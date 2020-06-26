@@ -225,7 +225,7 @@ LED bar:      lbr
 // Maximum length of fader tag and text message strings (Since for chat messages
 // some HTML code is added, we also have to define a second length which includes
 // this additionl HTML code. Right now the length of the HTML code is approx. 66
-// character. Here, we add some headroom to this number)
+// characters. Here, we add some headroom to this number)
 #define MAX_LEN_FADER_TAG                16
 #define MAX_LEN_CHAT_TEXT                1600
 #define MAX_LEN_CHAT_TEXT_PLUS_HTML      1800
@@ -237,7 +237,7 @@ LED bar:      lbr
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \
     "<br><div align=right><font size=-1><i>" + \
-    QCoreApplication::translate ( "global","For more information use the ""What's " \
+    QCoreApplication::translate ( "global", "For more information use the ""What's " \
     "This"" help (help menu, right mouse button or Shift+F1)" ) + \
     "</i></font></div>"
 

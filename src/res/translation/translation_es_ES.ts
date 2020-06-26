@@ -32,17 +32,17 @@
         <translation type="vanished"> utiliza las siguientes librerías, recursos o fragmentos de código:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="402"/>
+        <location filename="../../util.cpp" line="428"/>
         <source>Qt cross-platform application framework</source>
         <translation>Qt cross-platform application framework</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="406"/>
+        <location filename="../../util.cpp" line="432"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
         <translation>Código de reverberación de audio de Perry R. Cook y Gary P. Scavone</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="409"/>
+        <location filename="../../util.cpp" line="435"/>
         <source>Some pixmaps are from the</source>
         <translation>Algunos pixmaps son del</translation>
     </message>
@@ -51,67 +51,67 @@
         <translation type="vanished">Iconos de banderas nacionales de Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="381"/>
+        <location filename="../../util.cpp" line="407"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
         <translation>Esta aplicación permite a músicos realizar jam sessions en tiempo real por internet.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="382"/>
+        <location filename="../../util.cpp" line="408"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
         <translation>Hay un servidor que recoge el audio de cada cliente, los mezcla y la envía la mezcla de vuelta a cada cliente.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="401"/>
+        <location filename="../../util.cpp" line="427"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
         <translation>Esta aplicación utiliza las siguientes librerías, recursos o fragmentos de código:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="411"/>
+        <location filename="../../util.cpp" line="437"/>
         <source>Country flag icons by Mark James</source>
         <translation>Iconos de banderas nacionales de Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="435"/>
+        <location filename="../../util.cpp" line="462"/>
         <source>For details on the contributions check out the </source>
         <translation>Para más detalles sobre los contribuidores consulta la </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="436"/>
+        <location filename="../../util.cpp" line="463"/>
         <source>Github Contributors list</source>
         <translation>lista de Contribuidores en Github</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="440"/>
+        <location filename="../../util.cpp" line="467"/>
         <source>Spanish</source>
         <translation>Español</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="442"/>
+        <location filename="../../util.cpp" line="469"/>
         <source>French</source>
         <translation>Francés</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="444"/>
+        <location filename="../../util.cpp" line="471"/>
         <source>Portuguese</source>
         <translation>Portugués</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="447"/>
+        <location filename="../../util.cpp" line="474"/>
         <source>Dutch</source>
         <translation>Neerlandés</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="449"/>
+        <location filename="../../util.cpp" line="476"/>
         <source>Italian</source>
         <translation>Italiano</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="451"/>
+        <location filename="../../util.cpp" line="478"/>
         <source>German</source>
         <translation>Alemán</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="458"/>
+        <location filename="../../util.cpp" line="485"/>
         <source>About </source>
         <translation>Acerca de </translation>
     </message>
@@ -191,32 +191,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="669"/>
+        <location filename="../../audiomixerboard.cpp" line="670"/>
         <source>Personal Mix at the Server</source>
         <translation>Mezcla personal en el Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="669"/>
+        <location filename="../../audiomixerboard.cpp" line="670"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Estando conectado a un servidor, estos controles te permiten hacer tu mezcla personal sin afectar lo que otros escuchan de tí. El título muestra el nombre del servidor y, cuando se conoce, si está activamente grabando.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="749"/>
+        <location filename="../../audiomixerboard.cpp" line="750"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="758"/>
+        <location filename="../../audiomixerboard.cpp" line="759"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>I N T E N T A N D O   C O N E C T A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="879"/>
+        <location filename="../../audiomixerboard.cpp" line="880"/>
         <source>RECORDING ACTIVE</source>
         <translation>GRABACIÓN ACTIVA</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="882"/>
+        <location filename="../../audiomixerboard.cpp" line="883"/>
         <source>Personal Mix at: </source>
         <translation>Mezcla Personal en el Servidor: </translation>
     </message>
@@ -414,44 +414,44 @@
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="563"/>
+        <location filename="../../audiomixerboard.cpp" line="564"/>
         <source>Alias/Name</source>
         <translation>Alias/Nombre</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="569"/>
+        <location filename="../../audiomixerboard.cpp" line="570"/>
         <source>Instrument</source>
         <translation>Instrumento</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="577"/>
+        <location filename="../../audiomixerboard.cpp" line="578"/>
         <source>Location</source>
         <translation>Ubicación</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="599"/>
-        <location filename="../../audiomixerboard.cpp" line="603"/>
-        <location filename="../../audiomixerboard.cpp" line="607"/>
+        <location filename="../../audiomixerboard.cpp" line="600"/>
+        <location filename="../../audiomixerboard.cpp" line="604"/>
+        <location filename="../../audiomixerboard.cpp" line="608"/>
         <source>Skill Level</source>
         <translation>Nivel Habilidad</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="599"/>
+        <location filename="../../audiomixerboard.cpp" line="600"/>
         <source>Beginner</source>
         <translation>Principiante</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="603"/>
+        <location filename="../../audiomixerboard.cpp" line="604"/>
         <source>Intermediate</source>
         <translation>Intermedio</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="607"/>
+        <location filename="../../audiomixerboard.cpp" line="608"/>
         <source>Expert</source>
         <translation>Experto</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="618"/>
+        <location filename="../../audiomixerboard.cpp" line="619"/>
         <source>Musician Profile</source>
         <translation>Perfil Músico</translation>
     </message>
@@ -788,7 +788,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="203"/>
-        <location filename="../../clientdlg.cpp" line="1114"/>
+        <location filename="../../clientdlg.cpp" line="1094"/>
         <source>C&amp;onnect</source>
         <translation>C&amp;onectar</translation>
     </message>
@@ -949,7 +949,7 @@
         <translation>usuarios</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1090"/>
+        <location filename="../../clientdlg.cpp" line="1070"/>
         <source>D&amp;isconnect</source>
         <translation>D&amp;esconectar</translation>
     </message>
@@ -1582,12 +1582,12 @@
         <translation type="vanished">Manual</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="604"/>
+        <location filename="../../util.h" line="605"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="607"/>
+        <location filename="../../util.h" line="608"/>
         <source>All Genres</source>
         <translation>Todos los Géneros</translation>
     </message>
@@ -1596,22 +1596,22 @@
         <translation type="vanished">Género Rock/Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="616"/>
+        <location filename="../../util.h" line="617"/>
         <source>Genre Classical/Folk/Choir</source>
         <translation>Género Clásica/Folk/Coro</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="610"/>
+        <location filename="../../util.h" line="611"/>
         <source>Genre Rock</source>
         <translation>Género Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="613"/>
+        <location filename="../../util.h" line="614"/>
         <source>Genre Jazz</source>
         <translation>Género Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="619"/>
+        <location filename="../../util.h" line="620"/>
         <source>Default</source>
         <translation>Por defecto</translation>
     </message>
@@ -2003,28 +2003,28 @@
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../../util.cpp" line="838"/>
+        <location filename="../../util.cpp" line="865"/>
         <source>&amp;Help</source>
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="843"/>
-        <location filename="../../util.cpp" line="848"/>
+        <location filename="../../util.cpp" line="870"/>
+        <location filename="../../util.cpp" line="875"/>
         <source>Getting &amp;Started...</source>
         <translation>Cómo &amp;Empezar...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="844"/>
+        <location filename="../../util.cpp" line="871"/>
         <source>Software &amp;Manual...</source>
         <translation>Manual del &amp;Software...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="851"/>
+        <location filename="../../util.cpp" line="878"/>
         <source>What&apos;s &amp;This</source>
         <translation>Qué es &amp;Esto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="853"/>
+        <location filename="../../util.cpp" line="880"/>
         <source>&amp;About...</source>
         <translation>&amp;Acerca de...</translation>
     </message>
@@ -2032,102 +2032,102 @@
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <location filename="../../util.cpp" line="478"/>
+        <location filename="../../util.cpp" line="505"/>
         <source>I &amp;agree to the above licence terms</source>
         <translation>&amp;Acepto los términos de la licencia arriba expuestos</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="479"/>
+        <location filename="../../util.cpp" line="506"/>
         <source>Accept</source>
         <translation>Acepto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="480"/>
+        <location filename="../../util.cpp" line="507"/>
         <source>Decline</source>
         <translation>No Acepto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="496"/>
+        <location filename="../../util.cpp" line="523"/>
         <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
         <translation>Al conectarte a este servidor y aceptar esta notificación, aceptas lo siguiente:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="498"/>
+        <location filename="../../util.cpp" line="525"/>
         <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
         <translation>Ud. declara que todos los datos, audios u otras obras transmitidas a este servidor son la propiedad de Ud. y creadas por Ud. o sus licenciatarios, y que pone a disposición de terceras partes estos datos, audios u otras obras mediante la siguiente Licencia Creative Commons (para más información sobre esta licencia, ver </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="506"/>
+        <location filename="../../util.cpp" line="533"/>
         <source>You are free to:</source>
         <translation>Ud. es libre de:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="508"/>
+        <location filename="../../util.cpp" line="535"/>
         <source>Share</source>
         <translation>Compartir</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="509"/>
+        <location filename="../../util.cpp" line="536"/>
         <source>copy and redistribute the material in any medium or format</source>
         <translation>copiar y redistribuir el material en cualquier medio o formato</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="510"/>
+        <location filename="../../util.cpp" line="537"/>
         <source>Adapt</source>
         <translation>Adaptar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="511"/>
+        <location filename="../../util.cpp" line="538"/>
         <source>remix, transform, and build upon the material</source>
         <translation>remezclar, transformar y construir a partir del material</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="512"/>
+        <location filename="../../util.cpp" line="539"/>
         <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
         <translation>El licenciante no puede revocar estas libertades en tanto Ud. siga los términos de la licencia.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="514"/>
+        <location filename="../../util.cpp" line="541"/>
         <source>Under the following terms:</source>
         <translation>Bajo los siguientes términos:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="516"/>
+        <location filename="../../util.cpp" line="543"/>
         <source>Attribution</source>
         <translation>Atribución</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="517"/>
+        <location filename="../../util.cpp" line="544"/>
         <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
         <translation>Ud. debe dar crédito de manera adecuada, brindar un enlace a la licencia, e indicar si se han realizado cambios. Puede hacerlo en cualquier forma razonable, pero no de forma tal que sugiera que Ud. o su uso tienen el apoyo de la licenciante.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="520"/>
+        <location filename="../../util.cpp" line="547"/>
         <source>NonCommercial</source>
         <translation>No-Comercial</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="521"/>
+        <location filename="../../util.cpp" line="548"/>
         <source>You may not use the material for commercial purposes.</source>
         <translation>No puede utilizar el material con fines comerciales.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="522"/>
+        <location filename="../../util.cpp" line="549"/>
         <source>ShareAlike</source>
         <translation>ShareAlike</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="523"/>
+        <location filename="../../util.cpp" line="550"/>
         <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
         <translation>Si remezcla, transforma o construye sobre el material, debe distribuir sus contribuciones bajo la misma licencia que el original.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="525"/>
+        <location filename="../../util.cpp" line="552"/>
         <source>No additional restrictions</source>
         <translation>Sin restricciones adicionales</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="526"/>
+        <location filename="../../util.cpp" line="553"/>
         <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
         <translation>No puede aplicar términos legales o medidas tecnológicas que restringan legalmente a otras personas de hacer cualquier cosa permitida por la licencia.</translation>
     </message>
@@ -2139,85 +2139,85 @@
         <translation type="vanished"> Esta etiqueta también se mostrará a cada cliente conectado al mismo servidor que tú. Se se deja vacío, se muestra la dirección IP en su lugar.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="714"/>
+        <location filename="../../util.cpp" line="741"/>
         <source>Alias or name edit box</source>
         <translation>Campo para alias o nombre</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="716"/>
+        <location filename="../../util.cpp" line="743"/>
         <source>Instrument picture button</source>
         <translation>Botón imagen instrumento</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="718"/>
+        <location filename="../../util.cpp" line="745"/>
         <source>Country flag button</source>
         <translation>Botón bandera país</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="720"/>
+        <location filename="../../util.cpp" line="747"/>
         <source>City edit box</source>
         <translation>Ciudad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="722"/>
+        <location filename="../../util.cpp" line="749"/>
         <source>Skill level combo box</source>
         <translation>Nivel de habilidad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="668"/>
-        <location filename="../../util.cpp" line="680"/>
-        <location filename="../../util.cpp" line="975"/>
+        <location filename="../../util.cpp" line="695"/>
+        <location filename="../../util.cpp" line="707"/>
+        <location filename="../../util.cpp" line="1002"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="555"/>
-        <location filename="../../util.cpp" line="703"/>
+        <location filename="../../util.cpp" line="582"/>
+        <location filename="../../util.cpp" line="730"/>
         <source>Musician Profile</source>
         <translation>Perfil Músico</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="560"/>
+        <location filename="../../util.cpp" line="587"/>
         <source>Alias/Name</source>
         <translation>Alias/Nombre</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="562"/>
+        <location filename="../../util.cpp" line="589"/>
         <source>Instrument</source>
         <translation>Instrumento</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="564"/>
+        <location filename="../../util.cpp" line="591"/>
         <source>Country</source>
         <translation>País</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="566"/>
+        <location filename="../../util.cpp" line="593"/>
         <source>City</source>
         <translation>Ciudad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="568"/>
+        <location filename="../../util.cpp" line="595"/>
         <source>Skill</source>
         <translation>Habilidad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="570"/>
+        <location filename="../../util.cpp" line="597"/>
         <source>&amp;Close</source>
         <translation>&amp;Cerrar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="686"/>
+        <location filename="../../util.cpp" line="713"/>
         <source>Beginner</source>
         <translation>Principiante</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="692"/>
+        <location filename="../../util.cpp" line="719"/>
         <source>Intermediate</source>
         <translation>Intermedio</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="698"/>
+        <location filename="../../util.cpp" line="725"/>
         <source>Expert</source>
         <translation>Experto</translation>
     </message>
@@ -2230,7 +2230,7 @@
         <translation type="vanished">Lo que introduzcas aquí aparecerá en tu fader del mezclador cuando te conectes a un servidor </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="704"/>
+        <location filename="../../util.cpp" line="731"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
         <translation>Escribe tu nombre o alias aquí para que otros músicos con quien quieras tocar te reconozcan. Puedes además añadir una imagen del instrumento que tocas y la bandera del país donde vives. La ciudad donde vives y tu nivel de habilidad con el instrumento también pueden añadirse.</translation>
     </message>
@@ -2239,217 +2239,217 @@
         <translation type="vanished">Lo que introduzcas aquí aparecerá en tu fader del mezclador cuando te conectes a un servidor. Esta etiqueta también se mostrará en cada cliente conectado al mismo servidor que tú. Si se deja el nombre vacío, se muestra la dirección IP en su lugar.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="708"/>
+        <location filename="../../util.cpp" line="735"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
         <translation>Lo que introduzcas aquí aparecerá en tu fader del mezclador cuando te conectes a un servidor Jamulus. Esta etiqueta también se mostrará en cada cliente conectado al mismo servidor que tú.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="976"/>
+        <location filename="../../util.cpp" line="1003"/>
         <source>Drum Set</source>
         <translation>Batería</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="977"/>
+        <location filename="../../util.cpp" line="1004"/>
         <source>Djembe</source>
         <translation>Djembé</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="978"/>
+        <location filename="../../util.cpp" line="1005"/>
         <source>Electric Guitar</source>
         <translation>Guitarra Eléctrica</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="979"/>
+        <location filename="../../util.cpp" line="1006"/>
         <source>Acoustic Guitar</source>
         <translation>Guitarra Acústica</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="980"/>
+        <location filename="../../util.cpp" line="1007"/>
         <source>Bass Guitar</source>
         <translation>Bajo Eléctrico</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="981"/>
+        <location filename="../../util.cpp" line="1008"/>
         <source>Keyboard</source>
         <translation>Teclado</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="982"/>
+        <location filename="../../util.cpp" line="1009"/>
         <source>Synthesizer</source>
         <translation>Sintetizador</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="983"/>
+        <location filename="../../util.cpp" line="1010"/>
         <source>Grand Piano</source>
         <translation>Piano de Cola</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="984"/>
+        <location filename="../../util.cpp" line="1011"/>
         <source>Accordion</source>
         <translation>Acordeón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="985"/>
+        <location filename="../../util.cpp" line="1012"/>
         <source>Vocal</source>
         <translation>Voz</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="986"/>
+        <location filename="../../util.cpp" line="1013"/>
         <source>Microphone</source>
         <translation>Micrófono</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="987"/>
+        <location filename="../../util.cpp" line="1014"/>
         <source>Harmonica</source>
         <translation>Armónica</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="988"/>
+        <location filename="../../util.cpp" line="1015"/>
         <source>Trumpet</source>
         <translation>Trompeta</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="989"/>
+        <location filename="../../util.cpp" line="1016"/>
         <source>Trombone</source>
         <translation>Trombón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="990"/>
+        <location filename="../../util.cpp" line="1017"/>
         <source>French Horn</source>
         <translation>Trompa</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="991"/>
+        <location filename="../../util.cpp" line="1018"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="992"/>
+        <location filename="../../util.cpp" line="1019"/>
         <source>Saxophone</source>
         <translation>Saxofón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="993"/>
+        <location filename="../../util.cpp" line="1020"/>
         <source>Clarinet</source>
         <translation>Clarinete</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="994"/>
+        <location filename="../../util.cpp" line="1021"/>
         <source>Flute</source>
         <translation>Flauta</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="995"/>
+        <location filename="../../util.cpp" line="1022"/>
         <source>Violin</source>
         <translation>Violín</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="996"/>
+        <location filename="../../util.cpp" line="1023"/>
         <source>Cello</source>
         <translation>Violonchelo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="997"/>
+        <location filename="../../util.cpp" line="1024"/>
         <source>Double Bass</source>
         <translation>Contrabajo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="998"/>
+        <location filename="../../util.cpp" line="1025"/>
         <source>Recorder</source>
         <translation>Grabadora</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="999"/>
+        <location filename="../../util.cpp" line="1026"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1000"/>
+        <location filename="../../util.cpp" line="1027"/>
         <source>Listener</source>
         <translation>Oyente</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1001"/>
+        <location filename="../../util.cpp" line="1028"/>
         <source>Guitar+Vocal</source>
         <translation>Guitarra+Voz</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1002"/>
+        <location filename="../../util.cpp" line="1029"/>
         <source>Keyboard+Vocal</source>
         <translation>Teclado+Voz</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1003"/>
+        <location filename="../../util.cpp" line="1030"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1004"/>
+        <location filename="../../util.cpp" line="1031"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1005"/>
+        <location filename="../../util.cpp" line="1032"/>
         <source>Oboe</source>
         <translation>Oboe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1006"/>
+        <location filename="../../util.cpp" line="1033"/>
         <source>Harp</source>
         <translation>Arpa</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1007"/>
+        <location filename="../../util.cpp" line="1034"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1008"/>
+        <location filename="../../util.cpp" line="1035"/>
         <source>Congas</source>
         <translation>Congas</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1009"/>
+        <location filename="../../util.cpp" line="1036"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1010"/>
+        <location filename="../../util.cpp" line="1037"/>
         <source>Vocal Bass</source>
         <translation>Voz Bajo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1011"/>
+        <location filename="../../util.cpp" line="1038"/>
         <source>Vocal Tenor</source>
         <translation>Voz Tenor</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1012"/>
+        <location filename="../../util.cpp" line="1039"/>
         <source>Vocal Alto</source>
         <translation>Voz Alto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1013"/>
+        <location filename="../../util.cpp" line="1040"/>
         <source>Vocal Soprano</source>
         <translation>Voz Soprano</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1014"/>
+        <location filename="../../util.cpp" line="1041"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1015"/>
+        <location filename="../../util.cpp" line="1042"/>
         <source>Mandolin</source>
         <translation>Mandolina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1016"/>
+        <location filename="../../util.cpp" line="1043"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1017"/>
+        <location filename="../../util.cpp" line="1044"/>
         <source>Bass Ukulele</source>
         <translation>Ukulele Barítono</translation>
     </message>
@@ -2721,17 +2721,17 @@
         <translation>Dirección Preestablecida</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="728"/>
+        <location filename="../../serverdlg.cpp" line="730"/>
         <source>Recording</source>
         <translation>Grabando</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="733"/>
+        <location filename="../../serverdlg.cpp" line="735"/>
         <source>Not recording</source>
         <translation>No grabando</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="739"/>
+        <location filename="../../serverdlg.cpp" line="741"/>
         <source>Not enabled</source>
         <translation>No habilitado</translation>
     </message>
@@ -2758,42 +2758,52 @@
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="641"/>
+        <location filename="../../util.h" line="644"/>
         <source>Unregistered</source>
         <translation>Sin registrar</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="644"/>
+        <location filename="../../util.h" line="647"/>
         <source>Bad address</source>
         <translation>Dirección no válida</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="647"/>
+        <location filename="../../util.h" line="650"/>
         <source>Registration requested</source>
         <translation>Registro solicitado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="650"/>
+        <location filename="../../util.h" line="653"/>
         <source>Registration failed</source>
         <translation>Error de registro</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="653"/>
+        <location filename="../../util.h" line="656"/>
         <source>Check server version</source>
         <translation>Comprueba la versión del servidor</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="656"/>
+        <location filename="../../util.h" line="659"/>
         <source>Registered</source>
         <translation>Registrado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="659"/>
+        <location filename="../../util.h" line="662"/>
         <source>Central Server full</source>
         <translation>Servidor Central lleno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="662"/>
+        <location filename="../../util.h" line="665"/>
+        <source>Your server version is too old</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.h" line="668"/>
+        <source>Requirements not fulfilled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.h" line="671"/>
         <source>Unknown value </source>
         <translation>Valor desconocido </translation>
     </message>
@@ -3073,17 +3083,17 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1414"/>
+        <location filename="../../util.cpp" line="1441"/>
         <source>, Version </source>
         <translation>, Versión </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1427"/>
+        <location filename="../../util.cpp" line="1454"/>
         <source>Internet Jam Session Software</source>
         <translation>Internet Jam Session Software</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1431"/>
+        <location filename="../../util.cpp" line="1458"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation>Publicado bajo la GNU General Public License (GPL)</translation>
     </message>

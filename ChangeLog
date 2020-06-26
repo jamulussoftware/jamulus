@@ -33,8 +33,6 @@
 
 TODO add new register message which contains version and, e.g., max number of clients
 
-TODO the new translation loading does not work on MacOS
-
 TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
      - generate .qm on compile time with lrelease
      - download nsProcess.dll on Windows installer creation instead of put it in the repo

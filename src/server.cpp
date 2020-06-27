@@ -1671,9 +1671,6 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
         iFrameCount        = 0;
         bLevelsWereUpdated = true;
 
-        // init return vector with zeros since we mix all channels on that vector
-        vecLevelsOut.Reset ( 0 );
-
         for ( int j = 0; j < iNumClients; j++ )
         {
             // update and get signal level for meter in dB for each channel

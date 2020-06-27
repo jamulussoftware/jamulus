@@ -6,6 +6,7 @@ GenericName=Internet Jam Session Software
 GenericName[fr]=Logiciel de séance de bœuf sur Internet
 GenericName[es]=Software para Jam Sessions por Internet
 GenericName[pt]=Software para Jam Sessions pela Internet
+GenericName[nl]=Software voor jamsessies over internet
 Exec=$$TARGET
 Icon=jamulus
 Terminal=false

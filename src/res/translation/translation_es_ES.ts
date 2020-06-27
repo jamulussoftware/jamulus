@@ -2795,12 +2795,12 @@
     <message>
         <location filename="../../util.h" line="665"/>
         <source>Your server version is too old</source>
-        <translation type="unfinished"></translation>
+        <translation>La versión de tu servidor es demasiado antigua</translation>
     </message>
     <message>
         <location filename="../../util.h" line="668"/>
         <source>Requirements not fulfilled</source>
-        <translation type="unfinished"></translation>
+        <translation>No se cumplen los requisitos</translation>
     </message>
     <message>
         <location filename="../../util.h" line="671"/>

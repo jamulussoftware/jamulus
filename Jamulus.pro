@@ -650,9 +650,12 @@ DISTFILES += ChangeLog \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \
+    src/res/translation/translation_pt_BR.qm \
     src/res/translation/translation_es_ES.qm \
     src/res/translation/translation_nl_NL.qm \
+    src/res/translation/translation_pl_PL.qm \
     src/res/translation/translation_it_IT.qm \
+    src/res/translation/translation_sv_SE.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

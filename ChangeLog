@@ -2,8 +2,19 @@
 
 
 
+3.5.8git
 
-3.5.7git
+TODO add new register message which contains version and, e.g., max number of clients
+
+TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
+     - generate .qm on compile time with lrelease
+
+
+
+
+
+
+3.5.7 (2020-06-28)
 
 - add new "compact" skin, intended for large ensembles (#339)
 
@@ -28,17 +39,6 @@
 - add some protections to the code, coded by atsampson (#380, #381, #382)
 
 - bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
-
-
-
-TODO add new register message which contains version and, e.g., max number of clients
-
-TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
-     - generate .qm on compile time with lrelease
-
-
-
-
 
 
 3.5.6 (2020-06-09)

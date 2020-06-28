@@ -30,7 +30,9 @@ The **Delay Status** LED shows the current audio delay status:
 ![Input level](inputlevel.png)
 
 This shows the level of the two stereo channels for your audio input.
-Make sure not to clip the input signal to avoid distortions of the audio signal.
+Make sure not to clip the input signal to avoid distortions of the audio signal (the LEDs will indicate clipping when it occurs).
+
+
 
 ### Chat button
 
@@ -105,7 +107,9 @@ The **Solo button** allows you to hear one or more musicians on their own. Those
 
 Channels are listed left to right in the order that clients connect until they leave, at which point their "slot" is filled by the next new arrival. You can change the sort order using the Edit option in the application menu.
 
+You can group faders together using the "group" toggle. Moving the fader of any member of the group will move the other faders in that group by the same amount.
 
+If the server operator has enabled recording, you will see a message above the mixer showing that you are being recorded. 
 
 
 

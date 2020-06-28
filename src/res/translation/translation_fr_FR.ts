@@ -525,12 +525,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="64"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished">Édit&amp;er</translation>
+        <translation>Édit&amp;er</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="66"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation type="unfinished"></translation>
+        <translation>Vid&amp;er l&apos;historique du tchate</translation>
     </message>
 </context>
 <context>
@@ -543,7 +543,7 @@
     <message>
         <location filename="../../chatdlgbase.ui" line="51"/>
         <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
+        <translation>En&amp;voyer</translation>
     </message>
     <message>
         <source>Cl&amp;ear</source>
@@ -1579,7 +1579,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Compact</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -2787,12 +2787,12 @@
     <message>
         <location filename="../../util.h" line="665"/>
         <source>Your server version is too old</source>
-        <translation type="unfinished"></translation>
+        <translation>La version de votre serveur est trop vieille</translation>
     </message>
     <message>
         <location filename="../../util.h" line="668"/>
         <source>Requirements not fulfilled</source>
-        <translation type="unfinished"></translation>
+        <translation>Exigences non satisfaites</translation>
     </message>
     <message>
         <location filename="../../util.h" line="671"/>

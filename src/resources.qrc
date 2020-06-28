@@ -119,7 +119,6 @@
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>
-        <file>res/mainicon.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>

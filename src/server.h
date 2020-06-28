@@ -43,8 +43,7 @@
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
-#include "recorder/jamrecorder.h"
-
+#include "recorder/jamcontroller.h"
 
 /* Definitions ****************************************************************/
 // no valid channel number
@@ -199,10 +198,20 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
-    bool GetRecorderInitialised() { return bRecorderInitialised; }
-    bool GetRecordingEnabled() { return bEnableRecording; }
-    void RequestNewRecording();
+    // Jam recorder ------------------------------------------------------------
+    bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
+    QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
+    bool GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
+    void RequestNewRecording() { JamController.RequestNewRecording(); }
+
     void SetEnableRecording ( bool bNewEnableRecording );
+
+    QString GetRecordingDir() { return JamController.GetRecordingDir(); }
+
+    void SetRecordingDir( QString newRecordingDir )
+        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
+
+    virtual void CreateAndSendRecorderStateForAllConChannels();
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
@@ -273,10 +282,6 @@ protected:
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
-
-    virtual void CreateAndSendRecorderStateForAllConChannels();
-
-    ERecorderState GetRecorderState();
 
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
@@ -358,11 +363,6 @@ protected:
     // channel level update frame interval counter
     int                        iFrameCount;
 
-    // recording thread
-    recorder::CJamRecorder     JamRecorder;
-    bool                       bRecorderInitialised;
-    bool                       bEnableRecording;
-
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
@@ -372,6 +372,9 @@ protected:
 
     // server list
     CServerListManager         ServerListManager;
+
+    // jam recorder
+    recorder::CJamController   JamController;
 
     // GUI settings
     bool                       bAutoRunMinimized;
@@ -393,9 +396,12 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+
+    // pass through from jam controller
     void RestartRecorder();
     void StopRecorder();
     void RecordingSessionStarted ( QString sessionDir );
+    void EndRecorderThread();
 
 public slots:
     void OnTimer();
@@ -473,3 +479,5 @@ public slots:
 
     void OnHandledSignal ( int sigNum );
 };
+
+Q_DECLARE_METATYPE(CVector<int16_t>)

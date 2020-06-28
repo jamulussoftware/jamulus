@@ -302,60 +302,43 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
 /**
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
  * @param server Server object emiting signals
+ * @return QString::null on success else the failure reason
  */
-bool CJamRecorder::Init( const CServer* server,
-                         const int      _iServerFrameSizeSamples )
+QString CJamRecorder::Init()
 {
-    QFileInfo fi(recordBaseDir.absolutePath());
-    fi.setCaching(false);
+    QString errmsg = QString::null;
+    QFileInfo fi ( recordBaseDir.absolutePath() );
+    fi.setCaching ( false );
 
-    if (!fi.exists() && !QDir().mkpath(recordBaseDir.absolutePath()))
+    if ( !fi.exists() && !QDir().mkpath ( recordBaseDir.absolutePath() ) )
     {
-        qCritical() << recordBaseDir.absolutePath() << "does not exist but could not be created";
-        return false;
+        errmsg = recordBaseDir.absolutePath() + " does not exist but could not be created";
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qCritical()
+        qCritical() << errmsg;
+#endif
+        return errmsg;
     }
     if (!fi.isDir())
     {
-        qCritical() << recordBaseDir.absolutePath() << "exists but is not a directory";
-        return false;
+        errmsg = recordBaseDir.absolutePath() + " exists but is not a directory";
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qCritical()
+        qCritical() << errmsg;
+#endif
+        return errmsg;
     }
     if (!fi.isWritable())
     {
-        qCritical() << recordBaseDir.absolutePath() << "is a directory but cannot be written to";
-        return false;
+        errmsg = recordBaseDir.absolutePath() + " is a directory but cannot be written to";
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qCritical()
+        qCritical() << errmsg;
+#endif
+        return errmsg;
     }
 
-    QObject::connect( (const QObject *)server, SIGNAL ( RestartRecorder() ),
-                      this, SLOT( OnTriggerSession() ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    QObject::connect( (const QObject *)server, SIGNAL ( StopRecorder() ),
-                      this, SLOT( OnEnd() ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    QObject::connect( (const QObject *)server, SIGNAL ( Stopped() ),
-                      this, SLOT( OnEnd() ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    QObject::connect( (const QObject *)server, SIGNAL ( ClientDisconnected ( int ) ),
-                      this, SLOT( OnDisconnected ( int ) ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
-    QObject::connect( (const QObject *)server, SIGNAL ( AudioFrame( const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
-                      this, SLOT(  OnFrame (const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    QObject::connect( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
-                      this, SLOT( OnAboutToQuit() ) );
-
-    iServerFrameSizeSamples = _iServerFrameSizeSamples;
-
-    thisThread = new QThread();
-    moveToThread ( thisThread );
-    thisThread->start();
-
-    return true;
+    return errmsg;
 }
 
 /**
@@ -410,7 +393,7 @@ void CJamRecorder::OnAboutToQuit()
 {
     OnEnd();
 
-    thisThread->exit();
+    QThread::currentThread()->exit();
 }
 
 void CJamRecorder::ReaperProjectFromCurrentSession()

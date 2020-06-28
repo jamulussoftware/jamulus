@@ -198,6 +198,7 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
+
     // Jam recorder ------------------------------------------------------------
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
@@ -212,6 +213,7 @@ public:
         { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
 
     virtual void CreateAndSendRecorderStateForAllConChannels();
+
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }

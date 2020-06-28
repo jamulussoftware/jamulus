@@ -403,9 +403,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 
-    // jam recorder needs the frame size
-    JamController.SetRecordingDir ( strRecordingDirName, iServerFrameSizeSamples );
-
     // manage welcome message: if the welcome message is a valid link to a local
     // file, the content of that file is used as the welcome message (#361)
     strWelcomeMessage = strNewWelcomeMessage; // first copy text, may be overwritten
@@ -423,7 +420,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // restrict welcome message to maximum allowed length
     strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 
-    // enable jam recording (if requested) - kicks off the thread
+    // enable jam recording (if requested) - kicks off the thread (note
+    // that jam recorder needs the frame size which is given to the jam
+    // recorder in the SetRecordingDir() function)
     SetRecordingDir ( strRecordingDirName );
 
     // enable all channels (for the server all channel must be enabled the
@@ -487,14 +486,14 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &JamController, &recorder::CJamController::EndRecorderThread,
         this, &CServer::EndRecorderThread );
 
-    QObject::connect( this, &CServer::Stopped,
+    QObject::connect ( this, &CServer::Stopped,
         &JamController, &recorder::CJamController::Stopped );
 
-    QObject::connect( this, &CServer::ClientDisconnected,
+    QObject::connect ( this, &CServer::ClientDisconnected,
         &JamController, &recorder::CJamController::ClientDisconnected );
 
     qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
-    QObject::connect( this, &CServer::AudioFrame,
+    QObject::connect ( this, &CServer::AudioFrame,
         &JamController, &recorder::CJamController::AudioFrame );
 
     QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
@@ -1348,6 +1347,22 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     }
 }
 
+void CServer::CreateAndSendRecorderStateForAllConChannels()
+{
+    // get recorder state
+    ERecorderState eRecorderState = JamController.GetRecorderState();
+
+    // now send recorder state to all connected clients
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // send message
+            vecChannels[i].CreateRecorderStateMes ( eRecorderState );
+        }
+    }
+}
+
 void CServer::CreateOtherMuteStateChanged ( const int  iCurChanID,
                                             const int  iOtherChanID,
                                             const bool bIsMuted )
@@ -1533,7 +1548,7 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 {
     JamController.SetEnableRecording ( bNewEnableRecording, IsRunning() );
 
-    // send recording state message - doesn't hurt
+    // the recording state may have changed, send recording state message
     CreateAndSendRecorderStateForAllConChannels();
 }
 
@@ -1584,22 +1599,6 @@ void CServer::WriteHTMLChannelList()
 
     // finish list
     streamFileOut << "</ul>" << endl;
-}
-
-void CServer::CreateAndSendRecorderStateForAllConChannels()
-{
-    // get recorder state
-    ERecorderState eRecorderState = JamController.GetRecorderState();
-
-    // now send recorder state to all connected clients
-    for ( int i = 0; i < iMaxNumChannels; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            // send message
-            vecChannels[i].CreateRecorderStateMes ( eRecorderState );
-        }
-    }
 }
 
 void CServer::customEvent ( QEvent* pEvent )

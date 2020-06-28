@@ -965,29 +965,9 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
 
 void CClientDlg::OnTimerSigMet()
 {
-    // get current input levels
-    double dCurSigLeveldB_L = pClient->MicLeveldB_L();
-    double dCurSigLeveldB_R = pClient->MicLeveldB_R();
-
-    // linear transformation of the input level range to the progress-bar range
-    dCurSigLeveldB_L -= LOW_BOUND_SIG_METER;
-    dCurSigLeveldB_L *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-    dCurSigLeveldB_R -= LOW_BOUND_SIG_METER;
-    dCurSigLeveldB_R *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-
-    // lower bound the signal
-    if ( dCurSigLeveldB_L < 0 )
-    {
-        dCurSigLeveldB_L = 0;
-    }
-    if ( dCurSigLeveldB_R < 0 )
-    {
-        dCurSigLeveldB_R = 0;
-    }
-
     // show current level
-    lbrInputLevelL->SetValue ( dCurSigLeveldB_L );
-    lbrInputLevelR->SetValue ( dCurSigLeveldB_R );
+    lbrInputLevelL->SetValue ( pClient->GetLevelForMeterdBLeft() );
+    lbrInputLevelR->SetValue ( pClient->GetLevelForMeterdBRight() );
 }
 
 void CClientDlg::OnTimerBuffersLED()
@@ -1079,7 +1059,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             }
         }
 
-        catch ( CGenErr generr )
+        catch ( const CGenErr& generr )
         {
             // show error message and return the function
             QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );

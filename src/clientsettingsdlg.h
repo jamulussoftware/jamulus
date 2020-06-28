@@ -22,6 +22,8 @@
  *
 \******************************************************************************/
 
+#pragma once
+
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>

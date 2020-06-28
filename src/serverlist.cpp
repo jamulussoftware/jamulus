@@ -511,6 +511,14 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
         SetSvrRegStatus ( ESvrRegStatus::SRS_CENTRAL_SVR_FULL );
         break;
 
+    case ESvrRegResult::SRR_VERSION_TOO_OLD:
+        SetSvrRegStatus ( ESvrRegStatus::SRS_VERSION_TOO_OLD );
+        break;
+
+    case ESvrRegResult::SRR_NOT_FULFILL_REQIREMENTS:
+        SetSvrRegStatus ( ESvrRegStatus::SRS_NOT_FULFILL_REQIREMENTS );
+        break;
+
     default:
         SetSvrRegStatus ( ESvrRegStatus::SRS_UNKNOWN_RESP );
         break;

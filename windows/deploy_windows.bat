@@ -35,9 +35,18 @@ set NSIS_PATH=%PROGRAMFILES(x86)%\NSIS
 set VS_REDIST32_EXE=vc_redist.x86.exe
 set VS_REDIST64_EXE=VC_redist.x64.exe
 
+rem check for environment
 if "%VSINSTALLDIR%" == "" goto vsenvproblem
 if "%QTDIR32%" == "" goto qtdirproblem
 if "%QTDIR64%" == "" goto qtdirproblem
+
+rem check for needed NSIS plugin
+if not exist nsProcess.dll (
+    echo nsProcess.dll not found. Trying to download the 7z file containing the dll in NsProcess\Plugin.
+    powershell -Command "Invoke-WebRequest https://nsis.sourceforge.io/mediawiki/images/1/18/NsProcess.zip -OutFile nsProcess.7z"
+    goto nsispluginproblem
+)
+
 cd ..
 
 
@@ -90,6 +99,10 @@ goto endofskript
 
 :qtdirproblem
 echo The QTDIR32 and QTDIR64 is not set, please set these environment variables correclty before calling this script
+goto endofskript
+
+:nsispluginproblem
+echo Required NSIS plugin not found. Unzip the nsProcess.dll and copy it in the windows directory before calling this script
 goto endofskript
 
 :endofskript

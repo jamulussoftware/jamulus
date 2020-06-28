@@ -569,6 +569,7 @@ enum ELicenceType
 // Server jam recorder state enum ----------------------------------------------
 enum ERecorderState
 {
+    // used for protocol -> enum values must be fixed!
     RS_UNDEFINED = 0,
     RS_NOT_INITIALISED = 1,
     RS_NOT_ENABLED = 2,
@@ -579,8 +580,8 @@ enum ERecorderState
 // Channel sort type -----------------------------------------------------------
 enum EChSortType
 {
-    ST_BY_NAME = 0,
-    ST_BY_INSTRUMENT = 1
+    ST_BY_NAME,
+    ST_BY_INSTRUMENT
 };
 
 
@@ -624,13 +625,15 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
 // Slave server registration state ---------------------------------------------
 enum ESvrRegStatus
 {
-    SRS_UNREGISTERED = 0,
-    SRS_BAD_ADDRESS = 1,
-    SRS_REQUESTED = 2,
-    SRS_TIME_OUT = 3,
-    SRS_UNKNOWN_RESP = 4,
-    SRS_REGISTERED = 5,
-    SRS_CENTRAL_SVR_FULL = 6
+    SRS_UNREGISTERED,
+    SRS_BAD_ADDRESS,
+    SRS_REQUESTED,
+    SRS_TIME_OUT,
+    SRS_UNKNOWN_RESP,
+    SRS_REGISTERED,
+    SRS_CENTRAL_SVR_FULL,
+    SRS_VERSION_TOO_OLD,
+    SRS_NOT_FULFILL_REQIREMENTS
 };
 
 inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
@@ -657,6 +660,12 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 
     case SRS_CENTRAL_SVR_FULL:
         return QCoreApplication::translate ( "CServerDlg", "Central Server full" );
+
+    case SRS_VERSION_TOO_OLD:
+        return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
+
+    case SRS_NOT_FULFILL_REQIREMENTS:
+        return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
     return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
@@ -668,7 +677,9 @@ enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
     SRR_REGISTERED = 0,
-    SRR_CENTRAL_SVR_FULL = 1
+    SRR_CENTRAL_SVR_FULL = 1,
+    SRR_VERSION_TOO_OLD = 2,
+    SRR_NOT_FULFILL_REQIREMENTS = 3
 };
 
 
@@ -701,25 +712,35 @@ enum ESkillLevel
 class CStereoSignalLevelMeter
 {
 public:
-    CStereoSignalLevelMeter() { Reset(); }
+// TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
+//      But tests with 128 and 64 samples frame size have shown that the meter fly back
+//      is ok for both numbers of samples frame size with a factor of 0.97.
+    CStereoSignalLevelMeter ( const bool   bNIsStereoOut     = true,
+                              const double dNSmoothingFactor = 0.97 ) :
+        dSmoothingFactor ( dNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
 
-    void          Update ( const CVector<short>& vecsAudio );
-    double        MicLeveldBLeft()  { return CalcLogResult ( dCurLevelL ); }
-    double        MicLeveldBRight() { return CalcLogResult ( dCurLevelR ); }
-    static double CalcLogResult ( const double& dLinearLevel );
+    void Update ( const CVector<short>& vecsAudio,
+                  const int             iInSize,
+                  const bool            bIsStereoIn );
+
+    double        GetLevelForMeterdBLeftOrMono() { return CalcLogResultForMeter ( dCurLevelLOrMono ); }
+    double        GetLevelForMeterdBRight()      { return CalcLogResultForMeter ( dCurLevelR ); }
+    static double CalcLogResultForMeter ( const double& dLinearLevel );
 
     void Reset()
     {
-        dCurLevelL = 0.0;
-        dCurLevelR = 0.0;
+        dCurLevelLOrMono = 0.0;
+        dCurLevelR       = 0.0;
     }
 
 protected:
     double UpdateCurLevel ( double       dCurLevel,
-                            const short& sMax );
+                            const double dMax );
 
-    double dCurLevelL;
+    double dCurLevelLOrMono;
     double dCurLevelR;
+    double dSmoothingFactor;
+    bool   bIsStereoOut;
 };
 
 

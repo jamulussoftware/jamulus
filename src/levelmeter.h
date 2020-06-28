@@ -34,6 +34,11 @@
 #include "global.h"
 
 
+/* Definitions ****************************************************************/
+#define NUM_LEDS_INCL_CLIP_LED           ( NUM_STEPS_LED_BAR + 1 )
+#define CLIP_IND_TIME_OUT_MS             20000
+
+
 /* Classes ********************************************************************/
 class CLevelMeter : public QWidget
 {
@@ -67,8 +72,10 @@ protected:
         };
 
         cLED ( QWidget* parent );
-        void    setColor ( const ELightColor eNewColor );
-        QLabel* getLabelPointer() { return pLEDLabel; }
+
+        void        SetColor ( const ELightColor eNewColor );
+        ELightColor GetColor() { return eCurLightColor; };
+        QLabel*     GetLabelPointer() { return pLEDLabel; }
 
     protected:
         QPixmap     BitmCubeRoundBlack;
@@ -80,11 +87,16 @@ protected:
         QLabel*     pLEDLabel;
     };
 
-    void Reset ( const bool bEnabled );
-    virtual void changeEvent ( QEvent* curEvent );
+    void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType,
+                                         const bool            bIsClip );
 
     QStackedLayout* pStackedLayout;
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;
     QProgressBar*   pBarMeter;
+
+    QTimer          TimerClip;
+
+public slots:
+    void ClipReset();
 };

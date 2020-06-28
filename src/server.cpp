@@ -240,9 +240,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Socket                      ( this, iPortNumber ),
     Logging                     ( iMaxDaysHistory ),
     iFrameCount                 ( 0 ),
-    JamRecorder                 ( strRecordingDirName ),
-    bRecorderInitialised        ( false ),
-    bEnableRecording            ( false ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
@@ -423,12 +420,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // restrict welcome message to maximum allowed length
     strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 
-    // enable jam recording (if requested) - kicks off the thread
-    if ( !strRecordingDirName.isEmpty() )
-    {
-        bRecorderInitialised = JamRecorder.Init ( this, iServerFrameSizeSamples );
-        SetEnableRecording ( bRecorderInitialised );
-    }
+    // enable jam recording (if requested) - kicks off the thread (note
+    // that jam recorder needs the frame size which is given to the jam
+    // recorder in the SetRecordingDir() function)
+    SetRecordingDir ( strRecordingDirName );
 
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software)
@@ -479,8 +474,27 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged,
         this, &CServer::SvrRegStatusChanged );
 
-    QObject::connect( &JamRecorder, &recorder::CJamRecorder::RecordingSessionStarted,
+    QObject::connect ( &JamController, &recorder::CJamController::RestartRecorder,
+        this, &CServer::RestartRecorder );
+
+    QObject::connect ( &JamController, &recorder::CJamController::StopRecorder,
+        this, &CServer::StopRecorder );
+
+    QObject::connect ( &JamController, &recorder::CJamController::RecordingSessionStarted,
         this, &CServer::RecordingSessionStarted );
+
+    QObject::connect ( &JamController, &recorder::CJamController::EndRecorderThread,
+        this, &CServer::EndRecorderThread );
+
+    QObject::connect ( this, &CServer::Stopped,
+        &JamController, &recorder::CJamController::Stopped );
+
+    QObject::connect ( this, &CServer::ClientDisconnected,
+        &JamController, &recorder::CJamController::ClientDisconnected );
+
+    qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
+    QObject::connect ( this, &CServer::AudioFrame,
+        &JamController, &recorder::CJamController::AudioFrame );
 
     QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
         this, &CServer::OnAboutToQuit );
@@ -635,7 +649,7 @@ void CServer::OnNewConnection ( int          iChID,
     vecChannels[iChID].CreateVersionAndOSMes();
 
     // send recording state message on connection
-    vecChannels[iChID].CreateRecorderStateMes ( GetRecorderState() );
+    vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
 
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
@@ -727,7 +741,7 @@ void CServer::OnHandledSignal ( int sigNum )
         break;
 
     case SIGUSR2:
-        SetEnableRecording ( !bEnableRecording );
+        SetEnableRecording ( !JamController.GetRecordingEnabled() );
         break;
 
     case SIGINT:
@@ -740,46 +754,6 @@ void CServer::OnHandledSignal ( int sigNum )
         break;
     }
 #endif
-}
-
-void CServer::RequestNewRecording()
-{
-    if ( bRecorderInitialised && bEnableRecording )
-    {
-        emit RestartRecorder();
-    }
-
-    // send recording state message - doesn't hurt
-    CreateAndSendRecorderStateForAllConChannels();
-}
-
-void CServer::SetEnableRecording ( bool bNewEnableRecording )
-{
-    if ( bRecorderInitialised )
-    {
-        // note that this block executes regardless of whether
-        // what appears to be a change is being applied, to ensure
-        // the requested state is the result
-        bEnableRecording = bNewEnableRecording;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qInfo()
-        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
-#endif
-
-        if ( !bEnableRecording )
-        {
-            emit StopRecorder();
-        }
-        else if ( !IsRunning() )
-        {
-            // This dirty hack is for the GUI.  It doesn't care.
-            emit StopRecorder();
-        }
-    }
-
-    // send recording state message
-    CreateAndSendRecorderStateForAllConChannels();
 }
 
 void CServer::Start()
@@ -953,7 +927,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // and emit the client disconnected signal
                     if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
                     {
-                        if ( bEnableRecording )
+                        if ( JamController.GetRecordingEnabled() )
                         {
                             emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
                         }
@@ -1038,7 +1012,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             const int iCurNumAudChan = vecNumAudioChannels[i];
 
             // export the audio data for recording purpose
-            if ( bEnableRecording )
+            if ( JamController.GetRecordingEnabled() )
             {
                 emit AudioFrame ( iCurChanID,
                                   vecChannels[iCurChanID].GetName(),
@@ -1376,7 +1350,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
 void CServer::CreateAndSendRecorderStateForAllConChannels()
 {
     // get recorder state
-    ERecorderState eRecorderState = GetRecorderState();
+    ERecorderState eRecorderState = JamController.GetRecorderState();
 
     // now send recorder state to all connected clients
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1386,26 +1360,6 @@ void CServer::CreateAndSendRecorderStateForAllConChannels()
             // send message
             vecChannels[i].CreateRecorderStateMes ( eRecorderState );
         }
-    }
-}
-
-ERecorderState CServer::GetRecorderState()
-{
-    // return recorder state
-    if ( bRecorderInitialised )
-    {
-        if ( bEnableRecording )
-        {
-            return RS_RECORDING;
-        }
-        else
-        {
-            return RS_NOT_ENABLED;
-        }
-    }
-    else
-    {
-        return RS_NOT_INITIALISED;
     }
 }
 
@@ -1590,6 +1544,14 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     }
 }
 
+void CServer::SetEnableRecording ( bool bNewEnableRecording )
+{
+    JamController.SetEnableRecording ( bNewEnableRecording, IsRunning() );
+
+    // the recording state may have changed, send recording state message
+    CreateAndSendRecorderStateForAllConChannels();
+}
+
 void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,
                                            const QString& strNewServerNameWithPort )
 {
@@ -1663,7 +1625,6 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                                               const CVector<CVector<int16_t> > vecvecsData,
                                               CVector<uint16_t>&               vecLevelsOut )
 {
-    int  i, j, k;
     bool bLevelsWereUpdated = false;
 
     // low frequency updates
@@ -1672,52 +1633,16 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
         iFrameCount        = 0;
         bLevelsWereUpdated = true;
 
-        // init return vector with zeros since we mix all channels on that vector
-        vecLevelsOut.Reset ( 0 );
-
-        for ( j = 0; j < iNumClients; j++ )
+        for ( int j = 0; j < iNumClients; j++ )
         {
-            // get a reference to the audio data
-            const CVector<int16_t>& vecsData = vecvecsData[j];
+            // update and get signal level for meter in dB for each channel
+            const double dCurSigLevelForMeterdB = vecChannels[vecChanIDsCurConChan[j]].
+                UpdateAndGetLevelForMeterdB ( vecvecsData[j],
+                                              iServerFrameSizeSamples,
+                                              vecNumAudioChannels[j] > 1 );
 
-            double dCurLevel = 0.0;
-
-            if ( vecNumAudioChannels[j] == 1 )
-            {
-                // mono
-                for ( i = 0; i < iServerFrameSizeSamples; i += 3 )
-                {
-                    dCurLevel = std::max ( dCurLevel, fabs ( static_cast<double> ( vecsData[i] ) ) );
-                }
-            }
-            else
-            {
-                // stereo: apply stereo-to-mono attenuation
-                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 )
-                {
-                    double sMix = ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
-                    dCurLevel   = std::max ( dCurLevel, fabs ( sMix ) );
-                }
-            }
-
-            // smoothing
-            const int iChId = vecChanIDsCurConChan[j];
-            dCurLevel       = std::max ( dCurLevel, vecChannels[iChId].GetPrevLevel() * 0.5 );
-            vecChannels[iChId].SetPrevLevel ( dCurLevel );
-
-            // logarithmic measure
-            double dCurSigLevel = CStereoSignalLevelMeter::CalcLogResult ( dCurLevel );
-
-            // map to signal level meter
-            dCurSigLevel -= LOW_BOUND_SIG_METER;
-            dCurSigLevel *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-
-            if ( dCurSigLevel < 0 )
-            {
-                dCurSigLevel = 0;
-            }
-
-            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
+            // map value to integer for transmission via the protocol (4 bit available)
+            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevelForMeterdB ) );
         }
     }
 

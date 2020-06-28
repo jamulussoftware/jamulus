@@ -139,9 +139,11 @@ class CJamRecorder : public QObject
     Q_OBJECT
 
 public:
-    CJamRecorder ( const QString recordingDirName ) :
-        recordBaseDir ( recordingDirName ),
-        isRecording   ( false )
+    CJamRecorder ( const QString strRecordingBaseDir,
+                   const int     iServerFrameSizeSamples ) :
+        recordBaseDir           ( strRecordingBaseDir ),
+        iServerFrameSizeSamples ( iServerFrameSizeSamples ),
+        isRecording             ( false )
     {
     }
 
@@ -149,7 +151,7 @@ public:
      * @brief Create recording directory, if necessary, and connect signal handlers
      * @param server Server object emiting signals
      */
-    bool Init( const CServer* server, const int _iServerFrameSizeSamples );
+    QString Init();
 
     /**
      * @brief SessionDirToReaper Method that allows an RPP file to be recreated
@@ -163,46 +165,40 @@ private:
     void ReaperProjectFromCurrentSession();
     void AudacityLofFromCurrentSession();
 
-    QDir recordBaseDir;
-
+    QDir         recordBaseDir;
+    int          iServerFrameSizeSamples;
     bool         isRecording;
     CJamSession* currentSession;
-    int          iServerFrameSizeSamples;
-
-    QThread* thisThread;
 
 signals:
     void RecordingSessionStarted ( QString sessionDir );
 
-private slots:
+public slots:
     /**
-     * @brief Raised when last client leaves the server, ending the recording.
+     * @brief Handle last client leaving the server, ends the recording.
      */
     void OnEnd();
 
     /**
-     * @brief Raised to end one session and start a new one.
+     * @brief Handle request to end one session and start a new one.
      */
     void OnTriggerSession();
 
     /**
-     * @brief Raised when application is stopping
+     * @brief Handle application stopping
      */
     void OnAboutToQuit();
 
     /**
-     * @brief Raised when an existing client leaves the server.
+     * @brief Handle an existing client leaving the server.
      * @param iChID channel number of client
      */
     void OnDisconnected ( int iChID );
 
     /**
-     * @brief Raised when a frame of data is available to process
+     * @brief Handle a frame of data to process
      */
     void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data );
 };
 
 }
-
-Q_DECLARE_METATYPE(int16_t)
-Q_DECLARE_METATYPE(CVector<int16_t>)

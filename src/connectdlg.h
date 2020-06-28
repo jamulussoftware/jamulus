@@ -22,6 +22,8 @@
  *
 \******************************************************************************/
 
+#pragma once
+
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>

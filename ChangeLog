@@ -2,14 +2,29 @@
 
 
 
+3.5.8git
 
-3.5.7git
+TODO improve settings management -> move settings class in client/server classes, move actual settings variables
+
+TODO add new register message which contains version and, e.g., max number of clients
+
+TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
+     - generate .qm on compile time with lrelease
+
+
+
+
+
+
+3.5.7 (2020-06-28)
 
 - add new "compact" skin, intended for large ensembles (#339)
 
 - support sorting faders by channel instrument, coded by Alberstein8 (#356)
 
 - new group switch to change several faders in sync, coded by Alberstein8 (#202, #379)
+
+- support a clip LED, coded by fleutot (#220)
 
 - add server recording indicator, coded by pljones (#295)
 
@@ -19,13 +34,13 @@
 
 - the local pan middle position is no longer attenuated in Mono-in/Stereo-out mode (#353)
 
-- add some protections to the code, coded by atsampson (#380, #381, #382)
+- added translation: Brazilian Portuguese by melcon (#372)
 
 - add send button to chat window (#384)
 
+- add some protections to the code, coded by atsampson (#380, #381, #382)
+
 - bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
-
-
 
 
 3.5.6 (2020-06-09)

@@ -22,6 +22,8 @@
  *
 \******************************************************************************/
 
+#pragma once
+
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>
@@ -210,7 +212,7 @@ public slots:
     void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
         { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
 
-    void OnCLChannelLevelListReceived ( CHostAddress       /* unused */,
+    void OnCLChannelLevelListReceived ( CHostAddress      /* unused */,
                                         CVector<uint16_t> vecLevelList )
         { MainMixerBoard->SetChannelLevels ( vecLevelList ); }
 

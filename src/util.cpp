@@ -28,48 +28,64 @@
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
+void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
+                                       const int             iMonoBlockSizeSam,
+                                       const bool            bIsStereoIn )
 {
-    // get the stereo vector size
-    const int iStereoVecSize = vecsAudio.Size();
-
     // Get maximum of current block
     //
     // Speed optimization:
-    // - we only make use of the positive values and ignore the negative ones
-    //   -> we do not need to call the fabs() function
+    // - we only make use of the negative values and ignore the positive ones (since
+    //   int16 has range {-32768, 32767}) -> we do not need to call the fabs() function
     // - we only evaluate every third sample
     //
     // With these speed optimizations we might loose some information in
     // special cases but for the average music signals the following code
     // should give good results.
-    //
-    short sMaxL = 0;
-    short sMaxR = 0;
+    short sMinLOrMono = 0;
+    short sMinR       = 0;
 
-    for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
+    if ( bIsStereoIn )
     {
-        // left channel
-        sMaxL = std::max ( sMaxL, vecsAudio[i] );
+        // stereo in
+        for ( int i = 0; i < 2 * iMonoBlockSizeSam; i += 6 ) // 2 * 3 = 6 -> stereo
+        {
+            // left (or mono) and right channel
+            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
+            sMinR       = std::min ( sMinR,       vecsAudio[i + 1] );
+        }
 
-        // right channel
-        sMaxR = std::max ( sMaxR, vecsAudio[i + 1] );
+        // in case of mono out use minimum of both channels
+        if ( !bIsStereoOut )
+        {
+            sMinLOrMono = std::min ( sMinLOrMono, sMinR );
+        }
+    }
+    else
+    {
+        // mono in
+        for ( int i = 0; i < iMonoBlockSizeSam; i += 3 )
+        {
+            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
+        }
     }
 
-    dCurLevelL = UpdateCurLevel ( dCurLevelL, sMaxL );
-    dCurLevelR = UpdateCurLevel ( dCurLevelR, sMaxR );
+    // apply smoothing, if in stereo out mode, do this for two channels
+    dCurLevelLOrMono = UpdateCurLevel ( dCurLevelLOrMono, -sMinLOrMono );
+
+    if ( bIsStereoOut )
+    {
+        dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMinR );
+    }
 }
 
 double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
-                                                 const short& sMax )
+                                                 const double dMax )
 {
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
     {
-// TODO Calculate factor from sample rate and frame size (64 or 128 samples frame size).
-//      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size.
-        dCurLevel *= 0.97;
+        dCurLevel *= dSmoothingFactor;
     }
     else
     {
@@ -77,9 +93,9 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     }
 
     // update current level -> only use maximum
-    if ( static_cast<double> ( sMax ) > dCurLevel )
+    if ( dMax > dCurLevel )
     {
-        return static_cast<double> ( sMax );
+        return dMax;
     }
     else
     {
@@ -87,19 +103,29 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     }
 }
 
-double CStereoSignalLevelMeter::CalcLogResult ( const double& dLinearLevel )
+double CStereoSignalLevelMeter::CalcLogResultForMeter ( const double& dLinearLevel )
 {
-    const double dNormMicLevel = dLinearLevel / _MAXSHORT;
+    const double dNormLevel = dLinearLevel / _MAXSHORT;
 
     // logarithmic measure
-    if ( dNormMicLevel > 0 )
+    double dLevelForMeterdB = -100000.0; // large negative value
+
+    if ( dNormLevel > 0 )
     {
-        return 20.0 * log10 ( dNormMicLevel );
+        dLevelForMeterdB = 20.0 * log10 ( dNormLevel );
     }
-    else
+
+    // map to signal level meter (linear transformation of the input
+    // level range to the level meter range)
+    dLevelForMeterdB -= LOW_BOUND_SIG_METER;
+    dLevelForMeterdB *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+
+    if ( dLevelForMeterdB < 0 )
     {
-        return -100000.0; // large negative value
+        dLevelForMeterdB = 0;
     }
+
+    return dLevelForMeterdB;
 }
 
 
@@ -432,6 +458,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
         "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
+        "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
 
@@ -443,6 +470,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
         "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
         "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
+        "<p>Melcon Moraes (<a href=""https://github.com/melcon"">melcon</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
         "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
@@ -456,6 +484,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     // set window title
     setWindowTitle ( tr ( "About " ) + APP_NAME );
 }
+
 
 // Licence dialog --------------------------------------------------------------
 CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
@@ -850,8 +879,8 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
-
 #endif
+
 
 /******************************************************************************\
 * Other Classes                                                                *

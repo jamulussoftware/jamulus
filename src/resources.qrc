@@ -3,25 +3,52 @@
         <file alias="translation_de_DE.qm">res/translation/translation_de_DE.qm</file>
     </qresource>
     <qresource prefix="/translations">
+        <file alias="translation_de.qm">res/translation/translation_de_DE.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
         <file alias="translation_fr_FR.qm">res/translation/translation_fr_FR.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="translation_fr.qm">res/translation/translation_fr_FR.qm</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="translation_pt_PT.qm">res/translation/translation_pt_PT.qm</file>
     </qresource>
     <qresource prefix="/translations">
+        <file alias="translation_pt_BR.qm">res/translation/translation_pt_BR.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="translation_pt.qm">res/translation/translation_pt_PT.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
         <file alias="translation_es_ES.qm">res/translation/translation_es_ES.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="translation_es.qm">res/translation/translation_es_ES.qm</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="translation_nl_NL.qm">res/translation/translation_nl_NL.qm</file>
     </qresource>
     <qresource prefix="/translations">
+        <file alias="translation_nl.qm">res/translation/translation_nl_NL.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
         <file alias="translation_it_IT.qm">res/translation/translation_it_IT.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="translation_it.qm">res/translation/translation_it_IT.qm</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="translation_pl_PL.qm">res/translation/translation_pl_PL.qm</file>
     </qresource>
     <qresource prefix="/translations">
+        <file alias="translation_pl.qm">res/translation/translation_pl_PL.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
         <file alias="translation_sv_SE.qm">res/translation/translation_sv_SE.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="translation_sv.qm">res/translation/translation_sv_SE.qm</file>
     </qresource>
 
     <qresource prefix="/png/LEDs">

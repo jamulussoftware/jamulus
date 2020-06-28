@@ -22,6 +22,8 @@
  *
 \******************************************************************************/
 
+#pragma once
+
 #include <QCloseEvent>
 #include <QLabel>
 #include <QListView>

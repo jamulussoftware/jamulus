@@ -61,7 +61,7 @@ public:
     };
 
     AHistoryGraph ( const int iMaxDaysHistory );
-    ~AHistoryGraph() { }
+    virtual ~AHistoryGraph() { }
 
     void Start ( const QString& sNewFileName );
     void Add ( const QDateTime& newDateTime, const EHistoryItemType curType );

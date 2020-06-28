@@ -684,27 +684,6 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
     src/res/mixerboardbackground.png \
-    src/res/VLEDBlack.png \
-    src/res/VLEDBlackSmall.png \
-    src/res/VLEDDisabledSmall.png \
-    src/res/VLEDGreen.png \
-    src/res/VLEDGreenSmall.png \
-    src/res/VLEDGrey.png \
-    src/res/VLEDGreySmall.png \
-    src/res/VLEDRed.png \
-    src/res/VLEDRedSmall.png \
-    src/res/VLEDYellow.png \
-    src/res/VLEDYellowSmall.png \
-    src/res/VRLEDBlack.png \
-    src/res/VRLEDBlackSmall.png \
-    src/res/VRLEDGreen.png \
-    src/res/VRLEDGreenSmall.png \
-    src/res/VRLEDGrey.png \
-    src/res/VRLEDGreySmall.png \
-    src/res/VRLEDRed.png \
-    src/res/VRLEDRedSmall.png \
-    src/res/VRLEDYellow.png \
-    src/res/VRLEDYellowSmall.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \

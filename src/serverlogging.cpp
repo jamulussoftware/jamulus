@@ -76,6 +76,23 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
     SvgHistoryGraph.Add ( QDateTime::currentDateTime(), ClientInetAddr );
 }
 
+void CServerLogging::AddDisconnection ( const QHostAddress& ClientInetAddr )
+{
+    // logging of disconnected channel
+    const QString strLogStr = CurTimeDatetoLogString() + ", " +
+        ClientInetAddr.toString() + ", Disconnected";
+
+    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
+    tsConsoleStream << strLogStr << endl; // on console
+    *this << strLogStr; // in log file
+
+    // add element to history
+#ifndef HEADLESS
+    JpegHistoryGraph.Add ( QDateTime::currentDateTime(), ClientInetAddr );
+#endif
+    SvgHistoryGraph.Add ( QDateTime::currentDateTime(), ClientInetAddr );
+}
+
 void CServerLogging::AddServerStopped()
 {
     const QString strLogStr = CurTimeDatetoLogString() + ",, server stopped "

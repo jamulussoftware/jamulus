@@ -692,6 +692,7 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
     if ( iCurChanID != INVALID_CHANNEL_ID )
     {
         vecChannels[iCurChanID].Disconnect();
+        Logging.AddDisconnection( InetAddr.InetAddr );
     }
 }
 

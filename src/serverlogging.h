@@ -51,6 +51,7 @@ public:
     void Start ( const QString& strLoggingFileName );
     void EnableHistory ( const QString& strHistoryFileName );
     void AddNewConnection ( const QHostAddress& ClientInetAddr );
+    void AddDisconnection ( const QHostAddress& ClientInetAddr );
     void AddServerStopped();
     void ParseLogFile ( const QString& strFileName );
 

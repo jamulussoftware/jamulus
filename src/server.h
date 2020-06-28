@@ -159,6 +159,7 @@ protected:
 template<>
 class CServerSlots<0> {};
 
+
 class CServer :
         public QObject,
         public CServerSlots<MAX_NUM_CHANNELS>

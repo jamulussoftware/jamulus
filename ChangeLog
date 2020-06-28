@@ -4,6 +4,8 @@
 
 3.5.8git
 
+TODO improve settings management -> move settings class in client/server classes, move actual settings variables
+
 TODO add new register message which contains version and, e.g., max number of clients
 
 TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946

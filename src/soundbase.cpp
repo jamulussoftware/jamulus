@@ -291,7 +291,7 @@ printf ( "\n" );
                 // we only want to parse controller messages
                 if ( ( iStatusByte >= 0xB0 ) && ( iStatusByte < 0xC0 ) )
                 {
-                    // make sure paket is long enough
+                    // make sure packet is long enough
                     if ( vMIDIPaketBytes.Size() > 2 )
                     {
                         // we are assuming that the controller number is the same

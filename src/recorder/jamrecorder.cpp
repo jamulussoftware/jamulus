@@ -154,7 +154,7 @@ void CJamSession::DisconnectClient(int iChID)
 }
 
 /**
- * @brief CJamSession::Frame Process a frame emited for a client by the server
+ * @brief CJamSession::Frame Process a frame emitted for a client by the server
  * @param iChID the client channel id
  * @param name the client name
  * @param address the client IP and port number
@@ -301,7 +301,7 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
 
 /**
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
- * @param server Server object emiting signals
+ * @param server Server object emitting signals
  * @return QString::null on success else the failure reason
  */
 QString CJamRecorder::Init()
@@ -506,7 +506,7 @@ void CJamRecorder::OnDisconnected(int iChID)
 }
 
 /**
- * @brief CJamRecorder::OnFrame Handle a frame emited for a client by the server
+ * @brief CJamRecorder::OnFrame Handle a frame emitted for a client by the server
  * @param iChID the client channel id
  * @param name the client name
  * @param address the client IP and port number

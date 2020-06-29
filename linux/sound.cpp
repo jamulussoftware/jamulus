@@ -187,7 +187,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
 // Doesn't this give an infinite loop? The set buffer size function will call our
-// registerd callback which calls "EmitReinitRequestSignal()". In that function
+// registered callback which calls "EmitReinitRequestSignal()". In that function
 // this CSound::Init() function is called...
 //jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 

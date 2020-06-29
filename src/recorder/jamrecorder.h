@@ -149,7 +149,7 @@ public:
 
     /**
      * @brief Create recording directory, if necessary, and connect signal handlers
-     * @param server Server object emiting signals
+     * @param server Server object emitting signals
      */
     QString Init();
 

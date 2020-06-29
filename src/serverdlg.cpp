@@ -476,7 +476,7 @@ void CServerDlg::OnServerNameTextChanged ( const QString& strNewName )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         edtServerName->setText ( strNewName.left ( MAX_LEN_SERVER_NAME ) );
     }
 }
@@ -492,7 +492,7 @@ void CServerDlg::OnLocationCityTextChanged ( const QString& strNewCity )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         edtLocationCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
     }
 }

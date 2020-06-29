@@ -291,14 +291,14 @@ void CNetBufWithStats::UpdateAutoSetting()
         iCurMaxUpDecision = viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
 
         // This is a worst case, something very bad had happened. Hopefully
-        // this was just temporary so that we initiate a new initialzation
+        // this was just temporary so that we initiate a new initialization
         // phase to get quickly back to normal buffer sizes (hopefully).
         ResetInitCounter();
     }
 
 
     // Post calculation (filtering) --------------------------------------------
-    // Define different weigths for up and down direction. Up direction
+    // Define different weights for up and down direction. Up direction
     // filtering shall be slower than for down direction since we assume
     // that the lower value is the actual value which can be used for
     // the current network condition. If the current error rate estimation

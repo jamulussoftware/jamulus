@@ -141,12 +141,12 @@ void CCRC::AddByte ( const uint8_t byNewInput )
 {
     for ( int i = 0; i < 8; i++ )
     {
-        // shift bits in shift-register for transistion
+        // shift bits in shift-register for transition
         iStateShiftReg <<= 1;
 
         // take bit, which was shifted out of the register-size and place it
         // at the beginning (LSB)
-        // (If condition is not satisfied, implicitely a "0" is added)
+        // (If condition is not satisfied, implicitly a "0" is added)
         if ( ( iStateShiftReg & iBitOutMask) > 0 )
         {
             iStateShiftReg |= 1;
@@ -196,7 +196,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
                           const int          iSampleRate,
                           const double       rT60 )
 {
-    // store paramters
+    // store parameters
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
@@ -807,7 +807,7 @@ void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
     }
 }
@@ -845,7 +845,7 @@ void CMusProfDlg::OnCityTextChanged ( const QString& strNewCity )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
     }
 }
@@ -928,7 +928,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( !InetAddr.setAddress ( strAddress ) )
     {
-        // it was no vaild IP address, try to get host by name, assuming
+        // it was no valid IP address, try to get host by name, assuming
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 

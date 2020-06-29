@@ -39,18 +39,15 @@
 class CSettings
 {
 public:
-    CSettings ( CClient* pNCliP, const QString& sNFiName ) :
-        pClient ( pNCliP ), bIsClient ( true ), strFileName ( "" )
-        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
-
-    CSettings ( CServer* pNSerP, const QString& sNFiName ) :
-        pServer ( pNSerP ), bIsClient ( false ), strFileName ( "" )
-        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
+    CSettings() : strFileName ( "" ) {}
 
     void Load();
     void Save();
 
 protected:
+    virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) = 0;
+    virtual void WriteToXML  ( QDomDocument& IniXMLDocument )       = 0;
+
     void SetFileName ( const QString& sNFiName,
                        const QString& sDefaultFileName );
 
@@ -106,10 +103,38 @@ protected:
                          const QString& sKey,
                          const QString& sValue = "" );
 
-    // pointer to the client/server object which stores the various settings
-    CClient* pClient; // for client
-    CServer* pServer; // for server
-
-    bool     bIsClient;
-    QString  strFileName;
+    QString strFileName;
 };
+
+
+class CClientSettings : public CSettings
+{
+public:
+    CClientSettings ( CClient* pNCliP, const QString& sNFiName ) : pClient ( pNCliP )
+        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
+
+protected:
+    virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;
+    virtual void WriteToXML  ( QDomDocument& IniXMLDocument ) override;
+
+    CClient* pClient;
+};
+
+
+class CServerSettings : public CSettings
+{
+public:
+    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) : pServer ( pNSerP )
+        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
+
+protected:
+    virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;
+    virtual void WriteToXML  ( QDomDocument& IniXMLDocument ) override;
+
+    CServer* pServer;
+};
+
+
+
+
+

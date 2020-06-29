@@ -72,14 +72,14 @@ class CClientDlg : public QDialog, private Ui_CClientDlgBase
     Q_OBJECT
 
 public:
-    CClientDlg ( CClient*        pNCliP,
-                 CSettings*      pNSetP,
-                 const QString&  strConnOnStartupAddress,
-                 const int       iCtrlMIDIChannel,
-                 const bool      bNewShowComplRegConnList,
-                 const bool      bShowAnalyzerConsole,
-                 QWidget*        parent = nullptr,
-                 Qt::WindowFlags f = nullptr );
+    CClientDlg ( CClient*         pNCliP,
+                 CClientSettings* pNSetP,
+                 const QString&   strConnOnStartupAddress,
+                 const int        iCtrlMIDIChannel,
+                 const bool       bNewShowComplRegConnList,
+                 const bool       bShowAnalyzerConsole,
+                 QWidget*         parent = nullptr,
+                 Qt::WindowFlags  f = nullptr );
 
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -96,7 +96,7 @@ protected:
     void               Disconnect();
 
     CClient*           pClient;
-    CSettings*         pSettings;
+    CClientSettings*   pSettings;
 
     bool               bConnected;
     bool               bConnectDlgWasShown;

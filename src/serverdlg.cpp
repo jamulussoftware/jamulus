@@ -26,11 +26,11 @@
 
 
 /* Implementation *************************************************************/
-CServerDlg::CServerDlg ( CServer*        pNServP,
-                         CSettings*      pNSetP,
-                         const bool      bStartMinimized,
-                         QWidget*        parent,
-                         Qt::WindowFlags f )
+CServerDlg::CServerDlg ( CServer*         pNServP,
+                         CServerSettings* pNSetP,
+                         const bool       bStartMinimized,
+                         QWidget*         parent,
+                         Qt::WindowFlags  f )
     : QDialog                  ( parent, f ),
       pServer                  ( pNServP ),
       pSettings                ( pNSetP ),

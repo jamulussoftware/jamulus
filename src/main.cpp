@@ -617,7 +617,7 @@ int main ( int argc, char** argv )
                              strClientName );
 
             // load settings from init-file
-            CSettings Settings ( &Client, strIniFileName );
+            CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load();
 
 #ifndef HEADLESS
@@ -670,7 +670,7 @@ int main ( int argc, char** argv )
             if ( bUseGUI )
             {
                 // load settings from init-file
-                CSettings Settings ( &Server, strIniFileName );
+                CServerSettings Settings ( &Server, strIniFileName );
                 Settings.Load();
 
                 // update server list AFTER restoring the settings from the

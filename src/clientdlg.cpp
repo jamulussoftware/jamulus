@@ -26,14 +26,14 @@
 
 
 /* Implementation *************************************************************/
-CClientDlg::CClientDlg ( CClient*        pNCliP,
-                         CSettings*      pNSetP,
-                         const QString&  strConnOnStartupAddress,
-                         const int       iCtrlMIDIChannel,
-                         const bool      bNewShowComplRegConnList,
-                         const bool      bShowAnalyzerConsole,
-                         QWidget*        parent,
-                         Qt::WindowFlags f ) :
+CClientDlg::CClientDlg ( CClient*         pNCliP,
+                         CClientSettings* pNSetP,
+                         const QString&   strConnOnStartupAddress,
+                         const int        iCtrlMIDIChannel,
+                         const bool       bNewShowComplRegConnList,
+                         const bool       bShowAnalyzerConsole,
+                         QWidget*         parent,
+                         Qt::WindowFlags  f ) :
     QDialog             ( parent, f ),
     pClient             ( pNCliP ),
     pSettings           ( pNSetP ),

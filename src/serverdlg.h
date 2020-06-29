@@ -52,11 +52,11 @@ class CServerDlg : public QDialog, private Ui_CServerDlgBase
     Q_OBJECT
 
 public:
-    CServerDlg ( CServer*        pNServP,
-                 CSettings*      pNSetP,
-                 const bool      bStartMinimized,
-                 QWidget*        parent = nullptr,
-                 Qt::WindowFlags f = nullptr );
+    CServerDlg ( CServer*         pNServP,
+                 CServerSettings* pNSetP,
+                 const bool       bStartMinimized,
+                 QWidget*         parent = nullptr,
+                 Qt::WindowFlags  f = nullptr );
 
 protected:
     virtual void changeEvent ( QEvent* pEvent );
@@ -70,7 +70,7 @@ protected:
 
     QTimer                    Timer;
     CServer*                  pServer;
-    CSettings*                pSettings;
+    CServerSettings*          pSettings;
 
     CVector<QTreeWidgetItem*> vecpListViewItems;
     QMutex                    ListViewMutex;

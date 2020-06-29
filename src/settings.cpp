@@ -36,6 +36,7 @@ void CSettings::Load()
     // prepare file name for loading initialization data from XML file and read
     // data from file if possible
     QFile file ( strFileName );
+
     if ( file.open ( QIODevice::ReadOnly ) )
     {
         QTextStream in ( &file );
@@ -690,11 +691,13 @@ void CSettings::Save()
 
 
 // Help functions **************************************************************
-void CSettings::SetFileName ( const QString& sNFiName )
+void CSettings::SetFileName ( const QString& sNFiName,
+                              const QString& sDefaultFileName )
 {
     // return the file name with complete path, take care if given file name is
     // empty
     strFileName = sNFiName;
+
     if ( strFileName.isEmpty() )
     {
         // we use the Qt default setting file paths for the different OSs by
@@ -713,14 +716,7 @@ void CSettings::SetFileName ( const QString& sNFiName )
         }
 
         // append the actual file name
-        if ( bIsClient )
-        {
-            strFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME;
-        }
-        else
-        {
-            strFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME_SERVER;
-        }
+        strFileName = sConfigDir + "/" + sDefaultFileName;
     }
 }
 

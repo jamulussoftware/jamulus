@@ -40,18 +40,19 @@ class CSettings
 {
 public:
     CSettings ( CClient* pNCliP, const QString& sNFiName ) :
-        pClient ( pNCliP ), bIsClient ( true )
-        { SetFileName ( sNFiName ); }
+        pClient ( pNCliP ), bIsClient ( true ), strFileName ( "" )
+        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
 
     CSettings ( CServer* pNSerP, const QString& sNFiName ) :
-        pServer ( pNSerP ), bIsClient ( false )
-        { SetFileName ( sNFiName ); }
+        pServer ( pNSerP ), bIsClient ( false ), strFileName ( "" )
+        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
 
     void Load();
     void Save();
 
 protected:
-    void SetFileName ( const QString& sNFiName );
+    void SetFileName ( const QString& sNFiName,
+                       const QString& sDefaultFileName );
 
     // The following functions implement the conversion from the general string
     // to base64 (which should be used for binary data in XML files). This

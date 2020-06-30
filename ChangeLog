@@ -2,16 +2,14 @@
 
 
 
-3.5.8git
-
-TODO add new register message which contains version and, e.g., max number of clients
-
-TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
-     - generate .qm on compile time with lrelease
 
 
 
 
+
+3.5.8 (2020-06-30)
+
+- bug fix: incorrect selection of UI language (#408)
 
 
 3.5.7 (2020-06-28)

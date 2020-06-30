@@ -633,7 +633,7 @@ enum ESvrRegStatus
     SRS_REGISTERED,
     SRS_CENTRAL_SVR_FULL,
     SRS_VERSION_TOO_OLD,
-    SRS_NOT_FULFILL_REQIREMENTS
+    SRS_NOT_FULFILL_REQUIREMENTS
 };
 
 inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
@@ -664,7 +664,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
 
-    case SRS_NOT_FULFILL_REQIREMENTS:
+    case SRS_NOT_FULFILL_REQUIREMENTS:
         return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 

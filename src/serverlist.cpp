@@ -516,7 +516,7 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
         break;
 
     case ESvrRegResult::SRR_NOT_FULFILL_REQIREMENTS:
-        SetSvrRegStatus ( ESvrRegStatus::SRS_NOT_FULFILL_REQIREMENTS );
+        SetSvrRegStatus ( ESvrRegStatus::SRS_NOT_FULFILL_REQUIREMENTS );
         break;
 
     default:

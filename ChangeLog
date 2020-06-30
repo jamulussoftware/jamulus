@@ -3,12 +3,13 @@
 
 
 
-3.5.8git
+3.5.9git
 
 - bug fix: grouping faders in the client should be proportional (see discussion in #202)
 
 
 TODO bug fix: incorrect selection of UI language (#408) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     -> note that for the 3.5.8 bug fix release we want back to the original translation code (e.g. no pt_BR!)
 
 TODO improve settings management -> move settings class in client/server classes, move actual settings variables
 
@@ -19,7 +20,9 @@ TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
 
 
 
+3.5.8 (2020-06-30)
 
+- bug fix: incorrect selection of UI language (#408)
 
 
 3.5.7 (2020-06-28)

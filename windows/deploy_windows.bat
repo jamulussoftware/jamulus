@@ -98,7 +98,7 @@ echo Use the Visual Studio x86 x64 Cross Tools Command Prompt to call this skrip
 goto endofskript
 
 :qtdirproblem
-echo The QTDIR32 and QTDIR64 is not set, please set these environment variables correclty before calling this script
+echo The QTDIR32 and QTDIR64 is not set, please set these environment variables correctly before calling this script
 goto endofskript
 
 :nsispluginproblem

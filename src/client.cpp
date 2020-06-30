@@ -254,7 +254,7 @@ void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
 {
-    // message coult not be parsed, check if the packet comes
+    // message could not be parsed, check if the packet comes
     // from the server we just connected -> if yes, send
     // disconnect message since the server may not know that we
     // are not connected anymore
@@ -1184,7 +1184,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 
     if ( dSoundCardInputOutputLatencyMs == 0.0 )
     {
-        // use an alternative aproach for estimating the sound card delay:
+        // use an alternative approach for estimating the sound card delay:
         //
         // we assume that we have two period sizes for the input and one for the
         // output, therefore we have "3 *" instead of "2 *" (for input and output)

@@ -550,7 +550,7 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
             else
             {
                 // the protocol parsing failed and this was no audio block,
-                // we treat this as protocol error (unkown packet)
+                // we treat this as protocol error (unknown packet)
                 eRet = PS_PROT_ERR;
             }
 

@@ -204,7 +204,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
         pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum hight of the instrument+flag pictures
+        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum height of the instrument+flag pictures
         pFader->setMinimumHeight            ( 120 ); // if this value is too small, the fader might not be movable with the mouse for fancy skin (#292)
         pPan->setFixedSize                  ( 50, 50 );
         pPanLabel->setText                  ( tr ( "PAN" ) );
@@ -216,7 +216,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
     case GD_SLIMFADER:
         pLabelPictGrid->addWidget           ( plblLabel,  0, Qt::AlignHCenter ); // label below icons
-        pLabelInstBox->setMinimumHeight     ( 84 ); // maximum hight of the instrument+flag+label
+        pLabelInstBox->setMinimumHeight     ( 84 ); // maximum height of the instrument+flag+label
         pFader->setMinimumHeight            ( 85 );
         pPan->setFixedSize                  ( 28, 28 );
         pFader->setTickPosition             ( QSlider::NoTicks );
@@ -229,11 +229,11 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         break;
 
     default:
-        // reset style sheet and set original paramters
+        // reset style sheet and set original parameters
         pFader->setTickPosition             ( QSlider::TicksBothSides );
         pFader->setStyleSheet               ( "" );
         pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum hight of the instrument+flag pictures
+        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum height of the instrument+flag pictures
         pFader->setMinimumHeight            ( 85 );
         pPan->setFixedSize                  ( 50, 50 );
         pPanLabel->setText                  ( tr ( "Pan" ) );
@@ -691,7 +691,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 
     // set margins of the layout to zero to get maximum space for the controls
-    pGroupBoxLayout->setContentsMargins ( 0, 0, 0, 1 ); // note: to avoid problems at the botton, use a small margin for that
+    pGroupBoxLayout->setContentsMargins ( 0, 0, 0, 1 ); // note: to avoid problems at the bottom, use a small margin for that
 
     // add the group box to the scroll area
     pScrollArea->setMinimumWidth ( 200 ); // at least two faders shall be visible
@@ -816,7 +816,7 @@ void CAudioMixerBoard::HideAll()
     // make all controls invisible
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        // before hiding the fader, store its level (if some conditions are fullfilled)
+        // before hiding the fader, store its level (if some conditions are fulfilled)
         StoreFaderSettings ( vecpChanFader[i] );
 
         vecpChanFader[i]->SetChannelLevel ( 0 );
@@ -978,7 +978,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
         // if current fader is not used, hide it
         if ( !bFaderIsUsed )
         {
-            // before hiding the fader, store its level (if some conditions are fullfilled)
+            // before hiding the fader, store its level (if some conditions are fulfilled)
             StoreFaderSettings ( vecpChanFader[i] );
 
             vecpChanFader[i]->Hide();
@@ -1067,7 +1067,7 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
             if ( vecpChanFader[i]->IsVisible() && vecpChanFader[i]->IsSelect() && ( i != iChannelIdx ) )
             {
                 // synchronize faders with moving fader level (it is important
-                // to set the group flag to avoid inifinite looping)
+                // to set the group flag to avoid infinite looping)
                 vecpChanFader[i]->SetFaderLevel ( vecpChanFader[i]->GetFaderLevel() + iDiffLevel, true );
             }
         }

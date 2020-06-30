@@ -242,7 +242,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Mac Workaround:
     // If the connect button is the default button, on Mac it is highlighted
-    // by fading in and out a blue backgroud color. This operation consumes so
+    // by fading in and out a blue background color. This operation consumes so
     // much CPU that we get audio interruptions.
     // Better solution: increase thread priority of worker thread (since the
     // user can always highlight the button manually, too) -> TODO
@@ -711,7 +711,7 @@ void CClientDlg::OnConnectDlgAccepted()
             // user
             strMixerBoardLabel = strSelectedAddress;
 
-            // special case: if the address is empty, we substitude the default
+            // special case: if the address is empty, we substitute the default
             // central server address so that a user which just pressed the connect
             // button without selecting an item in the table or manually entered an
             // address gets a successful connection
@@ -1197,7 +1197,7 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
         break;
 
     default:
-        // reset style sheet and set original paramters
+        // reset style sheet and set original parameters
         backgroundFrame->setStyleSheet ( "" );
 
 #ifdef _WIN32

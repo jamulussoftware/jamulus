@@ -260,7 +260,7 @@ public:
             eBufState = CBufferBase<TData>::BS_OK;
         }
 
-        return true; // no error check in base class, alyways return ok
+        return true; // no error check in base class, always return ok
     }
 
     virtual bool Get ( CVector<TData>& vecData,
@@ -327,7 +327,7 @@ public:
             eBufState = CBufferBase<TData>::BS_OK;
         }
 
-        return true; // no error check in base class, alyways return ok
+        return true; // no error check in base class, always return ok
     }
 
     virtual int GetAvailSpace() const

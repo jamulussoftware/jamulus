@@ -63,7 +63,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     ServerList.clear();
 
     // Init server list entry (server info for this server) with defaults. Per
-    // definition the client substitudes the IP address of the central server
+    // definition the client substitutes the IP address of the central server
     // itself for his server list. If we are the central server, we assume that
     // we have a permanent server.
     CServerListEntry ThisServerListEntry ( CHostAddress(),

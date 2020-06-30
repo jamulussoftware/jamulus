@@ -501,7 +501,7 @@ TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
 - show number of connected clients in window title (and therefore in OS task
   bar)
 
-- added "Whats this" help text to the GUI controls in the general settings
+- added "What's this" help text to the GUI controls in the general settings
   dialog, added Tool Tips to some GUI controls
 
 - server logging history grid lines of weekend days are now plotted with

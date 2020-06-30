@@ -364,7 +364,7 @@ static int transient_analysis(const opus_val32 * OPUS_RESTRICT in, int len, int 
       unmask=0;
       /* We should never see NaNs here. If we find any, then something really bad happened and we better abort
          before it does any damage later on. If these asserts are disabled (no hardening), then the table
-         lookup a few lines below (id = ...) is likely to crash dur to an out-of-bounds read. DO NOT FIX
+         lookup a few lines below (id = ...) is likely to crash due to an out-of-bounds read. DO NOT FIX
          that crash on NaN since it could result in a worse issue later on. */
       celt_assert(!celt_isnan(tmp[0]));
       celt_assert(!celt_isnan(norm));

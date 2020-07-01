@@ -358,6 +358,14 @@ void CChannelFader::SetFaderLevel ( const double dLevel,
 
         SendFaderLevelToServer ( dLevel, bIsGroupUpdate );
     }
+    else if ( dLevel >= 0 )
+    {
+        // If the level is above the maximum, we have to store it for the purpose
+        // of group fader movement. If you move a fader which has lower volume than
+        // this one and this clips at max, we want to retain the ratio between this
+        // fader and the others in the group.
+        dPreviousFaderLevel = dLevel;
+    }
 }
 
 void CChannelFader::SetPanValue ( const int iPan )
@@ -440,7 +448,7 @@ void CChannelFader::SetMute ( const bool bState )
     if ( bState )
     {
         // mute channel -> send gain of 0
-        emit gainValueChanged ( 0, bIsMyOwnFader, false, false, -1 );
+        emit gainValueChanged ( 0, bIsMyOwnFader, false, false, -1 ); // set level ratio to in invalid value
     }
     else
     {
@@ -448,7 +456,7 @@ void CChannelFader::SetMute ( const bool bState )
         if ( !bOtherChannelIsSolo || IsSolo() )
         {
             // mute was unchecked, get current fader value and apply
-            emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, false, false, -1 );
+            emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, false, false, -1 ); // set level ratio to in invalid value
 
 // TODO When mute or solo is activated, the group synchronization does not work anymore.
 //      To get a smoother experience, we adjust the previous level as soon as the mute is

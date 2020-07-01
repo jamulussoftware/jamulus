@@ -35,9 +35,7 @@ void CSettings::Load()
 
     if ( file.open ( QIODevice::ReadOnly ) )
     {
-        QTextStream in ( &file );
-        IniXMLDocument.setContent ( in.readAll(), false );
-
+        IniXMLDocument.setContent ( QTextStream ( &file ).readAll(), false );
         file.close();
     }
 
@@ -56,11 +54,10 @@ void CSettings::Save()
     // prepare file name for storing initialization data in XML file and store
     // XML data in file
     QFile file ( strFileName );
+
     if ( file.open ( QIODevice::WriteOnly ) )
     {
-        QTextStream out ( &file );
-        out << IniXMLDocument.toString();
-
+        QTextStream ( &file ) << IniXMLDocument.toString();
         file.close();
     }
 }
@@ -68,25 +65,22 @@ void CSettings::Save()
 void CSettings::SetFileName ( const QString& sNFiName,
                               const QString& sDefaultFileName )
 {
-    // return the file name with complete path, take care if given file name is
-    // empty
+    // return the file name with complete path, take care if given file name is empty
     strFileName = sNFiName;
 
     if ( strFileName.isEmpty() )
     {
         // we use the Qt default setting file paths for the different OSs by
         // utilizing the QSettings class
-        const QSettings TempSettingsObject (
-            QSettings::IniFormat, QSettings::UserScope, APP_NAME, APP_NAME );
-
-        const QString sConfigDir =
-            QFileInfo ( TempSettingsObject.fileName() ).absolutePath();
+        const QString sConfigDir = QFileInfo ( QSettings ( QSettings::IniFormat,
+                                                           QSettings::UserScope,
+                                                           APP_NAME,
+                                                           APP_NAME ).fileName() ).absolutePath();
 
         // make sure the directory exists
         if ( !QFile::exists ( sConfigDir ) )
         {
-            QDir TempDirectoryObject;
-            TempDirectoryObject.mkpath ( sConfigDir );
+            QDir().mkpath ( sConfigDir );
         }
 
         // append the actual file name
@@ -100,7 +94,7 @@ void CSettings::SetNumericIniSet ( QDomDocument&  xmlFile,
                                    const int      iValue )
 {
     // convert input parameter which is an integer to string and store
-    PutIniSetting ( xmlFile, strSection, strKey, QString("%1").arg(iValue) );
+    PutIniSetting ( xmlFile, strSection, strKey, QString::number ( iValue ) );
 }
 
 bool CSettings::GetNumericIniSet ( const QDomDocument& xmlFile,
@@ -137,14 +131,7 @@ void CSettings::SetFlagIniSet ( QDomDocument&  xmlFile,
                                 const bool     bValue )
 {
     // we encode true -> "1" and false -> "0"
-    if ( bValue == true )
-    {
-        PutIniSetting ( xmlFile, strSection, strKey, "1" );
-    }
-    else
-    {
-        PutIniSetting ( xmlFile, strSection, strKey, "0" );
-    }
+    PutIniSetting ( xmlFile, strSection, strKey, bValue ? "1" : "0" );
 }
 
 bool CSettings::GetFlagIniSet ( const QDomDocument& xmlFile,
@@ -159,15 +146,7 @@ bool CSettings::GetFlagIniSet ( const QDomDocument& xmlFile,
 
     if ( !strGetIni.isEmpty() )
     {
-        if ( strGetIni.toInt() )
-        {
-            bValue = true;
-        }
-        else
-        {
-            bValue = false;
-        }
-
+        bValue  = ( strGetIni.toInt() != 0 );
         bReturn = true;
     }
 

@@ -9,7 +9,7 @@
 
 
 TODO bug fix: incorrect selection of UI language (#408) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     -> note that for the 3.5.8 bug fix release we want back to the original translation code (e.g. no pt_BR!)
+     -> note that for the 3.5.8 bug fix release we went back to the original translation code (e.g. no pt_BR!)
 
 TODO improve settings management -> move settings class in client/server classes, move actual settings variables
 

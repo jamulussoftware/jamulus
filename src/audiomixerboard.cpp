@@ -425,7 +425,9 @@ void CChannelFader::SendFaderLevelToServer ( const double dLevel,
                             bSuppressServerUpdate,
                             dLevel / dPreviousFaderLevel );
 
-    // update previous fader level since the level has changed
+    // update previous fader level since the level has changed, avoid to use
+    // the zero value not to have division by zero and also to retain the ratio
+    // after the fader is moved up again from the zero position
     if ( dLevel > 0 )
     {
         dPreviousFaderLevel = dLevel;

@@ -46,6 +46,12 @@
 // update time for GUI controls
 #define GUI_CONTRL_UPDATE_TIME      1000 // ms
 
+// Strings used in multiple places
+#define SREC_NOT_INITIALISED "Not initialised"
+#define SREC_NOT_ENABLED     "Not enabled"
+#define SREC_NOT_RECORDING   "Not recording"
+#define SREC_RECORDING       "Recording"
+
 
 /* Classes ********************************************************************/
 class CServerDlg : public QDialog, private Ui_CServerDlgBase

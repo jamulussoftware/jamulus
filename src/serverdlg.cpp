@@ -157,24 +157,25 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
     // recorder status
     lblRecorderStatus->setAccessibleName ( tr ( "Recorder status label" ) );
     lblRecorderStatus->setWhatsThis ( "<b>" + tr ( "Recorder Status" ) + ":</b> "
-        + tr ( "Displays the current status of the recorder.  The following values are possible:"
-               "<dl>"
-               "<dt>Not initialised</dt>"
-               "<dd>No recording directory has been set or the value is not useable</dd>"
-               "<dt>Not enabled</dt>"
-               "<dd>Recording has been switched off" )
+        + tr ( "Displays the current status of the recorder.  The following values are possible:" )
+        + "<dl>"
+        + "<dt>" + tr ( SREC_NOT_INITIALISED ) + "</dt>"
+        + "<dd>" + tr ( "No recording directory has been set or the value is not useable" ) + "</dd>"
+        + "<dt>" + tr ( SREC_NOT_ENABLED ) + "</dt>"
+        + "<dd>" + tr ( "Recording has been switched off" )
 #ifdef _WIN32
-         + tr ( " by the UI checkbox</dd>" )
+        + tr ( " by the UI checkbox" )
 #else
-         + tr ( ", either by the UI checkbox or SIGUSR2 being received</dd>" )
+        + tr ( ", either by the UI checkbox or SIGUSR2 being received" )
 #endif
-         + tr ( "<dt>Not recording</dt>"
-                "<dd>There is no one connected to the server to record</dd>"
-                "<dt>Recording</dt>"
-                "<dd>The performers are being recorded to the specified session directory</dd>"
-                "</dl>" )
-        + tr ( "<br/><b>NOTE:</b> If the recording directory is not useable, "
-               "the problem will be displayed in place of the directory.") );
+        + "</dd>"
+        + "<dt>" + tr ( SREC_NOT_RECORDING ) + "</dt>"
+        + "<dd>" + tr ( "There is no one connected to the server to record" ) + "</dd>"
+        + "<dt>" + tr ( SREC_RECORDING ) + "</dt>"
+        + "<dd>" + tr ( "The performers are being recorded to the specified session directory" ) + "</dd>"
+        + "</dl>"
+        + "<br/><b>" + tr ( "NOTE" ) + ":</b> "
+        + tr ( "If the recording directory is not useable, the problem will be displayed in place of the directory." ) );
 
     // new recording
     pbtNewRecording->setAccessibleName ( tr ( "Request new recording button" ) );
@@ -781,17 +782,17 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
             if ( pServer->IsRunning() )
             {
                 edtCurrentSessionDir->setText ( sessionDir != QString::null ? sessionDir : "" );
-                strRecorderStatus = tr ( "Recording" );
+                strRecorderStatus = tr ( SREC_RECORDING );
                 bIsRecording      = true;
             }
             else
             {
-                strRecorderStatus = tr ( "Not recording" );
+                strRecorderStatus = tr ( SREC_NOT_RECORDING );
             }
         }
         else
         {
-            strRecorderStatus = tr ( "Not enabled" );
+            strRecorderStatus = tr ( SREC_NOT_ENABLED );
         }
     }
     else
@@ -806,7 +807,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
             strRecordingDir = tr ( "ERROR" ) + ": " + strRecordingDir;
         }
         chbEnableRecorder->setEnabled ( false );
-        strRecorderStatus = tr ( "Not initialised" );
+        strRecorderStatus = tr ( SREC_NOT_INITIALISED );
     }
 
     edtRecordingDir->setText( strRecordingDir );

@@ -347,24 +347,25 @@ void CChannelFader::SetFaderLevel ( const double dLevel,
                                     const bool   bIsGroupUpdate )
 {
     // first make a range check
-    if ( ( dLevel >= 0 ) && ( dLevel <= AUD_MIX_FADER_MAX ) )
+    if ( dLevel >= 0 )
     {
         // we set the new fader level in the GUI (slider control) and also tell the
         // server about the change (block the signal of the fader since we want to
         // call SendFaderLevelToServer with a special additional parameter)
         pFader->blockSignals ( true );
-        pFader->setValue     ( MathUtils::round ( dLevel ) );
+        pFader->setValue     ( min ( AUD_MIX_FADER_MAX, MathUtils::round ( dLevel ) ) );
         pFader->blockSignals ( false );
 
-        SendFaderLevelToServer ( dLevel, bIsGroupUpdate );
-    }
-    else if ( dLevel >= 0 )
-    {
-        // If the level is above the maximum, we have to store it for the purpose
-        // of group fader movement. If you move a fader which has lower volume than
-        // this one and this clips at max, we want to retain the ratio between this
-        // fader and the others in the group.
-        dPreviousFaderLevel = dLevel;
+        SendFaderLevelToServer ( min ( static_cast<double> ( AUD_MIX_FADER_MAX ), dLevel ), bIsGroupUpdate );
+
+        if ( dLevel > AUD_MIX_FADER_MAX )
+        {
+            // If the level is above the maximum, we have to store it for the purpose
+            // of group fader movement. If you move a fader which has lower volume than
+            // this one and this clips at max, we want to retain the ratio between this
+            // fader and the others in the group.
+            dPreviousFaderLevel = dLevel;
+        }
     }
 }
 

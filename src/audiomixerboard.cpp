@@ -379,11 +379,6 @@ void CChannelFader::SetPanValue ( const int iPan )
     }
 }
 
-void CChannelFader::SetFaderIsSelect ( const bool bIsSelected )
-{
-    pcbGroup->setChecked ( bIsSelected );
-}
-
 void CChannelFader::SetFaderIsSolo ( const bool bIsSolo )
 {
     // changing the state automatically emits the signal, too
@@ -659,19 +654,20 @@ double CChannelFader::CalcFaderGain ( const double dValue )
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
-    QGroupBox            ( parent ),
-    vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-    vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-    vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-    vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    iNewClientFaderLevel ( 100 ),
-    bDisplayPans         ( false ),
-    bIsPanSupported      ( false ),
-    bNoFaderVisible      ( true ),
-    iMyChannelID         ( INVALID_INDEX ),
-    strServerName        ( "" ),
-    eRecorderState       ( RS_UNDEFINED )
+    QGroupBox             ( parent ),
+    vecStoredFaderTags    ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+    vecStoredFaderLevels  ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+    vecStoredPanValues    ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
+    vecStoredFaderIsSolo  ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    vecStoredFaderIsMute  ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
+    iNewClientFaderLevel  ( 100 ),
+    bDisplayPans          ( false ),
+    bIsPanSupported       ( false ),
+    bNoFaderVisible       ( true ),
+    iMyChannelID          ( INVALID_INDEX ),
+    strServerName         ( "" ),
+    eRecorderState        ( RS_UNDEFINED )
 {
     // add group box and hboxlayout
     QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
@@ -967,17 +963,20 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     int  iStoredPanValue;
                     bool bStoredFaderIsSolo;
                     bool bStoredFaderIsMute;
+                    int  iGroupID;
 
                     if ( GetStoredFaderSettings ( vecChanInfo[j],
                                                   iStoredFaderLevel,
                                                   iStoredPanValue,
                                                   bStoredFaderIsSolo,
-                                                  bStoredFaderIsMute ) )
+                                                  bStoredFaderIsMute,
+                                                  iGroupID ) )
                     {
                         vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
                         vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
                         vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                         vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
+                        vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
                     }
                 }
 
@@ -1076,13 +1075,13 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
     // if this fader is selected, all other in the group must be updated as
     // well (note that we do not have to update if this is already a group update
     // to avoid an infinite loop)
-    if ( vecpChanFader[iChannelIdx]->IsSelect() && !bIsGroupUpdate )
+    if ( ( vecpChanFader[iChannelIdx]->GetGroupID() != INVALID_INDEX ) && !bIsGroupUpdate )
     {
         for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
             // update rest of faders selected
             if ( vecpChanFader[i]->IsVisible() &&
-                 vecpChanFader[i]->IsSelect() &&
+                 ( vecpChanFader[i]->GetGroupID() == vecpChanFader[iChannelIdx]->GetGroupID() ) &&
                  ( i != iChannelIdx ) &&
                  ( dLevelRatio >= 0 ) )
             {
@@ -1106,10 +1105,11 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
     if ( pChanFader->IsVisible() &&
          !pChanFader->GetReceivedName().isEmpty() )
     {
-        CVector<int> viOldStoredFaderLevels ( vecStoredFaderLevels );
-        CVector<int> viOldStoredPanValues   ( vecStoredPanValues );
-        CVector<int> vbOldStoredFaderIsSolo ( vecStoredFaderIsSolo );
-        CVector<int> vbOldStoredFaderIsMute ( vecStoredFaderIsMute );
+        CVector<int> viOldStoredFaderLevels  ( vecStoredFaderLevels );
+        CVector<int> viOldStoredPanValues    ( vecStoredPanValues );
+        CVector<int> vbOldStoredFaderIsSolo  ( vecStoredFaderIsSolo );
+        CVector<int> vbOldStoredFaderIsMute  ( vecStoredFaderIsMute );
+        CVector<int> vbOldStoredFaderGroupID ( vecStoredFaderGroupID );
 
         // init temporary list count (may be overwritten later on)
         int iTempListCnt = 0;
@@ -1120,11 +1120,12 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
                                                        true );
 
         // current fader level and solo state is at the top of the list
-        vecStoredFaderLevels[0] = pChanFader->GetFaderLevel();
-        vecStoredPanValues[0]   = pChanFader->GetPanValue();
-        vecStoredFaderIsSolo[0] = pChanFader->IsSolo();
-        vecStoredFaderIsMute[0] = pChanFader->IsMute();
-        iTempListCnt            = 1;
+        vecStoredFaderLevels[0]  = pChanFader->GetFaderLevel();
+        vecStoredPanValues[0]    = pChanFader->GetPanValue();
+        vecStoredFaderIsSolo[0]  = pChanFader->IsSolo();
+        vecStoredFaderIsMute[0]  = pChanFader->IsMute();
+        vecStoredFaderGroupID[0] = pChanFader->GetGroupID();
+        iTempListCnt             = 1;
 
         for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
@@ -1136,10 +1137,11 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
                 // index in case the entry was not present in the vector before
                 if ( iIdx != iOldIdx )
                 {
-                    vecStoredFaderLevels[iTempListCnt] = viOldStoredFaderLevels[iIdx];
-                    vecStoredPanValues[iTempListCnt]   = viOldStoredPanValues[iIdx];
-                    vecStoredFaderIsSolo[iTempListCnt] = vbOldStoredFaderIsSolo[iIdx];
-                    vecStoredFaderIsMute[iTempListCnt] = vbOldStoredFaderIsMute[iIdx];
+                    vecStoredFaderLevels[iTempListCnt]  = viOldStoredFaderLevels[iIdx];
+                    vecStoredPanValues[iTempListCnt]    = viOldStoredPanValues[iIdx];
+                    vecStoredFaderIsSolo[iTempListCnt]  = vbOldStoredFaderIsSolo[iIdx];
+                    vecStoredFaderIsMute[iTempListCnt]  = vbOldStoredFaderIsMute[iIdx];
+                    vecStoredFaderGroupID[iTempListCnt] = vbOldStoredFaderGroupID[iIdx];
 
                     iTempListCnt++;
                 }
@@ -1152,7 +1154,8 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                                 int&                iStoredFaderLevel,
                                                 int&                iStoredPanValue,
                                                 bool&               bStoredFaderIsSolo,
-                                                bool&               bStoredFaderIsMute )
+                                                bool&               bStoredFaderIsMute,
+                                                int&                iGroupID )
 {
     // only do the check if the name string is not empty
     if ( !ChanInfo.strName.isEmpty() )
@@ -1167,6 +1170,7 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                 iStoredPanValue    = vecStoredPanValues[iIdx];
                 bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx] != 0;
                 bStoredFaderIsMute = vecStoredFaderIsMute[iIdx] != 0;
+                iGroupID           = vecStoredFaderGroupID[iIdx];
 
                 // values found and copied, return OK
                 return true;

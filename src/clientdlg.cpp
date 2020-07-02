@@ -189,12 +189,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
 
     // restore fader settings
-    MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
-    MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
-    MainMixerBoard->vecStoredPanValues   = pClient->vecStoredPanValues;
-    MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
-    MainMixerBoard->vecStoredFaderIsMute = pClient->vecStoredFaderIsMute;
-    MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel;
+    MainMixerBoard->vecStoredFaderTags    = pClient->vecStoredFaderTags;
+    MainMixerBoard->vecStoredFaderLevels  = pClient->vecStoredFaderLevels;
+    MainMixerBoard->vecStoredPanValues    = pClient->vecStoredPanValues;
+    MainMixerBoard->vecStoredFaderIsSolo  = pClient->vecStoredFaderIsSolo;
+    MainMixerBoard->vecStoredFaderIsMute  = pClient->vecStoredFaderIsMute;
+    MainMixerBoard->vecStoredFaderGroupID = pClient->vecStoredFaderGroupID;
+    MainMixerBoard->iNewClientFaderLevel  = pClient->iNewClientFaderLevel;
 
     // init status label
     OnTimerStatus();
@@ -602,6 +603,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pClient->vecStoredPanValues          = MainMixerBoard->vecStoredPanValues;
     pClient->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
     pClient->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
+    pClient->vecStoredFaderGroupID       = MainMixerBoard->vecStoredFaderGroupID;
     pClient->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
     pClient->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
 

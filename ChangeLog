@@ -5,7 +5,7 @@
 
 3.5.9git
 
-- bug fix: grouping faders in the client should be proportional (see discussion in #202)
+- bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
 
 TODO bug fix: incorrect selection of UI language (#408) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!

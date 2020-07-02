@@ -278,6 +278,17 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
         }
     }
 
+    // stored fader group ID
+    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+    {
+        if ( GetNumericIniSet ( IniXMLDocument, "client",
+                                QString ( "storedgroupid%1" ).arg ( iIdx ),
+                                0, MAX_NUM_FADER_GROUPS, iValue ) )
+        {
+            pClient->vecStoredFaderGroupID[iIdx] = iValue;
+        }
+    }
+
     // new client level
     if ( GetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
          0, 100, iValue ) )
@@ -583,6 +594,14 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
         SetFlagIniSet ( IniXMLDocument, "client",
                         QString ( "storedfaderismute%1" ).arg ( iIdx ),
                         pClient->vecStoredFaderIsMute[iIdx] != 0 );
+    }
+
+    // stored fader group ID
+    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+    {
+        SetNumericIniSet ( IniXMLDocument, "client",
+                           QString ( "storedgroupid%1" ).arg ( iIdx ),
+                           pClient->vecStoredFaderGroupID[iIdx] );
     }
 
     // new client level

@@ -285,6 +285,7 @@ public:
     CVector<int>     vecStoredPanValues;
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
+    CVector<int>     vecStoredFaderGroupID;
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
     QString          strClientName;

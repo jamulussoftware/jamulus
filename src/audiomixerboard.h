@@ -50,25 +50,25 @@ public:
     CChannelFader ( QWidget* pNW );
 
     QString GetReceivedName() { return cReceivedChanInfo.strName; }
-    int GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
-    void SetChannelInfos ( const CChannelInfo& cChanInfo );
-    void Show() { pFrame->show(); }
-    void Hide() { pFrame->hide(); }
-    bool IsVisible() { return !pFrame->isHidden(); }
-    bool IsSolo() { return pcbSolo->isChecked(); }
-    bool IsMute() { return pcbMute->isChecked(); }
-    bool IsSelect() { return pcbGroup->isChecked(); }
-    void SetGUIDesign ( const EGUIDesign eNewDesign );
-    void SetDisplayChannelLevel ( const bool eNDCL );
-    bool GetDisplayChannelLevel();
-    void SetDisplayPans ( const bool eNDP );
+    int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
+    void    SetChannelInfos ( const CChannelInfo& cChanInfo );
+    void    Show() { pFrame->show(); }
+    void    Hide() { pFrame->hide(); }
+    bool    IsVisible() { return !pFrame->isHidden(); }
+    bool    IsSolo() { return pcbSolo->isChecked(); }
+    bool    IsMute() { return pcbMute->isChecked(); }
+    int     GetGroupID() { return pcbGroup->isChecked() ? 0 : INVALID_INDEX; }
+    void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void    SetDisplayChannelLevel ( const bool eNDCL );
+    bool    GetDisplayChannelLevel();
+    void    SetDisplayPans ( const bool eNDP );
     QFrame* GetMainWidget() { return pFrame; }
 
     void SetPanValue ( const int iPan );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
+    void SetGroupID ( const int iGroupID ) { pcbGroup->setChecked ( iGroupID != INVALID_INDEX ); }
     void SetRemoteFaderIsMute ( const bool bIsMute );
-    void SetFaderIsSelect ( const bool bIsMute );
     void SetFaderLevel ( const double dLevel,
                          const bool   bIsGroupUpdate = false );
 
@@ -203,6 +203,7 @@ public:
     CVector<int>     vecStoredPanValues;
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
+    CVector<int>     vecStoredFaderGroupID;
     int              iNewClientFaderLevel;
 
 protected:
@@ -225,7 +226,8 @@ protected:
                                   int&                iStoredFaderLevel,
                                   int&                iStoredPanValue,
                                   bool&               bStoredFaderIsSolo,
-                                  bool&               bStoredFaderIsMute );
+                                  bool&               bStoredFaderIsMute,
+                                  int&                iGroupID );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();

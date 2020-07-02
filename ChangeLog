@@ -10,7 +10,6 @@
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
 
-TODO fix: if group, set one fader to 0, set mute, move fader up, unmute -> no grouping anymore
 
 TODO bug fix: incorrect selection of UI language (#408) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      -> note that for the 3.5.8 bug fix release we went back to the original translation code (e.g. no pt_BR!)

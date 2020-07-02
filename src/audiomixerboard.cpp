@@ -455,12 +455,6 @@ void CChannelFader::SetMute ( const bool bState )
         {
             // mute was unchecked, get current fader value and apply
             emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, false, false, -1 ); // set level ratio to in invalid value
-
-// TODO When mute or solo is activated, the group synchronization does not work anymore.
-//      To get a smoother experience, we adjust the previous level as soon as the mute is
-//      again set to off (if we would not do that, on the next move of the fader the other
-//      faders in the group would jump which is very bad).
-            dPreviousFaderLevel = GetFaderLevel();
         }
     }
 }

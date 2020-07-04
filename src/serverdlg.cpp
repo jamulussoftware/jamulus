@@ -330,7 +330,7 @@ lvwClients->setMinimumHeight ( 140 );
     pbtNewRecording->setAutoDefault ( false );
     pbtRecordingDir->setAutoDefault ( false );
     edtRecordingDir->setText( pServer->GetRecordingDir() );
-    tbtClearRecordingDir->setText ( ""<font color=""black"">&#9003;</font>"" );
+    tbtClearRecordingDir->setText(QString::fromUtf8("\u232B"));
 
     UpdateRecorderStatus ( QString::null );
 

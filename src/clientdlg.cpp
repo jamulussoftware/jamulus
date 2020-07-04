@@ -289,6 +289,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pEditMenu->addAction ( tr ( "Sort Channel Users by &Instrument" ), this,
         SLOT ( OnSortChannelsByInstrument() ), QKeySequence ( Qt::CTRL + Qt::Key_I ) );
 
+    pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
+        SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
+
 
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );

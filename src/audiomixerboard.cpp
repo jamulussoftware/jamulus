@@ -916,9 +916,21 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
         {
             PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
         }
-        else // ST_BY_INSTRUMENT
+        else if ( eChSortType ==  ST_BY_INSTRUMENT )
         {
             PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ), i );
+        }
+        else // ST_BY_GROUPID
+        {
+            if ( vecpChanFader[i]->GetGroupID() == INVALID_INDEX )
+            {
+                // put channels without a group at the end
+                PairList << QPair<QString, int> ( "z", i ); // group IDs are numbers, use letter to put it at the end
+            }
+            else
+            {
+                PairList << QPair<QString, int> ( QString::number ( vecpChanFader[i]->GetGroupID() ), i );
+            }
         }
     }
 

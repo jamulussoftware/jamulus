@@ -281,9 +281,10 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
     // stored fader group ID
     for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
     {
+        // note that we only apply valid group numbers here
         if ( GetNumericIniSet ( IniXMLDocument, "client",
                                 QString ( "storedgroupid%1" ).arg ( iIdx ),
-                                0, MAX_NUM_FADER_GROUPS, iValue ) )
+                                0, MAX_NUM_FADER_GROUPS - 1, iValue ) )
         {
             pClient->vecStoredFaderGroupID[iIdx] = iValue;
         }

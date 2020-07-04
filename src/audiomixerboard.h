@@ -82,7 +82,7 @@ public:
     void   UpdateSoloState ( const bool bNewOtherSoloState );
 
 protected:
-    void   UpdateGroupCheckState();
+    void   UpdateGroupIDDependencies();
     double CalcFaderGain ( const double dValue );
     void   SetMute ( const bool bState );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
@@ -118,6 +118,7 @@ protected:
     bool         bIsMyOwnFader;
     double       dPreviousFaderLevel;
     int          iGroupID;
+    QString      strGroupBaseText;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }

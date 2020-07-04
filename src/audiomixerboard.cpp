@@ -45,7 +45,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pMuteSoloBox                = new QWidget     ( pFrame );
     pcbMute                     = new QCheckBox   ( tr ( "Mute" ), pMuteSoloBox );
     pcbSolo                     = new QCheckBox   ( tr ( "Solo" ), pMuteSoloBox );
-    pcbGroup                    = new QCheckBox   ( tr ( "Grp" ), pMuteSoloBox );
+    pcbGroup                    = new QCheckBox   ( "", pMuteSoloBox );
 
     pLabelInstBox               = new QGroupBox   ( pFrame );
     plblLabel                   = new QLabel      ( "", pFrame );
@@ -128,6 +128,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pMainGrid->addWidget ( pLabelInstBox );
 
     // reset current fader
+    strGroupBaseText = "Grp"; // this will most probably overwritten by SetGUIDesign()
     Reset();
 
     // add help text to controls
@@ -224,7 +225,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "PAN" ) );
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
-        pcbGroup->setText                   ( tr ( "GRP" ) );
+        strGroupBaseText =                    tr ( "GRP" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
         break;
 
@@ -238,7 +239,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "M" ) );
         pcbSolo->setText                    ( tr ( "S" ) );
-        pcbGroup->setText                   ( tr ( "G" ) );
+        strGroupBaseText =                    tr ( "G" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_BAR );
         break;
 
@@ -253,10 +254,13 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
-        pcbGroup->setText                   ( tr ( "Grp" ) );
+        strGroupBaseText =                    tr ( "Grp" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
         break;
     }
+
+    // we need to update since we changed the checkbox text
+    UpdateGroupIDDependencies();
 }
 
 void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
@@ -356,7 +360,7 @@ void CChannelFader::Reset()
     bIsMyOwnFader       = false;
 
     iGroupID = INVALID_INDEX;
-    UpdateGroupCheckState();
+    UpdateGroupIDDependencies();
 }
 
 void CChannelFader::SetFaderLevel ( const double dLevel,
@@ -460,21 +464,10 @@ void CChannelFader::OnMuteStateChanged ( int value )
 void CChannelFader::SetGroupID ( const int iNGroupID )
 {
     iGroupID = iNGroupID;
-
-// TODO different skins, different text; also prolem with skin update
-    if ( iNGroupID != INVALID_INDEX )
-    {
-        pcbGroup->setText ( tr ( "Grp" ) + QString::number ( iNGroupID + 1  ) );
-    }
-    else
-    {
-        pcbGroup->setText ( tr ( "Grp" ) );
-    }
-
-    UpdateGroupCheckState();
+    UpdateGroupIDDependencies();
 }
 
-void CChannelFader::UpdateGroupCheckState()
+void CChannelFader::UpdateGroupIDDependencies()
 {
     // update the group checkbox according the current group ID setting
     pcbGroup->blockSignals ( true ); // make sure no signals as fired
@@ -487,6 +480,16 @@ void CChannelFader::UpdateGroupCheckState()
         pcbGroup->setCheckState ( Qt::Checked );
     }
     pcbGroup->blockSignals ( false );
+
+    // update group checkbox text
+    if ( iGroupID != INVALID_INDEX )
+    {
+        pcbGroup->setText ( strGroupBaseText + QString::number ( iGroupID + 1  ) );
+    }
+    else
+    {
+        pcbGroup->setText ( strGroupBaseText );
+    }
 }
 
 void CChannelFader::OnGroupStateChanged ( int )
@@ -496,7 +499,7 @@ void CChannelFader::OnGroupStateChanged ( int )
     // setting and not the current click state since the user might not click
     // on the menu but at one other place and then the popup menu disappears but
     // the checkobx state would be on an invalid state
-    UpdateGroupCheckState();
+    UpdateGroupIDDependencies();
     pGroupPopupMenu->popup ( QCursor::pos() );
 }
 

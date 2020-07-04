@@ -22,6 +22,8 @@ TODO improve settings management -> move settings class in client/server classes
 
 TODO add new register message which contains version and, e.g., max number of clients
 
+TODO Inconsistency between Input meter and Audio mixer meter #423
+
 TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
      - generate .qm on compile time with lrelease
 

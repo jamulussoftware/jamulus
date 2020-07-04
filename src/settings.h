@@ -164,8 +164,13 @@ protected:
 class CServerSettings : public CSettings
 {
 public:
-    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) : pServer ( pNSerP )
+    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) :
+        vecWindowPosMain ( ), // empty array
+        pServer          ( pNSerP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
+
+    // window position/state settings
+    QByteArray vecWindowPosMain;
 
 protected:
     virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;

@@ -360,9 +360,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     // Window positions --------------------------------------------------------
     // main window
-    if ( !pServer->vecWindowPosMain.isEmpty() && !pServer->vecWindowPosMain.isNull() )
+    if ( !pSettings->vecWindowPosMain.isEmpty() && !pSettings->vecWindowPosMain.isNull() )
     {
-        restoreGeometry ( pServer->vecWindowPosMain );
+        restoreGeometry ( pSettings->vecWindowPosMain );
     }
 
 
@@ -443,7 +443,7 @@ lvwClients->setMinimumHeight ( 140 );
 void CServerDlg::closeEvent ( QCloseEvent* Event )
 {
     // store window positions
-    pServer->vecWindowPosMain = saveGeometry();
+    pSettings->vecWindowPosMain = saveGeometry();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -557,8 +557,8 @@ void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
 
 void CServerDlg::OnServerStarted()
 {
-     UpdateSystemTrayIcon ( true );
-     UpdateRecorderStatus ( QString::null );
+    UpdateSystemTrayIcon ( true );
+    UpdateRecorderStatus ( QString::null );
 }
 
 void CServerDlg::OnServerStopped()
@@ -575,11 +575,12 @@ void CServerDlg::OnStopRecorder()
 void CServerDlg::OnRecordingDirClicked()
 {
     // get the current value from pServer
-    QString currentValue = pServer->GetRecordingDir();
+    QString currentValue    = pServer->GetRecordingDir();
     QString newRecordingDir = QFileDialog::getExistingDirectory ( this,
                                                                   tr ( "Select Main Recording Directory" ),
                                                                   currentValue,
                                                                   QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog );
+
     if ( newRecordingDir != currentValue )
     {
         pServer->SetRecordingDir ( newRecordingDir );
@@ -767,21 +768,23 @@ void CServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
 
 void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
 {
-    QString        currentSessionDir = edtCurrentSessionDir->text();
-    QString        errMsg            = pServer->GetRecorderErrMsg();
-    bool           bIsRecording      = false;
-    QString        strRecorderStatus;
-    QString        strRecordingDir;
+    QString currentSessionDir = edtCurrentSessionDir->text();
+    QString errMsg            = pServer->GetRecorderErrMsg();
+    bool    bIsRecording      = false;
+    QString strRecorderStatus;
+    QString strRecordingDir;
 
     if ( pServer->GetRecorderInitialised() )
     {
         strRecordingDir = pServer->GetRecordingDir();
         chbEnableRecorder->setEnabled ( true );
+
         if ( pServer->GetRecordingEnabled() )
         {
             if ( pServer->IsRunning() )
             {
                 edtCurrentSessionDir->setText ( sessionDir != QString::null ? sessionDir : "" );
+
                 strRecorderStatus = tr ( SREC_RECORDING );
                 bIsRecording      = true;
             }
@@ -798,6 +801,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
     else
     {
         strRecordingDir = pServer->GetRecorderErrMsg();
+
         if ( strRecordingDir == QString::null )
         {
             strRecordingDir = pServer->GetRecordingDir();
@@ -806,11 +810,12 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
         {
             strRecordingDir = tr ( "ERROR" ) + ": " + strRecordingDir;
         }
+
         chbEnableRecorder->setEnabled ( false );
         strRecorderStatus = tr ( SREC_NOT_INITIALISED );
     }
 
-    edtRecordingDir->setText( strRecordingDir );
+    edtRecordingDir->setText ( strRecordingDir );
     edtCurrentSessionDir->setEnabled ( bIsRecording );
     lblRecorderStatus->setText ( strRecorderStatus );
     pbtNewRecording->setEnabled ( bIsRecording );

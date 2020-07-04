@@ -234,7 +234,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const ELicenceType eNLicenceType ) :
-    vecWindowPosMain            (), // empty array
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     iMaxNumChannels             ( iNewMaxNumChan ),
     Socket                      ( this, iPortNumber ),

@@ -814,7 +814,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     }
 
     // window position of the main window
-    pServer->vecWindowPosMain = FromBase64ToByteArray (
+    vecWindowPosMain = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
 }
 
@@ -854,5 +854,5 @@ void CServerSettings::WriteToXML ( QDomDocument& IniXMLDocument )
 
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "server", "winposmain_base64",
-        ToBase64 ( pServer->vecWindowPosMain ) );
+        ToBase64 ( vecWindowPosMain ) );
 }

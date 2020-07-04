@@ -227,9 +227,6 @@ void CConnectDlg::RequestServerList()
     // clear server list view
     lvwServers->clear();
 
-    // clear filter edit box
-    edtFilter->setText ( "" );
-
     // update list combo box (disable events to avoid a signal)
     cbxCentServAddrType->blockSignals ( true );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
@@ -481,6 +478,9 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             // to show the children
             lvwServers->setRootIsDecorated ( true );
         }
+
+        // the clients list may have changed, update the filter selection
+        UpdateListFilter();
     }
 }
 
@@ -565,6 +565,14 @@ void CConnectDlg::UpdateListFilter()
 
             // search location
             if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+            {
+                bFilterFound = true;
+            }
+
+            // special case: filter for occupied servers
+            // DEFINITION: if "#" is set at the beginning of the filter text, we show
+            //             occupied servers (#397)
+            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( pCurListViewItem->childCount() > 0 ) )
             {
                 bFilterFound = true;
             }

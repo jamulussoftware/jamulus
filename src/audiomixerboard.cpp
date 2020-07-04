@@ -282,10 +282,36 @@ void CChannelFader::SetDisplayPans ( const bool eNDP )
 
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 {
+    // the group ID defines the border color
+    QString strBorderColor;
+
+    switch ( iGroupID )
+    {
+    case 0:
+        strBorderColor = "red";
+        break;
+
+    case 1:
+        strBorderColor = "blue";
+        break;
+
+    case 2:
+        strBorderColor = "green";
+        break;
+
+    case 3:
+        strBorderColor = "yellow";
+        break;
+
+    default:
+        strBorderColor = "black";
+        break;
+    }
+
     // setup group box for label/instrument picture: set a thick black border
     // with nice round edges
     QString strStile =
-        "QGroupBox { border:        2px solid black;"
+        "QGroupBox { border:        2px solid " + strBorderColor + ";"
         "            border-radius: 4px;"
         "            padding:       3px;";
 
@@ -490,6 +516,9 @@ void CChannelFader::UpdateGroupIDDependencies()
     {
         pcbGroup->setText ( strGroupBaseText );
     }
+
+    // the fader tag border color is set according to the selected group
+    SetupFaderTag ( cReceivedChanInfo.eSkillLevel );
 }
 
 void CChannelFader::OnGroupStateChanged ( int )

@@ -60,6 +60,17 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     QVBoxLayout* pPanGrid       = new QVBoxLayout ( );
     QHBoxLayout* pPanInfoGrid   = new QHBoxLayout ( );
 
+    // define the popup menu for the group checkbox
+    pGroupPopupMenu = new QMenu ( "", pcbGroup );
+    pGroupPopupMenu->addAction ( tr ( "No grouping" ), this, SLOT ( OnGroupMenuGrpNone() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 1", this, SLOT ( OnGroupMenuGrp1() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 2", this, SLOT ( OnGroupMenuGrp2() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 3", this, SLOT ( OnGroupMenuGrp3() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 4", this, SLOT ( OnGroupMenuGrp4() ) );
+#if ( MAX_NUM_FADER_GROUPS != 4 )
+# error "MAX_NUM_FADER_GROUPS must be set to 4, see implementation in CChannelFader()"
+#endif
+
     // setup channel level
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
 
@@ -183,6 +194,9 @@ CChannelFader::CChannelFader ( QWidget* pNW )
 
     QObject::connect ( pcbSolo, &QCheckBox::stateChanged,
         this, &CChannelFader::soloStateChanged );
+
+    QObject::connect ( pcbGroup, &QCheckBox::stateChanged,
+        this, &CChannelFader::OnGroupStateChanged );
 }
 
 void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -319,7 +333,6 @@ void CChannelFader::Reset()
     // reset mute/solo/group check boxes and level meter
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
-    pcbGroup->setChecked ( false );
     plbrChannelLevel->SetValue ( 0 );
     plbrChannelLevel->ClipReset();
 
@@ -341,6 +354,9 @@ void CChannelFader::Reset()
 
     bOtherChannelIsSolo = false;
     bIsMyOwnFader       = false;
+
+    iGroupID = INVALID_INDEX;
+    UpdateGroupCheckState();
 }
 
 void CChannelFader::SetFaderLevel ( const double dLevel,
@@ -439,6 +455,49 @@ void CChannelFader::OnMuteStateChanged ( int value )
 {
     // call muting function
     SetMute ( static_cast<Qt::CheckState> ( value ) == Qt::Checked );
+}
+
+void CChannelFader::SetGroupID ( const int iNGroupID )
+{
+    iGroupID = iNGroupID;
+
+// TODO different skins, different text; also prolem with skin update
+    if ( iNGroupID != INVALID_INDEX )
+    {
+        pcbGroup->setText ( tr ( "Grp" ) + QString::number ( iNGroupID + 1  ) );
+    }
+    else
+    {
+        pcbGroup->setText ( tr ( "Grp" ) );
+    }
+
+    UpdateGroupCheckState();
+}
+
+void CChannelFader::UpdateGroupCheckState()
+{
+    // update the group checkbox according the current group ID setting
+    pcbGroup->blockSignals ( true ); // make sure no signals as fired
+    if ( iGroupID == INVALID_INDEX )
+    {
+        pcbGroup->setCheckState ( Qt::Unchecked );
+    }
+    else
+    {
+        pcbGroup->setCheckState ( Qt::Checked );
+    }
+    pcbGroup->blockSignals ( false );
+}
+
+void CChannelFader::OnGroupStateChanged ( int )
+{
+    // we want a popup menu shown if the user presses the group checkbox but
+    // we want to make sure that the checkbox state represents the current group
+    // setting and not the current click state since the user might not click
+    // on the menu but at one other place and then the popup menu disappears but
+    // the checkobx state would be on an invalid state
+    UpdateGroupCheckState();
+    pGroupPopupMenu->popup ( QCursor::pos() );
 }
 
 void CChannelFader::SetMute ( const bool bState )

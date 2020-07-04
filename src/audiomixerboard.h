@@ -36,6 +36,7 @@
 #include <QSizePolicy>
 #include <QHostAddress>
 #include <QListWidget>
+#include <QMenu>
 #include "global.h"
 #include "util.h"
 #include "levelmeter.h"
@@ -57,7 +58,7 @@ public:
     bool    IsVisible() { return !pFrame->isHidden(); }
     bool    IsSolo() { return pcbSolo->isChecked(); }
     bool    IsMute() { return pcbMute->isChecked(); }
-    int     GetGroupID() { return pcbGroup->isChecked() ? 0 : INVALID_INDEX; }
+    int     GetGroupID() { return iGroupID; }
     void    SetGUIDesign ( const EGUIDesign eNewDesign );
     void    SetDisplayChannelLevel ( const bool eNDCL );
     bool    GetDisplayChannelLevel();
@@ -67,7 +68,7 @@ public:
     void SetPanValue ( const int iPan );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
-    void SetGroupID ( const int iGroupID ) { pcbGroup->setChecked ( iGroupID != INVALID_INDEX ); }
+    void SetGroupID ( const int iNGroupID );
     void SetRemoteFaderIsMute ( const bool bIsMute );
     void SetFaderLevel ( const double dLevel,
                          const bool   bIsGroupUpdate = false );
@@ -81,6 +82,7 @@ public:
     void   UpdateSoloState ( const bool bNewOtherSoloState );
 
 protected:
+    void   UpdateGroupCheckState();
     double CalcFaderGain ( const double dValue );
     void   SetMute ( const bool bState );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
@@ -103,6 +105,7 @@ protected:
     QCheckBox*   pcbMute;
     QCheckBox*   pcbSolo;
     QCheckBox*   pcbGroup;
+    QMenu*       pGroupPopupMenu;
 
     QGroupBox*   pLabelInstBox;
     QLabel*      plblLabel;
@@ -114,11 +117,19 @@ protected:
     bool         bOtherChannelIsSolo;
     bool         bIsMyOwnFader;
     double       dPreviousFaderLevel;
+    int          iGroupID;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }
     void OnPanValueChanged ( int value ) { SendPanValueToServer ( value ); }
     void OnMuteStateChanged ( int value );
+    void OnGroupStateChanged ( int );
+
+    void OnGroupMenuGrpNone() { SetGroupID ( INVALID_INDEX ); }
+    void OnGroupMenuGrp1()    { SetGroupID ( 0 ); }
+    void OnGroupMenuGrp2()    { SetGroupID ( 1 ); }
+    void OnGroupMenuGrp3()    { SetGroupID ( 2 ); }
+    void OnGroupMenuGrp4()    { SetGroupID ( 3 ); }
 
 signals:
     void gainValueChanged ( double value,

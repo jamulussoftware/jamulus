@@ -26,8 +26,13 @@
 
 
 /* Implementation *************************************************************/
-CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
-    Qt::WindowFlags f ) : QDialog ( parent, f ), pClient ( pNCliP )
+CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
+                                         CClientSettings* pNSetP,
+                                         QWidget*         parent,
+                                         Qt::WindowFlags  f ) :
+    QDialog   ( parent, f ),
+    pClient   ( pNCliP ),
+    pSettings ( pNSetP )
 {
     setupUi ( this );
 
@@ -340,7 +345,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
 
     // update new client fader level edit box
-    edtNewClientLevel->setText ( QString::number ( pClient->iNewClientFaderLevel ) );
+    edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
 
     // update enable small network buffers check box
     chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
@@ -671,8 +676,7 @@ void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 void CClientSettingsDlg::OnNewClientLevelEditingFinished()
 {
     // store new setting in the client
-    pClient->iNewClientFaderLevel =
-        edtNewClientLevel->text().toInt();
+    pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt();
 
     // inform that the level has changed and the mixer board settings must
     // be updated

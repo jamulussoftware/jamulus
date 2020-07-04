@@ -230,7 +230,7 @@ public slots:
 
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
-    void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }
+    void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pSettings->iNewClientFaderLevel; }
 
     void accept() { close(); } // introduced by pljones
 

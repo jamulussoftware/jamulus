@@ -110,8 +110,46 @@ protected:
 class CClientSettings : public CSettings
 {
 public:
-    CClientSettings ( CClient* pNCliP, const QString& sNFiName ) : pClient ( pNCliP )
+    CClientSettings ( CClient* pNCliP, const QString& sNFiName ) :
+        vecStoredFaderTags          ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+        vecStoredFaderLevels        ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+        vecStoredPanValues          ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
+        vecStoredFaderIsSolo        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+        vecStoredFaderIsMute        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+        vecStoredFaderGroupID       ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
+        iNewClientFaderLevel        ( 100 ),
+        bConnectDlgShowAllMusicians ( true ),
+        vecWindowPosMain            ( ), // empty array
+        vecWindowPosSettings        ( ), // empty array
+        vecWindowPosChat            ( ), // empty array
+        vecWindowPosProfile         ( ), // empty array
+        vecWindowPosConnect         ( ), // empty array
+        bWindowWasShownSettings     ( false ),
+        bWindowWasShownChat         ( false ),
+        bWindowWasShownProfile      ( false ),
+        bWindowWasShownConnect      ( false ),
+        pClient                     ( pNCliP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
+
+    CVector<QString> vecStoredFaderTags;
+    CVector<int>     vecStoredFaderLevels;
+    CVector<int>     vecStoredPanValues;
+    CVector<int>     vecStoredFaderIsSolo;
+    CVector<int>     vecStoredFaderIsMute;
+    CVector<int>     vecStoredFaderGroupID;
+    int              iNewClientFaderLevel;
+    bool             bConnectDlgShowAllMusicians;
+
+    // window position/state settings
+    QByteArray vecWindowPosMain;
+    QByteArray vecWindowPosSettings;
+    QByteArray vecWindowPosChat;
+    QByteArray vecWindowPosProfile;
+    QByteArray vecWindowPosConnect;
+    bool       bWindowWasShownSettings;
+    bool       bWindowWasShownChat;
+    bool       bWindowWasShownProfile;
+    bool       bWindowWasShownConnect;
 
 protected:
     virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;

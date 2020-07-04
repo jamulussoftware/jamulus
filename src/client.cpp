@@ -33,24 +33,7 @@ CClient::CClient ( const quint16  iPortNumber,
                    const QString& strNClientName ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
-    vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-    vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-    vecStoredPanValues               ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-    vecStoredFaderIsSolo             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    vecStoredFaderIsMute             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    vecStoredFaderGroupID            ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
-    iNewClientFaderLevel             ( 100 ),
-    bConnectDlgShowAllMusicians      ( true ),
     strClientName                    ( strNClientName ),
-    vecWindowPosMain                 (), // empty array
-    vecWindowPosSettings             (), // empty array
-    vecWindowPosChat                 (), // empty array
-    vecWindowPosProfile              (), // empty array
-    vecWindowPosConnect              (), // empty array
-    bWindowWasShownSettings          ( false ),
-    bWindowWasShownChat              ( false ),
-    bWindowWasShownProfile           ( false ),
-    bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder                   ( nullptr ),
     CurOpusDecoder                   ( nullptr ),

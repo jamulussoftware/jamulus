@@ -229,7 +229,7 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
     // stored fader tags
     for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
     {
-        pClient->vecStoredFaderTags[iIdx] = FromBase64ToString (
+        vecStoredFaderTags[iIdx] = FromBase64ToString (
             GetIniSetting ( IniXMLDocument, "client",
                             QString ( "storedfadertag%1_base64" ).arg ( iIdx ), "" ) );
     }
@@ -241,7 +241,7 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
                                 QString ( "storedfaderlevel%1" ).arg ( iIdx ),
                                 0, AUD_MIX_FADER_MAX, iValue ) )
         {
-            pClient->vecStoredFaderLevels[iIdx] = iValue;
+            vecStoredFaderLevels[iIdx] = iValue;
         }
     }
 
@@ -252,7 +252,7 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
                                 QString ( "storedpanvalue%1" ).arg ( iIdx ),
                                 0, AUD_MIX_PAN_MAX, iValue ) )
         {
-            pClient->vecStoredPanValues[iIdx] = iValue;
+            vecStoredPanValues[iIdx] = iValue;
         }
     }
 
@@ -263,7 +263,7 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
                              QString ( "storedfaderissolo%1" ).arg ( iIdx ),
                              bValue ) )
         {
-            pClient->vecStoredFaderIsSolo[iIdx] = bValue;
+            vecStoredFaderIsSolo[iIdx] = bValue;
         }
     }
 
@@ -274,7 +274,7 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
                              QString ( "storedfaderismute%1" ).arg ( iIdx ),
                              bValue ) )
         {
-            pClient->vecStoredFaderIsMute[iIdx] = bValue;
+            vecStoredFaderIsMute[iIdx] = bValue;
         }
     }
 
@@ -286,7 +286,7 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
                                 QString ( "storedgroupid%1" ).arg ( iIdx ),
                                 0, MAX_NUM_FADER_GROUPS - 1, iValue ) )
         {
-            pClient->vecStoredFaderGroupID[iIdx] = iValue;
+            vecStoredFaderGroupID[iIdx] = iValue;
         }
     }
 
@@ -294,13 +294,13 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
     if ( GetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
          0, 100, iValue ) )
     {
-        pClient->iNewClientFaderLevel = iValue;
+        iNewClientFaderLevel = iValue;
     }
 
     // connect dialog show all musicians
     if ( GetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians", bValue ) )
     {
-        pClient->bConnectDlgShowAllMusicians = bValue;
+        bConnectDlgShowAllMusicians = bValue;
     }
 
     // name
@@ -501,47 +501,47 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
 }
 
     // window position of the main window
-    pClient->vecWindowPosMain = FromBase64ToByteArray (
+    vecWindowPosMain = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "client", "winposmain_base64" ) );
 
     // window position of the settings window
-    pClient->vecWindowPosSettings = FromBase64ToByteArray (
+    vecWindowPosSettings = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "client", "winposset_base64" ) );
 
     // window position of the chat window
-    pClient->vecWindowPosChat = FromBase64ToByteArray (
+    vecWindowPosChat = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "client", "winposchat_base64" ) );
 
     // window position of the musician profile window
-    pClient->vecWindowPosProfile = FromBase64ToByteArray (
+    vecWindowPosProfile = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "client", "winposprofile_base64" ) );
 
     // window position of the connect window
-    pClient->vecWindowPosConnect = FromBase64ToByteArray (
+    vecWindowPosConnect = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
 
     // visibility state of the settings window
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisset", bValue ) )
     {
-        pClient->bWindowWasShownSettings = bValue;
+        bWindowWasShownSettings = bValue;
     }
 
     // visibility state of the chat window
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winvischat", bValue ) )
     {
-        pClient->bWindowWasShownChat = bValue;
+        bWindowWasShownChat = bValue;
     }
 
     // visibility state of the musician profile window
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisprofile", bValue ) )
     {
-        pClient->bWindowWasShownProfile = bValue;
+        bWindowWasShownProfile = bValue;
     }
 
     // visibility state of the connect window
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winviscon", bValue ) )
     {
-        pClient->bWindowWasShownConnect = bValue;
+        bWindowWasShownConnect = bValue;
     }
 }
 
@@ -562,7 +562,7 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     {
         PutIniSetting ( IniXMLDocument, "client",
                         QString ( "storedfadertag%1_base64" ).arg ( iIdx ),
-                        ToBase64 ( pClient->vecStoredFaderTags[iIdx] ) );
+                        ToBase64 ( vecStoredFaderTags[iIdx] ) );
     }
 
     // stored fader levels
@@ -570,7 +570,7 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     {
         SetNumericIniSet ( IniXMLDocument, "client",
                            QString ( "storedfaderlevel%1" ).arg ( iIdx ),
-                           pClient->vecStoredFaderLevels[iIdx] );
+                           vecStoredFaderLevels[iIdx] );
     }
 
     // stored pan values
@@ -578,7 +578,7 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     {
         SetNumericIniSet ( IniXMLDocument, "client",
                            QString ( "storedpanvalue%1" ).arg ( iIdx ),
-                           pClient->vecStoredPanValues[iIdx] );
+                           vecStoredPanValues[iIdx] );
     }
 
     // stored fader solo states
@@ -586,7 +586,7 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     {
         SetFlagIniSet ( IniXMLDocument, "client",
                         QString ( "storedfaderissolo%1" ).arg ( iIdx ),
-                        pClient->vecStoredFaderIsSolo[iIdx] != 0 );
+                        vecStoredFaderIsSolo[iIdx] != 0 );
     }
 
     // stored fader muted states
@@ -594,7 +594,7 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     {
         SetFlagIniSet ( IniXMLDocument, "client",
                         QString ( "storedfaderismute%1" ).arg ( iIdx ),
-                        pClient->vecStoredFaderIsMute[iIdx] != 0 );
+                        vecStoredFaderIsMute[iIdx] != 0 );
     }
 
     // stored fader group ID
@@ -602,16 +602,16 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     {
         SetNumericIniSet ( IniXMLDocument, "client",
                            QString ( "storedgroupid%1" ).arg ( iIdx ),
-                           pClient->vecStoredFaderGroupID[iIdx] );
+                           vecStoredFaderGroupID[iIdx] );
     }
 
     // new client level
     SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
-        pClient->iNewClientFaderLevel );
+        iNewClientFaderLevel );
 
     // connect dialog show all musicians
     SetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians",
-        pClient->bConnectDlgShowAllMusicians );
+        bConnectDlgShowAllMusicians );
 
     // name
     PutIniSetting ( IniXMLDocument, "client", "name_base64",
@@ -711,39 +711,39 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
 
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "client", "winposmain_base64",
-        ToBase64 ( pClient->vecWindowPosMain ) );
+        ToBase64 ( vecWindowPosMain ) );
 
     // window position of the settings window
     PutIniSetting ( IniXMLDocument, "client", "winposset_base64",
-        ToBase64 ( pClient->vecWindowPosSettings ) );
+        ToBase64 ( vecWindowPosSettings ) );
 
     // window position of the chat window
     PutIniSetting ( IniXMLDocument, "client", "winposchat_base64",
-        ToBase64 ( pClient->vecWindowPosChat ) );
+        ToBase64 ( vecWindowPosChat ) );
 
     // window position of the musician profile window
     PutIniSetting ( IniXMLDocument, "client", "winposprofile_base64",
-        ToBase64 ( pClient->vecWindowPosProfile ) );
+        ToBase64 ( vecWindowPosProfile ) );
 
     // window position of the connect window
     PutIniSetting ( IniXMLDocument, "client", "winposcon_base64",
-        ToBase64 ( pClient->vecWindowPosConnect ) );
+        ToBase64 ( vecWindowPosConnect ) );
 
     // visibility state of the settings window
     SetFlagIniSet ( IniXMLDocument, "client", "winvisset",
-        pClient->bWindowWasShownSettings );
+        bWindowWasShownSettings );
 
     // visibility state of the chat window
     SetFlagIniSet ( IniXMLDocument, "client", "winvischat",
-        pClient->bWindowWasShownChat );
+        bWindowWasShownChat );
 
     // visibility state of the musician profile window
     SetFlagIniSet ( IniXMLDocument, "client", "winvisprofile",
-        pClient->bWindowWasShownProfile );
+        bWindowWasShownProfile );
 
     // visibility state of the connect window
     SetFlagIniSet ( IniXMLDocument, "client", "winviscon",
-        pClient->bWindowWasShownConnect );
+        bWindowWasShownConnect );
 }
 
 

@@ -39,7 +39,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed       ( iCtrlMIDIChannel != INVALID_MIDI_CH ),
-    ClientSettingsDlg   ( pNCliP, parent, Qt::Window ),
+    ClientSettingsDlg   ( pNCliP, pNSetP, parent, Qt::Window ),
     ChatDlg             ( parent, Qt::Window ),
     ConnectDlg          ( pNCliP, bNewShowComplRegConnList, parent, Qt::Dialog ),
     AnalyzerConsole     ( pNCliP, parent, Qt::Window ),
@@ -189,13 +189,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
 
     // restore fader settings
-    MainMixerBoard->vecStoredFaderTags    = pClient->vecStoredFaderTags;
-    MainMixerBoard->vecStoredFaderLevels  = pClient->vecStoredFaderLevels;
-    MainMixerBoard->vecStoredPanValues    = pClient->vecStoredPanValues;
-    MainMixerBoard->vecStoredFaderIsSolo  = pClient->vecStoredFaderIsSolo;
-    MainMixerBoard->vecStoredFaderIsMute  = pClient->vecStoredFaderIsMute;
-    MainMixerBoard->vecStoredFaderGroupID = pClient->vecStoredFaderGroupID;
-    MainMixerBoard->iNewClientFaderLevel  = pClient->iNewClientFaderLevel;
+    MainMixerBoard->vecStoredFaderTags    = pSettings->vecStoredFaderTags;
+    MainMixerBoard->vecStoredFaderLevels  = pSettings->vecStoredFaderLevels;
+    MainMixerBoard->vecStoredPanValues    = pSettings->vecStoredPanValues;
+    MainMixerBoard->vecStoredFaderIsSolo  = pSettings->vecStoredFaderIsSolo;
+    MainMixerBoard->vecStoredFaderIsMute  = pSettings->vecStoredFaderIsMute;
+    MainMixerBoard->vecStoredFaderGroupID = pSettings->vecStoredFaderGroupID;
+    MainMixerBoard->iNewClientFaderLevel  = pSettings->iNewClientFaderLevel;
 
     // init status label
     OnTimerStatus();
@@ -226,7 +226,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     UpdateRevSelection();
 
     // init connect dialog
-    ConnectDlg.SetShowAllMusicians ( pClient->bConnectDlgShowAllMusicians );
+    ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
 
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
@@ -370,48 +370,48 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Window positions --------------------------------------------------------
     // main window
-    if ( !pClient->vecWindowPosMain.isEmpty() && !pClient->vecWindowPosMain.isNull() )
+    if ( !pSettings->vecWindowPosMain.isEmpty() && !pSettings->vecWindowPosMain.isNull() )
     {
-        restoreGeometry ( pClient->vecWindowPosMain );
+        restoreGeometry ( pSettings->vecWindowPosMain );
     }
 
     // settings window
-    if ( !pClient->vecWindowPosSettings.isEmpty() && !pClient->vecWindowPosSettings.isNull() )
+    if ( !pSettings->vecWindowPosSettings.isEmpty() && !pSettings->vecWindowPosSettings.isNull() )
     {
-        ClientSettingsDlg.restoreGeometry ( pClient->vecWindowPosSettings );
+        ClientSettingsDlg.restoreGeometry ( pSettings->vecWindowPosSettings );
     }
 
-    if ( pClient->bWindowWasShownSettings )
+    if ( pSettings->bWindowWasShownSettings )
     {
         ShowGeneralSettings();
     }
 
     // chat window
-    if ( !pClient->vecWindowPosChat.isEmpty() && !pClient->vecWindowPosChat.isNull() )
+    if ( !pSettings->vecWindowPosChat.isEmpty() && !pSettings->vecWindowPosChat.isNull() )
     {
-        ChatDlg.restoreGeometry ( pClient->vecWindowPosChat );
+        ChatDlg.restoreGeometry ( pSettings->vecWindowPosChat );
     }
 
-    if ( pClient->bWindowWasShownChat )
+    if ( pSettings->bWindowWasShownChat )
     {
         ShowChatWindow();
     }
 
     // musician profile window
-    if ( !pClient->vecWindowPosProfile.isEmpty() && !pClient->vecWindowPosProfile.isNull() )
+    if ( !pSettings->vecWindowPosProfile.isEmpty() && !pSettings->vecWindowPosProfile.isNull() )
     {
-        MusicianProfileDlg.restoreGeometry ( pClient->vecWindowPosProfile );
+        MusicianProfileDlg.restoreGeometry ( pSettings->vecWindowPosProfile );
     }
 
-    if ( pClient->bWindowWasShownProfile )
+    if ( pSettings->bWindowWasShownProfile )
     {
         ShowMusicianProfileDialog();
     }
 
     // connection setup window
-    if ( !pClient->vecWindowPosConnect.isEmpty() && !pClient->vecWindowPosConnect.isNull() )
+    if ( !pSettings->vecWindowPosConnect.isEmpty() && !pSettings->vecWindowPosConnect.isNull() )
     {
-        ConnectDlg.restoreGeometry ( pClient->vecWindowPosConnect );
+        ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
     }
 
 
@@ -564,7 +564,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
 
     // restore connect dialog
-    if ( pClient->bWindowWasShownConnect )
+    if ( pSettings->bWindowWasShownConnect )
     {
         ShowConnectionSetupDialog();
     }
@@ -573,16 +573,16 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 void CClientDlg::closeEvent ( QCloseEvent* Event )
 {
     // store window positions
-    pClient->vecWindowPosMain     = saveGeometry();
-    pClient->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
-    pClient->vecWindowPosChat     = ChatDlg.saveGeometry();
-    pClient->vecWindowPosProfile  = MusicianProfileDlg.saveGeometry();
-    pClient->vecWindowPosConnect  = ConnectDlg.saveGeometry();
+    pSettings->vecWindowPosMain     = saveGeometry();
+    pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
+    pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
+    pSettings->vecWindowPosProfile  = MusicianProfileDlg.saveGeometry();
+    pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
 
-    pClient->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
-    pClient->bWindowWasShownChat     = ChatDlg.isVisible();
-    pClient->bWindowWasShownProfile  = MusicianProfileDlg.isVisible();
-    pClient->bWindowWasShownConnect  = ConnectDlg.isVisible();
+    pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
+    pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
+    pSettings->bWindowWasShownProfile  = MusicianProfileDlg.isVisible();
+    pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
@@ -601,14 +601,14 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     // initiate a storage of the current mixer fader levels in case we are
     // just in a connected state) and other settings
     MainMixerBoard->HideAll();
-    pClient->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
-    pClient->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
-    pClient->vecStoredPanValues          = MainMixerBoard->vecStoredPanValues;
-    pClient->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
-    pClient->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
-    pClient->vecStoredFaderGroupID       = MainMixerBoard->vecStoredFaderGroupID;
-    pClient->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
-    pClient->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
+    pSettings->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
+    pSettings->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
+    pSettings->vecStoredPanValues          = MainMixerBoard->vecStoredPanValues;
+    pSettings->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
+    pSettings->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
+    pSettings->vecStoredFaderGroupID       = MainMixerBoard->vecStoredFaderGroupID;
+    pSettings->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
+    pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
 
     // default implementation of this event handler routine
     Event->accept();

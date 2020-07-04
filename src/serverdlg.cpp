@@ -330,7 +330,7 @@ lvwClients->setMinimumHeight ( 140 );
     pbtNewRecording->setAutoDefault ( false );
     pbtRecordingDir->setAutoDefault ( false );
     edtRecordingDir->setText( pServer->GetRecordingDir() );
-    tbtClearRecordingDir->setText ( "(X)" ); // someone make me a nice icon?
+    tbtClearRecordingDir->setText(QString::fromUtf8("\u232B"));
 
     UpdateRecorderStatus ( QString::null );
 

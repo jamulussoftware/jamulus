@@ -697,7 +697,7 @@ void CClientDlg::OnConnectDlgAccepted()
         {
             // store new address at the top of the list, if the list was already
             // full, the last element is thrown out
-            pClient->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
         }
 
         // get name to be set in audio mixer group box title
@@ -881,7 +881,7 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 void CClientDlg::ShowConnectionSetupDialog()
 {
     // init the connect dialog
-    ConnectDlg.Init ( pClient->vstrIPAddress );
+    ConnectDlg.Init ( pSettings->vstrIPAddress );
     ConnectDlg.SetCentralServerAddress ( NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
                                                                                 pClient->GetServerListCentralServerAddress() ) );
 

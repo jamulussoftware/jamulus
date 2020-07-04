@@ -221,7 +221,7 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
     // IP addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
-        pClient->vstrIPAddress[iIdx] =
+        vstrIPAddress[iIdx] =
             GetIniSetting ( IniXMLDocument, "client",
                             QString ( "ipaddress%1" ).arg ( iIdx ), "" );
     }
@@ -554,7 +554,7 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     {
         PutIniSetting ( IniXMLDocument, "client",
                         QString ( "ipaddress%1" ).arg ( iIdx ),
-                        pClient->vstrIPAddress[iIdx] );
+                        vstrIPAddress[iIdx] );
     }
 
     // stored fader tags

@@ -31,8 +31,7 @@ CClient::CClient ( const quint16  iPortNumber,
                    const int      iCtrlMIDIChannel,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName ) :
-    vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-    ChannelInfo                      (),
+    ChannelInfo                      ( ),
     strClientName                    ( strNClientName ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder                   ( nullptr ),

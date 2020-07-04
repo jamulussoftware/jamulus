@@ -278,7 +278,6 @@ public:
         { Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
 
     // settings
-    CVector<QString> vstrIPAddress;
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
 

@@ -117,6 +117,7 @@ public:
         vecStoredFaderIsSolo        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
         vecStoredFaderIsMute        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
         vecStoredFaderGroupID       ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
+        vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel        ( 100 ),
         bConnectDlgShowAllMusicians ( true ),
         vecWindowPosMain            ( ), // empty array
@@ -137,6 +138,7 @@ public:
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
     CVector<int>     vecStoredFaderGroupID;
+    CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
 

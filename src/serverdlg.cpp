@@ -329,8 +329,8 @@ lvwClients->setMinimumHeight ( 140 );
     edtCurrentSessionDir->setText ( "" );
     pbtNewRecording->setAutoDefault ( false );
     pbtRecordingDir->setAutoDefault ( false );
-    edtRecordingDir->setText( pServer->GetRecordingDir() );
-    tbtClearRecordingDir->setText(QString::fromUtf8("\u232B"));
+    edtRecordingDir->setText ( pServer->GetRecordingDir() );
+    tbtClearRecordingDir->setText ( u8"\u232B" );
 
     UpdateRecorderStatus ( QString::null );
 

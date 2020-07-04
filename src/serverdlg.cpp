@@ -330,7 +330,7 @@ lvwClients->setMinimumHeight ( 140 );
     pbtNewRecording->setAutoDefault ( false );
     pbtRecordingDir->setAutoDefault ( false );
     edtRecordingDir->setText( pServer->GetRecordingDir() );
-    tbtClearRecordingDir->setText ( "(X)" ); // someone make me a nice icon?
+    tbtClearRecordingDir->setText ( ""<font color=""black"">&#9003;</font>"" );
 
     UpdateRecorderStatus ( QString::null );
 

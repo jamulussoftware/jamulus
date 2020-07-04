@@ -9,6 +9,10 @@
 
 - new app icon for Jamulus, created by geheimerEichkater (#410)
 
+- support up to four different groups for the channels (#202)
+
+- support sorting faders by channel group
+
 - add special server list filter for filtering occupied servers by using "#" (#397)
 
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)

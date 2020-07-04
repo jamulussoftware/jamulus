@@ -178,8 +178,3 @@ protected:
 
     CServer* pServer;
 };
-
-
-
-
-

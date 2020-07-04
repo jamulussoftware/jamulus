@@ -725,9 +725,9 @@ int main ( int argc, char** argv )
         }
     }
     
-    #if defined ( __APPLE__ ) || defined ( __MACOSX )
-        activity.EndActivity();
-    #endif
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+    activity.EndActivity();
+#endif
 
     return 0;
 }

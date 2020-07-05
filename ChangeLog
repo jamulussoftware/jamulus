@@ -15,6 +15,8 @@
 
 - add special server list filter for filtering occupied servers by using "#" (#397)
 
+- scale channel instrument picture in Compact skin mode
+
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
 

@@ -614,14 +614,16 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     else
     {
         // set correct picture
-        if ( iInstrPicFixedWidth != INVALID_INDEX )
+        QPixmap pixInstr ( strCurResourceRef );
+
+        if ( ( iInstrPicFixedWidth != INVALID_INDEX ) && ( pixInstr.width() > iInstrPicFixedWidth ) )
         {
             // scale instrument picture on request (scale to the width with correct aspect ratio)
-            plblInstrument->setPixmap ( QPixmap ( strCurResourceRef ).scaledToWidth ( iInstrPicFixedWidth, Qt::SmoothTransformation ) );
+            plblInstrument->setPixmap ( pixInstr.scaledToWidth ( iInstrPicFixedWidth, Qt::SmoothTransformation ) );
         }
         else
         {
-            plblInstrument->setPixmap ( QPixmap ( strCurResourceRef ) );
+            plblInstrument->setPixmap ( pixInstr );
         }
         iTTInstrument = cChanInfo.iInstrument;
 

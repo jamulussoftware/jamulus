@@ -113,7 +113,7 @@
     <message>
         <location filename="../../util.cpp" line="481"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polaco</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="488"/>
@@ -330,7 +330,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="65"/>
         <source>No grouping</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin grupos</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
@@ -338,7 +338,7 @@
         <location filename="../../audiomixerboard.cpp" line="68"/>
         <location filename="../../audiomixerboard.cpp" line="69"/>
         <source>Assign to group</source>
-        <translation type="unfinished"></translation>
+        <translation>Asignar a grupo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
@@ -852,7 +852,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordenar Usuarios de Canal por &amp;Grupo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="341"/>
@@ -2652,43 +2652,43 @@
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
         <source>Display dialog to select recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar diálogo para seleccionar botón de directorio de grabación</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="128"/>
         <location filename="../../serverdlg.cpp" line="134"/>
         <source>Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Directorio Principal de Grabación</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsa el botón para abrir el diálogo que permite seleccionar el directorio principal de grabación. El valor escogido debe existir y tener permisos de escritura (permitir la creación de sub-directorios por parte del usuario ejecutando Jamulus). </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="133"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja de texto del directorio principal de grabación (solo lectura)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="135"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>El valor actual del directorio principal de grabación. El valor escogido debe existir y tener permisos de escritura (permitir la creación de sub-directorios por parte del usuario ejecutando Jamulus). Pulsa el botón para abrir el diálogo que permite seleccionar el directorio principal de grabación.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>Clear the recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaciar botón de directorio de grabación</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
         <source>Clear Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaciar Directorio de Grabación</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="142"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsa el botón para vaciar el directorio de grabación actualmente seleccionado. Esto impedirá la grabación hasta que se seleccione un nuevo valor.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="146"/>
@@ -2733,52 +2733,52 @@
     <message>
         <location filename="../../serverdlg.cpp" line="160"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation type="unfinished"></translation>
+        <translation>Muestra el estado actual de la grabadora. Son posibles los siguientes valores:</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="163"/>
         <source>No recording directory has been set or the value is not useable</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha establecido ningún directorio de grabación o el valor no es utilizable</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="165"/>
         <source>Recording has been switched off</source>
-        <translation type="unfinished"></translation>
+        <translation>La grabación se ha apagado</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="167"/>
         <source> by the UI checkbox</source>
-        <translation type="unfinished"></translation>
+        <translation> mediante la casilla del interfaz</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="169"/>
         <source>, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished"></translation>
+        <translation>, bien mediante la casilla del interfaz o la recepción de SIGUSR2</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="173"/>
         <source>There is no one connected to the server to record</source>
-        <translation type="unfinished"></translation>
+        <translation>No hay nadie conectado al servidor para grabar</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
         <source>The performers are being recorded to the specified session directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Los intérpretes están siendo grabados al directorio de sesión especificado</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="177"/>
         <source>NOTE</source>
-        <translation type="unfinished"></translation>
+        <translation>NOTA</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="178"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si el directorio de grabación no es utilizable, se mostrará el problema en lugar del directorio.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="811"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation>ERROR</translation>
     </message>
     <message>
         <source>Displays the current status of the recorder.</source>
@@ -2830,7 +2830,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="580"/>
         <source>Select Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar Directorio Principal de Grabación</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="674"/>
@@ -2974,17 +2974,17 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="177"/>
         <source>Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Directorio de Grabación</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="199"/>
         <source>Enable Jam Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar Grabador de Jams</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="220"/>
         <source>New Recording</source>
-        <translation type="unfinished">Nueva Grabación</translation>
+        <translation>Nueva Grabación</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

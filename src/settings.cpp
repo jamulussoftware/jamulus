@@ -303,6 +303,10 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
         bConnectDlgShowAllMusicians = bValue;
     }
 
+    // language
+    strLanguage = GetIniSetting ( IniXMLDocument, "client", "language",
+                                  CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
+
     // name
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64",
@@ -613,6 +617,10 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     SetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians",
         bConnectDlgShowAllMusicians );
 
+    // language
+    PutIniSetting ( IniXMLDocument, "client", "language",
+        strLanguage );
+
     // name
     PutIniSetting ( IniXMLDocument, "client", "name_base64",
         ToBase64 ( pClient->ChannelInfo.strName ) );
@@ -787,6 +795,10 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         pServer->SetServerListEnabled ( bValue );
     }
 
+    // language
+    strLanguage = GetIniSetting ( IniXMLDocument, "server", "language",
+                                  CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
+
     // name
     pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
 
@@ -831,6 +843,10 @@ void CServerSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     // server list enabled flag
     SetFlagIniSet ( IniXMLDocument, "server", "servlistenabled",
         pServer->GetServerListEnabled() );
+
+    // language
+    PutIniSetting ( IniXMLDocument, "server", "language",
+        strLanguage );
 
     // name
     PutIniSetting ( IniXMLDocument, "server", "name",

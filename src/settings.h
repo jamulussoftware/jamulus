@@ -120,6 +120,7 @@ public:
         vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel        ( 100 ),
         bConnectDlgShowAllMusicians ( true ),
+        strLanguage                 ( "" ),
         vecWindowPosMain            ( ), // empty array
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
@@ -141,6 +142,7 @@ public:
     CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
+    QString          strLanguage;
 
     // window position/state settings
     QByteArray vecWindowPosMain;
@@ -165,9 +167,12 @@ class CServerSettings : public CSettings
 {
 public:
     CServerSettings ( CServer* pNSerP, const QString& sNFiName ) :
+        strLanguage      ( "" ),
         vecWindowPosMain ( ), // empty array
         pServer          ( pNSerP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
+
+    QString strLanguage;
 
     // window position/state settings
     QByteArray vecWindowPosMain;

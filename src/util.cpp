@@ -1375,6 +1375,69 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
     }
 }
 
+QMap<QString, QString> CLocale::GetAvailableTranslations()
+{
+    QMap<QString, QString> TranslMap;
+    QDirIterator           DirIter ( ":/translations" );
+
+    while ( DirIter.hasNext() )
+    {
+        // get alias of translation file
+        const QString strCurFileName = DirIter.next();
+
+        // extract only language code (must be at the end, separated with a "_")
+        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
+
+        TranslMap[strLoc] = strCurFileName;
+    }
+
+    return TranslMap;
+}
+
+QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap )
+{
+    QPair<QString, QString> PairSysLang ( "", "" );
+    QStringList             slUiLang = QLocale().uiLanguages();
+
+    if ( !slUiLang.isEmpty() )
+    {
+        // only extract two first characters to identify language (ignoring
+        // location for getting a simpler implementation -> if the language
+        // is not correct, the user can change it in the GUI anyway)
+        const QString strUiLang = QLocale().uiLanguages().at ( 0 );
+
+        if ( strUiLang.length() >= 2 )
+        {
+            PairSysLang.first  = strUiLang.left ( 2 );
+            PairSysLang.second = TranslMap[PairSysLang.first];
+        }
+    }
+
+    return PairSysLang;
+}
+
+void CLocale::LoadTranslation ( const QString     strLanguage,
+                                QCoreApplication* pApp )
+{
+    // The translator objects must be static!
+    static QTranslator myappTranslator;
+    static QTranslator myqtTranslator;
+
+    QMap<QString, QString> TranslMap              = CLocale::GetAvailableTranslations();
+    const QString          strTranslationFileName = TranslMap[strLanguage];
+
+    if ( myappTranslator.load ( strTranslationFileName ) )
+    {
+        pApp->installTranslator ( &myappTranslator );
+    }
+
+    // allows the Qt messages to be translated in the application
+    if ( myqtTranslator.load ( QLocale ( strLanguage ), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
+    {
+        pApp->installTranslator ( &myqtTranslator );
+    }
+}
+
 
 // Console writer factory ------------------------------------------------------
 QTextStream* ConsoleWriterFactory::get()

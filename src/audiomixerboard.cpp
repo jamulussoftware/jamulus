@@ -128,7 +128,8 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pMainGrid->addWidget ( pLabelInstBox );
 
     // reset current fader
-    strGroupBaseText = "Grp"; // this will most probably overwritten by SetGUIDesign()
+    strGroupBaseText    = "Grp";         // this will most probably overwritten by SetGUIDesign()
+    iInstrPicFixedWidth = INVALID_INDEX; // this will most probably overwritten by SetGUIDesign()
     Reset();
 
     // add help text to controls
@@ -227,11 +228,12 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbSolo->setText                    ( tr ( "SOLO" ) );
         strGroupBaseText =                    tr ( "GRP" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
+        iInstrPicFixedWidth = INVALID_INDEX; // no instrument picture scaling
         break;
 
     case GD_SLIMFADER:
         pLabelPictGrid->addWidget           ( plblLabel,  0, Qt::AlignHCenter ); // label below icons
-        pLabelInstBox->setMinimumHeight     ( 84 ); // maximum height of the instrument+flag+label
+        pLabelInstBox->setMinimumHeight     ( 94 ); // maximum height of the instrument+flag+label
         pFader->setMinimumHeight            ( 85 );
         pPan->setFixedSize                  ( 28, 28 );
         pFader->setTickPosition             ( QSlider::NoTicks );
@@ -241,6 +243,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbSolo->setText                    ( tr ( "S" ) );
         strGroupBaseText =                    tr ( "G" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_BAR );
+        iInstrPicFixedWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
         break;
 
     default:
@@ -256,11 +259,15 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbSolo->setText                    ( tr ( "Solo" ) );
         strGroupBaseText =                    tr ( "Grp" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
+        iInstrPicFixedWidth = INVALID_INDEX; // no instrument picture scaling
         break;
     }
 
     // we need to update since we changed the checkbox text
     UpdateGroupIDDependencies();
+
+    // the instrument picture might need scaling after a style change
+    SetChannelInfos ( cReceivedChanInfo );
 }
 
 void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
@@ -607,7 +614,15 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     else
     {
         // set correct picture
-        plblInstrument->setPixmap ( QPixmap ( strCurResourceRef ) );
+        if ( iInstrPicFixedWidth != INVALID_INDEX )
+        {
+            // scale instrument picture on request (scale to the width with correct aspect ratio)
+            plblInstrument->setPixmap ( QPixmap ( strCurResourceRef ).scaledToWidth ( iInstrPicFixedWidth, Qt::SmoothTransformation ) );
+        }
+        else
+        {
+            plblInstrument->setPixmap ( QPixmap ( strCurResourceRef ) );
+        }
         iTTInstrument = cChanInfo.iInstrument;
 
         // enable instrument picture

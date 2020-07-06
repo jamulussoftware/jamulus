@@ -113,12 +113,12 @@
     <message>
         <location filename="../../util.cpp" line="481"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polonais</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="488"/>
         <source>About </source>
-        <translation>À propos</translation>
+        <translation>À propos </translation>
     </message>
     <message>
         <source>, Version </source>
@@ -338,7 +338,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="65"/>
         <source>No grouping</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de regroupement</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
@@ -346,7 +346,7 @@
         <location filename="../../audiomixerboard.cpp" line="68"/>
         <location filename="../../audiomixerboard.cpp" line="69"/>
         <source>Assign to group</source>
-        <translation type="unfinished"></translation>
+        <translation>Affecter au groupe</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
@@ -953,7 +953,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Trier les utilisateurs des canaux par &amp;groupe</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="726"/>
@@ -2644,43 +2644,43 @@
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
         <source>Display dialog to select recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le dialogue pour sélectionner le bouton du répertoire d'enregistrement</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="128"/>
         <location filename="../../serverdlg.cpp" line="134"/>
         <source>Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire principal des enregistrements</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquez sur le bouton pour ouvrir la boîte de dialogue permettant de sélectionner le répertoire d'enregistrement principal. La valeur choisie doit exister et être inscriptible (permettre la création de sous-répertoires par l'utilisateur sous lequel Jamulus fonctionne). </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="133"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone de texte du répertoire principal d'enregistrement (lecture seule)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="135"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>La valeur actuelle du répertoire principal d'enregistrement. La valeur choisie doit exister et être inscriptible (permettre la création de sous-répertoires par l'utilisateur sous lequel Jamulus fonctionne). Cliquez sur le bouton pour ouvrir la boîte de dialogue permettant de sélectionner le répertoire d'enregistrement principal.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>Clear the recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le bouton du répertoire d'enregistrement</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
         <source>Clear Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le répertoire des enregistrements</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="142"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquez sur le bouton pour effacer le répertoire d'enregistrement actuellement sélectionné. Cela empêchera l'enregistrement jusqu'à ce qu'une nouvelle valeur soit sélectionnée.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="146"/>
@@ -2725,52 +2725,52 @@
     <message>
         <location filename="../../serverdlg.cpp" line="160"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation type="unfinished"></translation>
+        <translation>Affiche l'état actuel de l'enregistreur.  Les valeurs suivantes sont possibles :</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="163"/>
         <source>No recording directory has been set or the value is not useable</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun répertoire d'enregistrement n'a été défini ou la valeur n'est pas utilisable</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="165"/>
         <source>Recording has been switched off</source>
-        <translation type="unfinished"></translation>
+        <translation>L'enregistrement a été désactivé</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="167"/>
         <source> by the UI checkbox</source>
-        <translation type="unfinished"></translation>
+        <translation> par la case à cocher de l'interface graphique</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="169"/>
         <source>, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished"></translation>
+        <translation>, soit en cochant la case de l'interface graphique ou en recevant SIGUSR2</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="173"/>
         <source>There is no one connected to the server to record</source>
-        <translation type="unfinished"></translation>
+        <translation>Il n'y a personne connecté au serveur pour enregistrer</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
         <source>The performers are being recorded to the specified session directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Les interprètes sont enregistrés dans le répertoire de session spécifié</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="177"/>
         <source>NOTE</source>
-        <translation type="unfinished"></translation>
+        <translation>NOTE</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="178"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si le répertoire d'enregistrement n'est pas utilisable, le problème sera affiché à la place du répertoire.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="811"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation>ERREUR</translation>
     </message>
     <message>
         <source>Displays the current status of the recorder.</source>
@@ -2822,7 +2822,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="580"/>
         <source>Select Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le répertoire principal des enregistrements</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="674"/>
@@ -2842,7 +2842,7 @@
     <message>
         <location filename="../../serverdlg.h" line="50"/>
         <source>Not initialised</source>
-        <translation type="unfinished"></translation>
+        <translation>Non initialisé</translation>
     </message>
     <message>
         <location filename="../../serverdlg.h" line="51"/>
@@ -2974,17 +2974,17 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="177"/>
         <source>Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire des enregistrements</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="199"/>
         <source>Enable Jam Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer l'enregistreur de bœuf</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="220"/>
         <source>New Recording</source>
-        <translation type="unfinished">Nouvel enregistrement</translation>
+        <translation>Nouvel enregistrement</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

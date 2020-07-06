@@ -109,7 +109,7 @@
     <message>
         <location filename="../../util.cpp" line="481"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polnisch</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="488"/>
@@ -318,7 +318,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="65"/>
         <source>No grouping</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Gruppierung</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
@@ -326,7 +326,7 @@
         <location filename="../../audiomixerboard.cpp" line="68"/>
         <location filename="../../audiomixerboard.cpp" line="69"/>
         <source>Assign to group</source>
-        <translation type="unfinished"></translation>
+        <translation>Zuweisung zur Gruppe</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
@@ -927,17 +927,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="286"/>
         <source>Sort Channel Users by &amp;Name</source>
-        <translation>Sortiere Kanäle nach &amp;Namen</translation>
+        <translation>Sortiere die Kanäle nach dem &amp;Namen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="289"/>
         <source>Sort Channel Users by &amp;Instrument</source>
-        <translation>Sortiere Kanäle nach &amp;Instrument</translation>
+        <translation>Sortiere die Kanäle nach dem &amp;Instrument</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortiere die Kanäle nach der &amp;Gruppe</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="726"/>
@@ -1789,7 +1789,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="521"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="543"/>
@@ -2037,12 +2037,12 @@
     <message>
         <location filename="../../util.cpp" line="944"/>
         <source>Restart Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Neustart erforderlich</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="945"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte starte die Applikation neu um die Änderung der Spracheinstellung anzuwenden.</translation>
     </message>
 </context>
 <context>
@@ -2650,23 +2650,23 @@
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
         <source>Display dialog to select recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige den Dialog zum das Aufnahmeverzeichnis festzulegen Knopf</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="128"/>
         <location filename="../../serverdlg.cpp" line="134"/>
         <source>Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufnahmehauptverzeichnis</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation type="unfinished"></translation>
+        <translation>Drücke den Knopf um einen Dialog anzuzeigen in dem man das Hauptverzeichnis für die Aufnahmen festlegen kann. Das Verzeichnis muss existieren und schreibbar sein (es muss für das Benutzerkonto, das die Applikation ausführt, möglich sein Unterverzeichnisse anzulegen).</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="133"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauptaufnahmeverzeichnis Textbox (schreibgeschützt)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="135"/>
@@ -2766,7 +2766,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="177"/>
         <source>NOTE</source>
-        <translation type="unfinished"></translation>
+        <translation>HINWEIS</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="178"/>
@@ -2776,7 +2776,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="811"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation>FEHLER</translation>
     </message>
     <message>
         <source>Displays the current status of the recorder.</source>
@@ -2828,7 +2828,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="580"/>
         <source>Select Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle das Aufnahmehauptverzeichnis aus</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="674"/>
@@ -2848,7 +2848,7 @@
     <message>
         <location filename="../../serverdlg.h" line="50"/>
         <source>Not initialised</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht initialisiert</translation>
     </message>
     <message>
         <location filename="../../serverdlg.h" line="51"/>
@@ -2980,17 +2980,17 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="177"/>
         <source>Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufnahmeverzeichnis</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="199"/>
         <source>Enable Jam Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviere die Aufnahmefunktion</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="220"/>
         <source>New Recording</source>
-        <translation type="unfinished">Neue Aufnahme</translation>
+        <translation>Neue Aufnahme</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

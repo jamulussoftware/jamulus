@@ -159,9 +159,9 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
     lblRecorderStatus->setWhatsThis ( "<b>" + tr ( "Recorder Status" ) + ":</b> "
         + tr ( "Displays the current status of the recorder.  The following values are possible:" )
         + "<dl>"
-        + "<dt>" + tr ( SREC_NOT_INITIALISED ) + "</dt>"
+        + "<dt>" + SREC_NOT_INITIALISED + "</dt>"
         + "<dd>" + tr ( "No recording directory has been set or the value is not useable" ) + "</dd>"
-        + "<dt>" + tr ( SREC_NOT_ENABLED ) + "</dt>"
+        + "<dt>" + SREC_NOT_ENABLED + "</dt>"
         + "<dd>" + tr ( "Recording has been switched off" )
 #ifdef _WIN32
         + tr ( " by the UI checkbox" )
@@ -169,9 +169,9 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
         + tr ( ", either by the UI checkbox or SIGUSR2 being received" )
 #endif
         + "</dd>"
-        + "<dt>" + tr ( SREC_NOT_RECORDING ) + "</dt>"
+        + "<dt>" + SREC_NOT_RECORDING + "</dt>"
         + "<dd>" + tr ( "There is no one connected to the server to record" ) + "</dd>"
-        + "<dt>" + tr ( SREC_RECORDING ) + "</dt>"
+        + "<dt>" + SREC_RECORDING + "</dt>"
         + "<dd>" + tr ( "The performers are being recorded to the specified session directory" ) + "</dd>"
         + "</dl>"
         + "<br/><b>" + tr ( "NOTE" ) + ":</b> "
@@ -785,17 +785,17 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
             {
                 edtCurrentSessionDir->setText ( sessionDir != QString::null ? sessionDir : "" );
 
-                strRecorderStatus = tr ( SREC_RECORDING );
+                strRecorderStatus = SREC_RECORDING;
                 bIsRecording      = true;
             }
             else
             {
-                strRecorderStatus = tr ( SREC_NOT_RECORDING );
+                strRecorderStatus = SREC_NOT_RECORDING;
             }
         }
         else
         {
-            strRecorderStatus = tr ( SREC_NOT_ENABLED );
+            strRecorderStatus = SREC_NOT_ENABLED;
         }
     }
     else
@@ -812,7 +812,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
         }
 
         chbEnableRecorder->setEnabled ( false );
-        strRecorderStatus = tr ( SREC_NOT_INITIALISED );
+        strRecorderStatus = SREC_NOT_INITIALISED;
     }
 
     edtRecordingDir->setText ( strRecordingDir );

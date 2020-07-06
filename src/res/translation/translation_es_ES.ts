@@ -1805,7 +1805,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="521"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="543"/>
@@ -2061,12 +2061,12 @@
     <message>
         <location filename="../../util.cpp" line="944"/>
         <source>Restart Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Reinicio Necesario</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="945"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor reinicia la aplicación para que el cambio de idioma surta efecto.</translation>
     </message>
 </context>
 <context>
@@ -3015,7 +3015,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="230"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

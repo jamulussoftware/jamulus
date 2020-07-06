@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>588</width>
-    <height>419</height>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -172,9 +172,30 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
+      <widget class="QPushButton" name="pbtRecordingDir">
+       <property name="text">
+        <string>Recording Directory</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="edtRecordingDir">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbtClearRecordingDir"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
       <widget class="QCheckBox" name="chbEnableRecorder">
        <property name="text">
-        <string>Enable jam recorder</string>
+        <string>Enable Jam Recorder</string>
        </property>
       </widget>
      </item>
@@ -195,27 +216,23 @@
      <item>
       <widget class="QPushButton" name="pbtNewRecording">
        <property name="text">
-        <string>New recording</string>
+        <string>New Recording</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pbtRecordingDir">
+      <widget class="QLabel" name="lblLanguage">
        <property name="text">
-        <string>Recordings folder</string>
+        <string>Language</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="edtRecordingsDir">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <widget class="CLanguageComboBox" name="cbxLanguage"/>
      </item>
     </layout>
    </item>
@@ -266,6 +283,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CLanguageComboBox</class>
+   <extends>QComboBox</extends>
+   <header>util.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>lvwClients</tabstop>
   <tabstop>chbStartOnOSStart</tabstop>
@@ -276,11 +300,13 @@
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>
+  <tabstop>pbtRecordingDir</tabstop>
+  <tabstop>edtRecordingDir</tabstop>
+  <tabstop>tbtClearRecordingDir</tabstop>
   <tabstop>chbEnableRecorder</tabstop>
   <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>pbtNewRecording</tabstop>
-  <tabstop>pbtRecordingDir</tabstop>
-  <tabstop>edtRecordingsDir</tabstop>
+  <tabstop>cbxLanguage</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

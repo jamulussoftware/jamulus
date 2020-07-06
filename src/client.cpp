@@ -31,25 +31,8 @@ CClient::CClient ( const quint16  iPortNumber,
                    const int      iCtrlMIDIChannel,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName ) :
-    vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-    ChannelInfo                      (),
-    vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-    vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-    vecStoredPanValues               ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-    vecStoredFaderIsSolo             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    vecStoredFaderIsMute             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    iNewClientFaderLevel             ( 100 ),
-    bConnectDlgShowAllMusicians      ( true ),
+    ChannelInfo                      ( ),
     strClientName                    ( strNClientName ),
-    vecWindowPosMain                 (), // empty array
-    vecWindowPosSettings             (), // empty array
-    vecWindowPosChat                 (), // empty array
-    vecWindowPosProfile              (), // empty array
-    vecWindowPosConnect              (), // empty array
-    bWindowWasShownSettings          ( false ),
-    bWindowWasShownChat              ( false ),
-    bWindowWasShownProfile           ( false ),
-    bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder                   ( nullptr ),
     CurOpusDecoder                   ( nullptr ),
@@ -254,7 +237,7 @@ void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
 {
-    // message coult not be parsed, check if the packet comes
+    // message could not be parsed, check if the packet comes
     // from the server we just connected -> if yes, send
     // disconnect message since the server may not know that we
     // are not connected anymore
@@ -1184,7 +1167,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 
     if ( dSoundCardInputOutputLatencyMs == 0.0 )
     {
-        // use an alternative aproach for estimating the sound card delay:
+        // use an alternative approach for estimating the sound card delay:
         //
         // we assume that we have two period sizes for the input and one for the
         // output, therefore we have "3 *" instead of "2 *" (for input and output)

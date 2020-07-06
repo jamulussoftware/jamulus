@@ -152,6 +152,9 @@ LED bar:      lbr
 #define AUD_MIX_FADER_MAX                100
 #define AUD_MIX_PAN_MAX                  100
 
+// maximum number of fader groups (must be consistent to audiomixerboard implementation)
+#define MAX_NUM_FADER_GROUPS             4
+
 // maximum number of recognized sound cards installed in the system
 #define MAX_NUMBER_SOUND_CARDS           129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
 

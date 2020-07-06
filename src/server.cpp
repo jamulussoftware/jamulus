@@ -234,7 +234,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const ELicenceType eNLicenceType ) :
-    vecWindowPosMain            (), // empty array
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     iMaxNumChannels             ( iNewMaxNumChan ),
     Socket                      ( this, iPortNumber ),
@@ -390,7 +389,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     {
         QString strCurServerNameForHTMLStatusFile = strServerNameForHTMLStatusFile;
 
-        // if server name is empty, substitude a default name
+        // if server name is empty, substitute a default name
         if ( strCurServerNameForHTMLStatusFile.isEmpty() )
         {
             strCurServerNameForHTMLStatusFile = "[server address]";
@@ -412,7 +411,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
         if ( file.open ( QIODevice::ReadOnly | QIODevice::Text ) )
         {
-            // use entrie file content for the welcome message
+            // use entire file content for the welcome message
             strWelcomeMessage = file.readAll();
         }
     }
@@ -616,7 +615,7 @@ void CServer::OnNewConnection ( int          iChID,
     // a channel name request to the client which causes a channel
     // name message to be transmitted to the server. If the server
     // receives this message, the channel list will be automatically
-    // updated (implicitely).
+    // updated (implicitly).
     //
     // Usually it is not required to send the channel list to the
     // client currently connecting since it automatically requests
@@ -631,7 +630,7 @@ void CServer::OnNewConnection ( int          iChID,
     // send welcome message (if enabled)
     if ( !strWelcomeMessage.isEmpty() )
     {
-        // create formated server welcome message and send it just to
+        // create formatted server welcome message and send it just to
         // the client which just connected to the server
         const QString strWelcomeMessageFormated =
             "<b>Server Welcome Message:</b> " + strWelcomeMessage;
@@ -1022,7 +1021,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                   vecvecsData[i] );
             }
 
-            // generate a sparate mix for each channel
+            // generate a separate mix for each channel
             // actual processing of audio data -> mix
             ProcessData ( vecvecsData,
                           vecvecdGains[i],

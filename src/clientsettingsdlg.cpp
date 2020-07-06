@@ -26,8 +26,13 @@
 
 
 /* Implementation *************************************************************/
-CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
-    Qt::WindowFlags f ) : QDialog ( parent, f ), pClient ( pNCliP )
+CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
+                                         CClientSettings* pNSetP,
+                                         QWidget*         parent,
+                                         Qt::WindowFlags  f ) :
+    QDialog   ( parent, f ),
+    pClient   ( pNCliP ),
+    pSettings ( pNSetP )
 {
     setupUi ( this );
 
@@ -336,11 +341,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxSkin->addItem ( tr ( "Compact" ) ); // GD_SLIMFADER
     cbxSkin->setCurrentIndex ( static_cast<int> ( pClient->GetGUIDesign() ) );
 
+    // language combo box (corrects the setting if language not found)
+    cbxLanguage->Init ( pSettings->strLanguage );
+
     // custom central server address
     edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
 
     // update new client fader level edit box
-    edtNewClientLevel->setText ( QString::number ( pClient->iNewClientFaderLevel ) );
+    edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
 
     // update enable small network buffers check box
     chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
@@ -417,6 +425,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QObject::connect ( cbxSkin, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnGUIDesignActivated );
+
+    QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged,
+        this, &CClientSettingsDlg::OnLanguageChanged );
 
     // buttons
     QObject::connect ( butDriverSetup, &QPushButton::clicked,
@@ -671,8 +682,7 @@ void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 void CClientSettingsDlg::OnNewClientLevelEditingFinished()
 {
     // store new setting in the client
-    pClient->iNewClientFaderLevel =
-        edtNewClientLevel->text().toInt();
+    pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt();
 
     // inform that the level has changed and the mixer board settings must
     // be updated

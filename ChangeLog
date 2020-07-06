@@ -2,18 +2,43 @@
 
 
 
-3.5.8git
 
-TODO improve settings management -> move settings class in client/server classes, move actual settings variables
+3.5.9git
+
+- update server UI to allow setting the jam recorder directory (like -R) (#228, #405)
+
+- new app icon for Jamulus, created by geheimerEichkater (#410)
+
+- support up to four different groups for the channels (#202)
+
+- support sorting faders by channel group
+
+- add support to change the GUI language (#297)
+
+- add special server list filter for filtering occupied servers by using "#" (#397)
+
+- scale channel instrument picture in Compact skin mode
+
+- bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
+
+
 
 TODO add new register message which contains version and, e.g., max number of clients
 
-TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
-     - generate .qm on compile time with lrelease
+TODO Inconsistency between Input meter and Audio mixer meter #423
+
+TODO improve settings management -> move settings class in client/server classes, move actual settings variables
+TODO store recorder settings (#313)
 
 
 
 
+
+
+
+3.5.8 (2020-06-30)
+
+- bug fix: incorrect selection of UI language (#408)
 
 
 3.5.7 (2020-06-28)
@@ -497,7 +522,7 @@ TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
 - show number of connected clients in window title (and therefore in OS task
   bar)
 
-- added "Whats this" help text to the GUI controls in the general settings
+- added "What's this" help text to the GUI controls in the general settings
   dialog, added Tool Tips to some GUI controls
 
 - server logging history grid lines of weekend days are now plotted with

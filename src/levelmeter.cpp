@@ -246,27 +246,24 @@ void CLevelMeter::SetValue ( const double dValue )
 
         TimerClip.start();
     }
-    else if ( !TimerClip.isActive() )
-    {
-        switch ( eLevelMeterType )
-        {
-        case MT_LED:
-            vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_BLACK );
-            break;
-
-        case MT_BAR:
-        case MT_SLIM_BAR:
-            SetBarMeterStyleAndClipStatus ( eLevelMeterType, false );
-            break;
-        }
-    }
 }
 
 void CLevelMeter::ClipReset()
 {
-    if ( eLevelMeterType == MT_LED )
+    // we manually want to reset the clipping indicator: stop timer and reset
+    // clipping indicator GUI element
+    TimerClip.stop();
+
+    switch ( eLevelMeterType )
     {
+    case MT_LED:
         vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_BLACK );
+        break;
+
+    case MT_BAR:
+    case MT_SLIM_BAR:
+        SetBarMeterStyleAndClipStatus ( eLevelMeterType, false );
+        break;
     }
 }
 

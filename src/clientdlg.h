@@ -72,14 +72,14 @@ class CClientDlg : public QDialog, private Ui_CClientDlgBase
     Q_OBJECT
 
 public:
-    CClientDlg ( CClient*        pNCliP,
-                 CSettings*      pNSetP,
-                 const QString&  strConnOnStartupAddress,
-                 const int       iCtrlMIDIChannel,
-                 const bool      bNewShowComplRegConnList,
-                 const bool      bShowAnalyzerConsole,
-                 QWidget*        parent = nullptr,
-                 Qt::WindowFlags f = nullptr );
+    CClientDlg ( CClient*         pNCliP,
+                 CClientSettings* pNSetP,
+                 const QString&   strConnOnStartupAddress,
+                 const int        iCtrlMIDIChannel,
+                 const bool       bNewShowComplRegConnList,
+                 const bool       bShowAnalyzerConsole,
+                 QWidget*         parent = nullptr,
+                 Qt::WindowFlags  f = nullptr );
 
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -96,7 +96,7 @@ protected:
     void               Disconnect();
 
     CClient*           pClient;
-    CSettings*         pSettings;
+    CClientSettings*   pSettings;
 
     bool               bConnected;
     bool               bConnectDlgWasShown;
@@ -157,6 +157,7 @@ public slots:
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_NAME ); }
     void OnSortChannelsByInstrument() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_INSTRUMENT ); }
+    void OnSortChannelsByGroupID() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_GROUPID ); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
@@ -229,7 +230,7 @@ public slots:
 
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
-    void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }
+    void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pSettings->iNewClientFaderLevel; }
 
     void accept() { close(); } // introduced by pljones
 

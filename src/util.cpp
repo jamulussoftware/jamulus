@@ -141,12 +141,12 @@ void CCRC::AddByte ( const uint8_t byNewInput )
 {
     for ( int i = 0; i < 8; i++ )
     {
-        // shift bits in shift-register for transistion
+        // shift bits in shift-register for transition
         iStateShiftReg <<= 1;
 
         // take bit, which was shifted out of the register-size and place it
         // at the beginning (LSB)
-        // (If condition is not satisfied, implicitely a "0" is added)
+        // (If condition is not satisfied, implicitly a "0" is added)
         if ( ( iStateShiftReg & iBitOutMask) > 0 )
         {
             iStateShiftReg |= 1;
@@ -196,7 +196,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
                           const int          iSampleRate,
                           const double       rT60 )
 {
-    // store paramters
+    // store parameters
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
@@ -442,6 +442,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
         "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
         "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
+        "<p>Martin Schilde (<a href=""https://github.com/geheimerEichkater"">geheimerEichkater</a>)</p>"
         "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
         "<p>Marc jr. Landolt (<a href=""https://github.com/braindef"">braindef</a>)</p>"
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
@@ -476,7 +477,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
         "<p>Giuseppe Sapienza (<a href=""https://github.com/dzpex"">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"
-        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
+        "<p><b>" + tr ( "Polish" ) + "</b></p>"
+        "<p>Martyna Danysz (<a href=""https://github.com/Martyna27"">Martyna27</a>)</p>");
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -807,7 +810,7 @@ void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
     }
 }
@@ -845,7 +848,7 @@ void CMusProfDlg::OnCityTextChanged ( const QString& strNewCity )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
     }
 }
@@ -878,6 +881,71 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
+}
+
+
+// Language combo box ----------------------------------------------------------
+CLanguageComboBox::CLanguageComboBox ( QWidget* parent ) :
+    QComboBox            ( parent ),
+    iIdxSelectedLanguage ( INVALID_INDEX )
+{
+    QObject::connect ( this, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CLanguageComboBox::OnLanguageActivated );
+}
+
+void CLanguageComboBox::Init ( QString& strSelLanguage )
+{
+    // load available translations
+    const QMap<QString, QString>   TranslMap = CLocale::GetAvailableTranslations();
+    QMapIterator<QString, QString> MapIter ( TranslMap );
+
+    // add translations to the combobox list
+    clear();
+    int iCnt                  = 0;
+    int iIdxOfEnglishLanguage = 0;
+    iIdxSelectedLanguage      = INVALID_INDEX;
+
+    while ( MapIter.hasNext() )
+    {
+        MapIter.next();
+        addItem ( QLocale ( MapIter.key() ).nativeLanguageName() + " (" + MapIter.key() + ")", MapIter.key() );
+
+        // store the combo box index of the default english language
+        if ( MapIter.key().compare ( "en" ) == 0 )
+        {
+            iIdxOfEnglishLanguage = iCnt;
+        }
+
+        // if the selected language is found, store the combo box index
+        if ( MapIter.key().compare ( strSelLanguage ) == 0 )
+        {
+            iIdxSelectedLanguage = iCnt;
+        }
+
+        iCnt++;
+    }
+
+    // if the selected language was not found, use the english language
+    if ( iIdxSelectedLanguage == INVALID_INDEX )
+    {
+        strSelLanguage       = "en";
+        iIdxSelectedLanguage = iIdxOfEnglishLanguage;
+    }
+
+    setCurrentIndex ( iIdxSelectedLanguage );
+}
+
+void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
+{
+    // only update if the language selection is different from the current selected language
+    if ( iIdxSelectedLanguage != iLanguageIdx )
+    {
+        QMessageBox::information ( this,
+                                   tr ( "Restart Required" ),
+                                   tr ( "Please restart the application for the language change to take effect." ) );
+
+        emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
+    }
 }
 #endif
 
@@ -928,7 +996,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( !InetAddr.setAddress ( strAddress ) )
     {
-        // it was no vaild IP address, try to get host by name, assuming
+        // it was no valid IP address, try to get host by name, assuming
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 
@@ -1369,6 +1437,82 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
 
     default:
         return AT_DEFAULT;
+    }
+}
+
+QMap<QString, QString> CLocale::GetAvailableTranslations()
+{
+    QMap<QString, QString> TranslMap;
+    QDirIterator           DirIter ( ":/translations" );
+
+    // add english language (default which is in the actual source code)
+    TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
+
+    while ( DirIter.hasNext() )
+    {
+        // get alias of translation file
+        const QString strCurFileName = DirIter.next();
+
+        // extract only language code (must be at the end, separated with a "_")
+        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
+
+        TranslMap[strLoc] = strCurFileName;
+    }
+
+    return TranslMap;
+}
+
+QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap )
+{
+    QPair<QString, QString> PairSysLang ( "", "" );
+    QStringList             slUiLang = QLocale().uiLanguages();
+
+    if ( !slUiLang.isEmpty() )
+    {
+        QString strUiLang = QLocale().uiLanguages().at ( 0 );
+        strUiLang.replace ( "-", "_" );
+
+        // first try to find the complete language string
+        if ( TranslMap.constFind ( strUiLang ) != TranslMap.constEnd() )
+        {
+            PairSysLang.first  = strUiLang;
+            PairSysLang.second = TranslMap[PairSysLang.first];
+        }
+        else
+        {
+            // only extract two first characters to identify language (ignoring
+            // location for getting a simpler implementation -> if the language
+            // is not correct, the user can change it in the GUI anyway)
+            if ( strUiLang.length() >= 2 )
+            {
+                PairSysLang.first  = strUiLang.left ( 2 );
+                PairSysLang.second = TranslMap[PairSysLang.first];
+            }
+        }
+    }
+
+    return PairSysLang;
+}
+
+void CLocale::LoadTranslation ( const QString     strLanguage,
+                                QCoreApplication* pApp )
+{
+    // The translator objects must be static!
+    static QTranslator myappTranslator;
+    static QTranslator myqtTranslator;
+
+    QMap<QString, QString> TranslMap              = CLocale::GetAvailableTranslations();
+    const QString          strTranslationFileName = TranslMap[strLanguage];
+
+    if ( myappTranslator.load ( strTranslationFileName ) )
+    {
+        pApp->installTranslator ( &myappTranslator );
+    }
+
+    // allows the Qt messages to be translated in the application
+    if ( myqtTranslator.load ( QLocale ( strLanguage ), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
+    {
+        pApp->installTranslator ( &myqtTranslator );
     }
 }
 

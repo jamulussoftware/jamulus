@@ -49,7 +49,7 @@ public:
         iLPort = static_cast<quint16> ( GenRandomIntInRange ( -2, 10000 ) );
 
         // bind socket (try 100 port numbers)
-        quint16 iPortIncrement = 0;     // start value: port nubmer plus ten
+        quint16 iPortIncrement = 0;     // start value: port number plus ten
         bool    bSuccess       = false; // initialization for while loop
 
         while ( !bSuccess && ( iPortIncrement <= 100 ) )

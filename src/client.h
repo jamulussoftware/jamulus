@@ -278,27 +278,8 @@ public:
         { Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
 
     // settings
-    CVector<QString> vstrIPAddress;
     CChannelCoreInfo ChannelInfo;
-    CVector<QString> vecStoredFaderTags;
-    CVector<int>     vecStoredFaderLevels;
-    CVector<int>     vecStoredPanValues;
-    CVector<int>     vecStoredFaderIsSolo;
-    CVector<int>     vecStoredFaderIsMute;
-    int              iNewClientFaderLevel;
-    bool             bConnectDlgShowAllMusicians;
     QString          strClientName;
-
-    // window position/state settings
-    QByteArray       vecWindowPosMain;
-    QByteArray       vecWindowPosSettings;
-    QByteArray       vecWindowPosChat;
-    QByteArray       vecWindowPosProfile;
-    QByteArray       vecWindowPosConnect;
-    bool             bWindowWasShownSettings;
-    bool             bWindowWasShownChat;
-    bool             bWindowWasShownProfile;
-    bool             bWindowWasShownConnect;
 
 #ifdef LLCON_VST_PLUGIN
     // VST version must have direct access to sound object

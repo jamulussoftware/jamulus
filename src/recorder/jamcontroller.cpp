@@ -90,6 +90,11 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         strRecorderErrMsg = pJamRecorder->Init();
         bRecorderInitialised = ( strRecorderErrMsg == QString::null );
         bEnableRecording = bRecorderInitialised;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qInfo()
+        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
+#endif
     }
     else
     {
@@ -97,6 +102,11 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         strRecorderErrMsg = QString::null;
         bRecorderInitialised = false;
         bEnableRecording = false;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qInfo()
+        qInfo() << "Recording state not initialised";
+#endif
     }
 
     if ( bRecorderInitialised )

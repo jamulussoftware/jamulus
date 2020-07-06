@@ -227,9 +227,6 @@ void CConnectDlg::RequestServerList()
     // clear server list view
     lvwServers->clear();
 
-    // clear filter edit box
-    edtFilter->setText ( "" );
-
     // update list combo box (disable events to avoid a signal)
     cbxCentServAddrType->blockSignals ( true );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
@@ -295,7 +292,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         }
         else
         {
-            // substitude the receive host address for central server
+            // substitute the receive host address for central server
             CurHostAddress = InetAddr;
         }
 
@@ -412,7 +409,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
 
     if ( pCurListViewItem )
     {
-        // first remove any existing childs
+        // first remove any existing children
         DeleteAllListViewItemChilds ( pCurListViewItem );
 
         // get number of connected clients
@@ -477,16 +474,19 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             // add the new child to the corresponding server item
             pCurListViewItem->addChild ( pNewChildListViewItem );
 
-            // at least one server has childs now, show decoration to be able
-            // to show the childs
+            // at least one server has children now, show decoration to be able
+            // to show the children
             lvwServers->setRootIsDecorated ( true );
         }
+
+        // the clients list may have changed, update the filter selection
+        UpdateListFilter();
     }
 }
 
 void CConnectDlg::OnServerListItemSelectionChanged()
 {
-    // get current selected item (we are only interested in the first selcted
+    // get current selected item (we are only interested in the first selected
     // item)
     QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
 
@@ -569,7 +569,15 @@ void CConnectDlg::UpdateListFilter()
                 bFilterFound = true;
             }
 
-            // search childs
+            // special case: filter for occupied servers
+            // DEFINITION: if "#" is set at the beginning of the filter text, we show
+            //             occupied servers (#397)
+            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( pCurListViewItem->childCount() > 0 ) )
+            {
+                bFilterFound = true;
+            }
+
+            // search children
             for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
             {
                 if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
@@ -785,13 +793,13 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         }
     }
 
-    // if no server item has childs, do not show decoration
+    // if no server item has children, do not show decoration
     bool bAnyListItemHasChilds = false;
     const int iServerListLen   = lvwServers->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
-        // check if the current list item has childs
+        // check if the current list item has children
         if ( lvwServers->topLevelItem ( iIdx )->childCount() > 0 )
         {
             bAnyListItemHasChilds = true;
@@ -846,7 +854,7 @@ QTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
 
 void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
 {
-    // loop over all childs
+    // loop over all children
     while ( pItem->childCount() > 0 )
     {
         // get the first child in the list

@@ -53,7 +53,7 @@ QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
         return tr ( "The audio driver could not be initialized." );
     }
 
-    // check device capabilities if it fullfills our requirements
+    // check device capabilities if it fulfills our requirements
     const QString strStat = CheckDeviceCapabilities();
 
     // check if device is capable
@@ -165,7 +165,7 @@ QString CSound::CheckDeviceCapabilities()
         // support the required sample format. But since we have support for
         // all known sample types, the following check should always pass and
         // therefore we throw the error message on any channel which does not
-        // fullfill the sample format requirement (quick hack solution).
+        // fulfill the sample format requirement (quick hack solution).
         if ( !CheckSampleTypeSupported ( channelInfosInput[i].type ) )
         {
             // return error string
@@ -195,7 +195,7 @@ QString CSound::CheckDeviceCapabilities()
         // support the required sample format. But since we have support for
         // all known sample types, the following check should always pass and
         // therefore we throw the error message on any channel which does not
-        // fullfill the sample format requirement (quick hack solution).
+        // fulfill the sample format requirement (quick hack solution).
         if ( !CheckSampleTypeSupported ( channelInfosOutput[i].type ) )
         {
             // return error string
@@ -449,7 +449,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
             dInOutLatencyMs = 0.0;
         }
 
-        // check wether the driver requires the ASIOOutputReady() optimization
+        // check whether the driver requires the ASIOOutputReady() optimization
         // (can be used by the driver to reduce output latency by one block)
         bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
     }

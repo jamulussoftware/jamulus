@@ -25,8 +25,6 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QTextStream>
-#include <QTranslator>
-#include <QLibraryInfo>
 #include "global.h"
 #ifndef HEADLESS
 # include <QApplication>
@@ -582,23 +580,6 @@ int main ( int argc, char** argv )
     // init resources
     Q_INIT_RESOURCE(resources);
 
-    // load translations
-    QTranslator myappTranslator, myqtTranslator;
-
-    if ( bUseGUI && bUseTranslation )
-    {
-        if ( myappTranslator.load ( QLocale(), "translation", "_", ":/translations" ) )
-        {
-            pApp->installTranslator ( &myappTranslator );
-        }
-
-        // allows the Qt messages to be translated in the application
-        if ( myqtTranslator.load ( QLocale(), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
-        {
-            pApp->installTranslator ( &myqtTranslator );
-        }
-    }
-
 
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
@@ -617,8 +598,14 @@ int main ( int argc, char** argv )
                              strClientName );
 
             // load settings from init-file
-            CSettings Settings ( &Client, strIniFileName );
+            CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load();
+
+            // load translation
+            if ( bUseGUI && bUseTranslation )
+            {
+                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+            }
 
 #ifndef HEADLESS
             if ( bUseGUI )
@@ -670,8 +657,14 @@ int main ( int argc, char** argv )
             if ( bUseGUI )
             {
                 // load settings from init-file
-                CSettings Settings ( &Server, strIniFileName );
+                CServerSettings Settings ( &Server, strIniFileName );
                 Settings.Load();
+
+                // load translation
+                if ( bUseGUI && bUseTranslation )
+                {
+                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                }
 
                 // update server list AFTER restoring the settings from the
                 // settings file
@@ -725,9 +718,9 @@ int main ( int argc, char** argv )
         }
     }
     
-    #if defined ( __APPLE__ ) || defined ( __MACOSX )
-        activity.EndActivity();
-    #endif
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+    activity.EndActivity();
+#endif
 
     return 0;
 }

@@ -36,6 +36,7 @@
 #include <QSizePolicy>
 #include <QHostAddress>
 #include <QListWidget>
+#include <QMenu>
 #include "global.h"
 #include "util.h"
 #include "levelmeter.h"
@@ -50,42 +51,44 @@ public:
     CChannelFader ( QWidget* pNW );
 
     QString GetReceivedName() { return cReceivedChanInfo.strName; }
-    int GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
-    void SetChannelInfos ( const CChannelInfo& cChanInfo );
-    void Show() { pFrame->show(); }
-    void Hide() { pFrame->hide(); }
-    bool IsVisible() { return !pFrame->isHidden(); }
-    bool IsSolo() { return pcbSolo->isChecked(); }
-    bool IsMute() { return pcbMute->isChecked(); }
-    bool IsSelect() { return pcbGroup->isChecked(); }
-    void SetGUIDesign ( const EGUIDesign eNewDesign );
-    void SetDisplayChannelLevel ( const bool eNDCL );
-    bool GetDisplayChannelLevel();
-    void SetDisplayPans ( const bool eNDP );
+    int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
+    void    SetChannelInfos ( const CChannelInfo& cChanInfo );
+    void    Show() { pFrame->show(); }
+    void    Hide() { pFrame->hide(); }
+    bool    IsVisible() { return !pFrame->isHidden(); }
+    bool    IsSolo() { return pcbSolo->isChecked(); }
+    bool    IsMute() { return pcbMute->isChecked(); }
+    int     GetGroupID() { return iGroupID; }
+    void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void    SetDisplayChannelLevel ( const bool eNDCL );
+    bool    GetDisplayChannelLevel();
+    void    SetDisplayPans ( const bool eNDP );
     QFrame* GetMainWidget() { return pFrame; }
 
     void SetPanValue ( const int iPan );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
+    void SetGroupID ( const int iNGroupID );
     void SetRemoteFaderIsMute ( const bool bIsMute );
-    void SetFaderIsSelect ( const bool bIsMute );
-    void SetFaderLevel ( const int  iLevel,
-                         const bool bIsGroupUpdate = false );
+    void SetFaderLevel ( const double dLevel,
+                         const bool   bIsGroupUpdate = false );
 
-    int  GetFaderLevel() { return pFader->value(); }
-    int  GetPanValue() { return pPan->value(); }
-    void Reset();
-    void SetChannelLevel ( const uint16_t iLevel );
-    void SetIsMyOwnFader() { bIsMyOwnFader = true; }
-    void UpdateSoloState ( const bool bNewOtherSoloState );
+    int    GetFaderLevel() { return pFader->value(); }
+    double GetPreviousFaderLevel() { return dPreviousFaderLevel; }
+    int    GetPanValue() { return pPan->value(); }
+    void   Reset();
+    void   SetChannelLevel ( const uint16_t iLevel );
+    void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
+    void   UpdateSoloState ( const bool bNewOtherSoloState );
 
 protected:
-    double CalcFaderGain ( const int value );
+    void   UpdateGroupIDDependencies();
+    double CalcFaderGain ( const double dValue );
     void   SetMute ( const bool bState );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
     void   SendPanValueToServer ( const int iPan );
-    void   SendFaderLevelToServer ( const int  iLevel,
-                                    const bool bIsGroupUpdate );
+    void   SendFaderLevelToServer ( const double dLevel,
+                                    const bool   bIsGroupUpdate );
 
     QFrame*      pFrame;
 
@@ -102,6 +105,7 @@ protected:
     QCheckBox*   pcbMute;
     QCheckBox*   pcbSolo;
     QCheckBox*   pcbGroup;
+    QMenu*       pGroupPopupMenu;
 
     QGroupBox*   pLabelInstBox;
     QLabel*      plblLabel;
@@ -112,18 +116,29 @@ protected:
 
     bool         bOtherChannelIsSolo;
     bool         bIsMyOwnFader;
-    int          iPreviousFaderLevel;
+    double       dPreviousFaderLevel;
+    int          iGroupID;
+    QString      strGroupBaseText;
+    int          iInstrPicFixedWidth;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }
     void OnPanValueChanged ( int value ) { SendPanValueToServer ( value ); }
     void OnMuteStateChanged ( int value );
+    void OnGroupStateChanged ( int );
+
+    void OnGroupMenuGrpNone() { SetGroupID ( INVALID_INDEX ); }
+    void OnGroupMenuGrp1()    { SetGroupID ( 0 ); }
+    void OnGroupMenuGrp2()    { SetGroupID ( 1 ); }
+    void OnGroupMenuGrp3()    { SetGroupID ( 2 ); }
+    void OnGroupMenuGrp4()    { SetGroupID ( 3 ); }
 
 signals:
     void gainValueChanged ( double value,
                             bool   bIsMyOwnFader,
                             bool   bIsGroupUpdate,
-                            int    iDiffLevel );
+                            bool   bSuppressServerUpdate,
+                            double dLevelRatio );
 
     void panValueChanged  ( double value );
     void soloStateChanged ( int value );
@@ -136,11 +151,13 @@ public:
     void OnChGainValueChanged ( double dValue,
                                 bool   bIsMyOwnFader,
                                 bool   bIsGroupUpdate,
-                                int    iDiffLevel ) { UpdateGainValue ( slotId - 1,
-                                                                        dValue,
-                                                                        bIsMyOwnFader,
-                                                                        bIsGroupUpdate,
-                                                                        iDiffLevel ); }
+                                bool   bSuppressServerUpdate,
+                                double dLevelRatio ) { UpdateGainValue ( slotId - 1,
+                                                                         dValue,
+                                                                         bIsMyOwnFader,
+                                                                         bIsGroupUpdate,
+                                                                         bSuppressServerUpdate,
+                                                                         dLevelRatio ); }
 
     void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
 
@@ -149,7 +166,8 @@ protected:
                                    const double dValue,
                                    const bool   bIsMyOwnFader,
                                    const bool   bIsGroupUpdate,
-                                   const int    iDiffLevel ) = 0;
+                                   const bool   bSuppressServerUpdate,
+                                   const double dLevelRatio ) = 0;
 
     virtual void UpdatePanValue ( const int    iChannelIdx,
                                   const double dValue ) = 0;
@@ -198,6 +216,7 @@ public:
     CVector<int>     vecStoredPanValues;
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
+    CVector<int>     vecStoredFaderGroupID;
     int              iNewClientFaderLevel;
 
 protected:
@@ -220,7 +239,8 @@ protected:
                                   int&                iStoredFaderLevel,
                                   int&                iStoredPanValue,
                                   bool&               bStoredFaderIsSolo,
-                                  bool&               bStoredFaderIsMute );
+                                  bool&               bStoredFaderIsMute,
+                                  int&                iGroupID );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
@@ -244,7 +264,8 @@ protected:
                                    const double dValue,
                                    const bool   bIsMyOwnFader,
                                    const bool   bIsGroupUpdate,
-                                   const int    iDiffLevel );
+                                   const bool   bSuppressServerUpdate,
+                                   const double dLevelRatio );
 
     virtual void UpdatePanValue ( const int    iChannelIdx,
                                   const double dValue );

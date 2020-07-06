@@ -41,6 +41,9 @@
 # include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
+#include <QDirIterator>
+#include <QTranslator>
+#include <QLibraryInfo>
 #include <QUrl>
 #include <QLocale>
 #include <QElapsedTimer>
@@ -420,7 +423,6 @@ class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 
 public:
     CAboutDlg ( QWidget* parent = nullptr );
-
 };
 
 
@@ -488,7 +490,28 @@ public slots:
     void OnHelpSoftwareMan()      { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
 };
 
+
+// Language combo box ----------------------------------------------------------
+class CLanguageComboBox : public QComboBox
+{
+    Q_OBJECT
+
+public:
+    CLanguageComboBox ( QWidget* parent = nullptr );
+
+    void Init ( QString& strSelLanguage );
+
+protected:
+    int iIdxSelectedLanguage;
+
+public slots:
+    void OnLanguageActivated ( int iLanguageIdx );
+
+signals:
+    void LanguageChanged ( QString strLanguage );
+};
 #endif
+
 
 // Console writer factory ------------------------------------------------------
 // this class was written by pljones
@@ -581,7 +604,8 @@ enum ERecorderState
 enum EChSortType
 {
     ST_BY_NAME,
-    ST_BY_INSTRUMENT
+    ST_BY_INSTRUMENT,
+    ST_BY_GROUPID
 };
 
 
@@ -633,7 +657,7 @@ enum ESvrRegStatus
     SRS_REGISTERED,
     SRS_CENTRAL_SVR_FULL,
     SRS_VERSION_TOO_OLD,
-    SRS_NOT_FULFILL_REQIREMENTS
+    SRS_NOT_FULFILL_REQUIREMENTS
 };
 
 inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
@@ -664,7 +688,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
 
-    case SRS_NOT_FULFILL_REQIREMENTS:
+    case SRS_NOT_FULFILL_REQUIREMENTS:
         return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
@@ -869,8 +893,12 @@ protected:
 class CLocale
 {
 public:
-    static QString    GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
-    static ECSAddType GetCentralServerAddressType ( const QLocale::Country eCountry );
+    static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
+    static ECSAddType              GetCentralServerAddressType ( const QLocale::Country eCountry );
+    static QMap<QString, QString>  GetAvailableTranslations();
+    static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
+    static void                    LoadTranslation ( const QString     strLanguage,
+                                                     QCoreApplication* pApp );
 };
 
 

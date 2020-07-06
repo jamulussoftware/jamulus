@@ -21,7 +21,6 @@
 
 
 TODO add support to change language (#297)
-     TODO add language selector also in the server GUI
      TODO search in the code for "TODO maybe first try to find the complete string, if not found use only first two letters instead"
 
 TODO bug fix: incorrect selection of UI language (#408) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!

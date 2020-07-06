@@ -39,10 +39,15 @@
 class CSettings
 {
 public:
-    CSettings() : strFileName ( "" ) {}
+    CSettings() :
+        strLanguage ( "" ),
+        strFileName ( "" ) {}
 
     void Load();
     void Save();
+
+    // common settings
+    QString strLanguage;
 
 protected:
     virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) = 0;
@@ -111,6 +116,7 @@ class CClientSettings : public CSettings
 {
 public:
     CClientSettings ( CClient* pNCliP, const QString& sNFiName ) :
+        CSettings                   ( ),
         vecStoredFaderTags          ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
         vecStoredFaderLevels        ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
         vecStoredPanValues          ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
@@ -120,7 +126,6 @@ public:
         vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel        ( 100 ),
         bConnectDlgShowAllMusicians ( true ),
-        strLanguage                 ( "" ),
         vecWindowPosMain            ( ), // empty array
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
@@ -133,6 +138,7 @@ public:
         pClient                     ( pNCliP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
 
+    // general settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
     CVector<int>     vecStoredPanValues;
@@ -142,7 +148,6 @@ public:
     CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
-    QString          strLanguage;
 
     // window position/state settings
     QByteArray vecWindowPosMain;
@@ -167,12 +172,10 @@ class CServerSettings : public CSettings
 {
 public:
     CServerSettings ( CServer* pNSerP, const QString& sNFiName ) :
-        strLanguage      ( "" ),
+        CSettings        ( ),
         vecWindowPosMain ( ), // empty array
         pServer          ( pNSerP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
-
-    QString strLanguage;
 
     // window position/state settings
     QByteArray vecWindowPosMain;

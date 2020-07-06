@@ -13,6 +13,8 @@
 
 - support sorting faders by channel group
 
+- add support to change the GUI language (#297)
+
 - add special server list filter for filtering occupied servers by using "#" (#397)
 
 - scale channel instrument picture in Compact skin mode
@@ -20,11 +22,6 @@
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
 
-TODO add support to change language (#297)
-     TODO add language selector also in the server GUI
-
-TODO bug fix: incorrect selection of UI language (#408) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     -> note that for the 3.5.8 bug fix release we went back to the original translation code (e.g. no pt_BR!)
 
 TODO add new register message which contains version and, e.g., max number of clients
 

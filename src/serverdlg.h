@@ -117,6 +117,7 @@ public slots:
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 
+    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
     void OnRecordingDirClicked();
     void OnClearRecordingDirClicked();

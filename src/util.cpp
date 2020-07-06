@@ -882,6 +882,71 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
+
+
+// Language combo box ----------------------------------------------------------
+CLanguageComboBox::CLanguageComboBox ( QWidget* parent ) :
+    QComboBox            ( parent ),
+    iIdxSelectedLanguage ( INVALID_INDEX )
+{
+    QObject::connect ( this, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CLanguageComboBox::OnLanguageActivated );
+}
+
+void CLanguageComboBox::Init ( QString& strSelLanguage )
+{
+    // load available translations
+    const QMap<QString, QString>   TranslMap = CLocale::GetAvailableTranslations();
+    QMapIterator<QString, QString> MapIter ( TranslMap );
+
+    // add translations to the combobox list
+    clear();
+    int iCnt                  = 0;
+    int iIdxOfEnglishLanguage = 0;
+    iIdxSelectedLanguage      = INVALID_INDEX;
+
+    while ( MapIter.hasNext() )
+    {
+        MapIter.next();
+        addItem ( QLocale ( MapIter.key() ).nativeLanguageName() + " (" + MapIter.key() + ")", MapIter.key() );
+
+        // store the combo box index of the default english language
+        if ( MapIter.key().compare ( "en" ) == 0 )
+        {
+            iIdxOfEnglishLanguage = iCnt;
+        }
+
+        // if the selected language is found, store the combo box index
+        if ( MapIter.key().compare ( strSelLanguage ) == 0 )
+        {
+            iIdxSelectedLanguage = iCnt;
+        }
+
+        iCnt++;
+    }
+
+    // if the selected language was not found, use the english language
+    if ( iIdxSelectedLanguage == INVALID_INDEX )
+    {
+        strSelLanguage       = "en";
+        iIdxSelectedLanguage = iIdxOfEnglishLanguage;
+    }
+
+    setCurrentIndex ( iIdxSelectedLanguage );
+}
+
+void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
+{
+    // only update if the language selection is different from the current selected language
+    if ( iIdxSelectedLanguage != iLanguageIdx )
+    {
+        QMessageBox::information ( this,
+                                   tr ( "Restart Required" ),
+                                   tr ( "Please restart the application for the language change to take effect." ) );
+
+        emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
+    }
+}
 #endif
 
 
@@ -1380,6 +1445,9 @@ QMap<QString, QString> CLocale::GetAvailableTranslations()
     QMap<QString, QString> TranslMap;
     QDirIterator           DirIter ( ":/translations" );
 
+    // add english language (default which is in the actual source code)
+    TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
+
     while ( DirIter.hasNext() )
     {
         // get alias of translation file
@@ -1401,15 +1469,25 @@ QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, 
 
     if ( !slUiLang.isEmpty() )
     {
-        // only extract two first characters to identify language (ignoring
-        // location for getting a simpler implementation -> if the language
-        // is not correct, the user can change it in the GUI anyway)
-        const QString strUiLang = QLocale().uiLanguages().at ( 0 );
+        QString strUiLang = QLocale().uiLanguages().at ( 0 );
+        strUiLang.replace ( "-", "_" );
 
-        if ( strUiLang.length() >= 2 )
+        // first try to find the complete language string
+        if ( TranslMap.constFind ( strUiLang ) != TranslMap.constEnd() )
         {
-            PairSysLang.first  = strUiLang.left ( 2 );
+            PairSysLang.first  = strUiLang;
             PairSysLang.second = TranslMap[PairSysLang.first];
+        }
+        else
+        {
+            // only extract two first characters to identify language (ignoring
+            // location for getting a simpler implementation -> if the language
+            // is not correct, the user can change it in the GUI anyway)
+            if ( strUiLang.length() >= 2 )
+            {
+                PairSysLang.first  = strUiLang.left ( 2 );
+                PairSysLang.second = TranslMap[PairSysLang.first];
+            }
         }
     }
 

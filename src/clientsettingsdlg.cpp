@@ -341,6 +341,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     cbxSkin->addItem ( tr ( "Compact" ) ); // GD_SLIMFADER
     cbxSkin->setCurrentIndex ( static_cast<int> ( pClient->GetGUIDesign() ) );
 
+    // language combo box (corrects the setting if language not found)
+    cbxLanguage->Init ( pSettings->strLanguage );
+
     // custom central server address
     edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
 
@@ -422,6 +425,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     QObject::connect ( cbxSkin, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnGUIDesignActivated );
+
+    QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged,
+        this, &CClientSettingsDlg::OnLanguageChanged );
 
     // buttons
     QObject::connect ( butDriverSetup, &QPushButton::clicked,

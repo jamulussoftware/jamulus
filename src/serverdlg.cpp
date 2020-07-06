@@ -334,6 +334,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     UpdateRecorderStatus ( QString::null );
 
+    // language combo box (corrects the setting if language not found)
+    cbxLanguage->Init ( pSettings->strLanguage );
+
     // update GUI dependencies
     UpdateGUIDependencies();
 
@@ -396,6 +399,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( cbxCentServAddrType, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CServerDlg::OnCentServAddrTypeActivated );
+
+    QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged,
+        this, &CServerDlg::OnLanguageChanged );
 
     // push buttons
     QObject::connect ( pbtRecordingDir, &QPushButton::released,

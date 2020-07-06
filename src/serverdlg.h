@@ -47,10 +47,10 @@
 #define GUI_CONTRL_UPDATE_TIME      1000 // ms
 
 // Strings used in multiple places
-#define SREC_NOT_INITIALISED tr ( "Not initialised" )
-#define SREC_NOT_ENABLED     tr ( "Not enabled" )
-#define SREC_NOT_RECORDING   tr ( "Not recording" )
-#define SREC_RECORDING       tr ( "Recording" )
+#define SREC_NOT_INITIALISED CServerDlg::tr ( "Not initialised" )
+#define SREC_NOT_ENABLED     CServerDlg::tr ( "Not enabled" )
+#define SREC_NOT_RECORDING   CServerDlg::tr ( "Not recording" )
+#define SREC_RECORDING       CServerDlg::tr ( "Recording" )
 
 
 /* Classes ********************************************************************/

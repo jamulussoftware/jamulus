@@ -423,7 +423,6 @@ class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 
 public:
     CAboutDlg ( QWidget* parent = nullptr );
-
 };
 
 
@@ -491,7 +490,28 @@ public slots:
     void OnHelpSoftwareMan()      { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
 };
 
+
+// Language combo box ----------------------------------------------------------
+class CLanguageComboBox : public QComboBox
+{
+    Q_OBJECT
+
+public:
+    CLanguageComboBox ( QWidget* parent = nullptr );
+
+    void Init ( QString& strSelLanguage );
+
+protected:
+    int iIdxSelectedLanguage;
+
+public slots:
+    void OnLanguageActivated ( int iLanguageIdx );
+
+signals:
+    void LanguageChanged ( QString strLanguage );
+};
 #endif
+
 
 // Console writer factory ------------------------------------------------------
 // this class was written by pljones

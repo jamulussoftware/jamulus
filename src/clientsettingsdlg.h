@@ -107,6 +107,7 @@ protected:
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
+    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
 
 signals:
     void GUIDesignChanged();

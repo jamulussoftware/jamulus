@@ -2794,7 +2794,7 @@
         <translation>Si el directorio de grabación no es utilizable, se mostrará el problema en lugar del directorio.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="811"/>
+        <location filename="../../serverdlg.cpp" line="817"/>
         <source>ERROR</source>
         <translation>ERROR</translation>
     </message>
@@ -2819,7 +2819,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="347"/>
+        <location filename="../../serverdlg.cpp" line="350"/>
         <source>E&amp;xit</source>
         <translation>S&amp;alir</translation>
     </message>
@@ -2846,12 +2846,12 @@
         <translation> </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="580"/>
+        <location filename="../../serverdlg.cpp" line="586"/>
         <source>Select Main Recording Directory</source>
         <translation>Seleccionar Directorio Principal de Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="674"/>
+        <location filename="../../serverdlg.cpp" line="680"/>
         <source>Predefined Address</source>
         <translation>Dirección Preestablecida</translation>
     </message>
@@ -2888,12 +2888,12 @@
         <translation type="vanished">Por defecto (Norteamérica)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="341"/>
+        <location filename="../../serverdlg.cpp" line="344"/>
         <source> Server</source>
         <translation> : Servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="345"/>
+        <location filename="../../serverdlg.cpp" line="348"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>
@@ -2988,7 +2988,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="89"/>
-        <location filename="../../serverdlgbase.ui" line="213"/>
+        <location filename="../../serverdlgbase.ui" line="212"/>
         <source>STATUS</source>
         <translation>ESTADO</translation>
     </message>
@@ -3003,14 +3003,19 @@
         <translation>Directorio de Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="199"/>
+        <location filename="../../serverdlgbase.ui" line="198"/>
         <source>Enable Jam Recorder</source>
         <translation>Activar Grabación de Jams</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="220"/>
+        <location filename="../../serverdlgbase.ui" line="219"/>
         <source>New Recording</source>
         <translation>Nueva Grabación</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlgbase.ui" line="230"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -3044,7 +3049,7 @@
         <translation type="vanished">Carpeta grabaciones</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="246"/>
+        <location filename="../../serverdlgbase.ui" line="259"/>
         <source>TextLabelNameVersion</source>
         <translation>TextLabelNameVersion</translation>
     </message>

@@ -2336,7 +2336,7 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="811"/>
+        <location filename="../../serverdlg.cpp" line="817"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2357,7 +2357,7 @@ nie jestem pewna</translatorcomment>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="347"/>
+        <location filename="../../serverdlg.cpp" line="350"/>
         <source>E&amp;xit</source>
         <translation type="unfinished">&amp;Wyjdź</translation>
     </message>
@@ -2384,17 +2384,17 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="580"/>
+        <location filename="../../serverdlg.cpp" line="586"/>
         <source>Select Main Recording Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="674"/>
+        <location filename="../../serverdlg.cpp" line="680"/>
         <source>Predefined Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="341"/>
+        <location filename="../../serverdlg.cpp" line="344"/>
         <source> Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2459,7 +2459,7 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="345"/>
+        <location filename="../../serverdlg.cpp" line="348"/>
         <source>&amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2575,7 +2575,7 @@ nie jestem pewna</translatorcomment>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="89"/>
-        <location filename="../../serverdlgbase.ui" line="213"/>
+        <location filename="../../serverdlgbase.ui" line="212"/>
         <source>STATUS</source>
         <translation>STATUS</translation>
     </message>
@@ -2605,13 +2605,18 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="199"/>
+        <location filename="../../serverdlgbase.ui" line="198"/>
         <source>Enable Jam Recorder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="220"/>
+        <location filename="../../serverdlgbase.ui" line="219"/>
         <source>New Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlgbase.ui" line="230"/>
+        <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2627,7 +2632,7 @@ nie jestem pewna</translatorcomment>
         <translation type="vanished">Katalog nagrań</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="246"/>
+        <location filename="../../serverdlgbase.ui" line="259"/>
         <source>TextLabelNameVersion</source>
         <translation></translation>
     </message>

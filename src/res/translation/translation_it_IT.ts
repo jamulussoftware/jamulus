@@ -2746,7 +2746,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="811"/>
+        <location filename="../../serverdlg.cpp" line="817"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2771,7 +2771,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="347"/>
+        <location filename="../../serverdlg.cpp" line="350"/>
         <source>E&amp;xit</source>
         <translation>&amp;Esci</translation>
     </message>
@@ -2798,22 +2798,22 @@
         <translation> server </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="341"/>
+        <location filename="../../serverdlg.cpp" line="344"/>
         <source> Server</source>
         <translation> Server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="345"/>
+        <location filename="../../serverdlg.cpp" line="348"/>
         <source>&amp;Window</source>
         <translation>&amp;Finestra</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="580"/>
+        <location filename="../../serverdlg.cpp" line="586"/>
         <source>Select Main Recording Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="674"/>
+        <location filename="../../serverdlg.cpp" line="680"/>
         <source>Predefined Address</source>
         <translation>Indirizzo Predefinito</translation>
     </message>
@@ -2928,7 +2928,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="89"/>
-        <location filename="../../serverdlgbase.ui" line="213"/>
+        <location filename="../../serverdlgbase.ui" line="212"/>
         <source>STATUS</source>
         <translation>STATO</translation>
     </message>
@@ -2943,14 +2943,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="199"/>
+        <location filename="../../serverdlgbase.ui" line="198"/>
         <source>Enable Jam Recorder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="220"/>
+        <location filename="../../serverdlgbase.ui" line="219"/>
         <source>New Recording</source>
         <translation type="unfinished">Nuova Registrazione</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlgbase.ui" line="230"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -2984,7 +2989,7 @@
         <translation type="vanished">Cartella di Registrazione</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="246"/>
+        <location filename="../../serverdlgbase.ui" line="259"/>
         <source>TextLabelNameVersion</source>
         <translation>TextLabelNameVersion</translation>
     </message>

@@ -1469,18 +1469,25 @@ QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, 
 
     if ( !slUiLang.isEmpty() )
     {
-        // only extract two first characters to identify language (ignoring
-        // location for getting a simpler implementation -> if the language
-        // is not correct, the user can change it in the GUI anyway)
-        const QString strUiLang = QLocale().uiLanguages().at ( 0 );
+        QString strUiLang = QLocale().uiLanguages().at ( 0 );
+        strUiLang.replace ( "-", "_" );
 
-        if ( strUiLang.length() >= 2 )
+        // first try to find the complete language string
+        if ( TranslMap.constFind ( strUiLang ) != TranslMap.constEnd() )
         {
-
-// TODO maybe first try to find the complete string, if not found use only first two letters instead
-
-            PairSysLang.first  = strUiLang.left ( 2 );
+            PairSysLang.first  = strUiLang;
             PairSysLang.second = TranslMap[PairSysLang.first];
+        }
+        else
+        {
+            // only extract two first characters to identify language (ignoring
+            // location for getting a simpler implementation -> if the language
+            // is not correct, the user can change it in the GUI anyway)
+            if ( strUiLang.length() >= 2 )
+            {
+                PairSysLang.first  = strUiLang.left ( 2 );
+                PairSysLang.second = TranslMap[PairSysLang.first];
+            }
         }
     }
 

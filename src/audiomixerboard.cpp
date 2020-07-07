@@ -128,8 +128,8 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pMainGrid->addWidget ( pLabelInstBox );
 
     // reset current fader
-    strGroupBaseText    = "Grp";         // this will most probably overwritten by SetGUIDesign()
-    iInstrPicFixedWidth = INVALID_INDEX; // this will most probably overwritten by SetGUIDesign()
+    strGroupBaseText  = "Grp";         // this will most probably overwritten by SetGUIDesign()
+    iInstrPicMaxWidth = INVALID_INDEX; // this will most probably overwritten by SetGUIDesign()
     Reset();
 
     // add help text to controls
@@ -228,7 +228,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbSolo->setText                    ( tr ( "SOLO" ) );
         strGroupBaseText =                    tr ( "GRP" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
-        iInstrPicFixedWidth = INVALID_INDEX; // no instrument picture scaling
+        iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
         break;
 
     case GD_SLIMFADER:
@@ -243,7 +243,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbSolo->setText                    ( tr ( "S" ) );
         strGroupBaseText =                    tr ( "G" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_BAR );
-        iInstrPicFixedWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
+        iInstrPicMaxWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
         break;
 
     default:
@@ -259,7 +259,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbSolo->setText                    ( tr ( "Solo" ) );
         strGroupBaseText =                    tr ( "Grp" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
-        iInstrPicFixedWidth = INVALID_INDEX; // no instrument picture scaling
+        iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
         break;
     }
 
@@ -631,10 +631,10 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         // set correct picture
         QPixmap pixInstr ( strCurResourceRef );
 
-        if ( ( iInstrPicFixedWidth != INVALID_INDEX ) && ( pixInstr.width() > iInstrPicFixedWidth ) )
+        if ( ( iInstrPicMaxWidth != INVALID_INDEX ) && ( pixInstr.width() > iInstrPicMaxWidth ) )
         {
             // scale instrument picture on request (scale to the width with correct aspect ratio)
-            plblInstrument->setPixmap ( pixInstr.scaledToWidth ( iInstrPicFixedWidth, Qt::SmoothTransformation ) );
+            plblInstrument->setPixmap ( pixInstr.scaledToWidth ( iInstrPicMaxWidth, Qt::SmoothTransformation ) );
         }
         else
         {

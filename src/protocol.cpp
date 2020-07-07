@@ -1887,7 +1887,7 @@ void CProtocol::CreateCLRegisterServerExMes ( const CHostAddress&    InetAddr,
     // version
     PutStringUTF8OnStream ( vecData, iPos, strUTF8Version );
 
-    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER,
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER_EX,
                                      vecData,
                                      InetAddr );
 }

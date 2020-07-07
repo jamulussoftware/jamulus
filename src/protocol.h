@@ -79,6 +79,7 @@
 #define PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST  1014 // request the connected clients list
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
+#define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -123,6 +124,9 @@ public:
                                          const int           iNumClients );
     void CreateCLServerFullMes         ( const CHostAddress& InetAddr );
     void CreateCLRegisterServerMes     ( const CHostAddress&    InetAddr,
+                                         const CHostAddress&    LInetAddr,
+                                         const CServerCoreInfo& ServerInfo );
+    void CreateCLRegisterServerExMes   ( const CHostAddress&    InetAddr,
                                          const CHostAddress&    LInetAddr,
                                          const CServerCoreInfo& ServerInfo );
     void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
@@ -250,6 +254,8 @@ protected:
     bool EvaluateCLServerFullMes();
     bool EvaluateCLRegisterServerMes     ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
+    bool EvaluateCLRegisterServerExMes   ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
     bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
     bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -315,6 +321,11 @@ signals:
     void CLRegisterServerReceived     ( CHostAddress           InetAddr,
                                         CHostAddress           LInetAddr,
                                         CServerCoreInfo        ServerInfo );
+    void CLRegisterServerExReceived   ( CHostAddress           InetAddr,
+                                        CHostAddress           LInetAddr,
+                                        CServerCoreInfo        ServerInfo,
+                                        COSUtil::EOpSystemType eOSType,
+                                        QString                strVersion );
     void CLUnregisterServerReceived   ( CHostAddress           InetAddr );
     void CLServerListReceived         ( CHostAddress           InetAddr,
                                         CVector<CServerInfo>   vecServerInfo );

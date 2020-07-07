@@ -449,6 +449,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerReceived,
         this, &CServer::OnCLRegisterServerReceived );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerExReceived,
+        this, &CServer::OnCLRegisterServerExReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLUnregisterServerReceived,
         this, &CServer::OnCLUnregisterServerReceived );
 

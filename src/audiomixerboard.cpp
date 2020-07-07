@@ -503,7 +503,7 @@ void CChannelFader::SetGroupID ( const int iNGroupID )
 void CChannelFader::UpdateGroupIDDependencies()
 {
     // update the group checkbox according the current group ID setting
-    pcbGroup->blockSignals ( true ); // make sure no signals as fired
+    pcbGroup->blockSignals ( true ); // make sure no signals are fired
     if ( iGroupID == INVALID_INDEX )
     {
         pcbGroup->setCheckState ( Qt::Unchecked );
@@ -522,6 +522,21 @@ void CChannelFader::UpdateGroupIDDependencies()
     else
     {
         pcbGroup->setText ( strGroupBaseText );
+    }
+
+    // if the group is disable for this fader, reset the previous fader level
+    if ( iGroupID == INVALID_INDEX )
+    {
+        // for the special case that the fader is all the way down, use a small
+        // value instead
+        if ( GetFaderLevel() > 0 )
+        {
+            dPreviousFaderLevel = GetFaderLevel();
+        }
+        else
+        {
+            dPreviousFaderLevel = 1; // small value
+        }
     }
 
     // the fader tag border color is set according to the selected group

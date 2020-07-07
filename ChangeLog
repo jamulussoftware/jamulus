@@ -23,10 +23,11 @@
 
 
 
-TODO bug fix: if group is set to disabled, reset "previous level"
-
 TODO improve settings management -> move settings class in client/server classes, move actual settings variables
-TODO store recorder settings (#313)
+TODO improve interaction between use of inifile and command line parameters (edited) #120
+(Save client settings on SIGUSR1 #294)
+(Add a save action for client and server with a keyboard shortcut #347)
+(Save and restore mixer state (fader / mute / solo...) #377)
 
 TODO Inconsistency between Input meter and Audio mixer meter #423
 

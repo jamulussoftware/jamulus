@@ -218,10 +218,6 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
         showMinimized();
     }
 
-    // set text for version and application name
-    lblNameVersion->setText ( QString ( APP_NAME ) +
-        tr ( " server " ) + QString ( VERSION ) );
-
     // set up list view for connected clients
     lvwClients->setColumnWidth ( 0, 170 );
     lvwClients->setColumnWidth ( 1, 200 );

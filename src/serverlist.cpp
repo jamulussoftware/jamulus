@@ -340,6 +340,16 @@ void CServerListManager::OnTimerPollList()
     }
 }
 
+void CServerListManager::CentralServerRegisterServerEx ( const CHostAddress&          InetAddr,
+                                                         const CHostAddress&          LInetAddr,
+                                                         const CServerCoreInfo&       ServerInfo,
+                                                         const COSUtil::EOpSystemType ,
+                                                         const QString&               )
+{
+// TODO right now we do not make use of the additional operating system and version number informations
+CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
+}
+
 void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                                        const CHostAddress&    LInetAddr,
                                                        const CServerCoreInfo& ServerInfo )

@@ -3220,17 +3220,17 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1578"/>
+        <location filename="../../util.cpp" line="1585"/>
         <source>, Version </source>
         <translation>, Version </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1591"/>
+        <location filename="../../util.cpp" line="1598"/>
         <source>Internet Jam Session Software</source>
         <translation>Internet Jam Session Software</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1595"/>
+        <location filename="../../util.cpp" line="1602"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation>Unter der GNU General Public License (GPL)</translation>
     </message>

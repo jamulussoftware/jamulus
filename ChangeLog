@@ -23,12 +23,11 @@
 
 
 
-TODO add new register message which contains version and, e.g., max number of clients
-
-TODO Inconsistency between Input meter and Audio mixer meter #423
-
 TODO improve settings management -> move settings class in client/server classes, move actual settings variables
-TODO store recorder settings (#313)
+TODO improve interaction between use of inifile and command line parameters (edited) #120
+TODO Save and restore mixer state (fader / mute / solo...) #377
+(Add a save action for client and server with a keyboard shortcut #347) -> should be closed
+
 
 
 

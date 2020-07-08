@@ -462,6 +462,15 @@ public slots:
         ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
     }
 
+    void OnCLRegisterServerExReceived ( CHostAddress           InetAddr,
+                                        CHostAddress           LInetAddr,
+                                        CServerCoreInfo        ServerInfo,
+                                        COSUtil::EOpSystemType eOSType,
+                                        QString                strVersion )
+    {
+        ServerListManager.CentralServerRegisterServerEx ( InetAddr, LInetAddr, ServerInfo, eOSType, strVersion );
+    }
+
     void OnCLRegisterServerResp ( CHostAddress  /* unused */,
                                   ESvrRegResult eResult )
     {

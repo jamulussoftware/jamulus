@@ -119,7 +119,7 @@ protected:
     double       dPreviousFaderLevel;
     int          iGroupID;
     QString      strGroupBaseText;
-    int          iInstrPicFixedWidth;
+    int          iInstrPicMaxWidth;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }

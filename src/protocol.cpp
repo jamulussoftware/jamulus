@@ -289,6 +289,14 @@ CONNECTION LESS MESSAGES
       necessary, that value will contain the server internal address.
 
 
+- PROTMESSID_CLM_REGISTER_SERVER_EX: Register a server, providing extended server
+                                     information
+
+    +--------------------------------+-------------------------------+
+    | PROTMESSID_CLM_REGISTER_SERVER | PROTMESSID_CLM_VERSION_AND_OS |
+    +--------------------------------+-------------------------------+
+
+
 - PROTMESSID_CLM_UNREGISTER_SERVER: Unregister a server
 
     note: does not have any data -> n = 0
@@ -736,6 +744,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
         case PROTMESSID_CLM_REGISTER_SERVER:
             bRet = EvaluateCLRegisterServerMes ( InetAddr, vecbyMesBodyData );
+            break;
+
+        case PROTMESSID_CLM_REGISTER_SERVER_EX:
+            bRet = EvaluateCLRegisterServerExMes ( InetAddr, vecbyMesBodyData );
             break;
 
         case PROTMESSID_CLM_UNREGISTER_SERVER:
@@ -1466,8 +1478,8 @@ void CProtocol::CreateReqChannelLevelListMes ( const bool bRCL )
 {
     CVector<uint8_t> vecData ( 1 ); // 1 byte of data
     int              iPos = 0; // init position pointer
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( bRCL ), 1 );
+
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( bRCL ), 1 );
 
     CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_LEVEL_LIST, vecData );
 }
@@ -1816,6 +1828,162 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
 
     // invoke message action
     emit CLRegisterServerReceived ( InetAddr, LInetAddr, RecServerInfo );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLRegisterServerExMes ( const CHostAddress&    InetAddr,
+                                              const CHostAddress&    LInetAddr,
+                                              const CServerCoreInfo& ServerInfo )
+{
+    int iPos = 0; // init position pointer
+
+    // convert server info strings to utf-8
+    const QByteArray strUTF8LInetAddr = LInetAddr.InetAddr.toString().toUtf8();
+    const QByteArray strUTF8Name      = ServerInfo.strName.toUtf8();
+    const QByteArray strUTF8City      = ServerInfo.strCity.toUtf8();
+    const QByteArray strUTF8Version   = QString ( VERSION ).toUtf8();
+
+    // size of current message body
+    const int iEntrLen =
+        2 /* server internal port number */ +
+        2 /* country */ +
+        1 /* maximum number of connected clients */ +
+        1 /* is permanent flag */ +
+        2 /* name utf-8 string size */ + strUTF8Name.size() +
+        2 /* server internal address utf-8 string size */ + strUTF8LInetAddr.size() +
+        2 /* city utf-8 string size */ + strUTF8City.size() +
+        1 /* operating system */ +
+        2 /* version utf-8 string size */ + strUTF8Version.size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // port number (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( LInetAddr.iPort ), 2 );
+
+    // country (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
+
+    // maximum number of connected clients (1 byte)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.iMaxNumClients ), 1 );
+
+    // "is permanent" flag (1 byte)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.bPermanentOnline ), 1 );
+
+    // name
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
+
+    // server internal address (formerly unused topic)
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8LInetAddr );
+
+    // city
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
+
+    // operating system (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( COSUtil::GetOperatingSystem() ), 1 );
+
+    // version
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Version );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER_EX,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLRegisterServerExMes ( const CHostAddress&     InetAddr,
+                                                const CVector<uint8_t>& vecData )
+{
+    int             iPos     = 0; // init position pointer
+    const int       iDataLen = vecData.Size();
+    QString         sLocHost; // temp string for server internal address
+    CHostAddress    LInetAddr;
+    CServerCoreInfo RecServerInfo;
+
+    // check size (the first 6 bytes)
+    if ( iDataLen < 6 )
+    {
+        return true; // return error code
+    }
+
+    // port number (2 bytes)
+    LInetAddr.iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // country (2 bytes)
+    RecServerInfo.eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // maximum number of connected clients (1 byte)
+    RecServerInfo.iMaxNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // "is permanent" flag (1 byte)
+    RecServerInfo.bPermanentOnline = static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // server name
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_SERVER_NAME,
+                               RecServerInfo.strName ) )
+    {
+        return true; // return error code
+    }
+
+    // server internal address
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_IP_ADDRESS,
+                               sLocHost ) )
+    {
+        return true; // return error code
+    }
+
+    if ( sLocHost.isEmpty() )
+    {
+        // old server, empty "topic", register as local host
+        LInetAddr.InetAddr.setAddress ( QHostAddress::LocalHost );
+    }
+    else if ( !LInetAddr.InetAddr.setAddress ( sLocHost ) )
+    {
+        return true; // return error code
+    }
+
+    // server city
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_SERVER_CITY,
+                               RecServerInfo.strCity ) )
+    {
+        return true; // return error code
+    }
+
+    // check size (the next 1 byte)
+    if ( iDataLen < iPos + 1 )
+    {
+        return true; // return error code
+    }
+
+    // operating system (1 byte)
+    const COSUtil::EOpSystemType eOSType =
+        static_cast<COSUtil::EOpSystemType> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // version text
+    QString strVersion;
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_VERSION_TEXT,
+                               strVersion ) )
+    {
+        return true; // return error code
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit CLRegisterServerExReceived ( InetAddr, LInetAddr, RecServerInfo, eOSType, strVersion );
 
     return false; // no error
 }

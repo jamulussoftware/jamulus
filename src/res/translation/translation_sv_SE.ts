@@ -36,7 +36,7 @@
     <message>
         <location filename="../../util.cpp" line="411"/>
         <source>Country flag icons by Mark James</source>
-        <translation type="unfinished">Landsflaggsymboler av Mark James</translation>
+        <translation type="unfinished">Landsflaggsymboler gjorda av Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="435"/>

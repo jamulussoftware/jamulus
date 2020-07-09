@@ -40,14 +40,16 @@ class CSettings
 {
 public:
     CSettings() :
-        strLanguage ( "" ),
-        strFileName ( "" ) {}
+        vecWindowPosMain ( ), // empty array
+        strLanguage      ( "" ),
+        strFileName      ( "" ) {}
 
     void Load();
     void Save();
 
     // common settings
-    QString strLanguage;
+    QByteArray vecWindowPosMain;
+    QString    strLanguage;
 
 protected:
     virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) = 0;
@@ -126,7 +128,6 @@ public:
         vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel        ( 100 ),
         bConnectDlgShowAllMusicians ( true ),
-        vecWindowPosMain            ( ), // empty array
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
         vecWindowPosProfile         ( ), // empty array
@@ -150,7 +151,6 @@ public:
     bool             bConnectDlgShowAllMusicians;
 
     // window position/state settings
-    QByteArray vecWindowPosMain;
     QByteArray vecWindowPosSettings;
     QByteArray vecWindowPosChat;
     QByteArray vecWindowPosProfile;
@@ -172,13 +172,9 @@ class CServerSettings : public CSettings
 {
 public:
     CServerSettings ( CServer* pNSerP, const QString& sNFiName ) :
-        CSettings        ( ),
-        vecWindowPosMain ( ), // empty array
-        pServer          ( pNSerP )
+        CSettings ( ),
+        pServer   ( pNSerP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
-
-    // window position/state settings
-    QByteArray vecWindowPosMain;
 
 protected:
     virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;

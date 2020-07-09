@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>588</width>
-    <height>447</height>
+    <height>435</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,194 +47,217 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="chbStartOnOSStart">
-     <property name="text">
-      <string>Start Minimized on Windows Start</string>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="chbUseCCLicence">
-     <property name="text">
-      <string>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</string>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
+     <widget class="QWidget" name="tabServerSetup">
+      <attribute name="title">
+       <string>Server Setup</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QCheckBox" name="chbRegisterServer">
+         <property name="text">
+          <string>Make My Server Public (Register My Server in the Server List)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Genre</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cbxCentServAddrType"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblRegSvrStatus">
+           <property name="text">
+            <string>STATUS</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="grbServerInfo">
+         <property name="title">
+          <string>My Server Info</string>
+         </property>
+         <layout class="QHBoxLayout">
+          <item>
+           <layout class="QVBoxLayout">
+            <item>
+             <widget class="QLabel" name="lblServerName">
+              <property name="text">
+               <string>Name</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblLocationCity">
+              <property name="text">
+               <string>Location: City</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblLocationCountry">
+              <property name="text">
+               <string>Location: Country</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout">
+            <item>
+             <widget class="QLineEdit" name="edtServerName"/>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="edtLocationCity"/>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cbxLocationCountry"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QCheckBox" name="chbEnableRecorder">
+           <property name="text">
+            <string>Enable Jam Recorder</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="edtCurrentSessionDir">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblRecorderStatus">
+           <property name="text">
+            <string>STATUS</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbtNewRecording">
+           <property name="text">
+            <string>New Recording</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabOptions">
+      <attribute name="title">
+       <string>Options</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="lblLanguage">
+           <property name="text">
+            <string>Language</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="CLanguageComboBox" name="cbxLanguage"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QPushButton" name="pbtRecordingDir">
+           <property name="text">
+            <string>Recording Directory</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="edtRecordingDir">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbtClearRecordingDir"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QLabel" name="lblCentralServerAddress">
+           <property name="text">
+            <string>Custom Central Server Address:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="edtCentralServerAddress"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chbStartOnOSStart">
+         <property name="text">
+          <string>Start Minimized on Windows Start</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chbUseCCLicence">
+         <property name="text">
+          <string>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QCheckBox" name="chbRegisterServer">
-       <property name="text">
-        <string>Make My Server Public (Register My Server in the Server List)</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Genre</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cbxCentServAddrType"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblRegSvrStatus">
-       <property name="text">
-        <string>STATUS</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QLabel" name="lblCentralServerAddress">
-       <property name="text">
-        <string>Custom Central Server Address:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="edtCentralServerAddress"/>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="grbServerInfo">
-     <property name="title">
-      <string>My Server Info</string>
-     </property>
-     <layout class="QHBoxLayout">
-      <item>
-       <layout class="QVBoxLayout">
-        <item>
-         <widget class="QLabel" name="lblServerName">
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblLocationCity">
-          <property name="text">
-           <string>Location: City</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblLocationCountry">
-          <property name="text">
-           <string>Location: Country</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout">
-        <item>
-         <widget class="QLineEdit" name="edtServerName"/>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="edtLocationCity"/>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbxLocationCountry"/>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QPushButton" name="pbtRecordingDir">
-       <property name="text">
-        <string>Recording Directory</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="edtRecordingDir">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="tbtClearRecordingDir"/>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QCheckBox" name="chbEnableRecorder">
-       <property name="text">
-        <string>Enable Jam Recorder</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="edtCurrentSessionDir">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblRecorderStatus">
-       <property name="text">
-        <string>STATUS</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbtNewRecording">
-       <property name="text">
-        <string>New Recording</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="lblLanguage">
-       <property name="text">
-        <string>Language</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="CLanguageComboBox" name="cbxLanguage"/>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
@@ -247,21 +270,22 @@
  </customwidgets>
  <tabstops>
   <tabstop>lvwClients</tabstop>
-  <tabstop>chbStartOnOSStart</tabstop>
-  <tabstop>chbUseCCLicence</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>chbRegisterServer</tabstop>
   <tabstop>cbxCentServAddrType</tabstop>
-  <tabstop>edtCentralServerAddress</tabstop>
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>
-  <tabstop>pbtRecordingDir</tabstop>
-  <tabstop>edtRecordingDir</tabstop>
-  <tabstop>tbtClearRecordingDir</tabstop>
   <tabstop>chbEnableRecorder</tabstop>
   <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>pbtNewRecording</tabstop>
   <tabstop>cbxLanguage</tabstop>
+  <tabstop>pbtRecordingDir</tabstop>
+  <tabstop>edtRecordingDir</tabstop>
+  <tabstop>tbtClearRecordingDir</tabstop>
+  <tabstop>edtCentralServerAddress</tabstop>
+  <tabstop>chbStartOnOSStart</tabstop>
+  <tabstop>chbUseCCLicence</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

@@ -254,6 +254,9 @@ public:
     QLocale::Country GetServerCountry()
         { return ServerListManager.GetServerCountry(); }
 
+    void SetWelcomeMessage ( const QString& strNWelcMess );
+    QString GetWelcomeMessage() { return strWelcomeMessage; }
+
     ESvrRegStatus GetSvrRegStatus() { return ServerListManager.GetSvrRegStatus(); }
 
 
@@ -323,6 +326,7 @@ protected:
     int                        iMaxNumChannels;
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;
+    QMutex                     MutexWelcomeMessage;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];

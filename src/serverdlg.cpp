@@ -333,6 +333,12 @@ lvwClients->setMinimumHeight ( 140 );
     // language combo box (corrects the setting if language not found)
     cbxLanguage->Init ( pSettings->strLanguage );
 
+    // setup welcome message GUI control
+    tedWelcomeMessage->setPlaceholderText ( tr (
+        "Type a message here. If no message is set, the server welcome is disabled." ) );
+
+    tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
+
     // update GUI dependencies
     UpdateGUIDependencies();
 
@@ -415,6 +421,9 @@ lvwClients->setMinimumHeight ( 140 );
         this, &CServerDlg::OnTimer );
 
     // other
+    QObject::connect ( tedWelcomeMessage, &QTextEdit::textChanged,
+        this, &CServerDlg::OnWelcomeMessageChanged );
+
     QObject::connect ( pServer, &CServer::Started,
         this, &CServerDlg::OnServerStarted );
 

@@ -404,7 +404,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     // manage welcome message: if the welcome message is a valid link to a local
     // file, the content of that file is used as the welcome message (#361)
-    strWelcomeMessage = strNewWelcomeMessage; // first copy text, may be overwritten
+    SetWelcomeMessage ( strNewWelcomeMessage ); // first use given text, may be overwritten
+
     if ( QFileInfo ( strNewWelcomeMessage ).exists() )
     {
         QFile file ( strNewWelcomeMessage );
@@ -412,12 +413,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
         if ( file.open ( QIODevice::ReadOnly | QIODevice::Text ) )
         {
             // use entire file content for the welcome message
-            strWelcomeMessage = file.readAll();
+            SetWelcomeMessage ( file.readAll() );
         }
     }
-
-    // restrict welcome message to maximum allowed length
-    strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 
     // enable jam recording (if requested) - kicks off the thread (note
     // that jam recorder needs the frame size which is given to the jam
@@ -631,6 +629,7 @@ void CServer::OnNewConnection ( int          iChID,
     vecChannels[iChID].CreateReqChanInfoMes();
 
     // send welcome message (if enabled)
+    MutexWelcomeMessage.lock();
     if ( !strWelcomeMessage.isEmpty() )
     {
         // create formatted server welcome message and send it just to
@@ -640,6 +639,7 @@ void CServer::OnNewConnection ( int          iChID,
 
         vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
     }
+    MutexWelcomeMessage.unlock();
 
     // send licence request message (if enabled)
     if ( eLicenceType != LT_NO_LICENCE )
@@ -1552,6 +1552,16 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 
     // the recording state may have changed, send recording state message
     CreateAndSendRecorderStateForAllConChannels();
+}
+
+void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
+{
+    // we need a mutex to secure access
+    QMutexLocker locker ( &MutexWelcomeMessage );
+    strWelcomeMessage = strNWelcMess;
+
+    // restrict welcome message to maximum allowed length
+    strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 }
 
 void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,

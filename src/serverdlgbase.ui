@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>588</width>
-    <height>435</height>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -185,6 +185,23 @@
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Chat Window Welcome (HTML/CSS Supported)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="tedWelcomeMessage">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabOptions">
@@ -279,6 +296,7 @@
   <tabstop>chbEnableRecorder</tabstop>
   <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>pbtNewRecording</tabstop>
+  <tabstop>tedWelcomeMessage</tabstop>
   <tabstop>cbxLanguage</tabstop>
   <tabstop>pbtRecordingDir</tabstop>
   <tabstop>edtRecordingDir</tabstop>

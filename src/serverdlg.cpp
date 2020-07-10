@@ -249,6 +249,9 @@ lvwClients->setMinimumHeight ( 140 );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
+    // custom central server address
+    edtCentralServerAddress->setText ( pServer->GetServerListCentralServerAddress() );
+
     // update server name line edit
     edtServerName->setText ( pServer->GetServerName() );
 
@@ -664,39 +667,13 @@ void CServerDlg::OnTimer()
 void CServerDlg::UpdateGUIDependencies()
 {
     // get the states which define the GUI dependencies from the server
-    const bool bCurSerListEnabled = pServer->GetServerListEnabled();
-
-    const bool bCurUseDefCentServAddr = ( pServer->GetCentralServerAddressType() != AT_CUSTOM );
-
-    const ESvrRegStatus eSvrRegStatus = pServer->GetSvrRegStatus();
+    const bool          bCurSerListEnabled = pServer->GetServerListEnabled();
+    const ESvrRegStatus eSvrRegStatus      = pServer->GetSvrRegStatus();
 
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
     cbxCentServAddrType->setEnabled ( bCurSerListEnabled );
     grbServerInfo->setEnabled       ( bCurSerListEnabled );
-
-    // make sure the line edit does not fire signals when we update the text
-    edtCentralServerAddress->blockSignals ( true );
-    {
-        if ( bCurUseDefCentServAddr )
-        {
-            // if the default central server is used, just show a text of the
-            // server name
-            edtCentralServerAddress->setText ( tr ( "Predefined Address" ) );
-        }
-        else
-        {
-            // show the current user defined server address
-            edtCentralServerAddress->setText (
-                pServer->GetServerListCentralServerAddress() );
-        }
-    }
-    edtCentralServerAddress->blockSignals ( false );
-
-    // the line edit of the central server address is only enabled, if the
-    // server list is enabled and not the default address is used
-    edtCentralServerAddress->setEnabled (
-        !bCurUseDefCentServAddr && bCurSerListEnabled );
 
     QString strStatus = svrRegStatusToString ( eSvrRegStatus );
 

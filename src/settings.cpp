@@ -825,6 +825,12 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
     }
 
+    // welcome message (command line overwrites setting file)
+    if ( pServer->GetWelcomeMessage().isEmpty() )
+    {
+        pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
+    }
+
     // window position of the main window
     vecWindowPosMain = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
@@ -867,6 +873,10 @@ void CServerSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     // licence type
     SetNumericIniSet ( IniXMLDocument, "server", "licencetype",
         static_cast<int> ( pServer->GetLicenceType() ) );
+
+    // welcome message
+    PutIniSetting ( IniXMLDocument, "server", "welcome",
+        ToBase64 ( pServer->GetWelcomeMessage() ) );
 
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "server", "winposmain_base64",

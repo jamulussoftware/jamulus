@@ -2801,7 +2801,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="337"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation>Ecribe un mensaje aquí. Si no se establece un mensaje, la bienvenida del servidor se deshabilita.</translation>
+        <translation>Escribe un mensaje aquí. Si se deja vacío, el mensaje de bienvenida del servidor se deshabilita.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="822"/>
@@ -2983,7 +2983,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="191"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation>Bienvenida Ventana Chat (HTML/CSS Soportado)</translation>
+        <translation>Ventana Mensaje Bienvenida (HTML/CSS Soportado)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="209"/>

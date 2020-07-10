@@ -799,17 +799,23 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     strLanguage = GetIniSetting ( IniXMLDocument, "server", "language",
                                   CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
-    // name
-    pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
-
-    // city
-    pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ) );
-
-    // country
-    if ( GetNumericIniSet ( IniXMLDocument, "server", "country",
-         0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
+    // name/city/country (command line overwrites setting file, note that
+    // name/city/country are set by one single command line argument so we
+    // can treat them combined here and it is sufficient to just check the name)
+    if ( pServer->GetServerName().isEmpty() )
     {
-        pServer->SetServerCountry ( static_cast<QLocale::Country> ( iValue ) );
+        // name
+        pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
+
+        // city
+        pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ) );
+
+        // country
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "country",
+             0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
+        {
+            pServer->SetServerCountry ( static_cast<QLocale::Country> ( iValue ) );
+        }
     }
 
     // start minimized on OS start
@@ -818,11 +824,14 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         pServer->SetAutoRunMinimized ( bValue );
     }
 
-    // licence type
-    if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
-         0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
+    // licence type (command line overwrites setting file)
+    if ( pServer->GetLicenceType() == LT_NO_LICENCE )
     {
-        pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
+             0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
+        {
+            pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
+        }
     }
 
     // welcome message (command line overwrites setting file)

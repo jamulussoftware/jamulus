@@ -118,7 +118,7 @@
     <message>
         <location filename="../../util.cpp" line="483"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Sueco</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="490"/>
@@ -2801,7 +2801,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="337"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ecribe un mensaje aquí. Si no se establece un mensaje, la bienvenida del servidor se deshabilita.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="822"/>
@@ -2978,17 +2978,17 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="62"/>
         <source>Server Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Conf. Servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="191"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenida Ventana Chat (HTML/CSS Soportado)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="209"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opciones</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="264"/>

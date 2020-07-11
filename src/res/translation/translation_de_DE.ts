@@ -114,7 +114,7 @@
     <message>
         <location filename="../../util.cpp" line="483"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Schwedisch</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="490"/>
@@ -2676,22 +2676,22 @@
     <message>
         <location filename="../../serverdlg.cpp" line="135"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies ist das aktuelle Aufnahmeverzeichnis. Das Verzeichnis muss existieren und der Benutzer Jamulus muss Schreibrechte haben und Verzeichnisse erstellen können. Wenn man den Knopf drückt, dann erscheint ein Dialog zum Auswählen des Verzeichnisses.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>Clear the recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösche das Aufnahmeverzeichnis Knopf</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
         <source>Clear Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurücksetzen des Aufnahmeverzeichnisses</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="142"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Drücke den Knopf um das aktuelle Aufnahmeverzeichnis zurückzusetzen. Damit wird eine neue Aufnahme verhindert bis wieder ein neues Verzeichnis gesetzt wurde.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="146"/>
@@ -2736,37 +2736,37 @@
     <message>
         <location filename="../../serverdlg.cpp" line="160"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeigt den aktuellen Status der Aufnahmefunktion an. Die folgenden Zustände sind möglich:</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="163"/>
         <source>No recording directory has been set or the value is not useable</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde kein Aufnahmeverzeichnis gesetzt oder es wurde ein ungültiges Aufnahmeverzeichnis angegeben</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="165"/>
         <source>Recording has been switched off</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Aufnahme wurde beendet</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="167"/>
         <source> by the UI checkbox</source>
-        <translation type="unfinished"></translation>
+        <translation> in der Benutzerschnittstelle</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="169"/>
         <source>, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished"></translation>
+        <translation>, entweder von der Auswahl in der Benutzeroberfläche oder von einem empfangenen SIGUSR2-Signal</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="173"/>
         <source>There is no one connected to the server to record</source>
-        <translation type="unfinished"></translation>
+        <translation>Es ist kein Musiker mit dem Server verbunden</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
         <source>The performers are being recorded to the specified session directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Aufnahme ist aktiv</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="177"/>
@@ -2776,27 +2776,27 @@
     <message>
         <location filename="../../serverdlg.cpp" line="178"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn das Aufnahmeverzeichnis ungültig ist, dann wird die Problembeschreibung anstelle des Verzeichnisnamens angezeigt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="186"/>
         <source>Server welcome message edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Server Willkommenstext Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="187"/>
         <source>Server Welcome Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Server Willkommensnachricht</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="188"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine Server Willkommensnachricht wird im Chat-Fenster angezeigt, wenn sich ein Musiker mit dem Server verbindet. Ist kein Text gesetzt, dann ist die Willkommensnachricht deaktiviert.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="346"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Willkommensnachricht eingeben. Ist kein Text gesetzt, dann ist die Willkommensnachricht deaktiviert.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="805"/>
@@ -2972,17 +2972,17 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="62"/>
         <source>Server Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Server Konfiguration</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="191"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat-Fenster Willkommensnachricht (HTML/CSS wird unterstützt)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="209"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Optionen</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="264"/>
@@ -3033,7 +3033,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="217"/>
         <source>Language</source>
-        <translation type="unfinished">Sprache</translation>
+        <translation>Sprache</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

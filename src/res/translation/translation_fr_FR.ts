@@ -118,7 +118,7 @@
     <message>
         <location filename="../../util.cpp" line="483"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Suédois</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="490"/>
@@ -1814,7 +1814,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="521"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Langue</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="543"/>
@@ -2062,12 +2062,12 @@
     <message>
         <location filename="../../util.cpp" line="946"/>
         <source>Restart Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Redémarrage nécessaire</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="947"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez relancer l&apos;application pour que le changement de langue prenne effet.</translation>
     </message>
 </context>
 <context>
@@ -2808,7 +2808,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="346"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tapez un message ici. Si aucun message n&apos;est défini, l&apos;accueil du serveur est désactivé.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="805"/>
@@ -2984,17 +2984,17 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="62"/>
         <source>Server Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètre du serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="191"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenue dans la fenêtre de tchate (HTML/CSS pris en charge)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="209"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="264"/>
@@ -3045,7 +3045,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="217"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Langue</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

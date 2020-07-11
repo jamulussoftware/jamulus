@@ -808,7 +808,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="37"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jitterbufferten kompenserar för nätverks- och ljudkortstimning. Storleken på bufferten påverkar därför kvaliteten på ljudströmmen (hur många bortfall som inträffar) och den totala förseningen (ju längre bufferten är, desto högre fördröjning).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="41"/>
@@ -1800,7 +1800,7 @@
     <message>
         <location filename="../../util.cpp" line="706"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Det du ställer in här visas på din fader på mixerkortet när du är ansluten till en Jamulus-server. Den här taggen kommer också att visas vid varje klient som är ansluten till samma server som du.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="712"/>
@@ -1960,7 +1960,7 @@
     <message>
         <location filename="../../util.cpp" line="1000"/>
         <source>Keyboard+Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klaviatur+sång</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1001"/>
@@ -2030,12 +2030,12 @@
     <message>
         <location filename="../../util.cpp" line="1014"/>
         <source>Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ukulele</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1015"/>
         <source>Bass Ukulele</source>
-        <translation type="unfinished">Ukulele</translation>
+        <translation type="unfinished">Ukulele (bas)</translation>
     </message>
 </context>
 <context>
@@ -2546,7 +2546,7 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation type="unfinished"> programvara kräver det låga latentljudgränssnittet ASIO för att fungera korrekt. Detta är inte ett vanligt Windows ljudgränssnitt och därför krävs en speciell ljuddrivrutin. Antingen har ditt ljudkort en inbyggd ASIO-drivrutin (som rekommenderas) eller så kanske du vill använda alternativa drivrutiner som ASIO4All-drivrutinen.</translation>
+        <translation type="unfinished">Programvaran kräver det låga latentljudgränssnittet ASIO för att fungera korrekt. Detta är inte ett vanligt Windows ljudgränssnitt och därför krävs en speciell ljuddrivrutin. Antingen har ditt ljudkort en inbyggd ASIO-drivrutin (som rekommenderas) eller så kanske du vill använda alternativa drivrutiner som ASIO4All-drivrutinen.</translation>
     </message>
 </context>
 <context>

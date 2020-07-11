@@ -2439,7 +2439,7 @@
         <translation>Ukelele-bas</translation>
     </message>
     <message>
-        <location filename="../../settings.cpp" line="313"/>
+        <location filename="../../settings.cpp" line="249"/>
         <source>No Name</source>
         <translation>Geen naam</translation>
     </message>
@@ -2739,12 +2739,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="340"/>
+        <location filename="../../serverdlg.cpp" line="186"/>
+        <source>Server welcome message edit box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="187"/>
+        <source>Server Welcome Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="188"/>
+        <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="346"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="799"/>
+        <location filename="../../serverdlg.cpp" line="805"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2768,25 +2783,25 @@
         <translation>Tijdens een opnamesessie kan de knio gebruikt worden om een nieuwe opname te starten.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="355"/>
+        <location filename="../../serverdlg.cpp" line="197"/>
+        <location filename="../../serverdlg.cpp" line="361"/>
         <source>E&amp;xit</source>
         <translation>&amp;Sluiten</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="197"/>
+        <location filename="../../serverdlg.cpp" line="203"/>
         <source>&amp;Hide </source>
         <translation>&amp;Verbergen </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="197"/>
-        <location filename="../../serverdlg.cpp" line="201"/>
+        <location filename="../../serverdlg.cpp" line="203"/>
         <location filename="../../serverdlg.cpp" line="207"/>
+        <location filename="../../serverdlg.cpp" line="213"/>
         <source> server</source>
         <translation> server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="201"/>
+        <location filename="../../serverdlg.cpp" line="207"/>
         <source>&amp;Open </source>
         <translation>&amp;Open </translation>
     </message>
@@ -2795,7 +2810,7 @@
         <translation type="vanished"> server </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="594"/>
+        <location filename="../../serverdlg.cpp" line="600"/>
         <source>Select Main Recording Directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2836,12 +2851,12 @@
         <translation type="vanished">Standaard (Noord-Amerika)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="349"/>
+        <location filename="../../serverdlg.cpp" line="355"/>
         <source> Server</source>
         <translation> Server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="353"/>
+        <location filename="../../serverdlg.cpp" line="359"/>
         <source>&amp;Window</source>
         <translation>&amp;Window</translation>
     </message>

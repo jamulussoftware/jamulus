@@ -2499,7 +2499,7 @@
         <translation>Ukulele Barítono</translation>
     </message>
     <message>
-        <location filename="../../settings.cpp" line="313"/>
+        <location filename="../../settings.cpp" line="249"/>
         <source>No Name</source>
         <translation>Sin Nombre</translation>
     </message>
@@ -2799,12 +2799,27 @@
         <translation>Si el directorio de grabación no es utilizable, se mostrará el problema en lugar del directorio.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="340"/>
+        <location filename="../../serverdlg.cpp" line="186"/>
+        <source>Server welcome message edit box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="187"/>
+        <source>Server Welcome Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="188"/>
+        <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="346"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Escribe un mensaje aquí. Si se deja vacío, el mensaje de bienvenida del servidor se deshabilita.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="799"/>
+        <location filename="../../serverdlg.cpp" line="805"/>
         <source>ERROR</source>
         <translation>ERROR</translation>
     </message>
@@ -2828,25 +2843,25 @@
         <translation>Durante una sesión de grabación, el botón puede utilizarse para comenzar una nueva grabación.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="355"/>
+        <location filename="../../serverdlg.cpp" line="197"/>
+        <location filename="../../serverdlg.cpp" line="361"/>
         <source>E&amp;xit</source>
         <translation>S&amp;alir</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="197"/>
+        <location filename="../../serverdlg.cpp" line="203"/>
         <source>&amp;Hide </source>
         <translation>&amp;Ocultar servidor </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="197"/>
-        <location filename="../../serverdlg.cpp" line="201"/>
+        <location filename="../../serverdlg.cpp" line="203"/>
         <location filename="../../serverdlg.cpp" line="207"/>
+        <location filename="../../serverdlg.cpp" line="213"/>
         <source> server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="201"/>
+        <location filename="../../serverdlg.cpp" line="207"/>
         <source>&amp;Open </source>
         <translation>&amp;Abrir servidor </translation>
     </message>
@@ -2855,7 +2870,7 @@
         <translation type="vanished"> </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="594"/>
+        <location filename="../../serverdlg.cpp" line="600"/>
         <source>Select Main Recording Directory</source>
         <translation>Seleccionar Directorio Principal de Grabación</translation>
     </message>
@@ -2896,12 +2911,12 @@
         <translation type="vanished">Por defecto (Norteamérica)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="349"/>
+        <location filename="../../serverdlg.cpp" line="355"/>
         <source> Server</source>
         <translation> : Servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="353"/>
+        <location filename="../../serverdlg.cpp" line="359"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>

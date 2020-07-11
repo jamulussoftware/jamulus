@@ -2475,7 +2475,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../settings.cpp" line="313"/>
+        <location filename="../../settings.cpp" line="249"/>
         <source>No Name</source>
         <translation>Kein Name</translation>
     </message>
@@ -2779,12 +2779,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="340"/>
+        <location filename="../../serverdlg.cpp" line="186"/>
+        <source>Server welcome message edit box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="187"/>
+        <source>Server Welcome Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="188"/>
+        <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="346"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="799"/>
+        <location filename="../../serverdlg.cpp" line="805"/>
         <source>ERROR</source>
         <translation>FEHLER</translation>
     </message>
@@ -2808,25 +2823,25 @@
         <translation>Mit diesem Knopf kann man die Aufnahme neu starten (d.h. es wird eine neue Aufnahmedatei angelegt).</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="355"/>
+        <location filename="../../serverdlg.cpp" line="197"/>
+        <location filename="../../serverdlg.cpp" line="361"/>
         <source>E&amp;xit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="197"/>
+        <location filename="../../serverdlg.cpp" line="203"/>
         <source>&amp;Hide </source>
         <translation>&amp;Ausblenden vom </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="197"/>
-        <location filename="../../serverdlg.cpp" line="201"/>
+        <location filename="../../serverdlg.cpp" line="203"/>
         <location filename="../../serverdlg.cpp" line="207"/>
+        <location filename="../../serverdlg.cpp" line="213"/>
         <source> server</source>
         <translation> Server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="201"/>
+        <location filename="../../serverdlg.cpp" line="207"/>
         <source>&amp;Open </source>
         <translation>Ö&amp;ffne den </translation>
     </message>
@@ -2835,7 +2850,7 @@
         <translation type="vanished"> Server </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="594"/>
+        <location filename="../../serverdlg.cpp" line="600"/>
         <source>Select Main Recording Directory</source>
         <translation>Wähle das Aufnahmehauptverzeichnis aus</translation>
     </message>
@@ -2876,12 +2891,12 @@
         <translation type="vanished">Standard (Nordamerika)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="349"/>
+        <location filename="../../serverdlg.cpp" line="355"/>
         <source> Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="353"/>
+        <location filename="../../serverdlg.cpp" line="359"/>
         <source>&amp;Window</source>
         <translation>&amp;Fenster</translation>
     </message>

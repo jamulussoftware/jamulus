@@ -532,7 +532,8 @@ int main ( int argc, char** argv )
     {
         tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
-    
+
+
     // Application/GUI setup ---------------------------------------------------
     // Application object
 #ifdef HEADLESS

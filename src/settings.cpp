@@ -226,70 +226,6 @@ void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
                             QString ( "ipaddress%1" ).arg ( iIdx ), "" );
     }
 
-    // stored fader tags
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        vecStoredFaderTags[iIdx] = FromBase64ToString (
-            GetIniSetting ( IniXMLDocument, "client",
-                            QString ( "storedfadertag%1_base64" ).arg ( iIdx ), "" ) );
-    }
-
-    // stored fader levels
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        if ( GetNumericIniSet ( IniXMLDocument, "client",
-                                QString ( "storedfaderlevel%1" ).arg ( iIdx ),
-                                0, AUD_MIX_FADER_MAX, iValue ) )
-        {
-            vecStoredFaderLevels[iIdx] = iValue;
-        }
-    }
-
-    // stored pan values
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        if ( GetNumericIniSet ( IniXMLDocument, "client",
-                                QString ( "storedpanvalue%1" ).arg ( iIdx ),
-                                0, AUD_MIX_PAN_MAX, iValue ) )
-        {
-            vecStoredPanValues[iIdx] = iValue;
-        }
-    }
-
-    // stored fader solo state
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        if ( GetFlagIniSet ( IniXMLDocument, "client",
-                             QString ( "storedfaderissolo%1" ).arg ( iIdx ),
-                             bValue ) )
-        {
-            vecStoredFaderIsSolo[iIdx] = bValue;
-        }
-    }
-
-    // stored fader muted state
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        if ( GetFlagIniSet ( IniXMLDocument, "client",
-                             QString ( "storedfaderismute%1" ).arg ( iIdx ),
-                             bValue ) )
-        {
-            vecStoredFaderIsMute[iIdx] = bValue;
-        }
-    }
-
-    // stored fader group ID
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        // note that we only apply valid group numbers here
-        if ( GetNumericIniSet ( IniXMLDocument, "client",
-                                QString ( "storedgroupid%1" ).arg ( iIdx ),
-                                0, MAX_NUM_FADER_GROUPS - 1, iValue ) )
-        {
-            vecStoredFaderGroupID[iIdx] = iValue;
-        }
-    }
-
     // new client level
     if ( GetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
          0, 100, iValue ) )
@@ -547,6 +483,65 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
     {
         bWindowWasShownConnect = bValue;
     }
+
+    // fader settings
+    ReadFaderSettingsFromXML ( IniXMLDocument );
+}
+
+void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument )
+{
+    int  iIdx;
+    int  iValue;
+    bool bValue;
+
+    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+    {
+        // stored fader tags
+        vecStoredFaderTags[iIdx] = FromBase64ToString (
+            GetIniSetting ( IniXMLDocument, "client",
+                            QString ( "storedfadertag%1_base64" ).arg ( iIdx ), "" ) );
+
+        // stored fader levels
+        if ( GetNumericIniSet ( IniXMLDocument, "client",
+                                QString ( "storedfaderlevel%1" ).arg ( iIdx ),
+                                0, AUD_MIX_FADER_MAX, iValue ) )
+        {
+            vecStoredFaderLevels[iIdx] = iValue;
+        }
+
+        // stored pan values
+        if ( GetNumericIniSet ( IniXMLDocument, "client",
+                                QString ( "storedpanvalue%1" ).arg ( iIdx ),
+                                0, AUD_MIX_PAN_MAX, iValue ) )
+        {
+            vecStoredPanValues[iIdx] = iValue;
+        }
+
+        // stored fader solo state
+        if ( GetFlagIniSet ( IniXMLDocument, "client",
+                             QString ( "storedfaderissolo%1" ).arg ( iIdx ),
+                             bValue ) )
+        {
+            vecStoredFaderIsSolo[iIdx] = bValue;
+        }
+
+        // stored fader muted state
+        if ( GetFlagIniSet ( IniXMLDocument, "client",
+                             QString ( "storedfaderismute%1" ).arg ( iIdx ),
+                             bValue ) )
+        {
+            vecStoredFaderIsMute[iIdx] = bValue;
+        }
+
+        // stored fader group ID
+        // note that we only apply valid group numbers here
+        if ( GetNumericIniSet ( IniXMLDocument, "client",
+                                QString ( "storedgroupid%1" ).arg ( iIdx ),
+                                0, MAX_NUM_FADER_GROUPS - 1, iValue ) )
+        {
+            vecStoredFaderGroupID[iIdx] = iValue;
+        }
+    }
 }
 
 void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
@@ -559,54 +554,6 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
         PutIniSetting ( IniXMLDocument, "client",
                         QString ( "ipaddress%1" ).arg ( iIdx ),
                         vstrIPAddress[iIdx] );
-    }
-
-    // stored fader tags
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        PutIniSetting ( IniXMLDocument, "client",
-                        QString ( "storedfadertag%1_base64" ).arg ( iIdx ),
-                        ToBase64 ( vecStoredFaderTags[iIdx] ) );
-    }
-
-    // stored fader levels
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        SetNumericIniSet ( IniXMLDocument, "client",
-                           QString ( "storedfaderlevel%1" ).arg ( iIdx ),
-                           vecStoredFaderLevels[iIdx] );
-    }
-
-    // stored pan values
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        SetNumericIniSet ( IniXMLDocument, "client",
-                           QString ( "storedpanvalue%1" ).arg ( iIdx ),
-                           vecStoredPanValues[iIdx] );
-    }
-
-    // stored fader solo states
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        SetFlagIniSet ( IniXMLDocument, "client",
-                        QString ( "storedfaderissolo%1" ).arg ( iIdx ),
-                        vecStoredFaderIsSolo[iIdx] != 0 );
-    }
-
-    // stored fader muted states
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        SetFlagIniSet ( IniXMLDocument, "client",
-                        QString ( "storedfaderismute%1" ).arg ( iIdx ),
-                        vecStoredFaderIsMute[iIdx] != 0 );
-    }
-
-    // stored fader group ID
-    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
-    {
-        SetNumericIniSet ( IniXMLDocument, "client",
-                           QString ( "storedgroupid%1" ).arg ( iIdx ),
-                           vecStoredFaderGroupID[iIdx] );
     }
 
     // new client level
@@ -752,6 +699,47 @@ void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
     // visibility state of the connect window
     SetFlagIniSet ( IniXMLDocument, "client", "winviscon",
         bWindowWasShownConnect );
+
+    // fader settings
+    WriteFaderSettingsToXML ( IniXMLDocument );
+}
+
+void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
+{
+    int iIdx;
+
+    for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+    {
+        // stored fader tags
+        PutIniSetting ( IniXMLDocument, "client",
+                        QString ( "storedfadertag%1_base64" ).arg ( iIdx ),
+                        ToBase64 ( vecStoredFaderTags[iIdx] ) );
+
+        // stored fader levels
+        SetNumericIniSet ( IniXMLDocument, "client",
+                           QString ( "storedfaderlevel%1" ).arg ( iIdx ),
+                           vecStoredFaderLevels[iIdx] );
+
+        // stored pan values
+        SetNumericIniSet ( IniXMLDocument, "client",
+                           QString ( "storedpanvalue%1" ).arg ( iIdx ),
+                           vecStoredPanValues[iIdx] );
+
+        // stored fader solo states
+        SetFlagIniSet ( IniXMLDocument, "client",
+                        QString ( "storedfaderissolo%1" ).arg ( iIdx ),
+                        vecStoredFaderIsSolo[iIdx] != 0 );
+
+        // stored fader muted states
+        SetFlagIniSet ( IniXMLDocument, "client",
+                        QString ( "storedfaderismute%1" ).arg ( iIdx ),
+                        vecStoredFaderIsMute[iIdx] != 0 );
+
+        // stored fader group ID
+        SetNumericIniSet ( IniXMLDocument, "client",
+                           QString ( "storedgroupid%1" ).arg ( iIdx ),
+                           vecStoredFaderGroupID[iIdx] );
+    }
 }
 
 

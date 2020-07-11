@@ -2607,7 +2607,7 @@
     <message>
         <location filename="../../util.cpp" line="1425"/>
         <source>Internet Jam Session Software</source>
-        <translation type="unfinished">Internet Jam Session Applikation</translation>
+        <translation type="unfinished">Internet Jam Session Software</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1429"/>

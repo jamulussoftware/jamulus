@@ -31,16 +31,10 @@ void CSettings::Load()
     // prepare file name for loading initialization data from XML file and read
     // data from file if possible
     QDomDocument IniXMLDocument;
-    QFile        file ( strFileName );
-
-    if ( file.open ( QIODevice::ReadOnly ) )
-    {
-        IniXMLDocument.setContent ( QTextStream ( &file ).readAll(), false );
-        file.close();
-    }
+    ReadFromFile ( strFileName, IniXMLDocument );
 
     // read the settings from the given XML file
-    ReadFromXML ( IniXMLDocument );
+    ReadSettingsFromXML ( IniXMLDocument );
 }
 
 void CSettings::Save()
@@ -49,15 +43,33 @@ void CSettings::Save()
     QDomDocument IniXMLDocument;
 
     // write the settings in the XML file
-    WriteToXML ( IniXMLDocument );
+    WriteSettingsToXML ( IniXMLDocument );
 
     // prepare file name for storing initialization data in XML file and store
     // XML data in file
-    QFile file ( strFileName );
+    WriteToFile ( strFileName, IniXMLDocument );
+}
+
+void CSettings::ReadFromFile ( const QString& strCurFileName,
+                               QDomDocument&  XMLDocument )
+{
+    QFile file ( strCurFileName );
+
+    if ( file.open ( QIODevice::ReadOnly ) )
+    {
+        XMLDocument.setContent ( QTextStream ( &file ).readAll(), false );
+        file.close();
+    }
+}
+
+void CSettings::WriteToFile ( const QString&      strCurFileName,
+                              const QDomDocument& XMLDocument )
+{
+    QFile file ( strCurFileName );
 
     if ( file.open ( QIODevice::WriteOnly ) )
     {
-        QTextStream ( &file ) << IniXMLDocument.toString();
+        QTextStream ( &file ) << XMLDocument.toString();
         file.close();
     }
 }
@@ -212,7 +224,31 @@ void CSettings::PutIniSetting ( QDomDocument&  xmlFile,
 
 
 // Client settings -------------------------------------------------------------
-void CClientSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
+void CClientSettings::LoadFaderSettings ( const QString& strCurFileName )
+{
+    // prepare file name for loading initialization data from XML file and read
+    // data from file if possible
+    QDomDocument IniXMLDocument;
+    ReadFromFile ( strCurFileName, IniXMLDocument );
+
+    // read the settings from the given XML file
+    ReadFaderSettingsFromXML ( IniXMLDocument );
+}
+
+void CClientSettings::SaveFaderSettings ( const QString& strCurFileName )
+{
+    // create XML document for storing initialization parameters
+    QDomDocument IniXMLDocument;
+
+    // write the settings in the XML file
+    WriteFaderSettingsToXML ( IniXMLDocument );
+
+    // prepare file name for storing initialization data in XML file and store
+    // XML data in file
+    WriteToFile ( strCurFileName, IniXMLDocument );
+}
+
+void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument )
 {
     int  iIdx;
     int  iValue;
@@ -544,7 +580,7 @@ void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocum
     }
 }
 
-void CClientSettings::WriteToXML ( QDomDocument& IniXMLDocument )
+void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 {
     int iIdx;
 
@@ -744,7 +780,7 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
 
 
 // Server settings -------------------------------------------------------------
-void CServerSettings::ReadFromXML ( const QDomDocument& IniXMLDocument )
+void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument )
 {
     int  iValue;
     bool bValue;
@@ -833,7 +869,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
 }
 
-void CServerSettings::WriteToXML ( QDomDocument& IniXMLDocument )
+void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 {
     // central server address
     PutIniSetting ( IniXMLDocument, "server", "centralservaddr",

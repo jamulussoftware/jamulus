@@ -52,8 +52,14 @@ public:
     QString    strLanguage;
 
 protected:
-    virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) = 0;
-    virtual void WriteToXML  ( QDomDocument& IniXMLDocument )       = 0;
+    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument ) = 0;
+    virtual void WriteSettingsToXML  ( QDomDocument& IniXMLDocument )       = 0;
+
+    void ReadFromFile ( const QString& strCurFileName,
+                        QDomDocument&  XMLDocument );
+
+    void WriteToFile ( const QString&      strCurFileName,
+                       const QDomDocument& XMLDocument );
 
     void SetFileName ( const QString& sNFiName,
                        const QString& sDefaultFileName );
@@ -139,6 +145,9 @@ public:
         pClient                     ( pNCliP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
 
+    void LoadFaderSettings ( const QString& strCurFileName );
+    void SaveFaderSettings ( const QString& strCurFileName );
+
     // general settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
@@ -161,8 +170,8 @@ public:
     bool       bWindowWasShownConnect;
 
 protected:
-    virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;
-    virtual void WriteToXML  ( QDomDocument& IniXMLDocument ) override;
+    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument ) override;
+    virtual void WriteSettingsToXML  ( QDomDocument& IniXMLDocument ) override;
 
     void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
     void WriteFaderSettingsToXML  ( QDomDocument& IniXMLDocument );
@@ -180,8 +189,8 @@ public:
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
 
 protected:
-    virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;
-    virtual void WriteToXML  ( QDomDocument& IniXMLDocument ) override;
+    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument ) override;
+    virtual void WriteSettingsToXML  ( QDomDocument& IniXMLDocument ) override;
 
     CServer* pServer;
 };

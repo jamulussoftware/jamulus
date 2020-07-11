@@ -769,7 +769,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         else
         {
             pCurListViewItem->
-                setText ( 2, QString().setNum ( iNumClients ) );
+                setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
         }
 
         // check if the number of child list items matches the number of

@@ -19,17 +19,16 @@
 
 - scale channel instrument picture in Compact skin mode
 
-- redesign of the server dialog
+- redesign of the server dialog (e.g. added welcome message setting)
+
+- show maximum number of clients for servers in the serverlist, coded by dingodoppelt (#451)
 
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
 
-TODO store welcome message set in the GUI in the ini file
-
 TODO improve settings management -> move settings class in client/server classes, move actual settings variables
 TODO improve interaction between use of inifile and command line parameters (edited) #120
 TODO Save and restore mixer state (fader / mute / solo...) #377
-(Add a save action for client and server with a keyboard shortcut #347) -> should be closed
 
 
 

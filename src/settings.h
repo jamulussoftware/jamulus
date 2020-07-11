@@ -164,6 +164,9 @@ protected:
     virtual void ReadFromXML ( const QDomDocument& IniXMLDocument ) override;
     virtual void WriteToXML  ( QDomDocument& IniXMLDocument ) override;
 
+    void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
+    void WriteFaderSettingsToXML  ( QDomDocument& IniXMLDocument );
+
     CClient* pClient;
 };
 

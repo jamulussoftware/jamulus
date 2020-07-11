@@ -630,14 +630,16 @@ void CServer::OnNewConnection ( int          iChID,
 
     // send welcome message (if enabled)
     MutexWelcomeMessage.lock();
-    if ( !strWelcomeMessage.isEmpty() )
     {
-        // create formatted server welcome message and send it just to
-        // the client which just connected to the server
-        const QString strWelcomeMessageFormated =
-            "<b>Server Welcome Message:</b> " + strWelcomeMessage;
+        if ( !strWelcomeMessage.isEmpty() )
+        {
+            // create formatted server welcome message and send it just to
+            // the client which just connected to the server
+            const QString strWelcomeMessageFormated =
+                "<b>Server Welcome Message:</b> " + strWelcomeMessage;
 
-        vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
+            vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
+        }
     }
     MutexWelcomeMessage.unlock();
 

@@ -2341,12 +2341,12 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="337"/>
+        <location filename="../../serverdlg.cpp" line="340"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="822"/>
+        <location filename="../../serverdlg.cpp" line="799"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2367,7 +2367,7 @@ nie jestem pewna</translatorcomment>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="352"/>
+        <location filename="../../serverdlg.cpp" line="355"/>
         <source>E&amp;xit</source>
         <translation type="unfinished">&amp;Wyjdź</translation>
     </message>
@@ -2389,17 +2389,12 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="591"/>
+        <location filename="../../serverdlg.cpp" line="594"/>
         <source>Select Main Recording Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="685"/>
-        <source>Predefined Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../serverdlg.cpp" line="346"/>
+        <location filename="../../serverdlg.cpp" line="349"/>
         <source> Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2464,7 +2459,7 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="350"/>
+        <location filename="../../serverdlg.cpp" line="353"/>
         <source>&amp;Window</source>
         <translation type="unfinished"></translation>
     </message>

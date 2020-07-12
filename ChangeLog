@@ -29,13 +29,6 @@
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
 
-TODO instrument names in the profile dialog are no longer translated (worked in v3.5.8)
-
-TODO improve settings management -> move settings class in client/server classes, move actual settings variables
-TODO improve interaction between use of inifile and command line parameters (edited) #120
-TODO Save and restore mixer state (fader / mute / solo...) #377
-
-
 
 
 

@@ -606,6 +606,7 @@ int main ( int argc, char** argv )
             if ( bUseGUI && bUseTranslation )
             {
                 CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                CInstPictures::UpdateTableOnLanguageChange();
             }
 
 #ifndef HEADLESS

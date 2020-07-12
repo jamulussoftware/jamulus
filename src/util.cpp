@@ -1058,18 +1058,19 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
 
 
 // Instrument picture data base ------------------------------------------------
-CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
+CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
 {
     // make sure we generate the table only once
     static bool TableIsInitialized = false;
 
     static CVector<CInstPictProps> vecDataBase;
 
-    if ( !TableIsInitialized )
+    if ( !TableIsInitialized || bReGenerateTable )
     {
         // instrument picture data base initialization
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
+        vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "None" ), ":/png/instr/res/instruments/none.png", IC_OTHER_INSTRUMENT ) ); // special first element
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Drum Set" ), ":/png/instr/res/instruments/drumset.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Djembe" ), ":/png/instr/res/instruments/djembe.png", IC_PERCUSSION_INSTRUMENT ) );

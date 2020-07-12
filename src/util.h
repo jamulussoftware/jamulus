@@ -859,6 +859,7 @@ public:
     static QString       GetResourceReference ( const int iInstrument );
     static QString       GetName ( const int iInstrument );
     static EInstCategory GetCategory ( const int iInstrument );
+    static void          UpdateTableOnLanguageChange() { GetTable ( true ); }
 
 // TODO make use of instrument category (not yet implemented)
 
@@ -884,8 +885,7 @@ protected:
     };
 
     static bool IsInstIndexInRange ( const int iIdx );
-
-    static CVector<CInstPictProps>& GetTable();
+    static CVector<CInstPictProps>& GetTable ( const bool bReGenerateTable = false );
 };
 
 

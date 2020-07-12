@@ -40,6 +40,7 @@
 #include "global.h"
 #include "util.h"
 #include "levelmeter.h"
+#include "settings.h"
 
 
 /* Classes ********************************************************************/
@@ -189,6 +190,7 @@ public:
 
     virtual ~CAudioMixerBoard();
 
+    void SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
     void HideAll();
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
@@ -208,16 +210,6 @@ public:
     void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
     void SetRecorderState ( const ERecorderState newRecorderState );
-
-
-    // settings
-    CVector<QString> vecStoredFaderTags;
-    CVector<int>     vecStoredFaderLevels;
-    CVector<int>     vecStoredPanValues;
-    CVector<int>     vecStoredFaderIsSolo;
-    CVector<int>     vecStoredFaderIsMute;
-    CVector<int>     vecStoredFaderGroupID;
-    int              iNewClientFaderLevel;
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea
@@ -249,6 +241,7 @@ protected:
     void OnGainValueChanged ( const int    iChannelIdx,
                               const double dValue );
 
+    CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
     CMixerBoardScrollArea*  pScrollArea;
     QHBoxLayout*            pMainLayout;

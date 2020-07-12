@@ -679,16 +679,6 @@ void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
         edtCentralServerAddress->text() );
 }
 
-void CClientSettingsDlg::OnNewClientLevelEditingFinished()
-{
-    // store new setting in the client
-    pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt();
-
-    // inform that the level has changed and the mixer board settings must
-    // be updated
-    emit NewClientLevelChanged();
-}
-
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
 {
     if ( button == rbtBufferDelayPreferred )

@@ -182,20 +182,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // init GUI design
     SetGUIDesign ( pClient->GetGUIDesign() );
 
+    // set the settings pointer to the mixer board (must be done early)
+    MainMixerBoard->SetSettingsPointer ( pSettings );
+
     // reset mixer board
     MainMixerBoard->HideAll();
 
     // restore channel level display preference
     MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
-
-    // restore fader settings
-    MainMixerBoard->vecStoredFaderTags    = pSettings->vecStoredFaderTags;
-    MainMixerBoard->vecStoredFaderLevels  = pSettings->vecStoredFaderLevels;
-    MainMixerBoard->vecStoredPanValues    = pSettings->vecStoredPanValues;
-    MainMixerBoard->vecStoredFaderIsSolo  = pSettings->vecStoredFaderIsSolo;
-    MainMixerBoard->vecStoredFaderIsMute  = pSettings->vecStoredFaderIsMute;
-    MainMixerBoard->vecStoredFaderGroupID = pSettings->vecStoredFaderGroupID;
-    MainMixerBoard->iNewClientFaderLevel  = pSettings->iNewClientFaderLevel;
 
     // init status label
     OnTimerStatus();
@@ -252,8 +246,23 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 #endif
 
 
+    // File menu  --------------------------------------------------------------
+    QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
+
+    pLoadChannelSetupAction = pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this,
+        SLOT ( OnLoadChannelSetup() ) );
+
+    pSaveChannelSetupAction = pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this,
+        SLOT ( OnSaveChannelSetup() ) );
+
+    pFileMenu->addSeparator();
+
+    pFileMenu->addAction ( tr ( "E&xit" ), this,
+        SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
+
+
     // View menu  --------------------------------------------------------------
-    pViewMenu = new QMenu ( tr ( "&View" ), this );
+    QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
 
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
         SLOT ( OnOpenConnectionSetupDialog() ) );
@@ -274,14 +283,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
             SLOT ( OnOpenAnalyzerConsole() ) );
     }
 
-    pViewMenu->addSeparator();
-
-    pViewMenu->addAction ( tr ( "E&xit" ), this,
-        SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
-
 
     // Edit menu  --------------------------------------------------------------
-    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
+    QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
     pEditMenu->addAction ( tr ( "Sort Channel Users by &Name" ), this,
         SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
@@ -294,78 +298,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
 
     // Main menu bar -----------------------------------------------------------
-    pMenu = new QMenuBar ( this );
+    QMenuBar* pMenu = new QMenuBar ( this );
 
+    pMenu->addMenu ( pFileMenu );
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
-
-
-    // Instrument pictures popup menu ------------------------------------------
-    pInstrPictPopupMenu = new QMenu ( this );
-
-    // add an entry for all known instruments
-    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
-    {
-        // create a menu action with text and image
-        QAction* pCurAction = new QAction (
-            QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
-            CInstPictures::GetName ( iCurInst ),
-            this );
-
-        // add data to identify the action data when it is triggered
-        pCurAction->setData ( iCurInst );
-
-        pInstrPictPopupMenu->addAction ( pCurAction );
-    }
-
-
-    // Country flag icons popup menu -------------------------------------------
-    pCountryFlagPopupMenu = new QMenu ( this );
-
-    // add an entry for all known country flags
-    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
-          iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
-    {
-        // the "Default" country gets a special icon
-        QIcon   CurFlagIcon;
-        QString sCurCountryName;
-
-        if ( static_cast<QLocale::Country> ( iCurCntry ) == QLocale::AnyCountry )
-        {
-            // default icon and name for no flag selected
-            CurFlagIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
-            sCurCountryName = tr ( "None" );
-        }
-        else
-        {
-            // get current country enum
-            QLocale::Country eCountry =
-                static_cast<QLocale::Country> ( iCurCntry );
-
-            // get resource file name
-            CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
-
-            // get the country name
-            sCurCountryName = QLocale::countryToString ( eCountry );
-        }
-
-        // only add the entry if a flag is available
-        if ( !CurFlagIcon.isNull() )
-        {
-            // create a menu action with text and image
-            QAction* pCurAction =
-                new QAction ( CurFlagIcon, sCurCountryName, this );
-
-            // add data to identify the action data when it is triggered
-            pCurAction->setData ( iCurCntry );
-
-            pCountryFlagPopupMenu->addAction ( pCurAction );
-        }
-    }
 
 
     // Window positions --------------------------------------------------------
@@ -524,9 +465,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::AudioChannelsChanged,
         this, &CClientDlg::OnAudioChannelsChanged );
 
-    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::NewClientLevelChanged,
-        this, &CClientDlg::OnNewClientLevelChanged );
-
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanGain,
         this, &CClientDlg::OnChangeChanGain );
 
@@ -597,17 +535,10 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
         pClient->Stop();
     }
 
-    // store mixer fader settings (we have to hide all mixer faders first to
-    // initiate a storage of the current mixer fader levels in case we are
-    // just in a connected state) and other settings
+    // we have to hide all mixer faders first to initiate a storage of the
+    // current mixer fader levels in case we are just in a connected state
     MainMixerBoard->HideAll();
-    pSettings->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
-    pSettings->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
-    pSettings->vecStoredPanValues          = MainMixerBoard->vecStoredPanValues;
-    pSettings->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
-    pSettings->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
-    pSettings->vecStoredFaderGroupID       = MainMixerBoard->vecStoredFaderGroupID;
-    pSettings->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
+
     pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
 
     // default implementation of this event handler routine
@@ -752,6 +683,36 @@ void CClientDlg::OnConnectDisconBut()
     else
     {
         ShowConnectionSetupDialog();
+    }
+}
+
+void CClientDlg::OnLoadChannelSetup()
+{
+    QString strFileName = QFileDialog::getOpenFileName ( this,
+                                                         tr ( "Select Channel Setup File" ),
+                                                         "",
+                                                         "*.jch" );
+
+    if ( !strFileName.isEmpty() )
+    {
+// TODO The client has to be stopped to apply recovered settings after re-connect.
+// TODO Should we automatically stop/load/re-start the connection?
+        pSettings->LoadFaderSettings ( strFileName );
+    }
+}
+
+void CClientDlg::OnSaveChannelSetup()
+{
+    QString strFileName = QFileDialog::getSaveFileName ( this,
+                                                         tr ( "Select Channel Setup File" ),
+                                                         "",
+                                                         "*.jch" );
+
+    if ( !strFileName.isEmpty() )
+    {
+// TODO The client has to be stopped to store current faders.
+// TODO Should we automatically stop/save/re-start the connection?
+        pSettings->SaveFaderSettings ( strFileName );
     }
 }
 
@@ -1061,6 +1022,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             if ( !pClient->IsRunning() )
             {
                 pClient->Start();
+
+// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
+pLoadChannelSetupAction->setEnabled ( false );
+pSaveChannelSetupAction->setEnabled ( false );
             }
         }
 
@@ -1093,6 +1058,10 @@ void CClientDlg::Disconnect()
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
+
+// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
+pLoadChannelSetupAction->setEnabled ( true );
+pSaveChannelSetupAction->setEnabled ( true );
     }
 
     // change connect button text to "connect"

@@ -96,7 +96,7 @@ protected:
     void OnDisplayChannelLevelsStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
-    void OnNewClientLevelEditingFinished();
+    void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
@@ -113,5 +113,4 @@ signals:
     void GUIDesignChanged();
     void DisplayChannelLevelsChanged();
     void AudioChannelsChanged();
-    void NewClientLevelChanged();
 };

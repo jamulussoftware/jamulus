@@ -36,6 +36,7 @@
 #include <QMenuBar>
 #include <QLayout>
 #include <QMessageBox>
+#include <QFileDialog>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 # include <QVersionNumber>
 #endif
@@ -109,11 +110,8 @@ protected:
     virtual void       closeEvent ( QCloseEvent* Event );
     void               UpdateDisplay();
 
-    QMenu*             pViewMenu;
-    QMenu*             pEditMenu;
-    QMenuBar*          pMenu;
-    QMenu*             pInstrPictPopupMenu;
-    QMenu*             pCountryFlagPopupMenu;
+    QAction*           pLoadChannelSetupAction;
+    QAction*           pSaveChannelSetupAction;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -150,6 +148,8 @@ public slots:
         { ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion ); }
 #endif
 
+    void OnLoadChannelSetup();
+    void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
     void OnOpenMusicianProfileDialog() { ShowMusicianProfileDialog(); }
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
@@ -230,7 +230,6 @@ public slots:
 
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
-    void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pSettings->iNewClientFaderLevel; }
 
     void accept() { close(); } // introduced by pljones
 

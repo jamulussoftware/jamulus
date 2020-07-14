@@ -2152,6 +2152,16 @@
         <source>Bass Ukulele</source>
         <translation>Ukulele (bas)</translation>
     </message>
+    <message>
+        <location filename="../../util.cpp" line="1117"/>
+        <source>Vocal Baritone</source>
+        <translation>Sång (baryton)</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1118"/>
+        <source>Vocal Lead</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>

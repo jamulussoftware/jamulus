@@ -2519,6 +2519,16 @@
         <translation>Ukulele Barítono</translation>
     </message>
     <message>
+        <location filename="../../util.cpp" line="1117"/>
+        <source>Vocal Baritone</source>
+        <translation>Voz Barítono</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1118"/>
+        <source>Vocal Lead</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="../../settings.cpp" line="285"/>
         <source>No Name</source>
         <translation>Sin Nombre</translation>

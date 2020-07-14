@@ -2878,17 +2878,17 @@ nie jestem pewna</translatorcomment>
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1589"/>
+        <location filename="../../util.cpp" line="1591"/>
         <source>, Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1602"/>
+        <location filename="../../util.cpp" line="1604"/>
         <source>Internet Jam Session Software</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1606"/>
+        <location filename="../../util.cpp" line="1608"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation type="unfinished"></translation>
     </message>

@@ -2459,6 +2459,16 @@
         <translation>Ukelele-bas</translation>
     </message>
     <message>
+        <location filename="../../util.cpp" line="1117"/>
+        <source>Vocal Baritone</source>
+        <translation>Bariton (stem)</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1118"/>
+        <source>Vocal Lead</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="../../settings.cpp" line="285"/>
         <source>No Name</source>
         <translation>Geen naam</translation>
@@ -3237,17 +3247,17 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1589"/>
+        <location filename="../../util.cpp" line="1591"/>
         <source>, Version </source>
         <translation>, Versie </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1602"/>
+        <location filename="../../util.cpp" line="1604"/>
         <source>Internet Jam Session Software</source>
         <translation>Internet Jamsessie Software</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1606"/>
+        <location filename="../../util.cpp" line="1608"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation>Gereleased onder de GNU General Public License (GPL)</translation>
     </message>

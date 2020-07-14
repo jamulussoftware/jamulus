@@ -2461,48 +2461,48 @@
     </message>
     <message>
         <location filename="../../util.cpp" line="1110"/>
-        <source>Vocal Baritone</source>
-        <translation>Voz Barítono</translation>
-    </message>
-    <message>
-        <location filename="../../util.cpp" line="1111"/>
-        <source>Vocal Lead</source>
-        <translation>Voz Lead</translation>
-    </message>
-    <message>
-        <location filename="../../util.cpp" line="1112"/>
         <source>Vocal Tenor</source>
         <translation>Voz Tenor</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1113"/>
+        <location filename="../../util.cpp" line="1111"/>
         <source>Vocal Alto</source>
         <translation>Voz Alto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1114"/>
+        <location filename="../../util.cpp" line="1112"/>
         <source>Vocal Soprano</source>
         <translation>Voz Soprano</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1115"/>
+        <location filename="../../util.cpp" line="1113"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1116"/>
+        <location filename="../../util.cpp" line="1114"/>
         <source>Mandolin</source>
         <translation>Bandolim</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1117"/>
+        <location filename="../../util.cpp" line="1115"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1118"/>
+        <location filename="../../util.cpp" line="1116"/>
         <source>Bass Ukulele</source>
         <translation>Ukulele Baixo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1117"/>
+        <source>Vocal Baritone</source>
+        <translation>Voz Barítono</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1118"/>
+        <source>Vocal Lead</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="285"/>

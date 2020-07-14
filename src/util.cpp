@@ -1107,8 +1107,6 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Congas" ), ":/png/instr/res/instruments/congas.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bongo" ), ":/png/instr/res/instruments/bongo.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Bass" ), ":/png/instr/res/instruments/vocalbass.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Tenor" ), ":/png/instr/res/instruments/vocaltenor.png", IC_OTHER_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Alto" ), ":/png/instr/res/instruments/vocalalto.png", IC_OTHER_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Soprano" ), ":/png/instr/res/instruments/vocalsoprano.png", IC_OTHER_INSTRUMENT ) );
@@ -1116,6 +1114,8 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mandolin" ), ":/png/instr/res/instruments/mandolin.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Ukulele" ), ":/png/instr/res/instruments/ukulele.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Ukulele" ), ":/png/instr/res/instruments/bassukulele.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;

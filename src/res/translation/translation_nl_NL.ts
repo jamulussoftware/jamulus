@@ -2425,36 +2425,46 @@
     </message>
     <message>
         <location filename="../../util.cpp" line="1110"/>
+        <source>Vocal Baritone</source>
+        <translation>Bairton (stem)</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1111"/>
+        <source>Vocal Lead</source>
+        <translation>Lead (stem)</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1112"/>
         <source>Vocal Tenor</source>
         <translation>Tenor (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1111"/>
+        <location filename="../../util.cpp" line="1113"/>
         <source>Vocal Alto</source>
         <translation>Alt (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1112"/>
+        <location filename="../../util.cpp" line="1114"/>
         <source>Vocal Soprano</source>
         <translation>Sopraan (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1113"/>
+        <location filename="../../util.cpp" line="1115"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1114"/>
+        <location filename="../../util.cpp" line="1116"/>
         <source>Mandolin</source>
         <translation>Mandoline</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1115"/>
+        <location filename="../../util.cpp" line="1117"/>
         <source>Ukulele</source>
         <translation>Ukelele</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1116"/>
+        <location filename="../../util.cpp" line="1118"/>
         <source>Bass Ukulele</source>
         <translation>Ukelele-bas</translation>
     </message>

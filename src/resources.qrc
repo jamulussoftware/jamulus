@@ -85,6 +85,8 @@
         <file>res/instruments/congas.png</file>
         <file>res/instruments/bongo.png</file>
         <file>res/instruments/vocalbass.png</file>
+        <file>res/instruments/vocalbaritone.png</file>
+        <file>res/instruments/vocallead.png</file>
         <file>res/instruments/vocaltenor.png</file>
         <file>res/instruments/vocalalto.png</file>
         <file>res/instruments/vocalsoprano.png</file>

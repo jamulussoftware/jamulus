@@ -26,8 +26,12 @@
 
 - show maximum number of clients for servers in the serverlist, coded by dingodoppelt (#451)
 
+- move the Mute Myself button up to prevent accidentally disconnecting
+
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
+
+TODO add the names of the instrument icon creators to the contributors list in the about dialog
 
 
 

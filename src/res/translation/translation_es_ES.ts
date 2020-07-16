@@ -817,7 +817,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="265"/>
@@ -957,12 +957,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="252"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cargar Configuración Canales Mezclador...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Guardar Configuración Canales Mezclador...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>
@@ -983,7 +983,7 @@
         <location filename="../../clientdlg.cpp" line="692"/>
         <location filename="../../clientdlg.cpp" line="707"/>
         <source>Select Channel Setup File</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar Archivo Configuración Canales</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="814"/>

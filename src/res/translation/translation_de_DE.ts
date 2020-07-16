@@ -936,12 +936,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="252"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation>&amp;Laden der Konfiguration der Mixerkanäle</translation>
+        <translation>&amp;Laden der Konfiguration der Mixerkanäle...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation>&amp;Speichern der Konfiguration der Mixerkanäle</translation>
+        <translation>&amp;Speichern der Konfiguration der Mixerkanäle...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>
@@ -1013,17 +1013,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="323"/>
+        <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="330"/>
+        <location filename="../../clientdlgbase.ui" line="337"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="337"/>
+        <location filename="../../clientdlgbase.ui" line="323"/>
         <source>Mute Myself</source>
         <translation>Stummschalten</translation>
     </message>
@@ -2502,7 +2502,7 @@
     <message>
         <location filename="../../util.cpp" line="1118"/>
         <source>Vocal Lead</source>
-        <translation></translation>
+        <translation>Leadsänger</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="285"/>
@@ -2696,7 +2696,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation>Drücke den Knopf um einen Dialog anzuzeigen in dem man das Hauptverzeichnis für die Aufnahmen festlegen kann. Das Verzeichnis muss existieren und schreibbar sein (es muss für das Benutzerkonto, das die Applikation ausführt, möglich sein Unterverzeichnisse anzulegen).</translation>
+        <translation>Drücke den Knopf um einen Dialog anzuzeigen in dem man das Hauptverzeichnis für die Aufnahmen festlegen kann. Das Verzeichnis muss existieren und schreibbar sein (es muss für das Benutzerkonto, das die Applikation ausführt, möglich sein Unterverzeichnisse anzulegen). </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="133"/>

@@ -850,17 +850,17 @@
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="323"/>
+        <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Settings</source>
         <translation>Inställningar</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="330"/>
+        <location filename="../../clientdlgbase.ui" line="337"/>
         <source>Chat</source>
         <translation>Chatt</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="337"/>
+        <location filename="../../clientdlgbase.ui" line="323"/>
         <source>Mute Myself</source>
         <translation>Tysta mig själv</translation>
     </message>

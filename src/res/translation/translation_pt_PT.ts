@@ -1025,17 +1025,17 @@
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="323"/>
+        <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Settings</source>
         <translation>Definições</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="330"/>
+        <location filename="../../clientdlgbase.ui" line="337"/>
         <source>Chat</source>
         <translation>Mensagens</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="337"/>
+        <location filename="../../clientdlgbase.ui" line="323"/>
         <source>Mute Myself</source>
         <translation>Silenciar-me</translation>
     </message>

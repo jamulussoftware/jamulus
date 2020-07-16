@@ -2478,7 +2478,7 @@
     <message>
         <location filename="../../util.cpp" line="1118"/>
         <source>Vocal Lead</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="285"/>

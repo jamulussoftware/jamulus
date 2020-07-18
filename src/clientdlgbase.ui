@@ -318,6 +318,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="chbLocalMute">
+          <property name="text">
+           <string>Mute Myself</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QCheckBox" name="chbSettings">
           <property name="text">
            <string>Settings</string>
@@ -328,13 +335,6 @@
          <widget class="QCheckBox" name="chbChat">
           <property name="text">
            <string>Chat</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="chbLocalMute">
-          <property name="text">
-           <string>Mute Myself</string>
           </property>
          </widget>
         </item>
@@ -575,9 +575,9 @@
  </customwidgets>
  <tabstops>
   <tabstop>butConnect</tabstop>
+  <tabstop>chbLocalMute</tabstop>
   <tabstop>chbSettings</tabstop>
   <tabstop>chbChat</tabstop>
-  <tabstop>chbLocalMute</tabstop>
   <tabstop>sldAudioPan</tabstop>
   <tabstop>sldAudioReverb</tabstop>
   <tabstop>rbtReverbSelL</tabstop>

@@ -402,7 +402,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="182"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>Identificação do canal d0 mixer (identificador do fader)</translation>
+        <translation>Identificação do canal do mixer (identificador do fader)</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="184"/>
@@ -811,7 +811,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Arquivo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="265"/>
@@ -950,12 +950,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="252"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Carregar Configuração de Canais do Mixer...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salvar Configuração de Canais do Mixer...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>
@@ -981,7 +981,7 @@
         <location filename="../../clientdlg.cpp" line="692"/>
         <location filename="../../clientdlg.cpp" line="707"/>
         <source>Select Channel Setup File</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione Arquivo de Configuraçao de Canal</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="814"/>
@@ -2505,7 +2505,7 @@
     <message>
         <location filename="../../util.cpp" line="1123"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz Principal</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="285"/>
@@ -2810,17 +2810,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="186"/>
         <source>Server welcome message edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caixa de edição da mensagem de boas-vindas do servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="187"/>
         <source>Server Welcome Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Mensagem  de Boas-vindas do Servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="188"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uma mensagem de boas-vindas é exibida na janela de chat se um músico entra no servidor. Se nenhuma mensagem for definida, a mensagem de boas-vindas do servidor é desativada.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="346"/>

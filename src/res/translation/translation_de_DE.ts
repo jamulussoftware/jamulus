@@ -54,7 +54,7 @@
     <message>
         <location filename="../../util.cpp" line="408"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation>Es gibt einen Server, der die Audiodaten von allen Musikern sammelt, zusammen mischt und wieder an alle verbundenen Musikern zurück schickt.</translation>
+        <translation>Es gibt einen Server, der die Audiodaten von allen Musikern sammelt, zusammen mischt und wieder an alle verbundenen Musiker zurück schickt.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="427"/>

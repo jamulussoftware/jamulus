@@ -5,8 +5,6 @@
 
 3.5.9git
 
-- update server UI to allow setting the jam recorder directory (like -R) (#228, #405)
-
 - new app icon for Jamulus, created by geheimerEichkater (#410)
 
 - support up to four different groups for the channels (#202)
@@ -17,12 +15,14 @@
 
 - add special server list filter for filtering occupied servers by using "#" (#397)
 
+- update server UI to allow setting the jam recorder directory (like -R) (#228, #405)
+
+- redesign of the server dialog (e.g. added welcome message setting)
+
 - save and restore mixer state (like fader, mute, etc.) (#377)
   note that saving/loading of settings only works if not connected
 
 - scale channel instrument picture in Compact skin mode
-
-- redesign of the server dialog (e.g. added welcome message setting)
 
 - show maximum number of clients for servers in the serverlist, coded by dingodoppelt (#451)
 

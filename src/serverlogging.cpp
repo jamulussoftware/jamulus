@@ -59,11 +59,12 @@ void CServerLogging::EnableHistory ( const QString& strHistoryFileName )
     }
 }
 
-void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
+void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr,
+                                        const int           iNumberOfConnectedClients )
 {
     // logging of new connected channel
     const QString strLogStr = CurTimeDatetoLogString() + ", " +
-        ClientInetAddr.toString() + ", connected";
+        ClientInetAddr.toString() + ", connected (" + QString::number ( iNumberOfConnectedClients ) + ")";
 
     QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
     tsConsoleStream << strLogStr << endl; // on console

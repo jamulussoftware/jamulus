@@ -660,7 +660,7 @@ void CServer::OnNewConnection ( int          iChID,
     DoubleFrameSizeConvBufOut[iChID].Reset();
 
     // logging of new connected channel
-    Logging.AddNewConnection ( RecHostAddr.InetAddr );
+    Logging.AddNewConnection ( RecHostAddr.InetAddr, GetNumberOfConnectedClients() );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )

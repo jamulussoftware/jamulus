@@ -786,16 +786,19 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         }
 
         // Update sorting. Note that the sorting must be the last action for the
-        // current item since the topLevelItem ( iIdx ) is then no longer valid.
-        if ( bDoSorting && !bShowCompleteRegList ) // do not sort if "show all servers"
+        // current item since the topLevelItem(iIdx) is then no longer valid.
+        // To avoid that the list is sorted shortly before a double click (which
+        // could lead to connecting an incorrect server) the sorting is disabled
+        // as long as the mouse is over the list (#293).
+        if ( bDoSorting && !bShowCompleteRegList && !lvwServers->underMouse() ) // do not sort if "show all servers"
         {
             lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
         }
     }
 
     // if no server item has children, do not show decoration
-    bool bAnyListItemHasChilds = false;
-    const int iServerListLen   = lvwServers->topLevelItemCount();
+    bool      bAnyListItemHasChilds = false;
+    const int iServerListLen        = lvwServers->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {

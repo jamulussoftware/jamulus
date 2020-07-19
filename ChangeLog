@@ -3,7 +3,10 @@
 
 
 
-3.5.9git
+
+
+
+3.5.9 (2020-07-19)
 
 - new app icon for Jamulus, created by geheimerEichkater (#410)
 
@@ -31,12 +34,6 @@
 - move the Mute Myself button up to prevent accidentally disconnecting
 
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
-
-
-
-
-
-
 
 
 3.5.8 (2020-06-30)

@@ -1061,6 +1061,12 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
     }
 }
 
+QString NetworkUtil::FixAddress ( const QString& strAddress )
+{
+    // remove all spaces from the address string
+    return strAddress.simplified().replace ( " ", "" );
+}
+
 
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )

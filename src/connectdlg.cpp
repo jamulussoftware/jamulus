@@ -658,8 +658,7 @@ void CConnectDlg::OnConnectClicked()
     }
     else
     {
-        // remove all spaces from the parsed string in the the combo box
-        strSelectedAddress = cbxServerAddr->currentText().simplified().replace ( " ", "" );
+        strSelectedAddress = NetworkUtil::FixAddress ( cbxServerAddr->currentText() );
     }
 
     // tell the parent window that the connection shall be initiated

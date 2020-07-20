@@ -6,6 +6,9 @@
 - do not change the server list order if the mouse is over the table to
   avoid selecting an incorrect server on a mouse double click (#293)
 
+- if network name/address contains spaces, they are removed now,
+  coded by dingodoppelt (#462)
+
 
 
 TODO improve compact channels: smaller font size of name is too long

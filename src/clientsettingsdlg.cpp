@@ -676,7 +676,7 @@ void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 {
     // store new setting in the client
     pClient->SetServerListCentralServerAddress (
-        edtCentralServerAddress->text() );
+        NetworkUtil::FixAddress ( edtCentralServerAddress->text() ) );
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )

@@ -462,7 +462,7 @@ int main ( int argc, char** argv )
                                  "--connect",
                                  strArgument ) )
         {
-            strConnOnStartupAddress = strArgument.simplified().replace( " ", "" );
+            strConnOnStartupAddress = NetworkUtil::FixAddress ( strArgument );
             tsConsole << "- connect on startup to address: " << strConnOnStartupAddress << endl;
             continue;
         }

@@ -121,6 +121,7 @@ protected:
     int          iGroupID;
     QString      strGroupBaseText;
     int          iInstrPicMaxWidth;
+    EGUIDesign   eDesign;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }

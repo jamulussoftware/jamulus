@@ -9,9 +9,8 @@
 - if network name/address contains spaces, they are removed now,
   coded by dingodoppelt (#462)
 
+- improve compact skin by using smaller font size if the name is too long
 
-
-TODO improve compact channels: smaller font size of name is too long
 
 
 

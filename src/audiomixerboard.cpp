@@ -28,7 +28,8 @@
 /******************************************************************************\
 * CChanneFader                                                                 *
 \******************************************************************************/
-CChannelFader::CChannelFader ( QWidget* pNW )
+CChannelFader::CChannelFader ( QWidget* pNW ) :
+    eDesign ( GD_STANDARD )
 {
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
@@ -91,7 +92,6 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat ( Qt::PlainText );
     plblLabel->setAlignment  ( Qt::AlignHCenter | Qt::AlignVCenter );
-    plblLabel->setStyleSheet ( "QLabel { color: black; font: bold; }" );
 
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
@@ -203,6 +203,8 @@ CChannelFader::CChannelFader ( QWidget* pNW )
 
 void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
+    eDesign = eNewDesign;
+
     switch ( eNewDesign )
     {
     case GD_ORIGINAL:
@@ -601,14 +603,45 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
 
     // Label text --------------------------------------------------------------
-    // break text at predefined position
-    const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
     QString strModText = cChanInfo.strName;
 
-    if ( strModText.length() > iBreakPos )
+    // apply break position and font size depending on the selected design as
+    // well as the length of the name
+    if ( ( eDesign == GD_SLIMFADER ) && ( strModText.length() > 6 ) )
     {
-        strModText.insert ( iBreakPos, QString ( "\n" ) );
+        // in slim mode, if the text is longer than 6 character, use a small font
+        plblLabel->setStyleSheet ( "QLabel { color: black; font: 6pt bold; }" );
+
+        // break at every 4th character
+        for ( int iInsPos = 4; iInsPos <= strModText.size() - 1; iInsPos += 4 + 1 )
+        {
+            strModText.insert ( iInsPos, "\n" );
+        }
+    }
+    else
+    {
+        plblLabel->setStyleSheet ( "QLabel { color: black; font: bold; }" );
+
+        // break text at predefined position
+        int iBreakPos;
+
+        if ( eDesign == GD_SLIMFADER )
+        {
+            // for slim design if the text is shorter than 6 characters, break
+            // at half of the 6 characters
+            iBreakPos = 3;
+        }
+        else
+        {
+            // default break position (used for other skins than slim)
+            iBreakPos = MAX_LEN_FADER_TAG / 2;
+        }
+
+        if ( strModText.length() > iBreakPos )
+        {
+            strModText.insert ( iBreakPos, QString ( "\n" ) );
+        }
     }
 
     plblLabel->setText ( strModText );

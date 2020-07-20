@@ -462,7 +462,7 @@ int main ( int argc, char** argv )
                                  "--connect",
                                  strArgument ) )
         {
-            strConnOnStartupAddress = strArgument;
+            strConnOnStartupAddress = strArgument.simplified().replace( " ", "" );
             tsConsole << "- connect on startup to address: " << strConnOnStartupAddress << endl;
             continue;
         }

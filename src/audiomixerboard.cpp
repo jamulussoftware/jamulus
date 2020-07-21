@@ -611,7 +611,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     if ( ( eDesign == GD_SLIMFADER ) && ( strModText.length() > 6 ) )
     {
         // in slim mode, if the text is longer than 6 character, use a small font
-        plblLabel->setStyleSheet ( "QLabel { color: black; font: 6pt bold; }" );
+        plblLabel->setStyleSheet ( "QLabel { color: black; }" ); // not bold
 
         // break at every 4th character
         for ( int iInsPos = 4; iInsPos <= strModText.size() - 1; iInsPos += 4 + 1 )

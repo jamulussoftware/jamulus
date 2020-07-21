@@ -606,12 +606,11 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
     QString strModText = cChanInfo.strName;
 
-    // apply break position and font size depending on the selected design as
-    // well as the length of the name
-    if ( ( eDesign == GD_SLIMFADER ) && ( strModText.length() > 6 ) )
+    // apply break position and font size depending on the selected design
+    if ( eDesign == GD_SLIMFADER )
     {
-        // in slim mode, if the text is longer than 6 character, use a small font
-        plblLabel->setStyleSheet ( "QLabel { color: black; }" ); // not bold
+        // in slim mode use a non-bold font (smaller width font)
+        plblLabel->setStyleSheet ( "QLabel { color: black; }" );
 
         // break at every 4th character
         for ( int iInsPos = 4; iInsPos <= strModText.size() - 1; iInsPos += 4 + 1 )
@@ -621,22 +620,11 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     }
     else
     {
+        // in normal mode use bold font
         plblLabel->setStyleSheet ( "QLabel { color: black; font: bold; }" );
 
         // break text at predefined position
-        int iBreakPos;
-
-        if ( eDesign == GD_SLIMFADER )
-        {
-            // for slim design if the text is shorter than 6 characters, break
-            // at half of the 6 characters
-            iBreakPos = 3;
-        }
-        else
-        {
-            // default break position (used for other skins than slim)
-            iBreakPos = MAX_LEN_FADER_TAG / 2;
-        }
+        const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
         if ( strModText.length() > iBreakPos )
         {

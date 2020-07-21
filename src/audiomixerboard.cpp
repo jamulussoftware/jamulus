@@ -235,7 +235,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
     case GD_SLIMFADER:
         pLabelPictGrid->addWidget           ( plblLabel,  0, Qt::AlignHCenter ); // label below icons
-        pLabelInstBox->setMinimumHeight     ( 94 ); // maximum height of the instrument+flag+label
+        pLabelInstBox->setMinimumHeight     ( 130 ); // maximum height of the instrument+flag+label
         pFader->setMinimumHeight            ( 85 );
         pPan->setFixedSize                  ( 28, 28 );
         pFader->setTickPosition             ( QSlider::NoTicks );

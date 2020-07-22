@@ -756,8 +756,10 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         }
         else
         {
+            // prepend spaces so that we can sort correctly (fieldWidth of
+            // 4 is sufficient since the maximum width is ">500") (#201)
             pCurListViewItem->
-                setText ( 1, QString().setNum ( iMinPingTime ) + " ms" );
+                setText ( 1, QString ( "%1 ms" ).arg ( iMinPingTime, 4, 10, QLatin1Char ( ' ' ) ) );
         }
 
         // update number of clients text

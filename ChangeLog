@@ -11,8 +11,10 @@
 
 - improve compact skin by using smaller font size if the name is too long
 
+- bug fix: --showallservers ping column sort is alphabetic (#201)
 
 
+TODO If network configuration of client changes (e.g. Wifi to LAN) we may get audio issues for a period of time #426
 
 
 

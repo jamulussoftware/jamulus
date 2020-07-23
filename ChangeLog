@@ -11,6 +11,8 @@
 
 - improve compact skin by using smaller font size if the name is too long
 
+- improve server audio mix processing for better clipping behavior
+
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 
 

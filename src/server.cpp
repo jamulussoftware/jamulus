@@ -338,6 +338,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecdPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
     vecvecsSendData.Init               ( iMaxNumChannels );
+    vecvecsIntermediateProcBuf.Init    ( iMaxNumChannels );
     vecvecbyCodedData.Init             ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
@@ -356,6 +357,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
         // (note that we only allocate iMaxNumChannels buffers for the send
         // and coded data because of the OMP implementation)
         vecvecsSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+
+        // allocate worst case memory for intermediate processing buffers in double precision
+        vecvecsIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // allocate worst case memory for the coded data
         vecvecbyCodedData[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
@@ -1031,6 +1035,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                           vecvecdGains[i],
                           vecvecdPannings[i],
                           vecNumAudioChannels,
+                          vecvecsIntermediateProcBuf[i],
                           vecvecsSendData[i],
                           iCurNumAudChan,
                           iNumClients );
@@ -1136,14 +1141,15 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                             const CVector<double>&            vecdGains,
                             const CVector<double>&            vecdPannings,
                             const CVector<int>&               vecNumAudioChannels,
+                            CVector<double>&                  vecdIntermProcBuf,
                             CVector<int16_t>&                 vecsOutData,
                             const int                         iCurNumAudChan,
                             const int                         iNumClients )
 {
     int i, j, k;
 
-    // init return vector with zeros since we mix all channels on that vector
-    vecsOutData.Reset ( 0 );
+    // init intermediate processing vector with zeros since we mix all channels on that vector
+    vecdIntermProcBuf.Reset ( 0 );
 
     // distinguish between stereo and mono mode
     if ( iCurNumAudChan == 1 )
@@ -1163,8 +1169,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
-                        vecsOutData[i] = Double2Short (
-                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
+                        vecdIntermProcBuf[i] += vecsData[i];
                     }
                 }
                 else
@@ -1172,9 +1177,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] +
-                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2 );
+                        vecdIntermProcBuf[i] +=
+                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
                     }
                 }
             }
@@ -1185,8 +1189,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
-                        vecsOutData[i] = Double2Short (
-                            vecsOutData[i] + vecsData[i] * dGain );
+                        vecdIntermProcBuf[i] += vecsData[i] * dGain;
                     }
                 }
                 else
@@ -1194,12 +1197,17 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] + dGain *
-                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2 );
+                        vecdIntermProcBuf[i] += dGain *
+                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
                     }
                 }
             }
+        }
+
+        // convert from double to short with clipping
+        for ( i = 0; i < iServerFrameSizeSamples; i++ )
+        {
+            vecsOutData[i] = Double2Short ( vecdIntermProcBuf[i] );
         }
     }
     else
@@ -1225,13 +1233,9 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        // left channel
-                        vecsOutData[k] = Double2Short (
-                            static_cast<double> ( vecsOutData[k] ) + vecsData[i] );
-
-                        // right channel
-                        vecsOutData[k + 1] = Double2Short (
-                            static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] );
+                        // left/right channel
+                        vecdIntermProcBuf[k]     += vecsData[i];
+                        vecdIntermProcBuf[k + 1] += vecsData[i];
                     }
                 }
                 else
@@ -1239,8 +1243,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
-                        vecsOutData[i] = Double2Short (
-                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
+                        vecdIntermProcBuf[i] += vecsData[i];
                     }
                 }
             }
@@ -1252,8 +1255,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left/right channel
-                        vecsOutData[k]     = Double2Short ( vecsOutData[k] +     vecsData[i] * dGainL );
-                        vecsOutData[k + 1] = Double2Short ( vecsOutData[k + 1] + vecsData[i] * dGainR );
+                        vecdIntermProcBuf[k]     += vecsData[i] * dGainL;
+                        vecdIntermProcBuf[k + 1] += vecsData[i] * dGainR;
                     }
                 }
                 else
@@ -1262,11 +1265,17 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
                         // left/right channel
-                        vecsOutData[i]     = Double2Short ( vecsOutData[i] +     vecsData[i] *     dGainL );
-                        vecsOutData[i + 1] = Double2Short ( vecsOutData[i + 1] + vecsData[i + 1] * dGainR );
+                        vecdIntermProcBuf[i]     += vecsData[i] *     dGainL;
+                        vecdIntermProcBuf[i + 1] += vecsData[i + 1] * dGainR;
                     }
                 }
             }
+        }
+
+        // convert from double to short with clipping
+        for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+        {
+            vecsOutData[i] = Double2Short ( vecdIntermProcBuf[i] );
         }
     }
 }

@@ -305,6 +305,7 @@ protected:
                        const CVector<double>&            vecdGains,
                        const CVector<double>&            vecdPannings,
                        const CVector<int>&               vecNumAudioChannels,
+                       CVector<double>&                  vecdIntermProcBuf,
                        CVector<int16_t>&                 vecsOutData,
                        const int                         iCurNumAudChan,
                        const int                         iNumClients );
@@ -353,6 +354,7 @@ protected:
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<int16_t> > vecvecsSendData;
+    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
     CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels

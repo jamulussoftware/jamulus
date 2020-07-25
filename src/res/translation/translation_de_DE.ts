@@ -1015,7 +1015,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="323"/>
         <source>&amp;Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Stu&amp;mmschalten</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>

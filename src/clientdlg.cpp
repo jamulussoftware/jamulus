@@ -927,6 +927,16 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
+    
+    // change windowTitle when locally muted
+    if ( value == Qt::Checked )
+    {
+        setWindowTitle ( QString ( pClient->strClientName ) + u8"  \u2588\u2588" + "  MUTED  " + u8"\u2588\u2588" );
+    }
+    else
+    {
+        setWindowTitle ( QString ( pClient->strClientName ) );
+    }
 }
 
 void CClientDlg::OnTimerSigMet()

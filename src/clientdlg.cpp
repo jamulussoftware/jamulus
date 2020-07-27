@@ -24,6 +24,8 @@
 
 #include "clientdlg.h"
 
+// variable to remember connected clients
+int iCurrConnClients = 0;
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -794,28 +796,43 @@ void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo 
 
 void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
+    // remember connected clients to be able to call SetMyWindowTitle manually
+    iCurrConnClients = iNewNumClients;
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }
 
 void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 {
+    // check for local mute status and construct window title accordingly    
+    QString strWindowTitle;
+    QString const strSelfMuted = u8" \u2588 MUTED \u2588 ";
+    
+    if ( pClient->GetMuteOutStream() )
+    {
+        strWindowTitle = pClient->strClientName + strSelfMuted;
+    }
+    else
+    {
+        strWindowTitle = pClient->strClientName;
+    }
+    
     // show number of connected clients in window title (and therefore also in
     // the task bar of the OS)
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( pClient->strClientName );
+        setWindowTitle ( strWindowTitle );
     }
     else
     {
         if ( iNumClients == 1 )
         {
-            setWindowTitle ( QString ( pClient->strClientName ) + " (1 " + tr ( "user" ) + ")" );
+            setWindowTitle ( QString ( strWindowTitle ) + " (1 " + tr ( "user" ) + ")" );
         }
         else
         {
-            setWindowTitle ( QString ( pClient->strClientName ) +
+            setWindowTitle ( QString ( strWindowTitle ) +
                 QString ( " (%1 " + tr ( "users" ) + ")" ).arg ( iNumClients ) );
         }
     }
@@ -927,6 +944,7 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
+    SetMyWindowTitle ( iCurrConnClients );
 }
 
 void CClientDlg::OnTimerSigMet()

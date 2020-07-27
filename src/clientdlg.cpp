@@ -24,6 +24,8 @@
 
 #include "clientdlg.h"
 
+// variable to remember connected clients
+int iCurrConnClients = 0;
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
@@ -820,6 +822,8 @@ void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo 
 
 void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
+    // remember connected clients to be able to call SetMyWindowTitle manually
+    iCurrConnClients = iNewNumClients;
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }
@@ -829,10 +833,27 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     // set the window title (and therefore also the task bar icon text of the OS)
     // according to the following specification (#559):
     // <ServerName> - <N> users - Jamulus
+    // check for local mute status and construct window title accordingly    
+    QString strWindowTitle;
+    QString const strSelfMuted = u8" \u2588 MUTED \u2588 ";
+    
+    if ( pClient->GetMuteOutStream() )
+    {
+        strSelfMuted = u8" \u2588 MUTED \u2588 ";
+        strWindowTitle = pClient->strClientName + strSelfMuted;
+    }
+    else
+    {
+        strSelfMuted = ""
+        strWindowTitle = pClient->strClientName;
+    }
+    
+    // show number of connected clients in window title (and therefore also in
+    // the task bar of the OS)
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( pClient->strClientName );
+        setWindowTitle ( strWindowTitle );
     }
     else
     {
@@ -841,13 +862,16 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
         if ( iNumClients == 1 )
         {
             strWinTitle += " - 1 " + tr ( "user" );
+            setWindowTitle ( QString ( strWindowTitle ) + " (1 " + tr ( "user" ) + ")" );
         }
         else if ( iNumClients > 1 )
         {
             strWinTitle += " - " + QString::number ( iNumClients ) + " " + tr ( "users" );
+            setWindowTitle ( QString ( strWindowTitle ) +
+                QString ( " (%1 " + tr ( "users" ) + ")" ).arg ( iNumClients ) );
         }
 
-        setWindowTitle ( strWinTitle + " - " + pClient->strClientName );
+        setWindowTitle ( strSelfMuted + strWinTitle + " - " + pClient->strClientName );
     }
 
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
@@ -957,6 +981,7 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
+<<<<<<< HEAD
 
     // show/hide info label
     if ( value == Qt::Checked )
@@ -967,6 +992,9 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
     {
         lblGlobalInfoLabel->hide();
     }
+=======
+    SetMyWindowTitle ( iCurrConnClients );
+>>>>>>> Toggle window title on change of mute state
 }
 
 void CClientDlg::OnTimerSigMet()

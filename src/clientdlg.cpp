@@ -25,11 +25,14 @@
 #include "clientdlg.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // variable to remember connected clients
 int iCurrConnClients = 0;
 
 >>>>>>> Toggle window title on change of mute state
+=======
+>>>>>>> get rid of global variable
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
@@ -826,8 +829,6 @@ void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo 
 
 void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
-    // remember connected clients to be able to call SetMyWindowTitle manually
-    iCurrConnClients = iNewNumClients;
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }
@@ -862,9 +863,6 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
     else
     {
         strSelfMuted = ""
-        strWindowTitle = pClient->strClientName;
-    }
-
         strWindowTitle = pClient->strClientName;
     }
 
@@ -1004,6 +1002,7 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
 <<<<<<< HEAD
+<<<<<<< HEAD
     SetMyWindowTitle ( -1 );
 
     // show/hide info label
@@ -1018,6 +1017,9 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
 =======
     SetMyWindowTitle ( iCurrConnClients );
 >>>>>>> Toggle window title on change of mute state
+=======
+    SetMyWindowTitle ( -1 );
+>>>>>>> get rid of global variable
 }
 
 void CClientDlg::OnTimerSigMet()

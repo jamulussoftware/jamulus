@@ -24,9 +24,6 @@
 
 #include "clientdlg.h"
 
-// variable to remember connected clients
-int iCurrConnClients = 0;
-
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
@@ -796,14 +793,25 @@ void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo 
 
 void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
-    // remember connected clients to be able to call SetMyWindowTitle manually
-    iCurrConnClients = iNewNumClients;
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }
 
-void CClientDlg::SetMyWindowTitle ( const int iNumClients )
+void CClientDlg::SetMyWindowTitle ( const int iClients )
 {
+    static int iCurrConnClients;
+    int iNumClients = 0;
+    
+    if ( iClients < 0)
+    {
+        iNumClients = iCurrConnClients;
+    }
+    else
+    {
+        iNumClients = iCurrConnClients = iClients;
+        
+    }
+    
     // check for local mute status and construct window title accordingly    
     QString strWindowTitle;
     QString const strSelfMuted = u8" \u2588 MUTED \u2588 ";
@@ -944,7 +952,7 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
-    SetMyWindowTitle ( iCurrConnClients );
+    SetMyWindowTitle ( -1 );
 }
 
 void CClientDlg::OnTimerSigMet()

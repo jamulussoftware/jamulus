@@ -773,6 +773,7 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         {
             pClient->SetMuteOutStream ( false );
         }
+        SetMyWindowTitle ( -1 );
     }
 }
 

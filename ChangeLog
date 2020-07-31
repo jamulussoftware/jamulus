@@ -9,13 +9,13 @@
 - if network name/address contains spaces, they are removed now,
   coded by dingodoppelt (#462)
 
-- improve compact skin by using smaller font size if the name is too long
+- improve compact skin by using smaller font size
 
 - improve server audio mix processing for better clipping behavior
 
 - support MIDI control faders in headless build (#483)
 
-- added more mutex in the server (may fix #480)
+- bug fix: added more mutex in the server (should fix #480)
 
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 

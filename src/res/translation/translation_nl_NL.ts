@@ -1003,8 +1003,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
-        <source>Settings</source>
-        <translation>Instellingen</translation>
+        <source>&amp;Settings</source>
+        <translation>In&amp;stellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>

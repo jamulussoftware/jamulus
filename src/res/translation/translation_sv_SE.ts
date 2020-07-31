@@ -856,8 +856,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
-        <source>Settings</source>
-        <translation>Inställningar</translation>
+        <source>&amp;Settings</source>
+        <translation>In&amp;ställningar</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>

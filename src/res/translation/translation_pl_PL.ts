@@ -858,8 +858,8 @@ nie jestem pewna</translatorcomment>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
-        <source>Settings</source>
-        <translation>Ustawienia</translation>
+        <source>&amp;Settings</source>
+        <translation>U&amp;stawienia</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>

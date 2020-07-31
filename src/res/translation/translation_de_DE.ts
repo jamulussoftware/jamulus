@@ -1019,8 +1019,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
+        <source>&amp;Settings</source>
+        <translation>Ein&amp;stellungen</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>

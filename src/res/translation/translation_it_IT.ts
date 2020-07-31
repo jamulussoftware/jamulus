@@ -109,12 +109,12 @@
     <message>
         <location filename="../../util.cpp" line="487"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polacco</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="489"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Svedese</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="496"/>
@@ -249,7 +249,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
         <source>No grouping</source>
-        <translation type="unfinished"></translation>
+        <translation>Non Assegnato</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="67"/>
@@ -257,7 +257,7 @@
         <location filename="../../audiomixerboard.cpp" line="69"/>
         <location filename="../../audiomixerboard.cpp" line="70"/>
         <source>Assign to group</source>
-        <translation type="unfinished"></translation>
+        <translation>Assegna al Gruppo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="262"/>
@@ -531,12 +531,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="64"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished">&amp;Modifica</translation>
+        <translation>&amp;Modifica</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="66"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation type="unfinished"></translation>
+        <translation>Cance&amp;lla Storico Chat</translation>
     </message>
 </context>
 <context>
@@ -549,7 +549,7 @@
     <message>
         <location filename="../../chatdlgbase.ui" line="51"/>
         <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Invia</translation>
     </message>
     <message>
         <source>Cl&amp;ear</source>
@@ -869,7 +869,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;File</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="265"/>
@@ -909,12 +909,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="252"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Carica Setup Mixer...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salva Setup Mixer...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="288"/>
@@ -934,7 +934,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="296"/>
         <source>Sort Channel Users by &amp;Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordina Canali per Nome &amp;Utente</translation>
     </message>
     <message>
         <source>&amp;Sort Channel Users by Name</source>
@@ -963,7 +963,7 @@
         <location filename="../../clientdlg.cpp" line="692"/>
         <location filename="../../clientdlg.cpp" line="707"/>
         <source>Select Channel Setup File</source>
-        <translation type="unfinished"></translation>
+        <translation>Selezione File di Setup dei Canali</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="814"/>
@@ -1794,7 +1794,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="521"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingua</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="543"/>
@@ -2042,12 +2042,12 @@
     <message>
         <location filename="../../util.cpp" line="952"/>
         <source>Restart Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Riavvio Richiesto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="953"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Perfavore Riavvia il programma oer rendere effettive le modifiche.</translation>
     </message>
 </context>
 <context>
@@ -2478,7 +2478,7 @@
     <message>
         <location filename="../../util.cpp" line="1129"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished"></translation>
+        <translation>Vocal Lead</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="285"/>
@@ -2657,43 +2657,43 @@
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
         <source>Display dialog to select recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza la finestra di dialogo per selezionare il pulsante della directory di registrazione</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="128"/>
         <location filename="../../serverdlg.cpp" line="134"/>
         <source>Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella Principale di Registrazione</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation type="unfinished"></translation>
+        <translation>Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la directory di registrazione principale. Il Percorso scelto deve esistere ed non essere protetto da scrittura (autorizzare l&apos;utente Jamulus alla creazione di cartelle e sottocartelle). </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="133"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Casella di testo della Cartella principale di registrazione (sola lettura)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="135"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il valore corrente della directory di registrazione principale. Il percorso scelto deve esistere e non essere protetto da scrittura (autorizzare l&apos;utente Jamulus alla creazine di cartelle e sottocartelle). Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la directory di registrazione principale.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>Clear the recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bottone per cancellare il contenuto della cartella di registrazione</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
         <source>Clear Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella cartella di Registrazione</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="142"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Premere il pulsante per eliminare la cartella di registrazione. Ciò impedirà la registrazione fino a quando non viene selezionato un nuovo percorso valido.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="146"/>
@@ -2738,72 +2738,72 @@
     <message>
         <location filename="../../serverdlg.cpp" line="160"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza lo stato della registrazione. Sono applicati i seguenti valori:</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="163"/>
         <source>No recording directory has been set or the value is not useable</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella per la registrazione non settata o non utilizzabile</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="165"/>
         <source>Recording has been switched off</source>
-        <translation type="unfinished"></translation>
+        <translation>La Registrazione è stata disattivata</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="167"/>
         <source> by the UI checkbox</source>
-        <translation type="unfinished"></translation>
+        <translation> dalla Checkbok sull&apos;UI</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="169"/>
         <source>, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished"></translation>
+        <translation>, dalla casella di controllo dell&apos;interfaccia utente o dalla ricezione di SIGUSR2</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="173"/>
         <source>There is no one connected to the server to record</source>
-        <translation type="unfinished"></translation>
+        <translation>Non c&apos;è nessuno collegato al server per registrare</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
         <source>The performers are being recorded to the specified session directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Gli artisti vengono registrati nella directory della sessione specificata</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="177"/>
         <source>NOTE</source>
-        <translation type="unfinished"></translation>
+        <translation>NOTE</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="178"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se la directory di registrazione non è utilizzabile, il problema verrà visualizzato al posto della directory.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="186"/>
         <source>Server welcome message edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Casella di modifica del messaggio di benvenuto del server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="187"/>
         <source>Server Welcome Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Messaggio di Benvenuto del Server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="188"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un messaggio di benvenuto del server viene visualizzato nella finestra di chat se un musicista entra nel server. Se non viene impostato alcun messaggio, il benvenuto del server è disabilitato.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="346"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita qui un messaggio. Se non viene impostato alcun messaggio, il benvenuto del server è disabilitato.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="805"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation>ERRORE</translation>
     </message>
     <message>
         <source>Displays the current status of the recorder.</source>
@@ -2864,7 +2864,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="600"/>
         <source>Select Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la directory di registrazione principale</translation>
     </message>
     <message>
         <source>Predefined Address</source>
@@ -2883,7 +2883,7 @@
     <message>
         <location filename="../../serverdlg.h" line="50"/>
         <source>Not initialised</source>
-        <translation type="unfinished"></translation>
+        <translation>Non inizializato</translation>
     </message>
     <message>
         <location filename="../../serverdlg.h" line="51"/>
@@ -2928,12 +2928,12 @@
     <message>
         <location filename="../../util.h" line="689"/>
         <source>Your server version is too old</source>
-        <translation type="unfinished"></translation>
+        <translation>La tua versione del server è troppo vecchia</translation>
     </message>
     <message>
         <location filename="../../util.h" line="692"/>
         <source>Requirements not fulfilled</source>
-        <translation type="unfinished"></translation>
+        <translation>Requisiti non soddisfatti</translation>
     </message>
     <message>
         <location filename="../../util.h" line="695"/>
@@ -2962,17 +2962,17 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="62"/>
         <source>Server Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Settaggi Server</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="191"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation type="unfinished"></translation>
+        <translation>Finesta Chat Messaggio di Benvenuto (Supporta HTML/CSS)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="209"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opzioni</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="264"/>
@@ -3008,22 +3008,22 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="231"/>
         <source>Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Directory di Registrazione</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="161"/>
         <source>Enable Jam Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita Registrazione Jam</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="182"/>
         <source>New Recording</source>
-        <translation type="unfinished">Nuova Registrazione</translation>
+        <translation>Nuova Registrazione</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="217"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Lingua</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

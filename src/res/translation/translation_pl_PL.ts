@@ -854,7 +854,7 @@ nie jestem pewna</translatorcomment>
     <message>
         <location filename="../../clientdlgbase.ui" line="323"/>
         <source>&amp;Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Wycisz &amp;mnie</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
@@ -865,10 +865,6 @@ nie jestem pewna</translatorcomment>
         <location filename="../../clientdlgbase.ui" line="337"/>
         <source>Chat</source>
         <translation>Czat</translation>
-    </message>
-    <message>
-        <source>Mute Myself</source>
-        <translation type="vanished">Wycisz mnie</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>

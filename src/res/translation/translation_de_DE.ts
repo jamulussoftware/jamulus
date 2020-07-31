@@ -1028,10 +1028,6 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <source>Mute Myself</source>
-        <translation type="vanished">Stummschalten</translation>
-    </message>
-    <message>
         <location filename="../../clientdlgbase.ui" line="344"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Verbinden</translation>

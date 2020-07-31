@@ -1031,7 +1031,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="323"/>
         <source>&amp;Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mutearme Yo</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
@@ -1042,10 +1042,6 @@
         <location filename="../../clientdlgbase.ui" line="337"/>
         <source>Chat</source>
         <translation>Chat</translation>
-    </message>
-    <message>
-        <source>Mute Myself</source>
-        <translation type="vanished">Mutearme Yo</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>

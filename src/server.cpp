@@ -599,6 +599,8 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 void CServer::OnNewConnection ( int          iChID,
                                 CHostAddress RecHostAddr )
 {
+    QMutexLocker locker ( &Mutex );
+
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
@@ -669,6 +671,8 @@ void CServer::OnNewConnection ( int          iChID,
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )
 {
+    // note: no mutex required here
+
     // inform the calling client that no channel is free
     ConnLessProtocol.CreateCLServerFullMes ( RecHostAddr );
 }
@@ -679,16 +683,6 @@ void CServer::OnSendCLProtMessage ( CHostAddress     InetAddr,
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
-}
-
-void CServer::OnProtcolCLMessageReceived ( int              iRecID,
-                                           CVector<uint8_t> vecbyMesBodyData,
-                                           CHostAddress     RecHostAddr )
-{
-    // connection less messages are always processed
-    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData,
-                                                      iRecID,
-                                                      RecHostAddr );
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )
@@ -743,7 +737,6 @@ void CServer::OnHandledSignal ( int sigNum )
 #else
     switch ( sigNum )
     {
-
     case SIGUSR1:
         RequestNewRecording();
         break;
@@ -1442,26 +1435,36 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr )
     return INVALID_CHANNEL_ID;
 }
 
+void CServer::OnProtcolCLMessageReceived ( int              iRecID,
+                                           CVector<uint8_t> vecbyMesBodyData,
+                                           CHostAddress     RecHostAddr )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // connection less messages are always processed
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData,
+                                                      iRecID,
+                                                      RecHostAddr );
+}
+
 void CServer::OnProtcolMessageReceived ( int              iRecCounter,
                                          int              iRecID,
                                          CVector<uint8_t> vecbyMesBodyData,
                                          CHostAddress     RecHostAddr )
 {
-    Mutex.lock();
-    {
-        // find the channel with the received address
-        const int iCurChanID = FindChannel ( RecHostAddr );
+    QMutexLocker locker ( &Mutex );
 
-        // if the channel exists, apply the protocol message to the channel
-        if ( iCurChanID != INVALID_CHANNEL_ID )
-        {
-            vecChannels[iCurChanID].PutProtcolData ( iRecCounter,
-                                                     iRecID,
-                                                     vecbyMesBodyData,
-                                                     RecHostAddr );
-        }
+    // find the channel with the received address
+    const int iCurChanID = FindChannel ( RecHostAddr );
+
+    // if the channel exists, apply the protocol message to the channel
+    if ( iCurChanID != INVALID_CHANNEL_ID )
+    {
+        vecChannels[iCurChanID].PutProtcolData ( iRecCounter,
+                                                 iRecID,
+                                                 vecbyMesBodyData,
+                                                 RecHostAddr );
     }
-    Mutex.unlock();
 }
 
 bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
@@ -1469,62 +1472,60 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
                              const CHostAddress&     HostAdr,
                              int&                    iCurChanID )
 {
+    QMutexLocker locker ( &Mutex );
+
     bool bNewConnection = false; // init return value
     bool bChanOK        = true;  // init with ok, might be overwritten
 
-    Mutex.lock();
+    // Get channel ID ------------------------------------------------------
+    // check address
+    iCurChanID = FindChannel ( HostAdr );
+
+    if ( iCurChanID == INVALID_CHANNEL_ID )
     {
-        // Get channel ID ------------------------------------------------------
-        // check address
-        iCurChanID = FindChannel ( HostAdr );
+        // a new client is calling, look for free channel
+        iCurChanID = GetFreeChan();
 
-        if ( iCurChanID == INVALID_CHANNEL_ID )
+        if ( iCurChanID != INVALID_CHANNEL_ID )
         {
-            // a new client is calling, look for free channel
-            iCurChanID = GetFreeChan();
+            // initialize current channel by storing the calling host
+            // address
+            vecChannels[iCurChanID].SetAddress ( HostAdr );
 
-            if ( iCurChanID != INVALID_CHANNEL_ID )
+            // reset channel info
+            vecChannels[iCurChanID].ResetInfo();
+
+            // reset the channel gains of current channel, at the same
+            // time reset gains of this channel ID for all other channels
+            for ( int i = 0; i < iMaxNumChannels; i++ )
             {
-                // initialize current channel by storing the calling host
-                // address
-                vecChannels[iCurChanID].SetAddress ( HostAdr );
+                vecChannels[iCurChanID].SetGain ( i, 1.0 );
 
-                // reset channel info
-                vecChannels[iCurChanID].ResetInfo();
-
-                // reset the channel gains of current channel, at the same
-                // time reset gains of this channel ID for all other channels
-                for ( int i = 0; i < iMaxNumChannels; i++ )
-                {
-                    vecChannels[iCurChanID].SetGain ( i, 1.0 );
-
-                    // other channels (we do not distinguish the case if
-                    // i == iCurChanID for simplicity)
-                    vecChannels[i].SetGain ( iCurChanID, 1.0 );
-                }
-            }
-            else
-            {
-                // no free channel available
-                bChanOK = false;
+                // other channels (we do not distinguish the case if
+                // i == iCurChanID for simplicity)
+                vecChannels[i].SetGain ( iCurChanID, 1.0 );
             }
         }
-
-
-        // Put received audio data in jitter buffer ----------------------------
-        if ( bChanOK )
+        else
         {
-            // put packet in socket buffer
-            if ( vecChannels[iCurChanID].PutAudioData ( vecbyRecBuf,
-                                                        iNumBytesRead,
-                                                        HostAdr ) == PS_NEW_CONNECTION )
-            {
-                // in case we have a new connection return this information
-                bNewConnection = true;
-            }
+            // no free channel available
+            bChanOK = false;
         }
     }
-    Mutex.unlock();
+
+
+    // Put received audio data in jitter buffer ----------------------------
+    if ( bChanOK )
+    {
+        // put packet in socket buffer
+        if ( vecChannels[iCurChanID].PutAudioData ( vecbyRecBuf,
+                                                    iNumBytesRead,
+                                                    HostAdr ) == PS_NEW_CONNECTION )
+        {
+            // in case we have a new connection return this information
+            bNewConnection = true;
+        }
+    }
 
     // return the state if a new connection was happening
     return bNewConnection;

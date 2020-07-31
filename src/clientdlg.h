@@ -83,6 +83,7 @@ public:
                  Qt::WindowFlags  f = nullptr );
 
 protected:
+    void               keyPressEvent( QKeyEvent *event );
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
     void               SetMyWindowTitle ( const int iNumClients );
     void               ShowConnectionSetupDialog();
@@ -120,6 +121,7 @@ protected:
     CMusProfDlg        MusicianProfileDlg;
 
 public slots:
+    void MuteMyself(); //Function For executing the MuteMyself with keyboard shortcut introduced by DzPex
     void OnAboutToQuit() { pSettings->Save(); }
 
     void OnConnectDisconBut();
@@ -232,7 +234,4 @@ public slots:
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones
-
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 };

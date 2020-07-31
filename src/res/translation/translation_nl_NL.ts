@@ -1008,8 +1008,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
-        <source>Chat</source>
-        <translation>Chat</translation>
+        <source>C&amp;hat</source>
+        <translation>C&amp;hat</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>

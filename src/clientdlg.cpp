@@ -507,6 +507,27 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         ShowConnectionSetupDialog();
     }
 }
+//----KeyEvent 
+void CClientDlg::keyPressEvent( QKeyEvent * event )
+{
+    if ( event->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( event );//Block Escape Key
+    if ( event->key() == Qt::Key_M ) CClientDlg::MuteMyself(); //Keyboard Shortcut for MuteMyself Function by pressing "M" introduced by DzPex
+}
+//------
+
+//------Function For execute MuteMyself with a Keypress Event Introduced By DzPex
+void CClientDlg::MuteMyself(){
+    if ( chbLocalMute->checkState() == Qt::Unchecked )
+    {
+        chbLocalMute->setChecked(1);
+        pClient->SetMuteOutStream ( true );
+    }
+    else{
+        chbLocalMute->setChecked(false);
+        pClient->SetMuteOutStream ( false );
+    }
+}
+//-----------------------------------------------------------
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )
 {

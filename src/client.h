@@ -245,7 +245,7 @@ public:
 
     void SetRemoteChanGain ( const int iId, const double dGain, const bool bIsMyOwnFader );
 
-	void SetRemoteChanPan ( const int iId, const double dPan )
+    void SetRemoteChanPan ( const int iId, const double dPan )
         { Channel.SetRemoteChanPan ( iId, dPan ); }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
@@ -372,7 +372,7 @@ protected:
 
     CSignalHandler*         pSignalHandler;
 
-public slots:
+protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
@@ -397,6 +397,7 @@ public slots:
                                           int          iNumClients );
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
+    void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

@@ -84,7 +84,6 @@ public:
 
 protected:
     void   UpdateGroupIDDependencies();
-    double CalcFaderGain ( const double dValue );
     void   SetMute ( const bool bState );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
     void   SendPanValueToServer ( const int iPan );

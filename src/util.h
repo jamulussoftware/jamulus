@@ -1278,6 +1278,24 @@ public:
     {
         return bXFade ? dPan : std::min ( 0.5, dPan ) * 2;
     }
+
+    // calculate linear gain from fader values which are in dB
+    static double CalcFaderGain ( const double dValue )
+    {
+        // convert actual slider range in gain values
+        // and normalize so that maximum gain is 1
+        const double dInValueRange0_1 = dValue / AUD_MIX_FADER_MAX;
+
+        // map range from 0..1 to range -35..0 dB and calculate linear gain
+        if ( dValue == 0 )
+        {
+            return 0; // -infinity
+        }
+        else
+        {
+            return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
+        }
+    }
 };
 
 

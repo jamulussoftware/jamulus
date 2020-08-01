@@ -24,7 +24,6 @@
 
 #include "clientdlg.h"
 
-
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
@@ -774,6 +773,7 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         {
             pClient->SetMuteOutStream ( false );
         }
+        SetMyWindowTitle ( -1 );
     }
 }
 
@@ -798,24 +798,50 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
     SetMyWindowTitle ( iNewNumClients );
 }
 
-void CClientDlg::SetMyWindowTitle ( const int iNumClients )
+void CClientDlg::SetMyWindowTitle ( const int iClients )
 {
+    static int iCurrConnClients;
+    int iNumClients = 0;
+    
+    if ( iClients < 0)
+    {
+        iNumClients = iCurrConnClients;
+    }
+    else
+    {
+        iNumClients = iCurrConnClients = iClients;
+        
+    }
+    
+    // check for local mute status and construct window title accordingly    
+    QString strWindowTitle;
+    QString const strSelfMuted = u8" \u2588 MUTED \u2588 ";
+    
+    if ( pClient->GetMuteOutStream() )
+    {
+        strWindowTitle = pClient->strClientName + strSelfMuted;
+    }
+    else
+    {
+        strWindowTitle = pClient->strClientName;
+    }
+    
     // show number of connected clients in window title (and therefore also in
     // the task bar of the OS)
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( pClient->strClientName );
+        setWindowTitle ( strWindowTitle );
     }
     else
     {
         if ( iNumClients == 1 )
         {
-            setWindowTitle ( QString ( pClient->strClientName ) + " (1 " + tr ( "user" ) + ")" );
+            setWindowTitle ( QString ( strWindowTitle ) + " (1 " + tr ( "user" ) + ")" );
         }
         else
         {
-            setWindowTitle ( QString ( pClient->strClientName ) +
+            setWindowTitle ( QString ( strWindowTitle ) +
                 QString ( " (%1 " + tr ( "users" ) + ")" ).arg ( iNumClients ) );
         }
     }
@@ -927,6 +953,7 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
+    SetMyWindowTitle ( -1 );
 }
 
 void CClientDlg::OnTimerSigMet()

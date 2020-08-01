@@ -77,26 +77,6 @@ else
   fi
 fi
 
-# optional: FluidSynth synthesizer
-if [ "$1" == "opt" ]; then
-  if [ -d "fluidsynth" ]; then
-    echo "The Fluidsynth directory is present, we assume it is compiled and ready to use. If not, delete the fluidsynth directory and call this script again."
-  else
-#TODO if the normal jack package is not installed, fluidsynth compiles without jack support
-    wget https://github.com/FluidSynth/fluidsynth/archive/v2.0.6.tar.gz -O fluidsynth.tar.gz
-    tar -xzf fluidsynth.tar.gz
-    rm fluidsynth.tar.gz
-    mv fluidsynth-* fluidsynth
-    cd fluidsynth
-    mkdir build
-    cd build
-    cmake ..
-    make -j${NCORES}
-    wget https://data.musical-artifacts.com/hammersound/claudio_piano.sf2
-    cd ../..
-  fi
-fi
-
 # compile Jamulus with external Opus library
 cd ..
 qmake "CONFIG+=opus_shared_lib raspijamulus headless" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Jamulus.pro
@@ -127,42 +107,9 @@ fi
 
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
+distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
+./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &
 
-if [ "$1" == "opt" ]; then
-  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
-  ./Jamulus -n -i ${JAMULUSINIFILE} -j -c jamulus.fischvolk.de &>/dev/null &
-  sleep 1
-  ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 0.4 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
-  sleep 3
-  ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output left" system:playback_1
-  ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output right" system:playback_2
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left "Jamulus:input left"
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right "Jamulus:input right"
-  aconnect 'USB-MIDI' 128
-
-  # if hyperion is installed, set red color
-  if [ ! -z "$(command -v hyperion-remote)" ]; then
-    hyperion-remote -c red
-  fi
-
-  # watchdog: if MIDI device is turned off, shutdown Jamulus
-  while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
-    sleep 1
-  done
-  killall Jamulus
-  killall fluidsynth
-  echo "Cleaned up jackd, Jamulus and fluidsynth"
-
-  # if hyperion is installed, reset color
-  if [ ! -z "$(command -v hyperion-remote)" ]; then
-    hyperion-remote --color black
-    hyperion-remote --clearall
-  fi
-else
-  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
-  ./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &
-  echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"
-  read -n 1 -s -r -p ""
-  killall Jamulus
-fi
-
+echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"
+read -n 1 -s -r -p ""
+killall Jamulus

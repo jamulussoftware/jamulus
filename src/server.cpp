@@ -1041,6 +1041,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                     vecvecdPannings[i],
                                     vecNumAudioChannels,
                                     vecvecsIntermediateProcBuf[i],
+                                    vecvecsSendData[i],
                                     vecvecbyCodedData[i],
                                     vecChannels[iCurChanID],
                                     DoubleFrameSizeConvBufOut[iCurChanID],
@@ -1050,8 +1051,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                     iCeltNumCodedBytes,
                                     iClientFrameSizeSamples,
                                     iCurNumAudChan,
-                                    iNumClients,
-                                    vecvecsSendData[i] );
+                                    iNumClients );
 
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();
@@ -1091,6 +1091,7 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
                                       const CVector<double>&            vecdPannings,
                                       const CVector<int>&               vecNumAudioChannels,
                                       CVector<double>&                  vecdIntermProcBuf,
+                                      CVector<int16_t>&                 vecsSendData,
                                       CVector<uint8_t>&                 vecbyCodedData,
                                       CChannel&                         Channel,
                                       CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
@@ -1100,8 +1101,7 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
                                       const int                         iCeltNumCodedBytes,
                                       const int                         iClientFrameSizeSamples,
                                       const int                         iCurNumAudChan,
-                                      const int                         iNumClients,
-                                      CVector<int16_t>&                 vecsOutData )
+                                      const int                         iNumClients )
 {
     int i, j, k, iUnused;
 
@@ -1164,7 +1164,7 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
         // convert from double to short with clipping
         for ( i = 0; i < iServerFrameSizeSamples; i++ )
         {
-            vecsOutData[i] = Double2Short ( vecdIntermProcBuf[i] );
+            vecsSendData[i] = Double2Short ( vecdIntermProcBuf[i] );
         }
     }
     else
@@ -1232,7 +1232,7 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
         // convert from double to short with clipping
         for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
         {
-            vecsOutData[i] = Double2Short ( vecdIntermProcBuf[i] );
+            vecsSendData[i] = Double2Short ( vecdIntermProcBuf[i] );
         }
     }
 
@@ -1242,12 +1242,12 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
     // is false and the Get() function is not called at all. Therefore if the buffer is not needed
     // we do not spend any time in the function but go directly inside the if condition.
     if ( ( iUseDoubleSysFraSizeConvBuf == 0 ) ||
-         DoubleFrameSizeConvBufOut.Put ( vecsOutData, SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan ) )
+         DoubleFrameSizeConvBufOut.Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan ) )
     {
         if ( iUseDoubleSysFraSizeConvBuf != 0 )
         {
             // get the large frame from the conversion buffer
-            DoubleFrameSizeConvBufOut.GetAll ( vecsOutData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan );
+            DoubleFrameSizeConvBufOut.GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan );
         }
 
         for ( int iB = 0; iB < iNumFrameSizeConvBlocks; iB++ )
@@ -1255,14 +1255,12 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
             // OPUS encoding
             if ( pCurOpusEncoder != nullptr )
             {
-// TODO find a better place than this: the setting does not change all the time
-//      so for speed optimization it would be better to set it only if the network
-//      frame size is changed
-opus_custom_encoder_ctl ( pCurOpusEncoder,
-                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+// TODO find a better place than this: the setting does not change all the time so for speed
+//      optimization it would be better to set it only if the network frame size is changed
+opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsOutData[iB * SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan],
+                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan],
                                                iClientFrameSizeSamples,
                                                &vecbyCodedData[0],
                                                iCeltNumCodedBytes );

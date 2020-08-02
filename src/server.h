@@ -306,6 +306,7 @@ protected:
                                  const CVector<double>&            vecdPannings,
                                  const CVector<int>&               vecNumAudioChannels,
                                  CVector<double>&                  vecdIntermProcBuf,
+                                 CVector<int16_t>&                 vecsSendData,
                                  CVector<uint8_t>&                 vecbyCodedData,
                                  CChannel&                         Channel,
                                  CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
@@ -315,8 +316,7 @@ protected:
                                  const int                         iCeltNumCodedBytes,
                                  const int                         iClientFrameSizeSamples,
                                  const int                         iCurNumAudChan,
-                                 const int                         iNumClients,
-                                 CVector<int16_t>&                 vecsOutData );
+                                 const int                         iNumClients );
 
     virtual void customEvent ( QEvent* pEvent );
 

@@ -1003,16 +1003,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // get number of audio channels of current channel
             const int iCurNumAudChan = vecNumAudioChannels[i];
 
-            // export the audio data for recording purpose
-            if ( JamController.GetRecordingEnabled() )
-            {
-                emit AudioFrame ( iCurChanID,
-                                  vecChannels[iCurChanID].GetName(),
-                                  vecChannels[iCurChanID].GetAddress(),
-                                  iCurNumAudChan,
-                                  vecvecsData[i] );
-            }
-
             // generate a separate mix for each channel
             // actual processing of audio data -> mix
             ProcessData ( vecvecsData,
@@ -1096,17 +1086,27 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
                                                                 vecvecbyCodedData[i],
                                                                 iCeltNumCodedBytes );
                 }
+            }
 
-                // update socket buffer size
-                vecChannels[iCurChanID].UpdateSocketBufferSize();
+            // update socket buffer size
+            vecChannels[iCurChanID].UpdateSocketBufferSize();
 
-                // send channel levels
-                if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
-                {
-                    ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
-                                                                   vecChannelLevels,
-                                                                   iNumClients );
-                }
+            // send channel levels
+            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+            {
+                ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
+                                                               vecChannelLevels,
+                                                               iNumClients );
+            }
+
+            // export the audio data for recording purpose
+            if ( JamController.GetRecordingEnabled() )
+            {
+                emit AudioFrame ( iCurChanID,
+                                  vecChannels[iCurChanID].GetName(),
+                                  vecChannels[iCurChanID].GetAddress(),
+                                  iCurNumAudChan,
+                                  vecvecsData[i] );
             }
         }
     }

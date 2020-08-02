@@ -301,14 +301,21 @@ protected:
 
     void WriteHTMLChannelList();
 
-    void ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
-                       const CVector<double>&            vecdGains,
-                       const CVector<double>&            vecdPannings,
-                       const CVector<int>&               vecNumAudioChannels,
-                       CVector<double>&                  vecdIntermProcBuf,
-                       CVector<int16_t>&                 vecsOutData,
-                       const int                         iCurNumAudChan,
-                       const int                         iNumClients );
+    void MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsData,
+                                 const CVector<double>&            vecdGains,
+                                 const CVector<double>&            vecdPannings,
+                                 const CVector<int>&               vecNumAudioChannels,
+                                 CVector<double>&                  vecdIntermProcBuf,
+                                 CVector<uint8_t>&                 vecbyCodedData,
+                                 CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
+                                 const int                         iUseDoubleSysFraSizeConvBuf,
+                                 const int                         iNumFrameSizeConvBlocks,
+                                 OpusCustomEncoder*                pCurOpusEncoder,
+                                 const int                         iCeltNumCodedBytes,
+                                 const int                         iClientFrameSizeSamples,
+                                 const int                         iCurNumAudChan,
+                                 const int                         iNumClients,
+                                 CVector<int16_t>&                 vecsOutData );
 
     virtual void customEvent ( QEvent* pEvent );
 

@@ -995,24 +995,13 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         for ( int i = 0; i < iNumClients; i++ )
         {
             int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
-            OpusCustomEncoder* CurOpusEncoder;
+            OpusCustomEncoder* pCurOpusEncoder;
 
             // get actual ID of current channel
             const int iCurChanID = vecChanIDsCurConChan[i];
 
             // get number of audio channels of current channel
             const int iCurNumAudChan = vecNumAudioChannels[i];
-
-            // generate a separate mix for each channel
-            // actual processing of audio data -> mix
-            ProcessData ( vecvecsData,
-                          vecvecdGains[i],
-                          vecvecdPannings[i],
-                          vecNumAudioChannels,
-                          vecvecsIntermediateProcBuf[i],
-                          vecvecsSendData[i],
-                          iCurNumAudChan,
-                          iNumClients );
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
@@ -1024,11 +1013,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
-                    CurOpusEncoder = OpusEncoderMono[iCurChanID];
+                    pCurOpusEncoder = OpusEncoderMono[iCurChanID];
                 }
                 else
                 {
-                    CurOpusEncoder = OpusEncoderStereo[iCurChanID];
+                    pCurOpusEncoder = OpusEncoderStereo[iCurChanID];
                 }
             }
             else if ( vecAudioComprType[i] == CT_OPUS64 )
@@ -1037,56 +1026,35 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
-                    CurOpusEncoder = Opus64EncoderMono[iCurChanID];
+                    pCurOpusEncoder = Opus64EncoderMono[iCurChanID];
                 }
                 else
                 {
-                    CurOpusEncoder = Opus64EncoderStereo[iCurChanID];
+                    pCurOpusEncoder = Opus64EncoderStereo[iCurChanID];
                 }
             }
             else
             {
-                CurOpusEncoder = nullptr;
+                pCurOpusEncoder = nullptr;
             }
 
-            // If the server frame size is smaller than the received OPUS frame size, we need a conversion
-            // buffer which stores the large buffer.
-            // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
-            // is false and the Get() function is not called at all. Therefore if the buffer is not needed
-            // we do not spend any time in the function but go directly inside the if condition.
-            if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecvecsSendData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
-            {
-                if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
-                {
-                    // get the large frame from the conversion buffer
-                    DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecvecsSendData[i], DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
-                }
-
-                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
-                {
-                    // OPUS encoding
-                    if ( CurOpusEncoder != nullptr )
-                    {
-// TODO find a better place than this: the setting does not change all the time
-//      so for speed optimization it would be better to set it only if the network
-//      frame size is changed
-opus_custom_encoder_ctl ( CurOpusEncoder,
-                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
-
-                        iUnused = opus_custom_encode ( CurOpusEncoder,
-                                                       &vecvecsSendData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                                       iClientFrameSizeSamples,
-                                                       &vecvecbyCodedData[i][0],
-                                                       iCeltNumCodedBytes );
-                    }
-
-                    // send separate mix to current clients
-                    vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                                vecvecbyCodedData[i],
-                                                                iCeltNumCodedBytes );
-                }
-            }
+            // generate a separate mix for each channel
+            // actual processing of audio data -> mix
+            MixEncodeTransmitData ( vecvecsData,
+                                    vecvecdGains[i],
+                                    vecvecdPannings[i],
+                                    vecNumAudioChannels,
+                                    vecvecsIntermediateProcBuf[i],
+                                    vecvecbyCodedData[i],
+                                    DoubleFrameSizeConvBufOut[iCurChanID],
+                                    vecUseDoubleSysFraSizeConvBuf[i],
+                                    vecNumFrameSizeConvBlocks[i],
+                                    pCurOpusEncoder,
+                                    iCeltNumCodedBytes,
+                                    iClientFrameSizeSamples,
+                                    iCurNumAudChan,
+                                    iNumClients,
+                                    vecvecsSendData[i] );
 
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();
@@ -1121,16 +1089,23 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
 }
 
 /// @brief Mix all audio data from all clients together.
-void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
-                            const CVector<double>&            vecdGains,
-                            const CVector<double>&            vecdPannings,
-                            const CVector<int>&               vecNumAudioChannels,
-                            CVector<double>&                  vecdIntermProcBuf,
-                            CVector<int16_t>&                 vecsOutData,
-                            const int                         iCurNumAudChan,
-                            const int                         iNumClients )
+void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsData,
+                                      const CVector<double>&            vecdGains,
+                                      const CVector<double>&            vecdPannings,
+                                      const CVector<int>&               vecNumAudioChannels,
+                                      CVector<double>&                  vecdIntermProcBuf,
+                                      CVector<uint8_t>&                 vecbyCodedData,
+                                      CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
+                                      const int                         iUseDoubleSysFraSizeConvBuf,
+                                      const int                         iNumFrameSizeConvBlocks,
+                                      OpusCustomEncoder*                pCurOpusEncoder,
+                                      const int                         iCeltNumCodedBytes,
+                                      const int                         iClientFrameSizeSamples,
+                                      const int                         iCurNumAudChan,
+                                      const int                         iNumClients,
+                                      CVector<int16_t>&                 vecsOutData )
 {
-    int i, j, k;
+    int i, j, k, iUnused;
 
     // init intermediate processing vector with zeros since we mix all channels on that vector
     vecdIntermProcBuf.Reset ( 0 );
@@ -1262,6 +1237,47 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
             vecsOutData[i] = Double2Short ( vecdIntermProcBuf[i] );
         }
     }
+
+    // If the server frame size is smaller than the received OPUS frame size, we need a conversion
+    // buffer which stores the large buffer.
+    // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
+    // is false and the Get() function is not called at all. Therefore if the buffer is not needed
+    // we do not spend any time in the function but go directly inside the if condition.
+    if ( ( iUseDoubleSysFraSizeConvBuf == 0 ) ||
+         DoubleFrameSizeConvBufOut.Put ( vecsOutData, SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan ) )
+    {
+        if ( iUseDoubleSysFraSizeConvBuf != 0 )
+        {
+            // get the large frame from the conversion buffer
+            DoubleFrameSizeConvBufOut.GetAll ( vecsOutData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan );
+        }
+
+        for ( int iB = 0; iB < iNumFrameSizeConvBlocks; iB++ )
+        {
+            // OPUS encoding
+            if ( pCurOpusEncoder != nullptr )
+            {
+// TODO find a better place than this: the setting does not change all the time
+//      so for speed optimization it would be better to set it only if the network
+//      frame size is changed
+opus_custom_encoder_ctl ( pCurOpusEncoder,
+                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+
+                iUnused = opus_custom_encode ( pCurOpusEncoder,
+                                               &vecsOutData[iB * SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan],
+                                               iClientFrameSizeSamples,
+                                               &vecbyCodedData[0],
+                                               iCeltNumCodedBytes );
+            }
+
+            // send separate mix to current clients
+            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                        vecbyCodedData,
+                                                        iCeltNumCodedBytes );
+        }
+    }
+
+    Q_UNUSED ( iUnused )
 }
 
 CVector<CChannelInfo> CServer::CreateChannelList()

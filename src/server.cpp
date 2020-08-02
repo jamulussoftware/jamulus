@@ -995,7 +995,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         for ( int i = 0; i < iNumClients; i++ )
         {
             int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
-            OpusCustomEncoder* pCurOpusEncoder;
+            OpusCustomEncoder* pCurOpusEncoder         = nullptr;
 
             // get actual ID of current channel
             const int iCurChanID = vecChanIDsCurConChan[i];
@@ -1033,13 +1033,9 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     pCurOpusEncoder = Opus64EncoderStereo[iCurChanID];
                 }
             }
-            else
-            {
-                pCurOpusEncoder = nullptr;
-            }
 
-            // generate a separate mix for each channel
-            // actual processing of audio data -> mix
+            // generate a separate mix for each channel, OPUS encode the
+            // audio data and transmit the network packet
             MixEncodeTransmitData ( vecvecsData,
                                     vecvecdGains[i],
                                     vecvecdPannings[i],

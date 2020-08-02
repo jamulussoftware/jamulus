@@ -307,6 +307,7 @@ protected:
                                  const CVector<int>&               vecNumAudioChannels,
                                  CVector<double>&                  vecdIntermProcBuf,
                                  CVector<uint8_t>&                 vecbyCodedData,
+                                 CChannel&                         Channel,
                                  CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
                                  const int                         iUseDoubleSysFraSizeConvBuf,
                                  const int                         iNumFrameSizeConvBlocks,

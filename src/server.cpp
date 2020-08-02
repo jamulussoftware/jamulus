@@ -1046,6 +1046,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                     vecNumAudioChannels,
                                     vecvecsIntermediateProcBuf[i],
                                     vecvecbyCodedData[i],
+                                    vecChannels[iCurChanID],
                                     DoubleFrameSizeConvBufOut[iCurChanID],
                                     vecUseDoubleSysFraSizeConvBuf[i],
                                     vecNumFrameSizeConvBlocks[i],
@@ -1095,6 +1096,7 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
                                       const CVector<int>&               vecNumAudioChannels,
                                       CVector<double>&                  vecdIntermProcBuf,
                                       CVector<uint8_t>&                 vecbyCodedData,
+                                      CChannel&                         Channel,
                                       CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
                                       const int                         iUseDoubleSysFraSizeConvBuf,
                                       const int                         iNumFrameSizeConvBlocks,
@@ -1271,9 +1273,9 @@ opus_custom_encoder_ctl ( pCurOpusEncoder,
             }
 
             // send separate mix to current clients
-            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                        vecbyCodedData,
-                                                        iCeltNumCodedBytes );
+            Channel.PrepAndSendPacket ( &Socket,
+                                        vecbyCodedData,
+                                        iCeltNumCodedBytes );
         }
     }
 

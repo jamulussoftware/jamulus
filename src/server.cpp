@@ -1055,8 +1055,18 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 }
             }
 
+// TEST
+QFuture<void> future = QtConcurrent::run ( this, &CServer::MixEncodeTransmitData,
+                                           i,
+                                           iCurChanID,
+                                           pCurOpusEncoder,
+                                           iClientFrameSizeSamples,
+                                           iNumClients );
+
+
             // generate a separate mix for each channel, OPUS encode the
             // audio data and transmit the network packet
+/*
             MixEncodeTransmitData ( vecvecsData,
                                     vecvecdGains[i],
                                     vecvecdPannings[i],
@@ -1073,6 +1083,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                     iClientFrameSizeSamples,
                                     iCurNumAudChan,
                                     iNumClients );
+*/
         }
     }
     else
@@ -1086,23 +1097,26 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 }
 
 /// @brief Mix all audio data from all clients together, encode and transmit
-void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsData,
-                                      const CVector<double>&            vecdGains,
-                                      const CVector<double>&            vecdPannings,
-                                      const CVector<int>&               vecNumAudioChannels,
-                                      CVector<double>&                  vecdIntermProcBuf,
-                                      CVector<int16_t>&                 vecsSendData,
-                                      CVector<uint8_t>&                 vecbyCodedData,
-                                      CChannel&                         Channel,
-                                      CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
-                                      const int                         iUseDoubleSysFraSizeConvBuf,
-                                      const int                         iNumFrameSizeConvBlocks,
-                                      OpusCustomEncoder*                pCurOpusEncoder,
-                                      const int                         iCeltNumCodedBytes,
-                                      const int                         iClientFrameSizeSamples,
-                                      const int                         iCurNumAudChan,
-                                      const int                         iNumClients )
+void CServer::MixEncodeTransmitData ( const int          iIdx,
+                                      const int          iCurChanID,
+                                      OpusCustomEncoder* pCurOpusEncoder,
+                                      const int          iClientFrameSizeSamples,
+                                      const int          iNumClients )
 {
+
+// TEST
+const CVector<double>& vecdGains                   = vecvecdGains[iIdx];
+const CVector<double>& vecdPannings                = vecvecdPannings[iIdx];
+CVector<double>&       vecdIntermProcBuf           = vecvecsIntermediateProcBuf[iIdx];
+CVector<int16_t>&      vecsSendData                = vecvecsSendData[iIdx];
+CVector<uint8_t>&      vecbyCodedData              = vecvecbyCodedData[iIdx];
+CChannel&              Channel                     = vecChannels[iCurChanID];
+CConvBuf<int16_t>*     pDoubleFrameSizeConvBufOut  = &DoubleFrameSizeConvBufOut[iCurChanID];
+const int              iUseDoubleSysFraSizeConvBuf = vecUseDoubleSysFraSizeConvBuf[iIdx];
+const int              iNumFrameSizeConvBlocks     = vecNumFrameSizeConvBlocks[iIdx];
+const int              iCurNumAudChan              = vecNumAudioChannels[iIdx];
+const int              iCeltNumCodedBytes          = vecChannels[iCurChanID].GetNetwFrameSize();
+
     int i, j, k, iUnused;
 
     // init intermediate processing vector with zeros since we mix all channels on that vector
@@ -1242,12 +1256,12 @@ void CServer::MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsD
     // is false and the Get() function is not called at all. Therefore if the buffer is not needed
     // we do not spend any time in the function but go directly inside the if condition.
     if ( ( iUseDoubleSysFraSizeConvBuf == 0 ) ||
-         DoubleFrameSizeConvBufOut.Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan ) )
+         pDoubleFrameSizeConvBufOut->Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan ) )
     {
         if ( iUseDoubleSysFraSizeConvBuf != 0 )
         {
             // get the large frame from the conversion buffer
-            DoubleFrameSizeConvBufOut.GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan );
+            pDoubleFrameSizeConvBufOut->GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan );
         }
 
         for ( int iB = 0; iB < iNumFrameSizeConvBlocks; iB++ )

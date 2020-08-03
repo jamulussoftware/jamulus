@@ -11,6 +11,7 @@ CONFIG += qt \
     release
 
 QT += network \
+    concurrent \
     xml
 
 contains(CONFIG, "headless") {

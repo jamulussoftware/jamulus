@@ -29,6 +29,7 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include <QFileInfo>
+#include <QtConcurrent>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
@@ -301,6 +302,7 @@ protected:
 
     void WriteHTMLChannelList();
 
+/*
     void MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsData,
                                  const CVector<double>&            vecdGains,
                                  const CVector<double>&            vecdPannings,
@@ -317,6 +319,15 @@ protected:
                                  const int                         iClientFrameSizeSamples,
                                  const int                         iCurNumAudChan,
                                  const int                         iNumClients );
+*/
+
+// TEST
+void MixEncodeTransmitData ( const int          iIdx,
+                             const int          iCurChanID,
+                             OpusCustomEncoder* pCurOpusEncoder,
+                             const int          iClientFrameSizeSamples,
+                             const int          iNumClients );
+
 
     virtual void customEvent ( QEvent* pEvent );
 

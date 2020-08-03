@@ -992,15 +992,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                  vecChannelLevels );
         }
 
-#ifdef USE_OMP
-// TODO This does not work as expected, the CPU is at high levels even if not much work is to be done. So we
-// have an issue using OMP in the OnTimer() function. Even if #pragma omp parallel for is used on a trivial
-// for loop for testing, still the CPU usage goes to very high values -> What is the cause of this issue?
-// NOTE Most probably it is the overhead of threads creation/destruction which causes this effect.
-// See https://software.intel.com/content/www/us/en/develop/articles/performance-obstacles-for-threading-how-do-they-affect-openmp-code.html
-// "[...] overhead numbers are high enough that it doesn’t make sense to thread that code. In those cases, we’re better off leaving the code in its original serial form."
-# pragma omp parallel for
-#endif
         for ( int i = 0; i < iNumClients; i++ )
         {
             int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
@@ -1011,16 +1002,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
             // get number of audio channels of current channel
             const int iCurNumAudChan = vecNumAudioChannels[i];
-
-            // export the audio data for recording purpose
-            if ( JamController.GetRecordingEnabled() )
-            {
-                emit AudioFrame ( iCurChanID,
-                                  vecChannels[iCurChanID].GetName(),
-                                  vecChannels[iCurChanID].GetAddress(),
-                                  iCurNumAudChan,
-                                  vecvecsData[i] );
-            }
 
             // generate a separate mix for each channel
             // actual processing of audio data -> mix
@@ -1105,17 +1086,27 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
                                                                 vecvecbyCodedData[i],
                                                                 iCeltNumCodedBytes );
                 }
+            }
 
-                // update socket buffer size
-                vecChannels[iCurChanID].UpdateSocketBufferSize();
+            // update socket buffer size
+            vecChannels[iCurChanID].UpdateSocketBufferSize();
 
-                // send channel levels
-                if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
-                {
-                    ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
-                                                                   vecChannelLevels,
-                                                                   iNumClients );
-                }
+            // send channel levels
+            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+            {
+                ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
+                                                               vecChannelLevels,
+                                                               iNumClients );
+            }
+
+            // export the audio data for recording purpose
+            if ( JamController.GetRecordingEnabled() )
+            {
+                emit AudioFrame ( iCurChanID,
+                                  vecChannels[iCurChanID].GetName(),
+                                  vecChannels[iCurChanID].GetAddress(),
+                                  iCurNumAudChan,
+                                  vecvecsData[i] );
             }
         }
     }

@@ -171,7 +171,12 @@ void CHighPrecisionTimer::Start()
 #endif
 
         // start thread
+#ifndef SCHED_RR
         QThread::start ( QThread::TimeCriticalPriority );
+#else
+        // priorty is "ignored" on linux: actually broken
+        QThread::start();
+#endif
     }
 }
 

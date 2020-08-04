@@ -34,6 +34,9 @@
 # include <QtConcurrent>
 # include <QFutureSynchronizer>
 #endif
+#ifndef _WIN32
+# include <sched.h>
+#endif
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else

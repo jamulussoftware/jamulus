@@ -305,14 +305,9 @@ protected:
 
     void WriteHTMLChannelList();
 
-
-// TEST
-void MixEncodeTransmitData ( const int          iIdx,
-                             const int          iCurChanID,
-                             OpusCustomEncoder* pCurOpusEncoder,
-                             const int          iClientFrameSizeSamples,
-                             const int          iNumClients );
-
+    void MixEncodeTransmitData ( const int iChanCnt,
+                                 const int iCurChanID,
+                                 const int iNumClients );
 
     virtual void customEvent ( QEvent* pEvent );
 

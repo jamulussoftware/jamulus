@@ -20,7 +20,6 @@
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 
 
-TODO QT += concurrent added -> Windows deployment must be adjusted!
 
 
 

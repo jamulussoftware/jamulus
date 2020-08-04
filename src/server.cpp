@@ -996,16 +996,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                  vecChannelLevels );
         }
 
-        for ( int i = 0; i < iNumClients; i++ )
+        for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
-            int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
-            OpusCustomEncoder* pCurOpusEncoder         = nullptr;
-
             // get actual ID of current channel
-            const int iCurChanID = vecChanIDsCurConChan[i];
-
-            // get number of audio channels of current channel
-            const int iCurNumAudChan = vecNumAudioChannels[i];
+            const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
 
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();
@@ -1024,39 +1018,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 emit AudioFrame ( iCurChanID,
                                   vecChannels[iCurChanID].GetName(),
                                   vecChannels[iCurChanID].GetAddress(),
-                                  iCurNumAudChan,
-                                  vecvecsData[i] );
-            }
-
-            // get current number of CELT coded bytes
-            const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
-
-            // select the opus encoder and raw audio frame length
-            if ( vecAudioComprType[i] == CT_OPUS )
-            {
-                iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
-
-                if ( vecNumAudioChannels[i] == 1 )
-                {
-                    pCurOpusEncoder = OpusEncoderMono[iCurChanID];
-                }
-                else
-                {
-                    pCurOpusEncoder = OpusEncoderStereo[iCurChanID];
-                }
-            }
-            else if ( vecAudioComprType[i] == CT_OPUS64 )
-            {
-                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
-
-                if ( vecNumAudioChannels[i] == 1 )
-                {
-                    pCurOpusEncoder = Opus64EncoderMono[iCurChanID];
-                }
-                else
-                {
-                    pCurOpusEncoder = Opus64EncoderStereo[iCurChanID];
-                }
+                                  vecNumAudioChannels[iChanCnt],
+                                  vecvecsData[iChanCnt] );
             }
 
             // generate a separate mix for each channel, OPUS encode the
@@ -1066,17 +1029,15 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 #ifdef USE_MULTITHREADING
             // by using the future synchronizer we make sure that all
             // threads are done when we leave the timer callback function
-            FutureSynchronizer.addFuture ( QtConcurrent::run ( this, &CServer::MixEncodeTransmitData,
-                                                               i,
+            FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                                                               &CServer::MixEncodeTransmitData,
+                                                               iChanCnt,
                                                                iCurChanID,
-                                                               pCurOpusEncoder,
-                                                               iClientFrameSizeSamples,
                                                                iNumClients ) );
 #else
-            MixEncodeTransmitData ( i,
+            // process and transmit data single threaded
+            MixEncodeTransmitData ( iChanCnt,
                                     iCurChanID,
-                                    pCurOpusEncoder,
-                                    iClientFrameSizeSamples,
                                     iNumClients );
 #endif
         }
@@ -1092,40 +1053,26 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 }
 
 /// @brief Mix all audio data from all clients together, encode and transmit
-void CServer::MixEncodeTransmitData ( const int          iIdx,
-                                      const int          iCurChanID,
-                                      OpusCustomEncoder* pCurOpusEncoder,
-                                      const int          iClientFrameSizeSamples,
-                                      const int          iNumClients )
+void CServer::MixEncodeTransmitData ( const int iChanCnt,
+                                      const int iCurChanID,
+                                      const int iNumClients )
 {
-
-// TEST
-const CVector<double>& vecdGains                   = vecvecdGains[iIdx];
-const CVector<double>& vecdPannings                = vecvecdPannings[iIdx];
-CVector<double>&       vecdIntermProcBuf           = vecvecsIntermediateProcBuf[iIdx];
-CVector<int16_t>&      vecsSendData                = vecvecsSendData[iIdx];
-CVector<uint8_t>&      vecbyCodedData              = vecvecbyCodedData[iIdx];
-CChannel&              Channel                     = vecChannels[iCurChanID];
-CConvBuf<int16_t>*     pDoubleFrameSizeConvBufOut  = &DoubleFrameSizeConvBufOut[iCurChanID];
-const int              iUseDoubleSysFraSizeConvBuf = vecUseDoubleSysFraSizeConvBuf[iIdx];
-const int              iNumFrameSizeConvBlocks     = vecNumFrameSizeConvBlocks[iIdx];
-const int              iCurNumAudChan              = vecNumAudioChannels[iIdx];
-const int              iCeltNumCodedBytes          = vecChannels[iCurChanID].GetNetwFrameSize();
-
-    int i, j, k, iUnused;
+    int               i, j, k, iUnused;
+    CVector<double>&  vecdIntermProcBuf = vecvecsIntermediateProcBuf[iChanCnt]; // use reference for faster access
+    CVector<int16_t>& vecsSendData      = vecvecsSendData[iChanCnt];            // use reference for faster access
 
     // init intermediate processing vector with zeros since we mix all channels on that vector
     vecdIntermProcBuf.Reset ( 0 );
 
     // distinguish between stereo and mono mode
-    if ( iCurNumAudChan == 1 )
+    if ( vecNumAudioChannels[iChanCnt] == 1 )
     {
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecdGains[j];
+            const double            dGain    = vecvecdGains[iChanCnt][j];
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( dGain == static_cast<double> ( 1.0 ) )
@@ -1183,8 +1130,8 @@ const int              iCeltNumCodedBytes          = vecChannels[iCurChanID].Get
         {
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecdGains[j];
-            const double            dPan     = vecdPannings[j];
+            const double            dGain    = vecvecdGains[iChanCnt][j];
+            const double            dPan     = vecvecdPannings[iChanCnt][j];
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
@@ -1245,21 +1192,55 @@ const int              iCeltNumCodedBytes          = vecChannels[iCurChanID].Get
         }
     }
 
+    int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
+    OpusCustomEncoder* pCurOpusEncoder         = nullptr;
+
+    // get current number of CELT coded bytes
+    const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
+
+    // select the opus encoder and raw audio frame length
+    if ( vecAudioComprType[iChanCnt] == CT_OPUS )
+    {
+        iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+
+        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        {
+            pCurOpusEncoder = OpusEncoderMono[iCurChanID];
+        }
+        else
+        {
+            pCurOpusEncoder = OpusEncoderStereo[iCurChanID];
+        }
+    }
+    else if ( vecAudioComprType[iChanCnt] == CT_OPUS64 )
+    {
+        iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
+
+        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        {
+            pCurOpusEncoder = Opus64EncoderMono[iCurChanID];
+        }
+        else
+        {
+            pCurOpusEncoder = Opus64EncoderStereo[iCurChanID];
+        }
+    }
+
     // If the server frame size is smaller than the received OPUS frame size, we need a conversion
     // buffer which stores the large buffer.
     // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
     // is false and the Get() function is not called at all. Therefore if the buffer is not needed
     // we do not spend any time in the function but go directly inside the if condition.
-    if ( ( iUseDoubleSysFraSizeConvBuf == 0 ) ||
-         pDoubleFrameSizeConvBufOut->Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan ) )
+    if ( ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] == 0 ) ||
+         DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
     {
-        if ( iUseDoubleSysFraSizeConvBuf != 0 )
+        if ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] != 0 )
         {
             // get the large frame from the conversion buffer
-            pDoubleFrameSizeConvBufOut->GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan );
+            DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
-        for ( int iB = 0; iB < iNumFrameSizeConvBlocks; iB++ )
+        for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
         {
             // OPUS encoding
             if ( pCurOpusEncoder != nullptr )
@@ -1269,16 +1250,16 @@ const int              iCeltNumCodedBytes          = vecChannels[iCurChanID].Get
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * iCurNumAudChan],
+                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
                                                iClientFrameSizeSamples,
-                                               &vecbyCodedData[0],
+                                               &vecvecbyCodedData[iChanCnt][0],
                                                iCeltNumCodedBytes );
             }
 
             // send separate mix to current clients
-            Channel.PrepAndSendPacket ( &Socket,
-                                        vecbyCodedData,
-                                        iCeltNumCodedBytes );
+            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                        vecvecbyCodedData[iChanCnt],
+                                                        iCeltNumCodedBytes );
         }
     }
 

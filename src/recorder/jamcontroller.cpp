@@ -114,8 +114,9 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         strRecordingDir = newRecordingDir;
 
         pthJamRecorder = new QThread();
+        pthJamRecorder->setObjectName ( "JamRecorder" );
+
         pJamRecorder->moveToThread ( pthJamRecorder );
-        pthJamRecorder->setObjectName ( "Jamulus::JamRecorder" );
 
         // QT signals
         QObject::connect ( pthJamRecorder, &QThread::finished,
@@ -151,7 +152,7 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         QObject::connect ( pJamRecorder, &CJamRecorder::RecordingSessionStarted,
             this, &CJamController::RecordingSessionStarted );
 
-        pthJamRecorder->start();
+        pthJamRecorder->start ( QThread::NormalPriority );
 
     }
     else

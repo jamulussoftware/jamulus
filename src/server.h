@@ -29,8 +29,11 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include <QFileInfo>
-#include <QtConcurrent>
 #include <algorithm>
+#ifdef USE_MULTITHREADING
+# include <QtConcurrent>
+# include <QFutureSynchronizer>
+#endif
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -302,24 +305,6 @@ protected:
 
     void WriteHTMLChannelList();
 
-/*
-    void MixEncodeTransmitData ( const CVector<CVector<int16_t> >& vecvecsData,
-                                 const CVector<double>&            vecdGains,
-                                 const CVector<double>&            vecdPannings,
-                                 const CVector<int>&               vecNumAudioChannels,
-                                 CVector<double>&                  vecdIntermProcBuf,
-                                 CVector<int16_t>&                 vecsSendData,
-                                 CVector<uint8_t>&                 vecbyCodedData,
-                                 CChannel&                         Channel,
-                                 CConvBuf<int16_t>&                DoubleFrameSizeConvBufOut,
-                                 const int                         iUseDoubleSysFraSizeConvBuf,
-                                 const int                         iNumFrameSizeConvBlocks,
-                                 OpusCustomEncoder*                pCurOpusEncoder,
-                                 const int                         iCeltNumCodedBytes,
-                                 const int                         iClientFrameSizeSamples,
-                                 const int                         iCurNumAudChan,
-                                 const int                         iNumClients );
-*/
 
 // TEST
 void MixEncodeTransmitData ( const int          iIdx,

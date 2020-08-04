@@ -979,6 +979,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
 
     // Process data ------------------------------------------------------------
+#ifdef USE_MULTITHREADING
+    QFutureSynchronizer<void> FutureSynchronizer;
+#endif
+
     // Check if at least one client is connected. If not, stop server until
     // one client is connected.
     if ( iNumClients > 0 )
@@ -1055,35 +1059,26 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 }
             }
 
-// TEST
-QFuture<void> future = QtConcurrent::run ( this, &CServer::MixEncodeTransmitData,
-                                           i,
-                                           iCurChanID,
-                                           pCurOpusEncoder,
-                                           iClientFrameSizeSamples,
-                                           iNumClients );
-
-
             // generate a separate mix for each channel, OPUS encode the
-            // audio data and transmit the network packet
-/*
-            MixEncodeTransmitData ( vecvecsData,
-                                    vecvecdGains[i],
-                                    vecvecdPannings[i],
-                                    vecNumAudioChannels,
-                                    vecvecsIntermediateProcBuf[i],
-                                    vecvecsSendData[i],
-                                    vecvecbyCodedData[i],
-                                    vecChannels[iCurChanID],
-                                    DoubleFrameSizeConvBufOut[iCurChanID],
-                                    vecUseDoubleSysFraSizeConvBuf[i],
-                                    vecNumFrameSizeConvBlocks[i],
+            // audio data and transmit the network packet (note that if
+            // multithreading is enabled, the work is distributed over
+            // all available processor cores)
+#ifdef USE_MULTITHREADING
+            // by using the future synchronizer we make sure that all
+            // threads are done when we leave the timer callback function
+            FutureSynchronizer.addFuture ( QtConcurrent::run ( this, &CServer::MixEncodeTransmitData,
+                                                               i,
+                                                               iCurChanID,
+                                                               pCurOpusEncoder,
+                                                               iClientFrameSizeSamples,
+                                                               iNumClients ) );
+#else
+            MixEncodeTransmitData ( i,
+                                    iCurChanID,
                                     pCurOpusEncoder,
-                                    iCeltNumCodedBytes,
                                     iClientFrameSizeSamples,
-                                    iCurNumAudChan,
                                     iNumClients );
-*/
+#endif
         }
     }
     else

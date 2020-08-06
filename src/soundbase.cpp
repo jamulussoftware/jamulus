@@ -41,8 +41,6 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
     lNumDevs          = 1;
     strDriverNames[0] = strSystemDriverTechniqueName;
 
-    setObjectName ( "CSoundBase::" + strSystemDriverTechniqueName );
-
     // set current device
     lCurDev = 0; // default device
 }

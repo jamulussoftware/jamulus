@@ -32,6 +32,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const int        iCtrlMIDIChannel,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
+                         const bool       bMuteStream,
                          QWidget*         parent,
                          Qt::WindowFlags  f ) :
     QDialog             ( parent, f ),
@@ -505,6 +506,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     if ( pSettings->bWindowWasShownConnect )
     {
         ShowConnectionSetupDialog();
+    }
+
+    // mute stream on startup (must be done after the signal connections)
+    if ( bMuteStream )
+    {
+        chbLocalMute->setCheckState ( Qt::Checked );
     }
 }
 

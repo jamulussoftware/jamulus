@@ -66,6 +66,7 @@ int main ( int argc, char** argv )
     bool         bDisconnectAllClientsOnQuit = false;
     bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
     bool         bShowAnalyzerConsole        = false;
+    bool         bMuteStream                 = false;
     bool         bCentServPingServerInList   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
@@ -468,6 +469,18 @@ int main ( int argc, char** argv )
         }
 
 
+        // Mute stream on startup ----------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-M",
+                               "--mutestream" ) )
+        {
+            bMuteStream = true;
+            tsConsole << "- mute stream activated" << endl;
+            continue;
+        }
+
+
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
              ( !strcmp ( argv[i], "-v" ) ) )
@@ -509,6 +522,7 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
     Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
     Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
+    Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
 
@@ -619,6 +633,7 @@ int main ( int argc, char** argv )
                                        iCtrlMIDIChannel,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
+                                       bMuteStream,
                                        nullptr,
                                        Qt::Window );
 
@@ -768,6 +783,7 @@ QString UsageArguments ( char **argv )
         "  -y, --history         enable connection history and set file name\n"
         "  -z, --startminimized  start minimizied\n"
         "\nClient only:\n"
+        "  -M, --mutestream      starts the application in muted state\n"
         "  -c, --connect         connect to given server address on startup\n"
         "  -j, --nojackconnect   disable auto Jack connections\n"
         "  --ctrlmidich          MIDI controller channel to listen\n"

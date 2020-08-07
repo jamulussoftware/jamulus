@@ -58,6 +58,8 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSi
     veciTimeOutIntervals[1] = 1;
     veciTimeOutIntervals[2] = 0;
 
+    setObjectName ( "CHighPrecisionTimer" );
+
     // connect timer timeout signal
     QObject::connect ( &Timer, &QTimer::timeout,
         this, &CHighPrecisionTimer::OnTimer );
@@ -142,6 +144,8 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize 
     // set delay
     Delay = iNsDelay;
 #endif
+
+    setObjectName ( "CHighPrecisionTimer" );
 }
 
 void CHighPrecisionTimer::Start()
@@ -167,7 +171,12 @@ void CHighPrecisionTimer::Start()
 #endif
 
         // start thread
+#ifndef SCHED_RR
         QThread::start ( QThread::TimeCriticalPriority );
+#else
+        // priorty is "ignored" on linux: actually broken
+        QThread::start();
+#endif
     }
 }
 

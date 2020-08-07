@@ -34,6 +34,7 @@
 #ifndef _WIN32
 # include <netinet/in.h>
 # include <sys/socket.h>
+# include <sched.h>
 #endif
 
 
@@ -150,7 +151,12 @@ public:
     {
         // starts the high priority socket receive thread (with using blocking
         // socket request call)
+#ifndef SCHED_RR
         NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
+#else
+        // priorty is "ignored" on linux: actually broken
+        NetworkWorkerThread.start();
+#endif
     }
 
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
@@ -169,7 +175,7 @@ protected:
     {
     public:
         CSocketThread ( CSocket* pNewSocket = nullptr, QObject* parent = nullptr ) :
-          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
+          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) { setObjectName ( "CSocketThread" ); }
 
         void Stop()
         {

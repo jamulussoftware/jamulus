@@ -7,3 +7,6 @@
 [submodule "tools/jamulus-web"]
 	path = tools/jamulus-web
 	url = https://github.com/softins/jamulus-web
+[submodule "tools/jamulus-wireshark"]
+	path = tools/jamulus-wireshark
+	url = https://github.com/softins/jamulus-wireshark

@@ -575,7 +575,8 @@ void CConnectDlg::UpdateListFilter()
             // special case: filter for occupied servers
             // DEFINITION: if "#" is set at the beginning of the filter text, we show
             //             occupied servers (#397)
-            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( pCurListViewItem->childCount() > 0 ) )
+            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) &&
+                 ( pCurListViewItem->childCount() > 0 ) )
             {
                 bFilterFound = true;
             }

@@ -143,6 +143,9 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
         lvwServers->sortItems ( 0, Qt::AscendingOrder );
     }
 
+    // set a placeholder text to explain how to filter occupied servers (#397)
+    edtFilter->setPlaceholderText ( tr ( "Type # for occupied servers" ) );
+
 #ifdef ANDROID
     // for the android version maximize the window
     setWindowState ( Qt::WindowMaximized );

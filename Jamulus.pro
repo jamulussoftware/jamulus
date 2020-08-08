@@ -363,7 +363,6 @@ HEADERS += src/buffer.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/historygraph.h \
     src/signalhandler.h
 
 HEADERS_GUI = src/audiomixerboard.h \
@@ -462,8 +461,7 @@ SOURCES += src/buffer.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
-    src/recorder/cwavestream.cpp \
-    src/historygraph.cpp
+    src/recorder/cwavestream.cpp
 
 SOURCES_GUI = src/audiomixerboard.cpp \
     src/chatdlg.cpp \

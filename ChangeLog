@@ -20,10 +20,14 @@
 
 - option to set "Mute Myself" on with a command line argument (#495)
 
+- replacing internal history graph functionality by external scripts/tools (#501)
+
 - bug fix: added more mutex in the server (should fix #480)
 
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 
+
+TODO make clear that filter # filters musicians
 
 
 

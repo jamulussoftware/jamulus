@@ -92,9 +92,6 @@ LED bar:      lbr
 // file name for logging file
 #define DEFAULT_LOG_FILE_NAME            "Jamulussrvlog.txt"
 
-// default oldest item to draw in history graph (days ago)
-#define DEFAULT_DAYS_HISTORY             60
-
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size.
 // Note that the UpdateAutoSetting() function assumes a value of 128.

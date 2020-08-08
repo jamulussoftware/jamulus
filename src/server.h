@@ -172,11 +172,9 @@ class CServer :
 
 public:
     CServer ( const int          iNewMaxNumChan,
-              const int          iMaxDaysHistory,
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strHistoryFileName,
               const QString&     strServerNameForHTMLStatusFile,
               const QString&     strCentralServer,
               const QString&     strServerInfo,

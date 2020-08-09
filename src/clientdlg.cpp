@@ -226,6 +226,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
 
+    // prepare Mute Myself info label (invisible by default)
+    lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
+    lblGlobalInfoLabel->hide();
+
 
     // Connect on startup ------------------------------------------------------
     if ( !strConnOnStartupAddress.isEmpty() )
@@ -934,6 +938,16 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
+
+    // show/hide info label
+    if ( value == Qt::Checked )
+    {
+        lblGlobalInfoLabel->show();
+    }
+    else
+    {
+        lblGlobalInfoLabel->hide();
+    }
 }
 
 void CClientDlg::OnTimerSigMet()

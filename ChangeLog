@@ -18,7 +18,9 @@
 - support multithreading in the server to better support multi-core CPUs,
   use qmake "CONFIG+=multithreading" to enable the new multithreading (#339)
 
-- option to set "Mute Myself" on with a command line argument (#495)
+- option to set Mute Myself on with a command line argument (#495)
+
+- added a red message to indicate that Mute Myself is activated (#476)
 
 - replacing internal history graph functionality by external scripts/tools (#501)
 

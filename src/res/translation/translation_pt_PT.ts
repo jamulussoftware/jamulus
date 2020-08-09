@@ -802,52 +802,52 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="199"/>
-        <location filename="../../clientdlg.cpp" line="1075"/>
+        <location filename="../../clientdlg.cpp" line="1089"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Ligar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="251"/>
+        <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;File</source>
         <translation>&amp;Ficheiro</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="266"/>
+        <location filename="../../clientdlg.cpp" line="270"/>
         <source>&amp;View</source>
         <translation>&amp;Ver</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="268"/>
+        <location filename="../../clientdlg.cpp" line="272"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Ligar a Servidor...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="271"/>
+        <location filename="../../clientdlg.cpp" line="275"/>
         <source>My &amp;Profile...</source>
         <translation>Meu &amp;Perfil...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="274"/>
+        <location filename="../../clientdlg.cpp" line="278"/>
         <source>C&amp;hat...</source>
         <translation>&amp;Mensagens...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="277"/>
+        <location filename="../../clientdlg.cpp" line="281"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Definições...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="283"/>
+        <location filename="../../clientdlg.cpp" line="287"/>
         <source>&amp;Analyzer Console...</source>
         <translation>Consola de &amp;Análise...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="261"/>
+        <location filename="../../clientdlg.cpp" line="265"/>
         <source>E&amp;xit</source>
         <translation>&amp;Sair</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="289"/>
+        <location filename="../../clientdlg.cpp" line="293"/>
         <source>&amp;Edit</source>
         <translation>&amp;Editar</translation>
     </message>
@@ -860,18 +860,18 @@
         <translation type="vanished">Nenhum</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="565"/>
+        <location filename="../../clientdlg.cpp" line="569"/>
         <source>Center</source>
         <translation>Centro</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="572"/>
+        <location filename="../../clientdlg.cpp" line="576"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="108"/>
-        <location filename="../../clientdlg.cpp" line="578"/>
+        <location filename="../../clientdlg.cpp" line="582"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -946,53 +946,53 @@
         <translation>O CPU do cliente ou servidor está a 100%.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="253"/>
+        <location filename="../../clientdlg.cpp" line="257"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>A&amp;brir configuração da mistura...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="256"/>
+        <location filename="../../clientdlg.cpp" line="260"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>Salvar &amp;configuração da mistura...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="291"/>
+        <location filename="../../clientdlg.cpp" line="295"/>
         <source>Sort Channel Users by &amp;Name</source>
         <translation>Ordenar Utilizadores por &amp;Nome</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="294"/>
+        <location filename="../../clientdlg.cpp" line="298"/>
         <source>Sort Channel Users by &amp;Instrument</source>
         <translation>Ordenar canais por &amp;Instrumento</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="297"/>
+        <location filename="../../clientdlg.cpp" line="301"/>
         <source>Sort Channel Users by &amp;Group</source>
         <translation>Ordenar canais por &amp;Grupo</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="664"/>
+        <location filename="../../clientdlg.cpp" line="668"/>
         <source>Central Server</source>
         <translation>Servidor Central</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="699"/>
-        <location filename="../../clientdlg.cpp" line="714"/>
+        <location filename="../../clientdlg.cpp" line="703"/>
+        <location filename="../../clientdlg.cpp" line="718"/>
         <source>Select Channel Setup File</source>
         <translation>Selecione o ficheiro de configuração da mistura</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="821"/>
+        <location filename="../../clientdlg.cpp" line="825"/>
         <source>user</source>
         <translation>utilizador</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="826"/>
+        <location filename="../../clientdlg.cpp" line="830"/>
         <source>users</source>
         <translation>utilizadores</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1047"/>
+        <location filename="../../clientdlg.cpp" line="1061"/>
         <source>D&amp;isconnect</source>
         <translation>Desl&amp;igar</translation>
     </message>
@@ -1068,6 +1068,11 @@
         <location filename="../../clientdlgbase.ui" line="533"/>
         <source>Right</source>
         <translation>Direito</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlgbase.ui" line="548"/>
+        <source>MUTED (You are not sending any audio to the server)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

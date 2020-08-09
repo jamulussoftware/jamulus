@@ -566,7 +566,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="108"/>
-        <location filename="../../clientdlg.cpp" line="578"/>
+        <location filename="../../clientdlg.cpp" line="582"/>
         <source>L</source>
         <translation>V</translation>
     </message>
@@ -707,77 +707,77 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="199"/>
-        <location filename="../../clientdlg.cpp" line="1075"/>
+        <location filename="../../clientdlg.cpp" line="1089"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Anslut</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="251"/>
+        <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;File</source>
         <translation>&amp;Fil</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="266"/>
+        <location filename="../../clientdlg.cpp" line="270"/>
         <source>&amp;View</source>
         <translation>&amp;Vy</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="268"/>
+        <location filename="../../clientdlg.cpp" line="272"/>
         <source>&amp;Connection Setup...</source>
         <translation>Anslutnings&amp;inställningar...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="271"/>
+        <location filename="../../clientdlg.cpp" line="275"/>
         <source>My &amp;Profile...</source>
         <translation>Min &amp;profil...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="274"/>
+        <location filename="../../clientdlg.cpp" line="278"/>
         <source>C&amp;hat...</source>
         <translation>&amp;Chatt...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="277"/>
+        <location filename="../../clientdlg.cpp" line="281"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Inställningar...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="283"/>
+        <location filename="../../clientdlg.cpp" line="287"/>
         <source>&amp;Analyzer Console...</source>
         <translation>&amp;Analyskonsol...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="261"/>
+        <location filename="../../clientdlg.cpp" line="265"/>
         <source>E&amp;xit</source>
         <translation>&amp;Avsluta</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="253"/>
+        <location filename="../../clientdlg.cpp" line="257"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>&amp;Ladda in mixerkanalinställningarna...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="256"/>
+        <location filename="../../clientdlg.cpp" line="260"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>&amp;Spara mixerkanalinställningarna...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="289"/>
+        <location filename="../../clientdlg.cpp" line="293"/>
         <source>&amp;Edit</source>
         <translation>&amp;Redigera</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="291"/>
+        <location filename="../../clientdlg.cpp" line="295"/>
         <source>Sort Channel Users by &amp;Name</source>
         <translation>Sortera kanalanvändare efter &amp;Namn</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="294"/>
+        <location filename="../../clientdlg.cpp" line="298"/>
         <source>Sort Channel Users by &amp;Instrument</source>
         <translation>Sortera kanalanvändare efter &amp;Instrument</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="297"/>
+        <location filename="../../clientdlg.cpp" line="301"/>
         <source>Sort Channel Users by &amp;Group</source>
         <translation>Sortera kanalanvändare efter &amp;Grupp</translation>
     </message>
@@ -786,38 +786,38 @@
         <translation type="obsolete">Ingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="565"/>
+        <location filename="../../clientdlg.cpp" line="569"/>
         <source>Center</source>
         <translation>Mitten</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="572"/>
+        <location filename="../../clientdlg.cpp" line="576"/>
         <source>R</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="664"/>
+        <location filename="../../clientdlg.cpp" line="668"/>
         <source>Central Server</source>
         <translation>Central server</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="699"/>
-        <location filename="../../clientdlg.cpp" line="714"/>
+        <location filename="../../clientdlg.cpp" line="703"/>
+        <location filename="../../clientdlg.cpp" line="718"/>
         <source>Select Channel Setup File</source>
         <translation>Välj kanalinställningsfil</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="821"/>
+        <location filename="../../clientdlg.cpp" line="825"/>
         <source>user</source>
         <translation>användare</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="826"/>
+        <location filename="../../clientdlg.cpp" line="830"/>
         <source>users</source>
         <translation>användare</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1047"/>
+        <location filename="../../clientdlg.cpp" line="1061"/>
         <source>D&amp;isconnect</source>
         <translation>Koppla &amp;ner</translation>
     </message>
@@ -893,6 +893,11 @@
         <location filename="../../clientdlgbase.ui" line="533"/>
         <source>Right</source>
         <translation>Höger</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlgbase.ui" line="548"/>
+        <source>MUTED (You are not sending any audio to the server)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

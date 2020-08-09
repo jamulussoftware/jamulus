@@ -861,7 +861,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bestand</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="270"/>
@@ -901,12 +901,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Laad Mengkanaalinstellingen...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="260"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixerkanaalinstellingen &amp;Opslaan...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="293"/>
@@ -951,7 +951,7 @@
         <location filename="../../clientdlg.cpp" line="703"/>
         <location filename="../../clientdlg.cpp" line="718"/>
         <source>Select Channel Setup File</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer bestand met Kanaalinstellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="825"/>
@@ -1044,7 +1044,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="548"/>
         <source>MUTED (You are not sending any audio to the server)</source>
-        <translation type="unfinished"></translation>
+        <translation>GEDEMPT (Je stuurt geen audio naar de server)</translation>
     </message>
 </context>
 <context>
@@ -1945,7 +1945,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="147"/>
         <source>Type # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ # voor bezette servers</translation>
     </message>
 </context>
 <context>
@@ -2476,7 +2476,7 @@
     <message>
         <location filename="../../util.cpp" line="1129"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished"></translation>
+        <translation>Leadzanger</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="285"/>

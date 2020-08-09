@@ -87,6 +87,8 @@ protected:
         QLabel*     pLEDLabel;
     };
 
+    virtual void mousePressEvent ( QMouseEvent* ) override { ClipReset(); }
+
     void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType,
                                          const bool            bIsClip );
 

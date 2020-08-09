@@ -143,6 +143,9 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
         lvwServers->sortItems ( 0, Qt::AscendingOrder );
     }
 
+    // set a placeholder text to explain how to filter occupied servers (#397)
+    edtFilter->setPlaceholderText ( tr ( "Type # for occupied servers" ) );
+
 #ifdef ANDROID
     // for the android version maximize the window
     setWindowState ( Qt::WindowMaximized );
@@ -572,7 +575,8 @@ void CConnectDlg::UpdateListFilter()
             // special case: filter for occupied servers
             // DEFINITION: if "#" is set at the beginning of the filter text, we show
             //             occupied servers (#397)
-            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( pCurListViewItem->childCount() > 0 ) )
+            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) &&
+                 ( pCurListViewItem->childCount() > 0 ) )
             {
                 bFilterFound = true;
             }

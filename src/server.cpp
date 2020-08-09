@@ -220,11 +220,9 @@ void CHighPrecisionTimer::run()
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
-                   const int          iMaxDaysHistory,
                    const QString&     strLoggingFileName,
                    const quint16      iPortNumber,
                    const QString&     strHTMLStatusFileName,
-                   const QString&     strHistoryFileName,
                    const QString&     strServerNameForHTMLStatusFile,
                    const QString&     strCentralServer,
                    const QString&     strServerInfo,
@@ -237,7 +235,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     iMaxNumChannels             ( iNewMaxNumChan ),
     Socket                      ( this, iPortNumber ),
-    Logging                     ( iMaxDaysHistory ),
+    Logging                     ( ),
     iFrameCount                 ( 0 ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
@@ -368,23 +366,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // allocate worst case memory for the channel levels
     vecChannelLevels.Init ( iMaxNumChannels );
 
-    // enable history graph (if requested)
-    if ( !strHistoryFileName.isEmpty() )
-    {
-        Logging.EnableHistory ( strHistoryFileName );
-    }
-
     // enable logging (if requested)
     if ( !strLoggingFileName.isEmpty() )
     {
-        // in case the history is enabled and a logging file name is
-        // given, parse the logging file for old entries which are then
-        // added in the history on software startup
-        if ( !strHistoryFileName.isEmpty() )
-        {
-            Logging.ParseLogFile ( strLoggingFileName );
-        }
-
         Logging.Start ( strLoggingFileName );
     }
 

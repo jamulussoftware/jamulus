@@ -15,8 +15,8 @@
 
 - support MIDI control faders in headless build (#483)
 
-- support multi-threading in the server to better support multi-core CPUs,
-  use qmake "CONFIG+=multithreading" to enable the new multi-threading (#339)
+- support multithreading in the server to better support multi-core CPUs,
+  use qmake "CONFIG+=multithreading" to enable the new multithreading (#339)
 
 - option to set "Mute Myself" on with a command line argument (#495)
 

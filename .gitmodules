@@ -10,3 +10,9 @@
 [submodule "tools/jamulus-wireshark"]
 	path = tools/jamulus-wireshark
 	url = https://github.com/softins/jamulus-wireshark
+[submodule "tools/jamulus-historytool"]
+	path = tools/jamulus-historytool
+	url = https://github.com/pljones/jamulus-historytool
+[submodule "tools/jamulus-jamexporter"]
+	path = tools/jamulus-jamexporter
+	url = https://github.com/pljones/jamulus-jamexporter

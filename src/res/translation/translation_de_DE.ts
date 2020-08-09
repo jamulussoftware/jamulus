@@ -1972,7 +1972,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="147"/>
         <source>Type # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation># eingeben für belegte Server</translation>
     </message>
 </context>
 <context>

@@ -15,6 +15,13 @@
 
 - support MIDI control faders in headless build (#483)
 
+- support multithreading in the server to better support multi-core CPUs,
+  use qmake "CONFIG+=multithreading" to enable the new multithreading (#339)
+
+- option to set "Mute Myself" on with a command line argument (#495)
+
+- replacing internal history graph functionality by external scripts/tools (#501)
+
 - bug fix: added more mutex in the server (should fix #480)
 
 - bug fix: --showallservers ping column sort is alphabetic (#201)

@@ -30,6 +30,10 @@
 #include <QHostAddress>
 #include <QFileInfo>
 #include <algorithm>
+#ifdef USE_MULTITHREADING
+# include <QtConcurrent>
+# include <QFutureSynchronizer>
+#endif
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -168,11 +172,9 @@ class CServer :
 
 public:
     CServer ( const int          iNewMaxNumChan,
-              const int          iMaxDaysHistory,
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strHistoryFileName,
               const QString&     strServerNameForHTMLStatusFile,
               const QString&     strCentralServer,
               const QString&     strServerInfo,
@@ -301,14 +303,9 @@ protected:
 
     void WriteHTMLChannelList();
 
-    void ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
-                       const CVector<double>&            vecdGains,
-                       const CVector<double>&            vecdPannings,
-                       const CVector<int>&               vecNumAudioChannels,
-                       CVector<double>&                  vecdIntermProcBuf,
-                       CVector<int16_t>&                 vecsOutData,
-                       const int                         iCurNumAudChan,
-                       const int                         iNumClients );
+    void MixEncodeTransmitData ( const int iChanCnt,
+                                 const int iCurChanID,
+                                 const int iNumClients );
 
     virtual void customEvent ( QEvent* pEvent );
 

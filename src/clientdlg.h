@@ -79,6 +79,7 @@ public:
                  const int        iCtrlMIDIChannel,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
+                 const bool       bMuteStream,
                  QWidget*         parent = nullptr,
                  Qt::WindowFlags  f = nullptr );
 

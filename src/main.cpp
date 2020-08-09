@@ -66,12 +66,12 @@ int main ( int argc, char** argv )
     bool         bDisconnectAllClientsOnQuit = false;
     bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
     bool         bShowAnalyzerConsole        = false;
+    bool         bMuteStream                 = false;
     bool         bCentServPingServerInList   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
-    int          iMaxDaysHistory             = DEFAULT_DAYS_HISTORY;
     int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
@@ -80,7 +80,6 @@ int main ( int argc, char** argv )
     QString      strHTMLStatusFileName       = "";
     QString      strServerName               = "";
     QString      strLoggingFileName          = "";
-    QString      strHistoryFileName          = "";
     QString      strRecordingDirName         = "";
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
@@ -156,26 +155,6 @@ int main ( int argc, char** argv )
 
             tsConsole << "- maximum number of channels: "
                 << iNumServerChannels << endl;
-
-            continue;
-        }
-
-
-        // Maximum days in history display -------------------------------------
-        if ( GetNumericArgument ( tsConsole,
-                                  argc,
-                                  argv,
-                                  i,
-                                  "-D",
-                                  "--histdays",
-                                  1,
-                                  366,
-                                  rDbleArgument ) )
-        {
-            iMaxDaysHistory = static_cast<int> ( rDbleArgument );
-
-            tsConsole << "- maximum days in history display: "
-                << iMaxDaysHistory << endl;
 
             continue;
         }
@@ -363,21 +342,6 @@ int main ( int argc, char** argv )
         }
 
 
-        // Server history file name --------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-y",
-                                 "--history",
-                                 strArgument ) )
-        {
-            strHistoryFileName = strArgument;
-            tsConsole << "- history file name: " << strHistoryFileName << endl;
-            continue;
-        }
-
-
         // Recording directory -------------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
@@ -468,6 +432,18 @@ int main ( int argc, char** argv )
         }
 
 
+        // Mute stream on startup ----------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-M",
+                               "--mutestream" ) )
+        {
+            bMuteStream = true;
+            tsConsole << "- mute stream activated" << endl;
+            continue;
+        }
+
+
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
              ( !strcmp ( argv[i], "-v" ) ) )
@@ -509,6 +485,7 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
     Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
     Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
+    Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
 
@@ -525,12 +502,6 @@ int main ( int argc, char** argv )
     if ( bIsClient && !bCustomPortNumberGiven )
     {
         iPortNumber += 10; // increment by 10
-    }
-
-    // display a warning if in server no GUI mode and a history file is requested
-    if ( !bIsClient && !bUseGUI && !strHistoryFileName.isEmpty() )
-    {
-        tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
 
 
@@ -619,6 +590,7 @@ int main ( int argc, char** argv )
                                        iCtrlMIDIChannel,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
+                                       bMuteStream,
                                        nullptr,
                                        Qt::Window );
 
@@ -640,11 +612,9 @@ int main ( int argc, char** argv )
             // Server:
             // actual server object
             CServer Server ( iNumServerChannels,
-                             iMaxDaysHistory,
                              strLoggingFileName,
                              iPortNumber,
                              strHTMLStatusFileName,
-                             strHistoryFileName,
                              strServerName,
                              strCentralServer,
                              strServerInfo,
@@ -745,7 +715,6 @@ QString UsageArguments ( char **argv )
         "\nServer only:\n"
         "  -a, --servername      server name, required for HTML status\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
-        "  -D, --histdays        number of days of history to display\n"
         "  -e, --centralserver   address of the central server\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
@@ -765,9 +734,9 @@ QString UsageArguments ( char **argv )
         "  -s, --server          start server\n"
         "  -u, --numchannels     maximum number of channels\n"
         "  -w, --welcomemessage  welcome message on connect\n"
-        "  -y, --history         enable connection history and set file name\n"
         "  -z, --startminimized  start minimizied\n"
         "\nClient only:\n"
+        "  -M, --mutestream      starts the application in muted state\n"
         "  -c, --connect         connect to given server address on startup\n"
         "  -j, --nojackconnect   disable auto Jack connections\n"
         "  --ctrlmidich          MIDI controller channel to listen\n"

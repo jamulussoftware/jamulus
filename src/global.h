@@ -92,9 +92,6 @@ LED bar:      lbr
 // file name for logging file
 #define DEFAULT_LOG_FILE_NAME            "Jamulussrvlog.txt"
 
-// default oldest item to draw in history graph (days ago)
-#define DEFAULT_DAYS_HISTORY             60
-
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size.
 // Note that the UpdateAutoSetting() function assumes a value of 128.
@@ -180,7 +177,7 @@ LED bar:      lbr
 #define YELLOW_BOUND_LED_BAR             5
 
 // maximum number of connected clients at the server (must not be larger than 256)
-#define MAX_NUM_CHANNELS                 50 // max number channels for server
+#define MAX_NUM_CHANNELS                 100 // max number channels for server
 
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS

@@ -6,6 +6,13 @@ contains(CONFIG, "noupcasename") {
     TARGET = jamulus
 }
 
+# support multi-threading with OMP if requested
+contains(CONFIG, "multithreading") {
+    message(Multithreading in the server is enabled.)
+    DEFINES += USE_MULTITHREADING
+    QT += concurrent
+}
+
 CONFIG += qt \
     thread \
     release
@@ -356,7 +363,6 @@ HEADERS += src/buffer.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/historygraph.h \
     src/signalhandler.h
 
 HEADERS_GUI = src/audiomixerboard.h \
@@ -455,8 +461,7 @@ SOURCES += src/buffer.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
-    src/recorder/cwavestream.cpp \
-    src/historygraph.cpp
+    src/recorder/cwavestream.cpp
 
 SOURCES_GUI = src/audiomixerboard.cpp \
     src/chatdlg.cpp \

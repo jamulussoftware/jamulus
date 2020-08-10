@@ -897,7 +897,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="548"/>
         <source>MUTED (You are not sending any audio to the server)</source>
-        <translation type="unfinished"></translation>
+        <translation>TYSTAD (Du skickar inget ljud till servern)</translation>
     </message>
 </context>
 <context>
@@ -905,7 +905,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="42"/>
         <source>Jitter Buffer Size</source>
-        <translation>Jitterbufferstorlek</translation>
+        <translation>Jitterbuffertstorlek</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="42"/>
@@ -965,7 +965,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="89"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation> under Microsoft Windows. Under MacOS/Linux är inget ljudkortsval möjligt. Om den valda ASIO-drivrutinen inte är giltig visas ett felmeddelande och den tidigare giltiga drivrutinen väljs.</translation>
+        <translation> under Windows. Under MacOS/Linux är inget ljudkortsval möjligt. Om den valda ASIO-drivrutinen inte är giltig visas ett felmeddelande och den tidigare giltiga drivrutinen väljs.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="91"/>
@@ -1100,7 +1100,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="170"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation>Om buffertfördröjningsinställningarna är inaktiverade är det ljuddrivrutinen som begränsar och det är inte möjligt att ändra denna inställning från applikationen. I Microsoft Windows trycker du på ASIO-inställningsknappen för att öppna drivrutinsinställningspanelen. I Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
+        <translation>Om buffertfördröjningsinställningarna är inaktiverade är det ljuddrivrutinen som begränsar och det är inte möjligt att ändra denna inställning från applikationen. I Windows trycker du på ASIO-inställningsknappen för att öppna drivrutinsinställningspanelen. I Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
@@ -1646,7 +1646,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="147"/>
         <source>Type # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv # för upptagna servrar</translation>
     </message>
 </context>
 <context>
@@ -2170,7 +2170,7 @@
     <message>
         <location filename="../../util.cpp" line="1129"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished"></translation>
+        <translation>Sång (Solist)</translation>
     </message>
 </context>
 <context>

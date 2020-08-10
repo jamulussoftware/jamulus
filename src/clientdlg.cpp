@@ -991,8 +991,7 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
-<<<<<<< HEAD
-<<<<<<< HEAD
+    SetMyWindowTitle ( -1 );
 
     // show/hide info label
     if ( value == Qt::Checked )
@@ -1003,12 +1002,6 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
     {
         lblGlobalInfoLabel->hide();
     }
-=======
-    SetMyWindowTitle ( iCurrConnClients );
->>>>>>> Toggle window title on change of mute state
-=======
-    SetMyWindowTitle ( -1 );
->>>>>>> get rid of global variable
 }
 
 void CClientDlg::OnTimerSigMet()

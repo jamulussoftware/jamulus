@@ -16,3 +16,6 @@
 [submodule "tools/jamulus-jamexporter"]
 	path = tools/jamulus-jamexporter
 	url = https://github.com/pljones/jamulus-jamexporter
+[submodule "tools/jamulus-docker"]
+	path = tools/jamulus-docker
+	url = https://github.com/grundic/jamulus-docker

@@ -24,15 +24,6 @@
 
 #include "clientdlg.h"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-// variable to remember connected clients
-int iCurrConnClients = 0;
-
->>>>>>> Toggle window title on change of mute state
-=======
->>>>>>> get rid of global variable
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
@@ -1003,6 +994,9 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
     pClient->SetMuteOutStream ( value == Qt::Checked );
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fix strange characters in file
     SetMyWindowTitle ( -1 );
 
     // show/hide info label
@@ -1014,12 +1008,16 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
     {
         lblGlobalInfoLabel->hide();
     }
+<<<<<<< HEAD
 =======
     SetMyWindowTitle ( iCurrConnClients );
 >>>>>>> Toggle window title on change of mute state
 =======
     SetMyWindowTitle ( -1 );
 >>>>>>> get rid of global variable
+=======
+
+>>>>>>> fix strange characters in file
 }
 
 void CClientDlg::OnTimerSigMet()

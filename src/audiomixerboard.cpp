@@ -432,6 +432,7 @@ void CChannelFader::SetPanValue ( const int iPan )
         // we set the new fader level in the GUI (slider control) which then
         // emits to signal to tell the server about the change (implicitly)
         pPan->setValue ( iPan );
+        pPan->setAccessibleName( QString::number( iPan ) );
     }
 }
 
@@ -488,6 +489,12 @@ void CChannelFader::SendFaderLevelToServer ( const double dLevel,
 void CChannelFader::SendPanValueToServer ( const int iPan )
 {
     emit panValueChanged ( static_cast<double> ( iPan ) / AUD_MIX_PAN_MAX );
+}
+
+void CChannelFader::OnPanValueChanged ( int value )
+{
+    pPan->setAccessibleName( QString::number(value) );
+    SendPanValueToServer ( value );
 }
 
 void CChannelFader::OnMuteStateChanged ( int value )

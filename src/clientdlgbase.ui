@@ -545,7 +545,7 @@
         <item>
          <widget class="QLabel" name="lblGlobalInfoLabel">
           <property name="text">
-           <string>MUTED (You are not sending any audio to the server)</string>
+           <string>MUTED (Other people won't hear you)</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

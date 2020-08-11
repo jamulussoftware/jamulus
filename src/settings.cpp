@@ -867,6 +867,12 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     // window position of the main window
     vecWindowPosMain = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
+
+    // base recording directory (command line overwrites setting file)
+    if ( pServer->GetRecordingDir().isEmpty() )
+    {
+        pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recording_dir" ) ) );
+    }
 }
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
@@ -914,4 +920,8 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "server", "winposmain_base64",
         ToBase64 ( vecWindowPosMain ) );
+
+    // base recording directory
+    PutIniSetting ( IniXMLDocument, "server", "recording_dir",
+        ToBase64 ( pServer->GetRecordingDir() ) );
 }

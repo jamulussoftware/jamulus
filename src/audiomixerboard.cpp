@@ -1018,7 +1018,7 @@ void CAudioMixerBoard::UpdateTitle()
     }
 
     setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
-    setAccessibleName(title());
+    setAccessibleName ( title() );
 }
 
 void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState )

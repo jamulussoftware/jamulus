@@ -871,7 +871,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     // base recording directory (command line overwrites setting file)
     if ( pServer->GetRecordingDir().isEmpty() )
     {
-        pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recording_dir" ) ) );
+        pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
     }
 }
 
@@ -922,6 +922,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
         ToBase64 ( vecWindowPosMain ) );
 
     // base recording directory
-    PutIniSetting ( IniXMLDocument, "server", "recording_dir",
+    PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64",
         ToBase64 ( pServer->GetRecordingDir() ) );
 }

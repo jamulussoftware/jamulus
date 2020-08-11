@@ -254,6 +254,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
 
+    // track number of clients to detect joins/leaves for audio alerts
+    iClients = 0;
+
     // prepare Mute Myself info label (invisible by default)
     lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
     lblGlobalInfoLabel->hide();
@@ -822,6 +825,12 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
+    if ( pSettings->bEnableAudioAlerts )
+    {
+        QSoundEffect* sf = new QSoundEffect();
+        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_message.wav" ) );
+        sf->play();
+    }
     ChatDlg.AddChatText ( strChatText );
 
     // Open chat dialog. If a server welcome message is received, we force
@@ -876,6 +885,17 @@ void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo 
 
 void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
+    if ( pSettings->bEnableAudioAlerts && iNewNumClients > iClients )
+    {
+        QSoundEffect* sf = new QSoundEffect();
+        sf->setSource ( QUrl::fromLocalFile ( ":sounds/res/sounds/new_user.wav" ) );
+        sf->play();
+    }
+
+    // iNewNumClients will be zero on the first trigger of this signal handler when connecting to a new server.
+    // Subsequent triggers will thus sound the alert (if enabled).
+    iClients = iNewNumClients;
+
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }

@@ -367,4 +367,8 @@
         <file>res/flags/zm.png</file>
         <file>res/flags/zw.png</file>
     </qresource>
+    <qresource prefix="/sounds">
+        <file>res/sounds/new_user.wav</file>
+        <file>res/sounds/new_message.wav</file>
+    </qresource>
 </RCC>

@@ -19,7 +19,14 @@ setup() {
     else
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations
+        local qtmultimedia=()
+        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+            # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+            # as an archive anymore.
+            qtmultimedia=("--modules")
+        fi
+        qtmultimedia+=("qtmultimedia")
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations "${qtmultimedia[@]}"
     fi
 }
 

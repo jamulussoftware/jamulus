@@ -39,6 +39,7 @@ contains(CONFIG, "headless") {
     QT -= gui
 } else {
     QT += widgets
+    QT += multimedia
 }
 
 LRELEASE_DIR = src/translation

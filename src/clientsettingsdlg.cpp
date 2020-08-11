@@ -390,6 +390,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setWhatsThis ( strDetectFeedback );
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
+    // audio alerts
+    QString strAudioAlerts = "<b>" + tr ( "Audio Alerts" ) + ":</b> " +
+                             tr ( "Enable audio alert when receiving a chat message and when a new client joins the session. "
+                                  "A second sound device may be required to hear the alerts." );
+    lblAudioAlerts->setWhatsThis ( strAudioAlerts );
+    chbAudioAlerts->setWhatsThis ( strAudioAlerts );
+    chbAudioAlerts->setAccessibleName ( tr ( "Audio Alerts check box" ) );
+
     // init driver button
 #if defined( _WIN32 ) && !defined( WITH_JACK )
     butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
@@ -469,6 +477,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // init number of mixer rows
     spnMixerRows->setValue ( pSettings->iNumMixerPanelRows );
+
+    // init audio alerts
+    chbAudioAlerts->setCheckState ( pSettings->bEnableAudioAlerts ? Qt::Checked : Qt::Unchecked );
 
     // update feedback detection
     chbDetectFeedback->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
@@ -632,6 +643,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( chbEnableOPUS64, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
 
     QObject::connect ( chbDetectFeedback, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnFeedbackDetectionChanged );
+
+    QObject::connect ( chbAudioAlerts, &QCheckBox::stateChanged, this, &CClientSettingsDlg::OnAudioAlertsChanged );
 
     // line edits
     QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
@@ -983,6 +996,8 @@ void CClientSettingsDlg::OnMeterStyleActivated ( int iMeterStyleIdx )
     emit MeterStyleChanged();
     UpdateDisplay();
 }
+
+void CClientSettingsDlg::OnAudioAlertsChanged ( int value ) { pSettings->bEnableAudioAlerts = value == Qt::Checked; }
 
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {

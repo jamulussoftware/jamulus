@@ -130,6 +130,7 @@ public:
         vstrDirectoryAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         eDirectoryType ( AT_DEFAULT ),
         bEnableFeedbackDetection ( true ),
+        bEnableAudioAlerts ( false ),
         vecWindowPosSettings(), // empty array
         vecWindowPosChat(),     // empty array
         vecWindowPosConnect(),  // empty array
@@ -163,6 +164,7 @@ public:
     EDirectoryType   eDirectoryType;
     int              iCustomDirectoryIndex; // index of selected custom directory server
     bool             bEnableFeedbackDetection;
+    bool             bEnableAudioAlerts;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;

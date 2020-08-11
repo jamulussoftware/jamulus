@@ -69,8 +69,20 @@ setup_qt() {
     else
         echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        local qtmultimedia=()
+        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+            # From Qt6 onwards, qtmultimedia is a module and cannot be installed
+            # as an archive anymore.
+            qtmultimedia=("--modules")
+        fi
+        qtmultimedia+=("qtmultimedia")
+
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" \
-            --archives qtbase qttools qttranslations qtandroidextras
+            --archives qtbase qttools qttranslations qtandroidextras \
+            "${qtmultimedia[@]}"
+        # Delete libraries, which we don't use, but which bloat the resulting package and might introduce unwanted dependencies.
+        find "${QT_BASEDIR}" -name 'libQt5*Quick*.so' -delete
+        rm -r "${QT_BASEDIR}/${QT_VERSION}/android/qml/"
     fi
 }
 

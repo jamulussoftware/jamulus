@@ -242,6 +242,13 @@
                     </property>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QLabel" name="lblAudioAlerts">
+                    <property name="text">
+                     <string>Audio Alerts</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </item>
                 <item>
@@ -278,6 +285,13 @@
                     </property>
                     <property name="maximum">
                      <number>8</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="chbAudioAlerts">
+                    <property name="text">
+                     <string>Enable</string>
                     </property>
                    </widget>
                   </item>
@@ -1283,6 +1297,7 @@
   <tabstop>cbxMeterStyle</tabstop>
   <tabstop>cbxLanguage</tabstop>
   <tabstop>spnMixerRows</tabstop>
+  <tabstop>chbAudioAlerts</tabstop>
   <tabstop>cbxSoundcard</tabstop>
   <tabstop>butDriverSetup</tabstop>
   <tabstop>cbxLInChan</tabstop>

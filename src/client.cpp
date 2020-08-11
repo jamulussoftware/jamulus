@@ -987,10 +987,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // Transmit signal ---------------------------------------------------------
-    // update stereo signal level meter
+    // update stereo signal level meter (not needed in headless mode)
+#ifndef HEADLESS
     SignalLevelMeter.Update ( vecsStereoSndCrd,
                               iMonoBlockSizeSam,
                               true );
+#endif
 
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )

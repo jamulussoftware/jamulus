@@ -1076,7 +1076,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="548"/>
         <source>MUTED (You are not sending any audio to the server)</source>
-        <translation type="unfinished"></translation>
+        <translation>MUTEADO (No estás enviando audio al servidor)</translation>
     </message>
 </context>
 <context>
@@ -2001,7 +2001,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="147"/>
         <source>Type # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Escribe # para servidores ocupados</translation>
     </message>
 </context>
 <context>

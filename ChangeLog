@@ -26,7 +26,7 @@
 
 - replacing internal history graph functionality by external scripts/tools (#501)
 
-- accessibility improvements, coded by chigkim (#499, #510)
+- accessibility improvements, coded by chigkim (#499, #510, #514)
 
 - bug fix: added more mutex in the server (should fix #480)
 

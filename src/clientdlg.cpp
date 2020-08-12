@@ -90,7 +90,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         "If you are connected, pressing this button will end the session." ) );
 
     butConnect->setAccessibleName (
-        tr ( "Connect and disconnect toggle" ) );
+        tr ( "Connect and disconnect toggle button" ) );
 
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +

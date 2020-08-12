@@ -625,12 +625,12 @@
         <translation type="vanished"> Software.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="101"/>
+        <location filename="../../clientdlg.cpp" line="96"/>
         <source>Local Audio Input Fader</source>
         <translation>Lokaler Eingangspegelregler</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="115"/>
+        <location filename="../../clientdlg.cpp" line="110"/>
         <source>Local audio input fader (left/right)</source>
         <translation>Lokaler Eingangsregler</translation>
     </message>
@@ -666,47 +666,46 @@
         <translation>Um die Software optimal zu nutzen, sollte man sein eigenes Instrument oder Gesang nicht im Lautsprecher oder Kopfhörer hören, wenn die Software nicht verbunden ist. Das kann man erreichen, indem man den Eingangskanal im Wiedergabemixer stumm schaltet.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="95"/>
         <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the application.</source>
-        <translation>Wenn man diesen Knopf drückt, dann wird die Beschriftung des Knopfes von Verbinden zu Trennen geändert, das heißt, dass er eine Umschaltfunktion hat zum Verbinden und Trennen der Applikation.</translation>
+        <translation type="vanished">Wenn man diesen Knopf drückt, dann wird die Beschriftung des Knopfes von Verbinden zu Trennen geändert, das heißt, dass er eine Umschaltfunktion hat zum Verbinden und Trennen der Applikation.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="102"/>
+        <location filename="../../clientdlg.cpp" line="97"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation>Mit diesem Einstellregler kann der relative Pegel vom linken und rechten Eingangskanal verändert werden. Für ein Mono-Signal verhält sich der Regler wie ein Pan-Regler. Wenn, z.B., ein Mikrofon am rechten Kanal angeschlossen ist und das Instrument am linken Eingangskanal ist viel lauter als das Mikrofon, dann kann man den Lautstärkeunterschied mit diesem Regler kompensieren indem man den Regler in eine Richtung verschiebt, so dass über dem Regler </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="118"/>
+        <location filename="../../clientdlg.cpp" line="113"/>
         <source>Reverb effect</source>
         <translation>Halleffektregler</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="119"/>
+        <location filename="../../clientdlg.cpp" line="114"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
         <translation>Der Halleffekt kann auf einen selektierten Mono-Audiokanal oder auf beide Stereoaudiokanäle angewendet werden. Die Mono-Kanalselektion und die Hallstärke können eingestellt werden. Wenn z.B. ein Mikrofonsignal auf dem rechten Kanal anliegt und ein Halleffekt soll auf das Mikrofonsignal angewendet werden, dann muss die Hallkanalselektion auf rechts eingestellt werden und der Hallregler muss erhöht werden, bis die gewünschte Stärke des Halleffekts erreicht ist.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="130"/>
+        <location filename="../../clientdlg.cpp" line="125"/>
         <source>Reverb effect level setting</source>
         <translation>Halleffekt Pegelregler</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="133"/>
+        <location filename="../../clientdlg.cpp" line="128"/>
         <source>Reverb Channel Selection</source>
         <translation>Halleffekt Kanalselektion</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="134"/>
+        <location filename="../../clientdlg.cpp" line="129"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
         <translation>Mit diesen Knöpfen kann ausgewählt werden, auf welches Eingangssignal der Halleffekt angewendet werden soll. Entweder der rechte oder linke Eingangskanal kann ausgewählt werden.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="139"/>
+        <location filename="../../clientdlg.cpp" line="134"/>
         <source>Left channel selection for reverb</source>
         <translation>Auswahl linker Kanal für Halleffekt</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="141"/>
+        <location filename="../../clientdlg.cpp" line="136"/>
         <source>Right channel selection for reverb</source>
         <translation>Auswahl rechter Kanal für Halleffekt</translation>
     </message>
@@ -715,27 +714,27 @@
         <translation type="obsolete">Die </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="147"/>
+        <location filename="../../clientdlg.cpp" line="142"/>
         <source>Green</source>
         <translation>Grün</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="147"/>
+        <location filename="../../clientdlg.cpp" line="142"/>
         <source>The delay is perfect for a jam session.</source>
         <translation>Die Verzögerung it gering genug für das Jammen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="149"/>
+        <location filename="../../clientdlg.cpp" line="144"/>
         <source>Yellow</source>
         <translation>Gelb</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="151"/>
+        <location filename="../../clientdlg.cpp" line="146"/>
         <source>Red</source>
         <translation>Rot</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="161"/>
+        <location filename="../../clientdlg.cpp" line="156"/>
         <source>Delay status LED indicator</source>
         <translation>LED Stautuslampe für die Verzögerung</translation>
     </message>
@@ -745,7 +744,7 @@
         <translation>Wenn man diesen Knopf drückt, dann wird die Beschriftung des Knopfes von Verbinden zu Trennen geändert, das heißt, dass er eine Umschaltfunktion hat zum Verbinden und Trennen der Software.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="145"/>
+        <location filename="../../clientdlg.cpp" line="140"/>
         <source>Shows the current audio delay status:</source>
         <translation>Die Status-LED für die Verzögerung zeigt eine Bewertung der Gesamtverzögerung des Audiosignals:</translation>
     </message>
@@ -754,88 +753,88 @@
         <translation type="vanished">Die Verzögerung ist gering genug für das Jammen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="149"/>
+        <location filename="../../clientdlg.cpp" line="144"/>
         <source>A session is still possible but it may be harder to play.</source>
         <translation>Man kann noch spielen aber es wird schwieriger Lieder mit hohem Tempo zu spielen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="151"/>
+        <location filename="../../clientdlg.cpp" line="146"/>
         <source>The delay is too large for jamming.</source>
         <translation>Die Verzögerung ist zu hoch zum Jammen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="157"/>
+        <location filename="../../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
         <translation>Wenn diese LED rot leuchtet, dann wirst du keinen Spaß haben mit der Software.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="165"/>
+        <location filename="../../clientdlg.cpp" line="160"/>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
         <translation>Die Status-LED für den Netzwerkpuffer zeigt den aktuellen Status des Netzwerkstroms. Wenn die LED grün ist, dann gibt es keine Pufferprobleme. Wenn die LED rot anzeigt, dann ist der Netzwerkstrom kurz unterbrochen. Dies kann folgende Ursachen haben:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="171"/>
+        <location filename="../../clientdlg.cpp" line="166"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
         <translation>Der Soundkartenpuffer ist zu klein eingestellt.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="173"/>
+        <location filename="../../clientdlg.cpp" line="168"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
         <translation>Die Upload-Rate der Internetverbindung ist zu klein für den Netzwerkdatenstrom.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="181"/>
+        <location filename="../../clientdlg.cpp" line="176"/>
         <source>Buffers status LED indicator</source>
         <translation>LED Statuslampe für den Netzwerkpuffer</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="199"/>
-        <location filename="../../clientdlg.cpp" line="1089"/>
+        <location filename="../../clientdlg.cpp" line="194"/>
+        <location filename="../../clientdlg.cpp" line="1084"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Verbinden</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="255"/>
+        <location filename="../../clientdlg.cpp" line="250"/>
         <source>&amp;File</source>
         <translation>&amp;Datei</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="270"/>
+        <location filename="../../clientdlg.cpp" line="265"/>
         <source>&amp;View</source>
         <translation>&amp;Ansicht</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="272"/>
+        <location filename="../../clientdlg.cpp" line="267"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Verbinden...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="275"/>
+        <location filename="../../clientdlg.cpp" line="270"/>
         <source>My &amp;Profile...</source>
         <translation>Mein &amp;Profil...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="278"/>
+        <location filename="../../clientdlg.cpp" line="273"/>
         <source>C&amp;hat...</source>
         <translation>C&amp;hat...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="281"/>
+        <location filename="../../clientdlg.cpp" line="276"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Einstellungen...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="287"/>
+        <location filename="../../clientdlg.cpp" line="282"/>
         <source>&amp;Analyzer Console...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="265"/>
+        <location filename="../../clientdlg.cpp" line="260"/>
         <source>E&amp;xit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="293"/>
+        <location filename="../../clientdlg.cpp" line="288"/>
         <source>&amp;Edit</source>
         <translation>B&amp;earbeiten</translation>
     </message>
@@ -848,18 +847,18 @@
         <translation type="vanished">Keine</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="569"/>
+        <location filename="../../clientdlg.cpp" line="564"/>
         <source>Center</source>
         <translation>Mitte</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="576"/>
+        <location filename="../../clientdlg.cpp" line="571"/>
         <source>R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="108"/>
-        <location filename="../../clientdlg.cpp" line="582"/>
+        <location filename="../../clientdlg.cpp" line="103"/>
+        <location filename="../../clientdlg.cpp" line="577"/>
         <source>L</source>
         <translation></translation>
     </message>
@@ -868,12 +867,12 @@
         <translation type="vanished">Mit diesem Einstellregler kann der relative Pegel vom linken und rechten Eingangskanal verändert werden. Für ein Mono-Signal verhält sich der Regler wie ein Pan-Regler. Wenn, z.B., ein Mikrofon am rechten Kanal angeschlossen ist und das Instrument am linken Eingangskanal ist viel lauter als das Mikrofon, dann kann man den Lautstärkeunterschied mit diesem Regler kompensieren indem man den Regler in eine Richtung verschiebt, so dass über dem Regler </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="108"/>
+        <location filename="../../clientdlg.cpp" line="103"/>
         <source>, where</source>
         <translation> angezeigt wird, wobei </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="109"/>
+        <location filename="../../clientdlg.cpp" line="104"/>
         <source>is the current attenuation indicator.</source>
         <translation>die aktuelle Dämpfung anzeigt.</translation>
     </message>
@@ -898,7 +897,7 @@
         <translation type="vanished">Mit diesen Knöpfen kann ausgewählt werden, auf welches Eingangssignal der Halleffekt angewendet werden soll. Entweder der rechte oder linke Eingangskanal kann ausgewählt werden.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="144"/>
+        <location filename="../../clientdlg.cpp" line="139"/>
         <source>Delay Status LED</source>
         <translation>Status LED für die Verzögerung</translation>
     </message>
@@ -907,7 +906,7 @@
         <translation type="vanished">Die Status-LED für die Verzögerung zeigt eine Bewertung der Gesamtverzögerung des Audiosignals. Wenn die LED grün leuchtet, dann ist die Verzögerung gering genug für das Jammen. Wenn die LED gelb anzeigt kann man noch spielen aber es wird schwieriger Lieder mit hohem Tempo zu spielen. Wenn die LED rot anzeigt, dann ist die Verzögerung zu hoch zum Jammen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="164"/>
+        <location filename="../../clientdlg.cpp" line="159"/>
         <source>Buffers Status LED</source>
         <translation>Status LED für den Netzwerkpuffer</translation>
     </message>
@@ -916,7 +915,7 @@
         <translation type="vanished">Die Status-LED für den Netzwerkpuffer zeigt den aktuellen Status des Netzwerkstroms. Wenn die LED grün ist, dann gibt es keine Pufferprobleme. Wenn die LED rot anzeigt, dann ist der Netzwerkstrom kurz unterbrochen. Dies kann folgende Ursachen haben:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="169"/>
+        <location filename="../../clientdlg.cpp" line="164"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
         <translation>Der Netzwerkpuffer ist nicht groß genug eingestellt für die aktuellen Netzwerkbedingungen.</translation>
     </message>
@@ -929,58 +928,58 @@
         <translation type="vanished">Die Upload-Rate der Internetverbindung ist zu klein für den Netzwerkdatenstrom.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="175"/>
+        <location filename="../../clientdlg.cpp" line="170"/>
         <source>The CPU of the client or server is at 100%.</source>
         <translation>Die CPU des Computers ist voll ausgelastet.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="257"/>
+        <location filename="../../clientdlg.cpp" line="252"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>&amp;Laden der Konfiguration der Mixerkanäle...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="260"/>
+        <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>&amp;Speichern der Konfiguration der Mixerkanäle...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="295"/>
+        <location filename="../../clientdlg.cpp" line="290"/>
         <source>Sort Channel Users by &amp;Name</source>
         <translation>Sortiere die Kanäle nach dem &amp;Namen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="298"/>
+        <location filename="../../clientdlg.cpp" line="293"/>
         <source>Sort Channel Users by &amp;Instrument</source>
         <translation>Sortiere die Kanäle nach dem &amp;Instrument</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="301"/>
+        <location filename="../../clientdlg.cpp" line="296"/>
         <source>Sort Channel Users by &amp;Group</source>
         <translation>Sortiere die Kanäle nach der &amp;Gruppe</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="668"/>
+        <location filename="../../clientdlg.cpp" line="663"/>
         <source>Central Server</source>
         <translation>Zentralserver</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="703"/>
-        <location filename="../../clientdlg.cpp" line="718"/>
+        <location filename="../../clientdlg.cpp" line="698"/>
+        <location filename="../../clientdlg.cpp" line="713"/>
         <source>Select Channel Setup File</source>
         <translation>Auswählen der Datei für die Konfiguration der Mixerkanäle</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="825"/>
+        <location filename="../../clientdlg.cpp" line="820"/>
         <source>user</source>
         <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="830"/>
+        <location filename="../../clientdlg.cpp" line="825"/>
         <source>users</source>
         <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1061"/>
+        <location filename="../../clientdlg.cpp" line="1056"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Trennen</translation>
     </message>

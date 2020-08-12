@@ -1075,7 +1075,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="548"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation type="unfinished"></translation>
+        <translation>MUTEADO (Otras personas no te escucharán)</translation>
     </message>
     <message>
         <source>MUTED (You are not sending any audio to the server)</source>
@@ -2215,17 +2215,17 @@
     <message>
         <location filename="../../multicolorled.cpp" line="75"/>
         <source>Red</source>
-        <translation type="unfinished">Rojo</translation>
+        <translation>Rojo</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="85"/>
         <source>Yellow</source>
-        <translation type="unfinished">Amarillo</translation>
+        <translation>Amarillo</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="95"/>
         <source>Green</source>
-        <translation type="unfinished">Verde</translation>
+        <translation>Verde</translation>
     </message>
 </context>
 <context>

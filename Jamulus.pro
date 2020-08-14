@@ -9,6 +9,7 @@ contains(CONFIG, "noupcasename") {
 # support multi-threading with OMP if requested
 contains(CONFIG, "multithreading") {
     message(Multithreading in the server is enabled.)
+    message(NOTE THAT THE MULTITHREADING IMPLEMENTATION IS STILL EXPERIMENTAL AND MAY NOT BE STABLE.)
     DEFINES += USE_MULTITHREADING
     QT += concurrent
 }

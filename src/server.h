@@ -306,8 +306,13 @@ protected:
 
     void WriteHTMLChannelList();
 
+#ifdef USE_MULTITHREADING
+    void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
+                                       const int iStopChanCnt,
+                                       const int iNumClients );
+#endif
+
     void MixEncodeTransmitData ( const int iChanCnt,
-                                 const int iCurChanID,
                                  const int iNumClients );
 
     virtual void customEvent ( QEvent* pEvent );

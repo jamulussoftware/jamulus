@@ -1011,25 +1011,36 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                   vecvecsData[iChanCnt] );
             }
 
+#ifndef USE_MULTITHREADING
             // generate a separate mix for each channel, OPUS encode the
-            // audio data and transmit the network packet (note that if
-            // multithreading is enabled, the work is distributed over
-            // all available processor cores)
-#ifdef USE_MULTITHREADING
-            // by using the future synchronizer we make sure that all
-            // threads are done when we leave the timer callback function
-            FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
-                                                               &CServer::MixEncodeTransmitData,
-                                                               iChanCnt,
-                                                               iCurChanID,
-                                                               iNumClients ) );
-#else
-            // process and transmit data single threaded
+            // audio data and transmit the network packet
             MixEncodeTransmitData ( iChanCnt,
-                                    iCurChanID,
                                     iNumClients );
 #endif
         }
+
+#ifdef USE_MULTITHREADING
+// TODO optimization of the MTBlockSize value
+        const int iMTBlockSize = 20; // every 20 users a new thread is created
+        const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iMTBlockSize ) );
+
+        for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
+        {
+            // Generate a separate mix for each channel, OPUS encode the
+            // audio data and transmit the network packet. The work is
+            // distributed over all available processor cores.
+            // By using the future synchronizer we make sure that all
+            // threads are done when we leave the timer callback function.
+            const int iStartChanCnt = iBlockCnt * iNumBlocks;
+            const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iNumBlocks - 1, iNumClients - 1 );
+
+            FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                                                               &CServer::MixEncodeTransmitDataBlocks,
+                                                               iStartChanCnt,
+                                                               iStopChanCnt,
+                                                               iNumClients ) );
+        }
+#endif
     }
     else
     {
@@ -1041,14 +1052,29 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     Q_UNUSED ( iUnused )
 }
 
+#ifdef USE_MULTITHREADING
+void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
+                                            const int iStopChanCnt,
+                                            const int iNumClients )
+{
+    // loop over all channels in the current block
+    for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )
+    {
+        MixEncodeTransmitData ( iChanCnt, iNumClients );
+    }
+}
+#endif
+
 /// @brief Mix all audio data from all clients together, encode and transmit
 void CServer::MixEncodeTransmitData ( const int iChanCnt,
-                                      const int iCurChanID,
                                       const int iNumClients )
 {
     int               i, j, k, iUnused;
     CVector<double>&  vecdIntermProcBuf = vecvecsIntermediateProcBuf[iChanCnt]; // use reference for faster access
     CVector<int16_t>& vecsSendData      = vecvecsSendData[iChanCnt];            // use reference for faster access
+
+    // get actual ID of current channel
+    const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
 
     // init intermediate processing vector with zeros since we mix all channels on that vector
     vecdIntermProcBuf.Reset ( 0 );

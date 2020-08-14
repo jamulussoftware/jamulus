@@ -1074,7 +1074,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="551"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation type="unfinished"></translation>
+        <translation>SILENCIADO (As pessoas não te ouvirão)</translation>
     </message>
 </context>
 <context>
@@ -1983,7 +1983,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="147"/>
         <source>Type # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Digite # para servidores ocupados</translation>
     </message>
 </context>
 <context>
@@ -2194,17 +2194,17 @@
     <message>
         <location filename="../../multicolorled.cpp" line="75"/>
         <source>Red</source>
-        <translation type="unfinished">Vermelho</translation>
+        <translation>Vermelho</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="85"/>
         <source>Yellow</source>
-        <translation type="unfinished">Amarelo</translation>
+        <translation>Amarelo</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="95"/>
         <source>Green</source>
-        <translation type="unfinished">Verde</translation>
+        <translation>Verde</translation>
     </message>
 </context>
 <context>

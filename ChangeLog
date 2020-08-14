@@ -31,7 +31,8 @@
 
 
 
-
+TODO improve multithreading
+TODO use command line argument to enable multithreading instead of qmake CONFIG
 
 
 

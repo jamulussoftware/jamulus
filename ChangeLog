@@ -15,9 +15,6 @@
 
 - support MIDI control faders in headless build (#483)
 
-- support multithreading in the server to better support multi-core CPUs,
-  use qmake "CONFIG+=multithreading" to enable the new multithreading (#339)
-
 - option to set Mute Myself on with a command line argument (#495)
 
 - added a red message to indicate that Mute Myself is activated (#476)
@@ -26,7 +23,7 @@
 
 - replacing internal history graph functionality by external scripts/tools (#501)
 
-- accessibility improvements, coded by chigkim (#499, #510)
+- accessibility improvements, coded by chigkim (#499, #510, #514)
 
 - bug fix: added more mutex in the server (should fix #480)
 
@@ -34,7 +31,8 @@
 
 
 
-
+TODO improve multithreading
+TODO use command line argument to enable multithreading instead of qmake CONFIG
 
 
 

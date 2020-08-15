@@ -37,7 +37,7 @@
 #define FILTER_DECISION_HYSTERESIS                  0.1
 
 // definition of the upper error bound of the jitter buffers
-#define ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE          0.001
+#define ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE          0.0005
 #define ERROR_RATE_BOUND                            ( ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE / 2 )
 
 // definition of the upper jitter buffer error bound, if that one is reached we

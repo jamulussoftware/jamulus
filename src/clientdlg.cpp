@@ -91,11 +91,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     butConnect->setAccessibleName (
         tr ( "Connect and disconnect toggle button" ) );
 
-    butConnect->setAccessibleDescription ( tr ( "Clicking on this "
-        "button changes the caption of the button from Connect to "
-        "Disconnect, i.e., it implements a toggle functionality for connecting "
-        "and disconnecting the application." ) );
-
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
         tr ( "Controls the relative levels of the left and right local audio "
@@ -237,17 +232,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         // (no alias))
         Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
     }
-
-
-    // Mac Workaround:
-    // If the connect button is the default button, on Mac it is highlighted
-    // by fading in and out a blue background color. This operation consumes so
-    // much CPU that we get audio interruptions.
-    // Better solution: increase thread priority of worker thread (since the
-    // user can always highlight the button manually, too) -> TODO
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-    butConnect->setDefault ( false );
-#endif
 
 
     // File menu  --------------------------------------------------------------

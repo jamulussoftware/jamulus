@@ -1,7 +1,16 @@
 
 
 
-3.5.9git <- NOTE: the release version number will be 3.5.10
+3.5.10git <- NOTE: the release version number will be 3.5.11
+
+TODO improve multithreading
+TODO use command line argument to enable multithreading instead of qmake CONFIG
+
+
+
+
+
+3.5.10 (2020-08-16)
 
 - do not change the server list order if the mouse is over the table to
   avoid selecting an incorrect server on a mouse double click (#293)
@@ -28,13 +37,6 @@
 - bug fix: added more mutex in the server (should fix #480)
 
 - bug fix: --showallservers ping column sort is alphabetic (#201)
-
-
-
-TODO improve multithreading
-TODO use command line argument to enable multithreading instead of qmake CONFIG
-
-
 
 
 3.5.9 (2020-07-19)

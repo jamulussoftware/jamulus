@@ -595,7 +595,7 @@ int main ( int argc, char** argv )
                              bNoAutoJackConnect,
                              strClientName );
 
-            // load settings from init-file
+            // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
 
@@ -654,7 +654,7 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
             if ( bUseGUI )
             {
-                // load settings from init-file
+                // load settings from init-file (command line options override)
                 CServerSettings Settings ( &Server, strIniFileName );
                 Settings.Load ( CommandLineOptions );
 

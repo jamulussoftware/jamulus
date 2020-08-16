@@ -828,10 +828,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     strLanguage = GetIniSetting ( IniXMLDocument, "server", "language",
                                   CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
-    // name/city/country (command line overwrites setting file, note that
-    // name/city/country are set by one single command line argument so we
-    // can treat them combined here and it is sufficient to just check the name)
-    //if ( pServer->GetServerName().isEmpty() )
+    // name/city/country
     if ( !CommandLineOptions.contains( "--serverinfo" ))
     {
         // name
@@ -869,8 +866,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         }
     }
 
-    // welcome message (command line overwrites setting file)
-    //if ( pServer->GetWelcomeMessage().isEmpty() )
+    // welcome message
     if ( !CommandLineOptions.contains( "--welcomemessage" ) )
     {
         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
@@ -880,8 +876,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     vecWindowPosMain = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
 
-    // base recording directory (command line overwrites setting file)
-    //if ( pServer->GetRecordingDir().isEmpty() )
+    // base recording directory
     if ( !CommandLineOptions.contains( "--recording" ) )
     {
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );

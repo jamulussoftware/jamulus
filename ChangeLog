@@ -4,7 +4,10 @@
 3.5.10git <- NOTE: the release version number will be 3.5.11
 
 
+TODO store recorder settings, coded by pljones (#313)
+
 TODO ability to remove servers from a central server you manage #413
+
 TODO improve multithreading
 TODO use command line argument to enable multithreading instead of qmake CONFIG
 
@@ -36,7 +39,7 @@ TODO use command line argument to enable multithreading instead of qmake CONFIG
 
 - accessibility improvements, coded by chigkim (#499, #510, #514)
 
-- bug fix: added more mutex in the server (should fix #480)
+- bug fix: fixed a stability issue in the server (should fix #480)
 
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 

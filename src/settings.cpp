@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-void CSettings::Load()
+void CSettings::Load ( const QList<QString> CommandLineOptions )
 {
     // prepare file name for loading initialization data from XML file and read
     // data from file if possible
@@ -34,7 +34,7 @@ void CSettings::Load()
     ReadFromFile ( strFileName, IniXMLDocument );
 
     // read the settings from the given XML file
-    ReadSettingsFromXML ( IniXMLDocument );
+    ReadSettingsFromXML ( IniXMLDocument, CommandLineOptions );
 }
 
 void CSettings::Save()
@@ -248,7 +248,8 @@ void CClientSettings::SaveFaderSettings ( const QString& strCurFileName )
     WriteToFile ( strCurFileName, IniXMLDocument );
 }
 
-void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument )
+void CClientSettings::ReadSettingsFromXML ( const QDomDocument&  IniXMLDocument,
+                                            const QList<QString> )
 {
     int  iIdx;
     int  iValue;
@@ -780,7 +781,8 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
 
 
 // Server settings -------------------------------------------------------------
-void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument )
+void CServerSettings::ReadSettingsFromXML ( const QDomDocument&  IniXMLDocument,
+                                            const QList<QString> CommandLineOptions )
 {
     int  iValue;
     bool bValue;
@@ -808,10 +810,13 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     }
 }
 
-    // central server address (to be set after the "use default central
-    // server address)
-    pServer->SetServerListCentralServerAddress (
-        GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
+    if ( !CommandLineOptions.contains( "--centralserver" ))
+    {
+        // central server address (to be set after the "use default central
+        // server address)
+        pServer->SetServerListCentralServerAddress (
+            GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
+    }
 
     // server list enabled flag
     if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) )
@@ -823,10 +828,8 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     strLanguage = GetIniSetting ( IniXMLDocument, "server", "language",
                                   CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
-    // name/city/country (command line overwrites setting file, note that
-    // name/city/country are set by one single command line argument so we
-    // can treat them combined here and it is sufficient to just check the name)
-    if ( pServer->GetServerName().isEmpty() )
+    // name/city/country
+    if ( !CommandLineOptions.contains( "--serverinfo" ))
     {
         // name
         pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
@@ -843,13 +846,18 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     }
 
     // start minimized on OS start
-    if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
+    if ( !CommandLineOptions.contains( "--startminimized" ) )
     {
-        pServer->SetAutoRunMinimized ( bValue );
+         if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
+         {
+             pServer->SetAutoRunMinimized ( bValue );
+         }
     }
 
     // licence type (command line overwrites setting file)
-    if ( pServer->GetLicenceType() == LT_NO_LICENCE )
+    //if ( pServer->GetLicenceType() == LT_NO_LICENCE )
+    // TODO: command line needs to become boolean, at least...
+    if ( !CommandLineOptions.contains( "--licence" ) )
     {
         if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
              0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
@@ -858,8 +866,8 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         }
     }
 
-    // welcome message (command line overwrites setting file)
-    if ( pServer->GetWelcomeMessage().isEmpty() )
+    // welcome message
+    if ( !CommandLineOptions.contains( "--welcomemessage" ) )
     {
         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
     }
@@ -867,6 +875,12 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     // window position of the main window
     vecWindowPosMain = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
+
+    // base recording directory
+    if ( !CommandLineOptions.contains( "--recording" ) )
+    {
+        pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
+    }
 }
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
@@ -914,4 +928,8 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "server", "winposmain_base64",
         ToBase64 ( vecWindowPosMain ) );
+
+    // base recording directory
+    PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64",
+        ToBase64 ( pServer->GetRecordingDir() ) );
 }

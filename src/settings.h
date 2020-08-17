@@ -52,8 +52,9 @@ public:
     QString    strLanguage;
 
 protected:
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString> CommandLineOptions ) = 0;
-    virtual void WriteSettingsToXML  ( QDomDocument& IniXMLDocument )       = 0;
+    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) = 0;
+    virtual void ReadSettingsFromXML ( const QDomDocument&  IniXMLDocument,
+                                       const QList<QString> CommandLineOptions ) = 0;
 
     void ReadFromFile ( const QString& strCurFileName,
                         QDomDocument&  XMLDocument );
@@ -171,11 +172,12 @@ public:
 
 protected:
     // No CommandLineOptions used when reading Client inifile
-    virtual void ReadSettingsFromXML (const QDomDocument& IniXMLDocument, const QList<QString> ) override;
-    virtual void WriteSettingsToXML  ( QDomDocument& IniXMLDocument ) override;
+    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
+    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument,
+                                       const QList<QString> ) override;
 
     void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
-    void WriteFaderSettingsToXML  ( QDomDocument& IniXMLDocument );
+    void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );
 
     CClient* pClient;
 };
@@ -190,8 +192,9 @@ public:
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
 
 protected:
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString> CommandLineOptions ) override;
-    virtual void WriteSettingsToXML  ( QDomDocument& IniXMLDocument ) override;
+    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
+    virtual void ReadSettingsFromXML ( const QDomDocument&  IniXMLDocument,
+                                       const QList<QString> CommandLineOptions ) override;
 
     CServer* pServer;
 };

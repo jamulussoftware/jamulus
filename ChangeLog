@@ -3,8 +3,8 @@
 
 3.5.10git <- NOTE: the release version number will be 3.5.11
 
+- store recorder settings, coded by pljones (#313)
 
-TODO store recorder settings, coded by pljones (#313)
 
 TODO ability to remove servers from a central server you manage #413
 

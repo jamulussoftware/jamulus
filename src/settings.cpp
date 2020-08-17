@@ -810,7 +810,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     }
 }
 
-    if ( !CommandLineOptions.contains( "--centralserver" ))
+    if ( !CommandLineOptions.contains ( "--centralserver" ) )
     {
         // central server address (to be set after the "use default central
         // server address)
@@ -829,7 +829,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
                                   CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
     // name/city/country
-    if ( !CommandLineOptions.contains( "--serverinfo" ))
+    if ( !CommandLineOptions.contains ( "--serverinfo" ) )
     {
         // name
         pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
@@ -846,7 +846,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     }
 
     // start minimized on OS start
-    if ( !CommandLineOptions.contains( "--startminimized" ) )
+    if ( !CommandLineOptions.contains ( "--startminimized" ) )
     {
          if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
          {
@@ -854,10 +854,8 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
          }
     }
 
-    // licence type (command line overwrites setting file)
-    //if ( pServer->GetLicenceType() == LT_NO_LICENCE )
-    // TODO: command line needs to become boolean, at least...
-    if ( !CommandLineOptions.contains( "--licence" ) )
+    // licence type
+    if ( !CommandLineOptions.contains ( "--licence" ) )
     {
         if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
              0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
@@ -867,7 +865,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     }
 
     // welcome message
-    if ( !CommandLineOptions.contains( "--welcomemessage" ) )
+    if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
     {
         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
     }
@@ -877,7 +875,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
 
     // base recording directory
-    if ( !CommandLineOptions.contains( "--recording" ) )
+    if ( !CommandLineOptions.contains ( "--recording" ) )
     {
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
     }

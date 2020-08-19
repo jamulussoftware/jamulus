@@ -48,9 +48,10 @@
 int main ( int argc, char** argv )
 {
 
-    QTextStream& tsConsole = *( ( new ConsoleWriterFactory() )->get() );
-    QString      strArgument;
-    double       rDbleArgument;
+    QTextStream&   tsConsole = *( ( new ConsoleWriterFactory() )->get() );
+    QString        strArgument;
+    double         rDbleArgument;
+    QList<QString> CommandLineOptions;
 
     // initialize all flags and string which might be changed by command line
     // arguments
@@ -99,6 +100,7 @@ int main ( int argc, char** argv )
         {
             bIsClient = false;
             tsConsole << "- server mode chosen" << endl;
+            CommandLineOptions << "--server";
             continue;
         }
 
@@ -111,6 +113,7 @@ int main ( int argc, char** argv )
         {
             bUseGUI = false;
             tsConsole << "- no GUI mode chosen" << endl;
+            CommandLineOptions << "--nogui";
             continue;
         }
 
@@ -124,6 +127,7 @@ int main ( int argc, char** argv )
             // right now only the creative commons licence is supported
             eLicenceType = LT_CREATIVECOMMONS;
             tsConsole << "- licence required" << endl;
+            CommandLineOptions << "--licence";
             continue;
         }
 
@@ -136,6 +140,7 @@ int main ( int argc, char** argv )
         {
             bUseDoubleSystemFrameSize = false; // 64 samples frame size
             tsConsole << "- using " << SYSTEM_FRAME_SIZE_SAMPLES << " samples frame size mode" << endl;
+            CommandLineOptions << "--fastupdate";
             continue;
         }
 
@@ -156,6 +161,7 @@ int main ( int argc, char** argv )
             tsConsole << "- maximum number of channels: "
                 << iNumServerChannels << endl;
 
+            CommandLineOptions << "--numchannels";
             continue;
         }
 
@@ -168,6 +174,7 @@ int main ( int argc, char** argv )
         {
             bStartMinimized = true;
             tsConsole << "- start minimized enabled" << endl;
+            CommandLineOptions << "--startminimized";
             continue;
         }
 
@@ -180,6 +187,7 @@ int main ( int argc, char** argv )
         {
             bCentServPingServerInList = true;
             tsConsole << "- ping servers in slave server list" << endl;
+            CommandLineOptions << "--pingservers";
             continue;
         }
 
@@ -192,6 +200,7 @@ int main ( int argc, char** argv )
         {
             bDisconnectAllClientsOnQuit = true;
             tsConsole << "- disconnect all clients on quit" << endl;
+            CommandLineOptions << "--discononquit";
             continue;
         }
 
@@ -204,6 +213,7 @@ int main ( int argc, char** argv )
         {
             bNoAutoJackConnect = true;
             tsConsole << "- disable auto Jack connections" << endl;
+            CommandLineOptions << "--nojackconnect";
             continue;
         }
 
@@ -216,6 +226,7 @@ int main ( int argc, char** argv )
         {
             bUseTranslation = false;
             tsConsole << "- translations disabled" << endl;
+            CommandLineOptions << "--notranslation";
             continue;
         }
 
@@ -231,6 +242,7 @@ int main ( int argc, char** argv )
         {
             bShowComplRegConnList = true;
             tsConsole << "- show all registered servers in server list" << endl;
+            CommandLineOptions << "--showallservers";
             continue;
         }
 
@@ -245,6 +257,7 @@ int main ( int argc, char** argv )
         {
             bShowAnalyzerConsole = true;
             tsConsole << "- show analyzer console" << endl;
+            CommandLineOptions << "--showanalyzerconsole";
             continue;
         }
 
@@ -262,6 +275,7 @@ int main ( int argc, char** argv )
         {
             iCtrlMIDIChannel = static_cast<int> ( rDbleArgument );
             tsConsole << "- selected controller MIDI channel: " << iCtrlMIDIChannel << endl;
+            CommandLineOptions << "--ctrlmidich";
             continue;
         }
 
@@ -277,6 +291,7 @@ int main ( int argc, char** argv )
         {
             strLoggingFileName = strArgument;
             tsConsole << "- logging file name: " << strLoggingFileName << endl;
+            CommandLineOptions << "--log";
             continue;
         }
 
@@ -295,6 +310,7 @@ int main ( int argc, char** argv )
             iPortNumber            = static_cast<quint16> ( rDbleArgument );
             bCustomPortNumberGiven = true;
             tsConsole << "- selected port number: " << iPortNumber << endl;
+            CommandLineOptions << "--port";
             continue;
         }
 
@@ -310,6 +326,7 @@ int main ( int argc, char** argv )
         {
             strHTMLStatusFileName = strArgument;
             tsConsole << "- HTML status file name: " << strHTMLStatusFileName << endl;
+            CommandLineOptions << "--htmlstatus";
             continue;
         }
 
@@ -323,6 +340,7 @@ int main ( int argc, char** argv )
         {
             strServerName = strArgument;
             tsConsole << "- server name for HTML status file: " << strServerName << endl;
+            CommandLineOptions << "--servername";
             continue;
         }
 
@@ -338,6 +356,7 @@ int main ( int argc, char** argv )
         {
             strClientName = QString ( APP_NAME ) + " " + strArgument;
             tsConsole << "- client name: " << strClientName << endl;
+            CommandLineOptions << "--clientname";
             continue;
         }
 
@@ -353,6 +372,7 @@ int main ( int argc, char** argv )
         {
             strRecordingDirName = strArgument;
             tsConsole << "- recording directory name: " << strRecordingDirName << endl;
+            CommandLineOptions << "--recording";
             continue;
         }
 
@@ -368,6 +388,7 @@ int main ( int argc, char** argv )
         {
             strCentralServer = strArgument;
             tsConsole << "- central server: " << strCentralServer << endl;
+            CommandLineOptions << "--centralserver";
             continue;
         }
 
@@ -383,6 +404,7 @@ int main ( int argc, char** argv )
         {
             strServerInfo = strArgument;
             tsConsole << "- server info: " << strServerInfo << endl;
+            CommandLineOptions << "--serverinfo";
             continue;
         }
 
@@ -398,6 +420,7 @@ int main ( int argc, char** argv )
         {
             strWelcomeMessage = strArgument;
             tsConsole << "- welcome message: " << strWelcomeMessage << endl;
+            CommandLineOptions << "--welcomemessage";
             continue;
         }
 
@@ -413,6 +436,7 @@ int main ( int argc, char** argv )
         {
             strIniFileName = strArgument;
             tsConsole << "- initialization file name: " << strIniFileName << endl;
+            CommandLineOptions << "--inifile";
             continue;
         }
 
@@ -428,6 +452,7 @@ int main ( int argc, char** argv )
         {
             strConnOnStartupAddress = NetworkUtil::FixAddress ( strArgument );
             tsConsole << "- connect on startup to address: " << strConnOnStartupAddress << endl;
+            CommandLineOptions << "--connect";
             continue;
         }
 
@@ -440,6 +465,7 @@ int main ( int argc, char** argv )
         {
             bMuteStream = true;
             tsConsole << "- mute stream activated" << endl;
+            CommandLineOptions << "--mutestream";
             continue;
         }
 
@@ -569,9 +595,9 @@ int main ( int argc, char** argv )
                              bNoAutoJackConnect,
                              strClientName );
 
-            // load settings from init-file
+            // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
-            Settings.Load();
+            Settings.Load ( CommandLineOptions );
 
             // load translation
             if ( bUseGUI && bUseTranslation )
@@ -628,9 +654,9 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
             if ( bUseGUI )
             {
-                // load settings from init-file
+                // load settings from init-file (command line options override)
                 CServerSettings Settings ( &Server, strIniFileName );
-                Settings.Load();
+                Settings.Load ( CommandLineOptions );
 
                 // load translation
                 if ( bUseGUI && bUseTranslation )

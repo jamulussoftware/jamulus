@@ -3,9 +3,11 @@
 
 3.5.10git <- NOTE: the release version number will be 3.5.11
 
+- added an optional server list whitelist filter (#413)
+
 - store recorder settings, coded by pljones (#313)
 
-- accessibility improvements, coded by chigkim (#511, #512)
+- accessibility improvements, coded by chigkim (#498, #512)
 
 
 

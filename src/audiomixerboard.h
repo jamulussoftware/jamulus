@@ -124,7 +124,7 @@ protected:
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }
-    void OnPanValueChanged ( int value ) { SendPanValueToServer ( value ); }
+    void OnPanValueChanged ( int value );
     void OnMuteStateChanged ( int value );
     void OnGroupStateChanged ( int );
 

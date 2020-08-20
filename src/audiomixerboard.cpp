@@ -703,27 +703,28 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
     // Tool tip ----------------------------------------------------------------
     // complete musician profile in the tool tip
-    QString strToolTip = "";
+    QString strToolTip              = "";
+    QString strAliasAccessible      = "";
+    QString strInstrumentAccessible = "";
+    QString strLocationAccessible   = "";
 
     // alias/name
-    QString accessibleAlias = "";
     if ( !cChanInfo.strName.isEmpty() )
     {
-        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
-        accessibleAlias += cChanInfo.strName;
+        strToolTip         += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
+        strAliasAccessible += cChanInfo.strName;
     }
 
     // instrument
-    QString accessibleInstrument = "";
     if ( !CInstPictures::IsNotUsedInstrument ( iTTInstrument ) )
     {
         strToolTip += "<h4>" + tr ( "Instrument" ) + "</h4>" +
             CInstPictures::GetName ( iTTInstrument );
-            accessibleInstrument += CInstPictures::GetName ( iTTInstrument );
+
+        strInstrumentAccessible += CInstPictures::GetName ( iTTInstrument );
     }
 
     // location
-    QString accessibleLocation = "";
     if ( ( eTTCountry != QLocale::AnyCountry ) ||
          ( !cChanInfo.strCity.isEmpty() ) )
     {
@@ -731,39 +732,44 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
         if ( !cChanInfo.strCity.isEmpty() )
         {
-            strToolTip += cChanInfo.strCity;
-            accessibleLocation += cChanInfo.strCity;
+            strToolTip            += cChanInfo.strCity;
+            strLocationAccessible += cChanInfo.strCity;
 
             if ( eTTCountry != QLocale::AnyCountry )
             {
-                strToolTip += ", ";
-                accessibleLocation += ", ";
+                strToolTip            += ", ";
+                strLocationAccessible += ", ";
             }
         }
 
         if ( eTTCountry != QLocale::AnyCountry )
         {
-            strToolTip += QLocale::countryToString ( eTTCountry );
-            accessibleLocation += QLocale::countryToString ( eTTCountry );
+            strToolTip            += QLocale::countryToString ( eTTCountry );
+            strLocationAccessible += QLocale::countryToString ( eTTCountry );
         }
     }
 
     // skill level
+    QString strSkillLevel;
+
     switch ( cChanInfo.eSkillLevel )
     {
     case SL_BEGINNER:
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Beginner" );
-        accessibleInstrument += ", Beginner";
+        strSkillLevel            = tr ( "Beginner" );
+        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_INTERMEDIATE:
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Intermediate" );
-        accessibleInstrument += ", Intermediate";
+        strSkillLevel            = tr ( "Intermediate" );
+        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_PROFESSIONAL:
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Expert" );
-        accessibleInstrument += ", Expert";
+        strSkillLevel            = tr ( "Expert" );
+        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_NOT_SET:
@@ -777,13 +783,13 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         strToolTip.prepend ( "<h3>" + tr ( "Musician Profile" ) + "</h3>" );
     }
 
-    plblCountryFlag->setToolTip ( strToolTip );
-    plblCountryFlag->setAccessibleDescription(accessibleLocation);
-    plblInstrument->setToolTip  ( strToolTip );
-plblInstrument->setAccessibleDescription ( accessibleInstrument );
-    plblLabel->setToolTip       ( strToolTip );
-    plblLabel->setAccessibleName(accessibleAlias);
-    plblLabel->setAccessibleDescription("Alias");
+    plblCountryFlag->setToolTip               ( strToolTip );
+    plblCountryFlag->setAccessibleDescription ( strLocationAccessible );
+    plblInstrument->setToolTip                ( strToolTip );
+    plblInstrument->setAccessibleDescription  ( strInstrumentAccessible );
+    plblLabel->setToolTip                     ( strToolTip );
+    plblLabel->setAccessibleName              ( strAliasAccessible );
+    plblLabel->setAccessibleDescription       ( tr ( "Alias" ) );
 }
 
 

@@ -10,9 +10,6 @@
 - accessibility improvements, coded by chigkim (#498, #512)
 
 
-
-TODO ability to remove servers from a central server you manage #413
-
 TODO fix Alt+h issue (see https://sourceforge.net/p/llcon/discussion/software/thread/1856e44ffd/?limit=25#74bb/5686) -> Alt+c
 
 TODO improve multithreading -> merge branch into master

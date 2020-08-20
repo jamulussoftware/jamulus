@@ -376,10 +376,10 @@ void CChannelFader::Reset()
     plbrChannelLevel->ClipReset();
 
     // clear instrument picture, country flag, tool tips and label text
-    plblLabel->setText ( "" );
-    plblLabel->setToolTip ( "" );
-    plblInstrument->setVisible ( false );
-    plblInstrument->setToolTip ( "" );
+    plblLabel->setText          ( "" );
+    plblLabel->setToolTip       ( "" );
+    plblInstrument->setVisible  ( false );
+    plblInstrument->setToolTip  ( "" );
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
     cReceivedChanInfo = CChannelInfo();
@@ -432,7 +432,7 @@ void CChannelFader::SetPanValue ( const int iPan )
         // we set the new fader level in the GUI (slider control) which then
         // emits to signal to tell the server about the change (implicitly)
         pPan->setValue ( iPan );
-        pPan->setAccessibleName( QString::number( iPan ) );
+        pPan->setAccessibleName ( QString::number ( iPan ) );
     }
 }
 
@@ -493,7 +493,7 @@ void CChannelFader::SendPanValueToServer ( const int iPan )
 
 void CChannelFader::OnPanValueChanged ( int value )
 {
-    pPan->setAccessibleName( QString::number(value) );
+    pPan->setAccessibleName ( QString::number ( value ) );
     SendPanValueToServer ( value );
 }
 

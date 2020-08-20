@@ -201,32 +201,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="795"/>
+        <location filename="../../audiomixerboard.cpp" line="823"/>
         <source>Personal Mix at the Server</source>
         <translation>Mezcla personal en el Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="795"/>
+        <location filename="../../audiomixerboard.cpp" line="823"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Estando conectado a un servidor, estos controles te permiten hacer tu mezcla personal sin afectar lo que otros escuchan de tí. El título muestra el nombre del servidor y, cuando se conoce, si está activamente grabando.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="875"/>
+        <location filename="../../audiomixerboard.cpp" line="903"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="884"/>
+        <location filename="../../audiomixerboard.cpp" line="912"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>I N T E N T A N D O   C O N E C T A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1017"/>
+        <location filename="../../audiomixerboard.cpp" line="1045"/>
         <source>RECORDING ACTIVE</source>
         <translation>GRABACIÓN ACTIVA</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1020"/>
+        <location filename="../../audiomixerboard.cpp" line="1048"/>
         <source>Personal Mix at: </source>
         <translation>Mezcla Personal en el Servidor: </translation>
     </message>
@@ -436,44 +436,49 @@
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="711"/>
+        <location filename="../../audiomixerboard.cpp" line="721"/>
         <source>Alias/Name</source>
         <translation>Alias/Nombre</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="717"/>
+        <location filename="../../audiomixerboard.cpp" line="728"/>
         <source>Instrument</source>
         <translation>Instrumento</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="725"/>
+        <location filename="../../audiomixerboard.cpp" line="738"/>
         <source>Location</source>
         <translation>Ubicación</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="747"/>
-        <location filename="../../audiomixerboard.cpp" line="751"/>
-        <location filename="../../audiomixerboard.cpp" line="755"/>
+        <location filename="../../audiomixerboard.cpp" line="766"/>
+        <location filename="../../audiomixerboard.cpp" line="772"/>
+        <location filename="../../audiomixerboard.cpp" line="778"/>
         <source>Skill Level</source>
         <translation>Nivel Habilidad</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="747"/>
+        <location filename="../../audiomixerboard.cpp" line="799"/>
+        <source>Alias</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="765"/>
         <source>Beginner</source>
         <translation>Principiante</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="751"/>
+        <location filename="../../audiomixerboard.cpp" line="771"/>
         <source>Intermediate</source>
         <translation>Intermedio</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="755"/>
+        <location filename="../../audiomixerboard.cpp" line="777"/>
         <source>Expert</source>
         <translation>Experto</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="766"/>
+        <location filename="../../audiomixerboard.cpp" line="790"/>
         <source>Musician Profile</source>
         <translation>Perfil Músico</translation>
     </message>
@@ -2560,7 +2565,7 @@
         <translation>Voz Principal</translation>
     </message>
     <message>
-        <location filename="../../settings.cpp" line="285"/>
+        <location filename="../../settings.cpp" line="286"/>
         <source>No Name</source>
         <translation>Sin Nombre</translation>
     </message>

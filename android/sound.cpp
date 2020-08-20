@@ -27,7 +27,7 @@
 
 /* Implementation *************************************************************/
 
-CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
                  void*          arg,
                  const int      iCtrlMIDIChannel,
                  const bool     ,
@@ -193,7 +193,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     iOpenSLBufferSizeStereo = 2 * iOpenSLBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
+    vecfTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
 
 // TEST
 #if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
@@ -205,7 +205,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 // 48 kHz / 16 kHz = factor 3 (note that the buffer size mono might
 // be divisible by three, therefore we will get a lot of drop outs)
 iModifiedInBufSize = iOpenSLBufferSizeMono / 3;
-vecsTmpAudioInSndCrd.Init ( iModifiedInBufSize );
+vecfTmpAudioInSndCrd.Init ( iModifiedInBufSize );
 
     return iOpenSLBufferSizeMono;
 }
@@ -238,7 +238,7 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, v
         memset ( audioData, 0, sizeof(float) * numFrames * oboeStream->getChannelCount() );
 
         // Only copy data if we have data to copy, otherwise fill with silence
-        if ( !pSound->vecsTmpAudioSndCrdStereo.empty() )
+        if ( !pSound->vecfTmpAudioSndCrdStereo.empty() )
         {
             for ( int frmNum = 0; frmNum < numFrames; ++frmNum )
             {
@@ -246,11 +246,9 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, v
                 {
                     // copy sample received from server into output buffer
 
-                    // convert to 32 bit
-                    const int32_t iCurSam = static_cast<int32_t> (
-                        pSound->vecsTmpAudioSndCrdStereo [frmNum * oboeStream->getChannelCount() + channelNum] );
-
-                    floatData[frmNum * oboeStream->getChannelCount() + channelNum] = (float) iCurSam / _MAXSHORT;
+                    const float fCurSam =
+                        pSound->vecfTmpAudioSndCrdStereo [frmNum * oboeStream->getChannelCount() + channelNum];
+                    floatData[frmNum * oboeStream->getChannelCount() + channelNum] = fCurSam;
                 }
             }
         }
@@ -282,13 +280,13 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, v
         {
             for ( int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++ )
             {
-                pSound->vecsTmpAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] =
-                    (short) floatData[frmNum * oboeStream->getChannelCount() + channelNum] * _MAXSHORT;
+               pSound->vecfTmpAudioSndCrdStereo [frmNum * oboeStream->getChannelCount() + channelNum] =
+                   floatData[frmNum * oboeStream->getChannelCount() + channelNum];
             }
         }
 
         // Tell parent class that we've put some data ready to send to the server
-        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo  );
+        pSound->ProcessCallback ( pSound->vecfTmpAudioSndCrdStereo  );
     }
 
 //  locker.unlock();

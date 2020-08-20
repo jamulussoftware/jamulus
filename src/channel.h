@@ -108,17 +108,17 @@ public:
     void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
-    void SetGain ( const int iChanID, const double dNewGain );
-    double GetGain ( const int iChanID );
-    double GetFadeInGain() { return static_cast<double> ( iFadeInCnt ) / iFadeInCntMax; }
+    void SetGain ( const int iChanID, const float dNewGain );
+    float GetGain ( const int iChanID );
+    float GetFadeInGain() { return static_cast<float> ( iFadeInCnt ) / iFadeInCntMax; }
 
-    void SetPan ( const int iChanID, const double dNewPan );
-    double GetPan ( const int iChanID );
+    void SetPan ( const int iChanID, const float dNewPan );
+    float GetPan ( const int iChanID );
 
-    void SetRemoteChanGain ( const int iId, const double dGain )
+    void SetRemoteChanGain ( const int iId, const float dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
-    void SetRemoteChanPan ( const int iId, const double dPan )
+    void SetRemoteChanPan ( const int iId, const float dPan )
         { Protocol.CreateChanPanMes ( iId, dPan ); }
 
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
@@ -176,9 +176,9 @@ public:
 
     bool ChannelLevelsRequired() const { return bChannelLevelsRequired; }
 
-    double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio,
-                                         const int             iInSize,
-                                         const bool            bIsStereoIn );
+    float UpdateAndGetLevelForMeterdB ( const CVector<float>& vecfAudio,
+                                        const int             iInSize,
+                                        const bool            bIsStereoIn );
 
 protected:
     bool ProtocolIsEnabled();
@@ -201,8 +201,8 @@ protected:
     CChannelCoreInfo        ChannelInfo;
 
     // mixer and effect settings
-    CVector<double>         vecdGains;
-    CVector<double>         vecdPannings;
+    CVector<float>          vecfGains;
+    CVector<float>          vecfPannings;
 
     // network jitter-buffer
     CNetBufWithStats        SockBuf;
@@ -241,8 +241,8 @@ protected:
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
-    void OnChangeChanGain ( int iChanID, double dNewGain );
-    void OnChangeChanPan ( int iChanID, double dNewPan );
+    void OnChangeChanGain ( int iChanID, float dNewGain );
+    void OnChangeChanPan ( int iChanID, float dNewPan );
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();

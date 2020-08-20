@@ -27,7 +27,7 @@
 
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
-                         void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
+                         void           (*fpNewProcessCallback) ( CVector<float>& vfData, void* pParg ),
                          void*          pParg,
                          const int      iNewCtrlMIDIChannel ) :
     fpProcessCallback            ( fpNewProcessCallback ),
@@ -249,7 +249,7 @@ printf ( "\n" );
                     {
                         // we are assuming that the controller number is the same
                         // as the audio fader index and the range is 0-127
-                        const int iFaderLevel = static_cast<int> ( static_cast<double> (
+                        const int iFaderLevel = static_cast<int> ( static_cast<float> (
                             qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
 
                         // Behringer X-TOUCH: offset of 0x46

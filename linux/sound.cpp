@@ -228,7 +228,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     iJACKBufferSizeStero = 2 * iJACKBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
+    vecfTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
 
     return iJACKBufferSizeMono;
 }
@@ -259,16 +259,13 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         {
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
             {
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-                    (short) ( in_left[i] * _MAXSHORT );
-
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-                    (short) ( in_right[i] * _MAXSHORT );
+                pSound->vecfTmpAudioSndCrdStereo[2 * i] = in_left[i];
+                pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] = in_right[i];
             }
         }
 
         // call processing callback function
-        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+        pSound->ProcessCallback ( pSound->vecfTmpAudioSndCrdStereo );
 
         // get output data pointer
         jack_default_audio_sample_t* out_left =
@@ -285,10 +282,10 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
             {
                 out_left[i] = (jack_default_audio_sample_t)
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+                    pSound->vecfTmpAudioSndCrdStereo[2 * i];
 
                 out_right[i] = (jack_default_audio_sample_t)
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+                    pSound->vecfTmpAudioSndCrdStereo[2 * i + 1];
             }
         }
     }

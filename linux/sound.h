@@ -60,7 +60,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     bNoAutoJackConnect,
@@ -78,7 +78,7 @@ public:
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
+    CVector<float> vecfTmpAudioSndCrdStereo;
     int            iJACKBufferSizeMono;
     int            iJACKBufferSizeStero;
     bool           bJackWasShutDown;
@@ -111,7 +111,7 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* pParg ),
              void*          pParg,
              const int      iCtrlMIDIChannel,
              const bool     ,

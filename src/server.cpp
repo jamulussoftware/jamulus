@@ -338,11 +338,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init          ( iMaxNumChannels );
-    vecvecdGains.Init                  ( iMaxNumChannels );
-    vecvecdPannings.Init               ( iMaxNumChannels );
-    vecvecsData.Init                   ( iMaxNumChannels );
-    vecvecsSendData.Init               ( iMaxNumChannels );
-    vecvecsIntermediateProcBuf.Init    ( iMaxNumChannels );
+    vecvecfGains.Init                  ( iMaxNumChannels );
+    vecvecfPannings.Init               ( iMaxNumChannels );
+    vecvecfData.Init                   ( iMaxNumChannels );
+    vecvecfSendData.Init               ( iMaxNumChannels );
+    vecvecfIntermediateProcBuf.Init    ( iMaxNumChannels );
     vecvecbyCodedData.Init             ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
@@ -352,18 +352,18 @@ CServer::CServer ( const int          iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         // init vectors storing information of all channels
-        vecvecdGains[i].Init    ( iMaxNumChannels );
-        vecvecdPannings[i].Init ( iMaxNumChannels );
+        vecvecfGains[i].Init    ( iMaxNumChannels );
+        vecvecfPannings[i].Init ( iMaxNumChannels );
 
         // we always use stereo audio buffers (which is the worst case)
-        vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        vecvecfData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // (note that we only allocate iMaxNumChannels buffers for the send
         // and coded data because of the OMP implementation)
-        vecvecsSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        vecvecfSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
-        // allocate worst case memory for intermediate processing buffers in double precision
-        vecvecsIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        // allocate worst case memory for intermediate processing buffers in single precision
+        vecvecfIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // allocate worst case memory for the coded data
         vecvecbyCodedData[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
@@ -489,7 +489,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( this, &CServer::ClientDisconnected,
         &JamController, &recorder::CJamController::ClientDisconnected );
 
-    qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
+    qRegisterMetaType<CVector<float> > ( "CVector<float>" );
     QObject::connect ( this, &CServer::AudioFrame,
         &JamController, &recorder::CJamController::AudioFrame );
 
@@ -884,17 +884,17 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // get gains of all connected channels
             for ( int j = 0; j < iNumClients; j++ )
             {
-                // The second index of "vecvecdGains" does not represent
+                // The second index of "vecvecfGains" does not represent
                 // the channel ID! Therefore we have to use
                 // "vecChanIDsCurConChan" to query the IDs of the currently
                 // connected channels
-                vecvecdGains[i][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
+                vecvecfGains[i][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
 
                 // consider audio fade-in
-                vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+                vecvecfGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
 
                 // panning
-                vecvecdPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
+                vecvecfPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
             }
 
             // flag for updating channel levels (if at least one clients wants it)
@@ -909,7 +909,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // is false and the Get() function is not called at all. Therefore if the buffer is not needed
             // we do not spend any time in the function but go directly inside the if condition.
             if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
+                 !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecfData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
             {
                 // get current number of OPUS coded bytes
                 const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
@@ -946,11 +946,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // OPUS decode received data stream
                     if ( CurOpusDecoder != nullptr )
                     {
-                        iUnused = opus_custom_decode ( CurOpusDecoder,
-                                                       pCurCodedData,
-                                                       iCeltNumCodedBytes,
-                                                       &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                                       iClientFrameSizeSamples );
+                        iUnused = opus_custom_decode_float ( CurOpusDecoder,
+                                                             pCurCodedData,
+                                                             iCeltNumCodedBytes,
+                                                             &vecvecfData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                             iClientFrameSizeSamples );
                     }
                 }
 
@@ -958,8 +958,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 // and read out the small frame size immediately for further processing
                 if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
                 {
-                    DoubleFrameSizeConvBufIn[iCurChanID].PutAll ( vecvecsData[i] );
-                    DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                    DoubleFrameSizeConvBufIn[iCurChanID].PutAll ( vecvecfData[i] );
+                    DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecfData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
                 }
             }
         }
@@ -984,7 +984,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         {
             bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients,
                                                                  vecNumAudioChannels,
-                                                                 vecvecsData,
+                                                                 vecvecfData,
                                                                  vecChannelLevels );
         }
 
@@ -1011,7 +1011,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                   vecChannels[iCurChanID].GetName(),
                                   vecChannels[iCurChanID].GetAddress(),
                                   vecNumAudioChannels[iChanCnt],
-                                  vecvecsData[iChanCnt] );
+                                  vecvecfData[iChanCnt] );
             }
 
             // processing without multithreading
@@ -1077,15 +1077,15 @@ void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
 void CServer::MixEncodeTransmitData ( const int iChanCnt,
                                       const int iNumClients )
 {
-    int               i, j, k, iUnused;
-    CVector<double>&  vecdIntermProcBuf = vecvecsIntermediateProcBuf[iChanCnt]; // use reference for faster access
-    CVector<int16_t>& vecsSendData      = vecvecsSendData[iChanCnt];            // use reference for faster access
+    int             i, j, k, iUnused;
+    CVector<float>& vecfIntermProcBuf = vecvecfIntermediateProcBuf[iChanCnt]; // use reference for faster access
+    CVector<float>& vecfSendData      = vecvecfSendData[iChanCnt];            // use reference for faster access
 
     // get actual ID of current channel
     const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
 
     // init intermediate processing vector with zeros since we mix all channels on that vector
-    vecdIntermProcBuf.Reset ( 0 );
+    vecfIntermProcBuf.Reset ( 0 );
 
     // distinguish between stereo and mono mode
     if ( vecNumAudioChannels[iChanCnt] == 1 )
@@ -1094,18 +1094,18 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain of the current client
-            const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecvecdGains[iChanCnt][j];
+            const CVector<float>& vecfData  = vecvecfData[j];
+            const float           dGain   = vecvecfGains[iChanCnt][j];
 
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( dGain == static_cast<double> ( 1.0 ) )
+            if ( dGain == 1.0f )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
-                        vecdIntermProcBuf[i] += vecsData[i];
+                        vecfIntermProcBuf[i] += vecfData[i];
                     }
                 }
                 else
@@ -1113,8 +1113,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecdIntermProcBuf[i] +=
-                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
+                        vecfIntermProcBuf[i] += ( vecfData[k] + vecfData[k + 1] ) / 2;
                     }
                 }
             }
@@ -1125,7 +1124,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
-                        vecdIntermProcBuf[i] += vecsData[i] * dGain;
+                        vecfIntermProcBuf[i] += vecfData[i] * dGain;
                     }
                 }
                 else
@@ -1133,17 +1132,21 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecdIntermProcBuf[i] += dGain *
-                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
+                        vecfIntermProcBuf[i] += dGain *
+                            ( static_cast<float> ( vecfData[k] ) + vecfData[k + 1] ) / 2;
                     }
                 }
             }
         }
 
-        // convert from double to short with clipping
+        // When adding multiple sound sources together
+        // the resulting signal level may exceed the maximum
+        // audio range which is from -1.0f to 1.0f inclusivly.
+        // Clip the intermediate sound buffer to be within
+        // the expected range
         for ( i = 0; i < iServerFrameSizeSamples; i++ )
         {
-            vecsSendData[i] = Double2Short ( vecdIntermProcBuf[i] );
+            vecfSendData[i] = clipFloat ( vecfIntermProcBuf[i] );
         }
     }
     else
@@ -1152,17 +1155,17 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain/pan of the current client
-            const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecvecdGains[iChanCnt][j];
-            const double            dPan     = vecvecdPannings[iChanCnt][j];
+            const CVector<float>& vecfData = vecvecfData[j];
+            const float           dGain    = vecvecfGains[iChanCnt][j];
+            const float           dPan     = vecvecfPannings[iChanCnt][j];
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
-            const double dGainL = MathUtils::GetLeftPan ( dPan, false ) * dGain;
-            const double dGainR = MathUtils::GetRightPan ( dPan, false ) * dGain;
+            const float dGainL = MathUtils::GetLeftPan ( dPan, false ) * dGain;
+            const float dGainR = MathUtils::GetRightPan ( dPan, false ) * dGain;
 
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( ( dGainL == static_cast<double> ( 1.0 ) ) && ( dGainR == static_cast<double> ( 1.0 ) ) )
+            if ( ( dGainL == 1.0f ) && ( dGainR == 1.0f ) )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
@@ -1170,8 +1173,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left/right channel
-                        vecdIntermProcBuf[k]     += vecsData[i];
-                        vecdIntermProcBuf[k + 1] += vecsData[i];
+                        vecfIntermProcBuf[k]     += vecfData[i];
+                        vecfIntermProcBuf[k + 1] += vecfData[i];
                     }
                 }
                 else
@@ -1179,7 +1182,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
-                        vecdIntermProcBuf[i] += vecsData[i];
+                        vecfIntermProcBuf[i] += vecfData[i];
                     }
                 }
             }
@@ -1191,8 +1194,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left/right channel
-                        vecdIntermProcBuf[k]     += vecsData[i] * dGainL;
-                        vecdIntermProcBuf[k + 1] += vecsData[i] * dGainR;
+                        vecfIntermProcBuf[k]     += vecfData[i] * dGainL;
+                        vecfIntermProcBuf[k + 1] += vecfData[i] * dGainR;
                     }
                 }
                 else
@@ -1201,17 +1204,21 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
                         // left/right channel
-                        vecdIntermProcBuf[i]     += vecsData[i] *     dGainL;
-                        vecdIntermProcBuf[i + 1] += vecsData[i + 1] * dGainR;
+                        vecfIntermProcBuf[i]     += vecfData[i] *     dGainL;
+                        vecfIntermProcBuf[i + 1] += vecfData[i + 1] * dGainR;
                     }
                 }
             }
         }
 
-        // convert from double to short with clipping
+        // When adding multiple sound sources together
+        // the resulting signal level may exceed the maximum
+        // audio range which is from -1.0f to 1.0f inclusivly.
+        // Clip the intermediate sound buffer to be within
+        // the expected range
         for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
         {
-            vecsSendData[i] = Double2Short ( vecdIntermProcBuf[i] );
+            vecfSendData[i] = clipFloat ( vecfIntermProcBuf[i] );
         }
     }
 
@@ -1255,12 +1262,12 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
     // is false and the Get() function is not called at all. Therefore if the buffer is not needed
     // we do not spend any time in the function but go directly inside the if condition.
     if ( ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] == 0 ) ||
-         DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
+         DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecfSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
     {
         if ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] != 0 )
         {
             // get the large frame from the conversion buffer
-            DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
+            DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecfSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
         for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
@@ -1272,11 +1279,11 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 //      optimization it would be better to set it only if the network frame size is changed
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-                iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
-                                               iClientFrameSizeSamples,
-                                               &vecvecbyCodedData[iChanCnt][0],
-                                               iCeltNumCodedBytes );
+                iUnused = opus_custom_encode_float ( pCurOpusEncoder,
+                                                     &vecfSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                                     iClientFrameSizeSamples,
+                                                     &vecvecbyCodedData[iChanCnt][0],
+                                                     iCeltNumCodedBytes );
             }
 
             // send separate mix to current clients
@@ -1665,10 +1672,10 @@ void CServer::customEvent ( QEvent* pEvent )
 }
 
 /// @brief Compute frame peak level for each client
-bool CServer::CreateLevelsForAllConChannels ( const int                        iNumClients,
-                                              const CVector<int>&              vecNumAudioChannels,
-                                              const CVector<CVector<int16_t> > vecvecsData,
-                                              CVector<uint16_t>&               vecLevelsOut )
+bool CServer::CreateLevelsForAllConChannels ( const int                     iNumClients,
+                                              const CVector<int>&           vecNumAudioChannels,
+                                              const CVector<CVector<float> > vecvecfData,
+                                              CVector<uint16_t>&            vecLevelsOut )
 {
     bool bLevelsWereUpdated = false;
 
@@ -1681,13 +1688,13 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
         for ( int j = 0; j < iNumClients; j++ )
         {
             // update and get signal level for meter in dB for each channel
-            const double dCurSigLevelForMeterdB = vecChannels[vecChanIDsCurConChan[j]].
-                UpdateAndGetLevelForMeterdB ( vecvecsData[j],
+            const float dCurSigLevelForMeterdB = vecChannels[vecChanIDsCurConChan[j]].
+                UpdateAndGetLevelForMeterdB ( vecvecfData[j],
                                               iServerFrameSizeSamples,
                                               vecNumAudioChannels[j] > 1 );
 
             // map value to integer for transmission via the protocol (4 bit available)
-            vecLevelsOut[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );
+            vecLevelsOut[j] = static_cast<uint16_t> ( std::ceilf ( dCurSigLevelForMeterdB ) );
         }
     }
 

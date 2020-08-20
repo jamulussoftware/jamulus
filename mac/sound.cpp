@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
                  void*          arg,
                  const int      iCtrlMIDIChannel,
                  const bool     ,
@@ -848,7 +848,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     iCoreAudioBufferSizeStereo = 2 * iCoreAudioBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStereo );
+    vecfTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStereo );
 
     return iCoreAudioBufferSizeMono;
 }
@@ -970,8 +970,8 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
             for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
             {
                 // copy left and right channels separately
-                pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( pLeftData[iNumChanPerFrameLeft * i + iSelInInterlChLeft] * _MAXSHORT );
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pRightData[iNumChanPerFrameRight * i + iSelInInterlChRight] * _MAXSHORT );
+                pSound->vecfTmpAudioSndCrdStereo[2 * i]     = pLeftData[iNumChanPerFrameLeft * i + iSelInInterlChLeft];
+                pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] = pRightData[iNumChanPerFrameRight * i + iSelInInterlChRight];
             }
 
             // add an additional optional channel
@@ -982,8 +982,8 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Double2Short (
-                        pSound->vecsTmpAudioSndCrdStereo[2 * i] + pLeftData[iNumChanPerFrameLeft * i + iSelAddInInterlChLeft] * _MAXSHORT );
+                    pSound->vecfTmpAudioSndCrdStereo[2 * i] = clipFloat (
+                        pSound->vecfTmpAudioSndCrdStereo[2 * i] + pLeftData[iNumChanPerFrameLeft * i + iSelAddInInterlChLeft] );
                 }
             }
 
@@ -994,19 +994,19 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Double2Short (
-                        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] + pRightData[iNumChanPerFrameRight * i + iSelAddInInterlChRight] * _MAXSHORT );
+                    pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] = clipFloat (
+                        pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] + pRightData[iNumChanPerFrameRight * i + iSelAddInInterlChRight] );
                 }
             }
         }
         else
         {
             // incompatible sizes, clear work buffer
-            pSound->vecsTmpAudioSndCrdStereo.Reset ( 0 );
+            pSound->vecfTmpAudioSndCrdStereo.Reset ( 0 );
         }
 
         // call processing callback function
-        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+        pSound->ProcessCallback ( pSound->vecfTmpAudioSndCrdStereo );
     }
 
     if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData )
@@ -1028,8 +1028,8 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
            {
                // copy left and right channels separately
-               pLeftData[iNumChanPerFrameLeft * i + iSelOutInterlChLeft]    = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
-               pRightData[iNumChanPerFrameRight * i + iSelOutInterlChRight] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+               pLeftData[iNumChanPerFrameLeft * i + iSelOutInterlChLeft]    = (Float32) pSound->vecfTmpAudioSndCrdStereo[2 * i];
+               pRightData[iNumChanPerFrameRight * i + iSelOutInterlChRight] = (Float32) pSound->vecfTmpAudioSndCrdStereo[2 * i + 1];
            }
         }
     }

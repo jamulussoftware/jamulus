@@ -34,26 +34,26 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
+    CSound ( void (*fpNewCallback) ( CVector<float>& vfData, void* arg ), void* arg ) :
         CSoundBase ( true, fpNewCallback, arg ), iVSTMonoBufferSize ( 0 ) {}
 
     // special VST functions
     void SetMonoBufferSize ( const int iNVBS ) { iVSTMonoBufferSize = iNVBS; }
     void VSTProcessCallback()
     {
-        CSoundBase::ProcessCallback ( vecsTmpAudioSndCrdStereo );
+        CSoundBase::ProcessCallback ( vecfTmpAudioSndCrdStereo );
     }
 
     virtual int Init ( const int )
     {
         // init base class
         CSoundBase::Init ( iVSTMonoBufferSize );
-        vecsTmpAudioSndCrdStereo.Init ( 2 * iVSTMonoBufferSize /* stereo */);
+        vecfTmpAudioSndCrdStereo.Init ( 2 * iVSTMonoBufferSize /* stereo */);
         return iVSTMonoBufferSize;
     }
 
     // this vector must be accessible from the outside (quick hack solution)
-    CVector<int16_t> vecsTmpAudioSndCrdStereo;
+    CVector<float> vecfTmpAudioSndCrdStereo;
 
 protected:
     int iVSTMonoBufferSize;

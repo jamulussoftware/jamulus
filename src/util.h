@@ -74,22 +74,10 @@ class CClient;  // forward declaration of CClient
 
 
 /* Global functions ***********************************************************/
-// converting double to short
-inline short Double2Short ( const double dInput )
+// range check audio samples
+static inline float clipFloat ( const float fInput )
 {
-    // lower bound
-    if ( dInput < _MINSHORT )
-    {
-        return _MINSHORT;
-    }
-
-    // upper bound
-    if ( dInput > _MAXSHORT )
-    {
-        return _MAXSHORT;
-    }
-
-    return static_cast<short> ( dInput );
+    return qBound ( -1.0f, fInput, 1.0f );
 }
 
 // debug error handling
@@ -739,32 +727,32 @@ public:
 // TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
 //      But tests with 128 and 64 samples frame size have shown that the meter fly back
 //      is ok for both numbers of samples frame size with a factor of 0.97.
-    CStereoSignalLevelMeter ( const bool   bNIsStereoOut     = true,
-                              const double dNSmoothingFactor = 0.97 ) :
-        dSmoothingFactor ( dNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
+    CStereoSignalLevelMeter ( const bool  bNIsStereoOut     = true,
+                              const float fNSmoothingFactor = 0.97f ) :
+        fSmoothingFactor ( fNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
 
-    void Update ( const CVector<short>& vecsAudio,
+    void Update ( const CVector<float>& vecfAudio,
                   const int             iInSize,
                   const bool            bIsStereoIn );
 
-    double        GetLevelForMeterdBLeftOrMono() { return CalcLogResultForMeter ( dCurLevelLOrMono ); }
-    double        GetLevelForMeterdBRight()      { return CalcLogResultForMeter ( dCurLevelR ); }
-    static double CalcLogResultForMeter ( const double& dLinearLevel );
+    float        GetLevelForMeterdBLeftOrMono() { return CalcLogResultForMeter ( fCurLevelLOrMono ); }
+    float        GetLevelForMeterdBRight()      { return CalcLogResultForMeter ( fCurLevelR ); }
+    static float CalcLogResultForMeter ( const float& fLinearLevel );
 
     void Reset()
     {
-        dCurLevelLOrMono = 0.0;
-        dCurLevelR       = 0.0;
+        fCurLevelLOrMono = 0.0f;
+        fCurLevelR       = 0.0f;
     }
 
 protected:
-    double UpdateCurLevel ( double       dCurLevel,
-                            const double dMax );
+    float UpdateCurLevel ( float       fCurLevel,
+                           const float fMax );
 
-    double dCurLevelLOrMono;
-    double dCurLevelR;
-    double dSmoothingFactor;
-    bool   bIsStereoOut;
+    float fCurLevelLOrMono;
+    float fCurLevelR;
+    float fSmoothingFactor;
+    bool  bIsStereoOut;
 };
 
 
@@ -1171,35 +1159,35 @@ public:
     void Init ( const EAudChanConf eNAudioChannelConf,
                 const int          iNStereoBlockSizeSam,
                 const int          iSampleRate,
-                const double       rT60 = 1.1 );
+                const float        rT60 = 1.1f );
 
     void Clear();
-    void Process ( CVector<int16_t>& vecsStereoInOut,
-                   const bool        bReverbOnLeftChan,
-                   const double      dAttenuation );
+    void Process ( CVector<float>& vecfStereoInOut,
+                   const bool      bReverbOnLeftChan,
+                   const float     fAttenuation );
 
 protected:
-    void setT60 ( const double rT60, const int iSampleRate );
+    void setT60 ( const float rT60, const int iSampleRate );
     bool isPrime ( const int number );
 
     class COnePole
     {
     public:
         COnePole() : dA ( 0 ), dB ( 0 ) { Reset(); }
-        void setPole ( const double dPole );
-        double Calc ( const double dIn );
+        void setPole ( const float dPole );
+        float Calc ( const float dIn );
         void Reset() { dLastSample = 0; }
 
     protected:
-        double dA;
-        double dB;
-        double dLastSample;
+        float dA;
+        float dB;
+        float dLastSample;
     };
 
     EAudChanConf  eAudioChannelConf;
     int           iStereoBlockSizeSam;
-    CFIFO<double> allpassDelays[3];
-    CFIFO<double> combDelays[4];
+    CFIFO<float>  allpassDelays[3];
+    CFIFO<float>  combDelays[4];
     COnePole      combFilters[4];
     CFIFO<double> outLeftDelay;
     CFIFO<double> outRightDelay;

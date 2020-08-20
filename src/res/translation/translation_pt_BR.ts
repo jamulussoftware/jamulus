@@ -1043,7 +1043,7 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
-        <source>C&amp;hat</source>
+        <source>&amp;Chat</source>
         <translation>Me&amp;nsagens</translation>
     </message>
     <message>

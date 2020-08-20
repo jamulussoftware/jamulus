@@ -1044,8 +1044,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
-        <source>C&amp;hat</source>
-        <translation>C&amp;hat</translation>
+        <source>&amp;Chat</source>
+        <translation>&amp;Chat</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>

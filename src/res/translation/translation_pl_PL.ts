@@ -863,8 +863,8 @@ nie jestem pewna</translatorcomment>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
-        <source>C&amp;hat</source>
-        <translation>C&amp;zat</translation>
+        <source>&amp;Chat</source>
+        <translation>&amp;Czat</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>

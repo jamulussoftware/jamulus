@@ -9,8 +9,8 @@
 
 - accessibility improvements, coded by chigkim (#498, #512)
 
+- bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
-TODO fix Alt+h issue (see https://sourceforge.net/p/llcon/discussion/software/thread/1856e44ffd/?limit=25#74bb/5686) -> Alt+c
 
 TODO improve multithreading -> merge branch into master
 TODO use command line argument to enable multithreading instead of qmake CONFIG

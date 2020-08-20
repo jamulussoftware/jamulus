@@ -865,8 +865,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
-        <source>C&amp;hat</source>
-        <translation>C&amp;hatt</translation>
+        <source>&amp;Chat</source>
+        <translation>&amp;Chatt</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>

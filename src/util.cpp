@@ -456,6 +456,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
         "<p>Alberstein8 (<a href=""https://github.com/Alberstein8"">Alberstein8</a>)</p>"
         "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
+        "<p>HPS (<a href=""https://github.com/hselasky"">hselasky</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
         "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"

@@ -84,6 +84,7 @@
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 #define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
+#define PROTMESSID_CLM_PING_MS_WITHADJUSTMENT 1019 // for measuring ping time
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE      2001 // a container for split messages
@@ -136,6 +137,9 @@ void CreateReqChannelLevelListMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
+    void CreateCLPingWithAdjustment    ( const CHostAddress& InetAddr,
+                                         const int           iMs,
+                                         const float         fAdjustment );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
                                          const int           iMs,
                                          const int           iNumClients );
@@ -287,6 +291,8 @@ protected:
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
+    bool EvaluateCLPingWithAdjustment    ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
     bool EvaluateCLPingWithNumClientsMes ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLServerFullMes();
@@ -361,6 +367,9 @@ signals:
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );
+    void CLPingWithAdjustmentReceived ( CHostAddress           InetAddr,
+                                        int                    iMs,
+                                        float                  fAdjustment );
     void CLPingWithNumClientsReceived ( CHostAddress           InetAddr,
                                         int                    iMs,
                                         int                    iNumClients );

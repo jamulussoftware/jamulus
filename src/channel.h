@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QTextStream>
 #include "global.h"
+#include "jitterbuffer.h"
 #include "buffer.h"
 #include "util.h"
 #include "protocol.h"
@@ -121,8 +122,7 @@ public:
     void SetRemoteChanPan ( const int iId, const float fPan )
         { Protocol.CreateChanPanMes ( iId, fPan ); }
 
-    bool SetSockBufNumFrames ( const int  iNewNumFrames,
-                               const bool bPreserve = false );
+    bool SetSockBufNumFrames ( const int iNewNumFrames );
     int GetSockBufNumFrames() const { return iCurSockBufNumFrames; }
 
     void UpdateSocketBufferSize();
@@ -143,8 +143,20 @@ public:
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
     int GetNetwFrameSize() const { return iNetwFrameSize; }
 
-    void GetBufErrorRates ( CVector<double>& vecErrRates, double& dLimit, double& dMaxUpLimit )
-        { SockBuf.GetErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
+    void GetJitterStatistics ( float *vecfStat, float &fClockDrift, float &fPacketDrops,
+                               float &fPeerAdjust, float &fLocalAdjust )
+    {
+          SockBuf.GetStatistics ( vecfStat );
+          fClockDrift = SockBuf.GetClockDrift ();
+          fPacketDrops = SockBuf.GetPacketDrops ();
+          fPeerAdjust = SockBuf.GetPeerAdjust ();
+          fLocalAdjust = SockBuf.GetLocalAdjustStep ();
+    }
+    bool GetToggle () { return SockBuf.GetToggle(); }
+    void SetLocalAdjustment ( const float fAdjustment ) { return SockBuf.SetLocalAdjust ( fAdjustment ); }
+    float GetPeerAdjustment () { return SockBuf.GetPeerAdjust (); }
+    int GetLocalAdjustment () { return SockBuf.GetLocalAdjust (); }
+    bool IsLocalAdjustmentActive () { return SockBuf.IsAdjustActive (); }
 
     EAudComprType GetAudioCompressionType() { return eAudioCompressionType; }
     int GetNumAudioChannels() const { return iNumAudioChannels; }
@@ -205,7 +217,7 @@ protected:
     CVector<float>          vecfPannings;
 
     // network jitter-buffer
-    CNetBufWithStats        SockBuf;
+    CJitterBuffer           SockBuf;
     int                     iCurSockBufNumFrames;
     bool                    bDoAutoSockBufSize;
 

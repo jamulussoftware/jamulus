@@ -165,6 +165,9 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived,
         this, &CClient::OnCLPingReceived );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithAdjustmentReceived,
+        this, &CClient::OnCLPingWithAdjustmentReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithNumClientsReceived,
         this, &CClient::OnCLPingWithNumClientsReceived );
 
@@ -318,6 +321,25 @@ void CClient::OnCLPingReceived ( CHostAddress InetAddr,
         if ( iCurDiff >= 0 )
         {
             emit PingTimeReceived ( iCurDiff );
+        }
+    }
+}
+
+void CClient::OnCLPingWithAdjustmentReceived ( CHostAddress InetAddr,
+                                               int          iMs,
+                                               float        fAdjustment )
+{
+    // make sure we are running and the server address is correct
+    if ( IsRunning() && ( InetAddr == Channel.GetAddress() ) )
+    {
+        // take care of wrap arounds (if wrapping, do not use result)
+        const int iCurDiff = EvaluatePingMessage ( iMs );
+        if ( iCurDiff >= 0 )
+        {
+            emit PingTimeReceived ( iCurDiff );
+
+            // update adjustment value - no need for locking
+            Channel.SetLocalAdjustment ( fAdjustment );
         }
     }
 }
@@ -1070,10 +1092,26 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             }
         }
 
-        // send coded audio through the network
-        Channel.PrepAndSendPacket ( &Socket,
-                                    vecCeltData,
-                                    iCeltNumCodedBytes );
+        // insert our toggle bit
+        vecCeltData[0] &= ~1;
+        vecCeltData[0] |= Channel.GetToggle();
+
+        switch ( Channel.GetLocalAdjustment () ) {
+        case 1:
+            // send coded audio through the network
+            Channel.PrepAndSendPacket ( &Socket,
+                                        vecCeltData,
+                                        iCeltNumCodedBytes );
+            // FALLTHROUGH
+        case 0:
+            // send coded audio through the network
+            Channel.PrepAndSendPacket ( &Socket,
+                                        vecCeltData,
+                                        iCeltNumCodedBytes );
+            // FALLTHROUGH
+        default:
+            break;
+        }
     }
 
 

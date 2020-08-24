@@ -444,6 +444,7 @@ public slots:
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
         { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
 
+    void OnCLPingWithAdjustmentReceived ( CHostAddress InetAddr, int iMs, float fAdjust );
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
                                           int          iMs,
                                           int )

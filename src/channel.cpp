@@ -179,13 +179,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
             iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
         }
 
-        MutexSocketBuf.lock();
-        {
-            // init socket buffer
-            SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
-        }
-        MutexSocketBuf.unlock();
+        SockBuf.Init ( iNetwFrameSize, bDoAutoSockBufSize ? 0 : iCurSockBufNumFrames );
 
         MutexConvBuf.lock();
         {
@@ -203,8 +197,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
     Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
 }
 
-bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
-                                     const bool bPreserve )
+bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames )
 {
     bool ReturnValue           = true;  // init with error
     bool bCurDoAutoSockBufSize = false; // we have to init but init values does not matter
@@ -223,7 +216,7 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
 
                 // the network block size is a multiple of the minimum network
                 // block size
-                SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
+                SockBuf.SetMaxInUse ( bDoAutoSockBufSize ? 0 : iNewNumFrames );
 
                 // store current auto socket buffer size setting in the mutex
                 // region since if we use the current parameter below in the
@@ -367,7 +360,7 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
         {
             // manual setting is received, turn OFF auto setting and apply new value
             SetDoAutoSockBufSize ( false );
-            SetSockBufNumFrames ( iNewJitBufSize, true );
+            SetSockBufNumFrames ( iNewJitBufSize );
         }
     }
     else
@@ -447,14 +440,9 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             // is not larger than the allowed maximum value
             iFadeInCnt = std::min ( iFadeInCnt, iFadeInCntMax );
 
-            MutexSocketBuf.lock();
-            {
-                // update socket buffer (the network block size is a multiple of the
-                // minimum network frame size)
-                SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-                SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
-            }
-            MutexSocketBuf.unlock();
+            // update socket buffer (the network block size is a multiple of the
+            // minimum network frame size)
+            SockBuf.Init ( iNetwFrameSize, bDoAutoSockBufSize ? 0 : iCurSockBufNumFrames );
 
             MutexConvBuf.lock();
             {
@@ -539,16 +527,20 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
         MutexSocketBuf.lock();
         {
             // only process audio if packet has correct size
-            if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
+            if ( (iNumBytes % iNetwFrameSize) == 0 )
             {
-                // store new packet in jitter buffer
-                if ( SockBuf.Put ( vecbyData, iNumBytes ) )
+                // set default return codee
+                eRet = PS_AUDIO_OK;
+
+                for ( int i = 0; i != iNumBytes; i += iNetwFrameSize )
                 {
-                    eRet = PS_AUDIO_OK;
-                }
-                else
-                {
-                    eRet = PS_AUDIO_ERR;
+                    // store new packet in jitter buffer
+		    if ( SockBuf.PutFrame ( vecbyData.data() + i,
+					    iNetwFrameSize ) == false )
+		    {
+                        eRet = PS_AUDIO_ERR;
+                        break;
+                    }
                 }
 
                 // manage audio fade-in counter
@@ -606,7 +598,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
     MutexSocketBuf.lock();
     {
         // the socket access must be inside a mutex
-        const bool bSockBufState = SockBuf.Get ( vecbyData, iNumBytes );
+        const bool bSockBufState = SockBuf.GetFrame ( vecbyData.data(), iNumBytes );
 
         // decrease time-out counter
         if ( iConTimeOut > 0 )
@@ -710,6 +702,6 @@ void CChannel::UpdateSocketBufferSize()
     {
         // use auto setting result from channel, make sure we preserve the
         // buffer memory since we just adjust the size here
-        SetSockBufNumFrames ( SockBuf.GetAutoSetting(), true );
+        SetSockBufNumFrames ( SockBuf.GetAutoSetting() );
     }
 }

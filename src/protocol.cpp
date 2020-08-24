@@ -252,6 +252,12 @@ CONNECTION LESS MESSAGES
     | 4 bytes transmit time in ms |
     +-----------------------------+
 
+- PROTMESSID_CLM_PING_MS_WITHADJUSTMENT: Connection less ping message
+
+    +-----------------------------+-----------------------------------+
+    | 4 bytes transmit time in ms | 4 bytes TX rate adjustment factor |
+    +-----------------------------+-----------------------------------+
+
 
 - PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS: Connection less ping message (for
                                          measuring the ping time) with the
@@ -868,6 +874,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
     {
     case PROTMESSID_CLM_PING_MS:
         EvaluateCLPingMes ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_PING_MS_WITHADJUSTMENT:
+        EvaluateCLPingWithAdjustment ( InetAddr, vecbyMesBodyData );
         break;
 
     case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
@@ -1763,7 +1773,6 @@ bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
     return false; // no error
 }
 
-
 // Connection less messages ----------------------------------------------------
 void CProtocol::CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
 {
@@ -1794,6 +1803,53 @@ bool CProtocol::EvaluateCLPingMes ( const CHostAddress& InetAddr,
     // invoke message action
     emit CLPingReceived ( InetAddr,
                           static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
+
+    return false; // no error
+}
+
+// Connection less messages ----------------------------------------------------
+void CProtocol::CreateCLPingWithAdjustment ( const CHostAddress& InetAddr,
+    const int iMs, const float fAdjust )
+{
+    static constexpr float fAdjustFactor = (1LL << 31) - 1LL;
+
+    int iPos = 0; // init position pointer
+
+    // build data vector (8 bytes long)
+    CVector<uint8_t> vecData ( 8 );
+
+    // transmit time (4 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
+
+    // transmit adjustment (4 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( fAdjust * fAdjustFactor), 4 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_PING_MS_WITHADJUSTMENT,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLPingWithAdjustment ( const CHostAddress&     InetAddr,
+					       const CVector<uint8_t>& vecData )
+{
+    static constexpr float fAdjustFactor = (1LL << 31) - 1LL;
+
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 8 )
+    {
+        return true; // return error code
+    }
+
+    // transmit time
+    const int iCurMs = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // get adjustment factor
+    const float fAdjust = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) / fAdjustFactor;
+
+    // invoke message action
+    emit CLPingWithAdjustmentReceived ( InetAddr, iCurMs, fAdjust );
 
     return false; // no error
 }

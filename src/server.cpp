@@ -429,6 +429,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived,
         this, &CServer::OnCLPingReceived );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithAdjustmentReceived,
+        this, &CServer::OnCLPingWithAdjustmentReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithNumClientsReceived,
         this, &CServer::OnCLPingWithNumClientsReceived );
 
@@ -1320,10 +1323,27 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
                                                iCeltNumCodedBytes );
             }
 
-            // send separate mix to current clients
-            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                        vecvecbyCodedData[iChanCnt],
-                                                        iCeltNumCodedBytes );
+            // insert our toggle bit
+            vecvecbyCodedData[iChanCnt][0] &= ~1;
+            vecvecbyCodedData[iChanCnt][0] |=
+                vecChannels[iCurChanID].GetToggle();
+
+            switch ( vecChannels[iCurChanID].GetLocalAdjustment () ) {
+            case 1:
+                  // send separate mix to current clients
+                  vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                              vecvecbyCodedData[iChanCnt],
+                                                              iCeltNumCodedBytes );
+                  // FALLTHROUGH
+            case 0:
+                  // send separate mix to current clients
+                  vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                              vecvecbyCodedData[iChanCnt],
+                                                              iCeltNumCodedBytes );
+                  // FALLTHROUGH
+            default:
+                  break;
+            }
         }
     }
 
@@ -1726,4 +1746,20 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
     }
 
     return bLevelsWereUpdated;
+}
+
+void CServer :: OnCLPingWithAdjustmentReceived ( CHostAddress InetAddr, int iMs, float fAdjust )
+{
+    const int iCurChanID = FindChannel ( InetAddr );
+
+    if ( iCurChanID != INVALID_CHANNEL_ID )
+    {
+        vecChannels[iCurChanID].SetLocalAdjustment ( fAdjust );
+        fAdjust = vecChannels[iCurChanID].GetPeerAdjustment ();
+    }
+    else
+    {
+        fAdjust = 0.0f;
+    }
+    ConnLessProtocol.CreateCLPingWithAdjustment ( InetAddr, iMs, fAdjust );
 }

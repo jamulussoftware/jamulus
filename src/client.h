@@ -155,10 +155,9 @@ public:
     void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
 
-    void SetSockBufNumFrames ( const int  iNumBlocks,
-                               const bool bPreserve = false )
+    void SetSockBufNumFrames ( const int  iNumBlocks )
     {
-        Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve );
+        Channel.SetSockBufNumFrames ( iNumBlocks );
     }
     int GetSockBufNumFrames() { return Channel.GetSockBufNumFrames(); }
 
@@ -251,7 +250,19 @@ public:
         { Channel.CreateChatTextMes ( strChatText ); }
 
     void CreateCLPingMes()
-        { ConnLessProtocol.CreateCLPingMes ( Channel.GetAddress(), PreparePingMessage() ); }
+    {
+        if (Channel.IsLocalAdjustmentActive())
+        {
+            // provide adjustment as part of ping message
+            ConnLessProtocol.CreateCLPingWithAdjustment ( Channel.GetAddress(),
+                                                          PreparePingMessage(),
+                                                          Channel.GetPeerAdjustment() );
+        }
+        else
+        {
+            ConnLessProtocol.CreateCLPingMes ( Channel.GetAddress(), PreparePingMessage() );
+        }
+    }
 
     void CreateCLServerListPingMes ( const CHostAddress& InetAddr )
     {
@@ -271,8 +282,10 @@ public:
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
-    void GetBufErrorRates ( CVector<double>& vecErrRates, double& dLimit, double& dMaxUpLimit )
-        { Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
+    void GetJitterStatistics ( float *vecfStats, float &fClockDrift,
+        float &fPacketDrops, float &fPeerAdjust, float &fLocalAdjust )
+        { Channel.GetJitterStatistics ( vecfStats, fClockDrift, fPacketDrops,
+                                        fPeerAdjust, fLocalAdjust ); }
 
     // settings
     CChannelCoreInfo ChannelInfo;
@@ -387,6 +400,10 @@ protected slots:
 
     void OnSendCLProtMessage ( CHostAddress     InetAddr,
                                CVector<uint8_t> vecMessage );
+
+    void OnCLPingWithAdjustmentReceived ( CHostAddress InetAddr,
+                                          int          iMs,
+                                          float        fAdjustment );
 
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
                                           int          iMs,

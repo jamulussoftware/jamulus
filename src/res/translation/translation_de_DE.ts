@@ -189,32 +189,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="795"/>
+        <location filename="../../audiomixerboard.cpp" line="823"/>
         <source>Personal Mix at the Server</source>
         <translation>Eigener Mix am Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="795"/>
+        <location filename="../../audiomixerboard.cpp" line="823"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Wenn man mit einem Server verbunden ist, dann kann man hier den eigenen Mix verstellen ohne dass man etwas daran verändert, was die anderen von mir hören. Der Titel zeigt den Servernamen an und falls bekannt den Aufnahmestatus des Servers.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="875"/>
+        <location filename="../../audiomixerboard.cpp" line="903"/>
         <source>Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="884"/>
+        <location filename="../../audiomixerboard.cpp" line="912"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>V E R B I N D U N G S A U F B A U</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1017"/>
+        <location filename="../../audiomixerboard.cpp" line="1045"/>
         <source>RECORDING ACTIVE</source>
         <translation>AUFNAHME AKTIV</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1020"/>
+        <location filename="../../audiomixerboard.cpp" line="1048"/>
         <source>Personal Mix at: </source>
         <translation>Eigener Mix am Server: </translation>
     </message>
@@ -424,44 +424,49 @@
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="711"/>
+        <location filename="../../audiomixerboard.cpp" line="721"/>
         <source>Alias/Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="717"/>
+        <location filename="../../audiomixerboard.cpp" line="728"/>
         <source>Instrument</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="725"/>
+        <location filename="../../audiomixerboard.cpp" line="738"/>
         <source>Location</source>
         <translation>Standort</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="747"/>
-        <location filename="../../audiomixerboard.cpp" line="751"/>
-        <location filename="../../audiomixerboard.cpp" line="755"/>
+        <location filename="../../audiomixerboard.cpp" line="766"/>
+        <location filename="../../audiomixerboard.cpp" line="772"/>
+        <location filename="../../audiomixerboard.cpp" line="778"/>
         <source>Skill Level</source>
         <translation>Spielstärke</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="747"/>
+        <location filename="../../audiomixerboard.cpp" line="799"/>
+        <source>Alias</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="765"/>
         <source>Beginner</source>
         <translation>Anfänger</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="751"/>
+        <location filename="../../audiomixerboard.cpp" line="771"/>
         <source>Intermediate</source>
         <translation>Mittlere Spielstärke</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="755"/>
+        <location filename="../../audiomixerboard.cpp" line="777"/>
         <source>Expert</source>
         <translation>Experte</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="766"/>
+        <location filename="../../audiomixerboard.cpp" line="790"/>
         <source>Musician Profile</source>
         <translation>Profil des Musikers</translation>
     </message>
@@ -1023,8 +1028,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
-        <source>C&amp;hat</source>
-        <translation>C&amp;hat</translation>
+        <source>&amp;Chat</source>
+        <translation>&amp;Chat</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>
@@ -2536,7 +2541,7 @@
         <translation>Leadsänger</translation>
     </message>
     <message>
-        <location filename="../../settings.cpp" line="285"/>
+        <location filename="../../settings.cpp" line="286"/>
         <source>No Name</source>
         <translation>Kein Name</translation>
     </message>

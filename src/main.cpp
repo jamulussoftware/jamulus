@@ -84,6 +84,7 @@ int main ( int argc, char** argv )
     QString      strRecordingDirName         = "";
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
+    QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = APP_NAME;
 
@@ -409,6 +410,22 @@ int main ( int argc, char** argv )
         }
 
 
+        // Server list filter --------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-f",
+                                 "--listfilter",
+                                 strArgument ) )
+        {
+            strServerListFilter = strArgument;
+            tsConsole << "- server list filter: " << strServerListFilter << endl;
+            CommandLineOptions << "--listfilter";
+            continue;
+        }
+
+
         // Server welcome message ----------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
@@ -644,6 +661,7 @@ int main ( int argc, char** argv )
                              strServerName,
                              strCentralServer,
                              strServerInfo,
+                             strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
                              bCentServPingServerInList,
@@ -742,6 +760,8 @@ QString UsageArguments ( char **argv )
         "  -a, --servername      server name, required for HTML status\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the central server\n"
+        "  -f, --listfilter      server list whitelist filter in the format:\n"
+        "                        [IP address 1];[IP address 2];[IP address 3]; ..."
         "  -F, --fastupdate      use 64 samples frame size mode\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"

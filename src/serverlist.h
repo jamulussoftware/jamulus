@@ -124,6 +124,7 @@ public:
     CServerListManager ( const quint16  iNPortNum,
                          const QString& sNCentServAddr,
                          const QString& strServerInfo,
+                         const QString& strServerListFilter,
                          const int      iNumChannels,
                          const bool     bNCentServPingServerInList,
                          CProtocol*     pNConLProt );
@@ -205,6 +206,8 @@ protected:
 
     CHostAddress            SlaveCurCentServerHostAddress;
     CHostAddress            SlaveCurLocalHostAddress;
+
+    QList<QHostAddress>     vWhiteList;
 
     CProtocol*              pConnLessProtocol;
 

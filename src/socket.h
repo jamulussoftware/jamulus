@@ -99,7 +99,7 @@ protected:
 
     bool             bJitterBufferOK;
 
-public slots:
+public:
     void OnDataReceived();
 
 signals:

@@ -334,7 +334,7 @@
         <item>
          <widget class="QCheckBox" name="chbChat">
           <property name="text">
-           <string>C&amp;hat</string>
+           <string>&amp;Chat</string>
           </property>
          </widget>
         </item>

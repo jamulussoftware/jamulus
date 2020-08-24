@@ -154,32 +154,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="795"/>
+        <location filename="../../audiomixerboard.cpp" line="823"/>
         <source>Personal Mix at the Server</source>
         <translation>Personlig mix på servern</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="795"/>
+        <location filename="../../audiomixerboard.cpp" line="823"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>När du är ansluten till en server låter kontrollerna här ställa in din lokala mix utan att påverka vad andra hör från dig. Titeln visar servernamnet och, om det är känt, om den aktivt spelar in.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="875"/>
+        <location filename="../../audiomixerboard.cpp" line="903"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="884"/>
+        <location filename="../../audiomixerboard.cpp" line="912"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>F Ö R S Ö K E R   A N S L U T A</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1017"/>
+        <location filename="../../audiomixerboard.cpp" line="1045"/>
         <source>RECORDING ACTIVE</source>
         <translation>INSPELNING AKTIV</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1020"/>
+        <location filename="../../audiomixerboard.cpp" line="1048"/>
         <source>Personal Mix at: </source>
         <translation>Personlig mix på: </translation>
     </message>
@@ -386,44 +386,49 @@
         <translation>Grp</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="711"/>
+        <location filename="../../audiomixerboard.cpp" line="721"/>
         <source>Alias/Name</source>
         <translation>Alias/Namn</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="717"/>
+        <location filename="../../audiomixerboard.cpp" line="728"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="725"/>
+        <location filename="../../audiomixerboard.cpp" line="738"/>
         <source>Location</source>
         <translation>Plats</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="747"/>
-        <location filename="../../audiomixerboard.cpp" line="751"/>
-        <location filename="../../audiomixerboard.cpp" line="755"/>
+        <location filename="../../audiomixerboard.cpp" line="766"/>
+        <location filename="../../audiomixerboard.cpp" line="772"/>
+        <location filename="../../audiomixerboard.cpp" line="778"/>
         <source>Skill Level</source>
         <translation>Skicklighetsnivå</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="747"/>
+        <location filename="../../audiomixerboard.cpp" line="799"/>
+        <source>Alias</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="765"/>
         <source>Beginner</source>
         <translation>Nybörjare</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="751"/>
+        <location filename="../../audiomixerboard.cpp" line="771"/>
         <source>Intermediate</source>
         <translation>Mellannivå</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="755"/>
+        <location filename="../../audiomixerboard.cpp" line="777"/>
         <source>Expert</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="766"/>
+        <location filename="../../audiomixerboard.cpp" line="790"/>
         <source>Musician Profile</source>
         <translation>Musikprofil</translation>
     </message>
@@ -860,8 +865,8 @@
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
-        <source>C&amp;hat</source>
-        <translation>C&amp;hatt</translation>
+        <source>&amp;Chat</source>
+        <translation>&amp;Chatt</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>
@@ -1876,7 +1881,7 @@
 <context>
     <name>CMusProfDlg</name>
     <message>
-        <location filename="../../settings.cpp" line="285"/>
+        <location filename="../../settings.cpp" line="286"/>
         <source>No Name</source>
         <translation>Inget namn</translation>
     </message>

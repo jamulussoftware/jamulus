@@ -1028,8 +1028,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // distributed over all available processor cores.
             // By using the future synchronizer we make sure that all
             // threads are done when we leave the timer callback function.
-            const int iStartChanCnt = iBlockCnt * iNumBlocks;
-            const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iNumBlocks - 1, iNumClients - 1 );
+            const int iStartChanCnt = iBlockCnt * iMTBlockSize;
+            const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
             FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
                                                                &CServer::MixEncodeTransmitDataBlocks,

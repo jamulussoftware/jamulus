@@ -74,6 +74,8 @@ public:
     virtual void Start();
     virtual void Stop();
 
+    virtual double GetInOutLatencyMs() { return dInOutLatencyMs; }
+
     // these variables should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
@@ -98,6 +100,8 @@ protected:
     static int     bufferSizeCallback ( jack_nframes_t, void *arg );
     static void    shutdownCallback ( void* );
     jack_client_t* pJackClient;
+
+    double dInOutLatencyMs;
 };
 #else
 // no sound -> dummy class definition

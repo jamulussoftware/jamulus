@@ -25,7 +25,6 @@
 \******************************************************************************/
 
 #include "sound.h"
-//#include <iostream> // For debugging total latency
 
 #ifdef WITH_SOUND
 void CSound::OpenJack ( const bool  bNoAutoJackConnect,
@@ -153,42 +152,26 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
             jack_free ( ports );
         }
 
-        // Compute latency:
-        // We'l just use the first input and first output ports
-        // in determining latency. We'll also use the most
-        // optimistic values.
-
-        jack_latency_callback_mode_t cbmode;
-        jack_latency_range_t latrange;
-
         // input latency
+        jack_latency_range_t         latrange;
+        jack_latency_callback_mode_t cbmode = JackCaptureLatency;
+        latrange.min                        = 0;
+        latrange.max                        = 0 ;
 
-        cbmode = JackCaptureLatency;
-        latrange.min = 0; 
-        latrange.max = 0 ;
-
-        jack_port_get_latency_range(input_port_left, cbmode, &latrange);
+        jack_port_get_latency_range ( input_port_left, cbmode, &latrange );
         int inLatency = latrange.min; // be optimistic
 
         // output latency 
-
-        cbmode = JackPlaybackLatency;
+        cbmode       = JackPlaybackLatency;
         latrange.min = 0; 
         latrange.max = 0 ;
 
-        jack_port_get_latency_range(output_port_left, cbmode, &latrange);
+        jack_port_get_latency_range ( output_port_left, cbmode, &latrange );
         int outLatency = latrange.min; // be optimistic
 
-        int totalLatency = inLatency + outLatency;
-
-        dInOutLatencyMs = double(totalLatency) * 1000.0 / double(SYSTEM_SAMPLE_RATE_HZ);
-
-        // For debugging
-        //std::cout << "------------------------------------------------" << std::endl;
-        //std::cout << "frame delay = " << inLatency << " in + " << outLatency << " out " << std::endl;
-        //std::cout << "total latency = " << totalLatency << " frames, " << dInOutLatencyMs << " ms " << std::endl;
-        //std::cout << "------------------------------------------------" << std::endl;
-
+        // compute latency by using the first input and first output
+        // ports and using the most optimistic values
+        dInOutLatencyMs = static_cast<double> ( inLatency + outLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
     }
 }
 

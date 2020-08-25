@@ -9,6 +9,8 @@
 
 - accessibility improvements, coded by chigkim (#498, #512)
 
+- added Jack audio audio latency calculation, coded by bflamig (#437)
+
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
 

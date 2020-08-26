@@ -1,1 +1,3 @@
-distributions/jamulus-server.service lib/systemd/system
+usr/bin/jamulus
+usr/share/applications/jamulus.desktop
+usr/share/icons/hicolor/512x512/apps/jamulus.png

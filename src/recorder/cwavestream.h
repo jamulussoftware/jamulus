@@ -59,7 +59,7 @@ public:
     HdrRiff() {}
 
     static const uint32_t chunkId = 0x46464952; // RIFF
-    static const uint32_t chunkSize = 0xffffffff; // (will be overwritten) Size of file in bytes - 8 = size of data + 36
+    static const uint32_t chunkSize = 0x00000000; // unknown
     static const uint32_t format = 0x45564157; // WAVE
 };
 
@@ -88,7 +88,7 @@ public:
     DataSubChunkHdr() {}
 
     static const uint32_t chunkId = 0x61746164; // "data"
-    static const uint32_t chunkSize = 0xffffffff; // (will be overwritten) Size of data
+    static const uint32_t chunkSize = 0x7ffff000; // magic for unspecified length
 };
 
 class CWaveStream : public QDataStream

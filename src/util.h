@@ -1299,34 +1299,6 @@ public:
 };
 
 
-// Precise time ----------------------------------------------------------------
-// required for ping measurement
-class CPreciseTime
-{
-public:
-#ifdef _WIN32
-    // for the Windows version we have to define a minimum timer precision
-    // -> set it to 1 ms
-    CPreciseTime() { timeBeginPeriod ( 1 ); }
-    virtual ~CPreciseTime() { timeEndPeriod ( 1 ); }
-#endif
-
-    // precise time (on Windows the QTime is not precise enough)
-    int elapsed()
-    {
-#ifdef _WIN32
-        return timeGetTime();
-#elif defined ( __APPLE__ ) || defined ( __MACOSX )
-        return mach_absolute_time() / 1000000; // convert ns in ms
-#else
-        timespec tp;
-        clock_gettime ( CLOCK_MONOTONIC, &tp );
-        return tp.tv_sec * 1000 + tp.tv_nsec / 1000000; // convert ns in ms and add the seconds part
-#endif
-    }
-};
-
-
 // Timing measurement ----------------------------------------------------------
 // intended for debugging the timing jitter of the sound card or server timer
 class CTimingMeas

@@ -190,6 +190,8 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal,
         this, &CClient::OnHandledSignal );
 
+    // start timer so that elapsed time works
+    PreciseTime.start();
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)

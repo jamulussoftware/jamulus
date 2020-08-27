@@ -9,9 +9,12 @@
 
 - accessibility improvements, coded by chigkim (#498, #512)
 
+- added Jack audio audio latency calculation, coded by bflamig (#437)
+
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
 
+TODO at about 70 client connections the client/server do not show/list all clients anymore (#547)
 TODO improve multithreading -> merge branch into master
 TODO use command line argument to enable multithreading instead of qmake CONFIG
 

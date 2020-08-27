@@ -369,7 +369,7 @@ protected:
     int                     iServerSockBufNumFrames;
 
     // for ping measurement
-    CPreciseTime            PreciseTime;
+    QElapsedTimer           PreciseTime;
 
     CSignalHandler*         pSignalHandler;
 

@@ -463,6 +463,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
         "<p>Nils Brederlow (<a href=""https://github.com/dingodoppelt"">dingodoppelt</a>)</p>"
         "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
+        "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
         "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
         "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
         "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"

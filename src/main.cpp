@@ -775,6 +775,7 @@ QString UsageArguments ( char **argv )
         "  -a, --servername      server name, required for HTML status\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the central server\n"
+        "                        (or 'localhost' to be a central server)\n"
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ..."
         "  -F, --fastupdate      use 64 samples frame size mode\n"

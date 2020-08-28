@@ -756,7 +756,7 @@ void CServer::Start()
     }
 }
 
-void CServer::Stop()
+void CServer::Stop(bool indicate_idling)
 {
     // Under Mac we have the problem that the timer shutdown might
     // take some time and therefore we get a lot of "server stopped"
@@ -768,12 +768,21 @@ void CServer::Stop()
         HighPrecisionTimer.Stop();
 
         // logging (add "server stopped" logging entry)
-        Logging.AddServerStopped();
+
+        if (indicate_idling)
+        {
+            Logging.AddServerStopped(",, server idling");
+        }
+        else 
+        {
+            Logging.AddServerStopped(",, server stopped");
+        }
 
         // emit stopped signal
         emit Stopped();
     }
 }
+
 
 void CServer::OnTimer()
 {
@@ -1032,7 +1041,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     {
         // Disable server if no clients are connected. In this case the server
         // does not consume any significant CPU when no client is connected.
-        Stop();
+        bool indicate_idling = true;
+        Stop(indicate_idling);
     }
 
     Q_UNUSED ( iUnused )

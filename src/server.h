@@ -189,7 +189,8 @@ public:
     virtual ~CServer();
 
     void Start();
-    void Stop();
+    void Stop(bool indicate_idling = false);
+
     bool IsRunning() { return HighPrecisionTimer.isActive(); }
 
     bool PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,

@@ -57,9 +57,10 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr,
     *this << strLogStr; // in log file
 }
 
-void CServerLogging::AddServerStopped()
+void CServerLogging::AddServerStopped(const QString &msgSuffix)
 {
-    const QString strLogStr = CurTimeDatetoLogString() + ",, server stopped "
+
+    const QString strLogStr = CurTimeDatetoLogString() + msgSuffix + 
         "-------------------------------------";
 
     QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );

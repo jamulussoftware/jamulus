@@ -44,7 +44,7 @@ public:
     virtual ~CServerLogging();
 
     void Start ( const QString& strLoggingFileName );
-    void AddServerStopped();
+    void AddServerStopped( const QString& msgSuffix );
 
     void AddNewConnection ( const QHostAddress& ClientInetAddr,
                             const int           iNumberOfConnectedClients );

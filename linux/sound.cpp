@@ -151,6 +151,25 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
 
             jack_free ( ports );
         }
+
+        // input latency
+        jack_latency_range_t latrange;
+        latrange.min = 0;
+        latrange.max = 0 ;
+
+        jack_port_get_latency_range ( input_port_left, JackCaptureLatency, &latrange );
+        int inLatency = latrange.min; // be optimistic
+
+        // output latency 
+        latrange.min = 0; 
+        latrange.max = 0 ;
+
+        jack_port_get_latency_range ( output_port_left, JackPlaybackLatency, &latrange );
+        int outLatency = latrange.min; // be optimistic
+
+        // compute latency by using the first input and first output
+        // ports and using the most optimistic values
+        dInOutLatencyMs = static_cast<double> ( inLatency + outLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
     }
 }
 

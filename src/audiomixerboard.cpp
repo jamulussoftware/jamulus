@@ -376,10 +376,10 @@ void CChannelFader::Reset()
     plbrChannelLevel->ClipReset();
 
     // clear instrument picture, country flag, tool tips and label text
-    plblLabel->setText ( "" );
-    plblLabel->setToolTip ( "" );
-    plblInstrument->setVisible ( false );
-    plblInstrument->setToolTip ( "" );
+    plblLabel->setText          ( "" );
+    plblLabel->setToolTip       ( "" );
+    plblInstrument->setVisible  ( false );
+    plblInstrument->setToolTip  ( "" );
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
     cReceivedChanInfo = CChannelInfo();
@@ -432,6 +432,7 @@ void CChannelFader::SetPanValue ( const int iPan )
         // we set the new fader level in the GUI (slider control) which then
         // emits to signal to tell the server about the change (implicitly)
         pPan->setValue ( iPan );
+        pPan->setAccessibleName ( QString::number ( iPan ) );
     }
 }
 
@@ -488,6 +489,12 @@ void CChannelFader::SendFaderLevelToServer ( const double dLevel,
 void CChannelFader::SendPanValueToServer ( const int iPan )
 {
     emit panValueChanged ( static_cast<double> ( iPan ) / AUD_MIX_PAN_MAX );
+}
+
+void CChannelFader::OnPanValueChanged ( int value )
+{
+    pPan->setAccessibleName ( QString::number ( value ) );
+    SendPanValueToServer ( value );
 }
 
 void CChannelFader::OnMuteStateChanged ( int value )
@@ -703,12 +710,16 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
     // Tool tip ----------------------------------------------------------------
     // complete musician profile in the tool tip
-    QString strToolTip = "";
+    QString strToolTip              = "";
+    QString strAliasAccessible      = "";
+    QString strInstrumentAccessible = "";
+    QString strLocationAccessible   = "";
 
     // alias/name
     if ( !cChanInfo.strName.isEmpty() )
     {
-        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
+        strToolTip         += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
+        strAliasAccessible += cChanInfo.strName;
     }
 
     // instrument
@@ -716,6 +727,8 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     {
         strToolTip += "<h4>" + tr ( "Instrument" ) + "</h4>" +
             CInstPictures::GetName ( iTTInstrument );
+
+        strInstrumentAccessible += CInstPictures::GetName ( iTTInstrument );
     }
 
     // location
@@ -726,33 +739,44 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
         if ( !cChanInfo.strCity.isEmpty() )
         {
-            strToolTip += cChanInfo.strCity;
+            strToolTip            += cChanInfo.strCity;
+            strLocationAccessible += cChanInfo.strCity;
 
             if ( eTTCountry != QLocale::AnyCountry )
             {
-                strToolTip += ", ";
+                strToolTip            += ", ";
+                strLocationAccessible += ", ";
             }
         }
 
         if ( eTTCountry != QLocale::AnyCountry )
         {
-            strToolTip += QLocale::countryToString ( eTTCountry );
+            strToolTip            += QLocale::countryToString ( eTTCountry );
+            strLocationAccessible += QLocale::countryToString ( eTTCountry );
         }
     }
 
     // skill level
+    QString strSkillLevel;
+
     switch ( cChanInfo.eSkillLevel )
     {
     case SL_BEGINNER:
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Beginner" );
+        strSkillLevel            = tr ( "Beginner" );
+        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_INTERMEDIATE:
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Intermediate" );
+        strSkillLevel            = tr ( "Intermediate" );
+        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_PROFESSIONAL:
-        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Expert" );
+        strSkillLevel            = tr ( "Expert" );
+        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_NOT_SET:
@@ -766,9 +790,13 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         strToolTip.prepend ( "<h3>" + tr ( "Musician Profile" ) + "</h3>" );
     }
 
-    plblCountryFlag->setToolTip ( strToolTip );
-    plblInstrument->setToolTip  ( strToolTip );
-    plblLabel->setToolTip       ( strToolTip );
+    plblCountryFlag->setToolTip               ( strToolTip );
+    plblCountryFlag->setAccessibleDescription ( strLocationAccessible );
+    plblInstrument->setToolTip                ( strToolTip );
+    plblInstrument->setAccessibleDescription  ( strInstrumentAccessible );
+    plblLabel->setToolTip                     ( strToolTip );
+    plblLabel->setAccessibleName              ( strAliasAccessible );
+    plblLabel->setAccessibleDescription       ( tr ( "Alias" ) );
 }
 
 

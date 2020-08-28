@@ -812,10 +812,21 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
 
     if ( !CommandLineOptions.contains ( "--centralserver" ) )
     {
+        QString strCentralServer = GetIniSetting ( IniXMLDocument, "server", "centralservaddr" );
+#ifdef HEADLESS
+        bool bUseGUI = false;
+#else
+        bool bUseGUI = !CommandLineOptions.contains ( "--nogui" );
+#endif
+        // per definition: if we are in "GUI" server mode and no central server
+        // address is given, we use the default central server address
+        if ( bUseGUI && strCentralServer.isEmpty() )
+        {
+            strCentralServer = DEFAULT_SERVER_ADDRESS;
+        }
         // central server address (to be set after the "use default central
         // server address)
-        pServer->SetServerListCentralServerAddress (
-            GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
+        pServer->SetServerListCentralServerAddress ( strCentralServer );
     }
 
     // server list enabled flag

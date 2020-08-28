@@ -547,13 +547,6 @@ int main ( int argc, char** argv )
 
 
     // Dependencies ------------------------------------------------------------
-    // per definition: if we are in "GUI" server mode and no central server
-    // address is given, we use the default central server address
-    if ( !bIsClient && bUseGUI && strCentralServer.isEmpty() )
-    {
-        strCentralServer = DEFAULT_SERVER_ADDRESS;
-    }
-
     // adjust default port number for client: use different default port than the server since
     // if the client is started before the server, the server would get a socket bind error
     if ( bIsClient && !bCustomPortNumberGiven )

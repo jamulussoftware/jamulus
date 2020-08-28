@@ -111,6 +111,12 @@ LED bar:      lbr
 #define SERVER_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Running-a-Server"
 #define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
 
+// update tool URLs
+#define SOFTWARE_LATEST_RELEASE_URL      "https://api.github.com/repos/corrados/jamulus/releases/latest"
+// Following has <release> substituted by the release "name" from the above
+#define SOFTWARE_CHANGELOG_URL           "https://raw.githubusercontent.com/corrados/jamulus/<release>/ChangeLog"
+#define SOFTWARE_DOWNLOAD_URL            "https://sourceforge.net/projects/llcon/"
+
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)
 #define WELL_KNOWN_HOST                  "8.8.8.8" // Google

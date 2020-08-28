@@ -54,8 +54,11 @@ public:
     void Save();
 
     // common settings
-    QByteArray vecWindowPosMain;
-    QString    strLanguage;
+    QByteArray   vecWindowPosMain;
+    QString      strLanguage;
+    EUTCheckType eUTDailyUpdateCheckType;
+    QDateTime    dtUTLastCheck;
+    QString      strUTLastSkippedVersion;
 
 protected:
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) = 0;
@@ -124,6 +127,8 @@ protected:
                          const QString& sValue = "" );
 
     QString strFileName;
+    QString base64DefaultLastCheck = ToBase64 ( QString ( "1970-01-01T00:00:00Z" ) );
+    QString base64DefaultLastSkippedVersion = ToBase64 ( QString ( "0.0.0" ) );
 
 public slots:
     void OnAboutToQuit() { Save(); }

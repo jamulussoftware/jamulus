@@ -66,6 +66,7 @@ using namespace std; // because of the library: "vector"
 
 
 class CClient;  // forward declaration of CClient
+class CUpdateTool; // forward declaration of CUpdateTool
 
 
 /* Definitions ****************************************************************/
@@ -421,8 +422,10 @@ class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 {
     Q_OBJECT
 
+    CUpdateTool* UpdateTool;
+
 public:
-    CAboutDlg ( QWidget* parent = nullptr );
+    CAboutDlg ( CUpdateTool* updateTool, QWidget* parent = nullptr );
 };
 
 
@@ -477,10 +480,11 @@ class CHelpMenu : public QMenu
     Q_OBJECT
 
 public:
-    CHelpMenu ( const bool bIsClient, QWidget* parent = nullptr );
+    CHelpMenu ( const bool bIsClient, CUpdateTool* updateTool, QWidget* parent = nullptr );
 
 protected:
-    CAboutDlg AboutDlg;
+    CAboutDlg    AboutDlg;
+    CUpdateTool* UpdateTool;
 
 public slots:
     void OnHelpWhatsThis()        { QWhatsThis::enterWhatsThisMode(); }
@@ -730,6 +734,20 @@ enum ESkillLevel
 #define RGBCOL_R_SL_SL_PROFESSIONAL 255
 #define RGBCOL_G_SL_SL_PROFESSIONAL 225
 #define RGBCOL_B_SL_SL_PROFESSIONAL 225
+
+
+// Daily Update check enum -----------------------------------------------------
+/*
+ * This is used for the value returned from the settings:
+ * "Ask" == "unset": ask the user what they want (if not headless)
+ * "Daily" == "enable": check for updates automatically once a day on start up
+ * "Never" == "disable": do not check automatically
+ */
+enum EUTCheckType {
+    UT_ASK = 0,
+    UT_DAILY = 1,
+    UT_NEVER = 2
+};
 
 
 // Stereo signal level meter ---------------------------------------------------

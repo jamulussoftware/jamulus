@@ -523,6 +523,30 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
 
     // fader settings
     ReadFaderSettingsFromXML ( IniXMLDocument );
+
+    if ( !CommandLineOptions.contains ( "--updatetool" ) )
+    {
+        // User's choice (or UT_ASK) for daily update checking
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "updatetooldailyupdatechecktype",
+             0, static_cast<int> ( UT_NEVER ), iValue ) )
+        {
+            eUTDailyUpdateCheckType = static_cast<EUTCheckType> ( iValue );
+        }
+        else
+        {
+            eUTDailyUpdateCheckType = UT_ASK; // which is zero, anyway
+        }
+    }
+
+    // UTC date of last update check, else epoch
+    dtUTLastCheck = QDateTime::fromString ( FromBase64ToString (
+        GetIniSetting ( IniXMLDocument, "client", "updatetoollastcheck_base64",
+                        base64DefaultLastCheck ) ), Qt::ISODate );
+
+    // Offered version the user last chose to skip
+    strUTLastSkippedVersion = FromBase64ToString (
+        GetIniSetting ( IniXMLDocument, "client", "updatetoollastskippedversion_base64",
+                        base64DefaultLastSkippedVersion ) );
 }
 
 void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument )
@@ -739,6 +763,18 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // fader settings
     WriteFaderSettingsToXML ( IniXMLDocument );
+
+    // User's choice for daily update checking
+    SetNumericIniSet ( IniXMLDocument, "client", "updatetooldailyupdatechecktype",
+        static_cast<int> ( eUTDailyUpdateCheckType ) );
+
+    // UTC date of last update check
+    PutIniSetting ( IniXMLDocument, "client", "updatetoollastcheck_base64",
+        ToBase64 ( dtUTLastCheck.toString ( Qt::ISODate ) ) );
+
+    // Offered version the user last chose to skip
+    PutIniSetting ( IniXMLDocument, "client", "updatetoollastskippedversion_base64",
+        ToBase64 ( strUTLastSkippedVersion ) );
 }
 
 void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
@@ -890,6 +926,30 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     {
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
     }
+
+    // User's choice (or UT_ASK) for daily update checking
+    if ( !CommandLineOptions.contains ( "--updatetool" ) )
+    {
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "updatetooldailyupdatechecktype",
+             0, static_cast<int> ( UT_NEVER ), iValue ) )
+        {
+            eUTDailyUpdateCheckType = static_cast<EUTCheckType> ( iValue );
+        }
+        else
+        {
+            eUTDailyUpdateCheckType = UT_ASK; // which is zero, anyway
+        }
+    }
+
+    // UTC date of last update check, else epoch
+    dtUTLastCheck = QDateTime::fromString ( FromBase64ToString (
+        GetIniSetting ( IniXMLDocument, "server", "updatetoollastcheck_base64",
+                        base64DefaultLastCheck ) ), Qt::ISODate );
+
+    // Offered version the user last chose to skip
+    strUTLastSkippedVersion = FromBase64ToString (
+        GetIniSetting ( IniXMLDocument, "server", "updatetoollastskippedversion_base64",
+                        base64DefaultLastSkippedVersion ) );
 }
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
@@ -941,4 +1001,16 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64",
         ToBase64 ( pServer->GetRecordingDir() ) );
+
+    // User's choice for daily update checking
+    SetNumericIniSet ( IniXMLDocument, "server", "updatetooldailyupdatechecktype",
+        static_cast<int> ( eUTDailyUpdateCheckType ) );
+
+    // UTC date of last update check
+    PutIniSetting ( IniXMLDocument, "server", "updatetoollastcheck_base64",
+        ToBase64 ( dtUTLastCheck.toString ( Qt::ISODate ) ) );
+
+    // Offered version the user last chose to skip
+    PutIniSetting ( IniXMLDocument, "server", "updatetoollastskippedversion_base64",
+        ToBase64 ( strUTLastSkippedVersion ) );
 }

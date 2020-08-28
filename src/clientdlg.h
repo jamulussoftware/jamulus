@@ -74,6 +74,7 @@ class CClientDlg : public QDialog, private Ui_CClientDlgBase
 
 public:
     CClientDlg ( CClient*         pNCliP,
+                 CUpdateTool*     pUpdateTool,
                  CClientSettings* pNSetP,
                  const QString&   strConnOnStartupAddress,
                  const int        iCtrlMIDIChannel,

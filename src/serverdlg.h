@@ -60,6 +60,7 @@ class CServerDlg : public QDialog, private Ui_CServerDlgBase
 
 public:
     CServerDlg ( CServer*         pNServP,
+                 CUpdateTool*     pUpdateTool,
                  CServerSettings* pNSetP,
                  const bool       bStartMinimized,
                  QWidget*         parent = nullptr,

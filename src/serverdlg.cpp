@@ -23,10 +23,12 @@
 \******************************************************************************/
 
 #include "serverdlg.h"
+#include "updatetool.h"
 
 
 /* Implementation *************************************************************/
 CServerDlg::CServerDlg ( CServer*         pNServP,
+                         CUpdateTool*     pUpdateTool,
                          CServerSettings* pNSetP,
                          const bool       bStartMinimized,
                          QWidget*         parent,
@@ -364,9 +366,8 @@ lvwClients->setMinimumHeight ( 140 );
 
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
-
     pMenu->addMenu ( pViewMenu );
-    pMenu->addMenu ( new CHelpMenu ( false, this ) );
+    pMenu->addMenu ( new CHelpMenu ( false, pUpdateTool, this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );

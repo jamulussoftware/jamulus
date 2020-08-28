@@ -94,6 +94,10 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="btnCheckForUpdates">
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

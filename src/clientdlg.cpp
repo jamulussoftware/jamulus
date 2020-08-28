@@ -23,10 +23,12 @@
 \******************************************************************************/
 
 #include "clientdlg.h"
+#include "updatetool.h"
 
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
+                         CUpdateTool*     pUpdateTool,
                          CClientSettings* pNSetP,
                          const QString&   strConnOnStartupAddress,
                          const int        iCtrlMIDIChannel,
@@ -288,11 +290,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
-
     pMenu->addMenu ( pFileMenu );
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
-    pMenu->addMenu ( new CHelpMenu ( true, this ) );
+    pMenu->addMenu ( new CHelpMenu ( true, pUpdateTool, this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );

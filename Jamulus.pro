@@ -353,6 +353,7 @@ HEADERS += src/buffer.h \
     src/socket.h \
     src/soundbase.h \
     src/testbench.h \
+    src/updatetool.h \
     src/util.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
@@ -452,6 +453,7 @@ SOURCES += src/buffer.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
+    src/updatetool.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \

@@ -35,6 +35,7 @@
 #include "settings.h"
 #include "testbench.h"
 #include "util.h"
+#include "updatetool.h"
 #ifdef ANDROID
 # include <QtAndroidExtras/QtAndroid>
 #endif
@@ -88,6 +89,7 @@ int main ( int argc, char** argv )
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = APP_NAME;
+    EUTCheckType eCheckType                  = UT_ASK;
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -501,6 +503,31 @@ int main ( int argc, char** argv )
         }
 
 
+        // Update Tool daily check preference ----------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--updatetool",
+                                 "--updatetool",
+                                 strArgument ) )
+        {
+            if ( strArgument.compare ( "daily", Qt::CaseInsensitive ) == 0 ) {
+                eCheckType = UT_DAILY;
+            }
+            else if ( strArgument.compare ( "never", Qt::CaseInsensitive ) == 0 ) {
+                eCheckType = UT_NEVER;
+            }
+            if ( eCheckType != UT_ASK )
+            {
+                tsConsole << "- will check for updates: " << ( eCheckType == UT_DAILY ? "daily" : "never" ) << endl;
+                CommandLineOptions << "--updatetool";
+                continue;
+            }
+            // otherwise treat as unrecognised
+        }
+
+
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
              ( !strcmp ( argv[i], "-v" ) ) )
@@ -609,6 +636,7 @@ int main ( int argc, char** argv )
 
     try
     {
+
         if ( bIsClient )
         {
             // Client:
@@ -621,6 +649,7 @@ int main ( int argc, char** argv )
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
+            Settings.eUTDailyUpdateCheckType = eCheckType;
             Settings.Load ( CommandLineOptions );
 
             // load translation
@@ -630,11 +659,18 @@ int main ( int argc, char** argv )
                 CInstPictures::UpdateTableOnLanguageChange();
             }
 
+            // Start up the update tool
+            CUpdateTool UpdateTool ( Settings.eUTDailyUpdateCheckType,
+                                     Settings.dtUTLastCheck,
+                                     Settings.strUTLastSkippedVersion,
+                                     bUseGUI );
+
 #ifndef HEADLESS
             if ( bUseGUI )
             {
                 // GUI object
                 CClientDlg ClientDlg ( &Client,
+                                       &UpdateTool,
                                        &Settings,
                                        strConnOnStartupAddress,
                                        iCtrlMIDIChannel,
@@ -679,6 +715,7 @@ int main ( int argc, char** argv )
 
             // load settings from init-file (command line options override)
             CServerSettings Settings ( &Server, strIniFileName );
+            Settings.eUTDailyUpdateCheckType = eCheckType;
             Settings.Load ( CommandLineOptions );
 
             // load translation
@@ -687,6 +724,11 @@ int main ( int argc, char** argv )
                 CLocale::LoadTranslation ( Settings.strLanguage, pApp );
             }
 
+            // Start up the update tool
+            CUpdateTool UpdateTool ( Settings.eUTDailyUpdateCheckType,
+                                     Settings.dtUTLastCheck,
+                                     Settings.strUTLastSkippedVersion,
+                                     bUseGUI );
 
 #ifndef HEADLESS
             if ( bUseGUI )
@@ -697,6 +739,7 @@ int main ( int argc, char** argv )
 
                 // GUI object for the server
                 CServerDlg ServerDlg ( &Server,
+                                       &UpdateTool,
                                        &Settings,
                                        bStartMinimized,
                                        nullptr,
@@ -764,6 +807,7 @@ QString UsageArguments ( char **argv )
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set your local port number\n"
         "  -t, --notranslation   disable translation (use englisch language)\n"
+        "      --updatetool      'daily' or 'never' check for a new " + APP_NAME + " version\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
         "  -a, --servername      server name, required for HTML status\n"

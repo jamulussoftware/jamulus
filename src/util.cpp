@@ -24,6 +24,7 @@
 
 #include "util.h"
 #include "client.h"
+#include "updatetool.h"
 
 
 /* Implementation *************************************************************/
@@ -393,12 +394,14 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
 }
 
 
+#ifndef HEADLESS
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
 // About dialog ----------------------------------------------------------------
-#ifndef HEADLESS
-CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
+CAboutDlg::CAboutDlg ( CUpdateTool* updateTool, QWidget* parent ) :
+    QDialog    ( parent ),
+    UpdateTool ( updateTool )
 {
     setupUi ( this );
 
@@ -494,6 +497,10 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
+
+    btnCheckForUpdates->setText ( UpdateTool->CheckNowBtnText() + "..." );
+    connect ( btnCheckForUpdates, &QPushButton::released,
+              [this] { UpdateTool->onCheckForUpdates ( this ); } );
 
     // set window title
     setWindowTitle ( tr ( "About " ) + APP_NAME );
@@ -876,7 +883,12 @@ void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
 
 
 // Help menu -------------------------------------------------------------------
-CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )
+CHelpMenu::CHelpMenu ( const bool       bIsClient,
+                       CUpdateTool*     updateTool,
+                       QWidget*         parent ) :
+    QMenu      ( tr ( "&Help" ), parent ),
+    AboutDlg   ( updateTool, parent ),
+    UpdateTool ( updateTool )
 {
     // standard help menu consists of about and what's this help
     if ( bIsClient )
@@ -890,6 +902,20 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     }
     addSeparator();
     addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
+    addSeparator();
+
+    QAction* aDailyUpdateEnabled = new QAction ( UpdateTool->CheckDailyBtnText() );
+    aDailyUpdateEnabled->setCheckable ( true );
+    aDailyUpdateEnabled->setChecked ( UpdateTool->isDailyUpdateEnabled() );
+    connect ( aDailyUpdateEnabled, &QAction::triggered,
+              [this, aDailyUpdateEnabled, parent] { UpdateTool->onDailyUpdateEnabled ( aDailyUpdateEnabled->isChecked(), parent ); } );
+    addAction ( aDailyUpdateEnabled );
+
+    QAction* aCheckForUpdateNow = new QAction ( UpdateTool->CheckNowBtnText() + "..." );
+    connect ( aCheckForUpdateNow, &QAction::triggered,
+              [this, parent] { UpdateTool->onCheckForUpdates ( parent ); } );
+    addAction ( aCheckForUpdateNow );
+
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }

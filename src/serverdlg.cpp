@@ -448,9 +448,6 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( pServer, &CServer::StopRecorder,
         this, &CServerDlg::OnStopRecorder );
 
-    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-        this, &CServerDlg::OnAboutToQuit );
-
     QObject::connect ( &SystemTrayIcon, &QSystemTrayIcon::activated,
         this, &CServerDlg::OnSysTrayActivated );
 

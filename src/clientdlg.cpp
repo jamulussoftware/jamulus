@@ -442,9 +442,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         this, &CClientDlg::OnCLVersionAndOSReceived );
 #endif
 
-    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-        this, &CClientDlg::OnAboutToQuit );
-
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
 

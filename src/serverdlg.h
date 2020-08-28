@@ -91,8 +91,6 @@ protected:
     QMenu*                    pSystemTrayIconMenu;
 
 public slots:
-    void OnAboutToQuit() { pSettings->Save(); }
-
     void OnRegisterServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );
     void OnUseCCLicenceStateChanged ( int value );

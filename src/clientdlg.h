@@ -121,8 +121,6 @@ protected:
     CMusProfDlg        MusicianProfileDlg;
 
 public slots:
-    void OnAboutToQuit() { pSettings->Save(); }
-
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();

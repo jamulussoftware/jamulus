@@ -75,15 +75,15 @@ void CSoundBase::Stop()
     // set flag so that thread can leave the main loop
     bRun = false;
 
-    // give thread some time to terminate
-    if ( !bIsCallbackAudioInterface )
-    {
-        wait ( 5000 );
-    }
+    // drain the audio process callback
+    QMutexLocker locker(&MutexAudioProcessCb);
 }
 
 void CSoundBase::run()
 {
+    // make sure we are locked during execution
+    QMutexLocker locker(&MutexAudioProcessCb);
+
     // main loop of working thread
     while ( bRun )
     {

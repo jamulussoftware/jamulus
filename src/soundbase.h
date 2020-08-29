@@ -26,6 +26,7 @@
 
 #include <QThread>
 #include <QString>
+#include <QMutex>
 #ifndef HEADLESS
 # include <QMessageBox>
 #endif
@@ -137,6 +138,7 @@ protected:
 
     void run();
     bool bRun;
+    QMutex MutexAudioProcessCb;
 
     void             ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 

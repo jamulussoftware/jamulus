@@ -66,6 +66,7 @@ int main ( int argc, char** argv )
     bool         bShowComplRegConnList       = false;
     bool         bDisconnectAllClientsOnQuit = false;
     bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
+    bool         bUseMultithreading          = false;
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
     bool         bCentServPingServerInList   = false;
@@ -133,7 +134,7 @@ int main ( int argc, char** argv )
         }
 
 
-        // Use 64 samples frame size mode ----------------------------------------------------
+        // Use 64 samples frame size mode --------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
                                "-F",
@@ -142,6 +143,19 @@ int main ( int argc, char** argv )
             bUseDoubleSystemFrameSize = false; // 64 samples frame size
             tsConsole << "- using " << SYSTEM_FRAME_SIZE_SAMPLES << " samples frame size mode" << endl;
             CommandLineOptions << "--fastupdate";
+            continue;
+        }
+
+
+        // Use multithreading --------------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-T",
+                               "--multithreading" ) )
+        {
+            bUseMultithreading = true;
+            tsConsole << "- using multithreading" << endl;
+            CommandLineOptions << "--multithreading";
             continue;
         }
 
@@ -667,6 +681,7 @@ int main ( int argc, char** argv )
                              bCentServPingServerInList,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
+                             bUseMultithreading,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -778,6 +793,8 @@ QString UsageArguments ( char **argv )
         "  -R, --recording       enables recording and sets directory to contain\n"
         "                        recorded jams\n"
         "  -s, --server          start server\n"
+        "  -T, --multithreading  use multithreading to make better use of\n"
+        "                        multi-core CPUs and support more clients"
         "  -u, --numchannels     maximum number of channels\n"
         "  -w, --welcomemessage  welcome message on connect\n"
         "  -z, --startminimized  start minimizied\n"

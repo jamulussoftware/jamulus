@@ -6,20 +6,13 @@ contains(CONFIG, "noupcasename") {
     TARGET = jamulus
 }
 
-# support multi-threading with OMP if requested
-contains(CONFIG, "multithreading") {
-    message(Multithreading in the server is enabled.)
-    message(NOTE THAT THE MULTITHREADING IMPLEMENTATION IS STILL EXPERIMENTAL AND MAY NOT BE STABLE.)
-    DEFINES += USE_MULTITHREADING
-    QT += concurrent
-}
-
 CONFIG += qt \
     thread \
     release
 
 QT += network \
-    xml
+    xml \
+    concurrent
 
 contains(CONFIG, "headless") {
     message(Headless mode activated.)

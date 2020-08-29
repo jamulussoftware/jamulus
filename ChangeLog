@@ -5,6 +5,8 @@
 
 - added an optional server list whitelist filter (#413)
 
+- added a command line argument to enable multithreading in the server
+
 - store recorder settings, coded by pljones (#313)
 
 - accessibility improvements, coded by chigkim (#498, #512)
@@ -17,8 +19,7 @@
 
 
 TODO at about 70 client connections the client/server do not show/list all clients anymore (#547)
-TODO improve multithreading -> merge branch into master
-TODO use command line argument to enable multithreading instead of qmake CONFIG
+
 
 
 

@@ -82,6 +82,7 @@ Section
   File             "$%QTDIR64%\bin\Qt5Widgets.dll"
   File             "$%QTDIR64%\bin\Qt5Network.dll"
   File             "$%QTDIR64%\bin\Qt5Svg.dll"
+  File             "$%QTDIR64%\bin\Qt5Concurrent.dll"
   File             "$%QTDIR64%\bin\Qt5Xml.dll"
   ${Else}
   File             "$%QTDIR32%\bin\Qt5Core.dll"
@@ -89,6 +90,7 @@ Section
   File             "$%QTDIR32%\bin\Qt5Widgets.dll"
   File             "$%QTDIR32%\bin\Qt5Network.dll"
   File             "$%QTDIR32%\bin\Qt5Svg.dll"
+  File             "$%QTDIR32%\bin\Qt5Concurrent.dll"
   File             "$%QTDIR32%\bin\Qt5Xml.dll"
   ${EndIf}
 
@@ -185,6 +187,7 @@ Delete $INSTDIR\Qt5Gui.dll
 Delete $INSTDIR\Qt5Widgets.dll
 Delete $INSTDIR\Qt5Network.dll
 Delete $INSTDIR\Qt5Svg.dll
+Delete $INSTDIR\Qt5Concurrent.dll
 Delete $INSTDIR\Qt5Xml.dll
 Delete $INSTDIR\COPYING
 Delete $INSTDIR\platforms\qwindows.dll

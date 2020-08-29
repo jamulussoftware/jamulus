@@ -136,9 +136,9 @@ protected:
     virtual bool Read  ( CVector<int16_t>& ) { printf ( "no sound!" ); return false; }
     virtual bool Write ( CVector<int16_t>& ) { printf ( "no sound!" ); return false; }
 
-    void run();
-    bool bRun;
-    QMutex MutexAudioProcessCb;
+    void   run();
+    bool   bRun;
+    QMutex MutexAudioProcessCallback;
 
     void             ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 

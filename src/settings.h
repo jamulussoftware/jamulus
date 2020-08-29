@@ -127,7 +127,6 @@ protected:
 
 public slots:
     void OnAboutToQuit() { Save(); }
-
 };
 
 

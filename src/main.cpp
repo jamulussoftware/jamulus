@@ -684,19 +684,20 @@ int main ( int argc, char** argv )
                              bUseMultithreading,
                              eLicenceType );
 
+            // load settings from init-file (command line options override)
+            CServerSettings Settings ( &Server, strIniFileName );
+            Settings.Load ( CommandLineOptions );
+
+            // load translation
+            if ( bUseGUI && bUseTranslation )
+            {
+                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+            }
+
+
 #ifndef HEADLESS
             if ( bUseGUI )
             {
-                // load settings from init-file (command line options override)
-                CServerSettings Settings ( &Server, strIniFileName );
-                Settings.Load ( CommandLineOptions );
-
-                // load translation
-                if ( bUseGUI && bUseTranslation )
-                {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                }
-
                 // update server list AFTER restoring the settings from the
                 // settings file
                 Server.UpdateServerList();

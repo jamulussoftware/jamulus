@@ -630,16 +630,16 @@ int main ( int argc, char** argv )
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
 
-            // load translation
-            if ( bUseGUI && bUseTranslation )
-            {
-                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                CInstPictures::UpdateTableOnLanguageChange();
-            }
-
 #ifndef HEADLESS
             if ( bUseGUI )
             {
+                // load translation
+                if ( bUseTranslation )
+                {
+                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                    CInstPictures::UpdateTableOnLanguageChange();
+                }
+
                 // GUI object
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
@@ -684,15 +684,15 @@ int main ( int argc, char** argv )
                              bUseMultithreading,
                              eLicenceType );
 
+            // load settings from init-file (command line options override)
+            CServerSettings Settings ( &Server, strIniFileName );
+            Settings.Load ( CommandLineOptions );
+
 #ifndef HEADLESS
             if ( bUseGUI )
             {
-                // load settings from init-file (command line options override)
-                CServerSettings Settings ( &Server, strIniFileName );
-                Settings.Load ( CommandLineOptions );
-
                 // load translation
-                if ( bUseGUI && bUseTranslation )
+                if ( bUseTranslation )
                 {
                     CLocale::LoadTranslation ( Settings.strLanguage, pApp );
                 }

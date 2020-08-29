@@ -11,6 +11,8 @@
 
 - added Jack audio audio latency calculation, coded by bflamig (#437)
 
+- bug fix: crash when using the Jack backend and quickly reconfiguring, coded by hselasky (#543)
+
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
 
@@ -195,7 +197,7 @@ TODO use command line argument to enable multithreading instead of qmake CONFIG
 
 - new command line option -d to disconnect all clients on shutdown of the server (#161)
 
-- bug fix: for mono capture jack audio interface Jamulus complains it
+- bug fix: for mono capture Jack audio interface Jamulus complains it
   cannot make connections (#137)
 
 - bug fix: fixed that Jamulus segfaults when jackd is restarted (#122, #127)

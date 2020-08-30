@@ -225,6 +225,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
     lblGlobalInfoLabel->hide();
 
+    // prepare update check info label (invisible by default)
+    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+                              tr ( "software upgrade available" ) + "</b></font>" );
+    lblUpdateCheck->hide();
+
 
     // Connect on startup ------------------------------------------------------
     if ( !strConnOnStartupAddress.isEmpty() )
@@ -749,10 +754,7 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
     {
-
-// TODO set update check label
-qDebug() << "newer version detected, my version: " << VERSION << " central server version: " << strVersion;
-
+        lblUpdateCheck->show();
     }
 #endif
 

@@ -4,6 +4,8 @@
 
 3.5.10git <- NOTE: the release version number will be 3.5.11
 
+- support a check for updates (#370)
+
 - added an optional server list whitelist filter (#413)
 
 - added a command line argument to enable multithreading in the server
@@ -19,7 +21,7 @@
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
 
-
+TODO implement "support a check for updates" for the server GUI, too
 
 
 

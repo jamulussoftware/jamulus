@@ -183,7 +183,7 @@ protected:
     // No CommandLineOptions used when reading Client inifile
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
     virtual void ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument,
-                                       const QList<QString>& CommandLineOptions) override;
+                                       const QList<QString>& ) override;
 
     void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
     void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );

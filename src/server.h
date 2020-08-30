@@ -201,6 +201,9 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
+    void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr )
+        { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
+
 
     // Jam recorder ------------------------------------------------------------
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
@@ -215,7 +218,7 @@ public:
     void SetRecordingDir( QString newRecordingDir )
         { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
 
-    virtual void CreateAndSendRecorderStateForAllConChannels();
+    void CreateAndSendRecorderStateForAllConChannels();
 
 
     // Server list management --------------------------------------------------
@@ -406,6 +409,10 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+
+    void CLVersionAndOSReceived ( CHostAddress           InetAddr,
+                                  COSUtil::EOpSystemType eOSType,
+                                  QString                strVersion );
 
     // pass through from jam controller
     void RestartRecorder();

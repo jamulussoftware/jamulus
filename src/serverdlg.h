@@ -122,4 +122,8 @@ public slots:
     void OnClearRecordingDirClicked();
     void OnRecordingSessionStarted ( QString sessionDir )
         { UpdateRecorderStatus ( sessionDir ); }
+
+    void OnCLVersionAndOSReceived ( CHostAddress           ,
+                                    COSUtil::EOpSystemType ,
+                                    QString                strVersion );
 };

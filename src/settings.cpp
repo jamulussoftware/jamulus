@@ -249,7 +249,7 @@ void CClientSettings::SaveFaderSettings ( const QString& strCurFileName )
 }
 
 void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument,
-                                            const QList<QString>& CommandLineOptions )
+                                            const QList<QString>& )
 {
     int  iIdx;
     int  iValue;

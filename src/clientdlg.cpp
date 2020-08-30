@@ -508,10 +508,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // chance and the update check is not time-critical at all)
     CHostAddress CentServerHostAddress;
 
-    NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS,
-                                        CentServerHostAddress );
-
-    pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    {
+        pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+    }
 }
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )

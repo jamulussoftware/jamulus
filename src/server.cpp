@@ -460,6 +460,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqVersionAndOS,
         this, &CServer::OnCLReqVersionAndOS );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived,
+        this, &CServer::CLVersionAndOSReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList,
         this, &CServer::OnCLReqConnClientsList );
 

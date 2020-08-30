@@ -741,6 +741,29 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
 #endif
 }
 
+void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
+                                            COSUtil::EOpSystemType eOSType,
+                                            QString                strVersion )
+{
+    // update check
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    {
+
+// TODO set update check label
+qDebug() << "newer version detected, my version: " << VERSION << " central server version: " << strVersion;
+
+    }
+#endif
+
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
+    ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion );
+#else
+    Q_UNUSED ( InetAddr ) // avoid compiler warnings
+    Q_UNUSED ( eOSType )  // avoid compiler warnings
+#endif
+}
+
 void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     ChatDlg.AddChatText ( strChatText );

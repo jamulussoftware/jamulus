@@ -142,18 +142,7 @@ public slots:
 
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,
-                                    QString                strVersion )
-    {
-
-/*
-// TODO update check: check the received version if it is newer than ours and show a label if it is newer on the main dialog
-qDebug() << strVersion;
-*/
-
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-        ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion );
-#endif
-    }
+                                    QString                strVersion );
 
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();

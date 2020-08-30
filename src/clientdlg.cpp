@@ -437,10 +437,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::VersionAndOSReceived,
         this, &CClientDlg::OnVersionAndOSReceived );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient, &CClient::CLVersionAndOSReceived,
         this, &CClientDlg::OnCLVersionAndOSReceived );
-#endif
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
@@ -498,6 +496,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     {
         chbLocalMute->setCheckState ( Qt::Checked );
     }
+
+    // query the central server version number needed for update check (note
+    // that the connection less message respond may not make it back but that
+    // is not critical since the next time Jamulus is started we have another
+    // chance and the update check is not time-critical at all)
+    CHostAddress CentServerHostAddress;
+
+    NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS,
+                                        CentServerHostAddress );
+
+    pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
 }
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )

@@ -169,10 +169,8 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLDisconnection ,
         this, &CClient::OnCLDisconnection );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived,
         this, &CClient::CLVersionAndOSReceived );
-#endif
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived,
         this, &CClient::CLChannelLevelListReceived );

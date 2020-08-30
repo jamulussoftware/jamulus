@@ -419,11 +419,9 @@ signals:
                                             int          iPingTime,
                                             int          iNumClients );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void CLVersionAndOSReceived ( CHostAddress           InetAddr,
                                   COSUtil::EOpSystemType eOSType,
                                   QString                strVersion );
-#endif
 
     void CLChannelLevelListReceived ( CHostAddress      InetAddr,
                                       CVector<uint16_t> vecLevelList );

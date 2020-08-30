@@ -840,8 +840,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // update conversion buffer size (nothing will happen if the size stays the same)
             if ( vecUseDoubleSysFraSizeConvBuf[i] )
             {
-                DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES  * vecNumAudioChannels[i] );
-                DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES  * vecNumAudioChannels[i] );
+                DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
             }
 
             // select the opus decoder and raw audio frame length
@@ -1014,8 +1014,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             {
                 // generate a separate mix for each channel, OPUS encode the
                 // audio data and transmit the network packet
-                MixEncodeTransmitData ( iChanCnt,
-                                        iNumClients );
+                MixEncodeTransmitData ( iChanCnt, iNumClients );
             }
         }
 

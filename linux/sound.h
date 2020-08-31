@@ -115,5 +115,6 @@ public:
              const QString& ) :
         CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel ) {}
     virtual ~CSound() {}
+    virtual bool Read  ( CVector<int16_t>& ) override { usleep ( 1e6 * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES / SYSTEM_SAMPLE_RATE_HZ ); return false; }
 };
 #endif // WITH_SOUND

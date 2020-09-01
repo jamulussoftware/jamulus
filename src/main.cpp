@@ -73,6 +73,7 @@ int main ( int argc, char** argv )
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
+    bool         bEduModeEnabled             = false;
     bool         bAllowRegisterEduMode       = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
@@ -451,6 +452,7 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strEduModePassword = strArgument;
+            bEduModeEnabled    = true;
             tsConsole << "- enabld Edu-Mode with password " << endl;
             CommandLineOptions << "--edumodepassword";
             continue;
@@ -706,10 +708,12 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             strEduModePassword,
                              bCentServPingServerInList,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
+                             bEduModeEnabled,
                              eLicenceType );
 
 #ifndef HEADLESS

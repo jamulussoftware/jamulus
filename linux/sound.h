@@ -105,6 +105,7 @@ protected:
 };
 #else
 // no sound -> dummy class definition
+#include <time.h>
 class CSound : public CSoundBase
 {
 public:
@@ -116,5 +117,6 @@ public:
         CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel ) {}
     virtual ~CSound() {}
     virtual bool Read  ( CVector<int16_t>& ) override { usleep ( 1e6 * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES / SYSTEM_SAMPLE_RATE_HZ ); return false; }
+    //virtual bool Read  ( CVector<int16_t>& ) override { nanosleep ( (const struct timespec[]) { { 0, 1000000000000L * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES / SYSTEM_SAMPLE_RATE_HZ } }, NULL); return false; }
 };
 #endif // WITH_SOUND

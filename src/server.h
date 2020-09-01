@@ -153,6 +153,10 @@ protected:
 
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID ) = 0;
 
+    virtual bool ChatIsDisabled() = 0;
+
+    virtual void EduModeSetChatDisabled( const bool chatIsDisabled ) = 0;
+
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText ) = 0;
 
@@ -298,6 +302,9 @@ protected:
 
     virtual void CreateAndSendChanListForAllConChannels();
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID );
+
+    virtual bool ChatIsDisabled();
+    virtual void EduModeSetChatDisabled( const bool chatIsDisabled );
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );

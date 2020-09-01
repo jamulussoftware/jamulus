@@ -1349,6 +1349,26 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 
+bool CServer::ChatIsDisabled ()
+{
+    if ( bEduModeEnabled && bEduModeChatDisabled )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void CServer::EduModeSetChatDisabled ( const bool chatIsDisabled )
+{
+    if ( bEduModeEnabled )
+    {
+        bEduModeChatDisabled = chatIsDisabled;
+    }
+}
+
 void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                        const QString& strChatText )
 {
@@ -1366,16 +1386,24 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
         ChanName.toHtmlEscaped() +
         "</b></font> " + strChatText;
 
-
-    // Send chat text to all connected clients ---------------------------------
-    for ( int i = 0; i < iMaxNumChannels; i++ )
+    // check if chat is disabled
+    if ( ChatIsDisabled() )
     {
-        if ( vecChannels[i].IsConnected() )
+        vecChannels[iCurChanID].CreateChatTextMes( "ERROR: Chat is disabled." );
+    }
+    else
+    {
+        // Send chat text to all connected clients ---------------------------------
+        for ( int i = 0; i < iMaxNumChannels; i++ )
         {
-            // send message
-            vecChannels[i].CreateChatTextMes ( strActualMessageText );
+            if ( vecChannels[i].IsConnected() )
+            {
+                // send message
+                vecChannels[i].CreateChatTextMes ( strActualMessageText );
+            }
         }
     }
+
 }
 void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
                                                const QString& strChatText )
@@ -1386,10 +1414,10 @@ void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
 
     if ( strChatCmd == strEduModePassword && bEduModeEnabled )
     {
-        //vecChannels[iCurChanID].SetAdmin( true );
+        vecChannels[iCurChanID].SetAdmin( true );
         vecChannels[iCurChanID].CreateChatTextMes ( "Hi " + ChanName.toHtmlEscaped() + " You are an admin now.");
     }
-    else if ( strChatCmd == "getAllIDs" /*&& vecChannels[iCurChanID].IsAdmin()*/ )
+    else if ( strChatCmd == "getAllIDs" && vecChannels[iCurChanID].IsAdmin() )
     {
         vecChannels[iCurChanID].CreateChatTextMes ( "Hi " + ChanName.toHtmlEscaped() + ". Getting all IDs and names...");
         // generate var to send
@@ -1406,11 +1434,17 @@ void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
         channelListText += "</table>";
         vecChannels[iCurChanID].CreateChatTextMes ( channelListText );
     }
-    else if ( strChatCmd.startsWith ( "disableChat" ) /*&& vecChannels[iCurChanID].IsAdmin()*/ )
+    else if ( strChatCmd.startsWith ( "disableChat" ) && vecChannels[iCurChanID].IsAdmin() )
     {
-        // disable chat
+        EduModeSetChatDisabled(true);
+        vecChannels[iCurChanID].CreateChatTextMes ( "Disabled Chat." );
     }
-    else if ( strChatCmd.startsWith ( "muteID" ) /*&& vecChannels[iCurChanID].IsAdmin()*/ )
+    else if ( strChatCmd.startsWith ( "enableChat" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        EduModeSetChatDisabled(false);
+        vecChannels[iCurChanID].CreateChatTextMes ( "Enabled Chat." );
+    }
+    else if ( strChatCmd.startsWith ( "muteID" ) && vecChannels[iCurChanID].IsAdmin() )
     {
         //QRegExp rx("muteID( )?([0-9]+)"); // regex to get the number of the channel
         //int

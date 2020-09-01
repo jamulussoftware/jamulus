@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -108,6 +108,12 @@ public:
     void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
+    // education methods
+    void SetAdmin(const bool bIsAdmin);
+    bool IsAdmin();
+
+    void SetBlocked(const bool bIsBlocked);
+    bool IsBlocked();
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );
     double GetFadeInGain() { return static_cast<double> ( iFadeInCnt ) / iFadeInCntMax; }
@@ -151,7 +157,7 @@ public:
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )
-    { 
+    {
         if ( ProtocolIsEnabled() )
         {
             Protocol.CreateJitBufMes ( iJitBufSize );
@@ -222,6 +228,10 @@ protected:
     bool                    bIsEnabled;
     bool                    bIsServer;
 
+    // education vars
+    bool                    bIsAdmin;
+    bool                    bIsBlocked = false;
+    
     int                     iNetwFrameSizeFact;
     int                     iNetwFrameSize;
     int                     iAudioFrameSizeSamples;

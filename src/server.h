@@ -51,6 +51,10 @@
 // no valid channel number
 #define INVALID_CHANNEL_ID                  ( MAX_NUM_CHANNELS + 1 )
 
+// Edu-Mode features
+#define EDU_MODE_FEATURE_CHAT            0
+#define EDU_MODE_FEATURE_WAITINGRM       1
+
 
 /* Classes ********************************************************************/
 #if ( defined ( WIN32 ) || defined ( _WIN32 ) )
@@ -153,9 +157,9 @@ protected:
 
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID ) = 0;
 
-    virtual bool ChatIsDisabled() = 0;
-
-    virtual void EduModeSetChatDisabled( const bool chatIsDisabled ) = 0;
+    // edu mode
+    virtual bool EduModeIsFeatureDisabled( const int iFeature ) = 0;
+    virtual void EduModeSetFeatureDisabled( const int iFeature, const bool bFeatureStatus ) = 0;
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText ) = 0;
@@ -303,8 +307,11 @@ protected:
     virtual void CreateAndSendChanListForAllConChannels();
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID );
 
-    virtual bool ChatIsDisabled();
-    virtual void EduModeSetChatDisabled( const bool chatIsDisabled );
+    // edu mode features
+
+    virtual bool EduModeIsFeatureDisabled( const int iFeature );
+    virtual void EduModeSetFeatureDisabled( const int iFeature, const bool bFeatureStatus );
+
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
@@ -349,6 +356,12 @@ protected:
                                           CVector<uint16_t>&               vecLevelsOut );
     // edu mode
     bool                       bEduModeEnabled;
+    // true = disabled
+    bool bEduModeFeatures[2] =
+    {
+      false, // EDU_MODE_FEATURE_CHAT
+      false // EDU_MODE_FEATURE_WAITINGRM
+    };
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -360,7 +373,6 @@ protected:
 
     // edu mode
     QString                    strEduModePassword;
-    bool                       bEduModeChatDisabled = false;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];

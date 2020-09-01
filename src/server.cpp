@@ -1349,24 +1349,14 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 
-bool CServer::ChatIsDisabled ()
+bool CServer::EduModeIsFeatureDisabled( const int iFeature )
 {
-    if ( bEduModeEnabled && bEduModeChatDisabled )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return bEduModeFeatures[iFeature];
 }
 
-void CServer::EduModeSetChatDisabled ( const bool chatIsDisabled )
+void CServer::EduModeSetFeatureDisabled( const int iFeature, const bool bFeatureStatus )
 {
-    if ( bEduModeEnabled )
-    {
-        bEduModeChatDisabled = chatIsDisabled;
-    }
+    bEduModeFeatures[iFeature] = bFeatureStatus;
 }
 
 void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
@@ -1387,7 +1377,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
         "</b></font> " + strChatText;
 
     // check if chat is disabled
-    if ( ChatIsDisabled() )
+    if ( bEduModeEnabled && EduModeIsFeatureDisabled( EDU_MODE_FEATURE_CHAT ) )
     {
         vecChannels[iCurChanID].CreateChatTextMes( "ERROR: Chat is disabled." );
     }
@@ -1436,18 +1426,26 @@ void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
     }
     else if ( strChatCmd.startsWith ( "disableChat" ) && vecChannels[iCurChanID].IsAdmin() )
     {
-        EduModeSetChatDisabled(true);
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_CHAT, true );
         vecChannels[iCurChanID].CreateChatTextMes ( "Disabled Chat." );
     }
     else if ( strChatCmd.startsWith ( "enableChat" ) && vecChannels[iCurChanID].IsAdmin() )
     {
-        EduModeSetChatDisabled(false);
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_CHAT, false );
         vecChannels[iCurChanID].CreateChatTextMes ( "Enabled Chat." );
     }
     else if ( strChatCmd.startsWith ( "muteID" ) && vecChannels[iCurChanID].IsAdmin() )
     {
         //QRegExp rx("muteID( )?([0-9]+)"); // regex to get the number of the channel
         //int
+    }
+    else if ( strChatText.startsWith( "enableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM, false );
+    }
+    else if ( strChatText.startsWith( "disableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM, true );
     }
     else
     {

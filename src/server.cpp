@@ -1289,9 +1289,14 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
             }
 
             // send separate mix to current clients
-            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                        vecvecbyCodedData[iChanCnt],
-                                                        iCeltNumCodedBytes );
+            // check if client is blocked
+            if ( !vecChannels[iCurChanID].IsBlocked() )
+            {
+                vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                            vecvecbyCodedData[iChanCnt],
+                                                            iCeltNumCodedBytes );
+            }
+
         }
     }
 
@@ -1436,16 +1441,31 @@ void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
     }
     else if ( strChatCmd.startsWith ( "muteID" ) && vecChannels[iCurChanID].IsAdmin() )
     {
-        //QRegExp rx("muteID( )?([0-9]+)"); // regex to get the number of the channel
-        //int
+
     }
-    else if ( strChatText.startsWith( "enableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
+    else if ( strChatCmd.startsWith( "enableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
     {
         EduModeSetFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM, false );
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                // send message
+                vecChannels[i].SetBlocked ( true );
+            }
+        }
     }
-    else if ( strChatText.startsWith( "disableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
+    else if ( strChatCmd.startsWith( "disableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
     {
         EduModeSetFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM, true );
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                // send message
+                vecChannels[i].SetBlocked ( false );
+            }
+        }
     }
     else
     {

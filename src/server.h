@@ -223,7 +223,8 @@ public:
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr )
         { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-
+    bool EduModeEnabled()
+         { return bEduModeEnabled; }
     // Jam recorder ------------------------------------------------------------
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
@@ -309,9 +310,8 @@ protected:
 
     // edu mode features
 
-    virtual bool EduModeIsFeatureDisabled( const int iFeature );
-    virtual void EduModeSetFeatureDisabled( const int iFeature, const bool bFeatureStatus );
-
+    virtual bool EduModeIsFeatureDisabled ( const int iFeature );
+    virtual void EduModeSetFeatureDisabled ( const int iFeature, const bool bFeatureStatus );
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );

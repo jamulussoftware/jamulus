@@ -112,7 +112,7 @@ public:
     void SetAdmin(const bool bIsAdmin);
     bool IsAdmin();
 
-    void SetBlocked(const bool bIsBlocked);
+    void SetBlocked ( const bool bIsBlocked );
     bool IsBlocked();
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );
@@ -230,8 +230,8 @@ protected:
 
     // education vars
     bool                    bIsAdmin;
-    bool                    bIsBlocked = false;
-    
+    bool                    bIsBlocked;
+
     int                     iNetwFrameSizeFact;
     int                     iNetwFrameSize;
     int                     iAudioFrameSizeSamples;

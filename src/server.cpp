@@ -8,7 +8,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
@@ -230,7 +230,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strServerListFilter,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
-                   const QString&     strEduModePassword,
+                   const QString&     strNEduModePassword,
                    const bool         bNCentServPingServerInList,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
@@ -239,7 +239,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading          ( bNUseMultithreading ),
+    bEduModeEnabled             ( bNEduModeEnabled ),
     iMaxNumChannels             ( iNewMaxNumChan ),
+    strEduModePassword          ( strNEduModePassword ),
     Socket                      ( this, iPortNumber ),
     Logging                     ( ),
     iFrameCount                 ( 0 ),
@@ -639,6 +641,15 @@ void CServer::OnNewConnection ( int          iChID,
                 "<b>Server Welcome Message:</b> " + strWelcomeMessage;
 
             vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
+        }
+
+        if ( bEduModeEnabled )
+        {
+          const QString strEduModeIsEnabledFormatted =
+              "<b>THIS SERVER RUNS IN EDU-MODE! YOU MAY BE KICKED/MUTED/... BY THE ADMIN!</b>";
+
+          vecChannels[iChID].CreateChatTextMes ( strEduModeIsEnabledFormatted );
+
         }
     }
     MutexWelcomeMessage.unlock();
@@ -1364,6 +1375,49 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
             // send message
             vecChannels[i].CreateChatTextMes ( strActualMessageText );
         }
+    }
+}
+void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
+                                               const QString& strChatText )
+{
+    QString strChatCmd = strChatText;
+    strChatCmd.remove ( 0, 3 );
+    QString ChanName = vecChannels[iCurChanID].GetName(); // to greet the user
+
+    if ( strChatCmd == strEduModePassword && bEduModeEnabled )
+    {
+        //vecChannels[iCurChanID].SetAdmin( true );
+        vecChannels[iCurChanID].CreateChatTextMes ( "Hi " + ChanName.toHtmlEscaped() + " You are an admin now.");
+    }
+    else if ( strChatCmd == "getAllIDs" /*&& vecChannels[iCurChanID].IsAdmin()*/ )
+    {
+        vecChannels[iCurChanID].CreateChatTextMes ( "Hi " + ChanName.toHtmlEscaped() + ". Getting all IDs and names...");
+        // generate var to send
+        QString channelListText = "<br><b>Channels names and nums: </b><table><tr style=\"font-weight: bold;\"><td>ID</td><td>Display name</td></tr>";
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                QString id = QString::number(i);
+                channelListText += "<tr><td>" + id.toHtmlEscaped() + "</td><td>" + vecChannels[i].GetName().toHtmlEscaped() + "</td></tr>";
+
+            }
+        }
+        channelListText += "</table>";
+        vecChannels[iCurChanID].CreateChatTextMes ( channelListText );
+    }
+    else if ( strChatCmd.startsWith ( "disableChat" ) /*&& vecChannels[iCurChanID].IsAdmin()*/ )
+    {
+        // disable chat
+    }
+    else if ( strChatCmd.startsWith ( "muteID" ) /*&& vecChannels[iCurChanID].IsAdmin()*/ )
+    {
+        //QRegExp rx("muteID( )?([0-9]+)"); // regex to get the number of the channel
+        //int
+    }
+    else
+    {
+        vecChannels[iCurChanID].CreateChatTextMes ( "Hi " + ChanName.toHtmlEscaped() + "! This command was invalid or you don't have the correct permissions.");
     }
 }
 

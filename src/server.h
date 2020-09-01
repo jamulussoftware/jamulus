@@ -128,7 +128,13 @@ public:
 
     void OnChatTextReceivedCh ( QString strChatText )
     {
-        CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+        if ( strChatText.startsWith("/c/") )
+        {
+          InterpretAndExecuteChatCommand ( slotId - 1, strChatText );
+        } else
+        {
+          CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+        }
     }
 
     void OnMuteStateHasChangedCh ( int iChanID, bool bIsMuted )
@@ -149,6 +155,9 @@ protected:
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText ) = 0;
+
+    virtual void InterpretAndExecuteChatCommand ( const int      iCurChanID,
+                                                  const QString& strChatText ) = 0;
 
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
@@ -184,7 +193,7 @@ public:
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
-              const bool         bNEduModeEnabled,
+              const bool         bEduModeEnabled,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -293,6 +302,9 @@ protected:
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
 
+    virtual void InterpretAndExecuteChatCommand ( const int      iCurChanID,
+                                                  const QString& strChatText );
+
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
                                                const bool bIsMuted );
@@ -320,7 +332,6 @@ protected:
     // if server mode is normal or double system frame size
     bool                       bUseDoubleSystemFrameSize;
     int                        iServerFrameSizeSamples;
-
     // variables needed for multithreading support
     bool                      bUseMultithreading;
     QFutureSynchronizer<void> FutureSynchronizer;
@@ -329,6 +340,8 @@ protected:
                                           const CVector<int>&              vecNumAudioChannels,
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
+    // edu mode
+    bool                       bEduModeEnabled;
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -337,6 +350,10 @@ protected:
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;
     QMutex                     MutexWelcomeMessage;
+
+    // edu mode
+    QString                    strEduModePassword;
+    bool                       bEduModeChatDisabled = false;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];

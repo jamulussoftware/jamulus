@@ -277,6 +277,9 @@ win32 {
     # we want to compile with C++11
     CONFIG += c++11
 
+    HEADERS += linux/sound.h
+    SOURCES += linux/sound.cpp
+
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though
     DEFINES += HAVE_LRINTF
@@ -296,8 +299,6 @@ win32 {
             PKGCONFIG += jack
         }
 
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
         DEFINES += WITH_SOUND
     }
 

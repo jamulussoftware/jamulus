@@ -1103,7 +1103,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
     // get actual ID of current channel
     const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
-
+    const bool currentClientBlocked = vecChannels[iCurChanID].IsBlocked();
     // init intermediate processing vector with zeros since we mix all channels on that vector
     vecdIntermProcBuf.Reset ( 0 );
 
@@ -1115,8 +1115,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         {
             // check if client is blocked.
             // one can always hear himself --> if we currently iterate through the blocked client we do send him audio
-
-            if ( vecChannels[j].IsBlocked() && j != iCurChanID )
+            if ( ( j != iCurChanID && vecChannels[j].IsBlocked() ) || ( j != iCurChanID && currentClientBlocked ) )
             {
                 continue;
             }
@@ -1181,7 +1180,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         {
 
             // check if the client j is blocked
-            if ( vecChannels[j].IsBlocked() && j != iCurChanID )
+            if ( ( j != iCurChanID && vecChannels[j].IsBlocked() ) || ( j != iCurChanID && currentClientBlocked ) )
             {
                 continue;
             }

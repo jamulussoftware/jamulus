@@ -1102,6 +1102,14 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
+            // check if client is blocked.
+            // one can always hear himself --> if we currently iterate through the blocked client we do send him audio
+
+            if ( vecChannels[j].IsBlocked() && j != iCurChanID )
+            {
+                continue;
+            }
+
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const double            dGain    = vecvecdGains[iChanCnt][j];
@@ -1160,6 +1168,13 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // Stereo target channel -----------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
+
+            // check if the client j is blocked
+            if ( vecChannels[j].IsBlocked() && j != iCurChanID )
+            {
+                continue;
+            }
+
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const double            dGain    = vecvecdGains[iChanCnt][j];
@@ -1289,14 +1304,10 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
             }
 
             // send separate mix to current clients
-            // check if client is blocked
-            if ( !vecChannels[iCurChanID].IsBlocked() )
-            {
-                vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                            vecvecbyCodedData[iChanCnt],
-                                                            iCeltNumCodedBytes );
-            }
 
+            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                        vecvecbyCodedData[iChanCnt],
+                                                        iCeltNumCodedBytes );
         }
     }
 

@@ -27,13 +27,11 @@
 
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
-                         const bool     bNewIsCallbackAudioInterface,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
                          const int      iNewCtrlMIDIChannel ) :
     fpProcessCallback            ( fpNewProcessCallback ),
     pProcessCallbackArg          ( pParg ), bRun ( false ),
-    bIsCallbackAudioInterface    ( bNewIsCallbackAudioInterface ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
     iCtrlMIDIChannel             ( iNewCtrlMIDIChannel )
 {
@@ -45,31 +43,6 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
     lCurDev = 0; // default device
 }
 
-int CSoundBase::Init ( const int iNewPrefMonoBufferSize )
-{
-    // init audio sound card buffer
-    if ( !bIsCallbackAudioInterface )
-    {
-        vecsAudioSndCrdStereo.Init ( 2 * iNewPrefMonoBufferSize /* stereo */ );
-    }
-
-    return iNewPrefMonoBufferSize;
-}
-
-void CSoundBase::Start()
-{
-    bRun = true;
-
-// TODO start audio interface
-
-    // start the audio thread in case we do not have an callback
-    // based audio interface
-    if ( !bIsCallbackAudioInterface )
-    {
-        start();
-    }
-}
-
 void CSoundBase::Stop()
 {
     // set flag so that thread can leave the main loop
@@ -78,26 +51,6 @@ void CSoundBase::Stop()
     // wait for draining the audio process callback
     QMutexLocker locker ( &MutexAudioProcessCallback );
 }
-
-void CSoundBase::run()
-{
-    // make sure we are locked during execution
-    QMutexLocker locker ( &MutexAudioProcessCallback );
-
-    // main loop of working thread
-    while ( bRun )
-    {
-        // get audio from sound card (blocking function)
-        Read ( vecsAudioSndCrdStereo );
-
-        // process audio data
-        (*fpProcessCallback) ( vecsAudioSndCrdStereo, pProcessCallbackArg );
-
-        // play the new block
-        Write ( vecsAudioSndCrdStereo );
-    }
-}
-
 
 
 /******************************************************************************\

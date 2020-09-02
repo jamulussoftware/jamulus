@@ -32,7 +32,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel )
+    CSoundBase ( "OpenSL", fpNewProcessCallback, arg, iCtrlMIDIChannel )
 
 {
      pSound = this;

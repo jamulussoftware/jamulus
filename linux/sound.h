@@ -65,7 +65,7 @@ public:
              const int      iCtrlMIDIChannel,
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
-        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+        CSoundBase ( "Jack", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
         iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
 
     virtual ~CSound() { CloseJack(); }
@@ -116,7 +116,7 @@ public:
              const int      iCtrlMIDIChannel,
              const bool     ,
              const QString& ) :
-        CSoundBase ( "nosound", true, fpNewProcessCallback, pParg, iCtrlMIDIChannel ),
+        CSoundBase ( "nosound", fpNewProcessCallback, pParg, iCtrlMIDIChannel ),
         HighPrecisionTimer ( true ) { HighPrecisionTimer.Start();
                                       QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout,
                                                          this, &CSound::OnTimer ); }

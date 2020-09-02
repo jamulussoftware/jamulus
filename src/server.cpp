@@ -1461,8 +1461,53 @@ void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
         EduModeSetFeatureDisabled( EDU_MODE_FEATURE_CHAT, false );
         vecChannels[iCurChanID].CreateChatTextMes ( "Enabled Chat." );
     }
-    else if ( strChatCmd.startsWith ( "muteID" ) && vecChannels[iCurChanID].IsAdmin() )
+    else if ( strChatCmd.startsWith ( "moveIDAway" ) && vecChannels[iCurChanID].IsAdmin() )
     {
+        QRegExp rMoveAway ( "moveIDAway\\s+([0-9]+)" );
+        bool bMatched = rMoveAway.exactMatch ( strChatCmd );
+        if ( !bMatched )
+        {
+            vecChannels[iCurChanID].CreateChatTextMes ( "Invalid parameter. Please try again." );
+        }
+        else
+        {
+            int iBlockedID = rMoveAway.capturedTexts()[1].toInt();
+            if ( iBlockedID < iMaxNumChannels && vecChannels[iBlockedID].IsConnected() )
+            {
+                vecChannels[iBlockedID].SetBlocked ( true );
+                vecChannels[iCurChanID].CreateChatTextMes ( "Blocked  " +  vecChannels[iBlockedID].GetName().toHtmlEscaped() );
+                vecChannels[iBlockedID].CreateChatTextMes ( "You have been blocked." );
+
+            }
+            else
+            {
+              vecChannels[iCurChanID].CreateChatTextMes ( "Invalid Channel ID." );
+            }
+        }
+
+    }
+    else if ( strChatCmd.startsWith ( "enableID" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        QRegExp rEnableID ( "enableID\\s+([0-9]+)" );
+        bool bMatched = rEnableID.exactMatch ( strChatCmd );
+        if ( !bMatched )
+        {
+            vecChannels[iCurChanID].CreateChatTextMes ( "Invalid parameter. Please try again." );
+        }
+        else
+        {
+            int iBlockedID = rEnableID.capturedTexts()[1].toInt();
+            if ( iBlockedID < iMaxNumChannels && vecChannels[iBlockedID].IsConnected() )
+            {
+                vecChannels[iBlockedID].SetBlocked ( false );
+                vecChannels[iCurChanID].CreateChatTextMes ( "Enabled  " +  vecChannels[iBlockedID].GetName().toHtmlEscaped() );
+                vecChannels[iBlockedID].CreateChatTextMes ( "You have been enabled." );
+            }
+            else
+            {
+              vecChannels[iCurChanID].CreateChatTextMes ( "Invalid Channel ID." );
+            }
+        }
 
     }
     else if ( strChatCmd.startsWith( "enableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )

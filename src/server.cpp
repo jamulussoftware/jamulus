@@ -597,6 +597,12 @@ void CServer::OnNewConnection ( int          iChID,
 {
     QMutexLocker locker ( &Mutex );
 
+    // if Edu-Mode is enabled and waitingroom is on, block him
+    if ( bEduModeEnabled && ! EduModeIsFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM ) )
+    {
+        vecChannels[iChID].SetBlocked ( true );
+    }
+
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
@@ -645,11 +651,16 @@ void CServer::OnNewConnection ( int          iChID,
 
         if ( bEduModeEnabled )
         {
-          const QString strEduModeIsEnabledFormatted =
-              "<b>THIS SERVER RUNS IN EDU-MODE! YOU MAY BE KICKED/MUTED/... BY THE ADMIN!</b>";
+
+            QString strEduModeIsEnabledFormatted =
+                "<b>THIS SERVER RUNS IN EDU-MODE! YOU MAY BE KICKED/MUTED/... BY THE ADMIN!</b>";
+
+            if ( ! EduModeIsFeatureDisabled ( EDU_MODE_FEATURE_WAITINGRM ) )
+            {
+                strEduModeIsEnabledFormatted += "<br><b>You can not hear others because waiting room mode is enabled. Please wait for an admin to enable you.</b>";
+            }
 
           vecChannels[iChID].CreateChatTextMes ( strEduModeIsEnabledFormatted );
-
         }
     }
     MutexWelcomeMessage.unlock();
@@ -1457,14 +1468,7 @@ void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
     else if ( strChatCmd.startsWith( "enableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
     {
         EduModeSetFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM, false );
-        for ( int i = 0; i < iMaxNumChannels; i++ )
-        {
-            if ( vecChannels[i].IsConnected() )
-            {
-                // send message
-                vecChannels[i].SetBlocked ( true );
-            }
-        }
+        vecChannels[iCurChanID].CreateChatTextMes ( "Enabled waiting room. New users will not be able to hear others." );
     }
     else if ( strChatCmd.startsWith( "disableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
     {
@@ -1474,9 +1478,11 @@ void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
             if ( vecChannels[i].IsConnected() )
             {
                 // send message
+                vecChannels[i].CreateChatTextMes ( "Waiting room mode was disabled. You are now unblocked." );
                 vecChannels[i].SetBlocked ( false );
             }
         }
+        vecChannels[iCurChanID].CreateChatTextMes ( "Disabled waiting room. Everybody can hear others now." );
     }
     else
     {

@@ -248,8 +248,8 @@ void CClientSettings::SaveFaderSettings ( const QString& strCurFileName )
     WriteToFile ( strCurFileName, IniXMLDocument );
 }
 
-void CClientSettings::ReadSettingsFromXML ( const QDomDocument&  IniXMLDocument,
-                                            const QList<QString> )
+void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument,
+                                            const QList<QString>& )
 {
     int  iIdx;
     int  iValue;
@@ -781,8 +781,8 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
 
 
 // Server settings -------------------------------------------------------------
-void CServerSettings::ReadSettingsFromXML ( const QDomDocument&  IniXMLDocument,
-                                            const QList<QString> CommandLineOptions )
+void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument,
+                                            const QList<QString>& CommandLineOptions )
 {
     int  iValue;
     bool bValue;

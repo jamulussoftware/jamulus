@@ -224,6 +224,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
     lblGlobalInfoLabel->hide();
 
+    // prepare update check info label (invisible by default)
+    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+                              tr ( "software upgrade available" ) + "</b></font>" );
+    lblUpdateCheck->hide();
+
 
     // Connect on startup ------------------------------------------------------
     if ( !strConnOnStartupAddress.isEmpty() )
@@ -436,13 +441,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::VersionAndOSReceived,
         this, &CClientDlg::OnVersionAndOSReceived );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient, &CClient::CLVersionAndOSReceived,
         this, &CClientDlg::OnCLVersionAndOSReceived );
-#endif
-
-    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-        this, &CClientDlg::OnAboutToQuit );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
@@ -499,6 +499,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     if ( bMuteStream )
     {
         chbLocalMute->setCheckState ( Qt::Checked );
+    }
+
+    // query the central server version number needed for update check (note
+    // that the connection less message respond may not make it back but that
+    // is not critical since the next time Jamulus is started we have another
+    // chance and the update check is not time-critical at all)
+    CHostAddress CentServerHostAddress;
+
+    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    {
+        pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
     }
 }
 
@@ -731,6 +742,26 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
     {
         MainMixerBoard->SetPanIsSupported();
     }
+#endif
+}
+
+void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
+                                            COSUtil::EOpSystemType eOSType,
+                                            QString                strVersion )
+{
+    // update check
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    {
+        lblUpdateCheck->show();
+    }
+#endif
+
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
+    ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion );
+#else
+    Q_UNUSED ( InetAddr ) // avoid compiler warnings
+    Q_UNUSED ( eOSType )  // avoid compiler warnings
 #endif
 }
 

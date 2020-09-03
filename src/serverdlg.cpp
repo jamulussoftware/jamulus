@@ -348,6 +348,11 @@ lvwClients->setMinimumHeight ( 140 );
 
     tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
 
+    // prepare update check info label (invisible by default)
+    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+                              tr ( "software upgrade available" ) + "</b></font>" );
+    lblUpdateCheck->hide();
+
     // update GUI dependencies
     UpdateGUIDependencies();
 
@@ -448,16 +453,27 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( pServer, &CServer::StopRecorder,
         this, &CServerDlg::OnStopRecorder );
 
-    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-        this, &CServerDlg::OnAboutToQuit );
+    QObject::connect ( pServer, &CServer::CLVersionAndOSReceived,
+        this, &CServerDlg::OnCLVersionAndOSReceived );
 
     QObject::connect ( &SystemTrayIcon, &QSystemTrayIcon::activated,
         this, &CServerDlg::OnSysTrayActivated );
 
 
-    // Timers ------------------------------------------------------------------
+    // Initializations which have to be done after the signals are connected ---
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
+
+    // query the central server version number needed for update check (note
+    // that the connection less message respond may not make it back but that
+    // is not critical since the next time Jamulus is started we have another
+    // chance and the update check is not time-critical at all)
+    CHostAddress CentServerHostAddress;
+
+    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    {
+        pServer->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+    }
 }
 
 void CServerDlg::closeEvent ( QCloseEvent* Event )
@@ -624,6 +640,19 @@ void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReaso
     {
         ShowWindowInForeground();
     }
+}
+
+void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
+                                            COSUtil::EOpSystemType ,
+                                            QString                strVersion )
+{
+    // update check
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    {
+        lblUpdateCheck->show();
+    }
+#endif
 }
 
 void CServerDlg::OnTimer()

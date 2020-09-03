@@ -46,7 +46,7 @@ class CChannel; // forward declaration of CChannel
 
 /* Definitions ****************************************************************/
 // number of ports we try to bind until we give up
-#define NUM_SOCKET_PORTS_TO_TRY         50
+#define NUM_SOCKET_PORTS_TO_TRY         100
 
 
 /* Classes ********************************************************************/

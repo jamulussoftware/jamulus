@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
+    <width>425</width>
     <height>490</height>
    </rect>
   </property>
@@ -565,6 +565,13 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblUpdateCheck">
+          <property name="text">
+           <string>Update check</string>
           </property>
          </widget>
         </item>

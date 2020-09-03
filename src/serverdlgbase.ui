@@ -289,6 +289,13 @@
      </widget>
     </widget>
    </item>
+   <item>
+    <widget class="QLabel" name="lblUpdateCheck">
+     <property name="text">
+      <string>Update check</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

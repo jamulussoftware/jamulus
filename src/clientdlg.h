@@ -121,8 +121,6 @@ protected:
     CMusProfDlg        MusicianProfileDlg;
 
 public slots:
-    void OnAboutToQuit() { pSettings->Save(); }
-
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
@@ -142,12 +140,9 @@ public slots:
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,
-                                    QString                strVersion )
-        { ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion ); }
-#endif
+                                    QString                strVersion );
 
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();

@@ -116,6 +116,7 @@ protected:
 
     bool         bOtherChannelIsSolo;
     bool         bIsMyOwnFader;
+    bool         bIsMutedAtServer;
     double       dPreviousFaderLevel;
     int          iGroupID;
     QString      strGroupBaseText;

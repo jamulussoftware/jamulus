@@ -116,6 +116,15 @@ int main ( int argc, char** argv )
             bUseGUI = false;
             tsConsole << "- no GUI mode chosen" << endl;
             CommandLineOptions << "--nogui";
+
+            if ( CommandLineOptions.contains ( "--inifile" ) )
+            {
+                tsConsole << argv[0] << ": ";
+                tsConsole << "Cannot specify inifile"
+                    " without GUI -- use '--help' for help" << endl;
+                break;
+            }
+
             continue;
         }
 
@@ -456,6 +465,7 @@ int main ( int argc, char** argv )
         }
 
 
+#ifndef HEADLESS
         // Initialization file -------------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
@@ -468,8 +478,18 @@ int main ( int argc, char** argv )
             strIniFileName = strArgument;
             tsConsole << "- initialization file name: " << strIniFileName << endl;
             CommandLineOptions << "--inifile";
+
+            if ( CommandLineOptions.contains ( "--nogui" ) )
+            {
+                tsConsole << argv[0] << ": ";
+                tsConsole << "Cannot use option '" << argv[i] << "'"
+                    " without GUI -- use '--help' for help" << endl;
+                break;
+            }
+
             continue;
         }
+#endif
 
 
         // Connect on startup --------------------------------------------------
@@ -561,6 +581,23 @@ int main ( int argc, char** argv )
         iPortNumber += 10; // increment by 10
     }
 
+    // per definition: if was are no "nogui" mode, no inifile is supported
+    if ( !bUseGUI )
+    {
+        if ( CommandLineOptions.contains ( "--inifile" ) )
+        {
+
+            tsConsole << argv[0] << ": ";
+            tsConsole << "Cannot specify inifile"
+                " without GUI -- use '--help' for help" << endl;
+
+// clicking on the Mac application bundle, the actual application
+// is called with weird command line args -> do not exit on these
+#if !( defined ( __APPLE__ ) || defined ( __MACOSX ) )
+            exit ( 1 );
+#endif
+        }
+    }
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
@@ -626,20 +663,20 @@ int main ( int argc, char** argv )
                              bNoAutoJackConnect,
                              strClientName );
 
-            // load settings from init-file (command line options override)
-            CClientSettings Settings ( &Client, strIniFileName );
-            Settings.Load ( CommandLineOptions );
-
-            // load translation
-            if ( bUseGUI && bUseTranslation )
-            {
-                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                CInstPictures::UpdateTableOnLanguageChange();
-            }
-
 #ifndef HEADLESS
             if ( bUseGUI )
             {
+                // load settings from init-file (command line options override)
+                CClientSettings Settings ( &Client, strIniFileName );
+                Settings.Load ( CommandLineOptions );
+
+                // load translation
+                if ( bUseTranslation )
+                {
+                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                    CInstPictures::UpdateTableOnLanguageChange();
+                }
+
                 // GUI object
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
@@ -766,7 +803,9 @@ QString UsageArguments ( char **argv )
         "Usage: " + QString ( argv[0] ) + " [option] [optional argument]\n"
         "\nRecognized options:\n"
         "  -h, -?, --help        display this help text and exit\n"
-        "  -i, --inifile         initialization file name\n"
+#ifndef HEADLESS
+        "  -i, --inifile         alternative initialization file name\n"
+#endif
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set your local port number\n"
         "  -t, --notranslation   disable translation (use englisch language)\n"

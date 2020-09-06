@@ -109,7 +109,7 @@ public:
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
     // education methods
-    void SetAdmin(const bool bIsAdmin);
+    void SetAdmin( const bool bIsAdmin );
     bool IsAdmin();
 
     void SetBlocked ( const bool bIsBlocked );

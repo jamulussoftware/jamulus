@@ -862,6 +862,9 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     plblLabel->setToolTip ( strToolTip );
     plblLabel->setAccessibleName ( strAliasAccessible );
     plblLabel->setAccessibleDescription ( tr ( "Alias" ) );
+    pcbMute->setAccessibleName ( "Mute " + strAliasAccessible + ", " + strInstrumentAccessible );
+    pcbSolo->setAccessibleName ( "Solo " + strAliasAccessible + ", " + strInstrumentAccessible );
+    pcbGroup->setAccessibleName ( "Group " + strAliasAccessible + ", " + strInstrumentAccessible );
 }
 
 /******************************************************************************\

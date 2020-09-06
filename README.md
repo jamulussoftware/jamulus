@@ -1,4 +1,3 @@
-![Homepage picture](https://sagora.org/images/sagora_logo_alta.png)
 
 SAGORA
 =======================================

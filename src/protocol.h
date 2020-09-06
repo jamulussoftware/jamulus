@@ -205,6 +205,12 @@ protected:
                            const int               iID,
                            const CVector<uint8_t>& vecData );
 
+    void GenSplitMessageContainer ( CVector<uint8_t>&       vecOut,
+                                    const int               iID,
+                                    const int               iNumParts,
+                                    const int               iSplitCnt,
+                                    const CVector<uint8_t>& vecData );
+
     void ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
                                       CVector<uint8_t>&       vecbyMesBodyData,
                                       int&                    iID,

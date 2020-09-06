@@ -422,8 +422,8 @@ CProtocol::CProtocol()
 
 
 // TEST
-const int iMaxNumParts = 25;
-iPartSize = 100;
+const int iMaxNumParts = 200;//25;
+iPartSize = 600;
 vecvecbySplitMessageStorage.Init ( iMaxNumParts );
 
 for ( int i = 0; i < iMaxNumParts; i++ )
@@ -537,16 +537,38 @@ void CProtocol::CreateAndSendMessage ( const int               iID,
 // TODO insert split mechanism here
 // TODO make use of MAX_SIZE_BYTES_NETW_BUF
 
+CVector<uint8_t> vecDataTmp;
+int iPointer = 0;
+
 // TEST split all messages by half for testing
 if ( vecData.Size() > iPartSize )
 {
     const int iNumParts = static_cast<int> ( ceil ( static_cast<double> ( vecData.Size() ) / iPartSize ) );
 
-    for ( int iPartCnt = 0; iPartCnt < iNumParts; iPartCnt++ )
-    {
+//qDebug() << iNumParts;
 
-// TODO
-//        vecData
+    for ( int iSplitCnt = 0; iSplitCnt < iNumParts; iSplitCnt++ )
+    {
+        int iCurPartSize = iPartSize;
+
+        if ( vecData.Size() - iPointer < iPartSize )
+        {
+            iCurPartSize = vecData.Size() - iPointer;
+        }
+
+vecDataTmp.Init ( iCurPartSize );
+
+for ( int i = 0; i < iCurPartSize; i++ )
+{
+    vecDataTmp[i] = vecData[iPointer + i];
+}
+iPointer += iCurPartSize;
+
+        GenSplitMessageContainer ( vecNewMessage,
+                                   iID,
+                                   iNumParts,
+                                   iSplitCnt,
+                                   vecDataTmp );
 
         // build complete message
         GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
@@ -2903,6 +2925,40 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
     }
 
     PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( CRCObj.GetCRC() ), 2 );
+}
+
+
+void CProtocol::GenSplitMessageContainer ( CVector<uint8_t>&       vecOut,
+                                           const int               iID,
+                                           const int               iNumParts,
+                                           const int               iSplitCnt,
+                                           const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // query length of data vector
+    const int iDataLenByte = vecData.Size();
+
+    // total length of message
+    const int iTotLenByte = 4 + iDataLenByte;
+
+    // init message vector
+    vecOut.Init ( iTotLenByte );
+
+    // 2 bytes ID
+    PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( iID ), 2 );
+
+    // 1 byte number of parts
+    PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( iNumParts ), 1 );
+
+    // 1 byte split cnt
+    PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( iSplitCnt ), 1 );
+
+    // data
+    for ( int i = 0; i < iDataLenByte; i++ )
+    {
+        PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( vecData[i] ), 1 );
+    }
 }
 
 void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,

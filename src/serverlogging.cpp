@@ -49,8 +49,18 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr,
                                         const int           iNumberOfConnectedClients )
 {
     // logging of new connected channel
+    QString strClientIP;
+    
+    if ( !bLogIP )
+    {
+        strClientIP = ClientInetAddr.toString().replace( QRegExp( "(\\.[0-9]{1,3}){2}$" ), ".x.x" );
+    }
+    else
+    {
+        strClientIP = ClientInetAddr.toString();
+    }
     const QString strLogStr = CurTimeDatetoLogString() + ", " +
-        ClientInetAddr.toString() + ", connected (" + QString::number ( iNumberOfConnectedClients ) + ")";
+        strClientIP + ", connected (" + QString::number ( iNumberOfConnectedClients ) + ")";
 
     QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
     tsConsoleStream << strLogStr << endl; // on console

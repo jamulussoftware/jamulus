@@ -43,6 +43,8 @@ public:
 
     virtual ~CServerLogging();
 
+    void operator<< ( const QString& sNewStr );
+
     void Start ( const QString& strLoggingFileName );
     void AddServerStopped();
 
@@ -50,7 +52,6 @@ public:
                             const int           iNumberOfConnectedClients );
 
 protected:
-    void operator<< ( const QString& sNewStr );
     QString CurTimeDatetoLogString();
 
     bool  bDoLogging;

@@ -419,6 +419,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         vecChannels[i].SetEnable ( true );
+        vecChannels[i].SetServerLogging ( i, &Logging );
     }
 
 

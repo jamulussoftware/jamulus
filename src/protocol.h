@@ -30,6 +30,7 @@
 #include <list>
 #include "global.h"
 #include "util.h"
+#include "serverlogging.h"
 
 
 /* Definitions ****************************************************************/
@@ -98,6 +99,8 @@ public:
     CProtocol();
 
     void Reset();
+
+    void SetServerLogging ( const int iChID, CServerLogging* pNLogging ) { iMyChID = iChID; pLogging = pNLogging; }
 
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
@@ -193,6 +196,14 @@ protected:
         int              iID, iCnt;
     };
 
+    void AddDebugLog ( const QString& sLog )
+    {
+        if ( pLogging != nullptr )
+        {
+            *pLogging << QString ( QString::number ( iMyChID ) + ": " + sLog );
+        }
+    }
+
     void EnqueueMessage ( CVector<uint8_t>& vecMessage,
                           const int         iCnt,
                           const int         iID );
@@ -282,6 +293,9 @@ protected:
 
     QTimer                  TimerSendMess;
     QMutex                  Mutex;
+
+    CServerLogging*         pLogging = nullptr;
+    int                     iMyChID;
 
 public slots:
     void OnTimerSendMess() { SendMessage(); }

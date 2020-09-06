@@ -425,6 +425,8 @@ void CProtocol::Reset()
 
     // delete complete "send message queue"
     SendMessQueue.clear();
+
+    AddDebugLog ( QString ( "Reset" ) );
 }
 
 void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
@@ -443,6 +445,10 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
 
         // we want to have a FIFO: we add at the end and take from the beginning
         SendMessQueue.push_back ( SendMessageObj );
+
+        AddDebugLog ( QString ( "Enqueue iID: " + QString::number ( iID ) +
+                                ", iCnt: " + QString::number ( iCnt ) +
+                                ", wasempty: " + QString::number ( bListWasEmpty ) ) );
     }
     Mutex.unlock();
 
@@ -472,6 +478,9 @@ void CProtocol::SendMessage()
             {
                 TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
             }
+
+            AddDebugLog ( QString ( "SendMessage iID: " + QString::number ( SendMessQueue.front().iID ) +
+                                    ", iCnt: " + QString::number ( SendMessQueue.front().iCnt ) ) );
 
             bSendMess = true;
         }
@@ -606,6 +615,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                 }
             }
             Mutex.unlock();
+
+            AddDebugLog ( QString ( "Ackn iID: " + QString::number ( iData ) +
+                                    ", iRecCounter: " + QString::number ( iRecCounter ) +
+                                    ", bSendNextMess: " + QString::number ( bSendNextMess ) ) );
 
             if ( bSendNextMess )
             {

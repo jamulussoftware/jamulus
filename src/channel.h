@@ -33,6 +33,7 @@
 #include "util.h"
 #include "protocol.h"
 #include "socket.h"
+#include "serverlogging.h"
 
 
 /* Definitions ****************************************************************/
@@ -124,6 +125,8 @@ public:
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
                                const bool bPreserve = false );
     int GetSockBufNumFrames() const { return iCurSockBufNumFrames; }
+
+    void SetServerLogging ( const int iChID, CServerLogging* pNLogging ) { pLogging = pNLogging; Protocol.SetServerLogging ( iChID, pNLogging ); }
 
     void UpdateSocketBufferSize();
 
@@ -236,6 +239,8 @@ protected:
     bool                    bChannelLevelsRequired;
 
     CStereoSignalLevelMeter SignalLevelMeter;
+
+    CServerLogging*         pLogging = nullptr;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

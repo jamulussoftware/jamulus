@@ -74,7 +74,9 @@ void CServerLogging::operator<< ( const QString& sNewStr )
         // append new line in logging file
         QTextStream out ( &File );
         out << sNewStr << endl;
-        File.flush();
+
+//File.flush();
+
     }
 }
 

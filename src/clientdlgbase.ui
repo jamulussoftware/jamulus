@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>490</height>
+    <width>500</width>
+    <height>360</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string/>
@@ -21,7 +27,7 @@
    <string/>
   </property>
   <property name="sizeGripEnabled">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <layout class="QHBoxLayout">
    <property name="leftMargin">
@@ -31,13 +37,19 @@
     <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>3</number>
+    <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>3</number>
+    <number>0</number>
    </property>
    <item>
     <widget class="QFrame" name="backgroundFrame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -51,8 +63,288 @@
       <enum>QFrame::Plain</enum>
      </property>
      <layout class="QHBoxLayout">
+      <property name="spacing">
+       <number>3</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>25</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>15</number>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="CAudioMixerBoard" name="MainMixerBoard" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
       <item>
        <layout class="QVBoxLayout">
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblAudioPan">
+            <property name="font">
+             <font>
+              <family>Noto Sans</family>
+             </font>
+            </property>
+            <property name="text">
+             <string>Pan</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAudioPanValue">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Noto Sans</family>
+             </font>
+            </property>
+            <property name="text">
+             <string>Center</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout">
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Minimum</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QSlider" name="sldAudioPan">
+              <property name="styleSheet">
+               <string notr="true">QSlider::handle{
+background-color:rgb(13,204,135);
+}</string>
+              </property>
+              <property name="pageStep">
+               <number>1</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="tickPosition">
+               <enum>QSlider::TicksBothSides</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Minimum</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout">
+          <item>
+           <layout class="QVBoxLayout">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblAudioReverb">
+              <property name="font">
+               <font>
+                <family>Noto Sans</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>Reverb</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout">
+              <item>
+               <spacer>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Minimum</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QSlider" name="sldAudioReverb">
+                <property name="styleSheet">
+                 <string notr="true">QSlider::handle{
+background-color:rgb(13,204,135);
+}</string>
+                </property>
+                <property name="pageStep">
+                 <number>1</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="tickPosition">
+                 <enum>QSlider::TicksBothSides</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Minimum</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="_2">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QRadioButton" name="rbtReverbSelL">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Noto Sans</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>Reverb L</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbtReverbSelR">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Noto Sans</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>Reverb R</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="leftMargin">
+         <number>5</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
         <item>
          <layout class="QHBoxLayout">
           <item>
@@ -61,36 +353,7 @@
              <number>3</number>
             </property>
             <item>
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>10</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="pxlLogo">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="pixmap">
-               <pixmap resource="resources.qrc">:/png/main/res/fronticon.png</pixmap>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>false</bool>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout"/>
             </item>
             <item>
              <spacer>
@@ -99,8 +362,8 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>10</width>
-                <height>0</height>
+                <width>13</width>
+                <height>13</height>
                </size>
               </property>
              </spacer>
@@ -109,6 +372,11 @@
              <layout class="QHBoxLayout">
               <item>
                <widget class="QLabel" name="lblDelay">
+                <property name="font">
+                 <font>
+                  <family>Noto Sans</family>
+                 </font>
+                </property>
                 <property name="text">
                  <string>Delay</string>
                 </property>
@@ -151,8 +419,8 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>10</width>
-                <height>0</height>
+                <width>13</width>
+                <height>13</height>
                </size>
               </property>
              </spacer>
@@ -161,6 +429,11 @@
              <layout class="QHBoxLayout">
               <item>
                <widget class="QLabel" name="lblBuffers">
+                <property name="font">
+                 <font>
+                  <family>Noto Sans</family>
+                 </font>
+                </property>
                 <property name="text">
                  <string>Buffers</string>
                 </property>
@@ -203,8 +476,8 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>10</width>
-                <height>0</height>
+                <width>13</width>
+                <height>13</height>
                </size>
               </property>
              </spacer>
@@ -222,8 +495,13 @@
            <layout class="QVBoxLayout">
             <item>
              <widget class="QLabel" name="lblInputLEDMeter">
+              <property name="font">
+               <font>
+                <family>Noto Sans</family>
+               </font>
+              </property>
               <property name="text">
-               <string>Input</string>
+               <string>Entrada</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -233,7 +511,7 @@
             <item>
              <layout class="QHBoxLayout">
               <item>
-               <widget class="CLevelMeter" name="lbrInputLevelL" native="true">
+               <widget class="CMultiColorLEDBar" name="lbrInputLevelL" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -242,14 +520,14 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>19</width>
+                  <width>16</width>
                   <height>88</height>
                  </size>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="CLevelMeter" name="lbrInputLevelR" native="true">
+               <widget class="CMultiColorLEDBar" name="lbrInputLevelR" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -258,7 +536,7 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>19</width>
+                  <width>16</width>
                   <height>88</height>
                  </size>
                 </property>
@@ -270,6 +548,11 @@
              <layout class="QHBoxLayout">
               <item>
                <widget class="QLabel" name="lblLevelMeterLeft">
+                <property name="font">
+                 <font>
+                  <family>Noto Sans</family>
+                 </font>
+                </property>
                 <property name="text">
                  <string>L</string>
                 </property>
@@ -280,6 +563,11 @@
               </item>
               <item>
                <widget class="QLabel" name="lblLevelMeterRight">
+                <property name="font">
+                 <font>
+                  <family>Noto Sans</family>
+                 </font>
+                </property>
                 <property name="text">
                  <string>R</string>
                 </property>
@@ -292,22 +580,6 @@
             </item>
            </layout>
           </item>
-          <item>
-           <spacer>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Minimum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>0</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
          </layout>
         </item>
         <item>
@@ -318,260 +590,123 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="chbLocalMute">
+         <widget class="QCheckBox" name="chbPerfil">
+          <property name="font">
+           <font>
+            <family>Noto Sans</family>
+           </font>
+          </property>
           <property name="text">
-           <string>&amp;Mute Myself</string>
+           <string>Perfil</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="chbSettings">
+          <property name="font">
+           <font>
+            <family>Noto Sans</family>
+           </font>
+          </property>
           <property name="text">
-           <string>&amp;Settings</string>
+           <string>Configuracion</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="chbChat">
+          <property name="font">
+           <font>
+            <family>Noto Sans</family>
+           </font>
+          </property>
           <property name="text">
-           <string>&amp;Chat</string>
+           <string>Chat</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Consola">
+          <property name="font">
+           <font>
+            <family>Noto Sans</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Analizador</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chbLocalMute">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Mute Myself</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2"/>
         </item>
         <item>
          <widget class="QPushButton" name="butConnect">
-          <property name="text">
-           <string>C&amp;onnect</string>
-          </property>
-          <property name="autoDefault">
-           <bool>false</bool>
-          </property>
-          <property name="default">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="Line" name="linePanReverb">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QVBoxLayout">
-        <item>
-         <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>3</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="lblAudioPan">
-            <property name="text">
-             <string>Pan</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblAudioPanValue">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Center</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout">
-            <item>
-             <spacer>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QSlider" name="sldAudioPan">
-              <property name="styleSheet">
-               <string/>
-              </property>
-              <property name="pageStep">
-               <number>1</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout">
-          <item>
-           <layout class="QVBoxLayout">
-            <property name="spacing">
-             <number>3</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="lblAudioReverb">
-              <property name="text">
-               <string>Reverb</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout">
-              <item>
-               <spacer>
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                 <enum>QSizePolicy::Minimum</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>0</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QSlider" name="sldAudioReverb">
-                <property name="pageStep">
-                 <number>1</number>
-                </property>
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="tickPosition">
-                 <enum>QSlider::TicksBothSides</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer>
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                 <enum>QSizePolicy::Minimum</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>0</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout">
-            <property name="spacing">
-             <number>3</number>
-            </property>
-            <item>
-             <widget class="QRadioButton" name="rbtReverbSelL">
-              <property name="text">
-               <string>Left</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="rbtReverbSelR">
-              <property name="text">
-               <string>Right</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="lblGlobalInfoLabel">
-          <property name="text">
-           <string>MUTED (Other people won't hear you)</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="margin">
-           <number>6</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="CAudioMixerBoard" name="MainMixerBoard" native="true">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblUpdateCheck">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Noto Sans</family>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#butConnect{
+background: rgb(28, 28, 28); 
+selection-background-color: rgb(28, 28, 28);
+border-color: rgb(120, 120, 120);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(120, 120, 120);
+}
+#butConnect:hover{
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(13, 204, 135);
+}
+
+
+#butConnect:pressed{
+background: rgb(15, 15, 15); 
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+}</string>
+          </property>
           <property name="text">
-           <string>Update check</string>
+           <string>Conectar </string>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
+          </property>
+          <property name="default">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -594,17 +729,17 @@
    <header>audiomixerboard.h</header>
   </customwidget>
   <customwidget>
-   <class>CLevelMeter</class>
+   <class>CMultiColorLEDBar</class>
    <extends>QWidget</extends>
-   <header>levelmeter.h</header>
+   <header>multicolorledbar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>butConnect</tabstop>
-  <tabstop>chbLocalMute</tabstop>
   <tabstop>chbSettings</tabstop>
   <tabstop>chbChat</tabstop>
+  <tabstop>chbLocalMute</tabstop>
   <tabstop>sldAudioPan</tabstop>
   <tabstop>sldAudioReverb</tabstop>
   <tabstop>rbtReverbSelL</tabstop>

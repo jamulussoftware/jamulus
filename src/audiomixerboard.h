@@ -8,17 +8,17 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
+ * Foundation; either version 2 of the License, or (at your option) any later 
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT
+ * This program is distributed in the hope that it will be useful, but WITHOUT 
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * this program; if not, write to the Free Software Foundation, Inc., 
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -32,15 +32,11 @@
 #include <QLayout>
 #include <QString>
 #include <QSlider>
-#include <QDial>
 #include <QSizePolicy>
 #include <QHostAddress>
-#include <QListWidget>
-#include <QMenu>
 #include "global.h"
 #include "util.h"
-#include "levelmeter.h"
-#include "settings.h"
+#include "multicolorledbar.h"
 
 
 /* Classes ********************************************************************/
@@ -49,226 +45,201 @@ class CChannelFader : public QObject
     Q_OBJECT
 
 public:
-    CChannelFader ( QWidget* pNW );
+    CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
 
-    QString GetReceivedName() { return cReceivedChanInfo.strName; }
-    int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
-    void    SetChannelInfos ( const CChannelInfo& cChanInfo );
-    void    Show() { pFrame->show(); }
-    void    Hide() { pFrame->hide(); }
-    bool    IsVisible() { return !pFrame->isHidden(); }
-    bool    IsSolo() { return pcbSolo->isChecked(); }
-    bool    IsMute() { return pcbMute->isChecked(); }
-    int     GetGroupID() { return iGroupID; }
-    void    SetGUIDesign ( const EGUIDesign eNewDesign );
-    void    SetDisplayChannelLevel ( const bool eNDCL );
-    bool    GetDisplayChannelLevel();
-    void    SetDisplayPans ( const bool eNDP );
-    QFrame* GetMainWidget() { return pFrame; }
+    void SetText ( const CChannelInfo& ChanInfo );
+    QString GetReceivedName() { return strReceivedName; }
+    void SetChannelInfos ( const CChannelInfo& cChanInfo );
+    void Show() { pFrame->show(); }
+    void Hide() { pFrame->hide(); }
+    bool IsVisible() { return !pFrame->isHidden(); }
+    bool IsSolo() { return pcbSolo->isChecked(); }
+    bool IsMute() { return pcbMute->isChecked(); }
+    void SetGUIDesign ( const EGUIDesign eNewDesign );
+    void SetDisplayChannelLevel ( const bool eNDCL );
+    bool GetDisplayChannelLevel();
 
-    void SetPanValue ( const int iPan );
+    void UpdateSoloState ( const bool bNewOtherSoloState );
+    void SetFaderLevel ( const int iLevel );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
-    void SetGroupID ( const int iNGroupID );
-    void SetRemoteFaderIsMute ( const bool bIsMute );
-    void SetFaderLevel ( const double dLevel,
-                         const bool   bIsGroupUpdate = false );
-
-    int    GetFaderLevel() { return pFader->value(); }
-    double GetPreviousFaderLevel() { return dPreviousFaderLevel; }
-    int    GetPanValue() { return pPan->value(); }
-    void   Reset();
-    void   SetChannelLevel ( const uint16_t iLevel );
-    void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
-    void   UpdateSoloState ( const bool bNewOtherSoloState );
+    int  GetFaderLevel() { return pFader->value(); }
+    void Reset();
+    void SetChannelLevel ( const uint16_t iLevel );
 
 protected:
-    void   UpdateGroupIDDependencies();
+    double CalcFaderGain ( const int value );
     void   SetMute ( const bool bState );
+    void   SendFaderLevelToServer ( const int iLevel );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
-    void   SendPanValueToServer ( const int iPan );
-    void   SendFaderLevelToServer ( const double dLevel,
-                                    const bool   bIsGroupUpdate );
 
-    QFrame*      pFrame;
+    QFrame*            pFrame;
 
-    QWidget*     pLevelsBox;
-    QWidget*     pMuteSoloBox;
-    CLevelMeter* plbrChannelLevel;
-    QSlider*     pFader;
-    QDial*       pPan;
-    QLabel*      pPanLabel;
-    QLabel*      pInfoLabel;
-    QHBoxLayout* pLabelGrid;
-    QVBoxLayout* pLabelPictGrid;
+    QWidget*           pLevelsBox;
+    QWidget*           pMuteSoloBox;
+    CMultiColorLEDBar* plbrChannelLevel;
+    QSlider*           pFader;
 
-    QCheckBox*   pcbMute;
-    QCheckBox*   pcbSolo;
-    QCheckBox*   pcbGroup;
-    QMenu*       pGroupPopupMenu;
+    QCheckBox*         pcbMute;
+    QCheckBox*         pcbSolo;
 
-    QGroupBox*   pLabelInstBox;
-    QLabel*      plblLabel;
-    QLabel*      plblInstrument;
-    QLabel*      plblCountryFlag;
+    QGroupBox*         pLabelInstBox;
+    QLabel*            plblLabel;
+    QLabel*            plblInstrument;
+    QLabel*            plblCountryFlag;
 
-    CChannelInfo cReceivedChanInfo;
+    QString            strReceivedName;
 
-    bool         bOtherChannelIsSolo;
-    bool         bIsMyOwnFader;
-    bool         bIsMutedAtServer;
-    double       dPreviousFaderLevel;
-    int          iGroupID;
-    QString      strGroupBaseText;
-    int          iInstrPicMaxWidth;
-    EGUIDesign   eDesign;
+    bool               bOtherChannelIsSolo;
 
 public slots:
-    void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }
-    void OnPanValueChanged ( int value );
+    void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
     void OnMuteStateChanged ( int value );
-    void OnGroupStateChanged ( int );
-
-    void OnGroupMenuGrpNone() { SetGroupID ( INVALID_INDEX ); }
-    void OnGroupMenuGrp1()    { SetGroupID ( 0 ); }
-    void OnGroupMenuGrp2()    { SetGroupID ( 1 ); }
-    void OnGroupMenuGrp3()    { SetGroupID ( 2 ); }
-    void OnGroupMenuGrp4()    { SetGroupID ( 3 ); }
 
 signals:
-    void gainValueChanged ( double value,
-                            bool   bIsMyOwnFader,
-                            bool   bIsGroupUpdate,
-                            bool   bSuppressServerUpdate,
-                            double dLevelRatio );
-
-    void panValueChanged  ( double value );
+    void gainValueChanged ( double value );
     void soloStateChanged ( int value );
 };
 
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 template<unsigned int slotId>
 class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
 {
-public:
-    void OnChGainValueChanged ( double dValue,
-                                bool   bIsMyOwnFader,
-                                bool   bIsGroupUpdate,
-                                bool   bSuppressServerUpdate,
-                                double dLevelRatio ) { UpdateGainValue ( slotId - 1,
-                                                                         dValue,
-                                                                         bIsMyOwnFader,
-                                                                         bIsGroupUpdate,
-                                                                         bSuppressServerUpdate,
-                                                                         dLevelRatio ); }
 
-    void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
+public:
+    void OnChGainValueChanged ( double dValue ) { UpdateGainValue ( slotId - 1, dValue ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue,
-                                   const bool   bIsMyOwnFader,
-                                   const bool   bIsGroupUpdate,
-                                   const bool   bSuppressServerUpdate,
-                                   const double dLevelRatio ) = 0;
-
-    virtual void UpdatePanValue ( const int    iChannelIdx,
-                                  const double dValue ) = 0;
+                                   const double dValue ) = 0;
 };
 
 template<>
 class CAudioMixerBoardSlots<0> {};
 
+#else
+template<unsigned int slotId>
+class CAudioMixerBoardSlots {};
+
+#endif
 
 class CAudioMixerBoard :
-    public QGroupBox,
+    public QScrollArea,
     public CAudioMixerBoardSlots<MAX_NUM_CHANNELS>
 {
     Q_OBJECT
 
 public:
-    CAudioMixerBoard ( QWidget*        parent = nullptr,
-                       Qt::WindowFlags f      = nullptr );
+    CAudioMixerBoard ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
 
-    virtual ~CAudioMixerBoard();
-
-    void SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
     void HideAll();
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetDisplayChannelLevels ( const bool eNDCL );
-    void SetDisplayPans ( const bool eNDP );
-    void SetPanIsSupported();
-    void SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
-    void SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );
 
-    void ChangeFaderOrder ( const bool        bDoSort,
-                            const EChSortType eChSortType );
-
     void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
-    void SetRecorderState ( const ERecorderState newRecorderState );
+    // settings
+    CVector<QString> vecStoredFaderTags;
+    CVector<int>     vecStoredFaderLevels;
+    CVector<int>     vecStoredFaderIsSolo;
+    CVector<int>     vecStoredFaderIsMute;
+    int              iNewClientFaderLevel;
 
 protected:
-    class CMixerBoardScrollArea : public QScrollArea
-    {
-    public:
-        CMixerBoardScrollArea ( QWidget* parent = nullptr ) : QScrollArea ( parent ) {}
-
-    protected:
-        virtual void resizeEvent ( QResizeEvent* event )
-        {
-            // if after a resize of the main window a vertical scroll bar is required, make
-            // sure that the fader label is visible (scroll down completely)
-            ensureVisible ( 0, 2000 ); // use a large value here
-            QScrollArea::resizeEvent ( event );
-        }
-    };
-
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
-                                  int&                iStoredPanValue,
                                   bool&               bStoredFaderIsSolo,
-                                  bool&               bStoredFaderIsMute,
-                                  int&                iGroupID );
+                                  bool&               bStoredFaderIsMute );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
-    void UpdateTitle();
 
-    void OnGainValueChanged ( const int    iChannelIdx,
-                              const double dValue );
-
-    CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
-    CMixerBoardScrollArea*  pScrollArea;
+    QGroupBox*              pGroupBox;
     QHBoxLayout*            pMainLayout;
     bool                    bDisplayChannelLevels;
-    bool                    bDisplayPans;
-    bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
-    int                     iMyChannelID;
     QString                 strServerName;
-    ERecorderState          eRecorderState;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue,
-                                   const bool   bIsMyOwnFader,
-                                   const bool   bIsGroupUpdate,
-                                   const bool   bSuppressServerUpdate,
-                                   const double dLevelRatio );
-
-    virtual void UpdatePanValue ( const int    iChannelIdx,
-                                  const double dValue );
+                                   const double dValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
 
+#else
+    void UpdateGainValue ( const int    iChannelIdx,
+                           const double dValue );
+
+#endif
+
+#if QT_VERSION < 0x50000  // MOC does not expand macros in Qt 4, so we cannot use QT_VERSION_CHECK(5, 0, 0)
+public slots:
+    // CODE TAG: MAX_NUM_CHANNELS_TAG
+    // make sure we have MAX_NUM_CHANNELS connections!!!
+    void OnGainValueChangedCh0  ( double dValue ) { UpdateGainValue ( 0,  dValue ); }
+    void OnGainValueChangedCh1  ( double dValue ) { UpdateGainValue ( 1,  dValue ); }
+    void OnGainValueChangedCh2  ( double dValue ) { UpdateGainValue ( 2,  dValue ); }
+    void OnGainValueChangedCh3  ( double dValue ) { UpdateGainValue ( 3,  dValue ); }
+    void OnGainValueChangedCh4  ( double dValue ) { UpdateGainValue ( 4,  dValue ); }
+    void OnGainValueChangedCh5  ( double dValue ) { UpdateGainValue ( 5,  dValue ); }
+    void OnGainValueChangedCh6  ( double dValue ) { UpdateGainValue ( 6,  dValue ); }
+    void OnGainValueChangedCh7  ( double dValue ) { UpdateGainValue ( 7,  dValue ); }
+    void OnGainValueChangedCh8  ( double dValue ) { UpdateGainValue ( 8,  dValue ); }
+    void OnGainValueChangedCh9  ( double dValue ) { UpdateGainValue ( 9,  dValue ); }
+    void OnGainValueChangedCh10 ( double dValue ) { UpdateGainValue ( 10, dValue ); }
+    void OnGainValueChangedCh11 ( double dValue ) { UpdateGainValue ( 11, dValue ); }
+    void OnGainValueChangedCh12 ( double dValue ) { UpdateGainValue ( 12, dValue ); }
+    void OnGainValueChangedCh13 ( double dValue ) { UpdateGainValue ( 13, dValue ); }
+    void OnGainValueChangedCh14 ( double dValue ) { UpdateGainValue ( 14, dValue ); }
+    void OnGainValueChangedCh15 ( double dValue ) { UpdateGainValue ( 15, dValue ); }
+    void OnGainValueChangedCh16 ( double dValue ) { UpdateGainValue ( 16, dValue ); }
+    void OnGainValueChangedCh17 ( double dValue ) { UpdateGainValue ( 17, dValue ); }
+    void OnGainValueChangedCh18 ( double dValue ) { UpdateGainValue ( 18, dValue ); }
+    void OnGainValueChangedCh19 ( double dValue ) { UpdateGainValue ( 19, dValue ); }
+    void OnGainValueChangedCh20 ( double dValue ) { UpdateGainValue ( 20, dValue ); }
+    void OnGainValueChangedCh21 ( double dValue ) { UpdateGainValue ( 21, dValue ); }
+    void OnGainValueChangedCh22 ( double dValue ) { UpdateGainValue ( 22, dValue ); }
+    void OnGainValueChangedCh23 ( double dValue ) { UpdateGainValue ( 23, dValue ); }
+    void OnGainValueChangedCh24 ( double dValue ) { UpdateGainValue ( 24, dValue ); }
+    void OnGainValueChangedCh25 ( double dValue ) { UpdateGainValue ( 25, dValue ); }
+    void OnGainValueChangedCh26 ( double dValue ) { UpdateGainValue ( 26, dValue ); }
+    void OnGainValueChangedCh27 ( double dValue ) { UpdateGainValue ( 27, dValue ); }
+    void OnGainValueChangedCh28 ( double dValue ) { UpdateGainValue ( 28, dValue ); }
+    void OnGainValueChangedCh29 ( double dValue ) { UpdateGainValue ( 29, dValue ); }
+    void OnGainValueChangedCh30 ( double dValue ) { UpdateGainValue ( 30, dValue ); }
+    void OnGainValueChangedCh31 ( double dValue ) { UpdateGainValue ( 31, dValue ); }
+    void OnGainValueChangedCh32 ( double dValue ) { UpdateGainValue ( 32, dValue ); }
+    void OnGainValueChangedCh33 ( double dValue ) { UpdateGainValue ( 33, dValue ); }
+    void OnGainValueChangedCh34 ( double dValue ) { UpdateGainValue ( 34, dValue ); }
+    void OnGainValueChangedCh35 ( double dValue ) { UpdateGainValue ( 35, dValue ); }
+    void OnGainValueChangedCh36 ( double dValue ) { UpdateGainValue ( 36, dValue ); }
+    void OnGainValueChangedCh37 ( double dValue ) { UpdateGainValue ( 37, dValue ); }
+    void OnGainValueChangedCh38 ( double dValue ) { UpdateGainValue ( 38, dValue ); }
+    void OnGainValueChangedCh39 ( double dValue ) { UpdateGainValue ( 39, dValue ); }
+    void OnGainValueChangedCh40 ( double dValue ) { UpdateGainValue ( 40, dValue ); }
+    void OnGainValueChangedCh41 ( double dValue ) { UpdateGainValue ( 41, dValue ); }
+    void OnGainValueChangedCh42 ( double dValue ) { UpdateGainValue ( 42, dValue ); }
+    void OnGainValueChangedCh43 ( double dValue ) { UpdateGainValue ( 43, dValue ); }
+    void OnGainValueChangedCh44 ( double dValue ) { UpdateGainValue ( 44, dValue ); }
+    void OnGainValueChangedCh45 ( double dValue ) { UpdateGainValue ( 45, dValue ); }
+    void OnGainValueChangedCh46 ( double dValue ) { UpdateGainValue ( 46, dValue ); }
+    void OnGainValueChangedCh47 ( double dValue ) { UpdateGainValue ( 47, dValue ); }
+    void OnGainValueChangedCh48 ( double dValue ) { UpdateGainValue ( 48, dValue ); }
+    void OnGainValueChangedCh49 ( double dValue ) { UpdateGainValue ( 49, dValue ); }
+
+    void OnChSoloStateChanged() { UpdateSoloStates(); }
+
+#endif
+
 signals:
-    void ChangeChanGain ( int iId, double dGain, bool bIsMyOwnFader );
-    void ChangeChanPan ( int iId, double dPan );
+    void ChangeChanGain ( int iId, double dGain );
     void NumClientsChanged ( int iNewNumClients );
 };

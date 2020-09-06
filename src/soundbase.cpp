@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -27,11 +27,13 @@
 
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
+                         const bool     bNewIsCallbackAudioInterface,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
                          const int      iNewCtrlMIDIChannel ) :
     fpProcessCallback            ( fpNewProcessCallback ),
     pProcessCallbackArg          ( pParg ), bRun ( false ),
+    bIsCallbackAudioInterface    ( bNewIsCallbackAudioInterface ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
     iCtrlMIDIChannel             ( iNewCtrlMIDIChannel )
 {
@@ -43,14 +45,59 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
     lCurDev = 0; // default device
 }
 
+int CSoundBase::Init ( const int iNewPrefMonoBufferSize )
+{
+    // init audio sound card buffer
+    if ( !bIsCallbackAudioInterface )
+    {
+        vecsAudioSndCrdStereo.Init ( 2 * iNewPrefMonoBufferSize /* stereo */ );
+    }
+
+    return iNewPrefMonoBufferSize;
+}
+
+void CSoundBase::Start()
+{
+    bRun = true;
+
+// TODO start audio interface
+
+    // start the audio thread in case we do not have an callback
+    // based audio interface
+    if ( !bIsCallbackAudioInterface )
+    {
+        start();
+    }
+}
+
 void CSoundBase::Stop()
 {
     // set flag so that thread can leave the main loop
     bRun = false;
 
-    // wait for draining the audio process callback
-    QMutexLocker locker ( &MutexAudioProcessCallback );
+    // give thread some time to terminate
+    if ( !bIsCallbackAudioInterface )
+    {
+        wait ( 5000 );
+    }
 }
+
+void CSoundBase::run()
+{
+    // main loop of working thread
+    while ( bRun )
+    {
+        // get audio from sound card (blocking function)
+        Read ( vecsAudioSndCrdStereo );
+
+        // process audio data
+        (*fpProcessCallback) ( vecsAudioSndCrdStereo, pProcessCallbackArg );
+
+        // play the new block
+        Write ( vecsAudioSndCrdStereo );
+    }
+}
+
 
 
 /******************************************************************************\
@@ -69,7 +116,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
     }
 
     // check if an ASIO driver was already initialized
-    if ( lCurDev != INVALID_INDEX )
+    if ( lCurDev != INVALID_SNC_CARD_DEVICE )
     {
         // a device was already been initialized and is used, first clean up
         // driver
@@ -90,16 +137,14 @@ QString CSoundBase::SetDev ( const int iNewDev )
                 // the same driver is used but the driver properties seems to
                 // have changed so that they are not compatible to our
                 // software anymore
-#ifndef HEADLESS
                 QMessageBox::critical (
                     nullptr, APP_NAME, QString ( tr ( "The audio driver properties "
-                    "have changed to a state which is incompatible with this "
+                    "have changed to a state which is incompatible to this "
                     "software. The selected audio device could not be used "
-                    "because of the following error:" ) + " <b>" ) +
+                    "because of the following error: <b>" ) ) +
                     strErrorMessage +
-                    QString ( "</b><br><br>" + tr ( "Please restart the software." ) ),
-                    tr ( "Close" ), nullptr );
-#endif
+                    QString ( tr ( "</b><br><br>Please restart the software." ) ),
+                    "Close", nullptr );
 
                 _exit ( 0 );
             }
@@ -113,7 +158,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
         // init flag for "load any driver"
         bool bTryLoadAnyDriver = false;
 
-        if ( iNewDev != INVALID_INDEX )
+        if ( iNewDev != INVALID_SNC_CARD_DEVICE )
         {
             // This is the first time a driver is to be initialized, we first
             // try to load the selected driver, if this fails, we try to load
@@ -141,11 +186,11 @@ QString CSoundBase::SetDev ( const int iNewDev )
             if ( !vsErrorList.isEmpty() )
             {
                 // create error message with all details
-                QString sErrorMessage = "<b>" + tr ( "No usable " ) +
+                QString sErrorMessage = tr ( "<b>No usable " ) +
                     strSystemDriverTechniqueName + tr ( " audio device "
-                    "(driver) found." ) + "</b><br><br>" + tr (
+                    "(driver) found.</b><br><br>"
                     "In the following there is a list of all available drivers "
-                    "with the associated error message:" ) + "<ul>";
+                    "with the associated error message:<ul>" );
 
                 for ( int i = 0; i < lNumDevs; i++ )
                 {
@@ -157,7 +202,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
                 // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
                 // offer the user under Windows that we open the driver setups of all registered
                 // ASIO drivers
-                sErrorMessage = sErrorMessage + "<br/>" + tr ( "Do you want to open the ASIO driver setups?" );
+                sErrorMessage = sErrorMessage + tr ( "<br/>Do you want to open the ASIO driver setups?" );
 
                 if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes|QMessageBox::No ) )
                 {
@@ -244,7 +289,7 @@ printf ( "\n" );
                 // we only want to parse controller messages
                 if ( ( iStatusByte >= 0xB0 ) && ( iStatusByte < 0xC0 ) )
                 {
-                    // make sure packet is long enough
+                    // make sure paket is long enough
                     if ( vMIDIPaketBytes.Size() > 2 )
                     {
                         // we are assuming that the controller number is the same

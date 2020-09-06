@@ -18,13 +18,14 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
 #pragma once
 
 #include <QObject>
+#include <QMessageBox>
 #include <QThread>
 #include <QMutex>
 #include <vector>
@@ -46,7 +47,7 @@ class CChannel; // forward declaration of CChannel
 
 /* Definitions ****************************************************************/
 // number of ports we try to bind until we give up
-#define NUM_SOCKET_PORTS_TO_TRY         100
+#define NUM_SOCKET_PORTS_TO_TRY         50
 
 
 /* Classes ********************************************************************/
@@ -99,7 +100,7 @@ protected:
 
     bool             bJitterBufferOK;
 
-public:
+public slots:
     void OnDataReceived();
 
 signals:
@@ -169,7 +170,7 @@ protected:
     {
     public:
         CSocketThread ( CSocket* pNewSocket = nullptr, QObject* parent = nullptr ) :
-          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) { setObjectName ( "CSocketThread" ); }
+          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
 
         void Stop()
         {
@@ -216,8 +217,9 @@ protected:
         NetworkWorkerThread.SetSocket ( &Socket );
 
         // connect the "InvalidPacketReceived" signal
-        QObject::connect ( &Socket, &CSocket::InvalidPacketReceived,
-            this, &CHighPrioSocket::InvalidPacketReceived );
+        QObject::connect ( &Socket,
+            SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
+            SIGNAL ( InvalidPacketReceived ( CHostAddress ) ) );
     }
 
     CSocketThread NetworkWorkerThread;

@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -26,10 +26,7 @@
 
 #include <QThread>
 #include <QString>
-#include <QMutex>
-#ifndef HEADLESS
-# include <QMessageBox>
-#endif
+#include <QMessageBox>
 #include "global.h"
 #include "util.h"
 
@@ -51,12 +48,13 @@ class CSoundBase : public QThread
 
 public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
+                 const bool     bNewIsCallbackAudioInterface,
                  void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                  void*          pParg,
                  const int      iNewCtrlMIDIChannel );
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize ) { return iNewPrefMonoBufferSize; }
-    virtual void Start() { bRun = true; }
+    virtual int  Init ( const int iNewPrefMonoBufferSize );
+    virtual void Start();
     virtual void Stop();
 
     // device selection
@@ -115,7 +113,7 @@ protected:
         }
         else
         {
-            iSelAddCHOut = INVALID_INDEX; // set it to an invalid number
+            iSelAddCHOut = -1; // set it to an invalid number
             iSelCHOut    = iSelCH;
         }
     }
@@ -130,17 +128,25 @@ protected:
         (*fpProcessCallback) ( psData, pProcessCallbackArg );
     }
 
-    void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
+    // these functions should be overwritten by derived class for
+    // non callback based audio interfaces
+    virtual bool Read  ( CVector<int16_t>& ) { printf ( "no sound!" ); return false; }
+    virtual bool Write ( CVector<int16_t>& ) { printf ( "no sound!" ); return false; }
 
-    bool    bRun;
-    QMutex  MutexAudioProcessCallback;
+    void run();
+    bool bRun;
 
-    QString strSystemDriverTechniqueName;
-    int     iCtrlMIDIChannel;
+    void             ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 
-    long    lNumDevs;
-    long    lCurDev;
-    QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
+    bool             bIsCallbackAudioInterface;
+    QString          strSystemDriverTechniqueName;
+    int              iCtrlMIDIChannel;
+
+    CVector<int16_t> vecsAudioSndCrdStereo;
+
+    long             lNumDevs;
+    long             lCurDev;
+    QString          strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:
     void ReinitRequest ( int iSndCrdResetType );

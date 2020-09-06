@@ -1,27 +1,4 @@
 @echo off
-rem /******************************************************************************\
-rem  * Copyright (c) 2004-2020
-rem  *
-rem  * Author(s):
-rem  *  Volker Fischer
-rem  *
-rem  ******************************************************************************
-rem  *
-rem  * This program is free software; you can redistribute it and/or modify it under
-rem  * the terms of the GNU General Public License as published by the Free Software
-rem  * Foundation; either version 2 of the License, or (at your option) any later
-rem  * version.
-rem  *
-rem  * This program is distributed in the hope that it will be useful, but WITHOUT
-rem  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-rem  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-rem  * details.
-rem  *
-rem  * You should have received a copy of the GNU General Public License along with
-rem  * this program; if not, write to the Free Software Foundation, Inc.,
-rem  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
-rem  *
-rem \******************************************************************************/
 
 rem To set up a new Qt and Visual Studio version
 rem - set environment path variable to the correct Qt bin directories:
@@ -35,18 +12,9 @@ set NSIS_PATH=%PROGRAMFILES(x86)%\NSIS
 set VS_REDIST32_EXE=vc_redist.x86.exe
 set VS_REDIST64_EXE=VC_redist.x64.exe
 
-rem check for environment
 if "%VSINSTALLDIR%" == "" goto vsenvproblem
 if "%QTDIR32%" == "" goto qtdirproblem
 if "%QTDIR64%" == "" goto qtdirproblem
-
-rem check for needed NSIS plugin
-if not exist nsProcess.dll (
-    echo nsProcess.dll not found. Trying to download the 7z file containing the dll in NsProcess\Plugin.
-    powershell -Command "Invoke-WebRequest https://nsis.sourceforge.io/mediawiki/images/1/18/NsProcess.zip -OutFile nsProcess.7z"
-    goto nsispluginproblem
-)
-
 cd ..
 
 
@@ -98,11 +66,7 @@ echo Use the Visual Studio x86 x64 Cross Tools Command Prompt to call this skrip
 goto endofskript
 
 :qtdirproblem
-echo The QTDIR32 and QTDIR64 is not set, please set these environment variables correctly before calling this script
-goto endofskript
-
-:nsispluginproblem
-echo Required NSIS plugin not found. Unzip the nsProcess.dll and copy it in the windows directory before calling this script
+echo The QTDIR32 and QTDIR64 is not set, please set these environment variables correclty before calling this script
 goto endofskript
 
 :endofskript

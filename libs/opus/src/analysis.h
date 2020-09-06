@@ -88,7 +88,7 @@ typedef struct {
  */
 void tonality_analysis_init(TonalityAnalysisState *analysis, opus_int32 Fs);
 
-/** Reset a TonalityAnalysisState struct.
+/** Reset a TonalityAnalysisState stuct.
  *
  * Call this when there's a discontinuity in the data.
  */

@@ -1,5 +1,4 @@
 /******************************************************************************\
- * Copyright (c) 2020
  *
  * Author(s):
  *  pljones
@@ -18,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -129,76 +128,53 @@ private:
     const QDir sessionDir;
 
     qint64 currentFrame;
-    int chIdDisconnected;
     QVector<CJamClient*> vecptrJamClients;
     QList<CJamClientConnection*> jamClientConnections;
 };
 
-class CJamRecorder : public QObject
+class CJamRecorder : public QThread
 {
     Q_OBJECT
 
 public:
-    CJamRecorder ( const QString strRecordingBaseDir,
-                   const int     iServerFrameSizeSamples ) :
-        recordBaseDir           ( strRecordingBaseDir ),
-        iServerFrameSizeSamples ( iServerFrameSizeSamples ),
-        isRecording             ( false )
-    {
-    }
+    CJamRecorder(const QString recordingDirName) :
+        recordBaseDir (recordingDirName), isRecording (false) {}
 
-    /**
-     * @brief Create recording directory, if necessary, and connect signal handlers
-     * @param server Server object emitting signals
-     */
-    QString Init();
+    void Init( const CServer* server, const int _iServerFrameSizeSamples );
 
-    /**
-     * @brief SessionDirToReaper Method that allows an RPP file to be recreated
-     * @param strSessionDirName Where the session wave files are
-     * @param serverFrameSizeSamples What the server frame size was for the session
-     */
     static void SessionDirToReaper( QString& strSessionDirName, int serverFrameSizeSamples );
-
-private:
-    void Start();
-    void ReaperProjectFromCurrentSession();
-    void AudacityLofFromCurrentSession();
-
-    QDir         recordBaseDir;
-    int          iServerFrameSizeSamples;
-    bool         isRecording;
-    CJamSession* currentSession;
-
-signals:
-    void RecordingSessionStarted ( QString sessionDir );
 
 public slots:
     /**
-     * @brief Handle last client leaving the server, ends the recording.
+     * @brief Raised when first client joins the server, triggering a new recording.
+     */
+    void OnStart();
+
+    /**
+     * @brief Raised when last client leaves the server, ending the recording.
      */
     void OnEnd();
 
     /**
-     * @brief Handle request to end one session and start a new one.
-     */
-    void OnTriggerSession();
-
-    /**
-     * @brief Handle application stopping
-     */
-    void OnAboutToQuit();
-
-    /**
-     * @brief Handle an existing client leaving the server.
+     * @brief Raised when an existing client leaves the server.
      * @param iChID channel number of client
      */
-    void OnDisconnected ( int iChID );
+    void OnDisconnected(int iChID);
 
     /**
-     * @brief Handle a frame of data to process
+     * @brief Raised when a frame of data fis available to process
      */
-    void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data );
+    void OnFrame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data);
+
+private:
+    QDir recordBaseDir;
+
+    bool         isRecording;
+    CJamSession* currentSession;
+    int          iServerFrameSizeSamples;
 };
 
 }
+
+Q_DECLARE_METATYPE(int16_t)
+Q_DECLARE_METATYPE(CVector<int16_t>)

@@ -1,5 +1,4 @@
 /******************************************************************************\
- * Copyright (c) 2020
  *
  * Author(s):
  *  pljones
@@ -18,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -28,38 +27,13 @@
 
 namespace recorder {
 
-inline QString secondsAt48K( const qint64 frames,
-                             const int    frameSize )
-{
-    return QString::number( static_cast<double>( frames * frameSize ) / 48000, 'f', 14 );
-}
-
-struct STrackItem
-{
-    STrackItem ( int numAudioChannels,
-                 qint64 startFrame,
-                 qint64 frameCount,
-                 QString fileName ) :
-        numAudioChannels ( numAudioChannels ),
-        startFrame       ( startFrame ),
-        frameCount       ( frameCount ),
-        fileName         ( fileName )
-    {
-    }
-
-    int numAudioChannels;
-    qint64 startFrame;
-    qint64 frameCount;
-    QString fileName;
-};
-
 class HdrRiff
 {
 public:
     HdrRiff() {}
 
     static const uint32_t chunkId = 0x46464952; // RIFF
-    static const uint32_t chunkSize = 0x00000000; // unknown
+    static const uint32_t chunkSize = 0xffffffff; // (will be overwritten) Size of file in bytes - 8 = size of data + 36
     static const uint32_t format = 0x45564157; // WAVE
 };
 
@@ -88,7 +62,7 @@ public:
     DataSubChunkHdr() {}
 
     static const uint32_t chunkId = 0x61746164; // "data"
-    static const uint32_t chunkSize = 0x7ffff000; // magic for unspecified length
+    static const uint32_t chunkSize = 0xffffffff; // (will be overwritten) Size of data
 };
 
 class CWaveStream : public QDataStream

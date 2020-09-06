@@ -1,19 +1,16 @@
-#!/bin/sh -e
+#!/bin/bash
+red="\e[91m"
+default="\e[39m"
+echo Today \(2019-05-27\) it is maybe best to build the .deb it on Ubuntu 16.04
+echo Since there are no versions specified of the libraries it will takte current
+echo so it would also run on Ubuntu 17,18,19 or Debian 9/10
+echo -e ${red}press a [KEY] to continue or [CTRL]-C to abort${default}
+read -n 1
 
-red="\033[91m"
-default="\033[39m"
-
-echo It can be preferential to build the binary packages on a Ubuntu 16.04
-echo system since there are no specific library version dependencies.The
-echo resulting packages will run on Ubuntu 17/18/19/20 or Debian 9/10.
-echo
-echo ${red}Press [ENTER] to continue or [CTRL]-C to abort${default}
-read dummy
-
-sudo apt-get install devscripts build-essential \
- debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools
+sudo apt-get install devscripts build-essential lintian dh-make
+sudo apt-get install qtdeclarative5-dev qt5-default libjack-jackd2-dev
 
 mv debian ..
 cd ..
-debuild -b -us -uc
+debuild -us -uc
 mv debian distributions

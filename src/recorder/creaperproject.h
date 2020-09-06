@@ -1,5 +1,4 @@
 /******************************************************************************\
- * Copyright (c) 2020
  *
  * Author(s):
  *  pljones
@@ -18,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -33,6 +32,21 @@
 
 namespace recorder {
 
+struct STrackItem
+{
+    STrackItem(int numAudioChannels, qint64 startFrame, qint64 frameCount, QString fileName) :
+        numAudioChannels(numAudioChannels),
+        startFrame(startFrame),
+        frameCount(frameCount),
+        fileName(fileName)
+    {
+    }
+    int numAudioChannels;
+    qint64 startFrame;
+    qint64 frameCount;
+    QString fileName;
+};
+
 class CReaperItem : public QObject
 {
     Q_OBJECT
@@ -45,6 +59,12 @@ private:
     const QUuid iguid = QUuid::createUuid();
     const QUuid guid = QUuid::createUuid();
     QString out;
+
+    inline QString secondsAt48K( const qint64 frames,
+                                 const int    frameSize )
+    {
+        return QString::number( static_cast<double>( frames * frameSize ) / 48000, 'f', 14 );
+    }
 };
 
 class CReaperTrack : public QObject

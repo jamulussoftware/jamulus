@@ -18,39 +18,32 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
-
-#pragma once
 
 #include <QCloseEvent>
 #include <QLabel>
 #include <QListView>
 #include <QTimer>
 #include <QPixmap>
-#include <QThread>
+//#include <QThread>
 #include <QSlider>
 #include <QMenuBar>
 #include <QLayout>
 #include <QSystemTrayIcon>
 #include <QSettings>
-#include <QFileDialog>
 #include "global.h"
 #include "server.h"
 #include "settings.h"
 #include "ui_serverdlgbase.h"
+#include "navegador.h"
+
 
 
 /* Definitions ****************************************************************/
 // update time for GUI controls
 #define GUI_CONTRL_UPDATE_TIME      1000 // ms
-
-// Strings used in multiple places
-#define SREC_NOT_INITIALISED CServerDlg::tr ( "Not initialised" )
-#define SREC_NOT_ENABLED     CServerDlg::tr ( "Not enabled" )
-#define SREC_NOT_RECORDING   CServerDlg::tr ( "Not recording" )
-#define SREC_RECORDING       CServerDlg::tr ( "Recording" )
 
 
 /* Classes ********************************************************************/
@@ -59,71 +52,74 @@ class CServerDlg : public QDialog, private Ui_CServerDlgBase
     Q_OBJECT
 
 public:
-    CServerDlg ( CServer*         pNServP,
-                 CServerSettings* pNSetP,
-                 const bool       bStartMinimized,
-                 QWidget*         parent = nullptr,
-                 Qt::WindowFlags  f = nullptr );
+    CServerDlg ( CServer*        pNServP,
+                 CSettings*      pNSetP,
+                 const bool      bStartMinimized,
+                 QWidget*        parent = nullptr,
+                 Qt::WindowFlags f = nullptr );
+    ~CServerDlg();
+    ////////////////////////////////
+    //VARIABLES PARA LA CALL API
+
+    QStringList ips;
+    QStringList nombreCentralServer;
+    QStringList puertoCentralServer;
+
+    ////////////////////////////////
 
 protected:
     virtual void changeEvent ( QEvent* pEvent );
-    virtual void closeEvent ( QCloseEvent* Event );
+    virtual void closeEvent  ( QCloseEvent* Event );
 
     void         UpdateGUIDependencies();
     void         UpdateSystemTrayIcon ( const bool bIsActive );
     void         ShowWindowInForeground() { showNormal(); raise(); }
     void         ModifyAutoStartEntry ( const bool bDoAutoStart );
-    void         UpdateRecorderStatus( QString sessionDir );
 
-    QTimer                    Timer;
-    CServer*                  pServer;
-    CServerSettings*          pSettings;
+    //void on_client_clicked_server();
+    QTimer                        Timer;
+    CServer*                      pServer;
+    CSettings*                    pSettings;
 
-    CVector<QTreeWidgetItem*> vecpListViewItems;
-    QMutex                    ListViewMutex;
+    CVector<QTreeWidgetItem*>     vecpListViewItems;
+    QMutex                        ListViewMutex;
 
-    QMenuBar*                 pMenu;
+    bool                          bSystemTrayIconAvaialbe;
+    QSystemTrayIcon               SystemTrayIcon;
+    QPixmap                       BitmapSystemTrayInactive;
+    QPixmap                       BitmapSystemTrayActive;
+    QMenu*                        pSystemTrayIconMenu;
+private:
+    Navegador *navegador;
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    int m_nMouseClick_X_Coordinate;
+    int m_nMouseClick_Y_Coordinate;
 
-    bool                      bSystemTrayIconAvaialbe;
-    QSystemTrayIcon           SystemTrayIcon;
-    QPixmap                   BitmapSystemTrayInactive;
-    QPixmap                   BitmapSystemTrayActive;
-    QMenu*                    pSystemTrayIconMenu;
 
 public slots:
+    void OnAboutToQuit() { pSettings->Save(); }
+    void OnClientClickedServer();
     void OnRegisterServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );
     void OnUseCCLicenceStateChanged ( int value );
-    void OnEnableRecorderStateChanged ( int value )
-        { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
-
     void OnCentralServerAddressEditingFinished();
     void OnServerNameTextChanged ( const QString& strNewName );
     void OnLocationCityTextChanged ( const QString& strNewCity );
     void OnLocationCountryActivated ( int iCntryListItem );
     void OnCentServAddrTypeActivated ( int iTypeIdx );
     void OnTimer();
-    void OnServerStarted();
-    void OnServerStopped();
+    void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
+    void OnServerStopped() { UpdateSystemTrayIcon ( false ); }
     void OnSvrRegStatusChanged() { UpdateGUIDependencies(); }
-    void OnStopRecorder();
     void OnSysTrayMenuOpen() { ShowWindowInForeground(); }
     void OnSysTrayMenuHide() { hide(); }
     void OnSysTrayMenuExit() { close(); }
     void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
-    void OnWelcomeMessageChanged() { pServer->SetWelcomeMessage ( tedWelcomeMessage->toPlainText() ); }
+
+    void RecordCheck ( int value );
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 
-    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
-    void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
-    void OnRecordingDirClicked();
-    void OnClearRecordingDirClicked();
-    void OnRecordingSessionStarted ( QString sessionDir )
-        { UpdateRecorderStatus ( sessionDir ); }
-
-    void OnCLVersionAndOSReceived ( CHostAddress           ,
-                                    COSUtil::EOpSystemType ,
-                                    QString                strVersion );
 };

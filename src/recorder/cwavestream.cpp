@@ -1,5 +1,4 @@
 /******************************************************************************\
- * Copyright (c) 2020
  *
  * Author(s):
  *  pljones
@@ -18,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -123,32 +122,26 @@ void CWaveStream::waveStreamHeaders()
 
 void CWaveStream::finalise()
 {
-    static const uint64_t hdrRiffChunkSize = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
-    static const uint64_t fmtSubChunkSize = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t);
+    static const uint32_t hdrRiffChunkSize = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
+    static const uint32_t fmtSubChunkSize = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t);
 
-    static const uint64_t hdrRiffChunkSizeOffset = sizeof(uint32_t);
-    static const uint64_t dataSubChunkHdrChunkSizeOffset = hdrRiffChunkSize + fmtSubChunkSize + sizeof (uint32_t);
+    static const uint32_t hdrRiffChunkSizeOffset = sizeof(uint32_t);
+    static const uint32_t dataSubChunkHdrChunkSizeOffset = hdrRiffChunkSize + fmtSubChunkSize + sizeof (uint32_t);
 
     const int64_t currentPos = this->device()->pos();
-    const uint64_t fileLengthRiff = static_cast<uint64_t>(currentPos - initialPos - (hdrRiffChunkSizeOffset + sizeof (uint32_t)));
-    const uint64_t fileLengthData = static_cast<uint64_t>(currentPos - initialPos - (dataSubChunkHdrChunkSizeOffset + sizeof (uint32_t)));
+    const uint32_t fileLength = static_cast<uint32_t>(currentPos - initialPos);
 
-    // check if lengths are within the range of the WAV file format
-    if (fileLengthRiff < 0x100000000ULL && fileLengthData < 0x100000000ULL)
-    {
-        QDataStream& out = static_cast<QDataStream&>(*this);
+    QDataStream& out = static_cast<QDataStream&>(*this);
 
-        // Overwrite hdr_riff.chunkSize
-        this->device()->seek(initialPos + hdrRiffChunkSizeOffset);
-        out << static_cast<uint32_t>(fileLengthRiff);
+    // Overwrite hdr_riff.chunkSize
+    this->device()->seek(initialPos + hdrRiffChunkSizeOffset);
+    out << static_cast<uint32_t>(fileLength - (hdrRiffChunkSizeOffset + sizeof (uint32_t)));
 
-        // Overwrite dataSubChunkHdr.chunkSize
-        this->device()->seek(initialPos + dataSubChunkHdrChunkSizeOffset);
-        out << static_cast<uint32_t>(fileLengthData);
+    // Overwrite dataSubChunkHdr.chunkSize
+    this->device()->seek(initialPos + dataSubChunkHdrChunkSizeOffset);
+    out << static_cast<uint32_t>(fileLength - (dataSubChunkHdrChunkSizeOffset + sizeof (uint32_t)));
 
-        // And restore the position
-        this->device()->seek(currentPos);
-    }
-    // restore the byte order
+    // and then restore the position and byte order
+    this->device()->seek(currentPos);
     setByteOrder(initialByteOrder);
 }

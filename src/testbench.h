@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -49,7 +49,7 @@ public:
         iLPort = static_cast<quint16> ( GenRandomIntInRange ( -2, 10000 ) );
 
         // bind socket (try 100 port numbers)
-        quint16 iPortIncrement = 0;     // start value: port number plus ten
+        quint16 iPortIncrement = 0;     // start value: port nubmer plus ten
         bool    bSuccess       = false; // initialization for while loop
 
         while ( !bSuccess && ( iPortIncrement <= 100 ) )
@@ -60,16 +60,13 @@ public:
             iPortIncrement++;
         }
 
-        // connect protocol signals
-        QObject::connect ( &Protocol, &CProtocol::MessReadyForSending,
-            this, &CTestbench::OnSendProtMessage );
-
-        QObject::connect ( &Protocol, &CProtocol::CLMessReadyForSending,
-            this, &CTestbench::OnSendCLMessage );
+        // connect protocol signal
+        QObject::connect ( &Protocol, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+            this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
         // connect and start the timer (testbench heartbeat)
-        QObject::connect ( &Timer, &QTimer::timeout,
-            this, &CTestbench::OnTimer );
+        QObject::connect ( &Timer, SIGNAL ( timeout() ),
+            this, SLOT ( OnTimer() ) );
 
         Timer.start ( 1 ); // 1 ms
     }
@@ -118,15 +115,13 @@ public slots:
         CNetworkTransportProps NetTrProps;
         CServerCoreInfo        ServerInfo;
         CVector<CServerInfo>   vecServerInfo ( 1 );
-        CVector<uint16_t>      vecLevelList ( 1 );
         CHostAddress           CurHostAddress ( QHostAddress ( sAddress ), iPort );
         CHostAddress           CurLocalAddress ( QHostAddress ( sLAddress ), iLPort );
         CChannelCoreInfo       ChannelCoreInfo;
         ELicenceType           eLicenceType;
-        ESvrRegResult          eSvrRegResult;
 
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 34 ) )
+        switch ( GenRandomIntInRange ( 0, 27 ) )
         {
         case 0: // PROTMESSID_JITT_BUF_SIZE
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -283,53 +278,9 @@ public slots:
             break;
 
         case 27:
-        {
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );
-            break;
-        }
-
-        case 28: // PROTMESSID_CLM_CONN_CLIENTS_LIST
-            vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
-            vecChanInfo[0].iIpAddr = GenRandomIPv4Address().toIPv4Address();
-            vecChanInfo[0].strName = GenRandomString();
-
-            Protocol.CreateCLConnClientsListMes ( CurHostAddress, vecChanInfo );
-            break;
-
-        case 29: // PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST
-            Protocol.CreateCLReqConnClientsListMes ( CurHostAddress );
-            break;
-
-        case 30: // PROTMESSID_CLM_CHANNEL_LEVEL_LIST
-            vecLevelList[0] = GenRandomIntInRange ( 0, 0xF );
-
-            Protocol.CreateCLChannelLevelListMes ( CurHostAddress,
-                                                   vecLevelList,
-                                                   1 );
-            break;
-
-        case 31: // PROTMESSID_CLM_REGISTER_SERVER_RESP
-            eSvrRegResult =
-                static_cast<ESvrRegResult> ( GenRandomIntInRange ( 0, 1 ) );
-
-            Protocol.CreateCLRegisterServerResp ( CurHostAddress,
-                                                  eSvrRegResult );
-            break;
-
-        case 32: // PROTMESSID_CHANNEL_PAN
-            Protocol.CreateChanPanMes ( GenRandomIntInRange ( -2, 20 ),
-                                        GenRandomIntInRange ( 0, 32767 ) );
-            break;
-
-        case 33: // PROTMESSID_MUTE_STATE_CHANGED
-            Protocol.CreateMuteStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ),
-                                                    GenRandomIntInRange ( 0, 1 ) );
-            break;
-
-        case 34: // PROTMESSID_CLIENT_ID
-            Protocol.CreateClientIDMes ( GenRandomIntInRange ( -2, 20 ) );
             break;
         }
     }
@@ -343,10 +294,5 @@ public slots:
         // reset protocol so that we do not have to wait for an acknowledge to
         // send the next message
         Protocol.Reset();
-    }
-
-    void OnSendCLMessage ( CHostAddress, CVector<uint8_t> vecMessage )
-    {
-        OnSendProtMessage ( vecMessage );
     }
 };

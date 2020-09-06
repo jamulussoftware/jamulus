@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -28,13 +28,12 @@
 CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
                                          const QString& strServerInfo,
-                                         const QString& strServerListFilter,
                                          const int      iNumChannels,
                                          const bool     bNCentServPingServerInList,
                                          CProtocol*     pNConLProt )
     : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
       iNumPredefinedServers     ( 0 ),
-      eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
+      eCentralServerAddressType ( AT_DEFAULT ), // must be AT_MANUAL for the "no GUI" case
       bCentServPingServerInList ( bNCentServPingServerInList ),
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
@@ -64,7 +63,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     ServerList.clear();
 
     // Init server list entry (server info for this server) with defaults. Per
-    // definition the client substitutes the IP address of the central server
+    // definition the client substitudes the IP address of the central server
     // itself for his server list. If we are the central server, we assume that
     // we have a permanent server.
     CServerListEntry ThisServerListEntry ( CHostAddress(),
@@ -159,23 +158,6 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         iNumPredefinedServers++;
     }
 
-    // whitelist parsing
-    if ( !strServerListFilter.isEmpty() )
-    {
-        // split the different parameter strings
-        QStringList  slWhitelistAddresses = strServerListFilter.split ( ";" );
-        QHostAddress CurWhiteListAddress;
-
-        for ( int iIdx = 0; iIdx < slWhitelistAddresses.size(); iIdx++ )
-        {
-            if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
-            {
-                vWhiteList << CurWhiteListAddress;
-                tsConsoleStream << "Whitelist entry added: " << CurWhiteListAddress.toString() << endl;
-            }
-        }
-    }
-
     // for slave servers start the one shot timer for determining if it is a
     // permanent server
     if ( !GetIsCentralServer() )
@@ -191,20 +173,20 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerPollList, &QTimer::timeout,
-        this, &CServerListManager::OnTimerPollList );
+    QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPollList() ) );
 
-    QObject::connect ( &TimerPingServerInList, &QTimer::timeout,
-        this, &CServerListManager::OnTimerPingServerInList );
+    QObject::connect ( &TimerPingServerInList, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPingServerInList() ) );
 
-    QObject::connect ( &TimerPingCentralServer, &QTimer::timeout,
-        this, &CServerListManager::OnTimerPingCentralServer );
+    QObject::connect ( &TimerPingCentralServer, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPingCentralServer() ) );
 
-    QObject::connect ( &TimerRegistering, &QTimer::timeout,
-        this, &CServerListManager::OnTimerRegistering );
+    QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerRegistering() ) );
 
-    QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout,
-        this, &CServerListManager::OnTimerCLRegisterServerResp );
+    QObject::connect ( &TimerCLRegisterServerResp, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerCLRegisterServerResp() ) );
 }
 
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
@@ -224,7 +206,7 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
             (
               ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
                 !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-              ( eCentralServerAddressType == AT_CUSTOM )
+              ( eCentralServerAddressType == AT_DEFAULT )
             );
 
         bEnabled = true;
@@ -358,16 +340,6 @@ void CServerListManager::OnTimerPollList()
     }
 }
 
-void CServerListManager::CentralServerRegisterServerEx ( const CHostAddress&          InetAddr,
-                                                         const CHostAddress&          LInetAddr,
-                                                         const CServerCoreInfo&       ServerInfo,
-                                                         const COSUtil::EOpSystemType ,
-                                                         const QString&               )
-{
-// TODO right now we do not make use of the additional operating system and version number informations
-CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
-}
-
 void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                                        const CHostAddress&    LInetAddr,
                                                        const CServerCoreInfo& ServerInfo )
@@ -378,27 +350,17 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
                         << InetAddr.toString() << " (" << LInetAddr.toString() << ")"
                         << ": " << ServerInfo.strName << endl;
 
-        // check for whitelist (it is enabled if it is not empty per definition)
-        if ( !vWhiteList.empty() )
-        {
-            // if the server is not listed, refuse registration and send registration response
-            if ( !vWhiteList.contains ( InetAddr.InetAddr ) )
-            {
-                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
-                return; // leave function early, i.e., we do not register this server
-            }
-        }
-
-        // access/modifications to the server list needs to be mutexed
         QMutexLocker locker ( &Mutex );
 
         const int iCurServerListSize = ServerList.size();
+        
+        // define invalid index used as a flag
+        const int ciInvalidIdx = -1;
 
         // Check if server is already registered.
         // The very first list entry must not be checked since
         // this is per definition the central server (i.e., this server)
-        int iSelIdx = INVALID_INDEX; // initialize with an illegal value
-
+        int iSelIdx = ciInvalidIdx; // initialize with an illegal value
         for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
             if ( ServerList[iIdx].HostAddr == InetAddr )
@@ -412,7 +374,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
         }
 
         // if server is not yet registered, we have to create a new entry
-        if ( iSelIdx == INVALID_INDEX )
+        if ( iSelIdx == ciInvalidIdx )
         {
             // check for maximum allowed number of servers in the server list
             if ( iCurServerListSize < MAX_NUM_SERVERS_IN_SERVER_LIST )
@@ -439,7 +401,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             }
         }
 
-        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == INVALID_INDEX
+        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == ciInvalidIdx
                                                             ? ESvrRegResult::SRR_CENTRAL_SVR_FULL
                                                             : ESvrRegResult::SRR_REGISTERED );
     }
@@ -550,14 +512,6 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
 
     case ESvrRegResult::SRR_CENTRAL_SVR_FULL:
         SetSvrRegStatus ( ESvrRegStatus::SRS_CENTRAL_SVR_FULL );
-        break;
-
-    case ESvrRegResult::SRR_VERSION_TOO_OLD:
-        SetSvrRegStatus ( ESvrRegStatus::SRS_VERSION_TOO_OLD );
-        break;
-
-    case ESvrRegResult::SRR_NOT_FULFILL_REQIREMENTS:
-        SetSvrRegStatus ( ESvrRegStatus::SRS_NOT_FULFILL_REQUIREMENTS );
         break;
 
     default:

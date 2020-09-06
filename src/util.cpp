@@ -18,74 +18,59 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
 #include "util.h"
 #include "client.h"
+#include "ui_clientdlgbase.h"
 
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
-                                       const int             iMonoBlockSizeSam,
-                                       const bool            bIsStereoIn )
+void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
 {
+    // get the stereo vector size
+    const int iStereoVecSize = vecsAudio.Size();
+
     // Get maximum of current block
     //
     // Speed optimization:
-    // - we only make use of the negative values and ignore the positive ones (since
-    //   int16 has range {-32768, 32767}) -> we do not need to call the fabs() function
+    // - we only make use of the positive values and ignore the negative ones
+    //   -> we do not need to call the fabs() function
     // - we only evaluate every third sample
     //
     // With these speed optimizations we might loose some information in
     // special cases but for the average music signals the following code
     // should give good results.
-    short sMinLOrMono = 0;
-    short sMinR       = 0;
+    //
+    short sMaxL = 0;
+    short sMaxR = 0;
 
-    if ( bIsStereoIn )
+    for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
     {
-        // stereo in
-        for ( int i = 0; i < 2 * iMonoBlockSizeSam; i += 6 ) // 2 * 3 = 6 -> stereo
-        {
-            // left (or mono) and right channel
-            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
-            sMinR       = std::min ( sMinR,       vecsAudio[i + 1] );
-        }
+        // left channel
+        sMaxL = std::max ( sMaxL, vecsAudio[i] );
 
-        // in case of mono out use minimum of both channels
-        if ( !bIsStereoOut )
-        {
-            sMinLOrMono = std::min ( sMinLOrMono, sMinR );
-        }
-    }
-    else
-    {
-        // mono in
-        for ( int i = 0; i < iMonoBlockSizeSam; i += 3 )
-        {
-            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
-        }
+        // right channel
+        sMaxR = std::max ( sMaxR, vecsAudio[i + 1] );
     }
 
-    // apply smoothing, if in stereo out mode, do this for two channels
-    dCurLevelLOrMono = UpdateCurLevel ( dCurLevelLOrMono, -sMinLOrMono );
-
-    if ( bIsStereoOut )
-    {
-        dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMinR );
-    }
+    dCurLevelL = UpdateCurLevel ( dCurLevelL, sMaxL );
+    dCurLevelR = UpdateCurLevel ( dCurLevelR, sMaxR );
 }
 
 double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
-                                                 const double dMax )
+                                                 const short& sMax )
 {
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
     {
-        dCurLevel *= dSmoothingFactor;
+// TODO Calculate factor from sample rate and frame size (64 or 128 samples frame size).
+//      But tests with 128 and 64 samples frame size have shown that the meter fly back
+//      is ok for both numbers of samples frame size.
+        dCurLevel *= 0.97;
     }
     else
     {
@@ -93,9 +78,9 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     }
 
     // update current level -> only use maximum
-    if ( dMax > dCurLevel )
+    if ( static_cast<double> ( sMax ) > dCurLevel )
     {
-        return dMax;
+        return static_cast<double> ( sMax );
     }
     else
     {
@@ -103,29 +88,19 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     }
 }
 
-double CStereoSignalLevelMeter::CalcLogResultForMeter ( const double& dLinearLevel )
+double CStereoSignalLevelMeter::CalcLogResult ( const double& dLinearLevel )
 {
-    const double dNormLevel = dLinearLevel / _MAXSHORT;
+    const double dNormMicLevel = dLinearLevel / _MAXSHORT;
 
     // logarithmic measure
-    double dLevelForMeterdB = -100000.0; // large negative value
-
-    if ( dNormLevel > 0 )
+    if ( dNormMicLevel > 0 )
     {
-        dLevelForMeterdB = 20.0 * log10 ( dNormLevel );
+        return 20.0 * log10 ( dNormMicLevel );
     }
-
-    // map to signal level meter (linear transformation of the input
-    // level range to the level meter range)
-    dLevelForMeterdB -= LOW_BOUND_SIG_METER;
-    dLevelForMeterdB *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-
-    if ( dLevelForMeterdB < 0 )
+    else
     {
-        dLevelForMeterdB = 0;
+        return -100000.0; // large negative value
     }
-
-    return dLevelForMeterdB;
 }
 
 
@@ -141,12 +116,12 @@ void CCRC::AddByte ( const uint8_t byNewInput )
 {
     for ( int i = 0; i < 8; i++ )
     {
-        // shift bits in shift-register for transition
+        // shift bits in shift-register for transistion
         iStateShiftReg <<= 1;
 
         // take bit, which was shifted out of the register-size and place it
         // at the beginning (LSB)
-        // (If condition is not satisfied, implicitly a "0" is added)
+        // (If condition is not satisfied, implicitely a "0" is added)
         if ( ( iStateShiftReg & iBitOutMask) > 0 )
         {
             iStateShiftReg |= 1;
@@ -191,24 +166,20 @@ uint32_t CCRC::GetCRC()
     three series allpass units, followed by four parallel comb filters, and two
     decorrelation delay lines in parallel at the output.
 */
-void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
-                          const int          iNStereoBlockSizeSam,
-                          const int          iSampleRate,
-                          const double       rT60 )
+void CAudioReverb::Init ( const int    iSampleRate,
+                          const double rT60 )
 {
-    // store parameters
-    eAudioChannelConf   = eNAudioChannelConf;
-    iStereoBlockSizeSam = iNStereoBlockSizeSam;
+    int delay, i;
 
     // delay lengths for 44100 Hz sample rate
-    int          lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const double scaler     = static_cast<double> ( iSampleRate ) / 44100.0;
+    int lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
+    const double scaler = static_cast<double> ( iSampleRate ) / 44100.0;
 
     if ( scaler != 1.0 )
     {
-        for ( int i = 0; i < 9; i++ )
+        for ( i = 0; i < 9; i++ )
         {
-            int delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
+            delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
 
             if ( ( delay & 1 ) == 0 )
             {
@@ -224,12 +195,12 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
         }
     }
 
-    for ( int i = 0; i < 3; i++ )
+    for ( i = 0; i < 3; i++ )
     {
         allpassDelays[i].Init ( lengths[i + 4] );
     }
 
-    for ( int i = 0; i < 4; i++ )
+    for ( i = 0; i < 4; i++ )
     {
         combDelays[i].Init ( lengths[i] );
         combFilters[i].setPole ( 0.2 );
@@ -315,81 +286,58 @@ double CAudioReverb::COnePole::Calc ( const double dIn )
     return dLastSample;
 }
 
-void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
-                             const bool        bReverbOnLeftChan,
-                             const double      dAttenuation )
+void CAudioReverb::ProcessSample ( int16_t&     iInputOutputLeft,
+                                   int16_t&     iInputOutputRight,
+                                   const double dAttenuation )
 {
-    double dMixedInput, temp, temp0, temp1, temp2;
+    // compute one output sample
+    double temp, temp0, temp1, temp2;
 
-    for ( int i = 0; i < iStereoBlockSizeSam; i += 2 )
-    {
-        // we sum up the stereo input channels (in case mono input is used, a zero
-        // shall be input for the right channel)
-        if ( eAudioChannelConf == CC_STEREO )
-        {
-            dMixedInput = 0.5 * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
-        }
-        else
-        {
-            if ( bReverbOnLeftChan )
-            {
-                dMixedInput = vecsStereoInOut[i];
-            }
-            else
-            {
-                dMixedInput = vecsStereoInOut[i + 1];
-            }
-        }
+    // we sum up the stereo input channels (in case mono input is used, a zero
+    // shall be input for the right channel)
+    const double dMixedInput = 0.5 * ( iInputOutputLeft + iInputOutputRight );
 
-        temp = allpassDelays[0].Get();
-        temp0 = allpassCoefficient * temp;
-        temp0 += dMixedInput;
-        allpassDelays[0].Add ( temp0 );
-        temp0 = - ( allpassCoefficient * temp0 ) + temp;
+    temp = allpassDelays[0].Get();
+    temp0 = allpassCoefficient * temp;
+    temp0 += dMixedInput;
+    allpassDelays[0].Add ( temp0 );
+    temp0 = - ( allpassCoefficient * temp0 ) + temp;
 
-        temp = allpassDelays[1].Get();
-        temp1 = allpassCoefficient * temp;
-        temp1 += temp0;
-        allpassDelays[1].Add ( temp1 );
-        temp1 = - ( allpassCoefficient * temp1 ) + temp;
+    temp = allpassDelays[1].Get();
+    temp1 = allpassCoefficient * temp;
+    temp1 += temp0;
+    allpassDelays[1].Add ( temp1 );
+    temp1 = - ( allpassCoefficient * temp1 ) + temp;
 
-        temp = allpassDelays[2].Get();
-        temp2 = allpassCoefficient * temp;
-        temp2 += temp1;
-        allpassDelays[2].Add ( temp2 );
-        temp2 = - ( allpassCoefficient * temp2 ) + temp;
+    temp = allpassDelays[2].Get();
+    temp2 = allpassCoefficient * temp;
+    temp2 += temp1;
+    allpassDelays[2].Add ( temp2 );
+    temp2 = - ( allpassCoefficient * temp2 ) + temp;
 
-        const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
-        const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
-        const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
-        const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
+    const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
+    const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
+    const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
+    const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
 
-        combDelays[0].Add ( temp3 );
-        combDelays[1].Add ( temp4 );
-        combDelays[2].Add ( temp5 );
-        combDelays[3].Add ( temp6 );
+    combDelays[0].Add ( temp3 );
+    combDelays[1].Add ( temp4 );
+    combDelays[2].Add ( temp5 );
+    combDelays[3].Add ( temp6 );
 
-        const double filtout = temp3 + temp4 + temp5 + temp6;
+    const double filtout = temp3 + temp4 + temp5 + temp6;
 
-        outLeftDelay.Add  ( filtout );
-        outRightDelay.Add ( filtout );
+    outLeftDelay.Add ( filtout );
+    outRightDelay.Add ( filtout );
 
-        // inplace apply the attenuated reverb signal (for stereo always apply
-        // reverberation effect on both channels)
-        if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
-        {
-            vecsStereoInOut[i] = Double2Short (
-                ( 1.0 - dAttenuation ) * vecsStereoInOut[i] +
-                0.5 * dAttenuation * outLeftDelay.Get() );
-        }
+    // inplace apply the attenuated reverb signal
+    iInputOutputLeft  = Double2Short (
+        ( 1.0 - dAttenuation ) * iInputOutputLeft +
+        0.5 * dAttenuation * outLeftDelay.Get() );
 
-        if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
-        {
-            vecsStereoInOut[i + 1] = Double2Short (
-                ( 1.0 - dAttenuation ) * vecsStereoInOut[i + 1] +
-                0.5 * dAttenuation * outRightDelay.Get() );
-        }
-    }
+    iInputOutputRight = Double2Short (
+        ( 1.0 - dAttenuation ) * iInputOutputRight +
+        0.5 * dAttenuation * outRightDelay.Get() );
 }
 
 
@@ -397,106 +345,99 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
 * GUI Utilities                                                                *
 \******************************************************************************/
 // About dialog ----------------------------------------------------------------
-#ifndef HEADLESS
 CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 {
     setupUi ( this );
 
-    // general description of software
-    txvAbout->setText (
-        "<p>" + tr ( "This app enables musicians to perform real-time jam sessions "
-        "over the internet." ) + "<br>" + tr ( "There is a server which collects "
-        " the audio data from each client, mixes the audio data and sends the mix "
-        " back to each client." ) + "</p>"
-        "<p><font face=\"courier\">" // GPL header text
-        "This program is free software; you can redistribute it and/or modify "
-        "it under the terms of the GNU General Public License as published by "
-        "the Free Software Foundation; either version 2 of the License, or "
-        "(at your option) any later version.<br>This program is distributed in "
-        "the hope that it will be useful, but WITHOUT ANY WARRANTY; without "
-        "even the implied warranty of MERCHANTABILITY or FITNESS FOR A "
-        "PARTICULAR PURPOSE. See the GNU General Public License for more "
-        "details.<br>You should have received a copy of the GNU General Public "
-        "License along with his program; if not, write to the Free Software "
-        "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
-        "USA"
-        "</font></p>" );
+    // set the text for the about dialog html text control
+    txvCredits->setOpenExternalLinks ( true );
+    txvCredits->setText (
+        tr ( "<p><span align='justify'> Software para transmisión de audio por internet. Está permitida su redistribución, modificación y/o uso bajo los términos de GNU General Public License</span></p>")
+                         
+        + tr ( "Sagora es un fork de Jamulus (https://github.com/corrados/jamulus), el popular software para sesiones de improvisación sobre internet. (https://github.com/sagora-repositorios) " )
+                         
+        + tr ( "Desarrolladores en Sagora: Esteban Calcagno, Nicolás Rodríguez Altieri, Juan Manuel Lopez Gargiulo. " )
+        
+        + tr ( "Diseño gráfico en Sagora: Ignacio Maiocco y Diego Romero Mascaró" )
+        + "<p><span align='justify'>"+ APP_NAME
+        + "Funciona en OSX (10.12 en adelante), Windows (8 en adelante), Linux x86-64/AMD64 64-bit y x86 32-bit y Raspbian, el sistema operativo de Raspberry Pi. </span></p><span>"
+        + "<p align='justify'><span>" APP_NAME + " es un software libre y gratuito, diseñado y desarrollado por artistas/investigadores de la Escuela Universitaria de Artes de la Universidad Nacional de Quilmes, Argentina.<span></p>"
 
-    // libraries used by this compilation
-    txvLibraries->setText (
-        tr ( "This app uses the following libraries, resources or code snippets:" ) +
-        "<br><p>" + tr ( "Qt cross-platform application framework" ) +
-        ", <i><a href=""http://www.qt.io"">http://www.qt.io</a></i></p>"
-        "<p>Opus Interactive Audio Codec"
-        ", <i><a href=""http://www.opus-codec.org"">http://www.opus-codec.org</a></i></p>"
-        "<p>" + tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-        ", 1995 - 2004, <i><a href=""http://ccrma.stanford.edu/software/stk"">"
-        "The Synthesis ToolKit in C++ (STK)</a></i></p>"
-        "<p>" + tr ( "Some pixmaps are from the" ) + " Open Clip Art Library (OCAL), "
-        "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></p>"
-        "<p>" + tr ( "Country flag icons by Mark James" ) +
-        ", <i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></p>" );
+        + "<p align='justify'><span>Permite conectar múltiples usuarios en una sala virtual y transmitir audio en tiempo real sin que se cancelen las señales, como sucede en las plataformas de uso común para teleconferencia.  Esta particularidad lo transforma en una aplicación sumamente útil para la práctica musical, tanto en el sector de industrias culturales como en el de educación, ya que permite realizar ensayos y/o conciertos utilizando internet.</span></p>"
 
-    // contributors list
-    txvContributors->setText (
-        "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
-        "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
-        "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
-        "<p>Martin Schilde (<a href=""https://github.com/geheimerEichkater"">geheimerEichkater</a>)</p>"
-        "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
-        "<p>Marc jr. Landolt (<a href=""https://github.com/braindef"">braindef</a>)</p>"
-        "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
-        "<p>Tarmo Johannes (<a href=""https://github.com/tarmoj"">tarmoj</a>)</p>"
-        "<p>mirabilos (<a href=""https://github.com/mirabilos"">mirabilos</a>)</p>"
-        "<p>Hector Martin (<a href=""https://github.com/marcan"">marcan</a>)</p>"
-        "<p>newlaurent62 (<a href=""https://github.com/newlaurent62"">newlaurent62</a>)</p>"
-        "<p>AronVietti (<a href=""https://github.com/AronVietti"">AronVietti</a>)</p>"
-        "<p>Emlyn Bolton (<a href=""https://github.com/emlynmac"">emlynmac</a>)</p>"
-        "<p>Jos van den Oever (<a href=""https://github.com/vandenoever"">vandenoever</a>)</p>"
-        "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
-        "<p>Alberstein8 (<a href=""https://github.com/Alberstein8"">Alberstein8</a>)</p>"
-        "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
-        "<p>HPS (<a href=""https://github.com/hselasky"">hselasky</a>)</p>"
-        "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
-        "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
-        "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
-        "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
-        "<p>Nils Brederlow (<a href=""https://github.com/dingodoppelt"">dingodoppelt</a>)</p>"
-        "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
-        "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
-        "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
-        "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
-        "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
-        "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
-        "<p>bspeer (<a href=""https://github.com/bspeer"">bspeer</a>)</p>"
-        "<br>" + tr ( "For details on the contributions check out the " ) +
-        "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
 
-    // translators
-    txvTranslation->setText (
-        "<p><b>" + tr ( "Spanish" ) + "</b></p>"
-        "<p>Daryl Hanlon (<a href=""https://github.com/ignotus666"">ignotus666</a>)</p>"
-        "<p><b>" + tr ( "French" ) + "</b></p>"
-        "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
-        "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
-        "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
-        "<p>Melcon Moraes (<a href=""https://github.com/melcon"">melcon</a>)</p>"
-        "<p><b>" + tr ( "Dutch" ) + "</b></p>"
-        "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
-        "<p><b>" + tr ( "Italian" ) + "</b></p>"
-        "<p>Giuseppe Sapienza (<a href=""https://github.com/dzpex"">dzpex</a>)</p>"
-        "<p><b>" + tr ( "German" ) + "</b></p>"
-        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
-        "<p><b>" + tr ( "Polish" ) + "</b></p>"
-        "<p>Martyna Danysz (<a href=""https://github.com/Martyna27"">Martyna27</a>)</p>"
-        "<p><b>" + tr ( "Swedish" ) + "</b></p>"
-        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>");
+        + "<p align='justify'><span>SAGORA está desarrollado en C++ y trabaja con la tecnología socket para enviar y recibir información de audio. Tiene la capacidad de equiparar las diferentes latencias de todas las personas conectadas, logrando que las señales lleguen al mismo tiempo y no haya sensación de retraso entre las señales.  Permite crear salas o conectarse a salas, desde donde se pueden escuchar a los diferentes participantes, compartiendo un mismo espacio sonoro. Las salas tienen un código que hace que el acceso sea restringido.</span></p>"
+        + "<p align='justify'><span> Para el diseño y desarrollo de SAGORA se necesitó de un ambiente que favorezca la investigación y la interdisciplinariedad, como lo es la Universidad Nacional de Quilmes (UNQ)."
+        + " En el caso particular de estos artistas/investigadores se puede encontrar inclusive un cruce y"
+        + " colaboración entre diferentes proyectos de investigación.  "
+        + "El Dr. Esteban Calcagno es Director de la Licenciatura en Música y Tecnología de la UNQ y de uno de los proyectos de promoción de la investigación en temas estratégicos institucionales (PITEI), creados en la UNQ a fines del año 2018.  Este proyecto se denomina “Plataforma de servicios para la educación digital” y tiene por finalidad la creación de una plataforma y aplicaciones para la educación online.  Por su parte, el Lic. Diego Romero Mascaró es Director de la Escuela Universitaria de Artes de la UNQ, integrante del PITEI “Plataforma de servicios para la educación digital” y co-director del proyecto de investigación “Desarrollos tecnológicos aplicados a las artes”,"
+        + " que es integrado también, entre otras/os investigadoras/es y becarias/os, por el Lic. "
+        + "Nicolás Rodríguez Altieri, miembro del equipo SAGORA.</span></p>"
+        "<p align='justify'><span>" + APP_NAME + " está basado en el software libre desarrollado por Volker Fisher denominado Jamulus, que permite realizar sesiones libres de improvisación (Jam) online, apoyándose en los permisos concedidos a través de la GNU General Public License.</span></p>"
+
+        "<p align='justify'><span>SAGORA is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
+             "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details."
+            " You should have received a copy of the GNU General Public License along with his program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA"
+             "SAGORA uses the following libraries, resources or code snippets:"
+             "Qt cross-platform application framework: http://www.qt.io"
+             "Opus Interactive Audio Codec: http://www.opus-codec.org"
+             "Audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004 (taken from The Synthesis ToolKit in C++ (STK))"
+             "Skins were developed by Diego Romero Mascaró and Ignacio Maiocco. " +
+        "</span></p>"
+
+                );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
 
     // set window title
     setWindowTitle ( tr ( "About " ) + APP_NAME );
+}
+
+QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
+{
+    QString strVersionText = "";
+
+    // name, short description and GPL hint
+    if ( bWithHtml )
+    {
+        strVersionText += "<center><b>";
+    }
+    else
+    {
+        strVersionText += " *** ";
+    }
+
+    strVersionText += "Acerca de SAGORA";
+
+    if ( bWithHtml )
+    {
+        strVersionText += "</b><br>";
+    }
+    else
+    {
+        strVersionText += "\n *** ";
+    }
+
+    strVersionText += tr ( "SAGORA, Version 1.1. Agosto 2020" );
+
+    if ( bWithHtml )
+    {
+        strVersionText += "<br>";
+    }
+    else
+    {
+        strVersionText += "\n *** ";
+    }
+
+    strVersionText += tr ( "Under the GNU General Public License (GPL) - V2" );
+
+    if ( bWithHtml )
+    {
+        strVersionText += "</center>";
+    }
+
+    return strVersionText;
 }
 
 
@@ -516,9 +457,9 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
     QTextBrowser* txvLicence = new QTextBrowser ( this );
-    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I &agree to the above licence terms" ), this );
-    butAccept                = new QPushButton ( tr ( "Accept" ), this );
-    QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
+    QCheckBox*    chbAgree   = new QCheckBox ( "I &agree to the above licence terms", this );
+    butAccept                = new QPushButton ( "Accept", this );
+    QPushButton*  butDecline = new QPushButton ( "Decline", this );
 
     pSubLayout->addStretch();
     pSubLayout->addWidget ( chbAgree );
@@ -540,10 +481,10 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
         "You agree that all data, sounds, or other works transmitted to this server "
         "are owned and created by you or your licensors, and that you are making these "
         "data, sounds or other works available via the following Creative Commons "
-        "License (for more information on this license, see " ) +
+        "License (for more information on this license, see "
         "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
-        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):</big></p>"
-        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>"
+        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):" ) + "</big></p>" +
+        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>" +
         "<p>" + tr ( "You are free to:" ) +
         "<ul>"
         "<li><b>" + tr ( "Share" ) + "</b> - " +
@@ -567,14 +508,14 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
         tr ( "You may not apply legal terms or technological measures that legally restrict "
         "others from doing anything the license permits." ) + "</p>" );
 
-    QObject::connect ( chbAgree, &QCheckBox::stateChanged,
-        this, &CLicenceDlg::OnAgreeStateChanged );
+    QObject::connect ( chbAgree, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnAgreeStateChanged ( int ) ) );
 
-    QObject::connect ( butAccept, &QPushButton::clicked,
-        this, &CLicenceDlg::accept );
+    QObject::connect ( butAccept, SIGNAL ( clicked() ),
+        this, SLOT ( accept() ) );
 
-    QObject::connect ( butDecline, &QPushButton::clicked,
-        this, &CLicenceDlg::reject );
+    QObject::connect ( butDecline, SIGNAL ( clicked() ),
+        this, SLOT ( reject() ) );
 }
 
 
@@ -593,43 +534,64 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     - label with combo box for skill level
     - OK button
 */
-    setWindowTitle ( tr ( "Musician Profile" ) );
+    setWindowTitle ( "Perfil de Músico" );
+    setStyleSheet("    background-color: rgb(40, 40, 40);\nborder-color: rgb(0, 0, 0);\ncolor: rgb(255, 255, 255);\nbackground-image:  url(:/png/main/res/ui/bg_fondos.png);");
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
 
     QVBoxLayout* pLayout        = new QVBoxLayout ( this );
     QHBoxLayout* pButSubLayout  = new QHBoxLayout;
-    QLabel*      plblAlias      = new QLabel ( tr ( "Alias/Name" ), this );
+    QLabel*      plblAlias      = new QLabel ( "Alias/Nombre", this );
     pedtAlias                   = new QLineEdit ( this );
-    QLabel*      plblInstrument = new QLabel ( tr ( "Instrument" ), this );
+    QLabel*      plblInstrument = new QLabel ( "Instrumento", this );
     pcbxInstrument              = new QComboBox ( this );
-    QLabel*      plblCountry    = new QLabel ( tr ( "Country" ), this );
+    QLabel*      plblCountry    = new QLabel ( "País", this );
     pcbxCountry                 = new QComboBox ( this );
-    QLabel*      plblCity       = new QLabel ( tr ( "City" ), this );
+    QLabel*      plblCity       = new QLabel ( "Ciudad", this );
     pedtCity                    = new QLineEdit ( this );
-    QLabel*      plblSkill      = new QLabel ( tr ( "Skill" ), this );
+    QLabel*      plblSkill      = new QLabel ( "Tipo de Músico", this );
     pcbxSkill                   = new QComboBox ( this );
-    QPushButton* butClose       = new QPushButton ( tr ( "&Close" ), this );
+    QPushButton* butClose       = new QPushButton ( "&Close", this );
 
     QGridLayout* pGridLayout = new QGridLayout;
+
+
     plblAlias->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    plblAlias->setStyleSheet("    background-color: transparent;\ncolor: rgb(255, 255, 255);");
     pGridLayout->addWidget ( plblAlias, 0, 0 );
+    pedtAlias->setStyleSheet("    background-color: background: rgb(15, 15, 15);\ncolor: rgb(255, 255, 255);");
     pGridLayout->addWidget ( pedtAlias, 0, 1 );
 
     plblInstrument->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    plblInstrument->setStyleSheet("    background-color: transparent;\n;\ncolor: rgb(255, 255, 255);");
+    pcbxInstrument->setStyleSheet("QComboBox{"
+                                  "background-color: rgb(15, 15, 15);"
+                                  "border-color: rgb(25,25,25);"
+                                  "color: white;"
+                                  "}"
+                                  ""
+                                  "QComboBox::down-arrow{"
+                                  "font-color: rgb(250,250,250);"
+                                  "}");
     pGridLayout->addWidget ( plblInstrument, 1, 0 );
     pGridLayout->addWidget ( pcbxInstrument, 1, 1 );
 
     plblCountry->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
     pGridLayout->addWidget ( plblCountry, 2, 0 );
     pGridLayout->addWidget ( pcbxCountry, 2, 1 );
+    //plblCountry->setVisible(false);
+    //pcbxCountry->setVisible(false);
 
     plblCity->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
     pGridLayout->addWidget ( plblCity, 3, 0 );
     pGridLayout->addWidget ( pedtCity, 3, 1 );
+    plblCity->setVisible(false);
+    pedtCity->setVisible(false);
 
     plblSkill->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
     pGridLayout->addWidget ( plblSkill, 4, 0 );
     pGridLayout->addWidget ( pcbxSkill, 4, 1 );
+    plblSkill->setVisible(true);
+    pcbxSkill->setVisible(true);
 
     pButSubLayout->addStretch();
     pButSubLayout->addWidget ( butClose );
@@ -638,38 +600,55 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
     // we do not want to close button to be a default one (the mouse pointer
     // may jump to that button which we want to avoid)
+
     butClose->setAutoDefault ( false );
     butClose->setDefault ( false );
+    plblSkill->setVisible(false);
+    butClose->setStyleSheet("#butClose{"
+                            "background: rgb(28, 28, 28); "
+                            "selection-background-color: rgb(28, 28, 28);"
+                            "border-color: rgb(120, 120, 120);"
+                              "  border-style: outset;"
+                             "   border-width: 1.3px;"
+                            "color: rgb(120, 120, 120);"
+                            "}"
+                            "#butClose:hover{"
+                            "border-color: rgb(13, 204, 135);"
+                            "   border-style: outset;"
+                            "    border-width: 1.3px;"
+                            "color: rgb(13, 204, 135);"
+                            "}"
+                            "#butClose:pressed{"
+                            "background: rgb(15, 15, 15); "
+                            "border-color: rgb(13, 204, 135);"
+                            "    border-style: outset;"
+                            "    border-width: 1.3px;"
+                            "}");
+
+pcbxCountry->setStyleSheet("QComboBox{"
+                      "background-color: rgb(15, 15, 15);"
+                      "border-color: rgb(25,25,25);"
+                      "color: white;"
+                      "}"
+                      ""
+                      "QComboBox::down-arrow{"
+                      "font-color: rgb(250,250,250);"
+                      "}");
+
+
+
 
 
     // Instrument pictures combo box -------------------------------------------
     // add an entry for all known instruments
     for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
     {
-        // create a combo box item with text, image and background color
-        QColor InstrColor;
-
-        pcbxInstrument->addItem ( QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
-                                  CInstPictures::GetName ( iCurInst ),
-                                  iCurInst );
-
-        switch ( CInstPictures::GetCategory ( iCurInst ) )
-        {
-        case CInstPictures::IC_OTHER_INSTRUMENT:      InstrColor = QColor ( Qt::blue );   break;
-        case CInstPictures::IC_WIND_INSTRUMENT:       InstrColor = QColor ( Qt::green );  break;
-        case CInstPictures::IC_STRING_INSTRUMENT:     InstrColor = QColor ( Qt::red );    break;
-        case CInstPictures::IC_PLUCKING_INSTRUMENT:   InstrColor = QColor ( Qt::cyan );   break;
-        case CInstPictures::IC_PERCUSSION_INSTRUMENT: InstrColor = QColor ( Qt::white );  break;
-        case CInstPictures::IC_KEYBOARD_INSTRUMENT:   InstrColor = QColor ( Qt::yellow ); break;
-        case CInstPictures::IC_MULTIPLE_INSTRUMENT:   InstrColor = QColor ( Qt::black );  break;
-        }
-
-        InstrColor.setAlpha ( 10 );
-        pcbxInstrument->setItemData ( iCurInst, InstrColor, Qt::BackgroundRole );
+        // create a combo box item with text and image
+        pcbxInstrument->addItem (
+            QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
+            CInstPictures::GetName ( iCurInst ),
+            iCurInst );
     }
-
-    // sort the items in alphabetical order
-    pcbxInstrument->model()->sort ( 0 );
 
 
     // Country flag icons combo box --------------------------------------------
@@ -681,7 +660,8 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
         if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
         {
             // get current country enum
-            QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
+            QLocale::Country eCountry =
+                static_cast<QLocale::Country> ( iCurCntry );
 
             // try to load icon from resource file name
             QIcon CurFlagIcon;
@@ -706,50 +686,51 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     FlagNoneIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
     pcbxCountry->insertItem ( 0,
                               FlagNoneIcon,
-                              tr ( "None" ),
+                              "None",
                               static_cast<int> ( QLocale::AnyCountry ) );
 
 
     // Skill level combo box ---------------------------------------------------
     // create a pixmap showing the skill level colors
-    QPixmap SLPixmap ( 16, 11 ); // same size as the country flags
+//    QPixmap SLPixmap ( 16, 11 ); // same size as the country flags
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_NOT_SET,
-                                      RGBCOL_G_SL_NOT_SET,
-                                      RGBCOL_B_SL_NOT_SET ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_NOT_SET,
+//                                      RGBCOL_G_SL_NOT_SET,
+//                                      RGBCOL_B_SL_NOT_SET ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "None" ), SL_NOT_SET );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), "None", SL_NOT_SET );
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER,
-                                      RGBCOL_G_SL_BEGINNER,
-                                      RGBCOL_B_SL_BEGINNER ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER,
+//                                      RGBCOL_G_SL_BEGINNER,
+//                                      RGBCOL_B_SL_BEGINNER ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Beginner" ), SL_BEGINNER );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Beginner", SL_BEGINNER );
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE,
-                                      RGBCOL_G_SL_INTERMEDIATE,
-                                      RGBCOL_B_SL_INTERMEDIATE ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE,
+//                                      RGBCOL_G_SL_INTERMEDIATE,
+//                                      RGBCOL_B_SL_INTERMEDIATE ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Intermediate" ), SL_INTERMEDIATE );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Intermediate", SL_INTERMEDIATE );
 
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL,
-                                      RGBCOL_G_SL_SL_PROFESSIONAL,
-                                      RGBCOL_B_SL_SL_PROFESSIONAL ) );
+//    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL,
+//                                      RGBCOL_G_SL_SL_PROFESSIONAL,
+//                                      RGBCOL_B_SL_SL_PROFESSIONAL ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Expert" ), SL_PROFESSIONAL );
+//    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Experto :P", SL_PROFESSIONAL );
 
 
     // Add help text to controls -----------------------------------------------
     // fader tag
-    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
-         tr ( "Write your name or an alias here so the other musicians you want to "
-        "play with know who you are. You may also add a picture of the instrument "
-        "you play and a flag of the country you are located in. "
-        "Your city and skill level playing your instrument may also be added." ) +
-        "<br>" + tr ( "What you set here will appear at your fader on the mixer "
-        "board when you are connected to a Jamulus server. This tag will "
-        "also be shown at each client which is connected to the same server as "
-        "you." );
+    QString strFaderTag = tr ( "<b>Musician Profile:</b> Set your name "
+        "or an alias here so that the other musicians you want to play with "
+        "know who you are. Additionally you may set an instrument picture of "
+        "the instrument you play and a flag of the country you are living. "
+        "The city you live in and the skill level of playing your instrument "
+        "may also be added.\n"
+        "What you set here will appear at your fader on the mixer board when "
+        "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
+        "also show up at each client which is connected to the same server as "
+        "you. If the name is left empty, the IP address is shown instead." );
 
     pedtAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
@@ -757,30 +738,30 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
     pcbxCountry->setWhatsThis ( strFaderTag );
     pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
-    pedtCity->setWhatsThis ( strFaderTag );
-    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
-    pcbxSkill->setWhatsThis ( strFaderTag );
-    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
+//    pedtCity->setWhatsThis ( strFaderTag );
+//    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
+//    pcbxSkill->setWhatsThis ( strFaderTag );
+//    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( pedtAlias, &QLineEdit::textChanged,
-        this, &CMusProfDlg::OnAliasTextChanged );
+    QObject::connect ( pedtAlias, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnAliasTextChanged ( const QString& ) ) );
 
-    QObject::connect ( pcbxInstrument, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
-        this, &CMusProfDlg::OnInstrumentActivated );
+    QObject::connect ( pcbxInstrument, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnInstrumentActivated ( int ) ) );
 
-    QObject::connect ( pcbxCountry, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
-        this, &CMusProfDlg::OnCountryActivated );
+    QObject::connect ( pcbxCountry, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnCountryActivated ( int ) ) );
 
-    QObject::connect ( pedtCity, &QLineEdit::textChanged,
-        this, &CMusProfDlg::OnCityTextChanged );
+//    QObject::connect ( pedtCity, SIGNAL ( textChanged ( const QString& ) ),
+//        this, SLOT ( OnCityTextChanged ( const QString& ) ) );
 
-    QObject::connect ( pcbxSkill, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
-        this, &CMusProfDlg::OnSkillActivated );
+//    QObject::connect ( pcbxSkill, SIGNAL ( activated ( int ) ),
+//        this, SLOT ( OnSkillActivated ( int ) ) );
 
-    QObject::connect ( butClose, &QPushButton::clicked,
-        this, &CMusProfDlg::accept );
+    QObject::connect ( butClose, SIGNAL ( clicked() ),
+        this, SLOT ( accept() ) );
 }
 
 void CMusProfDlg::showEvent ( QShowEvent* )
@@ -806,6 +787,7 @@ void CMusProfDlg::showEvent ( QShowEvent* )
     pcbxSkill->setCurrentIndex (
         pcbxSkill->findData (
         static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
+    pcbxSkill->setVisible(false);
 }
 
 void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
@@ -821,7 +803,7 @@ void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
     }
     else
     {
-        // text is too long, update control with shortened text
+        // text is too long, update control with shortend text
         pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
     }
 }
@@ -859,7 +841,7 @@ void CMusProfDlg::OnCityTextChanged ( const QString& strNewCity )
     }
     else
     {
-        // text is too long, update control with shortened text
+        // text is too long, update control with shortend text
         pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
     }
 }
@@ -876,89 +858,16 @@ void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
 
 
 // Help menu -------------------------------------------------------------------
-CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )
+CHelpMenu::CHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 {
-    // standard help menu consists of about and what's this help
-    if ( bIsClient )
-    {
-        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpClientGetStarted() ) );
-        addAction ( tr ( "Software &Manual..." ), this, SLOT ( OnHelpSoftwareMan() ) );
-    }
-    else
-    {
-        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpServerGetStarted() ) );
-    }
+
     addSeparator();
-    addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
+    addAction ( tr ( "&Link de Descarga..." ), this,
+        SLOT ( OnHelpDownloadLink() ) );
+
     addSeparator();
-    addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
+    addAction ( tr ( "&Sobre el proyecto" ), this, SLOT ( OnHelpAbout() ) );
 }
-
-
-// Language combo box ----------------------------------------------------------
-CLanguageComboBox::CLanguageComboBox ( QWidget* parent ) :
-    QComboBox            ( parent ),
-    iIdxSelectedLanguage ( INVALID_INDEX )
-{
-    QObject::connect ( this, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
-        this, &CLanguageComboBox::OnLanguageActivated );
-}
-
-void CLanguageComboBox::Init ( QString& strSelLanguage )
-{
-    // load available translations
-    const QMap<QString, QString>   TranslMap = CLocale::GetAvailableTranslations();
-    QMapIterator<QString, QString> MapIter ( TranslMap );
-
-    // add translations to the combobox list
-    clear();
-    int iCnt                  = 0;
-    int iIdxOfEnglishLanguage = 0;
-    iIdxSelectedLanguage      = INVALID_INDEX;
-
-    while ( MapIter.hasNext() )
-    {
-        MapIter.next();
-        addItem ( QLocale ( MapIter.key() ).nativeLanguageName() + " (" + MapIter.key() + ")", MapIter.key() );
-
-        // store the combo box index of the default english language
-        if ( MapIter.key().compare ( "en" ) == 0 )
-        {
-            iIdxOfEnglishLanguage = iCnt;
-        }
-
-        // if the selected language is found, store the combo box index
-        if ( MapIter.key().compare ( strSelLanguage ) == 0 )
-        {
-            iIdxSelectedLanguage = iCnt;
-        }
-
-        iCnt++;
-    }
-
-    // if the selected language was not found, use the english language
-    if ( iIdxSelectedLanguage == INVALID_INDEX )
-    {
-        strSelLanguage       = "en";
-        iIdxSelectedLanguage = iIdxOfEnglishLanguage;
-    }
-
-    setCurrentIndex ( iIdxSelectedLanguage );
-}
-
-void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
-{
-    // only update if the language selection is different from the current selected language
-    if ( iIdxSelectedLanguage != iLanguageIdx )
-    {
-        QMessageBox::information ( this,
-                                   tr ( "Restart Required" ),
-                                   tr ( "Please restart the application for the language change to take effect." ) );
-
-        emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
-    }
-}
-#endif
 
 
 /******************************************************************************\
@@ -969,7 +878,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
                                         CHostAddress& HostAddress )
 {
     QHostAddress InetAddr;
-    quint16      iNetPort = DEFAULT_PORT_NUMBER;
+    quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
 
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
@@ -1007,7 +916,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( !InetAddr.setAddress ( strAddress ) )
     {
-        // it was no valid IP address, try to get host by name, assuming
+        // it was no vaild IP address, try to get host by name, assuming
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 
@@ -1053,83 +962,78 @@ CHostAddress NetworkUtil::GetLocalAddress()
 QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
                                                const QString&   strCentralServerAddress )
 {
-    switch ( eCentralServerAddressType )
-    {
-    case AT_CUSTOM:               return strCentralServerAddress;
-    case AT_ALL_GENRES:           return CENTSERV_ALL_GENRES;
-    case AT_GENRE_ROCK:           return CENTSERV_GENRE_ROCK;
-    case AT_GENRE_JAZZ:           return CENTSERV_GENRE_JAZZ;
-    case AT_GENRE_CLASSICAL_FOLK: return CENTSERV_GENRE_CLASSICAL_FOLK;
-    default:                      return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
-    }
-}
+        //Esta funcion lee el archivo de servidores que se cargo con la info de la API de Servidores Centrales
+        QString savefile = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+        QFile fileIn(savefile+"/servidores.sagora");
 
-QString NetworkUtil::FixAddress ( const QString& strAddress )
-{
-    // remove all spaces from the address string
-    return strAddress.simplified().replace ( " ", "" );
+
+           if (!fileIn.open(QIODevice::ReadWrite | QIODevice::Text))
+           {
+               qInfo() << "error";
+           }
+
+           QStringList linea;
+           QString ServerCentral;
+           QTextStream in(&fileIn);
+
+           while (!in.atEnd()) {
+               QString line = in.readLine();
+
+               linea << line;
+           }
+
+           QStringList ip;
+           ip << linea.at(eCentralServerAddressType).split(",");
+           ServerCentral = ip.at(0) + ":" + ip.at(2);
+
+           //Al final devuelve el server central correspondiente
+           return ServerCentral;
 }
 
 
 // Instrument picture data base ------------------------------------------------
-CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
+CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
 {
     // make sure we generate the table only once
     static bool TableIsInitialized = false;
 
     static CVector<CInstPictProps> vecDataBase;
 
-    if ( !TableIsInitialized || bReGenerateTable )
+    if ( !TableIsInitialized )
     {
         // instrument picture data base initialization
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
-        vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "None" ), ":/png/instr/res/instruments/none.png", IC_OTHER_INSTRUMENT ) ); // special first element
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Drum Set" ), ":/png/instr/res/instruments/drumset.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Djembe" ), ":/png/instr/res/instruments/djembe.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Electric Guitar" ), ":/png/instr/res/instruments/eguitar.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Acoustic Guitar" ), ":/png/instr/res/instruments/aguitar.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Guitar" ), ":/png/instr/res/instruments/bassguitar.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Keyboard" ), ":/png/instr/res/instruments/keyboard.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Synthesizer" ), ":/png/instr/res/instruments/synthesizer.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Grand Piano" ), ":/png/instr/res/instruments/grandpiano.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Accordion" ), ":/png/instr/res/instruments/accordeon.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal" ), ":/png/instr/res/instruments/vocal.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Microphone" ), ":/png/instr/res/instruments/microphone.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Harmonica" ), ":/png/instr/res/instruments/harmonica.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Trumpet" ), ":/png/instr/res/instruments/trumpet.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Trombone" ), ":/png/instr/res/instruments/trombone.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "French Horn" ), ":/png/instr/res/instruments/frenchhorn.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Tuba" ), ":/png/instr/res/instruments/tuba.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Saxophone" ), ":/png/instr/res/instruments/saxophone.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Clarinet" ), ":/png/instr/res/instruments/clarinet.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Flute" ), ":/png/instr/res/instruments/flute.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Violin" ), ":/png/instr/res/instruments/violin.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Cello" ), ":/png/instr/res/instruments/cello.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Double Bass" ), ":/png/instr/res/instruments/doublebass.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Recorder" ), ":/png/instr/res/instruments/recorder.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Streamer" ), ":/png/instr/res/instruments/streamer.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Listener" ), ":/png/instr/res/instruments/listener.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Guitar+Vocal" ), ":/png/instr/res/instruments/guitarvocal.png", IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Keyboard+Vocal" ), ":/png/instr/res/instruments/keyboardvocal.png", IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bodhran" ), ":/png/instr/res/instruments/bodhran.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bassoon" ), ":/png/instr/res/instruments/bassoon.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Oboe" ), ":/png/instr/res/instruments/oboe.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Harp" ), ":/png/instr/res/instruments/harp.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Viola" ), ":/png/instr/res/instruments/viola.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Congas" ), ":/png/instr/res/instruments/congas.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bongo" ), ":/png/instr/res/instruments/bongo.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Bass" ), ":/png/instr/res/instruments/vocalbass.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Tenor" ), ":/png/instr/res/instruments/vocaltenor.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Alto" ), ":/png/instr/res/instruments/vocalalto.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Soprano" ), ":/png/instr/res/instruments/vocalsoprano.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Banjo" ), ":/png/instr/res/instruments/banjo.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mandolin" ), ":/png/instr/res/instruments/mandolin.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Ukulele" ), ":/png/instr/res/instruments/ukulele.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Ukulele" ), ":/png/instr/res/instruments/bassukulele.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "None", ":/png/instr/res/instruments/instrnone.png", IC_OTHER_INSTRUMENT ) ); // special first element
+        vecDataBase.Add ( CInstPictProps ( "Drum Set", ":/png/instr/res/instruments/instrdrumset.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Djembe", ":/png/instr/res/instruments/instrdjembe.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Electric Guitar", ":/png/instr/res/instruments/instreguitar.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Acoustic Guitar", ":/png/instr/res/instruments/instraguitar.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Bass Guitar", ":/png/instr/res/instruments/instrbassguitar.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Keyboard", ":/png/instr/res/instruments/instrkeyboard.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Synthesizer", ":/png/instr/res/instruments/instrsynthesizer.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Grand Piano", ":/png/instr/res/instruments/instrgrandpiano.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Accordion", ":/png/instr/res/instruments/instraccordeon.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Vocal", ":/png/instr/res/instruments/instrvocal.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Microphone", ":/png/instr/res/instruments/instrmicrophone.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Harmonica", ":/png/instr/res/instruments/instrharmonica.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Trumpet", ":/png/instr/res/instruments/instrtrumpet.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Trombone", ":/png/instr/res/instruments/instrtrombone.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "French Horn", ":/png/instr/res/instruments/instrfrenchhorn.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Tuba", ":/png/instr/res/instruments/instrtuba.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Saxophone", ":/png/instr/res/instruments/instrsaxophone.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Clarinet", ":/png/instr/res/instruments/instrclarinet.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Flute", ":/png/instr/res/instruments/instrflute.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Violin", ":/png/instr/res/instruments/instrviolin.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Cello", ":/png/instr/res/instruments/instrcello.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Double Bass", ":/png/instr/res/instruments/instrdoublebass.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Recorder", ":/png/instr/res/instruments/instrrecorder.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Streamer", ":/png/instr/res/instruments/instrstreamer.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Listener", ":/png/instr/res/instruments/instrlistener.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Guitar+Vocal", ":/png/instr/res/instruments/instrguitarvocal.png", IC_MULTIPLE_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Keyboard+Vocal", ":/png/instr/res/instruments/instrkeyboardvocal.png", IC_MULTIPLE_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Bodhran", ":/png/instr/res/instruments/bodhran.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Bassoon", ":/png/instr/res/instruments/bassoon.png", IC_WIND_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;
@@ -1210,188 +1114,190 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
         QString strISO3166 = "";
         switch ( static_cast<int> ( eCountry ) )
         {
-            case 1: strISO3166 = "af"; break;
-            case 2: strISO3166 = "al"; break;
-            case 3: strISO3166 = "dz"; break;
-            case 5: strISO3166 = "ad"; break;
-            case 6: strISO3166 = "ao"; break;
-            case 10: strISO3166 = "ar"; break;
-            case 11: strISO3166 = "am"; break;
-            case 12: strISO3166 = "aw"; break;
-            case 13: strISO3166 = "au"; break;
-            case 14: strISO3166 = "at"; break;
-            case 15: strISO3166 = "az"; break;
-            case 17: strISO3166 = "bh"; break;
-            case 18: strISO3166 = "bd"; break;
-            case 20: strISO3166 = "by"; break;
-            case 21: strISO3166 = "be"; break;
-            case 23: strISO3166 = "bj"; break;
-            case 25: strISO3166 = "bt"; break;
-            case 26: strISO3166 = "bo"; break;
-            case 27: strISO3166 = "ba"; break;
-            case 28: strISO3166 = "bw"; break;
-            case 30: strISO3166 = "br"; break;
-            case 32: strISO3166 = "bn"; break;
-            case 33: strISO3166 = "bg"; break;
-            case 34: strISO3166 = "bf"; break;
-            case 35: strISO3166 = "bi"; break;
-            case 36: strISO3166 = "kh"; break;
-            case 37: strISO3166 = "cm"; break;
-            case 38: strISO3166 = "ca"; break;
-            case 39: strISO3166 = "cv"; break;
-            case 41: strISO3166 = "cf"; break;
-            case 42: strISO3166 = "td"; break;
-            case 43: strISO3166 = "cl"; break;
-            case 44: strISO3166 = "cn"; break;
-            case 47: strISO3166 = "co"; break;
-            case 48: strISO3166 = "km"; break;
-            case 49: strISO3166 = "cd"; break;
-            case 50: strISO3166 = "cg"; break;
-            case 52: strISO3166 = "cr"; break;
-            case 53: strISO3166 = "ci"; break;
-            case 54: strISO3166 = "hr"; break;
-            case 55: strISO3166 = "cu"; break;
-            case 56: strISO3166 = "cy"; break;
-            case 57: strISO3166 = "cz"; break;
-            case 58: strISO3166 = "dk"; break;
-            case 59: strISO3166 = "dj"; break;
-            case 61: strISO3166 = "do"; break;
-            case 62: strISO3166 = "tl"; break;
-            case 63: strISO3166 = "ec"; break;
-            case 64: strISO3166 = "eg"; break;
-            case 65: strISO3166 = "sv"; break;
-            case 66: strISO3166 = "gq"; break;
-            case 67: strISO3166 = "er"; break;
-            case 68: strISO3166 = "ee"; break;
-            case 69: strISO3166 = "et"; break;
-            case 71: strISO3166 = "fo"; break;
-            case 73: strISO3166 = "fi"; break;
-            case 74: strISO3166 = "fr"; break;
-            case 76: strISO3166 = "gf"; break;
-            case 77: strISO3166 = "pf"; break;
-            case 79: strISO3166 = "ga"; break;
-            case 81: strISO3166 = "ge"; break;
-            case 82: strISO3166 = "de"; break;
-            case 83: strISO3166 = "gh"; break;
-            case 85: strISO3166 = "gr"; break;
-            case 86: strISO3166 = "gl"; break;
-            case 88: strISO3166 = "gp"; break;
-            case 90: strISO3166 = "gt"; break;
-            case 91: strISO3166 = "gn"; break;
-            case 92: strISO3166 = "gw"; break;
-            case 93: strISO3166 = "gy"; break;
-            case 96: strISO3166 = "hn"; break;
-            case 97: strISO3166 = "hk"; break;
-            case 98: strISO3166 = "hu"; break;
-            case 99: strISO3166 = "is"; break;
-            case 100: strISO3166 = "in"; break;
-            case 101: strISO3166 = "id"; break;
-            case 102: strISO3166 = "ir"; break;
-            case 103: strISO3166 = "iq"; break;
-            case 104: strISO3166 = "ie"; break;
-            case 105: strISO3166 = "il"; break;
-            case 106: strISO3166 = "it"; break;
-            case 108: strISO3166 = "jp"; break;
-            case 109: strISO3166 = "jo"; break;
-            case 110: strISO3166 = "kz"; break;
-            case 111: strISO3166 = "ke"; break;
-            case 113: strISO3166 = "kp"; break;
-            case 114: strISO3166 = "kr"; break;
-            case 115: strISO3166 = "kw"; break;
-            case 116: strISO3166 = "kg"; break;
-            case 117: strISO3166 = "la"; break;
-            case 118: strISO3166 = "lv"; break;
-            case 119: strISO3166 = "lb"; break;
-            case 120: strISO3166 = "ls"; break;
-            case 122: strISO3166 = "ly"; break;
-            case 123: strISO3166 = "li"; break;
-            case 124: strISO3166 = "lt"; break;
-            case 125: strISO3166 = "lu"; break;
-            case 126: strISO3166 = "mo"; break;
-            case 127: strISO3166 = "mk"; break;
-            case 128: strISO3166 = "mg"; break;
-            case 130: strISO3166 = "my"; break;
-            case 132: strISO3166 = "ml"; break;
-            case 133: strISO3166 = "mt"; break;
-            case 135: strISO3166 = "mq"; break;
-            case 136: strISO3166 = "mr"; break;
-            case 137: strISO3166 = "mu"; break;
-            case 138: strISO3166 = "yt"; break;
-            case 139: strISO3166 = "mx"; break;
-            case 141: strISO3166 = "md"; break;
-            case 142: strISO3166 = "mc"; break;
-            case 143: strISO3166 = "mn"; break;
-            case 145: strISO3166 = "ma"; break;
-            case 146: strISO3166 = "mz"; break;
-            case 147: strISO3166 = "mm"; break;
-            case 148: strISO3166 = "na"; break;
-            case 150: strISO3166 = "np"; break;
-            case 151: strISO3166 = "nl"; break;
-            case 153: strISO3166 = "nc"; break;
-            case 154: strISO3166 = "nz"; break;
-            case 155: strISO3166 = "ni"; break;
-            case 156: strISO3166 = "ne"; break;
-            case 157: strISO3166 = "ng"; break;
-            case 161: strISO3166 = "no"; break;
-            case 162: strISO3166 = "om"; break;
-            case 163: strISO3166 = "pk"; break;
-            case 165: strISO3166 = "ps"; break;
-            case 166: strISO3166 = "pa"; break;
-            case 167: strISO3166 = "pg"; break;
-            case 168: strISO3166 = "py"; break;
-            case 169: strISO3166 = "pe"; break;
-            case 170: strISO3166 = "ph"; break;
-            case 172: strISO3166 = "pl"; break;
-            case 173: strISO3166 = "pt"; break;
-            case 174: strISO3166 = "pr"; break;
-            case 175: strISO3166 = "qa"; break;
-            case 176: strISO3166 = "re"; break;
-            case 177: strISO3166 = "ro"; break;
-            case 178: strISO3166 = "ru"; break;
-            case 179: strISO3166 = "rw"; break;
-            case 184: strISO3166 = "sm"; break;
-            case 185: strISO3166 = "st"; break;
-            case 186: strISO3166 = "sa"; break;
-            case 187: strISO3166 = "sn"; break;
-            case 188: strISO3166 = "sc"; break;
-            case 189: strISO3166 = "sl"; break;
-            case 190: strISO3166 = "sg"; break;
-            case 191: strISO3166 = "sk"; break;
-            case 192: strISO3166 = "si"; break;
-            case 194: strISO3166 = "so"; break;
-            case 195: strISO3166 = "za"; break;
-            case 197: strISO3166 = "es"; break;
-            case 198: strISO3166 = "lk"; break;
-            case 201: strISO3166 = "sd"; break;
-            case 202: strISO3166 = "sr"; break;
-            case 204: strISO3166 = "sz"; break;
-            case 205: strISO3166 = "se"; break;
-            case 206: strISO3166 = "ch"; break;
-            case 207: strISO3166 = "sy"; break;
-            case 208: strISO3166 = "tw"; break;
-            case 209: strISO3166 = "tj"; break;
-            case 210: strISO3166 = "tz"; break;
-            case 211: strISO3166 = "th"; break;
-            case 212: strISO3166 = "tg"; break;
-            case 214: strISO3166 = "to"; break;
-            case 216: strISO3166 = "tn"; break;
-            case 217: strISO3166 = "tr"; break;
-            case 221: strISO3166 = "ug"; break;
-            case 222: strISO3166 = "ua"; break;
-            case 223: strISO3166 = "ae"; break;
-            case 224: strISO3166 = "gb"; break;
-            case 225: strISO3166 = "us"; break;
-            case 227: strISO3166 = "uy"; break;
-            case 228: strISO3166 = "uz"; break;
-            case 231: strISO3166 = "ve"; break;
-            case 232: strISO3166 = "vn"; break;
-            case 236: strISO3166 = "eh"; break;
-            case 237: strISO3166 = "ye"; break;
-            case 239: strISO3166 = "zm"; break;
-            case 240: strISO3166 = "zw"; break;
-            case 242: strISO3166 = "me"; break;
-            case 243: strISO3166 = "rs"; break;
-            case 248: strISO3166 = "ax"; break;
+
+        case 1: strISO3166 = "af"; break;
+                    case 2: strISO3166 = "al"; break;
+                    case 3: strISO3166 = "dz"; break;
+                    case 5: strISO3166 = "ad"; break;
+                    case 6: strISO3166 = "ao"; break;
+                    case 10: strISO3166 = "ar"; break;
+                    case 11: strISO3166 = "am"; break;
+                    case 12: strISO3166 = "aw"; break;
+                    case 13: strISO3166 = "au"; break;
+                    case 14: strISO3166 = "at"; break;
+                    case 15: strISO3166 = "az"; break;
+                    case 17: strISO3166 = "bh"; break;
+                    case 18: strISO3166 = "bd"; break;
+                    case 20: strISO3166 = "by"; break;
+                    case 21: strISO3166 = "be"; break;
+                    case 23: strISO3166 = "bj"; break;
+                    case 25: strISO3166 = "bt"; break;
+                    case 26: strISO3166 = "bo"; break;
+                    case 27: strISO3166 = "ba"; break;
+                    case 28: strISO3166 = "bw"; break;
+                    case 30: strISO3166 = "br"; break;
+                    case 32: strISO3166 = "bn"; break;
+                    case 33: strISO3166 = "bg"; break;
+                    case 34: strISO3166 = "bf"; break;
+                    case 35: strISO3166 = "bi"; break;
+                    case 36: strISO3166 = "kh"; break;
+                    case 37: strISO3166 = "cm"; break;
+                    case 38: strISO3166 = "ca"; break;
+                    case 39: strISO3166 = "cv"; break;
+                    case 41: strISO3166 = "cf"; break;
+                    case 42: strISO3166 = "td"; break;
+                    case 43: strISO3166 = "cl"; break;
+                    case 44: strISO3166 = "cn"; break;
+                    case 47: strISO3166 = "co"; break;
+                    case 48: strISO3166 = "km"; break;
+                    case 49: strISO3166 = "cd"; break;
+                    case 50: strISO3166 = "cg"; break;
+                    case 52: strISO3166 = "cr"; break;
+                    case 53: strISO3166 = "ci"; break;
+                    case 54: strISO3166 = "hr"; break;
+                    case 55: strISO3166 = "cu"; break;
+                    case 56: strISO3166 = "cy"; break;
+                    case 57: strISO3166 = "cz"; break;
+                    case 58: strISO3166 = "dk"; break;
+                    case 59: strISO3166 = "dj"; break;
+                    case 61: strISO3166 = "do"; break;
+                    case 62: strISO3166 = "tl"; break;
+                    case 63: strISO3166 = "ec"; break;
+                    case 64: strISO3166 = "eg"; break;
+                    case 65: strISO3166 = "sv"; break;
+                    case 66: strISO3166 = "gq"; break;
+                    case 67: strISO3166 = "er"; break;
+                    case 68: strISO3166 = "ee"; break;
+                    case 69: strISO3166 = "et"; break;
+                    case 71: strISO3166 = "fo"; break;
+                    case 73: strISO3166 = "fi"; break;
+                    case 74: strISO3166 = "fr"; break;
+                    case 76: strISO3166 = "gf"; break;
+                    case 77: strISO3166 = "pf"; break;
+                    case 79: strISO3166 = "ga"; break;
+                    case 81: strISO3166 = "ge"; break;
+                    case 82: strISO3166 = "de"; break;
+                    case 83: strISO3166 = "gh"; break;
+                    case 85: strISO3166 = "gr"; break;
+                    case 86: strISO3166 = "gl"; break;
+                    case 88: strISO3166 = "gp"; break;
+                    case 90: strISO3166 = "gt"; break;
+                    case 91: strISO3166 = "gn"; break;
+                    case 92: strISO3166 = "gw"; break;
+                    case 93: strISO3166 = "gy"; break;
+                    case 96: strISO3166 = "hn"; break;
+                    case 97: strISO3166 = "hk"; break;
+                    case 98: strISO3166 = "hu"; break;
+                    case 99: strISO3166 = "is"; break;
+                    case 100: strISO3166 = "in"; break;
+                    case 101: strISO3166 = "id"; break;
+                    case 102: strISO3166 = "ir"; break;
+                    case 103: strISO3166 = "iq"; break;
+                    case 104: strISO3166 = "ie"; break;
+                    case 105: strISO3166 = "il"; break;
+                    case 106: strISO3166 = "it"; break;
+                    case 108: strISO3166 = "jp"; break;
+                    case 109: strISO3166 = "jo"; break;
+                    case 110: strISO3166 = "kz"; break;
+                    case 111: strISO3166 = "ke"; break;
+                    case 113: strISO3166 = "kp"; break;
+                    case 114: strISO3166 = "kr"; break;
+                    case 115: strISO3166 = "kw"; break;
+                    case 116: strISO3166 = "kg"; break;
+                    case 117: strISO3166 = "la"; break;
+                    case 118: strISO3166 = "lv"; break;
+                    case 119: strISO3166 = "lb"; break;
+                    case 120: strISO3166 = "ls"; break;
+                    case 122: strISO3166 = "ly"; break;
+                    case 123: strISO3166 = "li"; break;
+                    case 124: strISO3166 = "lt"; break;
+                    case 125: strISO3166 = "lu"; break;
+                    case 126: strISO3166 = "mo"; break;
+                    case 127: strISO3166 = "mk"; break;
+                    case 128: strISO3166 = "mg"; break;
+                    case 130: strISO3166 = "my"; break;
+                    case 132: strISO3166 = "ml"; break;
+                    case 133: strISO3166 = "mt"; break;
+                    case 135: strISO3166 = "mq"; break;
+                    case 136: strISO3166 = "mr"; break;
+                    case 137: strISO3166 = "mu"; break;
+                    case 138: strISO3166 = "yt"; break;
+                    case 139: strISO3166 = "mx"; break;
+                    case 141: strISO3166 = "md"; break;
+                    case 142: strISO3166 = "mc"; break;
+                    case 143: strISO3166 = "mn"; break;
+                    case 145: strISO3166 = "ma"; break;
+                    case 146: strISO3166 = "mz"; break;
+                    case 147: strISO3166 = "mm"; break;
+                    case 148: strISO3166 = "na"; break;
+                    case 150: strISO3166 = "np"; break;
+                    case 151: strISO3166 = "nl"; break;
+                    case 153: strISO3166 = "nc"; break;
+                    case 154: strISO3166 = "nz"; break;
+                    case 155: strISO3166 = "ni"; break;
+                    case 156: strISO3166 = "ne"; break;
+                    case 157: strISO3166 = "ng"; break;
+                    case 161: strISO3166 = "no"; break;
+                    case 162: strISO3166 = "om"; break;
+                    case 163: strISO3166 = "pk"; break;
+                    case 165: strISO3166 = "ps"; break;
+                    case 166: strISO3166 = "pa"; break;
+                    case 167: strISO3166 = "pg"; break;
+                    case 168: strISO3166 = "py"; break;
+                    case 169: strISO3166 = "pe"; break;
+                    case 170: strISO3166 = "ph"; break;
+                    case 172: strISO3166 = "pl"; break;
+                    case 173: strISO3166 = "pt"; break;
+                    case 174: strISO3166 = "pr"; break;
+                    case 175: strISO3166 = "qa"; break;
+                    case 176: strISO3166 = "re"; break;
+                    case 177: strISO3166 = "ro"; break;
+                    case 178: strISO3166 = "ru"; break;
+                    case 179: strISO3166 = "rw"; break;
+                    case 184: strISO3166 = "sm"; break;
+                    case 185: strISO3166 = "st"; break;
+                    case 186: strISO3166 = "sa"; break;
+                    case 187: strISO3166 = "sn"; break;
+                    case 188: strISO3166 = "sc"; break;
+                    case 189: strISO3166 = "sl"; break;
+                    case 190: strISO3166 = "sg"; break;
+                    case 191: strISO3166 = "sk"; break;
+                    case 192: strISO3166 = "si"; break;
+                    case 194: strISO3166 = "so"; break;
+                    case 195: strISO3166 = "za"; break;
+                    case 197: strISO3166 = "es"; break;
+                    case 198: strISO3166 = "lk"; break;
+                    case 201: strISO3166 = "sd"; break;
+                    case 202: strISO3166 = "sr"; break;
+                    case 204: strISO3166 = "sz"; break;
+                    case 205: strISO3166 = "se"; break;
+                    case 206: strISO3166 = "ch"; break;
+                    case 207: strISO3166 = "sy"; break;
+                    case 208: strISO3166 = "tw"; break;
+                    case 209: strISO3166 = "tj"; break;
+                    case 210: strISO3166 = "tz"; break;
+                    case 211: strISO3166 = "th"; break;
+                    case 212: strISO3166 = "tg"; break;
+                    case 214: strISO3166 = "to"; break;
+                    case 216: strISO3166 = "tn"; break;
+                    case 217: strISO3166 = "tr"; break;
+                    case 221: strISO3166 = "ug"; break;
+                    case 222: strISO3166 = "ua"; break;
+                    case 223: strISO3166 = "ae"; break;
+                    case 224: strISO3166 = "gb"; break;
+                    case 225: strISO3166 = "us"; break;
+                    case 227: strISO3166 = "uy"; break;
+                    case 228: strISO3166 = "uz"; break;
+                    case 231: strISO3166 = "ve"; break;
+                    case 232: strISO3166 = "vn"; break;
+                    case 236: strISO3166 = "eh"; break;
+                    case 237: strISO3166 = "ye"; break;
+                    case 239: strISO3166 = "zm"; break;
+                    case 240: strISO3166 = "zw"; break;
+                    case 242: strISO3166 = "me"; break;
+                    case 243: strISO3166 = "rs"; break;
+                    case 248: strISO3166 = "ax"; break;
+
         }
         strReturn = ":/png/flags/res/flags/" + strISO3166 + ".png";
 
@@ -1441,6 +1347,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
 
     return strReturn;
+
 }
 
 ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountry )
@@ -1453,86 +1360,10 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
     case QLocale::Canada:
     case QLocale::Mexico:
     case QLocale::Greenland:
-        return AT_ALL_GENRES;
+        return AT_DEFAULT;
 
     default:
         return AT_DEFAULT;
-    }
-}
-
-QMap<QString, QString> CLocale::GetAvailableTranslations()
-{
-    QMap<QString, QString> TranslMap;
-    QDirIterator           DirIter ( ":/translations" );
-
-    // add english language (default which is in the actual source code)
-    TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
-
-    while ( DirIter.hasNext() )
-    {
-        // get alias of translation file
-        const QString strCurFileName = DirIter.next();
-
-        // extract only language code (must be at the end, separated with a "_")
-        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
-
-        TranslMap[strLoc] = strCurFileName;
-    }
-
-    return TranslMap;
-}
-
-QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap )
-{
-    QPair<QString, QString> PairSysLang ( "", "" );
-    QStringList             slUiLang = QLocale().uiLanguages();
-
-    if ( !slUiLang.isEmpty() )
-    {
-        QString strUiLang = QLocale().uiLanguages().at ( 0 );
-        strUiLang.replace ( "-", "_" );
-
-        // first try to find the complete language string
-        if ( TranslMap.constFind ( strUiLang ) != TranslMap.constEnd() )
-        {
-            PairSysLang.first  = strUiLang;
-            PairSysLang.second = TranslMap[PairSysLang.first];
-        }
-        else
-        {
-            // only extract two first characters to identify language (ignoring
-            // location for getting a simpler implementation -> if the language
-            // is not correct, the user can change it in the GUI anyway)
-            if ( strUiLang.length() >= 2 )
-            {
-                PairSysLang.first  = strUiLang.left ( 2 );
-                PairSysLang.second = TranslMap[PairSysLang.first];
-            }
-        }
-    }
-
-    return PairSysLang;
-}
-
-void CLocale::LoadTranslation ( const QString     strLanguage,
-                                QCoreApplication* pApp )
-{
-    // The translator objects must be static!
-    static QTranslator myappTranslator;
-    static QTranslator myqtTranslator;
-
-    QMap<QString, QString> TranslMap              = CLocale::GetAvailableTranslations();
-    const QString          strTranslationFileName = TranslMap[strLanguage];
-
-    if ( myappTranslator.load ( strTranslationFileName ) )
-    {
-        pApp->installTranslator ( &myappTranslator );
-    }
-
-    // allows the Qt messages to be translated in the application
-    if ( myqtTranslator.load ( QLocale ( strLanguage ), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
-    {
-        pApp->installTranslator ( &myqtTranslator );
     }
 }
 
@@ -1586,40 +1417,4 @@ void DebugError ( const QString& pchErDescr,
     }
     printf ( "\nDebug error! For more information see test/DebugError.dat\n" );
     exit ( 1 );
-}
-
-QString GetVersionAndNameStr ( const bool bWithHtml )
-{
-    QString strVersionText = "";
-
-    // name, short description and GPL hint
-    if ( bWithHtml )
-    {
-        strVersionText += "<b>";
-    }
-    else
-    {
-        strVersionText += " *** ";
-    }
-
-    strVersionText += APP_NAME + QCoreApplication::tr ( ", Version " ) + VERSION;
-
-    if ( bWithHtml )
-    {
-        strVersionText += "</b><br>";
-    }
-    else
-    {
-        strVersionText += "\n *** ";
-    }
-
-    if ( !bWithHtml )
-    {
-        strVersionText += QCoreApplication::tr ( "Internet Jam Session Software" );
-        strVersionText += "\n *** ";
-    }
-
-    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License (GPL)" );
-
-    return strVersionText;
 }

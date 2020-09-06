@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -291,14 +291,14 @@ void CNetBufWithStats::UpdateAutoSetting()
         iCurMaxUpDecision = viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
 
         // This is a worst case, something very bad had happened. Hopefully
-        // this was just temporary so that we initiate a new initialization
+        // this was just temporary so that we initiate a new initialzation
         // phase to get quickly back to normal buffer sizes (hopefully).
         ResetInitCounter();
     }
 
 
     // Post calculation (filtering) --------------------------------------------
-    // Define different weights for up and down direction. Up direction
+    // Define different weigths for up and down direction. Up direction
     // filtering shall be slower than for down direction since we assume
     // that the lower value is the actual value which can be used for
     // the current network condition. If the current error rate estimation

@@ -53,7 +53,7 @@ private network.
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -124,7 +124,6 @@ public:
     CServerListManager ( const quint16  iNPortNum,
                          const QString& sNCentServAddr,
                          const QString& strServerInfo,
-                         const QString& strServerListFilter,
                          const int      iNumChannels,
                          const bool     bNCentServPingServerInList,
                          CProtocol*     pNConLProt );
@@ -148,12 +147,6 @@ public:
                                        const CHostAddress&    LInetAddr,
                                        const CServerCoreInfo& ServerInfo );
 
-    void CentralServerRegisterServerEx ( const CHostAddress&          InetAddr,
-                                         const CHostAddress&          LInetAddr,
-                                         const CServerCoreInfo&       ServerInfo,
-                                         const COSUtil::EOpSystemType ,
-                                         const QString&               );
-
     void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
 
     void CentralServerQueryServerList ( const CHostAddress& InetAddr );
@@ -171,7 +164,7 @@ public:
     void SetServerCity ( const QString& strNewCity )
         { ServerList[0].strCity = strNewCity; }
 
-    QString GetServerCity() { return ServerList[0].strCity; }
+    QString GetServerPass() { return ServerList[0].strCity; }
 
     void SetServerCountry ( const QLocale::Country eNewCountry )
         { ServerList[0].eCountry = eNewCountry; }
@@ -206,8 +199,6 @@ protected:
 
     CHostAddress            SlaveCurCentServerHostAddress;
     CHostAddress            SlaveCurLocalHostAddress;
-
-    QList<QHostAddress>     vWhiteList;
 
     CProtocol*              pConnLessProtocol;
 

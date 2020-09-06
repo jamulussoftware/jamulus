@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -23,38 +23,152 @@
    <iconset resource="resources.qrc">
     <normaloff>:/png/main/res/fronticon.png</normaloff>:/png/main/res/fronticon.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#CChatDlgBase{
+background-image:  url(:/png/main/res/ui/bg_fondos.png);
+}
+</string>
+  </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QTextBrowser" name="txvChatWindow">
-     <property name="acceptDrops">
-      <bool>false</bool>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(40, 40, 40);
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+ border-image:  url(:/png/main/res/fondoo.png);</string>
      </property>
      <property name="textInteractionFlags">
-      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::NoTextInteraction|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-     </property>
-     <property name="openLinks">
-      <bool>false</bool>
+      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <widget class="QLineEdit" name="edtLocalInputText">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(40, 40, 40);
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLineEdit" name="edtLocalInputText"/>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>181</width>
+         <height>27</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="butSend">
+      <widget class="QPushButton" name="butClear">
+       <property name="minimumSize">
+        <size>
+         <width>65</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Noto Sans</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#butClear{
+background: rgb(28, 28, 28); 
+selection-background-color: rgb(28, 28, 28);
+border-color: rgb(120, 120, 120);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(120, 120, 120);
+}
+#butClear:hover{
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(13, 204, 135);
+}
+
+
+#butClear:pressed{
+background: rgb(15, 15, 15); 
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+}</string>
+       </property>
        <property name="text">
-        <string>&amp;Send</string>
+        <string>Cl&amp;ear</string>
        </property>
        <property name="autoDefault">
-        <bool>true</bool>
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonClose">
+       <property name="minimumSize">
+        <size>
+         <width>65</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>600</width>
+         <height>400</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Noto Sans</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#buttonClose{
+background: rgb(28, 28, 28); 
+selection-background-color: rgb(28, 28, 28);
+border-color: rgb(120, 120, 120);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(120, 120, 120);
+}
+#buttonClose:hover{
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(13, 204, 135);
+}
+
+#buttonClose:pressed{
+background: rgb(15, 15, 15); 
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+}</string>
+       </property>
+       <property name="text">
+        <string>&amp;Close</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
        <property name="default">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -63,10 +177,30 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>edtLocalInputText</tabstop>
   <tabstop>txvChatWindow</tabstop>
+  <tabstop>butClear</tabstop>
+  <tabstop>buttonClose</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonClose</sender>
+   <signal>clicked()</signal>
+   <receiver>CChatDlgBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

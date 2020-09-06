@@ -2,283 +2,104 @@
 
 
 
-3.5.10git <- NOTE: the release version number will be 3.5.11
 
-- support a check for updates (#370)
 
-- added an optional server list whitelist filter (#413)
+3.5.3git
 
-- added a command line argument to enable multithreading in the server
+  * for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
 
-- store recorder settings, coded by pljones (#313)
+  * added bassoon instrument icon, created by dszgit (Ticket #131)
 
-- accessibility improvements, coded by chigkim (#498, #512)
+  * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
-- added Jack audio audio latency calculation, coded by bflamig (#437)
 
-- bug fix: crash when using the Jack backend and quickly reconfiguring, coded by hselasky (#543)
+TODO implement panning for channels (Ticket #52, #145)
 
-- bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
+TODO improve help menu, see https://github.com/corrados/sagora/issues/90
 
+TODO support internationalization
 
+TODO standard style: meter bar gets smaller sometimes if board is full and fader text is short
 
+TODO sometimes I cannot see the central server in the server list
 
+TODO server: warning if Central server selected but OS location is different (e.g. US) -> warning in GUI and command line
 
+TODO show mute state of others
 
 
 
-3.5.10 (2020-08-16)
-
-- do not change the server list order if the mouse is over the table to
-  avoid selecting an incorrect server on a mouse double click (#293)
-
-- if network name/address contains spaces, they are removed now,
-  coded by dingodoppelt (#462)
-
-- improve compact skin by using smaller font size
-
-- improve server audio mix processing for better clipping behavior
-
-- support MIDI control faders in headless build (#483)
-
-- option to set Mute Myself on with a command line argument (#495)
-
-- added a red message to indicate that Mute Myself is activated (#476)
-
-- manual clip LED reset by mouse click on the level meter (#421)
-
-- replacing internal history graph functionality by external scripts/tools (#501)
-
-- accessibility improvements, coded by chigkim (#499, #510, #514)
-
-- bug fix: fixed a stability issue in the server (should fix #480)
-
-- bug fix: --showallservers ping column sort is alphabetic (#201)
-
-
-3.5.9 (2020-07-19)
-
-- new app icon for Jamulus, created by geheimerEichkater (#410)
-
-- support up to four different groups for the channels (#202)
-
-- support sorting faders by channel group
-
-- add support to change the GUI language (#297)
-
-- add special server list filter for filtering occupied servers by using "#" (#397)
-
-- update server UI to allow setting the jam recorder directory (like -R) (#228, #405)
-
-- redesign of the server dialog (e.g. added welcome message setting)
-
-- save and restore mixer state (like fader, mute, etc.) (#377)
-  note that saving/loading of settings only works if not connected
-
-- scale channel instrument picture in Compact skin mode
-
-- show maximum number of clients for servers in the serverlist, coded by dingodoppelt (#451)
-
-- log the number of connected clients on each new connection (#277)
-
-- move the Mute Myself button up to prevent accidentally disconnecting
-
-- bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
-
-
-3.5.8 (2020-06-30)
-
-- bug fix: incorrect selection of UI language (#408)
-
-
-3.5.7 (2020-06-28)
-
-- add new "compact" skin, intended for large ensembles (#339)
-
-- support sorting faders by channel instrument, coded by Alberstein8 (#356)
-
-- new group switch to change several faders in sync, coded by Alberstein8 (#202, #379)
-
-- support a clip LED, coded by fleutot (#220)
-
-- add server recording indicator, coded by pljones (#295)
-
-- support for storing/recovering the server window positions (#357)
-
-- add a headless build type which does not depend on QtGui/QtWidgets, coded by marcan (#322)
-
-- the local pan middle position is no longer attenuated in Mono-in/Stereo-out mode (#353)
-
-- added translation: Brazilian Portuguese by melcon (#372)
-
-- add send button to chat window (#384)
-
-- add some protections to the code, coded by atsampson (#380, #381, #382)
-
-- bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
-
-
-3.5.6 (2020-06-09)
-
-- support sorting faders by channel name (#178)
-
-- enable/disable recording from command line, coded by pljones (#228)
-
-- add Audacity "list of files" writer to jam recorder, by pljones (#315)
-
-- make level meter LED black when off, by fleutot (#318)
-
-- added ukulele/bass ukulele instrument icons created by dos1 (#319)
-
-- avoid showing IP address if no name in the musician profile is given (#316)
-
-- show channel numbers if --ctrlmidich is used (#241, #95)
-
-- added check in acknowledge message, coded by atsampson (#302)
-
-- bug fix: on MacOS declare an activity to ensure the process doesn't get throttled
-  by OS level Nap, Sleep, and Thread Priority systems, coded by AronVietti (#23)
-
-
-3.5.5 (2020-05-26)
-
-- added banjo/mandolin instrument icons created by atsampson (#283)
-
-- faster update of musicians list in the server list table
-
-- display recorder state and latest recording directory in the server GUI,
-  allow a new recording to be requested, by pljones (#228)
-
-- New Client Level now also applies if you enter a server
-
-- bug fix: honour own fader and Mute button in Mute Myself (#148)
-
-- bug fix: audio fader sliders cannot be moved if the main windows is too small (#292)
-
-- bug fix: server gain calculations were incorrect (introduced in version 3.5.4)
-
-
-3.5.4 (2020-05-24)
-
-- introduce genre-based server lists (#139)
-
-- implement panning for channels, coded by tarmoj (#52, #145)
-
-- added an indicator that another client has muted me (#257)
-
-- move central server type dropdown to connection setup (#157)
-
-- added vocal bass/tenor/alto/soprano instrument icons created by Alberstein8 (#131)
-
-- support intermediate Reaper RPP file while recording, coded by pljones (#170)
-
-- save client settings on Linux cmdline termination signal, coded by pljones (#70)
-
-- added translation: Italian by dzpex (#249)
-
-- bug fix: fixed misaligned tracks in recordings, coded by snayler, improved by pljones (#234)
-
-
-3.5.3 (2020-05-15)
-
-- correct unregister of headless server and RPP file creation on
-  SIGINT/SIGTERM, coded by pljones (Tickets #130, #168)
-
-- for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
-
-- added bassoon/oboe/harp instrument icons created by dszgit,
-  congas/bongo created by bspeer (#131)
-
-- link to docs from application Help menu (#90)
-
-- support Mac CoreAudio aggregated devices (#138)
-
-- added translations: French by trebmuh, Portuguese by Snayler,
-  Spanish by ignotus666, Dutch by jerogee, German by corrados (#77)
-
-- new design for the About dialog (#189)
-
-- new command line option -d to disconnect all clients on shutdown of the server (#161)
-
-- bug fix: for mono capture Jack audio interface Jamulus complains it
-  cannot make connections (#137)
-
-- bug fix: fixed that Jamulus segfaults when jackd is restarted (#122, #127)
-
-- bug fix: better handling of disconnect message in the client
-
-- note: Jamulus is no longer compatible to Qt4
 
 
 3.5.2 (2020-04-24)
 
-- use audio level meter bars for normal skin
+  * use audio level meter bars for normal skin
 
-- store Show All Musicians setting in the ini-file
+  * store Show All Musicians setting in the ini-file
 
-- improved Mac installer, coded by doloopuntil
+  * improved Mac installer, coded by doloopuntil
 
-- support to open ASIO driver setup(s) if startup failed due to incorrect driver settings (#117)
+  * support to open ASIO driver setup(s) if startup failed due to incorrect driver settings (Ticket #117)
 
-- added -v/--version command line argument to output version information (#121)
+  * added -v/--version command line argument to output version information (Ticket #121)
 
-- added bodhran and other instrument icons, bodhran created by bomm (#131)
+  * added bodhran and other instrument icons, bodhran created by bomm (Ticket #131)
 
-- bug fix: if small network buffers are used we get much better audio quality when drop outs occur
+  * bug fix: if small network buffers are used we get much better audio quality when drop outs occur
 
-- bug fix: if names given with the -o option were too long, the server registration failed (#91)
+  * bug fix: if names given with the -o option were too long, the server registration failed (Ticket #91)
 
-- bug fix: audio level changes if Buffer Delay is changed (#106)
+  * bug fix: audio level changes if Buffer Delay is changed (Ticket #106)
 
-- bug fix: do not reset fader level meters if number of clients change
+  * bug fix: do not reset fader level meters if number of clients change
 
-- bug fix: fixed a crash with JackRouter 64 bit ASIO driver (#93, thanks to elliotclee)
+  * bug fix: fixed a crash with JackRouter 64 bit ASIO driver (Ticket #93, thanks to elliotclee)
 
 
 3.5.1 (2020-04-18)
 
-- added a Mute Stream button to hear your signal and the signal of the other clients but
-  do not transmit your signal to the server so that the other clients cannot hear you
+  * added a Mute Stream button to hear your signal and the signal of the other clients but
+    do not transmit your signal to the server so that the other clients cannot hear you
 
-- added Enable Small Network Buffers switch to enable small sound card buffers in
-  combination with legacy OPUS packets since OPUS packets with 64 samples enable low
-  latency but can increase audio drop outs
+  * added Enable Small Network Buffers switch to enable small sound card buffers in
+    combination with legacy OPUS packets since OPUS packets with 64 samples enable low
+    latency but can increase audio drop outs
 
-- upgrade OPUS codec library to v1.3.1 by doloopuntil
+  * upgrade OPUS codec library to v1.3.1 by doloopuntil
 
-- server list registration status indicator added to the server GUI, coded by pljones
+  * server list registration status indicator added to the server GUI, coded by pljones
 
-- improved auto jitter buffer for 64 samples frame size
+  * improved auto jitter buffer for 64 samples frame size
 
-- the ping times in the server list are now more stable
+  * the ping times in the server list are now more stable
 
 
 3.5.0 (2020-04-15)
 
-- added support for 64 samples OPUS packets in the client (if a sound card buffer size
-  larger or equal than 128 samples is chosen, the legacy 128 samples OPUS packets are used)
+  * added support for 64 samples OPUS packets in the client (if a sound card buffer size
+    larger or equal than 128 samples is chosen, the legacy 128 samples OPUS packets are used)
 
-- added a filter for the server list to, e.g., filter a specific country or search for a musician
+  * added a filter for the server list to, e.g., filter a specific country or search for a musician
 
-- refresh server list if the Central Server address type is changed
+  * refresh server list if the Central Server address type is changed
 
-- the unit of the mixer faders is now dB using the range -50 dB to 0 dB
+  * the unit of the mixer faders is now dB using the range -50 dB to 0 dB
 
-- increased LED luminance (#71)
+  * increased LED luminance (Ticket #71)
 
-- bug fix: the server welcome message may appear twice if the server list was double clicked
+  * bug fix: the server welcome message may appear twice if the server list was double clicked
 
 
 3.4.7 (2020-04-11)
 
-- added support for alternative Central Servers to solve the 200 server registration limit (#50)
+  * added support for alternative Central Servers to solve the 200 server registration limit (Ticket #50)
 
-- added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
-  mode it is still compatible to both, 64 and 128 samples frame size clients)
+  * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
+    mode it is still compatible to both, 64 and 128 samples frame size clients)
 
-- added multichannel CoreAudio support, coded by emlynmac (#44)
+  * added multichannel CoreAudio support, coded by emlynmac (#44)
 
-- fixed server not visible if in same local network, coded by pljones (#27)
+  * fixed server not visible if in same local network, coded by pljones (Ticket #27)
 
 
 3.4.6 (2020-04-09)
@@ -289,7 +110,7 @@
 
 - store fader mute state in the ini file, coded by doloopuntil
 
-- fixed low-res icon issue (#28)
+- fixed low-res icon issue (Ticket #28)
 
 
 3.4.5 (2020-04-04)
@@ -311,7 +132,7 @@
 
 - added support for controlling the audio mixer faders with a MIDI controller (MacOS and Linux)
 
-- added command line argument for disabling auto jack connection (#49)
+- added command line argument for disabling auto jack connection (Ticket #49)
 
 - audio recording for the server, coded by pljones
 
@@ -415,7 +236,7 @@
 - new compile config options for disabling old CELT, use OPUS in a shared
   library and change the executable name
 
-- added a Linux jamulus.desktop file
+- added a Linux sagora.desktop file
 
 
 3.3.4 (2014-02-25)
@@ -572,7 +393,7 @@
 - show number of connected clients in window title (and therefore in OS task
   bar)
 
-- added "What's this" help text to the GUI controls in the general settings
+- added "Whats this" help text to the GUI controls in the general settings
   dialog, added Tool Tips to some GUI controls
 
 - server logging history grid lines of weekend days are now plotted with

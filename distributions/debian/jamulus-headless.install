@@ -1,2 +1,0 @@
-usr/bin/jamulus-headless
-debian/jamulus-headless.service lib/systemd/system

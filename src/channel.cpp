@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -28,15 +28,12 @@
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
-    vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
-    iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
     bIsServer              ( bNIsServer ),
-    iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
-    SignalLevelMeter       ( false, 0.5 ) // server mode with mono out and faster smoothing
+    iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES )
 {
     // reset network transport properties
     ResetNetworkTransportProperties();
@@ -62,59 +59,55 @@ CChannel::CChannel ( const bool bNIsServer ) :
 qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
 qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
-    QObject::connect ( &Protocol, &CProtocol::MessReadyForSending,
-        this, &CChannel::OnSendProtMessage );
+    QObject::connect ( &Protocol,
+        SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+        this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ChangeJittBufSize,
-        this, &CChannel::OnJittBufSizeChange );
+    QObject::connect ( &Protocol,
+        SIGNAL ( ChangeJittBufSize ( int ) ),
+        this, SLOT ( OnJittBufSizeChange ( int ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ReqJittBufSize,
-        this, &CChannel::ReqJittBufSize );
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqJittBufSize() ),
+        SIGNAL ( ReqJittBufSize() ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ReqChanInfo,
-        this, &CChannel::ReqChanInfo );
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqChanInfo() ),
+        SIGNAL ( ReqChanInfo() ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ReqConnClientsList,
-        this, &CChannel::ReqConnClientsList );
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqConnClientsList() ),
+        SIGNAL ( ReqConnClientsList() ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ConClientListMesReceived,
-        this, &CChannel::ConClientListMesReceived );
+    QObject::connect ( &Protocol,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ChangeChanGain,
-        this, &CChannel::OnChangeChanGain );
+    QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
+        this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ChangeChanPan,
-        this, &CChannel::OnChangeChanPan );
+    QObject::connect( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
+        this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived,
-        this, &CChannel::ClientIDReceived );
+    QObject::connect( &Protocol,
+        SIGNAL ( ChatTextReceived ( QString ) ),
+        SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::MuteStateHasChangedReceived,
-        this, &CChannel::MuteStateHasChangedReceived );
+    QObject::connect ( &Protocol,
+        SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
+        this, SLOT ( OnNetTranspPropsReceived ( CNetworkTransportProps ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ChangeChanInfo,
-        this, &CChannel::OnChangeChanInfo );
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqNetTranspProps() ),
+        this, SLOT ( OnReqNetTranspProps() ) );
 
-    QObject::connect ( &Protocol, &CProtocol::ChatTextReceived,
-        this, &CChannel::ChatTextReceived );
+    QObject::connect( &Protocol,
+        SIGNAL ( LicenceRequired ( ELicenceType ) ),
+        SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 
-    QObject::connect ( &Protocol, &CProtocol::NetTranspPropsReceived,
-        this, &CChannel::OnNetTranspPropsReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqNetTranspProps,
-        this, &CChannel::OnReqNetTranspProps );
-
-    QObject::connect ( &Protocol, &CProtocol::LicenceRequired,
-        this, &CChannel::LicenceRequired );
-
-    QObject::connect ( &Protocol, &CProtocol::VersionAndOSReceived,
-        this, &CChannel::VersionAndOSReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::RecorderStateReceived,
-        this, &CChannel::RecorderStateReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqChannelLevelList,
-        this, &CChannel::OnReqChannelLevelList );
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqChannelLevelList ( bool ) ),
+        this, SLOT ( OnReqChannelLevelList ( bool ) ) );
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -257,16 +250,6 @@ void CChannel::SetGain ( const int    iChanID,
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        // signal mute change
-        if ( ( vecdGains[iChanID] == 0 ) && ( dNewGain > 0 ) )
-        {
-            emit MuteStateHasChanged ( iChanID, false );
-        }
-        if ( ( vecdGains[iChanID] > 0 ) && ( dNewGain == 0 ) )
-        {
-            emit MuteStateHasChanged ( iChanID, true );
-        }
-
         vecdGains[iChanID] = dNewGain;
     }
 }
@@ -279,33 +262,6 @@ double CChannel::GetGain ( const int iChanID )
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
         return vecdGains[iChanID];
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-void CChannel::SetPan ( const int    iChanID,
-                        const double dNewPan )
-{
-    QMutexLocker locker ( &Mutex );
-
-    // set value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
-    {
-        vecdPannings[iChanID] = dNewPan;
-    }
-}
-
-double CChannel::GetPan ( const int iChanID )
-{
-    QMutexLocker locker ( &Mutex );
-
-    // get value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
-    {
-        return vecdPannings[iChanID];
     }
     else
     {
@@ -377,12 +333,6 @@ void CChannel::OnChangeChanGain ( int    iChanID,
                                   double dNewGain )
 {
     SetGain ( iChanID, dNewGain );
-}
-
-void CChannel::OnChangeChanPan ( int    iChanID,
-                                 double dNewPan )
-{
-    SetPan ( iChanID, dNewPan );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )
@@ -550,7 +500,7 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
             else
             {
                 // the protocol parsing failed and this was no audio block,
-                // we treat this as protocol error (unknown packet)
+                // we treat this as protocol error (unkown packet)
                 eRet = PS_PROT_ERR;
             }
 
@@ -569,9 +519,6 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
 
                 // init audio fade-in counter
                 iFadeInCnt = 0;
-
-                // init level meter
-                SignalLevelMeter.Reset();
             }
 
             // reset time-out counter (note that this must be done after the
@@ -660,18 +607,6 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
     {
         pSocket->SendPacket ( ConvBuf.GetAll(), GetAddress() );
     }
-}
-
-double CChannel::UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio,
-                                               const int             iInSize,
-                                               const bool            bIsStereoIn )
-{
-    // update the signal level meter and immediately return the current value
-    SignalLevelMeter.Update ( vecsAudio,
-                              iInSize,
-                              bIsStereoIn );
-
-    return SignalLevelMeter.GetLevelForMeterdBLeftOrMono();
 }
 
 int CChannel::GetUploadRateKbps()

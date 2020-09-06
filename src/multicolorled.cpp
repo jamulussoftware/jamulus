@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -37,12 +37,12 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     BitmCubeYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
     BitmCubeRed      ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
 {
+    // init color flags
+    Reset();
+
     // set init bitmap
     setPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
-
-    // init color flags
-    Reset();
 }
 
 void CMultiColorLED::changeEvent ( QEvent* curEvent )
@@ -72,7 +72,6 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         if ( eColorFlag != RL_RED )
         {
             setPixmap ( BitmCubeRed );
-            setAccessibleDescription ( tr ( "Red" ) );
             eColorFlag = RL_RED;
         }
         break;
@@ -82,7 +81,6 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         if ( eColorFlag != RL_YELLOW )
         {
             setPixmap ( BitmCubeYellow );
-            setAccessibleDescription ( tr ( "Yellow" ) );
             eColorFlag = RL_YELLOW;
         }
         break;
@@ -92,7 +90,6 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         if ( eColorFlag != RL_GREEN )
         {
             setPixmap ( BitmCubeGreen );
-            setAccessibleDescription ( tr ( "Green" ) );
             eColorFlag = RL_GREEN;
         }
         break;

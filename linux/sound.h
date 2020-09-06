@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -65,8 +65,8 @@ public:
              const int      iCtrlMIDIChannel,
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
-        CSoundBase ( "Jack", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
-        iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
+        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+        iJACKBufferSizeMono ( 0 ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
 
     virtual ~CSound() { CloseJack(); }
 
@@ -74,14 +74,11 @@ public:
     virtual void Start();
     virtual void Stop();
 
-    virtual double GetInOutLatencyMs() { return dInOutLatencyMs; }
-
     // these variables should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iJACKBufferSizeMono;
     int            iJACKBufferSizeStero;
-    bool           bJackWasShutDown;
 
     jack_port_t*   input_port_left;
     jack_port_t*   input_port_right;
@@ -100,34 +97,18 @@ protected:
     static int     bufferSizeCallback ( jack_nframes_t, void *arg );
     static void    shutdownCallback ( void* );
     jack_client_t* pJackClient;
-
-    double dInOutLatencyMs;
 };
 #else
 // no sound -> dummy class definition
-#include "server.h"
 class CSound : public CSoundBase
 {
-    Q_OBJECT
-
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
              void*          pParg,
              const int      iCtrlMIDIChannel,
              const bool     ,
              const QString& ) :
-        CSoundBase ( "nosound", fpNewProcessCallback, pParg, iCtrlMIDIChannel ),
-        HighPrecisionTimer ( true ) { HighPrecisionTimer.Start();
-                                      QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout,
-                                                         this, &CSound::OnTimer ); }
+        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel ) {}
     virtual ~CSound() {}
-    virtual int Init ( const int iNewPrefMonoBufferSize ) { CSoundBase::Init ( iNewPrefMonoBufferSize );
-                                                            vecsTemp.Init ( 2 * iNewPrefMonoBufferSize );
-                                                            return iNewPrefMonoBufferSize; }
-    CHighPrecisionTimer HighPrecisionTimer;
-    CVector<short>      vecsTemp;
-
-public slots:
-    void OnTimer() { vecsTemp.Reset ( 0 ); if ( IsRunning() ) { ProcessCallback ( vecsTemp ); } }
 };
 #endif // WITH_SOUND

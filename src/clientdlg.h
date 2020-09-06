@@ -18,11 +18,9 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
-
-#pragma once
 
 #include <QLabel>
 #include <QString>
@@ -35,11 +33,6 @@
 #include <QRadioButton>
 #include <QMenuBar>
 #include <QLayout>
-#include <QMessageBox>
-#include <QFileDialog>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-# include <QVersionNumber>
-#endif
 #include "global.h"
 #include "client.h"
 #include "settings.h"
@@ -50,6 +43,10 @@
 #include "connectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
+#include "serverlist.h"
+#include "navegador.h"
+
+
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
 # if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
 #  include <QtMac>
@@ -58,6 +55,10 @@
 
 
 /* Definitions ****************************************************************/
+// text strings for connection button for connect and disconnect
+#define CON_BUT_CONNECTTEXT         "C&onnect"
+#define CON_BUT_DISCONNECTTEXT      "D&isconnect"
+
 // update time for GUI controls
 #define LEVELMETER_UPDATE_TIME_MS   100   // ms
 #define BUFFER_LED_UPDATE_TIME_MS   300   // ms
@@ -73,21 +74,25 @@ class CClientDlg : public QDialog, private Ui_CClientDlgBase
     Q_OBJECT
 
 public:
-    CClientDlg ( CClient*         pNCliP,
-                 CClientSettings* pNSetP,
-                 const QString&   strConnOnStartupAddress,
-                 const int        iCtrlMIDIChannel,
-                 const bool       bNewShowComplRegConnList,
-                 const bool       bShowAnalyzerConsole,
-                 const bool       bMuteStream,
-                 QWidget*         parent = nullptr,
-                 Qt::WindowFlags  f = nullptr );
+    CClientDlg ( CClient*        pNCliP,
+                 CSettings*      pNSetP,
+                 const QString&  strConnOnStartupAddress,
+                 const bool      bNewShowComplRegConnList,
+                 const bool      bShowAnalyzerConsole,
+                 QWidget*        parent = nullptr,
+                 Qt::WindowFlags f = nullptr,
+                 bool bClientByServer = false,
+                 QString     bSalaByServer= "",
+                 QString bPassByServer="");
+
+    ~CClientDlg();
 
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
     void               SetMyWindowTitle ( const int iNumClients );
     void               ShowConnectionSetupDialog();
     void               ShowMusicianProfileDialog();
+    void               ShowPerfil(int);
     void               ShowGeneralSettings();
     void               ShowChatWindow ( const bool bForceRaise = true );
     void               ShowAnalyzerConsole();
@@ -98,11 +103,9 @@ protected:
     void               Disconnect();
 
     CClient*           pClient;
-    CClientSettings*   pSettings;
-
+    CSettings*         pSettings;
     bool               bConnected;
     bool               bConnectDlgWasShown;
-    bool               bMIDICtrlUsed;
     QTimer             TimerSigMet;
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;
@@ -111,8 +114,10 @@ protected:
     virtual void       closeEvent ( QCloseEvent* Event );
     void               UpdateDisplay();
 
-    QAction*           pLoadChannelSetupAction;
-    QAction*           pSaveChannelSetupAction;
+    QMenu*             pViewMenu;
+    QMenuBar*          pMenu;
+    QMenu*             pInstrPictPopupMenu;
+    QMenu*             pCountryFlagPopupMenu;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -120,11 +125,17 @@ protected:
     CAnalyzerConsole   AnalyzerConsole;
     CMusProfDlg        MusicianProfileDlg;
 
+    bool               ClientByServer;
+    QString            SalaByServer;
+    QString            PassByServer;
+
 public slots:
+    void OnAboutToQuit() { pSettings->Save(); }
+    void ShowPerfilSlot(int value){ShowPerfil(value);}
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
-
+    void ShowAnalyzerConsoleSlot(){ShowAnalyzerConsole();}
     void OnTimerStatus() { UpdateDisplay(); }
 
     void OnTimerPing();
@@ -137,23 +148,18 @@ public slots:
                                     const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx,
                                                                                          iValue ); }
 
-    void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
-                                  QString                strVersion );
-
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,
-                                    QString                strVersion );
+                                    QString                strVersion )
+        { ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion ); }
+#endif
 
-    void OnLoadChannelSetup();
-    void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
     void OnOpenMusicianProfileDialog() { ShowMusicianProfileDialog(); }
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
-    void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_NAME ); }
-    void OnSortChannelsByInstrument() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_INSTRUMENT ); }
-    void OnSortChannelsByGroupID() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_GROUPID ); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
@@ -174,11 +180,8 @@ public slots:
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
 
-    void OnChangeChanGain ( int iId, double dGain, bool bIsMyOwnFader )
-        { pClient->SetRemoteChanGain ( iId, dGain, bIsMyOwnFader ); }
-
-	void OnChangeChanPan ( int iId, double dPan )
-        { pClient->SetRemoteChanPan ( iId, dPan ); }
+    void OnChangeChanGain ( int iId, double dGain )
+        { pClient->SetRemoteChanGain ( iId, dGain ); }
 
     void OnNewLocalInputText ( QString strChatText )
         { pClient->CreateChatTextMes ( strChatText ); }
@@ -203,32 +206,36 @@ public slots:
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
 
-    void OnClientIDReceived ( int iChanID )
-        { MainMixerBoard->SetMyChannelID ( iChanID ); }
-
-    void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
-        { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
-
-    void OnCLChannelLevelListReceived ( CHostAddress      /* unused */,
+    void OnCLChannelLevelListReceived ( CHostAddress       /* unused */,
                                         CVector<uint16_t> vecLevelList )
         { MainMixerBoard->SetChannelLevels ( vecLevelList ); }
 
     void OnConnectDlgAccepted();
-    void OnDisconnected() { Disconnect(); }
+    void OnConnectDlgAcceptedServer(  QString bSalaByServer ,
+                                      QString bPassByServer);
+    void OnDisconnected();
     void OnCentralServerAddressTypeChanged();
-    void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
+
+    void OnGUIDesignChanged()
+        { SetGUIDesign ( pClient->GetGUIDesign() ); }
 
     void OnDisplayChannelLevelsChanged()
         { MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() ); }
 
-    void OnRecorderStateReceived ( ERecorderState eRecorderState )
-        { MainMixerBoard->SetRecorderState ( eRecorderState ); }
-
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
+    void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }
 
     void accept() { close(); } // introduced by pljones
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
+
+private:
+    Navegador *navegador;
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    int m_nMouseClick_X_Coordinate;
+    int m_nMouseClick_Y_Coordinate;
+
 };

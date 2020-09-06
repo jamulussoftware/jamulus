@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -32,44 +32,25 @@
 #include "global.h"
 #include "client.h"
 #include "server.h"
-#include "util.h"
 
 
 /* Classes ********************************************************************/
-class CSettings : public QObject
+class CSettings
 {
-    Q_OBJECT
-
 public:
-    CSettings() :
-        vecWindowPosMain ( ), // empty array
-        strLanguage      ( "" ),
-        strFileName      ( "" )
-    {
-        QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-            this, &CSettings::OnAboutToQuit );
-    }
+    CSettings ( CClient* pNCliP, const QString& sNFiName ) :
+        pClient ( pNCliP ), bIsClient ( true )
+        { SetFileName ( sNFiName ); }
 
-    void Load ( const QList<QString> CommandLineOptions );
+    CSettings ( CServer* pNSerP, const QString& sNFiName ) :
+        pServer ( pNSerP ), bIsClient ( false )
+        { SetFileName ( sNFiName ); }
+
+    void Load();
     void Save();
 
-    // common settings
-    QByteArray vecWindowPosMain;
-    QString    strLanguage;
-
 protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) = 0;
-    virtual void ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument,
-                                       const QList<QString>& CommandLineOptions ) = 0;
-
-    void ReadFromFile ( const QString& strCurFileName,
-                        QDomDocument&  XMLDocument );
-
-    void WriteToFile ( const QString&      strCurFileName,
-                       const QDomDocument& XMLDocument );
-
-    void SetFileName ( const QString& sNFiName,
-                       const QString& sDefaultFileName );
+    void SetFileName ( const QString& sNFiName );
 
     // The following functions implement the conversion from the general string
     // to base64 (which should be used for binary data in XML files). This
@@ -123,87 +104,10 @@ protected:
                          const QString& sKey,
                          const QString& sValue = "" );
 
-    QString strFileName;
+    // pointer to the client/server object which stores the various settings
+    CClient* pClient; // for client
+    CServer* pServer; // for server
 
-public slots:
-    void OnAboutToQuit() { Save(); }
-};
-
-
-class CClientSettings : public CSettings
-{
-public:
-    CClientSettings ( CClient* pNCliP, const QString& sNFiName ) :
-        CSettings                   ( ),
-        vecStoredFaderTags          ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-        vecStoredFaderLevels        ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-        vecStoredPanValues          ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-        vecStoredFaderIsSolo        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-        vecStoredFaderIsMute        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-        vecStoredFaderGroupID       ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
-        vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-        iNewClientFaderLevel        ( 100 ),
-        bConnectDlgShowAllMusicians ( true ),
-        vecWindowPosSettings        ( ), // empty array
-        vecWindowPosChat            ( ), // empty array
-        vecWindowPosProfile         ( ), // empty array
-        vecWindowPosConnect         ( ), // empty array
-        bWindowWasShownSettings     ( false ),
-        bWindowWasShownChat         ( false ),
-        bWindowWasShownProfile      ( false ),
-        bWindowWasShownConnect      ( false ),
-        pClient                     ( pNCliP )
-        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
-
-    void LoadFaderSettings ( const QString& strCurFileName );
-    void SaveFaderSettings ( const QString& strCurFileName );
-
-    // general settings
-    CVector<QString> vecStoredFaderTags;
-    CVector<int>     vecStoredFaderLevels;
-    CVector<int>     vecStoredPanValues;
-    CVector<int>     vecStoredFaderIsSolo;
-    CVector<int>     vecStoredFaderIsMute;
-    CVector<int>     vecStoredFaderGroupID;
-    CVector<QString> vstrIPAddress;
-    int              iNewClientFaderLevel;
-    bool             bConnectDlgShowAllMusicians;
-
-    // window position/state settings
-    QByteArray vecWindowPosSettings;
-    QByteArray vecWindowPosChat;
-    QByteArray vecWindowPosProfile;
-    QByteArray vecWindowPosConnect;
-    bool       bWindowWasShownSettings;
-    bool       bWindowWasShownChat;
-    bool       bWindowWasShownProfile;
-    bool       bWindowWasShownConnect;
-
-protected:
-    // No CommandLineOptions used when reading Client inifile
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
-    virtual void ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument,
-                                       const QList<QString>& ) override;
-
-    void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
-    void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );
-
-    CClient* pClient;
-};
-
-
-class CServerSettings : public CSettings
-{
-public:
-    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) :
-        CSettings ( ),
-        pServer   ( pNSerP )
-        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER); }
-
-protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
-    virtual void ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument,
-                                       const QList<QString>& CommandLineOptions ) override;
-
-    CServer* pServer;
+    bool     bIsClient;
+    QString  strFileName;
 };

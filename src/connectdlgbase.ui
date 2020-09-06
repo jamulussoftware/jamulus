@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>493</height>
+    <width>465</width>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,39 +18,198 @@
     <normaloff>:/png/main/res/fronticon.png</normaloff>:/png/main/res/fronticon.png</iconset>
   </property>
   <property name="styleSheet">
-   <string/>
+   <string notr="true">#CConnectDlgBase{
+border-image:  url(:/png/main/res/ui/bg_fondos.png);
+}
+
+</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout">
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="lblServerCentralAddr">
+       <property name="font">
+        <font>
+         <family>Noto Sans</family>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:transparent;
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Central de servidores</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbxCentServAddrType">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(40, 40, 40);
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QLabel" name="lblServerAddr">
+       <property name="font">
+        <font>
+         <family>Noto Sans</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:transparent;
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Sala Name/Address</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbxServerAddr">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(40, 40, 40);
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="currentText">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="_2">
+     <item>
+      <widget class="QLabel" name="titlePass">
+       <property name="font">
+        <font>
+         <family>Noto Sans</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:transparent;
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+</string>
+       </property>
+       <property name="text">
+        <string>Password Sala</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="passSala">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>IBeamCursor</cursorShape>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="frame">
+        <bool>true</bool>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="cursorPosition">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="lblList">
-       <property name="text">
-        <string>List</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cbxCentServAddrType"/>
-     </item>
-     <item>
       <widget class="QLabel" name="lblFilter">
+       <property name="font">
+        <font>
+         <family>Noto Sans</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(40, 40, 40);
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+</string>
+       </property>
        <property name="text">
         <string>Filter</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="edtFilter"/>
+      <widget class="QLineEdit" name="edtFilter">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(40, 40, 40);
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="chbExpandAll">
+       <property name="font">
+        <font>
+         <family>Noto Sans</family>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(40, 40, 40);
+border-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+</string>
+       </property>
        <property name="text">
         <string>Show All Musicians</string>
        </property>
@@ -60,30 +219,155 @@
    </item>
    <item>
     <widget class="QTreeWidget" name="lvwServers">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>100</horstretch>
+       <verstretch>100</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Noto Sans</family>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QTreeWidget{
+border-color: rgb(255, 255, 255);
+color: white;
+background:transparent;
+}
+
+QTreeView::item {
+font-color: white;
+}
+
+QHeaderView::section {
+    background-color: transparent;                                                  
+    color: black;                               
+    padding: 1px;                               
+    height:20px;                                
+    border: 1px solid rgb(120,120,120);                  
+    border-left:1px;                            
+    border-right:1px;                           
+}</string>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <property name="tabKeyNavigation">
       <bool>true</bool>
      </property>
+     <attribute name="headerMinimumSectionSize">
+      <number>50</number>
+     </attribute>
      <column>
       <property name="text">
-       <string>Server Name</string>
+       <string>Nombre de la Sala</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Noto Sans</family>
+       </font>
+      </property>
+      <property name="background">
+       <color alpha="5">
+        <red>5</red>
+        <green>5</green>
+        <blue>5</blue>
+       </color>
+      </property>
+      <property name="foreground">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Ping Time</string>
       </property>
+      <property name="font">
+       <font>
+        <family>Noto Sans</family>
+       </font>
+      </property>
+      <property name="background">
+       <color alpha="5">
+        <red>5</red>
+        <green>5</green>
+        <blue>5</blue>
+       </color>
+      </property>
+      <property name="foreground">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </property>
      </column>
      <column>
       <property name="text">
-       <string>Musicians</string>
+       <string>Músicos </string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Noto Sans</family>
+       </font>
+      </property>
+      <property name="textAlignment">
+       <set>AlignLeading|AlignVCenter</set>
+      </property>
+      <property name="background">
+       <color alpha="5">
+        <red>5</red>
+        <green>5</green>
+        <blue>5</blue>
+       </color>
+      </property>
+      <property name="foreground">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Location</string>
+      </property>
+      <property name="font">
+       <font>
+        <family>Noto Sans</family>
+       </font>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignTop</set>
+      </property>
+      <property name="background">
+       <color>
+        <red>5</red>
+        <green>5</green>
+        <blue>5</blue>
+       </color>
+      </property>
+      <property name="foreground">
+       <brush brushstyle="NoBrush">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
       </property>
      </column>
     </widget>
@@ -91,41 +375,37 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="lblServerAddr">
-       <property name="text">
-        <string>Server Name/Address</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cbxServerAddr">
-       <property name="editable">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
+      <widget class="QPushButton" name="butCancel">
+       <property name="minimumSize">
         <size>
-         <width>351</width>
-         <height>25</height>
+         <width>220</width>
+         <height>23</height>
         </size>
        </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="butCancel">
+       <property name="styleSheet">
+        <string notr="true">#butCancel{
+background: rgb(28, 28, 28); 
+selection-background-color: rgb(28, 28, 28);
+border-color: rgb(120, 120, 120);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(120, 120, 120);
+}
+#butCancel:hover{
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(13, 204, 135);
+}
+
+
+#butCancel:pressed{
+background: rgb(15, 15, 15); 
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+}</string>
+       </property>
        <property name="text">
         <string>C&amp;ancel</string>
        </property>
@@ -133,6 +413,36 @@
      </item>
      <item>
       <widget class="QPushButton" name="butConnect">
+       <property name="minimumSize">
+        <size>
+         <width>220</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#butConnect{
+background: rgb(28, 28, 28); 
+selection-background-color: rgb(28, 28, 28);
+border-color: rgb(120, 120, 120);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(120, 120, 120);
+}
+#butConnect:hover{
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+color: rgb(13, 204, 135);
+}
+
+
+#butConnect:pressed{
+background: rgb(15, 15, 15); 
+border-color: rgb(13, 204, 135);
+    border-style: outset;
+    border-width: 1.3px;
+}</string>
+       </property>
        <property name="text">
         <string>&amp;Connect</string>
        </property>

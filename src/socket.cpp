@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -65,9 +65,13 @@ void CSocket::Init ( const quint16 iPortNumber )
         }
         else
         {
+            // Per definition use the port number plus ten for the client to make
+            // it possible to run server and client on the same computer. If the
+            // port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times with
+            // incremented port numbers.
             // if the port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times
-            // with incremented port numbers
-            quint16 iClientPortIncrement = 0;
+                        // with incremented port numbers
+                        quint16 iClientPortIncrement = 0;
             bSuccess                     = false; // initialization for while loop
 
             while ( !bSuccess && ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
@@ -111,30 +115,37 @@ void CSocket::Init ( const quint16 iPortNumber )
     {
         // client connections:
 
-        QObject::connect ( this, &CSocket::ProtcolMessageReceived,
-            pChannel, &CChannel::OnProtcolMessageReceived );
+        QObject::connect ( this,
+            SIGNAL ( ProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ),
+            pChannel, SLOT ( OnProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ) );
 
-        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
-            pChannel, &CChannel::OnProtcolCLMessageReceived );
+        QObject::connect ( this,
+            SIGNAL ( ProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ),
+            pChannel, SLOT ( OnProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ) );
 
-        QObject::connect ( this, static_cast<void (CSocket::*)()> ( &CSocket::NewConnection ),
-            pChannel, &CChannel::OnNewConnection );
+        QObject::connect ( this,
+            SIGNAL ( NewConnection() ),
+            pChannel, SLOT ( OnNewConnection() ) );
     }
     else
     {
         // server connections:
 
-        QObject::connect ( this, &CSocket::ProtcolMessageReceived,
-            pServer, &CServer::OnProtcolMessageReceived );
+        QObject::connect ( this,
+            SIGNAL ( ProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ),
+            pServer, SLOT ( OnProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ) );
 
-        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
-            pServer, &CServer::OnProtcolCLMessageReceived );
+        QObject::connect ( this,
+            SIGNAL ( ProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ),
+            pServer, SLOT ( OnProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ) );
 
-        QObject::connect ( this, static_cast<void (CSocket::*) ( int, CHostAddress )> ( &CSocket::NewConnection ),
-            pServer, &CServer::OnNewConnection );
+        QObject::connect ( this,
+            SIGNAL ( NewConnection ( int, CHostAddress ) ),
+            pServer, SLOT ( OnNewConnection ( int, CHostAddress ) ) );
 
-        QObject::connect ( this, &CSocket::ServerFull,
-            pServer, &CServer::OnServerFull );
+        QObject::connect ( this,
+            SIGNAL ( ServerFull ( CHostAddress ) ),
+            pServer, SLOT ( OnServerFull ( CHostAddress ) ) );
     }
 }
 

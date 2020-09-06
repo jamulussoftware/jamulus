@@ -4,10 +4,15 @@ Priority: optional
 Maintainer: "Marc Landolt jr" <debian@marclandolt.ch>
 Build-Depends:
  debhelper (>= 9),
+ dpkg-dev,
+ g++,
+ libc6-dev | libc-dev,
  libjack-jackd2-dev,
- qtbase5-dev,
+ make,
+ qt5-default,
+ qtdeclarative5-dev,
  qttools5-dev-tools,
-Standards-Version: 3.9.7
+Standards-Version: 3.9.5
 Homepage: http://llcon.sourceforge.net/
 Vcs-Git: git://github.com/corrados/jamulus.git
 Vcs-Browser: https://github.com/corrados/jamulus
@@ -17,6 +22,10 @@ Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ adduser,
+ jackd,
+ qt5-default,
+ qtchooser,
 Description: Low latency Audio Server/Client
  The Jamulus software enables musicians to perform real-time jam sessions over
  the internet. There is one server running the Jamulus server software which
@@ -24,20 +33,3 @@ Description: Low latency Audio Server/Client
  sends the mix back to each client.
  .
  It runs on Windows / OSX / Linux.
-
-Package: jamulus-headless
-Architecture: any
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
- adduser,
-Description: Low latency Audio Server (headless)
- The Jamulus software enables musicians to perform real-time jam sessions over
- the internet. There is one server running the Jamulus server software which
- collects the audio data from each Jamulus client, mixes the audio data and
- sends the mix back to each client.
- .
- It runs on Windows / OSX / Linux.
- .
- This package contains a Jamulus binary built for headless operation
- (without GUI library dependencies) and a jamulus-headless systemd service.

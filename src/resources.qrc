@@ -1,32 +1,4 @@
 <RCC>
-    <qresource prefix="/translations">
-        <file alias="translation_de">res/translation/translation_de_DE.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_fr">res/translation/translation_fr_FR.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_pt_PT">res/translation/translation_pt_PT.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_pt">res/translation/translation_pt_BR.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_es">res/translation/translation_es_ES.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_nl">res/translation/translation_nl_NL.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_it">res/translation/translation_it_IT.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_pl">res/translation/translation_pl_PL.qm</file>
-    </qresource>
-    <qresource prefix="/translations">
-        <file alias="translation_sv">res/translation/translation_sv_SE.qm</file>
-    </qresource>
-
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
         <file>res/CLEDGreenArrow.png</file>
@@ -36,67 +8,84 @@
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellowSmall.png</file>
         <file>res/HLEDGreenSmall.png</file>
-        <file>res/HLEDBlackSmall.png</file>
+        <file>res/HLEDGreySmall.png</file>
         <file>res/HLEDRedSmall.png</file>
         <file>res/HLEDYellowSmall.png</file>
     </qresource>
     <qresource prefix="/png/fader">
-        <file>res/faderbackground.png</file>
-        <file>res/faderhandle.png</file>
         <file>res/faderhandlesmall.png</file>
         <file>res/ledbuttonnotpressed.png</file>
         <file>res/ledbuttonpressed.png</file>
         <file>res/mixerboardbackground.png</file>
+        <file>res/ui/fader.png</file>
+        <file>res/ui/faderbackground.png</file>
     </qresource>
     <qresource prefix="/png/instr">
-        <file>res/instruments/none.png</file>
-        <file>res/instruments/bassguitar.png</file>
-        <file>res/instruments/clarinet.png</file>
-        <file>res/instruments/drumset.png</file>
-        <file>res/instruments/eguitar.png</file>
-        <file>res/instruments/saxophone.png</file>
-        <file>res/instruments/trumpet.png</file>
-        <file>res/instruments/microphone.png</file>
-        <file>res/instruments/keyboard.png</file>
-        <file>res/instruments/violin.png</file>
-        <file>res/instruments/aguitar.png</file>
-        <file>res/instruments/flute.png</file>
-        <file>res/instruments/accordeon.png</file>
-        <file>res/instruments/cello.png</file>
-        <file>res/instruments/trombone.png</file>
-        <file>res/instruments/frenchhorn.png</file>
-        <file>res/instruments/tuba.png</file>
-        <file>res/instruments/doublebass.png</file>
-        <file>res/instruments/grandpiano.png</file>
-        <file>res/instruments/synthesizer.png</file>
-        <file>res/instruments/vocal.png</file>
-        <file>res/instruments/djembe.png</file>
-        <file>res/instruments/harmonica.png</file>
-        <file>res/instruments/recorder.png</file>
-        <file>res/instruments/listener.png</file>
-        <file>res/instruments/streamer.png</file>
-        <file>res/instruments/guitarvocal.png</file>
-        <file>res/instruments/keyboardvocal.png</file>
+        <file>res/instruments/instrnone.png</file>
+        <file>res/instruments/instrbassguitar.png</file>
+        <file>res/instruments/instrclarinet.png</file>
+        <file>res/instruments/instrdrumset.png</file>
+        <file>res/instruments/instreguitar.png</file>
+        <file>res/instruments/instrsaxophone.png</file>
+        <file>res/instruments/instrtrumpet.png</file>
+        <file>res/instruments/instrmicrophone.png</file>
+        <file>res/instruments/instrkeyboard.png</file>
+        <file>res/instruments/instrviolin.png</file>
+        <file>res/instruments/instraguitar.png</file>
+        <file>res/instruments/instrflute.png</file>
+        <file>res/instruments/instraccordeon.png</file>
+        <file>res/instruments/instrcello.png</file>
+        <file>res/instruments/instrtrombone.png</file>
+        <file>res/instruments/instrfrenchhorn.png</file>
+        <file>res/instruments/instrtuba.png</file>
+        <file>res/instruments/instrdoublebass.png</file>
+        <file>res/instruments/instrgrandpiano.png</file>
+        <file>res/instruments/instrsynthesizer.png</file>
+        <file>res/instruments/instrvocal.png</file>
+        <file>res/instruments/instrdjembe.png</file>
+        <file>res/instruments/instrharmonica.png</file>
+        <file>res/instruments/instrrecorder.png</file>
+        <file>res/instruments/instrlistener.png</file>
+        <file>res/instruments/instrstreamer.png</file>
+        <file>res/instruments/instrguitarvocal.png</file>
+        <file>res/instruments/instrkeyboardvocal.png</file>
         <file>res/instruments/bodhran.png</file>
         <file>res/instruments/bassoon.png</file>
-        <file>res/instruments/oboe.png</file>
-        <file>res/instruments/harp.png</file>
-        <file>res/instruments/viola.png</file>
-        <file>res/instruments/congas.png</file>
-        <file>res/instruments/bongo.png</file>
-        <file>res/instruments/vocalbass.png</file>
-        <file>res/instruments/vocalbaritone.png</file>
-        <file>res/instruments/vocallead.png</file>
-        <file>res/instruments/vocaltenor.png</file>
-        <file>res/instruments/vocalalto.png</file>
-        <file>res/instruments/vocalsoprano.png</file>
-        <file>res/instruments/banjo.png</file>
-        <file>res/instruments/mandolin.png</file>
-        <file>res/instruments/ukulele.png</file>
-        <file>res/instruments/bassukulele.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>
+        <file>res/logopicture.png</file>
+        <file>res/eudaicon.png</file>
+        <file>res/LogoEUdA.png</file>
+        <file>res/LogoUNQ.png</file>
+        <file>res/ui/bg_800x500.png</file>
+        <file>res/ui/bg_fondos.png</file>
+        <file>res/ui/btn_close.png</file>
+        <file>res/ui/btn_close_click.png</file>
+        <file>res/ui/btn_close_hover.png</file>
+        <file>res/ui/btn_desconctar.png</file>
+        <file>res/ui/btn_desconctar_click.png</file>
+        <file>res/ui/btn_desconctar_clicked.png</file>
+        <file>res/ui/btn_desconctar_hover.png</file>
+        <file>res/ui/btn_min.png</file>
+        <file>res/ui/btn_min_click.png</file>
+        <file>res/ui/btn_min_hover.png</file>
+        <file>res/ui/btn_minipower_click.png</file>
+        <file>res/ui/btn_minipower_clicked.png</file>
+        <file>res/ui/btn_minipower_hover.png</file>
+        <file>res/ui/btn_power.png</file>
+        <file>res/ui/btn_power_click.png</file>
+        <file>res/ui/btn_power_clicked.png</file>
+        <file>res/ui/btn_power_hover.png</file>
+        <file>res/ui/lbl_crear.png</file>
+        <file>res/ui/lbl_unirse.png</file>
+        <file>res/ui/logo.png</file>
+        <file>res/ui/rbtn_click.png</file>
+        <file>res/ui/rbtn_hover.png</file>
+        <file>res/ui/rbtn_off.png</file>
+        <file>res/ui/rbtn_on.png</file>
+        <file>res/ui/btn_minipower.png</file>
+        <file>res/ui/bg_big.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>

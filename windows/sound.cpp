@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -53,7 +53,7 @@ QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
         return tr ( "The audio driver could not be initialized." );
     }
 
-    // check device capabilities if it fulfills our requirements
+    // check device capabilities if it fullfills our requirements
     const QString strStat = CheckDeviceCapabilities();
 
     // check if device is capable
@@ -118,7 +118,7 @@ QString CSound::CheckDeviceCapabilities()
          ( SetSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
-        return tr ( "The audio device does not support setting the required sampling "
+        return tr ( "The audio device does not support to set the required sampling "
             "rate. This error can happen if you have an audio interface like the "
             "Roland UA-25EX where you set the sample rate with a hardware switch "
             "on the audio device. If this is the case, please change the sample rate "
@@ -165,7 +165,7 @@ QString CSound::CheckDeviceCapabilities()
         // support the required sample format. But since we have support for
         // all known sample types, the following check should always pass and
         // therefore we throw the error message on any channel which does not
-        // fulfill the sample format requirement (quick hack solution).
+        // fullfill the sample format requirement (quick hack solution).
         if ( !CheckSampleTypeSupported ( channelInfosInput[i].type ) )
         {
             // return error string
@@ -195,7 +195,7 @@ QString CSound::CheckDeviceCapabilities()
         // support the required sample format. But since we have support for
         // all known sample types, the following check should always pass and
         // therefore we throw the error message on any channel which does not
-        // fulfill the sample format requirement (quick hack solution).
+        // fullfill the sample format requirement (quick hack solution).
         if ( !CheckSampleTypeSupported ( channelInfosOutput[i].type ) )
         {
             // return error string
@@ -449,7 +449,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
             dInOutLatencyMs = 0.0;
         }
 
-        // check whether the driver requires the ASIOOutputReady() optimization
+        // check wether the driver requires the ASIOOutputReady() optimization
         // (can be used by the driver to reduce output latency by one block)
         bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
     }
@@ -488,7 +488,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase              ( "ASIO", fpNewCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),
@@ -517,7 +517,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     {
         throw CGenErr ( "<b>" + tr ( "No ASIO audio device (driver) found." ) + "</b><br><br>" +
             tr ( "The " ) + APP_NAME + tr ( " software requires the low latency audio "
-            "interface ASIO to work properly. This is not a standard "
+            "interface ASIO to work properly. This is no standard "
             "Windows audio interface and therefore a special audio driver is "
             "required. Either your sound card has a native ASIO driver (which "
             "is recommended) or you might want to use alternative drivers like "
@@ -533,7 +533,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     }
 
     // init device index as not initialized (invalid)
-    lCurDev = INVALID_INDEX;
+    lCurDev = INVALID_SNC_CARD_DEVICE;
 
     // init channel mapping
     ResetChannelMapping();

@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -28,6 +28,7 @@
 #include <QHostInfo>
 #include <QString>
 #include <QDateTime>
+#include <QMessageBox>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -38,7 +39,6 @@
 #include "channel.h"
 #include "util.h"
 #include "buffer.h"
-#include "signalhandler.h"
 #ifdef LLCON_VST_PLUGIN
 # include "vstsound.h"
 #else
@@ -110,15 +110,13 @@ public:
               const bool     bNoAutoJackConnect,
               const QString& strNClientName );
 
-    virtual ~CClient();
-
     void   Start();
     void   Stop();
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
 
-    double GetLevelForMeterdBLeft()  { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
-    double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
+    double MicLeveldB_L() { return SignalLevelMeter.MicLeveldBLeft(); }
+    double MicLeveldB_R() { return SignalLevelMeter.MicLeveldBRight(); }
 
     bool   GetAndResetbJitterBufferOKFlag();
 
@@ -152,7 +150,8 @@ public:
     void SetReverbOnLeftChan ( const bool bIL )
     {
         bReverbOnLeftChan = bIL;
-        AudioReverb.Clear();
+        AudioReverbL.Clear();
+        AudioReverbR.Clear();
     }
 
     void SetDoAutoSockBufSize ( const bool bValue );
@@ -243,10 +242,8 @@ public:
 
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
-    void SetRemoteChanGain ( const int iId, const double dGain, const bool bIsMyOwnFader );
-
-    void SetRemoteChanPan ( const int iId, const double dPan )
-        { Channel.SetRemoteChanPan ( iId, dPan ); }
+    void SetRemoteChanGain ( const int iId, const double dGain )
+        { Channel.SetRemoteChanGain ( iId, dGain ); }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
@@ -278,8 +275,26 @@ public:
         { Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
 
     // settings
+    CVector<QString> vstrIPAddress;
     CChannelCoreInfo ChannelInfo;
+    CVector<QString> vecStoredFaderTags;
+    CVector<int>     vecStoredFaderLevels;
+    CVector<int>     vecStoredFaderIsSolo;
+    CVector<int>     vecStoredFaderIsMute;
+    int              iNewClientFaderLevel;
+    bool             bConnectDlgShowAllMusicians;
     QString          strClientName;
+
+    // window position/state settings
+    QByteArray       vecWindowPosMain;
+    QByteArray       vecWindowPosSettings;
+    QByteArray       vecWindowPosChat;
+    QByteArray       vecWindowPosProfile;
+    QByteArray       vecWindowPosConnect;
+    bool             bWindowWasShownSettings;
+    bool             bWindowWasShownChat;
+    bool             bWindowWasShownProfile;
+    bool             bWindowWasShownConnect;
 
 #ifdef LLCON_VST_PLUGIN
     // VST version must have direct access to sound object
@@ -291,7 +306,7 @@ protected:
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
     void        Init();
-    void        ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
+    void        ProcessSndCrdAudioData ( CVector<short>& vecsMultChanAudioSndCrd );
     void        ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
 
     int         PreparePingMessage();
@@ -323,7 +338,6 @@ protected:
     int                     iNumAudioChannels;
     bool                    bIsInitializationPhase;
     bool                    bMuteOutStream;
-    double                  dMuteOutStreamGain;
     CVector<unsigned char>  vecCeltData;
 
     CHighPrioSocket         Socket;
@@ -335,7 +349,8 @@ protected:
     int                     iAudioInFader;
     bool                    bReverbOnLeftChan;
     int                     iReverbLevel;
-    CAudioReverb            AudioReverb;
+    CAudioReverb            AudioReverbL;
+    CAudioReverb            AudioReverbR;
 
     int                     iSndCrdPrefFrameSizeFactor;
     int                     iSndCrdFrameSizeFactor;
@@ -345,6 +360,7 @@ protected:
     CBufferBase<int16_t>    SndCrdConversionBufferIn;
     CBufferBase<int16_t>    SndCrdConversionBufferOut;
     CVector<int16_t>        vecDataConvBuf;
+    CVector<int16_t>        vecsStereoSndCrdTMP;
     CVector<int16_t>        vecsStereoSndCrdMuteStream;
     CVector<int16_t>        vecZeros;
 
@@ -368,12 +384,9 @@ protected:
     int                     iServerSockBufNumFrames;
 
     // for ping measurement
-    QElapsedTimer           PreciseTime;
+    CPreciseTime            PreciseTime;
 
-    CSignalHandler*         pSignalHandler;
-
-protected slots:
-    void OnHandledSignal ( int sigNum );
+public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
 
@@ -385,7 +398,7 @@ protected slots:
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
-    void OnCLDisconnection ( CHostAddress InetAddr ) { if ( InetAddr == Channel.GetAddress() ) { emit Disconnected(); } }
+    void OnCLDisconnection ( CHostAddress InetAddr ) { if ( InetAddr == Channel.GetAddress() ) { Stop(); } }
     void OnCLPingReceived ( CHostAddress InetAddr,
                             int          iMs );
 
@@ -397,17 +410,15 @@ protected slots:
                                           int          iNumClients );
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
-    void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
+
+    void OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                        CVector<uint16_t> vecLevelList );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
-    void ClientIDReceived ( int iChanID );
-    void MuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
     void LicenceRequired ( ELicenceType eLicenceType );
-    void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void PingTimeReceived ( int iPingTime );
-    void RecorderStateReceived ( ERecorderState eRecorderState );
 
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
@@ -419,9 +430,11 @@ signals:
                                             int          iPingTime,
                                             int          iNumClients );
 
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void CLVersionAndOSReceived ( CHostAddress           InetAddr,
                                   COSUtil::EOpSystemType eOSType,
                                   QString                strVersion );
+#endif
 
     void CLChannelLevelListReceived ( CHostAddress      InetAddr,
                                       CVector<uint16_t> vecLevelList );

@@ -20,7 +20,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -58,13 +58,13 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
     if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     {
         throw CGenErr ( tr ( "The Jack server sample rate is different from "
-            "the required one. The required sample rate is:" ) + " <b>" +
-            QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz</b>. " + tr ( "You can "
+            "the required one. The required sample rate is: <b>" ) +
+            QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + tr ( " Hz</b>. You can "
             "use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
-            "to adjust the Jack server sample rate." ) + "<br>" + tr ( "Make sure to set the "
-            "Frames/Period to a low value like " ) +
+            "to adjust the Jack server sample rate.<br>Make sure to set the "
+            "<b>Frames/Period</b> to a low value like <b>" ) +
             QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) +
-            tr ( " to achieve a low delay." ) );
+            tr ( "</b> to achieve a low delay." ) );
     }
 
     // create four ports (two for input, two for output -> stereo)
@@ -151,25 +151,6 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
 
             jack_free ( ports );
         }
-
-        // input latency
-        jack_latency_range_t latrange;
-        latrange.min = 0;
-        latrange.max = 0 ;
-
-        jack_port_get_latency_range ( input_port_left, JackCaptureLatency, &latrange );
-        int inLatency = latrange.min; // be optimistic
-
-        // output latency 
-        latrange.min = 0; 
-        latrange.max = 0 ;
-
-        jack_port_get_latency_range ( output_port_left, JackPlaybackLatency, &latrange );
-        int outLatency = latrange.min; // be optimistic
-
-        // compute latency by using the first input and first output
-        // ports and using the most optimistic values
-        dInOutLatencyMs = static_cast<double> ( inLatency + outLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
     }
 }
 
@@ -203,20 +184,16 @@ void CSound::Stop()
 int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 {
 
+
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
+
 // Doesn't this give an infinite loop? The set buffer size function will call our
-// registered callback which calls "EmitReinitRequestSignal()". In that function
+// registerd callback which calls "EmitReinitRequestSignal()". In that function
 // this CSound::Init() function is called...
+
 //jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 
-    // without a Jack server, Jamulus makes no sense to run, throw an error message
-    if ( bJackWasShutDown )
-    {
-        throw CGenErr ( tr ( "The Jack server was shut down. This software "
-            "requires a Jack server to run. Try to restart the software to "
-            "solve the issue." ) );
-    }
 
     // get actual buffer size
     iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
@@ -239,9 +216,6 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
 {
     CSound* pSound = static_cast<CSound*> ( arg );
     int     i;
-
-    // make sure we are locked during execution
-    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
 
     if ( pSound->IsRunning() && ( nframes == static_cast<jack_nframes_t> ( pSound->iJACKBufferSizeMono ) ) )
     {
@@ -347,7 +321,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     return 0; // zero on success, non-zero on error 
 }
 
-int CSound::bufferSizeCallback ( jack_nframes_t, void* arg )
+int CSound::bufferSizeCallback ( jack_nframes_t, void *arg )
 {
     CSound* pSound = static_cast<CSound*> ( arg );
 
@@ -356,11 +330,12 @@ int CSound::bufferSizeCallback ( jack_nframes_t, void* arg )
     return 0; // zero on success, non-zero on error
 }
 
-void CSound::shutdownCallback ( void* arg )
+void CSound::shutdownCallback ( void* )
 {
-    CSound* pSound = static_cast<CSound*> ( arg );
-
-    pSound->bJackWasShutDown = true;
-    pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT );
+    // without a Jack server, our software makes no sense to run, throw
+    // error message
+    throw CGenErr ( tr ( "The Jack server was shut down. This software "
+        "requires a Jack server to run. Try to restart the software to "
+        "solve the issue." ) );
 }
 #endif // WITH_SOUND

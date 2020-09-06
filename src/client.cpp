@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -31,20 +31,35 @@ CClient::CClient ( const quint16  iPortNumber,
                    const int      iCtrlMIDIChannel,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName ) :
-    ChannelInfo                      ( ),
+    vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+    ChannelInfo                      (),
+    vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+    vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+    vecStoredFaderIsSolo             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    vecStoredFaderIsMute             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    iNewClientFaderLevel             ( 100 ),
+    bConnectDlgShowAllMusicians      ( true ),
     strClientName                    ( strNClientName ),
+    vecWindowPosMain                 (), // empty array
+    vecWindowPosSettings             (), // empty array
+    vecWindowPosChat                 (), // empty array
+    vecWindowPosProfile              (), // empty array
+    vecWindowPosConnect              (), // empty array
+    bWindowWasShownSettings          ( false ),
+    bWindowWasShownChat              ( false ),
+    bWindowWasShownProfile           ( false ),
+    bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder                   ( nullptr ),
     CurOpusDecoder                   ( nullptr ),
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( OPUS_NUM_BYTES_MONO_LOW_QUALITY ),
     iOPUSFrameSizeSamples            ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
-    eAudioQuality                    ( AQ_NORMAL ),
+    eAudioQuality                    ( AQ_HIGH ),
     eAudioChannelConf                ( CC_MONO ),
     iNumAudioChannels                ( 1 ),
     bIsInitializationPhase           ( true ),
     bMuteOutStream                   ( false ),
-    dMuteOutStreamGain               ( 1.0 ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect, strNClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
@@ -63,8 +78,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
     eCentralServerAddressType        ( AT_DEFAULT ),
-    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
-    pSignalHandler                   ( CSignalHandler::getSingletonP() )
+    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
 {
     int iOpusError;
 
@@ -109,87 +123,87 @@ CClient::CClient ( const quint16  iPortNumber,
 
     // Connections -------------------------------------------------------------
     // connections for the protocol mechanism
-    QObject::connect ( &Channel, &CChannel::MessReadyForSending,
-        this, &CClient::OnSendProtMessage );
+    QObject::connect ( &Channel,
+        SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+        this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
-    QObject::connect ( &Channel, &CChannel::DetectedCLMessage,
-        this, &CClient::OnDetectedCLMessage );
+    QObject::connect ( &Channel,
+        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int, CHostAddress ) ),
+        this, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int, CHostAddress ) ) );
 
-    QObject::connect ( &Channel, &CChannel::ReqJittBufSize,
-        this, &CClient::OnReqJittBufSize );
+    QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
+        this, SLOT ( OnReqJittBufSize() ) );
 
-    QObject::connect ( &Channel, &CChannel::JittBufSizeChanged,
-        this, &CClient::OnJittBufSizeChanged );
+    QObject::connect ( &Channel, SIGNAL ( JittBufSizeChanged ( int ) ),
+        this, SLOT ( OnJittBufSizeChanged ( int ) ) );
 
-    QObject::connect ( &Channel, &CChannel::ReqChanInfo,
-        this, &CClient::OnReqChanInfo );
+    QObject::connect ( &Channel, SIGNAL ( ReqChanInfo() ),
+        this, SLOT ( OnReqChanInfo() ) );
 
-    QObject::connect ( &Channel, &CChannel::ConClientListMesReceived,
-        this, &CClient::ConClientListMesReceived );
+    QObject::connect ( &Channel,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
-    QObject::connect ( &Channel, &CChannel::Disconnected,
-        this, &CClient::Disconnected );
+    QObject::connect ( &Channel,
+        SIGNAL ( Disconnected() ),
+        SIGNAL ( Disconnected() ) );
 
-    QObject::connect ( &Channel, &CChannel::NewConnection,
-        this, &CClient::OnNewConnection );
+    QObject::connect ( &Channel, SIGNAL ( NewConnection() ),
+        this, SLOT ( OnNewConnection() ) );
 
-    QObject::connect ( &Channel, &CChannel::ChatTextReceived,
-        this, &CClient::ChatTextReceived );
+    QObject::connect ( &Channel,
+        SIGNAL ( ChatTextReceived ( QString ) ),
+        SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect ( &Channel, &CChannel::ClientIDReceived,
-        this, &CClient::ClientIDReceived );
+    QObject::connect( &Channel,
+        SIGNAL ( LicenceRequired ( ELicenceType ) ),
+        SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 
-    QObject::connect ( &Channel, &CChannel::MuteStateHasChangedReceived,
-        this, &CClient::MuteStateHasChangedReceived );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
+        this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
 
-    QObject::connect ( &Channel, &CChannel::LicenceRequired,
-        this, &CClient::LicenceRequired );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
+        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
 
-    QObject::connect ( &Channel, &CChannel::VersionAndOSReceived,
-        this, &CClient::VersionAndOSReceived );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ),
+        SIGNAL ( CLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ) );
 
-    QObject::connect ( &Channel, &CChannel::RecorderStateReceived,
-        this, &CClient::RecorderStateReceived );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
+        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLMessReadyForSending,
-        this, &CClient::OnSendCLProtMessage );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
+        this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLServerListReceived,
-        this, &CClient::CLServerListReceived );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLDisconnection ( CHostAddress ) ),
+        this, SLOT ( OnCLDisconnection ( CHostAddress ) ) );
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived,
-        this, &CClient::CLConnClientsListMesReceived );
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
+        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
+#endif
 
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived,
-        this, &CClient::OnCLPingReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithNumClientsReceived,
-        this, &CClient::OnCLPingWithNumClientsReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLDisconnection ,
-        this, &CClient::OnCLDisconnection );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived,
-        this, &CClient::CLVersionAndOSReceived );
-
-    QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived,
-        this, &CClient::CLChannelLevelListReceived );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
+        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
 
     // other
-    QObject::connect ( &Sound, &CSound::ReinitRequest,
-        this, &CClient::OnSndCrdReinitRequest );
+    QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
+        this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
 
-    QObject::connect ( &Sound, &CSound::ControllerInFaderLevel,
-        this, &CClient::OnControllerInFaderLevel );
+    QObject::connect ( &Sound,
+        SIGNAL ( ControllerInFaderLevel ( int, int ) ),
+        SIGNAL ( ControllerInFaderLevel ( int, int ) ) );
 
-    QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived,
-        this, &CClient::OnInvalidPacketReceived );
+    QObject::connect ( &Socket, SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
+        this, SLOT ( OnInvalidPacketReceived ( CHostAddress ) ) );
 
-    QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal,
-        this, &CClient::OnHandledSignal );
-
-    // start timer so that elapsed time works
-    PreciseTime.start();
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)
@@ -201,23 +215,6 @@ CClient::CClient ( const quint16  iPortNumber,
         SetServerAddr ( strConnOnStartupAddress );
         Start();
     }
-}
-
-CClient::~CClient()
-{
-    // free audio encoders and decoders
-    opus_custom_encoder_destroy ( OpusEncoderMono );
-    opus_custom_decoder_destroy ( OpusDecoderMono );
-    opus_custom_encoder_destroy ( OpusEncoderStereo );
-    opus_custom_decoder_destroy ( OpusDecoderStereo );
-    opus_custom_encoder_destroy ( Opus64EncoderMono );
-    opus_custom_decoder_destroy ( Opus64DecoderMono );
-    opus_custom_encoder_destroy ( Opus64EncoderStereo );
-    opus_custom_decoder_destroy ( Opus64DecoderStereo );
-
-    // free audio modes
-    opus_custom_mode_destroy ( OpusMode );
-    opus_custom_mode_destroy ( Opus64Mode );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -237,7 +234,7 @@ void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
 {
-    // message could not be parsed, check if the packet comes
+    // message coult not be parsed, check if the packet comes
     // from the server we just connected -> if yes, send
     // disconnect message since the server may not know that we
     // are not connected anymore
@@ -363,19 +360,6 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 
     // inform the server about the change
     CreateServerJitterBufferMessage();
-}
-
-void CClient::SetRemoteChanGain ( const int    iId,
-                                  const double dGain,
-                                  const bool   bIsMyOwnFader )
-{
-    // if this gain is for my own channel, apply the value for the Mute Myself function
-    if ( bIsMyOwnFader )
-    {
-        dMuteOutStreamGain = dGain;
-    }
-
-    Channel.SetRemoteChanGain ( iId, dGain );
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -657,47 +641,10 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
     }
 }
 
-void CClient::OnHandledSignal ( int sigNum )
+void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                             CVector<uint16_t> vecLevelList )
 {
-#ifdef _WIN32
-    // Windows does not actually get OnHandledSignal triggered
-    QCoreApplication::instance()->exit();
-    Q_UNUSED ( sigNum )
-#else
-    switch ( sigNum )
-    {
-    case SIGINT:
-    case SIGTERM:
-        // if connected, terminate connection (needed for headless mode)
-        if ( IsRunning() )
-        {
-            Stop();
-        }
-
-        // this should trigger OnAboutToQuit
-        QCoreApplication::instance()->exit();
-        break;
-
-    default:
-        break;
-    }
-#endif
-}
-
-void CClient::OnControllerInFaderLevel ( int iChannelIdx,
-                                         int iValue )
-{
-    // in case of a headless client the faders cannot be moved so we need
-    // to send the controller information directly to the server
-#ifdef HEADLESS
-    // only apply new fader level if channel index is valid
-    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
-    {
-        SetRemoteChanGain ( iChannelIdx, MathUtils::CalcFaderGain ( iValue ), false );
-    }
-#endif
-
-    emit ControllerInFaderLevel ( iChannelIdx, iValue );
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
 }
 
 void CClient::Start()
@@ -749,6 +696,7 @@ void CClient::Stop()
 
 void CClient::Init()
 {
+
     // check if possible frame size factors are supported
     const int iFraSizePreffered = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
     const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT;
@@ -757,6 +705,9 @@ void CClient::Init()
     bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
     bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault )   == iFraSizeDefault );
     bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe )      == iFraSizeSafe );
+
+    //Calidad Baja por default
+    eAudioQuality = AQ_LOW;
 
     // translate block size index in actual block size
     const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
@@ -844,6 +795,8 @@ void CClient::Init()
             CurOpusDecoder    = OpusDecoderStereo;
             iNumAudioChannels = 2;
 
+
+
             switch ( eAudioQuality )
             {
             case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY_DBLE_FRAMESIZE;    break;
@@ -889,9 +842,8 @@ void CClient::Init()
 
     vecCeltData.Init ( iCeltNumCodedBytes );
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
+    vecsStereoSndCrdTMP.Init ( iStereoBlockSizeSam );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
-
-    dMuteOutStreamGain = 1.0;
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE (
@@ -908,9 +860,8 @@ void CClient::Init()
                                        iNumAudioChannels );
 
     // init reverberation
-    AudioReverb.Init ( eAudioChannelConf,
-                       iStereoBlockSizeSam,
-                       SYSTEM_SAMPLE_RATE_HZ );
+    AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
+    AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
 
     // init the sound card conversion buffers
     if ( bSndCrdConversionBufferRequired )
@@ -942,6 +893,9 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
     // process audio data
     pMyClientObj->ProcessSndCrdAudioData ( psData );
 
+
+    //qInfo() << psData;
+
 /*
 // TEST do a soundcard jitter measurement
 static CTimingMeas JitterMeas ( 1000, "test2.dat" );
@@ -949,13 +903,32 @@ JitterMeas.Measure();
 */
 }
 
-void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
+void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsMultChanAudioSndCrd )
 {
+
+// TODO output mapping from stereo to multi channel: We want to change all the different sound interfaces that they
+// do not select the input and output channels but we do it here at the client. This has the advantage that, e.g.,
+// the special add modes supported for Windows (i.e. if 4 input channels available, you can mix channel 1+3 or 1+4)
+// can then be used for Mac as well without the need of changing anything in the actual Mac sound interface.
+// Since a multichannel signal arrives and must be converted to a stereo signal, we need an additional buffer: vecsStereoSndCrdTMP.
+// TEST input channel selection/mixing
+//const int iNumInCh = 2;
+//for ( int i = 0; i < iNumInCh; i++ )
+//{
+//    for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+//    {
+//        vecsStereoSndCrdTMP[2 * j + i] = vecsMultChanAudioSndCrd[iNumInCh * j + i];
+//    }
+//}
+
+
+vecsStereoSndCrdTMP = vecsMultChanAudioSndCrd; // TEST just copy the stereo data for now
+
     // check if a conversion buffer is required or not
     if ( bSndCrdConversionBufferRequired )
     {
         // add new sound card block in conversion buffer
-        SndCrdConversionBufferIn.Put ( vecsStereoSndCrd, vecsStereoSndCrd.Size() );
+        SndCrdConversionBufferIn.Put ( vecsStereoSndCrdTMP, vecsStereoSndCrdTMP.Size() );
 
         // process all available blocks of data
         while ( SndCrdConversionBufferIn.GetAvailData() >= iStereoBlockSizeSam )
@@ -970,14 +943,17 @@ void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
         }
 
         // get processed sound card block out of the conversion buffer
-        SndCrdConversionBufferOut.Get ( vecsStereoSndCrd, vecsStereoSndCrd.Size() );
+        SndCrdConversionBufferOut.Get ( vecsStereoSndCrdTMP, vecsStereoSndCrdTMP.Size() );
     }
     else
     {
         // regular case: no conversion buffer required
         // process audio data
-        ProcessAudioDataIntern ( vecsStereoSndCrd );
+        ProcessAudioDataIntern ( vecsStereoSndCrdTMP );
     }
+
+// TODO output mapping from stereo to multi channel, see comment above for the input mapping
+vecsMultChanAudioSndCrd = vecsStereoSndCrdTMP; // TEST just copy the stereo data for now
 }
 
 void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
@@ -987,53 +963,124 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // Transmit signal ---------------------------------------------------------
-    // update stereo signal level meter (not needed in headless mode)
-#ifndef HEADLESS
-    SignalLevelMeter.Update ( vecsStereoSndCrd,
-                              iMonoBlockSizeSam,
-                              true );
-#endif
+    // update stereo signal level meter
+    SignalLevelMeter.Update ( vecsStereoSndCrd );
 
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )
     {
-        AudioReverb.Process ( vecsStereoSndCrd,
-                              bReverbOnLeftChan,
-                              static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
-    }
-
-    // apply pan (audio fader) and mix mono signals
-    if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
-    {
-        // calculate pan gain in the range 0 to 1, where 0.5 is the middle position
-        const double dPan = static_cast<double> ( iAudioInFader ) / AUD_FADER_IN_MAX;
+        // calculate attenuation amplification factor
+        const double dRevLev = static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 4;
 
         if ( eAudioChannelConf == CC_STEREO )
         {
-            // for stereo only apply pan attenuation on one channel (same as pan in the server)
-            const double dGainL = MathUtils::GetLeftPan ( dPan, false );
-            const double dGainR = MathUtils::GetRightPan ( dPan, false );
-
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            // for stereo always apply reverberation effect on both channels
+            for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
             {
-                // note that the gain is always <= 1, therefore a simple cast is
-                // ok since we never can get an overload
-                vecsStereoSndCrd[j + 1] = static_cast<int16_t> ( dGainR * vecsStereoSndCrd[j + 1] );
-                vecsStereoSndCrd[j]     = static_cast<int16_t> ( dGainL * vecsStereoSndCrd[j] );
+                // both channels (stereo)
+                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], vecsStereoSndCrd[i + 1], dRevLev );
             }
         }
         else
         {
-            // for mono implement a cross-fade between channels and mix them, for
-            // mono-in/stereo-out use no attenuation in pan center
-            const double dGainL = MathUtils::GetLeftPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
-            const double dGainR = MathUtils::GetRightPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+            // mono and mono-in/stereo out mode
+            if ( bReverbOnLeftChan )
+            {
+                for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
+                {
+                    // left channel
+                    int16_t sRightDummy = 0; // has to be 0 for mono reverb
+                    AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], sRightDummy, dRevLev );
+                }
+            }
+            else
+            {
+                for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
+                {
+                    // right channel
+                    int16_t sRightDummy = 0; // has to be 0 for mono reverb
+                    AudioReverbR.ProcessSample ( vecsStereoSndCrd[i], sRightDummy, dRevLev );
+                }
+            }
+        }
+    }
 
+    // mix both signals depending on the fading setting, convert
+    // from double to short
+    if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
+    {
+        // no action require if fader is in the middle and stereo is used
+        if ( eAudioChannelConf != CC_STEREO )
+        {
+            // mix channels together (store result in first half of the vector)
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
-                // note that we need the Double2Short for stereo pan mode
-                vecsStereoSndCrd[i] = Double2Short (
-                    dGainL * vecsStereoSndCrd[j] + dGainR * vecsStereoSndCrd[j + 1] );
+                // for the sum make sure we have more bits available (cast to
+                // int32), after the normalization by 2, the result will fit
+                // into the old size so that cast to int16 is safe
+                vecsStereoSndCrd[i] = static_cast<int16_t> (
+                    ( static_cast<int32_t> ( vecsStereoSndCrd[j] ) + vecsStereoSndCrd[j + 1] ) / 2 );
+            }
+        }
+    }
+    else
+    {
+        if ( eAudioChannelConf == CC_STEREO )
+        {
+            // stereo
+            const double dAttFactStereo = static_cast<double> (
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE;
+
+            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on right channel
+                    vecsStereoSndCrd[j + 1] = Double2Short ( dAttFactStereo * vecsStereoSndCrd[j + 1] );
+                }
+            }
+            else
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on left channel
+                    vecsStereoSndCrd[j] = Double2Short ( dAttFactStereo * vecsStereoSndCrd[j] );
+                }
+            }
+        }
+        else
+        {
+            // mono and mono-in/stereo out mode
+            // make sure that in the middle position the two channels are
+            // amplified by 1/2, if the pan is set to one channel, this
+            // channel should have an amplification of 1
+            const double dAttFactMono = static_cast<double> (
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE / 2;
+
+            const double dAmplFactMono = 0.5 + static_cast<double> (
+                abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE / 2;
+
+            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on right channel (store result in first half
+                    // of the vector)
+                    vecsStereoSndCrd[i] = Double2Short (
+                        dAmplFactMono * vecsStereoSndCrd[j] +
+                        dAttFactMono * vecsStereoSndCrd[j + 1] );
+                }
+            }
+            else
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on left channel (store result in first half
+                    // of the vector)
+                    vecsStereoSndCrd[i] = Double2Short (
+                        dAmplFactMono * vecsStereoSndCrd[j + 1] +
+                        dAttFactMono * vecsStereoSndCrd[j] );
+                }
             }
         }
     }
@@ -1124,13 +1171,27 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
+/*
+// TEST
+// fid=fopen('c:\\temp\test2.dat','r');x=fread(fid,'int16');fclose(fid);
+static FILE* pFileDelay = fopen("c:\\temp\\test2.dat", "wb");
+short sData[2];
+for (i = 0; i < iMonoBlockSizeSam; i++)
+{
+    sData[0] = (short) vecsStereoSndCrd[i];
+    fwrite(&sData, size_t(2), size_t(1), pFileDelay);
+}
+fflush(pFileDelay);
+*/
+
+
     // for muted stream we have to add our local data here
     if ( bMuteOutStream )
     {
         for ( i = 0; i < iStereoBlockSizeSam; i++ )
         {
             vecsStereoSndCrd[i] = Double2Short (
-                vecsStereoSndCrd[i] + vecsStereoSndCrdMuteStream[i] * dMuteOutStreamGain );
+                static_cast<double> ( vecsStereoSndCrd[i] ) + vecsStereoSndCrdMuteStream[i] );
         }
     }
 
@@ -1156,8 +1217,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     // update socket buffer size
     Channel.UpdateSocketBufferSize();
-
-    Q_UNUSED ( iUnused )
+    Q_UNUSED ( iUnused );
 }
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
@@ -1185,7 +1245,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 
     if ( dSoundCardInputOutputLatencyMs == 0.0 )
     {
-        // use an alternative approach for estimating the sound card delay:
+        // use an alternative aproach for estimating the sound card delay:
         //
         // we assume that we have two period sizes for the input and one for the
         // output, therefore we have "3 *" instead of "2 *" (for input and output)

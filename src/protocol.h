@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -55,11 +55,6 @@
 #define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
 #define PROTMESSID_LICENCE_REQUIRED           27 // licence required
 #define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // request the channel level list
-#define PROTMESSID_VERSION_AND_OS             29 // version number and operating system
-#define PROTMESSID_CHANNEL_PAN                30 // set channel pan for mix
-#define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
-#define PROTMESSID_CLIENT_ID                  32 // current user ID and server status
-#define PROTMESSID_RECORDER_STATE             33 // contains the state of the jam recorder (ERecorderState)
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -79,7 +74,6 @@
 #define PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST  1014 // request the connected clients list
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
-#define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -101,10 +95,7 @@ public:
 
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
-    void CreateClientIDMes ( const int iChanID );
     void CreateChanGainMes ( const int iChanID, const double dGain );
-    void CreateChanPanMes ( const int iChanID, const double dPan );
-    void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted );
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
     void CreateChanInfoMes ( const CChannelCoreInfo ChanInfo );
@@ -115,8 +106,6 @@ public:
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
     void CreateReqChannelLevelListMes ( const bool bRCL );
-    void CreateVersionAndOSMes();
-    void CreateRecorderStateMes ( const ERecorderState eRecorderState );
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
@@ -124,9 +113,6 @@ public:
                                          const int           iNumClients );
     void CreateCLServerFullMes         ( const CHostAddress& InetAddr );
     void CreateCLRegisterServerMes     ( const CHostAddress&    InetAddr,
-                                         const CHostAddress&    LInetAddr,
-                                         const CServerCoreInfo& ServerInfo );
-    void CreateCLRegisterServerExMes   ( const CHostAddress&    InetAddr,
                                          const CHostAddress&    LInetAddr,
                                          const CServerCoreInfo& ServerInfo );
     void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
@@ -231,10 +217,7 @@ protected:
 
     bool EvaluateJitBufMes              ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
-    bool EvaluateClientIDMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateChanGainMes            ( const CVector<uint8_t>& vecData );
-    bool EvaluateChanPanMes             ( const CVector<uint8_t>& vecData );
-    bool EvaluateMuteStateHasChangedMes ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes       ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
     bool EvaluateChanInfoMes            ( const CVector<uint8_t>& vecData );
@@ -244,8 +227,6 @@ protected:
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
-    bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
-    bool EvaluateRecorderStateMes       ( const CVector<uint8_t>& vecData );
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -253,8 +234,6 @@ protected:
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLServerFullMes();
     bool EvaluateCLRegisterServerMes     ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
-    bool EvaluateCLRegisterServerExMes   ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
     bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
@@ -296,10 +275,7 @@ signals:
     void ChangeJittBufSize ( int iNewJitBufSize );
     void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
-    void ClientIDReceived ( int iChanID );
     void ChangeChanGain ( int iChanID, double dNewGain );
-    void ChangeChanPan ( int iChanID, double dNewPan );
-    void MuteStateHasChangedReceived ( int iCurID, bool bIsMuted );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();
     void ReqConnClientsList();
@@ -310,8 +286,6 @@ signals:
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
     void ReqChannelLevelList ( bool bOptIn );
-    void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
-    void RecorderStateReceived ( ERecorderState eRecorderState );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );
@@ -321,11 +295,6 @@ signals:
     void CLRegisterServerReceived     ( CHostAddress           InetAddr,
                                         CHostAddress           LInetAddr,
                                         CServerCoreInfo        ServerInfo );
-    void CLRegisterServerExReceived   ( CHostAddress           InetAddr,
-                                        CHostAddress           LInetAddr,
-                                        CServerCoreInfo        ServerInfo,
-                                        COSUtil::EOpSystemType eOSType,
-                                        QString                strVersion );
     void CLUnregisterServerReceived   ( CHostAddress           InetAddr );
     void CLServerListReceived         ( CHostAddress           InetAddr,
                                         CVector<CServerInfo>   vecServerInfo );

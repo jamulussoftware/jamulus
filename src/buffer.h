@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -37,7 +37,7 @@
 #define FILTER_DECISION_HYSTERESIS                  0.1
 
 // definition of the upper error bound of the jitter buffers
-#define ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE          0.0005
+#define ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE          0.001
 #define ERROR_RATE_BOUND                            ( ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE / 2 )
 
 // definition of the upper jitter buffer error bound, if that one is reached we
@@ -260,7 +260,7 @@ public:
             eBufState = CBufferBase<TData>::BS_OK;
         }
 
-        return true; // no error check in base class, always return ok
+        return true; // no error check in base class, alyways return ok
     }
 
     virtual bool Get ( CVector<TData>& vecData,
@@ -327,7 +327,7 @@ public:
             eBufState = CBufferBase<TData>::BS_OK;
         }
 
-        return true; // no error check in base class, always return ok
+        return true; // no error check in base class, alyways return ok
     }
 
     virtual int GetAvailSpace() const

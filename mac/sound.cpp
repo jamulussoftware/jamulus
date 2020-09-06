@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
 
@@ -31,7 +31,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
     // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop
@@ -163,7 +163,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     }
 
     // init device index as not initialized (invalid)
-    lCurDev                    = INVALID_INDEX;
+    lCurDev                    = INVALID_SNC_CARD_DEVICE;
     CurrentAudioInputDeviceID  = 0;
     CurrentAudioOutputDeviceID = 0;
     iNumInChan                 = 0;
@@ -312,7 +312,7 @@ int CSound::CountChannels ( AudioDeviceID devID,
 
 QString CSound::LoadAndInitializeDriver ( int iDriverIdx, bool )
 {
-    // check device capabilities if it fulfills our requirements
+    // check device capabilities if it fullfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
 
     // check if device is capable
@@ -561,7 +561,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         // add the "[n]:" at the beginning as is in the Audio-Midi-Setup
         if ( !bConvOK || ( iPropertySize == 0 ) )
         {
-            // use a default name in case there was an error or the name is empty
+            // use a defalut name in case there was an error or the name is empty
             sChannelNamesOutput[iCurOutCH] =
                 QString ( "%1: Channel %1" ).arg ( iCurOutCH + 1 );
         }
@@ -611,12 +611,12 @@ void CSound::UpdateChSelection()
     int iSelCHRight, iSelAddCHRight;
 
     // initialize all buffer indexes with an invalid value
-    iSelInBufferLeft     = INVALID_INDEX;
-    iSelInBufferRight    = INVALID_INDEX;
-    iSelAddInBufferLeft  = INVALID_INDEX; // if no additional channel used, this will stay on the invalid value
-    iSelAddInBufferRight = INVALID_INDEX; // if no additional channel used, this will stay on the invalid value
-    iSelOutBufferLeft    = INVALID_INDEX;
-    iSelOutBufferRight   = INVALID_INDEX;
+    iSelInBufferLeft     = -1;
+    iSelInBufferRight    = -1;
+    iSelAddInBufferLeft  = -1; // if no additional channel used, this will stay on the invalid value
+    iSelAddInBufferRight = -1; // if no additional channel used, this will stay on the invalid value
+    iSelOutBufferLeft    = -1;
+    iSelOutBufferRight   = -1;
 
     // input
     GetSelCHAndAddCH ( iSelInputLeftChannel,  iNumInChan, iSelCHLeft,  iSelAddCHLeft );
@@ -907,7 +907,7 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
         pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
     }
 
-/* NOTE that this code does not solve the crackling sound issue
+/*
     if ( inAddresses->mSelector == kAudioDeviceProcessorOverload )
     {
         // xrun handling (it is important to act on xruns under CoreAudio

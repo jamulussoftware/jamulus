@@ -467,7 +467,18 @@ void CProtocol::SendMessage()
             vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
             vecMessage = SendMessQueue.front().vecMessage;
 
+            // start time-out timer if not active
+            if ( !TimerSendMess.isActive() )
+            {
+                TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
+            }
+
             bSendMess = true;
+        }
+        else
+        {
+            // no message to send, stop timer
+            TimerSendMess.stop();
         }
     }
     Mutex.unlock();
@@ -476,17 +487,6 @@ void CProtocol::SendMessage()
     {
         // send message
         emit MessReadyForSending ( vecMessage );
-
-        // start time-out timer if not active
-        if ( !TimerSendMess.isActive() )
-        {
-            TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
-        }
-    }
-    else
-    {
-        // no message to send, stop timer
-        TimerSendMess.stop();
     }
 }
 

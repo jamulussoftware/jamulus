@@ -31,7 +31,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
     // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop

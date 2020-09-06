@@ -51,13 +51,12 @@ class CSoundBase : public QThread
 
 public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
-                 const bool     bNewIsCallbackAudioInterface,
                  void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                  void*          pParg,
                  const int      iNewCtrlMIDIChannel );
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
-    virtual void Start();
+    virtual int  Init ( const int iNewPrefMonoBufferSize ) { return iNewPrefMonoBufferSize; }
+    virtual void Start() { bRun = true; }
     virtual void Stop();
 
     // device selection
@@ -131,26 +130,17 @@ protected:
         (*fpProcessCallback) ( psData, pProcessCallbackArg );
     }
 
-    // these functions should be overwritten by derived class for
-    // non callback based audio interfaces
-    virtual bool Read  ( CVector<int16_t>& ) { return false; }
-    virtual bool Write ( CVector<int16_t>& ) { return false; }
+    void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 
-    void   run();
-    bool   bRun;
-    QMutex MutexAudioProcessCallback;
+    bool    bRun;
+    QMutex  MutexAudioProcessCallback;
 
-    void             ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
+    QString strSystemDriverTechniqueName;
+    int     iCtrlMIDIChannel;
 
-    bool             bIsCallbackAudioInterface;
-    QString          strSystemDriverTechniqueName;
-    int              iCtrlMIDIChannel;
-
-    CVector<int16_t> vecsAudioSndCrdStereo;
-
-    long             lNumDevs;
-    long             lCurDev;
-    QString          strDriverNames[MAX_NUMBER_SOUND_CARDS];
+    long    lNumDevs;
+    long    lCurDev;
+    QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:
     void ReinitRequest ( int iSndCrdResetType );

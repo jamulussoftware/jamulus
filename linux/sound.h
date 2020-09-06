@@ -65,7 +65,7 @@ public:
              const int      iCtrlMIDIChannel,
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
-        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+        CSoundBase ( "Jack", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
         iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
 
     virtual ~CSound() { CloseJack(); }
@@ -105,16 +105,29 @@ protected:
 };
 #else
 // no sound -> dummy class definition
+#include "server.h"
 class CSound : public CSoundBase
 {
+    Q_OBJECT
+
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
              void*          pParg,
              const int      iCtrlMIDIChannel,
              const bool     ,
              const QString& ) :
-        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel ) {}
+        CSoundBase ( "nosound", fpNewProcessCallback, pParg, iCtrlMIDIChannel ),
+        HighPrecisionTimer ( true ) { HighPrecisionTimer.Start();
+                                      QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout,
+                                                         this, &CSound::OnTimer ); }
     virtual ~CSound() {}
-    virtual bool Read  ( CVector<int16_t>& ) override { usleep ( 1e6 * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES / SYSTEM_SAMPLE_RATE_HZ ); return false; }
+    virtual int Init ( const int iNewPrefMonoBufferSize ) { CSoundBase::Init ( iNewPrefMonoBufferSize );
+                                                            vecsTemp.Init ( 2 * iNewPrefMonoBufferSize );
+                                                            return iNewPrefMonoBufferSize; }
+    CHighPrecisionTimer HighPrecisionTimer;
+    CVector<short>      vecsTemp;
+
+public slots:
+    void OnTimer() { vecsTemp.Reset ( 0 ); if ( IsRunning() ) { ProcessCallback ( vecsTemp ); } }
 };
 #endif // WITH_SOUND

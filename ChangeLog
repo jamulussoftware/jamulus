@@ -8,7 +8,7 @@
 
 - added an optional server list whitelist filter (#413)
 
-- added a command line argument to enable multithreading in the server
+- added a command line argument to enable multithreading in the server (#339)
 
 - store recorder settings, coded by pljones (#313)
 
@@ -16,9 +16,12 @@
 
 - added Jack audio audio latency calculation, coded by bflamig (#437)
 
+- show the server name in the title bar (#559)
+
 - bug fix: crash when using the Jack backend and quickly reconfiguring, coded by hselasky (#543)
 
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
+
 
 
 

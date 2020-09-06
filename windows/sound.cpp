@@ -488,7 +488,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase              ( "ASIO", fpNewCallback, arg, iCtrlMIDIChannel ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),

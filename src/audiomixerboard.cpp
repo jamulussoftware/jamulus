@@ -393,6 +393,7 @@ void CChannelFader::Reset()
 
     bOtherChannelIsSolo = false;
     bIsMyOwnFader       = false;
+    bIsMutedAtServer    = false;
 
     iGroupID = INVALID_INDEX;
     UpdateGroupIDDependencies();
@@ -567,16 +568,21 @@ void CChannelFader::SetMute ( const bool bState )
 {
     if ( bState )
     {
-        // mute channel -> send gain of 0
-        emit gainValueChanged ( 0, bIsMyOwnFader, false, false, -1 ); // set level ratio to in invalid value
+        if ( !bIsMutedAtServer )
+        {
+            // mute channel -> send gain of 0
+            emit gainValueChanged ( 0, bIsMyOwnFader, false, false, -1 ); // set level ratio to in invalid value
+            bIsMutedAtServer = true;
+        }
     }
     else
     {
         // only unmute if we are not solot but an other channel is on solo
-        if ( !bOtherChannelIsSolo || IsSolo() )
+        if ( ( !bOtherChannelIsSolo || IsSolo() ) && bIsMutedAtServer )
         {
             // mute was unchecked, get current fader value and apply
             emit gainValueChanged ( MathUtils::CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, false, false, -1 ); // set level ratio to in invalid value
+            bIsMutedAtServer = false;
         }
     }
 }

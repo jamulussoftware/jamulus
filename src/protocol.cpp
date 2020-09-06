@@ -51,6 +51,19 @@ MAIN FRAME
 
 
 
+SPLIT MESSAGE CONTAINER
+-----------------------
+
+    +------------+------------------------+------------------+--------------+
+    | 2 bytes ID | 1 byte number of parts | 1 byte split cnt | n bytes data |
+    +------------+------------------------+------------------+--------------+
+
+- ID is the message ID of the message being split
+- split cnt is the counter which is incremented for each part of the message
+- data is the data part of the original message which were split
+
+
+
 MESSAGES (with connection)
 --------------------------
 
@@ -406,6 +419,20 @@ CONNECTION LESS MESSAGES
 /* Implementation *************************************************************/
 CProtocol::CProtocol()
 {
+
+
+// TEST
+const int iMaxNumParts = 25;
+iPartSize = 100;
+vecvecbySplitMessageStorage.Init ( iMaxNumParts );
+
+for ( int i = 0; i < iMaxNumParts; i++ )
+{
+    vecvecbySplitMessageStorage[i].Init( iPartSize );
+}
+
+
+
     Reset();
 
 
@@ -506,11 +533,36 @@ void CProtocol::CreateAndSendMessage ( const int               iID,
     }
     Mutex.unlock();
 
+
+// TODO insert split mechanism here
+// TODO make use of MAX_SIZE_BYTES_NETW_BUF
+
+// TEST split all messages by half for testing
+if ( vecData.Size() > iPartSize )
+{
+    const int iNumParts = static_cast<int> ( ceil ( static_cast<double> ( vecData.Size() ) / iPartSize ) );
+
+    for ( int iPartCnt = 0; iPartCnt < iNumParts; iPartCnt++ )
+    {
+
+// TODO
+//        vecData
+
+        // build complete message
+        GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
+
+        // enqueue message
+        EnqueueMessage ( vecNewMessage, iCurCounter, iID );
+    }
+}
+else
+{
     // build complete message
     GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
 
     // enqueue message
     EnqueueMessage ( vecNewMessage, iCurCounter, iID );
+}
 }
 
 void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
@@ -614,76 +666,129 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
         }
         else
         {
-            // check which type of message we received and do action
-            switch ( iRecID )
+
+// TODO better solution: do not copy message
+CVector<uint8_t> vecbyMesBodyDataModified = vecbyMesBodyData;
+
+
+            bool bEvaluateMessage = true;
+
+            // check for special ID first
+            if ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE )
             {
-            case PROTMESSID_JITT_BUF_SIZE:
-                bRet = EvaluateJitBufMes ( vecbyMesBodyData );
-                break;
+                int iOriginalID;
+                int iReceivedNumParts;
+                int iReceivedSplitCnt;
 
-            case PROTMESSID_REQ_JITT_BUF_SIZE:
-                bRet = EvaluateReqJitBufMes();
-                break;
+                ParseSplitMessageContainer ( vecbyMesBodyData,
+                                             vecvecbySplitMessageStorage[iSplitMessageCnt],
+                                             iOriginalID,
+                                             iReceivedNumParts,
+                                             iReceivedSplitCnt );
 
-            case PROTMESSID_CLIENT_ID:
-                bRet = EvaluateClientIDMes ( vecbyMesBodyData );
-                break;
+// TODO implement some checks of counters, etc. here
 
-            case PROTMESSID_CHANNEL_GAIN:
-                bRet = EvaluateChanGainMes ( vecbyMesBodyData );
-                break;
+// TEST assuming everything is ok
+                iSplitMessageCnt++;
 
-            case PROTMESSID_CHANNEL_PAN:
-                bRet = EvaluateChanPanMes ( vecbyMesBodyData );
-                break;
+                if ( iSplitMessageCnt == iReceivedNumParts )
+                {
+// quick hack test!!!
+                    vecbyMesBodyDataModified.Reset ( 0 );
 
-            case PROTMESSID_MUTE_STATE_CHANGED:
-                bRet = EvaluateMuteStateHasChangedMes ( vecbyMesBodyData );
-                break;
+                    for ( int i = 0; i < iReceivedNumParts; i++ )
+                    {
+// quick hack test!!!
+                        for ( int j = 0; j < vecvecbySplitMessageStorage[i].Size(); j++ )
+                        {
+                            vecbyMesBodyDataModified.Add ( vecvecbySplitMessageStorage[i][j] );
+                        }
+                    }
+                }
+                else
+                {
+                    bEvaluateMessage = false;
+                }
+            }
+            else
+            {
+// TEST
+iSplitMessageCnt = 0;
+            }
 
-            case PROTMESSID_CONN_CLIENTS_LIST:
-                bRet = EvaluateConClientListMes ( vecbyMesBodyData );
-                break;
+            if ( bEvaluateMessage )
+            {
+                // check which type of message we received and do action
+                switch ( iRecID )
+                {
+                case PROTMESSID_JITT_BUF_SIZE:
+                    bRet = EvaluateJitBufMes ( vecbyMesBodyDataModified );
+                    break;
 
-            case PROTMESSID_REQ_CONN_CLIENTS_LIST:
-                bRet = EvaluateReqConnClientsList();
-                break;
+                case PROTMESSID_REQ_JITT_BUF_SIZE:
+                    bRet = EvaluateReqJitBufMes();
+                    break;
 
-            case PROTMESSID_CHANNEL_INFOS:
-                bRet = EvaluateChanInfoMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CLIENT_ID:
+                    bRet = EvaluateClientIDMes ( vecbyMesBodyDataModified );
+                    break;
 
-            case PROTMESSID_REQ_CHANNEL_INFOS:
-                bRet = EvaluateReqChanInfoMes();
-                break;
+                case PROTMESSID_CHANNEL_GAIN:
+                    bRet = EvaluateChanGainMes ( vecbyMesBodyDataModified );
+                    break;
 
-            case PROTMESSID_CHAT_TEXT:
-                bRet = EvaluateChatTextMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CHANNEL_PAN:
+                    bRet = EvaluateChanPanMes ( vecbyMesBodyDataModified );
+                    break;
 
-            case PROTMESSID_NETW_TRANSPORT_PROPS:
-                bRet = EvaluateNetwTranspPropsMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_MUTE_STATE_CHANGED:
+                    bRet = EvaluateMuteStateHasChangedMes ( vecbyMesBodyDataModified );
+                    break;
 
-            case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
-                bRet = EvaluateReqNetwTranspPropsMes();
-                break;
+                case PROTMESSID_CONN_CLIENTS_LIST:
+                    bRet = EvaluateConClientListMes ( vecbyMesBodyDataModified );
+                    break;
 
-            case PROTMESSID_LICENCE_REQUIRED:
-                bRet = EvaluateLicenceRequiredMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_REQ_CONN_CLIENTS_LIST:
+                    bRet = EvaluateReqConnClientsList();
+                    break;
 
-            case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
-                bRet = EvaluateReqChannelLevelListMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CHANNEL_INFOS:
+                    bRet = EvaluateChanInfoMes ( vecbyMesBodyDataModified );
+                    break;
 
-            case PROTMESSID_VERSION_AND_OS:
-                bRet = EvaluateVersionAndOSMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_REQ_CHANNEL_INFOS:
+                    bRet = EvaluateReqChanInfoMes();
+                    break;
 
-            case PROTMESSID_RECORDER_STATE:
-                bRet = EvaluateRecorderStateMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CHAT_TEXT:
+                    bRet = EvaluateChatTextMes ( vecbyMesBodyDataModified );
+                    break;
+
+                case PROTMESSID_NETW_TRANSPORT_PROPS:
+                    bRet = EvaluateNetwTranspPropsMes ( vecbyMesBodyDataModified );
+                    break;
+
+                case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
+                    bRet = EvaluateReqNetwTranspPropsMes();
+                    break;
+
+                case PROTMESSID_LICENCE_REQUIRED:
+                    bRet = EvaluateLicenceRequiredMes ( vecbyMesBodyDataModified );
+                    break;
+
+                case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
+                    bRet = EvaluateReqChannelLevelListMes ( vecbyMesBodyDataModified );
+                    break;
+
+                case PROTMESSID_VERSION_AND_OS:
+                    bRet = EvaluateVersionAndOSMes ( vecbyMesBodyDataModified );
+                    break;
+
+                case PROTMESSID_RECORDER_STATE:
+                    bRet = EvaluateRecorderStateMes ( vecbyMesBodyDataModified );
+                    break;
+                }
             }
 
             // immediately send acknowledge message
@@ -2642,6 +2747,40 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
     }
 
     return false; // no error
+}
+
+void CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
+                                             CVector<uint8_t>&       vecbyMesBodyData,
+                                             int&                    iID,
+                                             int&                    iNumParts,
+                                             int&                    iSplitCnt )
+{
+    int       iPos     = 0; // init position pointer
+    const int iDataLen = vecbyData.Size();
+
+    // 2 bytes ID
+    iID = static_cast<int> ( GetValFromStream ( vecbyData, iPos, 2 ) );
+
+    // 1 byte number of parts
+    iNumParts = static_cast<int> ( GetValFromStream ( vecbyData, iPos, 1 ) );
+
+    // 1 byte split cnt
+    iSplitCnt = static_cast<int> ( GetValFromStream ( vecbyData, iPos, 1 ) );
+
+
+    // Extract actual data -----------------------------------------------------
+
+    const int iLenBy = iDataLen - 4;
+
+// TODO this memory allocation is done in the real time thread but should be
+//      done in the low priority protocol management thread
+
+    vecbyMesBodyData.Init ( iLenBy );
+
+    for ( int i = 0; i < iLenBy; i++ )
+    {
+        vecbyMesBodyData[i] = static_cast<uint8_t> ( GetValFromStream ( vecbyData, iPos, 1 ) );
+    }
 }
 
 uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,

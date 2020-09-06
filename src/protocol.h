@@ -81,6 +81,9 @@
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 
+// special IDs
+#define PROTMESSID_SPECIAL_SPLIT_MESSAGE      2001 // a container for split messages
+
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
 #define MESS_LEN_WITHOUT_DATA_BYTE      ( MESS_HEADER_LENGTH_BYTE + 2 /* CRC (2) */ )
@@ -202,6 +205,12 @@ protected:
                            const int               iID,
                            const CVector<uint8_t>& vecData );
 
+    void ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
+                                      CVector<uint8_t>&       vecbyMesBodyData,
+                                      int&                    iID,
+                                      int&                    iNumParts,
+                                      int&                    iSplitCnt );
+
     void PutValOnStream ( CVector<uint8_t>& vecIn,
                           int&              iPos,
                           const uint32_t    iVal,
@@ -282,6 +291,10 @@ protected:
 
     QTimer                  TimerSendMess;
     QMutex                  Mutex;
+
+    CVector<CVector<uint8_t> > vecvecbySplitMessageStorage;
+    int                        iSplitMessageCnt;
+    int                        iPartSize;
 
 public slots:
     void OnTimerSendMess() { SendMessage(); }

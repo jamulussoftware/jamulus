@@ -556,6 +556,7 @@ for ( int i = 0; i < iCurPartSize; i++ )
 }
 iPointer += iCurPartSize;
 
+// TODO better solution
 CVector<uint8_t> vecNewSplitMessage;
 
         GenSplitMessageContainer ( vecNewSplitMessage,
@@ -734,32 +735,48 @@ qDebug() << "iSplitMessageCnt: " << iSplitMessageCnt << ", iReceivedSplitCnt: " 
 
                 if ( iSplitMessageCnt == iReceivedNumParts )
                 {
-// quick hack test!!!
-                    vecbyMesBodyDataModified.Init ( 0 );
 
-                    for ( int i = 0; i < iReceivedNumParts; i++ )
+// TODO is there a cleaner way of reconstructing the complete message?
+
+                    int iMessageSize = 0;
+
+                    for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
                     {
-// quick hack test!!!
-                        for ( int j = 0; j < vecvecbySplitMessageStorage[i].Size(); j++ )
-                        {
-                            vecbyMesBodyDataModified.Add ( vecvecbySplitMessageStorage[i][j] );
-                        }
+                        iMessageSize += vecvecbySplitMessageStorage[iSplitCnt].Size();
+                    }
+
+                    vecbyMesBodyDataModified.Init ( iMessageSize );
+
+                    int iPutPos = 0;
+
+                    for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
+                    {
+                        const int iCurPartSize = vecvecbySplitMessageStorage[iSplitCnt].Size();
+
+                        std::copy ( vecvecbySplitMessageStorage[iSplitCnt].begin(),
+                                    vecvecbySplitMessageStorage[iSplitCnt].begin() + iCurPartSize,
+                                    vecbyMesBodyDataModified.begin() + iPutPos );
+
+                        iPutPos += iCurPartSize;
                     }
 
                     iRecIDModified = iOriginalID;
 
 qDebug() << "received iNumParts: " << iReceivedNumParts;// << ", data: " << vecbyMesBodyDataModified;
 
+                    // the complete split message was reconstructed, reset the counter for the next split message
+                    iSplitMessageCnt = 0;
                 }
                 else
                 {
+                    // only part of the split message is received, no evaluation possible yet
                     bEvaluateMessage = false;
                 }
             }
             else
             {
-// TEST
-iSplitMessageCnt = 0;
+                // a non-split message was received, reset split message counter
+                iSplitMessageCnt = 0;
             }
 
             if ( bEvaluateMessage )

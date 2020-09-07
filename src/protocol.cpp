@@ -428,7 +428,7 @@ vecvecbySplitMessageStorage.Init ( iMaxNumParts );
 
 for ( int i = 0; i < iMaxNumParts; i++ )
 {
-    vecvecbySplitMessageStorage[i].Init( iPartSize );
+    vecvecbySplitMessageStorage[i].Init ( iPartSize );
 }
 
 
@@ -446,9 +446,10 @@ void CProtocol::Reset()
     QMutexLocker locker ( &Mutex );
 
     // prepare internal variables for initial protocol transfer
-    iCounter   = 0;
-    iOldRecID  = PROTMESSID_ILLEGAL;
-    iOldRecCnt = 0;
+    iCounter         = 0;
+    iOldRecID        = PROTMESSID_ILLEGAL;
+    iOldRecCnt       = 0;
+    iSplitMessageCnt = 0;
 
     // delete complete "send message queue"
     SendMessQueue.clear();
@@ -523,29 +524,20 @@ void CProtocol::CreateAndSendMessage ( const int               iID,
     CVector<uint8_t> vecNewMessage;
     int              iCurCounter;
 
-    Mutex.lock();
-    {
-        // store current counter value
-        iCurCounter = iCounter;
-
-        // increase counter (wraps around automatically)
-        iCounter++;
-    }
-    Mutex.unlock();
-
-
 // TODO insert split mechanism here
 // TODO make use of MAX_SIZE_BYTES_NETW_BUF
 
 CVector<uint8_t> vecDataTmp;
 int iPointer = 0;
 
+qDebug() << "CreateAndSendMessage vecData.Size(): " << vecData.Size();
+
 // TEST split all messages by half for testing
 if ( vecData.Size() > iPartSize )
 {
     const int iNumParts = static_cast<int> ( ceil ( static_cast<double> ( vecData.Size() ) / iPartSize ) );
 
-//qDebug() << iNumParts;
+qDebug() << "CreateAndSendMessage message spilt in " << iNumParts << " parts";
 
     for ( int iSplitCnt = 0; iSplitCnt < iNumParts; iSplitCnt++ )
     {
@@ -564,21 +556,43 @@ for ( int i = 0; i < iCurPartSize; i++ )
 }
 iPointer += iCurPartSize;
 
-        GenSplitMessageContainer ( vecNewMessage,
+CVector<uint8_t> vecNewSplitMessage;
+
+        GenSplitMessageContainer ( vecNewSplitMessage,
                                    iID,
                                    iNumParts,
                                    iSplitCnt,
                                    vecDataTmp );
 
+        Mutex.lock();
+        {
+            // store current counter value
+            iCurCounter = iCounter;
+
+            // increase counter (wraps around automatically)
+            iCounter++;
+        }
+        Mutex.unlock();
+
         // build complete message
-        GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
+        GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE, vecNewSplitMessage );
 
         // enqueue message
-        EnqueueMessage ( vecNewMessage, iCurCounter, iID );
+        EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE );
     }
 }
 else
 {
+    Mutex.lock();
+    {
+        // store current counter value
+        iCurCounter = iCounter;
+
+        // increase counter (wraps around automatically)
+        iCounter++;
+    }
+    Mutex.unlock();
+
     // build complete message
     GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
 
@@ -691,6 +705,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
 // TODO better solution: do not copy message
 CVector<uint8_t> vecbyMesBodyDataModified = vecbyMesBodyData;
+int              iRecIDModified = iRecID;
 
 
             bool bEvaluateMessage = true;
@@ -698,6 +713,8 @@ CVector<uint8_t> vecbyMesBodyDataModified = vecbyMesBodyData;
             // check for special ID first
             if ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE )
             {
+qDebug() << "PROTMESSID_SPECIAL_SPLIT_MESSAGE";
+
                 int iOriginalID;
                 int iReceivedNumParts;
                 int iReceivedSplitCnt;
@@ -713,10 +730,12 @@ CVector<uint8_t> vecbyMesBodyDataModified = vecbyMesBodyData;
 // TEST assuming everything is ok
                 iSplitMessageCnt++;
 
+qDebug() << "iSplitMessageCnt: " << iSplitMessageCnt << ", iReceivedSplitCnt: " << iReceivedSplitCnt << ", iReceivedNumParts: " << iReceivedNumParts;
+
                 if ( iSplitMessageCnt == iReceivedNumParts )
                 {
 // quick hack test!!!
-                    vecbyMesBodyDataModified.Reset ( 0 );
+                    vecbyMesBodyDataModified.Init ( 0 );
 
                     for ( int i = 0; i < iReceivedNumParts; i++ )
                     {
@@ -726,6 +745,11 @@ CVector<uint8_t> vecbyMesBodyDataModified = vecbyMesBodyData;
                             vecbyMesBodyDataModified.Add ( vecvecbySplitMessageStorage[i][j] );
                         }
                     }
+
+                    iRecIDModified = iOriginalID;
+
+qDebug() << "received iNumParts: " << iReceivedNumParts;// << ", data: " << vecbyMesBodyDataModified;
+
                 }
                 else
                 {
@@ -740,8 +764,11 @@ iSplitMessageCnt = 0;
 
             if ( bEvaluateMessage )
             {
+
+qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.Size(): " << vecbyMesBodyDataModified.Size();
+
                 // check which type of message we received and do action
-                switch ( iRecID )
+                switch ( iRecIDModified )
                 {
                 case PROTMESSID_JITT_BUF_SIZE:
                     bRet = EvaluateJitBufMes ( vecbyMesBodyDataModified );

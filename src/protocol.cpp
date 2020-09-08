@@ -200,6 +200,16 @@ MESSAGES (with connection)
     note: does not have any data -> n = 0
 
 
+- PROTMESSID_REQ_SPLIT_MESS_SUPPORT: Request split message support
+
+    note: does not have any data -> n = 0
+
+
+- PROTMESSID_SPLIT_MESS_SUPPORTED: Split messages are supported
+
+    note: does not have any data -> n = 0
+
+
 - PROTMESSID_LICENCE_REQUIRED: Licence required to connect to the server
 
     +---------------------+
@@ -432,10 +442,11 @@ void CProtocol::Reset()
     QMutexLocker locker ( &Mutex );
 
     // prepare internal variables for initial protocol transfer
-    iCounter         = 0;
-    iOldRecID        = PROTMESSID_ILLEGAL;
-    iOldRecCnt       = 0;
-    iSplitMessageCnt = 0;
+    iCounter               = 0;
+    iOldRecID              = PROTMESSID_ILLEGAL;
+    iOldRecCnt             = 0;
+    iSplitMessageCnt       = 0;
+    bSplitMessageSupported = false; // compatilibity to old versions
 
     // delete complete "send message queue"
     SendMessQueue.clear();
@@ -519,20 +530,20 @@ int iPointer = 0;
 qDebug() << "CreateAndSendMessage vecData.Size(): " << vecData.Size();
 
 // TEST split all messages by half for testing
-if ( vecData.Size() > MESS_SPLIT_PART_SIZE_BYTES )
-{
-    const int iNumParts = static_cast<int> ( ceil ( static_cast<double> ( vecData.Size() ) / MESS_SPLIT_PART_SIZE_BYTES ) );
+    if ( ( vecData.Size() > MESS_SPLIT_PART_SIZE_BYTES ) && bSplitMessageSupported )
+    {
+        const int iNumParts = static_cast<int> ( ceil ( static_cast<double> ( vecData.Size() ) / MESS_SPLIT_PART_SIZE_BYTES ) );
 
 qDebug() << "CreateAndSendMessage message spilt in " << iNumParts << " parts";
 
-    for ( int iSplitCnt = 0; iSplitCnt < iNumParts; iSplitCnt++ )
-    {
-        int iCurPartSize = MESS_SPLIT_PART_SIZE_BYTES;
-
-        if ( vecData.Size() - iPointer < MESS_SPLIT_PART_SIZE_BYTES )
+        for ( int iSplitCnt = 0; iSplitCnt < iNumParts; iSplitCnt++ )
         {
-            iCurPartSize = vecData.Size() - iPointer;
-        }
+            int iCurPartSize = MESS_SPLIT_PART_SIZE_BYTES;
+
+            if ( vecData.Size() - iPointer < MESS_SPLIT_PART_SIZE_BYTES )
+            {
+                iCurPartSize = vecData.Size() - iPointer;
+            }
 
 vecDataTmp.Init ( iCurPartSize );
 
@@ -545,12 +556,31 @@ iPointer += iCurPartSize;
 // TODO better solution
 CVector<uint8_t> vecNewSplitMessage;
 
-        GenSplitMessageContainer ( vecNewSplitMessage,
-                                   iID,
-                                   iNumParts,
-                                   iSplitCnt,
-                                   vecDataTmp );
+            GenSplitMessageContainer ( vecNewSplitMessage,
+                                       iID,
+                                       iNumParts,
+                                       iSplitCnt,
+                                       vecDataTmp );
 
+            Mutex.lock();
+            {
+                // store current counter value
+                iCurCounter = iCounter;
+
+                // increase counter (wraps around automatically)
+                iCounter++;
+            }
+            Mutex.unlock();
+
+            // build complete message
+            GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE, vecNewSplitMessage );
+
+            // enqueue message
+            EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE );
+        }
+    }
+    else
+    {
         Mutex.lock();
         {
             // store current counter value
@@ -562,30 +592,11 @@ CVector<uint8_t> vecNewSplitMessage;
         Mutex.unlock();
 
         // build complete message
-        GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE, vecNewSplitMessage );
+        GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
 
         // enqueue message
-        EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE );
+        EnqueueMessage ( vecNewMessage, iCurCounter, iID );
     }
-}
-else
-{
-    Mutex.lock();
-    {
-        // store current counter value
-        iCurCounter = iCounter;
-
-        // increase counter (wraps around automatically)
-        iCounter++;
-    }
-    Mutex.unlock();
-
-    // build complete message
-    GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
-
-    // enqueue message
-    EnqueueMessage ( vecNewMessage, iCurCounter, iID );
-}
 }
 
 void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
@@ -822,6 +833,14 @@ qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.
 
                 case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
                     EvaluateReqNetwTranspPropsMes();
+                    break;
+
+                case PROTMESSID_REQ_SPLIT_MESS_SUPPORT:
+                    EvaluateReqSplitMessSupportMes();
+                    break;
+
+                case PROTMESSID_SPLIT_MESS_SUPPORTED:
+                    EvaluateSplitMessSupportedMes();
                     break;
 
                 case PROTMESSID_LICENCE_REQUIRED:
@@ -1568,6 +1587,34 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes()
 {
     // invoke message action
     emit ReqNetTranspProps();
+
+    return false; // no error
+}
+
+void CProtocol::CreateReqSplitMessSupportMes()
+{
+    CreateAndSendMessage ( PROTMESSID_REQ_SPLIT_MESS_SUPPORT,
+                           CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateReqSplitMessSupportMes()
+{
+    // invoke message action
+    emit ReqSplitMessSupport();
+
+    return false; // no error
+}
+
+void CProtocol::CreateSplitMessSupportedMes()
+{
+    CreateAndSendMessage ( PROTMESSID_SPLIT_MESS_SUPPORTED,
+                           CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateSplitMessSupportedMes()
+{
+    // invoke message action
+    emit SplitMessSupported();
 
     return false; // no error
 }

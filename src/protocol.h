@@ -60,6 +60,8 @@
 #define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
 #define PROTMESSID_CLIENT_ID                  32 // current user ID and server status
 #define PROTMESSID_RECORDER_STATE             33 // contains the state of the jam recorder (ERecorderState)
+#define PROTMESSID_REQ_SPLIT_MESS_SUPPORT     34 // request support for split messages
+#define PROTMESSID_SPLIT_MESS_SUPPORTED       35 // split messages are supported
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -105,6 +107,7 @@ public:
     CProtocol();
 
     void Reset();
+    void SetSplitMessageSupported ( const bool bIn ) { bSplitMessageSupported = bIn; }
 
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
@@ -119,6 +122,8 @@ public:
     void CreateChatTextMes ( const QString strChatText );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
+    void CreateReqSplitMessSupportMes();
+    void CreateSplitMessSupportedMes();
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
     void CreateReqChannelLevelListMes ( const bool bRCL );
@@ -261,6 +266,8 @@ protected:
     bool EvaluateChatTextMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
+    bool EvaluateReqSplitMessSupportMes();
+    bool EvaluateSplitMessSupportedMes();
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
     bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
@@ -304,6 +311,7 @@ protected:
 
     CVector<uint8_t>        vecvecbySplitMessageStorage[MAX_NUM_MESS_SPLIT_PARTS];
     int                     iSplitMessageCnt;
+    bool                    bSplitMessageSupported;
 
 public slots:
     void OnTimerSendMess() { SendMessage(); }
@@ -330,6 +338,8 @@ signals:
     void ChatTextReceived ( QString strChatText );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
+    void ReqSplitMessSupport();
+    void SplitMessSupported();
     void LicenceRequired ( ELicenceType eLicenceType );
     void ReqChannelLevelList ( bool bOptIn );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );

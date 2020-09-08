@@ -709,7 +709,7 @@ CVector<uint8_t> vecbyMesBodyDataModified = vecbyMesBodyData;
 int              iRecIDModified = iRecID;
 
 
-            bool bEvaluateMessage = true;
+            bool bEvaluateMessage = false;
 
             // check for special ID first
             if ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE )
@@ -720,63 +720,61 @@ qDebug() << "PROTMESSID_SPECIAL_SPLIT_MESSAGE";
                 int iReceivedNumParts;
                 int iReceivedSplitCnt;
 
-                ParseSplitMessageContainer ( vecbyMesBodyData,
-                                             vecvecbySplitMessageStorage[iSplitMessageCnt],
-                                             iOriginalID,
-                                             iReceivedNumParts,
-                                             iReceivedSplitCnt );
-
+                if ( !ParseSplitMessageContainer ( vecbyMesBodyData,
+                                                   vecvecbySplitMessageStorage[iSplitMessageCnt],
+                                                   iOriginalID,
+                                                   iReceivedNumParts,
+                                                   iReceivedSplitCnt ) )
+                {
 // TODO implement some checks of counters, etc. here
 
 // TEST assuming everything is ok
-                iSplitMessageCnt++;
+                    iSplitMessageCnt++;
 
 qDebug() << "iSplitMessageCnt: " << iSplitMessageCnt << ", iReceivedSplitCnt: " << iReceivedSplitCnt << ", iReceivedNumParts: " << iReceivedNumParts;
 
-                if ( iSplitMessageCnt == iReceivedNumParts )
-                {
+                    if ( iSplitMessageCnt == iReceivedNumParts )
+                    {
 
 // TODO is there a cleaner way of reconstructing the complete message?
 
-                    int iMessageSize = 0;
+                        int iMessageSize = 0;
 
-                    for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
-                    {
-                        iMessageSize += vecvecbySplitMessageStorage[iSplitCnt].Size();
-                    }
+                        for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
+                        {
+                            iMessageSize += vecvecbySplitMessageStorage[iSplitCnt].Size();
+                        }
 
-                    vecbyMesBodyDataModified.Init ( iMessageSize );
+                        vecbyMesBodyDataModified.Init ( iMessageSize );
 
-                    int iPutPos = 0;
+                        int iPutPos = 0;
 
-                    for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
-                    {
-                        const int iCurPartSize = vecvecbySplitMessageStorage[iSplitCnt].Size();
+                        for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
+                        {
+                            const int iCurPartSize = vecvecbySplitMessageStorage[iSplitCnt].Size();
 
-                        std::copy ( vecvecbySplitMessageStorage[iSplitCnt].begin(),
-                                    vecvecbySplitMessageStorage[iSplitCnt].begin() + iCurPartSize,
-                                    vecbyMesBodyDataModified.begin() + iPutPos );
+                            std::copy ( vecvecbySplitMessageStorage[iSplitCnt].begin(),
+                                        vecvecbySplitMessageStorage[iSplitCnt].begin() + iCurPartSize,
+                                        vecbyMesBodyDataModified.begin() + iPutPos );
 
-                        iPutPos += iCurPartSize;
-                    }
+                            iPutPos += iCurPartSize;
+                        }
 
-                    iRecIDModified = iOriginalID;
+                        iRecIDModified = iOriginalID;
 
 qDebug() << "received iNumParts: " << iReceivedNumParts;// << ", data: " << vecbyMesBodyDataModified;
 
-                    // the complete split message was reconstructed, reset the counter for the next split message
-                    iSplitMessageCnt = 0;
-                }
-                else
-                {
-                    // only part of the split message is received, no evaluation possible yet
-                    bEvaluateMessage = false;
+                        // the complete split message was reconstructed, reset the counter for the next split message
+                        iSplitMessageCnt = 0;
+                        bEvaluateMessage = true;
+                    }
                 }
             }
             else
             {
                 // a non-split message was received, reset split message counter
                 iSplitMessageCnt = 0;
+                bEvaluateMessage = true;
             }
 
             if ( bEvaluateMessage )
@@ -2815,7 +2813,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
     return false; // no error
 }
 
-void CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
+bool CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
                                              CVector<uint8_t>&       vecbyMesBodyData,
                                              int&                    iID,
                                              int&                    iNumParts,
@@ -2823,6 +2821,12 @@ void CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
 {
     int       iPos     = 0; // init position pointer
     const int iDataLen = vecbyData.Size();
+
+    // check size (the first 4 bytes)
+    if ( iDataLen < 4 )
+    {
+        return true; // return error code
+    }
 
     // 2 bytes ID
     iID = static_cast<int> ( GetValFromStream ( vecbyData, iPos, 2 ) );
@@ -2847,6 +2851,8 @@ void CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
     {
         vecbyMesBodyData[i] = static_cast<uint8_t> ( GetValFromStream ( vecbyData, iPos, 1 ) );
     }
+
+    return false; // no error
 }
 
 uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,

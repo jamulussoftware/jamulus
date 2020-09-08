@@ -2,18 +2,95 @@
 
 
 
-3.5.8git
+3.5.10git <- NOTE: the release version number will be 3.5.11
 
-TODO improve settings management -> move settings class in client/server classes, move actual settings variables
+- support a check for updates (#370)
 
-TODO add new register message which contains version and, e.g., max number of clients
+- added an optional server list whitelist filter (#413)
 
-TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
-     - generate .qm on compile time with lrelease
+- added a command line argument to enable multithreading in the server (#339)
+
+- store recorder settings, coded by pljones (#313)
+
+- accessibility improvements, coded by chigkim (#498, #512)
+
+- added Jack audio audio latency calculation, coded by bflamig (#437)
+
+- show the server name in the title bar (#559)
+
+- bug fix: crash when using the Jack backend and quickly reconfiguring, coded by hselasky (#543)
+
+- bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
 
 
 
+
+
+
+
+3.5.10 (2020-08-16)
+
+- do not change the server list order if the mouse is over the table to
+  avoid selecting an incorrect server on a mouse double click (#293)
+
+- if network name/address contains spaces, they are removed now,
+  coded by dingodoppelt (#462)
+
+- improve compact skin by using smaller font size
+
+- improve server audio mix processing for better clipping behavior
+
+- support MIDI control faders in headless build (#483)
+
+- option to set Mute Myself on with a command line argument (#495)
+
+- added a red message to indicate that Mute Myself is activated (#476)
+
+- manual clip LED reset by mouse click on the level meter (#421)
+
+- replacing internal history graph functionality by external scripts/tools (#501)
+
+- accessibility improvements, coded by chigkim (#499, #510, #514)
+
+- bug fix: fixed a stability issue in the server (should fix #480)
+
+- bug fix: --showallservers ping column sort is alphabetic (#201)
+
+
+3.5.9 (2020-07-19)
+
+- new app icon for Jamulus, created by geheimerEichkater (#410)
+
+- support up to four different groups for the channels (#202)
+
+- support sorting faders by channel group
+
+- add support to change the GUI language (#297)
+
+- add special server list filter for filtering occupied servers by using "#" (#397)
+
+- update server UI to allow setting the jam recorder directory (like -R) (#228, #405)
+
+- redesign of the server dialog (e.g. added welcome message setting)
+
+- save and restore mixer state (like fader, mute, etc.) (#377)
+  note that saving/loading of settings only works if not connected
+
+- scale channel instrument picture in Compact skin mode
+
+- show maximum number of clients for servers in the serverlist, coded by dingodoppelt (#451)
+
+- log the number of connected clients on each new connection (#277)
+
+- move the Mute Myself button up to prevent accidentally disconnecting
+
+- bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
+
+
+3.5.8 (2020-06-30)
+
+- bug fix: incorrect selection of UI language (#408)
 
 
 3.5.7 (2020-06-28)
@@ -125,7 +202,7 @@ TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
 
 - new command line option -d to disconnect all clients on shutdown of the server (#161)
 
-- bug fix: for mono capture jack audio interface Jamulus complains it
+- bug fix: for mono capture Jack audio interface Jamulus complains it
   cannot make connections (#137)
 
 - bug fix: fixed that Jamulus segfaults when jackd is restarted (#122, #127)
@@ -497,7 +574,7 @@ TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
 - show number of connected clients in window title (and therefore in OS task
   bar)
 
-- added "Whats this" help text to the GUI controls in the general settings
+- added "What's this" help text to the GUI controls in the general settings
   dialog, added Tool Tips to some GUI controls
 
 - server logging history grid lines of weekend days are now plotted with

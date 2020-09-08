@@ -46,7 +46,7 @@ class CChannel; // forward declaration of CChannel
 
 /* Definitions ****************************************************************/
 // number of ports we try to bind until we give up
-#define NUM_SOCKET_PORTS_TO_TRY         50
+#define NUM_SOCKET_PORTS_TO_TRY         100
 
 
 /* Classes ********************************************************************/
@@ -99,7 +99,7 @@ protected:
 
     bool             bJitterBufferOK;
 
-public slots:
+public:
     void OnDataReceived();
 
 signals:
@@ -169,7 +169,7 @@ protected:
     {
     public:
         CSocketThread ( CSocket* pNewSocket = nullptr, QObject* parent = nullptr ) :
-          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
+          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) { setObjectName ( "CSocketThread" ); }
 
         void Stop()
         {

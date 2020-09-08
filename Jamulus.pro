@@ -1,4 +1,4 @@
-VERSION = 3.5.8git
+VERSION = 3.5.10git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -6,23 +6,13 @@ contains(CONFIG, "noupcasename") {
     TARGET = jamulus
 }
 
-# support multi-threading with OMP if requested
-contains(CONFIG, "multithreading") {
-    unix {
-        message(The OpenMP multithreading is enabled.)
-        message(NOTE THAT THE OpenMP IMPLEMENTATION IS STILL EXPERIMENTAL AND MAY NOT BE STABLE.)
-        DEFINES += USE_OMP
-        QMAKE_CXXFLAGS += -fopenmp
-        QMAKE_LFLAGS += -fopenmp
-    }
-}
-
 CONFIG += qt \
     thread \
     release
 
 QT += network \
-    xml
+    xml \
+    concurrent
 
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
@@ -287,6 +277,9 @@ win32 {
     # we want to compile with C++11
     CONFIG += c++11
 
+    HEADERS += linux/sound.h
+    SOURCES += linux/sound.cpp
+
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though
     DEFINES += HAVE_LRINTF
@@ -306,8 +299,6 @@ win32 {
             PKGCONFIG += jack
         }
 
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
         DEFINES += WITH_SOUND
     }
 
@@ -321,22 +312,26 @@ win32 {
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
     target.path = $$BINDIR
 
-    isEmpty(APPSDIR) {
-        APPSDIR = share/applications
-    }
-    APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
-    desktop.path = $$APPSDIR
-    QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
-    desktop.files = distributions/jamulus.desktop
+    contains(CONFIG, "headless") {
+        INSTALLS += target
+    } else {
+        isEmpty(APPSDIR) {
+            APPSDIR = share/applications
+        }
+        APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
+        desktop.path = $$APPSDIR
+        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
+        desktop.files = distributions/jamulus.desktop
 
-    isEmpty(ICONSDIR) {
-        ICONSDIR = share/icons/hicolor/512x512/apps
-    }
-    ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
-    icons.path = $$ICONSDIR
-    icons.files = distributions/jamulus.png
+        isEmpty(ICONSDIR) {
+            ICONSDIR = share/icons/hicolor/512x512/apps
+        }
+        ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
+        icons.path = $$ICONSDIR
+        icons.files = distributions/jamulus.png
 
-    INSTALLS += target desktop icons
+        INSTALLS += target desktop icons
+    }
 }
 
 RCC_DIR = src/res
@@ -367,7 +362,6 @@ HEADERS += src/buffer.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/historygraph.h \
     src/signalhandler.h
 
 HEADERS_GUI = src/audiomixerboard.h \
@@ -466,8 +460,7 @@ SOURCES += src/buffer.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
-    src/recorder/cwavestream.cpp \
-    src/historygraph.cpp
+    src/recorder/cwavestream.cpp
 
 SOURCES_GUI = src/audiomixerboard.cpp \
     src/chatdlg.cpp \
@@ -683,29 +676,7 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
-    src/res/mainicon.png \
     src/res/mixerboardbackground.png \
-    src/res/VLEDBlack.png \
-    src/res/VLEDBlackSmall.png \
-    src/res/VLEDDisabledSmall.png \
-    src/res/VLEDGreen.png \
-    src/res/VLEDGreenSmall.png \
-    src/res/VLEDGrey.png \
-    src/res/VLEDGreySmall.png \
-    src/res/VLEDRed.png \
-    src/res/VLEDRedSmall.png \
-    src/res/VLEDYellow.png \
-    src/res/VLEDYellowSmall.png \
-    src/res/VRLEDBlack.png \
-    src/res/VRLEDBlackSmall.png \
-    src/res/VRLEDGreen.png \
-    src/res/VRLEDGreenSmall.png \
-    src/res/VRLEDGrey.png \
-    src/res/VRLEDGreySmall.png \
-    src/res/VRLEDRed.png \
-    src/res/VRLEDRedSmall.png \
-    src/res/VRLEDYellow.png \
-    src/res/VRLEDYellowSmall.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \
@@ -755,6 +726,8 @@ DISTFILES += ChangeLog \
     src/res/instruments/vocaltenor.png \
     src/res/instruments/vocalalto.png \
     src/res/instruments/vocalsoprano.png \
+    src/res/instruments/vocalbaritone.png \
+    src/res/instruments/vocallead.png \
     src/res/instruments/banjo.png \
     src/res/instruments/mandolin.png \
     src/res/flags/flagnone.png \

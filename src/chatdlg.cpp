@@ -52,7 +52,7 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
     txvChatWindow->clear();
     edtLocalInputText->clear();
 
-    // we do not want to show a curser in the chat history
+    // we do not want to show a cursor in the chat history
     txvChatWindow->setCursorWidth ( 0 );
 
     // set a placeholder text to make sure where to type the message in (#384)
@@ -85,7 +85,7 @@ void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
     // check and correct length
     if ( strNewText.length() > MAX_LEN_CHAT_TEXT )
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         edtLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
     }
 }

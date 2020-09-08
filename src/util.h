@@ -41,6 +41,9 @@
 # include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
+#include <QDirIterator>
+#include <QTranslator>
+#include <QLibraryInfo>
 #include <QUrl>
 #include <QLocale>
 #include <QElapsedTimer>
@@ -420,7 +423,6 @@ class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 
 public:
     CAboutDlg ( QWidget* parent = nullptr );
-
 };
 
 
@@ -488,7 +490,28 @@ public slots:
     void OnHelpSoftwareMan()      { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
 };
 
+
+// Language combo box ----------------------------------------------------------
+class CLanguageComboBox : public QComboBox
+{
+    Q_OBJECT
+
+public:
+    CLanguageComboBox ( QWidget* parent = nullptr );
+
+    void Init ( QString& strSelLanguage );
+
+protected:
+    int iIdxSelectedLanguage;
+
+public slots:
+    void OnLanguageActivated ( int iLanguageIdx );
+
+signals:
+    void LanguageChanged ( QString strLanguage );
+};
 #endif
+
 
 // Console writer factory ------------------------------------------------------
 // this class was written by pljones
@@ -581,7 +604,8 @@ enum ERecorderState
 enum EChSortType
 {
     ST_BY_NAME,
-    ST_BY_INSTRUMENT
+    ST_BY_INSTRUMENT,
+    ST_BY_GROUPID
 };
 
 
@@ -633,7 +657,7 @@ enum ESvrRegStatus
     SRS_REGISTERED,
     SRS_CENTRAL_SVR_FULL,
     SRS_VERSION_TOO_OLD,
-    SRS_NOT_FULFILL_REQIREMENTS
+    SRS_NOT_FULFILL_REQUIREMENTS
 };
 
 inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
@@ -664,7 +688,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
 
-    case SRS_NOT_FULFILL_REQIREMENTS:
+    case SRS_NOT_FULFILL_REQUIREMENTS:
         return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
@@ -835,6 +859,7 @@ public:
     static QString       GetResourceReference ( const int iInstrument );
     static QString       GetName ( const int iInstrument );
     static EInstCategory GetCategory ( const int iInstrument );
+    static void          UpdateTableOnLanguageChange() { GetTable ( true ); }
 
 // TODO make use of instrument category (not yet implemented)
 
@@ -860,8 +885,7 @@ protected:
     };
 
     static bool IsInstIndexInRange ( const int iIdx );
-
-    static CVector<CInstPictProps>& GetTable();
+    static CVector<CInstPictProps>& GetTable ( const bool bReGenerateTable = false );
 };
 
 
@@ -869,8 +893,12 @@ protected:
 class CLocale
 {
 public:
-    static QString    GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
-    static ECSAddType GetCentralServerAddressType ( const QLocale::Country eCountry );
+    static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
+    static ECSAddType              GetCentralServerAddressType ( const QLocale::Country eCountry );
+    static QMap<QString, QString>  GetAvailableTranslations();
+    static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
+    static void                    LoadTranslation ( const QString     strLanguage,
+                                                     QCoreApplication* pApp );
 };
 
 
@@ -1084,6 +1112,7 @@ public:
     static bool ParseNetworkAddress ( QString       strAddress,
                                       CHostAddress& HostAddress );
 
+    static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
                                                   const QString&   strCentralServerAddress );
@@ -1249,33 +1278,23 @@ public:
     {
         return bXFade ? dPan : std::min ( 0.5, dPan ) * 2;
     }
-};
 
-
-// Precise time ----------------------------------------------------------------
-// required for ping measurement
-class CPreciseTime
-{
-public:
-#ifdef _WIN32
-    // for the Windows version we have to define a minimum timer precision
-    // -> set it to 1 ms
-    CPreciseTime() { timeBeginPeriod ( 1 ); }
-    virtual ~CPreciseTime() { timeEndPeriod ( 1 ); }
-#endif
-
-    // precise time (on Windows the QTime is not precise enough)
-    int elapsed()
+    // calculate linear gain from fader values which are in dB
+    static double CalcFaderGain ( const double dValue )
     {
-#ifdef _WIN32
-        return timeGetTime();
-#elif defined ( __APPLE__ ) || defined ( __MACOSX )
-        return mach_absolute_time() / 1000000; // convert ns in ms
-#else
-        timespec tp;
-        clock_gettime ( CLOCK_MONOTONIC, &tp );
-        return tp.tv_sec * 1000 + tp.tv_nsec / 1000000; // convert ns in ms and add the seconds part
-#endif
+        // convert actual slider range in gain values
+        // and normalize so that maximum gain is 1
+        const double dInValueRange0_1 = dValue / AUD_MIX_FADER_MAX;
+
+        // map range from 0..1 to range -35..0 dB and calculate linear gain
+        if ( dValue == 0 )
+        {
+            return 0; // -infinity
+        }
+        else
+        {
+            return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
+        }
     }
 };
 

@@ -26,20 +26,21 @@
 
 
 /* Implementation *************************************************************/
-CClientDlg::CClientDlg ( CClient*        pNCliP,
-                         CSettings*      pNSetP,
-                         const QString&  strConnOnStartupAddress,
-                         const int       iCtrlMIDIChannel,
-                         const bool      bNewShowComplRegConnList,
-                         const bool      bShowAnalyzerConsole,
-                         QWidget*        parent,
-                         Qt::WindowFlags f ) :
+CClientDlg::CClientDlg ( CClient*         pNCliP,
+                         CClientSettings* pNSetP,
+                         const QString&   strConnOnStartupAddress,
+                         const int        iCtrlMIDIChannel,
+                         const bool       bNewShowComplRegConnList,
+                         const bool       bShowAnalyzerConsole,
+                         const bool       bMuteStream,
+                         QWidget*         parent,
+                         Qt::WindowFlags  f ) :
     QDialog             ( parent, f ),
     pClient             ( pNCliP ),
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed       ( iCtrlMIDIChannel != INVALID_MIDI_CH ),
-    ClientSettingsDlg   ( pNCliP, parent, Qt::Window ),
+    ClientSettingsDlg   ( pNCliP, pNSetP, parent, Qt::Window ),
     ChatDlg             ( parent, Qt::Window ),
     ConnectDlg          ( pNCliP, bNewShowComplRegConnList, parent, Qt::Dialog ),
     AnalyzerConsole     ( pNCliP, parent, Qt::Window ),
@@ -90,11 +91,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     butConnect->setAccessibleName (
         tr ( "Connect and disconnect toggle button" ) );
-
-    butConnect->setAccessibleDescription ( tr ( "Clicking on this "
-        "button changes the caption of the button from Connect to "
-        "Disconnect, i.e., it implements a toggle functionality for connecting "
-        "and disconnecting the application." ) );
 
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
@@ -182,19 +178,14 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // init GUI design
     SetGUIDesign ( pClient->GetGUIDesign() );
 
+    // set the settings pointer to the mixer board (must be done early)
+    MainMixerBoard->SetSettingsPointer ( pSettings );
+
     // reset mixer board
     MainMixerBoard->HideAll();
 
     // restore channel level display preference
     MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
-
-    // restore fader settings
-    MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
-    MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
-    MainMixerBoard->vecStoredPanValues   = pClient->vecStoredPanValues;
-    MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
-    MainMixerBoard->vecStoredFaderIsMute = pClient->vecStoredFaderIsMute;
-    MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel;
 
     // init status label
     OnTimerStatus();
@@ -225,10 +216,19 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     UpdateRevSelection();
 
     // init connect dialog
-    ConnectDlg.SetShowAllMusicians ( pClient->bConnectDlgShowAllMusicians );
+    ConnectDlg.SetShowAllMusicians ( pSettings->bConnectDlgShowAllMusicians );
 
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
+
+    // prepare Mute Myself info label (invisible by default)
+    lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
+    lblGlobalInfoLabel->hide();
+
+    // prepare update check info label (invisible by default)
+    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+                              tr ( "software upgrade available" ) + "</b></font>" );
+    lblUpdateCheck->hide();
 
 
     // Connect on startup ------------------------------------------------------
@@ -240,19 +240,23 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     }
 
 
-    // Mac Workaround:
-    // If the connect button is the default button, on Mac it is highlighted
-    // by fading in and out a blue backgroud color. This operation consumes so
-    // much CPU that we get audio interruptions.
-    // Better solution: increase thread priority of worker thread (since the
-    // user can always highlight the button manually, too) -> TODO
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-    butConnect->setDefault ( false );
-#endif
+    // File menu  --------------------------------------------------------------
+    QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
+
+    pLoadChannelSetupAction = pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this,
+        SLOT ( OnLoadChannelSetup() ) );
+
+    pSaveChannelSetupAction = pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this,
+        SLOT ( OnSaveChannelSetup() ) );
+
+    pFileMenu->addSeparator();
+
+    pFileMenu->addAction ( tr ( "E&xit" ), this,
+        SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
 
 
     // View menu  --------------------------------------------------------------
-    pViewMenu = new QMenu ( tr ( "&View" ), this );
+    QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
 
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
         SLOT ( OnOpenConnectionSetupDialog() ) );
@@ -273,14 +277,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
             SLOT ( OnOpenAnalyzerConsole() ) );
     }
 
-    pViewMenu->addSeparator();
-
-    pViewMenu->addAction ( tr ( "E&xit" ), this,
-        SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
-
 
     // Edit menu  --------------------------------------------------------------
-    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
+    QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
     pEditMenu->addAction ( tr ( "Sort Channel Users by &Name" ), this,
         SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
@@ -288,10 +287,14 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pEditMenu->addAction ( tr ( "Sort Channel Users by &Instrument" ), this,
         SLOT ( OnSortChannelsByInstrument() ), QKeySequence ( Qt::CTRL + Qt::Key_I ) );
 
+    pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
+        SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
+
 
     // Main menu bar -----------------------------------------------------------
-    pMenu = new QMenuBar ( this );
+    QMenuBar* pMenu = new QMenuBar ( this );
 
+    pMenu->addMenu ( pFileMenu );
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
@@ -300,114 +303,50 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     layout()->setMenuBar ( pMenu );
 
 
-    // Instrument pictures popup menu ------------------------------------------
-    pInstrPictPopupMenu = new QMenu ( this );
-
-    // add an entry for all known instruments
-    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
-    {
-        // create a menu action with text and image
-        QAction* pCurAction = new QAction (
-            QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
-            CInstPictures::GetName ( iCurInst ),
-            this );
-
-        // add data to identify the action data when it is triggered
-        pCurAction->setData ( iCurInst );
-
-        pInstrPictPopupMenu->addAction ( pCurAction );
-    }
-
-
-    // Country flag icons popup menu -------------------------------------------
-    pCountryFlagPopupMenu = new QMenu ( this );
-
-    // add an entry for all known country flags
-    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
-          iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
-    {
-        // the "Default" country gets a special icon
-        QIcon   CurFlagIcon;
-        QString sCurCountryName;
-
-        if ( static_cast<QLocale::Country> ( iCurCntry ) == QLocale::AnyCountry )
-        {
-            // default icon and name for no flag selected
-            CurFlagIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
-            sCurCountryName = tr ( "None" );
-        }
-        else
-        {
-            // get current country enum
-            QLocale::Country eCountry =
-                static_cast<QLocale::Country> ( iCurCntry );
-
-            // get resource file name
-            CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
-
-            // get the country name
-            sCurCountryName = QLocale::countryToString ( eCountry );
-        }
-
-        // only add the entry if a flag is available
-        if ( !CurFlagIcon.isNull() )
-        {
-            // create a menu action with text and image
-            QAction* pCurAction =
-                new QAction ( CurFlagIcon, sCurCountryName, this );
-
-            // add data to identify the action data when it is triggered
-            pCurAction->setData ( iCurCntry );
-
-            pCountryFlagPopupMenu->addAction ( pCurAction );
-        }
-    }
-
-
     // Window positions --------------------------------------------------------
     // main window
-    if ( !pClient->vecWindowPosMain.isEmpty() && !pClient->vecWindowPosMain.isNull() )
+    if ( !pSettings->vecWindowPosMain.isEmpty() && !pSettings->vecWindowPosMain.isNull() )
     {
-        restoreGeometry ( pClient->vecWindowPosMain );
+        restoreGeometry ( pSettings->vecWindowPosMain );
     }
 
     // settings window
-    if ( !pClient->vecWindowPosSettings.isEmpty() && !pClient->vecWindowPosSettings.isNull() )
+    if ( !pSettings->vecWindowPosSettings.isEmpty() && !pSettings->vecWindowPosSettings.isNull() )
     {
-        ClientSettingsDlg.restoreGeometry ( pClient->vecWindowPosSettings );
+        ClientSettingsDlg.restoreGeometry ( pSettings->vecWindowPosSettings );
     }
 
-    if ( pClient->bWindowWasShownSettings )
+    if ( pSettings->bWindowWasShownSettings )
     {
         ShowGeneralSettings();
     }
 
     // chat window
-    if ( !pClient->vecWindowPosChat.isEmpty() && !pClient->vecWindowPosChat.isNull() )
+    if ( !pSettings->vecWindowPosChat.isEmpty() && !pSettings->vecWindowPosChat.isNull() )
     {
-        ChatDlg.restoreGeometry ( pClient->vecWindowPosChat );
+        ChatDlg.restoreGeometry ( pSettings->vecWindowPosChat );
     }
 
-    if ( pClient->bWindowWasShownChat )
+    if ( pSettings->bWindowWasShownChat )
     {
         ShowChatWindow();
     }
 
     // musician profile window
-    if ( !pClient->vecWindowPosProfile.isEmpty() && !pClient->vecWindowPosProfile.isNull() )
+    if ( !pSettings->vecWindowPosProfile.isEmpty() && !pSettings->vecWindowPosProfile.isNull() )
     {
-        MusicianProfileDlg.restoreGeometry ( pClient->vecWindowPosProfile );
+        MusicianProfileDlg.restoreGeometry ( pSettings->vecWindowPosProfile );
     }
 
-    if ( pClient->bWindowWasShownProfile )
+    if ( pSettings->bWindowWasShownProfile )
     {
         ShowMusicianProfileDialog();
     }
 
     // connection setup window
-    if ( !pClient->vecWindowPosConnect.isEmpty() && !pClient->vecWindowPosConnect.isNull() )
+    if ( !pSettings->vecWindowPosConnect.isEmpty() && !pSettings->vecWindowPosConnect.isNull() )
     {
-        ConnectDlg.restoreGeometry ( pClient->vecWindowPosConnect );
+        ConnectDlg.restoreGeometry ( pSettings->vecWindowPosConnect );
     }
 
 
@@ -503,13 +442,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient, &CClient::VersionAndOSReceived,
         this, &CClientDlg::OnVersionAndOSReceived );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient, &CClient::CLVersionAndOSReceived,
         this, &CClientDlg::OnCLVersionAndOSReceived );
-#endif
-
-    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-        this, &CClientDlg::OnAboutToQuit );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
@@ -519,9 +453,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::AudioChannelsChanged,
         this, &CClientDlg::OnAudioChannelsChanged );
-
-    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::NewClientLevelChanged,
-        this, &CClientDlg::OnNewClientLevelChanged );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanGain,
         this, &CClientDlg::OnChangeChanGain );
@@ -560,25 +491,42 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
 
     // restore connect dialog
-    if ( pClient->bWindowWasShownConnect )
+    if ( pSettings->bWindowWasShownConnect )
     {
         ShowConnectionSetupDialog();
+    }
+
+    // mute stream on startup (must be done after the signal connections)
+    if ( bMuteStream )
+    {
+        chbLocalMute->setCheckState ( Qt::Checked );
+    }
+
+    // query the central server version number needed for update check (note
+    // that the connection less message respond may not make it back but that
+    // is not critical since the next time Jamulus is started we have another
+    // chance and the update check is not time-critical at all)
+    CHostAddress CentServerHostAddress;
+
+    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    {
+        pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
     }
 }
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )
 {
     // store window positions
-    pClient->vecWindowPosMain     = saveGeometry();
-    pClient->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
-    pClient->vecWindowPosChat     = ChatDlg.saveGeometry();
-    pClient->vecWindowPosProfile  = MusicianProfileDlg.saveGeometry();
-    pClient->vecWindowPosConnect  = ConnectDlg.saveGeometry();
+    pSettings->vecWindowPosMain     = saveGeometry();
+    pSettings->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
+    pSettings->vecWindowPosChat     = ChatDlg.saveGeometry();
+    pSettings->vecWindowPosProfile  = MusicianProfileDlg.saveGeometry();
+    pSettings->vecWindowPosConnect  = ConnectDlg.saveGeometry();
 
-    pClient->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
-    pClient->bWindowWasShownChat     = ChatDlg.isVisible();
-    pClient->bWindowWasShownProfile  = MusicianProfileDlg.isVisible();
-    pClient->bWindowWasShownConnect  = ConnectDlg.isVisible();
+    pSettings->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
+    pSettings->bWindowWasShownChat     = ChatDlg.isVisible();
+    pSettings->bWindowWasShownProfile  = MusicianProfileDlg.isVisible();
+    pSettings->bWindowWasShownConnect  = ConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
@@ -593,17 +541,11 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
         pClient->Stop();
     }
 
-    // store mixer fader settings (we have to hide all mixer faders first to
-    // initiate a storage of the current mixer fader levels in case we are
-    // just in a connected state) and other settings
+    // we have to hide all mixer faders first to initiate a storage of the
+    // current mixer fader levels in case we are just in a connected state
     MainMixerBoard->HideAll();
-    pClient->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
-    pClient->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
-    pClient->vecStoredPanValues          = MainMixerBoard->vecStoredPanValues;
-    pClient->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
-    pClient->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
-    pClient->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
-    pClient->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
+
+    pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -692,7 +634,7 @@ void CClientDlg::OnConnectDlgAccepted()
         {
             // store new address at the top of the list, if the list was already
             // full, the last element is thrown out
-            pClient->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+            pSettings->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
         }
 
         // get name to be set in audio mixer group box title
@@ -711,7 +653,7 @@ void CClientDlg::OnConnectDlgAccepted()
             // user
             strMixerBoardLabel = strSelectedAddress;
 
-            // special case: if the address is empty, we substitude the default
+            // special case: if the address is empty, we substitute the default
             // central server address so that a user which just pressed the connect
             // button without selecting an item in the table or manually entered an
             // address gets a successful connection
@@ -750,6 +692,36 @@ void CClientDlg::OnConnectDisconBut()
     }
 }
 
+void CClientDlg::OnLoadChannelSetup()
+{
+    QString strFileName = QFileDialog::getOpenFileName ( this,
+                                                         tr ( "Select Channel Setup File" ),
+                                                         "",
+                                                         "*.jch" );
+
+    if ( !strFileName.isEmpty() )
+    {
+// TODO The client has to be stopped to apply recovered settings after re-connect.
+// TODO Should we automatically stop/load/re-start the connection?
+        pSettings->LoadFaderSettings ( strFileName );
+    }
+}
+
+void CClientDlg::OnSaveChannelSetup()
+{
+    QString strFileName = QFileDialog::getSaveFileName ( this,
+                                                         tr ( "Select Channel Setup File" ),
+                                                         "",
+                                                         "*.jch" );
+
+    if ( !strFileName.isEmpty() )
+    {
+// TODO The client has to be stopped to store current faders.
+// TODO Should we automatically stop/save/re-start the connection?
+        pSettings->SaveFaderSettings ( strFileName );
+    }
+}
+
 void CClientDlg::OnCentralServerAddressTypeChanged()
 {
     // if the server list is shown and the server type was changed, update the list
@@ -771,6 +743,26 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
     {
         MainMixerBoard->SetPanIsSupported();
     }
+#endif
+}
+
+void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
+                                            COSUtil::EOpSystemType eOSType,
+                                            QString                strVersion )
+{
+    // update check
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    {
+        lblUpdateCheck->show();
+    }
+#endif
+
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
+    ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion );
+#else
+    Q_UNUSED ( InetAddr ) // avoid compiler warnings
+    Q_UNUSED ( eOSType )  // avoid compiler warnings
 #endif
 }
 
@@ -834,8 +826,9 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 
 void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 {
-    // show number of connected clients in window title (and therefore also in
-    // the task bar of the OS)
+    // set the window title (and therefore also the task bar icon text of the OS)
+    // according to the following specification (#559):
+    // <ServerName> - <N> users - Jamulus
     if ( iNumClients == 0 )
     {
         // only application name
@@ -843,15 +836,18 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     }
     else
     {
+        QString strWinTitle = MainMixerBoard->GetServerName();
+
         if ( iNumClients == 1 )
         {
-            setWindowTitle ( QString ( pClient->strClientName ) + " (1 " + tr ( "user" ) + ")" );
+            strWinTitle += " - 1 " + tr ( "user" );
         }
-        else
+        else if ( iNumClients > 1 )
         {
-            setWindowTitle ( QString ( pClient->strClientName ) +
-                QString ( " (%1 " + tr ( "users" ) + ")" ).arg ( iNumClients ) );
+            strWinTitle += " - " + QString::number ( iNumClients ) + " " + tr ( "users" );
         }
+
+        setWindowTitle ( strWinTitle + " - " + pClient->strClientName );
     }
 
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
@@ -876,7 +872,7 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 void CClientDlg::ShowConnectionSetupDialog()
 {
     // init the connect dialog
-    ConnectDlg.Init ( pClient->vstrIPAddress );
+    ConnectDlg.Init ( pSettings->vstrIPAddress );
     ConnectDlg.SetCentralServerAddress ( NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
                                                                                 pClient->GetServerListCentralServerAddress() ) );
 
@@ -961,6 +957,16 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
+
+    // show/hide info label
+    if ( value == Qt::Checked )
+    {
+        lblGlobalInfoLabel->show();
+    }
+    else
+    {
+        lblGlobalInfoLabel->hide();
+    }
 }
 
 void CClientDlg::OnTimerSigMet()
@@ -1056,6 +1062,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             if ( !pClient->IsRunning() )
             {
                 pClient->Start();
+
+// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
+pLoadChannelSetupAction->setEnabled ( false );
+pSaveChannelSetupAction->setEnabled ( false );
             }
         }
 
@@ -1088,6 +1098,10 @@ void CClientDlg::Disconnect()
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
+
+// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
+pLoadChannelSetupAction->setEnabled ( true );
+pSaveChannelSetupAction->setEnabled ( true );
     }
 
     // change connect button text to "connect"
@@ -1197,7 +1211,7 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
         break;
 
     default:
-        // reset style sheet and set original paramters
+        // reset style sheet and set original parameters
         backgroundFrame->setStyleSheet ( "" );
 
 #ifdef _WIN32

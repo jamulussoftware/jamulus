@@ -32,7 +32,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel )
+    CSoundBase ( "OpenSL", fpNewProcessCallback, arg, iCtrlMIDIChannel )
 
 {
      pSound = this;
@@ -262,7 +262,7 @@ oboe::DataCallbackResult CSound::onAudioReady(oboe::AudioStream *oboeStream, voi
         }
 
         // We're good to start recording now
-        // Take the data from the recording device ouput buffer and move
+        // Take the data from the recording device output buffer and move
         // it to the vector ready to send up to the server
 
         float *floatData = static_cast<float *>(audioData);

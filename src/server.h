@@ -29,6 +29,8 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include <QFileInfo>
+#include <QtConcurrent>
+#include <QFutureSynchronizer>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
@@ -168,19 +170,19 @@ class CServer :
 
 public:
     CServer ( const int          iNewMaxNumChan,
-              const int          iMaxDaysHistory,
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strHistoryFileName,
               const QString&     strServerNameForHTMLStatusFile,
               const QString&     strCentralServer,
               const QString&     strServerInfo,
+              const QString&     strServerListFilter,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
               const bool         bNCentServPingServerInList,
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
+              const bool         bNUseMultithreading,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -199,6 +201,9 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
+    void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr )
+        { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
+
 
     // Jam recorder ------------------------------------------------------------
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
@@ -213,7 +218,7 @@ public:
     void SetRecordingDir( QString newRecordingDir )
         { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
 
-    virtual void CreateAndSendRecorderStateForAllConChannels();
+    void CreateAndSendRecorderStateForAllConChannels();
 
 
     // Server list management --------------------------------------------------
@@ -254,6 +259,9 @@ public:
     QLocale::Country GetServerCountry()
         { return ServerListManager.GetServerCountry(); }
 
+    void SetWelcomeMessage ( const QString& strNWelcMess );
+    QString GetWelcomeMessage() { return strWelcomeMessage; }
+
     ESvrRegStatus GetSvrRegStatus() { return ServerListManager.GetSvrRegStatus(); }
 
 
@@ -263,9 +271,6 @@ public:
 
     void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
     ELicenceType GetLicenceType() { return eLicenceType; }
-
-    // window position/state settings
-    QByteArray vecWindowPosMain;
 
 protected:
     // access functions for actual channels
@@ -301,19 +306,22 @@ protected:
 
     void WriteHTMLChannelList();
 
-    void ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
-                       const CVector<double>&            vecdGains,
-                       const CVector<double>&            vecdPannings,
-                       const CVector<int>&               vecNumAudioChannels,
-                       CVector<int16_t>&                 vecsOutData,
-                       const int                         iCurNumAudChan,
-                       const int                         iNumClients );
+    void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
+                                       const int iStopChanCnt,
+                                       const int iNumClients );
+
+    void MixEncodeTransmitData ( const int iChanCnt,
+                                 const int iNumClients );
 
     virtual void customEvent ( QEvent* pEvent );
 
     // if server mode is normal or double system frame size
     bool                       bUseDoubleSystemFrameSize;
     int                        iServerFrameSizeSamples;
+
+    // variables needed for multithreading support
+    bool                      bUseMultithreading;
+    QFutureSynchronizer<void> FutureSynchronizer;
 
     bool CreateLevelsForAllConChannels  ( const int                        iNumClients,
                                           const CVector<int>&              vecNumAudioChannels,
@@ -326,6 +334,7 @@ protected:
     int                        iMaxNumChannels;
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;
+    QMutex                     MutexWelcomeMessage;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];
@@ -352,6 +361,7 @@ protected:
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<int16_t> > vecvecsSendData;
+    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
     CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels
@@ -399,6 +409,10 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+
+    void CLVersionAndOSReceived ( CHostAddress           InetAddr,
+                                  COSUtil::EOpSystemType eOSType,
+                                  QString                strVersion );
 
     // pass through from jam controller
     void RestartRecorder();
@@ -463,6 +477,15 @@ public slots:
                                       CServerCoreInfo ServerInfo )
     {
         ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
+    }
+
+    void OnCLRegisterServerExReceived ( CHostAddress           InetAddr,
+                                        CHostAddress           LInetAddr,
+                                        CServerCoreInfo        ServerInfo,
+                                        COSUtil::EOpSystemType eOSType,
+                                        QString                strVersion )
+    {
+        ServerListManager.CentralServerRegisterServerEx ( InetAddr, LInetAddr, ServerInfo, eOSType, strVersion );
     }
 
     void OnCLRegisterServerResp ( CHostAddress  /* unused */,

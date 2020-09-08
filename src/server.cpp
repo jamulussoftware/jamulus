@@ -220,31 +220,32 @@ void CHighPrecisionTimer::run()
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
-                   const int          iMaxDaysHistory,
                    const QString&     strLoggingFileName,
                    const quint16      iPortNumber,
                    const QString&     strHTMLStatusFileName,
-                   const QString&     strHistoryFileName,
                    const QString&     strServerNameForHTMLStatusFile,
                    const QString&     strCentralServer,
                    const QString&     strServerInfo,
+                   const QString&     strServerListFilter,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
                    const bool         bNCentServPingServerInList,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
+                   const bool         bNUseMultithreading,
                    const ELicenceType eNLicenceType ) :
-    vecWindowPosMain            (), // empty array
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
+    bUseMultithreading          ( bNUseMultithreading ),
     iMaxNumChannels             ( iNewMaxNumChan ),
     Socket                      ( this, iPortNumber ),
-    Logging                     ( iMaxDaysHistory ),
+    Logging                     ( ),
     iFrameCount                 ( 0 ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
                                   strCentralServer,
                                   strServerInfo,
+                                  strServerListFilter,
                                   iNewMaxNumChan,
                                   bNCentServPingServerInList,
                                   &ConnLessProtocol ),
@@ -339,6 +340,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecdPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
     vecvecsSendData.Init               ( iMaxNumChannels );
+    vecvecsIntermediateProcBuf.Init    ( iMaxNumChannels );
     vecvecbyCodedData.Init             ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
@@ -358,6 +360,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
         // and coded data because of the OMP implementation)
         vecvecsSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
+        // allocate worst case memory for intermediate processing buffers in double precision
+        vecvecsIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+
         // allocate worst case memory for the coded data
         vecvecbyCodedData[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
     }
@@ -365,23 +370,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // allocate worst case memory for the channel levels
     vecChannelLevels.Init ( iMaxNumChannels );
 
-    // enable history graph (if requested)
-    if ( !strHistoryFileName.isEmpty() )
-    {
-        Logging.EnableHistory ( strHistoryFileName );
-    }
-
     // enable logging (if requested)
     if ( !strLoggingFileName.isEmpty() )
     {
-        // in case the history is enabled and a logging file name is
-        // given, parse the logging file for old entries which are then
-        // added in the history on software startup
-        if ( !strHistoryFileName.isEmpty() )
-        {
-            Logging.ParseLogFile ( strLoggingFileName );
-        }
-
         Logging.Start ( strLoggingFileName );
     }
 
@@ -390,7 +381,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     {
         QString strCurServerNameForHTMLStatusFile = strServerNameForHTMLStatusFile;
 
-        // if server name is empty, substitude a default name
+        // if server name is empty, substitute a default name
         if ( strCurServerNameForHTMLStatusFile.isEmpty() )
         {
             strCurServerNameForHTMLStatusFile = "[server address]";
@@ -405,20 +396,18 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     // manage welcome message: if the welcome message is a valid link to a local
     // file, the content of that file is used as the welcome message (#361)
-    strWelcomeMessage = strNewWelcomeMessage; // first copy text, may be overwritten
+    SetWelcomeMessage ( strNewWelcomeMessage ); // first use given text, may be overwritten
+
     if ( QFileInfo ( strNewWelcomeMessage ).exists() )
     {
         QFile file ( strNewWelcomeMessage );
 
         if ( file.open ( QIODevice::ReadOnly | QIODevice::Text ) )
         {
-            // use entrie file content for the welcome message
-            strWelcomeMessage = file.readAll();
+            // use entire file content for the welcome message
+            SetWelcomeMessage ( file.readAll() );
         }
     }
-
-    // restrict welcome message to maximum allowed length
-    strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 
     // enable jam recording (if requested) - kicks off the thread (note
     // that jam recorder needs the frame size which is given to the jam
@@ -450,6 +439,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerReceived,
         this, &CServer::OnCLRegisterServerReceived );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerExReceived,
+        this, &CServer::OnCLRegisterServerExReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLUnregisterServerReceived,
         this, &CServer::OnCLUnregisterServerReceived );
 
@@ -467,6 +459,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqVersionAndOS,
         this, &CServer::OnCLReqVersionAndOS );
+
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived,
+        this, &CServer::CLVersionAndOSReceived );
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList,
         this, &CServer::OnCLReqConnClientsList );
@@ -595,6 +590,8 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 void CServer::OnNewConnection ( int          iChID,
                                 CHostAddress RecHostAddr )
 {
+    QMutexLocker locker ( &Mutex );
+
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
@@ -616,7 +613,7 @@ void CServer::OnNewConnection ( int          iChID,
     // a channel name request to the client which causes a channel
     // name message to be transmitted to the server. If the server
     // receives this message, the channel list will be automatically
-    // updated (implicitely).
+    // updated (implicitly).
     //
     // Usually it is not required to send the channel list to the
     // client currently connecting since it automatically requests
@@ -629,15 +626,19 @@ void CServer::OnNewConnection ( int          iChID,
     vecChannels[iChID].CreateReqChanInfoMes();
 
     // send welcome message (if enabled)
-    if ( !strWelcomeMessage.isEmpty() )
+    MutexWelcomeMessage.lock();
     {
-        // create formated server welcome message and send it just to
-        // the client which just connected to the server
-        const QString strWelcomeMessageFormated =
-            "<b>Server Welcome Message:</b> " + strWelcomeMessage;
+        if ( !strWelcomeMessage.isEmpty() )
+        {
+            // create formatted server welcome message and send it just to
+            // the client which just connected to the server
+            const QString strWelcomeMessageFormated =
+                "<b>Server Welcome Message:</b> " + strWelcomeMessage;
 
-        vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
+            vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
+        }
     }
+    MutexWelcomeMessage.unlock();
 
     // send licence request message (if enabled)
     if ( eLicenceType != LT_NO_LICENCE )
@@ -656,11 +657,13 @@ void CServer::OnNewConnection ( int          iChID,
     DoubleFrameSizeConvBufOut[iChID].Reset();
 
     // logging of new connected channel
-    Logging.AddNewConnection ( RecHostAddr.InetAddr );
+    Logging.AddNewConnection ( RecHostAddr.InetAddr, GetNumberOfConnectedClients() );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )
 {
+    // note: no mutex required here
+
     // inform the calling client that no channel is free
     ConnLessProtocol.CreateCLServerFullMes ( RecHostAddr );
 }
@@ -671,16 +674,6 @@ void CServer::OnSendCLProtMessage ( CHostAddress     InetAddr,
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
-}
-
-void CServer::OnProtcolCLMessageReceived ( int              iRecID,
-                                           CVector<uint8_t> vecbyMesBodyData,
-                                           CHostAddress     RecHostAddr )
-{
-    // connection less messages are always processed
-    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData,
-                                                      iRecID,
-                                                      RecHostAddr );
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )
@@ -735,7 +728,6 @@ void CServer::OnHandledSignal ( int sigNum )
 #else
     switch ( sigNum )
     {
-
     case SIGUSR1:
         RequestNewRecording();
         break;
@@ -848,8 +840,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // update conversion buffer size (nothing will happen if the size stays the same)
             if ( vecUseDoubleSysFraSizeConvBuf[i] )
             {
-                DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES  * vecNumAudioChannels[i] );
-                DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES  * vecNumAudioChannels[i] );
+                DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
             }
 
             // select the opus decoder and raw audio frame length
@@ -991,25 +983,21 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                  vecChannelLevels );
         }
 
-#ifdef USE_OMP
-// TODO This does not work as expected, the CPU is at high levels even if not much work is to be done. So we
-// have an issue using OMP in the OnTimer() function. Even if #pragma omp parallel for is used on a trivial
-// for loop for testing, still the CPU usage goes to very high values -> What is the cause of this issue?
-// NOTE Most probably it is the overhead of threads creation/destruction which causes this effect.
-// See https://software.intel.com/content/www/us/en/develop/articles/performance-obstacles-for-threading-how-do-they-affect-openmp-code.html
-// "[...] overhead numbers are high enough that it doesn’t make sense to thread that code. In those cases, we’re better off leaving the code in its original serial form."
-# pragma omp parallel for
-#endif
-        for ( int i = 0; i < iNumClients; i++ )
+        for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
-            int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
-            OpusCustomEncoder* CurOpusEncoder;
-
             // get actual ID of current channel
-            const int iCurChanID = vecChanIDsCurConChan[i];
+            const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
 
-            // get number of audio channels of current channel
-            const int iCurNumAudChan = vecNumAudioChannels[i];
+            // update socket buffer size
+            vecChannels[iCurChanID].UpdateSocketBufferSize();
+
+            // send channel levels
+            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+            {
+                ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
+                                                               vecChannelLevels,
+                                                               iNumClients );
+            }
 
             // export the audio data for recording purpose
             if ( JamController.GetRecordingEnabled() )
@@ -1017,104 +1005,46 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 emit AudioFrame ( iCurChanID,
                                   vecChannels[iCurChanID].GetName(),
                                   vecChannels[iCurChanID].GetAddress(),
-                                  iCurNumAudChan,
-                                  vecvecsData[i] );
+                                  vecNumAudioChannels[iChanCnt],
+                                  vecvecsData[iChanCnt] );
             }
 
-            // generate a sparate mix for each channel
-            // actual processing of audio data -> mix
-            ProcessData ( vecvecsData,
-                          vecvecdGains[i],
-                          vecvecdPannings[i],
-                          vecNumAudioChannels,
-                          vecvecsSendData[i],
-                          iCurNumAudChan,
-                          iNumClients );
-
-            // get current number of CELT coded bytes
-            const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
-
-            // select the opus encoder and raw audio frame length
-            if ( vecAudioComprType[i] == CT_OPUS )
+            // processing without multithreading
+            if ( !bUseMultithreading )
             {
-                iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
-
-                if ( vecNumAudioChannels[i] == 1 )
-                {
-                    CurOpusEncoder = OpusEncoderMono[iCurChanID];
-                }
-                else
-                {
-                    CurOpusEncoder = OpusEncoderStereo[iCurChanID];
-                }
+                // generate a separate mix for each channel, OPUS encode the
+                // audio data and transmit the network packet
+                MixEncodeTransmitData ( iChanCnt, iNumClients );
             }
-            else if ( vecAudioComprType[i] == CT_OPUS64 )
+        }
+
+        // processing with multithreading
+        if ( bUseMultithreading )
+        {
+// TODO optimization of the MTBlockSize value
+            const int iMTBlockSize = 20; // every 20 users a new thread is created
+            const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iMTBlockSize ) );
+
+            for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
-                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
+                // Generate a separate mix for each channel, OPUS encode the
+                // audio data and transmit the network packet. The work is
+                // distributed over all available processor cores.
+                // By using the future synchronizer we make sure that all
+                // threads are done when we leave the timer callback function.
+                const int iStartChanCnt = iBlockCnt * iMTBlockSize;
+                const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
-                if ( vecNumAudioChannels[i] == 1 )
-                {
-                    CurOpusEncoder = Opus64EncoderMono[iCurChanID];
-                }
-                else
-                {
-                    CurOpusEncoder = Opus64EncoderStereo[iCurChanID];
-                }
+                FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                                                                   &CServer::MixEncodeTransmitDataBlocks,
+                                                                   iStartChanCnt,
+                                                                   iStopChanCnt,
+                                                                   iNumClients ) );
             }
-            else
-            {
-                CurOpusEncoder = nullptr;
-            }
 
-            // If the server frame size is smaller than the received OPUS frame size, we need a conversion
-            // buffer which stores the large buffer.
-            // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
-            // is false and the Get() function is not called at all. Therefore if the buffer is not needed
-            // we do not spend any time in the function but go directly inside the if condition.
-            if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecvecsSendData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
-            {
-                if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
-                {
-                    // get the large frame from the conversion buffer
-                    DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecvecsSendData[i], DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
-                }
-
-                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
-                {
-                    // OPUS encoding
-                    if ( CurOpusEncoder != nullptr )
-                    {
-// TODO find a better place than this: the setting does not change all the time
-//      so for speed optimization it would be better to set it only if the network
-//      frame size is changed
-opus_custom_encoder_ctl ( CurOpusEncoder,
-                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
-
-                        iUnused = opus_custom_encode ( CurOpusEncoder,
-                                                       &vecvecsSendData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                                       iClientFrameSizeSamples,
-                                                       &vecvecbyCodedData[i][0],
-                                                       iCeltNumCodedBytes );
-                    }
-
-                    // send separate mix to current clients
-                    vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                                vecvecbyCodedData[i],
-                                                                iCeltNumCodedBytes );
-                }
-
-                // update socket buffer size
-                vecChannels[iCurChanID].UpdateSocketBufferSize();
-
-                // send channel levels
-                if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
-                {
-                    ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
-                                                                   vecChannelLevels,
-                                                                   iNumClients );
-                }
-            }
+            // make sure all concurrent run threads have finished when we leave this function
+            FutureSynchronizer.waitForFinished();
+            FutureSynchronizer.clearFutures();
         }
     }
     else
@@ -1127,29 +1057,40 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
     Q_UNUSED ( iUnused )
 }
 
-/// @brief Mix all audio data from all clients together.
-void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
-                            const CVector<double>&            vecdGains,
-                            const CVector<double>&            vecdPannings,
-                            const CVector<int>&               vecNumAudioChannels,
-                            CVector<int16_t>&                 vecsOutData,
-                            const int                         iCurNumAudChan,
-                            const int                         iNumClients )
+void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
+                                            const int iStopChanCnt,
+                                            const int iNumClients )
 {
-    int i, j, k;
+    // loop over all channels in the current block, needed for multithreading support
+    for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )
+    {
+        MixEncodeTransmitData ( iChanCnt, iNumClients );
+    }
+}
 
-    // init return vector with zeros since we mix all channels on that vector
-    vecsOutData.Reset ( 0 );
+/// @brief Mix all audio data from all clients together, encode and transmit
+void CServer::MixEncodeTransmitData ( const int iChanCnt,
+                                      const int iNumClients )
+{
+    int               i, j, k, iUnused;
+    CVector<double>&  vecdIntermProcBuf = vecvecsIntermediateProcBuf[iChanCnt]; // use reference for faster access
+    CVector<int16_t>& vecsSendData      = vecvecsSendData[iChanCnt];            // use reference for faster access
+
+    // get actual ID of current channel
+    const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
+
+    // init intermediate processing vector with zeros since we mix all channels on that vector
+    vecdIntermProcBuf.Reset ( 0 );
 
     // distinguish between stereo and mono mode
-    if ( iCurNumAudChan == 1 )
+    if ( vecNumAudioChannels[iChanCnt] == 1 )
     {
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecdGains[j];
+            const double            dGain    = vecvecdGains[iChanCnt][j];
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( dGain == static_cast<double> ( 1.0 ) )
@@ -1159,8 +1100,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
-                        vecsOutData[i] = Double2Short (
-                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
+                        vecdIntermProcBuf[i] += vecsData[i];
                     }
                 }
                 else
@@ -1168,9 +1108,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] +
-                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2 );
+                        vecdIntermProcBuf[i] +=
+                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
                     }
                 }
             }
@@ -1181,8 +1120,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
-                        vecsOutData[i] = Double2Short (
-                            vecsOutData[i] + vecsData[i] * dGain );
+                        vecdIntermProcBuf[i] += vecsData[i] * dGain;
                     }
                 }
                 else
@@ -1190,12 +1128,17 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] + dGain *
-                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2 );
+                        vecdIntermProcBuf[i] += dGain *
+                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
                     }
                 }
             }
+        }
+
+        // convert from double to short with clipping
+        for ( i = 0; i < iServerFrameSizeSamples; i++ )
+        {
+            vecsSendData[i] = Double2Short ( vecdIntermProcBuf[i] );
         }
     }
     else
@@ -1205,8 +1148,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
         {
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecdGains[j];
-            const double            dPan     = vecdPannings[j];
+            const double            dGain    = vecvecdGains[iChanCnt][j];
+            const double            dPan     = vecvecdPannings[iChanCnt][j];
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
@@ -1221,13 +1164,9 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        // left channel
-                        vecsOutData[k] = Double2Short (
-                            static_cast<double> ( vecsOutData[k] ) + vecsData[i] );
-
-                        // right channel
-                        vecsOutData[k + 1] = Double2Short (
-                            static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] );
+                        // left/right channel
+                        vecdIntermProcBuf[k]     += vecsData[i];
+                        vecdIntermProcBuf[k + 1] += vecsData[i];
                     }
                 }
                 else
@@ -1235,8 +1174,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
-                        vecsOutData[i] = Double2Short (
-                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
+                        vecdIntermProcBuf[i] += vecsData[i];
                     }
                 }
             }
@@ -1248,8 +1186,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left/right channel
-                        vecsOutData[k]     = Double2Short ( vecsOutData[k] +     vecsData[i] * dGainL );
-                        vecsOutData[k + 1] = Double2Short ( vecsOutData[k + 1] + vecsData[i] * dGainR );
+                        vecdIntermProcBuf[k]     += vecsData[i] * dGainL;
+                        vecdIntermProcBuf[k + 1] += vecsData[i] * dGainR;
                     }
                 }
                 else
@@ -1258,13 +1196,92 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
                         // left/right channel
-                        vecsOutData[i]     = Double2Short ( vecsOutData[i] +     vecsData[i] *     dGainL );
-                        vecsOutData[i + 1] = Double2Short ( vecsOutData[i + 1] + vecsData[i + 1] * dGainR );
+                        vecdIntermProcBuf[i]     += vecsData[i] *     dGainL;
+                        vecdIntermProcBuf[i + 1] += vecsData[i + 1] * dGainR;
                     }
                 }
             }
         }
+
+        // convert from double to short with clipping
+        for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+        {
+            vecsSendData[i] = Double2Short ( vecdIntermProcBuf[i] );
+        }
     }
+
+    int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
+    OpusCustomEncoder* pCurOpusEncoder         = nullptr;
+
+    // get current number of CELT coded bytes
+    const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
+
+    // select the opus encoder and raw audio frame length
+    if ( vecAudioComprType[iChanCnt] == CT_OPUS )
+    {
+        iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+
+        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        {
+            pCurOpusEncoder = OpusEncoderMono[iCurChanID];
+        }
+        else
+        {
+            pCurOpusEncoder = OpusEncoderStereo[iCurChanID];
+        }
+    }
+    else if ( vecAudioComprType[iChanCnt] == CT_OPUS64 )
+    {
+        iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
+
+        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        {
+            pCurOpusEncoder = Opus64EncoderMono[iCurChanID];
+        }
+        else
+        {
+            pCurOpusEncoder = Opus64EncoderStereo[iCurChanID];
+        }
+    }
+
+    // If the server frame size is smaller than the received OPUS frame size, we need a conversion
+    // buffer which stores the large buffer.
+    // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
+    // is false and the Get() function is not called at all. Therefore if the buffer is not needed
+    // we do not spend any time in the function but go directly inside the if condition.
+    if ( ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] == 0 ) ||
+         DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
+    {
+        if ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] != 0 )
+        {
+            // get the large frame from the conversion buffer
+            DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
+        }
+
+        for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+        {
+            // OPUS encoding
+            if ( pCurOpusEncoder != nullptr )
+            {
+// TODO find a better place than this: the setting does not change all the time so for speed
+//      optimization it would be better to set it only if the network frame size is changed
+opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+
+                iUnused = opus_custom_encode ( pCurOpusEncoder,
+                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                               iClientFrameSizeSamples,
+                                               &vecvecbyCodedData[iChanCnt][0],
+                                               iCeltNumCodedBytes );
+            }
+
+            // send separate mix to current clients
+            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                        vecvecbyCodedData[iChanCnt],
+                                                        iCeltNumCodedBytes );
+        }
+    }
+
+    Q_UNUSED ( iUnused )
 }
 
 CVector<CChannelInfo> CServer::CreateChannelList()
@@ -1429,26 +1446,36 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr )
     return INVALID_CHANNEL_ID;
 }
 
+void CServer::OnProtcolCLMessageReceived ( int              iRecID,
+                                           CVector<uint8_t> vecbyMesBodyData,
+                                           CHostAddress     RecHostAddr )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // connection less messages are always processed
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData,
+                                                      iRecID,
+                                                      RecHostAddr );
+}
+
 void CServer::OnProtcolMessageReceived ( int              iRecCounter,
                                          int              iRecID,
                                          CVector<uint8_t> vecbyMesBodyData,
                                          CHostAddress     RecHostAddr )
 {
-    Mutex.lock();
-    {
-        // find the channel with the received address
-        const int iCurChanID = FindChannel ( RecHostAddr );
+    QMutexLocker locker ( &Mutex );
 
-        // if the channel exists, apply the protocol message to the channel
-        if ( iCurChanID != INVALID_CHANNEL_ID )
-        {
-            vecChannels[iCurChanID].PutProtcolData ( iRecCounter,
-                                                     iRecID,
-                                                     vecbyMesBodyData,
-                                                     RecHostAddr );
-        }
+    // find the channel with the received address
+    const int iCurChanID = FindChannel ( RecHostAddr );
+
+    // if the channel exists, apply the protocol message to the channel
+    if ( iCurChanID != INVALID_CHANNEL_ID )
+    {
+        vecChannels[iCurChanID].PutProtcolData ( iRecCounter,
+                                                 iRecID,
+                                                 vecbyMesBodyData,
+                                                 RecHostAddr );
     }
-    Mutex.unlock();
 }
 
 bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
@@ -1456,62 +1483,60 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
                              const CHostAddress&     HostAdr,
                              int&                    iCurChanID )
 {
+    QMutexLocker locker ( &Mutex );
+
     bool bNewConnection = false; // init return value
     bool bChanOK        = true;  // init with ok, might be overwritten
 
-    Mutex.lock();
+    // Get channel ID ------------------------------------------------------
+    // check address
+    iCurChanID = FindChannel ( HostAdr );
+
+    if ( iCurChanID == INVALID_CHANNEL_ID )
     {
-        // Get channel ID ------------------------------------------------------
-        // check address
-        iCurChanID = FindChannel ( HostAdr );
+        // a new client is calling, look for free channel
+        iCurChanID = GetFreeChan();
 
-        if ( iCurChanID == INVALID_CHANNEL_ID )
+        if ( iCurChanID != INVALID_CHANNEL_ID )
         {
-            // a new client is calling, look for free channel
-            iCurChanID = GetFreeChan();
+            // initialize current channel by storing the calling host
+            // address
+            vecChannels[iCurChanID].SetAddress ( HostAdr );
 
-            if ( iCurChanID != INVALID_CHANNEL_ID )
+            // reset channel info
+            vecChannels[iCurChanID].ResetInfo();
+
+            // reset the channel gains of current channel, at the same
+            // time reset gains of this channel ID for all other channels
+            for ( int i = 0; i < iMaxNumChannels; i++ )
             {
-                // initialize current channel by storing the calling host
-                // address
-                vecChannels[iCurChanID].SetAddress ( HostAdr );
+                vecChannels[iCurChanID].SetGain ( i, 1.0 );
 
-                // reset channel info
-                vecChannels[iCurChanID].ResetInfo();
-
-                // reset the channel gains of current channel, at the same
-                // time reset gains of this channel ID for all other channels
-                for ( int i = 0; i < iMaxNumChannels; i++ )
-                {
-                    vecChannels[iCurChanID].SetGain ( i, 1.0 );
-
-                    // other channels (we do not distinguish the case if
-                    // i == iCurChanID for simplicity)
-                    vecChannels[i].SetGain ( iCurChanID, 1.0 );
-                }
-            }
-            else
-            {
-                // no free channel available
-                bChanOK = false;
+                // other channels (we do not distinguish the case if
+                // i == iCurChanID for simplicity)
+                vecChannels[i].SetGain ( iCurChanID, 1.0 );
             }
         }
-
-
-        // Put received audio data in jitter buffer ----------------------------
-        if ( bChanOK )
+        else
         {
-            // put packet in socket buffer
-            if ( vecChannels[iCurChanID].PutAudioData ( vecbyRecBuf,
-                                                        iNumBytesRead,
-                                                        HostAdr ) == PS_NEW_CONNECTION )
-            {
-                // in case we have a new connection return this information
-                bNewConnection = true;
-            }
+            // no free channel available
+            bChanOK = false;
         }
     }
-    Mutex.unlock();
+
+
+    // Put received audio data in jitter buffer ----------------------------
+    if ( bChanOK )
+    {
+        // put packet in socket buffer
+        if ( vecChannels[iCurChanID].PutAudioData ( vecbyRecBuf,
+                                                    iNumBytesRead,
+                                                    HostAdr ) == PS_NEW_CONNECTION )
+        {
+            // in case we have a new connection return this information
+            bNewConnection = true;
+        }
+    }
 
     // return the state if a new connection was happening
     return bNewConnection;
@@ -1550,6 +1575,16 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 
     // the recording state may have changed, send recording state message
     CreateAndSendRecorderStateForAllConChannels();
+}
+
+void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
+{
+    // we need a mutex to secure access
+    QMutexLocker locker ( &MutexWelcomeMessage );
+    strWelcomeMessage = strNWelcMess;
+
+    // restrict welcome message to maximum allowed length
+    strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 }
 
 void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,

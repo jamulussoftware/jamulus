@@ -245,7 +245,7 @@ public:
 
     void SetRemoteChanGain ( const int iId, const double dGain, const bool bIsMyOwnFader );
 
-	void SetRemoteChanPan ( const int iId, const double dPan )
+    void SetRemoteChanPan ( const int iId, const double dPan )
         { Channel.SetRemoteChanPan ( iId, dPan ); }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
@@ -278,27 +278,8 @@ public:
         { Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
 
     // settings
-    CVector<QString> vstrIPAddress;
     CChannelCoreInfo ChannelInfo;
-    CVector<QString> vecStoredFaderTags;
-    CVector<int>     vecStoredFaderLevels;
-    CVector<int>     vecStoredPanValues;
-    CVector<int>     vecStoredFaderIsSolo;
-    CVector<int>     vecStoredFaderIsMute;
-    int              iNewClientFaderLevel;
-    bool             bConnectDlgShowAllMusicians;
     QString          strClientName;
-
-    // window position/state settings
-    QByteArray       vecWindowPosMain;
-    QByteArray       vecWindowPosSettings;
-    QByteArray       vecWindowPosChat;
-    QByteArray       vecWindowPosProfile;
-    QByteArray       vecWindowPosConnect;
-    bool             bWindowWasShownSettings;
-    bool             bWindowWasShownChat;
-    bool             bWindowWasShownProfile;
-    bool             bWindowWasShownConnect;
 
 #ifdef LLCON_VST_PLUGIN
     // VST version must have direct access to sound object
@@ -387,11 +368,11 @@ protected:
     int                     iServerSockBufNumFrames;
 
     // for ping measurement
-    CPreciseTime            PreciseTime;
+    QElapsedTimer           PreciseTime;
 
     CSignalHandler*         pSignalHandler;
 
-public slots:
+protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
@@ -416,6 +397,7 @@ public slots:
                                           int          iNumClients );
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
+    void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -437,11 +419,9 @@ signals:
                                             int          iPingTime,
                                             int          iNumClients );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void CLVersionAndOSReceived ( CHostAddress           InetAddr,
                                   COSUtil::EOpSystemType eOSType,
                                   QString                strVersion );
-#endif
 
     void CLChannelLevelListReceived ( CHostAddress      InetAddr,
                                       CVector<uint16_t> vecLevelList );

@@ -72,6 +72,7 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         if ( eColorFlag != RL_RED )
         {
             setPixmap ( BitmCubeRed );
+            setAccessibleDescription ( tr ( "Red" ) );
             eColorFlag = RL_RED;
         }
         break;
@@ -81,6 +82,7 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         if ( eColorFlag != RL_YELLOW )
         {
             setPixmap ( BitmCubeYellow );
+            setAccessibleDescription ( tr ( "Yellow" ) );
             eColorFlag = RL_YELLOW;
         }
         break;
@@ -90,6 +92,7 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         if ( eColorFlag != RL_GREEN )
         {
             setPixmap ( BitmCubeGreen );
+            setAccessibleDescription ( tr ( "Green" ) );
             eColorFlag = RL_GREEN;
         }
         break;

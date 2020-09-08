@@ -36,6 +36,7 @@
 #include <QMenuBar>
 #include <QLayout>
 #include <QMessageBox>
+#include <QFileDialog>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 # include <QVersionNumber>
 #endif
@@ -72,14 +73,15 @@ class CClientDlg : public QDialog, private Ui_CClientDlgBase
     Q_OBJECT
 
 public:
-    CClientDlg ( CClient*        pNCliP,
-                 CSettings*      pNSetP,
-                 const QString&  strConnOnStartupAddress,
-                 const int       iCtrlMIDIChannel,
-                 const bool      bNewShowComplRegConnList,
-                 const bool      bShowAnalyzerConsole,
-                 QWidget*        parent = nullptr,
-                 Qt::WindowFlags f = nullptr );
+    CClientDlg ( CClient*         pNCliP,
+                 CClientSettings* pNSetP,
+                 const QString&   strConnOnStartupAddress,
+                 const int        iCtrlMIDIChannel,
+                 const bool       bNewShowComplRegConnList,
+                 const bool       bShowAnalyzerConsole,
+                 const bool       bMuteStream,
+                 QWidget*         parent = nullptr,
+                 Qt::WindowFlags  f = nullptr );
 
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -96,7 +98,7 @@ protected:
     void               Disconnect();
 
     CClient*           pClient;
-    CSettings*         pSettings;
+    CClientSettings*   pSettings;
 
     bool               bConnected;
     bool               bConnectDlgWasShown;
@@ -109,11 +111,8 @@ protected:
     virtual void       closeEvent ( QCloseEvent* Event );
     void               UpdateDisplay();
 
-    QMenu*             pViewMenu;
-    QMenu*             pEditMenu;
-    QMenuBar*          pMenu;
-    QMenu*             pInstrPictPopupMenu;
-    QMenu*             pCountryFlagPopupMenu;
+    QAction*           pLoadChannelSetupAction;
+    QAction*           pSaveChannelSetupAction;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -122,8 +121,6 @@ protected:
     CMusProfDlg        MusicianProfileDlg;
 
 public slots:
-    void OnAboutToQuit() { pSettings->Save(); }
-
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
@@ -143,13 +140,12 @@ public slots:
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,
-                                    QString                strVersion )
-        { ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion ); }
-#endif
+                                    QString                strVersion );
 
+    void OnLoadChannelSetup();
+    void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
     void OnOpenMusicianProfileDialog() { ShowMusicianProfileDialog(); }
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
@@ -157,6 +153,7 @@ public slots:
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_NAME ); }
     void OnSortChannelsByInstrument() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_INSTRUMENT ); }
+    void OnSortChannelsByGroupID() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_GROUPID ); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
@@ -229,7 +226,6 @@ public slots:
 
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
-    void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }
 
     void accept() { close(); } // introduced by pljones
 

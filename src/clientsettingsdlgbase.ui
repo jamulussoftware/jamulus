@@ -515,6 +515,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="lblLanguage">
+            <property name="text">
+             <string>Language</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -541,6 +548,9 @@
           </item>
           <item>
            <widget class="QComboBox" name="cbxSkin"/>
+          </item>
+          <item>
+           <widget class="CLanguageComboBox" name="cbxLanguage"/>
           </item>
          </layout>
         </item>
@@ -707,6 +717,11 @@
    <extends>QWidget</extends>
    <header>multicolorled.h</header>
   </customwidget>
+  <customwidget>
+   <class>CLanguageComboBox</class>
+   <extends>QComboBox</extends>
+   <header>util.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>cbxSoundcard</tabstop>
@@ -726,6 +741,7 @@
   <tabstop>cbxAudioQuality</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxSkin</tabstop>
+  <tabstop>cbxLanguage</tabstop>
   <tabstop>chbDisplayChannelLevels</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>

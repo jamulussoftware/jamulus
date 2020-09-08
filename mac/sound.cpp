@@ -31,7 +31,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
     // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop
@@ -312,7 +312,7 @@ int CSound::CountChannels ( AudioDeviceID devID,
 
 QString CSound::LoadAndInitializeDriver ( int iDriverIdx, bool )
 {
-    // check device capabilities if it fullfills our requirements
+    // check device capabilities if it fulfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
 
     // check if device is capable
@@ -561,7 +561,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         // add the "[n]:" at the beginning as is in the Audio-Midi-Setup
         if ( !bConvOK || ( iPropertySize == 0 ) )
         {
-            // use a defalut name in case there was an error or the name is empty
+            // use a default name in case there was an error or the name is empty
             sChannelNamesOutput[iCurOutCH] =
                 QString ( "%1: Channel %1" ).arg ( iCurOutCH + 1 );
         }

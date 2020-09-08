@@ -141,12 +141,12 @@ void CCRC::AddByte ( const uint8_t byNewInput )
 {
     for ( int i = 0; i < 8; i++ )
     {
-        // shift bits in shift-register for transistion
+        // shift bits in shift-register for transition
         iStateShiftReg <<= 1;
 
         // take bit, which was shifted out of the register-size and place it
         // at the beginning (LSB)
-        // (If condition is not satisfied, implicitely a "0" is added)
+        // (If condition is not satisfied, implicitly a "0" is added)
         if ( ( iStateShiftReg & iBitOutMask) > 0 )
         {
             iStateShiftReg |= 1;
@@ -196,7 +196,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
                           const int          iSampleRate,
                           const double       rT60 )
 {
-    // store paramters
+    // store parameters
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
@@ -442,6 +442,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
         "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
         "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
+        "<p>Martin Schilde (<a href=""https://github.com/geheimerEichkater"">geheimerEichkater</a>)</p>"
         "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
         "<p>Marc jr. Landolt (<a href=""https://github.com/braindef"">braindef</a>)</p>"
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
@@ -455,10 +456,19 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
         "<p>Alberstein8 (<a href=""https://github.com/Alberstein8"">Alberstein8</a>)</p>"
         "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
+        "<p>HPS (<a href=""https://github.com/hselasky"">hselasky</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
         "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
         "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
+        "<p>Nils Brederlow (<a href=""https://github.com/dingodoppelt"">dingodoppelt</a>)</p>"
+        "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
+        "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
+        "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
+        "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
+        "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
+        "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
+        "<p>bspeer (<a href=""https://github.com/bspeer"">bspeer</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
 
@@ -476,7 +486,11 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
         "<p>Giuseppe Sapienza (<a href=""https://github.com/dzpex"">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"
-        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
+        "<p><b>" + tr ( "Polish" ) + "</b></p>"
+        "<p>Martyna Danysz (<a href=""https://github.com/Martyna27"">Martyna27</a>)</p>"
+        "<p><b>" + tr ( "Swedish" ) + "</b></p>"
+        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>");
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -807,7 +821,7 @@ void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
     }
 }
@@ -845,7 +859,7 @@ void CMusProfDlg::OnCityTextChanged ( const QString& strNewCity )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
     }
 }
@@ -878,6 +892,71 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
+}
+
+
+// Language combo box ----------------------------------------------------------
+CLanguageComboBox::CLanguageComboBox ( QWidget* parent ) :
+    QComboBox            ( parent ),
+    iIdxSelectedLanguage ( INVALID_INDEX )
+{
+    QObject::connect ( this, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CLanguageComboBox::OnLanguageActivated );
+}
+
+void CLanguageComboBox::Init ( QString& strSelLanguage )
+{
+    // load available translations
+    const QMap<QString, QString>   TranslMap = CLocale::GetAvailableTranslations();
+    QMapIterator<QString, QString> MapIter ( TranslMap );
+
+    // add translations to the combobox list
+    clear();
+    int iCnt                  = 0;
+    int iIdxOfEnglishLanguage = 0;
+    iIdxSelectedLanguage      = INVALID_INDEX;
+
+    while ( MapIter.hasNext() )
+    {
+        MapIter.next();
+        addItem ( QLocale ( MapIter.key() ).nativeLanguageName() + " (" + MapIter.key() + ")", MapIter.key() );
+
+        // store the combo box index of the default english language
+        if ( MapIter.key().compare ( "en" ) == 0 )
+        {
+            iIdxOfEnglishLanguage = iCnt;
+        }
+
+        // if the selected language is found, store the combo box index
+        if ( MapIter.key().compare ( strSelLanguage ) == 0 )
+        {
+            iIdxSelectedLanguage = iCnt;
+        }
+
+        iCnt++;
+    }
+
+    // if the selected language was not found, use the english language
+    if ( iIdxSelectedLanguage == INVALID_INDEX )
+    {
+        strSelLanguage       = "en";
+        iIdxSelectedLanguage = iIdxOfEnglishLanguage;
+    }
+
+    setCurrentIndex ( iIdxSelectedLanguage );
+}
+
+void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
+{
+    // only update if the language selection is different from the current selected language
+    if ( iIdxSelectedLanguage != iLanguageIdx )
+    {
+        QMessageBox::information ( this,
+                                   tr ( "Restart Required" ),
+                                   tr ( "Please restart the application for the language change to take effect." ) );
+
+        emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
+    }
 }
 #endif
 
@@ -928,7 +1007,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( !InetAddr.setAddress ( strAddress ) )
     {
-        // it was no vaild IP address, try to get host by name, assuming
+        // it was no valid IP address, try to get host by name, assuming
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 
@@ -985,20 +1064,27 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
     }
 }
 
+QString NetworkUtil::FixAddress ( const QString& strAddress )
+{
+    // remove all spaces from the address string
+    return strAddress.simplified().replace ( " ", "" );
+}
+
 
 // Instrument picture data base ------------------------------------------------
-CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
+CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
 {
     // make sure we generate the table only once
     static bool TableIsInitialized = false;
 
     static CVector<CInstPictProps> vecDataBase;
 
-    if ( !TableIsInitialized )
+    if ( !TableIsInitialized || bReGenerateTable )
     {
         // instrument picture data base initialization
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
+        vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "None" ), ":/png/instr/res/instruments/none.png", IC_OTHER_INSTRUMENT ) ); // special first element
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Drum Set" ), ":/png/instr/res/instruments/drumset.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Djembe" ), ":/png/instr/res/instruments/djembe.png", IC_PERCUSSION_INSTRUMENT ) );
@@ -1042,6 +1128,8 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mandolin" ), ":/png/instr/res/instruments/mandolin.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Ukulele" ), ":/png/instr/res/instruments/ukulele.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Ukulele" ), ":/png/instr/res/instruments/bassukulele.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;
@@ -1369,6 +1457,82 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
 
     default:
         return AT_DEFAULT;
+    }
+}
+
+QMap<QString, QString> CLocale::GetAvailableTranslations()
+{
+    QMap<QString, QString> TranslMap;
+    QDirIterator           DirIter ( ":/translations" );
+
+    // add english language (default which is in the actual source code)
+    TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
+
+    while ( DirIter.hasNext() )
+    {
+        // get alias of translation file
+        const QString strCurFileName = DirIter.next();
+
+        // extract only language code (must be at the end, separated with a "_")
+        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
+
+        TranslMap[strLoc] = strCurFileName;
+    }
+
+    return TranslMap;
+}
+
+QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap )
+{
+    QPair<QString, QString> PairSysLang ( "", "" );
+    QStringList             slUiLang = QLocale().uiLanguages();
+
+    if ( !slUiLang.isEmpty() )
+    {
+        QString strUiLang = QLocale().uiLanguages().at ( 0 );
+        strUiLang.replace ( "-", "_" );
+
+        // first try to find the complete language string
+        if ( TranslMap.constFind ( strUiLang ) != TranslMap.constEnd() )
+        {
+            PairSysLang.first  = strUiLang;
+            PairSysLang.second = TranslMap[PairSysLang.first];
+        }
+        else
+        {
+            // only extract two first characters to identify language (ignoring
+            // location for getting a simpler implementation -> if the language
+            // is not correct, the user can change it in the GUI anyway)
+            if ( strUiLang.length() >= 2 )
+            {
+                PairSysLang.first  = strUiLang.left ( 2 );
+                PairSysLang.second = TranslMap[PairSysLang.first];
+            }
+        }
+    }
+
+    return PairSysLang;
+}
+
+void CLocale::LoadTranslation ( const QString     strLanguage,
+                                QCoreApplication* pApp )
+{
+    // The translator objects must be static!
+    static QTranslator myappTranslator;
+    static QTranslator myqtTranslator;
+
+    QMap<QString, QString> TranslMap              = CLocale::GetAvailableTranslations();
+    const QString          strTranslationFileName = TranslMap[strLanguage];
+
+    if ( myappTranslator.load ( strTranslationFileName ) )
+    {
+        pApp->installTranslator ( &myappTranslator );
+    }
+
+    // allows the Qt messages to be translated in the application
+    if ( myqtTranslator.load ( QLocale ( strLanguage ), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
+    {
+        pApp->installTranslator ( &myqtTranslator );
     }
 }
 

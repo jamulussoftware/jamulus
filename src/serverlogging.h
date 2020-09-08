@@ -32,36 +32,27 @@
 #include "global.h"
 #include "util.h"
 
-#include "historygraph.h"
 
 /* Classes ********************************************************************/
 class CServerLogging
 {
 public:
-    CServerLogging ( const int iMaxDaysHistory ) :
-#ifndef HEADLESS
-        JpegHistoryGraph ( iMaxDaysHistory ),
-#endif
-        SvgHistoryGraph ( iMaxDaysHistory ),
+    CServerLogging() :
         bDoLogging ( false ),
         File ( DEFAULT_LOG_FILE_NAME ) {}
 
     virtual ~CServerLogging();
 
     void Start ( const QString& strLoggingFileName );
-    void EnableHistory ( const QString& strHistoryFileName );
-    void AddNewConnection ( const QHostAddress& ClientInetAddr );
     void AddServerStopped();
-    void ParseLogFile ( const QString& strFileName );
+
+    void AddNewConnection ( const QHostAddress& ClientInetAddr,
+                            const int           iNumberOfConnectedClients );
 
 protected:
     void operator<< ( const QString& sNewStr );
     QString CurTimeDatetoLogString();
 
-#ifndef HEADLESS
-    CJpegHistoryGraph JpegHistoryGraph;
-#endif
-    CSvgHistoryGraph  SvgHistoryGraph;
-    bool              bDoLogging;
-    QFile             File;
+    bool  bDoLogging;
+    QFile File;
 };

@@ -124,6 +124,7 @@ public:
     CServerListManager ( const quint16  iNPortNum,
                          const QString& sNCentServAddr,
                          const QString& strServerInfo,
+                         const QString& strServerListFilter,
                          const int      iNumChannels,
                          const bool     bNCentServPingServerInList,
                          CProtocol*     pNConLProt );
@@ -146,6 +147,12 @@ public:
     void CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                        const CHostAddress&    LInetAddr,
                                        const CServerCoreInfo& ServerInfo );
+
+    void CentralServerRegisterServerEx ( const CHostAddress&          InetAddr,
+                                         const CHostAddress&          LInetAddr,
+                                         const CServerCoreInfo&       ServerInfo,
+                                         const COSUtil::EOpSystemType ,
+                                         const QString&               );
 
     void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
 
@@ -199,6 +206,8 @@ protected:
 
     CHostAddress            SlaveCurCentServerHostAddress;
     CHostAddress            SlaveCurLocalHostAddress;
+
+    QList<QHostAddress>     vWhiteList;
 
     CProtocol*              pConnLessProtocol;
 

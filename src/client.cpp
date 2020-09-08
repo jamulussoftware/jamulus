@@ -31,25 +31,8 @@ CClient::CClient ( const quint16  iPortNumber,
                    const int      iCtrlMIDIChannel,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName ) :
-    vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-    ChannelInfo                      (),
-    vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-    vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-    vecStoredPanValues               ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-    vecStoredFaderIsSolo             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    vecStoredFaderIsMute             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    iNewClientFaderLevel             ( 100 ),
-    bConnectDlgShowAllMusicians      ( true ),
+    ChannelInfo                      ( ),
     strClientName                    ( strNClientName ),
-    vecWindowPosMain                 (), // empty array
-    vecWindowPosSettings             (), // empty array
-    vecWindowPosChat                 (), // empty array
-    vecWindowPosProfile              (), // empty array
-    vecWindowPosConnect              (), // empty array
-    bWindowWasShownSettings          ( false ),
-    bWindowWasShownChat              ( false ),
-    bWindowWasShownProfile           ( false ),
-    bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     CurOpusEncoder                   ( nullptr ),
     CurOpusDecoder                   ( nullptr ),
@@ -186,10 +169,8 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLDisconnection ,
         this, &CClient::OnCLDisconnection );
 
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived,
         this, &CClient::CLVersionAndOSReceived );
-#endif
 
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived,
         this, &CClient::CLChannelLevelListReceived );
@@ -199,7 +180,7 @@ CClient::CClient ( const quint16  iPortNumber,
         this, &CClient::OnSndCrdReinitRequest );
 
     QObject::connect ( &Sound, &CSound::ControllerInFaderLevel,
-        this, &CClient::ControllerInFaderLevel );
+        this, &CClient::OnControllerInFaderLevel );
 
     QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived,
         this, &CClient::OnInvalidPacketReceived );
@@ -207,6 +188,8 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal,
         this, &CClient::OnHandledSignal );
 
+    // start timer so that elapsed time works
+    PreciseTime.start();
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)
@@ -254,7 +237,7 @@ void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
 
 void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
 {
-    // message coult not be parsed, check if the packet comes
+    // message could not be parsed, check if the packet comes
     // from the server we just connected -> if yes, send
     // disconnect message since the server may not know that we
     // are not connected anymore
@@ -701,6 +684,22 @@ void CClient::OnHandledSignal ( int sigNum )
 #endif
 }
 
+void CClient::OnControllerInFaderLevel ( int iChannelIdx,
+                                         int iValue )
+{
+    // in case of a headless client the faders cannot be moved so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // only apply new fader level if channel index is valid
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    {
+        SetRemoteChanGain ( iChannelIdx, MathUtils::CalcFaderGain ( iValue ), false );
+    }
+#endif
+
+    emit ControllerInFaderLevel ( iChannelIdx, iValue );
+}
+
 void CClient::Start()
 {
     // init object
@@ -988,10 +987,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // Transmit signal ---------------------------------------------------------
-    // update stereo signal level meter
+    // update stereo signal level meter (not needed in headless mode)
+#ifndef HEADLESS
     SignalLevelMeter.Update ( vecsStereoSndCrd,
                               iMonoBlockSizeSam,
                               true );
+#endif
 
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )
@@ -1184,7 +1185,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 
     if ( dSoundCardInputOutputLatencyMs == 0.0 )
     {
-        // use an alternative aproach for estimating the sound card delay:
+        // use an alternative approach for estimating the sound card delay:
         //
         // we assume that we have two period sizes for the input and one for the
         // output, therefore we have "3 *" instead of "2 *" (for input and output)

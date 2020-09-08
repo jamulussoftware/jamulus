@@ -6,8 +6,19 @@ export QT_SELECT=qt5
 	dh $@
 
 override_dh_auto_configure:
-	qmake CONFIG+=noupcasename PREFIX=/usr Jamulus.pro
+	mkdir -p build-gui && cd build-gui && qmake TARGET=jamulus PREFIX=/usr ../Jamulus.pro
+	mkdir -p build-nox && cd build-nox && qmake "CONFIG+=nosound headless" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro
 
 override_dh_auto_build:
 	cd src/res/translation && lrelease *.ts
-	dh_auto_build
+	cd build-gui && make
+	cd build-nox && make
+
+override_dh_auto_install:
+	cd build-nox && make install INSTALL_ROOT=../debian/tmp
+	cd build-gui && make install INSTALL_ROOT=../debian/tmp
+
+override_dh_auto_clean:
+	rm -rf build-gui
+	rm -rf build-nox
+	dh_clean

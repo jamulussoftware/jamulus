@@ -853,96 +853,82 @@ qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.
     }
 }
 
-bool CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                                  const int               iRecID,
                                                  const CHostAddress&     InetAddr )
 {
-/*
-    return code: false -> ok; true -> error
-*/
-    bool bRet = false;
-
 /*
 // TEST channel implementation: randomly delete protocol messages (50 % loss)
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
 */
 
-    if ( IsConnectionLessMessageID ( iRecID ) )
+    // check which type of message we received and do action
+    switch ( iRecID )
     {
-        // check which type of message we received and do action
-        switch ( iRecID )
-        {
-        case PROTMESSID_CLM_PING_MS:
-            bRet = EvaluateCLPingMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_PING_MS:
+        EvaluateCLPingMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
-            bRet = EvaluateCLPingWithNumClientsMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
+        EvaluateCLPingWithNumClientsMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_SERVER_FULL:
-            bRet = EvaluateCLServerFullMes();
-            break;
+    case PROTMESSID_CLM_SERVER_FULL:
+        EvaluateCLServerFullMes();
+        break;
 
-        case PROTMESSID_CLM_SERVER_LIST:
-            bRet = EvaluateCLServerListMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_SERVER_LIST:
+        EvaluateCLServerListMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REQ_SERVER_LIST:
-            bRet = EvaluateCLReqServerListMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_REQ_SERVER_LIST:
+        EvaluateCLReqServerListMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
-            bRet = EvaluateCLSendEmptyMesMes ( vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
+        EvaluateCLSendEmptyMesMes ( vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REGISTER_SERVER:
-            bRet = EvaluateCLRegisterServerMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_REGISTER_SERVER:
+        EvaluateCLRegisterServerMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REGISTER_SERVER_EX:
-            bRet = EvaluateCLRegisterServerExMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_REGISTER_SERVER_EX:
+        EvaluateCLRegisterServerExMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_UNREGISTER_SERVER:
-            bRet = EvaluateCLUnregisterServerMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_UNREGISTER_SERVER:
+        EvaluateCLUnregisterServerMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_DISCONNECTION:
-            bRet = EvaluateCLDisconnectionMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_DISCONNECTION:
+        EvaluateCLDisconnectionMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_VERSION_AND_OS:
-            bRet = EvaluateCLVersionAndOSMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_VERSION_AND_OS:
+        EvaluateCLVersionAndOSMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REQ_VERSION_AND_OS:
-            bRet = EvaluateCLReqVersionAndOSMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_REQ_VERSION_AND_OS:
+        EvaluateCLReqVersionAndOSMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_CONN_CLIENTS_LIST:
-            bRet = EvaluateCLConnClientsListMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_CONN_CLIENTS_LIST:
+        EvaluateCLConnClientsListMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
-            bRet = EvaluateCLReqConnClientsListMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
+        EvaluateCLReqConnClientsListMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
-            bRet = EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
+        EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REGISTER_SERVER_RESP:
-            bRet = EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
-            break;
-        }
+    case PROTMESSID_CLM_REGISTER_SERVER_RESP:
+        EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
+        break;
     }
-    else
-    {
-        bRet = true; // return error code
-    }
-
-    return bRet;
 }
 
 

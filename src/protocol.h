@@ -165,7 +165,7 @@ public:
                             const int               iRecCounter,
                             const int               iRecID );
 
-    bool ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+    void ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                           const int               iRecID,
                                           const CHostAddress&     InetAddr );
 

@@ -91,6 +91,10 @@
 // time out for message re-send if no acknowledgement was received
 #define SEND_MESS_TIMEOUT_MS            400 // ms
 
+// message split parameters
+#define MESS_SPLIT_PART_SIZE_BYTES      550
+#define MAX_NUM_MESS_SPLIT_PARTS        ( MAX_SIZE_BYTES_NETW_BUF / 600 )
+
 
 /* Classes ********************************************************************/
 class CProtocol : public QObject
@@ -157,7 +161,7 @@ public:
                                     int&                    iRecCounter,
                                     int&                    iRecID );
 
-    bool ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+    void ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                             const int               iRecCounter,
                             const int               iRecID );
 
@@ -298,9 +302,8 @@ protected:
     QTimer                  TimerSendMess;
     QMutex                  Mutex;
 
-    CVector<CVector<uint8_t> > vecvecbySplitMessageStorage;
-    int                        iSplitMessageCnt;
-    int                        iPartSize;
+    CVector<uint8_t>        vecvecbySplitMessageStorage[MAX_NUM_MESS_SPLIT_PARTS];
+    int                     iSplitMessageCnt;
 
 public slots:
     void OnTimerSendMess() { SendMessage(); }

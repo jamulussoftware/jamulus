@@ -429,6 +429,9 @@ CONNECTION LESS MESSAGES
 /* Implementation *************************************************************/
 CProtocol::CProtocol()
 {
+    // allocate worst case memory for split part messages
+    vecbySplitMessageStorage.Init ( MAX_SIZE_BYTES_NETW_BUF );
+
     Reset();
 
 
@@ -446,6 +449,7 @@ void CProtocol::Reset()
     iOldRecID              = PROTMESSID_ILLEGAL;
     iOldRecCnt             = 0;
     iSplitMessageCnt       = 0;
+    iSplitMessageDataIndex = 0;
     bSplitMessageSupported = false; // compatilibity to old versions
 
     // delete complete "send message queue"
@@ -684,78 +688,61 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
         }
         else
         {
-
-// TODO better solution: do not copy message
-CVector<uint8_t> vecbyMesBodyDataModified = vecbyMesBodyData;
-int              iRecIDModified = iRecID;
-
-
-            bool bEvaluateMessage = false;
+            CVector<uint8_t> vecbyMesBodyDataSplitMess;
+            int              iRecIDModified   = iRecID;
+            bool             bEvaluateMessage = false;
 
             // check for special ID first
             if ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE )
             {
+                // Split message management ------------------------------------
                 int iOriginalID;
                 int iReceivedNumParts;
                 int iReceivedSplitCnt;
+                int iCurPartSize;
 
                 if ( !ParseSplitMessageContainer ( vecbyMesBodyData,
-                                                   vecvecbySplitMessageStorage[iSplitMessageCnt],
+                                                   vecbySplitMessageStorage,
+                                                   iSplitMessageDataIndex,
                                                    iOriginalID,
                                                    iReceivedNumParts,
-                                                   iReceivedSplitCnt ) )
+                                                   iReceivedSplitCnt,
+                                                   iCurPartSize ) )
                 {
-
-// TODO put check ( iSplitMessageCnt >= MAX_NUM_MESS_SPLIT_PARTS - 1 ) in front of the ParseSplitMessageContainer call
-
                     // consistency checks
                     if ( ( iSplitMessageCnt != iReceivedSplitCnt ) ||
                          ( iSplitMessageCnt >= iReceivedNumParts ) ||
-                         ( iSplitMessageCnt >= MAX_NUM_MESS_SPLIT_PARTS - 1 ) )
+                         ( iSplitMessageCnt >= MAX_NUM_MESS_SPLIT_PARTS ) )
                     {
-                        // in case of an error we result the split message counter
-                        iSplitMessageCnt = 0;
+                        // in case of an error we reset the split message counter
+                        iSplitMessageCnt       = 0;
+                        iSplitMessageDataIndex = 0;
                     }
                     else
                     {
+                        // update counter and message data index since we have received a valid new part
                         iSplitMessageCnt++;
+                        iSplitMessageDataIndex += iCurPartSize;
 
-qDebug() << "iSplitMessageCnt: " << iSplitMessageCnt << ", iReceivedSplitCnt: " << iReceivedSplitCnt << ", iReceivedNumParts: " << iReceivedNumParts;
-
+                        // check if the split part messages was completely received
                         if ( iSplitMessageCnt == iReceivedNumParts )
                         {
+                            // the split message is completely received, copy data for parsing
+                            vecbyMesBodyDataSplitMess.Init ( iSplitMessageDataIndex );
 
-// TODO is there a cleaner way of reconstructing the complete message?
+                            std::copy ( vecbySplitMessageStorage.begin(),
+                                        vecbySplitMessageStorage.begin() + iSplitMessageDataIndex,
+                                        vecbyMesBodyDataSplitMess.begin() );
 
-                            int iMessageSize = 0;
-
-                            for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
-                            {
-                                iMessageSize += vecvecbySplitMessageStorage[iSplitCnt].Size();
-                            }
-
-                            vecbyMesBodyDataModified.Init ( iMessageSize );
-
-                            int iPutPos = 0;
-
-                            for ( int iSplitCnt = 0; iSplitCnt < iReceivedNumParts; iSplitCnt++ )
-                            {
-                                const int iCurPartSize = vecvecbySplitMessageStorage[iSplitCnt].Size();
-
-                                std::copy ( vecvecbySplitMessageStorage[iSplitCnt].begin(),
-                                            vecvecbySplitMessageStorage[iSplitCnt].begin() + iCurPartSize,
-                                            vecbyMesBodyDataModified.begin() + iPutPos );
-
-                                iPutPos += iCurPartSize;
-                            }
-
+                            // the received ID is still PROTMESSID_SPECIAL_SPLIT_MESSAGE, set it to
+                            // the ID of the original reconstructed split message now
                             iRecIDModified = iOriginalID;
 
-qDebug() << "received iNumParts: " << iReceivedNumParts;// << ", data: " << vecbyMesBodyDataModified;
-
-                            // the complete split message was reconstructed, reset the counter for the next split message
-                            iSplitMessageCnt = 0;
-                            bEvaluateMessage = true;
+                            // the complete split message was reconstructed, reset the counter for
+                            // the next split message
+                            iSplitMessageCnt       = 0;
+                            iSplitMessageDataIndex = 0;
+                            bEvaluateMessage       = true;
                         }
                     }
                 }
@@ -763,20 +750,23 @@ qDebug() << "received iNumParts: " << iReceivedNumParts;// << ", data: " << vecb
             else
             {
                 // a non-split message was received, reset split message counter and directly evaluate message
-                iSplitMessageCnt = 0;
-                bEvaluateMessage = true;
+                iSplitMessageCnt       = 0;
+                iSplitMessageDataIndex = 0;
+                bEvaluateMessage       = true;
             }
 
             if ( bEvaluateMessage )
             {
-
-qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.Size(): " << vecbyMesBodyDataModified.Size();
+                // use a reference to either the original data vector or the reconstructed
+                // split message to avoid unnecessary copying
+                const CVector<uint8_t>& vecbyMesBodyDataRef =
+                    ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE ) ? vecbyMesBodyDataSplitMess : vecbyMesBodyData;
 
                 // check which type of message we received and do action
                 switch ( iRecIDModified )
                 {
                 case PROTMESSID_JITT_BUF_SIZE:
-                    EvaluateJitBufMes ( vecbyMesBodyDataModified );
+                    EvaluateJitBufMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_REQ_JITT_BUF_SIZE:
@@ -784,23 +774,23 @@ qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.
                     break;
 
                 case PROTMESSID_CLIENT_ID:
-                    EvaluateClientIDMes ( vecbyMesBodyDataModified );
+                    EvaluateClientIDMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_CHANNEL_GAIN:
-                    EvaluateChanGainMes ( vecbyMesBodyDataModified );
+                    EvaluateChanGainMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_CHANNEL_PAN:
-                    EvaluateChanPanMes ( vecbyMesBodyDataModified );
+                    EvaluateChanPanMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_MUTE_STATE_CHANGED:
-                    EvaluateMuteStateHasChangedMes ( vecbyMesBodyDataModified );
+                    EvaluateMuteStateHasChangedMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_CONN_CLIENTS_LIST:
-                    EvaluateConClientListMes ( vecbyMesBodyDataModified );
+                    EvaluateConClientListMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_REQ_CONN_CLIENTS_LIST:
@@ -808,7 +798,7 @@ qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.
                     break;
 
                 case PROTMESSID_CHANNEL_INFOS:
-                    EvaluateChanInfoMes ( vecbyMesBodyDataModified );
+                    EvaluateChanInfoMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_REQ_CHANNEL_INFOS:
@@ -816,11 +806,11 @@ qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.
                     break;
 
                 case PROTMESSID_CHAT_TEXT:
-                    EvaluateChatTextMes ( vecbyMesBodyDataModified );
+                    EvaluateChatTextMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_NETW_TRANSPORT_PROPS:
-                    EvaluateNetwTranspPropsMes ( vecbyMesBodyDataModified );
+                    EvaluateNetwTranspPropsMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
@@ -836,19 +826,19 @@ qDebug() << "iRecIDModified: " << iRecIDModified << ", vecbyMesBodyDataModified.
                     break;
 
                 case PROTMESSID_LICENCE_REQUIRED:
-                    EvaluateLicenceRequiredMes ( vecbyMesBodyDataModified );
+                    EvaluateLicenceRequiredMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
-                    EvaluateReqChannelLevelListMes ( vecbyMesBodyDataModified );
+                    EvaluateReqChannelLevelListMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_VERSION_AND_OS:
-                    EvaluateVersionAndOSMes ( vecbyMesBodyDataModified );
+                    EvaluateVersionAndOSMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_RECORDER_STATE:
-                    EvaluateRecorderStateMes ( vecbyMesBodyDataModified );
+                    EvaluateRecorderStateMes ( vecbyMesBodyDataRef );
                     break;
                 }
             }
@@ -2825,9 +2815,11 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
 
 bool CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
                                              CVector<uint8_t>&       vecbyMesBodyData,
+                                             const int               iSplitMessageDataIndex,
                                              int&                    iID,
                                              int&                    iNumParts,
-                                             int&                    iSplitCnt )
+                                             int&                    iSplitCnt,
+                                             int&                    iCurPartSize )
 {
     int       iPos     = 0; // init position pointer
     const int iDataLen = vecbyData.Size();
@@ -2849,17 +2841,17 @@ bool CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
 
 
     // Extract actual data -----------------------------------------------------
+    iCurPartSize = iDataLen - 4;
 
-    const int iLenBy = iDataLen - 4;
-
-// TODO this memory allocation is done in the real time thread but should be
-//      done in the low priority protocol management thread
-
-    vecbyMesBodyData.Init ( iLenBy );
-
-    for ( int i = 0; i < iLenBy; i++ )
+    // the memory must be allocated outside this function -> check the size
+    if ( vecbyMesBodyData.Size() < iSplitMessageDataIndex + iCurPartSize )
     {
-        vecbyMesBodyData[i] = static_cast<uint8_t> ( GetValFromStream ( vecbyData, iPos, 1 ) );
+        return true; // return error code
+    }
+
+    for ( int i = 0; i < iCurPartSize; i++ )
+    {
+        vecbyMesBodyData[iSplitMessageDataIndex + i] = static_cast<uint8_t> ( GetValFromStream ( vecbyData, iPos, 1 ) );
     }
 
     return false; // no error

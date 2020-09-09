@@ -10,6 +10,9 @@
 
 - added a command line argument to enable multithreading in the server (#339)
 
+- added support for split protocol messages (fixes bug with large number of clients
+  connected to a server, #547)
+
 - store recorder settings, coded by pljones (#313)
 
 - accessibility improvements, coded by chigkim (#498, #512)

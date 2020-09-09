@@ -224,9 +224,11 @@ protected:
 
     bool ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
                                       CVector<uint8_t>&       vecbyMesBodyData,
+                                      const int               iSplitMessageDataIndex,
                                       int&                    iID,
                                       int&                    iNumParts,
-                                      int&                    iSplitCnt );
+                                      int&                    iSplitCnt,
+                                      int&                    iCurPartSize );
 
     void PutValOnStream ( CVector<uint8_t>& vecIn,
                           int&              iPos,
@@ -311,8 +313,9 @@ protected:
     QTimer                  TimerSendMess;
     QMutex                  Mutex;
 
-    CVector<uint8_t>        vecvecbySplitMessageStorage[MAX_NUM_MESS_SPLIT_PARTS];
+    CVector<uint8_t>        vecbySplitMessageStorage;
     int                     iSplitMessageCnt;
+    int                     iSplitMessageDataIndex;
     bool                    bSplitMessageSupported;
 
 public slots:

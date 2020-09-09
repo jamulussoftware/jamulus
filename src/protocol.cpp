@@ -520,47 +520,38 @@ void CProtocol::CreateAndSendMessage ( const int               iID,
 {
     CVector<uint8_t> vecNewMessage;
     int              iCurCounter;
+    const int        iDataLen = vecData.Size();
 
-// TODO insert split mechanism here
-// TODO make use of MAX_SIZE_BYTES_NETW_BUF
-
-CVector<uint8_t> vecDataTmp;
-int iPointer = 0;
-
-qDebug() << "CreateAndSendMessage vecData.Size(): " << vecData.Size();
-
-// TEST split all messages by half for testing
-    if ( ( vecData.Size() > MESS_SPLIT_PART_SIZE_BYTES ) && bSplitMessageSupported )
+    // check if message has to be split because it is too large
+    if ( ( iDataLen > MESS_SPLIT_PART_SIZE_BYTES ) && bSplitMessageSupported )
     {
-        const int iNumParts = static_cast<int> ( ceil ( static_cast<double> ( vecData.Size() ) / MESS_SPLIT_PART_SIZE_BYTES ) );
+        CVector<uint8_t> vecNewSplitMessage;
+        int              iStartIndexInData = 0; // init index
 
-qDebug() << "CreateAndSendMessage message spilt in " << iNumParts << " parts";
+        // calculate the number of split parts
+        const int iNumParts = static_cast<int> (
+            std::ceil ( static_cast<double> ( iDataLen ) / MESS_SPLIT_PART_SIZE_BYTES ) );
 
         for ( int iSplitCnt = 0; iSplitCnt < iNumParts; iSplitCnt++ )
         {
+            // the split part size may be smaller for the last part
             int iCurPartSize = MESS_SPLIT_PART_SIZE_BYTES;
 
-            if ( vecData.Size() - iPointer < MESS_SPLIT_PART_SIZE_BYTES )
+            if ( iDataLen - iStartIndexInData < MESS_SPLIT_PART_SIZE_BYTES )
             {
-                iCurPartSize = vecData.Size() - iPointer;
+                iCurPartSize = iDataLen - iStartIndexInData;
             }
-
-vecDataTmp.Init ( iCurPartSize );
-
-for ( int i = 0; i < iCurPartSize; i++ )
-{
-    vecDataTmp[i] = vecData[iPointer + i];
-}
-iPointer += iCurPartSize;
-
-// TODO better solution
-CVector<uint8_t> vecNewSplitMessage;
 
             GenSplitMessageContainer ( vecNewSplitMessage,
                                        iID,
                                        iNumParts,
                                        iSplitCnt,
-                                       vecDataTmp );
+                                       vecData,
+                                       iStartIndexInData,
+                                       iCurPartSize );
+
+            // increment the start index of the source data by the last part size
+            iStartIndexInData += iCurPartSize;
 
             Mutex.lock();
             {
@@ -704,8 +695,6 @@ int              iRecIDModified = iRecID;
             // check for special ID first
             if ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE )
             {
-qDebug() << "PROTMESSID_SPECIAL_SPLIT_MESSAGE";
-
                 int iOriginalID;
                 int iReceivedNumParts;
                 int iReceivedSplitCnt;
@@ -3000,15 +2989,14 @@ void CProtocol::GenSplitMessageContainer ( CVector<uint8_t>&       vecOut,
                                            const int               iID,
                                            const int               iNumParts,
                                            const int               iSplitCnt,
-                                           const CVector<uint8_t>& vecData )
+                                           const CVector<uint8_t>& vecData,
+                                           const int               iStartIndexInData,
+                                           const int               iLengthOfDataPart )
 {
     int iPos = 0; // init position pointer
 
-    // query length of data vector
-    const int iDataLenByte = vecData.Size();
-
     // total length of message
-    const int iTotLenByte = 4 + iDataLenByte;
+    const int iTotLenByte = 4 + iLengthOfDataPart;
 
     // init message vector
     vecOut.Init ( iTotLenByte );
@@ -3023,9 +3011,9 @@ void CProtocol::GenSplitMessageContainer ( CVector<uint8_t>&       vecOut,
     PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( iSplitCnt ), 1 );
 
     // data
-    for ( int i = 0; i < iDataLenByte; i++ )
+    for ( int i = 0; i < iLengthOfDataPart; i++ )
     {
-        PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( vecData[i] ), 1 );
+        PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( vecData[iStartIndexInData + i] ), 1 );
     }
 }
 

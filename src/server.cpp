@@ -1680,7 +1680,7 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                                               vecNumAudioChannels[j] > 1 );
 
             // map value to integer for transmission via the protocol (4 bit available)
-            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevelForMeterdB ) );
+            vecLevelsOut[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );
         }
     }
 

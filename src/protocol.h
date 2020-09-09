@@ -218,7 +218,9 @@ protected:
                                     const int               iID,
                                     const int               iNumParts,
                                     const int               iSplitCnt,
-                                    const CVector<uint8_t>& vecData );
+                                    const CVector<uint8_t>& vecData,
+                                    const int               iStartIndexInData,
+                                    const int               iLengthOfDataPart );
 
     bool ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
                                       CVector<uint8_t>&       vecbyMesBodyData,

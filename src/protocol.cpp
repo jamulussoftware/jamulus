@@ -705,6 +705,9 @@ int              iRecIDModified = iRecID;
                                                    iReceivedNumParts,
                                                    iReceivedSplitCnt ) )
                 {
+
+// TODO put check ( iSplitMessageCnt >= MAX_NUM_MESS_SPLIT_PARTS - 1 ) in front of the ParseSplitMessageContainer call
+
                     // consistency checks
                     if ( ( iSplitMessageCnt != iReceivedSplitCnt ) ||
                          ( iSplitMessageCnt >= iReceivedNumParts ) ||

@@ -95,7 +95,7 @@
 
 // message split parameters
 #define MESS_SPLIT_PART_SIZE_BYTES      550
-#define MAX_NUM_MESS_SPLIT_PARTS        ( MAX_SIZE_BYTES_NETW_BUF / 600 )
+#define MAX_NUM_MESS_SPLIT_PARTS        ( MAX_SIZE_BYTES_NETW_BUF / MESS_SPLIT_PART_SIZE_BYTES )
 
 
 /* Classes ********************************************************************/

@@ -59,8 +59,9 @@ SPLIT MESSAGE CONTAINER
     +------------+------------------------+------------------+--------------+
 
 - ID is the message ID of the message being split
-- split cnt is the counter which is incremented for each part of the message
-- data is the data part of the original message which were split
+- number of parts - total number of parts comprising the whole message
+- split cnt - number within number total for this part of the message
+- data - subset of the data part of the original message being split
 
 
 
@@ -527,7 +528,7 @@ void CProtocol::CreateAndSendMessage ( const int               iID,
     const int        iDataLen = vecData.Size();
 
     // check if message has to be split because it is too large
-    if ( ( iDataLen > MESS_SPLIT_PART_SIZE_BYTES ) && bSplitMessageSupported )
+    if ( bSplitMessageSupported && ( iDataLen > MESS_SPLIT_PART_SIZE_BYTES ) )
     {
         CVector<uint8_t> vecNewSplitMessage;
         int              iStartIndexInData = 0; // init index

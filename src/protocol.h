@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <list>
+#include <cmath>
 #include "global.h"
 #include "util.h"
 

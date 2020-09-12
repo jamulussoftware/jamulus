@@ -596,6 +596,9 @@ void CServer::OnNewConnection ( int          iChID,
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
 
+    // query support for split messages in the client
+    vecChannels[iChID].CreateReqSplitMessSupportMes();
+
     // on a new connection we query the network transport properties for the
     // audio packets (to use the correct network block size and audio
     // compression properties, etc.)
@@ -1677,7 +1680,7 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                                               vecNumAudioChannels[j] > 1 );
 
             // map value to integer for transmission via the protocol (4 bit available)
-            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevelForMeterdB ) );
+            vecLevelsOut[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );
         }
     }
 

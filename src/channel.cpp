@@ -104,6 +104,12 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
     QObject::connect ( &Protocol, &CProtocol::ReqNetTranspProps,
         this, &CChannel::OnReqNetTranspProps );
 
+    QObject::connect ( &Protocol, &CProtocol::ReqSplitMessSupport,
+        this, &CChannel::OnReqSplitMessSupport );
+
+    QObject::connect ( &Protocol, &CProtocol::SplitMessSupported,
+        this, &CChannel::OnSplitMessSupported );
+
     QObject::connect ( &Protocol, &CProtocol::LicenceRequired,
         this, &CChannel::LicenceRequired );
 
@@ -470,6 +476,13 @@ void CChannel::OnReqNetTranspProps()
     Protocol.CreateNetwTranspPropsMes ( GetNetworkTransportPropsFromCurrentSettings() );
 }
 
+void CChannel::OnReqSplitMessSupport()
+{
+    // activate split messages in our protocol (client) and return answer message to the server
+    Protocol.SetSplitMessageSupported ( true );
+    Protocol.CreateSplitMessSupportedMes();
+}
+
 CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
 {
     // use current stored settings of the channel to fill the network transport
@@ -641,6 +654,9 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
     // in case we are just disconnected, we have to fire a message
     if ( eGetStatus == GS_CHAN_NOW_DISCONNECTED )
     {
+        // reset the protocol
+        Protocol.Reset();
+
         // emit message
         emit Disconnected();
     }

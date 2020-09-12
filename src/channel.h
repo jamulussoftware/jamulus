@@ -159,6 +159,7 @@ public:
     }
     void CreateClientIDMes ( const int iChanID )             { Protocol.CreateClientIDMes ( iChanID ); }
     void CreateReqNetwTranspPropsMes()                       { Protocol.CreateReqNetwTranspPropsMes(); }
+    void CreateReqSplitMessSupportMes()                      { Protocol.CreateReqSplitMessSupportMes(); }
     void CreateReqJitBufMes()                                { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                          { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText )    { Protocol.CreateChatTextMes ( strChatText ); }
@@ -245,6 +246,8 @@ public slots:
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
+    void OnReqSplitMessSupport();
+    void OnSplitMessSupported() { Protocol.SetSplitMessageSupported ( true ); }
 
     void OnParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
                               int              iRecCounter,

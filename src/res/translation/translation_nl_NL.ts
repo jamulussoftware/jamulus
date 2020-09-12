@@ -465,7 +465,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="799"/>
         <source>Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Alias</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="765"/>
@@ -865,7 +865,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="230"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>software-update beschikbaar</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="244"/>
@@ -1058,7 +1058,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="574"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Update check</translation>
     </message>
     <message>
         <source>MUTED (You are not sending any audio to the server)</source>
@@ -2837,7 +2837,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="353"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>software-update beschikbaar</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="834"/>
@@ -3038,7 +3038,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="295"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Update check</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="68"/>

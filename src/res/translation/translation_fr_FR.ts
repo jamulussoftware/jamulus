@@ -209,32 +209,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="823"/>
+        <location filename="../../audiomixerboard.cpp" line="829"/>
         <source>Personal Mix at the Server</source>
         <translation>Mixage personnel au serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="823"/>
+        <location filename="../../audiomixerboard.cpp" line="829"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Lorsque vous êtes connecté à un serveur, les contrôles vous permettent de régler votre mixage local sans affecter ce que les autres entendent de vous. Le titre indique le nom du serveur et, lorsqu&apos;il est connu, s&apos;il est en train d&apos;enregistrer.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="903"/>
+        <location filename="../../audiomixerboard.cpp" line="909"/>
         <source>Server</source>
         <translation>Serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="912"/>
+        <location filename="../../audiomixerboard.cpp" line="918"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>T E N T A T I V E   D E   C O N N E X I O N</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1045"/>
+        <location filename="../../audiomixerboard.cpp" line="1051"/>
         <source>RECORDING ACTIVE</source>
         <translation>ENREGISTREMENT ACTIF</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1048"/>
+        <location filename="../../audiomixerboard.cpp" line="1054"/>
         <source>Personal Mix at: </source>
         <translation>Mixage personnel à : </translation>
     </message>
@@ -444,49 +444,49 @@
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="721"/>
+        <location filename="../../audiomixerboard.cpp" line="727"/>
         <source>Alias/Name</source>
         <translation>Pseudo/nom</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="728"/>
+        <location filename="../../audiomixerboard.cpp" line="734"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="738"/>
+        <location filename="../../audiomixerboard.cpp" line="744"/>
         <source>Location</source>
         <translation>Localisation</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="766"/>
         <location filename="../../audiomixerboard.cpp" line="772"/>
         <location filename="../../audiomixerboard.cpp" line="778"/>
+        <location filename="../../audiomixerboard.cpp" line="784"/>
         <source>Skill Level</source>
         <translation>Niveau de compétence</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="799"/>
+        <location filename="../../audiomixerboard.cpp" line="805"/>
         <source>Alias</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="765"/>
+        <location filename="../../audiomixerboard.cpp" line="771"/>
         <source>Beginner</source>
         <translation>Débutant</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="771"/>
+        <location filename="../../audiomixerboard.cpp" line="777"/>
         <source>Intermediate</source>
         <translation>Intermédiaire</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="777"/>
+        <location filename="../../audiomixerboard.cpp" line="783"/>
         <source>Expert</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="790"/>
+        <location filename="../../audiomixerboard.cpp" line="796"/>
         <source>Musician Profile</source>
         <translation>Profil de musicien</translation>
     </message>
@@ -810,7 +810,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="194"/>
-        <location filename="../../clientdlg.cpp" line="1104"/>
+        <location filename="../../clientdlg.cpp" line="1108"/>
         <source>C&amp;onnect</source>
         <translation>Se c&amp;onnecter</translation>
     </message>
@@ -995,17 +995,17 @@
         <translation>Sélectionnez le fichier de configuration des canaux</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="840"/>
+        <location filename="../../clientdlg.cpp" line="843"/>
         <source>user</source>
         <translation>utilisateur</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="845"/>
+        <location filename="../../clientdlg.cpp" line="847"/>
         <source>users</source>
         <translation>utilisateurs</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1076"/>
+        <location filename="../../clientdlg.cpp" line="1080"/>
         <source>D&amp;isconnect</source>
         <translation>Dé&amp;connecter</translation>
     </message>
@@ -3295,7 +3295,7 @@
         <translation> nécessite l&apos;interface audio à faible latence ASIO pour fonctionner correctement. Il ne s&apos;agit pas d&apos;une interface audio Windows standard et un pilote audio spécial est donc nécessaire. Soit votre carte son dispose d&apos;un pilote ASIO natif (ce qui est recommandé), soit vous pouvez utiliser d&apos;autres pilotes comme le pilote ASIO4All.</translation>
     </message>
     <message>
-        <location filename="../../../android/sound.cpp" line="137"/>
+        <location filename="../../../android/sound.cpp" line="148"/>
         <source>Error closing stream: $s</source>
         <translation>Erreur de fermeture du flux : $s</translation>
     </message>
@@ -3303,47 +3303,47 @@
 <context>
     <name>CSoundBase</name>
     <message>
-        <location filename="../../soundbase.cpp" line="115"/>
+        <location filename="../../soundbase.cpp" line="68"/>
         <source>Invalid device selection.</source>
         <translation>Sélection de périphérique invalide.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="142"/>
+        <location filename="../../soundbase.cpp" line="95"/>
         <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
         <translation>Les propriétés du pilote audio ont changé et sont devenues incompatibles avec ce logiciel. Le périphérique audio sélectionné n&apos;a pas pu être utilisé en raison de l&apos;erreur suivante :</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="147"/>
+        <location filename="../../soundbase.cpp" line="100"/>
         <source>Please restart the software.</source>
         <translation>Veuillez redémarrer le logiciel</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="148"/>
+        <location filename="../../soundbase.cpp" line="101"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="191"/>
+        <location filename="../../soundbase.cpp" line="144"/>
         <source>No usable </source>
         <translation>Pas de périphérique audio (pilote) </translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="192"/>
+        <location filename="../../soundbase.cpp" line="145"/>
         <source> audio device (driver) found.</source>
         <translation> utilisable trouvé</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="193"/>
+        <location filename="../../soundbase.cpp" line="146"/>
         <source>In the following there is a list of all available drivers with the associated error message:</source>
         <translation>Vous trouverez ci-dessous une liste de tous les pilotes disponibles avec le message d&apos;erreur associé :</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="207"/>
+        <location filename="../../soundbase.cpp" line="160"/>
         <source>Do you want to open the ASIO driver setups?</source>
         <translation>Voulez-vous ouvrir les configurations des pilotes ASIO ?</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="214"/>
+        <location filename="../../soundbase.cpp" line="167"/>
         <source> could not be started because of audio interface issues.</source>
         <translation> n&apos;a pas pu être lancé en raison de problèmes d&apos;interface audio.</translation>
     </message>

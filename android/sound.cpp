@@ -37,7 +37,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     pSound = this;
 
 #ifdef ANDROIDDEBUG
-    qInstallMessageHandler(myMessageHandler);
+    qInstallMessageHandler ( myMessageHandler );
 #endif
 
     // we open the input/output streams once and keep then open the entire lifetime
@@ -49,12 +49,12 @@ void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
     // We request EXCLUSIVE mode since this will give us the lowest possible
     // latency. If EXCLUSIVE mode isn't available the builder will fall back to SHARED mode.
     builder->setCallback ( this )
-        ->setFormat ( oboe::AudioFormat::Float )
-        ->setSharingMode ( oboe::SharingMode::Exclusive )
-        ->setChannelCount ( oboe::ChannelCount::Stereo )
-        ->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ )
+        ->setFormat                      ( oboe::AudioFormat::Float )
+        ->setSharingMode                 ( oboe::SharingMode::Exclusive )
+        ->setChannelCount                ( oboe::ChannelCount::Stereo )
+        ->setSampleRate                  ( SYSTEM_SAMPLE_RATE_HZ )
         ->setSampleRateConversionQuality ( oboe::SampleRateConversionQuality::Medium )
-        ->setPerformanceMode ( oboe::PerformanceMode::LowLatency );
+        ->setPerformanceMode             ( oboe::PerformanceMode::LowLatency );
 
     return;
 }
@@ -69,29 +69,18 @@ void CSound::openStreams()
     setupCommonStreamParams ( &outBuilder );
 
 // TEST
-outBuilder.setFramesPerCallback ( 192 );
+//outBuilder.setFramesPerCallback ( 192 );
 
     oboe::Result result = outBuilder.openManagedStream ( mPlayStream );
-
-    if ( result != oboe::Result::OK )
-    {
-        return;
-    }
 
     // Setup input stream
     inBuilder.setDirection ( oboe::Direction::Input );
     setupCommonStreamParams ( &inBuilder );
 
 // TEST
-inBuilder.setFramesPerCallback ( 192 );
+//inBuilder.setFramesPerCallback ( 192 );
 
     result = inBuilder.openManagedStream ( mRecordingStream );
-
-    if ( result != oboe::Result::OK )
-    {
-        closeStream ( mPlayStream );
-        return;
-    }
 }
 
 void CSound::closeStream ( oboe::ManagedStream& stream )
@@ -183,9 +172,9 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     mRecordingStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
     mPlayStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
 
-// TEST
-inBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
-outBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
+//// TEST
+//inBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
+//outBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
 
 // TEST for debugging
 qInfo() << "iOpenSLBufferSizeMono: " << iOpenSLBufferSizeMono;

@@ -159,6 +159,7 @@ win32 {
 
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+    ANDROID_ABIS = armeabi-v7a
     OTHER_FILES += android/AndroidManifest.xml
 
     # if compiling for android you need to use Oboe library which is included as a git submodule

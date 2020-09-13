@@ -25,7 +25,7 @@
 
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
-
+- bug fix: pan is not correctly initialized in the server on a new connection (#537)
 
 
 

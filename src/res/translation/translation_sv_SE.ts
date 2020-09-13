@@ -410,7 +410,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="799"/>
         <source>Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Alias</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="765"/>
@@ -718,7 +718,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="230"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>mjukvaruuppdatering tillgänglig</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="244"/>
@@ -906,12 +906,12 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="551"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation type="unfinished"></translation>
+        <translation>TYSTAD (andra hör inte dig)</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="574"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdateringskontroll</translation>
     </message>
     <message>
         <source>MUTED (You are not sending any audio to the server)</source>
@@ -1875,17 +1875,17 @@
     <message>
         <location filename="../../multicolorled.cpp" line="75"/>
         <source>Red</source>
-        <translation type="unfinished">Röd</translation>
+        <translation>Röd</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="85"/>
         <source>Yellow</source>
-        <translation type="unfinished">Gul</translation>
+        <translation>Gul</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="95"/>
         <source>Green</source>
-        <translation type="unfinished">Grön</translation>
+        <translation>Grön</translation>
     </message>
 </context>
 <context>
@@ -2490,7 +2490,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="353"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>mjukvaruuppdatering tillgänglig</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="834"/>
@@ -2699,7 +2699,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="295"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppdateringskontroll</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="68"/>

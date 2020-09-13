@@ -64,9 +64,11 @@ private:
     void closeStreams();
     void closeStream ( oboe::ManagedStream& stream );
 
-    oboe::ManagedStream  mRecordingStream;
-    oboe::ManagedStream  mPlayStream;
-    AudioStreamCallback* mCallback;
+    oboe::AudioStreamBuilder inBuilder;
+    oboe::AudioStreamBuilder outBuilder;
+    oboe::ManagedStream      mRecordingStream;
+    oboe::ManagedStream      mPlayStream;
+    AudioStreamCallback*     mCallback;
 
     // used to reach a state where the input buffer is
     // empty and the garbage in the first 500ms or so is discarded

@@ -65,10 +65,11 @@ void CSound::openStreams()
     mCallback = this;
 
     // Setup output stream
-    oboe::AudioStreamBuilder inBuilder, outBuilder;
-
     outBuilder.setDirection ( oboe::Direction::Output );
     setupCommonStreamParams ( &outBuilder );
+
+// TEST
+outBuilder.setFramesPerCallback ( 192 );
 
     oboe::Result result = outBuilder.openManagedStream ( mPlayStream );
 
@@ -80,6 +81,9 @@ void CSound::openStreams()
     // Setup input stream
     inBuilder.setDirection ( oboe::Direction::Input );
     setupCommonStreamParams ( &inBuilder );
+
+// TEST
+inBuilder.setFramesPerCallback ( 192 );
 
     result = inBuilder.openManagedStream ( mRecordingStream );
 
@@ -164,12 +168,12 @@ void CSound::Stop()
 int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 {
     // get the preferred device frames per burst for input and output
-//    const int iInFramesPerBurst  = mRecordingStream->getFramesPerBurst();
-//    const int iOutFramesPerBurst = mPlayStream->getFramesPerBurst();
+    const int iInFramesPerBurst  = mRecordingStream->getFramesPerBurst();
+    const int iOutFramesPerBurst = mPlayStream->getFramesPerBurst();
 
-// TEST
-const int iInFramesPerBurst  = mRecordingStream->getBufferSizeInFrames();
-const int iOutFramesPerBurst = mPlayStream->getBufferSizeInFrames();
+//// TEST
+//const int iInFramesPerBurst  = mRecordingStream->getBufferSizeInFrames();
+//const int iOutFramesPerBurst = mPlayStream->getBufferSizeInFrames();
 
 
     // now take the larger value of both for our buffer size
@@ -177,9 +181,11 @@ const int iOutFramesPerBurst = mPlayStream->getBufferSizeInFrames();
 
     // apply the new frame size to the streams
     mRecordingStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
-
     mPlayStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
 
+// TEST
+inBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
+outBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
 
 // TEST for debugging
 qInfo() << "iOpenSLBufferSizeMono: " << iOpenSLBufferSizeMono;
@@ -216,7 +222,14 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
     // Buffer size can change regularly by android devices
     int& iBufferSizeMono = pSound->iOpenSLBufferSizeMono;
 
-qInfo() << oboeStream;
+if ( oboeStream == pSound->mRecordingStream.get() )
+{
+    qInfo() << "INPUT -------------";
+}
+else
+{
+    qInfo() << "OUTPUT ************";
+}
 qInfo() << "iBufferSizeMono: " << iBufferSizeMono << ", numFrames: " << numFrames;
 
     // perform the processing for input

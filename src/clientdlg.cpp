@@ -860,7 +860,7 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( strSelfMuted + strWindowTitle );
+        setWindowTitle ( strSelfMuted + pClient->strClientName );
     }
     else
     {

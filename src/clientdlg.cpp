@@ -826,7 +826,6 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 
 void CClientDlg::SetMyWindowTitle ( const int iClients )
 {
-<<<<<<< HEAD
     // set the window title (and therefore also the task bar icon text of the OS)
     // according to the following specification (#559):
     // <ServerName> - <N> users - Jamulus
@@ -850,23 +849,10 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
     if ( pClient->GetMuteOutStream() )
     {
         strSelfMuted = u8" \u2588 MUTED \u2588 ";
-        strWindowTitle = strSelfMuted + pClient->strClientName;
     }
     else
     {
-        strSelfMuted = ""
-
-    // check for local mute status and construct window title accordingly    
-    QString strWindowTitle;
-    QString const strSelfMuted = u8" \u2588 MUTED \u2588 ";
-   
-    if ( pClient->GetMuteOutStream() )
-    {
-        strWindowTitle = pClient->strClientName + strSelfMuted;
-    }
-    else
-    {
-        strWindowTitle = pClient->strClientName;
+        strSelfMuted = "";
     }
 
     // show number of connected clients in window title (and therefore also in
@@ -874,7 +860,7 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( strWindowTitle );
+        setWindowTitle ( strSelfMuted + strWindowTitle );
     }
     else
     {
@@ -1002,7 +988,6 @@ void CClientDlg::OnChatStateChanged ( int value )
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
     pClient->SetMuteOutStream ( value == Qt::Checked );
-    SetMyWindowTitle ( -1 );
 
     // show/hide info label
     if ( value == Qt::Checked )
@@ -1013,11 +998,7 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
     {
         lblGlobalInfoLabel->hide();
     }
-<<<<<<< HEAD
     SetMyWindowTitle ( -1 );
-=======
-
->>>>>>> 458a73e3ea1edaeb72d0694dea72bbae05015b0e
 }
 
 void CClientDlg::OnTimerSigMet()

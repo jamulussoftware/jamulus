@@ -845,7 +845,7 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
     // check for local mute status and construct window title accordingly    
     QString strWindowTitle;
     QString const strSelfMuted = u8" \u2588 MUTED \u2588 ";
-   
+
     if ( pClient->GetMuteOutStream() )
     {
         strSelfMuted = u8" \u2588 MUTED \u2588 ";

@@ -828,7 +828,7 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
 {
     static int iCurrConnClients;
     int iNumClients = 0;
-    
+
     if ( iClients < 0)
     {
         iNumClients = iCurrConnClients;
@@ -836,13 +836,12 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
     else
     {
         iNumClients = iCurrConnClients = iClients;
-        
     }
     
     // check for local mute status and construct window title accordingly    
     QString strWindowTitle;
     QString const strSelfMuted = u8" \u2588 MUTED \u2588 ";
-    
+   
     if ( pClient->GetMuteOutStream() )
     {
         strWindowTitle = pClient->strClientName + strSelfMuted;
@@ -851,7 +850,7 @@ void CClientDlg::SetMyWindowTitle ( const int iClients )
     {
         strWindowTitle = pClient->strClientName;
     }
-    
+
     // show number of connected clients in window title (and therefore also in
     // the task bar of the OS)
     if ( iNumClients == 0 )

@@ -1683,7 +1683,7 @@
     <message>
         <location filename="../../util.h" line="644"/>
         <source>Default</source>
-        <translation>Por defecto</translation>
+        <translation>Predeterminado</translation>
     </message>
     <message>
         <source>Default (North America)</source>
@@ -1787,7 +1787,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="233"/>
         <source>(default)</source>
-        <translation>(por defecto)</translation>
+        <translation>(predeterminado)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="240"/>

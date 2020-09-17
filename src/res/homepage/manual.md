@@ -1,3 +1,5 @@
+( en | [es](https://github.com/ignotus666/jamulus/blob/master/src/res/homepage/ES/manual-es.md) )
+
 Jamulus Help (Software Manual)
 ==============================
 

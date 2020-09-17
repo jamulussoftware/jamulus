@@ -109,7 +109,7 @@ LED bar:      lbr
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Getting-Started"
 #define SERVER_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Running-a-Server"
-#define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
+#define SOFTWARE_MANUAL_URL              "https://github.com/ignotus666/jamulus/blob/master/src/res/homepage/manual.md"
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)

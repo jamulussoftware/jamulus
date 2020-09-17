@@ -1,4 +1,4 @@
-( [en](https://github.com/ignotus666/jamulus/blob/master/src/res/homepage/manual.md) | es )
+( [en](https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md) | es )
 
 Ayuda para Jamulus (Manual del Software)
 ==============================

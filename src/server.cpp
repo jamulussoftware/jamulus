@@ -233,6 +233,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const bool         bNUseMultithreading,
+                   const bool         bDisableRecording,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading          ( bNUseMultithreading ),
@@ -249,6 +250,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   iNewMaxNumChan,
                                   bNCentServPingServerInList,
                                   &ConnLessProtocol ),
+    bDisableRecording           ( bDisableRecording ),
     bAutoRunMinimized           ( false ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
@@ -1577,6 +1579,8 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 void CServer::SetEnableRecording ( bool bNewEnableRecording )
 {
     JamController.SetEnableRecording ( bNewEnableRecording, IsRunning() );
+
+    bDisableRecording = !bNewEnableRecording;
 
     // the recording state may have changed, send recording state message
     CreateAndSendRecorderStateForAllConChannels();

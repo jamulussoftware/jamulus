@@ -469,7 +469,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="805"/>
         <source>Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Apelido</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="771"/>
@@ -815,7 +815,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="230"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>atualização de software disponível</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="244"/>
@@ -1089,7 +1089,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="574"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificação de atualização</translation>
     </message>
 </context>
 <context>
@@ -1815,7 +1815,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="483"/>
         <source>Misc</source>
-        <translation type="unfinished">Outras Config.</translation>
+        <translation>Outras Config</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="493"/>
@@ -2872,7 +2872,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="353"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>atualização de software disponível</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="834"/>
@@ -3073,7 +3073,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="295"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificação de atualização</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="68"/>

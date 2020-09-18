@@ -74,7 +74,4 @@ private:
     // empty and the garbage in the first 500ms or so is discarded
     static constexpr int32_t kNumCallbacksToDrain   = 10;
     int32_t                  mCountCallbacksToDrain = kNumCallbacksToDrain;
-
-    // Used to reference this instance of class from within the static callback
-    CSound *pSound;
 };

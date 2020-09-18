@@ -34,14 +34,19 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  const QString& ) :
     CSoundBase ( "Oboe", fpNewProcessCallback, arg, iCtrlMIDIChannel )
 {
-    pSound = this;
-
 #ifdef ANDROIDDEBUG
     qInstallMessageHandler ( myMessageHandler );
 #endif
 
-    // we open the input/output streams once and keep then open the entire lifetime
-    openStreams();
+    // create callback
+    mCallback = this;
+
+    // setup input/output stream with basic stream parameters
+    inBuilder.setDirection ( oboe::Direction::Input );
+    setupCommonStreamParams ( &inBuilder );
+
+    outBuilder.setDirection ( oboe::Direction::Output );
+    setupCommonStreamParams ( &outBuilder );
 }
 
 void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
@@ -57,30 +62,6 @@ void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
         ->setPerformanceMode             ( oboe::PerformanceMode::LowLatency );
 
     return;
-}
-
-void CSound::openStreams()
-{
-    // Create callback
-    mCallback = this;
-
-    // Setup output stream
-    outBuilder.setDirection ( oboe::Direction::Output );
-    setupCommonStreamParams ( &outBuilder );
-
-// TEST
-//outBuilder.setFramesPerCallback ( 192 );
-
-    oboe::Result result = outBuilder.openManagedStream ( mPlayStream );
-
-    // Setup input stream
-    inBuilder.setDirection ( oboe::Direction::Input );
-    setupCommonStreamParams ( &inBuilder );
-
-// TEST
-//inBuilder.setFramesPerCallback ( 192 );
-
-    result = inBuilder.openManagedStream ( mRecordingStream );
 }
 
 void CSound::closeStream ( oboe::ManagedStream& stream )
@@ -156,25 +137,33 @@ void CSound::Stop()
 
 int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 {
-    // get the preferred device frames per burst for input and output
-    const int iInFramesPerBurst  = mRecordingStream->getFramesPerBurst();
-    const int iOutFramesPerBurst = mPlayStream->getFramesPerBurst();
-
-//// TEST
-//const int iInFramesPerBurst  = mRecordingStream->getBufferSizeInFrames();
-//const int iOutFramesPerBurst = mPlayStream->getBufferSizeInFrames();
+    // first close input/output streams
+    closeStreams();
 
 
-    // now take the larger value of both for our buffer size
-    iOpenSLBufferSizeMono = std::max ( iInFramesPerBurst, iOutFramesPerBurst );
+// TEST we need to open the streams to get the info about the BufferSizeInFrames
+// -> TODO better solution
+outBuilder.openManagedStream ( mPlayStream );
+inBuilder.openManagedStream ( mRecordingStream );
+const int iInFramesPerBurst  = mRecordingStream->getBufferSizeInFrames();
+const int iOutFramesPerBurst = mPlayStream->getBufferSizeInFrames();
+iOpenSLBufferSizeMono = std::max ( iInFramesPerBurst, iOutFramesPerBurst );
+closeStreams();
+
+
+    // we need to get the same number of samples for each call of the callback
+    // (note that this must be done before the stream is opened)
+    inBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
+    outBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
+
+    // open input/output streams
+    inBuilder.openManagedStream ( mRecordingStream );
+    outBuilder.openManagedStream ( mPlayStream );
 
     // apply the new frame size to the streams
     mRecordingStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
     mPlayStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
 
-//// TEST
-//inBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
-//outBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
 
 // TEST for debugging
 qInfo() << "iOpenSLBufferSizeMono: " << iOpenSLBufferSizeMono;
@@ -192,26 +181,22 @@ printStreamDetails ( mPlayStream );
 }
 
 // This is the main callback method for when an audio stream is ready to publish data to an output stream
-// or has received data on an input stream.  As per manual much be very careful not to do anything in this back that
-// can cause delays such as sleeping, file processing, allocate memory, etc
+// or has received data on an input stream. As per manual much be very careful not to do anything in this back that
+// can cause delays such as sleeping, file processing, allocate memory, etc.
 oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
                                                 void*              audioData,
                                                 int32_t            numFrames )
 {
     // only process if we are running
-    if ( ! pSound->bRun )
+    if ( ! bRun )
     {
         return oboe::DataCallbackResult::Continue;
     }
 
     // both, the input and output device use the same callback function
-    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
+    QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    // Need to modify the size of the buffer based on the numFrames requested in this callback.
-    // Buffer size can change regularly by android devices
-    int& iBufferSizeMono = pSound->iOpenSLBufferSizeMono;
-
-if ( oboeStream == pSound->mRecordingStream.get() )
+if ( oboeStream == mRecordingStream.get() )
 {
     qInfo() << "INPUT -------------";
 }
@@ -219,19 +204,19 @@ else
 {
     qInfo() << "OUTPUT ************";
 }
-qInfo() << "iBufferSizeMono: " << iBufferSizeMono << ", numFrames: " << numFrames;
+qInfo() << "iOpenSLBufferSizeMono: " << iOpenSLBufferSizeMono << ", numFrames: " << numFrames;
 
     // perform the processing for input
-    if ( oboeStream == pSound->mRecordingStream.get() && audioData )
+    if ( oboeStream == mRecordingStream.get() && audioData )
     {
 
 // First things first, we need to discard the input queue a little for 500ms or so
-if ( pSound->mCountCallbacksToDrain > 0 )
+if ( mCountCallbacksToDrain > 0 )
 {
     // discard the input buffer
     int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
     memset ( audioData, 0 /* value */, numBytes );
-    pSound->mCountCallbacksToDrain--;
+    mCountCallbacksToDrain--;
 }
 
         // We're good to start recording now
@@ -244,17 +229,17 @@ if ( pSound->mCountCallbacksToDrain > 0 )
         {
             for ( int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++ )
             {
-                pSound->vecsTmpAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] =
+                vecsTmpAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] =
                     (short) floatData[frmNum * oboeStream->getChannelCount() + channelNum] * _MAXSHORT;
             }
         }
 
         // Tell parent class that we've put some data ready to send to the server
-        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo  );
+        ProcessCallback ( vecsTmpAudioSndCrdStereo  );
     }
 
     // perform the processing for output
-    if ( oboeStream == pSound->mPlayStream.get() && audioData )
+    if ( oboeStream == mPlayStream.get() && audioData )
     {
         float* floatData = static_cast<float*> ( audioData );
 
@@ -270,7 +255,7 @@ if ( pSound->mCountCallbacksToDrain > 0 )
 
                 // convert to 32 bit
                 const int32_t iCurSam = static_cast<int32_t> (
-                    pSound->vecsTmpAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] );
+                    vecsTmpAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] );
 
                 floatData[frmNum * oboeStream->getChannelCount() + channelNum] = (float) iCurSam / _MAXSHORT;
             }

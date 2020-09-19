@@ -19,27 +19,9 @@ It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://
 The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon).
 ![Sourceforge logo](http://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)
 
+## Installation
 
-Required Hardware Setup
------------------------
-
-The required minimum internet connection speed is 200 kbps (0.2Mbps) for the up and down-stream.
-The ping time (i.e. round trip delay) from your computer to the server should not exceed 40 ms average.
-
-For the Jamulus software to run stable it is recommended to use a PC with at least 1.5 GHz CPU frequency.
-
-On a Windows operating system it is recommended to use a sound card with a native ASIO driver.
-This ensures to get the lowest possible latencies.
-
-
-Download and Installation
--------------------------
-
-Download the latest version for [Windows, Macintosh or Linux here](https://sourceforge.net/projects/llcon/files/). 
-
-**Windows users**: The Jamulus client software requires an ASIO sound card driver to be available in the system.
-If your sound card does not have native ASIO support, you can try out [this alternative](http://www.asio4all.org/)
-
+To use Jamulus, please have a look at the [getting started page](https://github.com/corrados/jamulus/wiki/Getting-Started) in the wiki.
 
 Help
 ----

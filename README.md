@@ -19,7 +19,8 @@ It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://
 The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon).
 ![Sourceforge logo](http://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)
 
-## Installation
+Installation
+------------
 
 To use Jamulus, please have a look at the [getting started page](https://github.com/corrados/jamulus/wiki/Getting-Started) in the wiki.
 

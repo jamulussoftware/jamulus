@@ -4,6 +4,8 @@
 
 3.5.10git <- NOTE: the release version number will be 3.5.11
 
+- added a command line option to start recorder in disabled state (#574)
+
 - support a check for updates (#370)
 
 - added an optional server list whitelist filter (#413)

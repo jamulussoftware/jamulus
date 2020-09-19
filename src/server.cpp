@@ -1327,7 +1327,9 @@ CVector<CChannelInfo> CServer::CreateChannelList()
 
 void CServer::CreateAndSendChanListForAllConChannels()
 {
-    // create channel list
+    bool bIsFirstConnectedClient = true;
+
+    // create channel list once and use it for all connected clients
     CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
 
     // now send connected channels list to all connected clients
@@ -1335,8 +1337,19 @@ void CServer::CreateAndSendChanListForAllConChannels()
     {
         if ( vecChannels[i].IsConnected() )
         {
-            // send message
-            vecChannels[i].CreateConClientListMes ( vecChanInfo );
+            if ( bSingleMixServerMode && !bIsFirstConnectedClient )
+            {
+                // this is a single mix slave client, do not send channel list
+                vecChannels[i].CreateConClientListMes ( CVector<CChannelInfo>() );
+            }
+            else
+            {
+                // send message
+                vecChannels[i].CreateConClientListMes ( vecChanInfo );
+            }
+
+            // since we detected a connection, the next client is no longer the first one
+            bIsFirstConnectedClient = false;
         }
     }
 
@@ -1349,11 +1362,17 @@ void CServer::CreateAndSendChanListForAllConChannels()
 
 void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
 {
-    // create channel list
-    CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
-
-    // now send connected channels list to the channel with the ID "iCurChanID"
-    vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
+    // note: C++ shortcut -> GetSingleMixMasterID() function is not evaluated for normal server mode
+    if ( bSingleMixServerMode && ( iCurChanID != GetSingleMixMasterID() ) )
+    {
+        // this is a single mix slave client, do not send channel list
+        vecChannels[iCurChanID].CreateConClientListMes ( CVector<CChannelInfo>() );
+    }
+    else
+    {
+        // send connected channels list to the channel with the ID "iCurChanID"
+        vecChannels[iCurChanID].CreateConClientListMes ( CreateChannelList() );
+    }
 }
 
 void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
@@ -1424,6 +1443,21 @@ int CServer::GetFreeChan()
     }
 
     // no free channel found, return invalid ID
+    return INVALID_CHANNEL_ID;
+}
+
+int CServer::GetSingleMixMasterID()
+{
+    // per definition the first client is the master
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            return i;
+        }
+    }
+
+    // no connection found, return invalid ID
     return INVALID_CHANNEL_ID;
 }
 

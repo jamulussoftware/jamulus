@@ -283,6 +283,7 @@ protected:
                                       const QString& strNewServerNameWithPort );
 
     int GetFreeChan();
+    int GetSingleMixMasterID();
     int FindChannel ( const CHostAddress& CheckAddr );
     int GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();

@@ -255,7 +255,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bAutoRunMinimized           ( false ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
-    pSignalHandler              ( CSignalHandler::getSingletonP() )
+    pSignalHandler              ( CSignalHandler::getSingletonP() ),
+    bSingleMixServerMode        ( bNSingleMixServerMode )
 {
     int iOpusError;
     int i;
@@ -1020,9 +1021,21 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // processing without multithreading
             if ( !bUseMultithreading )
             {
-                // generate a separate mix for each channel, OPUS encode the
-                // audio data and transmit the network packet
-                MixEncodeTransmitData ( iChanCnt, iNumClients );
+                if ( bSingleMixServerMode && ( iChanCnt > 0 ) )
+                {
+                    // per definition in single mix server mode: only the very first connected
+                    // client at the server defines the audio mix, all other clients just reuse
+                    // the mix and coded audio data
+                    vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                                vecvecbyCodedDataOut[0],
+                                                                vecChannels[0].GetNetwFrameSize() );
+                }
+                else
+                {
+                    // generate a separate mix for each channel, OPUS encode the
+                    // audio data and transmit the network packet
+                    MixEncodeTransmitData ( iChanCnt, iNumClients );
+                }
             }
         }
 
@@ -1282,7 +1295,7 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
                                                iCeltNumCodedBytes );
             }
 
-            // send separate mix to current clients
+            // send separate mix to current client
             vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
                                                         vecvecbyCodedDataOut[iChanCnt],
                                                         iCeltNumCodedBytes );

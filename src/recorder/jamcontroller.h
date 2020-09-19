@@ -42,8 +42,7 @@ public:
     void RequestNewRecording();
     void SetEnableRecording ( bool bNewEnableRecording, bool isRunning );
     QString GetRecordingDir() { return strRecordingDir; }
-    void SetRecordingDir ( QString newRecordingDir,
-                           int     iServerFrameSizeSamples );
+    void SetRecordingDir ( QString newRecordingDir, int iServerFrameSizeSamples, bool bDisableRecording );
     ERecorderState GetRecorderState();
 
 private:

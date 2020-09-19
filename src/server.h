@@ -183,6 +183,7 @@ public:
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
+              const bool         bDisableRecording,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -216,7 +217,7 @@ public:
     QString GetRecordingDir() { return JamController.GetRecordingDir(); }
 
     void SetRecordingDir( QString newRecordingDir )
-        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
+        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording ); }
 
     void CreateAndSendRecorderStateForAllConChannels();
 
@@ -388,6 +389,7 @@ protected:
 
     // jam recorder
     recorder::CJamController   JamController;
+    bool bDisableRecording;
 
     // GUI settings
     bool                       bAutoRunMinimized;

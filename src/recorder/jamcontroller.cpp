@@ -71,7 +71,8 @@ void CJamController::SetEnableRecording  ( bool bNewEnableRecording, bool isRunn
 }
 
 void CJamController::SetRecordingDir ( QString newRecordingDir,
-                                       int     iServerFrameSizeSamples )
+                                       int     iServerFrameSizeSamples,
+                                       bool    bDisableRecording )
 {
     if ( bRecorderInitialised && pthJamRecorder != nullptr )
     {
@@ -89,7 +90,7 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         pJamRecorder = new recorder::CJamRecorder ( newRecordingDir, iServerFrameSizeSamples );
         strRecorderErrMsg = pJamRecorder->Init();
         bRecorderInitialised = ( strRecorderErrMsg == QString::null );
-        bEnableRecording = bRecorderInitialised;
+        bEnableRecording = bRecorderInitialised && !bDisableRecording;
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 // TODO we should use the ConsoleWriterFactory() instead of qInfo()

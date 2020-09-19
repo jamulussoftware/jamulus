@@ -74,6 +74,7 @@ int main ( int argc, char** argv )
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
+    bool         bSingleMixServerMode        = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
@@ -104,6 +105,19 @@ int main ( int argc, char** argv )
             bIsClient = false;
             tsConsole << "- server mode chosen" << endl;
             CommandLineOptions << "--server";
+            continue;
+        }
+
+
+        // Single audio mix server mode flag -----------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--singlemix", // no short form
+                               "--singlemix" ) )
+        {
+            bSingleMixServerMode = true;
+            tsConsole << "- single audio mix mode" << endl;
+            CommandLineOptions << "--singlemix";
             continue;
         }
 
@@ -698,6 +712,7 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             bSingleMixServerMode,
                              bCentServPingServerInList,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
@@ -794,6 +809,9 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use englisch language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
+        "      --singlemix       single audio mix server mode where all clients\n"
+        "                        hear the audio mix of the first connected client\n"
+        "                        (cannot be combined with -F and -T)\n"
         "  -a, --servername      server name, required for HTML status\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the central server\n"

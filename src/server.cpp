@@ -344,7 +344,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecsData.Init                   ( iMaxNumChannels );
     vecvecsSendData.Init               ( iMaxNumChannels );
     vecvecsIntermediateProcBuf.Init    ( iMaxNumChannels );
-    vecvecbyCodedData.Init             ( iMaxNumChannels );
+    vecvecbyCodedDataIn.Init           ( iMaxNumChannels );
+    vecvecbyCodedDataOut.Init          ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
     vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
@@ -367,7 +368,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         vecvecsIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // allocate worst case memory for the coded data
-        vecvecbyCodedData[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
+        vecvecbyCodedDataIn[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
+        vecvecbyCodedDataOut[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
     }
 
     // allocate worst case memory for the channel levels
@@ -918,7 +920,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
                 {
                     // get data
-                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[i], iCeltNumCodedBytes );
+                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedDataIn[i], iCeltNumCodedBytes );
 
                     // if channel was just disconnected, set flag that connected
                     // client list is sent to all other clients
@@ -936,7 +938,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // get pointer to coded data
                     if ( eGetStat == GS_BUFFER_OK )
                     {
-                        pCurCodedData = &vecvecbyCodedData[i][0];
+                        pCurCodedData = &vecvecbyCodedDataIn[i][0];
                     }
                     else
                     {
@@ -1276,13 +1278,13 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
                                                &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
                                                iClientFrameSizeSamples,
-                                               &vecvecbyCodedData[iChanCnt][0],
+                                               &vecvecbyCodedDataOut[iChanCnt][0],
                                                iCeltNumCodedBytes );
             }
 
             // send separate mix to current clients
             vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                        vecvecbyCodedData[iChanCnt],
+                                                        vecvecbyCodedDataOut[iChanCnt],
                                                         iCeltNumCodedBytes );
         }
     }

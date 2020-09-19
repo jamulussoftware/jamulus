@@ -364,7 +364,8 @@ protected:
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<int16_t> > vecvecsSendData;
     CVector<CVector<double> >  vecvecsIntermediateProcBuf;
-    CVector<CVector<uint8_t> > vecvecbyCodedData;
+    CVector<CVector<uint8_t> > vecvecbyCodedDataIn;
+    CVector<CVector<uint8_t> > vecvecbyCodedDataOut;
 
     // Channel levels
     CVector<uint16_t>          vecChannelLevels;

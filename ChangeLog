@@ -2,7 +2,15 @@
 
 
 
-3.5.10git <- NOTE: the release version number will be 3.5.11
+3.5.11git <- NOTE: the release version number will be 3.5.12
+
+
+
+
+
+
+
+3.5.11 (2020-09-19)
 
 - support a check for updates (#370)
 
@@ -28,10 +36,6 @@
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
 - bug fix: pan is not correctly initialized in the server on a new connection (#537)
-
-
-
-
 
 
 3.5.10 (2020-08-16)

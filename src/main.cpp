@@ -73,6 +73,7 @@ int main ( int argc, char** argv )
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
+    bool         bSingleMixServerMode        = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
@@ -110,6 +111,19 @@ int main ( int argc, char** argv )
             bIsClient = false;
             qInfo() << "- server mode chosen";
             CommandLineOptions << "--server";
+            continue;
+        }
+
+
+        // Single audio mix server mode flag -----------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--singlemix", // no short form
+                               "--singlemix" ) )
+        {
+            bSingleMixServerMode = true;
+            tsConsole << "- single audio mix mode" << endl;
+            CommandLineOptions << "--singlemix";
             continue;
         }
 
@@ -750,6 +764,7 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             bSingleMixServerMode,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -847,6 +862,9 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
+        "      --singlemix       single audio mix server mode where all clients\n"
+        "                        hear the audio mix of the first connected client\n"
+        "                        (cannot be combined with -F and -T)\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the server list on which to register\n"
         "                        (or 'localhost' to be a server list)\n"

@@ -639,6 +639,14 @@ int main ( int argc, char** argv )
         iPortNumber += 10; // increment by 10
     }
 
+    // the single mix mode cannot be combined with multithreading and fast update
+    if ( bSingleMixServerMode && ( bUseMultithreading || !bUseDoubleSystemFrameSize ) )
+    {
+        tsConsole << "Single mix mode cannot be combined with --fastupdate or --multithreading." << endl;
+        bUseMultithreading        = false;
+        bUseDoubleSystemFrameSize = true;
+    }
+
 
     // Application/GUI setup ---------------------------------------------------
     // Application object

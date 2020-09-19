@@ -15,6 +15,8 @@
 
 - store recorder settings, coded by pljones (#313)
 
+- added a command line argument to disable recording on start up, coded by pljones (#574)
+
 - accessibility improvements, coded by chigkim (#498, #512)
 
 - added Jack audio audio latency calculation, coded by bflamig (#437)

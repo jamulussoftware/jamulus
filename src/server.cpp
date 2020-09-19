@@ -1028,7 +1028,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // the mix and coded audio data
                     vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
                                                                 vecvecbyCodedDataOut[0],
-                                                                vecChannels[iCurChanID].GetNetwFrameSize() );
+                                                                vecChannels[vecChanIDsCurConChan[0]].GetNetwFrameSize() );
                 }
                 else
                 {

@@ -1580,6 +1580,7 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 {
     JamController.SetEnableRecording ( bNewEnableRecording, IsRunning() );
 
+    // not dependent upon JamController state
     bDisableRecording = !bNewEnableRecording;
 
     // the recording state may have changed, send recording state message

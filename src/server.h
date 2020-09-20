@@ -210,6 +210,7 @@ public:
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
     bool GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
+    bool GetDisableRecording() { return bDisableRecording; }
     void RequestNewRecording() { JamController.RequestNewRecording(); }
 
     void SetEnableRecording ( bool bNewEnableRecording );

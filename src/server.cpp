@@ -638,7 +638,7 @@ void CServer::OnNewConnection ( int          iChID,
             // create formatted server welcome message and send it just to
             // the client which just connected to the server
             const QString strWelcomeMessageFormated =
-                "<b>Server Welcome Message:</b> " + strWelcomeMessage;
+                WELCOME_MESSAGE_PREFIX + strWelcomeMessage;
 
             vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
         }

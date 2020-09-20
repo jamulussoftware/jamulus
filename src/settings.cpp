@@ -879,6 +879,15 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     {
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
     }
+
+    // norecord flag
+    if ( !CommandLineOptions.contains ( "--norecord" ) )
+    {
+         if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
+         {
+             pServer->SetEnableRecording( !bValue );
+         }
+    }
 }
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
@@ -930,4 +939,8 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64",
         ToBase64 ( pServer->GetRecordingDir() ) );
+
+    // norecord flag
+    SetFlagIniSet ( IniXMLDocument, "server", "norecord",
+        pServer->GetDisableRecording() );
 }

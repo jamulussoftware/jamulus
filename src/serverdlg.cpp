@@ -330,7 +330,7 @@ lvwClients->setMinimumHeight ( 140 );
 #endif
 
     // Recorder controls
-    chbEnableRecorder->setCheckState ( Qt::CheckState::Checked ); // move to settings
+    chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
     edtCurrentSessionDir->setText ( "" );
     pbtNewRecording->setAutoDefault ( false );
     pbtRecordingDir->setAutoDefault ( false );

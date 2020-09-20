@@ -465,6 +465,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
         "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
         "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
+        "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
         "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
         "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
         "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
@@ -1199,13 +1200,11 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
     else
     {
-
 // NOTE: The following code was introduced to support old QT versions. The problem
 //       is that the number of countries displayed is less than the one displayed
 //       with the new code below (which is disabled). Therefore, as soon as the
 //       compatibility to the very old versions of QT is not required anymore, use
 //       the new code.
-
 // COMPATIBLE FOR OLD QT VERSIONS -> use a table:
         QString strISO3166 = "";
         switch ( static_cast<int> ( eCountry ) )
@@ -1401,7 +1400,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             strReturn = "";
         }
 
-
 // AT LEAST QT 4.8 IS REQUIRED:
 /*
         // There is no direct query of the country code in Qt, therefore we use a
@@ -1419,8 +1417,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             // the second split contains the name we need
             if ( vstrLocParts.size() > 1 )
             {
-                strReturn =
-                    ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+                strReturn = ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
 
                 // check if file actually exists, if not then invalidate reference
                 if ( !QFile::exists ( strReturn ) )
@@ -1441,23 +1438,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
 
     return strReturn;
-}
-
-ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountry )
-{
-// TODO this is the initial implementation and should be extended in the future,
-//      maybe there is/will be some function in Qt to get the continent
-    switch ( eCountry )
-    {
-    case QLocale::UnitedStates:
-    case QLocale::Canada:
-    case QLocale::Mexico:
-    case QLocale::Greenland:
-        return AT_ALL_GENRES;
-
-    default:
-        return AT_DEFAULT;
-    }
 }
 
 QMap<QString, QString> CLocale::GetAvailableTranslations()

@@ -105,8 +105,45 @@ void CChatDlg::OnClearChatHistory()
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
-    // add new text in chat window
-    txvChatWindow->append ( strChatText );
+    // analyze strChatText to check if hyperlink (limit ourselves to https://)
+    const int iIdxHttps = strChatText.indexOf ( "https://" );
+
+    if ( iIdxHttps != -1 )
+    {
+        int iIdxSpace = strChatText.indexOf ( " ", iIdxHttps );
+
+        if ( iIdxSpace == -1 )
+        {
+            iIdxSpace = strChatText.length();
+        }
+
+        // drop "/" if last character of url text
+        const int iCutSlash = ( strChatText.at ( iIdxSpace - 1 ) == '/' ) ? 1 : 0;
+
+        // as entered by the user
+        const QString strURL_name = strChatText.mid ( iIdxHttps, iIdxSpace - iIdxHttps - iCutSlash );
+        QUrl          URL         = QUrl::fromUserInput ( strURL_name );
+
+        QString new_strChatText;
+
+        if ( URL.isValid() )
+        {
+            new_strChatText.append ( strChatText.left ( iIdxHttps ) + "<a href=\"" + URL.toString() + "\">" +
+                                     strURL_name + "</a> " + strChatText.right ( strChatText.length() - iIdxSpace ) );
+        }
+        else
+        {
+            // no change
+            new_strChatText.append ( strChatText );
+        }
+
+        txvChatWindow->append ( new_strChatText );
+    }
+    else
+    {
+        // add new text in chat window
+        txvChatWindow->append ( strChatText );
+    }
 
     // notify accessibility plugin that text has changed
     QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );

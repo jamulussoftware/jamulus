@@ -105,31 +105,31 @@ void CChatDlg::OnClearChatHistory()
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
-    // analyze strChatText to check if hyperlink (limit ourselves to https:://)
-    const int indx_http = strChatText.indexOf ( "https://", 0 );
+    // analyze strChatText to check if hyperlink (limit ourselves to https://)
+    const int iIdxHttps = strChatText.indexOf ( "https://" );
 
-    if ( indx_http != -1 )
+    if ( iIdxHttps != -1 )
     {
-        int indx_space = strChatText.indexOf ( " ", indx_http );
+        int iIdxSpace = strChatText.indexOf ( " ", iIdxHttps );
 
-        if ( indx_space==-1 )
+        if ( iIdxSpace == -1 )
         {
-            indx_space = strChatText.length();
+            iIdxSpace = strChatText.length();
         }
 
         // drop "/" if last character of url text
-        const int iCutSlash = ( strChatText.at ( indx_space - 1 ) == '/' ) ? 1 : 0;
+        const int iCutSlash = ( strChatText.at ( iIdxSpace - 1 ) == '/' ) ? 1 : 0;
 
         // as entered by the user
-        const QString strURL_name = strChatText.mid ( indx_http, indx_space - indx_http - iCutSlash );
+        const QString strURL_name = strChatText.mid ( iIdxHttps, iIdxSpace - iIdxHttps - iCutSlash );
         QUrl          URL         = QUrl::fromUserInput ( strURL_name );
 
         QString new_strChatText;
 
         if ( URL.isValid() )
         {
-            new_strChatText.append ( strChatText.left ( indx_http ) + "<a href=\"" + URL.toString() + "\">" +
-                                     strURL_name + "</a> " + strChatText.right ( strChatText.length() - indx_space ) );
+            new_strChatText.append ( strChatText.left ( iIdxHttps ) + "<a href=\"" + URL.toString() + "\">" +
+                                     strURL_name + "</a> " + strChatText.right ( strChatText.length() - iIdxSpace ) );
         }
         else
         {

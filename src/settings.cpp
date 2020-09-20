@@ -464,7 +464,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     else
     {
         // if no address type is given, choose one from the operating system locale
-        pClient->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        pClient->SetCentralServerAddressType ( AT_DEFAULT );
     }
 
 // TODO compatibility to old version
@@ -797,7 +797,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     else
     {
         // if no address type is given, choose one from the operating system locale
-        pServer->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        pServer->SetCentralServerAddressType ( AT_DEFAULT );
     }
 
 // TODO compatibility to old version

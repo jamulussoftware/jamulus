@@ -1200,13 +1200,11 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
     else
     {
-
 // NOTE: The following code was introduced to support old QT versions. The problem
 //       is that the number of countries displayed is less than the one displayed
 //       with the new code below (which is disabled). Therefore, as soon as the
 //       compatibility to the very old versions of QT is not required anymore, use
 //       the new code.
-
 // COMPATIBLE FOR OLD QT VERSIONS -> use a table:
         QString strISO3166 = "";
         switch ( static_cast<int> ( eCountry ) )
@@ -1402,7 +1400,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             strReturn = "";
         }
 
-
 // AT LEAST QT 4.8 IS REQUIRED:
 /*
         // There is no direct query of the country code in Qt, therefore we use a
@@ -1420,8 +1417,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             // the second split contains the name we need
             if ( vstrLocParts.size() > 1 )
             {
-                strReturn =
-                    ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+                strReturn = ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
 
                 // check if file actually exists, if not then invalidate reference
                 if ( !QFile::exists ( strReturn ) )
@@ -1442,23 +1438,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
 
     return strReturn;
-}
-
-ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountry )
-{
-// TODO this is the initial implementation and should be extended in the future,
-//      maybe there is/will be some function in Qt to get the continent
-    switch ( eCountry )
-    {
-    case QLocale::UnitedStates:
-    case QLocale::Canada:
-    case QLocale::Mexico:
-    case QLocale::Greenland:
-        return AT_ALL_GENRES;
-
-    default:
-        return AT_DEFAULT;
-    }
 }
 
 QMap<QString, QString> CLocale::GetAvailableTranslations()

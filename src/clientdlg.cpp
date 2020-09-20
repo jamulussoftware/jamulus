@@ -770,9 +770,11 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     ChatDlg.AddChatText ( strChatText );
 
-    // open window (note that we do not want to force the dialog to be upfront
-    // always when a new message arrives since this is annoying)
-    ShowChatWindow ( false );
+    // Open chat dialog. If a server welcome message is received, we force
+    // the dialog to be upfront in case a licence text is shown. For all
+    // other new chat texts we do not want to force the dialog to be upfront
+    // always when a new message arrives since this is annoying.
+    ShowChatWindow ( ( strChatText.indexOf ( WELCOME_MESSAGE_PREFIX ) == 0 ) );
 
     UpdateDisplay();
 }
@@ -907,12 +909,12 @@ void CClientDlg::ShowGeneralSettings()
 
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 {
-    // open chat dialog if it is not visible
-    if ( bForceRaise || !ChatDlg.isVisible() )
-    {
-        ChatDlg.show();
+    ChatDlg.show();
 
+    if ( bForceRaise )
+    {
         // make sure dialog is upfront and has focus
+        ChatDlg.showNormal();
         ChatDlg.raise();
         ChatDlg.activateWindow();
     }

@@ -105,35 +105,46 @@ void CChatDlg::OnClearChatHistory()
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
-    // add new text in chat window
-	
     // analyze strChatText to check if hyperlink (limit ourselves to https:://)
-	int indx_http  = strChatText.indexOf("https://", 0);
-	if (indx_http != -1)
-	{
-		int indx_space = strChatText.indexOf(" ", indx_http); 
-		if (indx_space==-1) indx_space=strChatText.length();
+    const int indx_http = strChatText.indexOf ( "https://", 0 );
 
-		int cutslash = (strChatText.at(indx_space-1)=='/') ? 1:0;		// drop "/" if last character of url text
-		
-		QString URL_name = strChatText.mid(indx_http,indx_space-indx_http-cutslash); // as entered by the user
-		QUrl URL = QUrl::fromUserInput(URL_name);
-		
-		QString new_strChatText;		
-		if ( URL.isValid() )
-		{
-			new_strChatText.append( strChatText.left( indx_http )+"<a href=\""+URL.toString()+"\">"+URL_name+"</a> "+strChatText.right( strChatText.length()-indx_space ) );
-		}
-		else new_strChatText.append( strChatText );	// no change
+    if ( indx_http != -1 )
+    {
+        int indx_space = strChatText.indexOf ( " ", indx_http );
 
-		txvChatWindow->append ( new_strChatText );	
-		// notify accessibility plugin that text has changed
-		QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, new_strChatText) );
-	}	
-	else 
-	{
-		txvChatWindow->append ( strChatText );
-		// notify accessibility plugin that text has changed
-		QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
-	}
+        if ( indx_space==-1 )
+        {
+            indx_space = strChatText.length();
+        }
+
+        // drop "/" if last character of url text
+        const int iCutSlash = ( strChatText.at ( indx_space - 1 ) == '/' ) ? 1 : 0;
+
+        // as entered by the user
+        const QString strURL_name = strChatText.mid ( indx_http, indx_space - indx_http - iCutSlash );
+        QUrl          URL         = QUrl::fromUserInput ( strURL_name );
+
+        QString new_strChatText;
+
+        if ( URL.isValid() )
+        {
+            new_strChatText.append ( strChatText.left ( indx_http ) + "<a href=\"" + URL.toString() + "\">" +
+                                     strURL_name + "</a> " + strChatText.right ( strChatText.length() - indx_space ) );
+        }
+        else
+        {
+            // no change
+            new_strChatText.append ( strChatText );
+        }
+
+        txvChatWindow->append ( new_strChatText );
+    }
+    else
+    {
+        // add new text in chat window
+        txvChatWindow->append ( strChatText );
+    }
+
+    // notify accessibility plugin that text has changed
+    QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
 }

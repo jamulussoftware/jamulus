@@ -885,7 +885,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     {
          if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
          {
-             pServer->SetEnableRecording( !bValue );
+             pServer->SetEnableRecording ( !bValue );
          }
     }
 }

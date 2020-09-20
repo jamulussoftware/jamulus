@@ -4,7 +4,10 @@
 
 3.5.11git <- NOTE: the release version number will be 3.5.12
 
+- added hyperlink support for the chat window, coded by jc-Rosichini (#591)
 
+
+TODO fix outstanding security issues with the hyperlink support in the chat window
 
 
 

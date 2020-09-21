@@ -108,14 +108,20 @@ void CChatDlg::OnClearChatHistory()
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
+// TEST do the below implementation with just one line
+//      -> problem with the short form: URLs are not checked and no check for "href="
+//txvChatWindow->append ( strChatText.replace ( QRegExp ( "((?:https?|ftp)://\\S+)" ), "<a href=\"\\1\">\\1</a>" ) );
+
     // analyze strChatText to check if hyperlink (limit ourselves to https://)
     const int iIdxHttps = strChatText.indexOf ( "https://" );
+    const int iIdxHref  = strChatText.indexOf ( "href=" );
 
-    if ( iIdxHttps != -1 )
+    // do not replace the hyperlinks if any HTML code for a hyperlink was found
+    if ( ( iIdxHttps >= 0 ) && ( iIdxHref < 0 ) )
     {
         int iIdxSpace = strChatText.indexOf ( " ", iIdxHttps );
 
-        if ( iIdxSpace == -1 )
+        if ( iIdxSpace < 0 )
         {
             iIdxSpace = strChatText.length();
         }

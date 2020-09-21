@@ -93,7 +93,7 @@ void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
 void CChatDlg::OnSendText()
 {
     // send new text and clear line afterwards, do not send an empty message
-    if ( edtLocalInputText->text() != "" )
+    if ( !edtLocalInputText->text().isEmpty() )
     {
         emit NewLocalInputText ( edtLocalInputText->text() );
         edtLocalInputText->clear();        

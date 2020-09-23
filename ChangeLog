@@ -6,8 +6,15 @@
 
 - added hyperlink support for the chat window, coded by jc-Rosichini (#591)
 
+- added new menu entry "Clear All Stored Solo Settings" (#616)
+
+
 
 TODO fix outstanding security issues with the hyperlink support in the chat window
+
+TODO functionality of Server Name/Address on Connection Setup window (#365)
+
+
 
 
 

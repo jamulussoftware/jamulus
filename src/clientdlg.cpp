@@ -290,6 +290,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
         SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
 
+    pEditMenu->addSeparator();
+
+    pClearAllStoredSoloSettings = pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
+        SLOT ( OnClearAllStoredSoloSettings() ) );
+
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
@@ -1065,6 +1070,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             {
                 pClient->Start();
 
+                // menu entries which are disabled during a session
+                pClearAllStoredSoloSettings->setEnabled ( false );
+
 // TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
 pLoadChannelSetupAction->setEnabled ( false );
 pSaveChannelSetupAction->setEnabled ( false );
@@ -1085,9 +1093,9 @@ pSaveChannelSetupAction->setEnabled ( false );
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
         // start timer for level meter bar and ping time measurement
-        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+        TimerSigMet.start     ( LEVELMETER_UPDATE_TIME_MS );
         TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start ( PING_UPDATE_TIME_MS );
+        TimerPing.start       ( PING_UPDATE_TIME_MS );
     }
 }
 
@@ -1100,6 +1108,9 @@ void CClientDlg::Disconnect()
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
+
+        // menu entries which are disabled during a session
+        pClearAllStoredSoloSettings->setEnabled ( true );
 
 // TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
 pLoadChannelSetupAction->setEnabled ( true );

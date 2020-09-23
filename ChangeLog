@@ -9,10 +9,13 @@
 - added new menu entry "Clear All Stored Solo Settings" (#616)
 
 
-
-TODO fix outstanding security issues with the hyperlink support in the chat window
+TODO compile flag for disabling the Jamulus version check (#370)
 
 TODO functionality of Server Name/Address on Connection Setup window (#365)
+
+TODO segmentation fault (server 3.5.11) (#618)
+
+TODO fix outstanding security issues with the hyperlink support in the chat window (#620)
 
 
 

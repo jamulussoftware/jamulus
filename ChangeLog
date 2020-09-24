@@ -8,8 +8,9 @@
 
 - added new menu entry "Clear All Stored Solo Settings" (#616)
 
+- added a qmake CONFIG flag for disabling the automatic version check (#370)
 
-TODO compile flag for disabling the Jamulus version check (#370)
+
 
 TODO functionality of Server Name/Address on Connection Setup window (#365)
 

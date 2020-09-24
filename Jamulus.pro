@@ -1011,3 +1011,9 @@ contains(CONFIG, "opus_shared_lib") {
     SOURCES += $$SOURCES_OPUS
     DISTFILES += $$DISTFILES_OPUS
 }
+
+# disable version check if requested
+contains(CONFIG, "disable_version_check") {
+    message(The version check is disabled.)
+    DEFINES += DISABLE_VERSION_CHECK
+}

@@ -756,7 +756,7 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                             QString                strVersion )
 {
     // update check
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+#if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) ) && !defined ( DISABLE_VERSION_CHECK )
     if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
     {
         lblUpdateCheck->show();

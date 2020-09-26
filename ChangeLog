@@ -10,9 +10,8 @@
 
 - added a qmake CONFIG flag for disabling the automatic version check (#370)
 
+- functionality of Server Name/Address on connection setup window (#365)
 
-
-TODO functionality of Server Name/Address on Connection Setup window (#365)
 
 TODO segmentation fault (server 3.5.11) (#618)
 

@@ -106,7 +106,6 @@ protected:
     bool         bShowAllMusicians;
 
 public slots:
-    void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
     void OnCentServAddrTypeChanged ( int iTypeIdx ) { pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) ); }

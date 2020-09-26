@@ -154,9 +154,6 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
 
     // Connections -------------------------------------------------------------
     // list view
-    QObject::connect ( lvwServers, &QTreeWidget::itemSelectionChanged,
-        this, &CConnectDlg::OnServerListItemSelectionChanged );
-
     QObject::connect ( lvwServers, &QTreeWidget::itemDoubleClicked,
         this, &CConnectDlg::OnServerListItemDoubleClicked );
 
@@ -484,25 +481,6 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
 
         // the clients list may have changed, update the filter selection
         UpdateListFilter();
-    }
-}
-
-void CConnectDlg::OnServerListItemSelectionChanged()
-{
-    // get current selected item (we are only interested in the first selected
-    // item)
-    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
-
-    // if an item is clicked/selected, copy the server name to the combo box
-    if ( CurSelListItemList.count() > 0 )
-    {
-        // make sure no signals are send when we change the text
-        cbxServerAddr->blockSignals ( true );
-        {
-            cbxServerAddr->setEditText (
-                GetParentListViewItem ( CurSelListItemList[0] )->text ( 0 ) );
-        }
-        cbxServerAddr->blockSignals ( false );
     }
 }
 

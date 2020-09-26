@@ -327,7 +327,7 @@ protected:
 
     bool CreateLevelsForAllConChannels  ( const int                        iNumClients,
                                           const CVector<int>&              vecNumAudioChannels,
-                                          const CVector<CVector<int16_t> > vecvecsData,
+                                          const CVector<CVector<float> >   vecvecfData,
                                           CVector<uint16_t>&               vecLevelsOut );
 
     // do not use the vector class since CChannel does not have appropriate
@@ -349,22 +349,22 @@ protected:
     OpusCustomDecoder*         OpusDecoderMono[MAX_NUM_CHANNELS];
     OpusCustomEncoder*         OpusEncoderStereo[MAX_NUM_CHANNELS];
     OpusCustomDecoder*         OpusDecoderStereo[MAX_NUM_CHANNELS];
-    CConvBuf<int16_t>          DoubleFrameSizeConvBufIn[MAX_NUM_CHANNELS];
-    CConvBuf<int16_t>          DoubleFrameSizeConvBufOut[MAX_NUM_CHANNELS];
+    CConvBuf<float>            DoubleFrameSizeConvBufIn[MAX_NUM_CHANNELS];
+    CConvBuf<float>            DoubleFrameSizeConvBufOut[MAX_NUM_CHANNELS];
 
     CVector<QString>           vstrChatColors;
     CVector<int>               vecChanIDsCurConChan;
 
-    CVector<CVector<double> >  vecvecdGains;
-    CVector<CVector<double> >  vecvecdPannings;
-    CVector<CVector<int16_t> > vecvecsData;
+    CVector<CVector<float> >   vecvecfGains;
+    CVector<CVector<float> >   vecvecfPannings;
+    CVector<CVector<float> >   vecvecfData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
-    CVector<CVector<int16_t> > vecvecsSendData;
-    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
-    CVector<CVector<uint8_t> > vecvecbyCodedData;
+    CVector<CVector<float> >   vecvecfSendData;
+    CVector<CVector<float> >   vecvecfIntermediateProcBuf;
+    CVector<CVector<uint8_t>>  vecvecbyCodedData;
 
     // Channel levels
     CVector<uint16_t>          vecChannelLevels;
@@ -411,7 +411,7 @@ signals:
                       const QString          stChName,
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
-                      const CVector<int16_t> vecsData );
+                      const CVector<float>   vecfData );
 
     void CLVersionAndOSReceived ( CHostAddress           InetAddr,
                                   COSUtil::EOpSystemType eOSType,
@@ -509,4 +509,4 @@ public slots:
     void OnHandledSignal ( int sigNum );
 };
 
-Q_DECLARE_METATYPE(CVector<int16_t>)
+Q_DECLARE_METATYPE(CVector<float>)

@@ -51,7 +51,7 @@ class CSoundBase : public QThread
 
 public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
-                 void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
+                 void           (*fpNewProcessCallback) ( CVector<float>& vfData, void* pParg ),
                  void*          pParg,
                  const int      iNewCtrlMIDIChannel );
 
@@ -121,13 +121,13 @@ protected:
     }
 
     // function pointer to callback function
-    void (*fpProcessCallback) ( CVector<int16_t>& psData, void* arg );
+    void (*fpProcessCallback) ( CVector<float>& vfData, void* arg );
     void* pProcessCallbackArg;
 
     // callback function call for derived classes
-    void ProcessCallback ( CVector<int16_t>& psData )
+    void ProcessCallback ( CVector<float>& vfData )
     {
-        (*fpProcessCallback) ( psData, pProcessCallbackArg );
+        (*fpProcessCallback) ( vfData, pProcessCallbackArg );
     }
 
     void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );

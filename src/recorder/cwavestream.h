@@ -31,7 +31,7 @@ namespace recorder {
 inline QString secondsAt48K( const qint64 frames,
                              const int    frameSize )
 {
-    return QString::number( static_cast<double>( frames * frameSize ) / 48000, 'f', 14 );
+    return QString::number( static_cast<float>( frames * frameSize ) / 48000, 'f', 14 );
 }
 
 struct STrackItem
@@ -79,7 +79,7 @@ public:
     static const uint32_t sampleRate = 48000; // because it's Jamulus
            const uint32_t byteRate; // sampleRate * numChannels * bitsPerSample/8
            const uint16_t blockAlign; // numChannels * bitsPerSample/8
-    static const uint16_t bitsPerSample = 16;
+    static const uint16_t bitsPerSample = 24;
 };
 
 class DataSubChunkHdr

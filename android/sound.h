@@ -36,7 +36,7 @@
 class CSound : public CSoundBase, public oboe::AudioStreamCallback//, public IRenderableAudio, public IRestartable
 {
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     ,
@@ -54,7 +54,7 @@ public:
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
+    CVector<float> vecfTmpAudioSndCrdStereo;
 
     static void android_message_handler ( QtMsgType                 type,
                                           const QMessageLogContext& context,
@@ -74,7 +74,7 @@ public:
     };
 
 // TEST
-CVector<short> vecsTmpAudioInSndCrd;
+CVector<float> vecfTmpAudioInSndCrd;
 int            iModifiedInBufSize;
 
     int            iOpenSLBufferSizeMono;

@@ -46,7 +46,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
+    CSound ( void           (*fpNewCallback) ( CVector<float>& psData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     ,
@@ -84,7 +84,6 @@ protected:
     int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString          CheckDeviceCapabilities();
     bool             CheckSampleTypeSupported ( const ASIOSampleType SamType );
-    bool             CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType );
     void             ResetChannelMapping();
 
     int              iASIOBufferSizeMono;
@@ -97,14 +96,9 @@ protected:
     CVector<int>     vSelectedInputChannels;
     CVector<int>     vSelectedOutputChannels;
 
-    CVector<int16_t> vecsMultChanAudioSndCrd;
+    CVector<float>   vecfMultChanAudioSndCrd;
 
     QMutex           ASIOMutex;
-
-    // utility functions
-    static int16_t   Flip16Bits ( const int16_t iIn );
-    static int32_t   Flip32Bits ( const int32_t iIn );
-    static int64_t   Flip64Bits ( const int64_t iIn );
 
     // audio hardware buffer info
     struct sHWBufferInfo
@@ -123,6 +117,49 @@ protected:
     ASIOChannelInfo  channelInfosOutput[MAX_NUM_IN_OUT_CHANNELS];
     bool             bASIOPostOutput;
     ASIOCallbacks    asioCallbacks;
+
+    // templates
+    template <typename T> void bufferSwitchImport ( const int iGain,
+        const long index, const int iCH)
+    {
+        int iSelAddCH;
+        int iSelCH;
+
+        GetSelCHAndAddCH ( vSelectedInputChannels[iCH], lNumInChan, iSelCH, iSelAddCH );
+
+        const T *pASIOBuf = static_cast<const T *> ( bufferInfos[iSelCH].buffers[index] );
+
+        for ( int iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+        {
+            vecfMultChanAudioSndCrd[2 * iCurSample + iCH] = pASIOBuf[iCurSample].get() * iGain;
+        }
+
+        if ( iSelAddCH >= 0 )
+        {
+            // mix input channels case
+            const T *pASIOBufAdd =
+                static_cast<T *> ( bufferInfos[iSelAddCH].buffers[index] );
+
+            for ( int iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+            {
+                vecfMultChanAudioSndCrd[2 * iCurSample + iCH] =
+                    clipFloat ( vecfMultChanAudioSndCrd[2 * iCurSample + iCH] +
+                                pASIOBufAdd[iCurSample].get() * iGain );
+            }
+        }
+    }
+
+    template <typename T> void bufferSwitchExport(const int iGain,
+        const long index, const int iCH)
+    {
+        const int iSelCH = lNumInChan + vSelectedOutputChannels[iCH];
+        T *pASIOBuf = static_cast<T *> ( bufferInfos[iSelCH].buffers[index] );
+
+        for ( int iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+        {
+            pASIOBuf[iCurSample].put( vecfMultChanAudioSndCrd[2 * iCurSample + iCH] / iGain );
+        }
+    }
 
     // callbacks
     static void      bufferSwitch ( long index, ASIOBool processNow );

@@ -580,120 +580,173 @@ bool CSound::CheckSampleTypeSupported ( const ASIOSampleType SamType )
         ( SamType == ASIOSTInt32MSB24 ) );
 }
 
-static constexpr double FACTOR16 = 32767.0;
+static constexpr double FACTOR16     = 32767.0;
 static constexpr double FACTOR16_INV = 1.0 / 32767.0;
 
-struct sample16LSB {
+struct sample16LSB
+{
     int16_t data[1];
-    float get() const {
-        return (data[0] * FACTOR16_INV);
+
+    float Get() const
+    {
+        return data[0] * FACTOR16_INV;
     }
-    void put(const float value) {
-        data[0] = (int16_t)(value * FACTOR16);
+
+    void Put ( const float value )
+    {
+        data[0] = static_cast<int16_t> ( value * FACTOR16 );
     }
 };
 
-struct sample16MSB {
+struct sample16MSB
+{
     uint8_t data[2];
-    float get() const {
-        const int16_t temp = data[1] | (data[0] << 8);
-        return (temp * FACTOR16_INV);
+
+    float Get() const
+    {
+        const int16_t temp = data[1] | ( data[0] << 8 );
+
+        return temp * FACTOR16_INV;
     }
-    void put(const float value) {
-        const int16_t temp = (int16_t) (value * FACTOR16);
-        data[0] = (uint8_t)(temp >> 8);
-        data[1] = (uint8_t)(temp);
+
+    void Put ( const float value )
+    {
+        const int16_t temp = static_cast<int16_t> ( value * FACTOR16 );
+
+        data[0] = static_cast<uint8_t> ( temp >> 8 );
+        data[1] = static_cast<uint8_t> ( temp );
     }
 };
 
-static constexpr double FACTOR24 = 2147483647.0;
+static constexpr double FACTOR24     = 2147483647.0;
 static constexpr double FACTOR24_INV = 1.0 / 2147483647.0;
 
-struct sample24LSB {
+struct sample24LSB
+{
     uint8_t data[3];
-    float get() const {
-        const int32_t temp = (data[0] << 8) | (data[1] << 16) | (data[2] << 24);
-        return (temp * FACTOR24_INV);
+
+    float Get() const
+    {
+        const int32_t temp = ( data[0] << 8 ) | ( data[1] << 16 ) | ( data[2] << 24 );
+
+        return temp * FACTOR24_INV;
     }
-    void put(const float value) {
-        const int32_t temp = (int32_t) (value * FACTOR24);
-        data[0] = (uint8_t)(temp >> 8);
-        data[1] = (uint8_t)(temp >> 16);
-        data[2] = (uint8_t)(temp >> 24);
+
+    void Put ( const float value )
+    {
+        const int32_t temp = static_cast<int32_t> ( value * FACTOR24 );
+
+        data[0] = static_cast<uint8_t> ( temp >> 8 );
+        data[1] = static_cast<uint8_t> ( temp >> 16 );
+        data[2] = static_cast<uint8_t> ( temp >> 24 );
     }
 };
 
-struct sample24MSB {
+struct sample24MSB
+{
     uint8_t data[3];
-    float get() const {
-        const int32_t temp = (data[2] << 8) | (data[1] << 16) | (data[0] << 24);
-        return (temp * FACTOR24_INV);
+
+    float Get() const
+    {
+        const int32_t temp = ( data[2] << 8 ) | ( data[1] << 16 ) | ( data[0] << 24 );
+
+        return temp * FACTOR24_INV;
     }
-    void put(const float value) {
-        const int32_t temp = (int32_t) (value * FACTOR24);
-        data[0] = (uint8_t)(temp >> 24);
-        data[1] = (uint8_t)(temp >> 16);
-        data[2] = (uint8_t)(temp >> 8);
+
+    void Put ( const float value )
+    {
+        const int32_t temp = static_cast<int32_t> ( value * FACTOR24 );
+
+        data[0] = static_cast<uint8_t> ( temp >> 24 );
+        data[1] = static_cast<uint8_t> ( temp >> 16 );
+        data[2] = static_cast<uint8_t> ( temp >> 8 );
     }
 };
 
-static constexpr double FACTOR32 = 2147483647.0;
+static constexpr double FACTOR32     = 2147483647.0;
 static constexpr double FACTOR32_INV = 1.0 / 2147483647.0;
 
-struct sample32LSB {
+struct sample32LSB
+{
     int32_t data[1];
-    float get() const {
-        return (data[0] * FACTOR32_INV);
+
+    float Get() const
+    {
+        return ( data[0] * FACTOR32_INV );
     }
-    void put(const float value) {
-        data[0] = (int32_t) (value * FACTOR32);
+
+    void Put ( const float value )
+    {
+        data[0] = static_cast<int32_t> ( value * FACTOR32 );
     }
 };
 
-struct sample32MSB {
+struct sample32MSB
+{
     uint8_t data[4];
-    float get() const {
-        const int32_t temp = (data[3] << 0) | (data[2] << 8) |
-            (data[1] << 16) | (data[0] << 24);
-        return (temp * FACTOR32_INV);
+
+    float Get() const
+    {
+        const int32_t temp = ( data[3] << 0 ) | ( data[2] << 8 ) |
+                             ( data[1] << 16 ) | ( data[0] << 24 );
+
+        return temp * FACTOR32_INV;
     }
-    void put(const float value) {
-        const int32_t temp = (int32_t) (value * FACTOR32);
-        data[0] = (uint8_t)(temp >> 24);
-        data[1] = (uint8_t)(temp >> 16);
-        data[2] = (uint8_t)(temp >> 8);
-        data[3] = (uint8_t)(temp >> 0);
+
+    void Put ( const float value )
+    {
+        const int32_t temp = static_cast<int32_t> ( value * FACTOR32 );
+
+        data[0] = static_cast<uint8_t> ( temp >> 24 );
+        data[1] = static_cast<uint8_t> ( temp >> 16 );
+        data[2] = static_cast<uint8_t> ( temp >> 8 );
+        data[3] = static_cast<uint8_t> ( temp >> 0 );
     }
 };
 
-union sampleFloat32Data {
+union sampleFloat32Data
+{
     uint8_t data[4];
-    float value;
+    float   value;
 };
 
-struct sampleFloat32LSB {
+struct sampleFloat32LSB
+{
     float data[1];
-    float get() const {
-        return (data[0]);
+
+    float Get() const
+    {
+        return data[0];
     }
-    void put(const float value) {
-	data[0] = value;
+
+    void Put ( const float value )
+    {
+        data[0] = value;
     }
 };
 
-struct sampleFloat32MSB {
+struct sampleFloat32MSB
+{
     uint8_t data[4];
-    float get() const {
+
+    float Get() const
+    {
         sampleFloat32Data temp;
+
         temp.data[0] = data[3];
         temp.data[1] = data[2];
         temp.data[2] = data[1];
         temp.data[3] = data[0];
-        return (temp.value);
+
+        return temp.value;
     }
-    void put(const float value) {
+
+    void Put ( const float value )
+    {
         sampleFloat32Data temp;
+
         temp.value = value;
+
         data[0] = temp.data[3];
         data[1] = temp.data[2];
         data[2] = temp.data[1];
@@ -701,25 +754,35 @@ struct sampleFloat32MSB {
     }
 };
 
-union sampleFloat64Data {
+union sampleFloat64Data
+{
     uint8_t data[8];
-    double value;
+    double  value;
 };
 
-struct sampleFloat64LSB {
+struct sampleFloat64LSB
+{
     double data[1];
-    float get() const {
-        return (data[0]);
+
+    float Get() const
+    {
+        return data[0];
     }
-    void put(const float value) {
+
+    void Put ( const float value )
+    {
         data[0] = value;
     }
 };
 
-struct sampleFloat64MSB {
+struct sampleFloat64MSB
+{
     uint8_t data[8];
-    float get() const {
+
+    float Get() const
+    {
         sampleFloat64Data temp;
+
         temp.data[0] = data[7];
         temp.data[1] = data[6];
         temp.data[2] = data[5];
@@ -728,11 +791,16 @@ struct sampleFloat64MSB {
         temp.data[5] = data[2];
         temp.data[6] = data[1];
         temp.data[7] = data[0];
-        return (temp.value);
+
+        return temp.value;
     }
-    void put(const float value) {
+
+    void Put ( const float value )
+    {
         sampleFloat64Data temp;
+
         temp.value = value;
+
         data[0] = temp.data[7];
         data[1] = temp.data[6];
         data[2] = temp.data[5];
@@ -752,11 +820,13 @@ void CSound::bufferSwitch ( long index, ASIOBool )
         // CAPTURE -------------------------------------------------------------
         for ( int i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
         {
-	    int iSelAddCH;
-	    int iSelCH;
+            int iSelAddCH;
+            int iSelCH;
 
-	    GetSelCHAndAddCH ( pSound->vSelectedInputChannels[i], pSound->lNumInChan,
-	        iSelCH, iSelAddCH );
+            GetSelCHAndAddCH ( pSound->vSelectedInputChannels[i],
+                               pSound->lNumInChan,
+                               iSelCH,
+                               iSelAddCH );
 
             // copy new captured block in thread transfer buffer (copy
             // mono data interleaved in stereo buffer)
@@ -803,35 +873,35 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32LSB16:
-                pSound->bufferSwitchImport<sample32LSB> ( 1<<16, index, i );
+                pSound->bufferSwitchImport<sample32LSB> ( 1 << 16, index, i );
                 break;
 
             case ASIOSTInt32MSB16:
-                pSound->bufferSwitchImport<sample32MSB> ( 1<<16, index, i );
+                pSound->bufferSwitchImport<sample32MSB> ( 1 << 16, index, i );
                 break;
 
             case ASIOSTInt32LSB18:
-                pSound->bufferSwitchImport<sample32LSB> ( 1<<14, index, i );
+                pSound->bufferSwitchImport<sample32LSB> ( 1 << 14, index, i );
                 break;
 
             case ASIOSTInt32MSB18:
-                pSound->bufferSwitchImport<sample32MSB> ( 1<<14, index, i );
+                pSound->bufferSwitchImport<sample32MSB> ( 1 << 14, index, i );
                 break;
 
             case ASIOSTInt32LSB20:
-                pSound->bufferSwitchImport<sample32LSB> ( 1<<12, index, i );
+                pSound->bufferSwitchImport<sample32LSB> ( 1 << 12, index, i );
                 break;
 
             case ASIOSTInt32MSB20:
-                pSound->bufferSwitchImport<sample32MSB> ( 1<<12, index, i );
+                pSound->bufferSwitchImport<sample32MSB> ( 1 << 12, index, i );
                 break;
 
             case ASIOSTInt32LSB24:
-                pSound->bufferSwitchImport<sample32LSB> ( 1<<8, index, i );
+                pSound->bufferSwitchImport<sample32LSB> ( 1 << 8, index, i );
                 break;
 
             case ASIOSTInt32MSB24:
-                pSound->bufferSwitchImport<sample32MSB> ( 1<<8, index, i );
+                pSound->bufferSwitchImport<sample32MSB> ( 1 << 8, index, i );
                 break;
             }
         }
@@ -888,38 +958,39 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32LSB16:
-                pSound->bufferSwitchExport<sample32LSB> ( 1<<16, index, i );
+                pSound->bufferSwitchExport<sample32LSB> ( 1 << 16, index, i );
                 break;
 
             case ASIOSTInt32MSB16:
-                pSound->bufferSwitchExport<sample32MSB> ( 1<<16, index, i );
+                pSound->bufferSwitchExport<sample32MSB> ( 1 << 16, index, i );
                 break;
 
             case ASIOSTInt32LSB18:
-                pSound->bufferSwitchExport<sample32LSB> ( 1<<14, index, i );
+                pSound->bufferSwitchExport<sample32LSB> ( 1 << 14, index, i );
                 break;
 
             case ASIOSTInt32MSB18:
-                pSound->bufferSwitchExport<sample32MSB> ( 1<<14, index, i );
+                pSound->bufferSwitchExport<sample32MSB> ( 1 << 14, index, i );
                 break;
 
             case ASIOSTInt32LSB20:
-                pSound->bufferSwitchExport<sample32LSB> ( 1<<12, index, i );
+                pSound->bufferSwitchExport<sample32LSB> ( 1 << 12, index, i );
                 break;
 
             case ASIOSTInt32MSB20:
-                pSound->bufferSwitchExport<sample32MSB> ( 1<<12, index, i );
+                pSound->bufferSwitchExport<sample32MSB> ( 1 << 12, index, i );
                 break;
 
             case ASIOSTInt32LSB24:
-                pSound->bufferSwitchExport<sample32LSB> ( 1<<8, index, i );
+                pSound->bufferSwitchExport<sample32LSB> ( 1 << 8, index, i );
                 break;
 
             case ASIOSTInt32MSB24:
-                pSound->bufferSwitchExport<sample32MSB> ( 1<<8, index, i );
+                pSound->bufferSwitchExport<sample32MSB> ( 1 << 8, index, i );
                 break;
             }
         }
+
 
         // Finally if the driver supports the ASIOOutputReady() optimization,
         // do it here, all data are in place -----------------------------------

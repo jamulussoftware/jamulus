@@ -78,27 +78,27 @@ public:
     virtual double  GetInOutLatencyMs() { return dInOutLatencyMs; }
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( int  iIdx,
-                                               bool bOpenDriverSetup );
-    virtual void     UnloadCurrentDriver();
-    int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
-    QString          CheckDeviceCapabilities();
-    bool             CheckSampleTypeSupported ( const ASIOSampleType SamType );
-    void             ResetChannelMapping();
+    virtual QString LoadAndInitializeDriver ( int  iIdx,
+                                              bool bOpenDriverSetup );
+    virtual void    UnloadCurrentDriver();
+    int             GetActualBufferSize ( const int iDesiredBufferSizeMono );
+    QString         CheckDeviceCapabilities();
+    bool            CheckSampleTypeSupported ( const ASIOSampleType SamType );
+    void            ResetChannelMapping();
 
-    int              iASIOBufferSizeMono;
-    int              iASIOBufferSizeStereo;
+    int             iASIOBufferSizeMono;
+    int             iASIOBufferSizeStereo;
 
-    long             lNumInChan;
-    long             lNumInChanPlusAddChan; // includes additional "added" channels
-    long             lNumOutChan;
-    double           dInOutLatencyMs;
-    CVector<int>     vSelectedInputChannels;
-    CVector<int>     vSelectedOutputChannels;
+    long            lNumInChan;
+    long            lNumInChanPlusAddChan; // includes additional "added" channels
+    long            lNumOutChan;
+    double          dInOutLatencyMs;
+    CVector<int>    vSelectedInputChannels;
+    CVector<int>    vSelectedOutputChannels;
 
-    CVector<float>   vecfMultChanAudioSndCrd;
+    CVector<float>  vecfMultChanAudioSndCrd;
 
-    QMutex           ASIOMutex;
+    QMutex          ASIOMutex;
 
     // audio hardware buffer info
     struct sHWBufferInfo
@@ -119,45 +119,47 @@ protected:
     ASIOCallbacks    asioCallbacks;
 
     // templates
-    template <typename T> void bufferSwitchImport ( const int iGain,
-        const long index, const int iCH)
+    template <typename T> void bufferSwitchImport ( const int  iGain,
+                                                    const long index,
+                                                    const int  iCH)
     {
         int iSelAddCH;
         int iSelCH;
 
         GetSelCHAndAddCH ( vSelectedInputChannels[iCH], lNumInChan, iSelCH, iSelAddCH );
 
-        const T *pASIOBuf = static_cast<const T *> ( bufferInfos[iSelCH].buffers[index] );
+        const T* pASIOBuf = static_cast<const T*> ( bufferInfos[iSelCH].buffers[index] );
 
         for ( int iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
         {
-            vecfMultChanAudioSndCrd[2 * iCurSample + iCH] = pASIOBuf[iCurSample].get() * iGain;
+            vecfMultChanAudioSndCrd[2 * iCurSample + iCH] = pASIOBuf[iCurSample].Get() * iGain;
         }
 
         if ( iSelAddCH >= 0 )
         {
             // mix input channels case
-            const T *pASIOBufAdd =
-                static_cast<T *> ( bufferInfos[iSelAddCH].buffers[index] );
+            const T* pASIOBufAdd = static_cast<T*> ( bufferInfos[iSelAddCH].buffers[index] );
 
             for ( int iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
             {
                 vecfMultChanAudioSndCrd[2 * iCurSample + iCH] =
                     ClipFloat ( vecfMultChanAudioSndCrd[2 * iCurSample + iCH] +
-                                pASIOBufAdd[iCurSample].get() * iGain );
+                                pASIOBufAdd[iCurSample].Get() * iGain );
             }
         }
     }
 
-    template <typename T> void bufferSwitchExport(const int iGain,
-        const long index, const int iCH)
+    template <typename T> void bufferSwitchExport ( const int  iGain,
+                                                    const long index,
+                                                    const int  iCH )
     {
         const int iSelCH = lNumInChan + vSelectedOutputChannels[iCH];
-        T *pASIOBuf = static_cast<T *> ( bufferInfos[iSelCH].buffers[index] );
+
+        T* pASIOBuf = static_cast<T*> ( bufferInfos[iSelCH].buffers[index] );
 
         for ( int iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
         {
-            pASIOBuf[iCurSample].put( vecfMultChanAudioSndCrd[2 * iCurSample + iCH] / iGain );
+            pASIOBuf[iCurSample].Put ( vecfMultChanAudioSndCrd[2 * iCurSample + iCH] / iGain );
         }
     }
 

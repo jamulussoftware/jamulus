@@ -1174,9 +1174,9 @@ protected:
     {
     public:
         COnePole() : dA ( 0 ), dB ( 0 ) { Reset(); }
-        void setPole ( const float dPole );
+        void  setPole ( const float dPole );
         float Calc ( const float dIn );
-        void Reset() { dLastSample = 0; }
+        void  Reset() { dLastSample = 0; }
 
     protected:
         float dA;

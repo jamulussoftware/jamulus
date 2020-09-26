@@ -232,7 +232,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
     for ( int i = 0; i < 4; i++ )
     {
         combDelays[i].Init ( lengths[i] );
-        combFilters[i].setPole ( 0.2 );
+        combFilters[i].setPole ( 0.2f );
     }
 
     setT60 ( rT60, iSampleRate );

@@ -15,8 +15,6 @@
 - switched all audio sample processing to use floats, coded by hselasky (#544)
 
 
-TODO clipping indicator does not work
-     -> we have a fix for the client but not for the server yet (mix panel clipping still does not work)
 
 
 TODO segmentation fault (server 3.5.11) (#618)

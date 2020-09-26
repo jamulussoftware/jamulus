@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QFile>
 #include <QDateTime>
+#include <QMutex>
 
 #include "../util.h"
 #include "../channel.h"
@@ -169,6 +170,7 @@ private:
     int          iServerFrameSizeSamples;
     bool         isRecording;
     CJamSession* currentSession;
+    QMutex       ChIdMutex;
 
 signals:
     void RecordingSessionStarted ( QString sessionDir );

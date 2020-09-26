@@ -350,8 +350,13 @@ void CJamRecorder::Start() {
     // Ensure any previous cleaning up has been done.
     OnEnd();
 
-    currentSession = new CJamSession( recordBaseDir );
-    isRecording = true;
+    // needs to be after OnEnd() as that also locks
+    ChIdMutex.lock();
+    {
+        currentSession = new CJamSession( recordBaseDir );
+        isRecording = true;
+    }
+    ChIdMutex.unlock();
 
     emit RecordingSessionStarted ( currentSession->SessionDir().path() );
 }
@@ -362,17 +367,21 @@ void CJamRecorder::Start() {
  */
 void CJamRecorder::OnEnd()
 {
-    if ( isRecording )
+    ChIdMutex.lock(); // iChId used in currentSession->End()
     {
-        isRecording = false;
-        currentSession->End();
+        if ( isRecording )
+        {
+            isRecording = false;
+            currentSession->End();
 
-        ReaperProjectFromCurrentSession();
-        AudacityLofFromCurrentSession();
+            ReaperProjectFromCurrentSession();
+            AudacityLofFromCurrentSession();
 
-        delete currentSession;
-        currentSession = nullptr;
+            delete currentSession;
+            currentSession = nullptr;
+        }
     }
+    ChIdMutex.unlock();
 }
 
 
@@ -495,16 +504,21 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFram
  */
 void CJamRecorder::OnDisconnected(int iChID)
 {
-    if ( !isRecording )
+    ChIdMutex.lock();
     {
-        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
+        if ( !isRecording )
+        {
+            qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
+        }
+        if ( currentSession == nullptr )
+        {
+            qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but no currentSession";
+            return;
+        }
+
+        currentSession->DisconnectClient ( iChID );
     }
-    if ( currentSession == nullptr )
-    {
-        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but no currentSession";
-        return;
-    }
-    currentSession->DisconnectClient(iChID);
+    ChIdMutex.unlock();
 }
 
 /**
@@ -525,5 +539,10 @@ void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddre
         Start();
     }
 
-    currentSession->Frame( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );
+    // needs to be after Start() as that also locks
+    ChIdMutex.lock();
+    {
+        currentSession->Frame ( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );
+    }
+    ChIdMutex.unlock();
 }

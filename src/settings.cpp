@@ -854,16 +854,6 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
          }
     }
 
-    // licence type
-    if ( !CommandLineOptions.contains ( "--licence" ) )
-    {
-        if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
-             0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
-        {
-            pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
-        }
-    }
-
     // welcome message
     if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
     {
@@ -923,10 +913,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // start minimized on OS start
     SetFlagIniSet ( IniXMLDocument, "server", "autostartmin",
         pServer->GetAutoRunMinimized() );
-
-    // licence type
-    SetNumericIniSet ( IniXMLDocument, "server", "licencetype",
-        static_cast<int> ( pServer->GetLicenceType() ) );
 
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome",

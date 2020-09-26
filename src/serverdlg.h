@@ -93,7 +93,6 @@ protected:
 public slots:
     void OnRegisterServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );
-    void OnUseCCLicenceStateChanged ( int value );
     void OnEnableRecorderStateChanged ( int value )
         { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
 

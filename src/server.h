@@ -271,9 +271,6 @@ public:
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
 
-    void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
-    ELicenceType GetLicenceType() { return eLicenceType; }
-
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )

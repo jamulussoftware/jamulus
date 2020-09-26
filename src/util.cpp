@@ -512,7 +512,6 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     - Decline button
 */
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
-    resize ( 700, 450 );
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
@@ -533,40 +532,8 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     butAccept->setDefault ( true );
     txvLicence->setOpenExternalLinks ( true );
 
-    // define the licence text (similar to what we have in Ninjam)
-    txvLicence->setText (
-        "<p><big>" + tr (
-        "By connecting to this server and agreeing to this notice, you agree to the "
-        "following:" ) + "</big></p><p><big>" + tr (
-        "You agree that all data, sounds, or other works transmitted to this server "
-        "are owned and created by you or your licensors, and that you are making these "
-        "data, sounds or other works available via the following Creative Commons "
-        "License (for more information on this license, see " ) +
-        "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
-        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):</big></p>"
-        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>"
-        "<p>" + tr ( "You are free to:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Share" ) + "</b> - " +
-        tr ( "copy and redistribute the material in any medium or format" ) + "</li>"
-        "<li><b>" + tr ( "Adapt" ) + "</b> - " +
-        tr ( "remix, transform, and build upon the material" ) + "</li>"
-        "</ul>" + tr ( "The licensor cannot revoke these freedoms as long as you follow the "
-        "license terms." ) + "</p>"
-        "<p>" + tr ( "Under the following terms:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Attribution" ) + "</b> - " +
-        tr ( "You must give appropriate credit, provide a link to the license, and indicate "
-        "if changes were made. You may do so in any reasonable manner, but not in any way "
-        "that suggests the licensor endorses you or your use." ) + "</li>"
-        "<li><b>" + tr ( "NonCommercial" ) + "</b> - " +
-        tr ( "You may not use the material for commercial purposes." ) + "</li>"
-        "<li><b>" + tr ( "ShareAlike" ) + "</b> - " +
-        tr ( "If you remix, transform, or build upon the material, you must distribute your "
-        "contributions under the same license as the original." ) + "</li>"
-        "</ul><b>" + tr ( "No additional restrictions" ) + "</b> — " +
-        tr ( "You may not apply legal terms or technological measures that legally restrict "
-        "others from doing anything the license permits." ) + "</p>" );
+    // define the licence text (reference to the server welcome message)
+    txvLicence->setText ( "<p><big>" + tr ( "Do you agree to the text in the chat window?" ) + "</big></p>" );
 
     QObject::connect ( chbAgree, &QCheckBox::stateChanged,
         this, &CLicenceDlg::OnAgreeStateChanged );

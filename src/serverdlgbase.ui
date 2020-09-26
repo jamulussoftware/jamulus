@@ -266,13 +266,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="chbUseCCLicence">
-         <property name="text">
-          <string>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -323,7 +316,6 @@
   <tabstop>tbtClearRecordingDir</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
   <tabstop>chbStartOnOSStart</tabstop>
-  <tabstop>chbUseCCLicence</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

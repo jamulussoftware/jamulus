@@ -12,14 +12,16 @@
 
 - functionality of Server Name/Address on connection setup window (#365)
 
+- removed the "Show Creative Commons BY-NC-SA 4.0 Licence Dialog" setting from the
+  server GUI and changed the -L/--licence text in the licence dialog to "Do you agree
+  to the text in the chat window?" so that a licence text must now be given in the
+  server welcome message (#587, #367, #81)
+
 
 TODO segmentation fault (server 3.5.11) (#618)
 
 TODO fix outstanding security issues with the hyperlink support in the chat window (#620)
 
-TODO -L considered harmful (#587)
-TODO Licence agreement function for server (#367)
-TODO Maybe add a second licence choice for the server (#81)
 
 
 

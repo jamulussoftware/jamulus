@@ -114,7 +114,7 @@ void CChatDlg::AddChatText ( QString strChatText )
     // analyze strChatText to check if hyperlink (limit ourselves to https://) but do not
     // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
     // coding hisself and we should not mess with that)
-    if ( strChatText.indexOf ( "href=" ) < 0 )
+    if ( !strChatText.contains ( QRegExp ( "href\\s*=|src\\s*=" ) ) )
     {
         // searches for all occurrences of https and cuts until a space (\S matches any non-white-space
         // character and the + means that matches the previous element one or more times.)

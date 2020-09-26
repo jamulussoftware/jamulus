@@ -380,14 +380,14 @@ void CAudioReverb::Process ( CVector<float>& vecfStereoInOut,
         // reverberation effect on both channels)
         if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
         {
-            vecfStereoInOut[i] = clipFloat (
+            vecfStereoInOut[i] = ClipFloat (
                 ( 1.0f - fAttenuation ) * vecfStereoInOut[i] +
                 0.5f * fAttenuation * outLeftDelay.Get() );
         }
 
         if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
         {
-            vecfStereoInOut[i + 1] = clipFloat (
+            vecfStereoInOut[i + 1] = ClipFloat (
                 ( 1.0f - fAttenuation ) * vecfStereoInOut[i + 1] +
                 0.5f * fAttenuation * outRightDelay.Get() );
         }

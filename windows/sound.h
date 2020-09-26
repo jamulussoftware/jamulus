@@ -46,7 +46,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void           (*fpNewCallback) ( CVector<float>& psData, void* arg ),
+    CSound ( void           (*fpNewCallback) ( CVector<float>& pfData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     ,
@@ -143,7 +143,7 @@ protected:
             for ( int iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
             {
                 vecfMultChanAudioSndCrd[2 * iCurSample + iCH] =
-                    clipFloat ( vecfMultChanAudioSndCrd[2 * iCurSample + iCH] +
+                    ClipFloat ( vecfMultChanAudioSndCrd[2 * iCurSample + iCH] +
                                 pASIOBufAdd[iCurSample].get() * iGain );
             }
         }

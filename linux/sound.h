@@ -60,7 +60,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     bNoAutoJackConnect,
@@ -111,7 +111,7 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* pParg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* pParg ),
              void*          pParg,
              const int      iCtrlMIDIChannel,
              const bool     ,

@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
+CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* arg ),
                  void*          arg,
                  const int      iCtrlMIDIChannel,
                  const bool     ,
@@ -982,7 +982,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
-                    pSound->vecfTmpAudioSndCrdStereo[2 * i] = clipFloat (
+                    pSound->vecfTmpAudioSndCrdStereo[2 * i] = ClipFloat (
                         pSound->vecfTmpAudioSndCrdStereo[2 * i] + pLeftData[iNumChanPerFrameLeft * i + iSelAddInInterlChLeft] );
                 }
             }
@@ -994,7 +994,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
-                    pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] = clipFloat (
+                    pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] = ClipFloat (
                         pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] + pRightData[iNumChanPerFrameRight * i + iSelAddInInterlChRight] );
                 }
             }

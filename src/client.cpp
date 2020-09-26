@@ -44,7 +44,7 @@ CClient::CClient ( const quint16  iPortNumber,
     iNumAudioChannels                ( 1 ),
     bIsInitializationPhase           ( true ),
     bMuteOutStream                   ( false ),
-    dMuteOutStreamGain               ( 1.0 ),
+    fMuteOutStreamGain               ( 1.0f ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect, strNClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
@@ -366,16 +366,16 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 }
 
 void CClient::SetRemoteChanGain ( const int   iId,
-                                  const float dGain,
+                                  const float fGain,
                                   const bool  bIsMyOwnFader )
 {
     // if this gain is for my own channel, apply the value for the Mute Myself function
     if ( bIsMyOwnFader )
     {
-        dMuteOutStreamGain = dGain;
+        fMuteOutStreamGain = fGain;
     }
 
-    Channel.SetRemoteChanGain ( iId, dGain );
+    Channel.SetRemoteChanGain ( iId, fGain );
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -891,7 +891,7 @@ void CClient::Init()
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecfStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
-    dMuteOutStreamGain = 1.0;
+    fMuteOutStreamGain = 1.0f;
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE (
@@ -1006,34 +1006,34 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
     if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
     {
         // calculate pan gain in the range 0 to 1, where 0.5 is the middle position
-        const float dPan = static_cast<float> ( iAudioInFader ) / AUD_FADER_IN_MAX;
+        const float fPan = static_cast<float> ( iAudioInFader ) / AUD_FADER_IN_MAX;
 
         if ( eAudioChannelConf == CC_STEREO )
         {
             // for stereo only apply pan attenuation on one channel (same as pan in the server)
-            const float dGainL = MathUtils::GetLeftPan ( dPan, false );
-            const float dGainR = MathUtils::GetRightPan ( dPan, false );
+            const float fGainL = MathUtils::GetLeftPan ( fPan, false );
+            const float fGainR = MathUtils::GetRightPan ( fPan, false );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
                 // note that the gain is always <= 1, therefore a simple cast is
                 // ok since we never can get an overload
-                vecfStereoSndCrd[j + 1] = dGainR * vecfStereoSndCrd[j + 1];
-                vecfStereoSndCrd[j]     = dGainL * vecfStereoSndCrd[j];
+                vecfStereoSndCrd[j + 1] = fGainR * vecfStereoSndCrd[j + 1];
+                vecfStereoSndCrd[j]     = fGainL * vecfStereoSndCrd[j];
             }
         }
         else
         {
             // for mono implement a cross-fade between channels and mix them, for
             // mono-in/stereo-out use no attenuation in pan center
-            const float dGainL = MathUtils::GetLeftPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
-            const float dGainR = MathUtils::GetRightPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+            const float fGainL = MathUtils::GetLeftPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+            const float fGainR = MathUtils::GetRightPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
                 // clip samples for stereo pan mode
-                vecfStereoSndCrd[i] = clipFloat (
-                    dGainL * vecfStereoSndCrd[j] + dGainR * vecfStereoSndCrd[j + 1] );
+                vecfStereoSndCrd[i] = ClipFloat (
+                    fGainL * vecfStereoSndCrd[j] + fGainR * vecfStereoSndCrd[j + 1] );
             }
         }
     }
@@ -1129,8 +1129,8 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
     {
         for ( i = 0; i < iStereoBlockSizeSam; i++ )
         {
-            vecfStereoSndCrd[i] = clipFloat (
-                vecfStereoSndCrd[i] + vecfStereoSndCrdMuteStream[i] * dMuteOutStreamGain );
+            vecfStereoSndCrd[i] = ClipFloat (
+                vecfStereoSndCrd[i] + vecfStereoSndCrdMuteStream[i] * fMuteOutStreamGain );
         }
     }
 
@@ -1162,7 +1162,7 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 {
-    const float dSystemBlockDurationMs = static_cast<float> ( iOPUSFrameSizeSamples ) /
+    const float fSystemBlockDurationMs = static_cast<float> ( iOPUSFrameSizeSamples ) /
         SYSTEM_SAMPLE_RATE_HZ * 1000;
 
     // If the jitter buffers are set effectively, i.e. they are exactly the
@@ -1170,20 +1170,20 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // length. Since that is usually not the case but the buffers are usually
     // a bit larger than necessary, we introduce some factor for compensation.
     // Consider the jitter buffer on the client and on the server side, too.
-    const float dTotalJitterBufferDelayMs = dSystemBlockDurationMs *
+    const float fTotalJitterBufferDelayMs = fSystemBlockDurationMs *
         static_cast<float> ( GetSockBufNumFrames() +
                               GetServerSockBufNumFrames() ) * 0.7;
 
     // consider delay introduced by the sound card conversion buffer by using
     // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"
-    float dTotalSoundCardDelayMs = GetSndCrdConvBufAdditionalDelayMonoBlSize() *
+    float fTotalSoundCardDelayMs = GetSndCrdConvBufAdditionalDelayMonoBlSize() *
         1000 / SYSTEM_SAMPLE_RATE_HZ;
 
     // try to get the actual input/output sound card delay from the audio
     // interface, per definition it is not available if a 0 is returned
-    const float dSoundCardInputOutputLatencyMs = Sound.GetInOutLatencyMs();
+    const float fSoundCardInputOutputLatencyMs = Sound.GetInOutLatencyMs();
 
-    if ( dSoundCardInputOutputLatencyMs == 0.0 )
+    if ( fSoundCardInputOutputLatencyMs == 0.0 )
     {
         // use an alternative approach for estimating the sound card delay:
         //
@@ -1191,29 +1191,29 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
         // output, therefore we have "3 *" instead of "2 *" (for input and output)
         // the actual sound card buffer size
         // "GetSndCrdConvBufAdditionalDelayMonoBlSize"
-        dTotalSoundCardDelayMs +=
+        fTotalSoundCardDelayMs +=
             ( 3 * GetSndCrdActualMonoBlSize() ) *
             1000 / SYSTEM_SAMPLE_RATE_HZ;
     }
     else
     {
         // add the actual sound card latency in ms
-        dTotalSoundCardDelayMs += dSoundCardInputOutputLatencyMs;
+        fTotalSoundCardDelayMs += fSoundCardInputOutputLatencyMs;
     }
 
     // network packets are of the same size as the audio packets per definition
     // if no sound card conversion buffer is used
-    const float dDelayToFillNetworkPacketsMs =
+    const float fDelayToFillNetworkPacketsMs =
         GetSystemMonoBlSize() * 1000.0 / SYSTEM_SAMPLE_RATE_HZ;
 
     // OPUS additional delay at small frame sizes is half a frame size
-    const float dAdditionalAudioCodecDelayMs = dSystemBlockDurationMs / 2;
+    const float fAdditionalAudioCodecDelayMs = fSystemBlockDurationMs / 2;
 
-    const float dTotalBufferDelayMs =
-        dDelayToFillNetworkPacketsMs +
-        dTotalJitterBufferDelayMs +
-        dTotalSoundCardDelayMs +
-        dAdditionalAudioCodecDelayMs;
+    const float fTotalBufferDelayMs =
+        fDelayToFillNetworkPacketsMs +
+        fTotalJitterBufferDelayMs +
+        fTotalSoundCardDelayMs +
+        fAdditionalAudioCodecDelayMs;
 
-    return MathUtils::round ( dTotalBufferDelayMs + iPingTimeMs );
+    return MathUtils::round ( fTotalBufferDelayMs + iPingTimeMs );
 }

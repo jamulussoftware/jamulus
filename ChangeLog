@@ -13,6 +13,8 @@
 - functionality of Server Name/Address on connection setup window (#365)
 
 
+TODO add entry for double->float, coded by ...
+
 TODO segmentation fault (server 3.5.11) (#618)
 
 TODO fix outstanding security issues with the hyperlink support in the chat window (#620)

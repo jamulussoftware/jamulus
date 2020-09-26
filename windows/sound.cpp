@@ -475,7 +475,7 @@ void CSound::Stop()
     }
 }
 
-CSound::CSound ( void           (*fpNewCallback) ( CVector<float>& psData, void* arg ),
+CSound::CSound ( void           (*fpNewCallback) ( CVector<float>& pfData, void* arg ),
                  void*          arg,
                  const int      iCtrlMIDIChannel,
                  const bool     ,

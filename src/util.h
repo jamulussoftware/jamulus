@@ -75,7 +75,7 @@ class CClient;  // forward declaration of CClient
 
 /* Global functions ***********************************************************/
 // range check audio samples
-static inline float clipFloat ( const float fInput )
+static inline float ClipFloat ( const float fInput )
 {
     return qBound ( -1.0f, fInput, 1.0f );
 }

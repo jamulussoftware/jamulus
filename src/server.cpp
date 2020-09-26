@@ -1094,11 +1094,11 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain of the current client
-            const CVector<float>& vecfData  = vecvecfData[j];
-            const float           dGain   = vecvecfGains[iChanCnt][j];
+            const CVector<float>& vecfData = vecvecfData[j];
+            const float           fGain    = vecvecfGains[iChanCnt][j];
 
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( dGain == 1.0f )
+            if ( fGain == 1.0f )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
@@ -1124,7 +1124,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
-                        vecfIntermProcBuf[i] += vecfData[i] * dGain;
+                        vecfIntermProcBuf[i] += vecfData[i] * fGain;
                     }
                 }
                 else
@@ -1132,8 +1132,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecfIntermProcBuf[i] += dGain *
-                            ( static_cast<float> ( vecfData[k] ) + vecfData[k + 1] ) / 2;
+                        vecfIntermProcBuf[i] += fGain *
+                            ( vecfData[k] + vecfData[k + 1] ) / 2;
                     }
                 }
             }
@@ -1146,7 +1146,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // the expected range
         for ( i = 0; i < iServerFrameSizeSamples; i++ )
         {
-            vecfSendData[i] = clipFloat ( vecfIntermProcBuf[i] );
+            vecfSendData[i] = ClipFloat ( vecfIntermProcBuf[i] );
         }
     }
     else
@@ -1156,16 +1156,16 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         {
             // get a reference to the audio data and gain/pan of the current client
             const CVector<float>& vecfData = vecvecfData[j];
-            const float           dGain    = vecvecfGains[iChanCnt][j];
-            const float           dPan     = vecvecfPannings[iChanCnt][j];
+            const float           fGain    = vecvecfGains[iChanCnt][j];
+            const float           fPan     = vecvecfPannings[iChanCnt][j];
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
-            const float dGainL = MathUtils::GetLeftPan ( dPan, false ) * dGain;
-            const float dGainR = MathUtils::GetRightPan ( dPan, false ) * dGain;
+            const float fGainL = MathUtils::GetLeftPan ( fPan, false ) * fGain;
+            const float fGainR = MathUtils::GetRightPan ( fPan, false ) * fGain;
 
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( ( dGainL == 1.0f ) && ( dGainR == 1.0f ) )
+            if ( ( fGainL == 1.0f ) && ( fGainR == 1.0f ) )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
@@ -1194,8 +1194,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left/right channel
-                        vecfIntermProcBuf[k]     += vecfData[i] * dGainL;
-                        vecfIntermProcBuf[k + 1] += vecfData[i] * dGainR;
+                        vecfIntermProcBuf[k]     += vecfData[i] * fGainL;
+                        vecfIntermProcBuf[k + 1] += vecfData[i] * fGainR;
                     }
                 }
                 else
@@ -1204,8 +1204,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
                         // left/right channel
-                        vecfIntermProcBuf[i]     += vecfData[i] *     dGainL;
-                        vecfIntermProcBuf[i + 1] += vecfData[i + 1] * dGainR;
+                        vecfIntermProcBuf[i]     += vecfData[i] *     fGainL;
+                        vecfIntermProcBuf[i + 1] += vecfData[i + 1] * fGainR;
                     }
                 }
             }
@@ -1218,7 +1218,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // the expected range
         for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
         {
-            vecfSendData[i] = clipFloat ( vecfIntermProcBuf[i] );
+            vecfSendData[i] = ClipFloat ( vecfIntermProcBuf[i] );
         }
     }
 

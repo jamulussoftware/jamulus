@@ -36,7 +36,7 @@
 class CSound : public CSoundBase, public oboe::AudioStreamCallback//, public IRenderableAudio, public IRestartable
 {
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     ,

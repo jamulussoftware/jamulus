@@ -259,7 +259,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         {
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
             {
-                pSound->vecfTmpAudioSndCrdStereo[2 * i] = in_left[i];
+                pSound->vecfTmpAudioSndCrdStereo[2 * i]     = in_left[i];
                 pSound->vecfTmpAudioSndCrdStereo[2 * i + 1] = in_right[i];
             }
         }

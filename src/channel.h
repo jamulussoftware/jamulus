@@ -108,18 +108,18 @@ public:
     void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
-    void SetGain ( const int iChanID, const float dNewGain );
+    void SetGain ( const int iChanID, const float fNewGain );
     float GetGain ( const int iChanID );
     float GetFadeInGain() { return static_cast<float> ( iFadeInCnt ) / iFadeInCntMax; }
 
-    void SetPan ( const int iChanID, const float dNewPan );
+    void SetPan ( const int iChanID, const float fNewPan );
     float GetPan ( const int iChanID );
 
-    void SetRemoteChanGain ( const int iId, const float dGain )
-        { Protocol.CreateChanGainMes ( iId, dGain ); }
+    void SetRemoteChanGain ( const int iId, const float fGain )
+        { Protocol.CreateChanGainMes ( iId, fGain ); }
 
-    void SetRemoteChanPan ( const int iId, const float dPan )
-        { Protocol.CreateChanPanMes ( iId, dPan ); }
+    void SetRemoteChanPan ( const int iId, const float fPan )
+        { Protocol.CreateChanPanMes ( iId, fPan ); }
 
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
                                const bool bPreserve = false );
@@ -241,8 +241,8 @@ protected:
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
-    void OnChangeChanGain ( int iChanID, float dNewGain );
-    void OnChangeChanPan ( int iChanID, float dNewPan );
+    void OnChangeChanGain ( int iChanID, float fNewGain );
+    void OnChangeChanPan ( int iChanID, float fNewPan );
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();

@@ -27,7 +27,7 @@
 
 /* Implementation *************************************************************/
 
-CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<float>& psData, void* arg ),
+CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* arg ),
                  void*          arg,
                  const int      iCtrlMIDIChannel,
                  const bool     ,
@@ -245,9 +245,9 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, v
                 for ( int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++ )
                 {
                     // copy sample received from server into output buffer
-
                     const float fCurSam =
-                        pSound->vecfTmpAudioSndCrdStereo [frmNum * oboeStream->getChannelCount() + channelNum];
+                        pSound->vecfTmpAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum];
+
                     floatData[frmNum * oboeStream->getChannelCount() + channelNum] = fCurSam;
                 }
             }

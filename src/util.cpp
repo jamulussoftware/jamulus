@@ -522,8 +522,8 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
-    QTextBrowser* txvLicence = new QTextBrowser ( this );
-    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I &agree to the above licence terms" ), this );
+    QLabel*       lblLicence = new QLabel ( tr ( "This server requires you accept conditions before you can join. Please read these in the chat window." ), this );
+    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I have read the conditions and &agree." ), this );
     butAccept                = new QPushButton ( tr ( "Accept" ), this );
     QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
 
@@ -531,16 +531,12 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     pSubLayout->addWidget ( chbAgree );
     pSubLayout->addWidget ( butAccept );
     pSubLayout->addWidget ( butDecline );
-    pLayout->addWidget    ( txvLicence );
+    pLayout->addWidget    ( lblLicence );
     pLayout->addLayout    ( pSubLayout );
 
     // set some properties
     butAccept->setEnabled ( false );
     butAccept->setDefault ( true );
-    txvLicence->setOpenExternalLinks ( true );
-
-    // define the licence text (reference to the server welcome message)
-    txvLicence->setText ( "<p><big>" + tr ( "Do you agree to the text in the chat window?" ) + "</big></p>" );
 
     QObject::connect ( chbAgree, &QCheckBox::stateChanged,
         this, &CLicenceDlg::OnAgreeStateChanged );

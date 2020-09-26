@@ -93,7 +93,7 @@
      <item>
       <widget class="QLabel" name="lblServerAddr">
        <property name="text">
-        <string>Server Name/Address</string>
+        <string>Server Address</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

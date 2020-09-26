@@ -2042,8 +2042,8 @@
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="96"/>
-        <source>Server Name/Address</source>
-        <translation>Servername/Adresse</translation>
+        <source>Server Address</source>
+        <translation>Serveradresse</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="130"/>

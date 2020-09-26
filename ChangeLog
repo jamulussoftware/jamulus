@@ -12,8 +12,11 @@
 
 - functionality of Server Name/Address on connection setup window (#365)
 
+- switched all audio sample processing to use floats, coded by hselasky (#544)
 
-TODO add entry for double->float, coded by ...
+
+TODO clipping indicator on input level meter on Linux does not work (but it does work on the remote meter...)
+
 
 TODO segmentation fault (server 3.5.11) (#618)
 

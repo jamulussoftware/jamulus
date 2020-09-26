@@ -108,7 +108,7 @@ float CStereoSignalLevelMeter::CalcLogResultForMeter ( const float& fLinearLevel
     const float fNormLevel = fLinearLevel;
 
     // logarithmic measure
-    float fLevelForMeterdB = -100000.0; // large negative value
+    float fLevelForMeterdB = -100000.0f; // large negative value
 
     if ( fNormLevel > 0 )
     {
@@ -201,8 +201,8 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
     // delay lengths for 44100 Hz sample rate
-    int lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const float scaler = static_cast<float> ( iSampleRate ) / 44100.0;
+    int         lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
+    const float scaler     = static_cast<float> ( iSampleRate ) / 44100.0f;
 
     if ( scaler != 1.0 )
     {
@@ -255,9 +255,9 @@ bool CAudioReverb::isPrime ( const int number )
 
     if ( number & 1 )
     {
-        const int max = static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1;
+        const int iMax = static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1;
 
-	for ( int i = 3; i < max; i += 2 )
+        for ( int i = 3; i < iMax; i += 2 )
         {
             if ( ( number % i ) == 0 )
             {

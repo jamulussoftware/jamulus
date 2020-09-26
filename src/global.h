@@ -168,8 +168,8 @@ LED bar:      lbr
 #define MAX_NUM_STORED_FADER_SETTINGS    250
 
 // range for signal level meter
-#define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
-#define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
+#define LOW_BOUND_SIG_METER              ( -50.0f ) // dB
+#define UPPER_BOUND_SIG_METER            ( 0.0f )   // dB
 
 // defines for LED level meter CLevelMeter
 #define NUM_STEPS_LED_BAR                8

@@ -325,10 +325,10 @@ protected:
     bool                      bUseMultithreading;
     QFutureSynchronizer<void> FutureSynchronizer;
 
-    bool CreateLevelsForAllConChannels  ( const int                        iNumClients,
-                                          const CVector<int>&              vecNumAudioChannels,
-                                          const CVector<CVector<float> >   vecvecfData,
-                                          CVector<uint16_t>&               vecLevelsOut );
+    bool CreateLevelsForAllConChannels ( const int                      iNumClients,
+                                         const CVector<int>&            vecNumAudioChannels,
+                                         const CVector<CVector<float> > vecvecfData,
+                                         CVector<uint16_t>&             vecLevelsOut );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -364,7 +364,7 @@ protected:
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<float> >   vecvecfSendData;
     CVector<CVector<float> >   vecvecfIntermediateProcBuf;
-    CVector<CVector<uint8_t>>  vecvecbyCodedData;
+    CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels
     CVector<uint16_t>          vecChannelLevels;
@@ -407,11 +407,11 @@ signals:
     void Stopped();
     void ClientDisconnected ( const int iChID );
     void SvrRegStatusChanged();
-    void AudioFrame ( const int              iChID,
-                      const QString          stChName,
-                      const CHostAddress     RecHostAddr,
-                      const int              iNumAudChan,
-                      const CVector<float>   vecfData );
+    void AudioFrame ( const int            iChID,
+                      const QString        stChName,
+                      const CHostAddress   RecHostAddr,
+                      const int            iNumAudChan,
+                      const CVector<float> vecfData );
 
     void CLVersionAndOSReceived ( CHostAddress           InetAddr,
                                   COSUtil::EOpSystemType eOSType,
@@ -509,4 +509,4 @@ public slots:
     void OnHandledSignal ( int sigNum );
 };
 
-Q_DECLARE_METATYPE(CVector<float>)
+Q_DECLARE_METATYPE ( CVector<float> )

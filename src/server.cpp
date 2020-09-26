@@ -1672,10 +1672,10 @@ void CServer::customEvent ( QEvent* pEvent )
 }
 
 /// @brief Compute frame peak level for each client
-bool CServer::CreateLevelsForAllConChannels ( const int                     iNumClients,
-                                              const CVector<int>&           vecNumAudioChannels,
+bool CServer::CreateLevelsForAllConChannels ( const int                      iNumClients,
+                                              const CVector<int>&            vecNumAudioChannels,
                                               const CVector<CVector<float> > vecvecfData,
-                                              CVector<uint16_t>&            vecLevelsOut )
+                                              CVector<uint16_t>&             vecLevelsOut )
 {
     bool bLevelsWereUpdated = false;
 
@@ -1688,13 +1688,13 @@ bool CServer::CreateLevelsForAllConChannels ( const int                     iNum
         for ( int j = 0; j < iNumClients; j++ )
         {
             // update and get signal level for meter in dB for each channel
-            const float dCurSigLevelForMeterdB = vecChannels[vecChanIDsCurConChan[j]].
+            const float fCurSigLevelForMeterdB = vecChannels[vecChanIDsCurConChan[j]].
                 UpdateAndGetLevelForMeterdB ( vecvecfData[j],
                                               iServerFrameSizeSamples,
                                               vecNumAudioChannels[j] > 1 );
 
             // map value to integer for transmission via the protocol (4 bit available)
-            vecLevelsOut[j] = static_cast<uint16_t> ( ceilf ( dCurSigLevelForMeterdB ) );
+            vecLevelsOut[j] = static_cast<uint16_t> ( ceilf ( fCurSigLevelForMeterdB ) );
         }
     }
 

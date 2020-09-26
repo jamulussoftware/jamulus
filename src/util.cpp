@@ -515,8 +515,8 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
-    QLabel*       lblLicence = new QLabel ( tr ( "To connect to this server, you need to accept a license. Please read the license in the chat window." ), this );
-    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I have read the license and &agree." ), this );
+    QLabel*       lblLicence = new QLabel ( tr ( "This server requires you accept conditions before you can join. Please read these in the chat window." ), this );
+    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I have read the conditions and &agree." ), this );
     butAccept                = new QPushButton ( tr ( "Accept" ), this );
     QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
 

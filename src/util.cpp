@@ -105,7 +105,12 @@ float CStereoSignalLevelMeter::UpdateCurLevel ( float       fCurLevel,
 
 float CStereoSignalLevelMeter::CalcLogResultForMeter ( const float& fLinearLevel )
 {
-    const float fNormLevel = fLinearLevel;
+    // With #544 by hselasky the signal processing was changed from short to float.
+    // With the code using short we defined the clipping to be if a value of 32768
+    // was detected. We did this by normalizing by 32767 and the clipping was then
+    // a bit larger than 1. To get the same behavior also with the new float type,
+    // we have to multiply with a factor 32768 / 32767 = 1.000030518509476.
+    const float fNormLevel = fLinearLevel * 1.000030518509476f;
 
     // logarithmic measure
     float fLevelForMeterdB = -100000.0f; // large negative value

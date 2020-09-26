@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2020
  *
  * Author(s):
- *  Volker Fischer
+ *  Volker Fischer, hselasky
  *
  * Description:
  * Sound card interface for Windows operating systems

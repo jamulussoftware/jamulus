@@ -1,7 +1,7 @@
 
 #!/bin/sh
 # set DISTRO either to "Ubuntu", "Debian" or "Fedora"
-DISTRO="Debina"
+DISTRO="Debian"
 LINVERSION="0.0"
 
 # Get Jamulus Release Name with "curl" and "grep"  

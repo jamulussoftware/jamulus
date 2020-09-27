@@ -8,9 +8,14 @@
 
 - added new menu entry "Clear All Stored Solo Settings" (#616)
 
+- fade in all clients at the server when entering a server to avoid the volume
+  is at 100% when joining a server (#628)
+
 - added a qmake CONFIG flag for disabling the automatic version check (#370)
 
-- functionality of Server Name/Address on connection setup window (#365)
+- avoid confusion with the Server Address field on the connection setup window by
+  no longer showing the server name in that field since it is only intended for
+  entering IP addresses or valid server URLs (#365)
 
 - switched all audio sample processing to use floats, coded by hselasky (#544)
 

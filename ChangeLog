@@ -22,8 +22,9 @@
   to the text in the chat window?" so that a licence text must now be given in the
   server welcome message (#587, #367, #81)
 
+- bug fix: crash when using the jam recorder in the server, coded by pljones (#618)
 
-TODO segmentation fault (server 3.5.11) (#618)
+
 
 TODO fix outstanding security issues with the hyperlink support in the chat window (#620)
 

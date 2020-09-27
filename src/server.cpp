@@ -897,7 +897,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 // as well to avoid the client volumes are at 100% when joining a server (#628)
                 if ( j != i )
                 {
-                    vecvecdGains[i][j] *= vecChannels[iCurChanID].GetFadeInGain();
+                    vecvecfGains[i][j] *= vecChannels[iCurChanID].GetFadeInGain();
                 }
 
                 // panning

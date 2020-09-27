@@ -122,12 +122,12 @@ public:
                                                          this, &CSound::OnTimer ); }
     virtual ~CSound() {}
     virtual int Init ( const int iNewPrefMonoBufferSize ) { CSoundBase::Init ( iNewPrefMonoBufferSize );
-                                                            vecsTemp.Init ( 2 * iNewPrefMonoBufferSize );
+                                                            vecfTemp.Init ( 2 * iNewPrefMonoBufferSize );
                                                             return iNewPrefMonoBufferSize; }
     CHighPrecisionTimer HighPrecisionTimer;
-    CVector<short>      vecsTemp;
+    CVector<float>      vecfTemp;
 
 public slots:
-    void OnTimer() { vecsTemp.Reset ( 0 ); if ( IsRunning() ) { ProcessCallback ( vecsTemp ); } }
+    void OnTimer() { vecfTemp.Reset ( 0 ); if ( IsRunning() ) { ProcessCallback ( vecfTemp ); } }
 };
 #endif // WITH_SOUND

@@ -726,9 +726,9 @@ class CStereoSignalLevelMeter
 public:
 // TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
 //      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size with a factor of 0.97.
+//      is ok for both numbers of samples frame size with a factor of 0.99.
     CStereoSignalLevelMeter ( const bool  bNIsStereoOut     = true,
-                              const float fNSmoothingFactor = 0.97f ) :
+                              const float fNSmoothingFactor = 0.99f ) :
         fSmoothingFactor ( fNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
 
     void Update ( const CVector<float>& vecfAudio,

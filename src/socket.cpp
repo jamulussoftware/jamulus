@@ -65,14 +65,12 @@ void CSocket::Init ( const quint16 iPortNumber )
         }
         else
         {
-            // if the port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times
-            // with incremented port numbers
-
-            // Randomize the start by 5 ports, in case a faulty router gets
-            // stuck and confused by a particular port (like the starting port).
-            // Might work around frustrating "cannot connect" problems.
-
-            quint16 startingPortNumber = iPortNumber + rand() % 5;
+            // If the port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times
+            // with incremented port numbers. Randomize the start port, in case a
+            // faulty router gets stuck and confused by a particular port (like
+            // the starting port). Might work around frustrating "cannot connect"
+            // problems (#568)
+            const quint16 startingPortNumber = iPortNumber + rand() % NUM_SOCKET_PORTS_TO_TRY;
 
             quint16 iClientPortIncrement = 0;
             bSuccess                     = false; // initialization for while loop
@@ -82,8 +80,8 @@ void CSocket::Init ( const quint16 iPortNumber )
                 UdpSocketInAddr.sin_port = htons ( startingPortNumber + iClientPortIncrement );
 
                 bSuccess = ( ::bind ( UdpSocket ,
-                                    (sockaddr*) &UdpSocketInAddr,
-                                    sizeof ( sockaddr_in ) ) == 0 );
+                                      (sockaddr*) &UdpSocketInAddr,
+                                      sizeof ( sockaddr_in ) ) == 0 );
 
                 iClientPortIncrement++;
             }

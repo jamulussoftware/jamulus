@@ -1351,7 +1351,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
                                                        const QString& strChatText )
 {
     // Create message which is sent to all connected clients -------------------
-    // get client name, if name is empty, use IP address instead
+    // get client name
     QString ChanName = vecChannels[iCurChanID].GetName();
 
     // add time and name of the client at the beginning of the message text and

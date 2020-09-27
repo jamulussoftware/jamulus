@@ -47,6 +47,10 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
 
     outBuilder.setDirection ( oboe::Direction::Output );
     setupCommonStreamParams ( &outBuilder );
+
+// TEST LiveEffectEngine
+// This sample uses blocking read() by setting callback to null
+inBuilder.setCallback ( nullptr );
 }
 
 void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
@@ -122,48 +126,56 @@ void CSound::Start()
     CSoundBase::Start();
 
     // finally start the streams so the callback begins, start with inputstream first.
-    mRecordingStream->requestStart();
-    mPlayStream->requestStart();
+// TEST LiveEffectEngine
+mFullDuplexPass.start();
+//    mRecordingStream->requestStart();
+//    mPlayStream->requestStart();
 }
 
 void CSound::Stop()
 {
-    mPlayStream->requestStop();
-    mRecordingStream->requestStop();
+// TEST LiveEffectEngine
+mFullDuplexPass.stop();
+//    mPlayStream->requestStop();
+//    mRecordingStream->requestStop();
 
     // call base class
     CSoundBase::Stop();
 }
 
-int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
+int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
     // first close input/output streams
     closeStreams();
 
 
-// TEST we need to open the streams to get the info about the BufferSizeInFrames
-// -> TODO better solution
-outBuilder.openManagedStream ( mPlayStream );
-inBuilder.openManagedStream ( mRecordingStream );
-const int iInFramesPerBurst  = mRecordingStream->getBufferSizeInFrames();
-const int iOutFramesPerBurst = mPlayStream->getBufferSizeInFrames();
-iOpenSLBufferSizeMono = std::max ( iInFramesPerBurst, iOutFramesPerBurst );
-closeStreams();
+//// TEST we need to open the streams to get the info about the BufferSizeInFrames
+//// -> TODO better solution
+//outBuilder.openManagedStream ( mPlayStream );
+//inBuilder.openManagedStream ( mRecordingStream );
+//const int iInFramesPerBurst  = mRecordingStream->getBufferSizeInFrames();
+//const int iOutFramesPerBurst = mPlayStream->getBufferSizeInFrames();
+//iOpenSLBufferSizeMono = std::max ( iInFramesPerBurst, iOutFramesPerBurst );
+//closeStreams();
 
 
-    // we need to get the same number of samples for each call of the callback
-    // (note that this must be done before the stream is opened)
-    inBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
-    outBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
+//    // we need to get the same number of samples for each call of the callback
+//    // (note that this must be done before the stream is opened)
+//    inBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
+//    outBuilder.setFramesPerCallback ( iOpenSLBufferSizeMono );
 
     // open input/output streams
     inBuilder.openManagedStream ( mRecordingStream );
     outBuilder.openManagedStream ( mPlayStream );
 
-    // apply the new frame size to the streams
-    mRecordingStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
-    mPlayStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
+//    // apply the new frame size to the streams
+//    mRecordingStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
+//    mPlayStream->setBufferSizeInFrames ( iOpenSLBufferSizeMono );
 
+// TEST LiveEffectEngine
+iOpenSLBufferSizeMono = iNewPrefMonoBufferSize;
+mFullDuplexPass.setInputStream ( mRecordingStream.get() );
+mFullDuplexPass.setOutputStream ( mPlayStream.get() );
 
 // TEST for debugging
 qInfo() << "iOpenSLBufferSizeMono: " << iOpenSLBufferSizeMono;
@@ -195,6 +207,11 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
 
     // both, the input and output device use the same callback function
     QMutexLocker locker ( &MutexAudioProcessCallback );
+
+
+// TEST LiveEffectEngine
+return mFullDuplexPass.onAudioReady ( oboeStream, audioData, numFrames );
+
 
 if ( oboeStream == mRecordingStream.get() )
 {

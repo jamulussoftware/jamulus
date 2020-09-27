@@ -213,7 +213,8 @@ win32 {
         libs/oboe/src/opensles/AudioStreamOpenSLES.cpp \
         libs/oboe/src/opensles/EngineOpenSLES.cpp \
         libs/oboe/src/opensles/OpenSLESUtilities.cpp \
-        libs/oboe/src/opensles/OutputMixerOpenSLES.cpp
+        libs/oboe/src/opensles/OutputMixerOpenSLES.cpp \
+        libs/oboe/samples/LiveEffect/src/main/cpp/FullDuplexStream.cpp
 
     OBOE_HEADERS = libs/oboe/src/aaudio/AAudioLoader.h \
         libs/oboe/src/aaudio/AudioStreamAAudio.h \
@@ -263,7 +264,8 @@ win32 {
         libs/oboe/src/opensles/AudioStreamOpenSLES.h \
         libs/oboe/src/opensles/EngineOpenSLES.h \
         libs/oboe/src/opensles/OpenSLESUtilities.h \
-        libs/oboe/src/opensles/OutputMixerOpenSLES.h
+        libs/oboe/src/opensles/OutputMixerOpenSLES.h \
+        libs/oboe/samples/LiveEffect/src/main/cpp/FullDuplexStream.h
 
     INCLUDEPATH_OBOE = libs/oboe/include/ \
         libs/oboe/src/

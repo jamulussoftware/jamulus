@@ -30,10 +30,34 @@
 #include "global.h"
 #include <QDebug>
 #include <android/log.h>
+#include "libs/oboe/samples/LiveEffect/src/main/cpp/FullDuplexStream.h"
 
 
 /* Classes ********************************************************************/
-class CSound : public CSoundBase, public oboe::AudioStreamCallback//, public IRenderableAudio, public IRestartable
+class FullDuplexPass : public FullDuplexStream {
+public:
+    virtual oboe::DataCallbackResult
+    onBothStreamsReady ( const void* inputData,
+                         int         numInputFrames,
+                         void*       outputData,
+                         int         numOutputFrames )
+    {
+        size_t bytesPerFrame = this->getOutputStream()->getBytesPerFrame();
+        size_t bytesToWrite  = numInputFrames * bytesPerFrame;
+        size_t byteDiff      = ( numOutputFrames - numInputFrames ) * bytesPerFrame;
+        size_t bytesToZero   = ( byteDiff > 0 ) ? byteDiff : 0;
+
+qInfo() << "bytesToWrite: " << bytesToWrite;
+
+        memcpy ( outputData, inputData, bytesToWrite );
+        memset ( (u_char*) outputData + bytesToWrite, 0, bytesToZero );
+
+        return oboe::DataCallbackResult::Continue;
+    }
+};
+
+
+class CSound : public CSoundBase, public oboe::AudioStreamCallback
 {
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
@@ -64,6 +88,7 @@ private:
     void closeStreams();
     void closeStream ( oboe::ManagedStream& stream );
 
+    FullDuplexPass           mFullDuplexPass;
     oboe::AudioStreamBuilder inBuilder;
     oboe::AudioStreamBuilder outBuilder;
     oboe::ManagedStream      mRecordingStream;

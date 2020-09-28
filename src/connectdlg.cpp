@@ -750,13 +750,14 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         }
 
         // update number of clients text
-        if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
+        if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
+        {
+            // special case: reduced server list
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
+        }
+        else if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
         {
             pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
-        }
-        else if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
-        {
-            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
         }
         else
         {

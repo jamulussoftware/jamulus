@@ -102,6 +102,7 @@ protected:
     QString      strSelectedServerName;
     bool         bShowCompleteRegList;
     bool         bServerListReceived;
+    bool         bReducedServerListReceived;
     bool         bServerListItemWasChosen;
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;

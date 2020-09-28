@@ -30,16 +30,17 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
                            const bool      bNewShowCompleteRegList,
                            QWidget*        parent,
                            Qt::WindowFlags f )
-    : QDialog ( parent, f ),
-      pClient                  ( pNCliP ),
-      strCentralServerAddress  ( "" ),
-      strSelectedAddress       ( "" ),
-      strSelectedServerName    ( "" ),
-      bShowCompleteRegList     ( bNewShowCompleteRegList ),
-      bServerListReceived      ( false ),
-      bServerListItemWasChosen ( false ),
-      bListFilterWasActive     ( false ),
-      bShowAllMusicians        ( true )
+    : QDialog                    ( parent, f ),
+      pClient                    ( pNCliP ),
+      strCentralServerAddress    ( "" ),
+      strSelectedAddress         ( "" ),
+      strSelectedServerName      ( "" ),
+      bShowCompleteRegList       ( bNewShowCompleteRegList ),
+      bServerListReceived        ( false ),
+      bReducedServerListReceived ( false ),
+      bServerListItemWasChosen   ( false ),
+      bListFilterWasActive       ( false ),
+      bShowAllMusicians          ( true )
 {
     setupUi ( this );
 
@@ -216,9 +217,10 @@ void CConnectDlg::showEvent ( QShowEvent* )
 void CConnectDlg::RequestServerList()
 {
     // reset flags
-    bServerListReceived      = false;
-    bServerListItemWasChosen = false;
-    bListFilterWasActive     = false;
+    bServerListReceived        = false;
+    bReducedServerListReceived = false;
+    bServerListItemWasChosen   = false;
+    bListFilterWasActive       = false;
 
     // clear current address and name
     strSelectedAddress    = "";
@@ -270,10 +272,24 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
                                   const CVector<CServerInfo>& vecServerInfo,
                                   const bool                  bIsReducedServerList )
 {
-    // set flag and disable timer for resend server list request if full list
-    // was received (i.e. not the reduced list)
-    if ( !bIsReducedServerList )
+    // special treatment if a reduced server list was received
+    if ( bIsReducedServerList )
     {
+        // make sure we only apply the reduced version list once
+        if ( bReducedServerListReceived )
+        {
+            // do nothing
+            return;
+        }
+        else
+        {
+            bReducedServerListReceived = true;
+        }
+    }
+    else
+    {
+        // set flag and disable timer for resend server list request if full list
+        // was received (i.e. not the reduced list)
         bServerListReceived = true;
         TimerReRequestServList.stop();
     }

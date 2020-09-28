@@ -526,7 +526,10 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
             }
         }
 
-        // send the server list to the client
+        // send the server list to the client, since we do not know that the client
+        // has a UDP fragmentation issue, we send both lists, the reduced and the
+        // normal list after each other
+        pConnLessProtocol->CreateCLRedServerListMes ( InetAddr, vecServerInfo );
         pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
     }
 }

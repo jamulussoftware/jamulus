@@ -432,6 +432,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::CLServerListReceived,
         this, &CClientDlg::OnCLServerListReceived );
 
+    QObject::connect ( pClient, &CClient::CLRedServerListReceived,
+        this, &CClientDlg::OnCLRedServerListReceived );
+
     QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived,
         this, &CClientDlg::OnCLConnClientsListMesReceived );
 

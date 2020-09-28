@@ -267,11 +267,16 @@ void CConnectDlg::OnTimerReRequestServList()
 }
 
 void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
-                                  const CVector<CServerInfo>& vecServerInfo )
+                                  const CVector<CServerInfo>& vecServerInfo,
+                                  const bool                  bIsReducedServerList )
 {
-    // set flag and disable timer for resend server list request
-    bServerListReceived = true;
-    TimerReRequestServList.stop();
+    // set flag and disable timer for resend server list request if full list
+    // was received (i.e. not the reduced list)
+    if ( !bIsReducedServerList )
+    {
+        bServerListReceived = true;
+        TimerReRequestServList.stop();
+    }
 
     // first clear list
     lvwServers->clear();
@@ -747,13 +752,15 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         // update number of clients text
         if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
         {
-            pCurListViewItem->
-                setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
+        }
+        else if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
+        {
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
         }
         else
         {
-            pCurListViewItem->
-                setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
         }
 
         // check if the number of child list items matches the number of

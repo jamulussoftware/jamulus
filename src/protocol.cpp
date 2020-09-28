@@ -338,6 +338,18 @@ CONNECTION LESS MESSAGES
       of the PROTMESSID_CLM_REGISTER_SERVER message is used
 
 
+- PROTMESSID_CLM_RED_SERVER_LIST: Reduced server list message (to have less UDP fragmentation)
+
+    for each registered server append following data:
+
+    +--------------------+------------------------------+ ...
+    | 4 bytes IP address | 2 bytes server internal port | ...
+    +--------------------+------------------------------+ ...
+        ... -----------------+----------------------------------+
+        ...  1 byte number n | n bytes UTF-8 string server name |
+        ... -----------------+----------------------------------+
+
+
 - PROTMESSID_CLM_REQ_SERVER_LIST: Request server list
 
     note: does not have any data -> n = 0
@@ -881,6 +893,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
     case PROTMESSID_CLM_SERVER_LIST:
         EvaluateCLServerListMes ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_RED_SERVER_LIST:
+        EvaluateCLRedServerListMes ( InetAddr, vecbyMesBodyData );
         break;
 
     case PROTMESSID_CLM_REQ_SERVER_LIST:
@@ -2323,6 +2339,103 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
     return false; // no error
 }
 
+void CProtocol::CreateCLRedServerListMes ( const CHostAddress&        InetAddr,
+                                           const CVector<CServerInfo> vecServerInfo )
+{
+    const int iNumServers = vecServerInfo.Size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( 0 );
+    int              iPos = 0; // init position pointer
+
+    for ( int i = 0; i < iNumServers; i++ )
+    {
+        // convert server list strings to utf-8
+        const QByteArray strUTF8Name = vecServerInfo[i].strName.toUtf8();
+
+        // size of current list entry
+        const int iCurListEntrLen =
+            4 /* IP address */ +
+            2 /* port number */ +
+            1 /* name utf-8 string size */ + strUTF8Name.size();
+
+        // make space for new data
+        vecData.Enlarge ( iCurListEntrLen );
+
+        // IP address (4 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> (
+            vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+
+        // port number (2 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
+
+        // name (note that the string length indicator is 1 in this special case)
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name, 1 );
+    }
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_RED_SERVER_LIST,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLRedServerListMes ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData )
+{
+    int                  iPos     = 0; // init position pointer
+    const int            iDataLen = vecData.Size();
+    CVector<CServerInfo> vecServerInfo ( 0 );
+
+    while ( iPos < iDataLen )
+    {
+        // check size (the next 6 bytes)
+        if ( ( iDataLen - iPos ) < 6 )
+        {
+            return true; // return error code
+        }
+
+        // IP address (4 bytes)
+        const quint32 iIpAddr = static_cast<quint32> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // port number (2 bytes)
+        const quint16 iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+        // server name (note that the string length indicator is 1 in this special case)
+        QString strName;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_NAME,
+                                   strName,
+                                   1 ) )
+        {
+            return true; // return error code
+        }
+
+        // add server information to vector
+        vecServerInfo.Add (
+            CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          strName,
+                          QLocale::AnyCountry, // set to any country since the information is not transmitted
+                          "", // empty city name since the information is not transmitted
+                          0, // per definition: if max. num. client is zero, we ignore the value in the server list
+                          false ) ); // assume not permanent since the information is not transmitted
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit CLRedServerListReceived ( InetAddr, vecServerInfo );
+
+    return false; // no error
+}
+
 void CProtocol::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
 {
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_SERVER_LIST,
@@ -2883,21 +2996,22 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn,
                                       int&                    iPos,
                                       const int               iMaxStringLen,
-                                      QString&                strOut )
+                                      QString&                strOut,
+                                      const int               iNumberOfBytsLen )
 {
 /*
     note: iPos is automatically incremented in this function
 */
     const int iInLen = vecIn.Size();
 
-    // check if at least two bytes are available
-    if ( ( iInLen - iPos ) < 2 )
+    // check if at least iNumberOfBytsLen bytes are available
+    if ( ( iInLen - iPos ) < iNumberOfBytsLen )
     {
         return true; // return error code
     }
 
-    // number of bytes for utf-8 string (2 bytes)
-    const int iStrUTF8Len = static_cast<int> ( GetValFromStream ( vecIn, iPos, 2 ) );
+    // number of bytes for utf-8 string (1 or 2 bytes)
+    const int iStrUTF8Len = static_cast<int> ( GetValFromStream ( vecIn, iPos, iNumberOfBytsLen ) );
 
     // (note that iPos was incremented by 2 in the above code!)
     if ( ( iInLen - iPos ) < iStrUTF8Len )
@@ -3034,13 +3148,14 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
 
 void CProtocol::PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
                                         int&              iPos,
-                                        const QByteArray& sStringUTF8 )
+                                        const QByteArray& sStringUTF8,
+                                        const int         iNumberOfBytsLen )
 {
     // get the utf-8 string size
     const int iStrUTF8Len = sStringUTF8.size();
 
-    // number of bytes for utf-8 string (2 bytes)
-    PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( iStrUTF8Len ), 2 );
+    // number of bytes for utf-8 string (iNumberOfBytsLen bytes)
+    PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( iStrUTF8Len ), iNumberOfBytsLen );
 
     // actual utf-8 string (n bytes)
     for ( int j = 0; j < iStrUTF8Len; j++ )

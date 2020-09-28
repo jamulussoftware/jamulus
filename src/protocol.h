@@ -83,6 +83,7 @@
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
+#define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE      2001 // a container for split messages
@@ -144,6 +145,8 @@ public:
                                          const CServerCoreInfo& ServerInfo );
     void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
     void CreateCLServerListMes         ( const CHostAddress&        InetAddr,
+                                         const CVector<CServerInfo> vecServerInfo );
+    void CreateCLRedServerListMes      ( const CHostAddress&        InetAddr,
                                          const CVector<CServerInfo> vecServerInfo );
     void CreateCLReqServerListMes      ( const CHostAddress& InetAddr );
     void CreateCLSendEmptyMesMes       ( const CHostAddress& InetAddr,
@@ -238,7 +241,8 @@ protected:
 
     void PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
                                  int&              iPos,
-                                 const QByteArray& sStringUTF8 );
+                                 const QByteArray& sStringUTF8,
+                                 const int         iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
 
     static uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
                                        int&                    iPos,
@@ -247,7 +251,8 @@ protected:
     bool GetStringFromStream ( const CVector<uint8_t>& vecIn,
                                int&                    iPos,
                                const int               iMaxStringLen,
-                               QString&                strOut );
+                               QString&                strOut,
+                               const int               iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
 
     void SendMessage();
 
@@ -289,6 +294,8 @@ protected:
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
     bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLRedServerListMes      ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerListMes      ( const CHostAddress&     InetAddr );
     bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
@@ -366,6 +373,8 @@ signals:
                                         QString                strVersion );
     void CLUnregisterServerReceived   ( CHostAddress           InetAddr );
     void CLServerListReceived         ( CHostAddress           InetAddr,
+                                        CVector<CServerInfo>   vecServerInfo );
+    void CLRedServerListReceived      ( CHostAddress           InetAddr,
                                         CVector<CServerInfo>   vecServerInfo );
     void CLReqServerList              ( CHostAddress           InetAddr );
     void CLSendEmptyMes               ( CHostAddress           TargetInetAddr );

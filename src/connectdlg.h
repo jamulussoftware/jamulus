@@ -61,7 +61,8 @@ public:
     bool GetShowAllMusicians() { return bShowAllMusicians; }
 
     void SetServerList ( const CHostAddress&         InetAddr,
-                         const CVector<CServerInfo>& vecServerInfo );
+                         const CVector<CServerInfo>& vecServerInfo,
+                         const bool                  bIsReducedServerList = false );
 
     void SetConnClientsList ( const CHostAddress&          InetAddr,
                               const CVector<CChannelInfo>& vecChanInfo );

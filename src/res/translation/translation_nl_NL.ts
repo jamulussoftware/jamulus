@@ -119,7 +119,7 @@
     <message>
         <location filename="../../util.cpp" line="495"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slowaaks</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="502"/>
@@ -543,12 +543,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="136"/>
         <source>Do you want to open the link</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilt u de link openen</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="137"/>
         <source>in an external browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>in een externe browser?</translation>
     </message>
 </context>
 <context>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
         <source>&amp;Clear All Stored Solo Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Wis Alle Opgeslagen Solo-instellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
@@ -2031,7 +2031,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="96"/>
         <source>Server Address</source>
-        <translation type="unfinished">Serveradres</translation>
+        <translation>Serveradres</translation>
     </message>
     <message>
         <source>Server Name/Address</source>
@@ -2099,12 +2099,12 @@
     <message>
         <location filename="../../util.cpp" line="520"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Deze server vereist dat u voorwaarden accepteert voor het verbinen. Lees deze in het chatvenster.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="521"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ik heb de voorwaarden gelezen en &amp;stem in.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="522"/>

@@ -119,7 +119,7 @@
     <message>
         <location filename="../../util.cpp" line="495"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slowakisch</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="502"/>
@@ -799,7 +799,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="194"/>
-        <location filename="../../clientdlg.cpp" line="1121"/>
+        <location filename="../../clientdlg.cpp" line="1126"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Verbinden</translation>
     </message>
@@ -862,18 +862,18 @@
         <translation type="vanished">Keine</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="569"/>
+        <location filename="../../clientdlg.cpp" line="572"/>
         <source>Center</source>
         <translation>Mitte</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="576"/>
+        <location filename="../../clientdlg.cpp" line="579"/>
         <source>R</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="103"/>
-        <location filename="../../clientdlg.cpp" line="582"/>
+        <location filename="../../clientdlg.cpp" line="585"/>
         <source>L</source>
         <translation></translation>
     </message>
@@ -975,31 +975,31 @@
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
         <source>&amp;Clear All Stored Solo Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Lösche alle gespeicherten Solo-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="668"/>
+        <location filename="../../clientdlg.cpp" line="671"/>
         <source>Central Server</source>
         <translation>Zentralserver</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="703"/>
-        <location filename="../../clientdlg.cpp" line="718"/>
+        <location filename="../../clientdlg.cpp" line="706"/>
+        <location filename="../../clientdlg.cpp" line="721"/>
         <source>Select Channel Setup File</source>
         <translation>Auswählen der Datei für die Konfiguration der Mixerkanäle</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="850"/>
+        <location filename="../../clientdlg.cpp" line="855"/>
         <source>user</source>
         <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="854"/>
+        <location filename="../../clientdlg.cpp" line="859"/>
         <source>users</source>
         <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1090"/>
+        <location filename="../../clientdlg.cpp" line="1095"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Trennen</translation>
     </message>
@@ -1898,7 +1898,7 @@
 <context>
     <name>CConnectDlg</name>
     <message>
-        <location filename="../../connectdlg.cpp" line="49"/>
+        <location filename="../../connectdlg.cpp" line="50"/>
         <source>Server List</source>
         <translation>Severliste</translation>
     </message>
@@ -1911,12 +1911,12 @@
         <translation type="vanished">Es kann einen Moment dauern, bis die Serverliste vom Zentralserver empfangen wird. Falls keine gültige Zentralserveradresse in den Einstellungen angegeben ist, kann keine Liste angezeigt werden.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="57"/>
+        <location filename="../../connectdlg.cpp" line="58"/>
         <source>Server list view</source>
         <translation>Serverliste Anzeige</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="60"/>
+        <location filename="../../connectdlg.cpp" line="61"/>
         <source>Server Address</source>
         <translation>Serveradresse</translation>
     </message>
@@ -1933,77 +1933,77 @@
         <translation type="vanished">. Eine Liste der letzten IP-Adressen oder URLs wird gespeichert und kann nachträglich wieder ausgewählt werden.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="49"/>
+        <location filename="../../connectdlg.cpp" line="50"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
         <translation>Die Serverliste zeigt eine Liste von verfügbaren Server, die sich am Zentralserver registriert haben. Markiere einen Server von der Liste und drücke den Knopf Verbinden um eine Verbindung zu dem Server aufzubauen. Alternativ kann man auch den Server in der Liste direkt doppelklicken. Wenn ein Server belegt ist, dann wird eine Liste der verbundenen Musikern angezeigt. Server, die länger online sind (permanente Server) werden in Fettschrift dargestellt.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="60"/>
+        <location filename="../../connectdlg.cpp" line="61"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
         <translation>Die IP-Adresse oder URL des Servers, auf der die Serversoftware läuft wird hier angegeben. Optional kann eine Portnummer angefügt werden. Diese wird hinter der IP-Adresse durch ein Doppelpunkt getrennt angegeben. Beispiel: example.org:</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="65"/>
+        <location filename="../../connectdlg.cpp" line="66"/>
         <source>. The field will also show a list of the most recently used server addresses.</source>
         <translation>. Eine Liste der letzten IP-Adressen oder URLs wird gespeichert und kann nachträglich wieder ausgewählt werden.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="71"/>
+        <location filename="../../connectdlg.cpp" line="72"/>
         <source>Server address edit box</source>
         <translation>Serveradresse Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="72"/>
+        <location filename="../../connectdlg.cpp" line="73"/>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
         <translation>Enthält die aktuelle Server-IP-Adresse oder URL. Es speichert auch alte URLs in der Auswahlliste.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="84"/>
+        <location filename="../../connectdlg.cpp" line="85"/>
         <source>Server List Selection</source>
         <translation>Serverlistenauswahl</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="84"/>
+        <location filename="../../connectdlg.cpp" line="85"/>
         <source>Selects the server list to be shown.</source>
         <translation>Wählt die Serverliste aus, die angezeigt werden soll.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="86"/>
+        <location filename="../../connectdlg.cpp" line="87"/>
         <source>Server list selection combo box</source>
         <translation>Severlistenauswahl Selektion</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="89"/>
+        <location filename="../../connectdlg.cpp" line="90"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="89"/>
+        <location filename="../../connectdlg.cpp" line="90"/>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
         <translation>Die Serverliste kann mit dem eingegebenen Text gefiltert werden, d.h. es werden nur Einträge angezeigt, die dem Filtertext entsprechen. Die Groß- und Kleinschreibung des Filtertexts wird dabei nicht beachtet.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="91"/>
+        <location filename="../../connectdlg.cpp" line="92"/>
         <source>Filter edit box</source>
         <translation>Filtereingabefeld</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="94"/>
+        <location filename="../../connectdlg.cpp" line="95"/>
         <source>Show All Musicians</source>
         <translation>Zeige alle Musiker</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="94"/>
+        <location filename="../../connectdlg.cpp" line="95"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
         <translation>Ist diese Einstellung angehakt, dann werden alle Musiker auf allen Servern angezeigt. Wird der Haken entfernt, dann werden alle Listeneinträge eingeklappt und die verbundenen Musikernamen werden verborgen.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="97"/>
+        <location filename="../../connectdlg.cpp" line="98"/>
         <source>Show all musicians check box</source>
         <translation>Zeige alle Musiker Schalter</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="147"/>
+        <location filename="../../connectdlg.cpp" line="148"/>
         <source>Type # for occupied servers</source>
         <translation># eingeben für belegte Server</translation>
     </message>
@@ -2117,12 +2117,12 @@
     <message>
         <location filename="../../util.cpp" line="520"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieser Server verlangt, dass man Bedingungen akzeptiert, bevor man sich verbinden kann. Bitte ließ die Bedingungen im Chat-Fenster.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="521"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ich h&amp;abe die Bedingungen gelesen und ich stimme zu.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="522"/>

@@ -641,7 +641,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="103"/>
-        <location filename="../../clientdlg.cpp" line="582"/>
+        <location filename="../../clientdlg.cpp" line="585"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -863,7 +863,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="194"/>
-        <location filename="../../clientdlg.cpp" line="1121"/>
+        <location filename="../../clientdlg.cpp" line="1126"/>
         <source>C&amp;onnect</source>
         <translation>C&amp;onnect</translation>
     </message>
@@ -952,38 +952,38 @@
         <translation type="vanished">Geen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="569"/>
+        <location filename="../../clientdlg.cpp" line="572"/>
         <source>Center</source>
         <translation>Centrum</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="576"/>
+        <location filename="../../clientdlg.cpp" line="579"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="668"/>
+        <location filename="../../clientdlg.cpp" line="671"/>
         <source>Central Server</source>
         <translation>Centrale Server</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="703"/>
-        <location filename="../../clientdlg.cpp" line="718"/>
+        <location filename="../../clientdlg.cpp" line="706"/>
+        <location filename="../../clientdlg.cpp" line="721"/>
         <source>Select Channel Setup File</source>
         <translation>Selecteer bestand met Kanaalinstellingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="850"/>
+        <location filename="../../clientdlg.cpp" line="855"/>
         <source>user</source>
         <translation>gebruiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="854"/>
+        <location filename="../../clientdlg.cpp" line="859"/>
         <source>users</source>
         <translation>gebruikers</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1090"/>
+        <location filename="../../clientdlg.cpp" line="1095"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Afmelden</translation>
     </message>
@@ -1866,7 +1866,7 @@
 <context>
     <name>CConnectDlg</name>
     <message>
-        <location filename="../../connectdlg.cpp" line="49"/>
+        <location filename="../../connectdlg.cpp" line="50"/>
         <source>Server List</source>
         <translation>Serverlijst</translation>
     </message>
@@ -1879,12 +1879,12 @@
         <translation type="vanished">Merk op dat het enige tijd kan duren om de serverlijst op te halen van de centrale server. Als er geen geldig centraal serveradres is opgegeven in de instellingen, zal er geen serverlijst beschikbaar zijn.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="57"/>
+        <location filename="../../connectdlg.cpp" line="58"/>
         <source>Server list view</source>
         <translation>Serverlijstweergave</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="60"/>
+        <location filename="../../connectdlg.cpp" line="61"/>
         <source>Server Address</source>
         <translation>Serveradres</translation>
     </message>
@@ -1901,77 +1901,77 @@
         <translation type="vanished">. Een lijst met de meest recent gebruikte server-IP-adressen of URL&apos;s is beschikbaar voor selectie.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="49"/>
+        <location filename="../../connectdlg.cpp" line="50"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
         <translation>De serverlijst toont een lijst van beschikbare servers die op de centrale server zijn geregistreerd. Selecteer een server uit de lijst en druk op de verbindingsknop om verbinding te maken met deze server. U kunt ook dubbelklikken op een server uit de lijst om verbinding te maken met deze server. Als een server bezet is, is een lijst van de verbonden muzikanten beschikbaar door het lijstitem uit te breiden. Permanente servers worden vetgedrukt weergegeven.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="60"/>
+        <location filename="../../connectdlg.cpp" line="61"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
         <translation>Het IP-adres of de URL van de server kan bij Servernaam/Adres worden ingevoerd. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, b.v. example.org:</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="65"/>
+        <location filename="../../connectdlg.cpp" line="66"/>
         <source>. The field will also show a list of the most recently used server addresses.</source>
         <translation>. Het veld toont ook een lijst met de laatstgebruikte serveradressen.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="71"/>
+        <location filename="../../connectdlg.cpp" line="72"/>
         <source>Server address edit box</source>
         <translation>Serveradres bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="72"/>
+        <location filename="../../connectdlg.cpp" line="73"/>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
         <translation>Bevat het huidige server-IP-adres of de URL. Het slaat ook oude URL&apos;s op in de comboboxlijst.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="84"/>
+        <location filename="../../connectdlg.cpp" line="85"/>
         <source>Server List Selection</source>
         <translation>Serverlijstselectie</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="84"/>
+        <location filename="../../connectdlg.cpp" line="85"/>
         <source>Selects the server list to be shown.</source>
         <translation>Selecteert de te tonen serverlijst.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="86"/>
+        <location filename="../../connectdlg.cpp" line="87"/>
         <source>Server list selection combo box</source>
         <translation>Serverlijstselectie combobox</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="89"/>
+        <location filename="../../connectdlg.cpp" line="90"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="89"/>
+        <location filename="../../connectdlg.cpp" line="90"/>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
         <translation>De serverlijst wordt gefilterd met de gegeven tekst. Merk op dat het filter ongevoelig is voor hoofdletters.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="91"/>
+        <location filename="../../connectdlg.cpp" line="92"/>
         <source>Filter edit box</source>
         <translation>Filter bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="94"/>
+        <location filename="../../connectdlg.cpp" line="95"/>
         <source>Show All Musicians</source>
         <translation>Toon alle muzikanten</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="94"/>
+        <location filename="../../connectdlg.cpp" line="95"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
         <translation>Als u dit selectievakje aanvinkt, worden de muzikanten van alle servers getoond. Als u het selectievakje uitvinkt, worden alle items van de lijstweergave samengevouwen.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="97"/>
+        <location filename="../../connectdlg.cpp" line="98"/>
         <source>Show all musicians check box</source>
         <translation>Toon alle muzikanten checkbox</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="147"/>
+        <location filename="../../connectdlg.cpp" line="148"/>
         <source>Type # for occupied servers</source>
         <translation>Typ # voor bezette servers</translation>
     </message>

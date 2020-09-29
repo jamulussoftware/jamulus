@@ -33,6 +33,7 @@
 #include <QLayout>
 #include <QAccessible>
 #include <QDesktopServices>
+#include <QMessageBox>
 #include "global.h"
 #include "ui_chatdlgbase.h"
 

@@ -580,8 +580,9 @@ bool CSound::CheckSampleTypeSupported ( const ASIOSampleType SamType )
         ( SamType == ASIOSTInt32MSB24 ) );
 }
 
+// Might want to comment that use of double in factors below avoids nasty conversion surprises
 static constexpr double FACTOR16     = 32767.0;
-static constexpr double FACTOR16_INV = 1.0 / 32767.0;
+static constexpr double FACTOR16_INV = 1.0 / 32768.0; // Notice diff in last digit from other factor, ala Port Audio
 
 struct sample16LSB
 {
@@ -618,8 +619,9 @@ struct sample16MSB
     }
 };
 
+// Might want to comment that use of double in factors below avoids nasty conversion surprises
 static constexpr double FACTOR24     = 2147483647.0;
-static constexpr double FACTOR24_INV = 1.0 / 2147483647.0;
+static constexpr double FACTOR24_INV = 1.0 / 2147483648.0; // Notice diff in last digit from other factor, ala Port Audio
 
 struct sample24LSB
 {
@@ -663,8 +665,9 @@ struct sample24MSB
     }
 };
 
+// Might want to comment that use of double in factors below avoids nasty conversion surprises.
 static constexpr double FACTOR32     = 2147483647.0;
-static constexpr double FACTOR32_INV = 1.0 / 2147483647.0;
+static constexpr double FACTOR32_INV = 1.0 / 2147483648.0; // Notice diff in last digit from other factor, ala Port Audio
 
 struct sample32LSB
 {

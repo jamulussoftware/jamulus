@@ -566,6 +566,16 @@
         <translatorcomment>Didn&apos;t include &quot;de Mensagens&quot; in order to  keep the menu a bit shorter.</translatorcomment>
         <translation>&amp;Limpar Histórico</translation>
     </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="136"/>
+        <source>Do you want to open the link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="137"/>
+        <source>in an external browser?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CChatDlgBase</name>

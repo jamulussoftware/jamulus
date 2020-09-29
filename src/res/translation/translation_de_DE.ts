@@ -544,6 +544,16 @@
         <source>Cl&amp;ear Chat History</source>
         <translation>Lösch&amp;en des Chatverlaufs</translation>
     </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="136"/>
+        <source>Do you want to open the link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="137"/>
+        <source>in an external browser?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CChatDlgBase</name>

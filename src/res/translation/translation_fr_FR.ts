@@ -123,7 +123,7 @@
     <message>
         <location filename="../../util.cpp" line="495"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovaque</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="502"/>
@@ -991,7 +991,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
         <source>&amp;Clear All Stored Solo Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Effa&amp;cer tous les paramètres de solo enregistrés</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="668"/>
@@ -2073,7 +2073,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="96"/>
         <source>Server Address</source>
-        <translation type="unfinished">Adresse du serveur</translation>
+        <translation>Adresse du serveur</translation>
     </message>
     <message>
         <source>Server Name/Address</source>
@@ -2141,12 +2141,12 @@
     <message>
         <location filename="../../util.cpp" line="520"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce serveur exige que vous acceptiez des conditions avant de pouvoir le rejoindre. Veuillez les lire dans la fenêtre de tchate.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="521"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>J'ai lu les conditions et les &amp;accepte.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="522"/>

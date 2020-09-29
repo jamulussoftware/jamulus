@@ -119,7 +119,7 @@
     <message>
         <location filename="../../util.cpp" line="495"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovacco</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="502"/>
@@ -267,7 +267,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="262"/>
         <source>Grp</source>
-        <translation>Rag</translation>
+        <translation>Grp</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="136"/>
@@ -478,7 +478,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="805"/>
         <source>Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Alias</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="771"/>
@@ -878,7 +878,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="230"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuova versione disponibile</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="244"/>
@@ -918,7 +918,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
         <source>&amp;Clear All Stored Solo Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ripristina i canali settati in &quot;Solo&quot;</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
@@ -1075,12 +1075,12 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="551"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation type="unfinished"></translation>
+        <translation>Muto (gli altri non possono sentirti)</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="574"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlla Aggiornamenti</translation>
     </message>
 </context>
 <context>
@@ -1981,7 +1981,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="147"/>
         <source>Type # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci # per i server con persone</translation>
     </message>
 </context>
 <context>
@@ -2029,7 +2029,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="96"/>
         <source>Server Address</source>
-        <translation type="unfinished">Indirizzo del Server</translation>
+        <translation>Indirizzo del Server</translation>
     </message>
     <message>
         <source>Server Name/Address</source>
@@ -2097,12 +2097,12 @@
     <message>
         <location filename="../../util.cpp" line="520"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server richiede che tu accetti le condizioni prima di accedere. Leggi il regolamento nella finestra di chat.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="521"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ho letto ed &amp;accetto.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="522"/>
@@ -2188,17 +2188,17 @@
     <message>
         <location filename="../../multicolorled.cpp" line="75"/>
         <source>Red</source>
-        <translation type="unfinished">Rosso</translation>
+        <translation>Rosso</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="85"/>
         <source>Yellow</source>
-        <translation type="unfinished">Giallo</translation>
+        <translation>Giallo</translation>
     </message>
     <message>
         <location filename="../../multicolorled.cpp" line="95"/>
         <source>Green</source>
-        <translation type="unfinished">Verde</translation>
+        <translation>Verde</translation>
     </message>
 </context>
 <context>
@@ -2849,7 +2849,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="338"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>Disponibile Aggiornamento</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="804"/>
@@ -3037,7 +3037,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="288"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlla Aggiornamenti</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="68"/>

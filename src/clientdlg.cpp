@@ -762,7 +762,9 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
 #if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) ) && !defined ( DISABLE_VERSION_CHECK )
     if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
     {
+        // show the label and hide it after one minute again
         lblUpdateCheck->show();
+        QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
     }
 #endif
 

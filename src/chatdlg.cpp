@@ -133,8 +133,8 @@ void CChatDlg::OnAnchorClicked ( const QUrl& Url )
     // only allow https URLs to be opened in an external browser
     if ( Url.scheme() == QLatin1String ( "https" ) )
     {
-        if ( QMessageBox::question ( this, APP_NAME, "Do you want to open the link <b>" + Url.toString() +
-                                     "</b> in an external browser?", QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
+        if ( QMessageBox::question ( this, APP_NAME, tr ( "Do you want to open the link" ) + " <b>" + Url.toString() +
+                                     "</b> " + tr ( "in an external browser?" ), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
         {
             QDesktopServices::openUrl ( Url );
         }

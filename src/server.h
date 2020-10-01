@@ -320,7 +320,6 @@ protected:
 
     // variables needed for multithreading support
     bool                      bUseMultithreading;
-    QFutureSynchronizer<void> FutureSynchronizer;
 
     bool CreateLevelsForAllConChannels  ( const int                        iNumClients,
                                           const CVector<int>&              vecNumAudioChannels,

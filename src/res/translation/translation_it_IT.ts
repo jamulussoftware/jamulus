@@ -436,7 +436,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="231"/>
         <source>GRP</source>
-        <translation>RAG</translation>
+        <translation type="unfinished">GRP</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="244"/>

@@ -78,6 +78,9 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 
     QObject::connect ( butSend, &QPushButton::clicked,
         this, &CChatDlg::OnSendText );
+
+    QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked,
+        this, &CChatDlg::OnAnchorClicked );
 }
 
 void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
@@ -123,4 +126,17 @@ void CChatDlg::AddChatText ( QString strChatText )
 
     // add new text in chat window
     txvChatWindow->append ( strChatText );
+}
+
+void CChatDlg::OnAnchorClicked ( const QUrl& Url )
+{
+    // only allow https URLs to be opened in an external browser
+    if ( Url.scheme() == QLatin1String ( "https" ) )
+    {
+        if ( QMessageBox::question ( this, APP_NAME, tr ( "Do you want to open the link" ) + " <b>" + Url.toString() +
+                                     "</b> " + tr ( "in an external browser?" ), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
+        {
+            QDesktopServices::openUrl ( Url );
+        }
+    }
 }

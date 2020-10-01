@@ -35,12 +35,12 @@
      <property name="textInteractionFlags">
       <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
      </property>
-     <property name="openLinks">
-      <bool>true</bool>
-     </property>
      <property name="openExternalLinks">
-      <bool>true</bool>
-     </property> 
+      <bool>false</bool>
+     </property>
+     <property name="openLinks">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item>

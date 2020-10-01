@@ -24,11 +24,12 @@
   to the text in the chat window?" so that a licence text must now be given in the
   server welcome message (#587, #367, #81)
 
+- added a protocol message for a reduced server list to improve the situation caused
+  by UDP packet fragmentation (#631, #255)
 
+- added translation: Slovak by jose1711 (#635)
 
-TODO segmentation fault (server 3.5.11) (#618)
-
-TODO fix outstanding security issues with the hyperlink support in the chat window (#620)
+- bug fix: crash when using the jam recorder in the server, coded by pljones (#618)
 
 
 

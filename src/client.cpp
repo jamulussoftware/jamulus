@@ -157,6 +157,9 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLServerListReceived,
         this, &CClient::CLServerListReceived );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived,
+        this, &CClient::CLRedServerListReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived,
         this, &CClient::CLConnClientsListMesReceived );
 

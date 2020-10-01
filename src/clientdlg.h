@@ -201,6 +201,10 @@ public slots:
                                   CVector<CServerInfo> vecServerInfo )
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
 
+    void OnCLRedServerListReceived ( CHostAddress         InetAddr,
+                                     CVector<CServerInfo> vecServerInfo )
+        { ConnectDlg.SetServerList ( InetAddr, vecServerInfo, true ); }
+
     void OnCLConnClientsListMesReceived ( CHostAddress          InetAddr,
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }

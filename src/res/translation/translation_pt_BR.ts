@@ -123,7 +123,7 @@
     <message>
         <location filename="../../util.cpp" line="495"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Eslovaco</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="502"/>
@@ -569,12 +569,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="136"/>
         <source>Do you want to open the link</source>
-        <translation type="unfinished"></translation>
+        <translation>Você quer abrir o link</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="137"/>
         <source>in an external browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>em um navegador externo?</translation>
     </message>
 </context>
 <context>
@@ -999,7 +999,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
         <source>&amp;Clear All Stored Solo Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Limpar Todos Ajustes de Solo Armazenados</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="671"/>
@@ -2130,12 +2130,12 @@
     <message>
         <location filename="../../util.cpp" line="520"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este servidor requer que você aceite as condições antes de entrar. Por favor leia-as na janela de chat.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="521"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Li as condições e &amp;concordo.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="522"/>

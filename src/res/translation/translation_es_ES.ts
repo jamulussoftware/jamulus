@@ -2151,7 +2151,7 @@
     <message>
         <location filename="../../util.cpp" line="520"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation>Este servidor requiere que aceptes ciertas condiciones antes de unirte. Por favor léelas en la ventana de chat.</translation>
+        <translation>Este servidor requiere que aceptes ciertas condiciones antes de unirte. Por favor léelas en la ventana del chat.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="521"/>

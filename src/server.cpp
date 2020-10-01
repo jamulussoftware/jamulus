@@ -690,6 +690,7 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
     if ( iCurChanID != INVALID_CHANNEL_ID )
     {
         vecChannels[iCurChanID].Disconnect();
+        hashChannelIndex.remove(InetAddr);
     }
 }
 
@@ -1437,21 +1438,8 @@ int CServer::GetNumberOfConnectedClients()
 
 int CServer::FindChannel ( const CHostAddress& CheckAddr )
 {
-    CHostAddress InetAddr;
-
-    // check for all possible channels if IP is already in use
-    for ( int i = 0; i < iMaxNumChannels; i++ )
-    {
-        // the "GetAddress" gives a valid address and returns true if the
-        // channel is connected
-        if ( vecChannels[i].GetAddress ( InetAddr ) )
-        {
-            // IP found, return channel number
-            if ( InetAddr == CheckAddr )
-            {
-                return i;
-            }
-        }
+    if (hashChannelIndex.contains(CheckAddr)) {
+        return hashChannelIndex[CheckAddr];
     }
 
     // IP not found, return invalid ID
@@ -1549,6 +1537,8 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
         {
             // in case we have a new connection return this information
             bNewConnection = true;
+            // also remember in the index
+            hashChannelIndex[HostAdr] = iCurChanID;
         }
     }
 

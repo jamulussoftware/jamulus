@@ -834,6 +834,10 @@ public:
     quint16      iPort;
 };
 
+inline uint qHash(const CHostAddress& adr, uint seed) {
+    return qHash(adr.InetAddr, seed) + qHash(adr.iPort, seed);
+}
+
 
 // Instrument picture data base ------------------------------------------------
 // this is a pure static class

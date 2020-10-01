@@ -330,6 +330,7 @@ protected:
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel                   vecChannels[MAX_NUM_CHANNELS];
+    QHash<CHostAddress,int>    hashChannelIndex;
     int                        iMaxNumChannels;
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;

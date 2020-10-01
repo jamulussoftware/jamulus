@@ -1037,9 +1037,13 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // processing with multithreading
         if ( bUseMultithreading )
         {
+            // make sure all concurrent run threads from prior call have finished before we start again
+            FutureSynchronizer.waitForFinished();
+            FutureSynchronizer.clearFutures();
+
             // Each thread must complete within the 1 or 2ms time budget for the timer.
-            const int iMaximumMixOpsInTimeBudget = 500;  // Approximate limit as observed on GCP e2-standard instance
-                                                         // TODO - determine at startup by running a small benchmark
+            const int iMaximumMixOpsInTimeBudget = 1800;  // Approximate limit as observed on GCP e2-standard instance
+                                                          // TODO - determine at startup by running a small benchmark
             const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
             const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iMTBlockSize ) );
 
@@ -1060,10 +1064,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                    iNumClients,
                                                                    iChannelDataPage ) );
             }
-
-            // make sure all concurrent run threads have finished when we leave this function
-            FutureSynchronizer.waitForFinished();
-            FutureSynchronizer.clearFutures();
         }
     }
     else

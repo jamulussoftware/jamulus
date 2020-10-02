@@ -844,22 +844,22 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                    iStartChanCnt,
                                                                    iStopChanCnt,
                                                                    iNumClients,
-                                                                   iChannelDataPage,
-                                                                   bUpdateChannelLevels ) );
+                                                                   iChannelDataPage ) );
             }
 
             // make sure all concurrent run threads have finished before we continue to mixing
             DecodeFutureSynchronizer.waitForFinished();
-            QList<QFuture<bool> > list = DecodeFutureSynchronizer.futures();
+            QList<QFuture<unsigned short> > list = DecodeFutureSynchronizer.futures();
             for (int i = 0; i < list.size(); i++) {
-                bChannelIsNowDisconnected = list[i].result();
-                if (bChannelIsNowDisconnected) {
-                    break;
-                }
+                unsigned short bitfield = list[i].result();
+                bChannelIsNowDisconnected = bChannelIsNowDisconnected || (bitfield & 0x2);
+                bUpdateChannelLevels = bUpdateChannelLevels || (bitfield & 0x1);
             }
             DecodeFutureSynchronizer.clearFutures();
         } else {
-            bChannelIsNowDisconnected = DecodeDataBlocks(0, iNumClients, iNumClients, iChannelDataPage, bUpdateChannelLevels);
+            unsigned short bitfield = DecodeDataBlocks(0, iNumClients, iNumClients, iChannelDataPage );
+            bChannelIsNowDisconnected = bitfield & 0x2;
+            bUpdateChannelLevels = bitfield & 0x1;
         }
 
         // a channel is now disconnected, take action on it
@@ -961,13 +961,13 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     Q_UNUSED ( iUnused )
 }
 
-bool CServer::DecodeDataBlocks ( const int iStartChanCnt,
+unsigned short CServer::DecodeDataBlocks ( const int iStartChanCnt,
                                  const int iStopChanCnt,
                                  const int iNumClients,
-                                 const int page,
-                                 bool& bUpdateChannelLevels)
+                                 const int page )
 {
     bool bChannelIsNowDisconnected = false;
+    bool bUpdateChannelLevels = false;
 
     int iUnused;
     CVector<CurrentChannelData>& vecCurrentChannelData(vecvecCurrentChannelData[page]);
@@ -1127,7 +1127,7 @@ bool CServer::DecodeDataBlocks ( const int iStartChanCnt,
 
     Q_UNUSED ( iUnused )
 
-    return bChannelIsNowDisconnected;
+    return (bChannelIsNowDisconnected << 1) | bUpdateChannelLevels;
 }
 
 void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,

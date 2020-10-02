@@ -809,6 +809,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     // afterwards!
     Mutex.lock();
     {
+        // TODO this could be managed when channels change state rather than in the performance loop
         // first, get number and IDs of connected channels
         for ( int i = 0; i < iMaxNumChannels; i++ )
         {
@@ -824,157 +825,41 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         }
 
         // process connected channels
-        for ( int i = 0; i < iNumClients; i++ )
-        {
-            int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
-            OpusCustomDecoder* CurOpusDecoder;
-            unsigned char*     pCurCodedData;
+        if (bUseMultithreading) {
+            const int iDBlockSize = 20;
+            const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iDBlockSize ) );
 
-            CurrentChannelData& currentChan(vecCurrentChannelData[i]);
-
-            // get and store number of audio channels and compression type
-            currentChan.iNumAudioChannels = vecChannels[currentChan.iChanID].GetNumAudioChannels();
-            currentChan.eAudioComprType   = vecChannels[currentChan.iChanID].GetAudioCompressionType();
-
-            // get info about required frame size conversion properties
-            currentChan.iUseDoubleSysFraSizeConvBuf = ( !bUseDoubleSystemFrameSize && ( currentChan.eAudioComprType == CT_OPUS ) );
-
-            if ( bUseDoubleSystemFrameSize && ( currentChan.eAudioComprType == CT_OPUS64 ) )
+            for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
-                currentChan.iNumFrameSizeConvBlocks = 2;
-            }
-            else
-            {
-                currentChan.iNumFrameSizeConvBlocks = 1;
-            }
+                // Generate a separate mix for each channel, OPUS encode the
+                // audio data and transmit the network packet. The work is
+                // distributed over all available processor cores.
+                // By using the future synchronizer we make sure that all
+                // threads are done when we leave the timer callback function.
+                const int iStartChanCnt = iBlockCnt * iDBlockSize;
+                const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iDBlockSize - 1, iNumClients - 1 );
 
-            // update conversion buffer size (nothing will happen if the size stays the same)
-            if ( currentChan.iUseDoubleSysFraSizeConvBuf )
-            {
-                DoubleFrameSizeConvBufIn[currentChan.iChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
-                DoubleFrameSizeConvBufOut[currentChan.iChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
+                DecodeFutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                                                                   &CServer::DecodeDataBlocks,
+                                                                   iStartChanCnt,
+                                                                   iStopChanCnt,
+                                                                   iNumClients,
+                                                                   iChannelDataPage,
+                                                                   bUpdateChannelLevels ) );
             }
 
-            // select the opus decoder and raw audio frame length
-            if ( currentChan.eAudioComprType == CT_OPUS )
-            {
-                iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
-
-                if ( currentChan.iNumAudioChannels == 1 )
-                {
-                    CurOpusDecoder = OpusDecoderMono[currentChan.iChanID];
-                }
-                else
-                {
-                    CurOpusDecoder = OpusDecoderStereo[currentChan.iChanID];
+            // make sure all concurrent run threads have finished before we continue to mixing
+            DecodeFutureSynchronizer.waitForFinished();
+            QList<QFuture<bool> > list = DecodeFutureSynchronizer.futures();
+            for (int i = 0; i < list.size(); i++) {
+                bChannelIsNowDisconnected = list[i].result();
+                if (bChannelIsNowDisconnected) {
+                    break;
                 }
             }
-            else if ( currentChan.eAudioComprType == CT_OPUS64 )
-            {
-                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
-
-                if ( currentChan.iNumAudioChannels == 1 )
-                {
-                    CurOpusDecoder = Opus64DecoderMono[currentChan.iChanID];
-                }
-                else
-                {
-                    CurOpusDecoder = Opus64DecoderStereo[currentChan.iChanID];
-                }
-            }
-            else
-            {
-                CurOpusDecoder = nullptr;
-            }
-
-            // get gains of all connected channels
-            for ( int j = 0; j < iNumClients; j++ )
-            {
-                // The second index of "vecvecdGains" does not represent
-                // the channel ID! Therefore we have to use
-                // "vecCurrentChannelData" to query the IDs of the currently
-                // connected channels
-                currentChan.vecdGains[j] = vecChannels[currentChan.iChanID].GetGain ( vecCurrentChannelData[j].iChanID );
-
-                // consider audio fade-in
-                currentChan.vecdGains[j] *= vecChannels[vecCurrentChannelData[j].iChanID].GetFadeInGain();
-
-                // use the fade in of the current channel for all other connected clients
-                // as well to avoid the client volumes are at 100% when joining a server (#628)
-                if ( j != i )
-                {
-                    currentChan.vecdGains[j] *= vecChannels[currentChan.iChanID].GetFadeInGain();
-                }
-
-                // panning
-                currentChan.vecdPannings[j] = vecChannels[currentChan.iChanID].GetPan ( vecCurrentChannelData[j].iChanID );
-            }
-
-            // flag for updating channel levels (if at least one clients wants it)
-            if ( vecChannels[currentChan.iChanID].ChannelLevelsRequired() )
-            {
-                bUpdateChannelLevels = true;
-            }
-
-            // If the server frame size is smaller than the received OPUS frame size, we need a conversion
-            // buffer which stores the large buffer.
-            // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
-            // is false and the Get() function is not called at all. Therefore if the buffer is not needed
-            // we do not spend any time in the function but go directly inside the if condition.
-            if ( ( currentChan.iUseDoubleSysFraSizeConvBuf == 0 ) ||
-                 !DoubleFrameSizeConvBufIn[currentChan.iChanID].Get ( currentChan.vecsData, SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels ) )
-            {
-                // get current number of OPUS coded bytes
-                const int iCeltNumCodedBytes = vecChannels[currentChan.iChanID].GetNetwFrameSize();
-
-                for ( int iB = 0; iB < currentChan.iNumFrameSizeConvBlocks; iB++ )
-                {
-                    // get data
-                    const EGetDataStat eGetStat = vecChannels[currentChan.iChanID].GetData ( currentChan.vecbyCodedDataIn, iCeltNumCodedBytes );
-
-                    // if channel was just disconnected, set flag that connected
-                    // client list is sent to all other clients
-                    // and emit the client disconnected signal
-                    if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
-                    {
-                        if ( JamController.GetRecordingEnabled() )
-                        {
-                            emit ClientDisconnected ( currentChan.iChanID ); // TODO do this outside the mutex lock?
-                        }
-
-                        bChannelIsNowDisconnected = true;
-                    }
-
-                    // get pointer to coded data
-                    if ( eGetStat == GS_BUFFER_OK )
-                    {
-                        pCurCodedData = &currentChan.vecbyCodedDataIn[0];
-                    }
-                    else
-                    {
-                        // for lost packets use null pointer as coded input data
-                        pCurCodedData = nullptr;
-                    }
-
-                    // OPUS decode received data stream
-                    if ( CurOpusDecoder != nullptr )
-                    {
-                        iUnused = opus_custom_decode ( CurOpusDecoder,
-                                                       pCurCodedData,
-                                                       iCeltNumCodedBytes,
-                                                       &currentChan.vecsData[iB * SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels],
-                                                       iClientFrameSizeSamples );
-                    }
-                }
-
-                // a new large frame is ready, if the conversion buffer is required, put it in the buffer
-                // and read out the small frame size immediately for further processing
-                if ( currentChan.iUseDoubleSysFraSizeConvBuf != 0 )
-                {
-                    DoubleFrameSizeConvBufIn[currentChan.iChanID].PutAll ( currentChan.vecsData );
-                    DoubleFrameSizeConvBufIn[currentChan.iChanID].Get ( currentChan.vecsData, SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
-                }
-            }
+            DecodeFutureSynchronizer.clearFutures();
+        } else {
+            bChannelIsNowDisconnected = DecodeDataBlocks(0, iNumClients, iNumClients, iChannelDataPage, bUpdateChannelLevels);
         }
 
         // a channel is now disconnected, take action on it
@@ -1038,11 +923,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         if ( bUseMultithreading )
         {
             // make sure all concurrent run threads from prior call have finished before we start again
-            FutureSynchronizer.waitForFinished();
-            FutureSynchronizer.clearFutures();
+            MixFutureSynchronizer.waitForFinished();
+            MixFutureSynchronizer.clearFutures();
 
             // Each thread must complete within the 1 or 2ms time budget for the timer.
-            const int iMaximumMixOpsInTimeBudget = 1800;  // Approximate limit as observed on GCP e2-standard instance
+            const int iMaximumMixOpsInTimeBudget = 900;  // Approximate limit as observed on GCP e2-standard instance
                                                           // TODO - determine at startup by running a small benchmark
             const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
             const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iMTBlockSize ) );
@@ -1057,7 +942,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 const int iStartChanCnt = iBlockCnt * iMTBlockSize;
                 const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
-                FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                MixFutureSynchronizer.addFuture ( QtConcurrent::run ( this,
                                                                    &CServer::MixEncodeTransmitDataBlocks,
                                                                    iStartChanCnt,
                                                                    iStopChanCnt,
@@ -1076,10 +961,179 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     Q_UNUSED ( iUnused )
 }
 
+bool CServer::DecodeDataBlocks ( const int iStartChanCnt,
+                                 const int iStopChanCnt,
+                                 const int iNumClients,
+                                 const int page,
+                                 bool& bUpdateChannelLevels)
+{
+    bool bChannelIsNowDisconnected = false;
+
+    int iUnused;
+    CVector<CurrentChannelData>& vecCurrentChannelData(vecvecCurrentChannelData[page]);
+
+    for ( int i = iStartChanCnt; i <= iStopChanCnt; i++ )
+    {
+        int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
+        OpusCustomDecoder* CurOpusDecoder;
+        unsigned char*     pCurCodedData;
+
+        CurrentChannelData& currentChan(vecCurrentChannelData[i]);
+
+        // get and store number of audio channels and compression type
+        currentChan.iNumAudioChannels = vecChannels[currentChan.iChanID].GetNumAudioChannels();
+        currentChan.eAudioComprType   = vecChannels[currentChan.iChanID].GetAudioCompressionType();
+
+        // get info about required frame size conversion properties
+        currentChan.iUseDoubleSysFraSizeConvBuf = ( !bUseDoubleSystemFrameSize && ( currentChan.eAudioComprType == CT_OPUS ) );
+
+        if ( bUseDoubleSystemFrameSize && ( currentChan.eAudioComprType == CT_OPUS64 ) )
+        {
+            currentChan.iNumFrameSizeConvBlocks = 2;
+        }
+        else
+        {
+            currentChan.iNumFrameSizeConvBlocks = 1;
+        }
+
+        // update conversion buffer size (nothing will happen if the size stays the same)
+        if ( currentChan.iUseDoubleSysFraSizeConvBuf )
+        {
+            DoubleFrameSizeConvBufIn[currentChan.iChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
+            DoubleFrameSizeConvBufOut[currentChan.iChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
+        }
+
+        // select the opus decoder and raw audio frame length
+        if ( currentChan.eAudioComprType == CT_OPUS )
+        {
+            iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+
+            if ( currentChan.iNumAudioChannels == 1 )
+            {
+                CurOpusDecoder = OpusDecoderMono[currentChan.iChanID];
+            }
+            else
+            {
+                CurOpusDecoder = OpusDecoderStereo[currentChan.iChanID];
+            }
+        }
+        else if ( currentChan.eAudioComprType == CT_OPUS64 )
+        {
+            iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
+
+            if ( currentChan.iNumAudioChannels == 1 )
+            {
+                CurOpusDecoder = Opus64DecoderMono[currentChan.iChanID];
+            }
+            else
+            {
+                CurOpusDecoder = Opus64DecoderStereo[currentChan.iChanID];
+            }
+        }
+        else
+        {
+            CurOpusDecoder = nullptr;
+        }
+
+        // get gains of all connected channels
+        for ( int j = 0; j < iNumClients; j++ )
+        {
+            // The second index of "vecvecdGains" does not represent
+            // the channel ID! Therefore we have to use
+            // "vecCurrentChannelData" to query the IDs of the currently
+            // connected channels
+            currentChan.vecdGains[j] = vecChannels[currentChan.iChanID].GetGain ( vecCurrentChannelData[j].iChanID );
+
+            // consider audio fade-in
+            currentChan.vecdGains[j] *= vecChannels[vecCurrentChannelData[j].iChanID].GetFadeInGain();
+
+            // use the fade in of the current channel for all other connected clients
+            // as well to avoid the client volumes are at 100% when joining a server (#628)
+            if ( j != i )
+            {
+                currentChan.vecdGains[j] *= vecChannels[currentChan.iChanID].GetFadeInGain();
+            }
+
+            // panning
+            currentChan.vecdPannings[j] = vecChannels[currentChan.iChanID].GetPan ( vecCurrentChannelData[j].iChanID );
+        }
+
+        // flag for updating channel levels (if at least one clients wants it)
+        if ( vecChannels[currentChan.iChanID].ChannelLevelsRequired() )
+        {
+            bUpdateChannelLevels = true;
+        }
+
+        // If the server frame size is smaller than the received OPUS frame size, we need a conversion
+        // buffer which stores the large buffer.
+        // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
+        // is false and the Get() function is not called at all. Therefore if the buffer is not needed
+        // we do not spend any time in the function but go directly inside the if condition.
+        if ( ( currentChan.iUseDoubleSysFraSizeConvBuf == 0 ) ||
+                !DoubleFrameSizeConvBufIn[currentChan.iChanID].Get ( currentChan.vecsData, SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels ) )
+        {
+            // get current number of OPUS coded bytes
+            const int iCeltNumCodedBytes = vecChannels[currentChan.iChanID].GetNetwFrameSize();
+
+            for ( int iB = 0; iB < currentChan.iNumFrameSizeConvBlocks; iB++ )
+            {
+                // get data
+                const EGetDataStat eGetStat = vecChannels[currentChan.iChanID].GetData ( currentChan.vecbyCodedDataIn, iCeltNumCodedBytes );
+
+                // if channel was just disconnected, set flag that connected
+                // client list is sent to all other clients
+                // and emit the client disconnected signal
+                if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
+                {
+                    if ( JamController.GetRecordingEnabled() )
+                    {
+                        emit ClientDisconnected ( currentChan.iChanID ); // TODO do this outside the mutex lock?
+                    }
+
+                    bChannelIsNowDisconnected = true;
+                }
+
+                // get pointer to coded data
+                if ( eGetStat == GS_BUFFER_OK )
+                {
+                    pCurCodedData = &currentChan.vecbyCodedDataIn[0];
+                }
+                else
+                {
+                    // for lost packets use null pointer as coded input data
+                    pCurCodedData = nullptr;
+                }
+
+                // OPUS decode received data stream
+                if ( CurOpusDecoder != nullptr )
+                {
+                    iUnused = opus_custom_decode ( CurOpusDecoder,
+                                                    pCurCodedData,
+                                                    iCeltNumCodedBytes,
+                                                    &currentChan.vecsData[iB * SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels],
+                                                    iClientFrameSizeSamples );
+                }
+            }
+
+            // a new large frame is ready, if the conversion buffer is required, put it in the buffer
+            // and read out the small frame size immediately for further processing
+            if ( currentChan.iUseDoubleSysFraSizeConvBuf != 0 )
+            {
+                DoubleFrameSizeConvBufIn[currentChan.iChanID].PutAll ( currentChan.vecsData );
+                DoubleFrameSizeConvBufIn[currentChan.iChanID].Get ( currentChan.vecsData, SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
+            }
+        }
+    }
+
+    Q_UNUSED ( iUnused )
+
+    return bChannelIsNowDisconnected;
+}
+
 void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                             const int iStopChanCnt,
                                             const int iNumClients,
-                                            const int page  )
+                                            const int page )
 {
     // loop over all channels in the current block, needed for multithreading support
     for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )

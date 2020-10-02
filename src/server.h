@@ -326,6 +326,12 @@ protected:
 
     void WriteHTMLChannelList();
 
+    bool DecodeDataBlocks ( const int iStartChanCnt,
+                            const int iStopChanCnt, 
+                            const int iNumClients, 
+                            const int page,
+                            bool& bUpdateChannelLevels);
+
     void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                        const int iStopChanCnt,
                                        const int iNumClients,
@@ -343,7 +349,8 @@ protected:
 
     // variables needed for multithreading support
     bool                      bUseMultithreading;
-    QFutureSynchronizer<void> FutureSynchronizer;
+    QFutureSynchronizer<void> MixFutureSynchronizer;
+    QFutureSynchronizer<bool> DecodeFutureSynchronizer;
 
     bool CreateLevelsForAllConChannels  ( const int                          iNumClients,
                                           const CVector<CurrentChannelData>& vecCurrentChannelData,

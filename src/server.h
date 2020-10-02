@@ -161,6 +161,27 @@ protected:
 template<>
 class CServerSlots<0> {};
 
+// This data is output from the decode thread, input to the mix thread(s)
+class CurrentChannelData {
+public:
+    int iChanID;
+    CVector<double>  vecdGains;
+    CVector<double>  vecdPannings;
+    CVector<int16_t> vecsData;
+    CVector<uint8_t> vecbyCodedDataIn;
+    int              iNumAudioChannels;
+    int              iNumFrameSizeConvBlocks;
+    int              iUseDoubleSysFraSizeConvBuf;
+    EAudComprType    eAudioComprType;
+};
+
+// This data is output from the mix thread(s)
+class ChannelOutputData {
+public:
+    CVector<int16_t> vecsSendData;
+    CVector<double>  vecsIntermediateProcBuf;
+    CVector<uint8_t> vecbyCodedDataOut;
+};
 
 class CServer :
         public QObject,
@@ -307,10 +328,12 @@ protected:
 
     void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                        const int iStopChanCnt,
-                                       const int iNumClients );
+                                       const int iNumClients,
+                                       const int page );
 
     void MixEncodeTransmitData ( const int iChanCnt,
-                                 const int iNumClients );
+                                 const int iNumClients,
+                                 const int page );
 
     virtual void customEvent ( QEvent* pEvent );
 
@@ -320,11 +343,11 @@ protected:
 
     // variables needed for multithreading support
     bool                      bUseMultithreading;
+    QFutureSynchronizer<void> FutureSynchronizer;
 
-    bool CreateLevelsForAllConChannels  ( const int                        iNumClients,
-                                          const CVector<int>&              vecNumAudioChannels,
-                                          const CVector<CVector<int16_t> > vecvecsData,
-                                          CVector<uint16_t>&               vecLevelsOut );
+    bool CreateLevelsForAllConChannels  ( const int                          iNumClients,
+                                          const CVector<CurrentChannelData>& vecCurrentChannelData,
+                                          CVector<uint16_t>&                 vecLevelsOut );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -350,18 +373,10 @@ protected:
     CConvBuf<int16_t>          DoubleFrameSizeConvBufOut[MAX_NUM_CHANNELS];
 
     CVector<QString>           vstrChatColors;
-    CVector<int>               vecChanIDsCurConChan;
 
-    CVector<CVector<double> >  vecvecdGains;
-    CVector<CVector<double> >  vecvecdPannings;
-    CVector<CVector<int16_t> > vecvecsData;
-    CVector<int>               vecNumAudioChannels;
-    CVector<int>               vecNumFrameSizeConvBlocks;
-    CVector<int>               vecUseDoubleSysFraSizeConvBuf;
-    CVector<EAudComprType>     vecAudioComprType;
-    CVector<CVector<int16_t> > vecvecsSendData;
-    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
-    CVector<CVector<uint8_t> > vecvecbyCodedData;
+    CVector<CVector<CurrentChannelData> >      vecvecCurrentChannelData;
+    CVector<CVector<ChannelOutputData> >       vecvecChannelOutputData;
+    int                        iChannelDataPage;
 
     // Channel levels
     CVector<uint16_t>          vecChannelLevels;

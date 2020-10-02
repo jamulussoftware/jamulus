@@ -330,44 +330,43 @@ CServer::CServer ( const int          iNewMaxNumChan,
         iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
 
-
     // To avoid audio clitches, in the entire realtime timer audio processing
     // routine including the ProcessData no memory must be allocated. Since we
     // do not know the required sizes for the vectors, we allocate memory for
     // the worst case here:
+    iChannelDataPage = 0;
+    vecvecCurrentChannelData.Init     ( 2 );
+    vecvecChannelOutputData.Init      ( 2 );
+    for ( int page = 0; page < 2; page++ ) {
+        CVector<CurrentChannelData>& vecCurrentChannelData = vecvecCurrentChannelData[page];
+        vecCurrentChannelData.Init     ( iMaxNumChannels );
 
-    // allocate worst case memory for the temporary vectors
-    vecChanIDsCurConChan.Init          ( iMaxNumChannels );
-    vecvecdGains.Init                  ( iMaxNumChannels );
-    vecvecdPannings.Init               ( iMaxNumChannels );
-    vecvecsData.Init                   ( iMaxNumChannels );
-    vecvecsSendData.Init               ( iMaxNumChannels );
-    vecvecsIntermediateProcBuf.Init    ( iMaxNumChannels );
-    vecvecbyCodedData.Init             ( iMaxNumChannels );
-    vecNumAudioChannels.Init           ( iMaxNumChannels );
-    vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
-    vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
-    vecAudioComprType.Init             ( iMaxNumChannels );
+        CVector<ChannelOutputData>& vecChannelOutputData = vecvecChannelOutputData[page];
+        vecChannelOutputData.Init      ( iMaxNumChannels );
 
-    for ( i = 0; i < iMaxNumChannels; i++ )
-    {
-        // init vectors storing information of all channels
-        vecvecdGains[i].Init    ( iMaxNumChannels );
-        vecvecdPannings[i].Init ( iMaxNumChannels );
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            // init vectors storing information of all channels
+            vecCurrentChannelData[i].vecdGains.Init    ( iMaxNumChannels );
+            vecCurrentChannelData[i].vecdPannings.Init ( iMaxNumChannels );
 
-        // we always use stereo audio buffers (which is the worst case)
-        vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+            // we always use stereo audio buffers (which is the worst case)
+            vecCurrentChannelData[i].vecsData.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
-        // (note that we only allocate iMaxNumChannels buffers for the send
-        // and coded data because of the OMP implementation)
-        vecvecsSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+            // (note that we only allocate iMaxNumChannels buffers for the send
+            // and coded data because of the OMP implementation)
+            vecChannelOutputData[i].vecsSendData.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
-        // allocate worst case memory for intermediate processing buffers in double precision
-        vecvecsIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+            // allocate worst case memory for intermediate processing buffers in double precision
+            vecChannelOutputData[i].vecsIntermediateProcBuf.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
-        // allocate worst case memory for the coded data
-        vecvecbyCodedData[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
+            // allocate worst case memory for the coded data
+            vecCurrentChannelData[i].vecbyCodedDataIn.Init ( MAX_SIZE_BYTES_NETW_BUF );
+            vecChannelOutputData[i].vecbyCodedDataOut.Init ( MAX_SIZE_BYTES_NETW_BUF );
+        }
+
     }
+
 
     // allocate worst case memory for the channel levels
     vecChannelLevels.Init ( iMaxNumChannels );
@@ -801,6 +800,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     bool bUpdateChannelLevels      = false;
     bool bSendChannelLevels        = false;
 
+    // flip to the idle page for the next call, in case it overlaps with the previous
+    iChannelDataPage = 1-iChannelDataPage;
+    CVector<CurrentChannelData>& vecCurrentChannelData(vecvecCurrentChannelData[iChannelDataPage]);
+    CVector<ChannelOutputData>& vecChannelOutputData(vecvecChannelOutputData[iChannelDataPage]);
+
     // Make put and get calls thread safe. Do not forget to unlock mutex
     // afterwards!
     Mutex.lock();
@@ -814,7 +818,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 // according to the worst case scenario, if the number of
                 // connected clients is less, only a subset of elements of this
                 // vector are actually used and the others are dummy elements)
-                vecChanIDsCurConChan[iNumClients] = i;
+                vecCurrentChannelData[iNumClients].iChanID = i;
                 iNumClients++;
             }
         }
@@ -826,57 +830,56 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             OpusCustomDecoder* CurOpusDecoder;
             unsigned char*     pCurCodedData;
 
-            // get actual ID of current channel
-            const int iCurChanID = vecChanIDsCurConChan[i];
+            CurrentChannelData& currentChan(vecCurrentChannelData[i]);
 
             // get and store number of audio channels and compression type
-            vecNumAudioChannels[i] = vecChannels[iCurChanID].GetNumAudioChannels();
-            vecAudioComprType[i]   = vecChannels[iCurChanID].GetAudioCompressionType();
+            currentChan.iNumAudioChannels = vecChannels[currentChan.iChanID].GetNumAudioChannels();
+            currentChan.eAudioComprType   = vecChannels[currentChan.iChanID].GetAudioCompressionType();
 
             // get info about required frame size conversion properties
-            vecUseDoubleSysFraSizeConvBuf[i] = ( !bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS ) );
+            currentChan.iUseDoubleSysFraSizeConvBuf = ( !bUseDoubleSystemFrameSize && ( currentChan.eAudioComprType == CT_OPUS ) );
 
-            if ( bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 ) )
+            if ( bUseDoubleSystemFrameSize && ( currentChan.eAudioComprType == CT_OPUS64 ) )
             {
-                vecNumFrameSizeConvBlocks[i] = 2;
+                currentChan.iNumFrameSizeConvBlocks = 2;
             }
             else
             {
-                vecNumFrameSizeConvBlocks[i] = 1;
+                currentChan.iNumFrameSizeConvBlocks = 1;
             }
 
             // update conversion buffer size (nothing will happen if the size stays the same)
-            if ( vecUseDoubleSysFraSizeConvBuf[i] )
+            if ( currentChan.iUseDoubleSysFraSizeConvBuf )
             {
-                DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
-                DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                DoubleFrameSizeConvBufIn[currentChan.iChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
+                DoubleFrameSizeConvBufOut[currentChan.iChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
             }
 
             // select the opus decoder and raw audio frame length
-            if ( vecAudioComprType[i] == CT_OPUS )
+            if ( currentChan.eAudioComprType == CT_OPUS )
             {
                 iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
 
-                if ( vecNumAudioChannels[i] == 1 )
+                if ( currentChan.iNumAudioChannels == 1 )
                 {
-                    CurOpusDecoder = OpusDecoderMono[iCurChanID];
+                    CurOpusDecoder = OpusDecoderMono[currentChan.iChanID];
                 }
                 else
                 {
-                    CurOpusDecoder = OpusDecoderStereo[iCurChanID];
+                    CurOpusDecoder = OpusDecoderStereo[currentChan.iChanID];
                 }
             }
-            else if ( vecAudioComprType[i] == CT_OPUS64 )
+            else if ( currentChan.eAudioComprType == CT_OPUS64 )
             {
                 iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
 
-                if ( vecNumAudioChannels[i] == 1 )
+                if ( currentChan.iNumAudioChannels == 1 )
                 {
-                    CurOpusDecoder = Opus64DecoderMono[iCurChanID];
+                    CurOpusDecoder = Opus64DecoderMono[currentChan.iChanID];
                 }
                 else
                 {
-                    CurOpusDecoder = Opus64DecoderStereo[iCurChanID];
+                    CurOpusDecoder = Opus64DecoderStereo[currentChan.iChanID];
                 }
             }
             else
@@ -889,26 +892,26 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             {
                 // The second index of "vecvecdGains" does not represent
                 // the channel ID! Therefore we have to use
-                // "vecChanIDsCurConChan" to query the IDs of the currently
+                // "vecCurrentChannelData" to query the IDs of the currently
                 // connected channels
-                vecvecdGains[i][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
+                currentChan.vecdGains[j] = vecChannels[currentChan.iChanID].GetGain ( vecCurrentChannelData[j].iChanID );
 
                 // consider audio fade-in
-                vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+                currentChan.vecdGains[j] *= vecChannels[vecCurrentChannelData[j].iChanID].GetFadeInGain();
 
                 // use the fade in of the current channel for all other connected clients
                 // as well to avoid the client volumes are at 100% when joining a server (#628)
                 if ( j != i )
                 {
-                    vecvecdGains[i][j] *= vecChannels[iCurChanID].GetFadeInGain();
+                    currentChan.vecdGains[j] *= vecChannels[currentChan.iChanID].GetFadeInGain();
                 }
 
                 // panning
-                vecvecdPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
+                currentChan.vecdPannings[j] = vecChannels[currentChan.iChanID].GetPan ( vecCurrentChannelData[j].iChanID );
             }
 
             // flag for updating channel levels (if at least one clients wants it)
-            if ( vecChannels[iCurChanID].ChannelLevelsRequired() )
+            if ( vecChannels[currentChan.iChanID].ChannelLevelsRequired() )
             {
                 bUpdateChannelLevels = true;
             }
@@ -918,16 +921,16 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
             // is false and the Get() function is not called at all. Therefore if the buffer is not needed
             // we do not spend any time in the function but go directly inside the if condition.
-            if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
+            if ( ( currentChan.iUseDoubleSysFraSizeConvBuf == 0 ) ||
+                 !DoubleFrameSizeConvBufIn[currentChan.iChanID].Get ( currentChan.vecsData, SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels ) )
             {
                 // get current number of OPUS coded bytes
-                const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
+                const int iCeltNumCodedBytes = vecChannels[currentChan.iChanID].GetNetwFrameSize();
 
-                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
+                for ( int iB = 0; iB < currentChan.iNumFrameSizeConvBlocks; iB++ )
                 {
                     // get data
-                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[i], iCeltNumCodedBytes );
+                    const EGetDataStat eGetStat = vecChannels[currentChan.iChanID].GetData ( currentChan.vecbyCodedDataIn, iCeltNumCodedBytes );
 
                     // if channel was just disconnected, set flag that connected
                     // client list is sent to all other clients
@@ -936,7 +939,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     {
                         if ( JamController.GetRecordingEnabled() )
                         {
-                            emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+                            emit ClientDisconnected ( currentChan.iChanID ); // TODO do this outside the mutex lock?
                         }
 
                         bChannelIsNowDisconnected = true;
@@ -945,7 +948,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // get pointer to coded data
                     if ( eGetStat == GS_BUFFER_OK )
                     {
-                        pCurCodedData = &vecvecbyCodedData[i][0];
+                        pCurCodedData = &currentChan.vecbyCodedDataIn[0];
                     }
                     else
                     {
@@ -959,17 +962,17 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                         iUnused = opus_custom_decode ( CurOpusDecoder,
                                                        pCurCodedData,
                                                        iCeltNumCodedBytes,
-                                                       &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       &currentChan.vecsData[iB * SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels],
                                                        iClientFrameSizeSamples );
                     }
                 }
 
                 // a new large frame is ready, if the conversion buffer is required, put it in the buffer
                 // and read out the small frame size immediately for further processing
-                if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
+                if ( currentChan.iUseDoubleSysFraSizeConvBuf != 0 )
                 {
-                    DoubleFrameSizeConvBufIn[iCurChanID].PutAll ( vecvecsData[i] );
-                    DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                    DoubleFrameSizeConvBufIn[currentChan.iChanID].PutAll ( currentChan.vecsData );
+                    DoubleFrameSizeConvBufIn[currentChan.iChanID].Get ( currentChan.vecsData, SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
                 }
             }
         }
@@ -993,23 +996,21 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         if ( bUpdateChannelLevels )
         {
             bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients,
-                                                                 vecNumAudioChannels,
-                                                                 vecvecsData,
+                                                                 vecCurrentChannelData,
                                                                  vecChannelLevels );
         }
 
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
-            // get actual ID of current channel
-            const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
+            const CurrentChannelData& currentChan(vecCurrentChannelData[iChanCnt]);
 
             // update socket buffer size
-            vecChannels[iCurChanID].UpdateSocketBufferSize();
+            vecChannels[currentChan.iChanID].UpdateSocketBufferSize();
 
             // send channel levels
-            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+            if ( bSendChannelLevels && vecChannels[currentChan.iChanID].ChannelLevelsRequired() )
             {
-                ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
+                ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[currentChan.iChanID].GetAddress(),
                                                                vecChannelLevels,
                                                                iNumClients );
             }
@@ -1017,11 +1018,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // export the audio data for recording purpose
             if ( JamController.GetRecordingEnabled() )
             {
-                emit AudioFrame ( iCurChanID,
-                                  vecChannels[iCurChanID].GetName(),
-                                  vecChannels[iCurChanID].GetAddress(),
-                                  vecNumAudioChannels[iChanCnt],
-                                  vecvecsData[iChanCnt] );
+                emit AudioFrame ( currentChan.iChanID,
+                                  vecChannels[currentChan.iChanID].GetName(),
+                                  vecChannels[currentChan.iChanID].GetAddress(),
+                                  currentChan.iNumAudioChannels,
+                                  currentChan.vecsData );
             }
 
             // processing without multithreading
@@ -1029,7 +1030,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             {
                 // generate a separate mix for each channel, OPUS encode the
                 // audio data and transmit the network packet
-                MixEncodeTransmitData ( iChanCnt, iNumClients );
+                MixEncodeTransmitData ( iChanCnt, iNumClients, iChannelDataPage );
             }
         }
 
@@ -1056,7 +1057,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                    &CServer::MixEncodeTransmitDataBlocks,
                                                                    iStartChanCnt,
                                                                    iStopChanCnt,
-                                                                   iNumClients ) );
+                                                                   iNumClients,
+                                                                   iChannelDataPage ) );
             }
 
             // make sure all concurrent run threads have finished when we leave this function
@@ -1076,43 +1078,43 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
 void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                             const int iStopChanCnt,
-                                            const int iNumClients )
+                                            const int iNumClients,
+                                            const int page  )
 {
     // loop over all channels in the current block, needed for multithreading support
     for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )
     {
-        MixEncodeTransmitData ( iChanCnt, iNumClients );
+        MixEncodeTransmitData ( iChanCnt, iNumClients, page );
     }
 }
 
 /// @brief Mix all audio data from all clients together, encode and transmit
 void CServer::MixEncodeTransmitData ( const int iChanCnt,
-                                      const int iNumClients )
+                                      const int iNumClients,
+                                      const int page  )
 {
     int               i, j, k, iUnused;
-    CVector<double>&  vecdIntermProcBuf = vecvecsIntermediateProcBuf[iChanCnt]; // use reference for faster access
-    CVector<int16_t>& vecsSendData      = vecvecsSendData[iChanCnt];            // use reference for faster access
-
-    // get actual ID of current channel
-    const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
+    CVector<double>&  vecdIntermProcBuf(vecvecChannelOutputData[page][iChanCnt].vecsIntermediateProcBuf); // use reference for faster access
+    CVector<int16_t>& vecsSendData(vecvecChannelOutputData[page][iChanCnt].vecsSendData);     // use reference for faster access
+    CurrentChannelData& currentChan(vecvecCurrentChannelData[page][iChanCnt]);
 
     // init intermediate processing vector with zeros since we mix all channels on that vector
     vecdIntermProcBuf.Reset ( 0 );
 
     // distinguish between stereo and mono mode
-    if ( vecNumAudioChannels[iChanCnt] == 1 )
+    if ( currentChan.iNumAudioChannels == 1 )
     {
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain of the current client
-            const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecvecdGains[iChanCnt][j];
+            const CVector<int16_t>& vecsData = vecvecCurrentChannelData[page][j].vecsData;
+            const double            dGain    = currentChan.vecdGains[j];
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( dGain == static_cast<double> ( 1.0 ) )
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                if ( vecvecCurrentChannelData[page][j].iNumAudioChannels == 1 )
                 {
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
@@ -1132,7 +1134,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             }
             else
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                if ( vecvecCurrentChannelData[page][j].iNumAudioChannels == 1 )
                 {
                     // mono
                     for ( i = 0; i < iServerFrameSizeSamples; i++ )
@@ -1164,9 +1166,9 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain/pan of the current client
-            const CVector<int16_t>& vecsData = vecvecsData[j];
-            const double            dGain    = vecvecdGains[iChanCnt][j];
-            const double            dPan     = vecvecdPannings[iChanCnt][j];
+            const CVector<int16_t>& vecsData = vecvecCurrentChannelData[page][j].vecsData;
+            const double            dGain    = currentChan.vecdGains[j];
+            const double            dPan     = currentChan.vecdPannings[j];
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
@@ -1176,7 +1178,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( ( dGainL == static_cast<double> ( 1.0 ) ) && ( dGainR == static_cast<double> ( 1.0 ) ) )
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                if ( vecvecCurrentChannelData[page][j].iNumAudioChannels == 1 )
                 {
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
@@ -1197,7 +1199,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             }
             else
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                if ( vecvecCurrentChannelData[page][j].iNumAudioChannels == 1 )
                 {
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
@@ -1231,33 +1233,33 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
     OpusCustomEncoder* pCurOpusEncoder         = nullptr;
 
     // get current number of CELT coded bytes
-    const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
+    const int iCeltNumCodedBytes = vecChannels[currentChan.iChanID].GetNetwFrameSize();
 
     // select the opus encoder and raw audio frame length
-    if ( vecAudioComprType[iChanCnt] == CT_OPUS )
+    if ( currentChan.eAudioComprType == CT_OPUS )
     {
         iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
 
-        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        if ( currentChan.iNumAudioChannels == 1 )
         {
-            pCurOpusEncoder = OpusEncoderMono[iCurChanID];
+            pCurOpusEncoder = OpusEncoderMono[currentChan.iChanID];
         }
         else
         {
-            pCurOpusEncoder = OpusEncoderStereo[iCurChanID];
+            pCurOpusEncoder = OpusEncoderStereo[currentChan.iChanID];
         }
     }
-    else if ( vecAudioComprType[iChanCnt] == CT_OPUS64 )
+    else if ( currentChan.eAudioComprType == CT_OPUS64 )
     {
         iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
 
-        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        if ( currentChan.iNumAudioChannels == 1 )
         {
-            pCurOpusEncoder = Opus64EncoderMono[iCurChanID];
+            pCurOpusEncoder = Opus64EncoderMono[currentChan.iChanID];
         }
         else
         {
-            pCurOpusEncoder = Opus64EncoderStereo[iCurChanID];
+            pCurOpusEncoder = Opus64EncoderStereo[currentChan.iChanID];
         }
     }
 
@@ -1266,16 +1268,16 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
     // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
     // is false and the Get() function is not called at all. Therefore if the buffer is not needed
     // we do not spend any time in the function but go directly inside the if condition.
-    if ( ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] == 0 ) ||
-         DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
+    if ( ( currentChan.iUseDoubleSysFraSizeConvBuf == 0 ) ||
+         DoubleFrameSizeConvBufOut[currentChan.iChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels ) )
     {
-        if ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] != 0 )
+        if ( currentChan.iUseDoubleSysFraSizeConvBuf != 0 )
         {
             // get the large frame from the conversion buffer
-            DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
+            DoubleFrameSizeConvBufOut[currentChan.iChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels );
         }
 
-        for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+        for ( int iB = 0; iB < currentChan.iNumFrameSizeConvBlocks; iB++ )
         {
             // OPUS encoding
             if ( pCurOpusEncoder != nullptr )
@@ -1285,15 +1287,15 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * currentChan.iNumAudioChannels],
                                                iClientFrameSizeSamples,
-                                               &vecvecbyCodedData[iChanCnt][0],
+                                               &vecvecChannelOutputData[page][iChanCnt].vecbyCodedDataOut[0],
                                                iCeltNumCodedBytes );
             }
 
-            // send separate mix to current clients
-            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                        vecvecbyCodedData[iChanCnt],
+            // send separate mix to current client
+            vecChannels[currentChan.iChanID].PrepAndSendPacket ( &Socket,
+                                                        vecvecChannelOutputData[page][iChanCnt].vecbyCodedDataOut,
                                                         iCeltNumCodedBytes );
         }
     }
@@ -1666,10 +1668,9 @@ void CServer::customEvent ( QEvent* pEvent )
 }
 
 /// @brief Compute frame peak level for each client
-bool CServer::CreateLevelsForAllConChannels ( const int                        iNumClients,
-                                              const CVector<int>&              vecNumAudioChannels,
-                                              const CVector<CVector<int16_t> > vecvecsData,
-                                              CVector<uint16_t>&               vecLevelsOut )
+bool CServer::CreateLevelsForAllConChannels ( const int                          iNumClients,
+                                              const CVector<CurrentChannelData>& vecCurrentChannelData,
+                                              CVector<uint16_t>&                 vecLevelsOut )
 {
     bool bLevelsWereUpdated = false;
 
@@ -1682,10 +1683,10 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
         for ( int j = 0; j < iNumClients; j++ )
         {
             // update and get signal level for meter in dB for each channel
-            const double dCurSigLevelForMeterdB = vecChannels[vecChanIDsCurConChan[j]].
-                UpdateAndGetLevelForMeterdB ( vecvecsData[j],
+            const double dCurSigLevelForMeterdB = vecChannels[vecCurrentChannelData[j].iChanID].
+                UpdateAndGetLevelForMeterdB ( vecCurrentChannelData[j].vecsData,
                                               iServerFrameSizeSamples,
-                                              vecNumAudioChannels[j] > 1 );
+                                              vecCurrentChannelData[j].iNumAudioChannels > 1 );
 
             // map value to integer for transmission via the protocol (4 bit available)
             vecLevelsOut[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );

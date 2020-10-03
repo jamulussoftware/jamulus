@@ -1,8 +1,14 @@
 
 
 
+3.5.12git <- NOTE: the release version number will be 3.5.13
 
-3.5.11git <- NOTE: the release version number will be 3.5.12
+
+
+
+
+
+3.5.12 (2020-10-03)
 
 - added hyperlink support for the chat window, coded by jc-Rosichini (#591)
 
@@ -28,10 +34,6 @@
 - added translation: Slovak by jose1711 (#635)
 
 - bug fix: crash when using the jam recorder in the server, coded by pljones (#618)
-
-
-
-
 
 
 3.5.11 (2020-09-19)

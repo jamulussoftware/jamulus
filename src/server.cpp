@@ -927,7 +927,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             MixFutureSynchronizer.clearFutures();
 
             // Each thread must complete within the 1 or 2ms time budget for the timer.
-            const int iMaximumMixOpsInTimeBudget = 900;  // Approximate limit as observed on GCP e2-standard instance
+            const int iMaximumMixOpsInTimeBudget = 500;  // Approximate limit as observed on GCP e2-standard instance
                                                           // TODO - determine at startup by running a small benchmark
             const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
             const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;

@@ -827,7 +827,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // process connected channels
         if (bUseMultithreading) {
             const int iDBlockSize = 20;
-            const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iDBlockSize ) );
+            const int iNumBlocks   = ( iNumClients - 1 ) / iDBlockSize + 1;
 
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
@@ -930,7 +930,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             const int iMaximumMixOpsInTimeBudget = 900;  // Approximate limit as observed on GCP e2-standard instance
                                                           // TODO - determine at startup by running a small benchmark
             const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
-            const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iMTBlockSize ) );
+            const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
 
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
@@ -1089,6 +1089,7 @@ unsigned short CServer::DecodeDataBlocks ( const int iStartChanCnt,
                     {
                         emit ClientDisconnected ( currentChan.iChanID ); // TODO do this outside the mutex lock?
                     }
+                    hashChannelIndex.remove(vecChannels[currentChan.iChanID].GetAddress());
 
                     bChannelIsNowDisconnected = true;
                 }

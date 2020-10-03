@@ -464,7 +464,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     else
     {
         // if no address type is given, choose one from the operating system locale
-        pClient->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        pClient->SetCentralServerAddressType ( AT_DEFAULT );
     }
 
 // TODO compatibility to old version
@@ -797,7 +797,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     else
     {
         // if no address type is given, choose one from the operating system locale
-        pServer->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        pServer->SetCentralServerAddressType ( AT_DEFAULT );
     }
 
 // TODO compatibility to old version
@@ -854,16 +854,6 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
          }
     }
 
-    // licence type
-    if ( !CommandLineOptions.contains ( "--licence" ) )
-    {
-        if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
-             0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
-        {
-            pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
-        }
-    }
-
     // welcome message
     if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
     {
@@ -878,6 +868,15 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     if ( !CommandLineOptions.contains ( "--recording" ) )
     {
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
+    }
+
+    // norecord flag
+    if ( !CommandLineOptions.contains ( "--norecord" ) )
+    {
+         if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
+         {
+             pServer->SetEnableRecording ( !bValue );
+         }
     }
 }
 
@@ -915,10 +914,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetFlagIniSet ( IniXMLDocument, "server", "autostartmin",
         pServer->GetAutoRunMinimized() );
 
-    // licence type
-    SetNumericIniSet ( IniXMLDocument, "server", "licencetype",
-        static_cast<int> ( pServer->GetLicenceType() ) );
-
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome",
         ToBase64 ( pServer->GetWelcomeMessage() ) );
@@ -930,4 +925,8 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64",
         ToBase64 ( pServer->GetRecordingDir() ) );
+
+    // norecord flag
+    SetFlagIniSet ( IniXMLDocument, "server", "norecord",
+        pServer->GetDisableRecording() );
 }

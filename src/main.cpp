@@ -69,6 +69,7 @@ int main ( int argc, char** argv )
     bool         bUseMultithreading          = false;
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
+    bool         bDisableRecording           = false;
     bool         bCentServPingServerInList   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
@@ -392,6 +393,19 @@ int main ( int argc, char** argv )
         }
 
 
+        // Disable recording on startup ----------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--norecord",
+                               "--norecord" ) )
+        {
+            bDisableRecording = true;
+            tsConsole << "- recording will not be enabled" << endl;
+            CommandLineOptions << "--norecord";
+            continue;
+        }
+
+
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
@@ -688,6 +702,7 @@ int main ( int argc, char** argv )
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
+                             bDisableRecording,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -789,8 +804,7 @@ QString UsageArguments ( char **argv )
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"
         "  -l, --log             enable logging, set file name\n"
-        "  -L, --licence         a licence must be accepted on a new\n"
-        "                        connection\n"
+        "  -L, --licence         show an agreement window before users can connect\n"
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of the server(s) in the format:\n"
         "                        [name];[city];[country as QLocale ID]; ...\n"
@@ -798,8 +812,8 @@ QString UsageArguments ( char **argv )
         "                        [server1 city]; ...\n"
         "                        [server1 country as QLocale ID]; ...\n"
         "                        [server2 address]; ...\n"
-        "  -R, --recording       enables recording and sets directory to contain\n"
-        "                        recorded jams\n"
+        "  -R, --recording       sets directory to contain recorded jams\n"
+        "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"
         "  -T, --multithreading  use multithreading to make better use of\n"
         "                        multi-core CPUs and support more clients\n"

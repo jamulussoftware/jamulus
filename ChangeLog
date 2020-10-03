@@ -1,8 +1,42 @@
 
 
 
+3.5.12git <- NOTE: the release version number will be 3.5.13
 
-3.5.10git <- NOTE: the release version number will be 3.5.11
+
+
+
+
+
+3.5.12 (2020-10-03)
+
+- added hyperlink support for the chat window, coded by jc-Rosichini (#591)
+
+- added new menu entry "Clear All Stored Solo Settings" (#616)
+
+- fade in all clients at the server when entering a server to avoid the volume
+  is at 100% when joining a server (#628)
+
+- added a qmake CONFIG flag for disabling the automatic version check (#370)
+
+- avoid confusion with the Server Address field on the connection setup window by
+  no longer showing the server name in that field since it is only intended for
+  entering IP addresses or valid server URLs (#365)
+
+- removed the "Show Creative Commons BY-NC-SA 4.0 Licence Dialog" setting from the
+  server GUI and changed the -L/--licence text in the licence dialog to "Do you agree
+  to the text in the chat window?" so that a licence text must now be given in the
+  server welcome message (#587, #367, #81)
+
+- added a protocol message for a reduced server list to improve the situation caused
+  by UDP packet fragmentation (#631, #255)
+
+- added translation: Slovak by jose1711 (#635)
+
+- bug fix: crash when using the jam recorder in the server, coded by pljones (#618)
+
+
+3.5.11 (2020-09-19)
 
 - support a check for updates (#370)
 
@@ -10,7 +44,12 @@
 
 - added a command line argument to enable multithreading in the server (#339)
 
+- added support for split protocol messages (fixes bug with large number of clients
+  connected to a server, #547)
+
 - store recorder settings, coded by pljones (#313)
+
+- added a command line argument to disable recording on start up, coded by pljones (#574)
 
 - accessibility improvements, coded by chigkim (#498, #512)
 
@@ -22,11 +61,7 @@
 
 - bug fix: Alt+h shortcut to open the Chat dialog did not work, use Alt+c instead
 
-
-
-
-
-
+- bug fix: pan is not correctly initialized in the server on a new connection (#537)
 
 
 3.5.10 (2020-08-16)

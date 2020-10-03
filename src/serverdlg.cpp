@@ -59,11 +59,6 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
         "started when the operating system starts up and is automatically "
         "minimized to a system task bar icon." ) );
 
-    // CC licence dialog switch
-    chbUseCCLicence->setWhatsThis ( "<b>" + tr ( "Show Creative Commons Licence "
-        "Dialog" ) + ":</b> " + tr ( "If enabled, a Creative Commons BY-NC-SA 4.0 Licence "
-        "dialog is shown each time a new user connects the server." ) );
-
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
         tr ( "If the Make My Server Public check box is checked, this server registers "
@@ -299,16 +294,6 @@ lvwClients->setMinimumHeight ( 140 );
         chbRegisterServer->setCheckState ( Qt::Unchecked );
     }
 
-    // update show Creative Commons licence check box
-    if ( pServer->GetLicenceType() == LT_CREATIVECOMMONS )
-    {
-        chbUseCCLicence->setCheckState ( Qt::Checked );
-    }
-    else
-    {
-        chbUseCCLicence->setCheckState ( Qt::Unchecked );
-    }
-
     // update start minimized check box (only available for Windows)
 #ifndef _WIN32
     chbStartOnOSStart->setVisible ( false );
@@ -330,7 +315,7 @@ lvwClients->setMinimumHeight ( 140 );
 #endif
 
     // Recorder controls
-    chbEnableRecorder->setCheckState ( Qt::CheckState::Checked ); // move to settings
+    chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
     edtCurrentSessionDir->setText ( "" );
     pbtNewRecording->setAutoDefault ( false );
     pbtRecordingDir->setAutoDefault ( false );
@@ -392,9 +377,6 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged,
         this, &CServerDlg::OnStartOnOSStartStateChanged );
-
-    QObject::connect ( chbUseCCLicence, &QCheckBox::stateChanged,
-        this, &CServerDlg::OnUseCCLicenceStateChanged );
 
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableRecorderStateChanged );
@@ -492,18 +474,6 @@ void CServerDlg::OnStartOnOSStartStateChanged ( int value )
     // update registry and server setting (for ini file)
     pServer->SetAutoRunMinimized ( bCurAutoStartMinState );
     ModifyAutoStartEntry         ( bCurAutoStartMinState );
-}
-
-void CServerDlg::OnUseCCLicenceStateChanged ( int value )
-{
-    if ( value == Qt::Checked )
-    {
-        pServer->SetLicenceType ( LT_CREATIVECOMMONS );
-    }
-    else
-    {
-        pServer->SetLicenceType ( LT_NO_LICENCE );
-    }
 }
 
 void CServerDlg::OnRegisterServerStateChanged ( int value )

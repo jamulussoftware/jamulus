@@ -113,6 +113,7 @@ protected:
 
     QAction*           pLoadChannelSetupAction;
     QAction*           pSaveChannelSetupAction;
+    QAction*           pClearAllStoredSoloSettings;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -154,6 +155,7 @@ public slots:
     void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_NAME ); }
     void OnSortChannelsByInstrument() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_INSTRUMENT ); }
     void OnSortChannelsByGroupID() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_GROUPID ); }
+    void OnClearAllStoredSoloSettings() { pSettings->vecStoredFaderIsSolo.Reset ( false ); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
@@ -198,6 +200,10 @@ public slots:
     void OnCLServerListReceived ( CHostAddress         InetAddr,
                                   CVector<CServerInfo> vecServerInfo )
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
+
+    void OnCLRedServerListReceived ( CHostAddress         InetAddr,
+                                     CVector<CServerInfo> vecServerInfo )
+        { ConnectDlg.SetServerList ( InetAddr, vecServerInfo, true ); }
 
     void OnCLConnClientsListMesReceived ( CHostAddress          InetAddr,
                                           CVector<CChannelInfo> vecChanInfo )

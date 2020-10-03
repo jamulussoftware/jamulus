@@ -290,6 +290,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
         SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
 
+    pEditMenu->addSeparator();
+
+    pClearAllStoredSoloSettings = pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
+        SLOT ( OnClearAllStoredSoloSettings() ) );
+
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
@@ -426,6 +431,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pClient, &CClient::CLServerListReceived,
         this, &CClientDlg::OnCLServerListReceived );
+
+    QObject::connect ( pClient, &CClient::CLRedServerListReceived,
+        this, &CClientDlg::OnCLRedServerListReceived );
 
     QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived,
         this, &CClientDlg::OnCLConnClientsListMesReceived );
@@ -751,10 +759,12 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                             QString                strVersion )
 {
     // update check
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+#if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) ) && !defined ( DISABLE_VERSION_CHECK )
     if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
     {
+        // show the label and hide it after one minute again
         lblUpdateCheck->show();
+        QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
     }
 #endif
 
@@ -770,9 +780,11 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     ChatDlg.AddChatText ( strChatText );
 
-    // open window (note that we do not want to force the dialog to be upfront
-    // always when a new message arrives since this is annoying)
-    ShowChatWindow ( false );
+    // Open chat dialog. If a server welcome message is received, we force
+    // the dialog to be upfront in case a licence text is shown. For all
+    // other new chat texts we do not want to force the dialog to be upfront
+    // always when a new message arrives since this is annoying.
+    ShowChatWindow ( ( strChatText.indexOf ( WELCOME_MESSAGE_PREFIX ) == 0 ) );
 
     UpdateDisplay();
 }
@@ -907,12 +919,12 @@ void CClientDlg::ShowGeneralSettings()
 
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 {
-    // open chat dialog if it is not visible
-    if ( bForceRaise || !ChatDlg.isVisible() )
-    {
-        ChatDlg.show();
+    ChatDlg.show();
 
+    if ( bForceRaise )
+    {
         // make sure dialog is upfront and has focus
+        ChatDlg.showNormal();
         ChatDlg.raise();
         ChatDlg.activateWindow();
     }
@@ -1063,6 +1075,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             {
                 pClient->Start();
 
+                // menu entries which are disabled during a session
+                pClearAllStoredSoloSettings->setEnabled ( false );
+
 // TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
 pLoadChannelSetupAction->setEnabled ( false );
 pSaveChannelSetupAction->setEnabled ( false );
@@ -1083,9 +1098,9 @@ pSaveChannelSetupAction->setEnabled ( false );
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
         // start timer for level meter bar and ping time measurement
-        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+        TimerSigMet.start     ( LEVELMETER_UPDATE_TIME_MS );
         TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start ( PING_UPDATE_TIME_MS );
+        TimerPing.start       ( PING_UPDATE_TIME_MS );
     }
 }
 
@@ -1098,6 +1113,9 @@ void CClientDlg::Disconnect()
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
+
+        // menu entries which are disabled during a session
+        pClearAllStoredSoloSettings->setEnabled ( true );
 
 // TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
 pLoadChannelSetupAction->setEnabled ( true );

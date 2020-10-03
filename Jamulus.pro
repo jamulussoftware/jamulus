@@ -1,4 +1,4 @@
-VERSION = 3.5.10git
+VERSION = 3.5.12git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -28,6 +28,7 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_es_ES.ts \
     src/res/translation/translation_nl_NL.ts \
     src/res/translation/translation_pl_PL.ts \
+    src/res/translation/translation_sk_SK.ts \
     src/res/translation/translation_it_IT.ts \
     src/res/translation/translation_sv_SE.ts
 
@@ -636,7 +637,7 @@ android {
 
 DISTFILES += ChangeLog \
     COPYING \
-    INSTALL.md \
+    CONTRIBUTING.md \
     README.md \
     distributions/jamulus.desktop.in \
     distributions/jamulus.png \
@@ -649,6 +650,7 @@ DISTFILES += ChangeLog \
     src/res/translation/translation_pl_PL.qm \
     src/res/translation/translation_it_IT.qm \
     src/res/translation/translation_sv_SE.qm \
+    src/res/translation/translation_sk_SK.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -1010,4 +1012,10 @@ contains(CONFIG, "opus_shared_lib") {
     HEADERS += $$HEADERS_OPUS
     SOURCES += $$SOURCES_OPUS
     DISTFILES += $$DISTFILES_OPUS
+}
+
+# disable version check if requested
+contains(CONFIG, "disable_version_check") {
+    message(The version check is disabled.)
+    DEFINES += DISABLE_VERSION_CHECK
 }

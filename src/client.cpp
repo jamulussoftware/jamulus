@@ -157,6 +157,9 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLServerListReceived,
         this, &CClient::CLServerListReceived );
 
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRedServerListReceived,
+        this, &CClient::CLRedServerListReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived,
         this, &CClient::CLConnClientsListMesReceived );
 
@@ -1204,7 +1207,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // network packets are of the same size as the audio packets per definition
     // if no sound card conversion buffer is used
     const double dDelayToFillNetworkPacketsMs =
-        GetSystemMonoBlSize() * 1000 / SYSTEM_SAMPLE_RATE_HZ;
+        GetSystemMonoBlSize() * 1000.0 / SYSTEM_SAMPLE_RATE_HZ;
 
     // OPUS additional delay at small frame sizes is half a frame size
     const double dAdditionalAudioCodecDelayMs = dSystemBlockDurationMs / 2;

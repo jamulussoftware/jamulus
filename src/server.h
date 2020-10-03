@@ -183,6 +183,7 @@ public:
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
+              const bool         bDisableRecording,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -209,6 +210,7 @@ public:
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
     bool GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
+    bool GetDisableRecording() { return bDisableRecording; }
     void RequestNewRecording() { JamController.RequestNewRecording(); }
 
     void SetEnableRecording ( bool bNewEnableRecording );
@@ -216,7 +218,7 @@ public:
     QString GetRecordingDir() { return JamController.GetRecordingDir(); }
 
     void SetRecordingDir( QString newRecordingDir )
-        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
+        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording ); }
 
     void CreateAndSendRecorderStateForAllConChannels();
 
@@ -268,9 +270,6 @@ public:
     // GUI settings ------------------------------------------------------------
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
-
-    void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
-    ELicenceType GetLicenceType() { return eLicenceType; }
 
 protected:
     // access functions for actual channels
@@ -388,6 +387,7 @@ protected:
 
     // jam recorder
     recorder::CJamController   JamController;
+    bool bDisableRecording;
 
     // GUI settings
     bool                       bAutoRunMinimized;

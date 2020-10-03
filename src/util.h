@@ -738,9 +738,9 @@ class CStereoSignalLevelMeter
 public:
 // TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
 //      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size with a factor of 0.97.
+//      is ok for both numbers of samples frame size with a factor of 0.99.
     CStereoSignalLevelMeter ( const bool   bNIsStereoOut     = true,
-                              const double dNSmoothingFactor = 0.97 ) :
+                              const double dNSmoothingFactor = 0.99 ) :
         dSmoothingFactor ( dNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
 
     void Update ( const CVector<short>& vecsAudio,
@@ -894,7 +894,6 @@ class CLocale
 {
 public:
     static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
-    static ECSAddType              GetCentralServerAddressType ( const QLocale::Country eCountry );
     static QMap<QString, QString>  GetAvailableTranslations();
     static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
     static void                    LoadTranslation ( const QString     strLanguage,

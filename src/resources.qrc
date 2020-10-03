@@ -24,6 +24,9 @@
         <file alias="translation_pl">res/translation/translation_pl_PL.qm</file>
     </qresource>
     <qresource prefix="/translations">
+        <file alias="translation_sk">res/translation/translation_sk_SK.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
         <file alias="translation_sv">res/translation/translation_sv_SE.qm</file>
     </qresource>
 

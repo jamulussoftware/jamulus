@@ -30,16 +30,17 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
                            const bool      bNewShowCompleteRegList,
                            QWidget*        parent,
                            Qt::WindowFlags f )
-    : QDialog ( parent, f ),
-      pClient                  ( pNCliP ),
-      strCentralServerAddress  ( "" ),
-      strSelectedAddress       ( "" ),
-      strSelectedServerName    ( "" ),
-      bShowCompleteRegList     ( bNewShowCompleteRegList ),
-      bServerListReceived      ( false ),
-      bServerListItemWasChosen ( false ),
-      bListFilterWasActive     ( false ),
-      bShowAllMusicians        ( true )
+    : QDialog                    ( parent, f ),
+      pClient                    ( pNCliP ),
+      strCentralServerAddress    ( "" ),
+      strSelectedAddress         ( "" ),
+      strSelectedServerName      ( "" ),
+      bShowCompleteRegList       ( bNewShowCompleteRegList ),
+      bServerListReceived        ( false ),
+      bReducedServerListReceived ( false ),
+      bServerListItemWasChosen   ( false ),
+      bListFilterWasActive       ( false ),
+      bShowAllMusicians          ( true )
 {
     setupUi ( this );
 
@@ -154,9 +155,6 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
 
     // Connections -------------------------------------------------------------
     // list view
-    QObject::connect ( lvwServers, &QTreeWidget::itemSelectionChanged,
-        this, &CConnectDlg::OnServerListItemSelectionChanged );
-
     QObject::connect ( lvwServers, &QTreeWidget::itemDoubleClicked,
         this, &CConnectDlg::OnServerListItemDoubleClicked );
 
@@ -219,9 +217,10 @@ void CConnectDlg::showEvent ( QShowEvent* )
 void CConnectDlg::RequestServerList()
 {
     // reset flags
-    bServerListReceived      = false;
-    bServerListItemWasChosen = false;
-    bListFilterWasActive     = false;
+    bServerListReceived        = false;
+    bReducedServerListReceived = false;
+    bServerListItemWasChosen   = false;
+    bListFilterWasActive       = false;
 
     // clear current address and name
     strSelectedAddress    = "";
@@ -270,11 +269,30 @@ void CConnectDlg::OnTimerReRequestServList()
 }
 
 void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
-                                  const CVector<CServerInfo>& vecServerInfo )
+                                  const CVector<CServerInfo>& vecServerInfo,
+                                  const bool                  bIsReducedServerList )
 {
-    // set flag and disable timer for resend server list request
-    bServerListReceived = true;
-    TimerReRequestServList.stop();
+    // special treatment if a reduced server list was received
+    if ( bIsReducedServerList )
+    {
+        // make sure we only apply the reduced version list once
+        if ( bReducedServerListReceived )
+        {
+            // do nothing
+            return;
+        }
+        else
+        {
+            bReducedServerListReceived = true;
+        }
+    }
+    else
+    {
+        // set flag and disable timer for resend server list request if full list
+        // was received (i.e. not the reduced list)
+        bServerListReceived = true;
+        TimerReRequestServList.stop();
+    }
 
     // first clear list
     lvwServers->clear();
@@ -484,25 +502,6 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
 
         // the clients list may have changed, update the filter selection
         UpdateListFilter();
-    }
-}
-
-void CConnectDlg::OnServerListItemSelectionChanged()
-{
-    // get current selected item (we are only interested in the first selected
-    // item)
-    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
-
-    // if an item is clicked/selected, copy the server name to the combo box
-    if ( CurSelListItemList.count() > 0 )
-    {
-        // make sure no signals are send when we change the text
-        cbxServerAddr->blockSignals ( true );
-        {
-            cbxServerAddr->setEditText (
-                GetParentListViewItem ( CurSelListItemList[0] )->text ( 0 ) );
-        }
-        cbxServerAddr->blockSignals ( false );
     }
 }
 
@@ -767,15 +766,18 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         }
 
         // update number of clients text
-        if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
+        if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
         {
-            pCurListViewItem->
-                setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
+            // special case: reduced server list
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
+        }
+        else if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
+        {
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
         }
         else
         {
-            pCurListViewItem->
-                setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
         }
 
         // check if the number of child list items matches the number of

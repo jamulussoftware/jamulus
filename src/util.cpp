@@ -465,6 +465,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
         "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
         "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
+        "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
         "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
         "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
         "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
@@ -490,7 +491,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p><b>" + tr ( "Polish" ) + "</b></p>"
         "<p>Martyna Danysz (<a href=""https://github.com/Martyna27"">Martyna27</a>)</p>"
         "<p><b>" + tr ( "Swedish" ) + "</b></p>"
-        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>");
+        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>"
+        "<p><b>" + tr ( "Slovak" ) + "</b></p>"
+        "<p>Jose Riha (<a href=""https://github.com/jose1711"">jose1711</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -511,12 +514,11 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     - Decline button
 */
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
-    resize ( 700, 450 );
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
-    QTextBrowser* txvLicence = new QTextBrowser ( this );
-    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I &agree to the above licence terms" ), this );
+    QLabel*       lblLicence = new QLabel ( tr ( "This server requires you accept conditions before you can join. Please read these in the chat window." ), this );
+    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I have read the conditions and &agree." ), this );
     butAccept                = new QPushButton ( tr ( "Accept" ), this );
     QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
 
@@ -524,48 +526,12 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     pSubLayout->addWidget ( chbAgree );
     pSubLayout->addWidget ( butAccept );
     pSubLayout->addWidget ( butDecline );
-    pLayout->addWidget    ( txvLicence );
+    pLayout->addWidget    ( lblLicence );
     pLayout->addLayout    ( pSubLayout );
 
     // set some properties
     butAccept->setEnabled ( false );
     butAccept->setDefault ( true );
-    txvLicence->setOpenExternalLinks ( true );
-
-    // define the licence text (similar to what we have in Ninjam)
-    txvLicence->setText (
-        "<p><big>" + tr (
-        "By connecting to this server and agreeing to this notice, you agree to the "
-        "following:" ) + "</big></p><p><big>" + tr (
-        "You agree that all data, sounds, or other works transmitted to this server "
-        "are owned and created by you or your licensors, and that you are making these "
-        "data, sounds or other works available via the following Creative Commons "
-        "License (for more information on this license, see " ) +
-        "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
-        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):</big></p>"
-        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>"
-        "<p>" + tr ( "You are free to:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Share" ) + "</b> - " +
-        tr ( "copy and redistribute the material in any medium or format" ) + "</li>"
-        "<li><b>" + tr ( "Adapt" ) + "</b> - " +
-        tr ( "remix, transform, and build upon the material" ) + "</li>"
-        "</ul>" + tr ( "The licensor cannot revoke these freedoms as long as you follow the "
-        "license terms." ) + "</p>"
-        "<p>" + tr ( "Under the following terms:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Attribution" ) + "</b> - " +
-        tr ( "You must give appropriate credit, provide a link to the license, and indicate "
-        "if changes were made. You may do so in any reasonable manner, but not in any way "
-        "that suggests the licensor endorses you or your use." ) + "</li>"
-        "<li><b>" + tr ( "NonCommercial" ) + "</b> - " +
-        tr ( "You may not use the material for commercial purposes." ) + "</li>"
-        "<li><b>" + tr ( "ShareAlike" ) + "</b> - " +
-        tr ( "If you remix, transform, or build upon the material, you must distribute your "
-        "contributions under the same license as the original." ) + "</li>"
-        "</ul><b>" + tr ( "No additional restrictions" ) + "</b> — " +
-        tr ( "You may not apply legal terms or technological measures that legally restrict "
-        "others from doing anything the license permits." ) + "</p>" );
 
     QObject::connect ( chbAgree, &QCheckBox::stateChanged,
         this, &CLicenceDlg::OnAgreeStateChanged );
@@ -1199,13 +1165,11 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
     else
     {
-
 // NOTE: The following code was introduced to support old QT versions. The problem
 //       is that the number of countries displayed is less than the one displayed
 //       with the new code below (which is disabled). Therefore, as soon as the
 //       compatibility to the very old versions of QT is not required anymore, use
 //       the new code.
-
 // COMPATIBLE FOR OLD QT VERSIONS -> use a table:
         QString strISO3166 = "";
         switch ( static_cast<int> ( eCountry ) )
@@ -1401,7 +1365,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             strReturn = "";
         }
 
-
 // AT LEAST QT 4.8 IS REQUIRED:
 /*
         // There is no direct query of the country code in Qt, therefore we use a
@@ -1419,8 +1382,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             // the second split contains the name we need
             if ( vstrLocParts.size() > 1 )
             {
-                strReturn =
-                    ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+                strReturn = ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
 
                 // check if file actually exists, if not then invalidate reference
                 if ( !QFile::exists ( strReturn ) )
@@ -1441,23 +1403,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
 
     return strReturn;
-}
-
-ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountry )
-{
-// TODO this is the initial implementation and should be extended in the future,
-//      maybe there is/will be some function in Qt to get the continent
-    switch ( eCountry )
-    {
-    case QLocale::UnitedStates:
-    case QLocale::Canada:
-    case QLocale::Mexico:
-    case QLocale::Greenland:
-        return AT_ALL_GENRES;
-
-    default:
-        return AT_DEFAULT;
-    }
 }
 
 QMap<QString, QString> CLocale::GetAvailableTranslations()

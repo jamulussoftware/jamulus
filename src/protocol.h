@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <list>
+#include <cmath>
 #include "global.h"
 #include "util.h"
 
@@ -60,6 +61,8 @@
 #define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
 #define PROTMESSID_CLIENT_ID                  32 // current user ID and server status
 #define PROTMESSID_RECORDER_STATE             33 // contains the state of the jam recorder (ERecorderState)
+#define PROTMESSID_REQ_SPLIT_MESS_SUPPORT     34 // request support for split messages
+#define PROTMESSID_SPLIT_MESS_SUPPORTED       35 // split messages are supported
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -80,6 +83,10 @@
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
+#define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
+
+// special IDs
+#define PROTMESSID_SPECIAL_SPLIT_MESSAGE      2001 // a container for split messages
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -87,6 +94,10 @@
 
 // time out for message re-send if no acknowledgement was received
 #define SEND_MESS_TIMEOUT_MS            400 // ms
+
+// message split parameters
+#define MESS_SPLIT_PART_SIZE_BYTES      550
+#define MAX_NUM_MESS_SPLIT_PARTS        ( MAX_SIZE_BYTES_NETW_BUF / MESS_SPLIT_PART_SIZE_BYTES )
 
 
 /* Classes ********************************************************************/
@@ -98,6 +109,7 @@ public:
     CProtocol();
 
     void Reset();
+    void SetSplitMessageSupported ( const bool bIn ) { bSplitMessageSupported = bIn; }
 
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
@@ -112,6 +124,8 @@ public:
     void CreateChatTextMes ( const QString strChatText );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
+    void CreateReqSplitMessSupportMes();
+    void CreateSplitMessSupportedMes();
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
     void CreateReqChannelLevelListMes ( const bool bRCL );
@@ -131,6 +145,8 @@ public:
                                          const CServerCoreInfo& ServerInfo );
     void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
     void CreateCLServerListMes         ( const CHostAddress&        InetAddr,
+                                         const CVector<CServerInfo> vecServerInfo );
+    void CreateCLRedServerListMes      ( const CHostAddress&        InetAddr,
                                          const CVector<CServerInfo> vecServerInfo );
     void CreateCLReqServerListMes      ( const CHostAddress& InetAddr );
     void CreateCLSendEmptyMesMes       ( const CHostAddress& InetAddr,
@@ -154,11 +170,11 @@ public:
                                     int&                    iRecCounter,
                                     int&                    iRecID );
 
-    bool ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+    void ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                             const int               iRecCounter,
                             const int               iRecID );
 
-    bool ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+    void ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                           const int               iRecID,
                                           const CHostAddress&     InetAddr );
 
@@ -202,6 +218,22 @@ protected:
                            const int               iID,
                            const CVector<uint8_t>& vecData );
 
+    void GenSplitMessageContainer ( CVector<uint8_t>&       vecOut,
+                                    const int               iID,
+                                    const int               iNumParts,
+                                    const int               iSplitCnt,
+                                    const CVector<uint8_t>& vecData,
+                                    const int               iStartIndexInData,
+                                    const int               iLengthOfDataPart );
+
+    bool ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
+                                      CVector<uint8_t>&       vecbyMesBodyData,
+                                      const int               iSplitMessageDataIndex,
+                                      int&                    iID,
+                                      int&                    iNumParts,
+                                      int&                    iSplitCnt,
+                                      int&                    iCurPartSize );
+
     void PutValOnStream ( CVector<uint8_t>& vecIn,
                           int&              iPos,
                           const uint32_t    iVal,
@@ -209,7 +241,8 @@ protected:
 
     void PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
                                  int&              iPos,
-                                 const QByteArray& sStringUTF8 );
+                                 const QByteArray& sStringUTF8,
+                                 const int         iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
 
     static uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
                                        int&                    iPos,
@@ -218,7 +251,8 @@ protected:
     bool GetStringFromStream ( const CVector<uint8_t>& vecIn,
                                int&                    iPos,
                                const int               iMaxStringLen,
-                               QString&                strOut );
+                               QString&                strOut,
+                               const int               iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
 
     void SendMessage();
 
@@ -242,6 +276,8 @@ protected:
     bool EvaluateChatTextMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
+    bool EvaluateReqSplitMessSupportMes();
+    bool EvaluateSplitMessSupportedMes();
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
     bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
@@ -258,6 +294,8 @@ protected:
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
     bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLRedServerListMes      ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerListMes      ( const CHostAddress&     InetAddr );
     bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
@@ -282,6 +320,11 @@ protected:
 
     QTimer                  TimerSendMess;
     QMutex                  Mutex;
+
+    CVector<uint8_t>        vecbySplitMessageStorage;
+    int                     iSplitMessageCnt;
+    int                     iSplitMessageDataIndex;
+    bool                    bSplitMessageSupported;
 
 public slots:
     void OnTimerSendMess() { SendMessage(); }
@@ -308,6 +351,8 @@ signals:
     void ChatTextReceived ( QString strChatText );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
+    void ReqSplitMessSupport();
+    void SplitMessSupported();
     void LicenceRequired ( ELicenceType eLicenceType );
     void ReqChannelLevelList ( bool bOptIn );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
@@ -328,6 +373,8 @@ signals:
                                         QString                strVersion );
     void CLUnregisterServerReceived   ( CHostAddress           InetAddr );
     void CLServerListReceived         ( CHostAddress           InetAddr,
+                                        CVector<CServerInfo>   vecServerInfo );
+    void CLRedServerListReceived      ( CHostAddress           InetAddr,
                                         CVector<CServerInfo>   vecServerInfo );
     void CLReqServerList              ( CHostAddress           InetAddr );
     void CLSendEmptyMes               ( CHostAddress           TargetInetAddr );

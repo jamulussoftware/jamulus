@@ -61,7 +61,8 @@ public:
     bool GetShowAllMusicians() { return bShowAllMusicians; }
 
     void SetServerList ( const CHostAddress&         InetAddr,
-                         const CVector<CServerInfo>& vecServerInfo );
+                         const CVector<CServerInfo>& vecServerInfo,
+                         const bool                  bIsReducedServerList = false );
 
     void SetConnClientsList ( const CHostAddress&          InetAddr,
                               const CVector<CChannelInfo>& vecChanInfo );
@@ -101,12 +102,12 @@ protected:
     QString      strSelectedServerName;
     bool         bShowCompleteRegList;
     bool         bServerListReceived;
+    bool         bReducedServerListReceived;
     bool         bServerListItemWasChosen;
     bool         bListFilterWasActive;
     bool         bShowAllMusicians;
 
 public slots:
-    void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
     void OnCentServAddrTypeChanged ( int iTypeIdx ) { pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) ); }

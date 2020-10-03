@@ -412,6 +412,9 @@ signals:
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
 
+    void CLRedServerListReceived ( CHostAddress         InetAddr,
+                                   CVector<CServerInfo> vecServerInfo );
+
     void CLConnClientsListMesReceived ( CHostAddress          InetAddr,
                                         CVector<CChannelInfo> vecChanInfo );
 

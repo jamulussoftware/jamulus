@@ -233,6 +233,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const bool         bNUseMultithreading,
+                   const bool         bDisableRecording,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading          ( bNUseMultithreading ),
@@ -249,6 +250,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   iNewMaxNumChan,
                                   bNCentServPingServerInList,
                                   &ConnLessProtocol ),
+    bDisableRecording           ( bDisableRecording ),
     bAutoRunMinimized           ( false ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
@@ -596,6 +598,9 @@ void CServer::OnNewConnection ( int          iChID,
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
 
+    // query support for split messages in the client
+    vecChannels[iChID].CreateReqSplitMessSupportMes();
+
     // on a new connection we query the network transport properties for the
     // audio packets (to use the correct network block size and audio
     // compression properties, etc.)
@@ -633,7 +638,7 @@ void CServer::OnNewConnection ( int          iChID,
             // create formatted server welcome message and send it just to
             // the client which just connected to the server
             const QString strWelcomeMessageFormated =
-                "<b>Server Welcome Message:</b> " + strWelcomeMessage;
+                WELCOME_MESSAGE_PREFIX + strWelcomeMessage;
 
             vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
         }
@@ -887,6 +892,13 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
                 // consider audio fade-in
                 vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+
+                // use the fade in of the current channel for all other connected clients
+                // as well to avoid the client volumes are at 100% when joining a server (#628)
+                if ( j != i )
+                {
+                    vecvecdGains[i][j] *= vecChannels[iCurChanID].GetFadeInGain();
+                }
 
                 // panning
                 vecvecdPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
@@ -1339,7 +1351,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
                                                        const QString& strChatText )
 {
     // Create message which is sent to all connected clients -------------------
-    // get client name, if name is empty, use IP address instead
+    // get client name
     QString ChanName = vecChannels[iCurChanID].GetName();
 
     // add time and name of the client at the beginning of the message text and
@@ -1506,15 +1518,17 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
             // reset channel info
             vecChannels[iCurChanID].ResetInfo();
 
-            // reset the channel gains of current channel, at the same
-            // time reset gains of this channel ID for all other channels
+            // reset the channel gains/pans of current channel, at the same
+            // time reset gains/pans of this channel ID for all other channels
             for ( int i = 0; i < iMaxNumChannels; i++ )
             {
                 vecChannels[iCurChanID].SetGain ( i, 1.0 );
+                vecChannels[iCurChanID].SetPan  ( i, 0.5 );
 
                 // other channels (we do not distinguish the case if
                 // i == iCurChanID for simplicity)
                 vecChannels[i].SetGain ( iCurChanID, 1.0 );
+                vecChannels[i].SetPan  ( iCurChanID, 0.5 );
             }
         }
         else
@@ -1572,6 +1586,9 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 void CServer::SetEnableRecording ( bool bNewEnableRecording )
 {
     JamController.SetEnableRecording ( bNewEnableRecording, IsRunning() );
+
+    // not dependent upon JamController state
+    bDisableRecording = !bNewEnableRecording;
 
     // the recording state may have changed, send recording state message
     CreateAndSendRecorderStateForAllConChannels();
@@ -1677,7 +1694,7 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                                               vecNumAudioChannels[j] > 1 );
 
             // map value to integer for transmission via the protocol (4 bit available)
-            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevelForMeterdB ) );
+            vecLevelsOut[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );
         }
     }
 

@@ -32,6 +32,8 @@
 #include <QWhatsThis>
 #include <QLayout>
 #include <QAccessible>
+#include <QDesktopServices>
+#include <QMessageBox>
 #include "global.h"
 #include "ui_chatdlgbase.h"
 
@@ -50,6 +52,7 @@ public slots:
     void OnSendText();
     void OnLocalInputTextTextChanged ( const QString& strNewText );
     void OnClearChatHistory();
+    void OnAnchorClicked ( const QUrl& Url );
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }

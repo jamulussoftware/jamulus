@@ -794,7 +794,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     // some inits
     int  iNumClients               = 0; // init connected client counter
     bool bChannelIsNowDisconnected = false;
-    bool bUpdateChannelLevels      = false;
+    bool bUpdateChannelLevels      = true; // TODO remove this -> set to true for now (#638)
     bool bSendChannelLevels        = false;
 
     // Make put and get calls thread safe. Do not forget to unlock mutex

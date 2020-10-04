@@ -8,6 +8,8 @@
 
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
+TODO BUG FIX: the new Windows audio interface gives ugly clipping (which the old one does not)!!!
+
 TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)
 
 

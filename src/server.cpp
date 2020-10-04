@@ -792,7 +792,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 */
     // Get data from all connected clients -------------------------------------
     // some inits
-    int  iUnused;
     int  iNumClients               = 0; // init connected client counter
     bool bChannelIsNowDisconnected = false;
     bool bUpdateChannelLevels      = false;
@@ -816,159 +815,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             }
         }
 
-        // process connected channels
-        for ( int i = 0; i < iNumClients; i++ )
+        // prepare and decode connected channels
+        for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
-            int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
-            OpusCustomDecoder* CurOpusDecoder;
-            unsigned char*     pCurCodedData;
-
-            // get actual ID of current channel
-            const int iCurChanID = vecChanIDsCurConChan[i];
-
-            // get and store number of audio channels and compression type
-            vecNumAudioChannels[i] = vecChannels[iCurChanID].GetNumAudioChannels();
-            vecAudioComprType[i]   = vecChannels[iCurChanID].GetAudioCompressionType();
-
-            // get info about required frame size conversion properties
-            vecUseDoubleSysFraSizeConvBuf[i] = ( !bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS ) );
-
-            if ( bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 ) )
-            {
-                vecNumFrameSizeConvBlocks[i] = 2;
-            }
-            else
-            {
-                vecNumFrameSizeConvBlocks[i] = 1;
-            }
-
-            // update conversion buffer size (nothing will happen if the size stays the same)
-            if ( vecUseDoubleSysFraSizeConvBuf[i] )
-            {
-                DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
-                DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
-            }
-
-            // select the opus decoder and raw audio frame length
-            if ( vecAudioComprType[i] == CT_OPUS )
-            {
-                iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
-
-                if ( vecNumAudioChannels[i] == 1 )
-                {
-                    CurOpusDecoder = OpusDecoderMono[iCurChanID];
-                }
-                else
-                {
-                    CurOpusDecoder = OpusDecoderStereo[iCurChanID];
-                }
-            }
-            else if ( vecAudioComprType[i] == CT_OPUS64 )
-            {
-                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
-
-                if ( vecNumAudioChannels[i] == 1 )
-                {
-                    CurOpusDecoder = Opus64DecoderMono[iCurChanID];
-                }
-                else
-                {
-                    CurOpusDecoder = Opus64DecoderStereo[iCurChanID];
-                }
-            }
-            else
-            {
-                CurOpusDecoder = nullptr;
-            }
-
-            // get gains of all connected channels
-            for ( int j = 0; j < iNumClients; j++ )
-            {
-                // The second index of "vecvecfGains" does not represent
-                // the channel ID! Therefore we have to use
-                // "vecChanIDsCurConChan" to query the IDs of the currently
-                // connected channels
-                vecvecfGains[i][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
-
-                // consider audio fade-in
-                vecvecfGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
-
-                // use the fade in of the current channel for all other connected clients
-                // as well to avoid the client volumes are at 100% when joining a server (#628)
-                if ( j != i )
-                {
-                    vecvecfGains[i][j] *= vecChannels[iCurChanID].GetFadeInGain();
-                }
-
-                // panning
-                vecvecfPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
-            }
-
-            // flag for updating channel levels (if at least one clients wants it)
-            if ( vecChannels[iCurChanID].ChannelLevelsRequired() )
-            {
-                bUpdateChannelLevels = true;
-            }
-
-            // If the server frame size is smaller than the received OPUS frame size, we need a conversion
-            // buffer which stores the large buffer.
-            // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
-            // is false and the Get() function is not called at all. Therefore if the buffer is not needed
-            // we do not spend any time in the function but go directly inside the if condition.
-            if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecfData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
-            {
-                // get current number of OPUS coded bytes
-                const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
-
-                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
-                {
-                    // get data
-                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[i], iCeltNumCodedBytes );
-
-                    // if channel was just disconnected, set flag that connected
-                    // client list is sent to all other clients
-                    // and emit the client disconnected signal
-                    if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
-                    {
-                        if ( JamController.GetRecordingEnabled() )
-                        {
-                            emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
-                        }
-
-                        bChannelIsNowDisconnected = true;
-                    }
-
-                    // get pointer to coded data
-                    if ( eGetStat == GS_BUFFER_OK )
-                    {
-                        pCurCodedData = &vecvecbyCodedData[i][0];
-                    }
-                    else
-                    {
-                        // for lost packets use null pointer as coded input data
-                        pCurCodedData = nullptr;
-                    }
-
-                    // OPUS decode received data stream
-                    if ( CurOpusDecoder != nullptr )
-                    {
-                        iUnused = opus_custom_decode_float ( CurOpusDecoder,
-                                                             pCurCodedData,
-                                                             iCeltNumCodedBytes,
-                                                             &vecvecfData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                                             iClientFrameSizeSamples );
-                    }
-                }
-
-                // a new large frame is ready, if the conversion buffer is required, put it in the buffer
-                // and read out the small frame size immediately for further processing
-                if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
-                {
-                    DoubleFrameSizeConvBufIn[iCurChanID].PutAll ( vecvecfData[i] );
-                    DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecfData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
-                }
-            }
+            DecodeReceiveData ( iChanCnt, iNumClients, bChannelIsNowDisconnected );
         }
 
         // a channel is now disconnected, take action on it
@@ -1065,8 +915,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // does not consume any significant CPU when no client is connected.
         Stop();
     }
-
-    Q_UNUSED ( iUnused )
 }
 
 void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
@@ -1078,6 +926,167 @@ void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
     {
         MixEncodeTransmitData ( iChanCnt, iNumClients );
     }
+}
+
+void CServer::DecodeReceiveData ( const int iChanCnt,
+                                  const int iNumClients,
+                                  bool&     bChannelIsNowDisconnected )
+{
+    int                iUnused;
+    int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
+    OpusCustomDecoder* CurOpusDecoder;
+    unsigned char*     pCurCodedData;
+
+    // get actual ID of current channel
+    const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
+
+    // get and store number of audio channels and compression type
+    vecNumAudioChannels[iChanCnt] = vecChannels[iCurChanID].GetNumAudioChannels();
+    vecAudioComprType[iChanCnt]   = vecChannels[iCurChanID].GetAudioCompressionType();
+
+    // get info about required frame size conversion properties
+    vecUseDoubleSysFraSizeConvBuf[iChanCnt] = ( !bUseDoubleSystemFrameSize && ( vecAudioComprType[iChanCnt] == CT_OPUS ) );
+
+    if ( bUseDoubleSystemFrameSize && ( vecAudioComprType[iChanCnt] == CT_OPUS64 ) )
+    {
+        vecNumFrameSizeConvBlocks[iChanCnt] = 2;
+    }
+    else
+    {
+        vecNumFrameSizeConvBlocks[iChanCnt] = 1;
+    }
+
+    // update conversion buffer size (nothing will happen if the size stays the same)
+    if ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] )
+    {
+        DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
+        DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
+    }
+
+    // select the opus decoder and raw audio frame length
+    if ( vecAudioComprType[iChanCnt] == CT_OPUS )
+    {
+        iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+
+        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        {
+            CurOpusDecoder = OpusDecoderMono[iCurChanID];
+        }
+        else
+        {
+            CurOpusDecoder = OpusDecoderStereo[iCurChanID];
+        }
+    }
+    else if ( vecAudioComprType[iChanCnt] == CT_OPUS64 )
+    {
+        iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
+
+        if ( vecNumAudioChannels[iChanCnt] == 1 )
+        {
+            CurOpusDecoder = Opus64DecoderMono[iCurChanID];
+        }
+        else
+        {
+            CurOpusDecoder = Opus64DecoderStereo[iCurChanID];
+        }
+    }
+    else
+    {
+        CurOpusDecoder = nullptr;
+    }
+
+    // get gains of all connected channels
+    for ( int j = 0; j < iNumClients; j++ )
+    {
+        // The second index of "vecvecfGains" does not represent
+        // the channel ID! Therefore we have to use
+        // "vecChanIDsCurConChan" to query the IDs of the currently
+        // connected channels
+        vecvecfGains[iChanCnt][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
+
+        // consider audio fade-in
+        vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+
+        // use the fade in of the current channel for all other connected clients
+        // as well to avoid the client volumes are at 100% when joining a server (#628)
+        if ( j != iChanCnt )
+        {
+            vecvecfGains[iChanCnt][j] *= vecChannels[iCurChanID].GetFadeInGain();
+        }
+
+        // panning
+        vecvecfPannings[iChanCnt][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
+    }
+
+// TODO remove this
+//    // flag for updating channel levels (if at least one clients wants it)
+//    if ( vecChannels[iCurChanID].ChannelLevelsRequired() )
+//    {
+//        bUpdateChannelLevels = true;
+//    }
+
+    // If the server frame size is smaller than the received OPUS frame size, we need a conversion
+    // buffer which stores the large buffer.
+    // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
+    // is false and the Get() function is not called at all. Therefore if the buffer is not needed
+    // we do not spend any time in the function but go directly inside the if condition.
+    if ( ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] == 0 ) ||
+         !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecfData[iChanCnt], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
+    {
+        // get current number of OPUS coded bytes
+        const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
+
+        for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+        {
+            // get data
+            const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
+
+            // if channel was just disconnected, set flag that connected
+            // client list is sent to all other clients
+            // and emit the client disconnected signal
+            if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
+            {
+                if ( JamController.GetRecordingEnabled() )
+                {
+                    emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+                }
+
+                // note that no mutex is needed for this shared resource
+                bChannelIsNowDisconnected = true;
+            }
+
+            // get pointer to coded data
+            if ( eGetStat == GS_BUFFER_OK )
+            {
+                pCurCodedData = &vecvecbyCodedData[iChanCnt][0];
+            }
+            else
+            {
+                // for lost packets use null pointer as coded input data
+                pCurCodedData = nullptr;
+            }
+
+            // OPUS decode received data stream
+            if ( CurOpusDecoder != nullptr )
+            {
+                iUnused = opus_custom_decode_float ( CurOpusDecoder,
+                                                     pCurCodedData,
+                                                     iCeltNumCodedBytes,
+                                                     &vecvecfData[iChanCnt][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                                     iClientFrameSizeSamples );
+            }
+        }
+
+        // a new large frame is ready, if the conversion buffer is required, put it in the buffer
+        // and read out the small frame size immediately for further processing
+        if ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] != 0 )
+        {
+            DoubleFrameSizeConvBufIn[iCurChanID].PutAll ( vecvecfData[iChanCnt] );
+            DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecfData[iChanCnt], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
+        }
+    }
+
+    Q_UNUSED ( iUnused )
 }
 
 /// @brief Mix all audio data from all clients together, encode and transmit

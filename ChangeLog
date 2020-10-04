@@ -8,6 +8,7 @@
 
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
+TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)
 
 
 

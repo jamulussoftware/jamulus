@@ -500,16 +500,16 @@ public:
         }
     }
 
-    void PutAll ( const CVector<TData>& vecfData )
+    void PutAll ( const CVector<TData>& vecData )
     {
         iGetPos = 0;
 
-        std::copy ( vecfData.begin(),
-                    vecfData.begin() + iBufferSize, // note that input vector might be larger then memory size
+        std::copy ( vecData.begin(),
+                    vecData.begin() + iBufferSize, // note that input vector might be larger then memory size
                     vecMemory.begin() );
     }
 
-    bool Put ( const CVector<TData>& vecfData,
+    bool Put ( const CVector<TData>& vecData,
                const int             iVecSize )
     {
         // calculate the input size and the end position after copying
@@ -519,8 +519,8 @@ public:
         if ( iEnd <= iBufferSize )
         {
             // copy new data in internal buffer
-            std::copy ( vecfData.begin(),
-                        vecfData.begin() + iVecSize,
+            std::copy ( vecData.begin(),
+                        vecData.begin() + iVecSize,
                         vecMemory.begin() + iPutPos );
 
             // set buffer pointer one block further
@@ -540,7 +540,7 @@ public:
         return vecMemory;
     }
 
-    void GetAll ( CVector<TData>& vecfData,
+    void GetAll ( CVector<TData>& vecData,
                   const int       iVecSize )
     {
         iPutPos = 0;
@@ -548,10 +548,10 @@ public:
         // copy data from internal buffer in given buffer
         std::copy ( vecMemory.begin(),
                     vecMemory.begin() + iVecSize,
-                    vecfData.begin() );
+                    vecData.begin() );
     }
 
-    bool Get ( CVector<TData>& vecfData,
+    bool Get ( CVector<TData>& vecData,
                const int       iVecSize )
     {
         // calculate the input size and the end position after copying
@@ -563,7 +563,7 @@ public:
             // copy new data from internal buffer
             std::copy ( vecMemory.begin() + iGetPos,
                         vecMemory.begin() + iGetPos + iVecSize,
-                        vecfData.begin() );
+                        vecData.begin() );
 
             // set buffer pointer one block further
             iGetPos = iEnd;

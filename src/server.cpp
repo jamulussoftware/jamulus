@@ -1529,13 +1529,13 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
             // time reset gains/pans of this channel ID for all other channels
             for ( int i = 0; i < iMaxNumChannels; i++ )
             {
-                vecChannels[iCurChanID].SetGain ( i, 1.0 );
-                vecChannels[iCurChanID].SetPan  ( i, 0.5 );
+                vecChannels[iCurChanID].SetGain ( i, 1.0f );
+                vecChannels[iCurChanID].SetPan  ( i, 0.5f );
 
                 // other channels (we do not distinguish the case if
                 // i == iCurChanID for simplicity)
-                vecChannels[i].SetGain ( iCurChanID, 1.0 );
-                vecChannels[i].SetPan  ( iCurChanID, 0.5 );
+                vecChannels[i].SetGain ( iCurChanID, 1.0f );
+                vecChannels[i].SetPan  ( iCurChanID, 0.5f );
             }
         }
         else

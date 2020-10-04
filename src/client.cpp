@@ -819,7 +819,6 @@ void CClient::Init()
             // since we use double size frame size for OPUS, we have to adjust the frame size factor
             iSndCrdFrameSizeFactor /= 2;
             eAudioCompressionType   = CT_OPUS;
-
         }
     }
 

@@ -1019,3 +1019,5 @@ contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)
     DEFINES += DISABLE_VERSION_CHECK
 }
+
+ANDROID_ABIS = armeabi-v7a arm64-v8a

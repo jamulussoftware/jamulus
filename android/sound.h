@@ -31,7 +31,6 @@
 #include <QDebug>
 #include <android/log.h>
 
-
 /* Classes ********************************************************************/
 class CSound : public CSoundBase, public oboe::AudioStreamCallback//, public IRenderableAudio, public IRestartable
 {
@@ -52,9 +51,9 @@ public:
     virtual void onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result );
     virtual void onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result );
 
-    // these variables should be protected but cannot since we want
-    // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
+protected:
+    CVector<short> vecsTmpInputAudioSndCrdStereo;
+    CVector<float> vecsTmpOutAudioSndCrdStereo;
 
     static void android_message_handler ( QtMsgType                 type,
                                           const QMessageLogContext& context,
@@ -72,10 +71,6 @@ public:
 
         __android_log_print ( priority, "Qt", "%s", qPrintable ( message ) );
     };
-
-// TEST
-CVector<short> vecsTmpAudioInSndCrd;
-int            iModifiedInBufSize;
 
     int            iOpenSLBufferSizeMono;
     int            iOpenSLBufferSizeStereo;
@@ -96,9 +91,4 @@ private:
     // empty and the garbage in the first 500ms or so is discarded
     static constexpr int32_t kNumCallbacksToDrain = 10;
     int32_t mCountCallbacksToDrain = kNumCallbacksToDrain;
-
-    // Used to reference this instance of class from within the static callback
-    CSound *pSound;
-
-    QMutex Mutex;
 };

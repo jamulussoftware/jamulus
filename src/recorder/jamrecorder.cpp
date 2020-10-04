@@ -71,13 +71,15 @@ CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString
  * @param _name The client's current name
  * @param pcm The PCM data
  */
-void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples)
+void CJamClient::Frame(const QString _name, const CVector<float>& pcm, int iServerFrameSizeSamples)
 {
     name = _name;
 
     for(int i = 0; i < numChannels * iServerFrameSizeSamples; i++)
     {
-        *out << pcm[i];
+        /* samples must be stored in little endian order */
+        const int sample24 = pcm[i] * ((1 << 23) - 1);
+        *out << ( uint8_t ) sample24 << ( uint8_t ) ( sample24 >> 8 ) << ( uint8_t )( sample24 >> 16 );
     }
 
     frameCount++;
@@ -166,7 +168,7 @@ void CJamSession::DisconnectClient(int iChID)
  *
  * Also manages the overall current frame counter for the session.
  */
-void CJamSession::Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples)
+void CJamSession::Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<float> data, int iServerFrameSizeSamples)
 {
     if ( iChID == chIdDisconnected )
     {
@@ -529,7 +531,7 @@ void CJamRecorder::OnDisconnected(int iChID)
  *
  * Ensures recording has started.
  */
-void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data)
+void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<float> data)
 {
     // Make sure we are ready
     if ( !isRecording )

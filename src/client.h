@@ -117,8 +117,8 @@ public:
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
 
-    double GetLevelForMeterdBLeft()  { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
-    double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
+    float GetLevelForMeterdBLeft()  { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
+    float GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
     bool   GetAndResetbJitterBufferOKFlag();
 
@@ -243,10 +243,10 @@ public:
 
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
-    void SetRemoteChanGain ( const int iId, const double dGain, const bool bIsMyOwnFader );
+    void SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader );
 
-    void SetRemoteChanPan ( const int iId, const double dPan )
-        { Channel.SetRemoteChanPan ( iId, dPan ); }
+    void SetRemoteChanPan ( const int iId, const float fPan )
+        { Channel.SetRemoteChanPan ( iId, fPan ); }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
@@ -288,11 +288,11 @@ public:
 
 protected:
     // callback function must be static, otherwise it does not work
-    static void AudioCallback ( CVector<short>& psData, void* arg );
+    static void AudioCallback ( CVector<float>& vfData, void* arg );
 
     void        Init();
-    void        ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
-    void        ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
+    void        ProcessSndCrdAudioData ( CVector<float>& vecfStereoSndCrd );
+    void        ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd );
 
     int         PreparePingMessage();
     int         EvaluatePingMessage ( const int iMs );
@@ -323,7 +323,7 @@ protected:
     int                     iNumAudioChannels;
     bool                    bIsInitializationPhase;
     bool                    bMuteOutStream;
-    double                  dMuteOutStreamGain;
+    float                   fMuteOutStreamGain;
     CVector<unsigned char>  vecCeltData;
 
     CHighPrioSocket         Socket;
@@ -342,11 +342,11 @@ protected:
 
     bool                    bSndCrdConversionBufferRequired;
     int                     iSndCardMonoBlockSizeSamConvBuff;
-    CBufferBase<int16_t>    SndCrdConversionBufferIn;
-    CBufferBase<int16_t>    SndCrdConversionBufferOut;
-    CVector<int16_t>        vecDataConvBuf;
-    CVector<int16_t>        vecsStereoSndCrdMuteStream;
-    CVector<int16_t>        vecZeros;
+    CBufferBase<float>      SndCrdConversionBufferIn;
+    CBufferBase<float>      SndCrdConversionBufferOut;
+    CVector<float>          vecDataConvBuf;
+    CVector<float>          vecfStereoSndCrdMuteStream;
+    CVector<float>          vecZeros;
 
     bool                    bFraSiFactPrefSupported;
     bool                    bFraSiFactDefSupported;

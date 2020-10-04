@@ -101,8 +101,8 @@ void CLlconVST::processReplacing ( float**  pvIn,
     // copy input data
     for ( i = 0, j = 0; i < iNumSamples; i++, j += 2 )
     {
-        Client.GetSound()->vecsTmpAudioSndCrdStereo[j]     = pfIn0[i];
-        Client.GetSound()->vecsTmpAudioSndCrdStereo[j + 1] = pfIn1[i];
+        Client.GetSound()->vecfTmpAudioSndCrdStereo[j]     = pfIn0[i];
+        Client.GetSound()->vecfTmpAudioSndCrdStereo[j + 1] = pfIn1[i];
     }
 
     // call processing callback function
@@ -111,7 +111,7 @@ void CLlconVST::processReplacing ( float**  pvIn,
     // copy output data
     for ( i = 0, j = 0; i < iNumSamples; i++, j += 2 )
     {
-        pfOut0[i] = Client.GetSound()->vecsTmpAudioSndCrdStereo[j];
-        pfOut1[i] = Client.GetSound()->vecsTmpAudioSndCrdStereo[j + 1];
+        pfOut0[i] = Client.GetSound()->vecfTmpAudioSndCrdStereo[j];
+        pfOut1[i] = Client.GetSound()->vecfTmpAudioSndCrdStereo[j + 1];
     }
 }

@@ -168,8 +168,8 @@ LED bar:      lbr
 #define MAX_NUM_STORED_FADER_SETTINGS    250
 
 // range for signal level meter
-#define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
-#define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
+#define LOW_BOUND_SIG_METER              ( -50.0f ) // dB
+#define UPPER_BOUND_SIG_METER            ( 0.0f )   // dB
 
 // defines for LED level meter CLevelMeter
 #define NUM_STEPS_LED_BAR                8
@@ -244,8 +244,6 @@ LED bar:      lbr
 // server welcome message title (do not change for compatibility!)
 #define WELCOME_MESSAGE_PREFIX           "<b>Server Welcome Message:</b> "
 
-#define _MAXSHORT                        32767
-#define _MINSHORT                        ( -32768 )
 #define INVALID_INDEX                    -1 // define invalid index as a negative value (a valid index must always be >= 0)
 
 #if HAVE_STDINT_H

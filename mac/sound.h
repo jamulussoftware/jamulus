@@ -36,7 +36,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     ,
@@ -63,7 +63,7 @@ public:
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
+    CVector<float> vecfTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
     AudioDeviceID  CurrentAudioInputDeviceID;

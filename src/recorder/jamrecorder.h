@@ -72,7 +72,7 @@ class CJamClient : public QObject
 public:
     CJamClient(const qint64 frame, const int numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir);
 
-    void Frame(const QString name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples);
+    void Frame(const QString name, const CVector<float>& pcm, int iServerFrameSizeSamples);
 
     void Disconnect();
 
@@ -108,7 +108,7 @@ public:
 
     CJamSession(QDir recordBaseDir);
 
-    void Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples);
+    void Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<float> data, int iServerFrameSizeSamples);
 
     void End();
 
@@ -200,7 +200,7 @@ public slots:
     /**
      * @brief Handle a frame of data to process
      */
-    void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data );
+    void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<float> data );
 };
 
 }

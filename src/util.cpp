@@ -28,7 +28,7 @@
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
+void CStereoSignalLevelMeter::Update ( const CVector<float>& vecfAudio,
                                        const int             iMonoBlockSizeSam,
                                        const bool            bIsStereoIn )
 {
@@ -36,14 +36,14 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
     //
     // Speed optimization:
     // - we only make use of the negative values and ignore the positive ones (since
-    //   int16 has range {-32768, 32767}) -> we do not need to call the fabs() function
+    //   float has the range {-1, 1}) -> we do not need to call the fabsf() function
     // - we only evaluate every third sample
     //
     // With these speed optimizations we might loose some information in
     // special cases but for the average music signals the following code
     // should give good results.
-    short sMinLOrMono = 0;
-    short sMinR       = 0;
+    float fMinLOrMono = 0;
+    float fMinR       = 0;
 
     if ( bIsStereoIn )
     {
@@ -51,14 +51,14 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
         for ( int i = 0; i < 2 * iMonoBlockSizeSam; i += 6 ) // 2 * 3 = 6 -> stereo
         {
             // left (or mono) and right channel
-            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
-            sMinR       = std::min ( sMinR,       vecsAudio[i + 1] );
+            fMinLOrMono = fminf ( fMinLOrMono, vecfAudio[i] );
+            fMinR       = fminf ( fMinR,       vecfAudio[i + 1] );
         }
 
         // in case of mono out use minimum of both channels
         if ( !bIsStereoOut )
         {
-            sMinLOrMono = std::min ( sMinLOrMono, sMinR );
+            fMinLOrMono = fminf ( fMinLOrMono, fMinR );
         }
     }
     else
@@ -66,66 +66,71 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
         // mono in
         for ( int i = 0; i < iMonoBlockSizeSam; i += 3 )
         {
-            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
+            fMinLOrMono = fminf ( fMinLOrMono, vecfAudio[i] );
         }
     }
 
     // apply smoothing, if in stereo out mode, do this for two channels
-    dCurLevelLOrMono = UpdateCurLevel ( dCurLevelLOrMono, -sMinLOrMono );
+    fCurLevelLOrMono = UpdateCurLevel ( fCurLevelLOrMono, -fMinLOrMono );
 
     if ( bIsStereoOut )
     {
-        dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMinR );
+        fCurLevelR = UpdateCurLevel ( fCurLevelR, -fMinR );
     }
 }
 
-double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
-                                                 const double dMax )
+float CStereoSignalLevelMeter::UpdateCurLevel ( float       fCurLevel,
+                                                const float fMax )
 {
     // decrease max with time
-    if ( dCurLevel >= METER_FLY_BACK )
+    if ( fCurLevel >= METER_FLY_BACK )
     {
-        dCurLevel *= dSmoothingFactor;
+        fCurLevel *= fSmoothingFactor;
     }
     else
     {
-        dCurLevel = 0;
+        fCurLevel = 0;
     }
 
     // update current level -> only use maximum
-    if ( dMax > dCurLevel )
+    if ( fMax > fCurLevel )
     {
-        return dMax;
+        return fMax;
     }
     else
     {
-        return dCurLevel;
+        return fCurLevel;
     }
 }
 
-double CStereoSignalLevelMeter::CalcLogResultForMeter ( const double& dLinearLevel )
+float CStereoSignalLevelMeter::CalcLogResultForMeter ( const float& fLinearLevel )
 {
-    const double dNormLevel = dLinearLevel / _MAXSHORT;
+    // With #544 by hselasky the signal processing was changed from short to float.
+    // With the code using short we defined the clipping to be if a value of 32768
+    // was detected. We did this by normalizing by 32767 and the clipping was then
+    // a bit larger than 1. To get the same behavior also with the new float type,
+    // we have to multiply with a factor 32768 / 32767 = 1.000030518509476.
+    const float fNormLevel = fLinearLevel * 1.000030518509476f;
 
     // logarithmic measure
-    double dLevelForMeterdB = -100000.0; // large negative value
+    float fLevelForMeterdB = -100000.0f; // large negative value
 
-    if ( dNormLevel > 0 )
+    if ( fNormLevel > 0 )
     {
-        dLevelForMeterdB = 20.0 * log10 ( dNormLevel );
+        fLevelForMeterdB = 20.0f * log10f ( fNormLevel );
     }
 
     // map to signal level meter (linear transformation of the input
     // level range to the level meter range)
-    dLevelForMeterdB -= LOW_BOUND_SIG_METER;
-    dLevelForMeterdB *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+    fLevelForMeterdB -= LOW_BOUND_SIG_METER;
+    fLevelForMeterdB *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
-    if ( dLevelForMeterdB < 0 )
+    if ( fLevelForMeterdB < 0 )
     {
-        dLevelForMeterdB = 0;
+        fLevelForMeterdB = 0;
     }
 
-    return dLevelForMeterdB;
+    return fLevelForMeterdB;
 }
 
 
@@ -194,21 +199,21 @@ uint32_t CCRC::GetCRC()
 void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
                           const int          iNStereoBlockSizeSam,
                           const int          iSampleRate,
-                          const double       rT60 )
+                          const float        rT60 )
 {
     // store parameters
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
     // delay lengths for 44100 Hz sample rate
-    int          lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const double scaler     = static_cast<double> ( iSampleRate ) / 44100.0;
+    int         lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
+    const float scaler     = static_cast<float> ( iSampleRate ) / 44100.0f;
 
     if ( scaler != 1.0 )
     {
         for ( int i = 0; i < 9; i++ )
         {
-            int delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
+            int delay = static_cast<int> ( floorf ( scaler * lengths[i] ) );
 
             if ( ( delay & 1 ) == 0 )
             {
@@ -232,7 +237,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
     for ( int i = 0; i < 4; i++ )
     {
         combDelays[i].Init ( lengths[i] );
-        combFilters[i].setPole ( 0.2 );
+        combFilters[i].setPole ( 0.2f );
     }
 
     setT60 ( rT60, iSampleRate );
@@ -255,7 +260,9 @@ bool CAudioReverb::isPrime ( const int number )
 
     if ( number & 1 )
     {
-        for ( int i = 3; i < static_cast<int> ( sqrt ( static_cast<double> ( number ) ) ) + 1; i += 2 )
+        const int iMax = static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1;
+
+        for ( int i = 3; i < iMax; i += 2 )
         {
             if ( ( number % i ) == 0 )
             {
@@ -289,37 +296,37 @@ void CAudioReverb::Clear()
     outLeftDelay.Reset ( 0 );
 }
 
-void CAudioReverb::setT60 ( const double rT60,
-                            const int    iSampleRate )
+void CAudioReverb::setT60 ( const float rT60,
+                            const int   iSampleRate )
 {
     // set the reverberation T60 decay time
     for ( int i = 0; i < 4; i++ )
     {
-        combCoefficient[i] = pow ( 10.0, static_cast<double> ( -3.0 *
+        combCoefficient[i] = powf ( 10.0f, static_cast<float> ( -3.0f *
             combDelays[i].Size() / ( rT60 * iSampleRate ) ) );
     }
 }
 
-void CAudioReverb::COnePole::setPole ( const double dPole )
+void CAudioReverb::COnePole::setPole ( const float dPole )
 {
     // calculate IIR filter coefficients based on the pole value
     dA = -dPole;
-    dB = 1.0 - dPole;
+    dB = 1.0f - dPole;
 }
 
-double CAudioReverb::COnePole::Calc ( const double dIn )
+float CAudioReverb::COnePole::Calc ( const float fIn )
 {
     // calculate IIR filter
-    dLastSample = dB * dIn - dA * dLastSample;
+    dLastSample = dB * fIn - dA * dLastSample;
 
     return dLastSample;
 }
 
-void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
-                             const bool        bReverbOnLeftChan,
-                             const double      dAttenuation )
+void CAudioReverb::Process ( CVector<float>& vecfStereoInOut,
+                             const bool      bReverbOnLeftChan,
+                             const float     fAttenuation )
 {
-    double dMixedInput, temp, temp0, temp1, temp2;
+    float fMixedInput, temp, temp0, temp1, temp2;
 
     for ( int i = 0; i < iStereoBlockSizeSam; i += 2 )
     {
@@ -327,23 +334,23 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
         // shall be input for the right channel)
         if ( eAudioChannelConf == CC_STEREO )
         {
-            dMixedInput = 0.5 * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
+            fMixedInput = 0.5f * ( vecfStereoInOut[i] + vecfStereoInOut[i + 1] );
         }
         else
         {
             if ( bReverbOnLeftChan )
             {
-                dMixedInput = vecsStereoInOut[i];
+                fMixedInput = vecfStereoInOut[i];
             }
             else
             {
-                dMixedInput = vecsStereoInOut[i + 1];
+                fMixedInput = vecfStereoInOut[i + 1];
             }
         }
 
         temp = allpassDelays[0].Get();
         temp0 = allpassCoefficient * temp;
-        temp0 += dMixedInput;
+        temp0 += fMixedInput;
         allpassDelays[0].Add ( temp0 );
         temp0 = - ( allpassCoefficient * temp0 ) + temp;
 
@@ -359,17 +366,17 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
         allpassDelays[2].Add ( temp2 );
         temp2 = - ( allpassCoefficient * temp2 ) + temp;
 
-        const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
-        const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
-        const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
-        const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
+        const float temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
+        const float temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
+        const float temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
+        const float temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
 
         combDelays[0].Add ( temp3 );
         combDelays[1].Add ( temp4 );
         combDelays[2].Add ( temp5 );
         combDelays[3].Add ( temp6 );
 
-        const double filtout = temp3 + temp4 + temp5 + temp6;
+        const float filtout = temp3 + temp4 + temp5 + temp6;
 
         outLeftDelay.Add  ( filtout );
         outRightDelay.Add ( filtout );
@@ -378,16 +385,16 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
         // reverberation effect on both channels)
         if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
         {
-            vecsStereoInOut[i] = Double2Short (
-                ( 1.0 - dAttenuation ) * vecsStereoInOut[i] +
-                0.5 * dAttenuation * outLeftDelay.Get() );
+            vecfStereoInOut[i] = ClipFloat (
+                ( 1.0f - fAttenuation ) * vecfStereoInOut[i] +
+                0.5f * fAttenuation * outLeftDelay.Get() );
         }
 
         if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
         {
-            vecsStereoInOut[i + 1] = Double2Short (
-                ( 1.0 - dAttenuation ) * vecsStereoInOut[i + 1] +
-                0.5 * dAttenuation * outRightDelay.Get() );
+            vecfStereoInOut[i + 1] = ClipFloat (
+                ( 1.0f - fAttenuation ) * vecfStereoInOut[i + 1] +
+                0.5f * fAttenuation * outRightDelay.Get() );
         }
     }
 }

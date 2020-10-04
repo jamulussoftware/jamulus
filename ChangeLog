@@ -4,6 +4,8 @@
 
 3.5.12git <- NOTE: the release version number will be 3.5.13
 
+- switched all audio sample processing to use floats, coded by hselasky (#544)
+
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 

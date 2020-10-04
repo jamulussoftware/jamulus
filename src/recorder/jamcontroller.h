@@ -67,10 +67,10 @@ signals:
                       const QString          stChName,
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
-                      const CVector<int16_t> vecsData );
+                      const CVector<float>   vecfData );
 
 };
 
 }
 
-Q_DECLARE_METATYPE(int16_t)
+Q_DECLARE_METATYPE(float)

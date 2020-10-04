@@ -60,7 +60,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
              const bool     bNoAutoJackConnect,
@@ -78,7 +78,7 @@ public:
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
+    CVector<float> vecfTmpAudioSndCrdStereo;
     int            iJACKBufferSizeMono;
     int            iJACKBufferSizeStero;
     bool           bJackWasShutDown;
@@ -111,7 +111,7 @@ class CSound : public CSoundBase
     Q_OBJECT
 
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
+    CSound ( void           (*fpNewProcessCallback) ( CVector<float>& pfData, void* pParg ),
              void*          pParg,
              const int      iCtrlMIDIChannel,
              const bool     ,
@@ -122,12 +122,12 @@ public:
                                                          this, &CSound::OnTimer ); }
     virtual ~CSound() {}
     virtual int Init ( const int iNewPrefMonoBufferSize ) { CSoundBase::Init ( iNewPrefMonoBufferSize );
-                                                            vecsTemp.Init ( 2 * iNewPrefMonoBufferSize );
+                                                            vecfTemp.Init ( 2 * iNewPrefMonoBufferSize );
                                                             return iNewPrefMonoBufferSize; }
     CHighPrecisionTimer HighPrecisionTimer;
-    CVector<short>      vecsTemp;
+    CVector<float>      vecfTemp;
 
 public slots:
-    void OnTimer() { vecsTemp.Reset ( 0 ); if ( IsRunning() ) { ProcessCallback ( vecsTemp ); } }
+    void OnTimer() { vecfTemp.Reset ( 0 ); if ( IsRunning() ) { ProcessCallback ( vecfTemp ); } }
 };
 #endif // WITH_SOUND

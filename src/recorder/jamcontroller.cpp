@@ -150,7 +150,7 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         QObject::connect( this, &CJamController::ClientDisconnected,
             pJamRecorder, &CJamRecorder::OnDisconnected );
 
-        qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
+        qRegisterMetaType<CVector<float> > ( "CVector<float>" );
         QObject::connect( this, &CJamController::AudioFrame,
             pJamRecorder, &CJamRecorder::OnFrame );
 

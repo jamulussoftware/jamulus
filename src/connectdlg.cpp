@@ -272,6 +272,13 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
                                   const CVector<CServerInfo>& vecServerInfo,
                                   const bool                  bIsReducedServerList )
 {
+    // if the normal list was received, we do not accept any further list
+    // updates (to avoid the reduced list overwrites the normal list (#657))
+    if ( bServerListReceived )
+    {
+        return;
+    }
+
     // special treatment if a reduced server list was received
     if ( bIsReducedServerList )
     {

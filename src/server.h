@@ -309,6 +309,10 @@ protected:
                                        const int iStopChanCnt,
                                        const int iNumClients );
 
+    void DecodeReceiveData ( const int iChanCnt,
+                             const int iNumClients,
+                             bool&     bChannelIsNowDisconnected );
+
     void MixEncodeTransmitData ( const int iChanCnt,
                                  const int iNumClients );
 

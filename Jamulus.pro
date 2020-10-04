@@ -1,4 +1,4 @@
-VERSION = 3.5.11git
+VERSION = 3.5.12git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -637,7 +637,7 @@ android {
 
 DISTFILES += ChangeLog \
     COPYING \
-    INSTALL.md \
+    CONTRIBUTING.md \
     README.md \
     distributions/jamulus.desktop.in \
     distributions/jamulus.png \
@@ -650,6 +650,7 @@ DISTFILES += ChangeLog \
     src/res/translation/translation_pl_PL.qm \
     src/res/translation/translation_it_IT.qm \
     src/res/translation/translation_sv_SE.qm \
+    src/res/translation/translation_sk_SK.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

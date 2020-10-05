@@ -113,7 +113,7 @@ LED bar:      lbr
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)
-#define WELL_KNOWN_HOST                  "8.8.8.8" // Google
+#define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms
 

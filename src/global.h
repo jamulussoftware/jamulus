@@ -112,7 +112,7 @@ LED bar:      lbr
 #define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
 
 // determining server internal address uses well-known host and port
-// (Google DNS, or something else reliable)
+// (You can change the service used here to something like Cloudflare (1.1.1.1), Google DNS (8.8.8.8), or something else reliable)
 #define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms

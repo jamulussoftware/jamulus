@@ -8,6 +8,7 @@
 
 TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)
 
+TODO Why does the disconnect take so long under Windows?
 
 
 

@@ -32,7 +32,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  const int      iCtrlMIDIChannel,
                  const bool     ,
                  const QString& ) :
-    CSoundBase ( "OpenSL", fpNewProcessCallback, arg, iCtrlMIDIChannel )
+    CSoundBase ( "Oboe", fpNewProcessCallback, arg, iCtrlMIDIChannel )
 {
 #ifdef ANDROIDDEBUG
     qInstallMessageHandler(myMessageHandler);
@@ -47,13 +47,31 @@ void CSound::setupCommonStreamParams(oboe::AudioStreamBuilder *builder)
             ->setFormat(oboe::AudioFormat::Float)
             ->setSharingMode(oboe::SharingMode::Exclusive)
             ->setChannelCount(oboe::ChannelCount::Stereo)
-            ->setSampleRate(48000)
+            ->setSampleRate(SYSTEM_SAMPLE_RATE_HZ)
             ->setFramesPerCallback(iOpenSLBufferSizeMono)
-           // ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Medium)
-            ->setPerformanceMode(oboe::PerformanceMode::None);
+            ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Medium)
+            ->setPerformanceMode(oboe::PerformanceMode::LowLatency);
 
     return;
 }
+
+void CSound::closeStream ( oboe::ManagedStream& stream )
+{
+    if ( stream )
+    {
+        oboe::Result requestStopRes = stream->requestStop();
+        oboe::Result result         = stream->close();
+
+        if ( result != oboe::Result::OK )
+        {
+            throw CGenErr ( tr ( "Error closing stream: $s",
+                                 oboe::convertToText ( result ) ) );
+        }
+
+        stream.reset();
+    }
+}
+
 
 void CSound::openStreams()
 {
@@ -112,10 +130,7 @@ void CSound::printStreamDetails ( oboe::ManagedStream& stream )
     QString sDeviceID               = QString::number ( stream->getDeviceId() );
     QString sSampleRate             = QString::number ( stream->getSampleRate() );
     QString sAudioFormat            = ( stream->getFormat()==oboe::AudioFormat::I16 ? "I16" : "Float" );
-
     QString sFramesPerCallback      = QString::number ( stream->getFramesPerCallback() );
-    //QString sSampleRateConversionQuality = (stream.getSampleRateConversionQuality()==oboe::SampleRateConversionQuality::
-
     qInfo() << "Stream details: [sDirection: " << sDirection <<
                ", FramesPerBurst: "            << sFramesPerBurst <<
                ", BufferSizeInFrames: "        << sBufferSizeInFrames <<
@@ -138,23 +153,6 @@ void CSound::warnIfNotLowLatency ( oboe::ManagedStream& stream, QString streamNa
     }
 }
 
-void CSound::closeStream ( oboe::ManagedStream& stream )
-{
-    if ( stream )
-    {
-        oboe::Result requestStopRes = stream->requestStop();
-        oboe::Result result         = stream->close();
-
-        if ( result != oboe::Result::OK )
-        {
-            throw CGenErr ( tr ( "Error closing stream: $s",
-                                 oboe::convertToText ( result ) ) );
-        }
-
-        stream.reset();
-    }
-}
-
 void CSound::closeStreams()
 {
     // clean up
@@ -172,7 +170,6 @@ void CSound::Start()
     // finally start the streams so the callback begins, start with inputstream first.
     mRecordingStream->requestStart();
     mPlayStream->requestStart();
-
 }
 
 void CSound::Stop()
@@ -198,18 +195,15 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     vecsTmpInputAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
     vecsTmpOutAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
 
-// TEST
-#if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
-# error "Only a system sample rate of 48 kHz is supported by this module"
-#endif
-
     return iOpenSLBufferSizeMono;
 }
 
 // This is the main callback method for when an audio stream is ready to publish data to an output stream
-// or has received data on an input stream.  As per manual much be very careful not to do anything in this back that
-// can cause delays such as sleeping, file processing, allocate memory, etc
-oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames )
+// or has received data on an input stream. As per manual much be very careful not to do anything in this back that
+// can cause delays such as sleeping, file processing, allocate memory, etc.
+oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
+                                                void*              audioData,
+                                                int32_t            numFrames )
 {
     // only process if we are running
     if ( ! bRun )
@@ -231,7 +225,8 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, v
         // We're good to start recording now
         // Take the data from the recording device output buffer and move
         // it to the vector ready to send up to the server
-        float *floatData = static_cast<float*> ( audioData );
+        float* floatData = static_cast<float*> ( audioData );
+
         // Copy recording data to internal vector
         for ( int frmNum = 0; frmNum < numFrames; ++frmNum )
         {
@@ -258,7 +253,7 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, v
 
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsTmpInputAudioSndCrdStereo [frmNum * oboeStream->getChannelCount() + channelNum] );
+                        vecsTmpInputAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] );
 
                     vecsTmpOutAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] = ((float) iCurSam) / _MAXSHORT;
                 }

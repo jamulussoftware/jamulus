@@ -25,14 +25,13 @@
 #pragma once
 
 #include <oboe/Oboe.h>
-#include <QMutex>
 #include "soundbase.h"
 #include "global.h"
 #include <QDebug>
 #include <android/log.h>
 
 /* Classes ********************************************************************/
-class CSound : public CSoundBase, public oboe::AudioStreamCallback//, public IRenderableAudio, public IRestartable
+class CSound : public CSoundBase, public oboe::AudioStreamCallback
 {
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),

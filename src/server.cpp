@@ -423,6 +423,12 @@ CServer::CServer ( const int          iNewMaxNumChan,
         vecChannels[i].SetEnable ( true );
     }
 
+    // introduced by kraney (#653): "increased the size of the thread pool"
+    if ( bUseMultithreading )
+    {
+        QThreadPool::globalInstance()->setMaxThreadCount ( QThread::idealThreadCount() * 4 );
+    }
+
 
     // Connections -------------------------------------------------------------
     // connect timer timeout signal
@@ -792,10 +798,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 */
     // Get data from all connected clients -------------------------------------
     // some inits
-    int  iNumClients               = 0; // init connected client counter
-    bool bChannelIsNowDisconnected = false;
-    bool bUpdateChannelLevels      = true; // TODO remove this -> set to true for now (#638)
-    bool bSendChannelLevels        = false;
+    int  iNumClients          = 0; // init connected client counter
+    bool bUpdateChannelLevels = true; // TODO remove this -> set to true for now (#638)
+    bool bSendChannelLevels   = false;
+    bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
 
     // Make put and get calls thread safe. Do not forget to unlock mutex
     // afterwards!
@@ -816,9 +822,38 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         }
 
         // prepare and decode connected channels
-        for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
+        if ( !bUseMultithreading )
         {
-            DecodeReceiveData ( iChanCnt, iNumClients, bChannelIsNowDisconnected );
+            for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
+            {
+                DecodeReceiveData ( iChanCnt, iNumClients );
+            }
+        }
+        else
+        {
+            // processing with multithreading
+// TODO optimization of the MTBlockSize value
+            const int iMTBlockSize = 20; // every 20 users a new thread is created
+            const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
+
+            for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
+            {
+                // The work for OPUS decoding is distributed over all available processor cores.
+                // By using the future synchronizer we make sure that all
+                // threads are done when we leave the timer callback function.
+                const int iStartChanCnt = iBlockCnt * iMTBlockSize;
+                const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
+
+                FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                                                                   &CServer::DecodeReceiveDataBlocks,
+                                                                   iStartChanCnt,
+                                                                   iStopChanCnt,
+                                                                   iNumClients ) );
+            }
+
+            // make sure all concurrent run threads have finished when we leave this function
+            FutureSynchronizer.waitForFinished();
+            FutureSynchronizer.clearFutures();
         }
 
         // a channel is now disconnected, take action on it
@@ -883,9 +918,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // processing with multithreading
         if ( bUseMultithreading )
         {
-// TODO optimization of the MTBlockSize value
-            const int iMTBlockSize = 20; // every 20 users a new thread is created
-            const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iMTBlockSize ) );
+            // introduced by kraney (#653): each thread must complete within the 1 or 2ms time budget for the timer
+// TODO determine at startup by running a small benchmark
+            const int iMaximumMixOpsInTimeBudget = 500; // approximate limit as observed on GCP e2-standard instance
+            const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
+            const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
 
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
@@ -917,6 +954,17 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     }
 }
 
+void CServer::DecodeReceiveDataBlocks ( const int iStartChanCnt,
+                                        const int iStopChanCnt,
+                                        const int iNumClients )
+{
+    // loop over all channels in the current block, needed for multithreading support
+    for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )
+    {
+        DecodeReceiveData ( iChanCnt, iNumClients );
+    }
+}
+
 void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                             const int iStopChanCnt,
                                             const int iNumClients )
@@ -929,8 +977,7 @@ void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
 }
 
 void CServer::DecodeReceiveData ( const int iChanCnt,
-                                  const int iNumClients,
-                                  bool&     bChannelIsNowDisconnected )
+                                  const int iNumClients )
 {
     int                iUnused;
     int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
@@ -1051,7 +1098,9 @@ void CServer::DecodeReceiveData ( const int iChanCnt,
                     emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
                 }
 
-                // note that no mutex is needed for this shared resource
+                // note that no mutex is needed for this shared resource since it is not a
+                // read-modify-write operation but an atomic write and also each thread can
+                // only set it to true and never to false
                 bChannelIsNowDisconnected = true;
             }
 

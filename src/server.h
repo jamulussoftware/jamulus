@@ -305,13 +305,16 @@ protected:
 
     void WriteHTMLChannelList();
 
+    void DecodeReceiveDataBlocks ( const int iStartChanCnt,
+                                   const int iStopChanCnt,
+                                   const int iNumClients );
+
     void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                        const int iStopChanCnt,
                                        const int iNumClients );
 
     void DecodeReceiveData ( const int iChanCnt,
-                             const int iNumClients,
-                             bool&     bChannelIsNowDisconnected );
+                             const int iNumClients );
 
     void MixEncodeTransmitData ( const int iChanCnt,
                                  const int iNumClients );
@@ -338,6 +341,7 @@ protected:
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;
     QMutex                     MutexWelcomeMessage;
+    bool                       bChannelIsNowDisconnected;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];

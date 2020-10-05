@@ -4,6 +4,8 @@
 
 3.5.12git <- NOTE: the release version number will be 3.5.13
 
+- improvements for the server multithreading, coded by kraney
+
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)

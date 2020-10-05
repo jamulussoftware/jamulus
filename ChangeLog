@@ -10,6 +10,8 @@ TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)
 
 TODO Why does the disconnect take so long under Windows?
 
+TODO accept server list message only if server address matches
+
 
 
 3.5.12 (2020-10-03)

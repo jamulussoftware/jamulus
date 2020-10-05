@@ -12,6 +12,7 @@ TODO BUG FIX: the new Windows audio interface gives ugly clipping (which the old
 
 TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)
 
+TODO Why does the disconnect take so long under Windows?
 
 
 

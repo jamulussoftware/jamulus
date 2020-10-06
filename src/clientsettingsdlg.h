@@ -93,7 +93,6 @@ protected:
     void OnNetBufValueChanged ( int value );
     void OnNetBufServerValueChanged ( int value );
     void OnAutoJitBufStateChanged ( int value );
-    void OnDisplayChannelLevelsStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
@@ -111,6 +110,5 @@ protected:
 
 signals:
     void GUIDesignChanged();
-    void DisplayChannelLevelsChanged();
     void AudioChannelsChanged();
 };

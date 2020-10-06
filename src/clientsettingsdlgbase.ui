@@ -557,13 +557,6 @@
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="chbDisplayChannelLevels">
-        <property name="text">
-         <string>Display Channel Levels</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="lblCentralServerAddress">
         <property name="text">
          <string>Custom Central Server Address:</string>
@@ -742,7 +735,6 @@
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxSkin</tabstop>
   <tabstop>cbxLanguage</tabstop>
-  <tabstop>chbDisplayChannelLevels</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>
  <resources>

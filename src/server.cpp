@@ -798,9 +798,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 */
     // Get data from all connected clients -------------------------------------
     // some inits
-    int  iNumClients          = 0; // init connected client counter
-    bool bUpdateChannelLevels = true; // TODO remove this -> set to true for now (#638)
-    bool bSendChannelLevels   = false;
+    int iNumClients           = 0; // init connected client counter
     bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
 
     // Make put and get calls thread safe. Do not forget to unlock mutex
@@ -872,13 +870,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     if ( iNumClients > 0 )
     {
         // calculate levels for all connected clients
-        if ( bUpdateChannelLevels )
-        {
-            bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients,
-                                                                 vecNumAudioChannels,
-                                                                 vecvecsData,
-                                                                 vecChannelLevels );
-        }
+        const bool bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients,
+                                                                        vecNumAudioChannels,
+                                                                        vecvecsData,
+                                                                        vecChannelLevels );
 
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
@@ -888,8 +883,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();
 
-            // send channel levels
-            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+            // send channel levels if they are ready
+            if ( bSendChannelLevels )
             {
                 ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
                                                                vecChannelLevels,
@@ -1064,13 +1059,6 @@ void CServer::DecodeReceiveData ( const int iChanCnt,
         // panning
         vecvecdPannings[iChanCnt][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
     }
-
-// TODO remove this
-//    // flag for updating channel levels (if at least one clients wants it)
-//    if ( vecChannels[iCurChanID].ChannelLevelsRequired() )
-//    {
-//        bUpdateChannelLevels = true;
-//    }
 
     // If the server frame size is smaller than the received OPUS frame size, we need a conversion
     // buffer which stores the large buffer.

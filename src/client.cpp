@@ -58,7 +58,6 @@ CClient::CClient ( const quint16  iPortNumber,
     bFraSiFactDefSupported           ( false ),
     bFraSiFactSafeSupported          ( false ),
     eGUIDesign                       ( GD_ORIGINAL ),
-    bDisplayChannelLevels            ( true ),
     bEnableOPUS64                    ( false ),
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
@@ -288,8 +287,8 @@ void CClient::OnNewConnection()
     Channel.CreateReqConnClientsList();
     CreateServerJitterBufferMessage();
 
-    // send opt-in / out for Channel Level updates
-    Channel.CreateReqChannelLevelListMes ( bDisplayChannelLevels );
+// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+Channel.CreateReqChannelLevelListMes();
 }
 
 void CClient::CreateServerJitterBufferMessage()
@@ -419,14 +418,6 @@ bool CClient::GetAndResetbJitterBufferOKFlag()
     // since per definition the jitter buffer status is OK if both the
     // put and get status are OK
     return bSocketJitBufOKFlag;
-}
-
-void CClient::SetDisplayChannelLevels ( const bool bNDCL )
-{
-    bDisplayChannelLevels = bNDCL;
-
-    // tell any connected server about the change
-    Channel.CreateReqChannelLevelListMes ( bDisplayChannelLevels );
 }
 
 void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )

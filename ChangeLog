@@ -6,13 +6,20 @@
 
 - improvements for the server multithreading, coded by kraney
 
+- removed Display Channel Levels setting (#638)
+
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
-TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)
+
+TODO Remove support for further server infos in --serverinfo (#638)
+
+TODO Remove the -g, --pingservers (#638)
 
 TODO Why does the disconnect take so long under Windows?
 
 TODO accept server list message only if server address matches
+
+
 
 
 

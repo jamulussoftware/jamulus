@@ -224,9 +224,6 @@ public slots:
     void OnCentralServerAddressTypeChanged();
     void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
 
-    void OnDisplayChannelLevelsChanged()
-        { MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() ); }
-
     void OnRecorderStateReceived ( ERecorderState eRecorderState )
         { MainMixerBoard->SetRecorderState ( eRecorderState ); }
 

@@ -198,7 +198,6 @@ protected:
     QList<CServerListEntry> ServerList;
 
     QString                 strCentralServerAddress;
-    int                     iNumPredefinedServers;
     bool                    bEnabled;
     bool                    bIsCentralServer;
     ECSAddType              eCentralServerAddressType;

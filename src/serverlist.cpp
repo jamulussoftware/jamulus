@@ -30,11 +30,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
                                          const int      iNumChannels,
-                                         const bool     bNCentServPingServerInList,
                                          CProtocol*     pNConLProt )
     : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
       eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
-      bCentServPingServerInList ( bNCentServPingServerInList ),
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
       iSvrRegRetries            ( 0 )
@@ -187,11 +185,8 @@ void CServerListManager::Update()
             // 1 minute = 60 * 1000 ms
             TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
 
-            if ( bCentServPingServerInList )
-            {
-                // start timer for sending ping messages to servers in the list
-                TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
-            }
+            // start timer for sending ping messages to servers in the list
+            TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
         }
         else
         {
@@ -231,11 +226,7 @@ void CServerListManager::Update()
         if ( bIsCentralServer )
         {
             TimerPollList.stop();
-
-            if ( bCentServPingServerInList )
-            {
-                TimerPingServerInList.stop();
-            }
+            TimerPingServerInList.stop();
         }
         else
         {

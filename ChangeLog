@@ -11,10 +11,11 @@
 - removed support for further server infos in --serverinfo since the preferred
   way of registering a server is to do it using the protocol messages (#638)
 
+- removed -g, --pingservers since all Central servers must activate this function,
+  now it is activated by default and no command line argument is needed (#638)
+
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
-
-TODO Remove the -g, --pingservers (#638)
 
 TODO Why does the disconnect take so long under Windows?
 

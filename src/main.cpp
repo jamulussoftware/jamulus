@@ -70,7 +70,6 @@ int main ( int argc, char** argv )
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
     bool         bDisableRecording           = false;
-    bool         bCentServPingServerInList   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
@@ -191,19 +190,6 @@ int main ( int argc, char** argv )
             bStartMinimized = true;
             tsConsole << "- start minimized enabled" << endl;
             CommandLineOptions << "--startminimized";
-            continue;
-        }
-
-
-        // Ping servers in list for central server -----------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-g",
-                               "--pingservers" ) )
-        {
-            bCentServPingServerInList = true;
-            tsConsole << "- ping servers in slave server list" << endl;
-            CommandLineOptions << "--pingservers";
             continue;
         }
 
@@ -698,7 +684,6 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
-                             bCentServPingServerInList,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -801,8 +786,6 @@ QString UsageArguments ( char **argv )
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"
-        "  -g, --pingservers     ping servers in list to keep NAT port open\n"
-        "                        (central server only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         show an agreement window before users can connect\n"
         "  -m, --htmlstatus      enable HTML status file, set file name\n"

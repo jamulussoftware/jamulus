@@ -254,6 +254,13 @@
         </layout>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="chbEnableSequence">
+        <property name="text">
+         <string>Enable Sequence Numbers</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

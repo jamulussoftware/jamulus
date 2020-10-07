@@ -344,6 +344,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // update enable small network buffers check box
     chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
 
+    // update enable small sequence numbers check box
+    chbEnableSequence->setCheckState ( pClient->GetEnableSequence() ? Qt::Checked : Qt::Unchecked );
+
     // set text for sound card buffer delay radio buttons
     rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES ) );
@@ -381,6 +384,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     QObject::connect ( chbEnableOPUS64, &QCheckBox::stateChanged,
         this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
+
+    QObject::connect ( chbEnableSequence, &QCheckBox::stateChanged,
+        this, &CClientSettingsDlg::OnEnableSequenceStateChanged );
 
     // line edits
     QObject::connect ( edtCentralServerAddress, &QLineEdit::editingFinished,
@@ -651,6 +657,12 @@ void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
 {
     pClient->SetEnableOPUS64 ( value == Qt::Checked );
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnEnableSequenceStateChanged ( int value )
+{
+    pClient->SetEnableSequence ( value == Qt::Checked );
     UpdateDisplay();
 }
 

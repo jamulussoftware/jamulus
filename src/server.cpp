@@ -223,7 +223,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strLoggingFileName,
                    const quint16      iPortNumber,
                    const QString&     strHTMLStatusFileName,
-                   const QString&     strServerNameForHTMLStatusFile,
                    const QString&     strCentralServer,
                    const QString&     strServerInfo,
                    const QString&     strServerListFilter,
@@ -241,6 +240,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Logging                     ( ),
     iFrameCount                 ( 0 ),
     bWriteStatusHTMLFile        ( false ),
+    strServerHTMLFileListName   ( strHTMLStatusFileName ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
                                   strCentralServer,
@@ -377,21 +377,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
     }
 
     // HTML status file writing
-    if ( !strHTMLStatusFileName.isEmpty() )
+    if ( !strServerHTMLFileListName.isEmpty() )
     {
-        QString strCurServerNameForHTMLStatusFile = strServerNameForHTMLStatusFile;
-
-        // if server name is empty, substitute a default name
-        if ( strCurServerNameForHTMLStatusFile.isEmpty() )
-        {
-            strCurServerNameForHTMLStatusFile = "[server address]";
-        }
-
-        // (the static cast to integer of the port number is required so that it
-        // works correctly under Linux)
-        StartStatusHTMLFileWriting ( strHTMLStatusFileName,
-            strCurServerNameForHTMLStatusFile + ":" +
-            QString().number( static_cast<int> ( iPortNumber ) ) );
+        // activate HTML file writing and write initial file
+        bWriteStatusHTMLFile = true;
+        WriteHTMLChannelList();
     }
 
     // manage welcome message: if the welcome message is a valid link to a local
@@ -1648,53 +1638,37 @@ void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
     strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 }
 
-void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,
-                                           const QString& strNewServerNameWithPort )
-{
-    // set important parameters
-    strServerHTMLFileListName = strNewFileName;
-    strServerNameWithPort     = strNewServerNameWithPort;
-
-    // set flag
-    bWriteStatusHTMLFile = true;
-
-    // write initial file
-    WriteHTMLChannelList();
-}
-
 void CServer::WriteHTMLChannelList()
 {
     // prepare file and stream
     QFile serverFileListFile ( strServerHTMLFileListName );
 
-    if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
+    if ( serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-        return;
-    }
+        QTextStream streamFileOut ( &serverFileListFile );
 
-    QTextStream streamFileOut ( &serverFileListFile );
-    streamFileOut << strServerNameWithPort.toHtmlEscaped() << endl << "<ul>" << endl;
-
-    // depending on number of connected clients write list
-    if ( GetNumberOfConnectedClients() == 0 )
-    {
-        // no clients are connected -> empty server
-        streamFileOut << "  No client connected" << endl;
-    }
-    else
-    {
-        // write entry for each connected client
-        for ( int i = 0; i < iMaxNumChannels; i++ )
+        // depending on number of connected clients write list
+        if ( GetNumberOfConnectedClients() == 0 )
         {
-            if ( vecChannels[i].IsConnected() )
+            // no clients are connected -> empty server
+            streamFileOut << "  No client connected\n";
+        }
+        else
+        {
+            streamFileOut << "<ul>\n";
+
+            // write entry for each connected client
+            for ( int i = 0; i < iMaxNumChannels; i++ )
             {
-                streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>" << endl;
+                if ( vecChannels[i].IsConnected() )
+                {
+                    streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>\n";
+                }
             }
+
+            streamFileOut << "</ul>\n";
         }
     }
-
-    // finish list
-    streamFileOut << "</ul>" << endl;
 }
 
 void CServer::customEvent ( QEvent* pEvent )

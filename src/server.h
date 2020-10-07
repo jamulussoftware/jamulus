@@ -173,7 +173,6 @@ public:
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strServerNameForHTMLStatusFile,
               const QString&     strCentralServer,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
@@ -272,11 +271,7 @@ public:
 
 protected:
     // access functions for actual channels
-    bool IsConnected ( const int iChanNum )
-        { return vecChannels[iChanNum].IsConnected(); }
-
-    void StartStatusHTMLFileWriting ( const QString& strNewFileName,
-                                      const QString& strNewServerNameWithPort );
+    bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
 
     int GetFreeChan();
     int FindChannel ( const CHostAddress& CheckAddr );
@@ -385,7 +380,6 @@ protected:
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
-    QString                    strServerNameWithPort;
 
     CHighPrecisionTimer        HighPrecisionTimer;
 

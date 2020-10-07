@@ -80,7 +80,6 @@ int main ( int argc, char** argv )
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
     QString      strHTMLStatusFileName       = "";
-    QString      strServerName               = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
     QString      strCentralServer            = "";
@@ -329,20 +328,6 @@ int main ( int argc, char** argv )
             strHTMLStatusFileName = strArgument;
             tsConsole << "- HTML status file name: " << strHTMLStatusFileName << endl;
             CommandLineOptions << "--htmlstatus";
-            continue;
-        }
-
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-a",
-                                 "--servername",
-                                 strArgument ) )
-        {
-            strServerName = strArgument;
-            tsConsole << "- server name for HTML status file: " << strServerName << endl;
-            CommandLineOptions << "--servername";
             continue;
         }
 
@@ -678,7 +663,6 @@ int main ( int argc, char** argv )
                              strLoggingFileName,
                              iPortNumber,
                              strHTMLStatusFileName,
-                             strServerName,
                              strCentralServer,
                              strServerInfo,
                              strServerListFilter,
@@ -779,7 +763,6 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use englisch language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
-        "  -a, --servername      server name, required for HTML status\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the central server\n"
         "                        (or 'localhost' to be a central server)\n"

@@ -6,7 +6,7 @@
 
 - improvements for the server multithreading, coded by kraney
 
-- removed Display Channel Levels setting (#638)
+- removed Display Channel Levels setting and --servername (#638)
 
 - removed support for further server infos in --serverinfo since the preferred
   way of registering a server is to do it using the protocol messages (#638)

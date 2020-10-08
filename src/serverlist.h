@@ -126,7 +126,6 @@ public:
                          const QString& strServerInfo,
                          const QString& strServerListFilter,
                          const int      iNumChannels,
-                         const bool     bNCentServPingServerInList,
                          CProtocol*     pNConLProt );
 
     // the update has to be called if any change to the server list
@@ -198,11 +197,9 @@ protected:
     QList<CServerListEntry> ServerList;
 
     QString                 strCentralServerAddress;
-    int                     iNumPredefinedServers;
     bool                    bEnabled;
     bool                    bIsCentralServer;
     ECSAddType              eCentralServerAddressType;
-    bool                    bCentServPingServerInList;
 
     CHostAddress            SlaveCurCentServerHostAddress;
     CHostAddress            SlaveCurLocalHostAddress;

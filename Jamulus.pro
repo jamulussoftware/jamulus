@@ -186,10 +186,12 @@ win32 {
         libs/oboe/src/fifo/FifoController.cpp \
         libs/oboe/src/fifo/FifoControllerBase.cpp \
         libs/oboe/src/fifo/FifoControllerIndirect.cpp \
+        libs/oboe/src/flowgraph/ChannelCountConverter.cpp \
         libs/oboe/src/flowgraph/ClipToRange.cpp \
         libs/oboe/src/flowgraph/FlowGraphNode.cpp \
         libs/oboe/src/flowgraph/ManyToMultiConverter.cpp \
         libs/oboe/src/flowgraph/MonoToMultiConverter.cpp \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.cpp \
         libs/oboe/src/flowgraph/RampLinear.cpp \
         libs/oboe/src/flowgraph/SampleRateConverter.cpp \
         libs/oboe/src/flowgraph/SinkFloat.cpp \
@@ -233,10 +235,12 @@ win32 {
         libs/oboe/src/fifo/FifoController.h \
         libs/oboe/src/fifo/FifoControllerBase.h \
         libs/oboe/src/fifo/FifoControllerIndirect.h \
+        libs/oboe/src/flowgraph/ChannelCountConverter.h \
         libs/oboe/src/flowgraph/ClipToRange.h \
         libs/oboe/src/flowgraph/FlowGraphNode.h \
         libs/oboe/src/flowgraph/ManyToMultiConverter.h \
         libs/oboe/src/flowgraph/MonoToMultiConverter.h \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.h \
         libs/oboe/src/flowgraph/RampLinear.h \
         libs/oboe/src/flowgraph/SampleRateConverter.h \
         libs/oboe/src/flowgraph/SinkFloat.h \
@@ -1019,3 +1023,5 @@ contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)
     DEFINES += DISABLE_VERSION_CHECK
 }
+
+ANDROID_ABIS = armeabi-v7a arm64-v8a

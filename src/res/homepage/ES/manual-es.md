@@ -192,12 +192,6 @@ Este ajuste define el nivel del fader de una nueva conexión de cliente, en porc
 
 Esto aplicará un aspecto oscuro a la ventana principal.
 
-### Mostrar Niveles de Canales
-
-![Display channel levels](displaychannellevels.png)
-
-Muestra los niveles de entrada de los canales de cada cliente conectado.
-
 ### Dirección personalizada del servidor central
 
 ![Central server address](centralserveraddress.png)

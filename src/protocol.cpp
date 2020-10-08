@@ -218,15 +218,6 @@ MESSAGES (with connection)
     +---------------------+
 
 
-- PROTMESSID_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
-
-    +---------------+
-    | 1 byte option |
-    +---------------+
-
-    option is boolean, true to opt in, false to opt out
-
-
 - PROTMESSID_VERSION_AND_OS: Version number and operating system
 
     +-------------------------+------------------+------------------------------+
@@ -840,10 +831,6 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
                 case PROTMESSID_LICENCE_REQUIRED:
                     EvaluateLicenceRequiredMes ( vecbyMesBodyDataRef );
-                    break;
-
-                case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
-                    EvaluateReqChannelLevelListMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_VERSION_AND_OS:
@@ -1660,38 +1647,15 @@ void CProtocol::CreateOpusSupportedMes()
     CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED, CVector<uint8_t> ( 0 ) );
 }
 
-void CProtocol::CreateReqChannelLevelListMes ( const bool bRCL )
+// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+void CProtocol::CreateReqChannelLevelListMes()
 {
     CVector<uint8_t> vecData ( 1 ); // 1 byte of data
     int              iPos = 0; // init position pointer
 
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( bRCL ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( true ), 1 );
 
     CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_LEVEL_LIST, vecData );
-}
-
-bool CProtocol::EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData )
-{
-    int iPos = 0; // init position pointer
-
-    // check size
-    if ( vecData.Size() != 1 )
-    {
-        return true; // return error code
-    }
-
-    // extract opt in / out for channel levels
-    uint32_t val = GetValFromStream ( vecData, iPos, 1 );
-
-    if ( val != 0 && val != 1 )
-    {
-        return true; // return error code
-    }
-
-    // invoke message action
-    emit ReqChannelLevelList ( static_cast<bool> ( val ) );
-
-    return false; // no error
 }
 
 void CProtocol::CreateVersionAndOSMes()

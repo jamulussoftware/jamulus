@@ -4,15 +4,27 @@
 
 3.5.12git <- NOTE: the release version number will be 3.5.13
 
+- improvements for the server multithreading, coded by kraney
+
 - switched all audio sample processing to use floats, coded by hselasky (#544)
+
+- removed Display Channel Levels setting and --servername (#638)
+
+- removed support for further server infos in --serverinfo since the preferred
+  way of registering a server is to do it using the protocol messages (#638)
+
+- removed -g, --pingservers since all Central servers must activate this function,
+  now it is activated by default and no command line argument is needed (#638)
 
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
-TODO BUG FIX: the new Windows audio interface gives ugly clipping (which the old one does not)!!!
-
-TODO remove ChannelLevelsRequired (see DecodeReceiveData function) (#638)
 
 TODO Why does the disconnect take so long under Windows?
+
+TODO accept server list message only if server address matches
+
+TODO BUG FIX: the new Windows audio interface gives ugly clipping (which the old one does not)!!!
+
 
 
 
@@ -61,7 +73,7 @@ TODO Why does the disconnect take so long under Windows?
 
 - accessibility improvements, coded by chigkim (#498, #512)
 
-- added Jack audio audio latency calculation, coded by bflamig (#437)
+- added Jack audio latency calculation, coded by bflamig (#437)
 
 - show the server name in the title bar (#559)
 
@@ -80,7 +92,7 @@ TODO Why does the disconnect take so long under Windows?
 - if network name/address contains spaces, they are removed now,
   coded by dingodoppelt (#462)
 
-- improve compact skin by using smaller font size
+- improve Compact skin by using smaller font size
 
 - improve server audio mix processing for better clipping behavior
 
@@ -96,7 +108,7 @@ TODO Why does the disconnect take so long under Windows?
 
 - accessibility improvements, coded by chigkim (#499, #510, #514)
 
-- bug fix: fixed a stability issue in the server (should fix #480)
+- bug fix: fixed a stability issue in the server
 
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 
@@ -117,7 +129,7 @@ TODO Why does the disconnect take so long under Windows?
 
 - redesign of the server dialog (e.g. added welcome message setting)
 
-- save and restore mixer state (like fader, mute, etc.) (#377)
+- save and restore mixer state (like fader, mute, etc.) (#377),
   note that saving/loading of settings only works if not connected
 
 - scale channel instrument picture in Compact skin mode

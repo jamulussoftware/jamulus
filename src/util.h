@@ -626,7 +626,7 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
 
     case AT_GENRE_CLASSICAL_FOLK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choir" );
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choral" );
 
     default: // AT_DEFAULT
         return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );

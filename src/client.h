@@ -127,9 +127,6 @@ public:
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
-    bool GetDisplayChannelLevels() const { return bDisplayChannelLevels; }
-    void SetDisplayChannelLevels ( const bool bNDCL );
-
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void SetAudioQuality ( const EAudioQuality eNAudioQuality );
 
@@ -356,7 +353,6 @@ protected:
     int                     iStereoBlockSizeSam;
 
     EGUIDesign              eGUIDesign;
-    bool                    bDisplayChannelLevels;
     bool                    bEnableOPUS64;
 
     bool                    bJitterBufferOK;

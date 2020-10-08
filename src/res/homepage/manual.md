@@ -227,12 +227,6 @@ that client was already stored.
 
 This applies a fancy skin to the main window.
 
-### Display channel levels
-
-![Display channel levels](displaychannellevels.png)
-
-This displays the channel input levels for each connected client.
-
 ### Custom central server address
 
 ![Central server address](centralserveraddress.png)

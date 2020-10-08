@@ -55,7 +55,7 @@
 #define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
 #define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
 #define PROTMESSID_LICENCE_REQUIRED           27 // licence required
-#define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // request the channel level list
+#define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // OLD (not used anymore) // TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
 #define PROTMESSID_VERSION_AND_OS             29 // version number and operating system
 #define PROTMESSID_CHANNEL_PAN                30 // set channel pan for mix
 #define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
@@ -128,7 +128,10 @@ public:
     void CreateSplitMessSupportedMes();
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
-    void CreateReqChannelLevelListMes ( const bool bRCL );
+
+// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+void CreateReqChannelLevelListMes();
+
     void CreateVersionAndOSMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );
 
@@ -279,7 +282,6 @@ protected:
     bool EvaluateReqSplitMessSupportMes();
     bool EvaluateSplitMessSupportedMes();
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
     bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
     bool EvaluateRecorderStateMes       ( const CVector<uint8_t>& vecData );
 
@@ -354,7 +356,6 @@ signals:
     void ReqSplitMessSupport();
     void SplitMessSupported();
     void LicenceRequired ( ELicenceType eLicenceType );
-    void ReqChannelLevelList ( bool bOptIn );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void RecorderStateReceived ( ERecorderState eRecorderState );
 

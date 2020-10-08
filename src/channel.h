@@ -164,7 +164,9 @@ public:
     void CreateReqConnClientsList()                          { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText )    { Protocol.CreateChatTextMes ( strChatText ); }
     void CreateLicReqMes ( const ELicenceType eLicenceType ) { Protocol.CreateLicenceRequiredMes ( eLicenceType ); }
-    void CreateReqChannelLevelListMes ( bool bOptIn )        { Protocol.CreateReqChannelLevelListMes ( bOptIn ); }
+
+// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+void CreateReqChannelLevelListMes() { Protocol.CreateReqChannelLevelListMes(); }
 
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
         { Protocol.CreateConClientListMes ( vecChanInfo ); }
@@ -173,8 +175,6 @@ public:
         { Protocol.CreateRecorderStateMes ( eRecorderState ); }
 
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
-
-    bool ChannelLevelsRequired() const { return bChannelLevelsRequired; }
 
     float UpdateAndGetLevelForMeterdB ( const CVector<float>& vecfAudio,
                                         const int             iInSize,
@@ -234,8 +234,6 @@ protected:
     QMutex                  MutexSocketBuf;
     QMutex                  MutexConvBuf;
 
-    bool                    bChannelLevelsRequired;
-
     CStereoSignalLevelMeter SignalLevelMeter;
 
 public slots:
@@ -273,8 +271,6 @@ public slots:
     }
 
     void OnNewConnection() { emit NewConnection(); }
-
-    void OnReqChannelLevelList ( bool bOptIn ) { bChannelLevelsRequired = bOptIn; }
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );

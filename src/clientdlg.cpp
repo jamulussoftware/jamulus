@@ -184,9 +184,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // reset mixer board
     MainMixerBoard->HideAll();
 
-    // restore channel level display preference
-    MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
-
     // init status label
     OnTimerStatus();
 
@@ -455,9 +452,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
-
-    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::DisplayChannelLevelsChanged,
-        this, &CClientDlg::OnDisplayChannelLevelsChanged );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::AudioChannelsChanged,
         this, &CClientDlg::OnAudioChannelsChanged );

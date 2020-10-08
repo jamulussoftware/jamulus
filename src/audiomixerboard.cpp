@@ -938,22 +938,6 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
     }
 }
 
-void CAudioMixerBoard::SetDisplayChannelLevels ( const bool eNDCL )
-{
-    bDisplayChannelLevels = eNDCL;
-
-    // only update hiding the levels immediately, showing the levels
-    // is only applied if the server actually transmits levels
-    if ( !bDisplayChannelLevels )
-    {
-        // hide all level meters
-        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-        {
-            vecpChanFader[i]->SetDisplayChannelLevel ( false );
-        }
-    }
-}
-
 void CAudioMixerBoard::SetDisplayPans ( const bool eNDP )
 {
     bDisplayPans = eNDP;
@@ -1358,7 +1342,7 @@ void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLev
 
             // show level only if we successfully received levels from the
             // server (if server does not support levels, do not show levels)
-            if ( bDisplayChannelLevels && !vecpChanFader[iChId]->GetDisplayChannelLevel() )
+            if ( !vecpChanFader[iChId]->GetDisplayChannelLevel() )
             {
                 vecpChanFader[iChId]->SetDisplayChannelLevel ( true );
             }

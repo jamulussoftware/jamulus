@@ -431,12 +431,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
     }
 
-    // display channel levels preference
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "displaychannellevels", bValue ) )
-    {
-        pClient->SetDisplayChannelLevels ( bValue );
-    }
-
     // audio channels
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels",
          0, 2 /* CC_STEREO */, iValue ) )
@@ -680,10 +674,6 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // GUI design
     SetNumericIniSet ( IniXMLDocument, "client", "guidesign",
         static_cast<int> ( pClient->GetGUIDesign() ) );
-
-    // display channel levels preference
-    SetFlagIniSet ( IniXMLDocument, "client", "displaychannellevels",
-        pClient->GetDisplayChannelLevels() );
 
     // audio channels
     SetNumericIniSet ( IniXMLDocument, "client", "audiochannels",

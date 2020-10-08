@@ -70,7 +70,6 @@ int main ( int argc, char** argv )
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
     bool         bDisableRecording           = false;
-    bool         bCentServPingServerInList   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
@@ -81,7 +80,6 @@ int main ( int argc, char** argv )
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
     QString      strHTMLStatusFileName       = "";
-    QString      strServerName               = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
     QString      strCentralServer            = "";
@@ -191,19 +189,6 @@ int main ( int argc, char** argv )
             bStartMinimized = true;
             tsConsole << "- start minimized enabled" << endl;
             CommandLineOptions << "--startminimized";
-            continue;
-        }
-
-
-        // Ping servers in list for central server -----------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-g",
-                               "--pingservers" ) )
-        {
-            bCentServPingServerInList = true;
-            tsConsole << "- ping servers in slave server list" << endl;
-            CommandLineOptions << "--pingservers";
             continue;
         }
 
@@ -343,20 +328,6 @@ int main ( int argc, char** argv )
             strHTMLStatusFileName = strArgument;
             tsConsole << "- HTML status file name: " << strHTMLStatusFileName << endl;
             CommandLineOptions << "--htmlstatus";
-            continue;
-        }
-
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-a",
-                                 "--servername",
-                                 strArgument ) )
-        {
-            strServerName = strArgument;
-            tsConsole << "- server name for HTML status file: " << strServerName << endl;
-            CommandLineOptions << "--servername";
             continue;
         }
 
@@ -692,13 +663,11 @@ int main ( int argc, char** argv )
                              strLoggingFileName,
                              iPortNumber,
                              strHTMLStatusFileName,
-                             strServerName,
                              strCentralServer,
                              strServerInfo,
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
-                             bCentServPingServerInList,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -794,24 +763,17 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use englisch language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
-        "  -a, --servername      server name, required for HTML status\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the central server\n"
         "                        (or 'localhost' to be a central server)\n"
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"
-        "  -g, --pingservers     ping servers in list to keep NAT port open\n"
-        "                        (central server only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         show an agreement window before users can connect\n"
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
-        "  -o, --serverinfo      infos of the server(s) in the format:\n"
-        "                        [name];[city];[country as QLocale ID]; ...\n"
-        "                        [server1 address];[server1 name]; ...\n"
-        "                        [server1 city]; ...\n"
-        "                        [server1 country as QLocale ID]; ...\n"
-        "                        [server2 address]; ...\n"
+        "  -o, --serverinfo      infos of this server in the format:\n"
+        "                        [name];[city];[country as QLocale ID]\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"

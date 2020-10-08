@@ -112,8 +112,8 @@ LED bar:      lbr
 #define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
 
 // determining server internal address uses well-known host and port
-// (Google DNS, or something else reliable)
-#define WELL_KNOWN_HOST                  "8.8.8.8" // Google
+// (You can change the service used here to something like Cloudflare (1.1.1.1), Google DNS (8.8.8.8), or something else reliable)
+#define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
@@ -177,7 +177,7 @@ LED bar:      lbr
 #define YELLOW_BOUND_LED_BAR             5
 
 // maximum number of connected clients at the server (must not be larger than 256)
-#define MAX_NUM_CHANNELS                 100 // max number channels for server
+#define MAX_NUM_CHANNELS                 150 // max number channels for server
 
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS

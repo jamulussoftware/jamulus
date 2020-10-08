@@ -223,13 +223,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strLoggingFileName,
                    const quint16      iPortNumber,
                    const QString&     strHTMLStatusFileName,
-                   const QString&     strServerNameForHTMLStatusFile,
                    const QString&     strCentralServer,
                    const QString&     strServerInfo,
                    const QString&     strServerListFilter,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
-                   const bool         bNCentServPingServerInList,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const bool         bNUseMultithreading,
@@ -242,13 +240,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Logging                     ( ),
     iFrameCount                 ( 0 ),
     bWriteStatusHTMLFile        ( false ),
+    strServerHTMLFileListName   ( strHTMLStatusFileName ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
                                   strCentralServer,
                                   strServerInfo,
                                   strServerListFilter,
                                   iNewMaxNumChan,
-                                  bNCentServPingServerInList,
                                   &ConnLessProtocol ),
     bDisableRecording           ( bDisableRecording ),
     bAutoRunMinimized           ( false ),
@@ -379,21 +377,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
     }
 
     // HTML status file writing
-    if ( !strHTMLStatusFileName.isEmpty() )
+    if ( !strServerHTMLFileListName.isEmpty() )
     {
-        QString strCurServerNameForHTMLStatusFile = strServerNameForHTMLStatusFile;
-
-        // if server name is empty, substitute a default name
-        if ( strCurServerNameForHTMLStatusFile.isEmpty() )
-        {
-            strCurServerNameForHTMLStatusFile = "[server address]";
-        }
-
-        // (the static cast to integer of the port number is required so that it
-        // works correctly under Linux)
-        StartStatusHTMLFileWriting ( strHTMLStatusFileName,
-            strCurServerNameForHTMLStatusFile + ":" +
-            QString().number( static_cast<int> ( iPortNumber ) ) );
+        // activate HTML file writing and write initial file
+        bWriteStatusHTMLFile = true;
+        WriteHTMLChannelList();
     }
 
     // manage welcome message: if the welcome message is a valid link to a local
@@ -421,6 +409,12 @@ CServer::CServer ( const int          iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         vecChannels[i].SetEnable ( true );
+    }
+
+    // introduced by kraney (#653): "increased the size of the thread pool"
+    if ( bUseMultithreading )
+    {
+        QThreadPool::globalInstance()->setMaxThreadCount ( QThread::idealThreadCount() * 4 );
     }
 
 
@@ -792,10 +786,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 */
     // Get data from all connected clients -------------------------------------
     // some inits
-    int  iNumClients               = 0; // init connected client counter
-    bool bChannelIsNowDisconnected = false;
-    bool bUpdateChannelLevels      = true; // TODO remove this -> set to true for now (#638)
-    bool bSendChannelLevels        = false;
+    int iNumClients           = 0; // init connected client counter
+    bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
 
     // Make put and get calls thread safe. Do not forget to unlock mutex
     // afterwards!
@@ -816,9 +808,38 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         }
 
         // prepare and decode connected channels
-        for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
+        if ( !bUseMultithreading )
         {
-            DecodeReceiveData ( iChanCnt, iNumClients, bChannelIsNowDisconnected );
+            for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
+            {
+                DecodeReceiveData ( iChanCnt, iNumClients );
+            }
+        }
+        else
+        {
+            // processing with multithreading
+// TODO optimization of the MTBlockSize value
+            const int iMTBlockSize = 20; // every 20 users a new thread is created
+            const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
+
+            for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
+            {
+                // The work for OPUS decoding is distributed over all available processor cores.
+                // By using the future synchronizer we make sure that all
+                // threads are done when we leave the timer callback function.
+                const int iStartChanCnt = iBlockCnt * iMTBlockSize;
+                const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
+
+                FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
+                                                                   &CServer::DecodeReceiveDataBlocks,
+                                                                   iStartChanCnt,
+                                                                   iStopChanCnt,
+                                                                   iNumClients ) );
+            }
+
+            // make sure all concurrent run threads have finished when we leave this function
+            FutureSynchronizer.waitForFinished();
+            FutureSynchronizer.clearFutures();
         }
 
         // a channel is now disconnected, take action on it
@@ -837,13 +858,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     if ( iNumClients > 0 )
     {
         // calculate levels for all connected clients
-        if ( bUpdateChannelLevels )
-        {
-            bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients,
-                                                                 vecNumAudioChannels,
-                                                                 vecvecfData,
-                                                                 vecChannelLevels );
-        }
+        const bool bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients,
+                                                                        vecNumAudioChannels,
+                                                                        vecvecfData,
+                                                                        vecChannelLevels );
 
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
@@ -853,8 +871,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();
 
-            // send channel levels
-            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+            // send channel levels if they are ready
+            if ( bSendChannelLevels )
             {
                 ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
                                                                vecChannelLevels,
@@ -883,9 +901,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // processing with multithreading
         if ( bUseMultithreading )
         {
-// TODO optimization of the MTBlockSize value
-            const int iMTBlockSize = 20; // every 20 users a new thread is created
-            const int iNumBlocks   = static_cast<int> ( std::ceil ( static_cast<double> ( iNumClients ) / iMTBlockSize ) );
+            // introduced by kraney (#653): each thread must complete within the 1 or 2ms time budget for the timer
+// TODO determine at startup by running a small benchmark
+            const int iMaximumMixOpsInTimeBudget = 500; // approximate limit as observed on GCP e2-standard instance
+            const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
+            const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
 
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
@@ -917,6 +937,17 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     }
 }
 
+void CServer::DecodeReceiveDataBlocks ( const int iStartChanCnt,
+                                        const int iStopChanCnt,
+                                        const int iNumClients )
+{
+    // loop over all channels in the current block, needed for multithreading support
+    for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )
+    {
+        DecodeReceiveData ( iChanCnt, iNumClients );
+    }
+}
+
 void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                             const int iStopChanCnt,
                                             const int iNumClients )
@@ -929,8 +960,7 @@ void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
 }
 
 void CServer::DecodeReceiveData ( const int iChanCnt,
-                                  const int iNumClients,
-                                  bool&     bChannelIsNowDisconnected )
+                                  const int iNumClients )
 {
     int                iUnused;
     int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
@@ -1018,13 +1048,6 @@ void CServer::DecodeReceiveData ( const int iChanCnt,
         vecvecfPannings[iChanCnt][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
     }
 
-// TODO remove this
-//    // flag for updating channel levels (if at least one clients wants it)
-//    if ( vecChannels[iCurChanID].ChannelLevelsRequired() )
-//    {
-//        bUpdateChannelLevels = true;
-//    }
-
     // If the server frame size is smaller than the received OPUS frame size, we need a conversion
     // buffer which stores the large buffer.
     // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
@@ -1051,7 +1074,9 @@ void CServer::DecodeReceiveData ( const int iChanCnt,
                     emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
                 }
 
-                // note that no mutex is needed for this shared resource
+                // note that no mutex is needed for this shared resource since it is not a
+                // read-modify-write operation but an atomic write and also each thread can
+                // only set it to true and never to false
                 bChannelIsNowDisconnected = true;
             }
 
@@ -1620,53 +1645,37 @@ void CServer::SetWelcomeMessage ( const QString& strNWelcMess )
     strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 }
 
-void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,
-                                           const QString& strNewServerNameWithPort )
-{
-    // set important parameters
-    strServerHTMLFileListName = strNewFileName;
-    strServerNameWithPort     = strNewServerNameWithPort;
-
-    // set flag
-    bWriteStatusHTMLFile = true;
-
-    // write initial file
-    WriteHTMLChannelList();
-}
-
 void CServer::WriteHTMLChannelList()
 {
     // prepare file and stream
     QFile serverFileListFile ( strServerHTMLFileListName );
 
-    if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
+    if ( serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-        return;
-    }
+        QTextStream streamFileOut ( &serverFileListFile );
 
-    QTextStream streamFileOut ( &serverFileListFile );
-    streamFileOut << strServerNameWithPort.toHtmlEscaped() << endl << "<ul>" << endl;
-
-    // depending on number of connected clients write list
-    if ( GetNumberOfConnectedClients() == 0 )
-    {
-        // no clients are connected -> empty server
-        streamFileOut << "  No client connected" << endl;
-    }
-    else
-    {
-        // write entry for each connected client
-        for ( int i = 0; i < iMaxNumChannels; i++ )
+        // depending on number of connected clients write list
+        if ( GetNumberOfConnectedClients() == 0 )
         {
-            if ( vecChannels[i].IsConnected() )
+            // no clients are connected -> empty server
+            streamFileOut << "  No client connected\n";
+        }
+        else
+        {
+            streamFileOut << "<ul>\n";
+
+            // write entry for each connected client
+            for ( int i = 0; i < iMaxNumChannels; i++ )
             {
-                streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>" << endl;
+                if ( vecChannels[i].IsConnected() )
+                {
+                    streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>\n";
+                }
             }
+
+            streamFileOut << "</ul>\n";
         }
     }
-
-    // finish list
-    streamFileOut << "</ul>" << endl;
 }
 
 void CServer::customEvent ( QEvent* pEvent )

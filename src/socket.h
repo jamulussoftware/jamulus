@@ -73,6 +73,10 @@ public:
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                       const CHostAddress&     HostAddr );
 
+    void SendPacket ( const char *        bySendBuf,
+                      const int           iSizeOut,
+                      const CHostAddress& HostAddr );
+
     bool GetAndResetbJitterBufferOKFlag();
     void Close();
 
@@ -157,6 +161,13 @@ public:
                       const CHostAddress&     HostAddr )
     {
         Socket.SendPacket ( vecbySendBuf, HostAddr );
+    }
+
+    void SendPacket ( const char * bySendBuf,
+                      const int iSizeOut,
+                      const CHostAddress&     HostAddr )
+    {
+        Socket.SendPacket ( bySendBuf, iSizeOut, HostAddr );
     }
 
     bool GetAndResetbJitterBufferOKFlag()

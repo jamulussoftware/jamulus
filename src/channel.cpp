@@ -31,6 +31,9 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
+    bUseSeq                ( false ),	// don't set until we know we are talking to a new server
+    sendSeqNum             ( 0 ),
+    recvSeqNum             ( 0 ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
@@ -190,7 +193,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         MutexConvBuf.lock();
         {
             // init conversion buffer
-            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, SEQ_HEADER_SIZE );
         }
         MutexConvBuf.unlock();
 
@@ -459,7 +462,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             MutexConvBuf.lock();
             {
                 // init conversion buffer
-                ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+                ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, SEQ_HEADER_SIZE );
             }
             MutexConvBuf.unlock();
         }
@@ -538,8 +541,18 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
     {
         MutexSocketBuf.lock();
         {
+            int hdrSize = 0;
+
+            if (vecbyData[0] == 0xFF) {
+                // sequenced audio
+                hdrSize = SEQ_HEADER_SIZE;
+                if (bIsServer) {
+                    bUseSeq = true;	// reply to client using sequence numbers
+                }
+            }
+
             // only process audio if packet has correct size
-            if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
+            if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact + hdrSize ) )
             {
                 // store new packet in jitter buffer
                 if ( SockBuf.Put ( vecbyData, iNumBytes ) )
@@ -667,11 +680,23 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
 {
     QMutexLocker locker ( &MutexConvBuf );
 
+    const char *p;
+    int len;
+
     // use conversion buffer to convert sound card block size in network
     // block size
     if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen ) )
     {
-        pSocket->SendPacket ( ConvBuf.GetAll(), GetAddress() );
+        ConvBuf.GetBuf(p, len); // len includes header, which may or may not be needed
+        if (bUseSeq) {
+            ConvBuf.WriteSeq(sendSeqNum);
+            sendSeqNum += len - SEQ_HEADER_SIZE; // ignore overflow
+        } else {
+            // discard the header
+            p += SEQ_HEADER_SIZE;
+            len -= SEQ_HEADER_SIZE;
+        }
+        pSocket->SendPacket ( p, len, GetAddress() );
     }
 }
 

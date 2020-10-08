@@ -69,6 +69,8 @@
 #define IIR_WEIGTH_UP_FAST                          0.9997499687422
 #define IIR_WEIGTH_DOWN_FAST                        0.999499875
 
+// size of sequence numbering header
+#define SEQ_HEADER_SIZE                             3
 
 /* Classes ********************************************************************/
 // Buffer base class -----------------------------------------------------------
@@ -194,6 +196,76 @@ public:
 
         // set initialized flag
         bIsInitialized = true;
+    }
+
+    virtual bool PutSeq ( const CVector<TData>& vecData,
+                       const int             iInSize,
+                       int iCurPos,
+                       const int seqNum )
+    {
+        (void)seqNum;
+
+        if ( bIsSimulation )
+        {
+            // in this simulation only the buffer pointers and the buffer state
+            // is updated, no actual data is transferred
+            iPutPos += iInSize;
+
+            if ( iPutPos >= iMemSize )
+            {
+                iPutPos -= iMemSize;
+            }
+        }
+        else
+        {
+            // copy new data in internal buffer
+
+            if ( iPutPos + iInSize > iMemSize )
+            {
+                // remaining space size for second block
+                const int iRemSpace = iPutPos + iInSize - iMemSize;
+
+                // data must be written in two steps because of wrap around
+                while ( iPutPos < iMemSize )
+                {
+                    vecMemory[iPutPos++] = vecData[iCurPos++];
+                }
+
+                for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
+                {
+                    vecMemory[iPutPos] = vecData[iCurPos++];
+                }
+            }
+            else
+            {
+                // data can be written in one step
+                std::copy ( vecData.begin() + iCurPos,
+                            vecData.begin() + iInSize,
+                            vecMemory.begin() + iPutPos );
+
+                // set the put position one block further (no wrap around needs
+                // to be considered here)
+                iPutPos += iInSize;
+            }
+        }
+
+        // take care about wrap around of put pointer
+        if ( iPutPos == iMemSize )
+        {
+            iPutPos = 0;
+        }
+
+        // set buffer state flag
+        if ( iPutPos == iGetPos )
+        {
+            eBufState = CBufferBase<TData>::BS_FULL;
+        }
+        else
+        {
+            eBufState = CBufferBase<TData>::BS_OK;
+        }
+
+        return true; // no error check in base class, always return ok
     }
 
     virtual bool Put ( const CVector<TData>& vecData,
@@ -393,7 +465,10 @@ protected:
     int            iMemSize;
     int            iGetPos;
     int            iPutPos;
+    uint16_t       iGetSeq;
+    uint16_t       iPutSeq;
     EBufState      eBufState;
+    bool           bSeqIsSet;
     bool           bIsSimulation;
     bool           bIsInitialized;
 };
@@ -475,19 +550,20 @@ template<class TData> class CConvBuf
 public:
     CConvBuf() { Init ( 0 ); }
 
-    void Init ( const int iNewMemSize )
+    void Init ( const int iNewMemSize, const int iNewHeaderSize = 0 )
     {
         // allocate internal memory and reset read/write positions
-        vecMemory.Init ( iNewMemSize );
+        vecMemory.Init ( iNewMemSize + iNewHeaderSize );
         iMemSize    = iNewMemSize;
         iBufferSize = iNewMemSize;
+        iHeaderSize = iNewHeaderSize;
         Reset();
     }
 
     void Reset()
     {
-        iPutPos = 0;
-        iGetPos = 0;
+        iPutPos = iHeaderSize;
+        iGetPos = iHeaderSize;
     }
 
     void SetBufferSize ( const int iNBSize )
@@ -502,11 +578,11 @@ public:
 
     void PutAll ( const CVector<TData>& vecsData )
     {
-        iGetPos = 0;
+        iGetPos = iHeaderSize;
 
         std::copy ( vecsData.begin(),
                     vecsData.begin() + iBufferSize, // note that input vector might be larger then memory size
-                    vecMemory.begin() );
+                    vecMemory.begin() + iHeaderSize );
     }
 
     bool Put ( const CVector<TData>& vecsData,
@@ -516,7 +592,7 @@ public:
         const int iEnd = iPutPos + iVecSize;
 
         // first check for buffer overrun
-        if ( iEnd <= iBufferSize )
+        if ( iEnd <= iBufferSize + iHeaderSize )
         {
             // copy new data in internal buffer
             std::copy ( vecsData.begin(),
@@ -527,23 +603,40 @@ public:
             iPutPos = iEnd;
 
             // return "buffer is ready for readout" flag
-            return ( iEnd == iBufferSize );
+            return ( iEnd == iBufferSize + iHeaderSize );
         }
 
         // buffer overrun or not initialized, return "not ready"
         return false;
     }
 
+    void WriteSeq ( const uint16_t seq )
+    {
+        if (iHeaderSize == SEQ_HEADER_SIZE) {
+            vecMemory[0] = 0xFF;
+            vecMemory[1] = seq & 0xFF;
+            vecMemory[2] = (seq >> 8) & 0xFF;
+        }
+    }
+
+    void GetBuf ( const char *& pAddress,
+                  int&    iLength )
+    {
+        pAddress = (const char *)&vecMemory[0];
+        iLength = vecMemory.Size();
+        iPutPos = iHeaderSize;
+    }
+
     const CVector<TData>& GetAll()
     {
-        iPutPos = 0;
+        iPutPos = iHeaderSize;
         return vecMemory;
     }
 
     void GetAll ( CVector<TData>& vecsData,
                   const int       iVecSize )
     {
-        iPutPos = 0;
+        iPutPos = iHeaderSize;
 
         // copy data from internal buffer in given buffer
         std::copy ( vecMemory.begin(),
@@ -580,5 +673,6 @@ protected:
     CVector<TData> vecMemory;
     int            iMemSize;
     int            iBufferSize;
+    int            iHeaderSize;
     int            iPutPos, iGetPos;
 };

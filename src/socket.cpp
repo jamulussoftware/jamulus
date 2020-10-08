@@ -197,6 +197,30 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
     }
 }
 
+void CSocket::SendPacket ( const char * bySendBuf,
+                           const int iSizeOut,
+                           const CHostAddress&     HostAddr )
+{
+    QMutexLocker locker ( &Mutex );
+
+    if ( iSizeOut > 0 )
+    {
+        // send packet through network
+        sockaddr_in UdpSocketOutAddr;
+
+        UdpSocketOutAddr.sin_family      = AF_INET;
+        UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
+        UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
+
+        sendto ( UdpSocket,
+                 bySendBuf,
+                 iSizeOut,
+                 0,
+                 (sockaddr*) &UdpSocketOutAddr,
+                 sizeof ( sockaddr_in ) );
+    }
+}
+
 bool CSocket::GetAndResetbJitterBufferOKFlag()
 {
     // check jitter buffer status

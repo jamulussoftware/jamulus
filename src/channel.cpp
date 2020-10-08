@@ -541,13 +541,19 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
     {
         MutexSocketBuf.lock();
         {
-            int hdrSize = 0;
+            int hdrSize;
 
             if (vecbyData[0] == 0xFF) {
                 // sequenced audio
                 hdrSize = SEQ_HEADER_SIZE;
                 if (bIsServer) {
                     bUseSeq = true;	// reply to client using sequence numbers
+                }
+            } else {
+                // non-sequenced audio
+                hdrSize = 0;
+                if (bIsServer) {
+                    bUseSeq = false; // reply to client without sequence numbers
                 }
             }
 

@@ -74,22 +74,22 @@ class CClient;  // forward declaration of CClient
 
 
 /* Global functions ***********************************************************/
-// converting double to short
-inline short Double2Short ( const double dInput )
+// converting float to short
+inline short Float2Short ( const float fInput )
 {
     // lower bound
-    if ( dInput < _MINSHORT )
+    if ( fInput < _MINSHORT )
     {
         return _MINSHORT;
     }
 
     // upper bound
-    if ( dInput > _MAXSHORT )
+    if ( fInput > _MAXSHORT )
     {
         return _MAXSHORT;
     }
 
-    return static_cast<short> ( dInput );
+    return static_cast<short> ( fInput );
 }
 
 // debug error handling
@@ -1171,40 +1171,40 @@ public:
     void Init ( const EAudChanConf eNAudioChannelConf,
                 const int          iNStereoBlockSizeSam,
                 const int          iSampleRate,
-                const double       rT60 = 1.1 );
+                const float        fT60 = 1.1f );
 
     void Clear();
     void Process ( CVector<int16_t>& vecsStereoInOut,
                    const bool        bReverbOnLeftChan,
-                   const double      dAttenuation );
+                   const float       fAttenuation );
 
 protected:
-    void setT60 ( const double rT60, const int iSampleRate );
+    void setT60 ( const float fT60, const int iSampleRate );
     bool isPrime ( const int number );
 
     class COnePole
     {
     public:
-        COnePole() : dA ( 0 ), dB ( 0 ) { Reset(); }
-        void setPole ( const double dPole );
-        double Calc ( const double dIn );
-        void Reset() { dLastSample = 0; }
+        COnePole() : fA ( 0 ), fB ( 0 ) { Reset(); }
+        void  setPole ( const float fPole );
+        float Calc ( const float fIn );
+        void  Reset() { fLastSample = 0; }
 
     protected:
-        double dA;
-        double dB;
-        double dLastSample;
+        float fA;
+        float fB;
+        float fLastSample;
     };
 
-    EAudChanConf  eAudioChannelConf;
-    int           iStereoBlockSizeSam;
-    CFIFO<double> allpassDelays[3];
-    CFIFO<double> combDelays[4];
-    COnePole      combFilters[4];
-    CFIFO<double> outLeftDelay;
-    CFIFO<double> outRightDelay;
-    double        allpassCoefficient;
-    double        combCoefficient[4];
+    EAudChanConf eAudioChannelConf;
+    int          iStereoBlockSizeSam;
+    CFIFO<float> allpassDelays[3];
+    CFIFO<float> combDelays[4];
+    COnePole     combFilters[4];
+    CFIFO<float> outLeftDelay;
+    CFIFO<float> outRightDelay;
+    float        allpassCoefficient;
+    float        combCoefficient[4];
 };
 
 
@@ -1269,30 +1269,30 @@ public:
 
     // calculate pan gains: in cross fade mode the pan center is attenuated
     // by 6 dB, otherwise the center equals full gain for both channels
-    static inline double GetLeftPan ( const double dPan, const bool bXFade)
+    static inline float GetLeftPan ( const float fPan, const bool bXFade)
     {
-        return bXFade ? 1 - dPan : std::min ( 0.5, 1 - dPan ) * 2;
+        return bXFade ? 1 - fPan : std::min ( 0.5f, 1 - fPan ) * 2;
     }
-    static inline double GetRightPan ( const double dPan, const bool bXFade)
+    static inline float GetRightPan ( const float fPan, const bool bXFade)
     {
-        return bXFade ? dPan : std::min ( 0.5, dPan ) * 2;
+        return bXFade ? fPan : std::min ( 0.5f, fPan ) * 2;
     }
 
     // calculate linear gain from fader values which are in dB
-    static double CalcFaderGain ( const double dValue )
+    static float CalcFaderGain ( const float fValue )
     {
         // convert actual slider range in gain values
         // and normalize so that maximum gain is 1
-        const double dInValueRange0_1 = dValue / AUD_MIX_FADER_MAX;
+        const float fInValueRange0_1 = fValue / AUD_MIX_FADER_MAX;
 
         // map range from 0..1 to range -35..0 dB and calculate linear gain
-        if ( dValue == 0 )
+        if ( fValue == 0 )
         {
             return 0; // -infinity
         }
         else
         {
-            return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
+            return powf ( 10.0f, ( fInValueRange0_1 * 35.0f - 35.0f ) / 20.0f );
         }
     }
 };

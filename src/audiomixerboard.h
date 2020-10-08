@@ -136,13 +136,13 @@ public slots:
     void OnGroupMenuGrp4()    { SetGroupID ( 3 ); }
 
 signals:
-    void gainValueChanged ( double value,
+    void gainValueChanged ( float  value,
                             bool   bIsMyOwnFader,
                             bool   bIsGroupUpdate,
                             bool   bSuppressServerUpdate,
                             double dLevelRatio );
 
-    void panValueChanged  ( double value );
+    void panValueChanged  ( float value );
     void soloStateChanged ( int value );
 };
 
@@ -150,29 +150,29 @@ template<unsigned int slotId>
 class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
 {
 public:
-    void OnChGainValueChanged ( double dValue,
+    void OnChGainValueChanged ( float  fValue,
                                 bool   bIsMyOwnFader,
                                 bool   bIsGroupUpdate,
                                 bool   bSuppressServerUpdate,
                                 double dLevelRatio ) { UpdateGainValue ( slotId - 1,
-                                                                         dValue,
+                                                                         fValue,
                                                                          bIsMyOwnFader,
                                                                          bIsGroupUpdate,
                                                                          bSuppressServerUpdate,
                                                                          dLevelRatio ); }
 
-    void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
+    void OnChPanValueChanged ( float fValue ) { UpdatePanValue ( slotId - 1, fValue ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue,
+                                   const float  fValue,
                                    const bool   bIsMyOwnFader,
                                    const bool   bIsGroupUpdate,
                                    const bool   bSuppressServerUpdate,
                                    const double dLevelRatio ) = 0;
 
-    virtual void UpdatePanValue ( const int    iChannelIdx,
-                                  const double dValue ) = 0;
+    virtual void UpdatePanValue ( const int   iChannelIdx,
+                                  const float fValue ) = 0;
 };
 
 template<>
@@ -239,9 +239,6 @@ protected:
     void UpdateSoloStates();
     void UpdateTitle();
 
-    void OnGainValueChanged ( const int    iChannelIdx,
-                              const double dValue );
-
     CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
     CMixerBoardScrollArea*  pScrollArea;
@@ -254,20 +251,20 @@ protected:
     ERecorderState          eRecorderState;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue,
+                                   const float  fValue,
                                    const bool   bIsMyOwnFader,
                                    const bool   bIsGroupUpdate,
                                    const bool   bSuppressServerUpdate,
                                    const double dLevelRatio );
 
-    virtual void UpdatePanValue ( const int    iChannelIdx,
-                                  const double dValue );
+    virtual void UpdatePanValue ( const int   iChannelIdx,
+                                  const float fValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
 
 signals:
-    void ChangeChanGain ( int iId, double dGain, bool bIsMyOwnFader );
-    void ChangeChanPan ( int iId, double dPan );
+    void ChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader );
+    void ChangeChanPan ( int iId, float fPan );
     void NumClientsChanged ( int iNewNumClients );
 };

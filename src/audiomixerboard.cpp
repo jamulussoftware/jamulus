@@ -472,7 +472,7 @@ void CChannelFader::SendFaderLevelToServer ( const double dLevel,
                                           ( !bOtherChannelIsSolo || IsSolo() ) );
 
     // emit signal for new fader gain value
-    emit gainValueChanged ( MathUtils::CalcFaderGain ( dLevel ),
+    emit gainValueChanged ( MathUtils::CalcFaderGain ( static_cast<float> ( dLevel ) ),
                             bIsMyOwnFader,
                             bIsGroupUpdate,
                             bSuppressServerUpdate,
@@ -489,7 +489,7 @@ void CChannelFader::SendFaderLevelToServer ( const double dLevel,
 
 void CChannelFader::SendPanValueToServer ( const int iPan )
 {
-    emit panValueChanged ( static_cast<double> ( iPan ) / AUD_MIX_PAN_MAX );
+    emit panValueChanged ( static_cast<float> ( iPan ) / AUD_MIX_PAN_MAX );
 }
 
 void CChannelFader::OnPanValueChanged ( int value )
@@ -877,10 +877,10 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 {
     int iCurChanID = slotId - 1;
 
-    void ( CAudioMixerBoard::* pGainValueChanged )( double, bool, bool, bool, double ) =
+    void ( CAudioMixerBoard::* pGainValueChanged )( float, bool, bool, bool, double ) =
         &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
 
-    void ( CAudioMixerBoard::* pPanValueChanged )( double ) =
+    void ( CAudioMixerBoard::* pPanValueChanged )( float ) =
         &CAudioMixerBoardSlots<slotId>::OnChPanValueChanged;
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
@@ -1014,7 +1014,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
     // if requested, sort the channels
     if ( bDoSort )
     {
-        qStableSort ( PairList.begin(), PairList.end() );
+        std::stable_sort ( PairList.begin(), PairList.end() );
     }
 
     // add channels to the layout in the new order (since we insert on the left, we
@@ -1207,7 +1207,7 @@ void CAudioMixerBoard::UpdateSoloStates()
 }
 
 void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
-                                         const double dValue,
+                                         const float  fValue,
                                          const bool   bIsMyOwnFader,
                                          const bool   bIsGroupUpdate,
                                          const bool   bSuppressServerUpdate,
@@ -1216,7 +1216,7 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
     // update current gain
     if ( !bSuppressServerUpdate )
     {
-        emit ChangeChanGain ( iChannelIdx, dValue, bIsMyOwnFader );
+        emit ChangeChanGain ( iChannelIdx, fValue, bIsMyOwnFader );
     }
 
     // if this fader is selected, all other in the group must be updated as
@@ -1240,10 +1240,10 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
     }
 }
 
-void CAudioMixerBoard::UpdatePanValue ( const int    iChannelIdx,
-                                        const double dValue )
+void CAudioMixerBoard::UpdatePanValue ( const int   iChannelIdx,
+                                        const float fValue )
 {
-    emit ChangeChanPan ( iChannelIdx, dValue );
+    emit ChangeChanPan ( iChannelIdx, fValue );
 }
 
 void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )

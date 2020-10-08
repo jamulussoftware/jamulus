@@ -27,8 +27,8 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
-    vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
-    vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
+    vecfGains              ( MAX_NUM_CHANNELS, 1.0f ),
+    vecfPannings           ( MAX_NUM_CHANNELS, 0.5f ),
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
     iFadeInCnt             ( 0 ),
@@ -252,8 +252,8 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
     return ReturnValue; // set error flag
 }
 
-void CChannel::SetGain ( const int    iChanID,
-                         const double dNewGain )
+void CChannel::SetGain ( const int   iChanID,
+                         const float fNewGain )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -261,27 +261,27 @@ void CChannel::SetGain ( const int    iChanID,
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
         // signal mute change
-        if ( ( vecdGains[iChanID] == 0 ) && ( dNewGain > 0 ) )
+        if ( ( vecfGains[iChanID] == 0 ) && ( fNewGain > 0 ) )
         {
             emit MuteStateHasChanged ( iChanID, false );
         }
-        if ( ( vecdGains[iChanID] > 0 ) && ( dNewGain == 0 ) )
+        if ( ( vecfGains[iChanID] > 0 ) && ( fNewGain == 0 ) )
         {
             emit MuteStateHasChanged ( iChanID, true );
         }
 
-        vecdGains[iChanID] = dNewGain;
+        vecfGains[iChanID] = fNewGain;
     }
 }
 
-double CChannel::GetGain ( const int iChanID )
+float CChannel::GetGain ( const int iChanID )
 {
     QMutexLocker locker ( &Mutex );
 
     // get value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        return vecdGains[iChanID];
+        return vecfGains[iChanID];
     }
     else
     {
@@ -289,26 +289,26 @@ double CChannel::GetGain ( const int iChanID )
     }
 }
 
-void CChannel::SetPan ( const int    iChanID,
-                        const double dNewPan )
+void CChannel::SetPan ( const int   iChanID,
+                        const float fNewPan )
 {
     QMutexLocker locker ( &Mutex );
 
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        vecdPannings[iChanID] = dNewPan;
+        vecfPannings[iChanID] = fNewPan;
     }
 }
 
-double CChannel::GetPan ( const int iChanID )
+float CChannel::GetPan ( const int iChanID )
 {
     QMutexLocker locker ( &Mutex );
 
     // get value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        return vecdPannings[iChanID];
+        return vecfPannings[iChanID];
     }
     else
     {
@@ -376,16 +376,16 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
     }
 }
 
-void CChannel::OnChangeChanGain ( int    iChanID,
-                                  double dNewGain )
+void CChannel::OnChangeChanGain ( int   iChanID,
+                                  float fNewGain )
 {
-    SetGain ( iChanID, dNewGain );
+    SetGain ( iChanID, fNewGain );
 }
 
-void CChannel::OnChangeChanPan ( int    iChanID,
-                                 double dNewPan )
+void CChannel::OnChangeChanPan ( int   iChanID,
+                                 float fNewPan )
 {
-    SetPan ( iChanID, dNewPan );
+    SetPan ( iChanID, fNewPan );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )

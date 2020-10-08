@@ -44,7 +44,7 @@ CClient::CClient ( const quint16  iPortNumber,
     iNumAudioChannels                ( 1 ),
     bIsInitializationPhase           ( true ),
     bMuteOutStream                   ( false ),
-    dMuteOutStreamGain               ( 1.0 ),
+    fMuteOutStreamGain               ( 1.0f ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect, strNClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
@@ -367,17 +367,17 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
     CreateServerJitterBufferMessage();
 }
 
-void CClient::SetRemoteChanGain ( const int    iId,
-                                  const double dGain,
-                                  const bool   bIsMyOwnFader )
+void CClient::SetRemoteChanGain ( const int   iId,
+                                  const float fGain,
+                                  const bool  bIsMyOwnFader )
 {
     // if this gain is for my own channel, apply the value for the Mute Myself function
     if ( bIsMyOwnFader )
     {
-        dMuteOutStreamGain = dGain;
+        fMuteOutStreamGain = fGain;
     }
 
-    Channel.SetRemoteChanGain ( iId, dGain );
+    Channel.SetRemoteChanGain ( iId, fGain );
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -885,7 +885,7 @@ void CClient::Init()
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
-    dMuteOutStreamGain = 1.0;
+    fMuteOutStreamGain = 1.0f;
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE (
@@ -993,41 +993,41 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     {
         AudioReverb.Process ( vecsStereoSndCrd,
                               bReverbOnLeftChan,
-                              static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
+                              static_cast<float> ( iReverbLevel ) / AUD_REVERB_MAX / 4 );
     }
 
     // apply pan (audio fader) and mix mono signals
     if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
     {
         // calculate pan gain in the range 0 to 1, where 0.5 is the middle position
-        const double dPan = static_cast<double> ( iAudioInFader ) / AUD_FADER_IN_MAX;
+        const float fPan = static_cast<float> ( iAudioInFader ) / AUD_FADER_IN_MAX;
 
         if ( eAudioChannelConf == CC_STEREO )
         {
             // for stereo only apply pan attenuation on one channel (same as pan in the server)
-            const double dGainL = MathUtils::GetLeftPan ( dPan, false );
-            const double dGainR = MathUtils::GetRightPan ( dPan, false );
+            const float fGainL = MathUtils::GetLeftPan  ( fPan, false );
+            const float fGainR = MathUtils::GetRightPan ( fPan, false );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
                 // note that the gain is always <= 1, therefore a simple cast is
                 // ok since we never can get an overload
-                vecsStereoSndCrd[j + 1] = static_cast<int16_t> ( dGainR * vecsStereoSndCrd[j + 1] );
-                vecsStereoSndCrd[j]     = static_cast<int16_t> ( dGainL * vecsStereoSndCrd[j] );
+                vecsStereoSndCrd[j + 1] = static_cast<int16_t> ( fGainR * vecsStereoSndCrd[j + 1] );
+                vecsStereoSndCrd[j]     = static_cast<int16_t> ( fGainL * vecsStereoSndCrd[j] );
             }
         }
         else
         {
             // for mono implement a cross-fade between channels and mix them, for
             // mono-in/stereo-out use no attenuation in pan center
-            const double dGainL = MathUtils::GetLeftPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
-            const double dGainR = MathUtils::GetRightPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+            const float fGainL = MathUtils::GetLeftPan  ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+            const float fGainR = MathUtils::GetRightPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
-                // note that we need the Double2Short for stereo pan mode
-                vecsStereoSndCrd[i] = Double2Short (
-                    dGainL * vecsStereoSndCrd[j] + dGainR * vecsStereoSndCrd[j + 1] );
+                // note that we need the Float2Short for stereo pan mode
+                vecsStereoSndCrd[i] = Float2Short (
+                    fGainL * vecsStereoSndCrd[j] + fGainR * vecsStereoSndCrd[j + 1] );
             }
         }
     }
@@ -1123,8 +1123,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     {
         for ( i = 0; i < iStereoBlockSizeSam; i++ )
         {
-            vecsStereoSndCrd[i] = Double2Short (
-                vecsStereoSndCrd[i] + vecsStereoSndCrdMuteStream[i] * dMuteOutStreamGain );
+            vecsStereoSndCrd[i] = Float2Short (
+                vecsStereoSndCrd[i] + vecsStereoSndCrdMuteStream[i] * fMuteOutStreamGain );
         }
     }
 

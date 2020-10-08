@@ -354,15 +354,15 @@ protected:
     CVector<QString>           vstrChatColors;
     CVector<int>               vecChanIDsCurConChan;
 
-    CVector<CVector<double> >  vecvecdGains;
-    CVector<CVector<double> >  vecvecdPannings;
+    CVector<CVector<float> >   vecvecfGains;
+    CVector<CVector<float> >   vecvecfPannings;
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<int16_t> > vecvecsSendData;
-    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
+    CVector<CVector<float> >   vecvecfIntermediateProcBuf;
     CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels

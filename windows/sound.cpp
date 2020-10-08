@@ -637,8 +637,8 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                     for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                     {
                         vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) pASIOBufAdd[iCurSample] );
+                            Float2Short ( (float) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
+                                          (float) pASIOBufAdd[iCurSample] );
                     }
                 }
                 break;
@@ -664,8 +664,8 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                         iCurSam >>= 8;
 
                         vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) static_cast<int16_t> ( iCurSam ) );
+                            Float2Short ( (float) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
+                                          (float) static_cast<int16_t> ( iCurSam ) );
                     }
                 }
                 break;
@@ -688,8 +688,8 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                     for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                     {
                         vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) static_cast<int16_t> ( pASIOBufAdd[iCurSample] >> 16 ) );
+                            Float2Short ( (float) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
+                                          (float) static_cast<int16_t> ( pASIOBufAdd[iCurSample] >> 16 ) );
                     }
                 }
                 break;

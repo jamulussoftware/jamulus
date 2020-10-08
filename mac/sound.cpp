@@ -982,7 +982,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Double2Short (
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Float2Short (
                         pSound->vecsTmpAudioSndCrdStereo[2 * i] + pLeftData[iNumChanPerFrameLeft * i + iSelAddInInterlChLeft] * _MAXSHORT );
                 }
             }
@@ -994,7 +994,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Double2Short (
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Float2Short (
                         pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] + pRightData[iNumChanPerFrameRight * i + iSelAddInInterlChRight] * _MAXSHORT );
                 }
             }

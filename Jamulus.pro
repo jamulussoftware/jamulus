@@ -1,4 +1,4 @@
-VERSION = 3.5.12git
+VERSION = 3.5.12git-softins
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -8,7 +8,7 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
-    release
+    debug optimize_debug # release
 
 QT += network \
     xml \

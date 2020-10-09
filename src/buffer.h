@@ -240,7 +240,7 @@ public:
             {
                 // data can be written in one step
                 std::copy ( vecData.begin() + iCurPos,
-                            vecData.begin() + iInSize,
+                            vecData.begin() + iCurPos + iInSize,
                             vecMemory.begin() + iPutPos );
 
                 // set the put position one block further (no wrap around needs

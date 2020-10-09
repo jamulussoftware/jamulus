@@ -545,16 +545,16 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
 
             if (vecbyData[0] == 0xFF) {
                 // sequenced audio
-                hdrSize = SEQ_HEADER_SIZE;
                 if (bIsServer) {
                     bUseSeq = true;	// reply to client using sequence numbers
                 }
+                hdrSize = SEQ_HEADER_SIZE;
             } else {
                 // non-sequenced audio
-                hdrSize = 0;
                 if (bIsServer) {
                     bUseSeq = false; // reply to client without sequence numbers
                 }
+                hdrSize = 0;
             }
 
             // only process audio if packet has correct size

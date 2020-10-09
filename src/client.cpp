@@ -1004,7 +1004,7 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
         if ( eAudioChannelConf == CC_STEREO )
         {
             // for stereo only apply pan attenuation on one channel (same as pan in the server)
-            const float fGainL = MathUtils::GetLeftPan ( fPan, false );
+            const float fGainL = MathUtils::GetLeftPan  ( fPan, false );
             const float fGainR = MathUtils::GetRightPan ( fPan, false );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
@@ -1019,7 +1019,7 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
         {
             // for mono implement a cross-fade between channels and mix them, for
             // mono-in/stereo-out use no attenuation in pan center
-            const float fGainL = MathUtils::GetLeftPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+            const float fGainL = MathUtils::GetLeftPan  ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
             const float fGainR = MathUtils::GetRightPan ( fPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )

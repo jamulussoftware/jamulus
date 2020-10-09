@@ -114,8 +114,8 @@ public:
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
     void CreateClientIDMes ( const int iChanID );
-    void CreateChanGainMes ( const int iChanID, const double dGain );
-    void CreateChanPanMes ( const int iChanID, const double dPan );
+    void CreateChanGainMes ( const int iChanID, const float fGain );
+    void CreateChanPanMes ( const int iChanID, const float fPan );
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted );
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
@@ -342,8 +342,8 @@ signals:
     void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ClientIDReceived ( int iChanID );
-    void ChangeChanGain ( int iChanID, double dNewGain );
-    void ChangeChanPan ( int iChanID, double dNewPan );
+    void ChangeChanGain ( int iChanID, float fNewGain );
+    void ChangeChanPan ( int iChanID, float fNewPan );
     void MuteStateHasChangedReceived ( int iCurID, bool bIsMuted );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();

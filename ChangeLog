@@ -6,8 +6,6 @@
 
 - improvements for the server multithreading, coded by kraney
 
-- switched all audio sample processing to use floats, coded by hselasky (#544)
-
 - removed Display Channel Levels setting and --servername (#638)
 
 - removed support for further server infos in --serverinfo since the preferred
@@ -15,6 +13,8 @@
 
 - removed -g, --pingservers since all Central servers must activate this function,
   now it is activated by default and no command line argument is needed (#638)
+
+- replaced double types by floats for some of the signal processing, coded by hselasky (#544)
 
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
@@ -24,6 +24,8 @@ TODO Why does the disconnect take so long under Windows?
 TODO accept server list message only if server address matches
 
 TODO BUG FIX: the new Windows audio interface gives ugly clipping (which the old one does not)!!!
+
+TODO switched all remaining audio sample processing to use floats, coded by hselasky (#544)
 
 
 

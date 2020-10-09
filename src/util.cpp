@@ -199,7 +199,7 @@ uint32_t CCRC::GetCRC()
 void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
                           const int          iNStereoBlockSizeSam,
                           const int          iSampleRate,
-                          const float        rT60 )
+                          const float        fT60 )
 {
     // store parameters
     eAudioChannelConf   = eNAudioChannelConf;
@@ -209,7 +209,7 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
     int         lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
     const float scaler     = static_cast<float> ( iSampleRate ) / 44100.0f;
 
-    if ( scaler != 1.0 )
+    if ( scaler != 1.0f )
     {
         for ( int i = 0; i < 9; i++ )
         {
@@ -240,10 +240,10 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
         combFilters[i].setPole ( 0.2f );
     }
 
-    setT60 ( rT60, iSampleRate );
+    setT60 ( fT60, iSampleRate );
     outLeftDelay.Init ( lengths[7] );
     outRightDelay.Init ( lengths[8] );
-    allpassCoefficient = 0.7;
+    allpassCoefficient = 0.7f;
     Clear();
 }
 
@@ -260,9 +260,7 @@ bool CAudioReverb::isPrime ( const int number )
 
     if ( number & 1 )
     {
-        const int iMax = static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1;
-
-        for ( int i = 3; i < iMax; i += 2 )
+        for ( int i = 3; i < static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1; i += 2 )
         {
             if ( ( number % i ) == 0 )
             {
@@ -296,30 +294,30 @@ void CAudioReverb::Clear()
     outLeftDelay.Reset ( 0 );
 }
 
-void CAudioReverb::setT60 ( const float rT60,
+void CAudioReverb::setT60 ( const float fT60,
                             const int   iSampleRate )
 {
     // set the reverberation T60 decay time
     for ( int i = 0; i < 4; i++ )
     {
         combCoefficient[i] = powf ( 10.0f, static_cast<float> ( -3.0f *
-            combDelays[i].Size() / ( rT60 * iSampleRate ) ) );
+            combDelays[i].Size() / ( fT60 * iSampleRate ) ) );
     }
 }
 
-void CAudioReverb::COnePole::setPole ( const float dPole )
+void CAudioReverb::COnePole::setPole ( const float fPole )
 {
     // calculate IIR filter coefficients based on the pole value
-    dA = -dPole;
-    dB = 1.0f - dPole;
+    fA = -fPole;
+    fB = 1.0f - fPole;
 }
 
 float CAudioReverb::COnePole::Calc ( const float fIn )
 {
     // calculate IIR filter
-    dLastSample = dB * fIn - dA * dLastSample;
+    fLastSample = fB * fIn - fA * fLastSample;
 
-    return dLastSample;
+    return fLastSample;
 }
 
 void CAudioReverb::Process ( CVector<float>& vecfStereoInOut,
@@ -354,14 +352,14 @@ void CAudioReverb::Process ( CVector<float>& vecfStereoInOut,
         allpassDelays[0].Add ( temp0 );
         temp0 = - ( allpassCoefficient * temp0 ) + temp;
 
-        temp = allpassDelays[1].Get();
-        temp1 = allpassCoefficient * temp;
+        temp   = allpassDelays[1].Get();
+        temp1  = allpassCoefficient * temp;
         temp1 += temp0;
         allpassDelays[1].Add ( temp1 );
         temp1 = - ( allpassCoefficient * temp1 ) + temp;
 
-        temp = allpassDelays[2].Get();
-        temp2 = allpassCoefficient * temp;
+        temp   = allpassDelays[2].Get();
+        temp2  = allpassCoefficient * temp;
         temp2 += temp1;
         allpassDelays[2].Add ( temp2 );
         temp2 = - ( allpassCoefficient * temp2 ) + temp;

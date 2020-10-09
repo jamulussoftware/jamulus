@@ -360,7 +360,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
         // and coded data because of the OMP implementation)
         vecvecfSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
-        // allocate worst case memory for intermediate processing buffers in single precision
+        // allocate worst case memory for intermediate processing buffers in float precision
         vecvecfIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // allocate worst case memory for the coded data

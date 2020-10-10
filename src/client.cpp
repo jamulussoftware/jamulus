@@ -1156,7 +1156,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 {
-    const double dSystemBlockDurationMs = static_cast<double> ( iOPUSFrameSizeSamples ) /
+    const float fSystemBlockDurationMs = static_cast<float> ( iOPUSFrameSizeSamples ) /
         SYSTEM_SAMPLE_RATE_HZ * 1000;
 
     // If the jitter buffers are set effectively, i.e. they are exactly the
@@ -1164,20 +1164,19 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // length. Since that is usually not the case but the buffers are usually
     // a bit larger than necessary, we introduce some factor for compensation.
     // Consider the jitter buffer on the client and on the server side, too.
-    const double dTotalJitterBufferDelayMs = dSystemBlockDurationMs *
-        static_cast<double> ( GetSockBufNumFrames() +
-                              GetServerSockBufNumFrames() ) * 0.7;
+    const float fTotalJitterBufferDelayMs = fSystemBlockDurationMs *
+        ( GetSockBufNumFrames() + GetServerSockBufNumFrames() ) * 0.7f;
 
     // consider delay introduced by the sound card conversion buffer by using
     // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"
-    double dTotalSoundCardDelayMs = GetSndCrdConvBufAdditionalDelayMonoBlSize() *
-        1000 / SYSTEM_SAMPLE_RATE_HZ;
+    float fTotalSoundCardDelayMs = GetSndCrdConvBufAdditionalDelayMonoBlSize() *
+        1000.0f / SYSTEM_SAMPLE_RATE_HZ;
 
     // try to get the actual input/output sound card delay from the audio
     // interface, per definition it is not available if a 0 is returned
-    const double dSoundCardInputOutputLatencyMs = Sound.GetInOutLatencyMs();
+    const float fSoundCardInputOutputLatencyMs = Sound.GetInOutLatencyMs();
 
-    if ( dSoundCardInputOutputLatencyMs == 0.0 )
+    if ( fSoundCardInputOutputLatencyMs == 0.0f )
     {
         // use an alternative approach for estimating the sound card delay:
         //
@@ -1185,29 +1184,29 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
         // output, therefore we have "3 *" instead of "2 *" (for input and output)
         // the actual sound card buffer size
         // "GetSndCrdConvBufAdditionalDelayMonoBlSize"
-        dTotalSoundCardDelayMs +=
+        fTotalSoundCardDelayMs +=
             ( 3 * GetSndCrdActualMonoBlSize() ) *
-            1000 / SYSTEM_SAMPLE_RATE_HZ;
+            1000.0f / SYSTEM_SAMPLE_RATE_HZ;
     }
     else
     {
         // add the actual sound card latency in ms
-        dTotalSoundCardDelayMs += dSoundCardInputOutputLatencyMs;
+        fTotalSoundCardDelayMs += fSoundCardInputOutputLatencyMs;
     }
 
     // network packets are of the same size as the audio packets per definition
     // if no sound card conversion buffer is used
-    const double dDelayToFillNetworkPacketsMs =
-        GetSystemMonoBlSize() * 1000.0 / SYSTEM_SAMPLE_RATE_HZ;
+    const float fDelayToFillNetworkPacketsMs =
+        GetSystemMonoBlSize() * 1000.0f / SYSTEM_SAMPLE_RATE_HZ;
 
     // OPUS additional delay at small frame sizes is half a frame size
-    const double dAdditionalAudioCodecDelayMs = dSystemBlockDurationMs / 2;
+    const float fAdditionalAudioCodecDelayMs = fSystemBlockDurationMs / 2;
 
-    const double dTotalBufferDelayMs =
-        dDelayToFillNetworkPacketsMs +
-        dTotalJitterBufferDelayMs +
-        dTotalSoundCardDelayMs +
-        dAdditionalAudioCodecDelayMs;
+    const float fTotalBufferDelayMs =
+        fDelayToFillNetworkPacketsMs +
+        fTotalJitterBufferDelayMs +
+        fTotalSoundCardDelayMs +
+        fAdditionalAudioCodecDelayMs;
 
-    return MathUtils::round ( dTotalBufferDelayMs + iPingTimeMs );
+    return MathUtils::round ( fTotalBufferDelayMs + iPingTimeMs );
 }

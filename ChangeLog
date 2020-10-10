@@ -21,9 +21,9 @@
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 
-TODO Why does the disconnect take so long under Windows?
+TODO convert GetInOutLatencyMs to float
 
-TODO accept server list message only if server address matches
+TODO Why does the disconnect take so long under Windows?
 
 
 

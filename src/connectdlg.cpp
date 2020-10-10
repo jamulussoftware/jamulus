@@ -474,13 +474,6 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
                     // set correct picture
                     pNewChildListViewItem->setIcon ( 0, QIcon ( CountryFlagPixmap ) );
 
-                    // add the instrument information as text
-                    if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
-                    {
-                        sClientText.append ( " (" +
-                            CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
-                    }
-
                     bCountryFlagIsUsed = true;
                 }
             }
@@ -498,6 +491,13 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
                     // set correct picture
                     pNewChildListViewItem->setIcon ( 0, QIcon ( QPixmap ( strCurResourceRef ) ) );
                 }
+            }
+
+            // add the instrument information as text
+            if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
+            {
+                sClientText.append ( " (" +
+                    CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
             }
 
             // apply the client text to the list view item

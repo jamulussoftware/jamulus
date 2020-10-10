@@ -1164,19 +1164,18 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // a bit larger than necessary, we introduce some factor for compensation.
     // Consider the jitter buffer on the client and on the server side, too.
     const float fTotalJitterBufferDelayMs = fSystemBlockDurationMs *
-        static_cast<float> ( GetSockBufNumFrames() +
-                              GetServerSockBufNumFrames() ) * 0.7;
+        ( GetSockBufNumFrames() + GetServerSockBufNumFrames() ) * 0.7f;
 
     // consider delay introduced by the sound card conversion buffer by using
     // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"
     float fTotalSoundCardDelayMs = GetSndCrdConvBufAdditionalDelayMonoBlSize() *
-        1000 / SYSTEM_SAMPLE_RATE_HZ;
+        1000.0f / SYSTEM_SAMPLE_RATE_HZ;
 
     // try to get the actual input/output sound card delay from the audio
     // interface, per definition it is not available if a 0 is returned
     const float fSoundCardInputOutputLatencyMs = Sound.GetInOutLatencyMs();
 
-    if ( fSoundCardInputOutputLatencyMs == 0.0 )
+    if ( fSoundCardInputOutputLatencyMs == 0.0f )
     {
         // use an alternative approach for estimating the sound card delay:
         //
@@ -1186,7 +1185,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
         // "GetSndCrdConvBufAdditionalDelayMonoBlSize"
         fTotalSoundCardDelayMs +=
             ( 3 * GetSndCrdActualMonoBlSize() ) *
-            1000 / SYSTEM_SAMPLE_RATE_HZ;
+            1000.0f / SYSTEM_SAMPLE_RATE_HZ;
     }
     else
     {
@@ -1197,7 +1196,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // network packets are of the same size as the audio packets per definition
     // if no sound card conversion buffer is used
     const float fDelayToFillNetworkPacketsMs =
-        GetSystemMonoBlSize() * 1000.0 / SYSTEM_SAMPLE_RATE_HZ;
+        GetSystemMonoBlSize() * 1000.0f / SYSTEM_SAMPLE_RATE_HZ;
 
     // OPUS additional delay at small frame sizes is half a frame size
     const float fAdditionalAudioCodecDelayMs = fSystemBlockDurationMs / 2;

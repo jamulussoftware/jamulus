@@ -699,6 +699,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/keyboard.png \
     src/res/instruments/listener.png \
     src/res/instruments/microphone.png \
+    src/res/instruments/mountaindulcimer.png \
     src/res/instruments/none.png \
     src/res/instruments/recorder.png \
     src/res/instruments/saxophone.png \

@@ -169,7 +169,7 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
 
         // compute latency by using the first input and first output
         // ports and using the most optimistic values
-        dInOutLatencyMs = static_cast<double> ( inLatency + outLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
+        fInOutLatencyMs = static_cast<float> ( inLatency + outLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
     }
 }
 

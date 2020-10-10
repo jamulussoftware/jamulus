@@ -272,9 +272,13 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
                                   const CVector<CServerInfo>& vecServerInfo,
                                   const bool                  bIsReducedServerList )
 {
-    // if the normal list was received, we do not accept any further list
-    // updates (to avoid the reduced list overwrites the normal list (#657))
-    if ( bServerListReceived )
+    // If the normal list was received, we do not accept any further list
+    // updates (to avoid the reduced list overwrites the normal list (#657)). Also,
+    // we only accept a server list from the server address we have sent the
+    // request for this to (note that we cannot use the port number since the
+    // receive port and send port might be different at the central server).
+    if ( bServerListReceived ||
+         ( InetAddr.InetAddr != CentralServerAddress.InetAddr ) )
     {
         return;
     }
@@ -470,13 +474,6 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
                     // set correct picture
                     pNewChildListViewItem->setIcon ( 0, QIcon ( CountryFlagPixmap ) );
 
-                    // add the instrument information as text
-                    if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
-                    {
-                        sClientText.append ( " (" +
-                            CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
-                    }
-
                     bCountryFlagIsUsed = true;
                 }
             }
@@ -494,6 +491,13 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
                     // set correct picture
                     pNewChildListViewItem->setIcon ( 0, QIcon ( QPixmap ( strCurResourceRef ) ) );
                 }
+            }
+
+            // add the instrument information as text
+            if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
+            {
+                sClientText.append ( " (" +
+                    CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
             }
 
             // apply the client text to the list view item

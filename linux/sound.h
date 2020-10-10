@@ -66,7 +66,7 @@ public:
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
         CSoundBase ( "Jack", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
-        iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
+        iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ), fInOutLatencyMs ( 0.0f ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
 
     virtual ~CSound() { CloseJack(); }
 
@@ -74,7 +74,7 @@ public:
     virtual void Start();
     virtual void Stop();
 
-    virtual double GetInOutLatencyMs() { return dInOutLatencyMs; }
+    virtual float GetInOutLatencyMs() { return fInOutLatencyMs; }
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
@@ -101,7 +101,7 @@ protected:
     static void    shutdownCallback ( void* );
     jack_client_t* pJackClient;
 
-    double dInOutLatencyMs;
+    float fInOutLatencyMs;
 };
 #else
 // no sound -> dummy class definition

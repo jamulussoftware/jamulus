@@ -79,7 +79,7 @@ public:
     virtual int     GetLeftOutputChannel()  { return 0; }
     virtual int     GetRightOutputChannel() { return 1; }
 
-    virtual double  GetInOutLatencyMs() { return 0.0; } // "0.0" means no latency is available
+    virtual float   GetInOutLatencyMs() { return 0.0f; } // "0.0" means no latency is available
 
     virtual void    OpenDriverSetup() {}
 

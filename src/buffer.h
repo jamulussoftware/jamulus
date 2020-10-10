@@ -188,6 +188,7 @@ public:
             // init buffer pointers and buffer state (empty buffer)
             iGetPos   = 0;
             iPutPos   = 0;
+            bSeqIsSet = false;
             eBufState = CBufferBase<TData>::BS_EMPTY;
         }
 
@@ -222,26 +223,24 @@ public:
 
             if ( iPutPos + iInSize > iMemSize )
             {
-                // remaining space size for second block
-                const int iRemSpace = iPutPos + iInSize - iMemSize;
-
                 // data must be written in two steps because of wrap around
-                while ( iPutPos < iMemSize )
-                {
-                    vecMemory[iPutPos++] = vecData[iCurPos++];
-                }
+                std::copy ( vecData.begin() + iCurPos,
+                            vecData.begin() + iCurPos + (iMemSize-iPutPos),
+                            vecMemory.begin() + iPutPos );
 
-                for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
-                {
-                    vecMemory[iPutPos] = vecData[iCurPos++];
-                }
+                std::copy ( vecData.begin() + iCurPos + (iMemSize-iPutPos),
+                            vecData.begin() + iCurPos + iInSize,
+                            vecMemory.begin() );
+
+                // set the put position one block further, wrapped around
+                iPutPos += iInSize - iMemSize;
             }
             else
             {
                 // data can be written in one step
                 std::copy ( vecData.begin() + iCurPos,
-                            vecData.begin() + iCurPos + iInSize,
-                            vecMemory.begin() + iPutPos );
+                        vecData.begin() + iCurPos + iInSize,
+                        vecMemory.begin() + iPutPos );
 
                 // set the put position one block further (no wrap around needs
                 // to be considered here)
@@ -285,23 +284,20 @@ public:
         else
         {
             // copy new data in internal buffer
-            int iCurPos = 0;
 
             if ( iPutPos + iInSize > iMemSize )
             {
-                // remaining space size for second block
-                const int iRemSpace = iPutPos + iInSize - iMemSize;
-
                 // data must be written in two steps because of wrap around
-                while ( iPutPos < iMemSize )
-                {
-                    vecMemory[iPutPos++] = vecData[iCurPos++];
-                }
+                std::copy ( vecData.begin(),
+                            vecData.begin() + (iMemSize-iPutPos),
+                            vecMemory.begin() + iPutPos );
 
-                for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
-                {
-                    vecMemory[iPutPos] = vecData[iCurPos++];
-                }
+                std::copy ( vecData.begin() + (iMemSize-iPutPos),
+                            vecData.begin() + iInSize,
+                            vecMemory.begin() );
+
+                // set the put position one block further, wrapped around
+                iPutPos += iInSize - iMemSize;
             }
             else
             {

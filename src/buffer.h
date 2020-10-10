@@ -200,11 +200,13 @@ public:
     }
 
     virtual bool PutSeq ( const CVector<TData>& vecData,
-                       const int             iInSize,
-                       int iCurPos,
-                       const int seqNum )
+                          const int             iInSize)
     {
-        (void)seqNum;
+        // iInSize contains the length of audio data after the sequence header
+
+        uint16_t seqNum = vecData[1] + (vecData[2]<<8);
+
+        (void) seqNum;  // temporary to stop warning until we start using it
 
         if ( bIsSimulation )
         {
@@ -224,12 +226,12 @@ public:
             if ( iPutPos + iInSize > iMemSize )
             {
                 // data must be written in two steps because of wrap around
-                std::copy ( vecData.begin() + iCurPos,
-                            vecData.begin() + iCurPos + (iMemSize-iPutPos),
+                std::copy ( vecData.begin() + SEQ_HEADER_SIZE,
+                            vecData.begin() + SEQ_HEADER_SIZE + (iMemSize-iPutPos),
                             vecMemory.begin() + iPutPos );
 
-                std::copy ( vecData.begin() + iCurPos + (iMemSize-iPutPos),
-                            vecData.begin() + iCurPos + iInSize,
+                std::copy ( vecData.begin() + SEQ_HEADER_SIZE + (iMemSize-iPutPos),
+                            vecData.begin() + SEQ_HEADER_SIZE + iInSize,
                             vecMemory.begin() );
 
                 // set the put position one block further, wrapped around
@@ -238,8 +240,8 @@ public:
             else
             {
                 // data can be written in one step
-                std::copy ( vecData.begin() + iCurPos,
-                        vecData.begin() + iCurPos + iInSize,
+                std::copy ( vecData.begin() + SEQ_HEADER_SIZE,
+                        vecData.begin() + SEQ_HEADER_SIZE + iInSize,
                         vecMemory.begin() + iPutPos );
 
                 // set the put position one block further (no wrap around needs

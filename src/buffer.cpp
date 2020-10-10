@@ -53,8 +53,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
     bool bPutOK = true;
 
     if (vecbyData[0] == 0xFF) {
-        // sequenced packet
-        uint16_t seqNum = vecbyData[1] + (vecbyData[2]<<8);
+        // sequenced packet - 3 bytes header (SEQ_HEADER_SIZE)
 
         // check if there is not enough space available
         if ( GetAvailSpace() < iInSize - SEQ_HEADER_SIZE )
@@ -63,7 +62,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
         }
 
         // copy new data in internal buffer (implemented in base class)
-        CBufferBase<uint8_t>::PutSeq ( vecbyData, iInSize - SEQ_HEADER_SIZE, SEQ_HEADER_SIZE, seqNum );
+        CBufferBase<uint8_t>::PutSeq ( vecbyData, iInSize - SEQ_HEADER_SIZE );
     } else {
         // check if there is not enough space available
         if ( GetAvailSpace() < iInSize )

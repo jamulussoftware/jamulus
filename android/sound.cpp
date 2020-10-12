@@ -41,7 +41,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
 #endif
 }
 
-void CSound::setupCommonStreamParams(oboe::AudioStreamBuilder *builder)
+void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
 {
     // We request EXCLUSIVE mode since this will give us the lowest possible
     // latency. If EXCLUSIVE mode isn't available the builder will fall back to SHARED mode
@@ -146,7 +146,8 @@ void CSound::printStreamDetails ( oboe::ManagedStream& stream )
                ", FramesPerCallback: "         << sFramesPerCallback << "]";
 }
 
-void CSound::warnIfNotLowLatency ( oboe::ManagedStream& stream, QString streamName )
+void CSound::warnIfNotLowLatency ( oboe::ManagedStream& stream,
+                                   QString              streamName )
 {
     if ( stream->getPerformanceMode() != oboe::PerformanceMode::LowLatency )
     {
@@ -207,12 +208,13 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
                                                 int32_t            numFrames )
 {
     // only process if we are running
-    if ( ! bRun )
+    if ( !bRun )
     {
         return oboe::DataCallbackResult::Continue;
     }
 
-    if(mStats.in_callback_calls % 1000 == 0) {
+    if ( mStats.in_callback_calls % 1000 == 0 )
+    {
         mStats.log();
     }
 
@@ -229,14 +231,18 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
     return oboe::DataCallbackResult::Continue;
 }
 
-oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames ) {
+oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames )
+{
     mStats.in_callback_calls++;
+
     // First things first, we need to discard the input queue a little for 500ms or so
     if ( mCountCallbacksToDrain > 0 )
     {
         // discard the input buffer
         int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
+
         memset ( audioData, 0 /* value */, numBytes );
+
         mCountCallbacksToDrain--;
     }
 
@@ -255,7 +261,8 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
         }
     }
 
-    if(numFrames != iOboeBufferSizeMono) {
+    if ( numFrames != iOboeBufferSizeMono )
+    {
         qDebug() << "Received " << numFrames << " expecting " << iOboeBufferSizeMono;
     }
 
@@ -270,8 +277,10 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
     return oboe::DataCallbackResult::Continue;
 }
 
-void CSound::addOutputData(int channel_count) {
-    std::lock_guard<std::mutex> guard(mMutex);
+void CSound::addOutputData(int channel_count)
+{
+    QMutexLocker locker ( &MutexAudioProcessCallback );
+
     // Only copy data if we have data to copy, otherwise fill with silence
     if ( !vecsTmpInputAudioSndCrdStereo.empty() )
     {
@@ -284,7 +293,8 @@ void CSound::addOutputData(int channel_count) {
                 // convert to 32 bit
                 const int32_t iCurSam = static_cast<int32_t> (
                     vecsTmpInputAudioSndCrdStereo[frmNum * channel_count+ channelNum] );
-                mOutBuffer.put(((float) iCurSam) / _MAXSHORT);
+
+                mOutBuffer.put ( ( static_cast<float> ( iCurSam ) ) / _MAXSHORT );
             }
         }
     }
@@ -295,59 +305,71 @@ void CSound::addOutputData(int channel_count) {
         {
             for ( int channelNum = 0; channelNum < channel_count; channelNum++ )
             {
-                mOutBuffer.put(0);
+                mOutBuffer.put ( 0 );
             }
         }
     }
-    if(mOutBuffer.isFull()) {
+
+    if ( mOutBuffer.isFull() )
+    {
         mStats.ring_overrun++;
     }
 }
 
-oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames ) {
+oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream,
+                                                 void*              audioData,
+                                                 int32_t            numFrames )
+{
     mStats.frames_out += numFrames;
     mStats.out_callback_calls++;
-    std::lock_guard<std::mutex> guard(mMutex);
-    std::size_t to_write = numFrames*oboeStream->getChannelCount();
-    std::size_t count = std::min(mOutBuffer.size(),to_write);
 
-    mOutBuffer.get((float *)audioData,count);
-    if(to_write > count) {
-        mStats.frames_filled_out += (to_write-count);
-        memset(((float *) audioData)+count,0, (to_write-count)*sizeof(float));
+    QMutexLocker locker ( &MutexAudioProcessCallback );
+
+    std::size_t to_write = numFrames*oboeStream->getChannelCount();
+    std::size_t count    = std::min ( mOutBuffer.size(), to_write );
+
+    mOutBuffer.get ( (float*) audioData, count );
+
+    if ( to_write > count )
+    {
+        mStats.frames_filled_out += ( to_write - count );
+        memset ( ( (float*) audioData ) + count, 0, ( to_write - count ) * sizeof ( float ) );
     }
+
     return oboe::DataCallbackResult::Continue;
 }
 
 // TODO better handling of stream closing errors
-void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result )
+void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream,
+                                 oboe::Result       result )
 {
     qDebug() << "CSound::onErrorAfterClose";
 }
 
 // TODO better handling of stream closing errors
-void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result )
+void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream,
+                                  oboe::Result       result )
 {
     qDebug() << "CSound::onErrorBeforeClose";
 }
 
 void CSound::Stats::reset() 
 {
-    frames_in=0;
-    frames_out=0;
-    frames_filled_out=0;
-    in_callback_calls=0;
-    out_callback_calls=0;
-    ring_overrun=0;
+    frames_in          = 0;
+    frames_out         = 0;
+    frames_filled_out  = 0;
+    in_callback_calls  = 0;
+    out_callback_calls = 0;
+    ring_overrun       = 0;
 }
 
 void CSound::Stats::log() const 
 {
     qDebug() << "Stats: "
-            << "frames_in: " << frames_in
-            << ",frames_out: " << frames_out
-            << ",frames_filled_out: " << frames_filled_out
-            << ",in_callback_calls: " << in_callback_calls
-            << ",out_callback_calls: " << out_callback_calls
-            << ",ring_overrun: " << ring_overrun;
+             << "frames_in: " << frames_in
+             << ",frames_out: " << frames_out
+             << ",frames_filled_out: " << frames_filled_out
+             << ",in_callback_calls: " << in_callback_calls
+             << ",out_callback_calls: " << out_callback_calls
+             << ",ring_overrun: " << ring_overrun;
 }

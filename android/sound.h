@@ -67,10 +67,10 @@ public:
     };
 
 protected:
-    CVector<int16_t> vecsTmpInputAudioSndCrdStereo;
+    CVector<int16_t>  vecsTmpInputAudioSndCrdStereo;
     RingBuffer<float> mOutBuffer;
-    int            iOboeBufferSizeMono;
-    int            iOboeBufferSizeStereo;
+    int               iOboeBufferSizeMono;
+    int               iOboeBufferSizeStereo;
 
 private:
     void setupCommonStreamParams ( oboe::AudioStreamBuilder* builder );
@@ -92,6 +92,5 @@ private:
     // empty and the garbage in the first 500ms or so is discarded
     static constexpr int32_t kNumCallbacksToDrain = 10;
     int32_t mCountCallbacksToDrain = kNumCallbacksToDrain;
-    std::mutex mMutex;
-    Stats mStats;
+    Stats   mStats;
 };

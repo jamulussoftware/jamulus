@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2020
  *
  * Author(s):
- *  Simon Tomlinson, Volker Fischer
+ *  Julian Santander
  *
  ******************************************************************************
  *

@@ -154,7 +154,9 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
-    HEADERS += android/sound.h
+    HEADERS += android/sound.h \
+        android/ring_buffer.h
+
     SOURCES += android/sound.cpp \
         android/androiddebug.cpp
 
@@ -350,7 +352,6 @@ FORMS_GUI = src/clientdlgbase.ui \
     src/aboutdlgbase.ui
 
 HEADERS += src/buffer.h \
-    android/ring_buffer.h \
     src/channel.h \
     src/client.h \
     src/global.h \

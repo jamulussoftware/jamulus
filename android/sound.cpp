@@ -27,6 +27,8 @@
 
 /* Implementation *************************************************************/
 
+const uint8_t CSound::RING_FACTOR = 20;
+
 CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
                  void*          arg,
                  const int      iCtrlMIDIChannel,
@@ -48,7 +50,7 @@ void CSound::setupCommonStreamParams(oboe::AudioStreamBuilder *builder)
             ->setSharingMode(oboe::SharingMode::Exclusive)
             ->setChannelCount(oboe::ChannelCount::Stereo)
             ->setSampleRate(SYSTEM_SAMPLE_RATE_HZ)
-            ->setFramesPerCallback(iOpenSLBufferSizeMono)
+            ->setFramesPerCallback(iOboeBufferSizeMono)
             ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Medium)
             ->setPerformanceMode(oboe::PerformanceMode::LowLatency);
 
@@ -75,13 +77,11 @@ void CSound::closeStream ( oboe::ManagedStream& stream )
 
 void CSound::openStreams()
 {
-    // Create callback
-    mCallback = this;
-
     // Setup output stream
     oboe::AudioStreamBuilder inBuilder, outBuilder;
 
     outBuilder.setDirection ( oboe::Direction::Output );
+    outBuilder.setCallback(this);
     setupCommonStreamParams ( &outBuilder );
 
     oboe::Result result = outBuilder.openManagedStream ( mPlayStream );
@@ -90,7 +90,7 @@ void CSound::openStreams()
     {
         return;
     }
-    mPlayStream->setBufferSizeInFrames ( iOpenSLBufferSizeStereo );
+    mPlayStream->setBufferSizeInFrames ( iOboeBufferSizeStereo );
 
     warnIfNotLowLatency ( mPlayStream, "PlayStream" );
     printStreamDetails ( mPlayStream );
@@ -111,10 +111,11 @@ void CSound::openStreams()
         return;
     }
 
-    mRecordingStream->setBufferSizeInFrames ( iOpenSLBufferSizeStereo );
+    mRecordingStream->setBufferSizeInFrames ( iOboeBufferSizeStereo );
 
     warnIfNotLowLatency ( mRecordingStream, "RecordStream" );
     printStreamDetails ( mRecordingStream );
+    printStreamDetails ( mPlayStream );
 }
 
 void CSound::printStreamDetails ( oboe::ManagedStream& stream )
@@ -183,19 +184,19 @@ void CSound::Stop()
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
     // store buffer size
-    iOpenSLBufferSizeMono = iNewPrefMonoBufferSize; // 512
+    iOboeBufferSizeMono = iNewPrefMonoBufferSize; // 512
 
     // init base class
-    CSoundBase::Init ( iOpenSLBufferSizeMono );
+    CSoundBase::Init ( iOboeBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size
-    iOpenSLBufferSizeStereo = 2 * iOpenSLBufferSizeMono;
+    iOboeBufferSizeStereo = 2 * iOboeBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpInputAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
-    vecsTmpOutAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
+    vecsTmpInputAudioSndCrdStereo.Init ( iOboeBufferSizeStereo );
+    mOutBuffer.reset ( iOboeBufferSizeStereo * RING_FACTOR );
 
-    return iOpenSLBufferSizeMono;
+    return iOboeBufferSizeMono;
 }
 
 // This is the main callback method for when an audio stream is ready to publish data to an output stream
@@ -211,77 +212,110 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
         return oboe::DataCallbackResult::Continue;
     }
 
+    if(mStats.in_callback_calls % 1000 == 0) {
+        mStats.log();
+    }
+
     if ( oboeStream == mRecordingStream.get() && audioData )
     {
-        // First things first, we need to discard the input queue a little for 500ms or so
-        if ( mCountCallbacksToDrain > 0 )
+        return onAudioInput(oboeStream, audioData, numFrames);
+    }
+
+    if ( oboeStream == mPlayStream.get() && audioData)
+    {
+        return onAudioOutput(oboeStream, audioData, numFrames);
+    }
+
+    return oboe::DataCallbackResult::Continue;
+}
+
+oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames ) {
+    mStats.in_callback_calls++;
+    // First things first, we need to discard the input queue a little for 500ms or so
+    if ( mCountCallbacksToDrain > 0 )
+    {
+        // discard the input buffer
+        int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
+        memset ( audioData, 0 /* value */, numBytes );
+        mCountCallbacksToDrain--;
+    }
+
+    // We're good to start recording now
+    // Take the data from the recording device output buffer and move
+    // it to the vector ready to send up to the server
+    float* floatData = static_cast<float*> ( audioData );
+
+    // Copy recording data to internal vector
+    for ( int frmNum = 0; frmNum < numFrames; ++frmNum )
+    {
+        for ( int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++ )
         {
-            // discard the input buffer
-            int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
-            memset ( audioData, 0 /* value */, numBytes );
-            mCountCallbacksToDrain--;
-        }
-
-        // We're good to start recording now
-        // Take the data from the recording device output buffer and move
-        // it to the vector ready to send up to the server
-        float* floatData = static_cast<float*> ( audioData );
-
-        // Copy recording data to internal vector
-        for ( int frmNum = 0; frmNum < numFrames; ++frmNum )
-        {
-            for ( int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++ )
-            {
-                vecsTmpInputAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] =
-                    static_cast<int16_t>(floatData[frmNum * oboeStream->getChannelCount() + channelNum] * _MAXSHORT);
-            }
-        }
-
-        // Tell parent class that we've put some data ready to send to the server
-        ProcessCallback ( vecsTmpInputAudioSndCrdStereo  );
-
-        // The callback has placed in the vector the samples to play
-
-        // Only copy data if we have data to copy, otherwise fill with silence
-        if ( !vecsTmpInputAudioSndCrdStereo.empty() )
-        {
-            for ( int frmNum = 0; frmNum < iOpenSLBufferSizeMono; ++frmNum )
-            {
-                for ( int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++ )
-                {
-                    // copy sample received from server into output buffer
-
-                    // convert to 32 bit
-                    const int32_t iCurSam = static_cast<int32_t> (
-                        vecsTmpInputAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] );
-
-                    vecsTmpOutAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] = ((float) iCurSam) / _MAXSHORT;
-                }
-            }
-        }
-        else
-        {
-            // prime output stream buffer with silence
-            vecsTmpOutAudioSndCrdStereo.Reset(0);
-        }
-
-        // Write without blocking.
-        oboe::ResultWithValue<int32_t> r = mPlayStream->write(vecsTmpOutAudioSndCrdStereo.data(),iOpenSLBufferSizeMono,0);
-        if(r)
-        {
-            // Note: this could result in not writing the requested number of frames.
-            // We could buffer them and wait for the next occasion, but for now we just discard them.
-            if(r.value() < iOpenSLBufferSizeMono)
-            {
-                qDebug() << "Could only write " << r.value() << " frames of the " << iOpenSLBufferSizeMono << " requested.";
-            }
-        }
-        else
-        {
-            qDebug() << "Could not write to output stream: " << oboe::convertToText(r.error());
+            vecsTmpInputAudioSndCrdStereo[frmNum * oboeStream->getChannelCount() + channelNum] =
+                static_cast<int16_t>(floatData[frmNum * oboeStream->getChannelCount() + channelNum] * _MAXSHORT);
         }
     }
 
+    if(numFrames != iOboeBufferSizeMono) {
+        qDebug() << "Received " << numFrames << " expecting " << iOboeBufferSizeMono;
+    }
+
+    mStats.frames_in += numFrames;
+
+    // Tell parent class that we've put some data ready to send to the server
+    ProcessCallback ( vecsTmpInputAudioSndCrdStereo  );
+
+    // The callback has placed in the vector the samples to play
+    addOutputData(oboeStream->getChannelCount());
+
+    return oboe::DataCallbackResult::Continue;
+}
+
+void CSound::addOutputData(int channel_count) {
+    std::lock_guard<std::mutex> guard(mMutex);
+    // Only copy data if we have data to copy, otherwise fill with silence
+    if ( !vecsTmpInputAudioSndCrdStereo.empty() )
+    {
+        for ( int frmNum = 0; frmNum < iOboeBufferSizeMono; ++frmNum )
+        {
+            for ( int channelNum = 0; channelNum < channel_count; channelNum++ )
+            {
+                // copy sample received from server into output buffer
+
+                // convert to 32 bit
+                const int32_t iCurSam = static_cast<int32_t> (
+                    vecsTmpInputAudioSndCrdStereo[frmNum * channel_count+ channelNum] );
+                mOutBuffer.put(((float) iCurSam) / _MAXSHORT);
+            }
+        }
+    }
+    else
+    {
+        // prime output stream buffer with silence
+        for ( int frmNum = 0; frmNum < iOboeBufferSizeMono; ++frmNum )
+        {
+            for ( int channelNum = 0; channelNum < channel_count; channelNum++ )
+            {
+                mOutBuffer.put(0);
+            }
+        }
+    }
+    if(mOutBuffer.isFull()) {
+        mStats.ring_overrun++;
+    }
+}
+
+oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames ) {
+    mStats.frames_out += numFrames;
+    mStats.out_callback_calls++;
+    std::lock_guard<std::mutex> guard(mMutex);
+    std::size_t to_write = numFrames*oboeStream->getChannelCount();
+    std::size_t count = std::min(mOutBuffer.size(),to_write);
+
+    mOutBuffer.get((float *)audioData,count);
+    if(to_write > count) {
+        mStats.frames_filled_out += (to_write-count);
+        memset(((float *) audioData)+count,0, (to_write-count)*sizeof(float));
+    }
     return oboe::DataCallbackResult::Continue;
 }
 
@@ -295,4 +329,25 @@ void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result res
 void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result )
 {
     qDebug() << "CSound::onErrorBeforeClose";
+}
+
+void CSound::Stats::reset() 
+{
+    frames_in=0;
+    frames_out=0;
+    frames_filled_out=0;
+    in_callback_calls=0;
+    out_callback_calls=0;
+    ring_overrun=0;
+}
+
+void CSound::Stats::log() const 
+{
+    qDebug() << "Stats: "
+            << "frames_in: " << frames_in
+            << ",frames_out: " << frames_out
+            << ",frames_filled_out: " << frames_filled_out
+            << ",in_callback_calls: " << in_callback_calls
+            << ",out_callback_calls: " << out_callback_calls
+            << ",ring_overrun: " << ring_overrun;
 }

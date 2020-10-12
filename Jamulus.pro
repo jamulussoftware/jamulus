@@ -350,6 +350,7 @@ FORMS_GUI = src/clientdlgbase.ui \
     src/aboutdlgbase.ui
 
 HEADERS += src/buffer.h \
+    android/ring_buffer.h \
     src/channel.h \
     src/client.h \
     src/global.h \
@@ -1025,4 +1026,4 @@ contains(CONFIG, "disable_version_check") {
     DEFINES += DISABLE_VERSION_CHECK
 }
 
-ANDROID_ABIS = armeabi-v7a arm64-v8a
+ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64

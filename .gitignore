@@ -8,6 +8,8 @@ Makefile
 .cproject
 .project
 .settings
+.idea
+.vscode
 *.user
 *.user.*
 *.o

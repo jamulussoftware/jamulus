@@ -62,8 +62,7 @@ public:
     CServerDlg ( CServer*         pNServP,
                  CServerSettings* pNSetP,
                  const bool       bStartMinimized,
-                 QWidget*         parent = nullptr,
-                 Qt::WindowFlags  f = nullptr );
+                 QWidget*         parent = nullptr );
 
 protected:
     virtual void changeEvent ( QEvent* pEvent );

@@ -28,9 +28,8 @@
 /* Implementation *************************************************************/
 CConnectDlg::CConnectDlg ( CClient*        pNCliP,
                            const bool      bNewShowCompleteRegList,
-                           QWidget*        parent,
-                           Qt::WindowFlags f )
-    : QDialog                    ( parent, f ),
+                           QWidget*        parent )
+    : QDialog                    ( parent ),
       pClient                    ( pNCliP ),
       strCentralServerAddress    ( "" ),
       strSelectedAddress         ( "" ),

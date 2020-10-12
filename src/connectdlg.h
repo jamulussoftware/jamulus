@@ -51,8 +51,7 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
 public:
     CConnectDlg ( CClient*        pNCliP,
                   const bool      bNewShowCompleteRegList,
-                  QWidget*        parent = nullptr,
-                  Qt::WindowFlags f = nullptr );
+                  QWidget*        parent = nullptr );
 
     void Init ( const CVector<QString>& vstrIPAddresses );
     void SetCentralServerAddress ( const QString strNewCentralServerAddr ) { strCentralServerAddress = strNewCentralServerAddr; }

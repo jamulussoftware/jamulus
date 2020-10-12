@@ -809,7 +809,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 /******************************************************************************\
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
-CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
+CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     QGroupBox       ( parent ),
     pSettings       ( nullptr ),
     bDisplayPans    ( false ),

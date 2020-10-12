@@ -186,8 +186,7 @@ class CAudioMixerBoard :
     Q_OBJECT
 
 public:
-    CAudioMixerBoard ( QWidget*        parent = nullptr,
-                       Qt::WindowFlags f      = nullptr );
+    CAudioMixerBoard ( QWidget* parent = nullptr );
 
     virtual ~CAudioMixerBoard();
 

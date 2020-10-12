@@ -639,8 +639,7 @@ int main ( int argc, char** argv )
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
                                        bMuteStream,
-                                       nullptr,
-                                       Qt::Window );
+                                       nullptr );
 
                 // show dialog
                 ClientDlg.show();
@@ -695,8 +694,7 @@ int main ( int argc, char** argv )
                 CServerDlg ServerDlg ( &Server,
                                        &Settings,
                                        bStartMinimized,
-                                       nullptr,
-                                       Qt::Window );
+                                       nullptr );
 
                 // show dialog (if not the minimized flag is set)
                 if ( !bStartMinimized )

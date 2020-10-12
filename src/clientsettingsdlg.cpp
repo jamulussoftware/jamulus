@@ -28,9 +28,8 @@
 /* Implementation *************************************************************/
 CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
                                          CClientSettings* pNSetP,
-                                         QWidget*         parent,
-                                         Qt::WindowFlags  f ) :
-    QDialog   ( parent, f ),
+                                         QWidget*         parent ) :
+    QDialog   ( parent ),
     pClient   ( pNCliP ),
     pSettings ( pNSetP )
 {

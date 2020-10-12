@@ -27,8 +27,7 @@
 
 // Analyzer console implementation *********************************************
 CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
-                                     QWidget* parent,
-                                     Qt::WindowFlags ) :
+                                     QWidget* parent ) :
     QDialog                ( parent ),
     pClient                ( pNCliP ),
     GraphImage             ( 1, 1, QImage::Format_RGB32 ),

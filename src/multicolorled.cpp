@@ -29,8 +29,8 @@
 
 
 /* Implementation *************************************************************/
-CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
-    : QLabel ( parent, f ),
+CMultiColorLED::CMultiColorLED ( QWidget* parent )
+    : QLabel ( parent ),
     BitmCubeDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
     BitmCubeGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
     BitmCubeGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),

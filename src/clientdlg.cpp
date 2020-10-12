@@ -33,17 +33,16 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
-                         QWidget*         parent,
-                         Qt::WindowFlags  f ) :
-    QDialog             ( parent, f ),
+                         QWidget*         parent ) :
+    QDialog             ( parent ),
     pClient             ( pNCliP ),
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed       ( iCtrlMIDIChannel != INVALID_MIDI_CH ),
-    ClientSettingsDlg   ( pNCliP, pNSetP, parent, Qt::Window ),
-    ChatDlg             ( parent, Qt::Window ),
-    ConnectDlg          ( pNCliP, bNewShowComplRegConnList, parent, Qt::Dialog ),
-    AnalyzerConsole     ( pNCliP, parent, Qt::Window ),
+    ClientSettingsDlg   ( pNCliP, pNSetP, parent ),
+    ChatDlg             ( parent ),
+    ConnectDlg          ( pNCliP, bNewShowComplRegConnList, parent ),
+    AnalyzerConsole     ( pNCliP, parent ),
     MusicianProfileDlg  ( pNCliP, parent )
 {
     setupUi ( this );

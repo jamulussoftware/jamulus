@@ -350,6 +350,7 @@ FORMS_GUI = src/clientdlgbase.ui \
     src/aboutdlgbase.ui
 
 HEADERS += src/buffer.h \
+    android/ring_buffer.h \
     src/channel.h \
     src/client.h \
     src/global.h \

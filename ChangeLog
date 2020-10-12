@@ -18,6 +18,8 @@
 
 - replaced double types by floats for some of the signal processing, coded by hselasky (#544)
 
+- improvements to the Android audio interface, coded by j-santander (#83)
+
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 

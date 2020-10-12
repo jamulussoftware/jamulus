@@ -24,6 +24,7 @@
 
 #include "server.h"
 
+#include "compressor.h"
 
 // CHighPrecisionTimer implementation ******************************************
 #ifdef _WIN32
@@ -339,8 +340,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecfGains.Init                  ( iMaxNumChannels );
     vecvecfPannings.Init               ( iMaxNumChannels );
     vecvecfData.Init                   ( iMaxNumChannels );
-    vecvecfSendData.Init               ( iMaxNumChannels );
     vecvecfIntermediateProcBuf.Init    ( iMaxNumChannels );
+    vecfOutputAudioPeak.Init           ( iMaxNumChannels, 0 );
     vecvecbyCodedData.Init             ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
@@ -355,10 +356,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
         // we always use stereo audio buffers (which is the worst case)
         vecvecfData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
-
-        // (note that we only allocate iMaxNumChannels buffers for the send
-        // and coded data because of the OMP implementation)
-        vecvecfSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // allocate worst case memory for intermediate processing buffers in float precision
         vecvecfIntermediateProcBuf[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
@@ -1120,7 +1117,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 {
     int             i, j, k, iUnused;
     CVector<float>& vecfIntermProcBuf = vecvecfIntermediateProcBuf[iChanCnt]; // use reference for faster access
-    CVector<float>& vecfSendData      = vecvecfSendData[iChanCnt];            // use reference for faster access
+    float &fAudioPeak = vecfOutputAudioPeak[iChanCnt];
 
     // get actual ID of current channel
     const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
@@ -1183,11 +1180,9 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // When adding multiple sound sources together
         // the resulting signal level may exceed the maximum
         // audio range which is from -1.0f to 1.0f inclusivly.
-        // Clip the intermediate sound buffer to be within
-        // the expected range
         for ( i = 0; i < iServerFrameSizeSamples; i++ )
         {
-            vecfSendData[i] = ClipFloat ( vecfIntermProcBuf[i] );
+	    monoCompressor(SYSTEM_SAMPLE_RATE_HZ, fAudioPeak, vecfIntermProcBuf[i]);
         }
     }
     else
@@ -1255,11 +1250,10 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // When adding multiple sound sources together
         // the resulting signal level may exceed the maximum
         // audio range which is from -1.0f to 1.0f inclusivly.
-        // Clip the intermediate sound buffer to be within
-        // the expected range
-        for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+        for ( i = 0; i < iServerFrameSizeSamples; i++ )
         {
-            vecfSendData[i] = ClipFloat ( vecfIntermProcBuf[i] );
+	    stereoCompressor(SYSTEM_SAMPLE_RATE_HZ, fAudioPeak,
+	        vecfIntermProcBuf[2 * i], vecfIntermProcBuf[2 * i + 1]);
         }
     }
 
@@ -1303,12 +1297,12 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
     // is false and the Get() function is not called at all. Therefore if the buffer is not needed
     // we do not spend any time in the function but go directly inside the if condition.
     if ( ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] == 0 ) ||
-         DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecfSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
+         DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecfIntermProcBuf, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] ) )
     {
         if ( vecUseDoubleSysFraSizeConvBuf[iChanCnt] != 0 )
         {
             // get the large frame from the conversion buffer
-            DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecfSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
+            DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecfIntermProcBuf, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt] );
         }
 
         for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
@@ -1321,7 +1315,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                 iUnused = opus_custom_encode_float ( pCurOpusEncoder,
-                                                     &vecfSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                                     &vecfIntermProcBuf[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
                                                      iClientFrameSizeSamples,
                                                      &vecvecbyCodedData[iChanCnt][0],
                                                      iCeltNumCodedBytes );

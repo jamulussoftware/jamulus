@@ -344,6 +344,8 @@ protected:
     CVector<float>          vecDataConvBuf;
     CVector<float>          vecfStereoSndCrdMuteStream;
     CVector<float>          vecZeros;
+    float                   fAudioInputPeak;
+    float                   fAudioOutputPeak;
 
     bool                    bFraSiFactPrefSupported;
     bool                    bFraSiFactDefSupported;

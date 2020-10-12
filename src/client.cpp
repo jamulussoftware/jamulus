@@ -24,6 +24,7 @@
 
 #include "client.h"
 
+#include "compressor.h"
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
@@ -54,6 +55,8 @@ CClient::CClient ( const quint16  iPortNumber,
     iSndCrdFrameSizeFactor           ( FRAME_SIZE_FACTOR_DEFAULT ),
     bSndCrdConversionBufferRequired  ( false ),
     iSndCardMonoBlockSizeSamConvBuff ( 0 ),
+    fAudioInputPeak                  ( 0 ),
+    fAudioOutputPeak                 ( 0 ),
     bFraSiFactPrefSupported          ( false ),
     bFraSiFactDefSupported           ( false ),
     bFraSiFactSafeSupported          ( false ),
@@ -1024,10 +1027,27 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
-                // clip samples for stereo pan mode
-                vecfStereoSndCrd[i] = ClipFloat (
-                    fGainL * vecfStereoSndCrd[j] + fGainR * vecfStereoSndCrd[j + 1] );
+                vecfStereoSndCrd[i] =
+		    fGainL * vecfStereoSndCrd[j] + fGainR * vecfStereoSndCrd[j + 1];
             }
+        }
+    }
+
+    // apply local audio input compressor
+    if ( eAudioChannelConf == CC_STEREO )
+    {
+        for ( i = 0; i < iMonoBlockSizeSam; i++ )
+        {
+            stereoCompressor(SYSTEM_SAMPLE_RATE_HZ, fAudioInputPeak,
+                vecfStereoSndCrd[2 * i], vecfStereoSndCrd[2 * i + 1]);
+        }
+    }
+    else
+    {
+        for ( i = 0; i < iMonoBlockSizeSam; i++ )
+        {
+            monoCompressor(SYSTEM_SAMPLE_RATE_HZ, fAudioInputPeak,
+                vecfStereoSndCrd[i]);
         }
     }
 
@@ -1122,8 +1142,8 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
     {
         for ( i = 0; i < iStereoBlockSizeSam; i++ )
         {
-            vecfStereoSndCrd[i] = ClipFloat (
-                vecfStereoSndCrd[i] + vecfStereoSndCrdMuteStream[i] * fMuteOutStreamGain );
+            vecfStereoSndCrd[i] =
+	        vecfStereoSndCrd[i] + vecfStereoSndCrdMuteStream[i] * fMuteOutStreamGain;
         }
     }
 
@@ -1145,6 +1165,13 @@ void CClient::ProcessAudioDataIntern ( CVector<float>& vecfStereoSndCrd )
     {
         // if not connected, clear data
         vecfStereoSndCrd.Reset ( 0 );
+    }
+
+    // apply local audio output compressor
+    for ( i = 0; i < iMonoBlockSizeSam; i++ )
+    {
+        stereoCompressor(SYSTEM_SAMPLE_RATE_HZ, fAudioOutputPeak,
+            vecfStereoSndCrd[2 * i], vecfStereoSndCrd[2 * i + 1]);
     }
 
     // update socket buffer size

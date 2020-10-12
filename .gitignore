@@ -8,6 +8,7 @@ Makefile
 .cproject
 .project
 .settings
+.idea
 *.user
 *.user.*
 *.o

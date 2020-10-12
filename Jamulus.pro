@@ -1025,4 +1025,4 @@ contains(CONFIG, "disable_version_check") {
     DEFINES += DISABLE_VERSION_CHECK
 }
 
-ANDROID_ABIS = armeabi-v7a arm64-v8a
+ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64

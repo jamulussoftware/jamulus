@@ -33,7 +33,6 @@ CChannel::CChannel ( const bool bNIsServer ) :
     bDoAutoSockBufSize     ( true ),
     bUseSeq                ( false ),	// don't set until we know we are talking to a new server
     sendSeqNum             ( 0 ),
-    recvSeqNum             ( 0 ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),

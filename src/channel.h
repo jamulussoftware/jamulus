@@ -219,7 +219,6 @@ protected:
 
     bool                    bUseSeq;    // use sequence numbers for audio
     uint16_t                sendSeqNum; // sending sequence number
-    uint16_t                recvSeqNum; // receiving sequence number
 
     int                     iConTimeOut;
     int                     iConTimeOutStartVal;

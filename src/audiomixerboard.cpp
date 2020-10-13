@@ -984,6 +984,8 @@ void CAudioMixerBoard::HideAll()
 void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
                                           const EChSortType eChSortType )
 {
+    QMutexLocker locker ( &Mutex );
+
     // create a pair list of lower strings and fader ID for each channel
     QList<QPair<QString, int> > PairList;
 
@@ -1032,7 +1034,7 @@ void CAudioMixerBoard::UpdateTitle()
 
     if ( eRecorderState == RS_RECORDING )
     {
-        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" )  + "] ";
+        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
     }
 
     setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
@@ -1048,6 +1050,8 @@ void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState 
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
+    QMutexLocker locker ( &Mutex );
+
     // we want to set the server name only if the very first faders appear
     // in the audio mixer board to show a "try to connect" before
     if ( bNoFaderVisible )
@@ -1099,6 +1103,13 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                         vecpChanFader[i]->SetFaderLevel (
                             pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
                     }
+
+                    // per definition: a fader for a new client shall always be inserted at
+                    // the right-hand-side (#673), note that it is not required to remove the
+                    // widget from the layout first but it is moved to the new position automatically
+                    // and also note that the last layout item is the spacer, therefore we have
+                    // to insert at position "count - 2"
+                    pMainLayout->insertWidget ( pMainLayout->count() - 2, vecpChanFader[i]->GetMainWidget() );
                 }
 
                 // restore gain (if new name is different from the current one)

@@ -37,6 +37,7 @@
 #include <QHostAddress>
 #include <QListWidget>
 #include <QMenu>
+#include <QMutex>
 #include "global.h"
 #include "util.h"
 #include "levelmeter.h"
@@ -248,6 +249,7 @@ protected:
     int                     iMyChannelID;
     QString                 strServerName;
     ERecorderState          eRecorderState;
+    QMutex                  Mutex;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const float  fValue,

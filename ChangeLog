@@ -4,6 +4,8 @@
 
 3.5.12git <- NOTE: the release version number will be 3.5.13
 
+- most recently connected users appear on the RH side on the fader panel (#673)
+
 - improvements for the server multithreading, coded by kraney
 
 - removed Display Channel Levels setting and --servername (#638)
@@ -23,7 +25,6 @@
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 
-TODO simple rule where most recently connected users appear on the RH side (#673)
 
 
 

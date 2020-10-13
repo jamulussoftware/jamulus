@@ -29,7 +29,6 @@
 #include <QPushButton>
 #include <QWhatsThis>
 #include <QTimer>
-#include <QMutex>
 #include <QLocale>
 #include "global.h"
 #include "client.h"

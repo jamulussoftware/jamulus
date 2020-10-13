@@ -543,15 +543,20 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
         {
             int hdrSize;
 
-            if (vecbyData[0] == 0xFF) {
+            if ( vecbyData[0] == 0xFF )
+            {
                 // sequenced audio
-                if (bIsServer) {
+                if ( bIsServer )
+                {
                     bUseSeq = true;	// reply to client using sequence numbers
                 }
                 hdrSize = SEQ_HEADER_SIZE;
-            } else {
+            }
+            else
+            {
                 // non-sequenced audio
-                if (bIsServer) {
+                if ( bIsServer )
+                {
                     bUseSeq = false; // reply to client without sequence numbers
                 }
                 hdrSize = 0;
@@ -693,11 +698,14 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
     // block size
     if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen ) )
     {
-        ConvBuf.GetBuf(p, len); // len includes header, which may or may not be needed
-        if (bUseSeq) {
-            ConvBuf.WriteSeq(sendSeqNum);
+        ConvBuf.GetBuf( p, len ); // len includes header, which may or may not be needed
+        if ( bUseSeq )
+        {
+            ConvBuf.WriteSeq( sendSeqNum );
             sendSeqNum += len - SEQ_HEADER_SIZE; // ignore overflow
-        } else {
+        }
+        else
+        {
             // discard the header
             p += SEQ_HEADER_SIZE;
             len -= SEQ_HEADER_SIZE;

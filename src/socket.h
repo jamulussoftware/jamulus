@@ -163,9 +163,9 @@ public:
         Socket.SendPacket ( vecbySendBuf, HostAddr );
     }
 
-    void SendPacket ( const char * bySendBuf,
-                      const int iSizeOut,
-                      const CHostAddress&     HostAddr )
+    void SendPacket ( const char *        bySendBuf,
+                      const int           iSizeOut,
+                      const CHostAddress& HostAddr )
     {
         Socket.SendPacket ( bySendBuf, iSizeOut, HostAddr );
     }

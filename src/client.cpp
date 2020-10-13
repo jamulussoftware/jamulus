@@ -462,7 +462,7 @@ void CClient::SetEnableSequence ( const bool eNEnableSequence )
 
     // set new parameter
     bEnableSequence = eNEnableSequence;
-    Channel.SetUseSeq(bEnableSequence);
+    Channel.SetUseSeq( bEnableSequence );
     Init();
 
     if ( bWasRunning )

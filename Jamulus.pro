@@ -8,7 +8,7 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
-    debug optimize_debug # release
+    release
 
 QT += network \
     xml \
@@ -46,7 +46,6 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
 
-QMAKE_CXXFLAGS += -Wno-psabi
 
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)

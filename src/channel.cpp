@@ -32,7 +32,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
     bUseSeq                ( false ),	// don't set until we know we are talking to a new server
-    sendSeqNum             ( 0 ),
+    iSendSeqNum            ( 0 ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
@@ -700,8 +700,8 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
         ConvBuf.GetBuf( p, len ); // len includes header, which may or may not be needed
         if ( bUseSeq )
         {
-            ConvBuf.WriteSeq( sendSeqNum );
-            sendSeqNum += len - SEQ_HEADER_SIZE; // ignore overflow
+            ConvBuf.WriteSeq( iSendSeqNum );
+            iSendSeqNum += len - SEQ_HEADER_SIZE; // ignore overflow
         }
         else
         {

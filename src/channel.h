@@ -217,8 +217,8 @@ protected:
     // network protocol
     CProtocol               Protocol;
 
-    bool                    bUseSeq;    // use sequence numbers for audio
-    uint16_t                sendSeqNum; // sending sequence number
+    bool                    bUseSeq;        // use sequence numbers for audio
+    uint16_t                iSendSeqNum;    // sending sequence number
 
     int                     iConTimeOut;
     int                     iConTimeOutStartVal;

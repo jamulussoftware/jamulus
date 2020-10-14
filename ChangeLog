@@ -6,7 +6,7 @@
 
 - most recently connected users appear on the RH side on the fader panel (#673)
 
-- improvements for the server multithreading, coded by kraney
+- improvements for the server multithreading, coded by kraney (#653)
 
 - removed Display Channel Levels setting and --servername (#638)
 
@@ -23,6 +23,9 @@
 - improvements to the Android audio interface, coded by j-santander (#83)
 
 - bug fix: reduced server list is displayed instead of the normal list (#657)
+
+
+TODO handle audio packets received out of order, coded by softins (#619)
 
 
 

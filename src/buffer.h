@@ -69,6 +69,8 @@
 #define IIR_WEIGTH_UP_FAST                          0.9997499687422
 #define IIR_WEIGTH_DOWN_FAST                        0.999499875
 
+// size of sequence numbering header
+#define SEQ_HEADER_SIZE                             3
 
 /* Classes ********************************************************************/
 // Buffer base class -----------------------------------------------------------
@@ -76,7 +78,14 @@ template<class TData> class CBufferBase
 {
 public:
     CBufferBase ( const bool bNIsSim = false ) :
-       bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
+       bIsSimulation            ( bNIsSim ),
+       bIsInitialized           ( false ),
+       iRecvAudioBytesTotal     ( 0 ),
+       iRecvAudioBytesOnTime    ( 0 ),
+       iRecvAudioBytesLateUsed  ( 0 ),
+       iRecvAudioBytesDiscarded ( 0 ),
+       iRecvAudioBytesGaps      ( 0 )
+    {}
 
     void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
 
@@ -186,6 +195,7 @@ public:
             // init buffer pointers and buffer state (empty buffer)
             iGetPos   = 0;
             iPutPos   = 0;
+            bSeqIsSet = false;
             eBufState = CBufferBase<TData>::BS_EMPTY;
         }
 
@@ -194,6 +204,234 @@ public:
 
         // set initialized flag
         bIsInitialized = true;
+    }
+
+    virtual bool PutSeq ( const CVector<TData>& vecData,
+                          const int             iInSize,
+                          const int             iBlockSize )
+    {
+        // iInSize contains the length of audio data after the sequence header
+
+        uint16_t iSeqNum = vecData[1] + ( vecData[2] << 8 );
+        uint16_t iEndSeq = iSeqNum + iInSize;
+        uint16_t iGetSeq;
+        uint8_t  iMonoStereo = vecData[3];  // contains 00 for mono, 04 for stereo
+
+        if ( !bSeqIsSet )
+        {
+            // first sequenced packet - use sequence number to init
+
+            iPutSeq = iSeqNum;
+            bSeqIsSet = true;
+        }
+
+        if ( !bIsSimulation ) iRecvAudioBytesTotal += iInSize;
+
+        int16_t iPutOffset = iSeqNum - iPutSeq;
+
+        if ( iPutOffset < 0 )
+        {
+            // this is late data - either discard or insert
+            // we don't update the put pointer or put sequence number
+
+            if ( !bIsSimulation )
+            {
+                // only do this if not simulating
+
+                // calculate the sequence number of the current jitter buffer start
+                if ( iPutPos > iGetPos )
+                {
+                    iGetSeq = iPutSeq - ( iPutPos - iGetPos );
+                }
+                else if ( iPutPos < iGetPos )
+                {
+                    iGetSeq = iPutSeq - ( iPutPos + iMemSize - iGetPos );
+                }
+                else if ( eBufState == BS_EMPTY )
+                {
+                    iGetSeq = iPutSeq;
+                }
+                else /* full */
+                {
+                    iGetSeq = iPutSeq - iMemSize;
+                }
+
+                int16_t iGetOffset = iSeqNum - iGetSeq;
+
+                if ( iGetOffset < 0 )
+                {
+                    iRecvAudioBytesDiscarded += iInSize;
+
+                    return false;   // the packet is too late - just discard it
+                }
+
+                iRecvAudioBytesLateUsed += iInSize;
+
+                // the whole packet will fit in the jitter buffer - overwrite the silence
+
+                int iTmpPos = iGetPos + iGetOffset;     // calculate the writing position
+                if ( iTmpPos >= iMemSize ) iTmpPos -= iMemSize;
+
+                if ( iTmpPos + iInSize > iMemSize )
+                {
+                    // write in two parts due to wrap around
+                    std::copy ( vecData.begin() + SEQ_HEADER_SIZE,
+                                vecData.begin() + SEQ_HEADER_SIZE + ( iMemSize - iTmpPos ),
+                                vecMemory.begin() + iTmpPos );
+                    std::copy ( vecData.begin() + SEQ_HEADER_SIZE + ( iMemSize - iTmpPos ),
+                                vecData.begin() + SEQ_HEADER_SIZE + iInSize,
+                                vecMemory.begin() );
+                }
+                else
+                {
+                    // can be written in one step
+                    std::copy ( vecData.begin() + SEQ_HEADER_SIZE,
+                                vecData.begin() + SEQ_HEADER_SIZE + iInSize,
+                                vecMemory.begin() + iTmpPos );
+                }
+                // no pointers to update when back-filling
+            }
+        }
+        else
+        {
+            // this is current data, possibly with a gap
+
+            if ( iPutOffset > 0 )
+            {
+                // This means we have a gap in the buffer that we need to fill with silence.
+                // Must be an integral number of blocks.
+
+                if ( !bIsSimulation ) iRecvAudioBytesGaps += iPutOffset;
+
+                if ( iPutOffset % iBlockSize )
+                {
+                    // not an integral number of blocks - should never happen
+                    return false;
+                }
+
+                // Ensure that we have enough space for the gap as well as the audio
+                while ( iPutOffset > 0 &&  GetAvailSpace() < iInSize + iPutOffset )
+                {
+                    if ( iGetPos == iPutPos )
+                    {
+                        // buffer is already empty, so reduce the amount of silence
+                        iPutOffset -= iBlockSize;
+                    }
+                    else
+                    {
+                        // discard the oldest data in the buffer
+                        iGetPos += iBlockSize;
+                        if ( iGetPos >= iMemSize ) iGetPos -= iMemSize;
+
+                        if ( !bIsSimulation ) iRecvAudioBytesDiscarded += iBlockSize;
+                    }
+                }
+
+                if ( bIsSimulation )
+                {
+                    // only update pointers
+                    iPutPos += iPutOffset;  // the amount of silence to insert
+
+                    if ( iPutPos >= iMemSize )
+                    {
+                        iPutPos -= iMemSize;
+                    }
+                }
+                else
+                {
+                    while ( iPutOffset > 0 )
+                    {
+                        // silence in Opus is 0x00 (Mono) or 0x04 (Stereo), 0xFF, 0xFE, then 0x00 up to the block size
+
+                        vecMemory[iPutPos++] = iMonoStereo;
+                        if ( iPutPos >= iMemSize ) iPutPos -= iMemSize;
+                        vecMemory[iPutPos++] = 0xFF;
+                        if ( iPutPos >= iMemSize ) iPutPos -= iMemSize;
+                        vecMemory[iPutPos++] = 0xFE;
+                        if ( iPutPos >= iMemSize ) iPutPos -= iMemSize;
+
+                        if ( iPutPos + iBlockSize - 3 > iMemSize )
+                        {
+                            // need to write silence in two blocks due to wrap
+                            std::fill_n ( vecMemory.begin() + iPutPos, iMemSize - iPutPos, 0 );
+                            iPutPos += iBlockSize - 3 - iMemSize;
+                            std::fill_n ( vecMemory.begin(), iPutPos, 0 );
+                        }
+                        else
+                        {
+                            std::fill_n ( vecMemory.begin() + iPutPos, iBlockSize - 3, 0 );
+                            iPutPos += iBlockSize - 3;
+                        }
+
+                        iPutOffset -= iBlockSize;
+                    }
+                }
+                // now we can fall through to write the audio packet at the new position
+            }
+
+            if ( bIsSimulation )
+            {
+                // in this simulation only the buffer pointers and the buffer state
+                // is updated, no actual data is transferred
+                iPutPos += iInSize;
+
+                if ( iPutPos >= iMemSize )
+                {
+                    iPutPos -= iMemSize;
+                }
+            }
+            else
+            {
+                // copy new data in internal buffer
+
+                if ( iPutPos + iInSize > iMemSize )
+                {
+                    // data must be written in two steps because of wrap around
+                    std::copy ( vecData.begin() + SEQ_HEADER_SIZE,
+                                vecData.begin() + SEQ_HEADER_SIZE + ( iMemSize - iPutPos ),
+                                vecMemory.begin() + iPutPos );
+
+                    std::copy ( vecData.begin() + SEQ_HEADER_SIZE + ( iMemSize - iPutPos ),
+                                vecData.begin() + SEQ_HEADER_SIZE + iInSize,
+                                vecMemory.begin() );
+
+                    // set the put position one block further, wrapped around
+                    iPutPos += iInSize - iMemSize;
+                }
+                else
+                {
+                    // data can be written in one step
+                    std::copy ( vecData.begin() + SEQ_HEADER_SIZE,
+                                vecData.begin() + SEQ_HEADER_SIZE + iInSize,
+                                vecMemory.begin() + iPutPos );
+
+                    // set the put position one block further (no wrap around needs
+                    // to be considered here)
+                    iPutPos += iInSize;
+                }
+
+                iRecvAudioBytesOnTime += iInSize;
+            }
+
+            // take care about wrap around of put pointer
+            if ( iPutPos == iMemSize )
+            {
+                iPutPos = 0;
+            }
+
+            // set buffer state flag
+            if ( iPutPos == iGetPos )
+            {
+                eBufState = CBufferBase<TData>::BS_FULL;
+            }
+            else
+            {
+                eBufState = CBufferBase<TData>::BS_OK;
+            }
+
+            iPutSeq = iEndSeq;
+        }
+        return true; // no error check in base class, always return ok
     }
 
     virtual bool Put ( const CVector<TData>& vecData,
@@ -213,23 +451,20 @@ public:
         else
         {
             // copy new data in internal buffer
-            int iCurPos = 0;
 
             if ( iPutPos + iInSize > iMemSize )
             {
-                // remaining space size for second block
-                const int iRemSpace = iPutPos + iInSize - iMemSize;
-
                 // data must be written in two steps because of wrap around
-                while ( iPutPos < iMemSize )
-                {
-                    vecMemory[iPutPos++] = vecData[iCurPos++];
-                }
+                std::copy ( vecData.begin(),
+                            vecData.begin() + ( iMemSize - iPutPos ),
+                            vecMemory.begin() + iPutPos );
 
-                for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
-                {
-                    vecMemory[iPutPos] = vecData[iCurPos++];
-                }
+                std::copy ( vecData.begin() + ( iMemSize - iPutPos ),
+                            vecData.begin() + iInSize,
+                            vecMemory.begin() );
+
+                // set the put position one block further, wrapped around
+                iPutPos += iInSize - iMemSize;
             }
             else
             {
@@ -386,6 +621,7 @@ protected:
         // init buffer pointers and buffer state (empty buffer)
         iGetPos   = 0;
         iPutPos   = 0;
+        bSeqIsSet = false;
         eBufState = CBufferBase<TData>::BS_EMPTY;
     }
 
@@ -393,9 +629,17 @@ protected:
     int            iMemSize;
     int            iGetPos;
     int            iPutPos;
+    uint16_t       iPutSeq;
     EBufState      eBufState;
+    bool           bSeqIsSet;
     bool           bIsSimulation;
     bool           bIsInitialized;
+    // statistics for sequenced buffer
+    unsigned long  iRecvAudioBytesTotal;
+    unsigned long  iRecvAudioBytesOnTime;
+    unsigned long  iRecvAudioBytesLateUsed;
+    unsigned long  iRecvAudioBytesDiscarded;
+    unsigned long  iRecvAudioBytesGaps;
 };
 
 
@@ -475,19 +719,20 @@ template<class TData> class CConvBuf
 public:
     CConvBuf() { Init ( 0 ); }
 
-    void Init ( const int iNewMemSize )
+    void Init ( const int iNewMemSize, const int iNewHeaderSize = 0 )
     {
         // allocate internal memory and reset read/write positions
-        vecMemory.Init ( iNewMemSize );
+        vecMemory.Init ( iNewMemSize + iNewHeaderSize );
         iMemSize    = iNewMemSize;
         iBufferSize = iNewMemSize;
+        iHeaderSize = iNewHeaderSize;
         Reset();
     }
 
     void Reset()
     {
-        iPutPos = 0;
-        iGetPos = 0;
+        iPutPos = iHeaderSize;
+        iGetPos = iHeaderSize;
     }
 
     void SetBufferSize ( const int iNBSize )
@@ -502,11 +747,11 @@ public:
 
     void PutAll ( const CVector<TData>& vecsData )
     {
-        iGetPos = 0;
+        iGetPos = iHeaderSize;
 
         std::copy ( vecsData.begin(),
                     vecsData.begin() + iBufferSize, // note that input vector might be larger then memory size
-                    vecMemory.begin() );
+                    vecMemory.begin() + iHeaderSize );
     }
 
     bool Put ( const CVector<TData>& vecsData,
@@ -516,7 +761,7 @@ public:
         const int iEnd = iPutPos + iVecSize;
 
         // first check for buffer overrun
-        if ( iEnd <= iBufferSize )
+        if ( iEnd <= iBufferSize + iHeaderSize )
         {
             // copy new data in internal buffer
             std::copy ( vecsData.begin(),
@@ -527,23 +772,41 @@ public:
             iPutPos = iEnd;
 
             // return "buffer is ready for readout" flag
-            return ( iEnd == iBufferSize );
+            return ( iEnd == iBufferSize + iHeaderSize );
         }
 
         // buffer overrun or not initialized, return "not ready"
         return false;
     }
 
+    void WriteSeq ( const uint16_t seq )
+    {
+        if ( iHeaderSize == SEQ_HEADER_SIZE )
+        {
+            vecMemory[0] = 0xFF;
+            vecMemory[1] = seq & 0xFF;
+            vecMemory[2] = ( seq >> 8 ) & 0xFF;
+        }
+    }
+
+    void GetBuf ( const char *& pAddress,
+                  int&    iLength )
+    {
+        pAddress = (const char *)&vecMemory[0];
+        iLength = vecMemory.Size();
+        iPutPos = iHeaderSize;
+    }
+
     const CVector<TData>& GetAll()
     {
-        iPutPos = 0;
+        iPutPos = iHeaderSize;
         return vecMemory;
     }
 
     void GetAll ( CVector<TData>& vecsData,
                   const int       iVecSize )
     {
-        iPutPos = 0;
+        iPutPos = iHeaderSize;
 
         // copy data from internal buffer in given buffer
         std::copy ( vecMemory.begin(),
@@ -580,5 +843,6 @@ protected:
     CVector<TData> vecMemory;
     int            iMemSize;
     int            iBufferSize;
+    int            iHeaderSize;
     int            iPutPos, iGetPos;
 };

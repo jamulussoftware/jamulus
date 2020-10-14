@@ -135,6 +135,8 @@ public:
                                     const int iNewNetwFrameSizeFact,
                                     const int iNewNumAudioChannels );
 
+    void SetUseSeq( const bool bValue ) { bUseSeq = bValue; }
+
     void SetDoAutoSockBufSize ( const bool bValue )
         { bDoAutoSockBufSize = bValue; }
 
@@ -214,6 +216,9 @@ protected:
 
     // network protocol
     CProtocol               Protocol;
+
+    bool                    bUseSeq;        // use sequence numbers for audio
+    uint16_t                iSendSeqNum;    // sending sequence number
 
     int                     iConTimeOut;
     int                     iConTimeOutStartVal;

@@ -93,6 +93,7 @@ protected:
     void OnNetBufServerValueChanged ( int value );
     void OnAutoJitBufStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
+    void OnEnableSequenceStateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );

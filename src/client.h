@@ -206,6 +206,9 @@ public:
     void SetEnableOPUS64 ( const bool eNEnableOPUS64 );
     bool GetEnableOPUS64() { return bEnableOPUS64; }
 
+    void SetEnableSequence ( const bool eNEnableSequence );
+    bool GetEnableSequence() { return bEnableSequence; }
+
     int GetSndCrdActualMonoBlSize()
     {
         // the actual sound card mono block size depends on whether a
@@ -354,6 +357,7 @@ protected:
 
     EGUIDesign              eGUIDesign;
     bool                    bEnableOPUS64;
+    bool                    bEnableSequence;
 
     bool                    bJitterBufferOK;
 

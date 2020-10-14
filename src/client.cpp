@@ -59,6 +59,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bFraSiFactSafeSupported          ( false ),
     eGUIDesign                       ( GD_ORIGINAL ),
     bEnableOPUS64                    ( false ),
+    bEnableSequence                  ( false ),
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
     eCentralServerAddressType        ( AT_DEFAULT ),
@@ -446,6 +447,27 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
             // restart client
             Sound.Start();
         }
+    }
+}
+
+void CClient::SetEnableSequence ( const bool eNEnableSequence )
+{
+    // init with new parameter, if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    // set new parameter
+    bEnableSequence = eNEnableSequence;
+    Channel.SetUseSeq( bEnableSequence );
+    Init();
+
+    if ( bWasRunning )
+    {
+        Sound.Start();
     }
 }
 

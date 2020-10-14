@@ -1,4 +1,4 @@
-VERSION = 3.5.12git
+VERSION = 3.5.12git-softins
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -45,6 +45,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     USE_ALLOCA \
     CUSTOM_MODES \
     _REENTRANT
+
 
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)

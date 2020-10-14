@@ -78,7 +78,14 @@ template<class TData> class CBufferBase
 {
 public:
     CBufferBase ( const bool bNIsSim = false ) :
-       bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
+       bIsSimulation            ( bNIsSim ),
+       bIsInitialized           ( false ),
+       iRecvAudioBytesTotal     ( 0 ),
+       iRecvAudioBytesOnTime    ( 0 ),
+       iRecvAudioBytesLateUsed  ( 0 ),
+       iRecvAudioBytesDiscarded ( 0 ),
+       iRecvAudioBytesGaps      ( 0 )
+    {}
 
     void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
 
@@ -218,6 +225,8 @@ public:
             bSeqIsSet = true;
         }
 
+        if ( !bIsSimulation ) iRecvAudioBytesTotal += iInSize;
+
         int16_t iPutOffset = iSeqNum - iPutSeq;
 
         if ( iPutOffset < 0 )
@@ -251,8 +260,12 @@ public:
 
                 if ( iGetOffset < 0 )
                 {
+                    iRecvAudioBytesDiscarded += iInSize;
+
                     return false;   // the packet is too late - just discard it
                 }
+
+                iRecvAudioBytesLateUsed += iInSize;
 
                 // the whole packet will fit in the jitter buffer - overwrite the silence
 
@@ -288,6 +301,8 @@ public:
                 // This means we have a gap in the buffer that we need to fill with silence.
                 // Must be an integral number of blocks.
 
+                if ( !bIsSimulation ) iRecvAudioBytesGaps += iPutOffset;
+
                 if ( iPutOffset % iBlockSize )
                 {
                     // not an integral number of blocks - should never happen
@@ -307,6 +322,8 @@ public:
                         // discard the oldest data in the buffer
                         iGetPos += iBlockSize;
                         if ( iGetPos >= iMemSize ) iGetPos -= iMemSize;
+
+                        if ( !bIsSimulation ) iRecvAudioBytesDiscarded += iBlockSize;
                     }
                 }
 
@@ -392,6 +409,8 @@ public:
                     // to be considered here)
                     iPutPos += iInSize;
                 }
+
+                iRecvAudioBytesOnTime += iInSize;
             }
 
             // take care about wrap around of put pointer
@@ -615,6 +634,12 @@ protected:
     bool           bSeqIsSet;
     bool           bIsSimulation;
     bool           bIsInitialized;
+    // statistics for sequenced buffer
+    unsigned long  iRecvAudioBytesTotal;
+    unsigned long  iRecvAudioBytesOnTime;
+    unsigned long  iRecvAudioBytesLateUsed;
+    unsigned long  iRecvAudioBytesDiscarded;
+    unsigned long  iRecvAudioBytesGaps;
 };
 
 

@@ -33,59 +33,196 @@ void CNetBuf::Init ( const int  iNewBlockSize,
                      const int  iNewNumBlocks,
                      const bool bPreserve )
 {
-    // store block size value
-    iBlockSize = iNewBlockSize;
-
-    // total size -> size of one block times the number of blocks
-    CBufferBase<uint8_t>::Init ( iNewBlockSize * iNewNumBlocks,
-                                 bPreserve );
-
-    // clear buffer if not preserved
-    if ( !bPreserve )
+    // in simulation mode the size is not changed during operation -> we do
+    // not have to implement special code for this case
+    // only enter the "preserve" branch, if object was already initialized
+    // and the block sizes are the same
+    if ( bPreserve && ( !bIsSimulation ) && bIsInitialized && ( iBlockSize == iNewBlockSize ) )
     {
-        Clear();
+        // extract all data from buffer in temporary storage
+        CVector<CVector<uint8_t> > vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
+
+        int iPreviousDataCnt = 0;
+
+        while ( Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
+        {
+            iPreviousDataCnt++;
+        }
+
+        // now resize the buffer to the new size (buffer is empty after this operation)
+        Resize ( iNewNumBlocks, iNewBlockSize );
+
+        // copy the previous data back in the buffer (make sure we only copy as much
+        // data back as the new buffer size can hold)
+        int iDataCnt = 0;
+
+        while ( ( iDataCnt < iPreviousDataCnt ) &&
+                Put ( vecvecTempMemory[iDataCnt], iBlockSize ) )
+        {
+            iDataCnt++;
+        }
     }
+    else
+    {
+        Resize ( iNewNumBlocks, iNewBlockSize );
+    }
+
+    // set initialized flag
+    bIsInitialized = true;
+}
+
+void CNetBuf::Resize ( const int iNewNumBlocks,
+                       const int iNewBlockSize )
+{
+    // allocate memory for actual data buffer
+    vecvecMemory.Init ( iNewNumBlocks );
+
+    if ( !bIsSimulation )
+    {
+        for ( int iBlock = 0; iBlock < iNewNumBlocks; iBlock++ )
+        {
+            vecvecMemory[iBlock].Init ( iNewBlockSize );
+        }
+    }
+
+    // init buffer pointers and buffer state (empty buffer) and store buffer properties
+    iBlockGetPos     = 0;
+    iBlockPutPos     = 0;
+    eBufState        = BS_EMPTY;
+    iBlockSize       = iNewBlockSize;
+    iNumBlocksMemory = iNewNumBlocks;
 }
 
 bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
                     const int               iInSize )
 {
-    bool bPutOK = true;
-
-    // check if there is not enough space available
-    if ( GetAvailSpace() < iInSize )
+    // check if there is not enough space available and that the input size is a
+    // multiple of the block size
+    if ( ( GetAvailSpace() < iInSize ) ||
+         ( ( iInSize % iBlockSize ) != 0 ) )
     {
         return false;
     }
 
-    // copy new data in internal buffer (implemented in base class)
-    CBufferBase<uint8_t>::Put ( vecbyData, iInSize );
+    // copy new data in internal buffer
+    const int iNumBlocks = iInSize / iBlockSize;
 
-    return bPutOK;
+    for ( int iBlock = 0; iBlock < iNumBlocks; iBlock++ )
+    {
+        // for simultion buffer only update pointer, no data copying
+        if ( !bIsSimulation )
+        {
+            // copy one block of data in buffer
+            std::copy ( vecbyData.begin() + iBlock * iBlockSize,
+                        vecbyData.begin() + iBlock * iBlockSize + iBlockSize,
+                        vecvecMemory[iBlockPutPos].begin() );
+        }
+
+        // set the put position one block further
+        iBlockPutPos++;
+
+        // take care about wrap around of put pointer
+        if ( iBlockPutPos == iNumBlocksMemory )
+        {
+            iBlockPutPos = 0;
+        }
+    }
+
+    // set buffer state flag
+    if ( iBlockPutPos == iBlockGetPos )
+    {
+        eBufState = BS_FULL;
+    }
+    else
+    {
+        eBufState = BS_OK;
+    }
+
+    return true;
 }
 
 bool CNetBuf::Get ( CVector<uint8_t>& vecbyData,
                     const int         iOutSize )
 {
-    bool bGetOK = true; // init return value
-
-    // check size
-    if ( ( iOutSize == 0 ) || ( iOutSize != iBlockSize ) )
+    // check requested output size and available buffer data
+    if ( ( iOutSize == 0 ) ||
+         ( iOutSize != iBlockSize ) ||
+         ( GetAvailData() < iOutSize ) )
     {
         return false;
     }
 
-    // check if there is not enough data available
-    if ( GetAvailData() < iOutSize )
+    // for simultion buffer only update pointer, no data copying
+    if ( !bIsSimulation )
     {
-        return false;
+        // copy data from internal buffer in output buffer
+        std::copy ( vecvecMemory[iBlockGetPos].begin(),
+                    vecvecMemory[iBlockGetPos].begin() + iBlockSize,
+                    vecbyData.begin() );
     }
 
-    // copy data from internal buffer in output buffer (implemented in base
-    // class)
-    CBufferBase<uint8_t>::Get ( vecbyData, iOutSize );
+    // set the get position one block further
+    iBlockGetPos++;
 
-    return bGetOK;
+    // take care about wrap around of get pointer
+    if ( iBlockGetPos == iNumBlocksMemory )
+    {
+        iBlockGetPos = 0;
+    }
+
+    // set buffer state flag
+    if ( iBlockPutPos == iBlockGetPos )
+    {
+        eBufState = BS_EMPTY;
+    }
+    else
+    {
+        eBufState = BS_OK;
+    }
+
+    return true;
+}
+
+int CNetBuf::GetAvailSpace() const
+{
+    // calculate available space in buffer
+    int iAvBlocks = iBlockGetPos - iBlockPutPos;
+
+    // check for special case and wrap around
+    if ( iAvBlocks < 0 )
+    {
+        iAvBlocks += iNumBlocksMemory; // wrap around
+    }
+    else
+    {
+        if ( ( iAvBlocks == 0 ) && ( eBufState == BS_EMPTY ) )
+        {
+            iAvBlocks = iNumBlocksMemory;
+        }
+    }
+
+    return iAvBlocks * iBlockSize;
+}
+
+int CNetBuf::GetAvailData() const
+{
+    // calculate available data in buffer
+    int iAvBlocks = iBlockPutPos - iBlockGetPos;
+
+    // check for special case and wrap around
+    if ( iAvBlocks < 0 )
+    {
+        iAvBlocks += iNumBlocksMemory; // wrap around
+    }
+    else
+    {
+        if ( ( iAvBlocks == 0 ) && ( eBufState == BS_FULL ) )
+        {
+            iAvBlocks = iNumBlocksMemory;
+        }
+    }
+
+    return iAvBlocks * iBlockSize;
 }
 
 

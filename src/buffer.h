@@ -72,176 +72,57 @@
 
 /* Classes ********************************************************************/
 // Buffer base class -----------------------------------------------------------
-template<class TData> class CBufferBase
+template<class TData> class CBuffer
 {
 public:
-    CBufferBase ( const bool bNIsSim = false ) :
-       bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
+    CBuffer() {}
 
-    void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
-
-    void Init ( const int  iNewMemSize,
-                const bool bPreserve = false )
+    void Init ( const int  iNewMemSize )
     {
-        // in simulation mode the size is not changed during operation -> we do
-        // not have to implement special code for this case
-        // only enter the "preserve" branch, if object was already initialized
-        if ( bPreserve && ( !bIsSimulation ) && bIsInitialized )
-        {
-            // copy old data in new vector using get pointer as zero per
-            // definition
-            int iCurPos;
+        // allocate memory for actual data buffer
+        vecMemory.Init ( iNewMemSize );
 
-            // copy current data in temporary vector
-            CVector<TData> vecTempMemory ( vecMemory );
-
-            // resize actual buffer memory
-            vecMemory.Init ( iNewMemSize );
-
-            // get maximum number of data to be copied
-            int iCopyLen = GetAvailData();
-
-            if ( iCopyLen > iNewMemSize )
-            {
-                iCopyLen = iNewMemSize;
-            }
-
-            // set correct buffer state
-            if ( iCopyLen == iNewMemSize )
-            {
-                eBufState = CBufferBase<TData>::BS_FULL;
-            }
-            else
-            {
-                if ( iCopyLen == 0 )
-                {
-                    eBufState = CBufferBase<TData>::BS_EMPTY;
-                }
-                else
-                {
-                    eBufState = CBufferBase<TData>::BS_OK;
-                }
-            }
-
-            if ( iGetPos < iPutPos )
-            {
-                // "get" position is before "put" position -> no wrap around
-                for ( iCurPos = 0; iCurPos < iCopyLen; iCurPos++ )
-                {
-                    vecMemory[iCurPos] = vecTempMemory[iGetPos + iCurPos];
-                }
-            }
-            else
-            {
-                // "put" position is before "get" position -> wrap around
-                bool bEnoughSpaceForSecondPart = true;
-                int  iFirstPartLen             = iMemSize - iGetPos;
-
-                // check that first copy length is not larger then new memory
-                if ( iFirstPartLen >= iCopyLen )
-                {
-                    iFirstPartLen             = iCopyLen;
-                    bEnoughSpaceForSecondPart = false;
-                }
-
-                for ( iCurPos = 0; iCurPos < iFirstPartLen; iCurPos++ )
-                {
-                    vecMemory[iCurPos] = vecTempMemory[iGetPos + iCurPos];
-                }
-
-                if ( bEnoughSpaceForSecondPart )
-                {
-                    // calculate remaining copy length
-                    const int iRemainingCopyLen = iCopyLen - iFirstPartLen;
-
-                    // perform copying of second part
-                    for ( iCurPos = 0; iCurPos < iRemainingCopyLen; iCurPos++ )
-                    {
-                        vecMemory[iCurPos + iFirstPartLen] = vecTempMemory[iCurPos];
-                    }
-                }
-            }
-
-            // update put pointer
-            if ( eBufState == CBufferBase<TData>::BS_FULL )
-            {
-                iPutPos = 0;
-            }
-            else
-            {
-                iPutPos = iCopyLen;
-            }
-
-            // update get position -> zero per definition
-            iGetPos = 0;
-        }
-        else
-        {
-            // allocate memory for actual data buffer
-            if ( !bIsSimulation )
-            {
-                vecMemory.Init ( iNewMemSize );
-            }
-
-            // init buffer pointers and buffer state (empty buffer)
-            iGetPos   = 0;
-            iPutPos   = 0;
-            eBufState = CBufferBase<TData>::BS_EMPTY;
-        }
+        // init buffer pointers and buffer state (empty buffer)
+        iGetPos   = 0;
+        iPutPos   = 0;
+        eBufState = BS_EMPTY;
 
         // store total memory size value
         iMemSize = iNewMemSize;
-
-        // set initialized flag
-        bIsInitialized = true;
     }
 
     virtual bool Put ( const CVector<TData>& vecData,
                        const int             iInSize )
     {
-        if ( bIsSimulation )
-        {
-            // in this simulation only the buffer pointers and the buffer state
-            // is updated, no actual data is transferred
-            iPutPos += iInSize;
+        // copy new data in internal buffer
+        int iCurPos = 0;
 
-            if ( iPutPos >= iMemSize )
+        if ( iPutPos + iInSize > iMemSize )
+        {
+            // remaining space size for second block
+            const int iRemSpace = iPutPos + iInSize - iMemSize;
+
+            // data must be written in two steps because of wrap around
+            while ( iPutPos < iMemSize )
             {
-                iPutPos -= iMemSize;
+                vecMemory[iPutPos++] = vecData[iCurPos++];
+            }
+
+            for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
+            {
+                vecMemory[iPutPos] = vecData[iCurPos++];
             }
         }
         else
         {
-            // copy new data in internal buffer
-            int iCurPos = 0;
+            // data can be written in one step
+            std::copy ( vecData.begin(),
+                        vecData.begin() + iInSize,
+                        vecMemory.begin() + iPutPos );
 
-            if ( iPutPos + iInSize > iMemSize )
-            {
-                // remaining space size for second block
-                const int iRemSpace = iPutPos + iInSize - iMemSize;
-
-                // data must be written in two steps because of wrap around
-                while ( iPutPos < iMemSize )
-                {
-                    vecMemory[iPutPos++] = vecData[iCurPos++];
-                }
-
-                for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
-                {
-                    vecMemory[iPutPos] = vecData[iCurPos++];
-                }
-            }
-            else
-            {
-                // data can be written in one step
-                std::copy ( vecData.begin(),
-                            vecData.begin() + iInSize,
-                            vecMemory.begin() + iPutPos );
-
-                // set the put position one block further (no wrap around needs
-                // to be considered here)
-                iPutPos += iInSize;
-            }
+            // set the put position one block further (no wrap around needs
+            // to be considered here)
+            iPutPos += iInSize;
         }
 
         // take care about wrap around of put pointer
@@ -253,11 +134,11 @@ public:
         // set buffer state flag
         if ( iPutPos == iGetPos )
         {
-            eBufState = CBufferBase<TData>::BS_FULL;
+            eBufState = BS_FULL;
         }
         else
         {
-            eBufState = CBufferBase<TData>::BS_OK;
+            eBufState = BS_OK;
         }
 
         return true; // no error check in base class, always return ok
@@ -266,49 +147,35 @@ public:
     virtual bool Get ( CVector<TData>& vecData,
                        const int       iOutSize )
     {
-        if ( bIsSimulation )
-        {
-            // in this simulation only the buffer pointers and the buffer state
-            // is updated, no actual data is transferred
-            iGetPos += iOutSize;
+        // copy data from internal buffer in output buffer
+        int iCurPos = 0;
 
-            if ( iGetPos >= iMemSize )
+        if ( iGetPos + iOutSize > iMemSize )
+        {
+            // remaining data size for second block
+            const int iRemData = iGetPos + iOutSize - iMemSize;
+
+            // data must be read in two steps because of wrap around
+            while ( iGetPos < iMemSize )
             {
-                iGetPos -= iMemSize;
+                vecData[iCurPos++] = vecMemory[iGetPos++];
+            }
+
+            for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
+            {
+                vecData[iCurPos++] = vecMemory[iGetPos];
             }
         }
         else
         {
-            // copy data from internal buffer in output buffer
-            int iCurPos = 0;
+            // data can be read in one step
+            std::copy ( vecMemory.begin() + iGetPos,
+                        vecMemory.begin() + iGetPos + iOutSize,
+                        vecData.begin() );
 
-            if ( iGetPos + iOutSize > iMemSize )
-            {
-                // remaining data size for second block
-                const int iRemData = iGetPos + iOutSize - iMemSize;
-
-                // data must be read in two steps because of wrap around
-                while ( iGetPos < iMemSize )
-                {
-                    vecData[iCurPos++] = vecMemory[iGetPos++];
-                }
-
-                for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
-                {
-                    vecData[iCurPos++] = vecMemory[iGetPos];
-                }
-            }
-            else
-            {
-                // data can be read in one step
-                std::copy ( vecMemory.begin() + iGetPos,
-                            vecMemory.begin() + iGetPos + iOutSize,
-                            vecData.begin() );
-
-                // set the get position one block further (no wrap around needs
-                // to be considered here)
-                iGetPos += iOutSize;
-            }
+            // set the get position one block further (no wrap around needs
+            // to be considered here)
+            iGetPos += iOutSize;
         }
 
         // take care about wrap around of get pointer
@@ -320,35 +187,14 @@ public:
         // set buffer state flag
         if ( iPutPos == iGetPos )
         {
-            eBufState = CBufferBase<TData>::BS_EMPTY;
+            eBufState = BS_EMPTY;
         }
         else
         {
-            eBufState = CBufferBase<TData>::BS_OK;
+            eBufState = BS_OK;
         }
 
         return true; // no error check in base class, always return ok
-    }
-
-    virtual int GetAvailSpace() const
-    {
-        // calculate available space in buffer
-        int iAvSpace = iGetPos - iPutPos;
-
-        // check for special case and wrap around
-        if ( iAvSpace < 0 )
-        {
-            iAvSpace += iMemSize; // wrap around
-        }
-        else
-        {
-            if ( ( iAvSpace == 0 ) && ( eBufState == BS_EMPTY ) )
-            {
-                iAvSpace = iMemSize;
-            }
-        }
-
-        return iAvSpace;
     }
 
     virtual int GetAvailData() const
@@ -375,48 +221,45 @@ public:
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
 
-    virtual void Clear()
-    {
-        // clear memory
-        if ( !bIsSimulation )
-        {
-            vecMemory.Reset ( 0 );
-        }
-
-        // init buffer pointers and buffer state (empty buffer)
-        iGetPos   = 0;
-        iPutPos   = 0;
-        eBufState = CBufferBase<TData>::BS_EMPTY;
-    }
-
     CVector<TData> vecMemory;
     int            iMemSize;
     int            iGetPos;
     int            iPutPos;
     EBufState      eBufState;
-    bool           bIsSimulation;
-    bool           bIsInitialized;
 };
 
 
 // Network buffer (jitter buffer) ----------------------------------------------
-class CNetBuf : public CBufferBase<uint8_t>
+class CNetBuf
 {
 public:
-    CNetBuf ( const bool bNewIsSim = false ) :
-       CBufferBase<uint8_t> ( bNewIsSim ) {}
+    CNetBuf ( const bool bNIsSim = false ) :
+        bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
 
     void Init ( const int  iNewBlockSize,
                 const int  iNewNumBlocks,
                 const bool bPreserve = false );
 
-    int GetSize() { return iMemSize / iBlockSize; }
+    void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
 protected:
-    int iBlockSize;
+    enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
+
+    int GetAvailSpace() const;
+    int GetAvailData() const;
+    void Resize ( const int iNewNumBlocks, const int iNewBlockSize );
+
+    CVector<CVector<uint8_t> > vecvecMemory;
+    int                        iNumBlocksMemory;
+    int                        iBlockGetPos;
+    int                        iBlockPutPos;
+    int                        iBlockSize;
+    EBufState                  eBufState;
+    bool                       bIsSimulation;
+    bool                       bIsInitialized;
 };
 
 

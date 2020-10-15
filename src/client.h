@@ -339,8 +339,8 @@ protected:
 
     bool                    bSndCrdConversionBufferRequired;
     int                     iSndCardMonoBlockSizeSamConvBuff;
-    CBufferBase<int16_t>    SndCrdConversionBufferIn;
-    CBufferBase<int16_t>    SndCrdConversionBufferOut;
+    CBuffer<int16_t>        SndCrdConversionBufferIn;
+    CBuffer<int16_t>        SndCrdConversionBufferOut;
     CVector<int16_t>        vecDataConvBuf;
     CVector<int16_t>        vecsStereoSndCrdMuteStream;
     CVector<int16_t>        vecZeros;

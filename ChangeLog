@@ -30,6 +30,8 @@ TODO handle audio packets received out of order, coded by softins (#619)
 TODO apply fader sorting always and not only on request (note: check when sorting by instrument
      that inside the instrument group there is an additional sorting by name applied)
 
+TODO add sort channel faders by city
+
 TODO embeded images in img HTML tag for chat dialog (drag'n'drop support?)
 
 

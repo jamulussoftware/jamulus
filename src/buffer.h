@@ -236,13 +236,14 @@ public:
     CNetBuf ( const bool bNIsSim = false ) :
         bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
 
-    void Init ( const int  iNewBlockSize,
+    void Init ( int        iNewBlockSize,
                 const int  iNewNumBlocks,
+                const bool bNUseSequenceNumber = false,
                 const bool bPreserve = false );
 
     void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
 
-    virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
+    virtual bool Put ( const CVector<uint8_t>& vecbyData, int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
 protected:
@@ -258,6 +259,7 @@ protected:
     int                        iBlockPutPos;
     int                        iBlockSize;
     EBufState                  eBufState;
+    bool                       bUseSequenceNumber;
     bool                       bIsSimulation;
     bool                       bIsInitialized;
 };
@@ -271,6 +273,7 @@ public:
 
     void Init ( const int  iNewBlockSize,
                 const int  iNewNumBlocks,
+                const bool bNUseSequenceNumber = false,
                 const bool bPreserve = false );
 
     void SetUseDoubleSystemFrameSize ( const bool bNDSFSize ) { bUseDoubleSystemFrameSize = bNDSFSize; }

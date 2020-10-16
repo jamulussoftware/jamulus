@@ -173,7 +173,7 @@ void CChannel::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
         bUseSequenceNumber = true;
 
         SetAudioStreamProperties ( eAudioCompressionType,
-                                   iNetwFrameSize,
+                                   iCeltNumCodedBytes,
                                    iNetwFrameSizeFact,
                                    iNumAudioChannels );
     }
@@ -183,7 +183,7 @@ void CChannel::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
 }
 
 void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
-                                          const int           iNewNetwFrameSize,
+                                          const int           iNewCeltNumCodedBytes,
                                           const int           iNewNetwFrameSizeFact,
                                           const int           iNewNumAudioChannels )
 {
@@ -197,13 +197,17 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         // store new values
         eAudioCompressionType = eNewAudComprType;
         iNumAudioChannels     = iNewNumAudioChannels;
-        iNetwFrameSize        = iNewNetwFrameSize;
+        iCeltNumCodedBytes    = iNewCeltNumCodedBytes;
         iNetwFrameSizeFact    = iNewNetwFrameSizeFact;
 
         // add the size of the optional packet counter
-        if ( NetworkTransportProps.eFlags == NF_WITH_COUNTER )
+        if ( bUseSequenceNumber )
         {
-            iNetwFrameSize++; // per definition 1 byte counter
+            iNetwFrameSize = iCeltNumCodedBytes + 1; // per definition 1 byte counter
+        }
+        else
+        {
+            iNetwFrameSize = iCeltNumCodedBytes;
         }
 
         // update audio frame size
@@ -220,14 +224,14 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         {
             // init socket buffer
             SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames, bUseSequenceNumber );
         }
         MutexSocketBuf.unlock();
 
         MutexConvBuf.lock();
         {
             // init conversion buffer
-            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, NetworkTransportProps.eFlags == NF_WITH_COUNTER );
+            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, bUseSequenceNumber );
         }
         MutexConvBuf.unlock();
 
@@ -260,7 +264,7 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
 
                 // the network block size is a multiple of the minimum network
                 // block size
-                SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
+                SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bUseSequenceNumber, bPreserve );
 
                 // store current auto socket buffer size setting in the mutex
                 // region since if we use the current parameter below in the
@@ -468,6 +472,15 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             iNetwFrameSize        = static_cast<int> ( NetworkTransportProps.iBaseNetworkPacketSize );
             bUseSequenceNumber    = ( NetworkTransportProps.eFlags == NF_WITH_COUNTER );
 
+            if ( bUseSequenceNumber )
+            {
+                iCeltNumCodedBytes = iNetwFrameSize - 1; // per definition 1 byte counter
+            }
+            else
+            {
+                iCeltNumCodedBytes = iNetwFrameSize;
+            }
+
             // update maximum number of frames for fade in counter (only needed for server)
             // and audio frame size
             if ( eAudioCompressionType == CT_OPUS )
@@ -490,14 +503,14 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
                 // update socket buffer (the network block size is a multiple of the
                 // minimum network frame size)
                 SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-                SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+                SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames, bUseSequenceNumber );
             }
             MutexSocketBuf.unlock();
 
             MutexConvBuf.lock();
             {
                 // init conversion buffer
-                ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, NetworkTransportProps.eFlags == NF_WITH_COUNTER );
+                ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, bUseSequenceNumber );
             }
             MutexConvBuf.unlock();
         }

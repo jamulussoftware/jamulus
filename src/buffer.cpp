@@ -29,40 +29,51 @@
 
 
 /* Network buffer implementation **********************************************/
-void CNetBuf::Init ( const int  iNewBlockSize,
+void CNetBuf::Init ( int        iNewBlockSize,
                      const int  iNewNumBlocks,
+                     const bool bNUseSequenceNumber,
                      const bool bPreserve )
 {
-    // in simulation mode the size is not changed during operation -> we do
-    // not have to implement special code for this case
-    // only enter the "preserve" branch, if object was already initialized
-    // and the block sizes are the same
-    if ( bPreserve && ( !bIsSimulation ) && bIsInitialized && ( iBlockSize == iNewBlockSize ) )
+    // if optional sequence number is used, reduce block size
+    bUseSequenceNumber = bNUseSequenceNumber;
+
+    if ( bNUseSequenceNumber )
     {
-        // extract all data from buffer in temporary storage
-        CVector<CVector<uint8_t> > vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
-
-        int iPreviousDataCnt = 0;
-
-        while ( Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
-        {
-            iPreviousDataCnt++;
-        }
-
-        // now resize the buffer to the new size (buffer is empty after this operation)
-        Resize ( iNewNumBlocks, iNewBlockSize );
-
-        // copy the previous data back in the buffer (make sure we only copy as much
-        // data back as the new buffer size can hold)
-        int iDataCnt = 0;
-
-        while ( ( iDataCnt < iPreviousDataCnt ) &&
-                Put ( vecvecTempMemory[iDataCnt], iBlockSize ) )
-        {
-            iDataCnt++;
-        }
+        iNewBlockSize--; // 1 byte sequence number
     }
-    else
+
+// TODO the following code does not yet work with bNUseSequenceNumber enabled
+
+//    // in simulation mode the size is not changed during operation -> we do
+//    // not have to implement special code for this case
+//    // only enter the "preserve" branch, if object was already initialized
+//    // and the block sizes are the same
+//    if ( bPreserve && ( !bIsSimulation ) && bIsInitialized && ( iBlockSize == iNewBlockSize ) )
+//    {
+//        // extract all data from buffer in temporary storage
+//        CVector<CVector<uint8_t> > vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
+//
+//        int iPreviousDataCnt = 0;
+//
+//        while ( Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
+//        {
+//            iPreviousDataCnt++;
+//        }
+//
+//        // now resize the buffer to the new size (buffer is empty after this operation)
+//        Resize ( iNewNumBlocks, iNewBlockSize );
+//
+//        // copy the previous data back in the buffer (make sure we only copy as much
+//        // data back as the new buffer size can hold)
+//        int iDataCnt = 0;
+//
+//        while ( ( iDataCnt < iPreviousDataCnt ) &&
+//                Put ( vecvecTempMemory[iDataCnt], iBlockSize ) )
+//        {
+//            iDataCnt++;
+//        }
+//    }
+//    else
     {
         Resize ( iNewNumBlocks, iNewBlockSize );
     }
@@ -94,8 +105,17 @@ void CNetBuf::Resize ( const int iNewNumBlocks,
 }
 
 bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
-                    const int               iInSize )
+                    int                     iInSize )
 {
+
+
+// TEST just throw away the sequence number for a test (NOTE this only works for single OPUS packets, not for, e.g., 256 samples)
+if ( bUseSequenceNumber )
+{
+    iInSize--;
+}
+
+
     // check if there is not enough space available and that the input size is a
     // multiple of the block size
     if ( ( GetAvailSpace() < iInSize ) ||
@@ -280,10 +300,11 @@ void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates,
 
 void CNetBufWithStats::Init ( const int  iNewBlockSize,
                               const int  iNewNumBlocks,
+                              const bool bNUseSequenceNumber,
                               const bool bPreserve )
 {
     // call base class Init
-    CNetBuf::Init ( iNewBlockSize, iNewNumBlocks, bPreserve );
+    CNetBuf::Init ( iNewBlockSize, iNewNumBlocks, bNUseSequenceNumber, bPreserve );
 
     // inits for statistics calculation
     if ( !bPreserve )
@@ -313,7 +334,7 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
         for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
         {
             // init simulation buffers with the correct size
-            SimulationBuffer[i].Init ( iNewBlockSize, viBufSizesForSim[i] );
+            SimulationBuffer[i].Init ( iNewBlockSize, viBufSizesForSim[i], bNUseSequenceNumber );
 
             // init statistics
             ErrorRateStatistic[i].Init ( iMaxStatisticCount, true );

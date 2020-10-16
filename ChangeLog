@@ -32,6 +32,7 @@ TODO apply fader sorting always and not only on request (note: check when sortin
 
 TODO add sort channel faders by city
 
+TODO should we check the port number, too? // Only process audio data if: - for client only: the packet comes from the server we want to talk to
 
 
 

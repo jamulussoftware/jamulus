@@ -238,7 +238,7 @@ public:
 
     void Init ( int        iNewBlockSize,
                 const int  iNewNumBlocks,
-                const bool bNUseSequenceNumber = false,
+                const bool bNUseSequenceNumber,
                 const bool bPreserve = false );
 
     void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
@@ -273,7 +273,7 @@ public:
 
     void Init ( const int  iNewBlockSize,
                 const int  iNewNumBlocks,
-                const bool bNUseSequenceNumber = false,
+                const bool bNUseSequenceNumber,
                 const bool bPreserve = false );
 
     void SetUseDoubleSystemFrameSize ( const bool bNDSFSize ) { bUseDoubleSystemFrameSize = bNDSFSize; }

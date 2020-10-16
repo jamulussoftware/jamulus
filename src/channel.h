@@ -208,6 +208,8 @@ protected:
     CNetBufWithStats        SockBuf;
     int                     iCurSockBufNumFrames;
     bool                    bDoAutoSockBufSize;
+    bool                    bUseSequenceNumber;
+    uint8_t                 iSendSequenceNumber;
 
     // network output conversion buffer
     CConvBuf<uint8_t>       ConvBuf;
@@ -246,6 +248,9 @@ public slots:
     void OnReqNetTranspProps();
     void OnReqSplitMessSupport();
     void OnSplitMessSupported() { Protocol.SetSplitMessageSupported ( true ); }
+
+    void OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
+                                  QString                strVersion );
 
     void OnParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
                               int              iRecCounter,

@@ -318,12 +318,14 @@ template<class TData> class CConvBuf
 public:
     CConvBuf() { Init ( 0 ); }
 
-    void Init ( const int iNewMemSize )
+    void Init ( const int  iNewMemSize,
+                const bool bNUseSequenceNumber = false )
     {
         // allocate internal memory and reset read/write positions
         vecMemory.Init ( iNewMemSize );
-        iMemSize    = iNewMemSize;
-        iBufferSize = iNewMemSize;
+        iMemSize           = iNewMemSize;
+        iBufferSize        = iNewMemSize;
+        bUseSequenceNumber = bNUseSequenceNumber;
         Reset();
     }
 
@@ -352,19 +354,34 @@ public:
                     vecMemory.begin() );
     }
 
-    bool Put ( const CVector<TData>& vecsData,
-               const int             iVecSize )
+    bool Put ( const CVector<TData>& vecData,
+               const int             iVecSize,
+               const TData           SequenceNumber = 0 )
     {
-        // calculate the input size and the end position after copying
-        const int iEnd = iPutPos + iVecSize;
+        // calculate the end position after copying
+        int iEnd = iPutPos + iVecSize;
+
+        // consider optional sequence number
+        if ( bUseSequenceNumber )
+        {
+            iEnd++;
+        }
 
         // first check for buffer overrun
         if ( iEnd <= iBufferSize )
         {
             // copy new data in internal buffer
-            std::copy ( vecsData.begin(),
-                        vecsData.begin() + iVecSize,
+            std::copy ( vecData.begin(),
+                        vecData.begin() + iVecSize,
                         vecMemory.begin() + iPutPos );
+
+            // add optional sequence number (NOTE that we currently
+            // only support a single sequence number per packet)
+            if ( bUseSequenceNumber )
+            {
+                // append the sequence number at the end
+                vecMemory[iPutPos + iVecSize] = SequenceNumber;
+            }
 
             // set buffer pointer one block further
             iPutPos = iEnd;
@@ -423,5 +440,6 @@ protected:
     CVector<TData> vecMemory;
     int            iMemSize;
     int            iBufferSize;
+    bool           bUseSequenceNumber;
     int            iPutPos, iGetPos;
 };

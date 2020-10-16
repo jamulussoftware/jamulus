@@ -550,6 +550,15 @@ enum EAudComprType
 };
 
 
+// Network transport flags -----------------------------------------------------
+enum ENetwFlags
+{
+    // used for protocol -> enum values must be fixed!
+    NF_NONE = 0,
+    NF_WITH_COUNTER = 1 // using a network counter to correctly order UDP packets in jitter buffer
+};
+
+
 // Audio quality enum ----------------------------------------------------------
 enum EAudioQuality
 {
@@ -1077,6 +1086,7 @@ public:
         iNumAudioChannels      ( 0 ),
         iSampleRate            ( 0 ),
         eAudioCodingType       ( CT_NONE ),
+        eFlags                 ( NF_NONE ),
         iAudioCodingArg        ( 0 ) {}
 
     CNetworkTransportProps ( const uint32_t      iNBNPS,
@@ -1084,14 +1094,14 @@ public:
                              const uint32_t      iNNACH,
                              const uint32_t      iNSR,
                              const EAudComprType eNACT,
-                             const uint32_t      iNVers,
+                             const ENetwFlags    eNFlags,
                              const int32_t       iNACA ) :
         iBaseNetworkPacketSize ( iNBNPS ),
         iBlockSizeFact         ( iNBSF ),
         iNumAudioChannels      ( iNNACH ),
         iSampleRate            ( iNSR ),
         eAudioCodingType       ( eNACT ),
-        iVersion               ( iNVers ),
+        eFlags                 ( eNFlags ),
         iAudioCodingArg        ( iNACA ) {}
 
     uint32_t      iBaseNetworkPacketSize;
@@ -1099,7 +1109,7 @@ public:
     uint32_t      iNumAudioChannels;
     uint32_t      iSampleRate;
     EAudComprType eAudioCodingType;
-    uint32_t      iVersion;
+    ENetwFlags    eFlags;
     int32_t       iAudioCodingArg;
 };
 

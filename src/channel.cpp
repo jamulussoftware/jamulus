@@ -489,7 +489,7 @@ CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
                                     static_cast<uint32_t> ( iNumAudioChannels ),
                                     SYSTEM_SAMPLE_RATE_HZ,
                                     eAudioCompressionType,
-                                    0, // version of the codec
+                                    NF_NONE,
                                     0 );
 }
 

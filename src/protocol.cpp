@@ -176,9 +176,9 @@ MESSAGES (with connection)
         ... ------------------+-----------------------+ ...
         ...  4 bytes sam rate | 2 bytes audiocod type | ...
         ... ------------------+-----------------------+ ...
-        ... -----------------+----------------------+
-        ...  2 bytes version | 4 bytes audiocod arg |
-        ... -----------------+----------------------+
+        ... ---------------+----------------------+
+        ...  2 bytes flags | 4 bytes audiocod arg |
+        ... ---------------+----------------------+
 
     - "base netw size":  length of the base network packet (frame) in bytes
     - "block size fact": block size factor
@@ -190,8 +190,9 @@ MESSAGES (with connection)
                           - 1: CELT
                           - 2: OPUS
                           - 3: OPUS64
-    - "version":         version of the audio coder, if not used this value
-                         shall be set to 0
+    - "flags":           flags indicating network properties:
+                          - 0: none
+                          - 1: WITH_COUNTER (a packet counter is added to the audio packet)
     - "audiocod arg":    argument for the audio coder, if not used this value
                          shall be set to 0
 
@@ -1466,8 +1467,8 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     // audio coding type (2 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.eAudioCodingType ), 2 );
 
-    // version (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iVersion ), 2 );
+    // flags (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.eFlags ), 2 );
 
     // argument for the audio coder (4 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iAudioCodingArg ), 4 );
@@ -1487,7 +1488,7 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
         1 /* num chan */ +
         4 /* sam rate */ +
         2 /* audiocod type */ +
-        2 /* version */ +
+        2 /* flags */ +
         4 /* audiocod arg */;
 
     // check size
@@ -1549,9 +1550,9 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     ReceivedNetwTranspProps.eAudioCodingType =
         static_cast<EAudComprType> ( iRecCodingType );
 
-    // version (2 bytes)
-    ReceivedNetwTranspProps.iVersion =
-        static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 2 ) );
+    // flags (2 bytes)
+    ReceivedNetwTranspProps.eFlags =
+        static_cast<ENetwFlags> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // argument for the audio coder (4 bytes)
     ReceivedNetwTranspProps.iAudioCodingArg =

@@ -116,7 +116,7 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         this, &CChannel::LicenceRequired );
 
     QObject::connect ( &Protocol, &CProtocol::VersionAndOSReceived,
-        this, &CChannel::VersionAndOSReceived );
+        this, &CChannel::OnVersionAndOSReceived );
 
     QObject::connect ( &Protocol, &CProtocol::RecorderStateReceived,
         this, &CChannel::RecorderStateReceived );

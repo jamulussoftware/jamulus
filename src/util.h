@@ -614,7 +614,8 @@ enum EChSortType
 {
     ST_BY_NAME,
     ST_BY_INSTRUMENT,
-    ST_BY_GROUPID
+    ST_BY_GROUPID,
+    ST_BY_CITY
 };
 
 

@@ -997,7 +997,9 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
         }
         else if ( eChSortType ==  ST_BY_INSTRUMENT )
         {
-            PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ), i );
+            // sort first "by instrument" and second "by name" by adding the name after the instrument
+            PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
+                                              vecpChanFader[i]->GetReceivedName().toLower(), i );
         }
         else // ST_BY_GROUPID
         {

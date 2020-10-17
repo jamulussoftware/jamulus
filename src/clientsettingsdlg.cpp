@@ -688,18 +688,20 @@ void CClientSettingsDlg::SetPingTimeResult ( const int                         i
     // a certain value
     if ( iPingTime > 500 )
     {
-        const QString sErrorText =
-            "<font color=""red""><b>&#62;500 ms</b></font>";
-
+        const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
         lblPingTimeValue->setText     ( sErrorText );
         lblOverallDelayValue->setText ( sErrorText );
     }
     else
     {
-        lblPingTimeValue->setText ( QString().setNum ( iPingTime ) + " ms" );
-        lblOverallDelayValue->setText (
-            QString().setNum ( iOverallDelayMs ) + " ms" );
+        lblPingTimeValue->setText     ( QString().setNum ( iPingTime ) + " ms" );
+        lblOverallDelayValue->setText ( QString().setNum ( iOverallDelayMs ) + " ms" );
     }
+
+    // update upstream rate information label (note that we update this together
+    // with the ping time since the network packet sequence number feature might
+    // be enabled at any time which has influence on the upstream rate)
+    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
 
     // set current LED status
     ledOverallDelay->SetLight ( eOverallDelayLEDColor );
@@ -717,11 +719,5 @@ void CClientSettingsDlg::UpdateDisplay()
         lblPingTimeValue->setText     ( "---" );
         lblOverallDelayValue->setText ( "---" );
         lblUpstreamValue->setText     ( "---" );
-    }
-    else
-    {
-        // update upstream rate information label (only if client is running)
-        lblUpstreamValue->setText (
-            QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
     }
 }

@@ -154,6 +154,7 @@ public slots:
     void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_NAME ); }
     void OnSortChannelsByInstrument() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_INSTRUMENT ); }
     void OnSortChannelsByGroupID() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_GROUPID ); }
+    void OnSortChannelsByCity() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_CITY ); }
     void OnClearAllStoredSoloSettings() { pSettings->vecStoredFaderIsSolo.Reset ( false ); }
 
     void OnSettingsStateChanged ( int value );

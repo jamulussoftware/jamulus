@@ -286,6 +286,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
         SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
 
+    pEditMenu->addAction ( tr ( "Sort Channel Users by &City" ), this,
+        SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
+
     pEditMenu->addSeparator();
 
     pClearAllStoredSoloSettings = pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,

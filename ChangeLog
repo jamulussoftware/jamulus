@@ -4,6 +4,8 @@
 
 3.5.12git <- NOTE: the release version number will be 3.6.0
 
+- handle audio packets received out of order, coded by softins (#619)
+
 - most recently connected users appear on the RH side on the fader panel (#673)
 
 - improvements for the server multithreading, coded by kraney (#653)
@@ -25,7 +27,6 @@
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 
-TODO handle audio packets received out of order, coded by softins (#619)
 
 TODO apply fader sorting always and not only on request (note: check when sorting by instrument
      that inside the instrument group there is an additional sorting by name applied)

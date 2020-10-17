@@ -159,6 +159,8 @@ if ( !bIsSimulation )
 */
 
 // TEST
+bool bIsCorrectedToTheLeft = false;
+
 if ( iSeqNumDiff < 0 )
 {
 //if ( !bIsSimulation )
@@ -179,7 +181,13 @@ if ( iSeqNumDiff < 0 )
         }
     }
 
+
+
     iBlockPutPos = iBlockGetPos;
+
+
+// TEST
+bIsCorrectedToTheLeft = true;
 }
 else if ( iSeqNumDiff >= iNumBlocksMemory )
 {
@@ -201,7 +209,17 @@ else if ( iSeqNumDiff >= iNumBlocksMemory )
         }
     }
 
-    iBlockPutPos = iBlockGetPos;
+// TEST we shifted the get position, invalidate oldest packet since this is not in correct order anymore
+veciBlockValid[iBlockGetPos] = 0; // invalidate
+
+
+
+    iBlockPutPos = iBlockGetPos + iNumBlocksMemory - 1;
+
+    if ( iBlockPutPos >= iNumBlocksMemory )
+    {
+        iBlockPutPos -= iNumBlocksMemory;
+    }
 }
 else
 {
@@ -234,6 +252,13 @@ else
 
             // valid packet added, set flag
             veciBlockValid[iBlockPutPos] = 1;
+
+// TEST
+if ( bIsCorrectedToTheLeft )
+{
+    veciBlockValid[iBlockPutPos] = 0;
+}
+
         }
     }
     else

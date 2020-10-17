@@ -22,6 +22,8 @@
 
 - replaced double types by floats for some of the signal processing, coded by hselasky (#544)
 
+- support sorting faders by channel city
+
 - if sorting the faders by instrument, we now sort by the name for the same instruments
 
 - improvements to the Android audio interface, coded by j-santander (#83)
@@ -31,8 +33,6 @@
 
 
 TODO apply fader sorting always and not only on request
-
-TODO add sort channel faders by city
 
 TODO should we check the port number, too? // Only process audio data if: - for client only: the packet comes from the server we want to talk to
 

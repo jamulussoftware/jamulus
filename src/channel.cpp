@@ -147,10 +147,9 @@ void CChannel::SetEnable ( const bool bNEnStat )
 
 
 // TEST is this the correct place for re-setting this parameter?
-if ( bNEnStat )
-{
-    bUseSequenceNumber = false;
-}
+// NOTE that it is important to reset this paramter on SetEnable(false) since
+// the SetEnable(true) is set AFTER the Init() in the client!
+bUseSequenceNumber = false;
 
 
     // if channel is not enabled, reset time out count and protocol
@@ -224,7 +223,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         {
             // init socket buffer
             SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames, bUseSequenceNumber );
+            SockBuf.Init ( iCeltNumCodedBytes, iCurSockBufNumFrames, bUseSequenceNumber );
         }
         MutexSocketBuf.unlock();
 
@@ -264,7 +263,7 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
 
                 // the network block size is a multiple of the minimum network
                 // block size
-                SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bUseSequenceNumber, bPreserve );
+                SockBuf.Init ( iCeltNumCodedBytes, iNewNumFrames, bUseSequenceNumber, bPreserve );
 
                 // store current auto socket buffer size setting in the mutex
                 // region since if we use the current parameter below in the
@@ -503,7 +502,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
                 // update socket buffer (the network block size is a multiple of the
                 // minimum network frame size)
                 SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-                SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames, bUseSequenceNumber );
+                SockBuf.Init ( iCeltNumCodedBytes, iCurSockBufNumFrames, bUseSequenceNumber );
             }
             MutexSocketBuf.unlock();
 

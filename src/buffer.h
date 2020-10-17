@@ -236,7 +236,7 @@ public:
     CNetBuf ( const bool bNIsSim = false ) :
         bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
 
-    void Init ( int        iNewBlockSize,
+    void Init ( const int  iNewBlockSize,
                 const int  iNewNumBlocks,
                 const bool bNUseSequenceNumber,
                 const bool bPreserve = false );

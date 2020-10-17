@@ -22,14 +22,15 @@
 
 - replaced double types by floats for some of the signal processing, coded by hselasky (#544)
 
+- if sorting the faders by instrument, we now sort by the name for the same instruments
+
 - improvements to the Android audio interface, coded by j-santander (#83)
 
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 
 
-TODO apply fader sorting always and not only on request (note: check when sorting by instrument
-     that inside the instrument group there is an additional sorting by name applied)
+TODO apply fader sorting always and not only on request
 
 TODO add sort channel faders by city
 

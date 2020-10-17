@@ -234,7 +234,7 @@ class CNetBuf
 {
 public:
     CNetBuf ( const bool bNIsSim = false ) :
-        bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
+        iSequenceNumberAtGetPos ( 0 ), bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
 
     void Init ( const int  iNewBlockSize,
                 const int  iNewNumBlocks,
@@ -254,10 +254,12 @@ protected:
     void Resize ( const int iNewNumBlocks, const int iNewBlockSize );
 
     CVector<CVector<uint8_t> > vecvecMemory;
+    CVector<int>               veciBlockValid;
     int                        iNumBlocksMemory;
     int                        iBlockGetPos;
     int                        iBlockPutPos;
     int                        iBlockSize;
+    uint8_t                    iSequenceNumberAtGetPos; // uint8_t so that it wraps automatically
     EBufState                  eBufState;
     bool                       bUseSequenceNumber;
     bool                       bIsSimulation;

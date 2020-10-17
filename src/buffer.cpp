@@ -103,12 +103,17 @@ void CNetBuf::Resize ( const int iNewNumBlocks,
 bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
                     int                     iInSize )
 {
+    int iNumBytesSeqNum = 0;
 
 
-// TEST just throw away the sequence number for a test (NOTE this only works for single OPUS packets, not for, e.g., 256 samples)
+// TEST just throw away the sequence number for a test
 if ( bUseSequenceNumber )
 {
-    iInSize--;
+    // to get the number of input blocks we assume that the number of bytes for the sequence
+    // number is much smaller than the number of coded audio bytes
+    const int iNumInBlocks = /* floor */ ( iInSize / iBlockSize );
+    iInSize               -= iNumInBlocks;
+    iNumBytesSeqNum        = 1;
 }
 
 
@@ -129,8 +134,8 @@ if ( bUseSequenceNumber )
         if ( !bIsSimulation )
         {
             // copy one block of data in buffer
-            std::copy ( vecbyData.begin() + iBlock * iBlockSize,
-                        vecbyData.begin() + iBlock * iBlockSize + iBlockSize,
+            std::copy ( vecbyData.begin() + iBlock * ( iBlockSize + iNumBytesSeqNum ),
+                        vecbyData.begin() + iBlock * ( iBlockSize + iNumBytesSeqNum ) + iBlockSize,
                         vecvecMemory[iBlockPutPos].begin() );
         }
 

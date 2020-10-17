@@ -74,6 +74,7 @@ void CNetBuf::Init ( const int  iNewBlockSize,
 // TODO implementation missing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // TODO implementation missing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // TODO implementation missing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Resize ( iNewNumBlocks, iNewBlockSize );
 
         }
     }

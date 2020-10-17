@@ -615,7 +615,8 @@ int main ( int argc, char** argv )
                              strConnOnStartupAddress,
                              iCtrlMIDIChannel,
                              bNoAutoJackConnect,
-                             strClientName );
+                             strClientName,
+                             bMuteStream );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );

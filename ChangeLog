@@ -18,6 +18,9 @@
 - removed -g, --pingservers since all Central servers must activate this function,
   now it is activated by default and no command line argument is needed (#638)
 
+- added --mutemyown command line argument to mute my own signal in my personal mix,
+  only supported in headless client mode (#340)
+
 - added mountain dulcimer instrument icon created by dora71 (#649)
 
 - replaced double types by floats for some of the signal processing, coded by hselasky (#544)

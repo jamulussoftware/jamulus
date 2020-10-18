@@ -170,105 +170,82 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
             {
                 iSeqNumDiff -= 256;
             }
-/*
-if ( !bIsSimulation )
-{
-    qDebug() << "iSeqNumDiff:" << iSeqNumDiff << ", iCurrentSequenceNumber:" << iCurrentSequenceNumber <<
-            ", iSequenceNumberAtGetPos:" << iSequenceNumberAtGetPos << veciBlockValid << "iBlockGetPos:" << iBlockGetPos;
-}
-*/
 
-// TEST
-//bool bIsCorrectedToTheLeft = false;
+            // The 1-byte sequence number wraps around at a count of 256. So if a packet is delayed
+            // further than this we cannot detect it. But it does not matter since such a packet is
+            // more than 100 ms delayed so we have a bad network situation anyway. Therefore we
+            // assume that the sequence number difference between the received and local counter is
+            // correct. The idea of the following code is that we always move our "buffer window" so
+            // that the received packet fits into the buffer. By doing this we are robust against
+            // sample rate offsets between client/server or buffer glitches in the audio driver since
+            // we adjust the window. The downside is that we never throw away single packets which arrive
+            // too late so we throw away valid packets when we move the "buffer window" to the delayed
+            // packet and then back to the correct place when the next normal packet is received. But
+            // tests showed that the new buffer strategy does not perform worse than the old jitter
+            // buffer which did not use any sequence number at all.
+            if ( iSeqNumDiff < 0 )
+            {
+                // the received packet comes too late so we shift the "buffer window" to the past
+                // until the received packet it the very first packet in the buffer
+                for ( int i = iSeqNumDiff; i < 0; i++ )
+                {
+                    // insert an invalid block at the shifted position
+                    veciBlockValid[iBlockGetPos] = 0; // invalidate
 
-if ( iSeqNumDiff < 0 )
-{
-//if ( !bIsSimulation )
-//{
-//    qDebug() << "iSeqNumDiff < 0";
-//}
+                    // we decrease the local sequence number and get position and take care of wrap
+                    iSequenceNumberAtGetPos--;
+                    iBlockGetPos--;
 
-    for ( int i = iSeqNumDiff; i < 0; i++ )
-    {
-        veciBlockValid[iBlockGetPos] = 0; // invalidate
+                    if ( iBlockGetPos < 0 )
+                    {
+                        iBlockGetPos += iNumBlocksMemory;
+                    }
+                }
 
-        iSequenceNumberAtGetPos--;
-        iBlockGetPos--;
+                // insert the new packet at the beginning of the buffer since it was delayed
+                iBlockPutPos = iBlockGetPos;
+            }
+            else if ( iSeqNumDiff >= iNumBlocksMemory )
+            {
+                // the received packet comes too early so we move the "buffer window" in the
+                // future until the received packet is the last packet in the buffer
+                for ( int i = 0; i < iSeqNumDiff - iNumBlocksMemory + 1; i++ )
+                {
+                    // insert an invalid block at the shifted position
+                    veciBlockValid[iBlockGetPos] = 0; // invalidate
 
-        if ( iBlockGetPos < 0 )
-        {
-            iBlockGetPos += iNumBlocksMemory;
-        }
-    }
+                    // we increase the local sequence number and get position and take care of wrap
+                    iSequenceNumberAtGetPos++;
+                    iBlockGetPos++;
 
-    iBlockPutPos = iBlockGetPos;
+                    if ( iBlockGetPos >= iNumBlocksMemory )
+                    {
+                        iBlockGetPos -= iNumBlocksMemory;
+                    }
+                }
 
+                // insert the new packet at the end of the buffer since it is too early (since
+                // we add an offset to the get position, we have to take care of wrapping)
+                iBlockPutPos = iBlockGetPos + iNumBlocksMemory - 1;
 
-// TEST
-//bIsCorrectedToTheLeft = true;
-}
-else if ( iSeqNumDiff >= iNumBlocksMemory )
-{
-//if ( !bIsSimulation )
-//{
-//    qDebug() << "iSeqNumDiff > iNumBlocksMemory";
-//}
+                if ( iBlockPutPos >= iNumBlocksMemory )
+                {
+                    iBlockPutPos -= iNumBlocksMemory;
+                }
+            }
+            else
+            {
+                // this is the regular case: the received packet fits into the buffer so
+                // we will write it at the correct position based on the sequence number
+                iBlockPutPos = iBlockGetPos + iSeqNumDiff;
 
-    for ( int i = 0; i < iSeqNumDiff - iNumBlocksMemory + 1; i++ )
-    {
-        veciBlockValid[iBlockGetPos] = 0; // invalidate
+                if ( iBlockPutPos >= iNumBlocksMemory )
+                {
+                    iBlockPutPos -= iNumBlocksMemory;
+                }
+            }
 
-        iSequenceNumberAtGetPos++;
-        iBlockGetPos++;
-
-        if ( iBlockGetPos >= iNumBlocksMemory )
-        {
-            iBlockGetPos -= iNumBlocksMemory;
-        }
-    }
-
-//// TEST we shifted the get position, invalidate oldest packet since this is not in correct order anymore
-//veciBlockValid[iBlockGetPos] = 0; // invalidate
-
-
-
-    iBlockPutPos = iBlockGetPos + iNumBlocksMemory - 1;
-
-    if ( iBlockPutPos >= iNumBlocksMemory )
-    {
-        iBlockPutPos -= iNumBlocksMemory;
-    }
-}
-else
-{
-    iBlockPutPos = iBlockGetPos + iSeqNumDiff;
-
-    if ( iBlockPutPos >= iNumBlocksMemory )
-    {
-        iBlockPutPos -= iNumBlocksMemory;
-    }
-}
-
-//if ( !bIsSimulation )
-//{
-//    qDebug() << "iSeqNumDiff:" << iSeqNumDiff << ", iCurSeqNumber:" << iCurrentSequenceNumber <<
-//            ", iSeqNumAtGetPos:" << iSequenceNumberAtGetPos << veciBlockValid <<
-//            "iGetPos:" << iBlockGetPos << "iPutPos:" << iBlockPutPos;
-//}
-
-/*
-// TEST
-if ( !bIsSimulation )
-{
-    static FILE* pFile = fopen ( "test.dat", "w" );
-    fprintf ( pFile, "%d\n", iSeqNumDiff );
-    fflush ( pFile );
-}
-*/
-
-
-
-            // for simultion buffer only update pointer, no data copying
+            // for simulation buffer only update pointer, no data copying
             if ( !bIsSimulation )
             {
                 // copy one block of data in buffer
@@ -279,13 +256,6 @@ if ( !bIsSimulation )
 
             // valid packet added, set flag
             veciBlockValid[iBlockPutPos] = 1;
-
-//// TEST
-//if ( bIsCorrectedToTheLeft )
-//{
-//    veciBlockValid[iBlockPutPos] = 0;
-//}
-
         }
     }
     else

@@ -192,26 +192,26 @@ public:
 
     virtual ~CAudioMixerBoard();
 
-    void    SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
-    void    HideAll();
-    void    ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
-    void    SetServerName ( const QString& strNewServerName );
-    QString GetServerName() { return strServerName; }
-    void    SetGUIDesign ( const EGUIDesign eNewDesign );
-    void    SetDisplayPans ( const bool eNDP );
-    void    SetPanIsSupported();
-    void    SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
-    void    SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
+    void        SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
+    void        HideAll();
+    void        ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
+    void        SetServerName ( const QString& strNewServerName );
+    QString     GetServerName() { return strServerName; }
+    void        SetGUIDesign ( const EGUIDesign eNewDesign );
+    void        SetDisplayPans ( const bool eNDP );
+    void        SetPanIsSupported();
+    void        SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
+    void        SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
 
-    void    SetFaderLevel ( const int iChannelIdx,
-                            const int iValue );
+    void        SetFaderLevel ( const int iChannelIdx,
+                                const int iValue );
 
-    void    ChangeFaderOrder ( const bool        bDoSort,
-                               const EChSortType eChSortType );
+    void        SetFaderSorting ( const EChSortType eNChSortType );
+    EChSortType GetFaderSorting() { return eChSortType; }
 
-    void    SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
+    void        SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
-    void    SetRecorderState ( const ERecorderState newRecorderState );
+    void        SetRecorderState ( const ERecorderState newRecorderState );
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea
@@ -228,6 +228,8 @@ protected:
             QScrollArea::resizeEvent ( event );
         }
     };
+
+    void ChangeFaderOrder ( const EChSortType eChSortType );
 
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
@@ -251,6 +253,7 @@ protected:
     QString                 strServerName;
     ERecorderState          eRecorderState;
     QMutex                  Mutex;
+    EChSortType             eChSortType;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const float  fValue,

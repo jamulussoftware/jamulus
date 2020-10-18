@@ -277,17 +277,45 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
-    pEditMenu->addAction ( tr ( "Sort Channel Users by &Name" ), this,
+    QAction* NoSortAction = pEditMenu->addAction ( tr ( "N&o Channel Sorting" ), this,
+        SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
+
+    QAction* ByNameAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &Name" ), this,
         SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
 
-    pEditMenu->addAction ( tr ( "Sort Channel Users by &Instrument" ), this,
+    QAction* ByInstrAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &Instrument" ), this,
         SLOT ( OnSortChannelsByInstrument() ), QKeySequence ( Qt::CTRL + Qt::Key_I ) );
 
-    pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
+    QAction* ByGroupAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
         SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
 
-    pEditMenu->addAction ( tr ( "Sort Channel Users by &City" ), this,
+    QAction* ByCityAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &City" ), this,
         SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
+
+    // the sorting menu entries shall be checkable and exclusive
+    QActionGroup* SortActionGroup = new QActionGroup ( this );
+    SortActionGroup->setExclusive ( true );
+    NoSortAction->setCheckable ( true );
+    SortActionGroup->addAction ( NoSortAction );
+    ByNameAction->setCheckable ( true );
+    SortActionGroup->addAction ( ByNameAction );
+    ByInstrAction->setCheckable ( true );
+    SortActionGroup->addAction ( ByInstrAction );
+    ByGroupAction->setCheckable ( true );
+    SortActionGroup->addAction ( ByGroupAction );
+    ByCityAction->setCheckable ( true );
+    SortActionGroup->addAction ( ByCityAction );
+
+    // initialize sort type setting (i.e., recover stored setting)
+    switch ( pSettings->eChannelSortType )
+    {
+    case ST_NO_SORT:       NoSortAction->setChecked  ( true ); break;
+    case ST_BY_NAME:       ByNameAction->setChecked  ( true ); break;
+    case ST_BY_INSTRUMENT: ByInstrAction->setChecked ( true ); break;
+    case ST_BY_GROUPID:    ByGroupAction->setChecked ( true ); break;
+    case ST_BY_CITY:       ByCityAction->setChecked  ( true ); break;
+    }
+    MainMixerBoard->SetFaderSorting ( pSettings->eChannelSortType );
 
     pEditMenu->addSeparator();
 
@@ -550,6 +578,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     MainMixerBoard->HideAll();
 
     pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
+    pSettings->eChannelSortType            = MainMixerBoard->GetFaderSorting();
 
     // default implementation of this event handler routine
     Event->accept();

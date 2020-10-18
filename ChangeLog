@@ -2,7 +2,7 @@
 
 
 
-3.5.12git <- NOTE: the release version number will be 3.5.13
+3.5.12git <- NOTE: the release version number will be 3.6.0
 
 - most recently connected users appear on the RH side on the fader panel (#673)
 
@@ -16,9 +16,18 @@
 - removed -g, --pingservers since all Central servers must activate this function,
   now it is activated by default and no command line argument is needed (#638)
 
+- added --mutemyown command line argument to mute my own signal in my personal mix,
+  only supported in headless client mode (#340)
+
 - added mountain dulcimer instrument icon created by dora71 (#649)
 
 - replaced double types by floats for some of the signal processing, coded by hselasky (#544)
+
+- support permanent channl fader sorting (i.e., not only on request but always) (#666)
+
+- support sorting faders by channel city
+
+- if sorting the faders by instrument, we now sort by the name for the same instruments
 
 - improvements to the Android audio interface, coded by j-santander (#83)
 
@@ -27,11 +36,7 @@
 
 TODO handle audio packets received out of order, coded by softins (#619)
 
-TODO apply fader sorting always and not only on request (note: check when sorting by instrument
-     that inside the instrument group there is an additional sorting by name applied)
-
-TODO add sort channel faders by city
-
+TODO should we check the port number, too? // Only process audio data if: - for client only: the packet comes from the server we want to talk to
 
 
 

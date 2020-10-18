@@ -145,12 +145,14 @@ void CChannel::SetEnable ( const bool bNEnStat )
     // set internal parameter
     bIsEnabled = bNEnStat;
 
-
-// TEST is this the correct place for re-setting this parameter?
-// NOTE that it is important to reset this paramter on SetEnable(false) since
-// the SetEnable(true) is set AFTER the Init() in the client!
-bUseSequenceNumber = false;
-
+    // The support for the packet sequence number must be reset if the client
+    // disconnects from a server since we do not yet know if the next server we
+    // connect to will support the sequence number. We use the SetEnable call in
+    // the client for this task since at every start/stop it will call this
+    // function. NOTE that it is important to reset this paramter on SetEnable(false)
+    // since the SetEnable(true) is set AFTER the Init() in the client -> we
+    // simply set it regardless of the state which does not hurt.
+    bUseSequenceNumber = false;
 
     // if channel is not enabled, reset time out count and protocol
     if ( !bNEnStat )

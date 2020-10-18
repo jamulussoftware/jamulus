@@ -31,7 +31,7 @@ CClient::CClient ( const quint16  iPortNumber,
                    const int      iCtrlMIDIChannel,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
-                   const bool     bNMuteStream ) :
+                   const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo                      ( ),
     strClientName                    ( strNClientName ),
     Channel                          ( false ), /* we need a client channel -> "false" */
@@ -61,7 +61,7 @@ CClient::CClient ( const quint16  iPortNumber,
     eGUIDesign                       ( GD_ORIGINAL ),
     bEnableOPUS64                    ( false ),
     bJitterBufferOK                  ( true ),
-    bMuteStream                      ( bNMuteStream ),
+    bNuteMeInPersonalMix             ( bNMuteMeInPersonalMix ),
     strCentralServerAddress          ( "" ),
     eCentralServerAddressType        ( AT_DEFAULT ),
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
@@ -698,14 +698,13 @@ void CClient::OnControllerInFaderLevel ( int iChannelIdx,
 
 void CClient::OnClientIDReceived ( int iChanID )
 {
-    // for headless mode the mute stream switch does not make sense so we
-    // redefined that flag in headless mode to mute your own signal in your own mix
-#ifdef HEADLESS
-    if ( bMuteStream )
+    // for headless mode we support to mute our own signal in the personal mix
+    // (note that the check for headless is done in the main.cpp and must not
+    // be checked here)
+    if ( bNuteMeInPersonalMix )
     {
         SetRemoteChanGain ( iChanID, 0, false );
     }
-#endif
 
     emit ClientIDReceived ( iChanID );
 }

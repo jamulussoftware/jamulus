@@ -109,7 +109,7 @@ public:
               const int      iCtrlMIDIChannel,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
-              const bool     bNMuteStream );
+              const bool     bNMuteMeInPersonalMix );
 
     virtual ~CClient();
 
@@ -357,7 +357,7 @@ protected:
     bool                    bEnableOPUS64;
 
     bool                    bJitterBufferOK;
-    bool                    bMuteStream;
+    bool                    bNuteMeInPersonalMix;
 
     QString                 strCentralServerAddress;
     ECSAddType              eCentralServerAddressType;

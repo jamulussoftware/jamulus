@@ -143,7 +143,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
     if ( bUseSequenceNumber )
     {
         // check that the input size is a multiple of the block size
-        if ( ( iInSize % ( iBlockSize + 1 ) ) != 0 )
+        if ( ( iInSize % ( iBlockSize + iNumBytesSeqNum ) ) != 0 )
         {
             return false;
         }

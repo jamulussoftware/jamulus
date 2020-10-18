@@ -264,6 +264,8 @@ protected:
     bool                       bUseSequenceNumber;
     bool                       bIsSimulation;
     bool                       bIsInitialized;
+
+    static constexpr int iNumBytesSeqNum = 1; // per definition 1 byte sequence counter
 };
 
 

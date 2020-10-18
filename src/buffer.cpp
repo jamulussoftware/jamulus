@@ -142,11 +142,6 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
     // the new network packet
     if ( bUseSequenceNumber )
     {
-
-// TODO better implementation -> header class declaration
-const int iNumBytesSeqNum = 1; // per definition
-
-
         // check that the input size is a multiple of the block size
         if ( ( iInSize % ( iBlockSize + 1 ) ) != 0 )
         {
@@ -184,7 +179,7 @@ if ( !bIsSimulation )
 */
 
 // TEST
-bool bIsCorrectedToTheLeft = false;
+//bool bIsCorrectedToTheLeft = false;
 
 if ( iSeqNumDiff < 0 )
 {
@@ -210,7 +205,7 @@ if ( iSeqNumDiff < 0 )
 
 
 // TEST
-bIsCorrectedToTheLeft = true;
+//bIsCorrectedToTheLeft = true;
 }
 else if ( iSeqNumDiff >= iNumBlocksMemory )
 {
@@ -285,11 +280,11 @@ if ( !bIsSimulation )
             // valid packet added, set flag
             veciBlockValid[iBlockPutPos] = 1;
 
-// TEST
-if ( bIsCorrectedToTheLeft )
-{
-    veciBlockValid[iBlockPutPos] = 0;
-}
+//// TEST
+//if ( bIsCorrectedToTheLeft )
+//{
+//    veciBlockValid[iBlockPutPos] = 0;
+//}
 
         }
     }

@@ -280,6 +280,13 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     strLanguage = GetIniSetting ( IniXMLDocument, "client", "language",
                                   CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
+    // fader channel sorting
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "channelsort",
+         0, 4 /* ST_BY_CITY */, iValue ) )
+    {
+        eChannelSortType = static_cast<EChSortType> ( iValue );
+    }
+
     // name
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64",
@@ -598,6 +605,10 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // language
     PutIniSetting ( IniXMLDocument, "client", "language",
         strLanguage );
+
+    // fader channel sorting
+    SetNumericIniSet ( IniXMLDocument, "client", "channelsort",
+        static_cast<int> ( eChannelSortType ) );
 
     // name
     PutIniSetting ( IniXMLDocument, "client", "name_base64",

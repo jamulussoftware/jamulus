@@ -144,6 +144,7 @@ public:
         vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel        ( 100 ),
         bConnectDlgShowAllMusicians ( true ),
+        eChannelSortType            ( ST_NO_SORT ),
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
         vecWindowPosProfile         ( ), // empty array
@@ -168,6 +169,7 @@ public:
     CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
+    EChSortType      eChannelSortType;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;

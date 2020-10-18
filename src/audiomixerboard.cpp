@@ -817,7 +817,8 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     bNoFaderVisible ( true ),
     iMyChannelID    ( INVALID_INDEX ),
     strServerName   ( "" ),
-    eRecorderState  ( RS_UNDEFINED )
+    eRecorderState  ( RS_UNDEFINED ),
+    eChSortType     ( ST_NO_SORT )
 {
     // add group box and hboxlayout
     QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
@@ -975,14 +976,20 @@ void CAudioMixerBoard::HideAll()
     iMyChannelID    = INVALID_INDEX;
 
     // use original order of channel (by server ID)
-    ChangeFaderOrder ( false, ST_BY_NAME );
+    ChangeFaderOrder ( ST_NO_SORT );
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
 
-void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
-                                          const EChSortType eChSortType )
+void CAudioMixerBoard::SetFaderSorting ( const EChSortType eNChSortType )
+{
+    // store new sort type and immediately initiate the sorting
+    eChSortType = eNChSortType;
+    ChangeFaderOrder ( eNChSortType );
+}
+
+void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -1020,7 +1027,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
     }
 
     // if requested, sort the channels
-    if ( bDoSort )
+    if ( eChSortType != ST_NO_SORT )
     {
         std::stable_sort ( PairList.begin(), PairList.end() );
     }
@@ -1056,117 +1063,125 @@ void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState 
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
-    QMutexLocker locker ( &Mutex );
-
-    // we want to set the server name only if the very first faders appear
-    // in the audio mixer board to show a "try to connect" before
-    if ( bNoFaderVisible )
-    {
-        UpdateTitle();
-    }
-
     // get number of connected clients
     const int iNumConnectedClients = vecChanInfo.Size();
 
-    // search for channels with are already present and preserve their gain
-    // setting, for all other channels reset gain
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    Mutex.lock();
     {
-        bool bFaderIsUsed = false;
-
-        for ( int j = 0; j < iNumConnectedClients; j++ )
+        // we want to set the server name only if the very first faders appear
+        // in the audio mixer board to show a "try to connect" before
+        if ( bNoFaderVisible )
         {
-            // check if current fader is used
-            if ( vecChanInfo[j].iChanID == i )
+            UpdateTitle();
+        }
+
+        // search for channels with are already present and preserve their gain
+        // setting, for all other channels reset gain
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            bool bFaderIsUsed = false;
+
+            for ( int j = 0; j < iNumConnectedClients; j++ )
             {
-                // check if fader was already in use -> preserve gain value
-                if ( !vecpChanFader[i]->IsVisible() )
+                // check if current fader is used
+                if ( vecChanInfo[j].iChanID == i )
                 {
-                    // the fader was not in use, reset everything for new client
-                    vecpChanFader[i]->Reset();
-
-                    // check if this is my own fader and set fader property
-                    if ( i == iMyChannelID )
+                    // check if fader was already in use -> preserve gain value
+                    if ( !vecpChanFader[i]->IsVisible() )
                     {
-                        vecpChanFader[i]->SetIsMyOwnFader();
+                        // the fader was not in use, reset everything for new client
+                        vecpChanFader[i]->Reset();
+
+                        // check if this is my own fader and set fader property
+                        if ( i == iMyChannelID )
+                        {
+                            vecpChanFader[i]->SetIsMyOwnFader();
+                        }
+
+                        // show fader
+                        vecpChanFader[i]->Show();
+
+                        // Set the default initial fader level. Check first that
+                        // this is not the initialization (i.e. previously there
+                        // were no faders visible) to avoid that our own level is
+                        // adjusted. If we have received our own channel ID, then
+                        // we can adjust the level even if no fader was visible.
+                        // The fader level of 100 % is the default in the
+                        // server, in that case we do not have to do anything here.
+                        if ( ( !bNoFaderVisible ||
+                               ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != i ) ) ) &&
+                             ( pSettings->iNewClientFaderLevel != 100 ) )
+                        {
+                            // the value is in percent -> convert range
+                            vecpChanFader[i]->SetFaderLevel (
+                                pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
+                        }
+
+                        // per definition: a fader for a new client shall always be inserted at
+                        // the right-hand-side (#673), note that it is not required to remove the
+                        // widget from the layout first but it is moved to the new position automatically
+                        // and also note that the last layout item is the spacer, therefore we have
+                        // to insert at position "count - 2"
+                        pMainLayout->insertWidget ( pMainLayout->count() - 2, vecpChanFader[i]->GetMainWidget() );
                     }
 
-                    // show fader
-                    vecpChanFader[i]->Show();
-
-                    // Set the default initial fader level. Check first that
-                    // this is not the initialization (i.e. previously there
-                    // were no faders visible) to avoid that our own level is
-                    // adjusted. If we have received our own channel ID, then
-                    // we can adjust the level even if no fader was visible.
-                    // The fader level of 100 % is the default in the
-                    // server, in that case we do not have to do anything here.
-                    if ( ( !bNoFaderVisible ||
-                           ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != i ) ) ) &&
-                         ( pSettings->iNewClientFaderLevel != 100 ) )
+                    // restore gain (if new name is different from the current one)
+                    if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
                     {
-                        // the value is in percent -> convert range
-                        vecpChanFader[i]->SetFaderLevel (
-                            pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
+                        // the text has actually changed, search in the list of
+                        // stored settings if we have a matching entry
+                        int  iStoredFaderLevel;
+                        int  iStoredPanValue;
+                        bool bStoredFaderIsSolo;
+                        bool bStoredFaderIsMute;
+                        int  iGroupID;
+
+                        if ( GetStoredFaderSettings ( vecChanInfo[j],
+                                                      iStoredFaderLevel,
+                                                      iStoredPanValue,
+                                                      bStoredFaderIsSolo,
+                                                      bStoredFaderIsMute,
+                                                      iGroupID ) )
+                        {
+                            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
+                            vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
+                            vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
+                            vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
+                            vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
+                        }
                     }
 
-                    // per definition: a fader for a new client shall always be inserted at
-                    // the right-hand-side (#673), note that it is not required to remove the
-                    // widget from the layout first but it is moved to the new position automatically
-                    // and also note that the last layout item is the spacer, therefore we have
-                    // to insert at position "count - 2"
-                    pMainLayout->insertWidget ( pMainLayout->count() - 2, vecpChanFader[i]->GetMainWidget() );
+                    // set the channel infos
+                    vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
+
+                    bFaderIsUsed = true;
                 }
+            }
 
-                // restore gain (if new name is different from the current one)
-                if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
-                {
-                    // the text has actually changed, search in the list of
-                    // stored settings if we have a matching entry
-                    int  iStoredFaderLevel;
-                    int  iStoredPanValue;
-                    bool bStoredFaderIsSolo;
-                    bool bStoredFaderIsMute;
-                    int  iGroupID;
+            // if current fader is not used, hide it
+            if ( !bFaderIsUsed )
+            {
+                // before hiding the fader, store its level (if some conditions are fulfilled)
+                StoreFaderSettings ( vecpChanFader[i] );
 
-                    if ( GetStoredFaderSettings ( vecChanInfo[j],
-                                                  iStoredFaderLevel,
-                                                  iStoredPanValue,
-                                                  bStoredFaderIsSolo,
-                                                  bStoredFaderIsMute,
-                                                  iGroupID ) )
-                    {
-                        vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
-                        vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
-                        vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
-                        vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
-                        vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
-                    }
-                }
-
-                // set the channel infos
-                vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
-
-                bFaderIsUsed = true;
+                vecpChanFader[i]->Hide();
             }
         }
 
-        // if current fader is not used, hide it
-        if ( !bFaderIsUsed )
-        {
-            // before hiding the fader, store its level (if some conditions are fulfilled)
-            StoreFaderSettings ( vecpChanFader[i] );
+        // update the solo states since if any channel was on solo and a new client
+        // has just connected, the new channel must be muted
+        UpdateSoloStates();
 
-            vecpChanFader[i]->Hide();
-        }
+        // update flag for "all faders are invisible"
+        bNoFaderVisible = ( iNumConnectedClients == 0 );
     }
+    Mutex.unlock(); // release mutex
 
-    // update the solo states since if any channel was on solo and a new client
-    // has just connected, the new channel must be muted
-    UpdateSoloStates();
-
-    // update flag for "all faders are invisible"
-    bNoFaderVisible = ( iNumConnectedClients == 0 );
+    // if requested, sort the channels
+    if ( eChSortType != ST_NO_SORT )
+    {
+        ChangeFaderOrder ( eChSortType );
+    }
 
     // emit status of connected clients
     emit NumClientsChanged ( iNumConnectedClients );

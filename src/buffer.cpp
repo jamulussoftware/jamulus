@@ -43,11 +43,11 @@ void CNetBuf::Init ( const int  iNewBlockSize,
     // and the block sizes are the same
     if ( bPreserve && ( !bIsSimulation ) && bIsInitialized && ( iBlockSize == iNewBlockSize ) )
     {
+        // extract all data from buffer in temporary storage
+        CVector<CVector<uint8_t> > vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
+
         if ( !bNUseSequenceNumber )
         {
-            // extract all data from buffer in temporary storage
-            CVector<CVector<uint8_t> > vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
-
             int iPreviousDataCnt = 0;
 
             while ( Get ( vecvecTempMemory[iPreviousDataCnt], iBlockSize ) )
@@ -70,12 +70,37 @@ void CNetBuf::Init ( const int  iNewBlockSize,
         }
         else
         {
+            // store current complete buffer state in temporary memory
+            CVector<int>  veciTempBlockValid ( iNumBlocksMemory );
+            const uint8_t iOldSequenceNumberAtGetPos = iSequenceNumberAtGetPos;
+            const int     iOldNumBlocksMemory        = iNumBlocksMemory;
+            const int     iOldBlockGetPos            = iBlockGetPos;
+            int           iCurBlockPos               = 0;
 
-// TODO implementation missing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO implementation missing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO implementation missing!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Resize ( iNewNumBlocks, iNewBlockSize );
+            while ( iBlockGetPos < iNumBlocksMemory )
+            {
+                veciTempBlockValid[iCurBlockPos] = veciBlockValid[iBlockGetPos];
+                vecvecTempMemory[iCurBlockPos++] = vecvecMemory[iBlockGetPos++];
+            }
 
+            for ( iBlockGetPos = 0; iBlockGetPos < iOldBlockGetPos; iBlockGetPos++ )
+            {
+                veciTempBlockValid[iCurBlockPos] = veciBlockValid[iBlockGetPos];
+                vecvecTempMemory[iCurBlockPos++] = vecvecMemory[iBlockGetPos];
+            }
+
+            // now resize the buffer to the new size
+            Resize ( iNewNumBlocks, iNewBlockSize );
+
+            // write back the temporary data in new memory
+            iSequenceNumberAtGetPos = iOldSequenceNumberAtGetPos;
+            iBlockGetPos            = 0; // per definition
+
+            for ( int iCurPos = 0; iCurPos < std::min ( iNewNumBlocks, iOldNumBlocksMemory ); iCurPos++ )
+            {
+                veciBlockValid[iCurPos] = veciTempBlockValid[iCurPos];
+                vecvecMemory[iCurPos]   = vecvecTempMemory[iCurPos];
+            }
         }
     }
     else
@@ -91,7 +116,7 @@ void CNetBuf::Resize ( const int iNewNumBlocks,
                        const int iNewBlockSize )
 {
     // allocate memory for actual data buffer
-    vecvecMemory.Init ( iNewNumBlocks );
+    vecvecMemory.Init   ( iNewNumBlocks );
     veciBlockValid.Init ( iNewNumBlocks, 0 ); // initialize with zeros = invalid
 
     if ( !bIsSimulation )
@@ -181,8 +206,6 @@ if ( iSeqNumDiff < 0 )
         }
     }
 
-
-
     iBlockPutPos = iBlockGetPos;
 
 
@@ -238,6 +261,15 @@ else
 //            "iGetPos:" << iBlockGetPos << "iPutPos:" << iBlockPutPos;
 //}
 
+/*
+// TEST
+if ( !bIsSimulation )
+{
+    static FILE* pFile = fopen ( "test.dat", "w" );
+    fprintf ( pFile, "%d\n", iSeqNumDiff );
+    fflush ( pFile );
+}
+*/
 
 
 

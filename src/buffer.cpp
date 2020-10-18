@@ -227,8 +227,8 @@ else if ( iSeqNumDiff >= iNumBlocksMemory )
         }
     }
 
-// TEST we shifted the get position, invalidate oldest packet since this is not in correct order anymore
-veciBlockValid[iBlockGetPos] = 0; // invalidate
+//// TEST we shifted the get position, invalidate oldest packet since this is not in correct order anymore
+//veciBlockValid[iBlockGetPos] = 0; // invalidate
 
 
 

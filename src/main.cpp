@@ -69,6 +69,7 @@ int main ( int argc, char** argv )
     bool         bUseMultithreading          = false;
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
+    bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
@@ -337,7 +338,7 @@ int main ( int argc, char** argv )
                                  argc,
                                  argv,
                                  i,
-                                 "--clientname",
+                                 "--clientname", // no short form
                                  "--clientname",
                                  strArgument ) )
         {
@@ -367,7 +368,7 @@ int main ( int argc, char** argv )
         // Disable recording on startup ----------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
-                               "--norecord",
+                               "--norecord", // no short form
                                "--norecord" ) )
         {
             bDisableRecording = true;
@@ -486,6 +487,19 @@ int main ( int argc, char** argv )
         }
 
 
+        // For headless client mute my own signal in personal mix --------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--mutemyown", // no short form
+                               "--mutemyown" ) )
+        {
+            bMuteMeInPersonalMix = true;
+            tsConsole << "- mute me in my personal mix" << endl;
+            CommandLineOptions << "--mutemyown";
+            continue;
+        }
+
+
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
              ( !strcmp ( argv[i], "-v" ) ) )
@@ -536,6 +550,13 @@ int main ( int argc, char** argv )
     if ( !bIsClient && !bUseGUI && !strIniFileName.isEmpty() )
     {
         tsConsole << "No initialization file support in headless server mode." << endl;
+    }
+
+    // mute my own signal in personal mix is only supported for headless mode
+    if ( bIsClient && bUseGUI && bMuteMeInPersonalMix )
+    {
+        bMuteMeInPersonalMix = false;
+        tsConsole << "Mute my own signal in my personal mix is only supported in headless mode." << endl;
     }
 
     // per definition: if we are in "GUI" server mode and no central server
@@ -615,7 +636,8 @@ int main ( int argc, char** argv )
                              strConnOnStartupAddress,
                              iCtrlMIDIChannel,
                              bNoAutoJackConnect,
-                             strClientName );
+                             strClientName,
+                             bMuteMeInPersonalMix );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -782,6 +804,7 @@ QString UsageArguments ( char **argv )
         "  -z, --startminimized  start minimizied\n"
         "\nClient only:\n"
         "  -M, --mutestream      starts the application in muted state\n"
+        "      --mutemyown       mute me in my personal mix (headless only)\n"
         "  -c, --connect         connect to given server address on startup\n"
         "  -j, --nojackconnect   disable auto Jack connections\n"
         "  --ctrlmidich          MIDI controller channel to listen\n"

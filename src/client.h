@@ -108,7 +108,8 @@ public:
               const QString& strConnOnStartupAddress,
               const int      iCtrlMIDIChannel,
               const bool     bNoAutoJackConnect,
-              const QString& strNClientName );
+              const QString& strNClientName,
+              const bool     bNMuteMeInPersonalMix );
 
     virtual ~CClient();
 
@@ -356,6 +357,7 @@ protected:
     bool                    bEnableOPUS64;
 
     bool                    bJitterBufferOK;
+    bool                    bNuteMeInPersonalMix;
 
     QString                 strCentralServerAddress;
     ECSAddType              eCentralServerAddressType;
@@ -394,6 +396,7 @@ protected slots:
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
     void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
+    void OnClientIDReceived ( int iChanID );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

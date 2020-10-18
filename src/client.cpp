@@ -30,7 +30,8 @@ CClient::CClient ( const quint16  iPortNumber,
                    const QString& strConnOnStartupAddress,
                    const int      iCtrlMIDIChannel,
                    const bool     bNoAutoJackConnect,
-                   const QString& strNClientName ) :
+                   const QString& strNClientName,
+                   const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo                      ( ),
     strClientName                    ( strNClientName ),
     Channel                          ( false ), /* we need a client channel -> "false" */
@@ -60,6 +61,7 @@ CClient::CClient ( const quint16  iPortNumber,
     eGUIDesign                       ( GD_ORIGINAL ),
     bEnableOPUS64                    ( false ),
     bJitterBufferOK                  ( true ),
+    bNuteMeInPersonalMix             ( bNMuteMeInPersonalMix ),
     strCentralServerAddress          ( "" ),
     eCentralServerAddressType        ( AT_DEFAULT ),
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
@@ -136,7 +138,7 @@ CClient::CClient ( const quint16  iPortNumber,
         this, &CClient::ChatTextReceived );
 
     QObject::connect ( &Channel, &CChannel::ClientIDReceived,
-        this, &CClient::ClientIDReceived );
+        this, &CClient::OnClientIDReceived );
 
     QObject::connect ( &Channel, &CChannel::MuteStateHasChangedReceived,
         this, &CClient::MuteStateHasChangedReceived );
@@ -692,6 +694,19 @@ void CClient::OnControllerInFaderLevel ( int iChannelIdx,
 #endif
 
     emit ControllerInFaderLevel ( iChannelIdx, iValue );
+}
+
+void CClient::OnClientIDReceived ( int iChanID )
+{
+    // for headless mode we support to mute our own signal in the personal mix
+    // (note that the check for headless is done in the main.cpp and must not
+    // be checked here)
+    if ( bNuteMeInPersonalMix )
+    {
+        SetRemoteChanGain ( iChanID, 0, false );
+    }
+
+    emit ClientIDReceived ( iChanID );
 }
 
 void CClient::Start()

@@ -4,6 +4,8 @@
 
 3.5.12git <- NOTE: the release version number will be 3.6.0
 
+- handle audio packets received out of order, coded by softins (#619)
+
 - most recently connected users appear on the RH side on the fader panel (#673)
 
 - improvements for the server multithreading, coded by kraney (#653)
@@ -33,8 +35,6 @@
 
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
-
-TODO handle audio packets received out of order, coded by softins (#619)
 
 TODO should we check the port number, too? // Only process audio data if: - for client only: the packet comes from the server we want to talk to
 

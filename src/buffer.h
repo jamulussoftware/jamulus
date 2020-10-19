@@ -234,15 +234,16 @@ class CNetBuf
 {
 public:
     CNetBuf ( const bool bNIsSim = false ) :
-        bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
+        iSequenceNumberAtGetPos ( 0 ), bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
 
     void Init ( const int  iNewBlockSize,
                 const int  iNewNumBlocks,
+                const bool bNUseSequenceNumber,
                 const bool bPreserve = false );
 
     void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
 
-    virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
+    virtual bool Put ( const CVector<uint8_t>& vecbyData, int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
 protected:
@@ -253,13 +254,18 @@ protected:
     void Resize ( const int iNewNumBlocks, const int iNewBlockSize );
 
     CVector<CVector<uint8_t> > vecvecMemory;
+    CVector<int>               veciBlockValid;
     int                        iNumBlocksMemory;
     int                        iBlockGetPos;
     int                        iBlockPutPos;
     int                        iBlockSize;
+    uint8_t                    iSequenceNumberAtGetPos; // uint8_t so that it wraps automatically
     EBufState                  eBufState;
+    bool                       bUseSequenceNumber;
     bool                       bIsSimulation;
     bool                       bIsInitialized;
+
+    static constexpr int iNumBytesSeqNum = 1; // per definition 1 byte sequence counter
 };
 
 
@@ -271,6 +277,7 @@ public:
 
     void Init ( const int  iNewBlockSize,
                 const int  iNewNumBlocks,
+                const bool bNUseSequenceNumber,
                 const bool bPreserve = false );
 
     void SetUseDoubleSystemFrameSize ( const bool bNDSFSize ) { bUseDoubleSystemFrameSize = bNDSFSize; }
@@ -318,12 +325,14 @@ template<class TData> class CConvBuf
 public:
     CConvBuf() { Init ( 0 ); }
 
-    void Init ( const int iNewMemSize )
+    void Init ( const int  iNewMemSize,
+                const bool bNUseSequenceNumber = false )
     {
         // allocate internal memory and reset read/write positions
         vecMemory.Init ( iNewMemSize );
-        iMemSize    = iNewMemSize;
-        iBufferSize = iNewMemSize;
+        iMemSize           = iNewMemSize;
+        iBufferSize        = iNewMemSize;
+        bUseSequenceNumber = bNUseSequenceNumber;
         Reset();
     }
 
@@ -352,19 +361,34 @@ public:
                     vecMemory.begin() );
     }
 
-    bool Put ( const CVector<TData>& vecsData,
-               const int             iVecSize )
+    bool Put ( const CVector<TData>& vecData,
+               const int             iVecSize,
+               const TData           SequenceNumber = 0 )
     {
-        // calculate the input size and the end position after copying
-        const int iEnd = iPutPos + iVecSize;
+        // calculate the end position after copying
+        int iEnd = iPutPos + iVecSize;
+
+        // consider optional sequence number
+        if ( bUseSequenceNumber )
+        {
+            iEnd++;
+        }
 
         // first check for buffer overrun
         if ( iEnd <= iBufferSize )
         {
             // copy new data in internal buffer
-            std::copy ( vecsData.begin(),
-                        vecsData.begin() + iVecSize,
+            std::copy ( vecData.begin(),
+                        vecData.begin() + iVecSize,
                         vecMemory.begin() + iPutPos );
+
+            // add optional sequence number (NOTE that we currently
+            // only support a single sequence number per packet)
+            if ( bUseSequenceNumber )
+            {
+                // append the sequence number at the end
+                vecMemory[iPutPos + iVecSize] = SequenceNumber;
+            }
 
             // set buffer pointer one block further
             iPutPos = iEnd;
@@ -423,5 +447,6 @@ protected:
     CVector<TData> vecMemory;
     int            iMemSize;
     int            iBufferSize;
+    bool           bUseSequenceNumber;
     int            iPutPos, iGetPos;
 };

@@ -141,7 +141,7 @@ public:
     bool GetDoAutoSockBufSize() const { return bDoAutoSockBufSize; }
 
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
-    int GetNetwFrameSize() const { return iNetwFrameSize; }
+    int GetCeltNumCodedBytes() const { return iCeltNumCodedBytes; }
 
     void GetBufErrorRates ( CVector<double>& vecErrRates, double& dLimit, double& dMaxUpLimit )
         { SockBuf.GetErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
@@ -191,7 +191,9 @@ protected:
         eAudioCompressionType = CT_NONE;
         iNetwFrameSizeFact    = FRAME_SIZE_FACTOR_PREFERRED;
         iNetwFrameSize        = CELT_MINIMUM_NUM_BYTES;
+        iCeltNumCodedBytes    = CELT_MINIMUM_NUM_BYTES;
         iNumAudioChannels     = 1; // mono
+        bUseSequenceNumber    = false;
     }
 
     // connection parameters
@@ -208,6 +210,8 @@ protected:
     CNetBufWithStats        SockBuf;
     int                     iCurSockBufNumFrames;
     bool                    bDoAutoSockBufSize;
+    bool                    bUseSequenceNumber;
+    uint8_t                 iSendSequenceNumber;
 
     // network output conversion buffer
     CConvBuf<uint8_t>       ConvBuf;
@@ -225,6 +229,7 @@ protected:
 
     int                     iNetwFrameSizeFact;
     int                     iNetwFrameSize;
+    int                     iCeltNumCodedBytes;
     int                     iAudioFrameSizeSamples;
 
     EAudComprType           eAudioCompressionType;
@@ -246,6 +251,9 @@ public slots:
     void OnReqNetTranspProps();
     void OnReqSplitMessSupport();
     void OnSplitMessSupported() { Protocol.SetSplitMessageSupported ( true ); }
+
+    void OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
+                                  QString                strVersion );
 
     void OnParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
                               int              iRecCounter,

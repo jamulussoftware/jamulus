@@ -2152,6 +2152,16 @@ nie jestem pewna</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../util.cpp" line="1104"/>
+        <source>Scratching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1105"/>
+        <source>Rapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings.cpp" line="293"/>
         <source>No Name</source>
         <translation>Brak nazwy</translation>
@@ -2858,17 +2868,17 @@ nie jestem pewna</translatorcomment>
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1555"/>
+        <location filename="../../util.cpp" line="1557"/>
         <source>, Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1568"/>
+        <location filename="../../util.cpp" line="1570"/>
         <source>Internet Jam Session Software</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1572"/>
+        <location filename="../../util.cpp" line="1574"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation type="unfinished"></translation>
     </message>

@@ -2235,6 +2235,16 @@
         <source>Mountain Dulcimer</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../util.cpp" line="1104"/>
+        <source>Scratching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1105"/>
+        <source>Rapping</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>
@@ -2964,17 +2974,17 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1555"/>
+        <location filename="../../util.cpp" line="1557"/>
         <source>, Version </source>
         <translation>, Version </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1568"/>
+        <location filename="../../util.cpp" line="1570"/>
         <source>Internet Jam Session Software</source>
         <translation>Internet Jam Session Software</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1572"/>
+        <location filename="../../util.cpp" line="1574"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation>Släppt under GNU General Public License (GPL)</translation>
     </message>

@@ -21,7 +21,9 @@
 - added --mutemyown command line argument to mute my own signal in my personal mix,
   only supported in headless client mode (#340)
 
-- added mountain dulcimer instrument icon created by dora71 (#649)
+- added "Mountain Dulcimer" instrument icon, created by dora71 (#649)
+
+- added new instrument icons for "Scratching" and "Rapping"
 
 - replaced double types by floats for some of the signal processing, coded by hselasky (#544)
 

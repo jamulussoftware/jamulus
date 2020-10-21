@@ -30,7 +30,7 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
                          CServerSettings* pNSetP,
                          const bool       bStartMinimized,
                          QWidget*         parent )
-    : QDialog                  ( parent ),
+    : QDialog                  ( parent, Qt::Window ),
       pServer                  ( pNServP ),
       pSettings                ( pNSetP ),
       BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),

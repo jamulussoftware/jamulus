@@ -29,7 +29,7 @@
 CConnectDlg::CConnectDlg ( CClient*        pNCliP,
                            const bool      bNewShowCompleteRegList,
                            QWidget*        parent )
-    : QDialog                    ( parent ),
+    : QDialog                    ( parent, Qt::Dialog ),
       pClient                    ( pNCliP ),
       strCentralServerAddress    ( "" ),
       strSelectedAddress         ( "" ),

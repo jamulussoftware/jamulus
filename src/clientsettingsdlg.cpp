@@ -29,7 +29,7 @@
 CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
                                          CClientSettings* pNSetP,
                                          QWidget*         parent ) :
-    QDialog   ( parent ),
+    QDialog   ( parent, Qt::Window ),
     pClient   ( pNCliP ),
     pSettings ( pNSetP )
 {

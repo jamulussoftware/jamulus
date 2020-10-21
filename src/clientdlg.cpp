@@ -34,7 +34,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
                          QWidget*         parent ) :
-    QDialog             ( parent ),
+    QDialog             ( parent, Qt::Window ),
     pClient             ( pNCliP ),
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),

@@ -28,7 +28,7 @@
 // Analyzer console implementation *********************************************
 CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
                                      QWidget* parent ) :
-    QDialog                ( parent ),
+    QDialog                ( parent, Qt::Window ),
     pClient                ( pNCliP ),
     GraphImage             ( 1, 1, QImage::Format_RGB32 ),
     GraphErrRateCanvasRect ( 0, 0, 600, 450 ), // defines total size of graph

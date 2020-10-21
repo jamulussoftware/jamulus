@@ -31,7 +31,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecfPannings           ( MAX_NUM_CHANNELS, 0.5f ),
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
-    bUseSequenceNumber     ( false ),
+    bUseSequenceNumber     ( false ), // this is important since in the client we reset on Channel.SetEnable ( false )
     iSendSequenceNumber    ( 0 ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),

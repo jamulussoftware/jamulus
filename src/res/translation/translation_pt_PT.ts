@@ -2963,22 +2963,22 @@
         <translation type="vanished">Endereço Predefinido</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="53"/>
+        <location filename="../../serverdlg.h" line="54"/>
         <source>Recording</source>
         <translation>A gravar</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="52"/>
+        <location filename="../../serverdlg.h" line="53"/>
         <source>Not recording</source>
         <translation>Não está a gravar</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="50"/>
+        <location filename="../../serverdlg.h" line="51"/>
         <source>Not initialised</source>
         <translation>Não inicializado</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="51"/>
+        <location filename="../../serverdlg.h" line="52"/>
         <source>Not enabled</source>
         <translation>Desactivado</translation>
     </message>

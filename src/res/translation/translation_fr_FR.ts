@@ -2987,22 +2987,22 @@
         <translation type="vanished">Adresse prédéfinie</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="53"/>
+        <location filename="../../serverdlg.h" line="54"/>
         <source>Recording</source>
         <translation>Enregistrement</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="52"/>
+        <location filename="../../serverdlg.h" line="53"/>
         <source>Not recording</source>
         <translation>Ne pas enregistrer</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="50"/>
+        <location filename="../../serverdlg.h" line="51"/>
         <source>Not initialised</source>
         <translation>Non initialisé</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="51"/>
+        <location filename="../../serverdlg.h" line="52"/>
         <source>Not enabled</source>
         <translation>Non activé</translation>
     </message>

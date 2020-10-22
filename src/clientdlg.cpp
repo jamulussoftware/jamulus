@@ -34,7 +34,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
                          QWidget*         parent ) :
-    QDialog             ( parent, Qt::Window ),
+    QDialog             ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient             ( pNCliP ),
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),

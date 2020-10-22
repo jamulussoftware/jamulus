@@ -28,7 +28,7 @@
 // Analyzer console implementation *********************************************
 CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
                                      QWidget* parent ) :
-    QDialog                ( parent, Qt::Window ),
+    QDialog                ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient                ( pNCliP ),
     GraphImage             ( 1, 1, QImage::Format_RGB32 ),
     GraphErrRateCanvasRect ( 0, 0, 600, 450 ), // defines total size of graph

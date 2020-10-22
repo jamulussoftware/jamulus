@@ -30,7 +30,7 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
                          CServerSettings* pNSetP,
                          const bool       bStartMinimized,
                          QWidget*         parent )
-    : QDialog                  ( parent, Qt::Window ),
+    : QDialog                  ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
       pServer                  ( pNServP ),
       pSettings                ( pNSetP ),
       BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),

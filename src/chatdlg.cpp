@@ -27,7 +27,7 @@
 
 /* Implementation *************************************************************/
 CChatDlg::CChatDlg ( QWidget* parent ) :
-    QDialog ( parent, Qt::Window )
+    QDialog ( parent, Qt::Window ) // use Qt::Window to get min/max window buttons
 {
     setupUi ( this );
 

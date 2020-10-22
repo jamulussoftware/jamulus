@@ -29,7 +29,7 @@
 CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
                                          CClientSettings* pNSetP,
                                          QWidget*         parent ) :
-    QDialog   ( parent, Qt::Window ),
+    QDialog   ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient   ( pNCliP ),
     pSettings ( pNSetP )
 {

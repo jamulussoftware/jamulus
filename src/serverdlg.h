@@ -36,6 +36,7 @@
 #include <QSystemTrayIcon>
 #include <QSettings>
 #include <QFileDialog>
+#include <QVersionNumber>
 #include "global.h"
 #include "server.h"
 #include "settings.h"

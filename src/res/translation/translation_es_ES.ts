@@ -58,7 +58,7 @@
     <message>
         <location filename="../../util.cpp" line="408"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation>Hay un servidor que recoge el audio de cada cliente, los mezcla y la envía la mezcla de vuelta a cada cliente.</translation>
+        <translation>Hay un servidor que recoge el audio de cada cliente, los combina y envía la mezcla de vuelta a cada cliente.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="427"/>
@@ -302,7 +302,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation>Activando Mute, se puede mutear el canal de audio.</translation>
+        <translation>Activando Mute, se puede silenciar el canal de audio.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="162"/>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="164"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>Activando Solo, todos los demás canales de audio excepto este se mutean. Es posible activar esta función para más de un canal.</translation>
+        <translation>Activando Solo, todos los demás canales de audio excepto este se silencian. Es posible activar esta función para más de un canal.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="170"/>
@@ -695,7 +695,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="65"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation>Para un uso adecuado de la aplicación, no deberías oír tu voz/instrumento por el altavoz o los auriculares cuando el software no está conectado. Esto se puede realizar muteando tu canal de entrada de audio en el mezclador de Reproducción (¡no el de Grabación!).</translation>
+        <translation>Para un uso adecuado de la aplicación, no deberías oír tu voz/instrumento por el altavoz o los auriculares cuando el software no está conectado. Esto se puede realizar silenciando tu canal de entrada de audio en el mezclador de Reproducción (¡no el de Grabación!).</translation>
     </message>
     <message>
         <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the application.</source>
@@ -991,7 +991,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>N&amp;o Channel Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;o Ordenar Canales</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
@@ -1006,7 +1006,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;City</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordenar Canales por &amp;Ciudad</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
@@ -1070,7 +1070,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="323"/>
         <source>&amp;Mute Myself</source>
-        <translation>&amp;Mutearme Yo</translation>
+        <translation>Silenciar&amp;me Yo</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
@@ -1115,7 +1115,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="551"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>MUTEADO (Otras personas no te escucharán)</translation>
+        <translation>SILENCIADO (Otras personas no te escucharán)</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="574"/>
@@ -2595,17 +2595,17 @@
     <message>
         <location filename="../../util.cpp" line="1103"/>
         <source>Mountain Dulcimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcémele de Montaña</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1104"/>
         <source>Scratching</source>
-        <translation type="unfinished"></translation>
+        <translation>Scratching</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1105"/>
         <source>Rapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapeo</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="293"/>

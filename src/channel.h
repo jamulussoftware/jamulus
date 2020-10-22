@@ -28,6 +28,7 @@
 #include <QDateTime>
 #include <QFile>
 #include <QTextStream>
+#include <QVersionNumber>
 #include "global.h"
 #include "buffer.h"
 #include "util.h"

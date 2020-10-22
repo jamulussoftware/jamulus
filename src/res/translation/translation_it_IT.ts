@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="it_IT">
+<TS version="2.0" language="it_IT">
 <context>
     <name>CAboutDlg</name>
     <message>
         <source>The </source>
-        <translation type="vanished">Il software </translation>
+        <translation>Il software </translation>
     </message>
     <message>
         <source> software enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation type="vanished"> permette ai musicisti di creare jam session in real time attraverso internet.</translation>
+        <translation> permette ai musicisti di creare jam session in real time attraverso internet.</translation>
     </message>
     <message>
         <source>There is a </source>
-        <translation type="vanished">Attraverso un Server </translation>
+        <translation>Attraverso un Server </translation>
     </message>
     <message>
         <source> server which collects the audio data from each </source>
-        <translation type="vanished"> che acquisisce i dati audio da ogni </translation>
+        <translation> che acquisisce i dati audio da ogni </translation>
     </message>
     <message>
         <source> client, mixes the audio data and sends the mix back to each client.</source>
-        <translation type="vanished"> client; mixa i dati audio e li rimanda ad ogni client.</translation>
+        <translation> client; mixa i dati audio e li rimanda ad ogni client.</translation>
     </message>
     <message>
         <source> uses the following libraries, resources or code snippets:</source>
-        <translation type="vanished"> usa le seguenti librerie, risorse o parti di codice:</translation>
+        <translation> usa le seguenti librerie, risorse o parti di codice:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="428"/>
@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Country flag icons from Mark James</source>
-        <translation type="vanished">Icone delle bandiere a cura di Mark James</translation>
+        <translation>Icone delle bandiere a cura di Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="407"/>
@@ -128,15 +128,15 @@
     </message>
     <message>
         <source>, Version </source>
-        <translation type="vanished">, Versione </translation>
+        <translation>, Versione </translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>
-        <translation type="vanished">Rilasciato sotto licensa GNU General Public License (GPL)</translation>
+        <translation>Rilasciato sotto licensa GNU General Public License (GPL)</translation>
     </message>
     <message>
         <source>Under the GNU General Public License (GPL)</source>
-        <translation type="vanished">Sotto la GNU General Public License (GPL)</translation>
+        <translation>Sotto la GNU General Public License (GPL)</translation>
     </message>
 </context>
 <context>
@@ -276,7 +276,7 @@
     </message>
     <message>
         <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
-        <translation type="vanished">Visualizza il livello audio pre-fader di questo canale. A tutti i client connessi al server verrà assegnato un livello audio, lo stesso valore per ciascun client.</translation>
+        <translation>Visualizza il livello audio pre-fader di questo canale. A tutti i client connessi al server verrà assegnato un livello audio, lo stesso valore per ciascun client.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="139"/>
@@ -290,7 +290,7 @@
     </message>
     <message>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
-        <translation type="vanished">Regola il livello audio di questo canale. A tutti i client connessi al server verrà assegnato un fader audio su ciascun client, regolando il mix locale.</translation>
+        <translation>Regola il livello audio di questo canale. A tutti i client connessi al server verrà assegnato un fader audio su ciascun client, regolando il mix locale.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="145"/>
@@ -309,7 +309,7 @@
     </message>
     <message>
         <source>Speaker with cancellation stroke: Indicates that the other client has muted you.</source>
-        <translation type="vanished">Altoparlante segnato: Indica che un altro client ha messo in mute il tuo canale.</translation>
+        <translation>Altoparlante segnato: Indica che un altro client ha messo in mute il tuo canale.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="153"/>
@@ -323,7 +323,7 @@
     </message>
     <message>
         <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation type="vanished">Imposta il Bilanciamento da Sinistra a Destra del canale. Funzione abilitata in modalità stereo oppure in modalità mono in/stereo out.</translation>
+        <translation>Imposta il Bilanciamento da Sinistra a Destra del canale. Funzione abilitata in modalità stereo oppure in modalità mono in/stereo out.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="158"/>
@@ -342,7 +342,7 @@
     </message>
     <message>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation type="vanished">Quando il Solo è attivo, il canale audio sarà in modalità solista escludendo gli altri canali che non saranno più udibili. E&apos; possibile attivare il solo su più canali per sentirli contemporaneamente.</translation>
+        <translation>Quando il Solo è attivo, il canale audio sarà in modalità solista escludendo gli altri canali che non saranno più udibili. E&apos; possibile attivare il solo su più canali per sentirli contemporaneamente.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="168"/>
@@ -356,7 +356,7 @@
     </message>
     <message>
         <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
-        <translation type="vanished">Il tag fader identifica il client connesso. Il nome del tag, l&apos;immagine del tuo strumento e una bandiera del tuo paese possono essere impostati nella finestra principale del profilo.</translation>
+        <translation>Il tag fader identifica il client connesso. Il nome del tag, l&apos;immagine del tuo strumento e una bandiera del tuo paese possono essere impostati nella finestra principale del profilo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="137"/>
@@ -436,7 +436,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="231"/>
         <source>GRP</source>
-        <translation type="unfinished">GRP</translation>
+        <translation>GRP</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="244"/>
@@ -551,12 +551,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="136"/>
         <source>Do you want to open the link</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi che il sia aperto</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="137"/>
         <source>in an external browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>sul browser?</translation>
     </message>
 </context>
 <context>
@@ -573,11 +573,11 @@
     </message>
     <message>
         <source>Cl&amp;ear</source>
-        <translation type="vanished">Can&amp;ella</translation>
+        <translation>Can&amp;ella</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="vanished">&amp;Chiudi</translation>
+        <translation>&amp;Chiudi</translation>
     </message>
 </context>
 <context>
@@ -589,7 +589,7 @@
     </message>
     <message>
         <source>The input level indicators show the input level of the two stereo channels of the current selected audio input.</source>
-        <translation type="vanished">L&apos;idicatore del segnale in ingresso mostra il livello dei due canali stereo scelti come input.</translation>
+        <translation>L&apos;idicatore del segnale in ingresso mostra il livello dei due canali stereo scelti come input.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="56"/>
@@ -598,23 +598,23 @@
     </message>
     <message>
         <source>If the </source>
-        <translation type="vanished">Se </translation>
+        <translation>Se </translation>
     </message>
     <message>
         <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation type="vanished"> è collegato, suonando lo strumento oppure cantando con il microfono, l&apos;idicatore a LED dovrebbe illuninarsi. In caso contrario probabilmente hai selezionato il canale di ingresso errato (ad es. Line in anziché l&apos;ingresso del microfono) oppure hai impostato un guadagno di input troppo basso nel mixer audio (Windows).</translation>
+        <translation> è collegato, suonando lo strumento oppure cantando con il microfono, l&apos;idicatore a LED dovrebbe illuninarsi. In caso contrario probabilmente hai selezionato il canale di ingresso errato (ad es. Line in anziché l&apos;ingresso del microfono) oppure hai impostato un guadagno di input troppo basso nel mixer audio (Windows).</translation>
     </message>
     <message>
         <source>For a proper usage of the </source>
-        <translation type="vanished">Per un uso corretto di </translation>
+        <translation>Per un uso corretto di </translation>
     </message>
     <message>
         <source> software, you should not hear your singing/instrument in the loudspeaker or your headphone when the </source>
-        <translation type="vanished"> non dovresti sentire la voce o lo strumento nelle casse o nelle cuffie quando </translation>
+        <translation> non dovresti sentire la voce o lo strumento nelle casse o nelle cuffie quando </translation>
     </message>
     <message>
         <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation type="vanished"> il programma non è connesso. Basta disattivare il canale audio in ingresso nel mixer di riproduzione (non nel mixer di registrazione!).</translation>
+        <translation> il programma non è connesso. Basta disattivare il canale audio in ingresso nel mixer di riproduzione (non nel mixer di registrazione!).</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
@@ -633,7 +633,7 @@
     </message>
     <message>
         <source>Push this button to connect to a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
-        <translation type="vanished">Cliccare il pulsante per connettersi ad un server. Si aprirà una finestra da dove poter scegliere a quale server connettersi. Se si è già connessi cliccando questo pulsante la connessione verrà interrotta.</translation>
+        <translation>Cliccare il pulsante per connettersi ad un server. Si aprirà una finestra da dove poter scegliere a quale server connettersi. Se si è già connessi cliccando questo pulsante la connessione verrà interrotta.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="92"/>
@@ -642,11 +642,11 @@
     </message>
     <message>
         <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the </source>
-        <translation type="vanished">Facendo clic su questo pulsante si modifica la dicitura del pulsante da Connetti a Disconnetti, ovvero implementa una funzionalità di attivazione / disattivazione per la connessione e disconnessione del </translation>
+        <translation>Facendo clic su questo pulsante si modifica la dicitura del pulsante da Connetti a Disconnetti, ovvero implementa una funzionalità di attivazione / disattivazione per la connessione e disconnessione del </translation>
     </message>
     <message>
         <source> software.</source>
-        <translation type="vanished"> programma.</translation>
+        <translation> programma.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="95"/>
@@ -655,7 +655,7 @@
     </message>
     <message>
         <source>With the audio fader, the relative levels of the left and right local audio channels can be changed. For a mono signal it acts like a panning between the two channels. If, e.g., a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="vanished">Con questo fader, è possibile modificare i livelli relativi dei canali audio sinistro e destro. Per un segnale mono si comporta come un mix tra i due canali. Se, ad esempio, un microfono è collegato al canale di ingresso destro e uno strumento è collegato al canale di ingresso sinistro che è molto più forte del microfono, spostare il fader audio nella direzione opposta a L (Sinistra) per bilanciare i volumi </translation>
+        <translation>Con questo fader, è possibile modificare i livelli relativi dei canali audio sinistro e destro. Per un segnale mono si comporta come un mix tra i due canali. Se, ad esempio, un microfono è collegato al canale di ingresso destro e uno strumento è collegato al canale di ingresso sinistro che è molto più forte del microfono, spostare il fader audio nella direzione opposta a L (Sinistra) per bilanciare i volumi </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
@@ -680,35 +680,35 @@
     </message>
     <message>
         <source>Reverberation Level</source>
-        <translation type="vanished">Livello di Riverbero</translation>
+        <translation>Livello di Riverbero</translation>
     </message>
     <message>
         <source>A reverberation effect can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverberation level can be modified. If, e.g., the microphone signal is fed into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector to right and move the fader upwards until the desired reverberation level is reached.</source>
-        <translation type="vanished">Un effetto di riverbero può essere applicato al canale mono o ad entrambi i canali stereo. La selezione del canale mono e il livello di riverbero possono essere modificati. Se, ad esempio, il segnale del microfono viene immesso nel canale audio destro della scheda audio e deve essere applicato un effetto di riverbero, impostare il selettore di canale a destra e spostare il fader verso l&apos;alto fino a raggiungere il livello di riverbero desiderato.</translation>
+        <translation>Un effetto di riverbero può essere applicato al canale mono o ad entrambi i canali stereo. La selezione del canale mono e il livello di riverbero possono essere modificati. Se, ad esempio, il segnale del microfono viene immesso nel canale audio destro della scheda audio e deve essere applicato un effetto di riverbero, impostare il selettore di canale a destra e spostare il fader verso l&apos;alto fino a raggiungere il livello di riverbero desiderato.</translation>
     </message>
     <message>
         <source>The reverberation effect requires significant CPU so it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
-        <translation type="vanished">L&apos;effetto di riverbero richiede un uso significativo della CPU, quindi è raccomandabile usarlo su computer veloci. Se il livello del riverbero è messo al minimo (come di default), l&apos;effetto è disattivato e non causa rallentamenti sulla CPU.</translation>
+        <translation>L&apos;effetto di riverbero richiede un uso significativo della CPU, quindi è raccomandabile usarlo su computer veloci. Se il livello del riverbero è messo al minimo (come di default), l&apos;effetto è disattivato e non causa rallentamenti sulla CPU.</translation>
     </message>
     <message>
         <source>Reverberation effect level setting</source>
-        <translation type="vanished">Settaggio del livello di Riverbero</translation>
+        <translation>Settaggio del livello di Riverbero</translation>
     </message>
     <message>
         <source>Reverberation Channel Selection</source>
-        <translation type="vanished">Selettore di canale per il Riverbero</translation>
+        <translation>Selettore di canale per il Riverbero</translation>
     </message>
     <message>
         <source>With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation type="vanished">Con questi pulsanti di opzione è possibile scegliere il canale d&apos;ingresso audio su cui viene applicato l&apos;effetto di riverbero. È possibile selezionare il canale di input sinistro o destro.</translation>
+        <translation>Con questi pulsanti di opzione è possibile scegliere il canale d&apos;ingresso audio su cui viene applicato l&apos;effetto di riverbero. È possibile selezionare il canale di input sinistro o destro.</translation>
     </message>
     <message>
         <source>Left channel selection for reverberation</source>
-        <translation type="vanished">Canale Sinistro per il Riverbero</translation>
+        <translation>Canale Sinistro per il Riverbero</translation>
     </message>
     <message>
         <source>Right channel selection for reverberation</source>
-        <translation type="vanished">Canale Destro per il Riverbero</translation>
+        <translation>Canale Destro per il Riverbero</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="138"/>
@@ -717,11 +717,11 @@
     </message>
     <message>
         <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
-        <translation type="vanished">Il LED di stato del delay indica graficamente il valore assunto in quel momento. Se verde il delay è nei valori ottimali, se giallo indica che durante la sessione si possono verificare situazioni in cui può diventare difficile suonare, se rosso il delay è troppo alto per una sessione.</translation>
+        <translation>Il LED di stato del delay indica graficamente il valore assunto in quel momento. Se verde il delay è nei valori ottimali, se giallo indica che durante la sessione si possono verificare situazioni in cui può diventare difficile suonare, se rosso il delay è troppo alto per una sessione.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="vanished">Se il LED diventa rosso avrete difficoltà nel suonare con </translation>
+        <translation>Se il LED diventa rosso avrete difficoltà nel suonare con </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="155"/>
@@ -735,7 +735,7 @@
     </message>
     <message>
         <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
-        <translation type="vanished">Il LED di stato del buffer indica la qualità dello straming. Se verde non sono presenti anomalie nel buffer e lo stream audio non subirà interruzioni. Se rosso lo stream audio subirà interruzioni per causa di uno dei seguenti motivi:</translation>
+        <translation>Il LED di stato del buffer indica la qualità dello straming. Se verde non sono presenti anomalie nel buffer e lo stream audio non subirà interruzioni. Se rosso lo stream audio subirà interruzioni per causa di uno dei seguenti motivi:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="163"/>
@@ -744,11 +744,11 @@
     </message>
     <message>
         <source>The sound card buffer delay (buffer size) is set to too small a value.</source>
-        <translation type="vanished">Il buffer delay della scheda audio è impostato su un valore troppo basso.</translation>
+        <translation>Il buffer delay della scheda audio è impostato su un valore troppo basso.</translation>
     </message>
     <message>
         <source>The upload or download stream rate is too high for the current available internet bandwidth.</source>
-        <translation type="vanished">La quantià di dati in upload o in download è eccessiva rispetto alla banda internet disponibile.</translation>
+        <translation>La quantià di dati in upload o in download è eccessiva rispetto alla banda internet disponibile.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="53"/>
@@ -767,7 +767,7 @@
     </message>
     <message>
         <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the application.</source>
-        <translation type="vanished">Cliccando su questo pulsante il stato passa da Connesso a Disconnesso, implementa infatti la funzionalità di connessione-disconnessione del programma.</translation>
+        <translation>Cliccando su questo pulsante il stato passa da Connesso a Disconnesso, implementa infatti la funzionalità di connessione-disconnessione del programma.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="96"/>
@@ -928,12 +928,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>N&amp;o Channel Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;on Riordinare i Canali</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;City</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordina i Canali per &amp;Città di provenienza</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
@@ -977,11 +977,11 @@
     </message>
     <message>
         <source>&amp;Sort Channel Users by Name</source>
-        <translation type="vanished">&amp;Canali in ordine Alfabetico</translation>
+        <translation>&amp;Canali in ordine Alfabetico</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="vanished">Nullo</translation>
+        <translation>Nullo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="597"/>
@@ -1112,11 +1112,11 @@
     </message>
     <message>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of this jitter buffer has therefore influence on the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation type="vanished">Il Jitter Buffer compensa i ritardi della rete o della scheda audio. La sua dimensione influisce sulla qualità dello stream audio (troppe interruzioni) e sull&apos;OverAll delay (più grande è il buffer, più alto è il delay).</translation>
+        <translation>Il Jitter Buffer compensa i ritardi della rete o della scheda audio. La sua dimensione influisce sulla qualità dello stream audio (troppe interruzioni) e sull&apos;OverAll delay (più grande è il buffer, più alto è il delay).</translation>
     </message>
     <message>
         <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
-        <translation type="vanished">La dimensione del Jitter Buffer può essere settata manualmente sia per il client che per il server. Le problematiche del buffer locale sono segnalate dal LED posto sotto i Fader del Jitter buffer. Se il LED è rosso il buffer è corrotto e lo streamaudio subisce interruzioni.</translation>
+        <translation>La dimensione del Jitter Buffer può essere settata manualmente sia per il client che per il server. Le problematiche del buffer locale sono segnalate dal LED posto sotto i Fader del Jitter buffer. Se il LED è rosso il buffer è corrotto e lo streamaudio subisce interruzioni.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="50"/>
@@ -1125,11 +1125,11 @@
     </message>
     <message>
         <source>An auto setting of the jitter buffer size setting is available. If the check Auto is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If the Auto check is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation type="vanished">E&apos; disponibile la funzione di regolazine Automatica del Jitter Buffer. Se Abilitata il Jitter Buffer Locale e Remoto saranno settati in base a delle misure effettuate sulla rete e sul ritardo della scheda audio. In questo caso i fader di regolazione saranno disabilitati(non potranno essere mossi con il muose).</translation>
+        <translation>E&apos; disponibile la funzione di regolazine Automatica del Jitter Buffer. Se Abilitata il Jitter Buffer Locale e Remoto saranno settati in base a delle misure effettuate sulla rete e sul ritardo della scheda audio. In questo caso i fader di regolazione saranno disabilitati(non potranno essere mossi con il muose).</translation>
     </message>
     <message>
         <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation type="vanished">Nel caso in cui sia abilitata l&apos;impostazione automatica del jitter buffer, i buffer di rete del client locale e del server remoto sono impostati su un valore di tipo conservativo per ridurre al minimo la probabilità di dropout audio. Per modificare il ritardo / latenza audio, si consiglia di disabilitare la funzionalità di impostazione automatica e di ridurre manualmente la dimensione del JitterBuffer utilizzando i fader fino a raggiungere il limite personale per una qualità audio accettabile. L&apos;indicatore LED visualizzerà i dropout audio del Jitter Buffer locale diventando rosso.</translation>
+        <translation>Nel caso in cui sia abilitata l&apos;impostazione automatica del jitter buffer, i buffer di rete del client locale e del server remoto sono impostati su un valore di tipo conservativo per ridurre al minimo la probabilità di dropout audio. Per modificare il ritardo / latenza audio, si consiglia di disabilitare la funzionalità di impostazione automatica e di ridurre manualmente la dimensione del JitterBuffer utilizzando i fader fino a raggiungere il limite personale per una qualità audio accettabile. L&apos;indicatore LED visualizzerà i dropout audio del Jitter Buffer locale diventando rosso.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="75"/>
@@ -1253,11 +1253,11 @@
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of the </source>
-        <translation type="vanished">Settare correttamente il Buffer Delay è un operazione fondamentale su </translation>
+        <translation>Settare correttamente il Buffer Delay è un operazione fondamentale su </translation>
     </message>
     <message>
         <source> software. This setting has influence on many connection properties.</source>
-        <translation type="vanished"> Questo settaggio ha influenza su molte proprietà di connessione.</translation>
+        <translation> Questo settaggio ha influenza su molte proprietà di connessione.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="141"/>
@@ -1266,31 +1266,31 @@
     </message>
     <message>
         <source>64 samples: This is the preferred setting since it provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="vanished">64 Campioni: Per le basse latenze ma non funziona su tutte le schede audio.</translation>
+        <translation>64 Campioni: Per le basse latenze ma non funziona su tutte le schede audio.</translation>
     </message>
     <message>
         <source>128 samples: This setting should work for most available sound cards.</source>
-        <translation type="vanished">128 Campioni: Settaggio che trova compatibilità con la maggiorparte delle schede audio.</translation>
+        <translation>128 Campioni: Settaggio che trova compatibilità con la maggiorparte delle schede audio.</translation>
     </message>
     <message>
         <source>256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.</source>
-        <translation type="vanished">256 Campiono: Settaggio usato su computer connessi a reti lente o su PC obsoleti.</translation>
+        <translation>256 Campiono: Settaggio usato su computer connessi a reti lente o su PC obsoleti.</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the </source>
-        <translation type="vanished">Molte Schede audio non permettono di modificare il buffer delay direttamente tramite l&apos;interfaccia di </translation>
+        <translation>Molte Schede audio non permettono di modificare il buffer delay direttamente tramite l&apos;interfaccia di </translation>
     </message>
     <message>
         <source> software. In this case the buffer delay setting is disabled. To change the actual buffer delay, this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="vanished"> In questo caso il Buffer Delay va settato direttamente tramite il software di gestione del driver della scheda audio. Su Windows cliccare sul bottone ASIO Setup per aprire il pannello dei driver. Su linux usare il pannello di configurazione di Jack per settare la dimensione del buffer.</translation>
+        <translation> In questo caso il Buffer Delay va settato direttamente tramite il software di gestione del driver della scheda audio. Su Windows cliccare sul bottone ASIO Setup per aprire il pannello dei driver. Su linux usare il pannello di configurazione di Jack per settare la dimensione del buffer.</translation>
     </message>
     <message>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The </source>
-        <translation type="vanished">Se non è selezionata alcuna scelta e le possibilità di scelta sono disabilitate, significa che è in uso una dimensione del buffer non supportata dal driver. Il programma </translation>
+        <translation>Se non è selezionata alcuna scelta e le possibilità di scelta sono disabilitate, significa che è in uso una dimensione del buffer non supportata dal driver. Il programma </translation>
     </message>
     <message>
         <source> software will still work with this setting but with restricted performance.</source>
-        <translation type="vanished"> funzionerà ma con performance ridotte.</translation>
+        <translation> funzionerà ma con performance ridotte.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="160"/>
@@ -1304,11 +1304,11 @@
     </message>
     <message>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the </source>
-        <translation type="vanished">Se le impostazioni del buffer delay sono disabilitate, il driver audio non può modificare questa impostazione tramite </translation>
+        <translation>Se le impostazioni del buffer delay sono disabilitate, il driver audio non può modificare questa impostazione tramite </translation>
     </message>
     <message>
         <source> software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="vanished"> Su Windows premere il bottone ASIo setup per aprire il pannello di settaggio del driver. Su  Linux usare il tool di configurazione di Jack per modificare la dimensione del buffer.</translation>
+        <translation> Su Windows premere il bottone ASIo setup per aprire il pannello di settaggio del driver. Su  Linux usare il tool di configurazione di Jack per modificare la dimensione del buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>
@@ -1332,27 +1332,27 @@
     </message>
     <message>
         <source>Fancy Skin</source>
-        <translation type="vanished">Tema Fantaia</translation>
+        <translation>Tema Fantaia</translation>
     </message>
     <message>
         <source>If enabled, a fancy skin will be applied to the main window.</source>
-        <translation type="vanished">Se selezionato questo tema verrà applicato alla finestra principale.</translation>
+        <translation>Se selezionato questo tema verrà applicato alla finestra principale.</translation>
     </message>
     <message>
         <source>Fancy skin check box</source>
-        <translation type="vanished">Check Box Tema Fantasia</translation>
+        <translation>Check Box Tema Fantasia</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
-        <translation type="vanished">Mostra livelli canali audio</translation>
+        <translation>Mostra livelli canali audio</translation>
     </message>
     <message>
         <source>If enabled, each client channel will display a pre-fader level bar.</source>
-        <translation type="vanished">Se abilitato su ogni client apparirà un metet a LED prima del Fader.</translation>
+        <translation>Se abilitato su ogni client apparirà un metet a LED prima del Fader.</translation>
     </message>
     <message>
         <source>Display channel levels check box</source>
-        <translation type="vanished">Check Box per abilitare la visualizzazione dei livelli dei canali audio</translation>
+        <translation>Check Box per abilitare la visualizzazione dei livelli dei canali audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="196"/>
@@ -1361,15 +1361,15 @@
     </message>
     <message>
         <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
-        <translation type="vanished">Seleziona il numero dei canali audio che saranno usati. Si possono usare tre modalità. In modalità mono e in modalità stereo vengono usati rispettivamente uno o due canali. Nella modalità mono-in/stereo-out il segnale inviato al server è mono ma il segnale di ritorno è stereo. Questà modalità è utile se si collega lo strumento su di un canale e il microfono nell&apos;altro. In questo modo i due segnali verranno mixati su di un canale mono ma sarà possibile ascoltare il mix ricevuto dal server in stereo.</translation>
+        <translation>Seleziona il numero dei canali audio che saranno usati. Si possono usare tre modalità. In modalità mono e in modalità stereo vengono usati rispettivamente uno o due canali. Nella modalità mono-in/stereo-out il segnale inviato al server è mono ma il segnale di ritorno è stereo. Questà modalità è utile se si collega lo strumento su di un canale e il microfono nell&apos;altro. In questo modo i due segnali verranno mixati su di un canale mono ma sarà possibile ascoltare il mix ricevuto dal server in stereo.</translation>
     </message>
     <message>
         <source>Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation type="vanished">Abilitando lo streaming stereo verrà incrementato l&apos;uso dei dati in upload. Accertarsi di avere velocità in upload sufficiente per lo stream.</translation>
+        <translation>Abilitando lo streaming stereo verrà incrementato l&apos;uso dei dati in upload. Accertarsi di avere velocità in upload sufficiente per lo stream.</translation>
     </message>
     <message>
         <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
-        <translation type="vanished">Nel caso in cui si una lo streaming stereo, non sarà possibile selezionare su quale canale far intervenire il riverbero inquanto sarà applicato ad entrambi i canali Left e Right.</translation>
+        <translation>Nel caso in cui si una lo streaming stereo, non sarà possibile selezionare su quale canale far intervenire il riverbero inquanto sarà applicato ad entrambi i canali Left e Right.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="219"/>
@@ -1383,7 +1383,7 @@
     </message>
     <message>
         <source>Select the desired audio quality. A low, normal or high audio quality can be selected. The higher the audio quality, the higher the audio stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation type="vanished">Selezionare la qualità audio desiderata. Si può scegliere tra Low (Bassa), normal (standard), high (Alta). Maggiore è la qualità settata più alto sarà il valore di streaming audio. Accertarsi di avere sufficiente banda in upload.</translation>
+        <translation>Selezionare la qualità audio desiderata. Si può scegliere tra Low (Bassa), normal (standard), high (Alta). Maggiore è la qualità settata più alto sarà il valore di streaming audio. Accertarsi di avere sufficiente banda in upload.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="229"/>
@@ -1397,7 +1397,7 @@
     </message>
     <message>
         <source>The new client level setting defines the fader level of a new connected client in percent. I.e. if a new client connects to the current server, it will get the specified initial fader level if no other fader level of a previous connection of that client was already stored.</source>
-        <translation type="vanished">Settare il livello per il nuovo client definisce il livello, in percentuale, di ingresso per un nuovo utente che si connette. Un nuovo client che si connette alla sessione assume un volume uguale a quello settato se non ci sono livelli memorizzati per questo client in precedenti connessioni con lo stesso.</translation>
+        <translation>Settare il livello per il nuovo client definisce il livello, in percentuale, di ingresso per un nuovo utente che si connette. Un nuovo client che si connette alla sessione assume un volume uguale a quello settato se non ci sono livelli memorizzati per questo client in precedenti connessioni con lo stesso.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="241"/>
@@ -1411,19 +1411,19 @@
     </message>
     <message>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
-        <translation type="vanished">L&apos;indirizzo personalizzato del server centrale è un indirizzo IP o URL di  un server centrale in cui viene gestito l&apos;elenco dei server della finestra di dialogo della connessione. Questo indirizzo viene utilizzato solo se l&apos;elenco dei server personalizzati è selezionato nella finestra di dialogo della connessione.</translation>
+        <translation>L&apos;indirizzo personalizzato del server centrale è un indirizzo IP o URL di  un server centrale in cui viene gestito l&apos;elenco dei server della finestra di dialogo della connessione. Questo indirizzo viene utilizzato solo se l&apos;elenco dei server personalizzati è selezionato nella finestra di dialogo della connessione.</translation>
     </message>
     <message>
         <source>Central Server Address</source>
-        <translation type="vanished">Indirizzo Server Centrale</translation>
+        <translation>Indirizzo Server Centrale</translation>
     </message>
     <message>
         <source>The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation type="vanished">L&apos;indirizzo del server centrale è un indirizzo IP o URL in cui viene gestito l&apos;elenco dei server tramite la finestra di gestione delle connessioni. Selezionanto il tipo di indirizzo del server centrale è possibile selezionare la regione dei server online. E&apos; possibile inoltre specificare un indirizzo manuale.</translation>
+        <translation>L&apos;indirizzo del server centrale è un indirizzo IP o URL in cui viene gestito l&apos;elenco dei server tramite la finestra di gestione delle connessioni. Selezionanto il tipo di indirizzo del server centrale è possibile selezionare la regione dei server online. E&apos; possibile inoltre specificare un indirizzo manuale.</translation>
     </message>
     <message>
         <source>Default central server type combo box</source>
-        <translation type="vanished">Box per l&apos;indirizzo del Server Centrale</translation>
+        <translation>Box per l&apos;indirizzo del Server Centrale</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
@@ -1437,15 +1437,15 @@
     </message>
     <message>
         <source>The ping time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="vanished">Il Ping è il tempo richiesto dallo stream audio per essere trasmesso dal client al server e tornare indietro. Questo ritardo è introdotto dalla rete. Questo ritardo dovrebbe non superare i 20-30 ms. Se tale ritardo supera i 50-60 ms significa che la distanza dal server è eccessiva oppure che la connessione non è adeguata.</translation>
+        <translation>Il Ping è il tempo richiesto dallo stream audio per essere trasmesso dal client al server e tornare indietro. Questo ritardo è introdotto dalla rete. Questo ritardo dovrebbe non superare i 20-30 ms. Se tale ritardo supera i 50-60 ms significa che la distanza dal server è eccessiva oppure che la connessione non è adeguata.</translation>
     </message>
     <message>
         <source>The overall delay is calculated from the current ping time and the delay which is introduced by the current buffer settings.</source>
-        <translation type="vanished">L&apos;Overall è un valore calcolato in base al ping corrente e al ritardo introdotto dai settaggi del buffer.</translation>
+        <translation>L&apos;Overall è un valore calcolato in base al ping corrente e al ritardo introdotto dai settaggi del buffer.</translation>
     </message>
     <message>
         <source>The upstream rate depends on the current audio packet size and the audio compression setting. Make sure that the upstream rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using speedtest.net).</source>
-        <translation type="vanished">La velocità di trasferimento dati in upload dipende dalla dimensione dei pacchetti audio e dai settaggi di compressione dell&apos;audio. Assicurarsi di non usare valori di upstream non adeguati alla propria connessione (è possibile verificare tali valori mediante un test sulla propria connessione, usando per esempio il sito speedtest.net).</translation>
+        <translation>La velocità di trasferimento dati in upload dipende dalla dimensione dei pacchetti audio e dai settaggi di compressione dell&apos;audio. Assicurarsi di non usare valori di upstream non adeguati alla propria connessione (è possibile verificare tali valori mediante un test sulla propria connessione, usando per esempio il sito speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="274"/>
@@ -1669,7 +1669,7 @@
     </message>
     <message>
         <source>Predefined Address</source>
-        <translation type="vanished">Indirizzo Preferito</translation>
+        <translation>Indirizzo Preferito</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="588"/>
@@ -1849,11 +1849,11 @@
     </message>
     <message>
         <source>Fancy Skin</source>
-        <translation type="vanished">Tema Fantasia</translation>
+        <translation>Tema Fantasia</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
-        <translation type="vanished">Visualizza Livelli Canali</translation>
+        <translation>Visualizza Livelli Canali</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="562"/>
@@ -1862,7 +1862,7 @@
     </message>
     <message>
         <source>Central Server Address:</source>
-        <translation type="vanished">Indirizzo Server Centrale:</translation>
+        <translation>Indirizzo Server Centrale:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="594"/>
@@ -1896,11 +1896,11 @@
     </message>
     <message>
         <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
-        <translation type="vanished">La lista dei server mostra i server disponibili che si sono registrati sul server centrale. Selezionare un server dalla lista e preme connetti per entrane nella sessione. Altrimenti eseguire un doppio click sul nome del server in lista per connettersi. Se ad un server sono già connessi altri client sarà possibili vedere una lista di musicisti connessi a tale server. I server che sono registrati come permanenti sono visualizzati in grassetto.</translation>
+        <translation>La lista dei server mostra i server disponibili che si sono registrati sul server centrale. Selezionare un server dalla lista e preme connetti per entrane nella sessione. Altrimenti eseguire un doppio click sul nome del server in lista per connettersi. Se ad un server sono già connessi altri client sarà possibili vedere una lista di musicisti connessi a tale server. I server che sono registrati come permanenti sono visualizzati in grassetto.</translation>
     </message>
     <message>
         <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
-        <translation type="vanished">Si noti che potrebbe essere necessario del tempo per recuperare l&apos;elenco dei server dal server centrale. Se nelle impostazioni non è specificato alcun indirizzo di server centrale valido, non sarà disponibile alcun elenco di server.</translation>
+        <translation>Si noti che potrebbe essere necessario del tempo per recuperare l&apos;elenco dei server dal server centrale. Se nelle impostazioni non è specificato alcun indirizzo di server centrale valido, non sarà disponibile alcun elenco di server.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="57"/>
@@ -1914,15 +1914,15 @@
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
-        <translation type="vanished">L&apos;indirizzo IP o l&apos;URL del server in cui è attivo </translation>
+        <translation>L&apos;indirizzo IP o l&apos;URL del server in cui è attivo </translation>
     </message>
     <message>
         <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
-        <translation type="vanished"> come server deve essere settato qui. Una porta di connessione opzionale può essere specificata aggiungendo i due punti ed il numero della porta dopo l&apos;indirizzo. Es. example.org:</translation>
+        <translation> come server deve essere settato qui. Una porta di connessione opzionale può essere specificata aggiungendo i due punti ed il numero della porta dopo l&apos;indirizzo. Es. example.org:</translation>
     </message>
     <message>
         <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
-        <translation type="vanished">.Una lista di server recentementi usati è disponibile mediante il menù a tendina.</translation>
+        <translation>.Una lista di server recentementi usati è disponibile mediante il menù a tendina.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="49"/>
@@ -2049,7 +2049,7 @@
     </message>
     <message>
         <source>Server Name/Address</source>
-        <translation type="vanished">Nome server/Indirizzo</translation>
+        <translation>Nome server/Indirizzo</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="130"/>
@@ -2108,7 +2108,7 @@
     <name>CLicenceDlg</name>
     <message>
         <source>I &amp;agree to the above licence terms</source>
-        <translation type="vanished">&amp;Accetto i termini di licenza</translation>
+        <translation>&amp;Accetto i termini di licenza</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="524"/>
@@ -2132,71 +2132,71 @@
     </message>
     <message>
         <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="vanished">Collegandosi a questo server e accettando questo avviso, si accetta quanto segue:</translation>
+        <translation>Collegandosi a questo server e accettando questo avviso, si accetta quanto segue:</translation>
     </message>
     <message>
         <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation type="vanished">Dichiari che tutti i dati, audio o altre opere trasmessi a questo server sono di tua proprietà e creati da te o dai tuoi licenziatari e che rendi questi dati, audio o altre opere disponibili a terzi mediante la seguente Licenza Creative Commons (per ulteriori informazioni su questa licenza, vedere </translation>
+        <translation>Dichiari che tutti i dati, audio o altre opere trasmessi a questo server sono di tua proprietà e creati da te o dai tuoi licenziatari e che rendi questi dati, audio o altre opere disponibili a terzi mediante la seguente Licenza Creative Commons (per ulteriori informazioni su questa licenza, vedere </translation>
     </message>
     <message>
         <source>You are free to:</source>
-        <translation type="vanished">Sei libero di:</translation>
+        <translation>Sei libero di:</translation>
     </message>
     <message>
         <source>Share</source>
-        <translation type="vanished">Condividere</translation>
+        <translation>Condividere</translation>
     </message>
     <message>
         <source>copy and redistribute the material in any medium or format</source>
-        <translation type="vanished">copiare e ridistribuire il materiale in qualsiasi supporto o formato</translation>
+        <translation>copiare e ridistribuire il materiale in qualsiasi supporto o formato</translation>
     </message>
     <message>
         <source>Adapt</source>
-        <translation type="vanished">Adattare</translation>
+        <translation>Adattare</translation>
     </message>
     <message>
         <source>remix, transform, and build upon the material</source>
-        <translation type="vanished">remixare, trasformare e modificare il materiale</translation>
+        <translation>remixare, trasformare e modificare il materiale</translation>
     </message>
     <message>
         <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation type="vanished">Il licenziante non può revocare queste libertà fintanto che segui i termini della licenza.</translation>
+        <translation>Il licenziante non può revocare queste libertà fintanto che segui i termini della licenza.</translation>
     </message>
     <message>
         <source>Under the following terms:</source>
-        <translation type="vanished">Sotto i seguenti requisiti:</translation>
+        <translation>Sotto i seguenti requisiti:</translation>
     </message>
     <message>
         <source>Attribution</source>
-        <translation type="vanished">Attribuzione</translation>
+        <translation>Attribuzione</translation>
     </message>
     <message>
         <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation type="vanished">È necessario accreditare in modo appropriato, fornire un collegamento alla licenza e indicare se sono state apportate modifiche. Puoi farlo in modo ragionevole, ma non in modo tale da suggerire a te o al tuo utilizzo il supporto del licenziante.</translation>
+        <translation>È necessario accreditare in modo appropriato, fornire un collegamento alla licenza e indicare se sono state apportate modifiche. Puoi farlo in modo ragionevole, ma non in modo tale da suggerire a te o al tuo utilizzo il supporto del licenziante.</translation>
     </message>
     <message>
         <source>NonCommercial</source>
-        <translation type="vanished">Non Commerciale</translation>
+        <translation>Non Commerciale</translation>
     </message>
     <message>
         <source>You may not use the material for commercial purposes.</source>
-        <translation type="vanished">Non è possibile utilizzare il materiale a fini commerciali.</translation>
+        <translation>Non è possibile utilizzare il materiale a fini commerciali.</translation>
     </message>
     <message>
         <source>ShareAlike</source>
-        <translation type="vanished">Condividere allo stesso modo</translation>
+        <translation>Condividere allo stesso modo</translation>
     </message>
     <message>
         <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
-        <translation type="vanished">Se remixate, trasformate o sviluppate il materiale, dovete distribuire i vostri contributi con la stessa licenza dell&apos;originale.</translation>
+        <translation>Se remixate, trasformate o sviluppate il materiale, dovete distribuire i vostri contributi con la stessa licenza dell&apos;originale.</translation>
     </message>
     <message>
         <source>No additional restrictions</source>
-        <translation type="vanished">Nessuna restrizione aggiuntiva</translation>
+        <translation>Nessuna restrizione aggiuntiva</translation>
     </message>
     <message>
         <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
-        <translation type="vanished">Non è possibile applicare termini legali o misure tecnologiche che impediscono legalmente ad altre persone di fare qualsiasi cosa consentita dalla licenza.</translation>
+        <translation>Non è possibile applicare termini legali o misure tecnologiche che impediscono legalmente ad altre persone di fare qualsiasi cosa consentita dalla licenza.</translation>
     </message>
 </context>
 <context>
@@ -2279,15 +2279,15 @@
     </message>
     <message>
         <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living in. The city you live in and the skill level playing your instrument may also be added.</source>
-        <translation type="vanished">Scrivi qui il tuo nome o alias in modo che gli altri musicisti con cui vuoi suonare ti riconoscano. Puoi anche aggiungere un&apos;immagine dello strumento che suoni e la bandiera del paese in cui vivi. È inoltre possibile aggiungere la città in cui vivi e il tuo livello di abilità con lo strumento.</translation>
+        <translation>Scrivi qui il tuo nome o alias in modo che gli altri musicisti con cui vuoi suonare ti riconoscano. Puoi anche aggiungere un&apos;immagine dello strumento che suoni e la bandiera del paese in cui vivi. È inoltre possibile aggiungere la città in cui vivi e il tuo livello di abilità con lo strumento.</translation>
     </message>
     <message>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
-        <translation type="vanished">Quello che inserisci qui apparirà nel tuo fader del mixer quando ti connetti a un server </translation>
+        <translation>Quello che inserisci qui apparirà nel tuo fader del mixer quando ti connetti a un server </translation>
     </message>
     <message>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
-        <translation type="vanished"> questo tag verrà mostrato anche a ciascun client connesso allo stesso server. Se viene lasciato vuoto, verrà visualizzato l&apos;indirizzo IP.</translation>
+        <translation> questo tag verrà mostrato anche a ciascun client connesso allo stesso server. Se viene lasciato vuoto, verrà visualizzato l&apos;indirizzo IP.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="715"/>
@@ -2547,17 +2547,17 @@
     <message>
         <location filename="../../util.cpp" line="1103"/>
         <source>Mountain Dulcimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulcimer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1104"/>
         <source>Scratching</source>
-        <translation type="unfinished"></translation>
+        <translation>Scratching</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1105"/>
         <source>Rapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapping</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="293"/>
@@ -2589,19 +2589,19 @@
     </message>
     <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
-        <translation type="vanished">Se è selezionato l&apos;avvio in modalità minimizzata il server </translation>
+        <translation>Se è selezionato l&apos;avvio in modalità minimizzata il server </translation>
     </message>
     <message>
         <source> server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation type="vanished"> si avvierà all&apos;apertura del sistema operativo e si ridurrà automaticamente a icona sulla barra delle applicazioni.</translation>
+        <translation> si avvierà all&apos;apertura del sistema operativo e si ridurrà automaticamente a icona sulla barra delle applicazioni.</translation>
     </message>
     <message>
         <source>Show Creative Commons Licence Dialog</source>
-        <translation type="vanished">Mostra finestra di dialogo Licenza Creative Commons</translation>
+        <translation>Mostra finestra di dialogo Licenza Creative Commons</translation>
     </message>
     <message>
         <source>If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
-        <translation type="vanished">Se attivato, verrà visualizzata una finestra di dialogo con la licenza BY-NC-SA 4.0 di Creative Commons ogni volta che un nuovo client si connette al server.</translation>
+        <translation>Se attivato, verrà visualizzata una finestra di dialogo con la licenza BY-NC-SA 4.0 di Creative Commons ogni volta che un nuovo client si connette al server.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="62"/>
@@ -2610,11 +2610,11 @@
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
-        <translation type="vanished">Se il Rendi il mio server Pubblico è attivato, questo server si registrerà con il server centrale in modo che tutti gli utenti di </translation>
+        <translation>Se il Rendi il mio server Pubblico è attivato, questo server si registrerà con il server centrale in modo che tutti gli utenti di </translation>
     </message>
     <message>
         <source> users can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="vanished"> possono vedere il server nell&apos;elenco dei server nella finestra di connessione e possono connettersi ad esso. La registrazione del server viene periodicamente aggiornata per garantire che tutti i server nell&apos;elenco siano effettivamente disponibili.</translation>
+        <translation> possono vedere il server nell&apos;elenco dei server nella finestra di connessione e possono connettersi ad esso. La registrazione del server viene periodicamente aggiornata per garantire che tutti i server nell&apos;elenco siano effettivamente disponibili.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="71"/>
@@ -2623,19 +2623,19 @@
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
-        <translation type="vanished">Se il Rendi il Server Pubblico è stato attivato, mostrerà se ti sei registrato correttamente al server centrale.</translation>
+        <translation>Se il Rendi il Server Pubblico è stato attivato, mostrerà se ti sei registrato correttamente al server centrale.</translation>
     </message>
     <message>
         <source>Central Server Address</source>
-        <translation type="vanished">Indirizzo Server Centrale</translation>
+        <translation>Indirizzo Server Centrale</translation>
     </message>
     <message>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation type="vanished">L&apos;indirizzo del server centrale è l&apos;indirizzo IP o URL del server centrale in cui è registrato questo server. Qui puoi scegliere la regione locale dai server centrali predefiniti oppure puoi specificare un indirizzo manualmente.</translation>
+        <translation>L&apos;indirizzo del server centrale è l&apos;indirizzo IP o URL del server centrale in cui è registrato questo server. Qui puoi scegliere la regione locale dai server centrali predefiniti oppure puoi specificare un indirizzo manualmente.</translation>
     </message>
     <message>
         <source>Default central server type combo box</source>
-        <translation type="vanished">Box di selezione Server Centrale</translation>
+        <translation>Box di selezione Server Centrale</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="56"/>
@@ -2689,7 +2689,7 @@
     </message>
     <message>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
-        <translation type="vanished">Il nome del server identifica il tuo server nell&apos;elenco dei server sul client. Se non viene specificato un nome, viene invece visualizzato l&apos;indirizzo IP.</translation>
+        <translation>Il nome del server identifica il tuo server nell&apos;elenco dei server sul client. Se non viene specificato un nome, viene invece visualizzato l&apos;indirizzo IP.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
@@ -2889,7 +2889,7 @@
     </message>
     <message>
         <source>Displays the current status of the recorder.</source>
-        <translation type="vanished">Visualizza lo stato del registratore.</translation>
+        <translation>Visualizza lo stato del registratore.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
@@ -2931,7 +2931,7 @@
     </message>
     <message>
         <source> server </source>
-        <translation type="vanished"> server </translation>
+        <translation> server </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="344"/>
@@ -2950,7 +2950,7 @@
     </message>
     <message>
         <source>Predefined Address</source>
-        <translation type="vanished">Indirizzo Predefinito</translation>
+        <translation>Indirizzo Predefinito</translation>
     </message>
     <message>
         <location filename="../../serverdlg.h" line="54"/>
@@ -3063,7 +3063,7 @@
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
-        <translation type="vanished">Visualizza la finestra Creative Commons BY-NC-SA 4.0 Licence</translation>
+        <translation>Visualizza la finestra Creative Commons BY-NC-SA 4.0 Licence</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="288"/>
@@ -3113,7 +3113,7 @@
     </message>
     <message>
         <source>Central Server Address:</source>
-        <translation type="vanished">Indirizzo Server Centrale:</translation>
+        <translation>Indirizzo Server Centrale:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="112"/>
@@ -3132,19 +3132,19 @@
     </message>
     <message>
         <source>Enable jam recorder</source>
-        <translation type="vanished">Abilita Registrazione Jam</translation>
+        <translation>Abilita Registrazione Jam</translation>
     </message>
     <message>
         <source>New recording</source>
-        <translation type="vanished">Nuova Registrazione</translation>
+        <translation>Nuova Registrazione</translation>
     </message>
     <message>
         <source>Recordings folder</source>
-        <translation type="vanished">Cartella di Registrazione</translation>
+        <translation>Cartella di Registrazione</translation>
     </message>
     <message>
         <source>TextLabelNameVersion</source>
-        <translation type="vanished">TextLabelNameVersion</translation>
+        <translation>TextLabelNameVersion</translation>
     </message>
 </context>
 <context>

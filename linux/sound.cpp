@@ -259,11 +259,8 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         {
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
             {
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-                    (short) ( in_left[i] * _MAXSHORT );
-
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-                    (short) ( in_right[i] * _MAXSHORT );
+                pSound->vecsTmpAudioSndCrdStereo[2 * i]     = Float2Short ( in_left[i] * _MAXSHORT );
+                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Float2Short ( in_right[i] * _MAXSHORT );
             }
         }
 

@@ -36,7 +36,9 @@
 #include <QSystemTrayIcon>
 #include <QSettings>
 #include <QFileDialog>
-#include <QVersionNumber>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+# include <QVersionNumber>
+#endif
 #include "global.h"
 #include "server.h"
 #include "settings.h"

@@ -2971,22 +2971,22 @@
         <translation type="vanished">Vordefinierte Adresse</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="54"/>
+        <location filename="../../serverdlg.h" line="56"/>
         <source>Recording</source>
         <translation>Aufnahme</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="53"/>
+        <location filename="../../serverdlg.h" line="55"/>
         <source>Not recording</source>
         <translation>Keine Aufnahme</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="51"/>
+        <location filename="../../serverdlg.h" line="53"/>
         <source>Not initialised</source>
         <translation>Nicht initialisiert</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="52"/>
+        <location filename="../../serverdlg.h" line="54"/>
         <source>Not enabled</source>
         <translation>Nicht aktiviert</translation>
     </message>

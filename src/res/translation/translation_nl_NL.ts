@@ -2935,22 +2935,22 @@
         <translation type="vanished">Standaardadres</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="54"/>
+        <location filename="../../serverdlg.h" line="56"/>
         <source>Recording</source>
         <translation>Neemt op</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="53"/>
+        <location filename="../../serverdlg.h" line="55"/>
         <source>Not recording</source>
         <translation>Neemt niet op</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="51"/>
+        <location filename="../../serverdlg.h" line="53"/>
         <source>Not initialised</source>
         <translation>Niet geïnitialiseerd</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="52"/>
+        <location filename="../../serverdlg.h" line="54"/>
         <source>Not enabled</source>
         <translation>Niet ingeschakeld</translation>
     </message>

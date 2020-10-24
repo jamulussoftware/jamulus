@@ -2991,22 +2991,22 @@
         <translation type="vanished">Dirección Preestablecida</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="54"/>
+        <location filename="../../serverdlg.h" line="56"/>
         <source>Recording</source>
         <translation>Grabando</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="53"/>
+        <location filename="../../serverdlg.h" line="55"/>
         <source>Not recording</source>
         <translation>No grabando</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="51"/>
+        <location filename="../../serverdlg.h" line="53"/>
         <source>Not initialised</source>
         <translation>No inicializado</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.h" line="52"/>
+        <location filename="../../serverdlg.h" line="54"/>
         <source>Not enabled</source>
         <translation>No habilitado</translation>
     </message>

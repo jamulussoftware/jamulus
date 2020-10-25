@@ -63,11 +63,11 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
 
     // define the popup menu for the group checkbox
     pGroupPopupMenu = new QMenu ( "", pcbGroup );
-    pGroupPopupMenu->addAction ( tr ( "No grouping" ), this, SLOT ( OnGroupMenuGrpNone() ) );
-    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 1", this, SLOT ( OnGroupMenuGrp1() ) );
-    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 2", this, SLOT ( OnGroupMenuGrp2() ) );
-    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 3", this, SLOT ( OnGroupMenuGrp3() ) );
-    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " 4", this, SLOT ( OnGroupMenuGrp4() ) );
+    pGroupPopupMenu->addAction ( tr ( "&No grouping" ), this, SLOT ( OnGroupMenuGrpNone() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " &1", this, SLOT ( OnGroupMenuGrp1() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " &2", this, SLOT ( OnGroupMenuGrp2() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " &3", this, SLOT ( OnGroupMenuGrp3() ) );
+    pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + " &4", this, SLOT ( OnGroupMenuGrp4() ) );
 #if ( MAX_NUM_FADER_GROUPS != 4 )
 # error "MAX_NUM_FADER_GROUPS must be set to 4, see implementation in CChannelFader()"
 #endif

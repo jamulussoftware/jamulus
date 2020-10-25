@@ -283,8 +283,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
-        <source>No grouping</source>
-        <translation>Bez zoskupovania</translation>
+        <source>&amp;No grouping</source>
+        <translation>&amp;Bez zoskupovania</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="67"/>

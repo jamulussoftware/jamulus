@@ -253,8 +253,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
-        <source>No grouping</source>
-        <translation>Non Assegnato</translation>
+        <source>&amp;No grouping</source>
+        <translation>&amp;Non Assegnato</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="67"/>

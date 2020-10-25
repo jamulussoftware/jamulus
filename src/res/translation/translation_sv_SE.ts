@@ -214,8 +214,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
-        <source>No grouping</source>
-        <translation>Ingen gruppering</translation>
+        <source>&amp;No grouping</source>
+        <translation>&amp;Ingen gruppering</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="67"/>

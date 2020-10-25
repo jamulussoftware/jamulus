@@ -284,7 +284,7 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
-        <source>No grouping</source>
+        <source>&amp;No grouping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

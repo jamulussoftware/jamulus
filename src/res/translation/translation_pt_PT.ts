@@ -347,8 +347,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
-        <source>No grouping</source>
-        <translation>Sem grupo</translation>
+        <source>&amp;No grouping</source>
+        <translation>&amp;Sem grupo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="67"/>

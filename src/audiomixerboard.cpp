@@ -1202,6 +1202,8 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
 
 void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
 {
+    QMutexLocker locker ( &Mutex );
+
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecpChanFader[i]->IsVisible() )

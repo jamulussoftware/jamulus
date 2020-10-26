@@ -773,12 +773,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>N&amp;o Channel Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>I&amp;ngen kanalstortering</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;City</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortera Användarna efter S&amp;taden</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
@@ -2233,17 +2233,17 @@
     <message>
         <location filename="../../util.cpp" line="1103"/>
         <source>Mountain Dulcimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mountain Dulcimer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1104"/>
         <source>Scratching</source>
-        <translation type="unfinished"></translation>
+        <translation>Scratching</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1105"/>
         <source>Rapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapp</translation>
     </message>
 </context>
 <context>

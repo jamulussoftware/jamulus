@@ -212,6 +212,7 @@ public:
     void        SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
     void        SetRecorderState ( const ERecorderState newRecorderState );
+    void        SetAllFaderLevelsToNewClientLevel();
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea

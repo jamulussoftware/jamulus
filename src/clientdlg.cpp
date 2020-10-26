@@ -322,6 +322,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClearAllStoredSoloSettings = pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
         SLOT ( OnClearAllStoredSoloSettings() ) );
 
+    pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
+        SLOT ( OnSetAllFadersToNewClientLevel() ) );
+
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );

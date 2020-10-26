@@ -1200,6 +1200,21 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
     }
 }
 
+void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
+{
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        if ( vecpChanFader[i]->IsVisible() )
+        {
+            // the value is in percent -> convert range, also use the group
+            // update flag to make sure the group values are all set to the
+            // same fader level now
+            vecpChanFader[i]->SetFaderLevel (
+                pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX, true );
+        }
+    }
+}
+
 void CAudioMixerBoard::SetRemoteFaderIsMute ( const int  iChannelIdx,
                                               const bool bIsMute )
 {

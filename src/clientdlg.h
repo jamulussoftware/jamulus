@@ -157,6 +157,7 @@ public slots:
     void OnSortChannelsByGroupID()    { MainMixerBoard->SetFaderSorting ( ST_BY_GROUPID ); }
     void OnSortChannelsByCity()       { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
     void OnClearAllStoredSoloSettings() { pSettings->vecStoredFaderIsSolo.Reset ( false ); }
+    void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );

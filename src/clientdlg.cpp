@@ -323,7 +323,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         SLOT ( OnClearAllStoredSoloSettings() ) );
 
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
-        SLOT ( OnSetAllFadersToNewClientLevel() ) );
+        SLOT ( OnSetAllFadersToNewClientLevel() ), QKeySequence ( Qt::CTRL + Qt::Key_L ) );
 
 
     // Main menu bar -----------------------------------------------------------

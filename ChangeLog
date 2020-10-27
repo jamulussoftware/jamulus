@@ -6,6 +6,8 @@
 
 - added menu entry "Set All Faders to New Client Level" (#622)
 
+- isolate a channel from the group temporarily with shift-click-drag (#695)
+
 
 
 

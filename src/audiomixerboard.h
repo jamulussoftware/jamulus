@@ -126,7 +126,8 @@ protected:
     EGUIDesign   eDesign;
 
 public slots:
-    void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }
+    void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, QGuiApplication::keyboardModifiers() == Qt::ShiftModifier ); /* isolate a channel from the group temporarily with shift-click-drag (#695) */ }
+
     void OnPanValueChanged ( int value );
     void OnMuteStateChanged ( int value );
     void OnGroupStateChanged ( int );

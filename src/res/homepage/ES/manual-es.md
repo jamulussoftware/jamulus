@@ -63,9 +63,9 @@ Puedes filtrar la lista por nombre de servidor o ubicación. Para solo mostrar l
 Si conoces la dirección IP o URL de un servidor, puedes conectarte a él utilizando el campo de Nombre/Dirección del Servidor. Se puede añadir un número de puerto opcional tras la dirección IP o URL utilizando dos puntos como separador, por ej.
 jamulus.dyndns.org:22124. El campo también mostrará una lista de los servidores utilizados recientemente.
 
-### Botón de Mutearme Yo
+### Botón de Silenciarme Yo
 
-Corta tu flujo de audio al servidor de modo que te escucharás y verás tus propios niveles de audio, pero otros músicos no. Ten en cuenta que otros músicos no sabrán si te has muteado.
+Corta tu flujo de audio al servidor de modo que te escucharás y verás tus propios niveles de audio, pero otros músicos no. Ten en cuenta que otros músicos no sabrán si te has silenciado.
 
 ### Efecto Reverb
 
@@ -90,11 +90,11 @@ El vúmetro muestra el nivel de entrada en el servidor - esto es, el sonido envi
 
 Si has configurado tu Canal de Audio a Estéreo o Salida Estéreo en tu Configuración, también verás un control de paneo.
 
-Si ves un icono de "mute" sobre un canal, significa que ese músico nopuede escucharte. Puede que te hayan muteado, aplicado 'solo' a uno o más canales sin incluir el tuyo, o han bajado tu fader en su mezcla a cero.
+Si ves un icono de "silenciado" sobre un canal, significa que ese músico no puede escucharte. Puede que te hayan silenciado, aplicado 'solo' a uno o más canales sin incluir el tuyo, o han bajado tu fader en su mezcla a cero.
 
-Utilizar el **botón de Mute** evita que el canal indicado se escuche en tu mezcla local. Ten en cuenta que cuando muteas a un músico, verán un icono de "muteado" sobre tu fader para indicar que no puedes escucharle. Ten en cuenta también que continuarás viendo mover su vúmetro si el sonido del músico muteado llega al servidor. La posición del fader para ellos en tu mezcla no se verá afectada.
+Utilizar el **botón de Mute** evita que el canal indicado se escuche en tu mezcla local. Ten en cuenta que cuando muteas a un músico, verán un icono de "silenciado" sobre tu fader para indicar que no puedes escucharle. Ten en cuenta también que continuarás viendo mover su vúmetro si el sonido del músico muteado llega al servidor. La posición del fader para ellos en tu mezcla no se verá afectada.
 
-El **botón de Solo** te permite escuchar uno o más músicos asilados de los demás. Los que no lo tengan aplicado estarán silenciados. Ten en cuenta que aquellos músicos que no lo tienen aplicado verán el icono de "muteado" sobre tu fader.
+El **botón de Solo** te permite escuchar uno o más músicos asilados de los demás. Los que no lo tengan aplicado estarán silenciados. Ten en cuenta que aquellos músicos que no lo tienen aplicado verán el icono de "silenciado" sobre tu fader.
 
 Los canales se muestran de izquierda a derecha en el orden en el que se conectan los clientes hasta que se marchan, momento en el cual su "posición" es ocupada por cada nueva conexión. Puedes cambiar el orden utilizando la opción Editar en el menú de la aplicación.
 
@@ -114,7 +114,7 @@ Ventana de Configuración
 ![Sound card device Windows](soundcarddevicewindows.png)
 ![Sound card device Mac](soundcarddevicemac.png)
 
-El driver ASIO (tarjeta de audio) se puede seleccionar utilizando Jamulusen el sistema operativo Windows. Si el driver ASIO no es válido se mostrará un mensaje de error y el anterior driver válido será seleccionado. En Mac, se puede seleccionar el hardware de entrada y salida.
+El driver ASIO (tarjeta de audio) se puede seleccionar utilizando Jamulus en el sistema operativo Windows. Si el driver ASIO no es válido se mostrará un mensaje de error y el anterior driver válido será seleccionado. En Mac, se puede seleccionar el hardware de entrada y salida.
 
 ### Mapeo canales entrada/salida
 

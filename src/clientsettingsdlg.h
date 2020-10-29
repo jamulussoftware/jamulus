@@ -110,4 +110,5 @@ protected:
 signals:
     void GUIDesignChanged();
     void AudioChannelsChanged();
+    void CustomCentralServerAddrChanged();
 };

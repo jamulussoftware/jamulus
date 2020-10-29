@@ -31,7 +31,7 @@
 #include <QTimer>
 #include <QLocale>
 #include "global.h"
-#include "client.h"
+#include "settings.h"
 #include "multicolorled.h"
 #include "ui_connectdlgbase.h"
 
@@ -48,12 +48,9 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
     Q_OBJECT
 
 public:
-    CConnectDlg ( CClient*        pNCliP,
-                  const bool      bNewShowCompleteRegList,
-                  QWidget*        parent = nullptr );
-
-    void Init ( const CVector<QString>& vstrIPAddresses );
-    void SetCentralServerAddress ( const QString strNewCentralServerAddr ) { strCentralServerAddress = strNewCentralServerAddr; }
+    CConnectDlg ( CClientSettings* pNSetP,
+                  const bool       bNewShowCompleteRegList,
+                  QWidget*         parent = nullptr );
 
     void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
     bool GetShowAllMusicians() { return bShowAllMusicians; }
@@ -78,7 +75,6 @@ public:
     bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
-    void    RequestServerList();
 
 protected:
     virtual void showEvent ( QShowEvent* );
@@ -89,28 +85,29 @@ protected:
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
     void             UpdateListFilter();
     void             ShowAllMusicians ( const bool bState );
+    void             RequestServerList();
 
-    CClient*     pClient;
+    CClientSettings* pSettings;
 
-    QTimer       TimerPing;
-    QTimer       TimerReRequestServList;
-    QString      strCentralServerAddress;
-    CHostAddress CentralServerAddress;
-    QString      strSelectedAddress;
-    QString      strSelectedServerName;
-    bool         bShowCompleteRegList;
-    bool         bServerListReceived;
-    bool         bReducedServerListReceived;
-    bool         bServerListItemWasChosen;
-    bool         bListFilterWasActive;
-    bool         bShowAllMusicians;
+    QTimer           TimerPing;
+    QTimer           TimerReRequestServList;
+    CHostAddress     CentralServerAddress;
+    QString          strSelectedAddress;
+    QString          strSelectedServerName;
+    bool             bShowCompleteRegList;
+    bool             bServerListReceived;
+    bool             bReducedServerListReceived;
+    bool             bServerListItemWasChosen;
+    bool             bListFilterWasActive;
+    bool             bShowAllMusicians;
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
-    void OnCentServAddrTypeChanged ( int iTypeIdx ) { pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) ); }
+    void OnCentServAddrTypeChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
+    void OnCustomCentralServerAddrChanged();
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

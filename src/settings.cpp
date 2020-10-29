@@ -453,19 +453,18 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     }
 
     // central server address
-    pClient->SetServerListCentralServerAddress (
-        GetIniSetting ( IniXMLDocument, "client", "centralservaddr" ) );
+    strCentralServerAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr" );
 
     // central server address type
     if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
          0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {
-        pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
+        eCentralServerAddressType = static_cast<ECSAddType> ( iValue );
     }
     else
     {
         // if no address type is given, choose one from the operating system locale
-        pClient->SetCentralServerAddressType ( AT_DEFAULT );
+        eCentralServerAddressType = AT_DEFAULT;
     }
 
 // TODO compatibility to old version
@@ -474,7 +473,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
     // only the case that manual was set in old ini must be considered
     if ( !bValue )
     {
-        pClient->SetCentralServerAddressType ( AT_CUSTOM );
+        eCentralServerAddressType = AT_CUSTOM;
     }
 }
 
@@ -696,11 +695,11 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // central server address
     PutIniSetting ( IniXMLDocument, "client", "centralservaddr",
-        pClient->GetServerListCentralServerAddress() );
+        strCentralServerAddress );
 
     // central server address type
     SetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
-        static_cast<int> ( pClient->GetCentralServerAddressType() ) );
+        static_cast<int> ( eCentralServerAddressType ) );
 
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "client", "winposmain_base64",

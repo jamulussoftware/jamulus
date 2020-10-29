@@ -134,12 +134,6 @@ public:
     EAudChanConf GetAudioChannels() const { return eAudioChannelConf; }
     void SetAudioChannels ( const EAudChanConf eNAudChanConf );
 
-    void SetServerListCentralServerAddress ( const QString& sNCentServAddr ) { strCentralServerAddress = sNCentServAddr; }
-    QString GetServerListCentralServerAddress() { return strCentralServerAddress; }
-
-    void SetCentralServerAddressType ( const ECSAddType eNCSAT );
-    ECSAddType GetCentralServerAddressType() { return eCentralServerAddressType; }
-
     int  GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
@@ -359,9 +353,6 @@ protected:
     bool                    bJitterBufferOK;
     bool                    bNuteMeInPersonalMix;
 
-    QString                 strCentralServerAddress;
-    ECSAddType              eCentralServerAddressType;
-
     // server settings
     int                     iServerSockBufNumFrames;
 
@@ -430,5 +421,4 @@ signals:
 
     void Disconnected();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
-    void CentralServerAddressTypeChanged();
 };

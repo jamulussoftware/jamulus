@@ -62,8 +62,6 @@ CClient::CClient ( const quint16  iPortNumber,
     bEnableOPUS64                    ( false ),
     bJitterBufferOK                  ( true ),
     bNuteMeInPersonalMix             ( bNMuteMeInPersonalMix ),
-    strCentralServerAddress          ( "" ),
-    eCentralServerAddressType        ( AT_DEFAULT ),
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
     pSignalHandler                   ( CSignalHandler::getSingletonP() )
 {
@@ -348,16 +346,6 @@ int CClient::EvaluatePingMessage ( const int iMs )
 {
     // calculate difference between received time in ms and current time in ms
     return PreciseTime.elapsed() - iMs;
-}
-
-void CClient::SetCentralServerAddressType ( const ECSAddType eNCSAT )
-{
-    if ( eCentralServerAddressType != eNCSAT )
-    {
-        // update type and emit message to update the server list, too
-        eCentralServerAddressType = eNCSAT;
-        emit CentralServerAddressTypeChanged();
-    }
 }
 
 void CClient::SetDoAutoSockBufSize ( const bool bValue )

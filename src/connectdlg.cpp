@@ -26,12 +26,11 @@
 
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( CClient*        pNCliP,
-                           const bool      bNewShowCompleteRegList,
-                           QWidget*        parent )
+CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
+                           const bool       bNewShowCompleteRegList,
+                           QWidget*         parent )
     : QDialog                    ( parent, Qt::Dialog ),
-      pClient                    ( pNCliP ),
-      strCentralServerAddress    ( "" ),
+      pSettings                  ( pNSetP ),
       strSelectedAddress         ( "" ),
       strSelectedServerName      ( "" ),
       bShowCompleteRegList       ( bNewShowCompleteRegList ),
@@ -99,6 +98,18 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
     // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
     cbxServerAddr->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxServerAddr->setInsertPolicy ( QComboBox::NoInsert );
+
+    // load stored IP addresses in combo box
+    cbxServerAddr->clear();
+    cbxServerAddr->clearEditText();
+
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
+    {
+        if ( !pSettings->vstrIPAddress[iLEIdx].isEmpty() )
+        {
+            cbxServerAddr->addItem ( pSettings->vstrIPAddress[iLEIdx] );
+        }
+    }
 
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
@@ -191,21 +202,6 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
         this, &CConnectDlg::OnTimerReRequestServList );
 }
 
-void CConnectDlg::Init ( const CVector<QString>& vstrIPAddresses )
-{
-    // load stored IP addresses in combo box
-    cbxServerAddr->clear();
-    cbxServerAddr->clearEditText();
-
-    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
-    {
-        if ( !vstrIPAddresses[iLEIdx].isEmpty() )
-        {
-            cbxServerAddr->addItem ( vstrIPAddresses[iLEIdx] );
-        }
-    }
-}
-
 void CConnectDlg::showEvent ( QShowEvent* )
 {
     // on opening the connect dialg, we always want to request a
@@ -230,13 +226,14 @@ void CConnectDlg::RequestServerList()
 
     // update list combo box (disable events to avoid a signal)
     cbxCentServAddrType->blockSignals ( true );
-    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
+    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
     cbxCentServAddrType->blockSignals ( false );
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it
-    if ( NetworkUtil().ParseNetworkAddress ( strCentralServerAddress,
+    if ( NetworkUtil().ParseNetworkAddress ( NetworkUtil::GetCentralServerAddress ( pSettings->eCentralServerAddressType,
+                                                                                    pSettings->strCentralServerAddress ),
                                              CentralServerAddress ) )
     {
         // send the request for the server list
@@ -253,6 +250,13 @@ void CConnectDlg::hideEvent ( QHideEvent* )
     // if window is closed, stop timers
     TimerPing.stop();
     TimerReRequestServList.stop();
+}
+
+void CConnectDlg::OnCentServAddrTypeChanged ( int iTypeIdx )
+{
+    // store the new central server address type and request new list
+    pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( iTypeIdx );
+    RequestServerList();
 }
 
 void CConnectDlg::OnTimerReRequestServList()
@@ -531,6 +535,15 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     // in the server address combo box, a text was changed, remove selection
     // in the server list (if any)
     lvwServers->clearSelection();
+}
+
+void CConnectDlg::OnCustomCentralServerAddrChanged()
+{
+    // only update list if the custom server list is selected
+    if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
+    {
+        RequestServerList();
+    }
 }
 
 void CConnectDlg::ShowAllMusicians ( const bool bState )

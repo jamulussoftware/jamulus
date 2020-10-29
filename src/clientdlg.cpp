@@ -41,7 +41,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     bMIDICtrlUsed       ( iCtrlMIDIChannel != INVALID_MIDI_CH ),
     ClientSettingsDlg   ( pNCliP, pNSetP, parent ),
     ChatDlg             ( parent ),
-    ConnectDlg          ( pNCliP, bNewShowComplRegConnList, parent ),
+    ConnectDlg          ( pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole     ( pNCliP, parent ),
     MusicianProfileDlg  ( pNCliP, parent )
 {
@@ -434,9 +434,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::Disconnected,
         this, &CClientDlg::OnDisconnected );
 
-    QObject::connect ( pClient, &CClient::CentralServerAddressTypeChanged,
-        this, &CClientDlg::OnCentralServerAddressTypeChanged );
-
     QObject::connect ( pClient, &CClient::ChatTextReceived,
         this, &CClientDlg::OnChatTextReceived );
 
@@ -488,6 +485,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::AudioChannelsChanged,
         this, &CClientDlg::OnAudioChannelsChanged );
+
+    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::CustomCentralServerAddrChanged,
+        &ConnectDlg, &CConnectDlg::OnCustomCentralServerAddrChanged );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanGain,
         this, &CClientDlg::OnChangeChanGain );
@@ -758,18 +758,6 @@ void CClientDlg::OnSaveChannelSetup()
     }
 }
 
-void CClientDlg::OnCentralServerAddressTypeChanged()
-{
-    // if the server list is shown and the server type was changed, update the list
-    if ( ConnectDlg.isVisible() )
-    {
-        ConnectDlg.SetCentralServerAddress ( NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
-                                                                                    pClient->GetServerListCentralServerAddress() ) );
-
-        ConnectDlg.RequestServerList();
-    }
-}
-
 void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                           QString                strVersion )
 {
@@ -911,11 +899,6 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 
 void CClientDlg::ShowConnectionSetupDialog()
 {
-    // init the connect dialog
-    ConnectDlg.Init ( pSettings->vstrIPAddress );
-    ConnectDlg.SetCentralServerAddress ( NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
-                                                                                pClient->GetServerListCentralServerAddress() ) );
-
     // show connect dialog
     bConnectDlgWasShown = true;
     ConnectDlg.show();

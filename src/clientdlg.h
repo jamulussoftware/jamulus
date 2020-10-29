@@ -223,7 +223,6 @@ public slots:
 
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
-    void OnCentralServerAddressTypeChanged();
     void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
 
     void OnRecorderStateReceived ( ERecorderState eRecorderState )

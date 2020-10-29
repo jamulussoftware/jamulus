@@ -145,6 +145,8 @@ public:
         iNewClientFaderLevel        ( 100 ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType            ( ST_NO_SORT ),
+        strCentralServerAddress     ( "" ),
+        eCentralServerAddressType   ( AT_DEFAULT ),
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
         vecWindowPosProfile         ( ), // empty array
@@ -170,6 +172,8 @@ public:
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
+    QString          strCentralServerAddress;
+    ECSAddType       eCentralServerAddressType;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;

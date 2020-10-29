@@ -335,7 +335,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     cbxLanguage->Init ( pSettings->strLanguage );
 
     // custom central server address
-    edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
+    edtCentralServerAddress->setText ( pSettings->strCentralServerAddress );
 
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
@@ -655,9 +655,9 @@ void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
 
 void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 {
-    // store new setting in the client
-    pClient->SetServerListCentralServerAddress (
-        NetworkUtil::FixAddress ( edtCentralServerAddress->text() ) );
+    // store new setting and inform the connect dialog about the change
+    pSettings->strCentralServerAddress = NetworkUtil::FixAddress ( edtCentralServerAddress->text() );
+    emit CustomCentralServerAddrChanged();
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )

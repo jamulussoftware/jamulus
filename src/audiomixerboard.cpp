@@ -494,6 +494,19 @@ void CChannelFader::SendPanValueToServer ( const int iPan )
 
 void CChannelFader::OnPanValueChanged ( int value )
 {
+    // on shift-click the pan shall reset to 0 L/R (#707)
+    if ( QGuiApplication::keyboardModifiers() == Qt::ShiftModifier )
+    {
+        // correct the value to the center position
+        value = AUD_MIX_PAN_MAX / 2;
+
+        // set the GUI control in the center position while deactivating
+        // the signals to avoid an infinite loop
+        pPan->blockSignals ( true );
+        pPan->setValue     ( value );
+        pPan->blockSignals ( false );
+    }
+
     pPan->setAccessibleName ( QString::number ( value ) );
     SendPanValueToServer ( value );
 }

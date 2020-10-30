@@ -8,6 +8,8 @@
 
 - isolate a channel from the group temporarily with shift-click-drag (#695)
 
+- on shift-click the pan reset to 0 L/R (#707)
+
 
 
 

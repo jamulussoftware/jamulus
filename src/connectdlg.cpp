@@ -99,18 +99,6 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
     cbxServerAddr->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxServerAddr->setInsertPolicy ( QComboBox::NoInsert );
 
-    // load stored IP addresses in combo box
-    cbxServerAddr->clear();
-    cbxServerAddr->clearEditText();
-
-    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
-    {
-        if ( !pSettings->vstrIPAddress[iLEIdx].isEmpty() )
-        {
-            cbxServerAddr->addItem ( pSettings->vstrIPAddress[iLEIdx] );
-        }
-    }
-
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
 #ifdef ANDROID
@@ -204,6 +192,18 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
 
 void CConnectDlg::showEvent ( QShowEvent* )
 {
+    // load stored IP addresses in combo box
+    cbxServerAddr->clear();
+    cbxServerAddr->clearEditText();
+
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
+    {
+        if ( !pSettings->vstrIPAddress[iLEIdx].isEmpty() )
+        {
+            cbxServerAddr->addItem ( pSettings->vstrIPAddress[iLEIdx] );
+        }
+    }
+
     // on opening the connect dialg, we always want to request a
     // new updated server list per definition
     RequestServerList();

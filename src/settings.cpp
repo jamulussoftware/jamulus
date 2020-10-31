@@ -452,8 +452,16 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
-    // central server address
-    strCentralServerAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr" );
+// TODO compatibility to old version (< 3.6.1)
+vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralservaddr" );
+
+    // central server addresses
+    for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
+    {
+        vstrCentralServerAddress[iIdx] =
+            GetIniSetting ( IniXMLDocument, "client",
+                            QString ( "centralservaddr%1" ).arg ( iIdx ), "" );
+    }
 
     // central server address type
     if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
@@ -693,9 +701,13 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetNumericIniSet ( IniXMLDocument, "client", "audioquality",
         static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // central server address
-    PutIniSetting ( IniXMLDocument, "client", "centralservaddr",
-        strCentralServerAddress );
+    // central server addresses
+    for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
+    {
+        PutIniSetting ( IniXMLDocument, "client",
+                        QString ( "centralservaddr%1" ).arg ( iIdx ),
+                        vstrCentralServerAddress[iIdx] );
+    }
 
     // central server address type
     SetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",

@@ -229,11 +229,12 @@ void CConnectDlg::RequestServerList()
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
     cbxCentServAddrType->blockSignals ( false );
 
-    // get the IP address of the central server (using the ParseNetworAddress
+    // Get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
-    // time to do it
+    // time to do it. Note that in case of custom central server address we
+    // use the first entry in the vector per definition.
     if ( NetworkUtil().ParseNetworkAddress ( NetworkUtil::GetCentralServerAddress ( pSettings->eCentralServerAddressType,
-                                                                                    pSettings->strCentralServerAddress ),
+                                                                                    pSettings->vstrCentralServerAddress[0] ),
                                              CentralServerAddress ) )
     {
         // send the request for the server list

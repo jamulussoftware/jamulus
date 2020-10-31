@@ -564,12 +564,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="edtCentralServerAddress">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QComboBox" name="cbxCentralServerAddress">
+        <property name="editable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -735,7 +732,7 @@
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxSkin</tabstop>
   <tabstop>cbxLanguage</tabstop>
-  <tabstop>edtCentralServerAddress</tabstop>
+  <tabstop>cbxCentralServerAddress</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

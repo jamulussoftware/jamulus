@@ -77,10 +77,11 @@ protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
     void    UpdateSoundChannelSelectionFrame();
+    void    UpdateCustomCentralServerComboBox();
     QString GenSndCrdBufferDelayString ( const int     iFrameSize,
                                          const QString strAddText = "" );
 
-    virtual void showEvent ( QShowEvent* ) { UpdateDisplay(); }
+    virtual void showEvent ( QShowEvent* );
 
     CClient*         pClient;
     CClientSettings* pSettings;

@@ -305,7 +305,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     {
         cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
     }
-    cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
+    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
 
     // init sound card channel selection frame
     UpdateSoundChannelSelectionFrame();
@@ -387,7 +387,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
     // combo boxes
-    QObject::connect ( cbxSoundcard, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+    QObject::connect ( cbxSoundcard, &QComboBox::textActivated,
         this, &CClientSettingsDlg::OnSoundcardActivated );
 
     QObject::connect ( cbxLInChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
@@ -588,9 +588,9 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
     UpdateJitterBufferFrame();
 }
 
-void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
+void CClientSettingsDlg::OnSoundcardActivated ( const QString strSndDevName )
 {
-    const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
+    const QString strError = pClient->SetSndCrdDev ( strSndDevName );
 
     if ( !strError.isEmpty() )
     {
@@ -601,7 +601,7 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
             tr ( "Ok" ), nullptr );
 
         // recover old selection
-        cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
+        cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
     }
     UpdateSoundChannelSelectionFrame();
     UpdateDisplay();

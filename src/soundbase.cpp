@@ -40,7 +40,7 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
     strDriverNames[0] = strSystemDriverTechniqueName;
 
     // set current device
-    lCurDev = 0; // default device
+    strCurDevName = ""; // default device
 }
 
 void CSoundBase::Stop()
@@ -56,34 +56,27 @@ void CSoundBase::Stop()
 /******************************************************************************\
 * Device handling                                                              *
 \******************************************************************************/
-QString CSoundBase::SetDev ( const int iNewDev )
+QString CSoundBase::SetDev ( const QString strDevName )
 {
     // init return parameter with "no error"
     QString strReturn = "";
 
-    // first check if valid input parameter
-    if ( iNewDev >= lNumDevs )
-    {
-        // we should actually never get here...
-        return tr ( "Invalid device selection." );
-    }
-
     // check if an ASIO driver was already initialized
-    if ( lCurDev != INVALID_INDEX )
+    if ( !strCurDevName.isEmpty() )
     {
         // a device was already been initialized and is used, first clean up
         // driver
         UnloadCurrentDriver();
 
-        const QString strErrorMessage = LoadAndInitializeDriver ( iNewDev, false );
+        const QString strErrorMessage = LoadAndInitializeDriver ( strDevName, false );
 
         if ( !strErrorMessage.isEmpty() )
         {
-            if ( iNewDev != lCurDev )
+            if ( strDevName != strCurDevName )
             {
                 // loading and initializing the new driver failed, go back to
                 // original driver and display error message
-                LoadAndInitializeDriver ( lCurDev, false );
+                LoadAndInitializeDriver ( strCurDevName, false );
             }
             else
             {
@@ -113,14 +106,14 @@ QString CSoundBase::SetDev ( const int iNewDev )
         // init flag for "load any driver"
         bool bTryLoadAnyDriver = false;
 
-        if ( iNewDev != INVALID_INDEX )
+        if ( !strDevName.isEmpty() )
         {
             // This is the first time a driver is to be initialized, we first
             // try to load the selected driver, if this fails, we try to load
             // the first available driver in the system. If this fails, too, we
             // throw an error that no driver is available -> it does not make
             // sense to start the software if no audio hardware is available.
-            if ( !LoadAndInitializeDriver ( iNewDev, false ).isEmpty() )
+            if ( !LoadAndInitializeDriver ( strDevName, false ).isEmpty() )
             {
                 // loading and initializing the new driver failed, try to find
                 // at least one usable driver
@@ -181,13 +174,13 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 
     // load and initialize first valid ASIO driver
     bool bValidDriverDetected = false;
-    int  iCurDriverIdx        = 0;
+    int  iDriverCnt           = 0;
 
     // try all available drivers in the system ("lNumDevs" devices)
-    while ( !bValidDriverDetected && ( iCurDriverIdx < lNumDevs ) )
+    while ( !bValidDriverDetected && ( iDriverCnt < lNumDevs ) )
     {
         // try to load and initialize current driver, store error message
-        const QString strCurError = LoadAndInitializeDriver ( iCurDriverIdx, bOpenDriverSetup );
+        const QString strCurError = LoadAndInitializeDriver ( GetDeviceName ( iDriverCnt ), bOpenDriverSetup );
 
         vsErrorList.append ( strCurError );
 
@@ -197,14 +190,14 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
             bValidDriverDetected = true;
 
             // store ID of selected driver
-            lCurDev = iCurDriverIdx;
+            strCurDevName = GetDeviceName ( iDriverCnt );
 
             // empty error list shows that init was successful
             vsErrorList.clear();
         }
 
         // try next driver
-        iCurDriverIdx++;
+        iDriverCnt++;
     }
 
     return vsErrorList;

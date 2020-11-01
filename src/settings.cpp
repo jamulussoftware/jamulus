@@ -343,21 +343,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     }
 
     // sound card selection
-    // special case with this setting: the sound card initialization depends
-    // on this setting call, therefore, if no setting file parameter could
-    // be retrieved, the sound card is initialized with a default setting
-    // defined here
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
-         1, MAX_NUMBER_SOUND_CARDS, iValue ) )
-    {
-        pClient->SetSndCrdDev ( iValue );
-    }
-    else
-    {
-        // use "INVALID_INDEX" to tell the sound card driver that
-        // no device selection was done previously
-        pClient->SetSndCrdDev ( INVALID_INDEX );
-    }
+    pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
 
     // sound card channel mapping settings: make sure these settings are
     // set AFTER the sound card device is set, otherwise the settings are
@@ -655,8 +641,8 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
         pClient->IsReverbOnLeftChan() );
 
     // sound card selection
-    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
-        pClient->GetSndCrdDev() );
+    PutIniSetting ( IniXMLDocument, "client", "auddev_base64",
+        ToBase64 ( pClient->GetSndCrdDev() ) );
 
     // sound card left input channel mapping
     SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",

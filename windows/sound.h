@@ -78,8 +78,8 @@ public:
     virtual float   GetInOutLatencyMs() { return fInOutLatencyMs; }
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( int  iIdx,
-                                               bool bOpenDriverSetup );
+    virtual QString  LoadAndInitializeDriver ( QString strDriverName,
+                                               bool    bOpenDriverSetup );
     virtual void     UnloadCurrentDriver();
     int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString          CheckDeviceCapabilities();

@@ -68,6 +68,7 @@ public:
     int            iCoreAudioBufferSizeStereo;
     AudioDeviceID  CurrentAudioInputDeviceID;
     AudioDeviceID  CurrentAudioOutputDeviceID;
+    long           lCurDev;
     int            iNumInChan;
     int            iNumInChanPlusAddChan; // includes additional "added" channels
     int            iNumOutChan;
@@ -91,7 +92,7 @@ public:
     CVector<int>   vecNumOutBufChan;
 
 protected:
-    virtual QString LoadAndInitializeDriver ( int iIdx, bool );
+    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();

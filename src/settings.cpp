@@ -453,14 +453,19 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     }
 
 // TODO compatibility to old version (< 3.6.1)
+// NOTE that the strCurAddr and "check for empty" can be removed if compatibility mode is removed
 vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralservaddr" );
 
     // central server addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
-        vstrCentralServerAddress[iIdx] =
-            GetIniSetting ( IniXMLDocument, "client",
-                            QString ( "centralservaddr%1" ).arg ( iIdx ), "" );
+        const QString strCurAddr = GetIniSetting ( IniXMLDocument, "client",
+                                                   QString ( "centralservaddr%1" ).arg ( iIdx ), "" );
+
+        if ( !strCurAddr.isEmpty() )
+        {
+            vstrCentralServerAddress[iIdx] = strCurAddr;
+        }
     }
 
     // central server address type

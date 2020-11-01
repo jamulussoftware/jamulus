@@ -480,7 +480,7 @@ vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "central
         eCentralServerAddressType = AT_DEFAULT;
     }
 
-// TODO compatibility to old version
+// TODO compatibility to old version (<3.4.7)
 if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
 {
     // only the case that manual was set in old ini must be considered

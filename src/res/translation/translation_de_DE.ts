@@ -2576,7 +2576,7 @@
     <message>
         <location filename="../../util.cpp" line="1104"/>
         <source>Scratching</source>
-        <translation>Scratcher</translation>
+        <translation>Scratching</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1105"/>

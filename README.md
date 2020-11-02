@@ -31,7 +31,7 @@ Installation and Getting Started
 Help
 ----
 
-Official documentation for Jamulus is on the [Jamulus homepage](https://jamulus.io/wiki)
+Official documentation for Jamulus is on the [Jamulus homepage](https://jamulus.io)
 
 See also the [discussion forums](https://sourceforge.net/p/llcon/discussion). If you have issues, feel free to ask for help there.
 

@@ -564,9 +564,9 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
             // register server
             SetSvrRegStatus (  SRS_REQUESTED );
 
-            pConnLessProtocol->CreateCLRegisterServerMes ( SlaveCurCentServerHostAddress,
-                                                           SlaveCurLocalHostAddress,
-                                                           ServerList[0] );
+            pConnLessProtocol->CreateCLRegisterServerExMes ( SlaveCurCentServerHostAddress,
+                                                             SlaveCurLocalHostAddress,
+                                                             ServerList[0] );
         }
         else
         {

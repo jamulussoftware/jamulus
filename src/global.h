@@ -232,7 +232,7 @@ LED bar:      lbr
 #define MAX_LEN_SERVER_NAME              20
 #define MAX_LEN_IP_ADDRESS               15
 #define MAX_LEN_SERVER_CITY              20
-#define MAX_LEN_VERSION_TEXT             20
+#define MAX_LEN_VERSION_TEXT             30
 
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \

@@ -33,6 +33,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          CProtocol*     pNConLProt )
     : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
       eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
+      strMinServerVersion       ( "" ), // disable version check with empty version
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
       iSvrRegRetries            ( 0 )
@@ -105,7 +106,14 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
         for ( int iIdx = 0; iIdx < slWhitelistAddresses.size(); iIdx++ )
         {
-            if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
+            // check for special case: [version]
+            if ( ( slWhitelistAddresses.at ( iIdx ).length() > 2 ) &&
+                 ( slWhitelistAddresses.at ( iIdx ).left ( 1 ) == "[" ) &&
+                 ( slWhitelistAddresses.at ( iIdx ).right ( 1 ) == "]" ) )
+            {
+                strMinServerVersion = slWhitelistAddresses.at ( iIdx ).mid ( 1, slWhitelistAddresses.at ( iIdx ).length() - 2 );
+            }
+            else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
             {
                 vWhiteList << CurWhiteListAddress;
                 tsConsoleStream << "Whitelist entry added: " << CurWhiteListAddress.toString() << endl;
@@ -288,25 +296,29 @@ void CServerListManager::OnTimerPollList()
     }
 }
 
-void CServerListManager::CentralServerRegisterServerEx ( const CHostAddress&          InetAddr,
-                                                         const CHostAddress&          LInetAddr,
-                                                         const CServerCoreInfo&       ServerInfo,
-                                                         const COSUtil::EOpSystemType ,
-                                                         const QString&               )
-{
-// TODO right now we do not make use of the additional operating system and version number informations
-CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
-}
-
 void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                                        const CHostAddress&    LInetAddr,
-                                                       const CServerCoreInfo& ServerInfo )
+                                                       const CServerCoreInfo& ServerInfo,
+                                                       const QString          strVersion )
 {
     if ( bIsCentralServer && bEnabled )
     {
         tsConsoleStream << "Requested to register entry for "
                         << InetAddr.toString() << " (" << LInetAddr.toString() << ")"
                         << ": " << ServerInfo.strName << endl;
+
+        // check for minimum server version
+        if ( !strMinServerVersion.isEmpty() )
+        {
+#if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) )
+            if ( strVersion.isEmpty() ||
+                 QVersionNumber::compare ( QVersionNumber::fromString ( strMinServerVersion ), QVersionNumber::fromString ( strVersion ) ) > 0 )
+            {
+                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
+                return; // leave function early, i.e., we do not register this server
+            }
+#endif
+        }
 
         // check for whitelist (it is enabled if it is not empty per definition)
         if ( !vWhiteList.empty() )

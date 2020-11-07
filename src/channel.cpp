@@ -37,6 +37,8 @@ CChannel::CChannel ( const bool bNIsServer ) :
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
     bIsServer              ( bNIsServer ),
+    bIsAdmin               ( false ),
+    bIsBlocked             ( false ),
     iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
     SignalLevelMeter       ( false, 0.5 ) // server mode with mono out and faster smoothing
 {
@@ -292,6 +294,27 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
     }
 
     return ReturnValue; // set error flag
+}
+
+// education methods
+void CChannel::SetAdmin ( const bool bSIsAdmin ) // admin
+{
+    bIsAdmin = bSIsAdmin;
+}
+
+bool CChannel::IsAdmin ()
+{
+    return bIsAdmin;
+}
+
+void CChannel::SetBlocked( const bool bSIsBlocked ) // user blocked
+{
+    bIsBlocked = bSIsBlocked;
+}
+
+bool CChannel::IsBlocked()
+{
+    return bIsBlocked;
 }
 
 void CChannel::SetGain ( const int   iChanID,

@@ -51,6 +51,10 @@
 // no valid channel number
 #define INVALID_CHANNEL_ID                  ( MAX_NUM_CHANNELS + 1 )
 
+// Edu-Mode features
+#define EDU_MODE_FEATURE_CHAT            0
+#define EDU_MODE_FEATURE_WAITINGRM       1
+
 
 /* Classes ********************************************************************/
 #if ( defined ( WIN32 ) || defined ( _WIN32 ) )
@@ -128,7 +132,13 @@ public:
 
     void OnChatTextReceivedCh ( QString strChatText )
     {
-        CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+        if ( strChatText.startsWith("/c/") )
+        {
+          InterpretAndExecuteChatCommand ( slotId - 1, strChatText );
+        } else
+        {
+          CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+        }
     }
 
     void OnMuteStateHasChangedCh ( int iChanID, bool bIsMuted )
@@ -147,8 +157,15 @@ protected:
 
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID ) = 0;
 
+    // edu mode
+    virtual bool EduModeIsFeatureDisabled( const int iFeature ) = 0;
+    virtual void EduModeSetFeatureDisabled( const int iFeature, const bool bFeatureStatus ) = 0;
+
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText ) = 0;
+
+    virtual void InterpretAndExecuteChatCommand ( const int      iCurChanID,
+                                                  const QString& strChatText ) = 0;
 
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
@@ -178,10 +195,12 @@ public:
               const QString&     strServerListFilter,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
+              const QString&     strEduModePassword,
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
               const bool         bDisableRecording,
+              const bool         bEduModeEnabled,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -203,7 +222,8 @@ public:
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr )
         { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-
+    bool EduModeEnabled()
+         { return bEduModeEnabled; }
     // Jam recorder ------------------------------------------------------------
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
@@ -281,8 +301,16 @@ protected:
     virtual void CreateAndSendChanListForAllConChannels();
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID );
 
+    // edu mode features
+
+    virtual bool EduModeIsFeatureDisabled ( const int iFeature );
+    virtual void EduModeSetFeatureDisabled ( const int iFeature, const bool bFeatureStatus );
+
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
+
+    virtual void InterpretAndExecuteChatCommand ( const int      iCurChanID,
+                                                  const QString& strChatText );
 
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
@@ -327,6 +355,14 @@ protected:
                                           const CVector<int>&              vecNumAudioChannels,
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
+    // edu mode
+    bool                       bEduModeEnabled;
+    // true = disabled
+    bool bEduModeFeatures[2] =
+    {
+      false, // EDU_MODE_FEATURE_CHAT
+      false // EDU_MODE_FEATURE_WAITINGRM
+    };
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -336,6 +372,9 @@ protected:
     QMutex                     Mutex;
     QMutex                     MutexWelcomeMessage;
     bool                       bChannelIsNowDisconnected;
+
+    // edu mode
+    QString                    strEduModePassword;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];

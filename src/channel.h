@@ -111,6 +111,13 @@ public:
     void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
+    // education methods
+    void SetAdmin( const bool bIsAdmin );
+    bool IsAdmin();
+
+    void SetBlocked ( const bool bIsBlocked );
+    bool IsBlocked();
+    
     void SetGain ( const int iChanID, const float fNewGain );
     float GetGain ( const int iChanID );
     float GetFadeInGain() { return static_cast<float> ( iFadeInCnt ) / iFadeInCntMax; }
@@ -229,6 +236,10 @@ protected:
 
     bool                    bIsEnabled;
     bool                    bIsServer;
+
+    // education vars
+    bool                    bIsAdmin;
+    bool                    bIsBlocked;
 
     int                     iNetwFrameSizeFact;
     int                     iNetwFrameSize;

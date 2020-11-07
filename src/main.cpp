@@ -74,6 +74,8 @@ int main ( int argc, char** argv )
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
+    bool         bEduModeEnabled             = false;
+    bool         bAllowRegisterEduMode       = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
@@ -86,6 +88,7 @@ int main ( int argc, char** argv )
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
     QString      strServerListFilter         = "";
+    QString      strEduModePassword          = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = APP_NAME;
 
@@ -425,6 +428,33 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Education mode password ---------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--edumodepassword", // no short argument
+                                 "--edumodepassword",
+                                 strArgument ) )
+        {
+            strEduModePassword = strArgument;
+            bEduModeEnabled    = true;
+            tsConsole << "- enabld Edu-Mode with password " << endl;
+            CommandLineOptions << "--edumodepassword";
+            continue;
+        }
+
+        // Allow edu mode servers on central server ----------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--allowedumode",
+                               "--allowedumode" ) )
+        {
+            bAllowRegisterEduMode = true;
+            tsConsole << "- Edu-Mode Servers can register on this central server" << endl;
+            CommandLineOptions << "--allowedumode";
+            continue;
+        }
 
         // Server welcome message ----------------------------------------------
         if ( GetStringArgument ( tsConsole,
@@ -689,10 +719,12 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             strEduModePassword,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
+                             bEduModeEnabled,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -788,6 +820,8 @@ QString UsageArguments ( char **argv )
         "                        (or 'localhost' to be a central server)\n"
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
+        "  --edumodepassword     enable Edu-Mode and set following admin password\n"
+        "  --allowedumode        allow servers in Edu-Mode to register on this central server\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         show an agreement window before users can connect\n"

@@ -684,6 +684,7 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
+    src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \

@@ -31,17 +31,38 @@
 /* Implementation *************************************************************/
 CMultiColorLED::CMultiColorLED ( QWidget* parent )
     : QLabel ( parent ),
-    BitmCubeDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
-    BitmCubeGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
-    BitmCubeGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
-    BitmCubeYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
-    BitmCubeRed      ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
+    BitmCubeDisabled    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
+    BitmCubeGrey        ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
+    BitmCubeGreen       ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
+    BitmCubeYellow      ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
+    BitmCubeRed         ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) ),
+    BitmIndicatorGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorGreen.png" ) ),
+    BitmIndicatorYellow ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorYellow.png" ) ),
+    BitmIndicatorRed    ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorRed.png" ) )
 {
     // set init bitmap
     setPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
 
-    // init color flags
+    // set default type (also resets the multicolor LED)
+    SetType ( MT_LED );
+}
+
+void CMultiColorLED::SetType ( const EType eNType )
+{
+    if ( eNType == MT_LED )
+    {
+        pBitmGreen  = &BitmCubeGreen;
+        pBitmYellow = &BitmCubeYellow;
+        pBitmRed    = &BitmCubeRed;
+    }
+    else
+    {
+        pBitmGreen  = &BitmIndicatorGreen;
+        pBitmYellow = &BitmIndicatorYellow;
+        pBitmRed    = &BitmIndicatorRed;
+    }
+
     Reset();
 }
 
@@ -71,7 +92,7 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         // red
         if ( eColorFlag != RL_RED )
         {
-            setPixmap ( BitmCubeRed );
+            setPixmap ( *pBitmRed );
             setAccessibleDescription ( tr ( "Red" ) );
             eColorFlag = RL_RED;
         }
@@ -81,7 +102,7 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         // yellow
         if ( eColorFlag != RL_YELLOW )
         {
-            setPixmap ( BitmCubeYellow );
+            setPixmap ( *pBitmYellow );
             setAccessibleDescription ( tr ( "Yellow" ) );
             eColorFlag = RL_YELLOW;
         }
@@ -91,7 +112,7 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         // green
         if ( eColorFlag != RL_GREEN )
         {
-            setPixmap ( BitmCubeGreen );
+            setPixmap ( *pBitmGreen );
             setAccessibleDescription ( tr ( "Green" ) );
             eColorFlag = RL_GREEN;
         }

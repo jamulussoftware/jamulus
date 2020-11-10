@@ -50,10 +50,17 @@ public:
         RL_RED
     };
 
+    enum EType
+    {
+        MT_LED,
+        MT_INDICATOR
+    };
+
     CMultiColorLED ( QWidget* parent = nullptr );
 
     void Reset();
     void SetLight ( const ELightColor eNewStatus );
+    void SetType ( const EType eNType );
 
 protected:
     ELightColor eColorFlag;
@@ -61,15 +68,22 @@ protected:
     virtual void changeEvent ( QEvent* curEvent );
     void SetColor ( const ELightColor eNewColorFlag );
 
-    QPixmap BitmCubeDisabled;
-    QPixmap BitmCubeGrey;
-    QPixmap BitmCubeGreen;
-    QPixmap BitmCubeYellow;
-    QPixmap BitmCubeRed;
+    QPixmap  BitmCubeDisabled;
+    QPixmap  BitmCubeGrey;
+    QPixmap  BitmCubeGreen;
+    QPixmap  BitmCubeYellow;
+    QPixmap  BitmCubeRed;
+    QPixmap  BitmIndicatorGreen;
+    QPixmap  BitmIndicatorYellow;
+    QPixmap  BitmIndicatorRed;
 
-    int     iUpdateTime;
+    QPixmap* pBitmGreen;
+    QPixmap* pBitmYellow;
+    QPixmap* pBitmRed;
 
-    bool    bFlagRedLi;
-    bool    bFlagGreenLi;
-    bool    bFlagYellowLi;
+    int      iUpdateTime;
+
+    bool     bFlagRedLi;
+    bool     bFlagGreenLi;
+    bool     bFlagYellowLi;
 };

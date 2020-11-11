@@ -68,22 +68,19 @@ protected:
     virtual void changeEvent ( QEvent* curEvent );
     void SetColor ( const ELightColor eNewColorFlag );
 
-    QPixmap  BitmCubeDisabled;
-    QPixmap  BitmCubeGrey;
-    QPixmap  BitmCubeGreen;
-    QPixmap  BitmCubeYellow;
-    QPixmap  BitmCubeRed;
-    QPixmap  BitmIndicatorGreen;
-    QPixmap  BitmIndicatorYellow;
-    QPixmap  BitmIndicatorRed;
+    QPixmap BitmCubeDisabled;
+    QPixmap BitmCubeGrey;
+    QPixmap BitmCubeGreen;
+    QPixmap BitmCubeYellow;
+    QPixmap BitmCubeRed;
+    QPixmap BitmIndicatorGreen;
+    QPixmap BitmIndicatorYellow;
+    QPixmap BitmIndicatorRed;
 
-    QPixmap* pBitmGreen;
-    QPixmap* pBitmYellow;
-    QPixmap* pBitmRed;
+    int     iUpdateTime;
+    EType   eType;
 
-    int      iUpdateTime;
-
-    bool     bFlagRedLi;
-    bool     bFlagGreenLi;
-    bool     bFlagYellowLi;
+    bool    bFlagRedLi;
+    bool    bFlagGreenLi;
+    bool    bFlagYellowLi;
 };

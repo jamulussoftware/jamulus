@@ -242,7 +242,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pLoadChannelSetupAction = pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this,
         SLOT ( OnLoadChannelSetup() ) );
 
-    pSaveChannelSetupAction = pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this,
+    pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this,
         SLOT ( OnSaveChannelSetup() ) );
 
     pFileMenu->addSeparator();
@@ -751,8 +751,9 @@ void CClientDlg::OnSaveChannelSetup()
 
     if ( !strFileName.isEmpty() )
     {
-// TODO The client has to be stopped to store current faders.
-// TODO Should we automatically stop/save/re-start the connection?
+        // first store all current fader settings (in case we are in an active connection
+        // right now) and then save the information in the settings struct in the file
+        MainMixerBoard->StoreAllFaderSettings();
         pSettings->SaveFaderSettings ( strFileName );
     }
 }
@@ -1088,9 +1089,8 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
                 // menu entries which are disabled during a session
                 pClearAllStoredSoloSettings->setEnabled ( false );
 
-// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
+// TODO the client has to be stopped to load current faders -> as a quick hack disable menu if running
 pLoadChannelSetupAction->setEnabled ( false );
-pSaveChannelSetupAction->setEnabled ( false );
             }
         }
 
@@ -1127,9 +1127,8 @@ void CClientDlg::Disconnect()
         // menu entries which are disabled during a session
         pClearAllStoredSoloSettings->setEnabled ( true );
 
-// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
+// TODO the client has to be stopped to load current faders -> as a quick hack disable menu if running
 pLoadChannelSetupAction->setEnabled ( true );
-pSaveChannelSetupAction->setEnabled ( true );
     }
 
     // change connect button text to "connect"

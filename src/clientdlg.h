@@ -111,7 +111,6 @@ protected:
     void               UpdateDisplay();
 
     QAction*           pLoadChannelSetupAction;
-    QAction*           pSaveChannelSetupAction;
     QAction*           pClearAllStoredSoloSettings;
 
     CClientSettingsDlg ClientSettingsDlg;

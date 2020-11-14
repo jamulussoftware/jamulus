@@ -867,11 +867,11 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     pGroupBoxLayout->setContentsMargins ( 0, 0, 0, 1 ); // note: to avoid problems at the bottom, use a small margin for that
 
     // add the group box to the scroll area
-    pScrollArea->setMinimumWidth ( 200 ); // at least two faders shall be visible
-    pScrollArea->setWidget ( pMixerWidget );
+    pScrollArea->setMinimumWidth    ( 200 ); // at least two faders shall be visible
+    pScrollArea->setWidget          ( pMixerWidget );
     pScrollArea->setWidgetResizable ( true ); // make sure it fills the entire scroll area
-    pScrollArea->setFrameShape ( QFrame::NoFrame );
-    pGroupBoxLayout->addWidget ( pScrollArea );
+    pScrollArea->setFrameShape      ( QFrame::NoFrame );
+    pGroupBoxLayout->addWidget      ( pScrollArea );
 
 
     // Connections -------------------------------------------------------------

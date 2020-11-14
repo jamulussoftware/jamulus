@@ -1324,9 +1324,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         int iTempListCnt = 0;
 
         // put new value on the top of the list
-        const int iOldIdx =
-            pSettings->vecStoredFaderTags.StringFiFoWithCompare ( pChanFader->GetReceivedName(),
-                                                                  true );
+        const int iOldIdx = pSettings->vecStoredFaderTags.StringFiFoWithCompare ( pChanFader->GetReceivedName() );
 
         // current fader level and solo state is at the top of the list
         pSettings->vecStoredFaderLevels[0]  = pChanFader->GetFaderLevel();

@@ -114,8 +114,6 @@ protected:
     virtual void       dropEvent      ( QDropEvent*      Event ) { MangeDragNDrop ( Event, false ); }
     void               UpdateDisplay();
 
-    QAction*           pClearAllStoredSoloSettings;
-
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
@@ -158,7 +156,7 @@ public slots:
     void OnSortChannelsByInstrument() { MainMixerBoard->SetFaderSorting ( ST_BY_INSTRUMENT ); }
     void OnSortChannelsByGroupID()    { MainMixerBoard->SetFaderSorting ( ST_BY_GROUPID ); }
     void OnSortChannelsByCity()       { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
-    void OnClearAllStoredSoloSettings() { pSettings->vecStoredFaderIsSolo.Reset ( false ); }
+    void OnClearAllStoredSoloSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
 
     void OnSettingsStateChanged ( int value );

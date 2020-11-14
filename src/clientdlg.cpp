@@ -319,7 +319,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pEditMenu->addSeparator();
 
-    pClearAllStoredSoloSettings = pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
+    pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
         SLOT ( OnClearAllStoredSoloSettings() ) );
 
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
@@ -756,6 +756,15 @@ void CClientDlg::OnConnectDisconBut()
     }
 }
 
+void CClientDlg::OnClearAllStoredSoloSettings()
+{
+    // if we are in an active connection, we first have to store all fader settings in
+    // the settings struct, clear the solo states and then apply the settings again
+    MainMixerBoard->StoreAllFaderSettings();
+    pSettings->vecStoredFaderIsSolo.Reset ( false );
+    MainMixerBoard->LoadAllFaderSettings();
+}
+
 void CClientDlg::OnLoadChannelSetup()
 {
     QString strFileName = QFileDialog::getOpenFileName ( this,
@@ -1114,9 +1123,6 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             if ( !pClient->IsRunning() )
             {
                 pClient->Start();
-
-                // menu entries which are disabled during a session
-                pClearAllStoredSoloSettings->setEnabled ( false );
             }
         }
 
@@ -1149,9 +1155,6 @@ void CClientDlg::Disconnect()
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
-
-        // menu entries which are disabled during a session
-        pClearAllStoredSoloSettings->setEnabled ( true );
     }
 
     // change connect button text to "connect"

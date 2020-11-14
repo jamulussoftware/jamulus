@@ -19,6 +19,8 @@
 - saving and loading mixer settings is now possible during an active connection and a
   mixer settings file can be loaded with drag'n'drop (#706)
 
+- menu entry Clear All Stored Solo Settings is now enabled during an active connection
+
 - bug fix: the fader group property was not correctly loaded from the ini file
 
 

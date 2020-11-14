@@ -239,7 +239,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
 
-    pLoadChannelSetupAction = pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this,
+    pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this,
         SLOT ( OnLoadChannelSetup() ) );
 
     pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this,
@@ -736,9 +736,9 @@ void CClientDlg::OnLoadChannelSetup()
 
     if ( !strFileName.isEmpty() )
     {
-// TODO The client has to be stopped to apply recovered settings after re-connect.
-// TODO Should we automatically stop/load/re-start the connection?
+        // first update the settings struct and then update the mixer panel
         pSettings->LoadFaderSettings ( strFileName );
+        MainMixerBoard->LoadAllFaderSettings();
     }
 }
 
@@ -1088,9 +1088,6 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
 
                 // menu entries which are disabled during a session
                 pClearAllStoredSoloSettings->setEnabled ( false );
-
-// TODO the client has to be stopped to load current faders -> as a quick hack disable menu if running
-pLoadChannelSetupAction->setEnabled ( false );
             }
         }
 
@@ -1126,9 +1123,6 @@ void CClientDlg::Disconnect()
 
         // menu entries which are disabled during a session
         pClearAllStoredSoloSettings->setEnabled ( true );
-
-// TODO the client has to be stopped to load current faders -> as a quick hack disable menu if running
-pLoadChannelSetupAction->setEnabled ( true );
     }
 
     // change connect button text to "connect"

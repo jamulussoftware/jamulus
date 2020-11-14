@@ -16,6 +16,7 @@
 
 - changed RYG indicator lights with colour-blind compensation, created by geheimerEichkater (#57)
 
+- saving and loading mixer settings is now possible during an active connection
 
 
 TODO #611 -> use disconnect messages at random time to try to reproduce the issue

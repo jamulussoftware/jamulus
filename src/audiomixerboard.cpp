@@ -1149,7 +1149,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                         bool bStoredFaderIsMute;
                         int  iGroupID;
 
-                        if ( GetStoredFaderSettings ( vecChanInfo[j],
+                        if ( GetStoredFaderSettings ( vecChanInfo[j].strName,
                                                       iStoredFaderLevel,
                                                       iStoredPanValue,
                                                       bStoredFaderIsSolo,
@@ -1237,6 +1237,34 @@ void CAudioMixerBoard::StoreAllFaderSettings()
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         StoreFaderSettings ( vecpChanFader[i] );
+    }
+}
+
+void CAudioMixerBoard::LoadAllFaderSettings()
+{
+    QMutexLocker locker ( &Mutex );
+
+    int  iStoredFaderLevel;
+    int  iStoredPanValue;
+    bool bStoredFaderIsSolo;
+    bool bStoredFaderIsMute;
+    int  iGroupID;
+
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        if ( GetStoredFaderSettings ( vecpChanFader[i]->GetReceivedName(),
+                                      iStoredFaderLevel,
+                                      iStoredPanValue,
+                                      bStoredFaderIsSolo,
+                                      bStoredFaderIsMute,
+                                      iGroupID ) )
+        {
+            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
+            vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
+            vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
+            vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
+            vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
+        }
     }
 }
 
@@ -1364,20 +1392,20 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
     }
 }
 
-bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
-                                                int&                iStoredFaderLevel,
-                                                int&                iStoredPanValue,
-                                                bool&               bStoredFaderIsSolo,
-                                                bool&               bStoredFaderIsMute,
-                                                int&                iGroupID )
+bool CAudioMixerBoard::GetStoredFaderSettings ( const QString& strName,
+                                                int&           iStoredFaderLevel,
+                                                int&           iStoredPanValue,
+                                                bool&          bStoredFaderIsSolo,
+                                                bool&          bStoredFaderIsMute,
+                                                int&           iGroupID )
 {
     // only do the check if the name string is not empty
-    if ( !ChanInfo.strName.isEmpty() )
+    if ( !strName.isEmpty() )
     {
         for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             // check if fader text is already known in the list
-            if ( !pSettings->vecStoredFaderTags[iIdx].compare ( ChanInfo.strName ) )
+            if ( !pSettings->vecStoredFaderTags[iIdx].compare ( strName ) )
             {
                 // copy stored settings values
                 iStoredFaderLevel  = pSettings->vecStoredFaderLevels[iIdx];

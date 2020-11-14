@@ -110,7 +110,6 @@ protected:
     virtual void       closeEvent ( QCloseEvent* Event );
     void               UpdateDisplay();
 
-    QAction*           pLoadChannelSetupAction;
     QAction*           pClearAllStoredSoloSettings;
 
     CClientSettingsDlg ClientSettingsDlg;

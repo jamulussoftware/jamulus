@@ -215,6 +215,7 @@ public:
     void        SetRecorderState ( const ERecorderState newRecorderState );
     void        SetAllFaderLevelsToNewClientLevel();
     void        StoreAllFaderSettings();
+    void        LoadAllFaderSettings();
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea
@@ -234,12 +235,12 @@ protected:
 
     void ChangeFaderOrder ( const EChSortType eChSortType );
 
-    bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
-                                  int&                iStoredFaderLevel,
-                                  int&                iStoredPanValue,
-                                  bool&               bStoredFaderIsSolo,
-                                  bool&               bStoredFaderIsMute,
-                                  int&                iGroupID );
+    bool GetStoredFaderSettings ( const QString& strName,
+                                  int&           iStoredFaderLevel,
+                                  int&           iStoredPanValue,
+                                  bool&          bStoredFaderIsSolo,
+                                  bool&          bStoredFaderIsMute,
+                                  int&           iGroupID );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();

@@ -586,6 +586,35 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     Event->accept();
 }
 
+void CClientDlg::MangeDragNDrop ( QDropEvent* Event,
+                                  const bool  bCheckAccept )
+{
+    // we only want to use drag'n'drop with file URLs
+    QListIterator<QUrl> UrlIterator ( Event->mimeData()->urls() );
+
+    while ( UrlIterator.hasNext() )
+    {
+        const QString strFileNameWithPath = UrlIterator.next().toLocalFile();
+
+        // check all given URLs and if any has the correct suffix
+        if ( !strFileNameWithPath.isEmpty() && ( QFileInfo ( strFileNameWithPath ).suffix() == MIX_SETTINGS_FILE_SUFFIX ) )
+        {
+            if ( bCheckAccept )
+            {
+                // only accept drops of supports file types
+                Event->acceptProposedAction();
+            }
+            else
+            {
+                // load the first valid settings file and leave the loop
+                pSettings->LoadFaderSettings ( strFileNameWithPath );
+                MainMixerBoard->LoadAllFaderSettings();
+                break;
+            }
+        }
+    }
+}
+
 void CClientDlg::UpdateAudioFaderSlider()
 {
     // update slider and label of audio fader
@@ -732,7 +761,7 @@ void CClientDlg::OnLoadChannelSetup()
     QString strFileName = QFileDialog::getOpenFileName ( this,
                                                          tr ( "Select Channel Setup File" ),
                                                          "",
-                                                         "*.jch" );
+                                                         QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
 
     if ( !strFileName.isEmpty() )
     {
@@ -747,7 +776,7 @@ void CClientDlg::OnSaveChannelSetup()
     QString strFileName = QFileDialog::getSaveFileName ( this,
                                                          tr ( "Select Channel Setup File" ),
                                                          "",
-                                                         "*.jch" );
+                                                         QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
 
     if ( !strFileName.isEmpty() )
     {

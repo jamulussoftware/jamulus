@@ -95,6 +95,8 @@ protected:
     void               Connect ( const QString& strSelectedAddress,
                                  const QString& strMixerBoardLabel );
     void               Disconnect();
+    void               MangeDragNDrop ( QDropEvent* Event,
+                                        const bool  bCheckAccept );
 
     CClient*           pClient;
     CClientSettings*   pSettings;
@@ -107,7 +109,9 @@ protected:
     QTimer             TimerStatus;
     QTimer             TimerPing;
 
-    virtual void       closeEvent ( QCloseEvent* Event );
+    virtual void       closeEvent     ( QCloseEvent*     Event );
+    virtual void       dragEnterEvent ( QDragEnterEvent* Event ) { MangeDragNDrop ( Event, true ); }
+    virtual void       dropEvent      ( QDropEvent*      Event ) { MangeDragNDrop ( Event, false ); }
     void               UpdateDisplay();
 
     QAction*           pClearAllStoredSoloSettings;

@@ -391,9 +391,10 @@ void CChannelFader::Reset()
     plblInstrument->setToolTipDuration  ( iToolTipDurMs );
     plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
 
-    bOtherChannelIsSolo = false;
-    bIsMyOwnFader       = false;
-    bIsMutedAtServer    = false;
+    bOtherChannelIsSolo  = false;
+    bIsMyOwnFader        = false;
+    bIsMutedAtServer     = false;
+    iRunningNewClientCnt = 0;
 
     iGroupID = INVALID_INDEX;
     UpdateGroupIDDependencies();
@@ -823,21 +824,22 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
-    QGroupBox       ( parent ),
-    pSettings       ( nullptr ),
-    bDisplayPans    ( false ),
-    bIsPanSupported ( false ),
-    bNoFaderVisible ( true ),
-    iMyChannelID    ( INVALID_INDEX ),
-    strServerName   ( "" ),
-    eRecorderState  ( RS_UNDEFINED ),
-    eChSortType     ( ST_NO_SORT )
+    QGroupBox            ( parent ),
+    pSettings            ( nullptr ),
+    bDisplayPans         ( false ),
+    bIsPanSupported      ( false ),
+    bNoFaderVisible      ( true ),
+    iMyChannelID         ( INVALID_INDEX ),
+    iRunningNewClientCnt ( 0 ),
+    strServerName        ( "" ),
+    eRecorderState       ( RS_UNDEFINED ),
+    eChSortType          ( ST_NO_SORT )
 {
     // add group box and hboxlayout
     QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
     QWidget*     pMixerWidget    = new QWidget(); // will be added to the scroll area which is then the parent
     pScrollArea                  = new CMixerBoardScrollArea ( this );
-    pMainLayout                  = new QHBoxLayout ( pMixerWidget );
+    pMainLayout                  = new QGridLayout ( pMixerWidget );
 
     setAccessibleName ( "Personal Mix at the Server groupbox" );
     setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + ":</b> " + tr (
@@ -856,12 +858,12 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
         vecpChanFader[i] = new CChannelFader ( this );
         vecpChanFader[i]->Hide();
 
-        // add fader frame to audio mixer board layout
+        // add fader frame to the audio mixer board layout
         pMainLayout->addWidget ( vecpChanFader[i]->GetMainWidget() );
     }
 
-    // insert horizontal spacer
-    pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
+    // insert horizontal spacer (at position MAX_NUM_CHANNELS+1 which is index MAX_NUM_CHANNELS)
+    pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ), 0, MAX_NUM_CHANNELS );
 
     // set margins of the layout to zero to get maximum space for the controls
     pGroupBoxLayout->setContentsMargins ( 0, 0, 0, 1 ); // note: to avoid problems at the bottom, use a small margin for that
@@ -982,11 +984,12 @@ void CAudioMixerBoard::HideAll()
         vecpChanFader[i]->Hide();
     }
 
-    // set flags
-    bIsPanSupported = false;
-    bNoFaderVisible = true;
-    eRecorderState  = RS_UNDEFINED;
-    iMyChannelID    = INVALID_INDEX;
+    // initialize flags and other parameters
+    bIsPanSupported      = false;
+    bNoFaderVisible      = true;
+    eRecorderState       = RS_UNDEFINED;
+    iMyChannelID         = INVALID_INDEX;
+    iRunningNewClientCnt = 0; // reset running counter on new server connection
 
     // use original order of channel (by server ID)
     ChangeFaderOrder ( ST_NO_SORT );
@@ -1025,7 +1028,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
             PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
                                               vecpChanFader[i]->GetReceivedName().toLower(), i );
         }
-        else // ST_BY_GROUPID
+        else if ( eChSortType == ST_BY_GROUPID )
         {
             if ( vecpChanFader[i]->GetGroupID() == INVALID_INDEX )
             {
@@ -1037,20 +1040,23 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
                 PairList << QPair<QString, int> ( QString::number ( vecpChanFader[i]->GetGroupID() ), i );
             }
         }
+        else // ST_NO_SORT
+        {
+            // per definition for no sort: faders are sorted in the order they appeared (note that we
+            // pad to a total of 11 characters with zeros to make sure the sorting is done correctly)
+            PairList << QPair<QString, int> ( QString ( "%1" ).arg (
+                vecpChanFader[i]->GetRunningNewClientCnt(), 11, 10, QLatin1Char ( '0' ) ), i );
+        }
     }
 
-    // if requested, sort the channels
-    if ( eChSortType != ST_NO_SORT )
-    {
-        std::stable_sort ( PairList.begin(), PairList.end() );
-    }
+    // sort the channels according to the first of the pair
+    std::stable_sort ( PairList.begin(), PairList.end() );
 
-    // add channels to the layout in the new order (since we insert on the left, we
-    // have to use a backwards counting loop), note that it is not required to remove
+    // add channels to the layout in the new order, note that it is not required to remove
     // the widget from the layout first but it is moved to the new position automatically
-    for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        pMainLayout->insertWidget ( 0, vecpChanFader[PairList[i].second]->GetMainWidget() );
+        pMainLayout->addWidget ( vecpChanFader[PairList[i].second]->GetMainWidget(), 0, i );
     }
 }
 
@@ -1111,6 +1117,11 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                             vecpChanFader[i]->SetIsMyOwnFader();
                         }
 
+                        // set and increment the running new client counter needed for sorting (per definition:
+                        // a fader for a new client shall always be inserted at the right-hand-side if no other
+                        // sorting type is selected (i.e. "no sorting" is active) (#673)
+                        vecpChanFader[i]->SetRunningNewClientCnt ( iRunningNewClientCnt++ );
+
                         // show fader
                         vecpChanFader[i]->Show();
 
@@ -1129,13 +1140,6 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                             vecpChanFader[i]->SetFaderLevel (
                                 pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
                         }
-
-                        // per definition: a fader for a new client shall always be inserted at
-                        // the right-hand-side (#673), note that it is not required to remove the
-                        // widget from the layout first but it is moved to the new position automatically
-                        // and also note that the last layout item is the spacer, therefore we have
-                        // to insert at position "count - 2"
-                        pMainLayout->insertWidget ( pMainLayout->count() - 2, vecpChanFader[i]->GetMainWidget() );
                     }
 
                     // restore gain (if new name is different from the current one)
@@ -1190,11 +1194,8 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     }
     Mutex.unlock(); // release mutex
 
-    // if requested, sort the channels
-    if ( eChSortType != ST_NO_SORT )
-    {
-        ChangeFaderOrder ( eChSortType );
-    }
+    // sort the channels according to the selected sorting type
+    ChangeFaderOrder ( eChSortType );
 
     // emit status of connected clients
     emit NumClientsChanged ( iNumConnectedClients );

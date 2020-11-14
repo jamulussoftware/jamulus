@@ -80,6 +80,8 @@ public:
     double GetPreviousFaderLevel() { return dPreviousFaderLevel; }
     int    GetPanValue() { return pPan->value(); }
     void   Reset();
+    void   SetRunningNewClientCnt ( const int iNRunningNewClientCnt ) { iRunningNewClientCnt = iNRunningNewClientCnt; }
+    int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
     void   SetChannelLevel ( const uint16_t iLevel );
     void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
     void   UpdateSoloState ( const bool bNewOtherSoloState );
@@ -122,6 +124,7 @@ protected:
     double       dPreviousFaderLevel;
     int          iGroupID;
     QString      strGroupBaseText;
+    int          iRunningNewClientCnt;
     int          iInstrPicMaxWidth;
     EGUIDesign   eDesign;
 
@@ -249,11 +252,12 @@ protected:
     CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
     CMixerBoardScrollArea*  pScrollArea;
-    QHBoxLayout*            pMainLayout;
+    QGridLayout *           pMainLayout;
     bool                    bDisplayPans;
     bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
     int                     iMyChannelID;
+    int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
     QString                 strServerName;
     ERecorderState          eRecorderState;
     QMutex                  Mutex;

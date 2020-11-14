@@ -970,12 +970,12 @@ void CAudioMixerBoard::SetPanIsSupported()
 
 void CAudioMixerBoard::HideAll()
 {
+    // before hiding the faders, store their settings
+    StoreAllFaderSettings();
+
     // make all controls invisible
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        // before hiding the fader, store its level (if some conditions are fulfilled)
-        StoreFaderSettings ( vecpChanFader[i] );
-
         vecpChanFader[i]->SetChannelLevel ( 0 );
         vecpChanFader[i]->SetDisplayChannelLevel ( false );
         vecpChanFader[i]->SetDisplayPans ( false );
@@ -1227,6 +1227,16 @@ void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
             vecpChanFader[i]->SetFaderLevel (
                 pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX, true );
         }
+    }
+}
+
+void CAudioMixerBoard::StoreAllFaderSettings()
+{
+    QMutexLocker locker ( &Mutex );
+
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        StoreFaderSettings ( vecpChanFader[i] );
     }
 }
 

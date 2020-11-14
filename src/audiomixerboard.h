@@ -214,6 +214,7 @@ public:
 
     void        SetRecorderState ( const ERecorderState newRecorderState );
     void        SetAllFaderLevelsToNewClientLevel();
+    void        StoreAllFaderSettings();
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea

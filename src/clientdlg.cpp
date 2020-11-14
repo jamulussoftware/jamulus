@@ -586,8 +586,8 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     Event->accept();
 }
 
-void CClientDlg::MangeDragNDrop ( QDropEvent* Event,
-                                  const bool  bCheckAccept )
+void CClientDlg::ManageDragNDrop ( QDropEvent* Event,
+                                   const bool  bCheckAccept )
 {
     // we only want to use drag'n'drop with file URLs
     QListIterator<QUrl> UrlIterator ( Event->mimeData()->urls() );

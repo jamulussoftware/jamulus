@@ -1320,9 +1320,6 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         CVector<int> vbOldStoredFaderIsMute  ( pSettings->vecStoredFaderIsMute );
         CVector<int> vbOldStoredFaderGroupID ( pSettings->vecStoredFaderGroupID );
 
-        // init temporary list count (may be overwritten later on)
-        int iTempListCnt = 0;
-
         // put new value on the top of the list
         const int iOldIdx = pSettings->vecStoredFaderTags.StringFiFoWithCompare ( pChanFader->GetReceivedName() );
 
@@ -1332,7 +1329,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         pSettings->vecStoredFaderIsSolo[0]  = pChanFader->IsSolo();
         pSettings->vecStoredFaderIsMute[0]  = pChanFader->IsMute();
         pSettings->vecStoredFaderGroupID[0] = pChanFader->GetGroupID();
-        iTempListCnt             = 1;
+        int iTempListCnt                    = 1; // current fader is on top, other faders index start at 1
 
         for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {

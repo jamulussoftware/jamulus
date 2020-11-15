@@ -14,6 +14,8 @@
 
 - the Jamulus server now has a different icon, created by geheimerEichkater (#700)
 
+- support two rows for the mixer panel (#720)
+
 - changed RYG indicator lights with colour-blind compensation, created by geheimerEichkater (#57)
 
 - saving and loading mixer settings is now possible during an active connection and a

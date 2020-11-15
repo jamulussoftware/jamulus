@@ -831,6 +831,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     bNoFaderVisible      ( true ),
     iMyChannelID         ( INVALID_INDEX ),
     iRunningNewClientCnt ( 0 ),
+    iNumMixerPanelRows   ( 1 ),
     strServerName        ( "" ),
     eRecorderState       ( RS_UNDEFINED ),
     eChSortType          ( ST_NO_SORT )
@@ -995,9 +996,16 @@ void CAudioMixerBoard::HideAll()
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
 
+void CAudioMixerBoard::SetNumMixerPanelRows ( const int iNNumMixerPanelRows )
+{
+    // store new value and immediately initiate the sorting
+    iNumMixerPanelRows = iNNumMixerPanelRows;
+    ChangeFaderOrder ( eChSortType );
+}
+
 void CAudioMixerBoard::SetFaderSorting ( const EChSortType eNChSortType )
 {
-    // store new sort type and immediately initiate the sorting
+    // store new sort type and update the fader order
     eChSortType = eNChSortType;
     ChangeFaderOrder ( eNChSortType );
 }
@@ -1056,9 +1064,9 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     // sort the channels according to the first of the pair
     std::stable_sort ( PairList.begin(), PairList.end() );
 
-// TEST
-const int iNumMixerPanelRows = 1;
-const int iNumFadersFirstRow = ( iNumVisibleFaders + 1 ) / iNumMixerPanelRows;
+    // calculate the number of the faders in the first row by distribute
+    // the faders equally in the available number of rows
+    const int iNumFadersFirstRow = ( iNumVisibleFaders + 1 ) / iNumMixerPanelRows;
 
     // add channels to the layout in the new order, note that it is not required to remove
     // the widget from the layout first but it is moved to the new position automatically

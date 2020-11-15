@@ -287,6 +287,13 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         eChannelSortType = static_cast<EChSortType> ( iValue );
     }
 
+    // number of mixer panel rows
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "numrowsmixpan",
+         1, 2, iValue ) )
+    {
+        iNumMixerPanelRows = iValue;
+    }
+
     // name
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64",
@@ -620,6 +627,10 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // fader channel sorting
     SetNumericIniSet ( IniXMLDocument, "client", "channelsort",
         static_cast<int> ( eChannelSortType ) );
+
+    // number of mixer panel rows
+    SetNumericIniSet ( IniXMLDocument, "client", "numrowsmixpan",
+        iNumMixerPanelRows );
 
     // name
     PutIniSetting ( IniXMLDocument, "client", "name_base64",

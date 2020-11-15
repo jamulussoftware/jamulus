@@ -210,6 +210,9 @@ public:
     void        SetFaderLevel ( const int iChannelIdx,
                                 const int iValue );
 
+    void        SetNumMixerPanelRows ( const int iNNumMixerPanelRows );
+    int         GetNumMixerPanelRows() { return iNumMixerPanelRows; }
+
     void        SetFaderSorting ( const EChSortType eNChSortType );
     EChSortType GetFaderSorting() { return eChSortType; }
 
@@ -258,6 +261,7 @@ protected:
     bool                    bNoFaderVisible;
     int                     iMyChannelID;
     int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
+    int                     iNumMixerPanelRows;
     QString                 strServerName;
     ERecorderState          eRecorderState;
     QMutex                  Mutex;

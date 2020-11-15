@@ -319,6 +319,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pEditMenu->addSeparator();
 
+    QAction* NumRowsAction = pEditMenu->addAction ( tr ( "Use &Two Rows Mixer Panel" ), this,
+        SLOT ( OnUseTowRowsForMixerPanel ( bool ) ) );
+
+    // initialize the "use two rows for mixer panel" menu entry (is checkable)
+    NumRowsAction->setCheckable ( true );
+    NumRowsAction->setChecked ( pSettings->iNumMixerPanelRows > 1 );
+    MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
+
     pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
         SLOT ( OnClearAllStoredSoloSettings() ) );
 
@@ -581,6 +589,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
 
     pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
     pSettings->eChannelSortType            = MainMixerBoard->GetFaderSorting();
+    pSettings->iNumMixerPanelRows          = MainMixerBoard->GetNumMixerPanelRows();
 
     // default implementation of this event handler routine
     Event->accept();

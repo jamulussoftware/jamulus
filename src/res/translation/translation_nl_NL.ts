@@ -930,7 +930,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik &amp;Twee-rijen-mengpaneel</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="330"/>
@@ -940,7 +940,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="333"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Zet Alle Faders op Nieuwe-Client-&amp;Niveau</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>
@@ -1605,7 +1605,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Central server address combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrale serveradres combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="254"/>

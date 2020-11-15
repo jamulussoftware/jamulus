@@ -1011,6 +1011,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
     // create a pair list of lower strings and fader ID for each channel
     QList<QPair<QString, int> > PairList;
+    int                         iNumVisibleFaders = 0;
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1047,16 +1048,55 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
             PairList << QPair<QString, int> ( QString ( "%1" ).arg (
                 vecpChanFader[i]->GetRunningNewClientCnt(), 11, 10, QLatin1Char ( '0' ) ), i );
         }
+
+        // count the number of visible faders
+        if ( vecpChanFader[i]->IsVisible() )
+        {
+            iNumVisibleFaders++;
+        }
     }
 
     // sort the channels according to the first of the pair
     std::stable_sort ( PairList.begin(), PairList.end() );
 
+// TEST
+const int iNumFadersFirstRow = iNumVisibleFaders / 2;
+int iVisibleFaderCnt   = 0;
+int iInvisibleFaderCnt = 0;
+
+for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+{
+    pMainLayout->removeWidget ( vecpChanFader[PairList[i].second]->GetMainWidget() );
+}
+
     // add channels to the layout in the new order, note that it is not required to remove
     // the widget from the layout first but it is moved to the new position automatically
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        pMainLayout->addWidget ( vecpChanFader[PairList[i].second]->GetMainWidget(), 0, i );
+//        pMainLayout->addWidget ( vecpChanFader[PairList[i].second]->GetMainWidget(), 0, i );
+
+// TEST
+if ( vecpChanFader[i]->IsVisible() )
+{
+    pMainLayout->addWidget ( vecpChanFader[PairList[i].second]->GetMainWidget(),
+            iVisibleFaderCnt / iNumFadersFirstRow,
+            iVisibleFaderCnt % iNumFadersFirstRow );
+
+//    pMainLayout->addWidget ( vecpChanFader[PairList[i].second]->GetMainWidget(),
+//            iVisibleFaderCnt % iNumFadersFirstRow,
+//            iVisibleFaderCnt / iNumFadersFirstRow );
+
+qDebug() << iVisibleFaderCnt / iNumFadersFirstRow << iVisibleFaderCnt % iNumFadersFirstRow;
+
+    iVisibleFaderCnt++;
+}
+//else
+//{
+//    pMainLayout->removeWidget ( vecpChanFader[PairList[i].second]->GetMainWidget() );
+//    iInvisibleFaderCnt++;
+//}
+
+
     }
 }
 

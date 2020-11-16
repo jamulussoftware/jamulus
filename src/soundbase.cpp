@@ -228,14 +228,15 @@ void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
         // split the different parameter strings
         const QStringList slMIDIParams = strMIDISetup.split ( ";" );
 
+        // [MIDI channel]
         if ( slMIDIParams.count() >= 1 )
         {
-            // [MIDI channel]
             iCtrlMIDIChannel = slMIDIParams[0].toUInt();
         }
-        else if ( slMIDIParams.count() >= 2 )
+
+        // [offset for level]
+        if ( slMIDIParams.count() >= 2 )
         {
-            // [offset for level]
             iMIDIOffsetFader = slMIDIParams[1].toUInt();
         }
     }

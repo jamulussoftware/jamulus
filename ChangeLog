@@ -26,8 +26,6 @@
 - bug fix: the fader group property was not correctly loaded from the ini file
 
 
-TODO #611 -> use disconnect messages at random time to try to reproduce the issue
-
 
 
 

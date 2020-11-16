@@ -62,10 +62,10 @@ class CSound : public CSoundBase
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
              void*          arg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
-        CSoundBase ( "Jack", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+        CSoundBase ( "Jack", fpNewProcessCallback, arg, strMIDISetup ),
         iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ), fInOutLatencyMs ( 0.0f ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
 
     virtual ~CSound() { CloseJack(); }
@@ -113,10 +113,10 @@ class CSound : public CSoundBase
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
              void*          pParg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     ,
              const QString& ) :
-        CSoundBase ( "nosound", fpNewProcessCallback, pParg, iCtrlMIDIChannel ),
+        CSoundBase ( "nosound", fpNewProcessCallback, pParg, strMIDISetup ),
         HighPrecisionTimer ( true ) { HighPrecisionTimer.Start();
                                       QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout,
                                                          this, &CSound::OnTimer ); }

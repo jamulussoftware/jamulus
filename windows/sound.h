@@ -48,7 +48,7 @@ class CSound : public CSoundBase
 public:
     CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
              void*          arg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     ,
              const QString& );
     

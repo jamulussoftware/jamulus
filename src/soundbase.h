@@ -53,7 +53,7 @@ public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                  void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                  void*          pParg,
-                 const int      iNewCtrlMIDIChannel );
+                 const QString& strMIDISetup );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize ) { return iNewPrefMonoBufferSize; }
     virtual void Start() { bRun = true; }
@@ -95,6 +95,7 @@ protected:
     virtual QString  LoadAndInitializeDriver ( int, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
     QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
+    void             ParseCommandLineArgument ( const QString& strMIDISetup );
 
     static void GetSelCHAndAddCH ( const int iSelCH,    const int iNumInChan,
                                    int&      iSelCHOut, int&      iSelAddCHOut )
@@ -134,6 +135,7 @@ protected:
 
     QString strSystemDriverTechniqueName;
     int     iCtrlMIDIChannel;
+    int     iMIDIOffsetFader;
 
     long    lNumDevs;
     long    lCurDev;

@@ -28,7 +28,7 @@
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
                    const QString& strConnOnStartupAddress,
-                   const int      iCtrlMIDIChannel,
+                   const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
                    const bool     bNMuteMeInPersonalMix ) :
@@ -47,7 +47,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bMuteOutStream                   ( false ),
     fMuteOutStreamGain               ( 1.0f ),
     Socket                           ( &Channel, iPortNumber ),
-    Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect, strNClientName ),
+    Sound                            ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),

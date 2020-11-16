@@ -485,10 +485,10 @@ void CSound::Stop()
 
 CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
                  void*          arg,
-                 const int      iCtrlMIDIChannel,
+                 const QString& strMIDISetup,
                  const bool     ,
                  const QString& ) :
-    CSoundBase              ( "ASIO", fpNewCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase              ( "ASIO", fpNewCallback, arg, strMIDISetup ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),

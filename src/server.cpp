@@ -819,7 +819,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         {
             // processing with multithreading
 // TODO optimization of the MTBlockSize value
-            const int iMTBlockSize = 20; // every 20 users a new thread is created
+            const int iMTBlockSize = 10; // every 10 users a new thread is created
             const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
 
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )

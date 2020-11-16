@@ -872,7 +872,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>U&amp;tiliser un panneau de mixage à deux rangées</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>
@@ -1021,7 +1021,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="333"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler tous &amp;les charriots sur le niveau d&apos;un nouveau client</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="736"/>
@@ -1649,7 +1649,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Central server address combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Boîte combo d&apos;adresses du serveur central</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="254"/>

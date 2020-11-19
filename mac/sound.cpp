@@ -331,6 +331,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
     {
         // store ID of selected driver if initialization was successful
         lCurDev                    = iDriverIdx;
+        strCurDevName              = strDriverNames[iDriverIdx];
         CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
         CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
 

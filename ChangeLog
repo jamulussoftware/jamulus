@@ -4,8 +4,12 @@
 
 
 
-TODOO change Clear All Stored Solo Settings to clear Mute as well (#731)
+TODO change Clear All Stored Solo Settings to clear Mute as well (#731)
 
+TODO merge feature_MIDI_parameters branch (set offset with command line argument, #95)
+
+TODO MacOS: Jamulus does not always select the previous sound card (#680)
+     -> branch fix_audiodev_sel
 
 
 

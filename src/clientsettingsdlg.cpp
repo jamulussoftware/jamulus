@@ -387,7 +387,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
     // combo boxes
-    QObject::connect ( cbxSoundcard, &QComboBox::textActivated,
+    QObject::connect ( cbxSoundcard, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnSoundcardActivated );
 
     QObject::connect ( cbxLInChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
@@ -588,9 +588,9 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
     UpdateJitterBufferFrame();
 }
 
-void CClientSettingsDlg::OnSoundcardActivated ( const QString strSndDevName )
+void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
-    const QString strError = pClient->SetSndCrdDev ( strSndDevName );
+    const QString strError = pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
 
     if ( !strError.isEmpty() )
     {

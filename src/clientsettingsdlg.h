@@ -97,7 +97,7 @@ protected:
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
-    void OnSoundcardActivated ( const QString strSndDevName );
+    void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
     void OnRInChanActivated ( int iChanIdx );
     void OnLOutChanActivated ( int iChanIdx );

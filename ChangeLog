@@ -2,6 +2,15 @@
 
 
 
+
+
+TODOO change Clear All Stored Solo Settings to clear Mute as well (#731)
+
+
+
+
+
+
 3.6.0git <- NOTE: the release version number will be 3.6.1
 
 - added menu entry "Set All Faders to New Client Level" (#622)

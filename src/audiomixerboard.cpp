@@ -1249,7 +1249,7 @@ void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        if ( vecpChanFader[i]->IsVisible() )
+        if ( vecpChanFader[i]->IsVisible() && i != iMyChannelID )
         {
             // the value is in percent -> convert range, also use the group
             // update flag to make sure the group values are all set to the

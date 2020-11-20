@@ -870,7 +870,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation>Usar &amp;Painel Mixer Duas Fileiras</translation>
+        <translation>Usar Duas Fileiras para &amp;Painel do Mixer</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>

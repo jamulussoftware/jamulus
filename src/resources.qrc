@@ -38,6 +38,9 @@
         <file>res/CLEDGreySmall.png</file>
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellowSmall.png</file>
+        <file>res/IndicatorGreen.png</file>
+        <file>res/IndicatorYellow.png</file>
+        <file>res/IndicatorRed.png</file>
         <file>res/HLEDGreenSmall.png</file>
         <file>res/HLEDBlackSmall.png</file>
         <file>res/HLEDRedSmall.png</file>
@@ -103,6 +106,7 @@
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>
+        <file>res/fronticonserver.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>

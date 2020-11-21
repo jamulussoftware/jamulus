@@ -1,4 +1,4 @@
-VERSION = 3.6.0git
+VERSION = 3.6.1git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -670,6 +670,9 @@ DISTFILES += ChangeLog \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/IndicatorGreen.png \
+    src/res/IndicatorYellow.png \
+    src/res/IndicatorRed.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
@@ -684,6 +687,7 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
+    src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \

@@ -287,6 +287,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // init delay and other information controls
     ledNetw->Reset();
     ledOverallDelay->Reset();
+    ledNetw->SetType              ( CMultiColorLED::MT_INDICATOR );
+    ledOverallDelay->SetType      ( CMultiColorLED::MT_INDICATOR );
     lblPingTimeValue->setText     ( "---" );
     lblOverallDelayValue->setText ( "---" );
     lblUpstreamValue->setText     ( "---" );

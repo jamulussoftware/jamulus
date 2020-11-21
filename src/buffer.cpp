@@ -171,7 +171,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
                 iSeqNumDiff -= 256;
             }
 
-            // The 1-byte sequence number wraps around at a count of 256. So if a packet is delayed
+            // The 1-byte sequence number wraps around at a count of 256. So, if a packet is delayed
             // further than this we cannot detect it. But it does not matter since such a packet is
             // more than 100 ms delayed so we have a bad network situation anyway. Therefore we
             // assume that the sequence number difference between the received and local counter is
@@ -186,7 +186,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
             if ( iSeqNumDiff < 0 )
             {
                 // the received packet comes too late so we shift the "buffer window" to the past
-                // until the received packet it the very first packet in the buffer
+                // until the received packet is the very first packet in the buffer
                 for ( int i = iSeqNumDiff; i < 0; i++ )
                 {
                     // insert an invalid block at the shifted position

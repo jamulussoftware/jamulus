@@ -244,6 +244,9 @@ LED bar:      lbr
 // server welcome message title (do not change for compatibility!)
 #define WELCOME_MESSAGE_PREFIX           "<b>Server Welcome Message:</b> "
 
+// mixer settings file name suffix
+#define MIX_SETTINGS_FILE_SUFFIX         "jch"
+
 #define _MAXSHORT                        32767
 #define _MINSHORT                        ( -32768 )
 #define INVALID_INDEX                    -1 // define invalid index as a negative value (a valid index must always be >= 0)

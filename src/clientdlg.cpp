@@ -239,10 +239,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
 
-    pLoadChannelSetupAction = pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this,
+    pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this,
         SLOT ( OnLoadChannelSetup() ) );
 
-    pSaveChannelSetupAction = pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this,
+    pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this,
         SLOT ( OnSaveChannelSetup() ) );
 
     pFileMenu->addSeparator();
@@ -319,7 +319,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pEditMenu->addSeparator();
 
-    pClearAllStoredSoloSettings = pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
+    QAction* NumRowsAction = pEditMenu->addAction ( tr ( "Use &Two Rows Mixer Panel" ), this,
+        SLOT ( OnUseTowRowsForMixerPanel ( bool ) ) );
+
+    // initialize the "use two rows for mixer panel" menu entry (is checkable)
+    NumRowsAction->setCheckable ( true );
+    NumRowsAction->setChecked ( pSettings->iNumMixerPanelRows > 1 );
+    MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
+
+    pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
         SLOT ( OnClearAllStoredSoloSettings() ) );
 
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
@@ -576,15 +584,44 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
         pClient->Stop();
     }
 
-    // we have to hide all mixer faders first to initiate a storage of the
-    // current mixer fader levels in case we are just in a connected state
-    MainMixerBoard->HideAll();
+    // make sure all current fader settings are applied to the settings struct
+    MainMixerBoard->StoreAllFaderSettings();
 
     pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
     pSettings->eChannelSortType            = MainMixerBoard->GetFaderSorting();
+    pSettings->iNumMixerPanelRows          = MainMixerBoard->GetNumMixerPanelRows();
 
     // default implementation of this event handler routine
     Event->accept();
+}
+
+void CClientDlg::ManageDragNDrop ( QDropEvent* Event,
+                                   const bool  bCheckAccept )
+{
+    // we only want to use drag'n'drop with file URLs
+    QListIterator<QUrl> UrlIterator ( Event->mimeData()->urls() );
+
+    while ( UrlIterator.hasNext() )
+    {
+        const QString strFileNameWithPath = UrlIterator.next().toLocalFile();
+
+        // check all given URLs and if any has the correct suffix
+        if ( !strFileNameWithPath.isEmpty() && ( QFileInfo ( strFileNameWithPath ).suffix() == MIX_SETTINGS_FILE_SUFFIX ) )
+        {
+            if ( bCheckAccept )
+            {
+                // only accept drops of supports file types
+                Event->acceptProposedAction();
+            }
+            else
+            {
+                // load the first valid settings file and leave the loop
+                pSettings->LoadFaderSettings ( strFileNameWithPath );
+                MainMixerBoard->LoadAllFaderSettings();
+                break;
+            }
+        }
+    }
 }
 
 void CClientDlg::UpdateAudioFaderSlider()
@@ -728,18 +765,27 @@ void CClientDlg::OnConnectDisconBut()
     }
 }
 
+void CClientDlg::OnClearAllStoredSoloSettings()
+{
+    // if we are in an active connection, we first have to store all fader settings in
+    // the settings struct, clear the solo states and then apply the settings again
+    MainMixerBoard->StoreAllFaderSettings();
+    pSettings->vecStoredFaderIsSolo.Reset ( false );
+    MainMixerBoard->LoadAllFaderSettings();
+}
+
 void CClientDlg::OnLoadChannelSetup()
 {
     QString strFileName = QFileDialog::getOpenFileName ( this,
                                                          tr ( "Select Channel Setup File" ),
                                                          "",
-                                                         "*.jch" );
+                                                         QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
 
     if ( !strFileName.isEmpty() )
     {
-// TODO The client has to be stopped to apply recovered settings after re-connect.
-// TODO Should we automatically stop/load/re-start the connection?
+        // first update the settings struct and then update the mixer panel
         pSettings->LoadFaderSettings ( strFileName );
+        MainMixerBoard->LoadAllFaderSettings();
     }
 }
 
@@ -748,12 +794,13 @@ void CClientDlg::OnSaveChannelSetup()
     QString strFileName = QFileDialog::getSaveFileName ( this,
                                                          tr ( "Select Channel Setup File" ),
                                                          "",
-                                                         "*.jch" );
+                                                         QString ( "*." ) + MIX_SETTINGS_FILE_SUFFIX );
 
     if ( !strFileName.isEmpty() )
     {
-// TODO The client has to be stopped to store current faders.
-// TODO Should we automatically stop/save/re-start the connection?
+        // first store all current fader settings (in case we are in an active connection
+        // right now) and then save the information in the settings struct in the file
+        MainMixerBoard->StoreAllFaderSettings();
         pSettings->SaveFaderSettings ( strFileName );
     }
 }
@@ -1085,13 +1132,6 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             if ( !pClient->IsRunning() )
             {
                 pClient->Start();
-
-                // menu entries which are disabled during a session
-                pClearAllStoredSoloSettings->setEnabled ( false );
-
-// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
-pLoadChannelSetupAction->setEnabled ( false );
-pSaveChannelSetupAction->setEnabled ( false );
             }
         }
 
@@ -1124,13 +1164,6 @@ void CClientDlg::Disconnect()
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
-
-        // menu entries which are disabled during a session
-        pClearAllStoredSoloSettings->setEnabled ( true );
-
-// TODO the client has to be stopped to load/store current faders -> as a quick hack disable menu if running
-pLoadChannelSetupAction->setEnabled ( true );
-pSaveChannelSetupAction->setEnabled ( true );
     }
 
     // change connect button text to "connect"
@@ -1237,6 +1270,8 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
 
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED );
+        ledBuffers->SetType               ( CMultiColorLED::MT_LED );
+        ledDelay->SetType                 ( CMultiColorLED::MT_LED );
         break;
 
     default:
@@ -1251,6 +1286,8 @@ rbtReverbSelR->setStyleSheet ( "" );
 
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
+        ledBuffers->SetType               ( CMultiColorLED::MT_INDICATOR );
+        ledDelay->SetType                 ( CMultiColorLED::MT_INDICATOR );
         break;
     }
 

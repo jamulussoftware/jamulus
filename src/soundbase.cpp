@@ -255,7 +255,7 @@ printf ( "\n" );
                         // Behringer X-TOUCH: offset of 0x46
                         const int iChID = vMIDIPaketBytes[1] - 70;
 
-                        EmitControllerInFaderLevel ( iChID, iFaderLevel );
+                        emit ControllerInFaderLevel ( iChID, iFaderLevel );
                     }
                 }
             }

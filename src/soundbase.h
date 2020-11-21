@@ -90,9 +90,6 @@ public:
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType )
         { emit ReinitRequest ( eSndCrdResetType ); }
 
-    void EmitControllerInFaderLevel ( const int iChannelIdx,
-                                      const int iValue ) { emit ControllerInFaderLevel ( iChannelIdx, iValue ); }
-
 protected:
     // driver handling
     virtual QString  LoadAndInitializeDriver ( int, bool ) { return ""; }

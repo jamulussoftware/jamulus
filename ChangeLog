@@ -1,8 +1,24 @@
 
 
 
+3.6.1git <- NOTE: the release version number will be 3.6.2
 
-3.6.0git <- NOTE: the release version number will be 3.6.1
+TODO remove DebugError, TData& operator[](iPos), TData operator[](iPos) const, CVector<TData>& operator=(vecI)
+
+TODO change Clear All Stored Solo Settings to clear Mute as well (#731)
+
+TODO merge feature_MIDI_parameters branch (set offset with command line argument, #95)
+
+TODO MacOS: Jamulus does not always select the previous sound card (#680)
+     -> branch fix_audiodev_sel
+
+
+
+
+
+
+
+3.6.1 (2020-11-21)
 
 - added menu entry "Set All Faders to New Client Level" (#622)
 
@@ -12,9 +28,18 @@
 
 - support multiple custom central server addresses (#698)
 
+- the Jamulus server now has a different icon, created by geheimerEichkater (#700)
 
+- support two rows for the mixer panel (#720)
 
+- changed RYG indicator lights with colour-blind compensation, created by geheimerEichkater (#57)
 
+- saving and loading mixer settings is now possible during an active connection and a
+  mixer settings file can be loaded with drag'n'drop (#706)
+
+- menu entry Clear All Stored Solo Settings is now enabled during an active connection
+
+- bug fix: the fader group property was not correctly loaded from the ini file
 
 
 3.6.0 (2020-10-25)

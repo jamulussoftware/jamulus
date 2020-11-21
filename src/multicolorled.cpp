@@ -31,17 +31,27 @@
 /* Implementation *************************************************************/
 CMultiColorLED::CMultiColorLED ( QWidget* parent )
     : QLabel ( parent ),
-    BitmCubeDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
-    BitmCubeGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
-    BitmCubeGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
-    BitmCubeYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
-    BitmCubeRed      ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
+    BitmCubeDisabled    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
+    BitmCubeGrey        ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
+    BitmCubeGreen       ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
+    BitmCubeYellow      ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
+    BitmCubeRed         ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) ),
+    BitmIndicatorGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorGreen.png" ) ),
+    BitmIndicatorYellow ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorYellow.png" ) ),
+    BitmIndicatorRed    ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorRed.png" ) )
 {
     // set init bitmap
     setPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
 
-    // init color flags
+    // set default type and reset
+    eType = MT_LED;
+    Reset();
+}
+
+void CMultiColorLED::SetType ( const EType eNType )
+{
+    eType = eNType;
     Reset();
 }
 
@@ -71,7 +81,14 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         // red
         if ( eColorFlag != RL_RED )
         {
-            setPixmap ( BitmCubeRed );
+            if ( eType == MT_LED )
+            {
+                setPixmap ( BitmCubeRed );
+            }
+            else
+            {
+                setPixmap ( BitmIndicatorRed );
+            }
             setAccessibleDescription ( tr ( "Red" ) );
             eColorFlag = RL_RED;
         }
@@ -81,7 +98,14 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         // yellow
         if ( eColorFlag != RL_YELLOW )
         {
-            setPixmap ( BitmCubeYellow );
+            if ( eType == MT_LED )
+            {
+                setPixmap ( BitmCubeYellow );
+            }
+            else
+            {
+                setPixmap ( BitmIndicatorYellow );
+            }
             setAccessibleDescription ( tr ( "Yellow" ) );
             eColorFlag = RL_YELLOW;
         }
@@ -91,7 +115,14 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         // green
         if ( eColorFlag != RL_GREEN )
         {
-            setPixmap ( BitmCubeGreen );
+            if ( eType == MT_LED )
+            {
+                setPixmap ( BitmCubeGreen );
+            }
+            else
+            {
+                setPixmap ( BitmIndicatorGreen );
+            }
             setAccessibleDescription ( tr ( "Green" ) );
             eColorFlag = RL_GREEN;
         }
@@ -101,7 +132,15 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
         // if no color is active, set control to grey light
         if ( eColorFlag != RL_GREY )
         {
-            setPixmap ( BitmCubeGrey );
+            if ( eType == MT_LED )
+            {
+                setPixmap ( BitmCubeGrey );
+            }
+            else
+            {
+                // make it invisible if in indicator mode
+                setPixmap ( QPixmap() );
+            }
             eColorFlag = RL_GREY;
         }
         break;
@@ -112,6 +151,8 @@ void CMultiColorLED::Reset()
 {
     if ( isEnabled() )
     {
+        // set color flag to disable to make sure the pixmap gets updated
+        eColorFlag = RL_DISABLED;
         SetColor ( RL_GREY );
     }
 }

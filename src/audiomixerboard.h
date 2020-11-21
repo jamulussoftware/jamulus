@@ -80,6 +80,8 @@ public:
     double GetPreviousFaderLevel() { return dPreviousFaderLevel; }
     int    GetPanValue() { return pPan->value(); }
     void   Reset();
+    void   SetRunningNewClientCnt ( const int iNRunningNewClientCnt ) { iRunningNewClientCnt = iNRunningNewClientCnt; }
+    int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
     void   SetChannelLevel ( const uint16_t iLevel );
     void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
     void   UpdateSoloState ( const bool bNewOtherSoloState );
@@ -122,6 +124,7 @@ protected:
     double       dPreviousFaderLevel;
     int          iGroupID;
     QString      strGroupBaseText;
+    int          iRunningNewClientCnt;
     int          iInstrPicMaxWidth;
     EGUIDesign   eDesign;
 
@@ -207,6 +210,9 @@ public:
     void        SetFaderLevel ( const int iChannelIdx,
                                 const int iValue );
 
+    void        SetNumMixerPanelRows ( const int iNNumMixerPanelRows );
+    int         GetNumMixerPanelRows() { return iNumMixerPanelRows; }
+
     void        SetFaderSorting ( const EChSortType eNChSortType );
     EChSortType GetFaderSorting() { return eChSortType; }
 
@@ -214,6 +220,8 @@ public:
 
     void        SetRecorderState ( const ERecorderState newRecorderState );
     void        SetAllFaderLevelsToNewClientLevel();
+    void        StoreAllFaderSettings();
+    void        LoadAllFaderSettings();
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea
@@ -233,12 +241,12 @@ protected:
 
     void ChangeFaderOrder ( const EChSortType eChSortType );
 
-    bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
-                                  int&                iStoredFaderLevel,
-                                  int&                iStoredPanValue,
-                                  bool&               bStoredFaderIsSolo,
-                                  bool&               bStoredFaderIsMute,
-                                  int&                iGroupID );
+    bool GetStoredFaderSettings ( const QString& strName,
+                                  int&           iStoredFaderLevel,
+                                  int&           iStoredPanValue,
+                                  bool&          bStoredFaderIsSolo,
+                                  bool&          bStoredFaderIsMute,
+                                  int&           iGroupID );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
@@ -247,11 +255,13 @@ protected:
     CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
     CMixerBoardScrollArea*  pScrollArea;
-    QHBoxLayout*            pMainLayout;
+    QGridLayout *           pMainLayout;
     bool                    bDisplayPans;
     bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
     int                     iMyChannelID;
+    int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
+    int                     iNumMixerPanelRows;
     QString                 strServerName;
     ERecorderState          eRecorderState;
     QMutex                  Mutex;

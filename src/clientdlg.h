@@ -95,6 +95,8 @@ protected:
     void               Connect ( const QString& strSelectedAddress,
                                  const QString& strMixerBoardLabel );
     void               Disconnect();
+    void               ManageDragNDrop ( QDropEvent* Event,
+                                         const bool  bCheckAccept );
 
     CClient*           pClient;
     CClientSettings*   pSettings;
@@ -107,12 +109,10 @@ protected:
     QTimer             TimerStatus;
     QTimer             TimerPing;
 
-    virtual void       closeEvent ( QCloseEvent* Event );
+    virtual void       closeEvent     ( QCloseEvent*     Event );
+    virtual void       dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
+    virtual void       dropEvent      ( QDropEvent*      Event ) { ManageDragNDrop ( Event, false ); }
     void               UpdateDisplay();
-
-    QAction*           pLoadChannelSetupAction;
-    QAction*           pSaveChannelSetupAction;
-    QAction*           pClearAllStoredSoloSettings;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -156,7 +156,8 @@ public slots:
     void OnSortChannelsByInstrument() { MainMixerBoard->SetFaderSorting ( ST_BY_INSTRUMENT ); }
     void OnSortChannelsByGroupID()    { MainMixerBoard->SetFaderSorting ( ST_BY_GROUPID ); }
     void OnSortChannelsByCity()       { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
-    void OnClearAllStoredSoloSettings() { pSettings->vecStoredFaderIsSolo.Reset ( false ); }
+    void OnUseTowRowsForMixerPanel ( bool Checked ) { MainMixerBoard->SetNumMixerPanelRows ( Checked ? 2 : 1 ); }
+    void OnClearAllStoredSoloSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
 
     void OnSettingsStateChanged ( int value );

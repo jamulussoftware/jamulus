@@ -3,6 +3,7 @@
 
 
 
+TODO remove DebugError, TData& operator[](iPos), TData operator[](iPos) const, CVector<TData>& operator=(vecI)
 
 TODO change Clear All Stored Solo Settings to clear Mute as well (#731)
 

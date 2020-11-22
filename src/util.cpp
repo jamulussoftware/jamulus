@@ -982,18 +982,26 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 
-        if ( HostInfo.error() == QHostInfo::NoError )
-        {
-            // apply IP address to QT object
-             if ( !HostInfo.addresses().isEmpty() )
-             {
-                 // use the first IP address
-                 InetAddr = HostInfo.addresses().first();
-             }
-        }
-        else
+        if ( HostInfo.error() != QHostInfo::NoError )
         {
             return false; // invalid address
+        }
+
+        // use the first IPv4 address, if any
+        bool bFoundIPv4 = false;
+        foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
+        {
+            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+               InetAddr = HostAddr;
+               bFoundIPv4 = true;
+               break;
+            }
+        }
+        if ( !bFoundIPv4 )
+        {
+            // only found IPv6 addresses
+            return false;
         }
     }
 

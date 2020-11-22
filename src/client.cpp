@@ -499,7 +499,7 @@ void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
     }
 }
 
-QString CClient::SetSndCrdDev ( const int iNewDev )
+QString CClient::SetSndCrdDev ( const QString strNewDev )
 {
     // if client was running then first
     // stop it and restart again after new initialization
@@ -509,7 +509,7 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
         Sound.Stop();
     }
 
-    const QString strReturn = Sound.SetDev ( iNewDev );
+    const QString strReturn = Sound.SetDev ( strNewDev );
 
     // init again because the sound card actual buffer size might
     // be changed on new device

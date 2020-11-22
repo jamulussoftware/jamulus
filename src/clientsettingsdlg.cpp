@@ -307,7 +307,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     {
         cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
     }
-    cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
+    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
 
     // init sound card channel selection frame
     UpdateSoundChannelSelectionFrame();
@@ -592,7 +592,7 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
-    const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
+    const QString strError = pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
 
     if ( !strError.isEmpty() )
     {
@@ -603,7 +603,7 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
             tr ( "Ok" ), nullptr );
 
         // recover old selection
-        cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
+        cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
     }
     UpdateSoundChannelSelectionFrame();
     UpdateDisplay();

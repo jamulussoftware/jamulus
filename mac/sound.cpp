@@ -310,8 +310,19 @@ int CSound::CountChannels ( AudioDeviceID devID,
     return result;
 }
 
-QString CSound::LoadAndInitializeDriver ( int iDriverIdx, bool )
+QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
+    // find and load driver
+    int iDriverIdx = 0; // if the name was not found, use first driver
+
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    {
+        if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
+        {
+            iDriverIdx = i;
+        }
+    }
+
     // check device capabilities if it fulfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
 
@@ -320,6 +331,7 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx, bool )
     {
         // store ID of selected driver if initialization was successful
         lCurDev                    = iDriverIdx;
+        strCurDevName              = strDriverNames[iDriverIdx];
         CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
         CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
 

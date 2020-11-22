@@ -176,8 +176,8 @@ public:
     QString GetSndCrdDeviceName ( const int iDiD )
         { return Sound.GetDeviceName ( iDiD ); }
 
-    QString SetSndCrdDev ( const int iNewDev );
-    int     GetSndCrdDev() { return Sound.GetDev(); }
+    QString SetSndCrdDev ( const QString strNewDev );
+    QString GetSndCrdDev() { return Sound.GetDev(); }
     void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
     // sound card channel selection

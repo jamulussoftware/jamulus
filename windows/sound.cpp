@@ -40,10 +40,20 @@ CSound* pSound;
 /******************************************************************************\
 * Common                                                                       *
 \******************************************************************************/
-QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
-                                          bool bOpenDriverSetup )
+QString CSound::LoadAndInitializeDriver ( QString strDriverName,
+                                          bool    bOpenDriverSetup )
 {
-    // load driver
+    // find and load driver
+    int iDriverIdx = 0; // if the name was not found, use first driver
+
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    {
+        if ( strDriverName.compare ( cDriverNames[i] ) == 0 )
+        {
+            iDriverIdx = i;
+        }
+    }
+
     loadAsioDriver ( cDriverNames[iDriverIdx] );
 
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
@@ -64,7 +74,7 @@ QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
         ResetChannelMapping();
 
         // store ID of selected driver if initialization was successful
-        lCurDev = iDriverIdx;
+        strCurDevName = cDriverNames[iDriverIdx];
     }
     else
     {
@@ -533,7 +543,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     }
 
     // init device index as not initialized (invalid)
-    lCurDev = INVALID_INDEX;
+    strCurDevName = "";
 
     // init channel mapping
     ResetChannelMapping();

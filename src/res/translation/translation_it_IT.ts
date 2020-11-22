@@ -938,12 +938,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita &amp;Vista su due Righe</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="330"/>
         <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Clear All Stored Solo Settings</source>
@@ -952,7 +952,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="333"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Setta &amp;Livelli del Mixer al valore impostato per i Nuovi Utenti</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>
@@ -1621,7 +1621,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Central server address combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Casella dell&apos;indirizzo del server centrale</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="254"/>

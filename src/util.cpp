@@ -1518,29 +1518,6 @@ QTextStream* ConsoleWriterFactory::get()
 /******************************************************************************\
 * Global Functions Implementation                                              *
 \******************************************************************************/
-void DebugError ( const QString& pchErDescr,
-                  const QString& pchPar1Descr, 
-                  const double   dPar1,
-                  const QString& pchPar2Descr,
-                  const double   dPar2 )
-{
-    QFile File ( "DebugError.dat" );
-    if ( File.open ( QIODevice::Append ) )
-    {
-        // append new line in logging file
-        QTextStream out ( &File );
-        out << pchErDescr << " ### " <<
-            pchPar1Descr << ": " << QString().setNum ( dPar1, 'f', 2 ) <<
-            " ### " <<
-            pchPar2Descr << ": " << QString().setNum ( dPar2, 'f', 2 ) <<
-            endl;
-
-        File.close();
-    }
-    printf ( "\nDebug error! For more information see test/DebugError.dat\n" );
-    exit ( 1 );
-}
-
 QString GetVersionAndNameStr ( const bool bWithHtml )
 {
     QString strVersionText = "";

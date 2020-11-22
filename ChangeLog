@@ -6,14 +6,12 @@
 
 3.6.1git <- NOTE: the release version number will be 3.6.2
 
-
 - added possibility to set MIDI offset for fader control to --ctrlmidich (#95)
 
 - bug fix: on MacOS Jamulus does not always select the previous sound card (#680)
 
 
 
-TODO remove DebugError, TData& operator[](iPos), TData operator[](iPos) const, CVector<TData>& operator=(vecI)
 
 TODO change Clear All Stored Solo Settings to clear Mute as well (#731)
 

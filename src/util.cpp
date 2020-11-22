@@ -461,6 +461,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
         "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
+        "<p>Jakob Jarmar (<a href=""https://github.com/jarmar"">jarmar</a>)</p>"
         "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
         "<p>Nils Brederlow (<a href=""https://github.com/dingodoppelt"">dingodoppelt</a>)</p>"
         "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
@@ -989,15 +990,17 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
 
         // use the first IPv4 address, if any
         bool bFoundIPv4 = false;
+
         foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
         {
             if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol )
             {
-               InetAddr = HostAddr;
+               InetAddr   = HostAddr;
                bFoundIPv4 = true;
                break;
             }
         }
+
         if ( !bFoundIPv4 )
         {
             // only found IPv6 addresses

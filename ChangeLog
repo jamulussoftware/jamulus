@@ -8,6 +8,8 @@
 
 - change Clear All Stored Solo Settings to clear Mute as well (#731)
 
+- avoid selecting IPv6 results from hostname lookup, coded by jarmar (#722)
+
 - added possibility to set MIDI offset for fader control to --ctrlmidich (#95)
 
 - bug fix: on MacOS Jamulus does not always select the previous sound card (#680)

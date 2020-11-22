@@ -943,7 +943,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="330"/>
         <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation></translation>
+        <translation>&amp;Riprisitna tutti gli stati salvati di SOLO e MUTE</translation>
     </message>
     <message>
         <source>&amp;Clear All Stored Solo Settings</source>

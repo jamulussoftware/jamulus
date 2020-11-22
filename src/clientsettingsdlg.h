@@ -76,7 +76,6 @@ public:
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
-    void    UpdateSoundChannelSelectionFrame();
     void    UpdateCustomCentralServerComboBox();
     QString GenSndCrdBufferDelayString ( const int     iFrameSize,
                                          const QString strAddText = "" );
@@ -88,7 +87,7 @@ protected:
     QTimer           TimerStatus;
     QButtonGroup     SndCrdBufferDelayButtonGroup;
 
- public slots:
+public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnNetBufValueChanged ( int value );
     void OnNetBufServerValueChanged ( int value );
@@ -107,6 +106,7 @@ protected:
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
+    void OnUpdateSoundDeviceChannelSelectionFrame();
 
 signals:
     void GUIDesignChanged();

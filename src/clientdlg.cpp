@@ -488,6 +488,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::CLVersionAndOSReceived,
         this, &CClientDlg::OnCLVersionAndOSReceived );
 
+    QObject::connect ( pClient, &CClient::SoundDeviceChanged,
+        &ClientSettingsDlg, &CClientSettingsDlg::OnUpdateSoundDeviceChannelSelectionFrame );
+
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
 

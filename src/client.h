@@ -420,5 +420,6 @@ signals:
                                       CVector<uint16_t> vecLevelList );
 
     void Disconnected();
+    void SoundDeviceChanged();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };

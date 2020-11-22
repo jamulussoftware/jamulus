@@ -331,16 +331,22 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
     {
         // store ID of selected driver if initialization was successful
         lCurDev                    = iDriverIdx;
-        strCurDevName              = strDriverNames[iDriverIdx];
         CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
         CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
 
-        // the device has changed, per definition we reset the channel
-        // mapping to the defaults (first two available channels)
-        SetLeftInputChannel   ( 0 );
-        SetRightInputChannel  ( 1 );
-        SetLeftOutputChannel  ( 0 );
-        SetRightOutputChannel ( 1 );
+        // only reset the channel mapping if a new device was selected
+        if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
+        {
+            // the device has changed, per definition we reset the channel
+            // mapping to the defaults (first two available channels)
+            SetLeftInputChannel   ( 0 );
+            SetRightInputChannel  ( 1 );
+            SetLeftOutputChannel  ( 0 );
+            SetRightOutputChannel ( 1 );
+
+            // store the current name of the driver
+            strCurDevName = strDriverNames[iDriverIdx];
+        }
     }
 
     return strStat;

@@ -69,12 +69,16 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        // the device has changed, per definition we reset the channel
-        // mapping to the defaults (first two available channels)
-        ResetChannelMapping();
+        // only reset the channel mapping if a new device was selected
+        if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
+        {
+            // the device has changed, per definition we reset the channel
+            // mapping to the defaults (first two available channels)
+            ResetChannelMapping();
 
-        // store ID of selected driver if initialization was successful
-        strCurDevName = cDriverNames[iDriverIdx];
+            // store ID of selected driver if initialization was successful
+            strCurDevName = cDriverNames[iDriverIdx];
+        }
     }
     else
     {

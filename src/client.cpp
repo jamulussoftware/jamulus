@@ -639,6 +639,9 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         // restart client
         Sound.Start();
     }
+
+    // inform GUI about the sound card device change
+    emit SoundDeviceChanged();
 }
 
 void CClient::OnHandledSignal ( int sigNum )

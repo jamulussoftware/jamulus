@@ -29,12 +29,16 @@
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
-                         const int      iNewCtrlMIDIChannel ) :
+                         const QString& strMIDISetup ) :
     fpProcessCallback            ( fpNewProcessCallback ),
     pProcessCallbackArg          ( pParg ), bRun ( false ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
-    iCtrlMIDIChannel             ( iNewCtrlMIDIChannel )
+    iCtrlMIDIChannel             ( INVALID_MIDI_CH ),
+    iMIDIOffsetFader             ( 70 ) // Behringer X-TOUCH: offset of 0x46
 {
+    // parse the MIDI setup command line argument string
+    ParseCommandLineArgument ( strMIDISetup );
+
     // initializations for the sound card names (default)
     lNumDevs          = 1;
     strDriverNames[0] = strSystemDriverTechniqueName;
@@ -208,6 +212,29 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 /******************************************************************************\
 * MIDI handling                                                                *
 \******************************************************************************/
+void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
+{
+    // parse the server info string according to definition:
+    // [MIDI channel];[offset for level]
+    if ( !strMIDISetup.isEmpty() )
+    {
+        // split the different parameter strings
+        const QStringList slMIDIParams = strMIDISetup.split ( ";" );
+
+        // [MIDI channel]
+        if ( slMIDIParams.count() >= 1 )
+        {
+            iCtrlMIDIChannel = slMIDIParams[0].toUInt();
+        }
+
+        // [offset for level]
+        if ( slMIDIParams.count() >= 2 )
+        {
+            iMIDIOffsetFader = slMIDIParams[1].toUInt();
+        }
+    }
+}
+
 void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
 {
     if ( vMIDIPaketBytes.Size() > 0 )
@@ -245,8 +272,8 @@ printf ( "\n" );
                         const int iFaderLevel = static_cast<int> ( static_cast<double> (
                             qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
 
-                        // Behringer X-TOUCH: offset of 0x46
-                        const int iChID = vMIDIPaketBytes[1] - 70;
+                        // consider offset for the faders
+                        const int iChID = vMIDIPaketBytes[1] - iMIDIOffsetFader;
 
                         emit ControllerInFaderLevel ( iChID, iFaderLevel );
                     }

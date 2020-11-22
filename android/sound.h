@@ -39,7 +39,7 @@ public:
     static const uint8_t RING_FACTOR;
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
              void*          arg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     ,
              const QString& );
     virtual ~CSound() {}

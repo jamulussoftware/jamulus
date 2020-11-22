@@ -76,7 +76,7 @@ public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
                  const QString&   strConnOnStartupAddress,
-                 const int        iCtrlMIDIChannel,
+                 const QString&   strMIDISetup,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
                  const bool       bMuteStream,

@@ -75,9 +75,9 @@ int main ( int argc, char** argv )
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
-    int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
+    QString      strMIDISetup                = "";
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
     QString      strHTMLStatusFileName       = "";
@@ -265,18 +265,16 @@ int main ( int argc, char** argv )
 
 
         // Controller MIDI channel ---------------------------------------------
-        if ( GetNumericArgument ( tsConsole,
-                                  argc,
-                                  argv,
-                                  i,
-                                  "--ctrlmidich", // no short form
-                                  "--ctrlmidich",
-                                  0,
-                                  15,
-                                  rDbleArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--ctrlmidich", // no short form
+                                 "--ctrlmidich",
+                                 strArgument ) )
         {
-            iCtrlMIDIChannel = static_cast<int> ( rDbleArgument );
-            tsConsole << "- selected controller MIDI channel: " << iCtrlMIDIChannel << endl;
+            strMIDISetup = strArgument;
+            tsConsole << "- MIDI controller settings: " << strMIDISetup << endl;
             CommandLineOptions << "--ctrlmidich";
             continue;
         }
@@ -634,7 +632,7 @@ int main ( int argc, char** argv )
             // actual client object
             CClient Client ( iPortNumber,
                              strConnOnStartupAddress,
-                             iCtrlMIDIChannel,
+                             strMIDISetup,
                              bNoAutoJackConnect,
                              strClientName,
                              bMuteMeInPersonalMix );
@@ -657,7 +655,7 @@ int main ( int argc, char** argv )
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
                                        strConnOnStartupAddress,
-                                       iCtrlMIDIChannel,
+                                       strMIDISetup,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
                                        bMuteStream,

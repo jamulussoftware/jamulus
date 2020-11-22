@@ -106,7 +106,7 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
-              const int      iCtrlMIDIChannel,
+              const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNMuteMeInPersonalMix );

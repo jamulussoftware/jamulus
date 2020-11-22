@@ -12,6 +12,8 @@
 
 - added possibility to set MIDI offset for fader control to --ctrlmidich (#95)
 
+- bug fix: compiling Jamulus 3.6.1 is failing on Debian 9 Linode (#736)
+
 - bug fix: on MacOS Jamulus does not always select the previous sound card (#680)
 
 

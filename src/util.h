@@ -192,9 +192,9 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
         {
             // only add old element if it is not the same as the
             // selected one
-            if ( operator[] ( iIdx ).compare ( strNewValue ) )
+            if ( std::vector<TData>::operator[] ( iIdx ).compare ( strNewValue ) )
             {
-                vstrTempList[iTempListCnt] = operator[] ( iIdx );
+                vstrTempList[iTempListCnt] = std::vector<TData>::operator[] ( iIdx );
 
                 iTempListCnt++;
             }

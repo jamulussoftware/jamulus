@@ -64,6 +64,9 @@ private network.
 #include <QList>
 #include <QElapsedTimer>
 #include <QMutex>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+# include <QVersionNumber>
+#endif
 #include "global.h"
 #include "util.h"
 #include "protocol.h"

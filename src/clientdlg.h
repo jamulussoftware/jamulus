@@ -76,7 +76,7 @@ public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
                  const QString&   strConnOnStartupAddress,
-                 const int        iCtrlMIDIChannel,
+                 const QString&   strMIDISetup,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
                  const bool       bMuteStream,
@@ -157,7 +157,7 @@ public slots:
     void OnSortChannelsByGroupID()    { MainMixerBoard->SetFaderSorting ( ST_BY_GROUPID ); }
     void OnSortChannelsByCity()       { MainMixerBoard->SetFaderSorting ( ST_BY_CITY ); }
     void OnUseTowRowsForMixerPanel ( bool Checked ) { MainMixerBoard->SetNumMixerPanelRows ( Checked ? 2 : 1 ); }
-    void OnClearAllStoredSoloSettings();
+    void OnClearAllStoredSoloMuteSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
 
     void OnSettingsStateChanged ( int value );

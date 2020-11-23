@@ -1,16 +1,27 @@
 
 
 
+
+
+
 3.6.1git <- NOTE: the release version number will be 3.6.2
 
-TODO remove DebugError, TData& operator[](iPos), TData operator[](iPos) const, CVector<TData>& operator=(vecI)
+- change Clear All Stored Solo Settings to clear Mute as well (#731)
 
-TODO change Clear All Stored Solo Settings to clear Mute as well (#731)
+- avoid selecting IPv6 results from hostname lookup, coded by jarmar (#722)
 
-TODO merge feature_MIDI_parameters branch (set offset with command line argument, #95)
+- added possibility to set MIDI offset for fader control to --ctrlmidich (#95)
 
-TODO MacOS: Jamulus does not always select the previous sound card (#680)
-     -> branch fix_audiodev_sel
+- bug fix: do not reset sound card channel selection on a device property change
+
+- bug fix: compiling Jamulus 3.6.1 is failing on Debian 9 Linode (#736)
+
+- bug fix: on MacOS Jamulus does not always select the previous sound card (#680)
+
+
+
+
+
 
 
 

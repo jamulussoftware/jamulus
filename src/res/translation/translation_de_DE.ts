@@ -67,62 +67,62 @@
         <translation>Die Bilder der Länderflaggen sind von Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="477"/>
+        <location filename="../../util.cpp" line="478"/>
         <source>For details on the contributions check out the </source>
         <translation>Die Details über die Codebeiträge findet man in der </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="478"/>
+        <location filename="../../util.cpp" line="479"/>
         <source>Github Contributors list</source>
         <translation>Github Liste der Mitwirkenden</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="482"/>
+        <location filename="../../util.cpp" line="483"/>
         <source>Spanish</source>
         <translation>Spanisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="484"/>
+        <location filename="../../util.cpp" line="485"/>
         <source>French</source>
         <translation>Französisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="486"/>
+        <location filename="../../util.cpp" line="487"/>
         <source>Portuguese</source>
         <translation>Portugiesisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="489"/>
+        <location filename="../../util.cpp" line="490"/>
         <source>Dutch</source>
         <translation>Holländisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="491"/>
+        <location filename="../../util.cpp" line="492"/>
         <source>Italian</source>
         <translation>Italienisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="493"/>
+        <location filename="../../util.cpp" line="494"/>
         <source>German</source>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="495"/>
+        <location filename="../../util.cpp" line="496"/>
         <source>Polish</source>
         <translation>Polnisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="498"/>
+        <location filename="../../util.cpp" line="499"/>
         <source>Swedish</source>
         <translation>Schwedisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="500"/>
+        <location filename="../../util.cpp" line="501"/>
         <source>Slovak</source>
         <translation>Slowakisch</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="507"/>
+        <location filename="../../util.cpp" line="508"/>
         <source>About </source>
         <translation>Über </translation>
     </message>
@@ -809,7 +809,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="190"/>
-        <location filename="../../clientdlg.cpp" line="1170"/>
+        <location filename="../../clientdlg.cpp" line="1171"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Verbinden</translation>
     </message>
@@ -857,6 +857,11 @@
         <location filename="../../clientdlg.cpp" line="322"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
         <translation>Benu&amp;tze zwei Zeilen für das Mischpult</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="330"/>
+        <source>&amp;Clear All Stored Solo and Mute Settings</source>
+        <translation>&amp;Lösche alle gespeicherten Solo- und Mute-Einstellungen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="250"/>
@@ -998,9 +1003,8 @@
         <translation>Sortiere die Kanäle nach der &amp;Stadt</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="330"/>
         <source>&amp;Clear All Stored Solo Settings</source>
-        <translation>&amp;Lösche alle gespeicherten Solo-Einstellungen</translation>
+        <translation type="vanished">&amp;Lösche alle gespeicherten Solo-Einstellungen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="333"/>
@@ -1013,23 +1017,23 @@
         <translation>Zentralserver</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="780"/>
-        <location filename="../../clientdlg.cpp" line="795"/>
+        <location filename="../../clientdlg.cpp" line="781"/>
+        <location filename="../../clientdlg.cpp" line="796"/>
         <source>Select Channel Setup File</source>
         <translation>Auswählen der Datei für die Konfiguration der Mixerkanäle</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="918"/>
+        <location filename="../../clientdlg.cpp" line="919"/>
         <source>user</source>
         <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="922"/>
+        <location filename="../../clientdlg.cpp" line="923"/>
         <source>users</source>
         <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1146"/>
+        <location filename="../../clientdlg.cpp" line="1147"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Trennen</translation>
     </message>
@@ -1677,22 +1681,22 @@
         <translation type="vanished">Manuell</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="641"/>
+        <location filename="../../util.h" line="593"/>
         <source>Custom</source>
         <translation>Benutzerdefiniert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="644"/>
+        <location filename="../../util.h" line="596"/>
         <source>All Genres</source>
         <translation>Alle Genres</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="647"/>
+        <location filename="../../util.h" line="599"/>
         <source>Genre Rock</source>
         <translation>Genre Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="650"/>
+        <location filename="../../util.h" line="602"/>
         <source>Genre Jazz</source>
         <translation>Genre Jazz</translation>
     </message>
@@ -1701,12 +1705,12 @@
         <translation type="vanished">Genre Rock/Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="653"/>
+        <location filename="../../util.h" line="605"/>
         <source>Genre Classical/Folk/Choral</source>
         <translation>Genre Klassik/Volksmusik/Chor</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="656"/>
+        <location filename="../../util.h" line="608"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -2099,28 +2103,28 @@
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../../util.cpp" line="850"/>
+        <location filename="../../util.cpp" line="851"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="855"/>
-        <location filename="../../util.cpp" line="860"/>
+        <location filename="../../util.cpp" line="856"/>
+        <location filename="../../util.cpp" line="861"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Erste Schritte...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="856"/>
+        <location filename="../../util.cpp" line="857"/>
         <source>Software &amp;Manual...</source>
         <translation>Software&amp;handbuch...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="863"/>
+        <location filename="../../util.cpp" line="864"/>
         <source>What&apos;s &amp;This</source>
         <translation>Konte&amp;xthilfe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="865"/>
+        <location filename="../../util.cpp" line="866"/>
         <source>&amp;About...</source>
         <translation>Ü&amp;ber...</translation>
     </message>
@@ -2128,12 +2132,12 @@
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../../util.cpp" line="926"/>
+        <location filename="../../util.cpp" line="927"/>
         <source>Restart Required</source>
         <translation>Neustart erforderlich</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="927"/>
+        <location filename="../../util.cpp" line="928"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Bitte starte die Applikation neu um die Änderung der Spracheinstellung anzuwenden.</translation>
     </message>
@@ -2145,22 +2149,22 @@
         <translation type="vanished">Ich &amp;stimme den Lizenzbedingungen zu</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="525"/>
+        <location filename="../../util.cpp" line="526"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Dieser Server verlangt, dass man Bedingungen akzeptiert, bevor man sich verbinden kann. Bitte ließ die Bedingungen im Chat-Fenster.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="526"/>
+        <location filename="../../util.cpp" line="527"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Ich h&amp;abe die Bedingungen gelesen und ich stimme zu.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="527"/>
+        <location filename="../../util.cpp" line="528"/>
         <source>Accept</source>
         <translation>Einwilligen</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="528"/>
+        <location filename="../../util.cpp" line="529"/>
         <source>Decline</source>
         <translation>Ablehnen</translation>
     </message>
@@ -2258,85 +2262,85 @@
         <translation type="vanished"> Server. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt. Wenn der Name leer gelassen wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="726"/>
+        <location filename="../../util.cpp" line="727"/>
         <source>Alias or name edit box</source>
         <translation>Alias oder Name Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="728"/>
+        <location filename="../../util.cpp" line="729"/>
         <source>Instrument picture button</source>
         <translation>Instrumentenbild Knopf</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="730"/>
+        <location filename="../../util.cpp" line="731"/>
         <source>Country flag button</source>
         <translation>Landesflagge Knopf</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="732"/>
+        <location filename="../../util.cpp" line="733"/>
         <source>City edit box</source>
         <translation>Stadt Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="734"/>
+        <location filename="../../util.cpp" line="735"/>
         <source>Skill level combo box</source>
         <translation>Fähigkeit Auswahlbox</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="680"/>
-        <location filename="../../util.cpp" line="692"/>
-        <location filename="../../util.cpp" line="1059"/>
+        <location filename="../../util.cpp" line="681"/>
+        <location filename="../../util.cpp" line="693"/>
+        <location filename="../../util.cpp" line="1070"/>
         <source>None</source>
         <translation>Kein</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="567"/>
-        <location filename="../../util.cpp" line="715"/>
+        <location filename="../../util.cpp" line="568"/>
+        <location filename="../../util.cpp" line="716"/>
         <source>Musician Profile</source>
         <translation>Musikerprofil</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="572"/>
+        <location filename="../../util.cpp" line="573"/>
         <source>Alias/Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="574"/>
+        <location filename="../../util.cpp" line="575"/>
         <source>Instrument</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="576"/>
+        <location filename="../../util.cpp" line="577"/>
         <source>Country</source>
         <translation>Land</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="578"/>
+        <location filename="../../util.cpp" line="579"/>
         <source>City</source>
         <translation>Stadt</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="580"/>
+        <location filename="../../util.cpp" line="581"/>
         <source>Skill</source>
         <translation>Können</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="582"/>
+        <location filename="../../util.cpp" line="583"/>
         <source>&amp;Close</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="698"/>
+        <location filename="../../util.cpp" line="699"/>
         <source>Beginner</source>
         <translation>Anfänger</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="704"/>
+        <location filename="../../util.cpp" line="705"/>
         <source>Intermediate</source>
         <translation>Mittlere Spielstärke</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="710"/>
+        <location filename="../../util.cpp" line="711"/>
         <source>Expert</source>
         <translation>Experte</translation>
     </message>
@@ -2349,7 +2353,7 @@
         <translation type="vanished">Was man hier sieht wird auch am Fader im Mixer angezeigt, wenn du mit einem </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="716"/>
+        <location filename="../../util.cpp" line="717"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
         <translation>Schreibe den Namen oder Alias hier rein so dass die anderen Musikern mit denen du spielst wissen wer du bist. Zusätzlich kannst du dein Instrument auswählen und eine Flagge des Landes auswählen in dem du dich befindest. Deine Stadt und deine Spielstärke des Instruments kannst du ebenso angeben.</translation>
     </message>
@@ -2358,242 +2362,242 @@
         <translation type="vanished">Was man hier sieht wird auch am Fader im Mixer angezeigt, wenn du mit einem Server verbunden bist. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="720"/>
+        <location filename="../../util.cpp" line="721"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
         <translation>Was man hier sieht wird auch am Fader im Mixer angezeigt, wenn du mit einem Server verbunden bist. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1060"/>
+        <location filename="../../util.cpp" line="1071"/>
         <source>Drum Set</source>
         <translation>Schlagzeug</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1061"/>
+        <location filename="../../util.cpp" line="1072"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1062"/>
+        <location filename="../../util.cpp" line="1073"/>
         <source>Electric Guitar</source>
         <translation>E-Gitarre</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1063"/>
+        <location filename="../../util.cpp" line="1074"/>
         <source>Acoustic Guitar</source>
         <translation>Akustikgitarre</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1064"/>
+        <location filename="../../util.cpp" line="1075"/>
         <source>Bass Guitar</source>
         <translation>E-Bass</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1065"/>
+        <location filename="../../util.cpp" line="1076"/>
         <source>Keyboard</source>
         <translation>Keyboard</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1066"/>
+        <location filename="../../util.cpp" line="1077"/>
         <source>Synthesizer</source>
         <translation>Synthesizer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1067"/>
+        <location filename="../../util.cpp" line="1078"/>
         <source>Grand Piano</source>
         <translation>Flügel</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1068"/>
+        <location filename="../../util.cpp" line="1079"/>
         <source>Accordion</source>
         <translation>Akkordeon</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1069"/>
+        <location filename="../../util.cpp" line="1080"/>
         <source>Vocal</source>
         <translation>Gesang</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1070"/>
+        <location filename="../../util.cpp" line="1081"/>
         <source>Microphone</source>
         <translation>Mikrofon</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1071"/>
+        <location filename="../../util.cpp" line="1082"/>
         <source>Harmonica</source>
         <translation>Mundharmonika</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1072"/>
+        <location filename="../../util.cpp" line="1083"/>
         <source>Trumpet</source>
         <translation>Trompete</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1073"/>
+        <location filename="../../util.cpp" line="1084"/>
         <source>Trombone</source>
         <translation>Posaune</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1074"/>
+        <location filename="../../util.cpp" line="1085"/>
         <source>French Horn</source>
         <translation>Waldhorn</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1075"/>
+        <location filename="../../util.cpp" line="1086"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1076"/>
+        <location filename="../../util.cpp" line="1087"/>
         <source>Saxophone</source>
         <translation>Saxophon</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1077"/>
+        <location filename="../../util.cpp" line="1088"/>
         <source>Clarinet</source>
         <translation>Klarinette</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1078"/>
+        <location filename="../../util.cpp" line="1089"/>
         <source>Flute</source>
         <translation>Flöte</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1079"/>
+        <location filename="../../util.cpp" line="1090"/>
         <source>Violin</source>
         <translation>Violine</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1080"/>
+        <location filename="../../util.cpp" line="1091"/>
         <source>Cello</source>
         <translation>Cello</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1081"/>
+        <location filename="../../util.cpp" line="1092"/>
         <source>Double Bass</source>
         <translation>Kontrabass</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1082"/>
+        <location filename="../../util.cpp" line="1093"/>
         <source>Recorder</source>
         <translation>Recorder</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1083"/>
+        <location filename="../../util.cpp" line="1094"/>
         <source>Streamer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1084"/>
+        <location filename="../../util.cpp" line="1095"/>
         <source>Listener</source>
         <translation>Zuhörer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1085"/>
+        <location filename="../../util.cpp" line="1096"/>
         <source>Guitar+Vocal</source>
         <translation>Gitarre+Gesang</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1086"/>
+        <location filename="../../util.cpp" line="1097"/>
         <source>Keyboard+Vocal</source>
         <translation>Keyboard+Gesang</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1087"/>
+        <location filename="../../util.cpp" line="1098"/>
         <source>Bodhran</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1088"/>
+        <location filename="../../util.cpp" line="1099"/>
         <source>Bassoon</source>
         <translation>Fagott</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1089"/>
+        <location filename="../../util.cpp" line="1100"/>
         <source>Oboe</source>
         <translation>Oboe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1090"/>
+        <location filename="../../util.cpp" line="1101"/>
         <source>Harp</source>
         <translation>Harfe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1091"/>
+        <location filename="../../util.cpp" line="1102"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1092"/>
+        <location filename="../../util.cpp" line="1103"/>
         <source>Congas</source>
         <translation>Congas</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1093"/>
+        <location filename="../../util.cpp" line="1104"/>
         <source>Bongo</source>
         <translation>Bongos</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1094"/>
+        <location filename="../../util.cpp" line="1105"/>
         <source>Vocal Bass</source>
         <translation>Gesang Bass</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1095"/>
+        <location filename="../../util.cpp" line="1106"/>
         <source>Vocal Tenor</source>
         <translation>Gesang Tenor</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1096"/>
+        <location filename="../../util.cpp" line="1107"/>
         <source>Vocal Alto</source>
         <translation>Gesang Alt</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1097"/>
+        <location filename="../../util.cpp" line="1108"/>
         <source>Vocal Soprano</source>
         <translation>Gesang Sopran</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1098"/>
+        <location filename="../../util.cpp" line="1109"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1099"/>
+        <location filename="../../util.cpp" line="1110"/>
         <source>Mandolin</source>
         <translation>Mandoline</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1100"/>
+        <location filename="../../util.cpp" line="1111"/>
         <source>Ukulele</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1101"/>
+        <location filename="../../util.cpp" line="1112"/>
         <source>Bass Ukulele</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1102"/>
+        <location filename="../../util.cpp" line="1113"/>
         <source>Vocal Baritone</source>
         <translation>Gesang Bariton</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1103"/>
+        <location filename="../../util.cpp" line="1114"/>
         <source>Vocal Lead</source>
         <translation>Gesang Lead</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1104"/>
+        <location filename="../../util.cpp" line="1115"/>
         <source>Mountain Dulcimer</source>
         <translation>Mountain Dulcimer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1105"/>
+        <location filename="../../util.cpp" line="1116"/>
         <source>Scratching</source>
         <translation>Scratching</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1106"/>
+        <location filename="../../util.cpp" line="1117"/>
         <source>Rapping</source>
         <translation>Rapper</translation>
     </message>
@@ -3027,52 +3031,52 @@
         <translation>&amp;Fenster</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="680"/>
+        <location filename="../../util.h" line="632"/>
         <source>Unregistered</source>
         <translation>Nicht registriert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="683"/>
+        <location filename="../../util.h" line="635"/>
         <source>Bad address</source>
         <translation>Ungültige Adresse</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="686"/>
+        <location filename="../../util.h" line="638"/>
         <source>Registration requested</source>
         <translation>Registrierung angefordert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="689"/>
+        <location filename="../../util.h" line="641"/>
         <source>Registration failed</source>
         <translation>Registrierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="692"/>
+        <location filename="../../util.h" line="644"/>
         <source>Check server version</source>
         <translation>Überprüfe Version des Servers</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="695"/>
+        <location filename="../../util.h" line="647"/>
         <source>Registered</source>
         <translation>Registriert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="698"/>
+        <location filename="../../util.h" line="650"/>
         <source>Central Server full</source>
         <translation>Zentralserver voll</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="701"/>
+        <location filename="../../util.h" line="653"/>
         <source>Your server version is too old</source>
         <translation>Deine Serverversion ist zu alt</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="704"/>
+        <location filename="../../util.h" line="656"/>
         <source>Requirements not fulfilled</source>
         <translation>Anfoderungen nicht erfüllt</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="707"/>
+        <location filename="../../util.h" line="659"/>
         <source>Unknown value </source>
         <translation>Unbekannter Wert </translation>
     </message>
@@ -3251,78 +3255,78 @@
         <translation>CoreAudio Ausgang AudioHardwareGetProperty Aufruf schlug fehl. Es scheint, dass keine Soundkarte ist im System verfügbar.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="370"/>
+        <location filename="../../../mac/sound.cpp" line="382"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation>Die aktuelle Eingangssamplerate von %1 Hz wird nicht unterstützt. Bitte öffne die Audio-MIDI-Setup-Applikation in Applikationen-&gt;Werkzeuge und versuche die Samplerate auf %2 Hz einzustellen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="397"/>
+        <location filename="../../../mac/sound.cpp" line="409"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation>Die aktuelle Ausgangssamplerate von %1 Hz wird nicht unterstützt. Bitte öffne die Audio-MIDI-Setup-Applikation in Applikationen-&gt;Werkzeuge und versuche die Samplerate auf %2 Hz einzustellen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="470"/>
+        <location filename="../../../mac/sound.cpp" line="482"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
         <translation>Das Audioeingangsstromformat von diesem Audiogerät ist nicht kompatibel mit dieser Software.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="488"/>
+        <location filename="../../../mac/sound.cpp" line="500"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
         <translation>Das Audioausgangsstromformat von diesem Audiogerät ist nicht kompatibel mit dieser Software.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="813"/>
+        <location filename="../../../mac/sound.cpp" line="825"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
         <translation>Die Puffergrößen vom aktuellen Eingangs- und Ausgangsaudiogerät kann nicht auf einen gemeinsamen Wert eingestellt werden. Bitte wähle ein anderes Eingangs-/Ausgangsgerät aus der Geräteliste aus.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="53"/>
+        <location filename="../../../windows/sound.cpp" line="63"/>
         <source>The audio driver could not be initialized.</source>
         <translation>Der Audiotreiber konnte nicht initialisiert werden.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="108"/>
+        <location filename="../../../windows/sound.cpp" line="118"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
         <translation>Das Audiogerät unterstützt nicht die benötigte Samplerate. Die benötigte Samplerate ist: </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="121"/>
+        <location filename="../../../windows/sound.cpp" line="131"/>
         <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation>Das Audiogerät unterstützt nicht die benötigte Samplerate. Dieser Fehler kann auftreten, wenn ein Audiogerät wie das Roland UA-25EX verwendet wird, bei dem die Samplerate per Schalter am Gerät verstellt werden muss. Falls das der Fall sein sollte, dann stelle bitte den Schalter auf </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="125"/>
+        <location filename="../../../windows/sound.cpp" line="135"/>
         <source> Hz on the device and restart the </source>
         <translation> Hz am Gerät und starte die </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="126"/>
+        <location filename="../../../windows/sound.cpp" line="136"/>
         <source> software.</source>
         <translation> Software neu.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="136"/>
+        <location filename="../../../windows/sound.cpp" line="146"/>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
         <translation>Das Audiogerät unterstützt nicht die benötigte Anzahl an Kanälen. Die benötigte Anzahl an Kanälen für den Eingang und den Ausgang ist: </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="172"/>
-        <location filename="../../../windows/sound.cpp" line="202"/>
+        <location filename="../../../windows/sound.cpp" line="182"/>
+        <location filename="../../../windows/sound.cpp" line="212"/>
         <source>Required audio sample format not available.</source>
         <translation>Das benötigte Audio Sampleformat ist nicht verfügbar.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="518"/>
+        <location filename="../../../windows/sound.cpp" line="528"/>
         <source>No ASIO audio device (driver) found.</source>
         <translation>Kein ASIO-Gerätetreiber wurde gefunden.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="519"/>
+        <location filename="../../../windows/sound.cpp" line="529"/>
         <source>The </source>
         <translation>Die </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="519"/>
+        <location filename="../../../windows/sound.cpp" line="529"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation> Software benötigt aber ein ASIO Audiointerface um zu funktionieren. Dies ist keine Standard-Windowsschnittstelle und benötigt deshalb einen speziellen Treiber. Entweder die Soundkarte liefert einen nativen ASIO-Treiber mit (was empfohlen wird) oder man versucht es mit dem ASIO4All-Universaltreiber.</translation>
     </message>
@@ -3335,47 +3339,46 @@
 <context>
     <name>CSoundBase</name>
     <message>
-        <location filename="../../soundbase.cpp" line="68"/>
         <source>Invalid device selection.</source>
-        <translation>Ungültige Geräteauswahl.</translation>
+        <translation type="vanished">Ungültige Geräteauswahl.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="95"/>
+        <location filename="../../soundbase.cpp" line="92"/>
         <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
         <translation>Die Audiotreibereigenschaften haben sich geändert. Die neuen Einstellungen sind nicht mehr kompatibel zu dieser Software. Das ausgewählte Audiogerät konnte nicht benutzt werden wegen folgendem Fehler:</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="100"/>
+        <location filename="../../soundbase.cpp" line="97"/>
         <source>Please restart the software.</source>
         <translation>Bitte starte die Software neu.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="101"/>
+        <location filename="../../soundbase.cpp" line="98"/>
         <source>Close</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="144"/>
+        <location filename="../../soundbase.cpp" line="141"/>
         <source>No usable </source>
         <translation>Kein benutzbares </translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="145"/>
+        <location filename="../../soundbase.cpp" line="142"/>
         <source> audio device (driver) found.</source>
         <translation> Audiogerät (Treiber) konnte gefunden werden.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="146"/>
+        <location filename="../../soundbase.cpp" line="143"/>
         <source>In the following there is a list of all available drivers with the associated error message:</source>
         <translation>Im folgenden wird eine Liste aller gefundenen Audiogeräte mit entsprechender Fehlermeldung angezeigt:</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="160"/>
+        <location filename="../../soundbase.cpp" line="157"/>
         <source>Do you want to open the ASIO driver setups?</source>
         <translation>Willst du die ASIO-Treibereinstellungen öffnen?</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="167"/>
+        <location filename="../../soundbase.cpp" line="164"/>
         <source> could not be started because of audio interface issues.</source>
         <translation> konnte nicht gestartet werden wegen Problemen mit dem Audiogerät.</translation>
     </message>
@@ -3383,17 +3386,17 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1558"/>
+        <location filename="../../util.cpp" line="1546"/>
         <source>, Version </source>
         <translation>, Version </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1571"/>
+        <location filename="../../util.cpp" line="1559"/>
         <source>Internet Jam Session Software</source>
         <translation>Internet Jam Session Software</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1575"/>
+        <location filename="../../util.cpp" line="1563"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation>Unter der GNU General Public License (GPL)</translation>
     </message>

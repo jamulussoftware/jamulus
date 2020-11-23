@@ -106,7 +106,7 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
-              const int      iCtrlMIDIChannel,
+              const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNMuteMeInPersonalMix );
@@ -176,8 +176,8 @@ public:
     QString GetSndCrdDeviceName ( const int iDiD )
         { return Sound.GetDeviceName ( iDiD ); }
 
-    QString SetSndCrdDev ( const int iNewDev );
-    int     GetSndCrdDev() { return Sound.GetDev(); }
+    QString SetSndCrdDev ( const QString strNewDev );
+    QString GetSndCrdDev() { return Sound.GetDev(); }
     void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
     // sound card channel selection
@@ -420,5 +420,6 @@ signals:
                                       CVector<uint16_t> vecLevelList );
 
     void Disconnected();
+    void SoundDeviceChanged();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };

@@ -38,7 +38,7 @@ class CSound : public CSoundBase
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
              void*          arg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     ,
              const QString& );
 
@@ -68,6 +68,7 @@ public:
     int            iCoreAudioBufferSizeStereo;
     AudioDeviceID  CurrentAudioInputDeviceID;
     AudioDeviceID  CurrentAudioOutputDeviceID;
+    long           lCurDev;
     int            iNumInChan;
     int            iNumInChanPlusAddChan; // includes additional "added" channels
     int            iNumOutChan;
@@ -91,7 +92,7 @@ public:
     CVector<int>   vecNumOutBufChan;
 
 protected:
-    virtual QString LoadAndInitializeDriver ( int iIdx, bool );
+    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();

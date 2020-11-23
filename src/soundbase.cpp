@@ -29,18 +29,22 @@
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
-                         const int      iNewCtrlMIDIChannel ) :
+                         const QString& strMIDISetup ) :
     fpProcessCallback            ( fpNewProcessCallback ),
     pProcessCallbackArg          ( pParg ), bRun ( false ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
-    iCtrlMIDIChannel             ( iNewCtrlMIDIChannel )
+    iCtrlMIDIChannel             ( INVALID_MIDI_CH ),
+    iMIDIOffsetFader             ( 70 ) // Behringer X-TOUCH: offset of 0x46
 {
+    // parse the MIDI setup command line argument string
+    ParseCommandLineArgument ( strMIDISetup );
+
     // initializations for the sound card names (default)
     lNumDevs          = 1;
     strDriverNames[0] = strSystemDriverTechniqueName;
 
     // set current device
-    lCurDev = 0; // default device
+    strCurDevName = ""; // default device
 }
 
 void CSoundBase::Stop()
@@ -56,34 +60,27 @@ void CSoundBase::Stop()
 /******************************************************************************\
 * Device handling                                                              *
 \******************************************************************************/
-QString CSoundBase::SetDev ( const int iNewDev )
+QString CSoundBase::SetDev ( const QString strDevName )
 {
     // init return parameter with "no error"
     QString strReturn = "";
 
-    // first check if valid input parameter
-    if ( iNewDev >= lNumDevs )
-    {
-        // we should actually never get here...
-        return tr ( "Invalid device selection." );
-    }
-
     // check if an ASIO driver was already initialized
-    if ( lCurDev != INVALID_INDEX )
+    if ( !strCurDevName.isEmpty() )
     {
         // a device was already been initialized and is used, first clean up
         // driver
         UnloadCurrentDriver();
 
-        const QString strErrorMessage = LoadAndInitializeDriver ( iNewDev, false );
+        const QString strErrorMessage = LoadAndInitializeDriver ( strDevName, false );
 
         if ( !strErrorMessage.isEmpty() )
         {
-            if ( iNewDev != lCurDev )
+            if ( strDevName != strCurDevName )
             {
                 // loading and initializing the new driver failed, go back to
                 // original driver and display error message
-                LoadAndInitializeDriver ( lCurDev, false );
+                LoadAndInitializeDriver ( strCurDevName, false );
             }
             else
             {
@@ -113,14 +110,14 @@ QString CSoundBase::SetDev ( const int iNewDev )
         // init flag for "load any driver"
         bool bTryLoadAnyDriver = false;
 
-        if ( iNewDev != INVALID_INDEX )
+        if ( !strDevName.isEmpty() )
         {
             // This is the first time a driver is to be initialized, we first
             // try to load the selected driver, if this fails, we try to load
             // the first available driver in the system. If this fails, too, we
             // throw an error that no driver is available -> it does not make
             // sense to start the software if no audio hardware is available.
-            if ( !LoadAndInitializeDriver ( iNewDev, false ).isEmpty() )
+            if ( !LoadAndInitializeDriver ( strDevName, false ).isEmpty() )
             {
                 // loading and initializing the new driver failed, try to find
                 // at least one usable driver
@@ -181,13 +178,13 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 
     // load and initialize first valid ASIO driver
     bool bValidDriverDetected = false;
-    int  iCurDriverIdx        = 0;
+    int  iDriverCnt           = 0;
 
     // try all available drivers in the system ("lNumDevs" devices)
-    while ( !bValidDriverDetected && ( iCurDriverIdx < lNumDevs ) )
+    while ( !bValidDriverDetected && ( iDriverCnt < lNumDevs ) )
     {
         // try to load and initialize current driver, store error message
-        const QString strCurError = LoadAndInitializeDriver ( iCurDriverIdx, bOpenDriverSetup );
+        const QString strCurError = LoadAndInitializeDriver ( GetDeviceName ( iDriverCnt ), bOpenDriverSetup );
 
         vsErrorList.append ( strCurError );
 
@@ -197,14 +194,14 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
             bValidDriverDetected = true;
 
             // store ID of selected driver
-            lCurDev = iCurDriverIdx;
+            strCurDevName = GetDeviceName ( iDriverCnt );
 
             // empty error list shows that init was successful
             vsErrorList.clear();
         }
 
         // try next driver
-        iCurDriverIdx++;
+        iDriverCnt++;
     }
 
     return vsErrorList;
@@ -215,6 +212,29 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 /******************************************************************************\
 * MIDI handling                                                                *
 \******************************************************************************/
+void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
+{
+    // parse the server info string according to definition:
+    // [MIDI channel];[offset for level]
+    if ( !strMIDISetup.isEmpty() )
+    {
+        // split the different parameter strings
+        const QStringList slMIDIParams = strMIDISetup.split ( ";" );
+
+        // [MIDI channel]
+        if ( slMIDIParams.count() >= 1 )
+        {
+            iCtrlMIDIChannel = slMIDIParams[0].toUInt();
+        }
+
+        // [offset for level]
+        if ( slMIDIParams.count() >= 2 )
+        {
+            iMIDIOffsetFader = slMIDIParams[1].toUInt();
+        }
+    }
+}
+
 void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
 {
     if ( vMIDIPaketBytes.Size() > 0 )
@@ -252,8 +272,8 @@ printf ( "\n" );
                         const int iFaderLevel = static_cast<int> ( static_cast<double> (
                             qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
 
-                        // Behringer X-TOUCH: offset of 0x46
-                        const int iChID = vMIDIPaketBytes[1] - 70;
+                        // consider offset for the faders
+                        const int iChID = vMIDIPaketBytes[1] - iMIDIOffsetFader;
 
                         emit ControllerInFaderLevel ( iChID, iFaderLevel );
                     }

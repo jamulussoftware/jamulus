@@ -28,10 +28,10 @@
 /* Implementation *************************************************************/
 CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
                  void*          arg,
-                 const int      iCtrlMIDIChannel,
+                 const QString& strMIDISetup,
                  const bool     ,
                  const QString& ) :
-    CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, strMIDISetup ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
     // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop
@@ -310,8 +310,19 @@ int CSound::CountChannels ( AudioDeviceID devID,
     return result;
 }
 
-QString CSound::LoadAndInitializeDriver ( int iDriverIdx, bool )
+QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
+    // find and load driver
+    int iDriverIdx = 0; // if the name was not found, use first driver
+
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    {
+        if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
+        {
+            iDriverIdx = i;
+        }
+    }
+
     // check device capabilities if it fulfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
 
@@ -323,12 +334,19 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx, bool )
         CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
         CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
 
-        // the device has changed, per definition we reset the channel
-        // mapping to the defaults (first two available channels)
-        SetLeftInputChannel   ( 0 );
-        SetRightInputChannel  ( 1 );
-        SetLeftOutputChannel  ( 0 );
-        SetRightOutputChannel ( 1 );
+        // only reset the channel mapping if a new device was selected
+        if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
+        {
+            // the device has changed, per definition we reset the channel
+            // mapping to the defaults (first two available channels)
+            SetLeftInputChannel   ( 0 );
+            SetRightInputChannel  ( 1 );
+            SetLeftOutputChannel  ( 0 );
+            SetRightOutputChannel ( 1 );
+
+            // store the current name of the driver
+            strCurDevName = strDriverNames[iDriverIdx];
+        }
     }
 
     return strStat;

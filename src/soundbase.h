@@ -53,7 +53,7 @@ public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                  void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                  void*          pParg,
-                 const int      iNewCtrlMIDIChannel );
+                 const QString& strMIDISetup );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize ) { return iNewPrefMonoBufferSize; }
     virtual void Start() { bRun = true; }
@@ -62,8 +62,8 @@ public:
     // device selection
     virtual int     GetNumDev() { return lNumDevs; }
     virtual QString GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
-    virtual QString SetDev ( const int );
-    virtual int     GetDev() { return lCurDev; }
+    virtual QString SetDev ( const QString strDevName );
+    virtual QString GetDev() { return strCurDevName; }
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
@@ -92,9 +92,10 @@ public:
 
 protected:
     // driver handling
-    virtual QString  LoadAndInitializeDriver ( int, bool ) { return ""; }
+    virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
     QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
+    void             ParseCommandLineArgument ( const QString& strMIDISetup );
 
     static void GetSelCHAndAddCH ( const int iSelCH,    const int iNumInChan,
                                    int&      iSelCHOut, int&      iSelAddCHOut )
@@ -134,9 +135,10 @@ protected:
 
     QString strSystemDriverTechniqueName;
     int     iCtrlMIDIChannel;
+    int     iMIDIOffsetFader;
 
     long    lNumDevs;
-    long    lCurDev;
+    QString strCurDevName;
     QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:

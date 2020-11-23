@@ -48,7 +48,7 @@ class CSound : public CSoundBase
 public:
     CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
              void*          arg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     ,
              const QString& );
     
@@ -78,8 +78,8 @@ public:
     virtual float   GetInOutLatencyMs() { return fInOutLatencyMs; }
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( int  iIdx,
-                                               bool bOpenDriverSetup );
+    virtual QString  LoadAndInitializeDriver ( QString strDriverName,
+                                               bool    bOpenDriverSetup );
     virtual void     UnloadCurrentDriver();
     int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString          CheckDeviceCapabilities();

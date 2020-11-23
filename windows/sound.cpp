@@ -40,10 +40,20 @@ CSound* pSound;
 /******************************************************************************\
 * Common                                                                       *
 \******************************************************************************/
-QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
-                                          bool bOpenDriverSetup )
+QString CSound::LoadAndInitializeDriver ( QString strDriverName,
+                                          bool    bOpenDriverSetup )
 {
-    // load driver
+    // find and load driver
+    int iDriverIdx = 0; // if the name was not found, use first driver
+
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    {
+        if ( strDriverName.compare ( cDriverNames[i] ) == 0 )
+        {
+            iDriverIdx = i;
+        }
+    }
+
     loadAsioDriver ( cDriverNames[iDriverIdx] );
 
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
@@ -59,12 +69,16 @@ QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        // the device has changed, per definition we reset the channel
-        // mapping to the defaults (first two available channels)
-        ResetChannelMapping();
+        // only reset the channel mapping if a new device was selected
+        if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
+        {
+            // the device has changed, per definition we reset the channel
+            // mapping to the defaults (first two available channels)
+            ResetChannelMapping();
 
-        // store ID of selected driver if initialization was successful
-        lCurDev = iDriverIdx;
+            // store ID of selected driver if initialization was successful
+            strCurDevName = cDriverNames[iDriverIdx];
+        }
     }
     else
     {
@@ -485,10 +499,10 @@ void CSound::Stop()
 
 CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
                  void*          arg,
-                 const int      iCtrlMIDIChannel,
+                 const QString& strMIDISetup,
                  const bool     ,
                  const QString& ) :
-    CSoundBase              ( "ASIO", fpNewCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase              ( "ASIO", fpNewCallback, arg, strMIDISetup ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),
@@ -533,7 +547,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     }
 
     // init device index as not initialized (invalid)
-    lCurDev = INVALID_INDEX;
+    strCurDevName = "";
 
     // init channel mapping
     ResetChannelMapping();

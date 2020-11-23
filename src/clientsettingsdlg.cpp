@@ -301,16 +301,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     sldNetBufServer->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
-    // init combo box containing all available sound cards in the system
-    cbxSoundcard->clear();
-    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
-    {
-        cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
-    }
-    cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
-
     // init sound card channel selection frame
-    UpdateSoundChannelSelectionFrame();
+    OnUpdateSoundDeviceChannelSelectionFrame();
 
     // Audio Channels combo box
     cbxAudioChannels->clear();
@@ -519,8 +511,17 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     }
 }
 
-void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
+void CClientSettingsDlg::OnUpdateSoundDeviceChannelSelectionFrame()
 {
+    // update combo box containing all available sound cards in the system
+    cbxSoundcard->clear();
+    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
+    {
+        cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
+    }
+    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+
+    // update input/output channel selection
 #if defined ( _WIN32 ) || defined ( __APPLE__ ) || defined ( __MACOSX )
     int iSndChanIdx;
 
@@ -592,7 +593,7 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
-    const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
+    const QString strError = pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
 
     if ( !strError.isEmpty() )
     {
@@ -601,36 +602,33 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
             "because of the following error: " ) ) + strError +
             QString ( tr ( " The previous driver will be selected." ) ),
             tr ( "Ok" ), nullptr );
-
-        // recover old selection
-        cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
     }
-    UpdateSoundChannelSelectionFrame();
+    OnUpdateSoundDeviceChannelSelectionFrame();
     UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    OnUpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnRInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    OnUpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnLOutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    OnUpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    OnUpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )

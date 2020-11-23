@@ -29,7 +29,7 @@
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
                          const QString&   strConnOnStartupAddress,
-                         const int        iCtrlMIDIChannel,
+                         const QString&   strMIDISetup,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
@@ -38,7 +38,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient             ( pNCliP ),
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),
-    bMIDICtrlUsed       ( iCtrlMIDIChannel != INVALID_MIDI_CH ),
+    bMIDICtrlUsed       ( !strMIDISetup.isEmpty() ),
     ClientSettingsDlg   ( pNCliP, pNSetP, parent ),
     ChatDlg             ( parent ),
     ConnectDlg          ( pNSetP, bNewShowComplRegConnList, parent ),
@@ -327,8 +327,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     NumRowsAction->setChecked ( pSettings->iNumMixerPanelRows > 1 );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
-    pEditMenu->addAction ( tr ( "&Clear All Stored Solo Settings" ), this,
-        SLOT ( OnClearAllStoredSoloSettings() ) );
+    pEditMenu->addAction ( tr ( "&Clear All Stored Solo and Mute Settings" ), this,
+        SLOT ( OnClearAllStoredSoloMuteSettings() ) );
 
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
         SLOT ( OnSetAllFadersToNewClientLevel() ), QKeySequence ( Qt::CTRL + Qt::Key_L ) );
@@ -487,6 +487,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( pClient, &CClient::CLVersionAndOSReceived,
         this, &CClientDlg::OnCLVersionAndOSReceived );
+
+    QObject::connect ( pClient, &CClient::SoundDeviceChanged,
+        &ClientSettingsDlg, &CClientSettingsDlg::OnUpdateSoundDeviceChannelSelectionFrame );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
@@ -765,12 +768,13 @@ void CClientDlg::OnConnectDisconBut()
     }
 }
 
-void CClientDlg::OnClearAllStoredSoloSettings()
+void CClientDlg::OnClearAllStoredSoloMuteSettings()
 {
     // if we are in an active connection, we first have to store all fader settings in
-    // the settings struct, clear the solo states and then apply the settings again
+    // the settings struct, clear the solo and mute states and then apply the settings again
     MainMixerBoard->StoreAllFaderSettings();
     pSettings->vecStoredFaderIsSolo.Reset ( false );
+    pSettings->vecStoredFaderIsMute.Reset ( false );
     MainMixerBoard->LoadAllFaderSettings();
 }
 

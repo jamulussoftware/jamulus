@@ -92,13 +92,6 @@ inline short Float2Short ( const float fInput )
     return static_cast<short> ( fInput );
 }
 
-// debug error handling
-void DebugError ( const QString& pchErDescr,
-                  const QString& pchPar1Descr, 
-                  const double   dPar1,
-                  const QString& pchPar2Descr,
-                  const double   dPar2 );
-
 // calculate the bit rate in bits per second from the number of coded bytes
 inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
                                                  const int iFrameSize )
@@ -150,47 +143,6 @@ public:
 
     // this function simply converts the type of size to integer
     inline int Size() const { return static_cast<int> ( std::vector<TData>::size() ); }
-
-    // This operator allows for a l-value assignment of this object:
-    // CVector[x] = y is possible
-    inline TData& operator[] ( const int iPos )
-    {
-#ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
-        {
-            DebugError ( "Writing vector out of bounds", "Vector size",
-                Size(), "New parameter", iPos );
-        }
-#endif
-        return std::vector<TData>::operator[] ( iPos );
-    }
-
-    inline TData operator[] ( const int iPos ) const
-    {
-#ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
-        {
-            DebugError ( "Reading vector out of bounds", "Vector size",
-                Size(), "New parameter", iPos );
-        }
-#endif
-        return std::vector<TData>::operator[] ( iPos );
-    }
-
-    inline CVector<TData>& operator= ( const CVector<TData>& vecI )
-    {
-#ifdef _DEBUG_
-        // vectors which shall be copied MUST have same size!
-        if ( vecI.Size() != Size() )
-        {
-            DebugError ( "Vector operator=() different size", "Vector size",
-                Size(), "New parameter", vecI.Size() );
-        }
-#endif
-        std::vector<TData>::operator= ( vecI );
-
-        return *this;
-    }
 };
 
 
@@ -240,9 +192,9 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
         {
             // only add old element if it is not the same as the
             // selected one
-            if ( operator[] ( iIdx ).compare ( strNewValue ) )
+            if ( std::vector<TData>::operator[] ( iIdx ).compare ( strNewValue ) )
             {
-                vstrTempList[iTempListCnt] = operator[] ( iIdx );
+                vstrTempList[iTempListCnt] = std::vector<TData>::operator[] ( iIdx );
 
                 iTempListCnt++;
             }

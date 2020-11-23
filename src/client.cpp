@@ -28,7 +28,7 @@
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
                    const QString& strConnOnStartupAddress,
-                   const int      iCtrlMIDIChannel,
+                   const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
                    const bool     bNMuteMeInPersonalMix ) :
@@ -47,7 +47,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bMuteOutStream                   ( false ),
     fMuteOutStreamGain               ( 1.0f ),
     Socket                           ( &Channel, iPortNumber ),
-    Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect, strNClientName ),
+    Sound                            ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),
@@ -499,7 +499,7 @@ void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
     }
 }
 
-QString CClient::SetSndCrdDev ( const int iNewDev )
+QString CClient::SetSndCrdDev ( const QString strNewDev )
 {
     // if client was running then first
     // stop it and restart again after new initialization
@@ -509,7 +509,7 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
         Sound.Stop();
     }
 
-    const QString strReturn = Sound.SetDev ( iNewDev );
+    const QString strReturn = Sound.SetDev ( strNewDev );
 
     // init again because the sound card actual buffer size might
     // be changed on new device
@@ -639,6 +639,9 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         // restart client
         Sound.Start();
     }
+
+    // inform GUI about the sound card device change
+    emit SoundDeviceChanged();
 }
 
 void CClient::OnHandledSignal ( int sigNum )

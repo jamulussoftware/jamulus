@@ -349,6 +349,20 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
             stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
 
             // unregister callback functions for device property changes
+            stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+
+            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
+
+            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
             AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
@@ -420,6 +434,20 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
                                          this );
 
         AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
+
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
                                          &stPropertyAddress,
                                          deviceNotification,
                                          this );

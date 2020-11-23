@@ -79,7 +79,9 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
 
 void CSound::GetAvailableInOutDevices()
 {
-    // Get available input/output devices --------------------------------------
+    // secure lNumDevs/strDriverNames access
+    QMutexLocker locker ( &pSound->Mutex );
+
     UInt32                     iPropertySize = 0;
     AudioObjectPropertyAddress stPropertyAddress;
 
@@ -926,6 +928,9 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
 
     if ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged )
     {
+        // reload the driver list of available sound devices
+        pSound->GetAvailableInOutDevices();
+
         // if any property of the device has changed, do a full reload
         pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
     }

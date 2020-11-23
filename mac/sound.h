@@ -61,8 +61,9 @@ public:
     virtual int     GetLeftOutputChannel()  { return iSelOutputLeftChannel; }
     virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
 
-    // these variables should be protected but cannot since we want
+    // these variables/functions should be protected but cannot since we want
     // to access them from the callback function
+    void           GetAvailableInOutDevices();
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
@@ -94,7 +95,6 @@ public:
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
 
-    void    GetAvailableInOutDevices();
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();
 

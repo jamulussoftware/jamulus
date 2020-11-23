@@ -953,6 +953,8 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
 {
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
+qDebug() << "deviceNotification received";
+
     if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) ||
          ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) )
     {

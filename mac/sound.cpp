@@ -449,6 +449,11 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
             strCurDevName = strDriverNames[iDriverIdx];
         }
     }
+    else
+    {
+        // an error occurred, reload system driver list
+        GetAvailableInOutDevices();
+    }
 
     return strStat;
 }

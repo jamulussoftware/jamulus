@@ -469,12 +469,15 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     stPropertyAddress.mSelector = kAudioDevicePropertyNominalSampleRate;
     iPropertySize               = sizeof ( Float64 );
 
-    AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx],
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &inputSampleRate );
+    if ( AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx],
+                                      &stPropertyAddress,
+                                      0,
+                                      NULL,
+                                      &iPropertySize,
+                                      &inputSampleRate ) )
+    {
+        return QString ( tr ( "Current audio input device is no longer available." ) );
+    }
 
     if ( inputSampleRate != fSystemSampleRate )
     {
@@ -496,12 +499,15 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     // check output device sample rate
     iPropertySize = sizeof ( Float64 );
 
-    AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx],
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &outputSampleRate );
+    if ( AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx],
+                                      &stPropertyAddress,
+                                      0,
+                                      NULL,
+                                      &iPropertySize,
+                                      &outputSampleRate ) )
+    {
+        return QString ( tr ( "Current audio output device is no longer available." ) );
+    }
 
     if ( outputSampleRate != fSystemSampleRate )
     {

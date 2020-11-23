@@ -361,6 +361,18 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
                                                deviceNotification,
                                                this );
 
+            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
+
+            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
             // unregister the callback function for xruns
             stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
 
@@ -389,6 +401,18 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 
         // setup callbacks for device property changes
         stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
+
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
 
         AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
                                          &stPropertyAddress,
@@ -929,7 +953,8 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
 {
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
-    if ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged )
+    if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) ||
+         ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) )
     {
         // reload the driver list of available sound devices
         pSound->GetAvailableInOutDevices();

@@ -336,10 +336,80 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
     // check if device is capable
     if ( strStat.isEmpty() )
     {
+        AudioObjectPropertyAddress stPropertyAddress;
+
+        // unregister callbacks if previous device was valid
+        if ( lCurDev != INVALID_INDEX )
+        {
+            // unregister the callback function for input and output
+            AudioDeviceDestroyIOProcID ( audioInputDevice[lCurDev], audioInputProcID );
+            AudioDeviceDestroyIOProcID ( audioOutputDevice[lCurDev], audioOutputProcID );
+
+            stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
+            stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
+
+            // unregister callback functions for device property changes
+            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
+
+            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            // unregister the callback function for xruns
+            stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
+
+            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+        }
+
         // store ID of selected driver if initialization was successful
         lCurDev                    = iDriverIdx;
         CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
         CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
+
+        // register callbacks
+        stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
+        stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
+
+        // setup callback for xruns (only for input is enough)
+        stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
+
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        // setup callbacks for device property changes
+        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
+
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        // register the callback function for input and output
+        AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
+                                    callbackIO,
+                                    this,
+                                    &audioInputProcID );
+
+        AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
+                                    callbackIO,
+                                    this,
+                                    &audioOutputProcID );
 
         // only reset the channel mapping if a new device was selected
         if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
@@ -744,43 +814,6 @@ void CSound::SetRightOutputChannel ( const int iNewChan )
 
 void CSound::Start()
 {
-    AudioObjectPropertyAddress stPropertyAddress;
-
-    stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
-    stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
-
-    // setup callback for xruns (only for input is enough)
-    stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
-
-    AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
-                                     &stPropertyAddress,
-                                     deviceNotification,
-                                     this );
-
-    // setup callbacks for device property changes
-    stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
-
-    AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
-                                     &stPropertyAddress,
-                                     deviceNotification,
-                                     this );
-
-    AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
-                                     &stPropertyAddress,
-                                     deviceNotification,
-                                     this );
-
-    // register the callback function for input and output
-    AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
-                                callbackIO,
-                                this,
-                                &audioInputProcID );
-
-    AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
-                                callbackIO,
-                                this,
-                                &audioOutputProcID );
-
     // start the audio stream
     AudioDeviceStart ( audioInputDevice[lCurDev], audioInputProcID );
     AudioDeviceStart ( audioOutputDevice[lCurDev], audioOutputProcID );
@@ -794,36 +827,6 @@ void CSound::Stop()
     // stop the audio stream
     AudioDeviceStop ( audioInputDevice[lCurDev], audioInputProcID );
     AudioDeviceStop ( audioOutputDevice[lCurDev], audioOutputProcID );
-
-    // unregister the callback function for input and output
-    AudioDeviceDestroyIOProcID ( audioInputDevice[lCurDev], audioInputProcID );
-    AudioDeviceDestroyIOProcID ( audioOutputDevice[lCurDev], audioOutputProcID );
-
-    AudioObjectPropertyAddress stPropertyAddress;
-
-    stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
-    stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
-
-    // unregister callback functions for device property changes
-    stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
-
-    AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
-                                       &stPropertyAddress,
-                                       deviceNotification,
-                                       this );
-
-    AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                       &stPropertyAddress,
-                                       deviceNotification,
-                                       this );
-
-    // unregister the callback function for xruns
-    stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
-
-    AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                       &stPropertyAddress,
-                                       deviceNotification,
-                                       this );
 
     // call base class
     CSoundBase::Stop();

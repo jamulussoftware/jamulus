@@ -80,7 +80,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
 void CSound::GetAvailableInOutDevices()
 {
     // secure lNumDevs/strDriverNames access
-    QMutexLocker locker ( &pSound->Mutex );
+    QMutexLocker locker ( &Mutex );
 
     UInt32                     iPropertySize = 0;
     AudioObjectPropertyAddress stPropertyAddress;

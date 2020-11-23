@@ -54,7 +54,31 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                                  sizeof ( CFRunLoopRef ),
                                  &theRunLoop );
 
+    // initial query for available input/output sound devices in the system
+    GetAvailableInOutDevices();
 
+
+    // Optional MIDI initialization --------------------------------------------
+    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+    {
+        // create client and ports
+        MIDIClientRef midiClient = static_cast<MIDIClientRef> ( NULL );
+        MIDIClientCreate ( CFSTR ( APP_NAME ), NULL, NULL, &midiClient );
+        MIDIInputPortCreate ( midiClient, CFSTR ( "Input port" ), callbackMIDI, this, &midiInPortRef );
+
+        // open connections from all sources
+        const int iNMIDISources = MIDIGetNumberOfSources();
+
+        for ( int i = 0; i < iNMIDISources; i++ )
+        {
+            MIDIEndpointRef src = MIDIGetSource ( i );
+            MIDIPortConnectSource ( midiInPortRef, src, NULL ) ;
+        }
+    }
+}
+
+void CSound::GetAvailableInOutDevices()
+{
     // Get available input/output devices --------------------------------------
     UInt32                     iPropertySize = 0;
     AudioObjectPropertyAddress stPropertyAddress;
@@ -173,25 +197,6 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     iSelInputRightChannel      = 0;
     iSelOutputLeftChannel      = 0;
     iSelOutputRightChannel     = 0;
-
-
-    // Optional MIDI initialization --------------------------------------------
-    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
-    {
-        // create client and ports
-        MIDIClientRef midiClient = static_cast<MIDIClientRef> ( NULL );
-        MIDIClientCreate ( CFSTR ( APP_NAME ), NULL, NULL, &midiClient );
-        MIDIInputPortCreate ( midiClient, CFSTR ( "Input port" ), callbackMIDI, this, &midiInPortRef );
-
-        // open connections from all sources
-        const int iNMIDISources = MIDIGetNumberOfSources();
-
-        for ( int i = 0; i < iNMIDISources; i++ )
-        {
-            MIDIEndpointRef src = MIDIGetSource ( i );
-            MIDIPortConnectSource ( midiInPortRef, src, NULL ) ;
-        }
-    }
 }
 
 void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,

@@ -94,6 +94,7 @@ public:
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
 
+    void    GetAvailableInOutDevices();
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();
 

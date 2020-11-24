@@ -319,6 +319,9 @@ int CSound::CountChannels ( AudioDeviceID devID,
 
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
+    // secure lNumDevs/strDriverNames access
+    QMutexLocker locker ( &Mutex );
+
     // find and load driver
     int  iDriverIdx   = 0; // if the name was not found, use first driver
     bool bDriverFound = false;
@@ -469,11 +472,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
             // store the current name of the driver
             strCurDevName = strDriverNames[iDriverIdx];
         }
-    }
-    else
-    {
-        // an error occurred, reload system driver list
-        GetAvailableInOutDevices();
     }
 
     return strStat;

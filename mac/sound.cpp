@@ -334,8 +334,8 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 
     if ( !strDriverName.isEmpty() && !bDriverFound )
     {
-        QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previous selected driver "
-            "is no longer available. The system default driver will be selected instead." ) );
+        QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previously selected audio device "
+            "is no longer available. The system default audio device will be selected instead." ) );
     }
 
     // check device capabilities if it fulfills our requirements
@@ -349,10 +349,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
         // unregister callbacks if previous device was valid
         if ( lCurDev != INVALID_INDEX )
         {
-            // unregister the callback function for input and output
-            AudioDeviceDestroyIOProcID ( audioInputDevice[lCurDev], audioInputProcID );
-            AudioDeviceDestroyIOProcID ( audioOutputDevice[lCurDev], audioOutputProcID );
-
             stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
             stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
 
@@ -459,17 +455,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
                                          &stPropertyAddress,
                                          deviceNotification,
                                          this );
-
-        // register the callback function for input and output
-        AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
-                                    callbackIO,
-                                    this,
-                                    &audioInputProcID );
-
-        AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
-                                    callbackIO,
-                                    this,
-                                    &audioOutputProcID );
 
         // only reset the channel mapping if a new device was selected
         if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
@@ -885,6 +870,17 @@ void CSound::SetRightOutputChannel ( const int iNewChan )
 
 void CSound::Start()
 {
+    // register the callback function for input and output
+    AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
+                                callbackIO,
+                                this,
+                                &audioInputProcID );
+
+    AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
+                                callbackIO,
+                                this,
+                                &audioOutputProcID );
+
     // start the audio stream
     AudioDeviceStart ( audioInputDevice[lCurDev], audioInputProcID );
     AudioDeviceStart ( audioOutputDevice[lCurDev], audioOutputProcID );
@@ -898,6 +894,10 @@ void CSound::Stop()
     // stop the audio stream
     AudioDeviceStop ( audioInputDevice[lCurDev], audioInputProcID );
     AudioDeviceStop ( audioOutputDevice[lCurDev], audioOutputProcID );
+
+    // unregister the callback function for input and output
+    AudioDeviceDestroyIOProcID ( audioInputDevice[lCurDev], audioInputProcID );
+    AudioDeviceDestroyIOProcID ( audioOutputDevice[lCurDev], audioOutputProcID );
 
     // call base class
     CSoundBase::Stop();

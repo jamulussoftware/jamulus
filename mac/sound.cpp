@@ -320,14 +320,22 @@ int CSound::CountChannels ( AudioDeviceID devID,
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
     // find and load driver
-    int iDriverIdx = 0; // if the name was not found, use first driver
+    int  iDriverIdx   = 0; // if the name was not found, use first driver
+    bool bDriverFound = false;
 
     for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
         if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
         {
-            iDriverIdx = i;
+            iDriverIdx   = i;
+            bDriverFound = true;
         }
+    }
+
+    if ( !strDriverName.isEmpty() && !bDriverFound )
+    {
+        QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previous selected driver "
+            "is no longer available. The system default driver will be selected instead." ) );
     }
 
     // check device capabilities if it fulfills our requirements

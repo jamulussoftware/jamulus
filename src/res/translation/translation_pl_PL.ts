@@ -547,7 +547,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
-        <location filename="../../clientdlg.cpp" line="650"/>
+        <location filename="../../clientdlg.cpp" line="653"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -713,7 +713,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="190"/>
-        <location filename="../../clientdlg.cpp" line="1171"/>
+        <location filename="../../clientdlg.cpp" line="1174"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Połącz</translation>
     </message>
@@ -814,46 +814,46 @@
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Używaj &amp;dwurzędowego panelu miksera</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="330"/>
         <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Wy&amp;czyść wszystkie ustawienia solo/wycissz</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="637"/>
+        <location filename="../../clientdlg.cpp" line="640"/>
         <source>Center</source>
         <translation>Środek</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="644"/>
+        <location filename="../../clientdlg.cpp" line="647"/>
         <source>R</source>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="736"/>
+        <location filename="../../clientdlg.cpp" line="739"/>
         <source>Central Server</source>
         <translation>Serwer centralny</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="781"/>
-        <location filename="../../clientdlg.cpp" line="796"/>
+        <location filename="../../clientdlg.cpp" line="784"/>
+        <location filename="../../clientdlg.cpp" line="799"/>
         <source>Select Channel Setup File</source>
         <translation>Wybierz plik ustawień kanału</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="919"/>
+        <location filename="../../clientdlg.cpp" line="922"/>
         <source>user</source>
         <translation>użytkownik</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="923"/>
+        <location filename="../../clientdlg.cpp" line="926"/>
         <source>users</source>
         <translation>użytkownicy</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1147"/>
+        <location filename="../../clientdlg.cpp" line="1150"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Rozłącz</translation>
     </message>
@@ -1084,12 +1084,12 @@
         <translation>Przycisk ustawień ASIO</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="332"/>
+        <location filename="../../clientsettingsdlg.cpp" line="324"/>
         <source>Fancy</source>
         <translation>Fantazyjna</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="333"/>
+        <location filename="../../clientsettingsdlg.cpp" line="325"/>
         <source>Compact</source>
         <translation>Kompaktowa</translation>
     </message>
@@ -1185,19 +1185,19 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
-        <location filename="../../clientsettingsdlg.cpp" line="317"/>
+        <location filename="../../clientsettingsdlg.cpp" line="309"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="318"/>
+        <location filename="../../clientsettingsdlg.cpp" line="310"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-in/Stereo-out</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="201"/>
         <location filename="../../clientsettingsdlg.cpp" line="210"/>
-        <location filename="../../clientsettingsdlg.cpp" line="319"/>
+        <location filename="../../clientsettingsdlg.cpp" line="311"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
@@ -1337,18 +1337,18 @@
         <translation>Całkowite opóźnienie jest obliczane na podstawie bieżącego czasu ping i opóźnienia wprowadzonego przez bieżące ustawienia bufora.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="324"/>
+        <location filename="../../clientsettingsdlg.cpp" line="316"/>
         <source>Low</source>
         <translation>Niska</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="325"/>
-        <location filename="../../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../../clientsettingsdlg.cpp" line="317"/>
+        <location filename="../../clientsettingsdlg.cpp" line="323"/>
         <source>Normal</source>
         <translation>Standardowa</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="326"/>
+        <location filename="../../clientsettingsdlg.cpp" line="318"/>
         <source>High</source>
         <translation>Wysoka</translation>
     </message>
@@ -1383,38 +1383,38 @@
         <translation>Domyślny</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="355"/>
+        <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>preferred</source>
         <translation>preferowany</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="451"/>
-        <location filename="../../clientsettingsdlg.cpp" line="455"/>
+        <location filename="../../clientsettingsdlg.cpp" line="443"/>
+        <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>Size: </source>
         <translation>Rozmiar: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="512"/>
+        <location filename="../../clientsettingsdlg.cpp" line="504"/>
         <source>Buffer Delay</source>
         <translation>Opóźnienie bufora</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="517"/>
+        <location filename="../../clientsettingsdlg.cpp" line="509"/>
         <source>Buffer Delay: </source>
         <translation>Opóźnienie bufora: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="600"/>
+        <location filename="../../clientsettingsdlg.cpp" line="601"/>
         <source>The selected audio device could not be used because of the following error: </source>
         <translation>Wybrane urządzenie audio nie mogło być użyte z powodu następującego błędu: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="602"/>
+        <location filename="../../clientsettingsdlg.cpp" line="603"/>
         <source> The previous driver will be selected.</source>
         <translation> Został wybrany poprzedni sterownik.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="603"/>
+        <location filename="../../clientsettingsdlg.cpp" line="604"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -2710,27 +2710,27 @@
         <translation>CoreAudio wywołanie wyjścia AudioHardwareGetProperty nie powiodło się. Wydaje się, że karta dźwiękowa nie jest dostępna w systemie.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="382"/>
+        <location filename="../../../mac/sound.cpp" line="388"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation>Aktualna systemowa częstotliwość próbkowania urządzenia wejściowego audio %1 Hz nie jest obsługiwana. Proszę otworzyć Audio-MIDI-Setup w Applications-&gt;Utilities i spróbować ustawić częstotliwość próbkowania %2 Hz.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="409"/>
+        <location filename="../../../mac/sound.cpp" line="415"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation>Aktualna systemowa częstotliwość próbkowania urządzenia wyjściowego audio %1 Hz nie jest obsługiwana. Proszę otworzyć Audio-MIDI-Setup w Applications-&gt;Utilities i spróbować ustawić częstotliwość próbkowania %2 Hz.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="482"/>
+        <location filename="../../../mac/sound.cpp" line="488"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
         <translation>Format strumienia wejściowego audio dla tego urządzenia audio nie jest kompatybilny z tym oprogramowaniem.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="500"/>
+        <location filename="../../../mac/sound.cpp" line="506"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
         <translation>Format strumienia wyjściowego audio dla tego urządzenia audio nie jest kompatybilny z tym oprogramowaniem.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="825"/>
+        <location filename="../../../mac/sound.cpp" line="831"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
         <translation>Rozmiary bufora bieżącego wejściowego i wyjściowego urządzenia audio nie mogą być ustawione na wspólną wartość. Proszę wybrać inne wejściowe/wyjściowe urządzenia audio w ustawieniach systemowych.</translation>
     </message>
@@ -2740,48 +2740,48 @@
         <translation>Sterownik audio nie może zostać zainicjalizowany.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="118"/>
+        <location filename="../../../windows/sound.cpp" line="122"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
         <translation>Urządzenie audio nie obsługuje wymaganej częstotliwości próbkowania. Wymagana częstotliwość próbkowania wynosi: </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="131"/>
+        <location filename="../../../windows/sound.cpp" line="135"/>
         <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation>Urządzenie audio nie obsługuje ustawiania wymaganej częstotliwości próbkowania. Błąd ten może się zdarzyć, jeśli posiadasz interfejs audio taki jak Roland UA-25EX, w którym ustawiasz częstotliwość próbkowania za pomocą przełącznika sprzętowego na urządzeniu audio. W takim przypadku należy zmienić częstotliwość próbkowania na </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="135"/>
+        <location filename="../../../windows/sound.cpp" line="139"/>
         <source> Hz on the device and restart the </source>
         <translation> Hz na urządzeniu i ponownie uruchom program </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="136"/>
+        <location filename="../../../windows/sound.cpp" line="140"/>
         <source> software.</source>
         <translation> program.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="146"/>
+        <location filename="../../../windows/sound.cpp" line="150"/>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
         <translation>Urządzenie audio nie obsługuje wymaganej liczby kanałów. Wymagana liczba kanałów dla wejścia i wyjścia wynosi: </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="182"/>
-        <location filename="../../../windows/sound.cpp" line="212"/>
+        <location filename="../../../windows/sound.cpp" line="186"/>
+        <location filename="../../../windows/sound.cpp" line="216"/>
         <source>Required audio sample format not available.</source>
         <translation>Wymagany format próbkowania audio nie jest dostępny.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="528"/>
+        <location filename="../../../windows/sound.cpp" line="532"/>
         <source>No ASIO audio device (driver) found.</source>
         <translation>Urządzenie (sterownik) ASIO nie został znaleziony.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="529"/>
+        <location filename="../../../windows/sound.cpp" line="533"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation> program wymaga do poprawnego działania interfejsu audio ASIO o niskim opóźnieniu. Nie jest to standardowy interfejs systemu Windows i dlatego wymagany jest specjalny sterownik audio. Albo twoja karta dźwiękowa posiada natywny sterownik ASIO (co jest zalecane) lub możesz użyć alternatywnych sterowników, takich jak ASIO4All.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="529"/>
+        <location filename="../../../windows/sound.cpp" line="533"/>
         <source>The </source>
         <translation></translation>
     </message>

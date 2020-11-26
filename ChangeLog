@@ -20,6 +20,14 @@
 
 
 
+TODO sliders move by themselves in 3.5.11 (#611) -> maybe the cause are the groupings of faders, see https://www.facebook.com/groups/619274602254947/permalink/803001740548898/?comment_id=803602367155502&reply_comment_id=803624437153295
+
+TODO use new server icon on Mac server bundle (#737) (on Windows the setup is already fixed)
+
+TODO add Github Issues for the MacOS audio interface changes done on the branch
+
+
+
 
 
 

@@ -361,6 +361,9 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 
 void CChannelFader::Reset()
 {
+    // it is important to reset the group index first (#611)
+    iGroupID = INVALID_INDEX;
+
     // general initializations
     SetRemoteFaderIsMute ( false );
 
@@ -396,7 +399,6 @@ void CChannelFader::Reset()
     bIsMutedAtServer     = false;
     iRunningNewClientCnt = 0;
 
-    iGroupID = INVALID_INDEX;
     UpdateGroupIDDependencies();
 }
 
@@ -1189,7 +1191,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                                                       bStoredFaderIsMute,
                                                       iGroupID ) )
                         {
-                            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
+                            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel, true ); // suppress group update
                             vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
                             vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                             vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
@@ -1290,7 +1292,7 @@ void CAudioMixerBoard::LoadAllFaderSettings()
                                       bStoredFaderIsMute,
                                       iGroupID ) )
         {
-            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
+            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel, true ); // suppress group update
             vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
             vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
             vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );

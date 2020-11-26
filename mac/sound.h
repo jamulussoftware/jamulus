@@ -28,6 +28,7 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
+#include <QMessageBox>
 #include "soundbase.h"
 #include "global.h"
 
@@ -61,8 +62,9 @@ public:
     virtual int     GetLeftOutputChannel()  { return iSelOutputLeftChannel; }
     virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
 
-    // these variables should be protected but cannot since we want
+    // these variables/functions should be protected but cannot since we want
     // to access them from the callback function
+    void           GetAvailableInOutDevices();
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;

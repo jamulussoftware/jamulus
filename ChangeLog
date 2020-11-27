@@ -20,11 +20,8 @@
 
 - bug fix: on MacOS Jamulus does not always select the previous sound card (#680)
 
+- bug fix: use new server icon on Mac server bundle and Windows installer (#737)
 
-
-TODO use new server icon on Mac server bundle (#737) (on Windows the setup is already fixed)
-
-TODO add Github Issues for the MacOS audio interface changes done on the branch
 
 
 

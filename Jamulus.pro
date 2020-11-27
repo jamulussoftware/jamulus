@@ -97,6 +97,11 @@ win32 {
 
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
+        MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+        RC_FILE = mac/jamulus-server-icon-2020.icns
+    } else {
+        MACOSX_BUNDLE_ICON_FILE = mainicon.icns
+        RC_FILE = mac/mainicon.icns
     }
 
     QT += macextras
@@ -104,7 +109,6 @@ win32 {
     SOURCES += mac/sound.cpp
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
-    RC_FILE = mac/mainicon.icns
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET

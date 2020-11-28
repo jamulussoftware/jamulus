@@ -393,14 +393,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
                                                &stPropertyAddress,
                                                deviceNotification,
                                                this );
-
-            // unregister the callback function for xruns
-            stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
-
-            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                               &stPropertyAddress,
-                                               deviceNotification,
-                                               this );
         }
 
         // store ID of selected driver if initialization was successful
@@ -411,14 +403,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
         // register callbacks
         stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
         stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
-
-        // setup callback for xruns (only for input is enough)
-        stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
-
-        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
-                                         &stPropertyAddress,
-                                         deviceNotification,
-                                         this );
 
         // setup callbacks for device property changes
         stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
@@ -1009,16 +993,6 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
         // if any property of the device has changed, do a full reload
         pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
     }
-
-/* NOTE that this code does not solve the crackling sound issue
-    if ( inAddresses->mSelector == kAudioDeviceProcessorOverload )
-    {
-        // xrun handling (it is important to act on xruns under CoreAudio
-        // since it seems that the xrun situation stays stable for a
-        // while and would give you a long time bad audio)
-        pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART );
-    }
-*/
 
     return noErr;
 }

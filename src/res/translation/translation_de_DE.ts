@@ -1035,7 +1035,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1130"/>
         <source>The soundcard device does not work correctly. Please check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Soundkarte funktioniert nicht ordnungsgemäß. Bitte überprüfe die Soundkartenauswahl und die Einstellungen der Soundkarte.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1169"/>
@@ -3262,12 +3262,12 @@
     <message>
         <location filename="../../../mac/sound.cpp" line="340"/>
         <source>The previously selected audio device is no longer available. The system default audio device will be selected instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die vorher ausgewählte Soundkarte ist nicht mehr im System verfügbar. Die System-Standardsoundkarte wird nun stattdessen ausgewählt.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="487"/>
         <source>Current audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das aktuelle Audiogerät für den Toneingang ist nicht mehr verfügbar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="500"/>
@@ -3277,7 +3277,7 @@
     <message>
         <location filename="../../../mac/sound.cpp" line="517"/>
         <source>Current audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das aktuelle Audiogerät für den Tonausgang ist nicht mehr verfügbar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="530"/>

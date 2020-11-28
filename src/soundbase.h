@@ -56,7 +56,7 @@ public:
                  const QString& strMIDISetup );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize ) { return iNewPrefMonoBufferSize; }
-    virtual void Start() { bRun = true; }
+    virtual void Start() { bRun = true; bCallbackEntered = false; }
     virtual void Stop();
 
     // device selection
@@ -84,6 +84,7 @@ public:
     virtual void    OpenDriverSetup() {}
 
     bool IsRunning() const { return bRun; }
+    bool IsCallbackEntered() const { return bCallbackEntered; }
 
     // TODO this should be protected but since it is used
     // in a callback function it has to be public -> better solution
@@ -125,12 +126,14 @@ protected:
     // callback function call for derived classes
     void ProcessCallback ( CVector<int16_t>& psData )
     {
+        bCallbackEntered = true;
         (*fpProcessCallback) ( psData, pProcessCallbackArg );
     }
 
     void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 
     bool    bRun;
+    bool    bCallbackEntered;
     QMutex  MutexAudioProcessCallback;
 
     QString strSystemDriverTechniqueName;

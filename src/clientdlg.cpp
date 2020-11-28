@@ -226,6 +226,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                               tr ( "software upgrade available" ) + "</b></font>" );
     lblUpdateCheck->hide();
 
+    // setup timers
+    TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
+
 
     // Connect on startup ------------------------------------------------------
     if ( !strConnOnStartupAddress.isEmpty() )
@@ -420,6 +423,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerPing, &QTimer::timeout,
         this, &CClientDlg::OnTimerPing );
+
+    QObject::connect ( &TimerCheckAudioDeviceOk, &QTimer::timeout,
+        this, &CClientDlg::OnTimerCheckAudioDeviceOk );
 
     // sliders
     QObject::connect ( sldAudioPan, &QSlider::valueChanged,
@@ -1113,6 +1119,19 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     ledDelay->SetLight ( eOverallDelayLEDColor );
 }
 
+void CClientDlg::OnTimerCheckAudioDeviceOk()
+{
+    // check if the audio device entered the audio callback after a pre-defined
+    // timeout to check if a valid device is selected and if we do not have
+    // fundamental settings errors (in which case the GUI would only show that
+    // it is trying to connect the server which does not help to solve the problem (#129))
+    if ( !pClient->IsCallbackEntered() )
+    {
+        QMessageBox::warning ( this, APP_NAME, tr ( "The soundcard device does not "
+            "work correctly. Please check the device selection and the driver settings." ) );
+    }
+}
+
 void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                                       int          iPingTime,
                                                       int          iNumClients )
@@ -1153,9 +1172,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
         // start timer for level meter bar and ping time measurement
-        TimerSigMet.start     ( LEVELMETER_UPDATE_TIME_MS );
-        TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start       ( PING_UPDATE_TIME_MS );
+        TimerSigMet.start             ( LEVELMETER_UPDATE_TIME_MS );
+        TimerBuffersLED.start         ( BUFFER_LED_UPDATE_TIME_MS );
+        TimerPing.start               ( PING_UPDATE_TIME_MS );
+        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
     }
 }
 
@@ -1184,6 +1204,7 @@ void CClientDlg::Disconnect()
     // stop other timers
     TimerBuffersLED.stop();
     TimerPing.stop();
+    TimerCheckAudioDeviceOk.stop();
 
 
 // TODO is this still required???

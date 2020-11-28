@@ -31,7 +31,9 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void*          pParg,
                          const QString& strMIDISetup ) :
     fpProcessCallback            ( fpNewProcessCallback ),
-    pProcessCallbackArg          ( pParg ), bRun ( false ),
+    pProcessCallbackArg          ( pParg ),
+    bRun                         ( false ),
+    bCallbackEntered             ( false ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
     iCtrlMIDIChannel             ( INVALID_MIDI_CH ),
     iMIDIOffsetFader             ( 70 ) // Behringer X-TOUCH: offset of 0x46

@@ -62,6 +62,7 @@
 #define LEVELMETER_UPDATE_TIME_MS   100   // ms
 #define BUFFER_LED_UPDATE_TIME_MS   300   // ms
 #define LED_BAR_UPDATE_TIME_MS      1000  // ms
+#define CHECK_AUDIO_DEV_OK_TIME_MS  5000  // ms
 
 // number of ping times > upper bound until error message is shown
 #define NUM_HIGH_PINGS_UNTIL_ERROR  5
@@ -108,6 +109,7 @@ protected:
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;
     QTimer             TimerPing;
+    QTimer             TimerCheckAudioDeviceOk;
 
     virtual void       closeEvent     ( QCloseEvent*     Event );
     virtual void       dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
@@ -124,6 +126,7 @@ public slots:
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
+    void OnTimerCheckAudioDeviceOk();
 
     void OnTimerStatus() { UpdateDisplay(); }
 

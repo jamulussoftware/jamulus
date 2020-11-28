@@ -116,6 +116,7 @@ public:
     void   Start();
     void   Stop();
     bool   IsRunning() { return Sound.IsRunning(); }
+    bool   IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
     bool   SetServerAddr ( QString strNAddr );
 
     double GetLevelForMeterdBLeft()  { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }

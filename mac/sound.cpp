@@ -354,8 +354,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
     {
         AudioObjectPropertyAddress stPropertyAddress;
 
-qDebug() << "1";
-
         // unregister callbacks if previous device was valid
         if ( lCurDev != INVALID_INDEX )
         {
@@ -370,16 +368,12 @@ qDebug() << "1";
                                                deviceNotification,
                                                this );
 
-qDebug() << "2";
-
             stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
 
             AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
                                                &stPropertyAddress,
                                                deviceNotification,
                                                this );
-
-qDebug() << "3";
 
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
@@ -388,14 +382,10 @@ qDebug() << "3";
                                                deviceNotification,
                                                this );
 
-qDebug() << "4";
-
             AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
                                                &stPropertyAddress,
                                                deviceNotification,
                                                this );
-
-qDebug() << "5";
 
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
 
@@ -403,8 +393,6 @@ qDebug() << "5";
                                                &stPropertyAddress,
                                                deviceNotification,
                                                this );
-
-qDebug() << "6";
 
             AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
                                                &stPropertyAddress,
@@ -424,14 +412,10 @@ qDebug() << "6";
         // setup callbacks for device property changes
         stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
-qDebug() << "7";
-
         AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
                                          &stPropertyAddress,
                                          deviceNotification,
                                          this );
-
-qDebug() << "8";
 
         AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
                                          &stPropertyAddress,
@@ -440,14 +424,10 @@ qDebug() << "8";
 
         stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
 
-qDebug() << "9";
-
         AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
                                          &stPropertyAddress,
                                          deviceNotification,
                                          this );
-
-qDebug() << "10";
 
         AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
                                          &stPropertyAddress,
@@ -456,16 +436,12 @@ qDebug() << "10";
 
         stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
-qDebug() << "11";
-
         AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
                                          &stPropertyAddress,
                                          deviceNotification,
                                          this );
 
         stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
-
-qDebug() << "12";
 
         AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
                                          &stPropertyAddress,

@@ -198,32 +198,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="846"/>
+        <location filename="../../audiomixerboard.cpp" line="848"/>
         <source>Personal Mix at the Server</source>
         <translation>Eigen mix op de Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="846"/>
+        <location filename="../../audiomixerboard.cpp" line="848"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Indien verbonden met de server kan hier de lokale mix ingesteld worden zonder dat hetgeen anderen van je horen wordt beïnvloed. De titel toont de servernaam en indien bekend of er audio wordt opgenomen.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="923"/>
+        <location filename="../../audiomixerboard.cpp" line="925"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="932"/>
+        <location filename="../../audiomixerboard.cpp" line="934"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>A A N  H E T  V E R B I N D E N</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1098"/>
+        <location filename="../../audiomixerboard.cpp" line="1100"/>
         <source>RECORDING ACTIVE</source>
         <translation>GELUIDSOPNAME ACTIEF</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1101"/>
+        <location filename="../../audiomixerboard.cpp" line="1103"/>
         <source>Personal Mix at: </source>
         <translation>Eigen mix op: </translation>
     </message>
@@ -446,49 +446,49 @@
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="741"/>
+        <location filename="../../audiomixerboard.cpp" line="743"/>
         <source>Alias/Name</source>
         <translation>Alias/Naam</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="748"/>
+        <location filename="../../audiomixerboard.cpp" line="750"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="758"/>
+        <location filename="../../audiomixerboard.cpp" line="760"/>
         <source>Location</source>
         <translation>Locatie</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="786"/>
-        <location filename="../../audiomixerboard.cpp" line="792"/>
-        <location filename="../../audiomixerboard.cpp" line="798"/>
+        <location filename="../../audiomixerboard.cpp" line="788"/>
+        <location filename="../../audiomixerboard.cpp" line="794"/>
+        <location filename="../../audiomixerboard.cpp" line="800"/>
         <source>Skill Level</source>
         <translation>Vaardigheidssniveau</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="819"/>
+        <location filename="../../audiomixerboard.cpp" line="821"/>
         <source>Alias</source>
         <translation>Alias</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="785"/>
+        <location filename="../../audiomixerboard.cpp" line="787"/>
         <source>Beginner</source>
         <translation>Beginner</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="791"/>
+        <location filename="../../audiomixerboard.cpp" line="793"/>
         <source>Intermediate</source>
         <translation>Gemiddeld</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="797"/>
+        <location filename="../../audiomixerboard.cpp" line="799"/>
         <source>Expert</source>
         <translation>Gevorderd</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="810"/>
+        <location filename="../../audiomixerboard.cpp" line="812"/>
         <source>Musician Profile</source>
         <translation>Muzikantenprofiel</translation>
     </message>
@@ -651,7 +651,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
-        <location filename="../../clientdlg.cpp" line="650"/>
+        <location filename="../../clientdlg.cpp" line="659"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -873,7 +873,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="190"/>
-        <location filename="../../clientdlg.cpp" line="1171"/>
+        <location filename="../../clientdlg.cpp" line="1194"/>
         <source>C&amp;onnect</source>
         <translation>C&amp;onnect</translation>
     </message>
@@ -883,57 +883,57 @@
         <translation>software-update beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="240"/>
+        <location filename="../../clientdlg.cpp" line="243"/>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="255"/>
+        <location filename="../../clientdlg.cpp" line="258"/>
         <source>&amp;View</source>
         <translation>&amp;Bekijken</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="257"/>
+        <location filename="../../clientdlg.cpp" line="260"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Verbindingsinstellingen...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="260"/>
+        <location filename="../../clientdlg.cpp" line="263"/>
         <source>My &amp;Profile...</source>
         <translation>Mijn &amp;Profiel...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="263"/>
+        <location filename="../../clientdlg.cpp" line="266"/>
         <source>C&amp;hat...</source>
         <translation>C&amp;hat...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="266"/>
+        <location filename="../../clientdlg.cpp" line="269"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Settings...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="272"/>
+        <location filename="../../clientdlg.cpp" line="275"/>
         <source>&amp;Analyzer Console...</source>
         <translation>&amp;Analyzer Console...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="280"/>
+        <location filename="../../clientdlg.cpp" line="283"/>
         <source>N&amp;o Channel Sorting</source>
         <translation>Kanalen Niet S&amp;orteren</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="292"/>
+        <location filename="../../clientdlg.cpp" line="295"/>
         <source>Sort Channel Users by &amp;City</source>
         <translation>Sorteer muzikanten op &amp;Stad</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="322"/>
+        <location filename="../../clientdlg.cpp" line="325"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
         <translation>Gebruik &amp;Twee-rijen-mengpaneel</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="330"/>
+        <location filename="../../clientdlg.cpp" line="333"/>
         <source>&amp;Clear All Stored Solo and Mute Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -942,42 +942,42 @@
         <translation type="vanished">&amp;Wis Alle Opgeslagen Solo-instellingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="333"/>
+        <location filename="../../clientdlg.cpp" line="336"/>
         <source>Set All Faders to New Client &amp;Level</source>
         <translation>Zet Alle Faders op Nieuwe-Client-&amp;Niveau</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="250"/>
+        <location filename="../../clientdlg.cpp" line="253"/>
         <source>E&amp;xit</source>
         <translation>E&amp;xit</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="242"/>
+        <location filename="../../clientdlg.cpp" line="245"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>&amp;Laad Mengkanaalinstellingen...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="245"/>
+        <location filename="../../clientdlg.cpp" line="248"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>Mixerkanaalinstellingen &amp;Opslaan...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="278"/>
+        <location filename="../../clientdlg.cpp" line="281"/>
         <source>&amp;Edit</source>
         <translation>&amp;Bewerken</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="283"/>
+        <location filename="../../clientdlg.cpp" line="286"/>
         <source>Sort Channel Users by &amp;Name</source>
         <translation>Sorteer muzikanten op &amp;Naam</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="286"/>
+        <location filename="../../clientdlg.cpp" line="289"/>
         <source>Sort Channel Users by &amp;Instrument</source>
         <translation>Sorteer muzikanten op &amp;Instrument</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="289"/>
+        <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;Group</source>
         <translation>Sorteer muzikanten op &amp;Groep</translation>
     </message>
@@ -986,38 +986,43 @@
         <translation type="vanished">Geen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="637"/>
+        <location filename="../../clientdlg.cpp" line="646"/>
         <source>Center</source>
         <translation>Centrum</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="644"/>
+        <location filename="../../clientdlg.cpp" line="653"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="736"/>
+        <location filename="../../clientdlg.cpp" line="745"/>
         <source>Central Server</source>
         <translation>Centrale Server</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="781"/>
-        <location filename="../../clientdlg.cpp" line="796"/>
+        <location filename="../../clientdlg.cpp" line="790"/>
+        <location filename="../../clientdlg.cpp" line="805"/>
         <source>Select Channel Setup File</source>
         <translation>Selecteer bestand met Kanaalinstellingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="919"/>
+        <location filename="../../clientdlg.cpp" line="928"/>
         <source>user</source>
         <translation>gebruiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="923"/>
+        <location filename="../../clientdlg.cpp" line="932"/>
         <source>users</source>
         <translation>gebruikers</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1147"/>
+        <location filename="../../clientdlg.cpp" line="1130"/>
+        <source>The soundcard device does not work correctly. Please check the device selection and the driver settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="1169"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Afmelden</translation>
     </message>
@@ -1465,7 +1470,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
-        <location filename="../../clientsettingsdlg.cpp" line="317"/>
+        <location filename="../../clientsettingsdlg.cpp" line="309"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
@@ -1475,14 +1480,14 @@
         <translation> modus verhoogt de bandbreedte van de audiostream. Zorg ervoor dat deze niet hoger staat dan de beschikbare bandbreedte van uw internetverbinding.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="318"/>
+        <location filename="../../clientsettingsdlg.cpp" line="310"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-in/Stereo-out</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="201"/>
         <location filename="../../clientsettingsdlg.cpp" line="210"/>
-        <location filename="../../clientsettingsdlg.cpp" line="319"/>
+        <location filename="../../clientsettingsdlg.cpp" line="311"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
@@ -1627,28 +1632,28 @@
         <translation>De upstreamsnelheid is afhankelijk van de huidige grootte van het audiopakket en de instelling van de audiocompressie. Zorg ervoor dat de upstreamsnelheid niet hoger is dan de beschikbare snelheid (controleer de upstreammogelijkheden van uw internetverbinding door bijvoorbeeld speedtest.net te gebruiken).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="324"/>
+        <location filename="../../clientsettingsdlg.cpp" line="316"/>
         <source>Low</source>
         <translation>Laag</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="325"/>
-        <location filename="../../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../../clientsettingsdlg.cpp" line="317"/>
+        <location filename="../../clientsettingsdlg.cpp" line="323"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="326"/>
+        <location filename="../../clientsettingsdlg.cpp" line="318"/>
         <source>High</source>
         <translation>Hoog</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="332"/>
+        <location filename="../../clientsettingsdlg.cpp" line="324"/>
         <source>Fancy</source>
         <translation>Fancy</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="333"/>
+        <location filename="../../clientsettingsdlg.cpp" line="325"/>
         <source>Compact</source>
         <translation>Compact</translation>
     </message>
@@ -1691,38 +1696,38 @@
         <translation type="vanished">Standaard (Noord-Amerika)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="355"/>
+        <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>preferred</source>
         <translation>gewenst</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="451"/>
-        <location filename="../../clientsettingsdlg.cpp" line="455"/>
+        <location filename="../../clientsettingsdlg.cpp" line="443"/>
+        <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>Size: </source>
         <translation>Size: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="512"/>
+        <location filename="../../clientsettingsdlg.cpp" line="504"/>
         <source>Buffer Delay</source>
         <translation>Buffervertraging</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="517"/>
+        <location filename="../../clientsettingsdlg.cpp" line="509"/>
         <source>Buffer Delay: </source>
         <translation>Buffervertraging: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="600"/>
+        <location filename="../../clientsettingsdlg.cpp" line="601"/>
         <source>The selected audio device could not be used because of the following error: </source>
         <translation>Het geselecteerde audioapparaat kon niet worden gebruikt vanwege de volgende fout: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="602"/>
+        <location filename="../../clientsettingsdlg.cpp" line="603"/>
         <source> The previous driver will be selected.</source>
         <translation> Het vorige stuurprogramma wordt geselecteerd.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="603"/>
+        <location filename="../../clientsettingsdlg.cpp" line="604"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -3218,37 +3223,52 @@
         <translation>De Jack-server werd afgesloten. Voor deze software is een Jack-server nodig om te kunnen draaien. Probeer de software te herstarten om het probleem op te lossen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="101"/>
+        <location filename="../../../mac/sound.cpp" line="127"/>
         <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
         <translation>CoreAudio-ingang AudioHardwareGetProperty-oproep mislukt. Het lijkt erop dat er geen geluidskaart beschikbaar is in het systeem.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="115"/>
+        <location filename="../../../mac/sound.cpp" line="141"/>
         <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
         <translation>CoreAudio uitgang AudioHardwareGetProperty call mislukt. Het lijkt erop dat er geen geluidskaart beschikbaar is in het systeem.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="382"/>
+        <location filename="../../../mac/sound.cpp" line="340"/>
+        <source>The previously selected audio device is no longer available. The system default audio device will be selected instead.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="487"/>
+        <source>Current audio input device is no longer available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="500"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation>Een sample rate van %1 Hz voor het audio-ingangsapparaat van het huidige systeem wordt niet ondersteund. Open de Audio-MIDI-Setup in Applications-&gt;Utilities en probeer een sample rate van %2 Hz in te stellen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="409"/>
+        <location filename="../../../mac/sound.cpp" line="517"/>
+        <source>Current audio output device is no longer available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="530"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation>De sample rate van %1 Hz van het huidige systeem audiouitgangsapparaat wordt niet ondersteund. Open de Audio-MIDI-Setup in Applications-&gt;Utilities en probeer een sample rate van %2 Hz in te stellen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="482"/>
+        <location filename="../../../mac/sound.cpp" line="603"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
         <translation>Het audio input stream-formaat voor dit audioapparaat is niet compatibel met deze software.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="500"/>
+        <location filename="../../../mac/sound.cpp" line="621"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
         <translation>Het formaat van de audio-uitgangsstroom voor dit audioapparaat is niet compatibel met deze software.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="825"/>
+        <location filename="../../../mac/sound.cpp" line="894"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
         <translation>De buffergrootte van het huidige in- en uitgaande audioapparaat kan niet op een gemeenschappelijke waarde worden ingesteld. Kies andere in-/uitgangsaudioapparaten in uw systeeminstellingen.</translation>
     </message>
@@ -3258,48 +3278,48 @@
         <translation>De audiodriver kon niet worden geïnitialiseerd.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="118"/>
+        <location filename="../../../windows/sound.cpp" line="122"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
         <translation>Het audioapparaat ondersteunt niet de vereiste samplefrequentie. De vereiste samplefrequentie wel: </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="131"/>
+        <location filename="../../../windows/sound.cpp" line="135"/>
         <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation>Het audioapparaat biedt geen ondersteuning voor het instellen van de vereiste bemonsteringsfrequentie. Deze fout kan zich voordoen als u een audio-interface heeft zoals de Roland UA-25EX waarbij u de samplefrequentie instelt met een hardwareschakelaar op het audioapparaat. Als dit het geval is, verander dan de samplefrequentie in </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="135"/>
+        <location filename="../../../windows/sound.cpp" line="139"/>
         <source> Hz on the device and restart the </source>
         <translation> Hz op het apparaat en start de </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="136"/>
+        <location filename="../../../windows/sound.cpp" line="140"/>
         <source> software.</source>
         <translation> software.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="146"/>
+        <location filename="../../../windows/sound.cpp" line="150"/>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
         <translation>Het audioapparaat ondersteunt niet het vereiste aantal kanalen. Het vereiste aantal kanalen voor in- en uitvoer is: </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="182"/>
-        <location filename="../../../windows/sound.cpp" line="212"/>
+        <location filename="../../../windows/sound.cpp" line="186"/>
+        <location filename="../../../windows/sound.cpp" line="216"/>
         <source>Required audio sample format not available.</source>
         <translation>Vereist audiosampleformaat niet beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="528"/>
+        <location filename="../../../windows/sound.cpp" line="532"/>
         <source>No ASIO audio device (driver) found.</source>
         <translation>Geen ASIO-audioapparaat (stuurprogramma) gevonden.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="529"/>
+        <location filename="../../../windows/sound.cpp" line="533"/>
         <source>The </source>
         <translation>De </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="529"/>
+        <location filename="../../../windows/sound.cpp" line="533"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation> software vereist de lage-latency audio-interface ASIO om goed te kunnen werken. Dit is geen standaard Windows audio-interface en daarom is een speciale audio-stuurprogramma vereist. Ofwel heeft uw geluidskaart een native ASIO driver (die wordt aanbevolen), ofwel wilt u alternatieve drivers gebruiken zoals de ASIO4All driver.</translation>
     </message>
@@ -3311,42 +3331,42 @@
         <translation type="vanished">Ongeldige apparaatkeuze.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="92"/>
+        <location filename="../../soundbase.cpp" line="94"/>
         <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
         <translation>De eigenschappen van de audiodriver zijn veranderd in een toestand die niet compatibel is met deze software. Het geselecteerde audioapparaat kon niet worden gebruikt vanwege de volgende fout:</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="97"/>
+        <location filename="../../soundbase.cpp" line="99"/>
         <source>Please restart the software.</source>
         <translation>Start de software opnieuw op.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="98"/>
+        <location filename="../../soundbase.cpp" line="100"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="141"/>
+        <location filename="../../soundbase.cpp" line="143"/>
         <source>No usable </source>
         <translation>Niet bruikbaar </translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="142"/>
+        <location filename="../../soundbase.cpp" line="144"/>
         <source> audio device (driver) found.</source>
         <translation> audioapparaat (stuurprogramma) gevonden.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="143"/>
+        <location filename="../../soundbase.cpp" line="145"/>
         <source>In the following there is a list of all available drivers with the associated error message:</source>
         <translation>Hieronder vindt u een lijst van alle beschikbare drivers met de bijbehorende foutmelding:</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="157"/>
+        <location filename="../../soundbase.cpp" line="159"/>
         <source>Do you want to open the ASIO driver setups?</source>
         <translation>Wilt u de ASIO-stuurprogramma&apos;s openen?</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="164"/>
+        <location filename="../../soundbase.cpp" line="166"/>
         <source> could not be started because of audio interface issues.</source>
         <translation> kon niet worden gestart vanwege problemen met de audio-interface.</translation>
     </message>

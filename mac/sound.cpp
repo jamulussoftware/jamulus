@@ -335,11 +335,13 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
         }
     }
 
+/*
     if ( !strDriverName.isEmpty() && !bDriverFound )
     {
         QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previously selected audio device "
             "is no longer available. The system default audio device will be selected instead." ) );
     }
+*/
 
     // check device capabilities if it fulfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );

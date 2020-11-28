@@ -319,32 +319,27 @@ int CSound::CountChannels ( AudioDeviceID devID,
 
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
+    // secure lNumDevs/strDriverNames access
+    QMutexLocker locker ( &Mutex );
+
     // find and load driver
     int  iDriverIdx   = 0; // if the name was not found, use first driver
     bool bDriverFound = false;
 
-    // secure strDriverNames access
-    Mutex.lock();
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
-        for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+        if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
         {
-            if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
-            {
-                iDriverIdx   = i;
-                bDriverFound = true;
-            }
+            iDriverIdx   = i;
+            bDriverFound = true;
         }
     }
-    Mutex.unlock();
 
     if ( !strDriverName.isEmpty() && !bDriverFound )
     {
         QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previously selected audio device "
             "is no longer available. The system default audio device will be selected instead." ) );
     }
-
-    // secure lNumDevs/strDriverNames access
-    QMutexLocker locker ( &Mutex );
 
     // check device capabilities if it fulfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );

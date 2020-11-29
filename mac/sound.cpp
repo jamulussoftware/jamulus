@@ -320,8 +320,9 @@ int CSound::CountChannels ( AudioDeviceID devID,
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
     // find and load driver
-    int  iDriverIdx   = 0; // if the name was not found, use first driver
-    bool bDriverFound = false;
+    QString strStat      = "";
+    int     iDriverIdx   = 0; // if the name was not found, use first driver
+    bool    bDriverFound = false;
 
     // secure lNumDevs/strDriverNames access
     Mutex.lock();
@@ -336,7 +337,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
         }
 
         // check device capabilities if it fulfills our requirements
-        const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
+        strStat = CheckDeviceCapabilities ( iDriverIdx );
 
         // check if device is capable
         if ( strStat.isEmpty() )

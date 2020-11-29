@@ -274,12 +274,6 @@
        <layout class="QHBoxLayout">
         <item>
          <widget class="QLabel" name="lblNetBufLabel">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Local</string>
           </property>
@@ -293,12 +287,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lblNetBufServerLabel">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Server</string>
           </property>
@@ -316,12 +304,6 @@
        <layout class="QHBoxLayout">
         <item>
          <widget class="QLabel" name="lblNetBuf">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Size</string>
           </property>
@@ -335,12 +317,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lblNetBufServer">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Size</string>
           </property>

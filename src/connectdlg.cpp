@@ -708,10 +708,24 @@ void CConnectDlg::OnTimerPing()
                 data ( 0, Qt::UserRole ).toString(),
                 CurServerAddress ) )
         {
-            // if address is valid, send ping or the version and OS request
-            emit CreateCLServerListPingMes ( CurServerAddress );
+            // if address is valid, send ping message using a new thread
+            QtConcurrent::run ( this,
+                                &CConnectDlg::EmitCLServerListPingMes,
+                                CurServerAddress );
         }
     }
+}
+
+void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& CurServerAddress )
+{
+    // The ping time messages for all servers should not be sent all in a very
+    // short time since it showed that this leads to errors in the ping time
+    // measurement (#49). We therefore introduce a short delay for each server
+    // (since we are doing this in a separate thread for each server, we do not
+    // block the GUI).
+    QThread::msleep ( 1 );
+
+    emit CreateCLServerListPingMes ( CurServerAddress );
 }
 
 void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,

@@ -30,6 +30,7 @@
 #include <QWhatsThis>
 #include <QTimer>
 #include <QLocale>
+#include <QtConcurrent>
 #include "global.h"
 #include "settings.h"
 #include "multicolorled.h"
@@ -80,6 +81,7 @@ protected:
     void             UpdateListFilter();
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
+    void             EmitCLServerListPingMes ( const CHostAddress& CurServerAddress );
 
     CClientSettings* pSettings;
 

@@ -827,8 +827,8 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
 #endif
 }
 
-void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
-                                            COSUtil::EOpSystemType eOSType,
+void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
+                                            COSUtil::EOpSystemType ,
                                             QString                strVersion )
 {
     // update check
@@ -839,13 +839,6 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
         lblUpdateCheck->show();
         QTimer::singleShot ( 60000, [this]() { lblUpdateCheck->hide(); } );
     }
-#endif
-
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-    ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion );
-#else
-    Q_UNUSED ( InetAddr ) // avoid compiler warnings
-    Q_UNUSED ( eOSType )  // avoid compiler warnings
 #endif
 }
 

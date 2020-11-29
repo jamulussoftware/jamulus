@@ -143,8 +143,8 @@ public slots:
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 
-    void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
-                                    COSUtil::EOpSystemType eOSType,
+    void OnCLVersionAndOSReceived ( CHostAddress           ,
+                                    COSUtil::EOpSystemType ,
                                     QString                strVersion );
 
     void OnLoadChannelSetup();

@@ -709,11 +709,7 @@ void CConnectDlg::OnTimerPing()
                 CurServerAddress ) )
         {
             // if address is valid, send ping or the version and OS request
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-            emit CreateCLServerListReqVerAndOSMes ( CurServerAddress );
-#else
             emit CreateCLServerListPingMes ( CurServerAddress );
-#endif
         }
     }
 }
@@ -902,28 +898,3 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
         delete pCurChildItem;
     }
 }
-
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-void CConnectDlg::SetVersionAndOSType ( CHostAddress           InetAddr,
-                                        COSUtil::EOpSystemType eOSType,
-                                        QString                strVersion )
-{
-    // apply the received version and OS type to the correct server list entry
-    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
-
-    if ( pCurListViewItem )
-    {
-// TEST since this is just a debug info, we just reuse the ping column (note
-// the we have to replace the ping message emit with the version and OS request
-// so that this works, see above code)
-pCurListViewItem->
-    setText ( 1, strVersion + "/" + COSUtil::GetOperatingSystemString ( eOSType ) );
-
-// a version and OS type was received, set item to visible
-if ( pCurListViewItem->isHidden() )
-{
-    pCurListViewItem->setHidden ( false );
-}
-    }
-}
-#endif

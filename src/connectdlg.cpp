@@ -723,7 +723,7 @@ void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& CurServerAddress
     // measurement (#49). We therefore introduce a short delay for each server
     // (since we are doing this in a separate thread for each server, we do not
     // block the GUI).
-    QThread::msleep ( 1 );
+    QThread::msleep ( 11 );
 
     emit CreateCLServerListPingMes ( CurServerAddress );
 }

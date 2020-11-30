@@ -145,6 +145,9 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
     // set a placeholder text to explain how to filter occupied servers (#397)
     edtFilter->setPlaceholderText ( tr ( "Type # for occupied servers" ) );
 
+    // setup timers
+    TimerInitialSort.setSingleShot ( true ); // only once after list request
+
 #ifdef ANDROID
     // for the android version maximize the window
     setWindowState ( Qt::WindowMaximized );
@@ -243,6 +246,7 @@ void CConnectDlg::RequestServerList()
         // start timer, if this message did not get any respond to retransmit
         // the server list request message
         TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
+        TimerInitialSort.start ( SERV_LIST_REQ_UPDATE_TIME_MS ); // reuse the time value
     }
 }
 
@@ -831,8 +835,9 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         // current item since the topLevelItem(iIdx) is then no longer valid.
         // To avoid that the list is sorted shortly before a double click (which
         // could lead to connecting an incorrect server) the sorting is disabled
-        // as long as the mouse is over the list (#293).
-        if ( bDoSorting && !bShowCompleteRegList && !lvwServers->underMouse() ) // do not sort if "show all servers"
+        // as long as the mouse is over the list (but it is not disabled for the
+        // initial timer of about 2s, see TimerInitialSort) (#293).
+        if ( bDoSorting && !bShowCompleteRegList && (TimerInitialSort.isActive() || !lvwServers->underMouse()) ) // do not sort if "show all servers"
         {
             lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
         }

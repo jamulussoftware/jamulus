@@ -87,6 +87,7 @@ protected:
 
     QTimer           TimerPing;
     QTimer           TimerReRequestServList;
+    QTimer           TimerInitialSort;
     CHostAddress     CentralServerAddress;
     QString          strSelectedAddress;
     QString          strSelectedServerName;

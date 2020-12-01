@@ -95,9 +95,9 @@ public:
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
-    virtual void    UnloadCurrentDriver();
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
+    void    UpdateChSelection();
 
     int CountChannels ( AudioDeviceID devID,
                         bool          isInput );

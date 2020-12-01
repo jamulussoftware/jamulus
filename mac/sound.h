@@ -43,6 +43,8 @@ public:
              const bool     ,
              const QString& );
 
+    virtual ~CSound() { UnloadCurrentDriver(); }
+
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
@@ -95,6 +97,7 @@ public:
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
+    virtual void    UnloadCurrentDriver();
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();

@@ -43,8 +43,6 @@ public:
              const bool     ,
              const QString& );
 
-    virtual ~CSound() { UnloadCurrentDriver(); }
-
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();

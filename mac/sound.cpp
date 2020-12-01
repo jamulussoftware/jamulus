@@ -411,11 +411,11 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 
 void CSound::UnloadCurrentDriver()
 {
-    AudioObjectPropertyAddress stPropertyAddress;
-
     // unregister callbacks if previous device was valid
     if ( lCurDev != INVALID_INDEX )
     {
+        AudioObjectPropertyAddress stPropertyAddress;
+
         stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
         stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
 
@@ -483,7 +483,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                                       &iPropertySize,
                                       &inputSampleRate ) )
     {
-        return QString ( tr ( "Current audio input device is no longer available." ) );
+        return QString ( tr ( "The audio input device is no longer available." ) );
     }
 
     if ( inputSampleRate != fSystemSampleRate )
@@ -513,7 +513,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                                       &iPropertySize,
                                       &outputSampleRate ) )
     {
-        return QString ( tr ( "Current audio output device is no longer available." ) );
+        return QString ( tr ( "The audio output device is no longer available." ) );
     }
 
     if ( outputSampleRate != fSystemSampleRate )

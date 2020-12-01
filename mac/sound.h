@@ -98,7 +98,6 @@ protected:
     virtual void    UnloadCurrentDriver();
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
-    void    UpdateChSelection();
 
     int CountChannels ( AudioDeviceID devID,
                         bool          isInput );

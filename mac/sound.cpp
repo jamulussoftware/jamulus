@@ -345,14 +345,60 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
     // check if device is capable and if not the same device is used
     if ( strStat.isEmpty() && ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) )
     {
+        AudioObjectPropertyAddress stPropertyAddress;
+
+        // unregister callbacks if previous device was valid
+        if ( lCurDev != INVALID_INDEX )
+        {
+            stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
+            stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
+
+            // unregister callback functions for device property changes
+            stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+
+            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
+
+            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
+
+            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
+
+            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+        }
+
         // store ID of selected driver if initialization was successful
         lCurDev                    = iDriverIdx;
         CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
         CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
 
         // register callbacks
-        AudioObjectPropertyAddress stPropertyAddress;
-
         stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
         stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
 
@@ -407,57 +453,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
     }
 
     return strStat;
-}
-
-void CSound::UnloadCurrentDriver()
-{
-    // unregister callbacks if previous device was valid
-    if ( lCurDev != INVALID_INDEX )
-    {
-        AudioObjectPropertyAddress stPropertyAddress;
-
-        stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
-        stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
-
-        // unregister callback functions for device property changes
-        stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
-
-        AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
-                                           &stPropertyAddress,
-                                           deviceNotification,
-                                           this );
-
-        stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
-
-        AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
-                                           &stPropertyAddress,
-                                           deviceNotification,
-                                           this );
-
-        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
-
-        AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
-                                           &stPropertyAddress,
-                                           deviceNotification,
-                                           this );
-
-        AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                           &stPropertyAddress,
-                                           deviceNotification,
-                                           this );
-
-        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
-
-        AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
-                                           &stPropertyAddress,
-                                           deviceNotification,
-                                           this );
-
-        AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                           &stPropertyAddress,
-                                           deviceNotification,
-                                           this );
-    }
 }
 
 QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )

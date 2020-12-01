@@ -28,7 +28,6 @@
 #include <QHostInfo>
 #include <QString>
 #include <QDateTime>
-#include <QMutex>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -354,8 +353,6 @@ protected:
 
     bool                    bJitterBufferOK;
     bool                    bNuteMeInPersonalMix;
-
-    QMutex                  MutexAudiReinit;
 
     // server settings
     int                     iServerSockBufNumFrames;

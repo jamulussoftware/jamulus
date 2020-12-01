@@ -606,8 +606,6 @@ void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
 
 void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 {
-    QMutexLocker locker ( &MutexAudiReinit );
-
     // in older QT versions, enums cannot easily be used in signals without
     // registering them -> workaroud: we use the int type and cast to the enum
     const ESndCrdResetType eSndCrdResetType =

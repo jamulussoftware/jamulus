@@ -179,7 +179,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     // other
     QObject::connect ( &Sound, &CSound::ReinitRequest,
-        this, &CClient::OnSndCrdReinitRequest, Qt::BlockingQueuedConnection );
+        this, &CClient::OnSndCrdReinitRequest );
 
     QObject::connect ( &Sound, &CSound::ControllerInFaderLevel,
         this, &CClient::OnControllerInFaderLevel );

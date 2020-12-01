@@ -92,7 +92,6 @@ public:
     int            iSelOutInterlChRight;
     CVector<int>   vecNumInBufChan;
     CVector<int>   vecNumOutBufChan;
-    QMutex         MutexDeviceNotification;
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );

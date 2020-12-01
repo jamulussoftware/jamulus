@@ -976,8 +976,6 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
 {
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
-    QMutexLocker locker ( &pSound->MutexDeviceNotification );
-
     if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) ||
          ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) ||
          ( inAddresses->mSelector == kAudioHardwarePropertyDefaultOutputDevice ) ||

@@ -852,7 +852,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="263"/>
         <source>My &amp;Profile...</source>
-        <translation>Mon &amp;profil</translation>
+        <translation>Mon &amp;profil...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="266"/>

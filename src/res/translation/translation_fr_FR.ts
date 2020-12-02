@@ -263,7 +263,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Mixer Fader</source>
-        <translation>Charriot du mixeur</translation>
+        <translation>Chariot du mixeur</translation>
     </message>
     <message>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
@@ -1025,7 +1025,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="336"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation>Régler tous &amp;les charriots sur le niveau d&apos;un nouveau client</translation>
+        <translation>Régler tous &amp;les chariots sur le niveau d&apos;un nouveau client</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="745"/>

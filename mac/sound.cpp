@@ -356,41 +356,41 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
             // unregister callback functions for device property changes
             stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
-            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
-                                               &stPropertyAddress,
-                                               deviceNotification,
-                                               this );
+            AudioObjectRemovePropertyListener ( kAudioObjectSystemObject,
+                                                &stPropertyAddress,
+                                                deviceNotification,
+                                                this );
 
             stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
 
-            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
-                                               &stPropertyAddress,
-                                               deviceNotification,
-                                               this );
+            AudioObjectRemovePropertyListener ( kAudioObjectSystemObject,
+                                                &stPropertyAddress,
+                                                deviceNotification,
+                                                this );
 
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
-            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
-                                               &stPropertyAddress,
-                                               deviceNotification,
-                                               this );
+            AudioObjectRemovePropertyListener ( audioOutputDevice[lCurDev],
+                                                &stPropertyAddress,
+                                                deviceNotification,
+                                                this );
 
-            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                               &stPropertyAddress,
-                                               deviceNotification,
-                                               this );
+            AudioObjectRemovePropertyListener ( audioInputDevice[lCurDev],
+                                                &stPropertyAddress,
+                                                deviceNotification,
+                                                this );
 
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
 
-            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
-                                               &stPropertyAddress,
-                                               deviceNotification,
-                                               this );
+            AudioObjectRemovePropertyListener ( audioOutputDevice[lCurDev],
+                                                &stPropertyAddress,
+                                                deviceNotification,
+                                                this );
 
-            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                               &stPropertyAddress,
-                                               deviceNotification,
-                                               this );
+            AudioObjectRemovePropertyListener ( audioInputDevice[lCurDev],
+                                                &stPropertyAddress,
+                                                deviceNotification,
+                                                this );
         }
 
         // store ID of selected driver if initialization was successful

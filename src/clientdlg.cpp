@@ -495,7 +495,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         this, &CClientDlg::OnCLVersionAndOSReceived );
 
     QObject::connect ( pClient, &CClient::SoundDeviceChanged,
-        &ClientSettingsDlg, &CClientSettingsDlg::OnUpdateSoundDeviceChannelSelectionFrame );
+        this, &CClientDlg::OnSoundDeviceChanged );
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
         this, &CClientDlg::OnGUIDesignChanged );
@@ -1123,6 +1123,18 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
         QMessageBox::warning ( this, APP_NAME, tr ( "The soundcard device does not "
             "work correctly. Please check the device selection and the driver settings." ) );
     }
+}
+
+void CClientDlg::OnSoundDeviceChanged()
+{
+    // if the check audio device timer is running, it must be restarted on a device change
+    if ( TimerCheckAudioDeviceOk.isActive() )
+    {
+        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS );
+    }
+
+    // update the settings dialog
+    ClientSettingsDlg.UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,

@@ -302,7 +302,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     UpdateJitterBufferFrame();
 
     // init sound card channel selection frame
-    OnUpdateSoundDeviceChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 
     // Audio Channels combo box
     cbxAudioChannels->clear();
@@ -511,7 +511,7 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     }
 }
 
-void CClientSettingsDlg::OnUpdateSoundDeviceChannelSelectionFrame()
+void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
 {
     // update combo box containing all available sound cards in the system
     cbxSoundcard->clear();
@@ -603,32 +603,32 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
             QString ( tr ( " The previous driver will be selected." ) ),
             tr ( "Ok" ), nullptr );
     }
-    OnUpdateSoundDeviceChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
     UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftInputChannel ( iChanIdx );
-    OnUpdateSoundDeviceChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnRInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightInputChannel ( iChanIdx );
-    OnUpdateSoundDeviceChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnLOutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftOutputChannel ( iChanIdx );
-    OnUpdateSoundDeviceChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightOutputChannel ( iChanIdx );
-    OnUpdateSoundDeviceChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )

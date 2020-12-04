@@ -72,6 +72,7 @@ public:
                              const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
     void UpdateDisplay();
+    void UpdateSoundDeviceChannelSelectionFrame();
 
 protected:
     void    UpdateJitterBufferFrame();
@@ -106,7 +107,6 @@ public slots:
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
-    void OnUpdateSoundDeviceChannelSelectionFrame();
 
 signals:
     void GUIDesignChanged();

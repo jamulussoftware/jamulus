@@ -984,8 +984,18 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
         // reload the driver list of available sound devices
         pSound->GetAvailableInOutDevices();
 
-        // if any property of the device has changed, do a full reload
-        pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
+        if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) ||
+             ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) )
+        {
+            // if any property of the device has changed, do a full reload
+            pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
+        }
+        else
+        {
+            // for any other change in audio devices, just initiate a restart which
+            // triggers an update of the sound device selection combo box
+            pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART );
+        }
     }
 
     return noErr;

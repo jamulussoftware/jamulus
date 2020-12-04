@@ -88,7 +88,6 @@ public:
 
     // TODO this should be protected but since it is used
     // in a callback function it has to be public -> better solution
-    QMutex MutexAudioProcessCallback;
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType )
         { emit ReinitRequest ( eSndCrdResetType ); }
 
@@ -135,6 +134,7 @@ protected:
 
     bool    bRun;
     bool    bCallbackEntered;
+    QMutex  MutexAudioProcessCallback;
 
     QString strSystemDriverTechniqueName;
     int     iCtrlMIDIChannel;

@@ -1018,7 +1018,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
     // both, the input and output device use the same callback function
-    QMutexLocker locker ( &pSound->IOMutex );
+    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
 
     const int           iCoreAudioBufferSizeMono = pSound->iCoreAudioBufferSizeMono;
     const int           iSelInBufferLeft         = pSound->iSelInBufferLeft;

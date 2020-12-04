@@ -142,5 +142,4 @@ protected:
     QString             sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];
 
     QMutex              Mutex;
-    QMutex              IOMutex;
 };

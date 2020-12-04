@@ -207,6 +207,12 @@ CClient::CClient ( const quint16  iPortNumber,
 
 CClient::~CClient()
 {
+    // if we were running, stop sound device
+    if ( Sound.IsRunning() )
+    {
+        Sound.Stop();
+    }
+
     // free audio encoders and decoders
     opus_custom_encoder_destroy ( OpusEncoderMono );
     opus_custom_decoder_destroy ( OpusDecoderMono );

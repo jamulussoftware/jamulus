@@ -44,7 +44,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
                                           bool    bOpenDriverSetup )
 {
     // find and load driver
-    int iDriverIdx = 0; // if the name was not found, use first driver
+    int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
 
     for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
@@ -52,6 +52,12 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
         {
             iDriverIdx = i;
         }
+    }
+
+    // if the selected driver was not found, return an error message
+    if ( iDriverIdx == INVALID_INDEX )
+    {
+        return tr ( "The current selected audio device is no longer present in the system." );
     }
 
     loadAsioDriver ( cDriverNames[iDriverIdx] );

@@ -319,146 +319,137 @@ int CSound::CountChannels ( AudioDeviceID devID,
 
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
-    // find and load driver
-    QString strStat      = "";
-    int     iDriverIdx   = 0; // if the name was not found, use first driver
-    bool    bDriverFound = false;
-
     // secure lNumDevs/strDriverNames access
-    Mutex.lock();
+    QMutexLocker locker ( &Mutex );
+
+    // find driver index from given driver name
+    int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
+
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
-        for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+        if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
         {
-            if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
-            {
-                iDriverIdx   = i;
-                bDriverFound = true;
-            }
+            iDriverIdx = i;
         }
+    }
 
-        // check device capabilities if it fulfills our requirements
-        strStat = CheckDeviceCapabilities ( iDriverIdx );
+    // if the selected driver was not found, return an error message
+    if ( iDriverIdx == INVALID_INDEX )
+    {
+        return tr ( "The current selected audio device is no longer present in the system." );
+    }
 
-        // check if device is capable
-        if ( strStat.isEmpty() )
+    // check device capabilities if it fulfills our requirements
+    const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
+
+    // check if device is capable and if not the same device is used
+    if ( strStat.isEmpty() && ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) )
+    {
+        AudioObjectPropertyAddress stPropertyAddress;
+
+        // unregister callbacks if previous device was valid
+        if ( lCurDev != INVALID_INDEX )
         {
-            AudioObjectPropertyAddress stPropertyAddress;
-
-            // unregister callbacks if previous device was valid
-            if ( lCurDev != INVALID_INDEX )
-            {
-                stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
-                stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
-
-                // unregister callback functions for device property changes
-                stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
-
-                AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
-                                                   &stPropertyAddress,
-                                                   deviceNotification,
-                                                   this );
-
-                stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
-
-                AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
-                                                   &stPropertyAddress,
-                                                   deviceNotification,
-                                                   this );
-
-                stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
-
-                AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
-                                                   &stPropertyAddress,
-                                                   deviceNotification,
-                                                   this );
-
-                AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                                   &stPropertyAddress,
-                                                   deviceNotification,
-                                                   this );
-
-                stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
-
-                AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
-                                                   &stPropertyAddress,
-                                                   deviceNotification,
-                                                   this );
-
-                AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
-                                                   &stPropertyAddress,
-                                                   deviceNotification,
-                                                   this );
-            }
-
-            // store ID of selected driver if initialization was successful
-            lCurDev                    = iDriverIdx;
-            CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
-            CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
-
-            // register callbacks
             stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
             stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
 
-            // setup callbacks for device property changes
-            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
-
-            AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
-                                             &stPropertyAddress,
-                                             deviceNotification,
-                                             this );
-
-            AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
-                                             &stPropertyAddress,
-                                             deviceNotification,
-                                             this );
-
-            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
-
-            AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
-                                             &stPropertyAddress,
-                                             deviceNotification,
-                                             this );
-
-            AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
-                                             &stPropertyAddress,
-                                             deviceNotification,
-                                             this );
-
+            // unregister callback functions for device property changes
             stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
-            AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
-                                             &stPropertyAddress,
-                                             deviceNotification,
-                                             this );
+            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
 
             stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
 
-            AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
-                                             &stPropertyAddress,
-                                             deviceNotification,
-                                             this );
+            AudioObjectRemovePropertyListener( kAudioObjectSystemObject,
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
 
-            // only reset the channel mapping if a new device was selected
-            if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
-            {
-                // the device has changed, per definition we reset the channel
-                // mapping to the defaults (first two available channels)
-                SetLeftInputChannel   ( 0 );
-                SetRightInputChannel  ( 1 );
-                SetLeftOutputChannel  ( 0 );
-                SetRightOutputChannel ( 1 );
+            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
-                // store the current name of the driver
-                strCurDevName = strDriverNames[iDriverIdx];
-            }
+            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
+
+            AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
+
+            AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                               &stPropertyAddress,
+                                               deviceNotification,
+                                               this );
         }
-    }
-    Mutex.unlock();
 
-    if ( !strDriverName.isEmpty() && !bDriverFound )
-    {
-        QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previously selected audio device "
-            "is no longer available. The system default audio device will be selected instead." ) );
+        // store ID of selected driver if initialization was successful
+        lCurDev                    = iDriverIdx;
+        CurrentAudioInputDeviceID  = audioInputDevice[iDriverIdx];
+        CurrentAudioOutputDeviceID = audioOutputDevice[iDriverIdx];
+
+        // register callbacks
+        stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
+        stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
+
+        // setup callbacks for device property changes
+        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
+
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
+
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
+
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
+                                         &stPropertyAddress,
+                                         deviceNotification,
+                                         this );
+
+        // the device has changed, per definition we reset the channel
+        // mapping to the defaults (first two available channels)
+        SetLeftInputChannel   ( 0 );
+        SetRightInputChannel  ( 1 );
+        SetLeftOutputChannel  ( 0 );
+        SetRightOutputChannel ( 1 );
+
+        // store the current name of the driver
+        strCurDevName = strDriverNames[iDriverIdx];
     }
 
     return strStat;
@@ -487,7 +478,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                                       &iPropertySize,
                                       &inputSampleRate ) )
     {
-        return QString ( tr ( "Current audio input device is no longer available." ) );
+        return QString ( tr ( "The audio input device is no longer available." ) );
     }
 
     if ( inputSampleRate != fSystemSampleRate )
@@ -517,7 +508,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                                       &iPropertySize,
                                       &outputSampleRate ) )
     {
-        return QString ( tr ( "Current audio output device is no longer available." ) );
+        return QString ( tr ( "The audio output device is no longer available." ) );
     }
 
     if ( outputSampleRate != fSystemSampleRate )

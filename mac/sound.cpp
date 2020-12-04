@@ -1036,7 +1036,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     const CVector<int>& vecNumInBufChan          = pSound->vecNumInBufChan;
     const CVector<int>& vecNumOutBufChan         = pSound->vecNumOutBufChan;
 
-    if ( ( inDevice == pSound->CurrentAudioInputDeviceID ) && inInputData )
+    if ( ( inDevice == pSound->CurrentAudioInputDeviceID ) && inInputData && pSound->bRun )
     {
         // check sizes (note that float32 has four bytes)
         if ( ( iSelInBufferLeft >= 0 ) &&
@@ -1096,7 +1096,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
         pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
     }
 
-    if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData )
+    if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData && pSound->bRun )
     {
        // check sizes (note that float32 has four bytes)
        if ( ( iSelOutBufferLeft >= 0 ) &&

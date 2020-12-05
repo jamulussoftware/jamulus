@@ -91,9 +91,6 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
 
 void CSound::GetAvailableInOutDevices()
 {
-    // secure lNumDevs/strDriverNames access
-    QMutexLocker locker ( &Mutex );
-
     UInt32                     iPropertySize = 0;
     AudioObjectPropertyAddress stPropertyAddress;
 
@@ -321,6 +318,9 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 {
     // secure lNumDevs/strDriverNames access
     QMutexLocker locker ( &Mutex );
+
+    // reload the driver list of available sound devices
+    GetAvailableInOutDevices();
 
     // find driver index from given driver name
     int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
@@ -981,9 +981,6 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
          ( inAddresses->mSelector == kAudioHardwarePropertyDefaultOutputDevice ) ||
          ( inAddresses->mSelector == kAudioHardwarePropertyDefaultInputDevice ) )
     {
-        // reload the driver list of available sound devices
-        pSound->GetAvailableInOutDevices();
-
         if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) ||
              ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) )
         {

@@ -64,7 +64,6 @@ public:
 
     // these variables/functions should be protected but cannot since we want
     // to access them from the callback function
-    void           GetAvailableInOutDevices();
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
@@ -98,6 +97,7 @@ protected:
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();
+    void    GetAvailableInOutDevices();
 
     int CountChannels ( AudioDeviceID devID,
                         bool          isInput );

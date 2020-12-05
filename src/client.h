@@ -174,9 +174,7 @@ public:
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
     // sound card device selection
-    int     GetSndCrdNumDev() { return Sound.GetNumDev(); }
-    QString GetSndCrdDeviceName ( const int iDiD )
-        { return Sound.GetDeviceName ( iDiD ); }
+    QStringList GetSndCrdDevNames()  { return Sound.GetDevNames(); }
 
     QString SetSndCrdDev ( const QString strNewDev );
     QString GetSndCrdDev() { return Sound.GetDev(); }

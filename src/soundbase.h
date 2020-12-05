@@ -60,10 +60,9 @@ public:
     virtual void Stop();
 
     // device selection
-    virtual int     GetNumDev() { return lNumDevs; }
-    virtual QString GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
-    virtual QString SetDev ( const QString strDevName );
-    virtual QString GetDev() { return strCurDevName; }
+    QStringList GetDevNames();
+    QString     SetDev ( const QString strDevName );
+    QString     GetDev() { QMutexLocker locker ( &MutexDevProperties ); return strCurDevName; }
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
@@ -92,11 +91,11 @@ public:
         { emit ReinitRequest ( eSndCrdResetType ); }
 
 protected:
-    // driver handling
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
     QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
     void             ParseCommandLineArgument ( const QString& strMIDISetup );
+    QString          GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
 
     static void GetSelCHAndAddCH ( const int iSelCH,    const int iNumInChan,
                                    int&      iSelCHOut, int&      iSelAddCHOut )
@@ -135,6 +134,7 @@ protected:
     bool    bRun;
     bool    bCallbackEntered;
     QMutex  MutexAudioProcessCallback;
+    QMutex  MutexDevProperties;
 
     QString strSystemDriverTechniqueName;
     int     iCtrlMIDIChannel;

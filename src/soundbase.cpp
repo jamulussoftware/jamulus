@@ -62,8 +62,26 @@ void CSoundBase::Stop()
 /******************************************************************************\
 * Device handling                                                              *
 \******************************************************************************/
+QStringList CSoundBase::GetDevNames()
+{
+    QMutexLocker locker ( &MutexDevProperties );
+
+    QStringList slDevNames;
+
+    // put all device names in the string list
+    for ( int iDev = 0; iDev < lNumDevs; iDev++ )
+    {
+        slDevNames << strDriverNames[iDev];
+    }
+
+    return slDevNames;
+}
+
+
 QString CSoundBase::SetDev ( const QString strDevName )
 {
+    QMutexLocker locker ( &MutexDevProperties );
+
     // init return parameter with "no error"
     QString strReturn = "";
 

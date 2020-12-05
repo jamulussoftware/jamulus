@@ -514,11 +514,14 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
 {
     // update combo box containing all available sound cards in the system
+    QStringList slSndCrdDevNames = pClient->GetSndCrdDevNames();
     cbxSoundcard->clear();
-    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
+
+    foreach ( QString strDevName, slSndCrdDevNames )
     {
-        cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
+        cbxSoundcard->addItem ( strDevName );
     }
+
     cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
 
     // update input/output channel selection

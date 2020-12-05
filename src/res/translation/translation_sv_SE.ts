@@ -135,12 +135,12 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="148"/>
         <source>&amp;Translation</source>
-        <translation>&amp;Översättning</translation>
+        <translation>&amp;Översättningar</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="198"/>
         <source>&amp;OK</source>
-        <translation>&amp;Okej</translation>
+        <translation>&amp;Stäng</translation>
     </message>
 </context>
 <context>
@@ -778,17 +778,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
         <source>Sort Channel Users by &amp;City</source>
-        <translation>Sortera Användarna efter S&amp;taden</translation>
+        <translation>Sortera användarna efter S&amp;tad</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="325"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Dela upp &amp;mixerpanelen i två rader</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="333"/>
         <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rensa alla lagrade solo och tystade inställningar</translation>
     </message>
     <message>
         <source>&amp;Clear All Stored Solo Settings</source>
@@ -797,7 +797,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="336"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Ställ in alla mixers till ny klient&amp;nivå</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="253"/>
@@ -872,7 +872,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1130"/>
         <source>The soundcard device does not work correctly. Please check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljudkortet fungerar inte som det ska. Kontrollera enhetsvalet och drivrutinsinställningarna.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1169"/>
@@ -955,7 +955,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="554"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>TYSTAD (andra hör inte dig)</translation>
+        <translation>Du är tystad! (andra hör inte dig)</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="577"/>
@@ -1207,7 +1207,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Central server address combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Kombinationsruta för centralserveradress</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
@@ -1554,12 +1554,12 @@
         <location filename="../../clientsettingsdlgbase.ui" line="326"/>
         <location filename="../../clientsettingsdlgbase.ui" line="345"/>
         <source>Size</source>
-        <translation>Storlek</translation>
+        <translation>Nivå</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="483"/>
         <source>Misc</source>
-        <translation>Blandat</translation>
+        <translation>Blandade inställningar</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="493"/>
@@ -1598,7 +1598,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="562"/>
         <source>Custom Central Server Address:</source>
-        <translation>Anpassad centralserveradress:</translation>
+        <translation>Egen serveradress:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="591"/>
@@ -1789,7 +1789,7 @@
         <location filename="../../util.cpp" line="856"/>
         <location filename="../../util.cpp" line="861"/>
         <source>Getting &amp;Started...</source>
-        <translation>Komma &amp;igång ...</translation>
+        <translation>Komma &amp;igång...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="857"/>
@@ -2872,12 +2872,12 @@
     <message>
         <location filename="../../../mac/sound.cpp" line="340"/>
         <source>The previously selected audio device is no longer available. The system default audio device will be selected instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den tidigare valda ljudenheten är inte längre tillgänglig. Systemets standardljudenhet har valts i stället.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="487"/>
         <source>Current audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvarande ljudingångsenhet är inte längre tillgänglig.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="500"/>
@@ -2887,7 +2887,7 @@
     <message>
         <location filename="../../../mac/sound.cpp" line="517"/>
         <source>Current audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvarande ljudutgångsenhet är inte längre tillgänglig.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="530"/>

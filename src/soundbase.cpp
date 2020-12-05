@@ -126,11 +126,13 @@ QString CSoundBase::SetDev ( const QString strDevName )
         // if a driver was previously selected, show a warning message
         if ( !strDevName.isEmpty() )
         {
+#ifndef HEADLESS
             QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previously selected audio device "
                 "is no longer available or the audio driver properties have changed to a state which "
                 "is incompatible with this software. We now try to find a valid audio device. This new "
                 "audio device might cause audio feedback. So, before connecting to a server, please "
                 "check the audio device setting." ) );
+#endif
         }
 
         // try to load and initialize any valid driver

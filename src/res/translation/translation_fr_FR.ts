@@ -1011,7 +1011,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
         <source>Sort Channel Users by &amp;Group</source>
-        <translation>Trier les utilisateurs des canaux par &amp;groupe</translation>
+        <translation>Trier les utilisateurs du canal par &amp;groupe</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>

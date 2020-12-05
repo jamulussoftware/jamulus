@@ -28,6 +28,7 @@
 #include <QHostInfo>
 #include <QString>
 #include <QDateTime>
+#include <QMutex>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -353,6 +354,7 @@ protected:
 
     bool                    bJitterBufferOK;
     bool                    bNuteMeInPersonalMix;
+    QMutex                  MutexDriverReinit;
 
     // server settings
     int                     iServerSockBufNumFrames;
@@ -421,6 +423,6 @@ signals:
                                       CVector<uint16_t> vecLevelList );
 
     void Disconnected();
-    void SoundDeviceChanged();
+    void SoundDeviceChanged ( QString strError );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };

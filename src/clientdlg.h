@@ -181,7 +181,7 @@ public slots:
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
-    void OnSoundDeviceChanged();
+    void OnSoundDeviceChanged ( QString strError );
 
     void OnChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader )
         { pClient->SetRemoteChanGain ( iId, fGain, bIsMyOwnFader ); }

@@ -350,7 +350,16 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     }
 
     // sound card selection
-    pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
+    const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
+
+    if ( !strError.isEmpty() )
+    {
+#ifndef HEADLESS
+        // special case: when settings are loaded no GUI is yet created, therefore
+        // we have to create a warning message box here directly
+        QMessageBox::warning ( nullptr, APP_NAME, strError );
+#endif
+    }
 
     // sound card channel mapping settings: make sure these settings are
     // set AFTER the sound card device is set, otherwise the settings are

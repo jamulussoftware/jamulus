@@ -382,14 +382,11 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
 
-// TODO we only check the alive for the input to avoid that we get the warning message
-// twice since the OnSndCrdReinitRequest() function is not thread safe
-/*
             AudioObjectRemovePropertyListener ( audioOutputDevice[lCurDev],
                                                 &stPropertyAddress,
                                                 deviceNotification,
                                                 this );
-*/
+
             AudioObjectRemovePropertyListener ( audioInputDevice[lCurDev],
                                                 &stPropertyAddress,
                                                 deviceNotification,
@@ -425,13 +422,10 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
                                          deviceNotification,
                                          this );
 
-// TODO see comment above
-/*
         AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
                                          &stPropertyAddress,
                                          deviceNotification,
                                          this );
-*/
 
         stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 

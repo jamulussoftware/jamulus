@@ -84,8 +84,13 @@ QString CSoundBase::SetDev ( const QString strDevName )
             if ( strDevName != strCurDevName )
             {
                 // loading and initializing the new driver failed, go back to
-                // original driver and display error message
+                // original driver and create error message
                 LoadAndInitializeDriver ( strCurDevName, false );
+
+                // store error return message
+                strReturn = QString ( tr ( "The selected audio device could not be used "
+                    "because of the following error: " ) ) + strErrorMessage +
+                    QString ( tr ( " The previous driver will be selected." ) );
             }
             else
             {
@@ -93,9 +98,6 @@ QString CSoundBase::SetDev ( const QString strDevName )
                 // at least one usable driver
                 bTryLoadAnyDriver = true;
             }
-
-            // store error return message
-            strReturn = strErrorMessage;
         }
     }
     else
@@ -126,13 +128,11 @@ QString CSoundBase::SetDev ( const QString strDevName )
         // if a driver was previously selected, show a warning message
         if ( !strDevName.isEmpty() )
         {
-#ifndef HEADLESS
-            QMessageBox::warning ( nullptr, APP_NAME, tr ( "The previously selected audio device "
+            strReturn = tr ( "The previously selected audio device "
                 "is no longer available or the audio driver properties have changed to a state which "
                 "is incompatible with this software. We now try to find a valid audio device. This new "
                 "audio device might cause audio feedback. So, before connecting to a server, please "
-                "check the audio device setting." ) );
-#endif
+                "check the audio device setting." );
         }
 
         // try to load and initialize any valid driver

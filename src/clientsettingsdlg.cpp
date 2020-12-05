@@ -593,16 +593,8 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
-    const QString strError = pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
+    pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
 
-    if ( !strError.isEmpty() )
-    {
-        QMessageBox::critical ( this, APP_NAME,
-            QString ( tr ( "The selected audio device could not be used "
-            "because of the following error: " ) ) + strError +
-            QString ( tr ( " The previous driver will be selected." ) ),
-            tr ( "Ok" ), nullptr );
-    }
     UpdateSoundDeviceChannelSelectionFrame();
     UpdateDisplay();
 }

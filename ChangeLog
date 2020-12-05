@@ -27,6 +27,7 @@
 - bug fix: ping times of servers which are further down the server list are too high (#49)
 
 
+TODO fix dead lock on MacOS when connecting/disconnecting audio device and at the same time open the device selection combo box
 
 
 

@@ -515,7 +515,7 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
         Sound.Stop();
     }
 
-    const QString strReturn = Sound.SetDev ( strNewDev );
+    const QString strError = Sound.SetDev ( strNewDev );
 
     // init again because the sound card actual buffer size might
     // be changed on new device
@@ -527,7 +527,13 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
         Sound.Start();
     }
 
-    return strReturn;
+    // in case of an error inform the GUI about it
+    if ( !strError.isEmpty() )
+    {
+        emit SoundDeviceChanged ( strError );
+    }
+
+    return strError;
 }
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
@@ -612,42 +618,50 @@ void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
 
 void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 {
-    // in older QT versions, enums cannot easily be used in signals without
-    // registering them -> workaroud: we use the int type and cast to the enum
-    const ESndCrdResetType eSndCrdResetType =
-        static_cast<ESndCrdResetType> ( iSndCrdResetType );
+    QString strError = "";
 
-    // if client was running then first
-    // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
+    // audio device notifications can come at any time and they are in a
+    // different thread, therefore we need a mutex here
+    MutexDriverReinit.lock();
     {
-        Sound.Stop();
-    }
+        // in older QT versions, enums cannot easily be used in signals without
+        // registering them -> workaroud: we use the int type and cast to the enum
+        const ESndCrdResetType eSndCrdResetType =
+            static_cast<ESndCrdResetType> ( iSndCrdResetType );
 
-    // perform reinit request as indicated by the request type parameter
-    if ( eSndCrdResetType != RS_ONLY_RESTART )
-    {
-        if ( eSndCrdResetType != RS_ONLY_RESTART_AND_INIT )
+        // if client was running then first
+        // stop it and restart again after new initialization
+        const bool bWasRunning = Sound.IsRunning();
+        if ( bWasRunning )
         {
-            // reinit the driver if requested
-            // (we use the currently selected driver)
-            Sound.SetDev ( Sound.GetDev() );
+            Sound.Stop();
         }
 
-        // init client object (must always be performed if the driver
-        // was changed)
-        Init();
-    }
+        // perform reinit request as indicated by the request type parameter
+        if ( eSndCrdResetType != RS_ONLY_RESTART )
+        {
+            if ( eSndCrdResetType != RS_ONLY_RESTART_AND_INIT )
+            {
+                // reinit the driver if requested
+                // (we use the currently selected driver)
+                strError = Sound.SetDev ( Sound.GetDev() );
+            }
 
-    if ( bWasRunning )
-    {
-        // restart client
-        Sound.Start();
+            // init client object (must always be performed if the driver
+            // was changed)
+            Init();
+        }
+
+        if ( bWasRunning )
+        {
+            // restart client
+            Sound.Start();
+        }
     }
+    MutexDriverReinit.unlock();
 
     // inform GUI about the sound card device change
-    emit SoundDeviceChanged();
+    emit SoundDeviceChanged ( strError );
 }
 
 void CClient::OnHandledSignal ( int sigNum )

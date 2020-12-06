@@ -280,19 +280,19 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
-    QAction* NoSortAction = pEditMenu->addAction ( tr ( "N&o Channel Sorting" ), this,
+    QAction* NoSortAction = pEditMenu->addAction ( tr ( "N&o User Sorting" ), this,
         SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
 
-    QAction* ByNameAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &Name" ), this,
+    QAction* ByNameAction = pEditMenu->addAction ( tr ( "Sort Users by &Name" ), this,
         SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
 
-    QAction* ByInstrAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &Instrument" ), this,
+    QAction* ByInstrAction = pEditMenu->addAction ( tr ( "Sort Users by &Instrument" ), this,
         SLOT ( OnSortChannelsByInstrument() ), QKeySequence ( Qt::CTRL + Qt::Key_I ) );
 
-    QAction* ByGroupAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &Group" ), this,
+    QAction* ByGroupAction = pEditMenu->addAction ( tr ( "Sort Users by &Group" ), this,
         SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
 
-    QAction* ByCityAction = pEditMenu->addAction ( tr ( "Sort Channel Users by &City" ), this,
+    QAction* ByCityAction = pEditMenu->addAction ( tr ( "Sort Users by &City" ), this,
         SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
 
     // the sorting menu entries shall be checkable and exclusive

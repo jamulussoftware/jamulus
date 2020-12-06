@@ -884,7 +884,7 @@
         <translation>B&amp;earbeiten</translation>
     </message>
     <message>
-        <source>&amp;Sort Channel Users by Name</source>
+        <source>&amp;Sort Users by Name</source>
         <translation type="vanished">&amp;Sortiere Kanäle nach Namen</translation>
     </message>
     <message>
@@ -989,27 +989,27 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
-        <source>N&amp;o Channel Sorting</source>
+        <source>N&amp;o User Sorting</source>
         <translation>Keine Kanals&amp;ortierung</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="286"/>
-        <source>Sort Channel Users by &amp;Name</source>
+        <source>Sort Users by &amp;Name</source>
         <translation>Sortiere die Kanäle nach dem &amp;Namen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="289"/>
-        <source>Sort Channel Users by &amp;Instrument</source>
+        <source>Sort Users by &amp;Instrument</source>
         <translation>Sortiere die Kanäle nach dem &amp;Instrument</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
-        <source>Sort Channel Users by &amp;Group</source>
+        <source>Sort Users by &amp;Group</source>
         <translation>Sortiere die Kanäle nach der &amp;Gruppe</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
-        <source>Sort Channel Users by &amp;City</source>
+        <source>Sort Users by &amp;City</source>
         <translation>Sortiere die Kanäle nach der &amp;Stadt</translation>
     </message>
     <message>

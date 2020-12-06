@@ -927,12 +927,12 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
-        <source>N&amp;o Channel Sorting</source>
+        <source>N&amp;o User Sorting</source>
         <translation>N&amp;on Riordinare i Canali</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
-        <source>Sort Channel Users by &amp;City</source>
+        <source>Sort Users by &amp;City</source>
         <translation>Ordina i Canali per &amp;Città di provenienza</translation>
     </message>
     <message>
@@ -986,21 +986,21 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="286"/>
-        <source>Sort Channel Users by &amp;Name</source>
+        <source>Sort Users by &amp;Name</source>
         <translation>Ordina canali per &amp;Nome</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="289"/>
-        <source>Sort Channel Users by &amp;Instrument</source>
+        <source>Sort Users by &amp;Instrument</source>
         <translation>Ordina canali per &amp;Strumento</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
-        <source>Sort Channel Users by &amp;Group</source>
+        <source>Sort Users by &amp;Group</source>
         <translation>Ordina Canali per Nome &amp;Utente</translation>
     </message>
     <message>
-        <source>&amp;Sort Channel Users by Name</source>
+        <source>&amp;Sort Users by Name</source>
         <translation type="vanished">&amp;Canali in ordine Alfabetico</translation>
     </message>
     <message>

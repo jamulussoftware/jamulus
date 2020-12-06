@@ -759,12 +759,12 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
-        <source>N&amp;o Channel Sorting</source>
+        <source>N&amp;o User Sorting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
-        <source>Sort Channel Users by &amp;City</source>
+        <source>Sort Users by &amp;City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -814,17 +814,17 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="286"/>
-        <source>Sort Channel Users by &amp;Name</source>
+        <source>Sort Users by &amp;Name</source>
         <translation>Triediť používateľov kanálov podľa &amp;mena</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="289"/>
-        <source>Sort Channel Users by &amp;Instrument</source>
+        <source>Sort Users by &amp;Instrument</source>
         <translation>Triediť používateľov kanálov podľa &amp;nástroja</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
-        <source>Sort Channel Users by &amp;Group</source>
+        <source>Sort Users by &amp;Group</source>
         <translation>Triediť používateľov kanálov podľa &amp;skupiny</translation>
     </message>
     <message>

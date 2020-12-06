@@ -896,7 +896,7 @@
         <translation>&amp;Editar</translation>
     </message>
     <message>
-        <source>&amp;Sort Channel Users by Name</source>
+        <source>&amp;Sort Users by Name</source>
         <translation type="vanished">Ordenar os Canais por &amp;Nome...</translation>
     </message>
     <message>
@@ -1001,27 +1001,27 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
-        <source>N&amp;o Channel Sorting</source>
+        <source>N&amp;o User Sorting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="286"/>
-        <source>Sort Channel Users by &amp;Name</source>
+        <source>Sort Users by &amp;Name</source>
         <translation>Ordenar Utilizadores por &amp;Nome</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="289"/>
-        <source>Sort Channel Users by &amp;Instrument</source>
+        <source>Sort Users by &amp;Instrument</source>
         <translation>Ordenar canais por &amp;Instrumento</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
-        <source>Sort Channel Users by &amp;Group</source>
+        <source>Sort Users by &amp;Group</source>
         <translation>Ordenar canais por &amp;Grupo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
-        <source>Sort Channel Users by &amp;City</source>
+        <source>Sort Users by &amp;City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

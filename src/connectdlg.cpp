@@ -587,33 +587,37 @@ void CConnectDlg::UpdateListFilter()
             QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
             bool             bFilterFound     = false;
 
-            // search server name
-            if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-            {
-                bFilterFound = true;
-            }
-
-            // search location
-            if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-            {
-                bFilterFound = true;
-            }
-
-            // special case: filter for occupied servers
             // DEFINITION: if "#" is set at the beginning of the filter text, we show
             //             occupied servers (#397)
-            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) &&
-                 ( pCurListViewItem->childCount() > 0 ) )
+            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) )
             {
-                bFilterFound = true;
-            }
-
-            // search children
-            for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
-            {
-                if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                // special case: filter for occupied servers
+                if ( pCurListViewItem->childCount() > 0 )
                 {
                     bFilterFound = true;
+                }
+            }
+            else
+            {
+                // search server name
+                if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                {
+                    bFilterFound = true;
+                }
+
+                // search location
+                if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                {
+                    bFilterFound = true;
+                }
+
+                // search children
+                for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
+                {
+                    if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                    {
+                        bFilterFound = true;
+                    }
                 }
             }
 

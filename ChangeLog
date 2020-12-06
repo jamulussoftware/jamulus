@@ -86,7 +86,7 @@
 
 - replaced double types by floats for some of the signal processing, coded by hselasky (#544)
 
-- support permanent channl fader sorting (i.e., not only on request but always) (#666)
+- support permanent channel fader sorting (i.e., not only on request but always) (#666)
 
 - support sorting faders by channel city
 

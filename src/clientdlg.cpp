@@ -1120,7 +1120,7 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
     // it is trying to connect the server which does not help to solve the problem (#129))
     if ( !pClient->IsCallbackEntered() )
     {
-        QMessageBox::warning ( this, APP_NAME, tr ( "Your soundcard does not work correctly. "
+        QMessageBox::warning ( this, APP_NAME, tr ( "Your sound card is not working correctly. "
             "Please open the settings dialog and check the device selection and the driver settings." ) );
     }
 }

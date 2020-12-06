@@ -793,11 +793,6 @@
         <translation>Sortuj kanały według &amp;miasta</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1123"/>
-        <source>The soundcard device does not work correctly. Please open the settings and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="1139"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
@@ -861,6 +856,11 @@
         <location filename="../../clientdlg.cpp" line="925"/>
         <source>users</source>
         <translation>użytkownicy</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="1123"/>
+        <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1186"/>

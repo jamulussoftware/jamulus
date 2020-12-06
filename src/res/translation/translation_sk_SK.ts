@@ -713,7 +713,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="190"/>
-        <location filename="../../clientdlg.cpp" line="1194"/>
+        <location filename="../../clientdlg.cpp" line="1211"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Pripojiť</translation>
     </message>
@@ -783,6 +783,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../clientdlg.cpp" line="1123"/>
+        <source>The soundcard device does not work correctly. Please open the settings and check the device selection and the driver settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="1139"/>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
         <location filename="../../clientdlg.cpp" line="253"/>
         <source>E&amp;xit</source>
         <translation>U&amp;končiť</translation>
@@ -843,22 +853,17 @@
         <translation>Vyberte súbor s nastavením kanálov</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="928"/>
+        <location filename="../../clientdlg.cpp" line="921"/>
         <source>user</source>
         <translation>používateľ</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="932"/>
+        <location filename="../../clientdlg.cpp" line="925"/>
         <source>users</source>
         <translation>používatelia</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1130"/>
-        <source>The soundcard device does not work correctly. Please check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientdlg.cpp" line="1169"/>
+        <location filename="../../clientdlg.cpp" line="1186"/>
         <source>D&amp;isconnect</source>
         <translation>O&amp;dpojiť</translation>
     </message>
@@ -1413,19 +1418,16 @@
         <translation>Oneskorenie buffera: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="601"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation>Vybrané audio zariadenie nie je možné použiť kvôli nasledujúcej chybe: </translation>
+        <translation type="vanished">Vybrané audio zariadenie nie je možné použiť kvôli nasledujúcej chybe: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="603"/>
         <source> The previous driver will be selected.</source>
-        <translation> Bude vybraný predchádzajúci ovládač.</translation>
+        <translation type="vanished"> Bude vybraný predchádzajúci ovládač.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="604"/>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation type="vanished">Ok</translation>
     </message>
 </context>
 <context>
@@ -1508,53 +1510,53 @@
         <translation>Automaticky</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="284"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="278"/>
         <source>Local</source>
         <translation>Lokálny</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="303"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="291"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="326"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="345"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="308"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="321"/>
         <source>Size</source>
         <translation>Veľkosť</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="483"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="459"/>
         <source>Misc</source>
         <translation>Rôzne</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="493"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="469"/>
         <source>Audio Channels</source>
         <translation>Audio kanály</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="500"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="476"/>
         <source>Audio Quality</source>
         <translation>Audio kvalita</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="507"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="483"/>
         <source>New Client Level</source>
         <translation>Úroveň nového klienta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="514"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="490"/>
         <source>Skin</source>
         <translation>Vzhľad</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="521"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="497"/>
         <source>Language</source>
         <translation>Jazyk</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="543"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="519"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -1563,29 +1565,29 @@
         <translation type="vanished">Zobraziť úrovne kanálov</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="562"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="538"/>
         <source>Custom Central Server Address:</source>
         <translation>Adresa vlastného centrálneho servera:</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="591"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="567"/>
         <source>Audio Stream Rate</source>
         <translation>Rýchlosť streamovania zvuku</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="604"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="634"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="669"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="580"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="610"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="645"/>
         <source>val</source>
         <translation>hodn</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="615"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="591"/>
         <source>Ping Time</source>
         <translation>Čas odpovede</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="645"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="621"/>
         <source>Overall Delay</source>
         <translation>Celkové oneskorenie</translation>
     </message>
@@ -2743,103 +2745,104 @@
         <translation>Server Jack bol vypnutý. Tento program vyžaduje, aby bol server Jack spustený. Pokúste sa reštartovať tento program a vyriešiť tak tento problém.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="127"/>
+        <location filename="../../../mac/sound.cpp" line="136"/>
         <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="141"/>
+        <location filename="../../../mac/sound.cpp" line="150"/>
         <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="340"/>
-        <source>The previously selected audio device is no longer available. The system default audio device will be selected instead.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../mac/sound.cpp" line="487"/>
-        <source>Current audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../mac/sound.cpp" line="500"/>
+        <location filename="../../../mac/sound.cpp" line="494"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="517"/>
-        <source>Current audio output device is no longer available.</source>
+        <location filename="../../../mac/sound.cpp" line="339"/>
+        <location filename="../../../windows/sound.cpp" line="60"/>
+        <source>The current selected audio device is no longer present in the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="530"/>
+        <location filename="../../../mac/sound.cpp" line="481"/>
+        <source>The audio input device is no longer available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="511"/>
+        <source>The audio output device is no longer available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="524"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="603"/>
+        <location filename="../../../mac/sound.cpp" line="597"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="621"/>
+        <location filename="../../../mac/sound.cpp" line="615"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="894"/>
+        <location filename="../../../mac/sound.cpp" line="888"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="63"/>
+        <location filename="../../../windows/sound.cpp" line="69"/>
         <source>The audio driver could not be initialized.</source>
         <translation>Audio ovládač sa nepodarilo inicializovať.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="122"/>
+        <location filename="../../../windows/sound.cpp" line="128"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="135"/>
+        <location filename="../../../windows/sound.cpp" line="141"/>
         <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="139"/>
+        <location filename="../../../windows/sound.cpp" line="145"/>
         <source> Hz on the device and restart the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="140"/>
+        <location filename="../../../windows/sound.cpp" line="146"/>
         <source> software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="150"/>
+        <location filename="../../../windows/sound.cpp" line="156"/>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="186"/>
-        <location filename="../../../windows/sound.cpp" line="216"/>
+        <location filename="../../../windows/sound.cpp" line="192"/>
+        <location filename="../../../windows/sound.cpp" line="222"/>
         <source>Required audio sample format not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="532"/>
+        <location filename="../../../windows/sound.cpp" line="538"/>
         <source>No ASIO audio device (driver) found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="533"/>
+        <location filename="../../../windows/sound.cpp" line="539"/>
         <source>The </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="533"/>
+        <location filename="../../../windows/sound.cpp" line="539"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2851,42 +2854,50 @@
         <translation type="vanished">Neplatný výber zariadenia.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="94"/>
-        <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
+        <source>Please restart the software.</source>
+        <translation type="vanished">Prosím, reštartujte tento program.</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="vanished">Zavrieť</translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="109"/>
+        <source>The selected audio device could not be used because of the following error: </source>
+        <translation type="unfinished">Vybrané audio zariadenie nie je možné použiť kvôli nasledujúcej chybe: </translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="111"/>
+        <source> The previous driver will be selected.</source>
+        <translation type="unfinished"> Bude vybraný predchádzajúci ovládač.</translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="149"/>
+        <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="99"/>
-        <source>Please restart the software.</source>
-        <translation>Prosím, reštartujte tento program.</translation>
-    </message>
-    <message>
-        <location filename="../../soundbase.cpp" line="100"/>
-        <source>Close</source>
-        <translation>Zavrieť</translation>
-    </message>
-    <message>
-        <location filename="../../soundbase.cpp" line="143"/>
+        <location filename="../../soundbase.cpp" line="162"/>
         <source>No usable </source>
         <translation>Nebolo nájdené </translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="144"/>
+        <location filename="../../soundbase.cpp" line="163"/>
         <source> audio device (driver) found.</source>
         <translation> žiadne zvukové zariadenie (ovládač).</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="145"/>
+        <location filename="../../soundbase.cpp" line="164"/>
         <source>In the following there is a list of all available drivers with the associated error message:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="159"/>
+        <location filename="../../soundbase.cpp" line="178"/>
         <source>Do you want to open the ASIO driver setups?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="166"/>
+        <location filename="../../soundbase.cpp" line="185"/>
         <source> could not be started because of audio interface issues.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2912,7 +2923,7 @@
 <context>
     <name>global</name>
     <message>
-        <location filename="../../global.h" line="240"/>
+        <location filename="../../global.h" line="235"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
         <translation>Pre získanie viac informácii, použite &quot;Čo je toto?&quot; (ponuka pomocníka, pravé tlačidlo myši alebo Shift+F1)</translation>
     </message>

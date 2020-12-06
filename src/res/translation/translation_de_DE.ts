@@ -866,12 +866,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1123"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Soundkarte funktioniert nicht ordnungsgemäß. Bitte überprüfe die Soundkartenauswahl und die Einstellungen der Soundkarte.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1139"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="253"/>
@@ -3282,17 +3282,17 @@
         <location filename="../../../mac/sound.cpp" line="339"/>
         <location filename="../../../windows/sound.cpp" line="60"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die ausgewählte Soundkarte ist nicht mehr im System verfügbar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das aktuelle Audiogerät für den Toneingang ist nicht mehr verfügbar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das aktuelle Audiogerät für den Tonausgang ist nicht mehr verfügbar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -3388,17 +3388,17 @@
     <message>
         <location filename="../../soundbase.cpp" line="109"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished">Das ausgewählte Audiogerät kann aus folgendem Grund nicht verwendet werden: </translation>
+        <translation>Das ausgewählte Audiogerät kann aus folgendem Grund nicht verwendet werden: </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="111"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"> Der vorherige Treiber wird wieder ausgewählt.</translation>
+        <translation> Der vorherige Treiber wird wieder ausgewählt.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="149"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das aktuell ausgewählte Audiogerät ist nicht mehr verfügbar oder die Treibereinstellungen sind nicht mehr mit dieser Software kompatibel. Es wird nun versucht, ein funktionierendes Audiogerät zu finden. Dieses neue Audiogerät könnte eine Tonrückkopplung verursachen. Bitte überprüfe deswegen die Audiogeräteeinstellungen vor der nächsten Verbindung mit dem Server.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="162"/>

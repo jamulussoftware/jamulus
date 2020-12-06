@@ -14,7 +14,10 @@
 
 - bug fix: sliders move by themselves if fader groups are used on reconnect (#611)
 
-- bug fix: do not reset sound card channel selection on a device property change
+- bug fix: do not reset sound card channel selection on a device property change (#727)
+
+- bug fix: on MacOS if an audio device is no longer available, show a warning
+  rather than switching to default automatically (#727)
 
 - bug fix: compiling Jamulus 3.6.1 is failing on Debian 9 Linode (#736)
 

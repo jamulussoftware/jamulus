@@ -935,12 +935,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="333"/>
         <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Wis Alle Opgeslagen Solo- en Demp-instellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1139"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>&amp;Clear All Stored Solo Settings</source>
@@ -1024,7 +1024,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1123"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Uw geluidskaart werkt niet correct. Open het Instellingsvenster en controleer  apparaatselectie en bestuurprogramma-instellingen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1186"/>
@@ -3243,17 +3243,17 @@
         <location filename="../../../mac/sound.cpp" line="339"/>
         <location filename="../../../windows/sound.cpp" line="60"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het geselecteerde audioapparaat is niet langer in het systeem beschikbaar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het audio-invoerapparaat is niet langer beschikbaar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het audio-uitvoerapparaat is niet langer beschikbaar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -3348,17 +3348,17 @@
     <message>
         <location filename="../../soundbase.cpp" line="109"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished">Het geselecteerde audioapparaat kon niet worden gebruikt vanwege de volgende fout: </translation>
+        <translation>Het geselecteerde audioapparaat kon niet worden gebruikt vanwege de volgende fout: </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="111"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"> Het vorige stuurprogramma wordt geselecteerd.</translation>
+        <translation> Het vorige stuurprogramma zal worden geselecteerd.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="149"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het eerder geselecteerde audioapparaat is niet langer beschikbaar of de stuurprogramma-eigenschappen zijn aangepast en werken niet met deze software. We zoeken nu naar een bruikbaar audioapparaat. Dit nieuwe audioappraat zou audio feedback kunnen veroorzaken. Controleer daarom de audioapparaat-instellingen alvorens op een server in te loggen.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="162"/>

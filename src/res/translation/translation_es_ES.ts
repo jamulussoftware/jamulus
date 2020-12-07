@@ -881,12 +881,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="333"/>
         <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar Todas las &amp;Configuraciones de Solo y Mute</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1139"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="253"/>
@@ -1006,22 +1006,22 @@
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
         <source>N&amp;o User Sorting</source>
-        <translation>N&amp;o Ordenar Canales</translation>
+        <translation>N&amp;o Ordenar Usuarios</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="286"/>
         <source>Sort Users by &amp;Name</source>
-        <translation>Ordenar Canales por &amp;Nombre</translation>
+        <translation>Ordenar Usuarios por &amp;Nombre</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="289"/>
         <source>Sort Users by &amp;Instrument</source>
-        <translation>Ordenar Canales por &amp;Instrumento</translation>
+        <translation>Ordenar Usuarios por &amp;Instrumento</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="295"/>
         <source>Sort Users by &amp;City</source>
-        <translation>Ordenar Canales por &amp;Ciudad</translation>
+        <translation>Ordenar Usuarios por &amp;Ciudad</translation>
     </message>
     <message>
         <source>&amp;Clear All Stored Solo Settings</source>
@@ -1056,12 +1056,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1123"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu tarjeta de sonido no está funcionando correctamente. Por favor abre la ventana de configuración y comprueba la selección de dispositivo y la configuración del driver.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1186"/>
         <source>D&amp;isconnect</source>
-        <translation>D&amp;esconectar</translation>
+        <translation>&amp;Desconectar</translation>
     </message>
 </context>
 <context>
@@ -1099,7 +1099,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="333"/>
         <source>&amp;Settings</source>
-        <translation>C&amp;onfiguración</translation>
+        <translation>Co&amp;nfiguración</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="340"/>
@@ -3294,17 +3294,17 @@
         <location filename="../../../mac/sound.cpp" line="339"/>
         <location filename="../../../windows/sound.cpp" line="60"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>El dispositivo de audio seleccionado actualmente ya no está presente en el sistema.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>El dispositivo de entrada de audio ya no está disponible.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>El dispositivo de salida de audio ya no está disponible.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -3404,17 +3404,17 @@
     <message>
         <location filename="../../soundbase.cpp" line="109"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished">El dispositivo de audio seleccionado no puede utilizarse a causa del siguiente error: </translation>
+        <translation>El dispositivo de audio seleccionado no puede utilizarse a causa del siguiente error: </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="111"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"> Se utilizará el driver anterior.</translation>
+        <translation> Se seleccionará el driver anterior.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="149"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>El dispositivo de audio seleccionado anteriormente ya no está disponible o las propiedades del driver han cambiado a un estado que es incompatible con este software. Intentaremos ahora encontrar un dispositivo de audio válido. Este nuevo dispositivo puede ocasionar retroalimentación de audio. Por tanto, antes de conectarte a un servidor, comprueba la configuración del dispositivo de audio.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="162"/>

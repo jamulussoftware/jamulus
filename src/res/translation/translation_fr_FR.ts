@@ -2706,17 +2706,17 @@
         <location filename="../../../mac/sound.cpp" line="339"/>
         <location filename="../../../windows/sound.cpp" line="60"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation>Le périphérique audio actuellement sélectionné n'est plus présent dans le système.</translation>
+        <translation>Le périphérique audio actuellement sélectionné n&apos;est plus présent dans le système.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation>Le périphérique d'entrée audio n'est plus disponible.</translation>
+        <translation>Le périphérique d&apos;entrée audio n&apos;est plus disponible.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation>Le périphérique de sortie audio n'est plus disponible.</translation>
+        <translation>Le périphérique de sortie audio n&apos;est plus disponible.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -2810,7 +2810,7 @@
     <message>
         <location filename="../../soundbase.cpp" line="149"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation>Le périphérique audio précédemment sélectionné n'est plus disponible ou les propriétés du pilote audio sont passées à un état incompatible avec ce logiciel. Nous essayons à présent de trouver un périphérique audio valide. Ce nouveau périphérique audio peut provoquer un retour audio. Aussi, avant de vous connecter à un serveur, veuillez vérifier le réglage du périphérique audio.</translation>
+        <translation>Le périphérique audio précédemment sélectionné n&apos;est plus disponible ou les propriétés du pilote audio sont passées à un état incompatible avec ce logiciel. Nous essayons à présent de trouver un périphérique audio valide. Ce nouveau périphérique audio peut provoquer un retour audio. Aussi, avant de vous connecter à un serveur, veuillez vérifier le réglage du périphérique audio.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="162"/>

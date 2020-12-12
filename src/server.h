@@ -190,14 +190,12 @@ public:
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strServerNameForHTMLStatusFile,
               const QString&     strCentralServer,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
               const QString&     strEduModePassword,
-              const bool         bNCentServPingServerInList,
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
@@ -229,6 +227,7 @@ public:
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
     bool GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
+    bool GetDisableRecording() { return bDisableRecording; }
     void RequestNewRecording() { JamController.RequestNewRecording(); }
 
     void SetEnableRecording ( bool bNewEnableRecording );
@@ -236,7 +235,7 @@ public:
     QString GetRecordingDir() { return JamController.GetRecordingDir(); }
 
     void SetRecordingDir( QString newRecordingDir )
-        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
+        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording ); }
 
     void CreateAndSendRecorderStateForAllConChannels();
 
@@ -289,16 +288,9 @@ public:
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
 
-    void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
-    ELicenceType GetLicenceType() { return eLicenceType; }
-
 protected:
     // access functions for actual channels
-    bool IsConnected ( const int iChanNum )
-        { return vecChannels[iChanNum].IsConnected(); }
-
-    void StartStatusHTMLFileWriting ( const QString& strNewFileName,
-                                      const QString& strNewServerNameWithPort );
+    bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
 
     int GetFreeChan();
     int FindChannel ( const CHostAddress& CheckAddr );
@@ -334,9 +326,16 @@ protected:
 
     void WriteHTMLChannelList();
 
+    void DecodeReceiveDataBlocks ( const int iStartChanCnt,
+                                   const int iStopChanCnt,
+                                   const int iNumClients );
+
     void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                        const int iStopChanCnt,
                                        const int iNumClients );
+
+    void DecodeReceiveData ( const int iChanCnt,
+                             const int iNumClients );
 
     void MixEncodeTransmitData ( const int iChanCnt,
                                  const int iNumClients );
@@ -370,6 +369,7 @@ protected:
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;
     QMutex                     MutexWelcomeMessage;
+    bool                       bChannelIsNowDisconnected;
 
     // edu mode
     QString                    strEduModePassword;
@@ -391,15 +391,15 @@ protected:
     CVector<QString>           vstrChatColors;
     CVector<int>               vecChanIDsCurConChan;
 
-    CVector<CVector<double> >  vecvecdGains;
-    CVector<CVector<double> >  vecvecdPannings;
+    CVector<CVector<float> >   vecvecfGains;
+    CVector<CVector<float> >   vecvecfPannings;
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<int16_t> > vecvecsSendData;
-    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
+    CVector<CVector<float> >   vecvecfIntermediateProcBuf;
     CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels
@@ -417,7 +417,6 @@ protected:
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
-    QString                    strServerNameWithPort;
 
     CHighPrecisionTimer        HighPrecisionTimer;
 
@@ -426,6 +425,7 @@ protected:
 
     // jam recorder
     recorder::CJamController   JamController;
+    bool bDisableRecording;
 
     // GUI settings
     bool                       bAutoRunMinimized;
@@ -520,10 +520,10 @@ public slots:
     void OnCLRegisterServerExReceived ( CHostAddress           InetAddr,
                                         CHostAddress           LInetAddr,
                                         CServerCoreInfo        ServerInfo,
-                                        COSUtil::EOpSystemType eOSType,
+                                        COSUtil::EOpSystemType ,
                                         QString                strVersion )
     {
-        ServerListManager.CentralServerRegisterServerEx ( InetAddr, LInetAddr, ServerInfo, eOSType, strVersion );
+        ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo, strVersion );
     }
 
     void OnCLRegisterServerResp ( CHostAddress  /* unused */,

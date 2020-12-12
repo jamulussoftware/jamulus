@@ -64,6 +64,9 @@ private network.
 #include <QList>
 #include <QElapsedTimer>
 #include <QMutex>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+# include <QVersionNumber>
+#endif
 #include "global.h"
 #include "util.h"
 #include "protocol.h"
@@ -126,7 +129,6 @@ public:
                          const QString& strServerInfo,
                          const QString& strServerListFilter,
                          const int      iNumChannels,
-                         const bool     bNCentServPingServerInList,
                          CProtocol*     pNConLProt );
 
     // the update has to be called if any change to the server list
@@ -146,13 +148,8 @@ public:
 
     void CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                        const CHostAddress&    LInetAddr,
-                                       const CServerCoreInfo& ServerInfo );
-
-    void CentralServerRegisterServerEx ( const CHostAddress&          InetAddr,
-                                         const CHostAddress&          LInetAddr,
-                                         const CServerCoreInfo&       ServerInfo,
-                                         const COSUtil::EOpSystemType ,
-                                         const QString&               );
+                                       const CServerCoreInfo& ServerInfo,
+                                       const QString          strVersion = "" );
 
     void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
 
@@ -198,16 +195,15 @@ protected:
     QList<CServerListEntry> ServerList;
 
     QString                 strCentralServerAddress;
-    int                     iNumPredefinedServers;
     bool                    bEnabled;
     bool                    bIsCentralServer;
     ECSAddType              eCentralServerAddressType;
-    bool                    bCentServPingServerInList;
 
     CHostAddress            SlaveCurCentServerHostAddress;
     CHostAddress            SlaveCurLocalHostAddress;
 
     QList<QHostAddress>     vWhiteList;
+    QString                 strMinServerVersion;
 
     CProtocol*              pConnLessProtocol;
 

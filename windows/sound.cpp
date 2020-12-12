@@ -40,10 +40,26 @@ CSound* pSound;
 /******************************************************************************\
 * Common                                                                       *
 \******************************************************************************/
-QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
-                                          bool bOpenDriverSetup )
+QString CSound::LoadAndInitializeDriver ( QString strDriverName,
+                                          bool    bOpenDriverSetup )
 {
-    // load driver
+    // find and load driver
+    int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
+
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    {
+        if ( strDriverName.compare ( cDriverNames[i] ) == 0 )
+        {
+            iDriverIdx = i;
+        }
+    }
+
+    // if the selected driver was not found, return an error message
+    if ( iDriverIdx == INVALID_INDEX )
+    {
+        return tr ( "The current selected audio device is no longer present in the system." );
+    }
+
     loadAsioDriver ( cDriverNames[iDriverIdx] );
 
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
@@ -59,12 +75,16 @@ QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        // the device has changed, per definition we reset the channel
-        // mapping to the defaults (first two available channels)
-        ResetChannelMapping();
+        // only reset the channel mapping if a new device was selected
+        if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
+        {
+            // the device has changed, per definition we reset the channel
+            // mapping to the defaults (first two available channels)
+            ResetChannelMapping();
 
-        // store ID of selected driver if initialization was successful
-        lCurDev = iDriverIdx;
+            // store ID of selected driver if initialization was successful
+            strCurDevName = cDriverNames[iDriverIdx];
+        }
     }
     else
     {
@@ -439,14 +459,14 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         {
             // add the input and output latencies (returned in number of
             // samples) and calculate the time in ms
-            dInOutLatencyMs =
-                ( static_cast<double> ( lInputLatency ) + lOutputLatency ) *
+            fInOutLatencyMs =
+                ( static_cast<float> ( lInputLatency ) + lOutputLatency ) *
                 1000 / SYSTEM_SAMPLE_RATE_HZ;
         }
         else
         {
             // no latency available
-            dInOutLatencyMs = 0.0;
+            fInOutLatencyMs = 0.0f;
         }
 
         // check whether the driver requires the ASIOOutputReady() optimization
@@ -485,14 +505,14 @@ void CSound::Stop()
 
 CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
                  void*          arg,
-                 const int      iCtrlMIDIChannel,
+                 const QString& strMIDISetup,
                  const bool     ,
                  const QString& ) :
-    CSoundBase              ( "ASIO", fpNewCallback, arg, iCtrlMIDIChannel ),
+    CSoundBase              ( "ASIO", fpNewCallback, arg, strMIDISetup ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),
-    dInOutLatencyMs         ( 0.0 ), // "0.0" means that no latency value is available
+    fInOutLatencyMs         ( 0.0f ), // "0.0" means that no latency value is available
     vSelectedInputChannels  ( NUM_IN_OUT_CHANNELS ),
     vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS )
 {
@@ -533,7 +553,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     }
 
     // init device index as not initialized (invalid)
-    lCurDev = INVALID_INDEX;
+    strCurDevName = "";
 
     // init channel mapping
     ResetChannelMapping();
@@ -637,8 +657,8 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                     for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                     {
                         vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) pASIOBufAdd[iCurSample] );
+                            Float2Short ( (float) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
+                                          (float) pASIOBufAdd[iCurSample] );
                     }
                 }
                 break;
@@ -664,8 +684,8 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                         iCurSam >>= 8;
 
                         vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) static_cast<int16_t> ( iCurSam ) );
+                            Float2Short ( (float) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
+                                          (float) static_cast<int16_t> ( iCurSam ) );
                     }
                 }
                 break;
@@ -688,8 +708,8 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                     for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                     {
                         vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) static_cast<int16_t> ( pASIOBufAdd[iCurSample] >> 16 ) );
+                            Float2Short ( (float) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
+                                          (float) static_cast<int16_t> ( pASIOBufAdd[iCurSample] >> 16 ) );
                     }
                 }
                 break;

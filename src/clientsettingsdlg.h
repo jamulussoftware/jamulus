@@ -57,8 +57,7 @@ class CClientSettingsDlg : public QDialog, private Ui_CClientSettingsDlgBase
 public:
     CClientSettingsDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
-                         QWidget*         parent = nullptr,
-                         Qt::WindowFlags  f = nullptr );
+                         QWidget*         parent = nullptr );
 
     void SetStatus ( const CMultiColorLED::ELightColor eStatus ) { ledNetw->SetLight ( eStatus ); }
 
@@ -73,27 +72,27 @@ public:
                              const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
     void UpdateDisplay();
+    void UpdateSoundDeviceChannelSelectionFrame();
 
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
-    void    UpdateSoundChannelSelectionFrame();
+    void    UpdateCustomCentralServerComboBox();
     QString GenSndCrdBufferDelayString ( const int     iFrameSize,
                                          const QString strAddText = "" );
 
-    virtual void showEvent ( QShowEvent* ) { UpdateDisplay(); }
+    virtual void showEvent ( QShowEvent* );
 
     CClient*         pClient;
     CClientSettings* pSettings;
     QTimer           TimerStatus;
     QButtonGroup     SndCrdBufferDelayButtonGroup;
 
- public slots:
+public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnNetBufValueChanged ( int value );
     void OnNetBufServerValueChanged ( int value );
     void OnAutoJitBufStateChanged ( int value );
-    void OnDisplayChannelLevelsStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
@@ -111,6 +110,6 @@ protected:
 
 signals:
     void GUIDesignChanged();
-    void DisplayChannelLevelsChanged();
     void AudioChannelsChanged();
+    void CustomCentralServerAddrChanged();
 };

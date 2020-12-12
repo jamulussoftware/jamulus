@@ -27,10 +27,12 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
-    vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
-    vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
+    vecfGains              ( MAX_NUM_CHANNELS, 1.0f ),
+    vecfPannings           ( MAX_NUM_CHANNELS, 0.5f ),
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
+    bUseSequenceNumber     ( false ), // this is important since in the client we reset on Channel.SetEnable ( false )
+    iSendSequenceNumber    ( 0 ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
@@ -106,17 +108,20 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
     QObject::connect ( &Protocol, &CProtocol::ReqNetTranspProps,
         this, &CChannel::OnReqNetTranspProps );
 
+    QObject::connect ( &Protocol, &CProtocol::ReqSplitMessSupport,
+        this, &CChannel::OnReqSplitMessSupport );
+
+    QObject::connect ( &Protocol, &CProtocol::SplitMessSupported,
+        this, &CChannel::OnSplitMessSupported );
+
     QObject::connect ( &Protocol, &CProtocol::LicenceRequired,
         this, &CChannel::LicenceRequired );
 
     QObject::connect ( &Protocol, &CProtocol::VersionAndOSReceived,
-        this, &CChannel::VersionAndOSReceived );
+        this, &CChannel::OnVersionAndOSReceived );
 
     QObject::connect ( &Protocol, &CProtocol::RecorderStateReceived,
         this, &CChannel::RecorderStateReceived );
-
-    QObject::connect ( &Protocol, &CProtocol::ReqChannelLevelList,
-        this, &CChannel::OnReqChannelLevelList );
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -142,6 +147,15 @@ void CChannel::SetEnable ( const bool bNEnStat )
     // set internal parameter
     bIsEnabled = bNEnStat;
 
+    // The support for the packet sequence number must be reset if the client
+    // disconnects from a server since we do not yet know if the next server we
+    // connect to will support the sequence number. We use the SetEnable call in
+    // the client for this task since at every start/stop it will call this
+    // function. NOTE that it is important to reset this paramter on SetEnable(false)
+    // since the SetEnable(true) is set AFTER the Init() in the client -> we
+    // simply set it regardless of the state which does not hurt.
+    bUseSequenceNumber = false;
+
     // if channel is not enabled, reset time out count and protocol
     if ( !bNEnStat )
     {
@@ -150,8 +164,29 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
+void CChannel::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
+                                        QString                strVersion )
+{
+    // check if audio packet counter is supported by the server (minimum version is 3.6.0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 6, 0 ) ) >= 0 )
+    {
+        // activate sequence counter and update the audio stream properties (which
+        // does all the initialization and tells the server about the change)
+        bUseSequenceNumber = true;
+
+        SetAudioStreamProperties ( eAudioCompressionType,
+                                   iCeltNumCodedBytes,
+                                   iNetwFrameSizeFact,
+                                   iNumAudioChannels );
+    }
+#endif
+
+    emit VersionAndOSReceived ( eOSType, strVersion );
+}
+
 void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
-                                          const int           iNewNetwFrameSize,
+                                          const int           iNewCeltNumCodedBytes,
                                           const int           iNewNetwFrameSizeFact,
                                           const int           iNewNumAudioChannels )
 {
@@ -165,8 +200,18 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         // store new values
         eAudioCompressionType = eNewAudComprType;
         iNumAudioChannels     = iNewNumAudioChannels;
-        iNetwFrameSize        = iNewNetwFrameSize;
+        iCeltNumCodedBytes    = iNewCeltNumCodedBytes;
         iNetwFrameSizeFact    = iNewNetwFrameSizeFact;
+
+        // add the size of the optional packet counter
+        if ( bUseSequenceNumber )
+        {
+            iNetwFrameSize = iCeltNumCodedBytes + 1; // per definition 1 byte counter
+        }
+        else
+        {
+            iNetwFrameSize = iCeltNumCodedBytes;
+        }
 
         // update audio frame size
         if ( eAudioCompressionType == CT_OPUS )
@@ -182,14 +227,14 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         {
             // init socket buffer
             SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+            SockBuf.Init ( iCeltNumCodedBytes, iCurSockBufNumFrames, bUseSequenceNumber );
         }
         MutexSocketBuf.unlock();
 
         MutexConvBuf.lock();
         {
             // init conversion buffer
-            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, bUseSequenceNumber );
         }
         MutexConvBuf.unlock();
 
@@ -222,7 +267,7 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
 
                 // the network block size is a multiple of the minimum network
                 // block size
-                SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
+                SockBuf.Init ( iCeltNumCodedBytes, iNewNumFrames, bUseSequenceNumber, bPreserve );
 
                 // store current auto socket buffer size setting in the mutex
                 // region since if we use the current parameter below in the
@@ -272,8 +317,8 @@ bool CChannel::IsBlocked()
     return bIsBlocked;
 }
 
-void CChannel::SetGain ( const int    iChanID,
-                         const double dNewGain )
+void CChannel::SetGain ( const int   iChanID,
+                         const float fNewGain )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -281,27 +326,27 @@ void CChannel::SetGain ( const int    iChanID,
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
         // signal mute change
-        if ( ( vecdGains[iChanID] == 0 ) && ( dNewGain > 0 ) )
+        if ( ( vecfGains[iChanID] == 0 ) && ( fNewGain > 0 ) )
         {
             emit MuteStateHasChanged ( iChanID, false );
         }
-        if ( ( vecdGains[iChanID] > 0 ) && ( dNewGain == 0 ) )
+        if ( ( vecfGains[iChanID] > 0 ) && ( fNewGain == 0 ) )
         {
             emit MuteStateHasChanged ( iChanID, true );
         }
 
-        vecdGains[iChanID] = dNewGain;
+        vecfGains[iChanID] = fNewGain;
     }
 }
 
-double CChannel::GetGain ( const int iChanID )
+float CChannel::GetGain ( const int iChanID )
 {
     QMutexLocker locker ( &Mutex );
 
     // get value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        return vecdGains[iChanID];
+        return vecfGains[iChanID];
     }
     else
     {
@@ -309,26 +354,26 @@ double CChannel::GetGain ( const int iChanID )
     }
 }
 
-void CChannel::SetPan ( const int    iChanID,
-                        const double dNewPan )
+void CChannel::SetPan ( const int   iChanID,
+                        const float fNewPan )
 {
     QMutexLocker locker ( &Mutex );
 
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        vecdPannings[iChanID] = dNewPan;
+        vecfPannings[iChanID] = fNewPan;
     }
 }
 
-double CChannel::GetPan ( const int iChanID )
+float CChannel::GetPan ( const int iChanID )
 {
     QMutexLocker locker ( &Mutex );
 
     // get value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        return vecdPannings[iChanID];
+        return vecfPannings[iChanID];
     }
     else
     {
@@ -396,16 +441,16 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
     }
 }
 
-void CChannel::OnChangeChanGain ( int    iChanID,
-                                  double dNewGain )
+void CChannel::OnChangeChanGain ( int   iChanID,
+                                  float fNewGain )
 {
-    SetGain ( iChanID, dNewGain );
+    SetGain ( iChanID, fNewGain );
 }
 
-void CChannel::OnChangeChanPan ( int    iChanID,
-                                 double dNewPan )
+void CChannel::OnChangeChanPan ( int   iChanID,
+                                 float fNewPan )
 {
-    SetPan ( iChanID, dNewPan );
+    SetPan ( iChanID, fNewPan );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )
@@ -449,6 +494,16 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             iNumAudioChannels     = static_cast<int> ( NetworkTransportProps.iNumAudioChannels );
             iNetwFrameSizeFact    = NetworkTransportProps.iBlockSizeFact;
             iNetwFrameSize        = static_cast<int> ( NetworkTransportProps.iBaseNetworkPacketSize );
+            bUseSequenceNumber    = ( NetworkTransportProps.eFlags == NF_WITH_COUNTER );
+
+            if ( bUseSequenceNumber )
+            {
+                iCeltNumCodedBytes = iNetwFrameSize - 1; // per definition 1 byte counter
+            }
+            else
+            {
+                iCeltNumCodedBytes = iNetwFrameSize;
+            }
 
             // update maximum number of frames for fade in counter (only needed for server)
             // and audio frame size
@@ -472,14 +527,14 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
                 // update socket buffer (the network block size is a multiple of the
                 // minimum network frame size)
                 SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
-                SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+                SockBuf.Init ( iCeltNumCodedBytes, iCurSockBufNumFrames, bUseSequenceNumber );
             }
             MutexSocketBuf.unlock();
 
             MutexConvBuf.lock();
             {
                 // init conversion buffer
-                ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+                ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact, bUseSequenceNumber );
             }
             MutexConvBuf.unlock();
         }
@@ -493,8 +548,23 @@ void CChannel::OnReqNetTranspProps()
     Protocol.CreateNetwTranspPropsMes ( GetNetworkTransportPropsFromCurrentSettings() );
 }
 
+void CChannel::OnReqSplitMessSupport()
+{
+    // activate split messages in our protocol (client) and return answer message to the server
+    Protocol.SetSplitMessageSupported ( true );
+    Protocol.CreateSplitMessSupportedMes();
+}
+
 CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
 {
+    // set network flags
+    ENetwFlags eFlags = NF_NONE;
+
+    if ( bUseSequenceNumber )
+    {
+        eFlags = NF_WITH_COUNTER;
+    }
+
     // use current stored settings of the channel to fill the network transport
     // properties structure
     return CNetworkTransportProps ( static_cast<uint32_t> ( iNetwFrameSize ),
@@ -502,7 +572,7 @@ CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
                                     static_cast<uint32_t> ( iNumAudioChannels ),
                                     SYSTEM_SAMPLE_RATE_HZ,
                                     eAudioCompressionType,
-                                    0, // version of the codec
+                                    eFlags,
                                     0 );
 }
 
@@ -664,6 +734,9 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
     // in case we are just disconnected, we have to fire a message
     if ( eGetStatus == GS_CHAN_NOW_DISCONNECTED )
     {
+        // reset the protocol
+        Protocol.Reset();
+
         // emit message
         emit Disconnected();
     }
@@ -678,8 +751,9 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
     QMutexLocker locker ( &MutexConvBuf );
 
     // use conversion buffer to convert sound card block size in network
-    // block size
-    if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen ) )
+    // block size and take care of optional sequence number (note that
+    // the sequence number wraps automatically)
+    if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen, iSendSequenceNumber++ ) )
     {
         pSocket->SendPacket ( ConvBuf.GetAll(), GetAddress() );
     }

@@ -1,3 +1,5 @@
+( en | [es](https://github.com/corrados/jamulus/blob/master/src/res/homepage/ES/manual-es.md) )
+
 Jamulus Help (Software Manual)
 ==============================
 
@@ -224,12 +226,6 @@ that client was already stored.
 ![Fancy skin](fancyskin.png)
 
 This applies a fancy skin to the main window.
-
-### Display channel levels
-
-![Display channel levels](displaychannellevels.png)
-
-This displays the channel input levels for each connected client.
 
 ### Custom central server address
 

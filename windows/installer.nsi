@@ -75,6 +75,9 @@ Section
   File             "${BINARY_PATH}x86\${APP_EXE}"
   ${EndIf}
 
+  ; icons
+  File             "jamulus-server-icon-2020.ico"
+
   ; QT dlls
   ${If} ${RunningX64}
   File             "$%QTDIR64%\bin\Qt5Core.dll"
@@ -114,7 +117,7 @@ Section
 
   CreateDirectory  "$SMPROGRAMS\${APP_NAME}"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
-  CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk" "$INSTDIR\${APP_EXE}" "-s"
+  CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk" "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\jamulus-server-icon-2020.ico"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${UNINSTALL_EXE}.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
   ; cleanup: remove temporary Microsoft Visual Studio redistributable executable
@@ -182,6 +185,7 @@ RMDIR  "$SMPROGRAMS\${APP_NAME}"
 
 Delete $INSTDIR\${UNINSTALL_EXE}
 Delete $INSTDIR\${APP_EXE}
+Delete $INSTDIR\jamulus-server-icon-2020.ico
 Delete $INSTDIR\Qt5Core.dll
 Delete $INSTDIR\Qt5Gui.dll
 Delete $INSTDIR\Qt5Widgets.dll

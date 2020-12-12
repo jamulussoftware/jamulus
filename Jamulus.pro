@@ -1,4 +1,4 @@
-VERSION = 3.5.10git
+VERSION = 3.6.2git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -28,6 +28,7 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_es_ES.ts \
     src/res/translation/translation_nl_NL.ts \
     src/res/translation/translation_pl_PL.ts \
+    src/res/translation/translation_sk_SK.ts \
     src/res/translation/translation_it_IT.ts \
     src/res/translation/translation_sv_SE.ts
 
@@ -96,6 +97,11 @@ win32 {
 
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
+        MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+        RC_FILE = mac/jamulus-server-icon-2020.icns
+    } else {
+        MACOSX_BUNDLE_ICON_FILE = mainicon.icns
+        RC_FILE = mac/mainicon.icns
     }
 
     QT += macextras
@@ -103,7 +109,6 @@ win32 {
     SOURCES += mac/sound.cpp
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
-    RC_FILE = mac/mainicon.icns
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
@@ -153,7 +158,9 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
-    HEADERS += android/sound.h
+    HEADERS += android/sound.h \
+        android/ring_buffer.h
+
     SOURCES += android/sound.cpp \
         android/androiddebug.cpp
 
@@ -185,10 +192,12 @@ win32 {
         libs/oboe/src/fifo/FifoController.cpp \
         libs/oboe/src/fifo/FifoControllerBase.cpp \
         libs/oboe/src/fifo/FifoControllerIndirect.cpp \
+        libs/oboe/src/flowgraph/ChannelCountConverter.cpp \
         libs/oboe/src/flowgraph/ClipToRange.cpp \
         libs/oboe/src/flowgraph/FlowGraphNode.cpp \
         libs/oboe/src/flowgraph/ManyToMultiConverter.cpp \
         libs/oboe/src/flowgraph/MonoToMultiConverter.cpp \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.cpp \
         libs/oboe/src/flowgraph/RampLinear.cpp \
         libs/oboe/src/flowgraph/SampleRateConverter.cpp \
         libs/oboe/src/flowgraph/SinkFloat.cpp \
@@ -232,10 +241,12 @@ win32 {
         libs/oboe/src/fifo/FifoController.h \
         libs/oboe/src/fifo/FifoControllerBase.h \
         libs/oboe/src/fifo/FifoControllerIndirect.h \
+        libs/oboe/src/flowgraph/ChannelCountConverter.h \
         libs/oboe/src/flowgraph/ClipToRange.h \
         libs/oboe/src/flowgraph/FlowGraphNode.h \
         libs/oboe/src/flowgraph/ManyToMultiConverter.h \
         libs/oboe/src/flowgraph/MonoToMultiConverter.h \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.h \
         libs/oboe/src/flowgraph/RampLinear.h \
         libs/oboe/src/flowgraph/SampleRateConverter.h \
         libs/oboe/src/flowgraph/SinkFloat.h \
@@ -636,7 +647,7 @@ android {
 
 DISTFILES += ChangeLog \
     COPYING \
-    INSTALL.md \
+    CONTRIBUTING.md \
     README.md \
     distributions/jamulus.desktop.in \
     distributions/jamulus.png \
@@ -649,6 +660,7 @@ DISTFILES += ChangeLog \
     src/res/translation/translation_pl_PL.qm \
     src/res/translation/translation_it_IT.qm \
     src/res/translation/translation_sv_SE.qm \
+    src/res/translation/translation_sk_SK.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -662,6 +674,9 @@ DISTFILES += ChangeLog \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/IndicatorGreen.png \
+    src/res/IndicatorYellow.png \
+    src/res/IndicatorRed.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
@@ -676,6 +691,7 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
+    src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
@@ -693,9 +709,12 @@ DISTFILES += ChangeLog \
     src/res/instruments/keyboard.png \
     src/res/instruments/listener.png \
     src/res/instruments/microphone.png \
+    src/res/instruments/mountaindulcimer.png \
     src/res/instruments/none.png \
+    src/res/instruments/rapping.png \
     src/res/instruments/recorder.png \
     src/res/instruments/saxophone.png \
+    src/res/instruments/scratching.png \
     src/res/instruments/streamer.png \
     src/res/instruments/synthesizer.png \
     src/res/instruments/trombone.png \
@@ -1011,3 +1030,11 @@ contains(CONFIG, "opus_shared_lib") {
     SOURCES += $$SOURCES_OPUS
     DISTFILES += $$DISTFILES_OPUS
 }
+
+# disable version check if requested
+contains(CONFIG, "disable_version_check") {
+    message(The version check is disabled.)
+    DEFINES += DISABLE_VERSION_CHECK
+}
+
+ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64

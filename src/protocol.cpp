@@ -51,6 +51,20 @@ MAIN FRAME
 
 
 
+SPLIT MESSAGE CONTAINER
+-----------------------
+
+    +------------+------------------------+------------------+--------------+
+    | 2 bytes ID | 1 byte number of parts | 1 byte split cnt | n bytes data |
+    +------------+------------------------+------------------+--------------+
+
+- ID is the message ID of the message being split
+- number of parts - total number of parts comprising the whole message
+- split cnt - number within number total for this part of the message
+- data - subset of the data part of the original message being split
+
+
+
 MESSAGES (with connection)
 --------------------------
 
@@ -162,9 +176,9 @@ MESSAGES (with connection)
         ... ------------------+-----------------------+ ...
         ...  4 bytes sam rate | 2 bytes audiocod type | ...
         ... ------------------+-----------------------+ ...
-        ... -----------------+----------------------+
-        ...  2 bytes version | 4 bytes audiocod arg |
-        ... -----------------+----------------------+
+        ... ---------------+----------------------+
+        ...  2 bytes flags | 4 bytes audiocod arg |
+        ... ---------------+----------------------+
 
     - "base netw size":  length of the base network packet (frame) in bytes
     - "block size fact": block size factor
@@ -176,8 +190,9 @@ MESSAGES (with connection)
                           - 1: CELT
                           - 2: OPUS
                           - 3: OPUS64
-    - "version":         version of the audio coder, if not used this value
-                         shall be set to 0
+    - "flags":           flags indicating network properties:
+                          - 0: none
+                          - 1: WITH_COUNTER (a packet counter is added to the audio packet)
     - "audiocod arg":    argument for the audio coder, if not used this value
                          shall be set to 0
 
@@ -187,20 +202,21 @@ MESSAGES (with connection)
     note: does not have any data -> n = 0
 
 
+- PROTMESSID_REQ_SPLIT_MESS_SUPPORT: Request split message support
+
+    note: does not have any data -> n = 0
+
+
+- PROTMESSID_SPLIT_MESS_SUPPORTED: Split messages are supported
+
+    note: does not have any data -> n = 0
+
+
 - PROTMESSID_LICENCE_REQUIRED: Licence required to connect to the server
 
     +---------------------+
     | 1 byte licence type |
     +---------------------+
-
-
-- PROTMESSID_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
-
-    +---------------+
-    | 1 byte option |
-    +---------------+
-
-    option is boolean, true to opt in, false to opt out
 
 
 - PROTMESSID_VERSION_AND_OS: Version number and operating system
@@ -314,6 +330,18 @@ CONNECTION LESS MESSAGES
       of the PROTMESSID_CLM_REGISTER_SERVER message is used
 
 
+- PROTMESSID_CLM_RED_SERVER_LIST: Reduced server list message (to have less UDP fragmentation)
+
+    for each registered server append following data:
+
+    +--------------------+------------------------------+ ...
+    | 4 bytes IP address | 2 bytes server internal port | ...
+    +--------------------+------------------------------+ ...
+        ... -----------------+----------------------------------+
+        ...  1 byte number n | n bytes UTF-8 string server name |
+        ... -----------------+----------------------------------+
+
+
 - PROTMESSID_CLM_REQ_SERVER_LIST: Request server list
 
     note: does not have any data -> n = 0
@@ -406,6 +434,9 @@ CONNECTION LESS MESSAGES
 /* Implementation *************************************************************/
 CProtocol::CProtocol()
 {
+    // allocate worst case memory for split part messages
+    vecbySplitMessageStorage.Init ( MAX_SIZE_BYTES_NETW_BUF );
+
     Reset();
 
 
@@ -419,9 +450,12 @@ void CProtocol::Reset()
     QMutexLocker locker ( &Mutex );
 
     // prepare internal variables for initial protocol transfer
-    iCounter   = 0;
-    iOldRecID  = PROTMESSID_ILLEGAL;
-    iOldRecCnt = 0;
+    iCounter               = 0;
+    iOldRecID              = PROTMESSID_ILLEGAL;
+    iOldRecCnt             = 0;
+    iSplitMessageCnt       = 0;
+    iSplitMessageDataIndex = 0;
+    bSplitMessageSupported = false; // compatilibity to old versions
 
     // delete complete "send message queue"
     SendMessQueue.clear();
@@ -495,22 +529,74 @@ void CProtocol::CreateAndSendMessage ( const int               iID,
 {
     CVector<uint8_t> vecNewMessage;
     int              iCurCounter;
+    const int        iDataLen = vecData.Size();
 
-    Mutex.lock();
+    // check if message has to be split because it is too large
+    if ( bSplitMessageSupported && ( iDataLen > MESS_SPLIT_PART_SIZE_BYTES ) )
     {
-        // store current counter value
-        iCurCounter = iCounter;
+        CVector<uint8_t> vecNewSplitMessage;
+        int              iStartIndexInData = 0; // init index
 
-        // increase counter (wraps around automatically)
-        iCounter++;
+        // calculate the number of split parts
+        const int iNumParts = static_cast<int> (
+            std::ceil ( static_cast<double> ( iDataLen ) / MESS_SPLIT_PART_SIZE_BYTES ) );
+
+        for ( int iSplitCnt = 0; iSplitCnt < iNumParts; iSplitCnt++ )
+        {
+            // the split part size may be smaller for the last part
+            int iCurPartSize = MESS_SPLIT_PART_SIZE_BYTES;
+
+            if ( iDataLen - iStartIndexInData < MESS_SPLIT_PART_SIZE_BYTES )
+            {
+                iCurPartSize = iDataLen - iStartIndexInData;
+            }
+
+            GenSplitMessageContainer ( vecNewSplitMessage,
+                                       iID,
+                                       iNumParts,
+                                       iSplitCnt,
+                                       vecData,
+                                       iStartIndexInData,
+                                       iCurPartSize );
+
+            // increment the start index of the source data by the last part size
+            iStartIndexInData += iCurPartSize;
+
+            Mutex.lock();
+            {
+                // store current counter value
+                iCurCounter = iCounter;
+
+                // increase counter (wraps around automatically)
+                iCounter++;
+            }
+            Mutex.unlock();
+
+            // build complete message
+            GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE, vecNewSplitMessage );
+
+            // enqueue message
+            EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_SPECIAL_SPLIT_MESSAGE );
+        }
     }
-    Mutex.unlock();
+    else
+    {
+        Mutex.lock();
+        {
+            // store current counter value
+            iCurCounter = iCounter;
 
-    // build complete message
-    GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
+            // increase counter (wraps around automatically)
+            iCounter++;
+        }
+        Mutex.unlock();
 
-    // enqueue message
-    EnqueueMessage ( vecNewMessage, iCurCounter, iID );
+        // build complete message
+        GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
+
+        // enqueue message
+        EnqueueMessage ( vecNewMessage, iCurCounter, iID );
+    }
 }
 
 void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
@@ -544,16 +630,10 @@ void CProtocol::CreateAndImmSendConLessMessage ( const int               iID,
     emit CLMessReadyForSending ( InetAddr, vecNewMessage );
 }
 
-bool CProtocol::ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+void CProtocol::ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                    const int               iRecCounter,
                                    const int               iRecID )
 {
-/*
-    return code: false -> ok; true -> error
-*/
-    bool bRet = false;
-    bool bSendNextMess;
-
 /*
 // TEST channel implementation: randomly delete protocol messages (50 % loss)
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
@@ -580,18 +660,17 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
             // check size
             if ( vecbyMesBodyData.Size() != 2 )
             {
-                return true; // return error code
+                return;
             }
 
             // extract data from stream and emit signal for received value
-            int       iPos = 0;
-            const int iData =
-                static_cast<int> ( GetValFromStream ( vecbyMesBodyData, iPos, 2 ) );
+            bool      bSendNextMess = false;
+            int       iPos          = 0;
+            const int iData         = static_cast<int> ( GetValFromStream ( vecbyMesBodyData, iPos, 2 ) );
 
             Mutex.lock();
             {
                 // check if this is the correct acknowledgment
-                bSendNextMess = false;
                 if ( !SendMessQueue.empty() )
                 {
                     if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
@@ -614,76 +693,155 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
         }
         else
         {
-            // check which type of message we received and do action
-            switch ( iRecID )
+            CVector<uint8_t> vecbyMesBodyDataSplitMess;
+            int              iRecIDModified   = iRecID;
+            bool             bEvaluateMessage = false;
+
+            // check for special ID first
+            if ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE )
             {
-            case PROTMESSID_JITT_BUF_SIZE:
-                bRet = EvaluateJitBufMes ( vecbyMesBodyData );
-                break;
+                // Split message management ------------------------------------
+                int iOriginalID;
+                int iReceivedNumParts;
+                int iReceivedSplitCnt;
+                int iCurPartSize;
 
-            case PROTMESSID_REQ_JITT_BUF_SIZE:
-                bRet = EvaluateReqJitBufMes();
-                break;
+                if ( !ParseSplitMessageContainer ( vecbyMesBodyData,
+                                                   vecbySplitMessageStorage,
+                                                   iSplitMessageDataIndex,
+                                                   iOriginalID,
+                                                   iReceivedNumParts,
+                                                   iReceivedSplitCnt,
+                                                   iCurPartSize ) )
+                {
+                    // consistency checks
+                    if ( ( iSplitMessageCnt != iReceivedSplitCnt ) ||
+                         ( iSplitMessageCnt >= iReceivedNumParts ) ||
+                         ( iSplitMessageCnt >= MAX_NUM_MESS_SPLIT_PARTS ) )
+                    {
+                        // in case of an error we reset the split message counter
+                        iSplitMessageCnt       = 0;
+                        iSplitMessageDataIndex = 0;
+                    }
+                    else
+                    {
+                        // update counter and message data index since we have received a valid new part
+                        iSplitMessageCnt++;
+                        iSplitMessageDataIndex += iCurPartSize;
 
-            case PROTMESSID_CLIENT_ID:
-                bRet = EvaluateClientIDMes ( vecbyMesBodyData );
-                break;
+                        // check if the split part messages was completely received
+                        if ( iSplitMessageCnt == iReceivedNumParts )
+                        {
+                            // the split message is completely received, copy data for parsing
+                            vecbyMesBodyDataSplitMess.Init ( iSplitMessageDataIndex );
 
-            case PROTMESSID_CHANNEL_GAIN:
-                bRet = EvaluateChanGainMes ( vecbyMesBodyData );
-                break;
+                            std::copy ( vecbySplitMessageStorage.begin(),
+                                        vecbySplitMessageStorage.begin() + iSplitMessageDataIndex,
+                                        vecbyMesBodyDataSplitMess.begin() );
 
-            case PROTMESSID_CHANNEL_PAN:
-                bRet = EvaluateChanPanMes ( vecbyMesBodyData );
-                break;
+                            // the received ID is still PROTMESSID_SPECIAL_SPLIT_MESSAGE, set it to
+                            // the ID of the original reconstructed split message now
+                            iRecIDModified = iOriginalID;
 
-            case PROTMESSID_MUTE_STATE_CHANGED:
-                bRet = EvaluateMuteStateHasChangedMes ( vecbyMesBodyData );
-                break;
+                            // the complete split message was reconstructed, reset the counter for
+                            // the next split message
+                            iSplitMessageCnt       = 0;
+                            iSplitMessageDataIndex = 0;
+                            bEvaluateMessage       = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // a non-split message was received, reset split message counter and directly evaluate message
+                iSplitMessageCnt       = 0;
+                iSplitMessageDataIndex = 0;
+                bEvaluateMessage       = true;
+            }
 
-            case PROTMESSID_CONN_CLIENTS_LIST:
-                bRet = EvaluateConClientListMes ( vecbyMesBodyData );
-                break;
+            if ( bEvaluateMessage )
+            {
+                // use a reference to either the original data vector or the reconstructed
+                // split message to avoid unnecessary copying
+                const CVector<uint8_t>& vecbyMesBodyDataRef =
+                    ( iRecID == PROTMESSID_SPECIAL_SPLIT_MESSAGE ) ? vecbyMesBodyDataSplitMess : vecbyMesBodyData;
 
-            case PROTMESSID_REQ_CONN_CLIENTS_LIST:
-                bRet = EvaluateReqConnClientsList();
-                break;
+                // check which type of message we received and do action
+                switch ( iRecIDModified )
+                {
+                case PROTMESSID_JITT_BUF_SIZE:
+                    EvaluateJitBufMes ( vecbyMesBodyDataRef );
+                    break;
 
-            case PROTMESSID_CHANNEL_INFOS:
-                bRet = EvaluateChanInfoMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_REQ_JITT_BUF_SIZE:
+                    EvaluateReqJitBufMes();
+                    break;
 
-            case PROTMESSID_REQ_CHANNEL_INFOS:
-                bRet = EvaluateReqChanInfoMes();
-                break;
+                case PROTMESSID_CLIENT_ID:
+                    EvaluateClientIDMes ( vecbyMesBodyDataRef );
+                    break;
 
-            case PROTMESSID_CHAT_TEXT:
-                bRet = EvaluateChatTextMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CHANNEL_GAIN:
+                    EvaluateChanGainMes ( vecbyMesBodyDataRef );
+                    break;
 
-            case PROTMESSID_NETW_TRANSPORT_PROPS:
-                bRet = EvaluateNetwTranspPropsMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CHANNEL_PAN:
+                    EvaluateChanPanMes ( vecbyMesBodyDataRef );
+                    break;
 
-            case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
-                bRet = EvaluateReqNetwTranspPropsMes();
-                break;
+                case PROTMESSID_MUTE_STATE_CHANGED:
+                    EvaluateMuteStateHasChangedMes ( vecbyMesBodyDataRef );
+                    break;
 
-            case PROTMESSID_LICENCE_REQUIRED:
-                bRet = EvaluateLicenceRequiredMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CONN_CLIENTS_LIST:
+                    EvaluateConClientListMes ( vecbyMesBodyDataRef );
+                    break;
 
-            case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
-                bRet = EvaluateReqChannelLevelListMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_REQ_CONN_CLIENTS_LIST:
+                    EvaluateReqConnClientsList();
+                    break;
 
-            case PROTMESSID_VERSION_AND_OS:
-                bRet = EvaluateVersionAndOSMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_CHANNEL_INFOS:
+                    EvaluateChanInfoMes ( vecbyMesBodyDataRef );
+                    break;
 
-            case PROTMESSID_RECORDER_STATE:
-                bRet = EvaluateRecorderStateMes ( vecbyMesBodyData );
-                break;
+                case PROTMESSID_REQ_CHANNEL_INFOS:
+                    EvaluateReqChanInfoMes();
+                    break;
+
+                case PROTMESSID_CHAT_TEXT:
+                    EvaluateChatTextMes ( vecbyMesBodyDataRef );
+                    break;
+
+                case PROTMESSID_NETW_TRANSPORT_PROPS:
+                    EvaluateNetwTranspPropsMes ( vecbyMesBodyDataRef );
+                    break;
+
+                case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
+                    EvaluateReqNetwTranspPropsMes();
+                    break;
+
+                case PROTMESSID_REQ_SPLIT_MESS_SUPPORT:
+                    EvaluateReqSplitMessSupportMes();
+                    break;
+
+                case PROTMESSID_SPLIT_MESS_SUPPORTED:
+                    EvaluateSplitMessSupportedMes();
+                    break;
+
+                case PROTMESSID_LICENCE_REQUIRED:
+                    EvaluateLicenceRequiredMes ( vecbyMesBodyDataRef );
+                    break;
+
+                case PROTMESSID_VERSION_AND_OS:
+                    EvaluateVersionAndOSMes ( vecbyMesBodyDataRef );
+                    break;
+
+                case PROTMESSID_RECORDER_STATE:
+                    EvaluateRecorderStateMes ( vecbyMesBodyDataRef );
+                    break;
+                }
             }
 
             // immediately send acknowledge message
@@ -695,100 +853,88 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
             iOldRecCnt = iRecCounter;
         }
     }
-
-    return bRet;
 }
 
-bool CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                                  const int               iRecID,
                                                  const CHostAddress&     InetAddr )
 {
-/*
-    return code: false -> ok; true -> error
-*/
-    bool bRet = false;
-
 /*
 // TEST channel implementation: randomly delete protocol messages (50 % loss)
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
 */
 
-    if ( IsConnectionLessMessageID ( iRecID ) )
+    // check which type of message we received and do action
+    switch ( iRecID )
     {
-        // check which type of message we received and do action
-        switch ( iRecID )
-        {
-        case PROTMESSID_CLM_PING_MS:
-            bRet = EvaluateCLPingMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_PING_MS:
+        EvaluateCLPingMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
-            bRet = EvaluateCLPingWithNumClientsMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
+        EvaluateCLPingWithNumClientsMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_SERVER_FULL:
-            bRet = EvaluateCLServerFullMes();
-            break;
+    case PROTMESSID_CLM_SERVER_FULL:
+        EvaluateCLServerFullMes();
+        break;
 
-        case PROTMESSID_CLM_SERVER_LIST:
-            bRet = EvaluateCLServerListMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_SERVER_LIST:
+        EvaluateCLServerListMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REQ_SERVER_LIST:
-            bRet = EvaluateCLReqServerListMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_RED_SERVER_LIST:
+        EvaluateCLRedServerListMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
-            bRet = EvaluateCLSendEmptyMesMes ( vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_REQ_SERVER_LIST:
+        EvaluateCLReqServerListMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_REGISTER_SERVER:
-            bRet = EvaluateCLRegisterServerMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
+        EvaluateCLSendEmptyMesMes ( vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_REGISTER_SERVER_EX:
-            bRet = EvaluateCLRegisterServerExMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_REGISTER_SERVER:
+        EvaluateCLRegisterServerMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_UNREGISTER_SERVER:
-            bRet = EvaluateCLUnregisterServerMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_REGISTER_SERVER_EX:
+        EvaluateCLRegisterServerExMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_DISCONNECTION:
-            bRet = EvaluateCLDisconnectionMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_UNREGISTER_SERVER:
+        EvaluateCLUnregisterServerMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_VERSION_AND_OS:
-            bRet = EvaluateCLVersionAndOSMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_DISCONNECTION:
+        EvaluateCLDisconnectionMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_REQ_VERSION_AND_OS:
-            bRet = EvaluateCLReqVersionAndOSMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_VERSION_AND_OS:
+        EvaluateCLVersionAndOSMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_CONN_CLIENTS_LIST:
-            bRet = EvaluateCLConnClientsListMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_REQ_VERSION_AND_OS:
+        EvaluateCLReqVersionAndOSMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
-            bRet = EvaluateCLReqConnClientsListMes ( InetAddr );
-            break;
+    case PROTMESSID_CLM_CONN_CLIENTS_LIST:
+        EvaluateCLConnClientsListMes ( InetAddr, vecbyMesBodyData );
+        break;
 
-        case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
-            bRet = EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
-            break;
+    case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
+        EvaluateCLReqConnClientsListMes ( InetAddr );
+        break;
 
-        case PROTMESSID_CLM_REGISTER_SERVER_RESP:
-            bRet = EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
-            break;
-        }
+    case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
+        EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_REGISTER_SERVER_RESP:
+        EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
+        break;
     }
-    else
-    {
-        bRet = true; // return error code
-    }
-
-    return bRet;
 }
 
 
@@ -877,7 +1023,7 @@ bool CProtocol::EvaluateClientIDMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
+void CProtocol::CreateChanGainMes ( const int iChanID, const float fGain )
 {
     CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
     int              iPos = 0;      // init position pointer
@@ -887,7 +1033,7 @@ void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
 
     // actual gain, we convert from double with range 0..1 to integer
-    const int iCurGain = static_cast<int> ( dGain * ( 1 << 15 ) );
+    const int iCurGain = static_cast<int> ( fGain * ( 1 << 15 ) );
 
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurGain ), 2 );
 
@@ -911,15 +1057,15 @@ bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
     const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // we convert the gain from integer to double with range 0..1
-    const double dNewGain = static_cast<double> ( iData ) / ( 1 << 15 );
+    const float fNewGain = static_cast<float> ( iData ) / ( 1 << 15 );
 
     // invoke message action
-    emit ChangeChanGain ( iCurID, dNewGain );
+    emit ChangeChanGain ( iCurID, fNewGain );
 
     return false; // no error
 }
 
-void CProtocol::CreateChanPanMes ( const int iChanID, const double dPan )
+void CProtocol::CreateChanPanMes ( const int iChanID, const float fPan )
 {
     CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
     int              iPos = 0;      // init position pointer
@@ -928,8 +1074,8 @@ void CProtocol::CreateChanPanMes ( const int iChanID, const double dPan )
     // channel ID
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
 
-    // actual gain, we convert from double with range 0..1 to integer
-    const int iCurPan = static_cast<int> ( dPan * ( 1 << 15 ) );
+    // actual pan, we convert from double with range 0..1 to integer
+    const int iCurPan = static_cast<int> ( fPan * ( 1 << 15 ) );
 
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurPan ), 2 );
 
@@ -952,11 +1098,11 @@ bool CProtocol::EvaluateChanPanMes ( const CVector<uint8_t> &vecData )
     // pan (read integer value)
     const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
-    // we convert the gain from integer to double with range 0..1
-    const double dNewPan = static_cast<double> ( iData ) / ( 1 << 15 );
+    // we convert the pan from integer to double with range 0..1
+    const float fNewPan = static_cast<float> ( iData ) / ( 1 << 15 );
 
     // invoke message action
-    emit ChangeChanPan ( iCurID, dNewPan );
+    emit ChangeChanPan ( iCurID, fNewPan );
 
     return false; // no error
 }
@@ -1321,8 +1467,8 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     // audio coding type (2 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.eAudioCodingType ), 2 );
 
-    // version (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iVersion ), 2 );
+    // flags (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.eFlags ), 2 );
 
     // argument for the audio coder (4 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iAudioCodingArg ), 4 );
@@ -1342,7 +1488,7 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
         1 /* num chan */ +
         4 /* sam rate */ +
         2 /* audiocod type */ +
-        2 /* version */ +
+        2 /* flags */ +
         4 /* audiocod arg */;
 
     // check size
@@ -1404,9 +1550,9 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     ReceivedNetwTranspProps.eAudioCodingType =
         static_cast<EAudComprType> ( iRecCodingType );
 
-    // version (2 bytes)
-    ReceivedNetwTranspProps.iVersion =
-        static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 2 ) );
+    // flags (2 bytes)
+    ReceivedNetwTranspProps.eFlags =
+        static_cast<ENetwFlags> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // argument for the audio coder (4 bytes)
     ReceivedNetwTranspProps.iAudioCodingArg =
@@ -1428,6 +1574,34 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes()
 {
     // invoke message action
     emit ReqNetTranspProps();
+
+    return false; // no error
+}
+
+void CProtocol::CreateReqSplitMessSupportMes()
+{
+    CreateAndSendMessage ( PROTMESSID_REQ_SPLIT_MESS_SUPPORT,
+                           CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateReqSplitMessSupportMes()
+{
+    // invoke message action
+    emit ReqSplitMessSupport();
+
+    return false; // no error
+}
+
+void CProtocol::CreateSplitMessSupportedMes()
+{
+    CreateAndSendMessage ( PROTMESSID_SPLIT_MESS_SUPPORTED,
+                           CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateSplitMessSupportedMes()
+{
+    // invoke message action
+    emit SplitMessSupported();
 
     return false; // no error
 }
@@ -1474,38 +1648,15 @@ void CProtocol::CreateOpusSupportedMes()
     CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED, CVector<uint8_t> ( 0 ) );
 }
 
-void CProtocol::CreateReqChannelLevelListMes ( const bool bRCL )
+// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+void CProtocol::CreateReqChannelLevelListMes()
 {
     CVector<uint8_t> vecData ( 1 ); // 1 byte of data
     int              iPos = 0; // init position pointer
 
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( bRCL ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( true ), 1 );
 
     CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_LEVEL_LIST, vecData );
-}
-
-bool CProtocol::EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData )
-{
-    int iPos = 0; // init position pointer
-
-    // check size
-    if ( vecData.Size() != 1 )
-    {
-        return true; // return error code
-    }
-
-    // extract opt in / out for channel levels
-    uint32_t val = GetValFromStream ( vecData, iPos, 1 );
-
-    if ( val != 0 && val != 1 )
-    {
-        return true; // return error code
-    }
-
-    // invoke message action
-    emit ReqChannelLevelList ( static_cast<bool> ( val ) );
-
-    return false; // no error
 }
 
 void CProtocol::CreateVersionAndOSMes()
@@ -2153,6 +2304,103 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
     return false; // no error
 }
 
+void CProtocol::CreateCLRedServerListMes ( const CHostAddress&        InetAddr,
+                                           const CVector<CServerInfo> vecServerInfo )
+{
+    const int iNumServers = vecServerInfo.Size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( 0 );
+    int              iPos = 0; // init position pointer
+
+    for ( int i = 0; i < iNumServers; i++ )
+    {
+        // convert server list strings to utf-8
+        const QByteArray strUTF8Name = vecServerInfo[i].strName.toUtf8();
+
+        // size of current list entry
+        const int iCurListEntrLen =
+            4 /* IP address */ +
+            2 /* port number */ +
+            1 /* name utf-8 string size */ + strUTF8Name.size();
+
+        // make space for new data
+        vecData.Enlarge ( iCurListEntrLen );
+
+        // IP address (4 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> (
+            vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+
+        // port number (2 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
+
+        // name (note that the string length indicator is 1 in this special case)
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name, 1 );
+    }
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_RED_SERVER_LIST,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLRedServerListMes ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData )
+{
+    int                  iPos     = 0; // init position pointer
+    const int            iDataLen = vecData.Size();
+    CVector<CServerInfo> vecServerInfo ( 0 );
+
+    while ( iPos < iDataLen )
+    {
+        // check size (the next 6 bytes)
+        if ( ( iDataLen - iPos ) < 6 )
+        {
+            return true; // return error code
+        }
+
+        // IP address (4 bytes)
+        const quint32 iIpAddr = static_cast<quint32> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // port number (2 bytes)
+        const quint16 iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+        // server name (note that the string length indicator is 1 in this special case)
+        QString strName;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_NAME,
+                                   strName,
+                                   1 ) )
+        {
+            return true; // return error code
+        }
+
+        // add server information to vector
+        vecServerInfo.Add (
+            CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          strName,
+                          QLocale::AnyCountry, // set to any country since the information is not transmitted
+                          "", // empty city name since the information is not transmitted
+                          0, // per definition: if max. num. client is zero, we ignore the value in the server list
+                          false ) ); // assume not permanent since the information is not transmitted
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit CLRedServerListReceived ( InetAddr, vecServerInfo );
+
+    return false; // no error
+}
+
 void CProtocol::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
 {
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_SERVER_LIST,
@@ -2644,6 +2892,50 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
     return false; // no error
 }
 
+bool CProtocol::ParseSplitMessageContainer ( const CVector<uint8_t>& vecbyData,
+                                             CVector<uint8_t>&       vecbyMesBodyData,
+                                             const int               iSplitMessageDataIndex,
+                                             int&                    iID,
+                                             int&                    iNumParts,
+                                             int&                    iSplitCnt,
+                                             int&                    iCurPartSize )
+{
+    int       iPos     = 0; // init position pointer
+    const int iDataLen = vecbyData.Size();
+
+    // check size (the first 4 bytes)
+    if ( iDataLen < 4 )
+    {
+        return true; // return error code
+    }
+
+    // 2 bytes ID
+    iID = static_cast<int> ( GetValFromStream ( vecbyData, iPos, 2 ) );
+
+    // 1 byte number of parts
+    iNumParts = static_cast<int> ( GetValFromStream ( vecbyData, iPos, 1 ) );
+
+    // 1 byte split cnt
+    iSplitCnt = static_cast<int> ( GetValFromStream ( vecbyData, iPos, 1 ) );
+
+
+    // Extract actual data -----------------------------------------------------
+    iCurPartSize = iDataLen - 4;
+
+    // the memory must be allocated outside this function -> check the size
+    if ( vecbyMesBodyData.Size() < iSplitMessageDataIndex + iCurPartSize )
+    {
+        return true; // return error code
+    }
+
+    for ( int i = 0; i < iCurPartSize; i++ )
+    {
+        vecbyMesBodyData[iSplitMessageDataIndex + i] = static_cast<uint8_t> ( GetValFromStream ( vecbyData, iPos, 1 ) );
+    }
+
+    return false; // no error
+}
+
 uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
                                        int&                    iPos,
                                        const int               iNumOfBytes )
@@ -2669,21 +2961,22 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn,
                                       int&                    iPos,
                                       const int               iMaxStringLen,
-                                      QString&                strOut )
+                                      QString&                strOut,
+                                      const int               iNumberOfBytsLen )
 {
 /*
     note: iPos is automatically incremented in this function
 */
     const int iInLen = vecIn.Size();
 
-    // check if at least two bytes are available
-    if ( ( iInLen - iPos ) < 2 )
+    // check if at least iNumberOfBytsLen bytes are available
+    if ( ( iInLen - iPos ) < iNumberOfBytsLen )
     {
         return true; // return error code
     }
 
-    // number of bytes for utf-8 string (2 bytes)
-    const int iStrUTF8Len = static_cast<int> ( GetValFromStream ( vecIn, iPos, 2 ) );
+    // number of bytes for utf-8 string (1 or 2 bytes)
+    const int iStrUTF8Len = static_cast<int> ( GetValFromStream ( vecIn, iPos, iNumberOfBytsLen ) );
 
     // (note that iPos was incremented by 2 in the above code!)
     if ( ( iInLen - iPos ) < iStrUTF8Len )
@@ -2766,6 +3059,39 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
     PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( CRCObj.GetCRC() ), 2 );
 }
 
+
+void CProtocol::GenSplitMessageContainer ( CVector<uint8_t>&       vecOut,
+                                           const int               iID,
+                                           const int               iNumParts,
+                                           const int               iSplitCnt,
+                                           const CVector<uint8_t>& vecData,
+                                           const int               iStartIndexInData,
+                                           const int               iLengthOfDataPart )
+{
+    int iPos = 0; // init position pointer
+
+    // total length of message
+    const int iTotLenByte = 4 + iLengthOfDataPart;
+
+    // init message vector
+    vecOut.Init ( iTotLenByte );
+
+    // 2 bytes ID
+    PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( iID ), 2 );
+
+    // 1 byte number of parts
+    PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( iNumParts ), 1 );
+
+    // 1 byte split cnt
+    PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( iSplitCnt ), 1 );
+
+    // data
+    for ( int i = 0; i < iLengthOfDataPart; i++ )
+    {
+        PutValOnStream ( vecOut, iPos, static_cast<uint32_t> ( vecData[iStartIndexInData + i] ), 1 );
+    }
+}
+
 void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
                                  int&              iPos,
                                  const uint32_t    iVal,
@@ -2787,13 +3113,14 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
 
 void CProtocol::PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
                                         int&              iPos,
-                                        const QByteArray& sStringUTF8 )
+                                        const QByteArray& sStringUTF8,
+                                        const int         iNumberOfBytsLen )
 {
     // get the utf-8 string size
     const int iStrUTF8Len = sStringUTF8.size();
 
-    // number of bytes for utf-8 string (2 bytes)
-    PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( iStrUTF8Len ), 2 );
+    // number of bytes for utf-8 string (iNumberOfBytsLen bytes)
+    PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( iStrUTF8Len ), iNumberOfBytsLen );
 
     // actual utf-8 string (n bytes)
     for ( int j = 0; j < iStrUTF8Len; j++ )

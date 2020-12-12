@@ -1,4 +1,4 @@
-VERSION = 3.6.1git
+VERSION = 3.6.2
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {

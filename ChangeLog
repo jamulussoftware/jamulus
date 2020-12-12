@@ -1,10 +1,12 @@
 
 
 
+3.6.2git <- NOTE: the release version number will be 3.6.3
 
 
 
-3.6.1git <- NOTE: the release version number will be 3.6.2
+
+3.6.2 (2020-12-12)
 
 - change Clear All Stored Solo Settings to clear Mute as well (#731)
 
@@ -28,13 +30,6 @@
 - bug fix: use new server icon on Mac server bundle and Windows installer (#737)
 
 - bug fix: ping times of servers which are further down the server list are too high (#49)
-
-
-
-
-
-
-
 
 
 3.6.1 (2020-11-21)

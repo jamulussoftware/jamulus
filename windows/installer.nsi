@@ -113,6 +113,8 @@ Section
   WriteUninstaller $INSTDIR\${UNINSTALL_EXE}
 
   ; shortcuts
+  ; install for all users 
+  SetShellVarContext all
   CreateShortCut   "$DESKTOP\${APP_NAME}.lnk" "$OUTDIR\${APP_EXE}"
 
   CreateDirectory  "$SMPROGRAMS\${APP_NAME}"
@@ -176,7 +178,8 @@ DeleteRegKey HKLM "${UNINST_KEY}"
 
 ; the software may have written an auto run entry in the registry, remove it
 DeleteRegValue HKCU "${AUTORUN_KEY}" "${AUTORUN_NAME}"
-
+; all users
+SetShellVarContext all
 Delete "$DESKTOP\${APP_NAME}.lnk"
 Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"
 Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME} server.lnk"

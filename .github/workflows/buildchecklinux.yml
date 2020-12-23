@@ -1,8 +1,8 @@
-name: CI Debian
+name: CI Linux
 on: [push]
 jobs:
   build:
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout Project
       uses: actions/checkout@v1

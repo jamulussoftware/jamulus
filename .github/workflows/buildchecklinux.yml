@@ -7,7 +7,7 @@ jobs:
     - name: Checkout Project
       uses: actions/checkout@v1
     - name: Install dependencies
-      run: sudo apt install build-essential qt5-qmake qtdeclarative5-dev qt5-default qttools5-dev-tools libjack-jackd2-dev
+      run: sudo apt update; sudo apt install -y build-essential qt5-qmake qtdeclarative5-dev qt5-default qttools5-dev-tools libjack-jackd2-dev
     - name: Setup Qt Project
       run: qmake Jamulus.pro
     - name: Clean up

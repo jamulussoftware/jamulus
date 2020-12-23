@@ -33,6 +33,7 @@ BrandingText "${APP_NAME} powers your online jam session"
 
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
+!define MUI_SERVER_ICON                "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
@@ -109,7 +110,6 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 
     ; Add the redistribution license
     File "/oname=$INSTDIR\COPYING" "${ROOT_PATH}\COPYING"
-
     ; Cleanup
     !delfile "${files}"
     !undef files
@@ -134,7 +134,7 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
     CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$OUTDIR\${APP_EXE}"
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"           "$INSTDIR\${APP_EXE}"
-    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s"
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "${MUI_SERVER_ICON}"  
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Uninstall.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
 !macroend

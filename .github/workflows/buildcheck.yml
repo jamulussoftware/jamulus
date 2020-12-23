@@ -16,3 +16,4 @@ jobs:
       run: xcodebuild -list -project Jamulus.xcodeproj
     - name: Build 
       run: xcodebuild build
+      

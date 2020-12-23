@@ -33,7 +33,8 @@ BrandingText "${APP_NAME} powers your online jam session"
 
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
-!define MUI_SERVER_ICON                "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
+!define MUI_UNICON                     "${WINDOWS_PATH}\uninsticon.ico"
+!define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
@@ -110,6 +111,7 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 
     ; Add the redistribution license
     File "/oname=$INSTDIR\COPYING" "${ROOT_PATH}\COPYING"
+    File "/oname=$INSTDIR\servericon.ico" "${SERVER_ICON}"
     ; Cleanup
     !delfile "${files}"
     !undef files
@@ -131,10 +133,10 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
     WriteUninstaller "$INSTDIR\${UNINSTALL_EXE}"
 
     ; Add the Start Menu and desktop shortcuts
-    CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$OUTDIR\${APP_EXE}"
+    CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"           "$INSTDIR\${APP_EXE}"
-    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "${MUI_SERVER_ICON}"  
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\servericon.ico"  
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Uninstall.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
 !macroend
@@ -236,6 +238,7 @@ FunctionEnd
     !include "${files}"
 
     Delete "$INSTDIR\COPYING"
+    Delete "$INSTDIR\servericon.ico"
     Delete "$INSTDIR\${UNINSTALL_EXE}"
     RMDir  "$INSTDIR"
 

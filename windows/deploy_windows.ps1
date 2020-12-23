@@ -53,9 +53,13 @@ Function Install-Dependency
     if (Test-Path -Path "$WindowsPath\$Destination") { return }
 
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
+    $TempDir = [System.IO.Path]::GetTempPath()
+
     Invoke-WebRequest -Uri $Uri -OutFile $TempFileName
-    Expand-Archive -Path $TempFileName -DestinationPath $Env:TEMP -Force
-    Move-Item -Path "$Env:TEMP\$Name" -Destination "$WindowsPath\$Destination" -Force
+    echo $TempFileName
+    Expand-Archive -Path $TempFileName -DestinationPath $TempDir -Force
+    echo $WindowsPath\$Destination
+    Move-Item -Path "$TempDir\$Name" -Destination "$WindowsPath\$Destination" -Force
     Remove-Item -Path $TempFileName -Force
 }
 
@@ -66,8 +70,8 @@ Function Install-Dependencies
     Install-Module -Name "VSSetup" -Scope CurrentUser -Force
     Install-Dependency -Uri "http://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip" `
         -Name "ASIOSDK2.3.2" -Destination "ASIOSDK2"
-    Install-Dependency -Uri "https://netix.dl.sourceforge.net/project/nsis/NSIS%203/3.05/nsis-3.05.zip" `
-        -Name "nsis-3.05" -Destination "NSIS"
+    Install-Dependency -Uri "https://jztkft.dl.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip" `
+        -Name "nsis-3.06.1" -Destination "NSIS"
 }
 
 # Setup environment variables and build tool paths

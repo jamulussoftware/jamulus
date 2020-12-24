@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # set armhf
-sudo dpkg --add-architecture armhf
+#sudo dpkg --add-architecture armhf
 
 echo "Update system..."
 sudo apt-get -qq update

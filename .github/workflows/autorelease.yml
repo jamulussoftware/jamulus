@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "main"
-
 jobs:
   pre-release:
     name: "Pre Release"
@@ -15,7 +14,7 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v1
       - name: "Build & test"
-        run: cd distributions; sudo apt-get -qq update; sudo apt-get -qq -y upgrade; sudo apt-get -qq -y install devscripts build-essential debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools; mv debian ..; cd ..; debuild -b -us -uc; mv debian distributions; cd ..
+        run: cd distributions; sudo apt-get -qq update; sudo apt-get -qq -y upgrade; sudo apt-get -qq -y install devscripts build-essential debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools; mv debian ..; cd ..; debuild -b -us -uc; mv debian distributions; ls; pwd; cd ..; ls
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:

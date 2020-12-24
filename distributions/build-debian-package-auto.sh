@@ -14,17 +14,18 @@ cd ..
 # get the jamulus version from pro file
 VERSION=$(cat Jamulus.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
 
-# patch changelog
-DATE=$(date "+%a, %d %B %Y %T %Z" )
-echo "-- GitHub Actions <noemail@example.com> ${DATE}" >> debian/changelog
-echo "" >> debian/changelog
-echo "* See GitHub releases for changelog" >> debian/changelog
-echo "" >> debian/changelog
-echo "jamulus (${VERSION}-0) UNRELEASED; urgency=medium" >> debian/changelog
+# patch changelog (with hack)
 
+DATE=$(date "+%a, %d %B %Y %T %Z" )
+echo "jamulus (${VERSION}-0) UNRELEASED; urgency=medium" > debian/changelog
+echo "" >> debian/changelog
+echo "  * See GitHub releases for changelog" >> debian/changelog
+echo "" >> debian/changelog
+echo "-- GitHub Actions <noemail@example.com> ${DATE}" >> debian/changelog
+cat distributions/debian/changelog >> debian/changelog
 
 # patch the control file
-# move the modified control file here
+# cp the modified control file here
 
 cp distributions/autobuilddeb/control debian/control
 

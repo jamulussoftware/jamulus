@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Project
         uses: actions/checkout@v1
       - name: "Build & test"
-        run: cd distributions; sudo build-debian-package-auto.sh
+        run: cd distributions; sudo ./build-debian-package-auto.sh
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:

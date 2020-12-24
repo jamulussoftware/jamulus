@@ -1,4 +1,4 @@
-name: "pre-release"
+name: "Autobuild deb"
 
 on:
   push:
@@ -8,14 +8,11 @@ jobs:
   pre-release:
     name: "Pre Release"
     runs-on: "ubuntu-latest"
-
     steps:
-      # ...
       - name: Checkout Project
         uses: actions/checkout@v1
-      - name: "Build & test"
+      - name: "Build package"
         run: cd distributions; sudo ./build-debian-package-auto.sh
-
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"

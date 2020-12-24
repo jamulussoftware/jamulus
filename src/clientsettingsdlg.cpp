@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -26,8 +26,12 @@
 
 
 /* Implementation *************************************************************/
-CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
-    Qt::WindowFlags f ) : QDialog ( parent, f ), pClient ( pNCliP )
+CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
+                                         CClientSettings* pNSetP,
+                                         QWidget*         parent ) :
+    QDialog   ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
+    pClient   ( pNCliP ),
+    pSettings ( pNSetP )
 {
     setupUi ( this );
 
@@ -36,31 +40,30 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // jitter buffer
     QString strJitterBufferSize = "<b>" + tr ( "Jitter Buffer Size" ) + ":</b> " + tr (
         "The jitter buffer compensates for network and sound card timing jitters. The "
-        "size of this jitter buffer has therefore influence on the quality of "
+        "size of the buffer therefore influences the quality of "
         "the audio stream (how many dropouts occur) and the overall delay "
         "(the longer the buffer, the higher the delay)." ) + "<br>" + tr (
-        "The jitter buffer size can be manually chosen for the local client "
+        "You can set the jitter buffer size manually for the local client "
         "and the remote server. For the local jitter buffer, dropouts in the "
         "audio stream are indicated by the light below the "
         "jitter buffer size faders. If the light turns to red, a buffer "
-        "overrun/underrun took place and the audio stream is interrupted." ) + "<br>" + tr (
+        "overrun/underrun has taken place and the audio stream is interrupted." ) + "<br>" + tr (
         "The jitter buffer setting is therefore a trade-off between audio "
         "quality and overall delay." ) + "<br>" + tr (
-        "An auto setting of the jitter buffer size setting is available. If "
-        "the check Auto is enabled, the jitter buffers of the local client and "
+        "If the Auto setting is enabled, the jitter buffers of the local client and "
         "the remote server are set automatically "
         "based on measurements of the network and sound card timing jitter. If "
-        "the Auto check is enabled, the jitter buffer size faders are "
+        "Auto is enabled, the jitter buffer size faders are "
         "disabled (they cannot be moved with the mouse)." );
 
-    QString strJitterBufferSizeTT = tr ( "If the auto setting of the "
-        "jitter buffer is enabled, the network buffers of the local client and "
+    QString strJitterBufferSizeTT = tr ( "If the Auto setting "
+        "is enabled, the network buffers of the local client and "
         "the remote server are set to a conservative "
         "value to minimize the audio dropout probability. To tweak the "
-        "audio delay/latency it is recommended to disable the auto setting "
-        "functionality and to lower the jitter buffer size manually by "
-        "using the sliders until your personal acceptable limit of the amount "
-        "of dropouts is reached. The LED indicator will visualize the audio "
+        "audio delay/latency it is recommended to disable the Auto setting "
+        "and to lower the jitter buffer size manually by "
+        "using the sliders until your personal acceptable amount "
+        "of dropouts is reached. The LED indicator will display the audio "
         "dropouts of the local jitter buffer with a red light." ) +
         TOOLTIP_COM_END_TEXT;
 
@@ -133,28 +136,27 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // sound card buffer delay
     QString strSndCrdBufDelay = "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
-        tr ( "The buffer delay setting is a fundamental setting of the " ) +
-        APP_NAME + tr ( " software. This setting has influence on many "
+        tr ( "The buffer delay setting is a fundamental setting of this "
+        "software. This setting has an influence on many "
         "connection properties." ) + "<br>" + tr (
         "Three buffer sizes are supported" ) +
         ":<ul>"
-        "<li>" + tr ( "64 samples: This is the preferred setting since it provides the lowest "
-        "latency but does not work with all sound cards." ) + "</li>"
-        "<li>" + tr ( "128 samples: This setting should work for most available "
-        "sound cards." ) + "</li>"
-        "<li>" + tr ( "256 samples: This setting should only be used if only a very slow "
-        "computer or a slow internet connection is available." ) + "</li>"
+        "<li>" + tr ( "64 samples: The preferred setting. Provides the lowest latency "
+        "but does not work with all sound cards." ) + "</li>"
+        "<li>" + tr ( "128 samples: Should work for most available sound cards." ) +
+        "</li>"
+        "<li>" + tr ( "256 samples: Should only be used on very slow "
+        "computers or with a slow internet connection." ) + "</li>"
         "</ul>" + tr (
         "Some sound card drivers do not allow the buffer delay to be changed "
-        "from within the " ) + APP_NAME +
-        tr ( " software. In this case the buffer delay setting "
-        "is disabled. To change the actual buffer delay, this "
-        "setting has to be changed in the sound card driver. On Windows, press "
-        "the ASIO Setup button to open the driver settings panel. On Linux, "
+        "from within the application. "
+        "In this case the buffer delay setting is disabled and has to be "
+        "changed using the sound card driver. On Windows, press the "
+        "ASIO Setup button to open the driver settings panel. On Linux, "
         "use the Jack configuration tool to change the buffer size." ) + "<br>" + tr (
         "If no buffer size is selected and all settings are disabled, an "
-        "unsupported buffer size is used by the driver. The " ) + APP_NAME +
-        tr ( " software will still work with this setting but with restricted "
+        "unsupported buffer size is used by the driver. The application "
+        "will still work with this setting but with restricted "
         "performance." ) + "<br>" + tr (
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
@@ -166,8 +168,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
         "disabled, it is prohibited by the audio driver to modify this "
-        "setting from within the " ) + APP_NAME +
-        tr ( " software. On Windows, press the ASIO Setup button to open the "
+        "setting from within the software. "
+        "On Windows, press the ASIO Setup button to open the "
         "driver settings panel. On Linux, use the Jack configuration tool to "
         "change the buffer size." ) + TOOLTIP_COM_END_TEXT;
 
@@ -185,34 +187,32 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     butDriverSetup->setToolTip ( strSndCrdBufDelayTT );
 
     // fancy skin
-    chbGUIDesignFancy->setWhatsThis ( "<b>" + tr ( "Fancy Skin" ) + ":</b> " + tr (
-        "If enabled, a fancy skin will be applied to the main window." ) );
+    cbxSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr (
+        "Select the skin to be used for the main window." ) );
 
-    chbGUIDesignFancy->setAccessibleName ( tr ( "Fancy skin check box" ) );
-
-    // display channel levels
-    chbDisplayChannelLevels->setWhatsThis ( "<b>" + tr ( "Display Channel Levels" ) + ":</b> " +
-        tr ( "If enabled, each client channel will display a pre-fader level bar." ) );
-
-    chbDisplayChannelLevels->setAccessibleName ( tr ( "Display channel levels check box" ) );
+    cbxSkin->setAccessibleName ( tr ( "Skin combo box" ) );
 
     // audio channels
     QString strAudioChannels = "<b>" + tr ( "Audio Channels" ) + ":</b> " + tr (
-        "Select the number of audio channels to be used. There are three "
-        "modes available. The mono and stereo modes use one and two "
-        "audio channels respectively. In mono-in/stereo-out mode "
-        "the audio signal which is sent to the server is mono but the "
+        "Selects the number of audio channels to be used for communication between "
+        "client and server. There are three modes available:" ) +
+        "<ul>"
+        "<li>" "<b>" + tr ( "Mono" ) + "</b> " + tr ( "and " ) +
+        "<b>" + tr ( "Stereo" ) + ":</b> " + tr ( "These modes use "
+        "one and two audio channels respectively." ) + "</li>"
+        "<li>" "<b>" + tr ( "Mono in/Stereo-out" ) + ":</b> " + tr (
+        "The audio signal sent to the server is mono but the "
         "return signal is stereo. This is useful if the "
         "sound card has the instrument on one input channel and the "
-        "microphone on the other channel. In that case the two input signals "
-        "can be mixed to one mono channel but the server mix can be heard in "
-        "stereo." ) + "<br>" + tr (
-        "Enabling the stereo streaming mode will increase the "
-        "stream data rate. Make sure that the current upload rate does not "
-        "exceed the available bandwidth of your internet connection." ) + "<br>" + tr (
-        "In stereo streaming mode, no audio channel selection "
-        "for the reverberation effect will be available on the main window "
-        "since the effect is applied on both channels in this case." );
+        "microphone on the other. In that case the two input signals "
+        "can be mixed to one mono channel but the server mix is heard in "
+        "stereo." )  + "</li>"
+        "<li>" + tr ( "Enabling " ) + "<b>" + tr ( "Stereo" ) + "</b> " + tr ( " mode "
+        "will increase your stream's data rate. Make sure your upload rate does not "
+        "exceed the available upload speed of your internet connection." )  + "</li>"
+        "</ul>" + "<br>" + tr ( "In stereo streaming mode, no audio channel selection "
+        "for the reverb effect will be available on the main window "
+        "since the effect is applied to both channels in this case." );
 
     lblAudioChannels->setWhatsThis ( strAudioChannels );
     cbxAudioChannels->setWhatsThis ( strAudioChannels );
@@ -220,11 +220,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // audio quality
     QString strAudioQuality = "<b>" + tr ( "Audio Quality" ) + ":</b> " + tr (
-        "Select the desired audio quality. A low, normal or high audio "
-        "quality can be selected. The higher the audio quality, the higher "
-        "the audio stream data rate. Make sure that the current "
-        "upload rate does not exceed the available bandwidth of your "
-        "internet connection." );
+        "The higher the audio quality, the higher your audio stream's "
+        "data rate. Make sure your upload rate does not exceed the "
+        "available bandwidth of your internet connection.");
 
     lblAudioQuality->setWhatsThis ( strAudioQuality );
     cbxAudioQuality->setWhatsThis ( strAudioQuality );
@@ -232,10 +230,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // new client fader level
     QString strNewClientLevel = "<b>" + tr ( "New Client Level" ) + ":</b> " +
-        tr ( "The new client level setting defines the fader level of a new "
-        "connected client in percent. I.e. if a new client connects "
-        "to the current server, it will get the specified initial "
-        "fader level if no other fader level of a previous connection "
+        tr ( "This setting defines the fader level of a newly "
+        "connected client in percent. If a new client connects "
+        "to the current server, they will get the specified initial "
+        "fader level if no other fader level from a previous connection "
         "of that client was already stored." );
 
     lblNewClientLevel->setWhatsThis ( strNewClientLevel );
@@ -244,29 +242,27 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // custom central server address
     QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
-        tr ( "The custom central server address is the IP address or URL of the central "
-        "server at which the server list of the connection dialog is managed. This "
-        "address is only used if the custom server list is selected in the connection "
-        "dialog." );
+        tr ( "Leave this blank unless you need to enter the address of a central "
+        "server other than the default." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
+    cbxCentralServerAddress->setWhatsThis ( strCentrServAddr );
+    cbxCentralServerAddress->setAccessibleName ( tr ( "Central server address combo box" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr (  "Current Connection Status "
-        "Parameter" ) + ":</b> " + tr ( "The ping time is the time required for the audio "
+        "Parameter" ) + ":</b> " + tr ( "The Ping Time is the time required for the audio "
         "stream to travel from the client to the server and back again. This "
-        "delay is introduced by the network. This delay should be as low as "
-        "20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to "
+        "delay is introduced by the network and should be about "
+        "20-30 ms. If this delay is higher than about 50 ms, your distance to "
         "the server is too large or your internet connection is not "
         "sufficient." ) + "<br>" + tr (
-        "The overall delay is calculated from the current ping time and the "
-        "delay which is introduced by the current buffer settings." ) + "<br>" + tr (
-        "The upstream rate depends on the current audio packet size and the "
-        "audio compression setting. Make sure that the upstream rate is not "
-        "higher than the available rate (check the upstream capabilities of "
-        "your internet connection by, e.g., using speedtest.net)." );
+        "Overall Delay is calculated from the current Ping Time and the "
+        "delay introduced by the current buffer settings." ) + "<br>" + tr (
+        "Audio Upstream Rate depends on the current audio packet size and "
+        "compression setting. Make sure that the upstream rate is not "
+        "higher than your available internet upload speed (check this with a "
+        "service such as speedtest.net)." );
 
     lblPingTime->setWhatsThis          ( strConnStats );
     lblPingTimeValue->setWhatsThis     ( strConnStats );
@@ -291,6 +287,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // init delay and other information controls
     ledNetw->Reset();
     ledOverallDelay->Reset();
+    ledNetw->SetType              ( CMultiColorLED::MT_INDICATOR );
+    ledOverallDelay->SetType      ( CMultiColorLED::MT_INDICATOR );
     lblPingTimeValue->setText     ( "---" );
     lblOverallDelayValue->setText ( "---" );
     lblUpstreamValue->setText     ( "---" );
@@ -303,49 +301,39 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     sldNetBufServer->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
-    // init combo box containing all available sound cards in the system
-    cbxSoundcard->clear();
-    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
-    {
-        cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
-    }
-    cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
-
     // init sound card channel selection frame
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 
-    // fancy GUI design check box
-    if ( pClient->GetGUIDesign() == GD_STANDARD )
-    {
-        chbGUIDesignFancy->setCheckState ( Qt::Unchecked );
-    }
-    else
-    {
-        chbGUIDesignFancy->setCheckState ( Qt::Checked );
-    }
-
-    // Display Channel Levels check box
-    chbDisplayChannelLevels->setCheckState ( pClient->GetDisplayChannelLevels() ? Qt::Checked : Qt::Unchecked );
-
-    // "Audio Channels" combo box
+    // Audio Channels combo box
     cbxAudioChannels->clear();
     cbxAudioChannels->addItem ( tr ( "Mono" ) );               // CC_MONO
     cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) ); // CC_MONO_IN_STEREO_OUT
     cbxAudioChannels->addItem ( tr ( "Stereo" ) );             // CC_STEREO
     cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
 
-    // "Audio Quality" combo box
+    // Audio Quality combo box
     cbxAudioQuality->clear();
     cbxAudioQuality->addItem ( tr ( "Low" ) );    // AQ_LOW
     cbxAudioQuality->addItem ( tr ( "Normal" ) ); // AQ_NORMAL
     cbxAudioQuality->addItem ( tr ( "High" ) );   // AQ_HIGH
     cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // custom central server address
-    edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
+    // GUI design (skin) combo box
+    cbxSkin->clear();
+    cbxSkin->addItem ( tr ( "Normal" ) );  // GD_STANDARD
+    cbxSkin->addItem ( tr ( "Fancy" ) );   // GD_ORIGINAL
+    cbxSkin->addItem ( tr ( "Compact" ) ); // GD_SLIMFADER
+    cbxSkin->setCurrentIndex ( static_cast<int> ( pClient->GetGUIDesign() ) );
+
+    // language combo box (corrects the setting if language not found)
+    cbxLanguage->Init ( pSettings->strLanguage );
+
+    // init custom central server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
+    cbxCentralServerAddress->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
+    cbxCentralServerAddress->setInsertPolicy ( QComboBox::NoInsert );
 
     // update new client fader level edit box
-    edtNewClientLevel->setText ( QString::number ( pClient->iNewClientFaderLevel ) );
+    edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
 
     // update enable small network buffers check box
     chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
@@ -371,71 +359,80 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // Connections -------------------------------------------------------------
     // timers
-    QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerStatus() ) );
+    QObject::connect ( &TimerStatus, &QTimer::timeout,
+        this, &CClientSettingsDlg::OnTimerStatus );
 
     // slider controls
-    QObject::connect ( sldNetBuf, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnNetBufValueChanged ( int ) ) );
+    QObject::connect ( sldNetBuf, &QSlider::valueChanged,
+        this, &CClientSettingsDlg::OnNetBufValueChanged );
 
-    QObject::connect ( sldNetBufServer, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnNetBufServerValueChanged ( int ) ) );
+    QObject::connect ( sldNetBufServer, &QSlider::valueChanged,
+        this, &CClientSettingsDlg::OnNetBufServerValueChanged );
 
     // check boxes
-    QObject::connect ( chbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
+    QObject::connect ( chbAutoJitBuf, &QCheckBox::stateChanged,
+        this, &CClientSettingsDlg::OnAutoJitBufStateChanged );
 
-    QObject::connect ( chbDisplayChannelLevels, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnDisplayChannelLevelsStateChanged ( int ) ) );
-
-    QObject::connect ( chbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnAutoJitBufStateChanged ( int ) ) );
-
-    QObject::connect ( chbEnableOPUS64, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnEnableOPUS64StateChanged ( int ) ) );
+    QObject::connect ( chbEnableOPUS64, &QCheckBox::stateChanged,
+        this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
 
     // line edits
-    QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
-        this, SLOT ( OnCentralServerAddressEditingFinished() ) );
-
-    QObject::connect ( edtNewClientLevel, SIGNAL ( editingFinished() ),
-        this, SLOT ( OnNewClientLevelEditingFinished() ) );
+    QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished,
+        this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
     // combo boxes
-    QObject::connect ( cbxSoundcard, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSoundcardActivated ( int ) ) );
+    QObject::connect ( cbxSoundcard, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnSoundcardActivated );
 
-    QObject::connect ( cbxLInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLInChanActivated ( int ) ) );
+    QObject::connect ( cbxLInChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnLInChanActivated );
 
-    QObject::connect ( cbxRInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnRInChanActivated ( int ) ) );
+    QObject::connect ( cbxRInChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnRInChanActivated );
 
-    QObject::connect ( cbxLOutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLOutChanActivated ( int ) ) );
+    QObject::connect ( cbxLOutChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnLOutChanActivated );
 
-    QObject::connect ( cbxROutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnROutChanActivated ( int ) ) );
+    QObject::connect ( cbxROutChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnROutChanActivated );
 
-    QObject::connect ( cbxAudioChannels, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnAudioChannelsActivated ( int ) ) );
+    QObject::connect ( cbxAudioChannels, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnAudioChannelsActivated );
 
-    QObject::connect ( cbxAudioQuality, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnAudioQualityActivated ( int ) ) );
+    QObject::connect ( cbxAudioQuality, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnAudioQualityActivated );
+
+    QObject::connect ( cbxSkin, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnGUIDesignActivated );
+
+    QObject::connect ( cbxCentralServerAddress->lineEdit(), &QLineEdit::editingFinished,
+        this, &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
+
+    QObject::connect ( cbxCentralServerAddress, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
+
+    QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged,
+        this, &CClientSettingsDlg::OnLanguageChanged );
 
     // buttons
-    QObject::connect ( butDriverSetup, SIGNAL ( clicked() ),
-        this, SLOT ( OnDriverSetupClicked() ) );
+    QObject::connect ( butDriverSetup, &QPushButton::clicked,
+        this, &CClientSettingsDlg::OnDriverSetupClicked );
 
     // misc
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
-        SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
-        SLOT ( OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* ) ) );
+        static_cast<void (QButtonGroup::*) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
+        this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
 
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
+}
+
+void CClientSettingsDlg::showEvent ( QShowEvent* )
+{
+    UpdateDisplay();
+    UpdateCustomCentralServerComboBox();
 }
 
 void CClientSettingsDlg::UpdateJitterBufferFrame()
@@ -514,8 +511,20 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     }
 }
 
-void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
+void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
 {
+    // update combo box containing all available sound cards in the system
+    QStringList slSndCrdDevNames = pClient->GetSndCrdDevNames();
+    cbxSoundcard->clear();
+
+    foreach ( QString strDevName, slSndCrdDevNames )
+    {
+        cbxSoundcard->addItem ( strDevName );
+    }
+
+    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+
+    // update input/output channel selection
 #if defined ( _WIN32 ) || defined ( __APPLE__ ) || defined ( __MACOSX )
     int iSndChanIdx;
 
@@ -587,45 +596,34 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
-    const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
+    pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
 
-    if ( !strError.isEmpty() )
-    {
-        QMessageBox::critical ( this, APP_NAME,
-            QString ( tr ( "The selected audio device could not be used "
-            "because of the following error: " ) ) + strError +
-            QString ( tr ( " The previous driver will be selected." ) ),
-            tr ( "Ok" ), nullptr );
-
-        // recover old selection
-        cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
-    }
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
     UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnRInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnLOutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )
@@ -641,6 +639,13 @@ void CClientSettingsDlg::OnAudioQualityActivated ( int iQualityIdx )
     UpdateDisplay(); // upload rate will be changed
 }
 
+void CClientSettingsDlg::OnGUIDesignActivated ( int iDesignIdx )
+{
+    pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iDesignIdx ) );
+    emit GUIDesignChanged();
+    UpdateDisplay();
+}
+
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
@@ -653,42 +658,24 @@ void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )
+void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 {
-    if ( value == Qt::Unchecked )
+    // if the user has selected and deleted an entry in the combo box list,
+    // we delete the corresponding entry in the central server address vector
+    if ( cbxCentralServerAddress->currentText().isEmpty() && cbxCentralServerAddress->currentData().isValid() )
     {
-        pClient->SetGUIDesign ( GD_STANDARD );
+        pSettings->vstrCentralServerAddress[cbxCentralServerAddress->currentData().toInt()] = "";
     }
     else
     {
-        pClient->SetGUIDesign ( GD_ORIGINAL );
+        // store new address at the top of the list, if the list was already
+        // full, the last element is thrown out
+        pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCentralServerAddress->currentText() ) );
     }
-    emit GUIDesignChanged();
-    UpdateDisplay();
-}
 
-void CClientSettingsDlg::OnDisplayChannelLevelsStateChanged ( int value )
-{
-    pClient->SetDisplayChannelLevels ( value != Qt::Unchecked );
-    emit DisplayChannelLevelsChanged();
-}
-
-void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
-{
-    // store new setting in the client
-    pClient->SetServerListCentralServerAddress (
-        edtCentralServerAddress->text() );
-}
-
-void CClientSettingsDlg::OnNewClientLevelEditingFinished()
-{
-    // store new setting in the client
-    pClient->iNewClientFaderLevel =
-        edtNewClientLevel->text().toInt();
-
-    // inform that the level has changed and the mixer board settings must
-    // be updated
-    emit NewClientLevelChanged();
+    // update combo box list and inform connect dialog about the new address
+    UpdateCustomCentralServerComboBox();
+    emit CustomCentralServerAddrChanged();
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
@@ -719,18 +706,20 @@ void CClientSettingsDlg::SetPingTimeResult ( const int                         i
     // a certain value
     if ( iPingTime > 500 )
     {
-        const QString sErrorText =
-            "<font color=""red""><b>&#62;500 ms</b></font>";
-
+        const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
         lblPingTimeValue->setText     ( sErrorText );
         lblOverallDelayValue->setText ( sErrorText );
     }
     else
     {
-        lblPingTimeValue->setText ( QString().setNum ( iPingTime ) + " ms" );
-        lblOverallDelayValue->setText (
-            QString().setNum ( iOverallDelayMs ) + " ms" );
+        lblPingTimeValue->setText     ( QString().setNum ( iPingTime ) + " ms" );
+        lblOverallDelayValue->setText ( QString().setNum ( iOverallDelayMs ) + " ms" );
     }
+
+    // update upstream rate information label (note that we update this together
+    // with the ping time since the network packet sequence number feature might
+    // be enabled at any time which has influence on the upstream rate)
+    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
 
     // set current LED status
     ledOverallDelay->SetLight ( eOverallDelayLEDColor );
@@ -749,10 +738,19 @@ void CClientSettingsDlg::UpdateDisplay()
         lblOverallDelayValue->setText ( "---" );
         lblUpstreamValue->setText     ( "---" );
     }
-    else
+}
+
+void CClientSettingsDlg::UpdateCustomCentralServerComboBox()
+{
+    cbxCentralServerAddress->clear();
+    cbxCentralServerAddress->clearEditText();
+
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
-        // update upstream rate information label (only if client is running)
-        lblUpstreamValue->setText (
-            QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
+        if ( !pSettings->vstrCentralServerAddress[iLEIdx].isEmpty() )
+        {
+            // store the index as user data to the combo box item, too
+            cbxCentralServerAddress->addItem ( pSettings->vstrCentralServerAddress[iLEIdx], iLEIdx );
+        }
     }
 }

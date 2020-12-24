@@ -20,7 +20,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -151,6 +151,25 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
 
             jack_free ( ports );
         }
+
+        // input latency
+        jack_latency_range_t latrange;
+        latrange.min = 0;
+        latrange.max = 0 ;
+
+        jack_port_get_latency_range ( input_port_left, JackCaptureLatency, &latrange );
+        int inLatency = latrange.min; // be optimistic
+
+        // output latency 
+        latrange.min = 0; 
+        latrange.max = 0 ;
+
+        jack_port_get_latency_range ( output_port_left, JackPlaybackLatency, &latrange );
+        int outLatency = latrange.min; // be optimistic
+
+        // compute latency by using the first input and first output
+        // ports and using the most optimistic values
+        fInOutLatencyMs = static_cast<float> ( inLatency + outLatency ) * 1000 / SYSTEM_SAMPLE_RATE_HZ;
     }
 }
 
@@ -187,7 +206,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
 // Doesn't this give an infinite loop? The set buffer size function will call our
-// registerd callback which calls "EmitReinitRequestSignal()". In that function
+// registered callback which calls "EmitReinitRequestSignal()". In that function
 // this CSound::Init() function is called...
 //jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 
@@ -221,6 +240,9 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     CSound* pSound = static_cast<CSound*> ( arg );
     int     i;
 
+    // make sure we are locked during execution
+    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
+
     if ( pSound->IsRunning() && ( nframes == static_cast<jack_nframes_t> ( pSound->iJACKBufferSizeMono ) ) )
     {
         // get input data pointer
@@ -237,11 +259,8 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         {
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
             {
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-                    (short) ( in_left[i] * _MAXSHORT );
-
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-                    (short) ( in_right[i] * _MAXSHORT );
+                pSound->vecsTmpAudioSndCrdStereo[2 * i]     = Float2Short ( in_left[i] * _MAXSHORT );
+                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Float2Short ( in_right[i] * _MAXSHORT );
             }
         }
 

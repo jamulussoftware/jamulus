@@ -18,9 +18,11 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
+
+#pragma once
 
 #include <QLabel>
 #include <QString>
@@ -34,8 +36,10 @@
 #include <QMenuBar>
 #include <QLayout>
 #include <QButtonGroup>
+#include <QMessageBox>
 #include "global.h"
 #include "client.h"
+#include "settings.h"
 #include "multicolorled.h"
 #include "ui_clientsettingsdlgbase.h"
 
@@ -51,9 +55,9 @@ class CClientSettingsDlg : public QDialog, private Ui_CClientSettingsDlgBase
     Q_OBJECT
 
 public:
-    CClientSettingsDlg ( CClient* pNCliP,
-                         QWidget* parent = nullptr,
-                         Qt::WindowFlags f = nullptr );
+    CClientSettingsDlg ( CClient*         pNCliP,
+                         CClientSettings* pNSetP,
+                         QWidget*         parent = nullptr );
 
     void SetStatus ( const CMultiColorLED::ELightColor eStatus ) { ledNetw->SetLight ( eStatus ); }
 
@@ -68,30 +72,30 @@ public:
                              const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
     void UpdateDisplay();
+    void UpdateSoundDeviceChannelSelectionFrame();
 
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
-    void    UpdateSoundChannelSelectionFrame();
-    QString GenSndCrdBufferDelayString ( const int iFrameSize,
+    void    UpdateCustomCentralServerComboBox();
+    QString GenSndCrdBufferDelayString ( const int     iFrameSize,
                                          const QString strAddText = "" );
 
-    virtual void showEvent ( QShowEvent* ) { UpdateDisplay(); }
+    virtual void showEvent ( QShowEvent* );
 
-    CClient*     pClient;
-    QTimer       TimerStatus;
-    QButtonGroup SndCrdBufferDelayButtonGroup;
+    CClient*         pClient;
+    CClientSettings* pSettings;
+    QTimer           TimerStatus;
+    QButtonGroup     SndCrdBufferDelayButtonGroup;
 
- public slots:
+public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnNetBufValueChanged ( int value );
     void OnNetBufServerValueChanged ( int value );
     void OnAutoJitBufStateChanged ( int value );
-    void OnGUIDesignFancyStateChanged ( int value );
-    void OnDisplayChannelLevelsStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
-    void OnNewClientLevelEditingFinished();
+    void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
@@ -100,11 +104,12 @@ protected:
     void OnROutChanActivated ( int iChanIdx );
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
+    void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
+    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
 
 signals:
     void GUIDesignChanged();
-    void DisplayChannelLevelsChanged();
     void AudioChannelsChanged();
-    void NewClientLevelChanged();
+    void CustomCentralServerAddrChanged();
 };

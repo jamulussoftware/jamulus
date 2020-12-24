@@ -2,7 +2,7 @@ language: cpp
 matrix:
   include:
   - os: linux
-    dist: xenial
+    dist: trusty
     before_install:
     - sudo apt-get update -qq
     - sudo apt-get install devscripts build-essential lintian dh-make
@@ -12,6 +12,10 @@ matrix:
     - gcc
     script:
     - echo $TRAVIS_TAG
+    # headless server compilation
+    - qmake "CONFIG+=headless nosound" Jamulus.pro
+    - make
+    # normal compilation
     - qmake Jamulus.pro
     - make
     #deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)

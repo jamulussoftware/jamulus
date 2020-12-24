@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -28,6 +28,7 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
+#include <QMessageBox>
 #include "soundbase.h"
 #include "global.h"
 
@@ -38,7 +39,7 @@ class CSound : public CSoundBase
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
              void*          arg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     ,
              const QString& );
 
@@ -61,13 +62,14 @@ public:
     virtual int     GetLeftOutputChannel()  { return iSelOutputLeftChannel; }
     virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
 
-    // these variables should be protected but cannot since we want
+    // these variables/functions should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
     AudioDeviceID  CurrentAudioInputDeviceID;
     AudioDeviceID  CurrentAudioOutputDeviceID;
+    long           lCurDev;
     int            iNumInChan;
     int            iNumInChanPlusAddChan; // includes additional "added" channels
     int            iNumOutChan;
@@ -91,10 +93,11 @@ public:
     CVector<int>   vecNumOutBufChan;
 
 protected:
-    virtual QString LoadAndInitializeDriver ( int iIdx, bool );
+    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    UpdateChSelection();
+    void    GetAvailableInOutDevices();
 
     int CountChannels ( AudioDeviceID devID,
                         bool          isInput );

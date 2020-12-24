@@ -274,12 +274,6 @@
        <layout class="QHBoxLayout">
         <item>
          <widget class="QLabel" name="lblNetBufLabel">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Local</string>
           </property>
@@ -293,12 +287,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lblNetBufServerLabel">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Server</string>
           </property>
@@ -316,12 +304,6 @@
        <layout class="QHBoxLayout">
         <item>
          <widget class="QLabel" name="lblNetBuf">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Size</string>
           </property>
@@ -335,12 +317,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lblNetBufServer">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Size</string>
           </property>
@@ -508,6 +484,20 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="lblSkin">
+            <property name="text">
+             <string>Skin</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblLanguage">
+            <property name="text">
+             <string>Language</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -532,25 +522,13 @@
             </item>
            </layout>
           </item>
+          <item>
+           <widget class="QComboBox" name="cbxSkin"/>
+          </item>
+          <item>
+           <widget class="CLanguageComboBox" name="cbxLanguage"/>
+          </item>
          </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout">
-        <item>
-         <widget class="QCheckBox" name="chbGUIDesignFancy">
-          <property name="text">
-           <string>Fancy Skin</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="chbDisplayChannelLevels">
-          <property name="text">
-           <string>Display Channel Levels</string>
-          </property>
-         </widget>
         </item>
        </layout>
       </item>
@@ -562,12 +540,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="edtCentralServerAddress">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QComboBox" name="cbxCentralServerAddress">
+        <property name="editable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -708,6 +683,11 @@
    <extends>QWidget</extends>
    <header>multicolorled.h</header>
   </customwidget>
+  <customwidget>
+   <class>CLanguageComboBox</class>
+   <extends>QComboBox</extends>
+   <header>util.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>cbxSoundcard</tabstop>
@@ -726,9 +706,9 @@
   <tabstop>cbxAudioChannels</tabstop>
   <tabstop>cbxAudioQuality</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
-  <tabstop>chbGUIDesignFancy</tabstop>
-  <tabstop>chbDisplayChannelLevels</tabstop>
-  <tabstop>edtCentralServerAddress</tabstop>
+  <tabstop>cbxSkin</tabstop>
+  <tabstop>cbxLanguage</tabstop>
+  <tabstop>cbxCentralServerAddress</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

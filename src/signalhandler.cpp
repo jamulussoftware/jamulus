@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
  ******************************************************************************
  *
@@ -146,6 +146,7 @@ CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) :
         socketNotifier->setEnabled ( true );
 
         setSignalHandled ( SIGUSR1, true );
+        setSignalHandled ( SIGUSR2, true );
         setSignalHandled ( SIGINT, true );
         setSignalHandled ( SIGTERM, true );
     }
@@ -153,6 +154,7 @@ CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) :
 
 CSignalUnix::~CSignalUnix() {
     setSignalHandled ( SIGUSR1, false );
+    setSignalHandled ( SIGUSR2, false );
     setSignalHandled ( SIGINT, false );
     setSignalHandled ( SIGTERM, false );
 }
@@ -167,11 +169,12 @@ bool CSignalUnix::setSignalHandled ( int sigNum, bool state )
     if ( state )
     {
         sa.sa_handler = CSignalUnix::signalHandler;
-        sa.sa_flags |= SA_RESTART;
+        sa.sa_flags = SA_RESTART;
     }
     else
     {
         sa.sa_handler = SIG_DFL;
+        sa.sa_flags = 0;
     }
 
     return ::sigaction ( sigNum, &sa, nullptr ) == 0;

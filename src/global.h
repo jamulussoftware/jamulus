@@ -43,7 +43,7 @@ LED bar:      lbr
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -72,11 +72,6 @@ LED bar:      lbr
 //#define _DEBUG_
 #undef _DEBUG_
 
-// define this macro if the version and operating system debugging shall
-// be enabled in the client (the ping time column in the connect dialog then
-// shows the requested information instead of the ping time)
-#undef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-
 // version and application name (use version from qt prject file)
 #undef VERSION
 #define VERSION                          APP_VERSION
@@ -91,9 +86,6 @@ LED bar:      lbr
 
 // file name for logging file
 #define DEFAULT_LOG_FILE_NAME            "Jamulussrvlog.txt"
-
-// default oldest item to draw in history graph (days ago)
-#define DEFAULT_DAYS_HISTORY             60
 
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size.
@@ -110,13 +102,13 @@ LED bar:      lbr
 #define CENTSERV_GENRE_CLASSICAL_FOLK    "jamulusclassical.fischvolk.de:22524"
 
 // getting started and software manual URL
-#define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Getting-Started"
-#define SERVER_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Running-a-Server"
-#define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
+#define CLIENT_GETTING_STARTED_URL       "https://jamulus.io/wiki/Getting-Started"
+#define SERVER_GETTING_STARTED_URL       "https://jamulus.io/wiki/Running-a-Server"
+#define SOFTWARE_MANUAL_URL              "https://jamulus.io/wiki/Software-Manual"
 
 // determining server internal address uses well-known host and port
-// (Google DNS, or something else reliable)
-#define WELL_KNOWN_HOST                  "8.8.8.8" // Google
+// (You can change the service used here to something like Cloudflare (1.1.1.1), Google DNS (8.8.8.8), or something else reliable)
+#define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
@@ -152,6 +144,9 @@ LED bar:      lbr
 #define AUD_MIX_FADER_MAX                100
 #define AUD_MIX_PAN_MAX                  100
 
+// maximum number of fader groups (must be consistent to audiomixerboard implementation)
+#define MAX_NUM_FADER_GROUPS             4
+
 // maximum number of recognized sound cards installed in the system
 #define MAX_NUMBER_SOUND_CARDS           129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
 
@@ -171,8 +166,13 @@ LED bar:      lbr
 #define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
+// defines for LED level meter CLevelMeter
+#define NUM_STEPS_LED_BAR                8
+#define RED_BOUND_LED_BAR                7
+#define YELLOW_BOUND_LED_BAR             5
+
 // maximum number of connected clients at the server (must not be larger than 256)
-#define MAX_NUM_CHANNELS                 50 // max number channels for server
+#define MAX_NUM_CHANNELS                 150 // max number channels for server
 
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS
@@ -206,7 +206,7 @@ LED bar:      lbr
 #define SERVLIST_REGIST_INTERV_MINUTES   15 // minutes
 
 // defines the minimum time a server must run to be a permanent server
-#define SERVLIST_TIME_PERMSERV_MINUTES   4320 // minutes, 4320 = 60 min * 24 h * 3 d
+#define SERVLIST_TIME_PERMSERV_MINUTES   2880 // minutes, 2880 = 60 min * 24 h * 2 d
 
 // registration response timeout
 #define REGISTER_SERVER_TIME_OUT_MS      500 // ms
@@ -220,21 +220,27 @@ LED bar:      lbr
 // Maximum length of fader tag and text message strings (Since for chat messages
 // some HTML code is added, we also have to define a second length which includes
 // this additionl HTML code. Right now the length of the HTML code is approx. 66
-// character. Here, we add some headroom to this number)
+// characters. Here, we add some headroom to this number)
 #define MAX_LEN_FADER_TAG                16
 #define MAX_LEN_CHAT_TEXT                1600
 #define MAX_LEN_CHAT_TEXT_PLUS_HTML      1800
 #define MAX_LEN_SERVER_NAME              20
 #define MAX_LEN_IP_ADDRESS               15
 #define MAX_LEN_SERVER_CITY              20
-#define MAX_LEN_VERSION_TEXT             20
+#define MAX_LEN_VERSION_TEXT             30
 
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \
     "<br><div align=right><font size=-1><i>" + \
-    QCoreApplication::translate ( "global","For more information use the ""What's " \
+    QCoreApplication::translate ( "global", "For more information use the ""What's " \
     "This"" help (help menu, right mouse button or Shift+F1)" ) + \
     "</i></font></div>"
+
+// server welcome message title (do not change for compatibility!)
+#define WELCOME_MESSAGE_PREFIX           "<b>Server Welcome Message:</b> "
+
+// mixer settings file name suffix
+#define MIX_SETTINGS_FILE_SUFFIX         "jch"
 
 #define _MAXSHORT                        32767
 #define _MINSHORT                        ( -32768 )
@@ -277,7 +283,7 @@ public:
     CGenErr ( QString strNewErrorMsg, QString strNewErrorType = "" ) :
         strErrorMsg ( strNewErrorMsg ), strErrorType ( strNewErrorType ) {}
 
-    QString GetErrorText()
+    QString GetErrorText() const
     {
         // return formatted error text
         if ( strErrorType.isEmpty() )

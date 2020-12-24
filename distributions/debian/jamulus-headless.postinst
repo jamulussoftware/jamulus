@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+# dh_sysuser can be used in newer distro releases
+
+adduser --system --quiet --home /nonexistent --no-create-home jamulus
+
+#DEBHELPER#

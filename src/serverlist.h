@@ -53,7 +53,7 @@ private network.
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -64,6 +64,9 @@ private network.
 #include <QList>
 #include <QElapsedTimer>
 #include <QMutex>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+# include <QVersionNumber>
+#endif
 #include "global.h"
 #include "util.h"
 #include "protocol.h"
@@ -124,8 +127,8 @@ public:
     CServerListManager ( const quint16  iNPortNum,
                          const QString& sNCentServAddr,
                          const QString& strServerInfo,
+                         const QString& strServerListFilter,
                          const int      iNumChannels,
-                         const bool     bNCentServPingServerInList,
                          CProtocol*     pNConLProt );
 
     // the update has to be called if any change to the server list
@@ -145,7 +148,8 @@ public:
 
     void CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                        const CHostAddress&    LInetAddr,
-                                       const CServerCoreInfo& ServerInfo );
+                                       const CServerCoreInfo& ServerInfo,
+                                       const QString          strVersion = "" );
 
     void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
 
@@ -191,14 +195,15 @@ protected:
     QList<CServerListEntry> ServerList;
 
     QString                 strCentralServerAddress;
-    int                     iNumPredefinedServers;
     bool                    bEnabled;
     bool                    bIsCentralServer;
     ECSAddType              eCentralServerAddressType;
-    bool                    bCentServPingServerInList;
 
     CHostAddress            SlaveCurCentServerHostAddress;
     CHostAddress            SlaveCurLocalHostAddress;
+
+    QList<QHostAddress>     vWhiteList;
+    QString                 strMinServerVersion;
 
     CProtocol*              pConnLessProtocol;
 

@@ -18,25 +18,32 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
 #pragma once
 
+#include <QCoreApplication>
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
-#include <QMenu>
-#include <QWhatsThis>
-#include <QTextBrowser>
-#include <QLabel>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QDateTime>
+#ifndef HEADLESS
+# include <QMenu>
+# include <QWhatsThis>
+# include <QTextBrowser>
+# include <QLabel>
+# include <QCheckBox>
+# include <QComboBox>
+# include <QLineEdit>
+# include <QDateTime>
+# include <QDesktopServices>
+# include "ui_aboutdlgbase.h"
+#endif
 #include <QFile>
-#include <QDesktopServices>
+#include <QDirIterator>
+#include <QTranslator>
+#include <QLibraryInfo>
 #include <QUrl>
 #include <QLocale>
 #include <QElapsedTimer>
@@ -56,7 +63,6 @@ using namespace std; // because of the library: "vector"
 #else
 # include <sys/time.h>
 #endif
-#include "ui_aboutdlgbase.h"
 
 
 class CClient;  // forward declaration of CClient
@@ -68,30 +74,23 @@ class CClient;  // forward declaration of CClient
 
 
 /* Global functions ***********************************************************/
-// converting double to short
-inline short Double2Short ( const double dInput )
+// converting float to short
+inline short Float2Short ( const float fInput )
 {
     // lower bound
-    if ( dInput < _MINSHORT )
+    if ( fInput < _MINSHORT )
     {
         return _MINSHORT;
     }
 
     // upper bound
-    if ( dInput > _MAXSHORT )
+    if ( fInput > _MAXSHORT )
     {
         return _MAXSHORT;
     }
 
-    return static_cast<short> ( dInput );
+    return static_cast<short> ( fInput );
 }
-
-// debug error handling
-void DebugError ( const QString& pchErDescr,
-                  const QString& pchPar1Descr, 
-                  const double   dPar1,
-                  const QString& pchPar2Descr,
-                  const double   dPar2 );
 
 // calculate the bit rate in bits per second from the number of coded bytes
 inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
@@ -100,6 +99,7 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
     return ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) / iFrameSize;
 }
 
+QString GetVersionAndNameStr ( const bool bWithHtml = true );
 
 
 /******************************************************************************\
@@ -143,47 +143,6 @@ public:
 
     // this function simply converts the type of size to integer
     inline int Size() const { return static_cast<int> ( std::vector<TData>::size() ); }
-
-    // This operator allows for a l-value assignment of this object:
-    // CVector[x] = y is possible
-    inline TData& operator[] ( const int iPos )
-    {
-#ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
-        {
-            DebugError ( "Writing vector out of bounds", "Vector size",
-                Size(), "New parameter", iPos );
-        }
-#endif
-        return std::vector<TData>::operator[] ( iPos );
-    }
-
-    inline TData operator[] ( const int iPos ) const
-    {
-#ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
-        {
-            DebugError ( "Reading vector out of bounds", "Vector size",
-                Size(), "New parameter", iPos );
-        }
-#endif
-        return std::vector<TData>::operator[] ( iPos );
-    }
-
-    inline CVector<TData>& operator= ( const CVector<TData>& vecI )
-    {
-#ifdef _DEBUG_
-        // vectors which shall be copied MUST have same size!
-        if ( vecI.Size() != Size() )
-        {
-            DebugError ( "Vector operator=() different size", "Vector size",
-                Size(), "New parameter", vecI.Size() );
-        }
-#endif
-        std::vector<TData>::operator= ( vecI );
-
-        return *this;
-    }
 };
 
 
@@ -233,9 +192,9 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
         {
             // only add old element if it is not the same as the
             // selected one
-            if ( operator[] ( iIdx ).compare ( strNewValue ) )
+            if ( std::vector<TData>::operator[] ( iIdx ).compare ( strNewValue ) )
             {
-                vstrTempList[iTempListCnt] = operator[] ( iIdx );
+                vstrTempList[iTempListCnt] = std::vector<TData>::operator[] ( iIdx );
 
                 iTempListCnt++;
             }
@@ -408,6 +367,7 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
+#ifndef HEADLESS
 // About dialog ----------------------------------------------------------------
 class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 {
@@ -415,8 +375,6 @@ class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 
 public:
     CAboutDlg ( QWidget* parent = nullptr );
-
-    static QString GetVersionAndNameStr ( const bool bWithHtml = true );
 };
 
 
@@ -485,6 +443,28 @@ public slots:
 };
 
 
+// Language combo box ----------------------------------------------------------
+class CLanguageComboBox : public QComboBox
+{
+    Q_OBJECT
+
+public:
+    CLanguageComboBox ( QWidget* parent = nullptr );
+
+    void Init ( QString& strSelLanguage );
+
+protected:
+    int iIdxSelectedLanguage;
+
+public slots:
+    void OnLanguageActivated ( int iLanguageIdx );
+
+signals:
+    void LanguageChanged ( QString strLanguage );
+};
+#endif
+
+
 // Console writer factory ------------------------------------------------------
 // this class was written by pljones
 class ConsoleWriterFactory
@@ -501,8 +481,6 @@ private:
 /******************************************************************************\
 * Other Classes/Enums                                                          *
 \******************************************************************************/
-
-
 // Audio channel configuration -------------------------------------------------
 enum EAudChanConf
 {
@@ -521,6 +499,15 @@ enum EAudComprType
     CT_CELT = 1,
     CT_OPUS = 2,
     CT_OPUS64 = 3 // using OPUS with 64 samples frame size
+};
+
+
+// Network transport flags -----------------------------------------------------
+enum ENetwFlags
+{
+    // used for protocol -> enum values must be fixed!
+    NF_NONE = 0,
+    NF_WITH_COUNTER = 1 // using a network counter to correctly order UDP packets in jitter buffer
 };
 
 
@@ -549,7 +536,8 @@ enum EGUIDesign
 {
     // used for settings -> enum values should be fixed
     GD_STANDARD = 0,
-    GD_ORIGINAL = 1
+    GD_ORIGINAL = 1,
+    GD_SLIMFADER = 2
 };
 
 
@@ -559,6 +547,29 @@ enum ELicenceType
     // used for protocol -> enum values must be fixed!
     LT_NO_LICENCE = 0,
     LT_CREATIVECOMMONS = 1
+};
+
+
+// Server jam recorder state enum ----------------------------------------------
+enum ERecorderState
+{
+    // used for protocol -> enum values must be fixed!
+    RS_UNDEFINED = 0,
+    RS_NOT_INITIALISED = 1,
+    RS_NOT_ENABLED = 2,
+    RS_RECORDING = 3
+};
+
+
+// Channel sort type -----------------------------------------------------------
+enum EChSortType
+{
+    // used for settings -> enum values should be fixed
+    ST_NO_SORT = 0,
+    ST_BY_NAME = 1,
+    ST_BY_INSTRUMENT = 2,
+    ST_BY_GROUPID = 3,
+    ST_BY_CITY = 4
 };
 
 
@@ -591,7 +602,7 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
 
     case AT_GENRE_CLASSICAL_FOLK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choir" );
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choral" );
 
     default: // AT_DEFAULT
         return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );
@@ -602,13 +613,15 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
 // Slave server registration state ---------------------------------------------
 enum ESvrRegStatus
 {
-    SRS_UNREGISTERED = 0,
-    SRS_BAD_ADDRESS = 1,
-    SRS_REQUESTED = 2,
-    SRS_TIME_OUT = 3,
-    SRS_UNKNOWN_RESP = 4,
-    SRS_REGISTERED = 5,
-    SRS_CENTRAL_SVR_FULL = 6
+    SRS_UNREGISTERED,
+    SRS_BAD_ADDRESS,
+    SRS_REQUESTED,
+    SRS_TIME_OUT,
+    SRS_UNKNOWN_RESP,
+    SRS_REGISTERED,
+    SRS_CENTRAL_SVR_FULL,
+    SRS_VERSION_TOO_OLD,
+    SRS_NOT_FULFILL_REQUIREMENTS
 };
 
 inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
@@ -635,6 +648,12 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 
     case SRS_CENTRAL_SVR_FULL:
         return QCoreApplication::translate ( "CServerDlg", "Central Server full" );
+
+    case SRS_VERSION_TOO_OLD:
+        return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
+
+    case SRS_NOT_FULFILL_REQUIREMENTS:
+        return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
     return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
@@ -646,7 +665,9 @@ enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
     SRR_REGISTERED = 0,
-    SRR_CENTRAL_SVR_FULL = 1
+    SRR_CENTRAL_SVR_FULL = 1,
+    SRR_VERSION_TOO_OLD = 2,
+    SRR_NOT_FULFILL_REQIREMENTS = 3
 };
 
 
@@ -679,25 +700,35 @@ enum ESkillLevel
 class CStereoSignalLevelMeter
 {
 public:
-    CStereoSignalLevelMeter() { Reset(); }
+// TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
+//      But tests with 128 and 64 samples frame size have shown that the meter fly back
+//      is ok for both numbers of samples frame size with a factor of 0.99.
+    CStereoSignalLevelMeter ( const bool   bNIsStereoOut     = true,
+                              const double dNSmoothingFactor = 0.99 ) :
+        dSmoothingFactor ( dNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
 
-    void          Update ( const CVector<short>& vecsAudio );
-    double        MicLeveldBLeft()  { return CalcLogResult ( dCurLevelL ); }
-    double        MicLeveldBRight() { return CalcLogResult ( dCurLevelR ); }
-    static double CalcLogResult ( const double& dLinearLevel );
+    void Update ( const CVector<short>& vecsAudio,
+                  const int             iInSize,
+                  const bool            bIsStereoIn );
+
+    double        GetLevelForMeterdBLeftOrMono() { return CalcLogResultForMeter ( dCurLevelLOrMono ); }
+    double        GetLevelForMeterdBRight()      { return CalcLogResultForMeter ( dCurLevelR ); }
+    static double CalcLogResultForMeter ( const double& dLinearLevel );
 
     void Reset()
     {
-        dCurLevelL = 0.0;
-        dCurLevelR = 0.0;
+        dCurLevelLOrMono = 0.0;
+        dCurLevelR       = 0.0;
     }
 
 protected:
-    double UpdateCurLevel ( double        dCurLevel,
-                            const short&  sMax );
+    double UpdateCurLevel ( double       dCurLevel,
+                            const double dMax );
 
-    double dCurLevelL;
+    double dCurLevelLOrMono;
     double dCurLevelR;
+    double dSmoothingFactor;
+    bool   bIsStereoOut;
 };
 
 
@@ -792,6 +823,7 @@ public:
     static QString       GetResourceReference ( const int iInstrument );
     static QString       GetName ( const int iInstrument );
     static EInstCategory GetCategory ( const int iInstrument );
+    static void          UpdateTableOnLanguageChange() { GetTable ( true ); }
 
 // TODO make use of instrument category (not yet implemented)
 
@@ -817,8 +849,7 @@ protected:
     };
 
     static bool IsInstIndexInRange ( const int iIdx );
-
-    static CVector<CInstPictProps>& GetTable();
+    static CVector<CInstPictProps>& GetTable ( const bool bReGenerateTable = false );
 };
 
 
@@ -826,8 +857,11 @@ protected:
 class CLocale
 {
 public:
-    static QString    GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
-    static ECSAddType GetCentralServerAddressType ( const QLocale::Country eCountry );
+    static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
+    static QMap<QString, QString>  GetAvailableTranslations();
+    static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
+    static void                    LoadTranslation ( const QString     strLanguage,
+                                                     QCoreApplication* pApp );
 };
 
 
@@ -836,11 +870,11 @@ class CChannelCoreInfo
 {
 public:
     CChannelCoreInfo() :
-        strName         ( "" ),
-        eCountry        ( QLocale::AnyCountry ),
-        strCity         ( "" ),
-        iInstrument     ( CInstPictures::GetNotUsedInstrument() ),
-        eSkillLevel     ( SL_NOT_SET ) {}
+        strName     ( "" ),
+        eCountry    ( QLocale::AnyCountry ),
+        strCity     ( "" ),
+        iInstrument ( CInstPictures::GetNotUsedInstrument() ),
+        eSkillLevel ( SL_NOT_SET ) {}
 
     CChannelCoreInfo ( const QString           NsName,
                        const QLocale::Country& NeCountry,
@@ -916,25 +950,6 @@ public:
                            NeSkillLevel ),
         iChanID ( NiID ),
         iIpAddr ( NiIP ) {}
-
-    QString GenNameForDisplay() const
-    {
-        // if text is empty, show IP address instead
-        if ( strName.isEmpty() )
-        {
-            // convert IP address to text and show it (use dummy port number
-            // since it is not used here)
-            const CHostAddress TempAddr =
-                CHostAddress ( QHostAddress ( iIpAddr ), 0 );
-
-            return TempAddr.toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
-        }
-        else
-        {
-            // show name of channel
-            return strName;
-        }
-    }
 
     // ID of the channel
     int     iChanID;
@@ -1026,6 +1041,7 @@ public:
         iNumAudioChannels      ( 0 ),
         iSampleRate            ( 0 ),
         eAudioCodingType       ( CT_NONE ),
+        eFlags                 ( NF_NONE ),
         iAudioCodingArg        ( 0 ) {}
 
     CNetworkTransportProps ( const uint32_t      iNBNPS,
@@ -1033,14 +1049,14 @@ public:
                              const uint32_t      iNNACH,
                              const uint32_t      iNSR,
                              const EAudComprType eNACT,
-                             const uint32_t      iNVers,
+                             const ENetwFlags    eNFlags,
                              const int32_t       iNACA ) :
         iBaseNetworkPacketSize ( iNBNPS ),
         iBlockSizeFact         ( iNBSF ),
         iNumAudioChannels      ( iNNACH ),
         iSampleRate            ( iNSR ),
         eAudioCodingType       ( eNACT ),
-        iVersion               ( iNVers ),
+        eFlags                 ( eNFlags ),
         iAudioCodingArg        ( iNACA ) {}
 
     uint32_t      iBaseNetworkPacketSize;
@@ -1048,7 +1064,7 @@ public:
     uint32_t      iNumAudioChannels;
     uint32_t      iSampleRate;
     EAudComprType eAudioCodingType;
-    uint32_t      iVersion;
+    ENetwFlags    eFlags;
     int32_t       iAudioCodingArg;
 };
 
@@ -1060,6 +1076,7 @@ public:
     static bool ParseNetworkAddress ( QString       strAddress,
                                       CHostAddress& HostAddress );
 
+    static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
                                                   const QString&   strCentralServerAddress );
@@ -1116,37 +1133,43 @@ class CAudioReverb
 public:
     CAudioReverb() {}
     
-    void Init ( const int iSampleRate, const double rT60 = 1.1 );
+    void Init ( const EAudChanConf eNAudioChannelConf,
+                const int          iNStereoBlockSizeSam,
+                const int          iSampleRate,
+                const float        fT60 = 1.1f );
+
     void Clear();
-    void ProcessSample ( int16_t&     iInputOutputLeft,
-                         int16_t&     iInputOutputRight,
-                         const double dAttenuation );
+    void Process ( CVector<int16_t>& vecsStereoInOut,
+                   const bool        bReverbOnLeftChan,
+                   const float       fAttenuation );
 
 protected:
-    void setT60 ( const double rT60, const int iSampleRate );
+    void setT60 ( const float fT60, const int iSampleRate );
     bool isPrime ( const int number );
 
     class COnePole
     {
     public:
-        COnePole() : dA ( 0 ), dB ( 0 ) { Reset(); }
-        void setPole ( const double dPole );
-        double Calc ( const double dIn );
-        void Reset() { dLastSample = 0; }
+        COnePole() : fA ( 0 ), fB ( 0 ) { Reset(); }
+        void  setPole ( const float fPole );
+        float Calc ( const float fIn );
+        void  Reset() { fLastSample = 0; }
 
     protected:
-        double dA;
-        double dB;
-        double dLastSample;
+        float fA;
+        float fB;
+        float fLastSample;
     };
 
-    CFIFO<double> allpassDelays[3];
-    CFIFO<double> combDelays[4];
-    COnePole      combFilters[4];
-    CFIFO<double> outLeftDelay;
-    CFIFO<double> outRightDelay;
-    double        allpassCoefficient;
-    double        combCoefficient[4];
+    EAudChanConf eAudioChannelConf;
+    int          iStereoBlockSizeSam;
+    CFIFO<float> allpassDelays[3];
+    CFIFO<float> combDelays[4];
+    COnePole     combFilters[4];
+    CFIFO<float> outLeftDelay;
+    CFIFO<float> outRightDelay;
+    float        allpassCoefficient;
+    float        combCoefficient[4];
 };
 
 
@@ -1186,13 +1209,11 @@ public:
         // different IIR weights for up and down direction
         if ( dNewValue < dOldValue )
         {
-            dOldValue =
-                dOldValue * dWeightDown + ( 1.0 - dWeightDown ) * dNewValue;
+            dOldValue = dOldValue * dWeightDown + ( 1.0 - dWeightDown ) * dNewValue;
         }
         else
         {
-            dOldValue =
-                dOldValue * dWeightUp + ( 1.0 - dWeightUp ) * dNewValue;
+            dOldValue = dOldValue * dWeightUp + ( 1.0 - dWeightUp ) * dNewValue;
         }
     }
 
@@ -1210,33 +1231,34 @@ public:
             return round ( dValue + dHysteresis );
         }
     }
-};
 
-
-// Precise time ----------------------------------------------------------------
-// required for ping measurement
-class CPreciseTime
-{
-public:
-#ifdef _WIN32
-    // for the Windows version we have to define a minimum timer precision
-    // -> set it to 1 ms
-    CPreciseTime() { timeBeginPeriod ( 1 ); }
-    virtual ~CPreciseTime() { timeEndPeriod ( 1 ); }
-#endif
-
-    // precise time (on Windows the QTime is not precise enough)
-    int elapsed()
+    // calculate pan gains: in cross fade mode the pan center is attenuated
+    // by 6 dB, otherwise the center equals full gain for both channels
+    static inline float GetLeftPan ( const float fPan, const bool bXFade)
     {
-#ifdef _WIN32
-        return timeGetTime();
-#elif defined ( __APPLE__ ) || defined ( __MACOSX )
-        return mach_absolute_time() / 1000000; // convert ns in ms
-#else
-        timespec tp;
-        clock_gettime ( CLOCK_MONOTONIC, &tp );
-        return tp.tv_sec * 1000 + tp.tv_nsec / 1000000; // convert ns in ms and add the seconds part
-#endif
+        return bXFade ? 1 - fPan : std::min ( 0.5f, 1 - fPan ) * 2;
+    }
+    static inline float GetRightPan ( const float fPan, const bool bXFade)
+    {
+        return bXFade ? fPan : std::min ( 0.5f, fPan ) * 2;
+    }
+
+    // calculate linear gain from fader values which are in dB
+    static float CalcFaderGain ( const float fValue )
+    {
+        // convert actual slider range in gain values
+        // and normalize so that maximum gain is 1
+        const float fInValueRange0_1 = fValue / AUD_MIX_FADER_MAX;
+
+        // map range from 0..1 to range -35..0 dB and calculate linear gain
+        if ( fValue == 0 )
+        {
+            return 0; // -infinity
+        }
+        else
+        {
+            return powf ( 10.0f, ( fInValueRange0_1 * 35.0f - 35.0f ) / 20.0f );
+        }
     }
 };
 

@@ -364,7 +364,7 @@ static int transient_analysis(const opus_val32 * OPUS_RESTRICT in, int len, int 
       unmask=0;
       /* We should never see NaNs here. If we find any, then something really bad happened and we better abort
          before it does any damage later on. If these asserts are disabled (no hardening), then the table
-         lookup a few lines below (id = ...) is likely to crash dur to an out-of-bounds read. DO NOT FIX
+         lookup a few lines below (id = ...) is likely to crash due to an out-of-bounds read. DO NOT FIX
          that crash on NaN since it could result in a worse issue later on. */
       celt_assert(!celt_isnan(tmp[0]));
       celt_assert(!celt_isnan(norm));
@@ -1571,7 +1571,7 @@ int celt_encode_with_ec(CELTEncoder * OPUS_RESTRICT st, const opus_val16 * pcm, 
                (tmp+4*mode->Fs)/(8*mode->Fs)-!!st->signalling));
       effectiveBytes = nbCompressedBytes - nbFilledBytes;
    }
-   equiv_rate = ((opus_int32)nbCompressedBytes*8*50 >> (3-LM)) - (40*C+20)*((400>>LM) - 50);
+   equiv_rate = ((opus_int32)nbCompressedBytes*8*50 << (3-LM)) - (40*C+20)*((400>>LM) - 50);
    if (st->bitrate != OPUS_BITRATE_MAX)
       equiv_rate = IMIN(equiv_rate, st->bitrate - (40*C+20)*((400>>LM) - 50));
 

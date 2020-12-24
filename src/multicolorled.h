@@ -25,7 +25,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -50,10 +50,17 @@ public:
         RL_RED
     };
 
-    CMultiColorLED ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
+    enum EType
+    {
+        MT_LED,
+        MT_INDICATOR
+    };
+
+    CMultiColorLED ( QWidget* parent = nullptr );
 
     void Reset();
     void SetLight ( const ELightColor eNewStatus );
+    void SetType ( const EType eNType );
 
 protected:
     ELightColor eColorFlag;
@@ -66,8 +73,12 @@ protected:
     QPixmap BitmCubeGreen;
     QPixmap BitmCubeYellow;
     QPixmap BitmCubeRed;
+    QPixmap BitmIndicatorGreen;
+    QPixmap BitmIndicatorYellow;
+    QPixmap BitmIndicatorRed;
 
     int     iUpdateTime;
+    EType   eType;
 
     bool    bFlagRedLi;
     bool    bFlagGreenLi;

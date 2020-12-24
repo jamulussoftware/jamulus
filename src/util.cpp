@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -28,48 +28,64 @@
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
+void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
+                                       const int             iMonoBlockSizeSam,
+                                       const bool            bIsStereoIn )
 {
-    // get the stereo vector size
-    const int iStereoVecSize = vecsAudio.Size();
-
     // Get maximum of current block
     //
     // Speed optimization:
-    // - we only make use of the positive values and ignore the negative ones
-    //   -> we do not need to call the fabs() function
+    // - we only make use of the negative values and ignore the positive ones (since
+    //   int16 has range {-32768, 32767}) -> we do not need to call the fabs() function
     // - we only evaluate every third sample
     //
     // With these speed optimizations we might loose some information in
     // special cases but for the average music signals the following code
     // should give good results.
-    //
-    short sMaxL = 0;
-    short sMaxR = 0;
+    short sMinLOrMono = 0;
+    short sMinR       = 0;
 
-    for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
+    if ( bIsStereoIn )
     {
-        // left channel
-        sMaxL = std::max ( sMaxL, vecsAudio[i] );
+        // stereo in
+        for ( int i = 0; i < 2 * iMonoBlockSizeSam; i += 6 ) // 2 * 3 = 6 -> stereo
+        {
+            // left (or mono) and right channel
+            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
+            sMinR       = std::min ( sMinR,       vecsAudio[i + 1] );
+        }
 
-        // right channel
-        sMaxR = std::max ( sMaxR, vecsAudio[i + 1] );
+        // in case of mono out use minimum of both channels
+        if ( !bIsStereoOut )
+        {
+            sMinLOrMono = std::min ( sMinLOrMono, sMinR );
+        }
+    }
+    else
+    {
+        // mono in
+        for ( int i = 0; i < iMonoBlockSizeSam; i += 3 )
+        {
+            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
+        }
     }
 
-    dCurLevelL = UpdateCurLevel ( dCurLevelL, sMaxL );
-    dCurLevelR = UpdateCurLevel ( dCurLevelR, sMaxR );
+    // apply smoothing, if in stereo out mode, do this for two channels
+    dCurLevelLOrMono = UpdateCurLevel ( dCurLevelLOrMono, -sMinLOrMono );
+
+    if ( bIsStereoOut )
+    {
+        dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMinR );
+    }
 }
 
 double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
-                                                 const short& sMax )
+                                                 const double dMax )
 {
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
     {
-// TODO Calculate factor from sample rate and frame size (64 or 128 samples frame size).
-//      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size.
-        dCurLevel *= 0.97;
+        dCurLevel *= dSmoothingFactor;
     }
     else
     {
@@ -77,9 +93,9 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     }
 
     // update current level -> only use maximum
-    if ( static_cast<double> ( sMax ) > dCurLevel )
+    if ( dMax > dCurLevel )
     {
-        return static_cast<double> ( sMax );
+        return dMax;
     }
     else
     {
@@ -87,19 +103,29 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     }
 }
 
-double CStereoSignalLevelMeter::CalcLogResult ( const double& dLinearLevel )
+double CStereoSignalLevelMeter::CalcLogResultForMeter ( const double& dLinearLevel )
 {
-    const double dNormMicLevel = dLinearLevel / _MAXSHORT;
+    const double dNormLevel = dLinearLevel / _MAXSHORT;
 
     // logarithmic measure
-    if ( dNormMicLevel > 0 )
+    double dLevelForMeterdB = -100000.0; // large negative value
+
+    if ( dNormLevel > 0 )
     {
-        return 20.0 * log10 ( dNormMicLevel );
+        dLevelForMeterdB = 20.0 * log10 ( dNormLevel );
     }
-    else
+
+    // map to signal level meter (linear transformation of the input
+    // level range to the level meter range)
+    dLevelForMeterdB -= LOW_BOUND_SIG_METER;
+    dLevelForMeterdB *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+
+    if ( dLevelForMeterdB < 0 )
     {
-        return -100000.0; // large negative value
+        dLevelForMeterdB = 0;
     }
+
+    return dLevelForMeterdB;
 }
 
 
@@ -115,12 +141,12 @@ void CCRC::AddByte ( const uint8_t byNewInput )
 {
     for ( int i = 0; i < 8; i++ )
     {
-        // shift bits in shift-register for transistion
+        // shift bits in shift-register for transition
         iStateShiftReg <<= 1;
 
         // take bit, which was shifted out of the register-size and place it
         // at the beginning (LSB)
-        // (If condition is not satisfied, implicitely a "0" is added)
+        // (If condition is not satisfied, implicitly a "0" is added)
         if ( ( iStateShiftReg & iBitOutMask) > 0 )
         {
             iStateShiftReg |= 1;
@@ -165,20 +191,24 @@ uint32_t CCRC::GetCRC()
     three series allpass units, followed by four parallel comb filters, and two
     decorrelation delay lines in parallel at the output.
 */
-void CAudioReverb::Init ( const int    iSampleRate,
-                          const double rT60 )
+void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
+                          const int          iNStereoBlockSizeSam,
+                          const int          iSampleRate,
+                          const float        fT60 )
 {
-    int delay, i;
+    // store parameters
+    eAudioChannelConf   = eNAudioChannelConf;
+    iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
     // delay lengths for 44100 Hz sample rate
-    int lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const double scaler = static_cast<double> ( iSampleRate ) / 44100.0;
+    int         lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
+    const float scaler     = static_cast<float> ( iSampleRate ) / 44100.0f;
 
-    if ( scaler != 1.0 )
+    if ( scaler != 1.0f )
     {
-        for ( i = 0; i < 9; i++ )
+        for ( int i = 0; i < 9; i++ )
         {
-            delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
+            int delay = static_cast<int> ( floorf ( scaler * lengths[i] ) );
 
             if ( ( delay & 1 ) == 0 )
             {
@@ -194,21 +224,21 @@ void CAudioReverb::Init ( const int    iSampleRate,
         }
     }
 
-    for ( i = 0; i < 3; i++ )
+    for ( int i = 0; i < 3; i++ )
     {
         allpassDelays[i].Init ( lengths[i + 4] );
     }
 
-    for ( i = 0; i < 4; i++ )
+    for ( int i = 0; i < 4; i++ )
     {
         combDelays[i].Init ( lengths[i] );
-        combFilters[i].setPole ( 0.2 );
+        combFilters[i].setPole ( 0.2f );
     }
 
-    setT60 ( rT60, iSampleRate );
+    setT60 ( fT60, iSampleRate );
     outLeftDelay.Init ( lengths[7] );
     outRightDelay.Init ( lengths[8] );
-    allpassCoefficient = 0.7;
+    allpassCoefficient = 0.7f;
     Clear();
 }
 
@@ -225,7 +255,7 @@ bool CAudioReverb::isPrime ( const int number )
 
     if ( number & 1 )
     {
-        for ( int i = 3; i < static_cast<int> ( sqrt ( static_cast<double> ( number ) ) ) + 1; i += 2 )
+        for ( int i = 3; i < static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1; i += 2 )
         {
             if ( ( number % i ) == 0 )
             {
@@ -259,84 +289,107 @@ void CAudioReverb::Clear()
     outLeftDelay.Reset ( 0 );
 }
 
-void CAudioReverb::setT60 ( const double rT60,
-                            const int    iSampleRate )
+void CAudioReverb::setT60 ( const float fT60,
+                            const int   iSampleRate )
 {
     // set the reverberation T60 decay time
     for ( int i = 0; i < 4; i++ )
     {
-        combCoefficient[i] = pow ( 10.0, static_cast<double> ( -3.0 *
-            combDelays[i].Size() / ( rT60 * iSampleRate ) ) );
+        combCoefficient[i] = powf ( 10.0f, static_cast<float> ( -3.0f *
+            combDelays[i].Size() / ( fT60 * iSampleRate ) ) );
     }
 }
 
-void CAudioReverb::COnePole::setPole ( const double dPole )
+void CAudioReverb::COnePole::setPole ( const float fPole )
 {
     // calculate IIR filter coefficients based on the pole value
-    dA = -dPole;
-    dB = 1.0 - dPole;
+    fA = -fPole;
+    fB = 1.0f - fPole;
 }
 
-double CAudioReverb::COnePole::Calc ( const double dIn )
+float CAudioReverb::COnePole::Calc ( const float fIn )
 {
     // calculate IIR filter
-    dLastSample = dB * dIn - dA * dLastSample;
+    fLastSample = fB * fIn - fA * fLastSample;
 
-    return dLastSample;
+    return fLastSample;
 }
 
-void CAudioReverb::ProcessSample ( int16_t&     iInputOutputLeft,
-                                   int16_t&     iInputOutputRight,
-                                   const double dAttenuation )
+void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
+                             const bool        bReverbOnLeftChan,
+                             const float       fAttenuation )
 {
-    // compute one output sample
-    double temp, temp0, temp1, temp2;
+    float fMixedInput, temp, temp0, temp1, temp2;
 
-    // we sum up the stereo input channels (in case mono input is used, a zero
-    // shall be input for the right channel)
-    const double dMixedInput = 0.5 * ( iInputOutputLeft + iInputOutputRight );
+    for ( int i = 0; i < iStereoBlockSizeSam; i += 2 )
+    {
+        // we sum up the stereo input channels (in case mono input is used, a zero
+        // shall be input for the right channel)
+        if ( eAudioChannelConf == CC_STEREO )
+        {
+            fMixedInput = 0.5f * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
+        }
+        else
+        {
+            if ( bReverbOnLeftChan )
+            {
+                fMixedInput = vecsStereoInOut[i];
+            }
+            else
+            {
+                fMixedInput = vecsStereoInOut[i + 1];
+            }
+        }
 
-    temp = allpassDelays[0].Get();
-    temp0 = allpassCoefficient * temp;
-    temp0 += dMixedInput;
-    allpassDelays[0].Add ( temp0 );
-    temp0 = - ( allpassCoefficient * temp0 ) + temp;
+        temp   = allpassDelays[0].Get();
+        temp0  = allpassCoefficient * temp;
+        temp0 += fMixedInput;
+        allpassDelays[0].Add ( temp0 );
+        temp0 = - ( allpassCoefficient * temp0 ) + temp;
 
-    temp = allpassDelays[1].Get();
-    temp1 = allpassCoefficient * temp;
-    temp1 += temp0;
-    allpassDelays[1].Add ( temp1 );
-    temp1 = - ( allpassCoefficient * temp1 ) + temp;
+        temp   = allpassDelays[1].Get();
+        temp1  = allpassCoefficient * temp;
+        temp1 += temp0;
+        allpassDelays[1].Add ( temp1 );
+        temp1 = - ( allpassCoefficient * temp1 ) + temp;
 
-    temp = allpassDelays[2].Get();
-    temp2 = allpassCoefficient * temp;
-    temp2 += temp1;
-    allpassDelays[2].Add ( temp2 );
-    temp2 = - ( allpassCoefficient * temp2 ) + temp;
+        temp   = allpassDelays[2].Get();
+        temp2  = allpassCoefficient * temp;
+        temp2 += temp1;
+        allpassDelays[2].Add ( temp2 );
+        temp2 = - ( allpassCoefficient * temp2 ) + temp;
 
-    const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
-    const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
-    const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
-    const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
+        const float temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
+        const float temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
+        const float temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
+        const float temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
 
-    combDelays[0].Add ( temp3 );
-    combDelays[1].Add ( temp4 );
-    combDelays[2].Add ( temp5 );
-    combDelays[3].Add ( temp6 );
+        combDelays[0].Add ( temp3 );
+        combDelays[1].Add ( temp4 );
+        combDelays[2].Add ( temp5 );
+        combDelays[3].Add ( temp6 );
 
-    const double filtout = temp3 + temp4 + temp5 + temp6;
+        const float filtout = temp3 + temp4 + temp5 + temp6;
 
-    outLeftDelay.Add ( filtout );
-    outRightDelay.Add ( filtout );
+        outLeftDelay.Add  ( filtout );
+        outRightDelay.Add ( filtout );
 
-    // inplace apply the attenuated reverb signal
-    iInputOutputLeft  = Double2Short (
-        ( 1.0 - dAttenuation ) * iInputOutputLeft +
-        0.5 * dAttenuation * outLeftDelay.Get() );
+        // inplace apply the attenuated reverb signal (for stereo always apply
+        // reverberation effect on both channels)
+        if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
+        {
+            vecsStereoInOut[i] = Float2Short (
+                ( 1.0f - fAttenuation ) * vecsStereoInOut[i] +
+                0.5f * fAttenuation * outLeftDelay.Get() );
+        }
 
-    iInputOutputRight = Double2Short (
-        ( 1.0 - dAttenuation ) * iInputOutputRight +
-        0.5 * dAttenuation * outRightDelay.Get() );
+        if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
+        {
+            vecsStereoInOut[i + 1] = Float2Short (
+                ( 1.0f - fAttenuation ) * vecsStereoInOut[i + 1] +
+                0.5f * fAttenuation * outRightDelay.Get() );
+        }
+    }
 }
 
 
@@ -344,18 +397,17 @@ void CAudioReverb::ProcessSample ( int16_t&     iInputOutputLeft,
 * GUI Utilities                                                                *
 \******************************************************************************/
 // About dialog ----------------------------------------------------------------
+#ifndef HEADLESS
 CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 {
     setupUi ( this );
 
     // general description of software
     txvAbout->setText (
-        "<p>" + tr ( "The " ) + APP_NAME +
-        tr ( " software enables musicians to perform real-time jam sessions "
-        "over the internet." ) + "<br>" + tr ( "There is a " ) + APP_NAME + tr ( " "
-        "server which collects the audio data from each " ) +
-        APP_NAME + tr ( " client, mixes the audio data and sends the mix back "
-        "to each client." ) + "</p>"
+        "<p>" + tr ( "This app enables musicians to perform real-time jam sessions "
+        "over the internet." ) + "<br>" + tr ( "There is a server which collects "
+        " the audio data from each client, mixes the audio data and sends the mix "
+        " back to each client." ) + "</p>"
         "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "
@@ -371,8 +423,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "</font></p>" );
 
     // libraries used by this compilation
-    txvLibraries->setText ( APP_NAME +
-        tr ( " uses the following libraries, resources or code snippets:" ) +
+    txvLibraries->setText (
+        tr ( "This app uses the following libraries, resources or code snippets:" ) +
         "<br><p>" + tr ( "Qt cross-platform application framework" ) +
         ", <i><a href=""http://www.qt.io"">http://www.qt.io</a></i></p>"
         "<p>Opus Interactive Audio Codec"
@@ -382,7 +434,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "The Synthesis ToolKit in C++ (STK)</a></i></p>"
         "<p>" + tr ( "Some pixmaps are from the" ) + " Open Clip Art Library (OCAL), "
         "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></p>"
-        "<p>" + tr ( "Country flag icons from Mark James" ) +
+        "<p>" + tr ( "Country flag icons by Mark James" ) +
         ", <i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></p>" );
 
     // contributors list
@@ -390,17 +442,39 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
         "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
         "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
+        "<p>Martin Schilde (<a href=""https://github.com/geheimerEichkater"">geheimerEichkater</a>)</p>"
         "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
         "<p>Marc jr. Landolt (<a href=""https://github.com/braindef"">braindef</a>)</p>"
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
         "<p>Tarmo Johannes (<a href=""https://github.com/tarmoj"">tarmoj</a>)</p>"
         "<p>mirabilos (<a href=""https://github.com/mirabilos"">mirabilos</a>)</p>"
+        "<p>Hector Martin (<a href=""https://github.com/marcan"">marcan</a>)</p>"
         "<p>newlaurent62 (<a href=""https://github.com/newlaurent62"">newlaurent62</a>)</p>"
+        "<p>AronVietti (<a href=""https://github.com/AronVietti"">AronVietti</a>)</p>"
         "<p>Emlyn Bolton (<a href=""https://github.com/emlynmac"">emlynmac</a>)</p>"
         "<p>Jos van den Oever (<a href=""https://github.com/vandenoever"">vandenoever</a>)</p>"
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
+        "<p>Alberstein8 (<a href=""https://github.com/Alberstein8"">Alberstein8</a>)</p>"
+        "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
+        "<p>Tony Mountifield (<a href=""https://github.com/softins"">softins</a>)</p>"
+        "<p>HPS (<a href=""https://github.com/hselasky"">hselasky</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
+        "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
+        "<p>Jakob Jarmar (<a href=""https://github.com/jarmar"">jarmar</a>)</p>"
+        "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
+        "<p>Nils Brederlow (<a href=""https://github.com/dingodoppelt"">dingodoppelt</a>)</p>"
+        "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
+        "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
+        "<p>Kris Raney (<a href=""https://github.com/kraney"">kraney</a>)</p>"
+        "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
+        "<p>ann0see (<a href=""https://github.com/ann0see"">ann0see</a>)</p>"
+        "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
+        "<p>Julian Santander (<a href=""https://github.com/j-santander"">j-santander</a>)</p>"
+        "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
+        "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
+        "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
+        "<p>bspeer (<a href=""https://github.com/bspeer"">bspeer</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
 
@@ -412,54 +486,26 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
         "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
         "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
+        "<p>Melcon Moraes (<a href=""https://github.com/melcon"">melcon</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
         "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
         "<p>Giuseppe Sapienza (<a href=""https://github.com/dzpex"">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"
-        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
+        "<p><b>" + tr ( "Polish" ) + "</b></p>"
+        "<p>Martyna Danysz (<a href=""https://github.com/Martyna27"">Martyna27</a>)</p>"
+        "<p>Tomasz Bojczuk (<a href=""https://github.com/SeeLook"">SeeLook</a>)</p>"
+        "<p><b>" + tr ( "Swedish" ) + "</b></p>"
+        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>"
+        "<p><b>" + tr ( "Slovak" ) + "</b></p>"
+        "<p>Jose Riha (<a href=""https://github.com/jose1711"">jose1711</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
 
     // set window title
     setWindowTitle ( tr ( "About " ) + APP_NAME );
-}
-
-QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
-{
-    QString strVersionText = "";
-
-    // name, short description and GPL hint
-    if ( bWithHtml )
-    {
-        strVersionText += "<b>";
-    }
-    else
-    {
-        strVersionText += " *** ";
-    }
-
-    strVersionText += APP_NAME + tr ( ", Version " ) + VERSION;
-
-    if ( bWithHtml )
-    {
-        strVersionText += "</b><br>";
-    }
-    else
-    {
-        strVersionText += "\n *** ";
-    }
-
-    if ( !bWithHtml )
-    {
-        strVersionText += tr ( "Internet Jam Session Software" );
-        strVersionText += "\n *** ";
-    }
-
-    strVersionText += tr ( "Under the GNU General Public License (GPL)" );
-
-    return strVersionText;
 }
 
 
@@ -474,12 +520,11 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     - Decline button
 */
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
-    resize ( 700, 450 );
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
-    QTextBrowser* txvLicence = new QTextBrowser ( this );
-    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I &agree to the above licence terms" ), this );
+    QLabel*       lblLicence = new QLabel ( tr ( "This server requires you accept conditions before you can join. Please read these in the chat window." ), this );
+    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I have read the conditions and &agree." ), this );
     butAccept                = new QPushButton ( tr ( "Accept" ), this );
     QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
 
@@ -487,57 +532,21 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     pSubLayout->addWidget ( chbAgree );
     pSubLayout->addWidget ( butAccept );
     pSubLayout->addWidget ( butDecline );
-    pLayout->addWidget    ( txvLicence );
+    pLayout->addWidget    ( lblLicence );
     pLayout->addLayout    ( pSubLayout );
 
     // set some properties
     butAccept->setEnabled ( false );
     butAccept->setDefault ( true );
-    txvLicence->setOpenExternalLinks ( true );
 
-    // define the licence text (similar to what we have in Ninjam)
-    txvLicence->setText (
-        "<p><big>" + tr (
-        "By connecting to this server and agreeing to this notice, you agree to the "
-        "following:" ) + "</big></p><p><big>" + tr (
-        "You agree that all data, sounds, or other works transmitted to this server "
-        "are owned and created by you or your licensors, and that you are making these "
-        "data, sounds or other works available via the following Creative Commons "
-        "License (for more information on this license, see " ) +
-        "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
-        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):</big></p>"
-        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>"
-        "<p>" + tr ( "You are free to:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Share" ) + "</b> - " +
-        tr ( "copy and redistribute the material in any medium or format" ) + "</li>"
-        "<li><b>" + tr ( "Adapt" ) + "</b> - " +
-        tr ( "remix, transform, and build upon the material" ) + "</li>"
-        "</ul>" + tr ( "The licensor cannot revoke these freedoms as long as you follow the "
-        "license terms." ) + "</p>"
-        "<p>" + tr ( "Under the following terms:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Attribution" ) + "</b> - " +
-        tr ( "You must give appropriate credit, provide a link to the license, and indicate "
-        "if changes were made. You may do so in any reasonable manner, but not in any way "
-        "that suggests the licensor endorses you or your use." ) + "</li>"
-        "<li><b>" + tr ( "NonCommercial" ) + "</b> - " +
-        tr ( "You may not use the material for commercial purposes." ) + "</li>"
-        "<li><b>" + tr ( "ShareAlike" ) + "</b> - " +
-        tr ( "If you remix, transform, or build upon the material, you must distribute your "
-        "contributions under the same license as the original." ) + "</li>"
-        "</ul><b>" + tr ( "No additional restrictions" ) + "</b> — " +
-        tr ( "You may not apply legal terms or technological measures that legally restrict "
-        "others from doing anything the license permits." ) + "</p>" );
+    QObject::connect ( chbAgree, &QCheckBox::stateChanged,
+        this, &CLicenceDlg::OnAgreeStateChanged );
 
-    QObject::connect ( chbAgree, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnAgreeStateChanged ( int ) ) );
+    QObject::connect ( butAccept, &QPushButton::clicked,
+        this, &CLicenceDlg::accept );
 
-    QObject::connect ( butAccept, SIGNAL ( clicked() ),
-        this, SLOT ( accept() ) );
-
-    QObject::connect ( butDecline, SIGNAL ( clicked() ),
-        this, SLOT ( reject() ) );
+    QObject::connect ( butDecline, &QPushButton::clicked,
+        this, &CLicenceDlg::reject );
 }
 
 
@@ -704,16 +713,15 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
     // Add help text to controls -----------------------------------------------
     // fader tag
-    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " + tr (
-        "Set your name or an alias here so that the other musicians you want to play with "
-        "know who you are. Additionally you may set an instrument picture of "
-        "the instrument you play and a flag of the country you are living in. "
-        "The city you live in and the skill level playing your instrument "
-        "may also be added." ) + "<br>" + tr (
-        "What you set here will appear at your fader on the mixer board when "
-        "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
-        "also show up at each client which is connected to the same server as "
-        "you. If the name is left empty, the IP address is shown instead." );
+    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
+         tr ( "Write your name or an alias here so the other musicians you want to "
+        "play with know who you are. You may also add a picture of the instrument "
+        "you play and a flag of the country you are located in. "
+        "Your city and skill level playing your instrument may also be added." ) +
+        "<br>" + tr ( "What you set here will appear at your fader on the mixer "
+        "board when you are connected to a Jamulus server. This tag will "
+        "also be shown at each client which is connected to the same server as "
+        "you." );
 
     pedtAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
@@ -728,23 +736,23 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( pedtAlias, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnAliasTextChanged ( const QString& ) ) );
+    QObject::connect ( pedtAlias, &QLineEdit::textChanged,
+        this, &CMusProfDlg::OnAliasTextChanged );
 
-    QObject::connect ( pcbxInstrument, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnInstrumentActivated ( int ) ) );
+    QObject::connect ( pcbxInstrument, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CMusProfDlg::OnInstrumentActivated );
 
-    QObject::connect ( pcbxCountry, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnCountryActivated ( int ) ) );
+    QObject::connect ( pcbxCountry, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CMusProfDlg::OnCountryActivated );
 
-    QObject::connect ( pedtCity, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnCityTextChanged ( const QString& ) ) );
+    QObject::connect ( pedtCity, &QLineEdit::textChanged,
+        this, &CMusProfDlg::OnCityTextChanged );
 
-    QObject::connect ( pcbxSkill, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSkillActivated ( int ) ) );
+    QObject::connect ( pcbxSkill, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CMusProfDlg::OnSkillActivated );
 
-    QObject::connect ( butClose, SIGNAL ( clicked() ),
-        this, SLOT ( accept() ) );
+    QObject::connect ( butClose, &QPushButton::clicked,
+        this, &CMusProfDlg::accept );
 }
 
 void CMusProfDlg::showEvent ( QShowEvent* )
@@ -785,7 +793,7 @@ void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
     }
 }
@@ -823,7 +831,7 @@ void CMusProfDlg::OnCityTextChanged ( const QString& strNewCity )
     }
     else
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
     }
 }
@@ -857,6 +865,72 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
+
+
+// Language combo box ----------------------------------------------------------
+CLanguageComboBox::CLanguageComboBox ( QWidget* parent ) :
+    QComboBox            ( parent ),
+    iIdxSelectedLanguage ( INVALID_INDEX )
+{
+    QObject::connect ( this, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CLanguageComboBox::OnLanguageActivated );
+}
+
+void CLanguageComboBox::Init ( QString& strSelLanguage )
+{
+    // load available translations
+    const QMap<QString, QString>   TranslMap = CLocale::GetAvailableTranslations();
+    QMapIterator<QString, QString> MapIter ( TranslMap );
+
+    // add translations to the combobox list
+    clear();
+    int iCnt                  = 0;
+    int iIdxOfEnglishLanguage = 0;
+    iIdxSelectedLanguage      = INVALID_INDEX;
+
+    while ( MapIter.hasNext() )
+    {
+        MapIter.next();
+        addItem ( QLocale ( MapIter.key() ).nativeLanguageName() + " (" + MapIter.key() + ")", MapIter.key() );
+
+        // store the combo box index of the default english language
+        if ( MapIter.key().compare ( "en" ) == 0 )
+        {
+            iIdxOfEnglishLanguage = iCnt;
+        }
+
+        // if the selected language is found, store the combo box index
+        if ( MapIter.key().compare ( strSelLanguage ) == 0 )
+        {
+            iIdxSelectedLanguage = iCnt;
+        }
+
+        iCnt++;
+    }
+
+    // if the selected language was not found, use the english language
+    if ( iIdxSelectedLanguage == INVALID_INDEX )
+    {
+        strSelLanguage       = "en";
+        iIdxSelectedLanguage = iIdxOfEnglishLanguage;
+    }
+
+    setCurrentIndex ( iIdxSelectedLanguage );
+}
+
+void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
+{
+    // only update if the language selection is different from the current selected language
+    if ( iIdxSelectedLanguage != iLanguageIdx )
+    {
+        QMessageBox::information ( this,
+                                   tr ( "Restart Required" ),
+                                   tr ( "Please restart the application for the language change to take effect." ) );
+
+        emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
+    }
+}
+#endif
 
 
 /******************************************************************************\
@@ -905,22 +979,32 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( !InetAddr.setAddress ( strAddress ) )
     {
-        // it was no vaild IP address, try to get host by name, assuming
+        // it was no valid IP address, try to get host by name, assuming
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 
-        if ( HostInfo.error() == QHostInfo::NoError )
-        {
-            // apply IP address to QT object
-             if ( !HostInfo.addresses().isEmpty() )
-             {
-                 // use the first IP address
-                 InetAddr = HostInfo.addresses().first();
-             }
-        }
-        else
+        if ( HostInfo.error() != QHostInfo::NoError )
         {
             return false; // invalid address
+        }
+
+        // use the first IPv4 address, if any
+        bool bFoundIPv4 = false;
+
+        foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
+        {
+            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+               InetAddr   = HostAddr;
+               bFoundIPv4 = true;
+               break;
+            }
+        }
+
+        if ( !bFoundIPv4 )
+        {
+            // only found IPv6 addresses
+            return false;
         }
     }
 
@@ -962,20 +1046,27 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
     }
 }
 
+QString NetworkUtil::FixAddress ( const QString& strAddress )
+{
+    // remove all spaces from the address string
+    return strAddress.simplified().replace ( " ", "" );
+}
+
 
 // Instrument picture data base ------------------------------------------------
-CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
+CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
 {
     // make sure we generate the table only once
     static bool TableIsInitialized = false;
 
     static CVector<CInstPictProps> vecDataBase;
 
-    if ( !TableIsInitialized )
+    if ( !TableIsInitialized || bReGenerateTable )
     {
         // instrument picture data base initialization
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
+        vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "None" ), ":/png/instr/res/instruments/none.png", IC_OTHER_INSTRUMENT ) ); // special first element
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Drum Set" ), ":/png/instr/res/instruments/drumset.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Djembe" ), ":/png/instr/res/instruments/djembe.png", IC_PERCUSSION_INSTRUMENT ) );
@@ -1017,6 +1108,13 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Soprano" ), ":/png/instr/res/instruments/vocalsoprano.png", IC_OTHER_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Banjo" ), ":/png/instr/res/instruments/banjo.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mandolin" ), ":/png/instr/res/instruments/mandolin.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Ukulele" ), ":/png/instr/res/instruments/ukulele.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Ukulele" ), ":/png/instr/res/instruments/bassukulele.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mountain Dulcimer" ), ":/png/instr/res/instruments/mountaindulcimer.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Scratching" ), ":/png/instr/res/instruments/scratching.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Rapping" ), ":/png/instr/res/instruments/rapping.png", IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;
@@ -1086,13 +1184,11 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
     else
     {
-
 // NOTE: The following code was introduced to support old QT versions. The problem
 //       is that the number of countries displayed is less than the one displayed
 //       with the new code below (which is disabled). Therefore, as soon as the
 //       compatibility to the very old versions of QT is not required anymore, use
 //       the new code.
-
 // COMPATIBLE FOR OLD QT VERSIONS -> use a table:
         QString strISO3166 = "";
         switch ( static_cast<int> ( eCountry ) )
@@ -1288,7 +1384,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             strReturn = "";
         }
 
-
 // AT LEAST QT 4.8 IS REQUIRED:
 /*
         // There is no direct query of the country code in Qt, therefore we use a
@@ -1306,8 +1401,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             // the second split contains the name we need
             if ( vstrLocParts.size() > 1 )
             {
-                strReturn =
-                    ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+                strReturn = ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
 
                 // check if file actually exists, if not then invalidate reference
                 if ( !QFile::exists ( strReturn ) )
@@ -1330,20 +1424,79 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     return strReturn;
 }
 
-ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountry )
+QMap<QString, QString> CLocale::GetAvailableTranslations()
 {
-// TODO this is the initial implementation and should be extended in the future,
-//      maybe there is/will be some function in Qt to get the continent
-    switch ( eCountry )
-    {
-    case QLocale::UnitedStates:
-    case QLocale::Canada:
-    case QLocale::Mexico:
-    case QLocale::Greenland:
-        return AT_ALL_GENRES;
+    QMap<QString, QString> TranslMap;
+    QDirIterator           DirIter ( ":/translations" );
 
-    default:
-        return AT_DEFAULT;
+    // add english language (default which is in the actual source code)
+    TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language
+
+    while ( DirIter.hasNext() )
+    {
+        // get alias of translation file
+        const QString strCurFileName = DirIter.next();
+
+        // extract only language code (must be at the end, separated with a "_")
+        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
+
+        TranslMap[strLoc] = strCurFileName;
+    }
+
+    return TranslMap;
+}
+
+QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap )
+{
+    QPair<QString, QString> PairSysLang ( "", "" );
+    QStringList             slUiLang = QLocale().uiLanguages();
+
+    if ( !slUiLang.isEmpty() )
+    {
+        QString strUiLang = QLocale().uiLanguages().at ( 0 );
+        strUiLang.replace ( "-", "_" );
+
+        // first try to find the complete language string
+        if ( TranslMap.constFind ( strUiLang ) != TranslMap.constEnd() )
+        {
+            PairSysLang.first  = strUiLang;
+            PairSysLang.second = TranslMap[PairSysLang.first];
+        }
+        else
+        {
+            // only extract two first characters to identify language (ignoring
+            // location for getting a simpler implementation -> if the language
+            // is not correct, the user can change it in the GUI anyway)
+            if ( strUiLang.length() >= 2 )
+            {
+                PairSysLang.first  = strUiLang.left ( 2 );
+                PairSysLang.second = TranslMap[PairSysLang.first];
+            }
+        }
+    }
+
+    return PairSysLang;
+}
+
+void CLocale::LoadTranslation ( const QString     strLanguage,
+                                QCoreApplication* pApp )
+{
+    // The translator objects must be static!
+    static QTranslator myappTranslator;
+    static QTranslator myqtTranslator;
+
+    QMap<QString, QString> TranslMap              = CLocale::GetAvailableTranslations();
+    const QString          strTranslationFileName = TranslMap[strLanguage];
+
+    if ( myappTranslator.load ( strTranslationFileName ) )
+    {
+        pApp->installTranslator ( &myappTranslator );
+    }
+
+    // allows the Qt messages to be translated in the application
+    if ( myqtTranslator.load ( QLocale ( strLanguage ), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
+    {
+        pApp->installTranslator ( &myqtTranslator );
     }
 }
 
@@ -1376,25 +1529,38 @@ QTextStream* ConsoleWriterFactory::get()
 /******************************************************************************\
 * Global Functions Implementation                                              *
 \******************************************************************************/
-void DebugError ( const QString& pchErDescr,
-                  const QString& pchPar1Descr, 
-                  const double   dPar1,
-                  const QString& pchPar2Descr,
-                  const double   dPar2 )
+QString GetVersionAndNameStr ( const bool bWithHtml )
 {
-    QFile File ( "DebugError.dat" );
-    if ( File.open ( QIODevice::Append ) )
-    {
-        // append new line in logging file
-        QTextStream out ( &File );
-        out << pchErDescr << " ### " <<
-            pchPar1Descr << ": " << QString().setNum ( dPar1, 'f', 2 ) <<
-            " ### " <<
-            pchPar2Descr << ": " << QString().setNum ( dPar2, 'f', 2 ) <<
-            endl;
+    QString strVersionText = "";
 
-        File.close();
+    // name, short description and GPL hint
+    if ( bWithHtml )
+    {
+        strVersionText += "<b>";
     }
-    printf ( "\nDebug error! For more information see test/DebugError.dat\n" );
-    exit ( 1 );
+    else
+    {
+        strVersionText += " *** ";
+    }
+
+    strVersionText += APP_NAME + QCoreApplication::tr ( ", Version " ) + VERSION;
+
+    if ( bWithHtml )
+    {
+        strVersionText += "</b><br>";
+    }
+    else
+    {
+        strVersionText += "\n *** ";
+    }
+
+    if ( !bWithHtml )
+    {
+        strVersionText += QCoreApplication::tr ( "Internet Jam Session Software" );
+        strVersionText += "\n *** ";
+    }
+
+    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License (GPL)" );
+
+    return strVersionText;
 }

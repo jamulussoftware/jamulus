@@ -1,4 +1,4 @@
-VERSION = 3.5.6git
+VERSION = 3.6.2git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -10,16 +10,27 @@ CONFIG += qt \
     thread \
     release
 
-QT += widgets \
-    network \
-    xml
+QT += network \
+    xml \
+    concurrent
+
+contains(CONFIG, "headless") {
+    message(Headless mode activated.)
+    QT -= gui
+} else {
+    QT += widgets
+}
 
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
+    src/res/translation/translation_pt_BR.ts \
     src/res/translation/translation_es_ES.ts \
     src/res/translation/translation_nl_NL.ts \
-    src/res/translation/translation_it_IT.ts
+    src/res/translation/translation_pl_PL.ts \
+    src/res/translation/translation_sk_SK.ts \
+    src/res/translation/translation_it_IT.ts \
+    src/res/translation/translation_sv_SE.ts
 
 INCLUDEPATH += src
 
@@ -86,12 +97,18 @@ win32 {
 
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
+        MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+        RC_FILE = mac/jamulus-server-icon-2020.icns
+    } else {
+        MACOSX_BUNDLE_ICON_FILE = mainicon.icns
+        RC_FILE = mac/mainicon.icns
     }
 
     QT += macextras
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
-    RC_FILE = mac/mainicon.icns
+    HEADERS += mac/activity.h
+    OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
@@ -107,7 +124,8 @@ win32 {
         -framework CoreAudio \
         -framework CoreMIDI \
         -framework AudioToolbox \
-        -framework AudioUnit
+        -framework AudioUnit \
+        -framework Foundation
 
     # replace coreaudio with jack if requested
     contains(CONFIG, "jackonmac") {
@@ -140,7 +158,9 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
-    HEADERS += android/sound.h
+    HEADERS += android/sound.h \
+        android/ring_buffer.h
+
     SOURCES += android/sound.cpp \
         android/androiddebug.cpp
 
@@ -172,10 +192,12 @@ win32 {
         libs/oboe/src/fifo/FifoController.cpp \
         libs/oboe/src/fifo/FifoControllerBase.cpp \
         libs/oboe/src/fifo/FifoControllerIndirect.cpp \
+        libs/oboe/src/flowgraph/ChannelCountConverter.cpp \
         libs/oboe/src/flowgraph/ClipToRange.cpp \
         libs/oboe/src/flowgraph/FlowGraphNode.cpp \
         libs/oboe/src/flowgraph/ManyToMultiConverter.cpp \
         libs/oboe/src/flowgraph/MonoToMultiConverter.cpp \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.cpp \
         libs/oboe/src/flowgraph/RampLinear.cpp \
         libs/oboe/src/flowgraph/SampleRateConverter.cpp \
         libs/oboe/src/flowgraph/SinkFloat.cpp \
@@ -219,10 +241,12 @@ win32 {
         libs/oboe/src/fifo/FifoController.h \
         libs/oboe/src/fifo/FifoControllerBase.h \
         libs/oboe/src/fifo/FifoControllerIndirect.h \
+        libs/oboe/src/flowgraph/ChannelCountConverter.h \
         libs/oboe/src/flowgraph/ClipToRange.h \
         libs/oboe/src/flowgraph/FlowGraphNode.h \
         libs/oboe/src/flowgraph/ManyToMultiConverter.h \
         libs/oboe/src/flowgraph/MonoToMultiConverter.h \
+        libs/oboe/src/flowgraph/MultiToMonoConverter.h \
         libs/oboe/src/flowgraph/RampLinear.h \
         libs/oboe/src/flowgraph/SampleRateConverter.h \
         libs/oboe/src/flowgraph/SinkFloat.h \
@@ -264,6 +288,9 @@ win32 {
     # we want to compile with C++11
     CONFIG += c++11
 
+    HEADERS += linux/sound.h
+    SOURCES += linux/sound.cpp
+
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though
     DEFINES += HAVE_LRINTF
@@ -272,8 +299,7 @@ win32 {
     DEFINES += HAVE_STDINT_H
 
     # only include jack support if CONFIG nosound is not set
-    nosoundoption = $$find(CONFIG, "nosound")
-    count(nosoundoption, 0) {
+    !contains(CONFIG, "nosound") {
         message(Jack Audio Interface Enabled.)
 
         contains(CONFIG, "raspijamulus") {
@@ -284,45 +310,58 @@ win32 {
             PKGCONFIG += jack
         }
 
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
         DEFINES += WITH_SOUND
     }
 
     isEmpty(PREFIX) {
         PREFIX = /usr/local
     }
+
     isEmpty(BINDIR) {
         BINDIR = bin
     }
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
-    INSTALLS += target
     target.path = $$BINDIR
+
+    contains(CONFIG, "headless") {
+        INSTALLS += target
+    } else {
+        isEmpty(APPSDIR) {
+            APPSDIR = share/applications
+        }
+        APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
+        desktop.path = $$APPSDIR
+        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
+        desktop.files = distributions/jamulus.desktop
+
+        isEmpty(ICONSDIR) {
+            ICONSDIR = share/icons/hicolor/512x512/apps
+        }
+        ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
+        icons.path = $$ICONSDIR
+        icons.files = distributions/jamulus.png
+
+        INSTALLS += target desktop icons
+    }
 }
 
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS += src/clientdlgbase.ui \
+FORMS_GUI = src/clientdlgbase.ui \
     src/serverdlgbase.ui \
     src/clientsettingsdlgbase.ui \
     src/chatdlgbase.ui \
     src/connectdlgbase.ui \
     src/aboutdlgbase.ui
 
-HEADERS += src/audiomixerboard.h \
-    src/buffer.h \
+HEADERS += src/buffer.h \
     src/channel.h \
-    src/chatdlg.h \
     src/client.h \
-    src/clientsettingsdlg.h \
-    src/connectdlg.h \
     src/global.h \
-    src/clientdlg.h \
-    src/serverdlg.h \
     src/multicolorled.h \
-    src/multicolorledbar.h \
     src/protocol.h \
+    src/recorder/jamcontroller.h \
     src/server.h \
     src/serverlist.h \
     src/serverlogging.h \
@@ -331,12 +370,19 @@ HEADERS += src/audiomixerboard.h \
     src/soundbase.h \
     src/testbench.h \
     src/util.h \
-    src/analyzerconsole.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/historygraph.h \
     src/signalhandler.h
+
+HEADERS_GUI = src/audiomixerboard.h \
+    src/chatdlg.h \
+    src/clientsettingsdlg.h \
+    src/connectdlg.h \
+    src/clientdlg.h \
+    src/serverdlg.h \
+    src/levelmeter.h \
+    src/analyzerconsole.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
@@ -409,19 +455,12 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/vq_sse.h \
     libs/opus/celt/x86/x86cpu.h
 
-SOURCES += src/audiomixerboard.cpp \
-    src/buffer.cpp \
+SOURCES += src/buffer.cpp \
     src/channel.cpp \
-    src/chatdlg.cpp \
     src/client.cpp \
-    src/clientsettingsdlg.cpp \
-    src/connectdlg.cpp \
-    src/clientdlg.cpp \
-    src/serverdlg.cpp \
     src/main.cpp \
-    src/multicolorled.cpp \
-    src/multicolorledbar.cpp \
     src/protocol.cpp \
+    src/recorder/jamcontroller.cpp \
     src/server.cpp \
     src/serverlist.cpp \
     src/serverlogging.cpp \
@@ -430,11 +469,19 @@ SOURCES += src/audiomixerboard.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \
-    src/analyzerconsole.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
-    src/recorder/cwavestream.cpp \
-    src/historygraph.cpp
+    src/recorder/cwavestream.cpp
+
+SOURCES_GUI = src/audiomixerboard.cpp \
+    src/chatdlg.cpp \
+    src/clientsettingsdlg.cpp \
+    src/connectdlg.cpp \
+    src/clientdlg.cpp \
+    src/serverdlg.cpp \
+    src/multicolorled.cpp \
+    src/levelmeter.cpp \
+    src/analyzerconsole.cpp
 
 SOURCES_OPUS = libs/opus/celt/bands.c \
     libs/opus/celt/celt.c \
@@ -600,14 +647,20 @@ android {
 
 DISTFILES += ChangeLog \
     COPYING \
-    INSTALL.md \
+    CONTRIBUTING.md \
     README.md \
+    distributions/jamulus.desktop.in \
+    distributions/jamulus.png \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \
+    src/res/translation/translation_pt_BR.qm \
     src/res/translation/translation_es_ES.qm \
     src/res/translation/translation_nl_NL.qm \
+    src/res/translation/translation_pl_PL.qm \
     src/res/translation/translation_it_IT.qm \
+    src/res/translation/translation_sv_SE.qm \
+    src/res/translation/translation_sk_SK.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -621,13 +674,16 @@ DISTFILES += ChangeLog \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/IndicatorGreen.png \
+    src/res/IndicatorYellow.png \
+    src/res/IndicatorRed.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
     src/res/HLEDGreen.png \
     src/res/HLEDGreenSmall.png \
-    src/res/HLEDGrey.png \
-    src/res/HLEDGreySmall.png \
+    src/res/HLEDBlack.png \
+    src/res/HLEDBlackSmall.png \
     src/res/HLEDRed.png \
     src/res/HLEDRedSmall.png \
     src/res/HLEDYellow.png \
@@ -635,29 +691,8 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
-    src/res/mainicon.png \
+    src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
-    src/res/VLEDBlack.png \
-    src/res/VLEDBlackSmall.png \
-    src/res/VLEDDisabledSmall.png \
-    src/res/VLEDGreen.png \
-    src/res/VLEDGreenSmall.png \
-    src/res/VLEDGrey.png \
-    src/res/VLEDGreySmall.png \
-    src/res/VLEDRed.png \
-    src/res/VLEDRedSmall.png \
-    src/res/VLEDYellow.png \
-    src/res/VLEDYellowSmall.png \
-    src/res/VRLEDBlack.png \
-    src/res/VRLEDBlackSmall.png \
-    src/res/VRLEDGreen.png \
-    src/res/VRLEDGreenSmall.png \
-    src/res/VRLEDGrey.png \
-    src/res/VRLEDGreySmall.png \
-    src/res/VRLEDRed.png \
-    src/res/VRLEDRedSmall.png \
-    src/res/VRLEDYellow.png \
-    src/res/VRLEDYellowSmall.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \
@@ -674,9 +709,12 @@ DISTFILES += ChangeLog \
     src/res/instruments/keyboard.png \
     src/res/instruments/listener.png \
     src/res/instruments/microphone.png \
+    src/res/instruments/mountaindulcimer.png \
     src/res/instruments/none.png \
+    src/res/instruments/rapping.png \
     src/res/instruments/recorder.png \
     src/res/instruments/saxophone.png \
+    src/res/instruments/scratching.png \
     src/res/instruments/streamer.png \
     src/res/instruments/synthesizer.png \
     src/res/instruments/trombone.png \
@@ -699,10 +737,16 @@ DISTFILES += ChangeLog \
     src/res/instruments/congas.png \
     src/res/instruments/bongo.svg \
     src/res/instruments/bongo.png \
+    src/res/instruments/ukulele.svg \
+    src/res/instruments/ukulele.png \
+    src/res/instruments/bassukulele.svg \
+    src/res/instruments/bassukulele.png \
     src/res/instruments/vocalbass.png \
     src/res/instruments/vocaltenor.png \
     src/res/instruments/vocalalto.png \
     src/res/instruments/vocalsoprano.png \
+    src/res/instruments/vocalbaritone.png \
+    src/res/instruments/vocallead.png \
     src/res/instruments/banjo.png \
     src/res/instruments/mandolin.png \
     src/res/flags/flagnone.png \
@@ -958,6 +1002,14 @@ DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/celt/arm/armopts.s.in \
     libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
 
+contains(CONFIG, "headless") {
+    DEFINES += HEADLESS
+} else {
+    HEADERS += $$HEADERS_GUI
+    SOURCES += $$SOURCES_GUI
+    FORMS += $$FORMS_GUI
+}
+
 # use external OPUS library if requested
 contains(CONFIG, "opus_shared_lib") {
     message(OPUS codec is used from a shared library.)
@@ -978,3 +1030,11 @@ contains(CONFIG, "opus_shared_lib") {
     SOURCES += $$SOURCES_OPUS
     DISTFILES += $$DISTFILES_OPUS
 }
+
+# disable version check if requested
+contains(CONFIG, "disable_version_check") {
+    message(The version check is disabled.)
+    DEFINES += DISABLE_VERSION_CHECK
+}
+
+ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64

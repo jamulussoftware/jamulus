@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -26,8 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
-    QDialog ( parent, f )
+CChatDlg::CChatDlg ( QWidget* parent ) :
+    QDialog ( parent, Qt::Window ) // use Qt::Window to get min/max window buttons
 {
     setupUi ( this );
 
@@ -52,17 +52,35 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
     txvChatWindow->clear();
     edtLocalInputText->clear();
 
+    // we do not want to show a cursor in the chat history
+    txvChatWindow->setCursorWidth ( 0 );
+
+    // set a placeholder text to make sure where to type the message in (#384)
+    edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+
+
+    // Menu  -------------------------------------------------------------------
+    QMenuBar* pMenu     = new QMenuBar ( this );
+    QMenu*    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
+
+    pEditMenu->addAction ( tr ( "Cl&ear Chat History" ), this,
+        SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
+
+    pMenu->addMenu ( pEditMenu );
+
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );
+
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( edtLocalInputText,
-        SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnLocalInputTextTextChanged ( const QString& ) ) );
+    QObject::connect ( edtLocalInputText, &QLineEdit::textChanged,
+        this, &CChatDlg::OnLocalInputTextTextChanged );
 
-    QObject::connect ( edtLocalInputText, SIGNAL ( returnPressed() ),
-        this, SLOT ( OnLocalInputTextReturnPressed() ) );
+    QObject::connect ( butSend, &QPushButton::clicked,
+        this, &CChatDlg::OnSendText );
 
-    QObject::connect ( butClear, SIGNAL ( pressed() ),
-        this, SLOT ( OnClearPressed() ) );
+    QObject::connect ( txvChatWindow, &QTextBrowser::anchorClicked,
+        this, &CChatDlg::OnAnchorClicked );
 }
 
 void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
@@ -70,19 +88,22 @@ void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
     // check and correct length
     if ( strNewText.length() > MAX_LEN_CHAT_TEXT )
     {
-        // text is too long, update control with shortend text
+        // text is too long, update control with shortened text
         edtLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
     }
 }
 
-void CChatDlg::OnLocalInputTextReturnPressed()
+void CChatDlg::OnSendText()
 {
-    // send new text and clear line afterwards
-    emit NewLocalInputText ( edtLocalInputText->text() );
-    edtLocalInputText->clear();
+    // send new text and clear line afterwards, do not send an empty message
+    if ( !edtLocalInputText->text().isEmpty() )
+    {
+        emit NewLocalInputText ( edtLocalInputText->text() );
+        edtLocalInputText->clear();        
+    }
 }
 
-void CChatDlg::OnClearPressed()
+void CChatDlg::OnClearChatHistory()
 {
     // clear chat window
     txvChatWindow->clear();
@@ -90,9 +111,32 @@ void CChatDlg::OnClearPressed()
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
-    // add new text in chat window
-    txvChatWindow->append ( strChatText );
-
     // notify accessibility plugin that text has changed
     QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
+
+    // analyze strChatText to check if hyperlink (limit ourselves to https://) but do not
+    // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
+    // coding hisself and we should not mess with that)
+    if ( !strChatText.contains ( QRegExp ( "href\\s*=|src\\s*=" ) ) )
+    {
+        // searches for all occurrences of https and cuts until a space (\S matches any non-white-space
+        // character and the + means that matches the previous element one or more times.)
+        strChatText.replace ( QRegExp ( "(https://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
+    }
+
+    // add new text in chat window
+    txvChatWindow->append ( strChatText );
+}
+
+void CChatDlg::OnAnchorClicked ( const QUrl& Url )
+{
+    // only allow https URLs to be opened in an external browser
+    if ( Url.scheme() == QLatin1String ( "https" ) )
+    {
+        if ( QMessageBox::question ( this, APP_NAME, tr ( "Do you want to open the link" ) + " <b>" + Url.toString() +
+                                     "</b> " + tr ( "in an external browser?" ), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
+        {
+            QDesktopServices::openUrl ( Url );
+        }
+    }
 }

@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -32,32 +32,27 @@
 #include "global.h"
 #include "util.h"
 
-#include "historygraph.h"
 
 /* Classes ********************************************************************/
 class CServerLogging
 {
 public:
-    CServerLogging ( const int iMaxDaysHistory ) :
-        JpegHistoryGraph ( iMaxDaysHistory ),
-        SvgHistoryGraph ( iMaxDaysHistory ),
+    CServerLogging() :
         bDoLogging ( false ),
         File ( DEFAULT_LOG_FILE_NAME ) {}
 
     virtual ~CServerLogging();
 
     void Start ( const QString& strLoggingFileName );
-    void EnableHistory ( const QString& strHistoryFileName );
-    void AddNewConnection ( const QHostAddress& ClientInetAddr );
     void AddServerStopped();
-    void ParseLogFile ( const QString& strFileName );
+
+    void AddNewConnection ( const QHostAddress& ClientInetAddr,
+                            const int           iNumberOfConnectedClients );
 
 protected:
     void operator<< ( const QString& sNewStr );
     QString CurTimeDatetoLogString();
 
-    CJpegHistoryGraph JpegHistoryGraph;
-    CSvgHistoryGraph  SvgHistoryGraph;
-    bool              bDoLogging;
-    QFile             File;
+    bool  bDoLogging;
+    QFile File;
 };

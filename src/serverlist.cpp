@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -28,13 +28,12 @@
 CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
                                          const QString& strServerInfo,
+                                         const QString& strServerListFilter,
                                          const int      iNumChannels,
-                                         const bool     bNCentServPingServerInList,
                                          CProtocol*     pNConLProt )
     : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
-      iNumPredefinedServers     ( 0 ),
       eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
-      bCentServPingServerInList ( bNCentServPingServerInList ),
+      strMinServerVersion       ( "" ), // disable version check with empty version
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
       iSvrRegRetries            ( 0 )
@@ -63,7 +62,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     ServerList.clear();
 
     // Init server list entry (server info for this server) with defaults. Per
-    // definition the client substitudes the IP address of the central server
+    // definition the client substitutes the IP address of the central server
     // itself for his server list. If we are the central server, we assume that
     // we have a permanent server.
     CServerListEntry ThisServerListEntry ( CHostAddress(),
@@ -91,71 +90,35 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
         if ( !slServInfoSeparateParams[2].isEmpty() && ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
         {
-            ThisServerListEntry.eCountry = static_cast<QLocale::Country> (
-                iCountry );
+            ThisServerListEntry.eCountry = static_cast<QLocale::Country> ( iCountry );
         }
     }
 
     // per definition, the first entry in the server list is the own server
     ServerList.append ( ThisServerListEntry );
 
-    // parse the predefined server infos (if any) according to definition:
-    // [server1 address];[server1 name];[server1 city]; ...
-    //    [server1 country as QLocale ID]; ...
-    //    [server2 address];[server2 name];[server2 city]; ...
-    //    [server2 country as QLocale ID]; ...
-    //    ...
-    int iCurUsedServInfoSplitItems = 3; // three items are used for this server
-
-    // we always expect four items per new server, also check for maximum
-    // allowed number of servers in the server list
-    while ( ( iServInfoNumSplitItems - iCurUsedServInfoSplitItems >= 4 ) &&
-            ( iNumPredefinedServers <= MAX_NUM_SERVERS_IN_SERVER_LIST ) )
+    // whitelist parsing
+    if ( !strServerListFilter.isEmpty() )
     {
-        // create a new server list entry, we assume that servers which are
-        // registered via the command line are permanent servers
-        CServerListEntry NewServerListEntry ( CHostAddress(),
-                                              CHostAddress(),
-                                              "",
-                                              QLocale::AnyCountry,
-                                              "",
-                                              iNumChannels,
-                                              true );
+        // split the different parameter strings
+        QStringList  slWhitelistAddresses = strServerListFilter.split ( ";" );
+        QHostAddress CurWhiteListAddress;
 
-        // [server n address]
-        NetworkUtil().ParseNetworkAddress (
-            slServInfoSeparateParams[iCurUsedServInfoSplitItems],
-            NewServerListEntry.HostAddr );
-
-        // [server n server internal address]
-        // Not included in the static server info, so use external address
-        NewServerListEntry.LHostAddr = NewServerListEntry.HostAddr;
-
-        // [server n name]
-        NewServerListEntry.strName =
-            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 1].left ( MAX_LEN_SERVER_NAME );
-
-        // [server n city]
-        NewServerListEntry.strCity =
-            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 2].left ( MAX_LEN_SERVER_CITY );
-
-        // [server n country as QLocale ID]
-        const int iCountry =
-            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 3].toInt();
-
-        if ( ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
+        for ( int iIdx = 0; iIdx < slWhitelistAddresses.size(); iIdx++ )
         {
-            NewServerListEntry.eCountry = static_cast<QLocale::Country> (
-                iCountry );
+            // check for special case: [version]
+            if ( ( slWhitelistAddresses.at ( iIdx ).length() > 2 ) &&
+                 ( slWhitelistAddresses.at ( iIdx ).left ( 1 ) == "[" ) &&
+                 ( slWhitelistAddresses.at ( iIdx ).right ( 1 ) == "]" ) )
+            {
+                strMinServerVersion = slWhitelistAddresses.at ( iIdx ).mid ( 1, slWhitelistAddresses.at ( iIdx ).length() - 2 );
+            }
+            else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
+            {
+                vWhiteList << CurWhiteListAddress;
+                tsConsoleStream << "Whitelist entry added: " << CurWhiteListAddress.toString() << endl;
+            }
         }
-
-        // add the new server to the server list
-        ServerList.append ( NewServerListEntry );
-
-        // we have used four items and have created one predefined server
-        // (adjust counters)
-        iCurUsedServInfoSplitItems += 4;
-        iNumPredefinedServers++;
     }
 
     // for slave servers start the one shot timer for determining if it is a
@@ -173,20 +136,20 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPollList() ) );
+    QObject::connect ( &TimerPollList, &QTimer::timeout,
+        this, &CServerListManager::OnTimerPollList );
 
-    QObject::connect ( &TimerPingServerInList, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPingServerInList() ) );
+    QObject::connect ( &TimerPingServerInList, &QTimer::timeout,
+        this, &CServerListManager::OnTimerPingServerInList );
 
-    QObject::connect ( &TimerPingCentralServer, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPingCentralServer() ) );
+    QObject::connect ( &TimerPingCentralServer, &QTimer::timeout,
+        this, &CServerListManager::OnTimerPingCentralServer );
 
-    QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerRegistering() ) );
+    QObject::connect ( &TimerRegistering, &QTimer::timeout,
+        this, &CServerListManager::OnTimerRegistering );
 
-    QObject::connect ( &TimerCLRegisterServerResp, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerCLRegisterServerResp() ) );
+    QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout,
+        this, &CServerListManager::OnTimerCLRegisterServerResp );
 }
 
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
@@ -230,11 +193,8 @@ void CServerListManager::Update()
             // 1 minute = 60 * 1000 ms
             TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
 
-            if ( bCentServPingServerInList )
-            {
-                // start timer for sending ping messages to servers in the list
-                TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
-            }
+            // start timer for sending ping messages to servers in the list
+            TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
         }
         else
         {
@@ -274,11 +234,7 @@ void CServerListManager::Update()
         if ( bIsCentralServer )
         {
             TimerPollList.stop();
-
-            if ( bCentServPingServerInList )
-            {
-                TimerPingServerInList.stop();
-            }
+            TimerPingServerInList.stop();
         }
         else
         {
@@ -298,8 +254,8 @@ void CServerListManager::OnTimerPingServerInList()
     const int iCurServerListSize = ServerList.size();
 
     // send ping to list entries except of the very first one (which is the central
-    // server entry) and the predefined servers
-    for ( int iIdx = 1 + iNumPredefinedServers; iIdx < iCurServerListSize; iIdx++ )
+    // server entry)
+    for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
     {
         // send empty message to keep NAT port open at slave server
         pConnLessProtocol->CreateCLEmptyMes ( ServerList[iIdx].HostAddr );
@@ -313,10 +269,10 @@ void CServerListManager::OnTimerPollList()
     QMutexLocker locker ( &Mutex );
 
     // Check all list entries except of the very first one (which is the central
-    // server entry) and the predefined servers if they are still valid.
+    // server entry) if they are still valid.
     // Note that we have to use "ServerList.size()" function in the for loop
     // since we may remove elements from the server list inside the for loop.
-    for ( int iIdx = 1 + iNumPredefinedServers; iIdx < ServerList.size(); )
+    for ( int iIdx = 1; iIdx < ServerList.size(); )
     {
         // 1 minute = 60 * 1000 ms
         if ( ServerList[iIdx].RegisterTime.elapsed() > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
@@ -342,7 +298,8 @@ void CServerListManager::OnTimerPollList()
 
 void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                                        const CHostAddress&    LInetAddr,
-                                                       const CServerCoreInfo& ServerInfo )
+                                                       const CServerCoreInfo& ServerInfo,
+                                                       const QString          strVersion )
 {
     if ( bIsCentralServer && bEnabled )
     {
@@ -350,6 +307,31 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
                         << InetAddr.toString() << " (" << LInetAddr.toString() << ")"
                         << ": " << ServerInfo.strName << endl;
 
+        // check for minimum server version
+        if ( !strMinServerVersion.isEmpty() )
+        {
+#if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) )
+            if ( strVersion.isEmpty() ||
+                 QVersionNumber::compare ( QVersionNumber::fromString ( strMinServerVersion ), QVersionNumber::fromString ( strVersion ) ) > 0 )
+            {
+                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
+                return; // leave function early, i.e., we do not register this server
+            }
+#endif
+        }
+
+        // check for whitelist (it is enabled if it is not empty per definition)
+        if ( !vWhiteList.empty() )
+        {
+            // if the server is not listed, refuse registration and send registration response
+            if ( !vWhiteList.contains ( InetAddr.InetAddr ) )
+            {
+                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
+                return; // leave function early, i.e., we do not register this server
+            }
+        }
+
+        // access/modifications to the server list needs to be mutexed
         QMutexLocker locker ( &Mutex );
 
         const int iCurServerListSize = ServerList.size();
@@ -358,6 +340,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
         // The very first list entry must not be checked since
         // this is per definition the central server (i.e., this server)
         int iSelIdx = INVALID_INDEX; // initialize with an illegal value
+
         for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
             if ( ServerList[iIdx].HostAddr == InetAddr )
@@ -383,19 +366,15 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
         }
         else
         {
-            // do not update the information in the predefined servers
-            if ( iSelIdx > iNumPredefinedServers )
-            {
-                // update all data and call update registration function
-                ServerList[iSelIdx].LHostAddr        = LInetAddr;
-                ServerList[iSelIdx].strName          = ServerInfo.strName;
-                ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
-                ServerList[iSelIdx].strCity          = ServerInfo.strCity;
-                ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
-                ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
+            // update all data and call update registration function
+            ServerList[iSelIdx].LHostAddr        = LInetAddr;
+            ServerList[iSelIdx].strName          = ServerInfo.strName;
+            ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
+            ServerList[iSelIdx].strCity          = ServerInfo.strCity;
+            ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
+            ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
 
-                ServerList[iSelIdx].UpdateRegistration();
-            }
+            ServerList[iSelIdx].UpdateRegistration();
         }
 
         pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == INVALID_INDEX
@@ -417,8 +396,8 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
 
         // Find the server to unregister in the list. The very first list entry
         // must not be checked since this is per definition the central server
-        // (i.e., this server), also the predefined servers must not be checked.
-        for ( int iIdx = 1 + iNumPredefinedServers; iIdx < iCurServerListSize; iIdx++ )
+        // (i.e., this server).
+        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
             if ( ServerList[iIdx].HostAddr == InetAddr )
             {
@@ -462,14 +441,7 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                 // to allow for NAT.
                 if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
                 {
-                    // for a predefined server:
-                    // - LHostAddr and HostAddr are the same
-                    // - no local port number is supplied
-                    // otherwise, use the supplied details
-                    if ( iIdx > iNumPredefinedServers )
-                    {
-                        vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
-                    }
+                    vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
                 }
                 else
                 {
@@ -485,7 +457,10 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
             }
         }
 
-        // send the server list to the client
+        // send the server list to the client, since we do not know that the client
+        // has a UDP fragmentation issue, we send both lists, the reduced and the
+        // normal list after each other
+        pConnLessProtocol->CreateCLRedServerListMes ( InetAddr, vecServerInfo );
         pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
     }
 }
@@ -509,6 +484,14 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
 
     case ESvrRegResult::SRR_CENTRAL_SVR_FULL:
         SetSvrRegStatus ( ESvrRegStatus::SRS_CENTRAL_SVR_FULL );
+        break;
+
+    case ESvrRegResult::SRR_VERSION_TOO_OLD:
+        SetSvrRegStatus ( ESvrRegStatus::SRS_VERSION_TOO_OLD );
+        break;
+
+    case ESvrRegResult::SRR_NOT_FULFILL_REQIREMENTS:
+        SetSvrRegStatus ( ESvrRegStatus::SRS_NOT_FULFILL_REQUIREMENTS );
         break;
 
     default:
@@ -581,9 +564,9 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
             // register server
             SetSvrRegStatus (  SRS_REQUESTED );
 
-            pConnLessProtocol->CreateCLRegisterServerMes ( SlaveCurCentServerHostAddress,
-                                                           SlaveCurLocalHostAddress,
-                                                           ServerList[0] );
+            pConnLessProtocol->CreateCLRegisterServerExMes ( SlaveCurCentServerHostAddress,
+                                                             SlaveCurLocalHostAddress,
+                                                             ServerList[0] );
         }
         else
         {

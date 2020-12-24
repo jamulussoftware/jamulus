@@ -1,6 +1,12 @@
 param(
     # Replace default path with system Qt installation folder if necessary
-    [string] $QtInstallPath = "C:\Qt\5.12.3"
+    [string] $QtInstallPath = "C:\Qt\5.12.3",
+    [string] $QtCompile32 = "msvc2019",
+    [string] $QtCompile64 = "msvc2019_64",
+    [string] $AsioSDKName = "ASIOSDK2.3.2",
+    [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
+    [string] $NsisName = "nsis-3.06.1",
+    [string] $NsisUrl = "https://jztkft.dl.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
 
 # Global constants
@@ -53,9 +59,13 @@ Function Install-Dependency
     if (Test-Path -Path "$WindowsPath\$Destination") { return }
 
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
+    $TempDir = [System.IO.Path]::GetTempPath()
+
     Invoke-WebRequest -Uri $Uri -OutFile $TempFileName
-    Expand-Archive -Path $TempFileName -DestinationPath $Env:TEMP -Force
-    Move-Item -Path "$Env:TEMP\$Name" -Destination "$WindowsPath\$Destination" -Force
+    echo $TempFileName
+    Expand-Archive -Path $TempFileName -DestinationPath $TempDir -Force
+    echo $WindowsPath\$Destination
+    Move-Item -Path "$TempDir\$Name" -Destination "$WindowsPath\$Destination" -Force
     Remove-Item -Path $TempFileName -Force
 }
 
@@ -64,10 +74,10 @@ Function Install-Dependencies
 {
     Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     Install-Module -Name "VSSetup" -Scope CurrentUser -Force
-    Install-Dependency -Uri "http://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip" `
-        -Name "ASIOSDK2.3.2" -Destination "ASIOSDK2"
-    Install-Dependency -Uri "https://netix.dl.sourceforge.net/project/nsis/NSIS%203/3.05/nsis-3.05.zip" `
-        -Name "nsis-3.05" -Destination "NSIS"
+    Install-Dependency -Uri $AsioSDKUrl `
+        -Name $AsioSDKName -Destination "ASIOSDK2"
+    Install-Dependency -Uri $NsisUrl `
+        -Name $NsisName -Destination "NSIS"
 }
 
 # Setup environment variables and build tool paths
@@ -90,12 +100,12 @@ Function Setup-Build-Environment
     if ($BuildArch -Eq "x86_64")
     {
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars64.bat"
-        $QtMsvcSpecPath = "$QtInstallPath\msvc2017_64\bin"
+        $QtMsvcSpecPath = "$QtInstallPath\$QtCompile64\bin"
     }
     else
     {
         $VcVarsBin = "$VsInstallPath\VC\Auxiliary\build\vcvars32.bat"
-        $QtMsvcSpecPath = "$QtInstallPath\msvc2017\bin"
+        $QtMsvcSpecPath = "$QtInstallPath\$QtCompile32\bin"
     }
 
     # Setup Qt executables paths for later calls

@@ -1,4 +1,5 @@
 /******************************************************************************\
+ * Copyright (c) 2020
  *
  * Author(s):
  *  pljones
@@ -17,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -153,7 +154,7 @@ void CJamSession::DisconnectClient(int iChID)
 }
 
 /**
- * @brief CJamSession::Frame Process a frame emited for a client by the server
+ * @brief CJamSession::Frame Process a frame emitted for a client by the server
  * @param iChID the client channel id
  * @param name the client name
  * @param address the client IP and port number
@@ -300,52 +301,44 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
 
 /**
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
- * @param server Server object emiting signals
+ * @param server Server object emitting signals
+ * @return QString::null on success else the failure reason
  */
-void CJamRecorder::Init( const CServer* server,
-                         const int      _iServerFrameSizeSamples )
+QString CJamRecorder::Init()
 {
-    QFileInfo fi(recordBaseDir.absolutePath());
-    fi.setCaching(false);
+    QString errmsg = QString::null;
+    QFileInfo fi ( recordBaseDir.absolutePath() );
+    fi.setCaching ( false );
 
-    if (!fi.exists() && !QDir().mkpath(recordBaseDir.absolutePath()))
+    if ( !fi.exists() && !QDir().mkpath ( recordBaseDir.absolutePath() ) )
     {
-        throw std::runtime_error( (recordBaseDir.absolutePath() + " does not exist but could not be created").toStdString() );
+        errmsg = recordBaseDir.absolutePath() + " does not exist but could not be created";
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qCritical()
+        qCritical() << errmsg;
+#endif
+        return errmsg;
     }
     if (!fi.isDir())
     {
-        throw std::runtime_error( (recordBaseDir.absolutePath() + " exists but is not a directory").toStdString() );
+        errmsg = recordBaseDir.absolutePath() + " exists but is not a directory";
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qCritical()
+        qCritical() << errmsg;
+#endif
+        return errmsg;
     }
     if (!fi.isWritable())
     {
-        throw std::runtime_error( (recordBaseDir.absolutePath() + " is a directory but cannot be written to").toStdString() );
+        errmsg = recordBaseDir.absolutePath() + " is a directory but cannot be written to";
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qCritical()
+        qCritical() << errmsg;
+#endif
+        return errmsg;
     }
 
-    QObject::connect( (const QObject *)server, SIGNAL ( RestartRecorder() ),
-                      this, SLOT( OnTriggerSession() ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    QObject::connect( (const QObject *)server, SIGNAL ( Stopped() ),
-                      this, SLOT( OnEnd() ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    QObject::connect( (const QObject *)server, SIGNAL ( ClientDisconnected ( int ) ),
-                      this, SLOT( OnDisconnected ( int ) ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
-    QObject::connect( (const QObject *)server, SIGNAL ( AudioFrame( const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
-                      this, SLOT(  OnFrame (const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
-                      Qt::ConnectionType::QueuedConnection );
-
-    QObject::connect( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
-                      this, SLOT( OnAboutToQuit() ) );
-
-    iServerFrameSizeSamples = _iServerFrameSizeSamples;
-
-    thisThread = new QThread();
-    moveToThread ( thisThread );
-    thisThread->start();
+    return errmsg;
 }
 
 /**
@@ -355,56 +348,40 @@ void CJamRecorder::Start() {
     // Ensure any previous cleaning up has been done.
     OnEnd();
 
-    currentSession = new CJamSession( recordBaseDir );
-    isRecording = true;
+    // needs to be after OnEnd() as that also locks
+    ChIdMutex.lock();
+    {
+        currentSession = new CJamSession( recordBaseDir );
+        isRecording = true;
+    }
+    ChIdMutex.unlock();
 
     emit RecordingSessionStarted ( currentSession->SessionDir().path() );
 }
 
 
 /**
- * @brief CJamRecorder::OnEnd Finalise the recording and emit the Reaper RPP file
- *
- * Emits RecordingSessionEnded with the Reaper project file name,
- * or null if was not recording or a problem occurs
+ * @brief CJamRecorder::OnEnd Finalise the recording and write the Reaper RPP file
  */
 void CJamRecorder::OnEnd()
 {
-    QString reaperProjectFileName = QString::Null();
-
-    if ( isRecording )
+    ChIdMutex.lock(); // iChId used in currentSession->End()
     {
-        isRecording = false;
-        currentSession->End();
-
-        QString reaperProjectFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".rpp"));
-        const QFileInfo fi(reaperProjectFileName);
-
-        if (fi.exists())
+        if ( isRecording )
         {
-            qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "exists and will not be overwritten.";
-            reaperProjectFileName = QString::Null();
-        }
-        else
-        {
-            QFile outf (reaperProjectFileName);
-            if ( outf.open(QFile::WriteOnly) )
-            {
-                QTextStream out(&outf);
-                out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
-                qDebug() << "Session RPP:" << reaperProjectFileName;
-            }
-            else
-            {
-                qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "could not be created, no RPP written.";
-                reaperProjectFileName = QString::Null();
-            }
-        }
+            isRecording = false;
+            currentSession->End();
 
-        delete currentSession;
-        currentSession = nullptr;
+            ReaperProjectFromCurrentSession();
+            AudacityLofFromCurrentSession();
+
+            delete currentSession;
+            currentSession = nullptr;
+        }
     }
+    ChIdMutex.unlock();
 }
+
 
 /**
  * @brief CJamRecorder::OnTriggerSession End one session and start a new one
@@ -425,7 +402,67 @@ void CJamRecorder::OnAboutToQuit()
 {
     OnEnd();
 
-    thisThread->exit();
+    QThread::currentThread()->exit();
+}
+
+void CJamRecorder::ReaperProjectFromCurrentSession()
+{
+    QString reaperProjectFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".rpp"));
+    const QFileInfo fi(reaperProjectFileName);
+
+    if (fi.exists())
+    {
+        qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
+    }
+    else
+    {
+        QFile outf (reaperProjectFileName);
+        if ( outf.open(QFile::WriteOnly) )
+        {
+            QTextStream out(&outf);
+            out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
+            qDebug() << "Session RPP:" << reaperProjectFileName;
+        }
+        else
+        {
+            qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << fi.absolutePath() << "could not be created, no RPP written.";
+        }
+    }
+}
+
+void CJamRecorder::AudacityLofFromCurrentSession()
+{
+    QString audacityLofFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".lof"));
+    const QFileInfo fi(audacityLofFileName);
+
+    if (fi.exists())
+    {
+        qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
+    }
+    else
+    {
+        QFile outf (audacityLofFileName);
+        if ( outf.open(QFile::WriteOnly) )
+        {
+            QTextStream sOut(&outf);
+
+            foreach ( auto trackName, currentSession->Tracks().keys() )
+            {
+                foreach ( auto item, currentSession->Tracks()[trackName] ) {
+                    QFileInfo fi ( item.fileName );
+                    sOut << "file " << '"' << fi.fileName() << '"';
+                    sOut << " offset " << secondsAt48K( item.startFrame, iServerFrameSizeSamples ) << endl;
+                }
+            }
+
+            sOut.flush();
+            qDebug() << "Session LOF:" << audacityLofFileName;
+        }
+        else
+        {
+            qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << fi.absolutePath() << "could not be created, no LOF written.";
+        }
+    }
 }
 
 /**
@@ -465,20 +502,25 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFram
  */
 void CJamRecorder::OnDisconnected(int iChID)
 {
-    if ( !isRecording )
+    ChIdMutex.lock();
     {
-        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
+        if ( !isRecording )
+        {
+            qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
+        }
+        if ( currentSession == nullptr )
+        {
+            qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but no currentSession";
+            return;
+        }
+
+        currentSession->DisconnectClient ( iChID );
     }
-    if ( currentSession == nullptr )
-    {
-        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but no currentSession";
-        return;
-    }
-    currentSession->DisconnectClient(iChID);
+    ChIdMutex.unlock();
 }
 
 /**
- * @brief CJamRecorder::OnFrame Handle a frame emited for a client by the server
+ * @brief CJamRecorder::OnFrame Handle a frame emitted for a client by the server
  * @param iChID the client channel id
  * @param name the client name
  * @param address the client IP and port number
@@ -495,5 +537,10 @@ void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddre
         Start();
     }
 
-    currentSession->Frame( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );
+    // needs to be after Start() as that also locks
+    ChIdMutex.lock();
+    {
+        currentSession->Frame ( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );
+    }
+    ChIdMutex.unlock();
 }

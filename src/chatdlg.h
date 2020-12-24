@@ -18,17 +18,22 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
+
+#pragma once
 
 #include <QLabel>
 #include <QString>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QMenuBar>
 #include <QWhatsThis>
 #include <QLayout>
 #include <QAccessible>
+#include <QDesktopServices>
+#include <QMessageBox>
 #include "global.h"
 #include "ui_chatdlgbase.h"
 
@@ -39,14 +44,15 @@ class CChatDlg : public QDialog, private Ui_CChatDlgBase
     Q_OBJECT
 
 public:
-    CChatDlg ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
+    CChatDlg ( QWidget* parent = nullptr );
 
     void AddChatText ( QString strChatText );
 
 public slots:
-    void OnLocalInputTextReturnPressed();
+    void OnSendText();
     void OnLocalInputTextTextChanged ( const QString& strNewText );
-    void OnClearPressed();
+    void OnClearChatHistory();
+    void OnAnchorClicked ( const QUrl& Url );
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }

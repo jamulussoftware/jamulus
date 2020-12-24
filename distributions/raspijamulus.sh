@@ -1,17 +1,7 @@
 #!/bin/bash
 
 # This script is intended to setup a clean Raspberry Pi system for running Jamulus
-
-# Regarding the old OPUS version (#252): I just tried out the following:
-# * Do not use OPUS in shared library but use the version which is included in the jamulus source code:
-#   instead of 80 % load I get 90 % load on my Raspberry Pi Zero
-# * Do not use OPUS in shared libaray but use the version which is included in the Jamulus source code
-#   but try to compile in fixed-point: I get compilation errors so this is not possible right now
-# * I replaced the opus-1.1 with OPUS="opus-1.3.1" in the raspijamulus.sh -> OPUS version 1.3.1 has a
-#   known bug with the custom interface. If I use that version as a shared libaray, I get a runtime error
-#   on starting Jamulus. So this is also not possible. We have to wait for the next official OPUS version.
-# Therefore it is the best to keep the opus-1.1 version.
-OPUS="opus-1.1"
+OPUS="opus-1.3.1"
 NCORES=$(nproc)
 
 # install required packages
@@ -32,6 +22,30 @@ else
   tar -xzf ${OPUS}.tar.gz
   rm ${OPUS}.tar.gz
   cd ${OPUS}
+  if [ ${OPUS} == "opus-1.3.1" ]; then
+    echo "@@ -117,13 +117,19 @@ void validate_celt_decoder(CELTDecoder *st)
+ #ifndef CUSTOM_MODES
+    celt_assert(st->mode == opus_custom_mode_create(48000, 960, NULL));
+    celt_assert(st->overlap == 120);
++   celt_assert(st->end <= 21);
++#else
++/* From Section 4.3 in the spec: The normal CELT layer uses 21 of those bands,
++   though Opus Custom (see Section 6.2) may use a different number of bands
++
++   Check if it's within the maximum number of Bark frequency bands instead */
++   celt_assert(st->end <= 25);
+ #endif
+    celt_assert(st->channels == 1 || st->channels == 2);
+    celt_assert(st->stream_channels == 1 || st->stream_channels == 2);
+    celt_assert(st->downsample > 0);
+    celt_assert(st->start == 0 || st->start == 17);
+    celt_assert(st->start < st->end);
+-   celt_assert(st->end <= 21);
+ #ifdef OPUS_ARCHMASK
+    celt_assert(st->arch >= 0);
+    celt_assert(st->arch <= OPUS_ARCHMASK);" >> opus_patch_file.diff
+    patch celt/celt_decoder.c opus_patch_file.diff
+  fi
   ./configure --enable-custom-modes --enable-fixed-point
   make -j${NCORES}
   mkdir include/opus
@@ -63,36 +77,17 @@ else
   fi
 fi
 
-# optional: FluidSynth synthesizer
-if [ "$1" == "opt" -o "$1" == "synth" ]; then
-  if [ -d "fluidsynth" ]; then
-    echo "The Fluidsynth directory is present, we assume it is compiled and ready to use. If not, delete the fluidsynth directory and call this script again."
-  else
-#TODO if the normal jack package is not installed, fluidsynth compiles without jack support
-    wget https://github.com/FluidSynth/fluidsynth/archive/v2.0.6.tar.gz -O fluidsynth.tar.gz
-    tar -xzf fluidsynth.tar.gz
-    rm fluidsynth.tar.gz
-    mv fluidsynth-* fluidsynth
-    cd fluidsynth
-    mkdir build
-    cd build
-    cmake ..
-    make -j${NCORES}
-    wget https://data.musical-artifacts.com/hammersound/claudio_piano.sf2
-    cd ../..
-  fi
-fi
-
 # compile Jamulus with external Opus library
 cd ..
-qmake "CONFIG+=opus_shared_lib" "CONFIG+=raspijamulus" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Jamulus.pro
+qmake "CONFIG+=opus_shared_lib raspijamulus headless" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Jamulus.pro
 make -j${NCORES}
 
 # get first USB audio sound card device
 ADEVICE=$(aplay -l|grep "USB Audio"|tail -1|cut -d' ' -f3)
 echo "Using USB audio device: ${ADEVICE}"
 
-# write Jamulus ini file for setting the client name and buffer settings
+# write Jamulus ini file for setting the client name and buffer settings, if there is
+# just one CPU core, we assume that we are running on a Raspberry Pi Zero
 JAMULUSINIFILE="Jamulus.ini"
 NAME64=$(echo "Raspi $(hostname)"|cut -c -16|tr -d $'\n'|base64)
 if [ "$NCORES" -gt "1" ]; then
@@ -102,7 +97,7 @@ if [ "$NCORES" -gt "1" ]; then
 else
   echo -e "<client>\n  <name_base64>${NAME64}</name_base64>" > ${JAMULUSINIFILE}
   echo -e "  <autojitbuf>1</autojitbuf>\n  <jitbuf>3</jitbuf>\n  <jitbufserver>3</jitbufserver>" >> ${JAMULUSINIFILE}
-  echo -e "  <audiochannels>0</audiochannels>\n  <audioquality>0</audioquality>\n</client>" >> ${JAMULUSINIFILE}
+  echo -e "  <audiochannels>0</audiochannels>\n  <audioquality>1</audioquality>\n</client>" >> ${JAMULUSINIFILE}
 fi
 
 # taken from "Raspberry Pi and realtime, low-latency audio" homepage at wiki.linuxaudio.org
@@ -112,58 +107,9 @@ fi
 
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
+distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
+./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &
 
-if [ "$1" == "opt" ]; then
-  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
-  ./Jamulus -n -i ${JAMULUSINIFILE} -j -c jamulus.fischvolk.de &>/dev/null &
-  sleep 1
-  ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 0.4 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
-  sleep 3
-  ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output left" system:playback_1
-  ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output right" system:playback_2
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left "Jamulus:input left"
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right "Jamulus:input right"
-  aconnect 'USB-MIDI' 128
-
-  # if hyperion is installed, set red color
-  if [ ! -z "$(command -v hyperion-remote)" ]; then
-    hyperion-remote -c red
-  fi
-
-  # watchdog: if MIDI device is turned off, shutdown Jamulus
-  while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
-    sleep 1
-  done
-  killall Jamulus
-  killall fluidsynth
-  echo "Cleaned up jackd, Jamulus and fluidsynth"
-
-  # if hyperion is installed, reset color
-  if [ ! -z "$(command -v hyperion-remote)" ]; then
-    hyperion-remote --color black
-    hyperion-remote --clearall
-  fi
-
-elif [ "$1" == "synth" ]; then
-  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
-  ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 0.4 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
-  sleep 3
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left  system:playback_1
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right system:playback_2
-  aconnect 'USB-MIDI' 128
-
-  # watchdog: if MIDI device is turned off, shutdown fluidsynth
-  while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
-    sleep 1
-  done
-  killall fluidsynth
-  echo "Cleaned up jackd and fluidsynth"
-
-else
-  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
-  ./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &
-  echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"
-  read -n 1 -s -r -p ""
-  killall Jamulus
-fi
-
+echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"
+read -n 1 -s -r -p ""
+killall Jamulus

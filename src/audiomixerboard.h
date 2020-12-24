@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
@@ -35,9 +35,13 @@
 #include <QDial>
 #include <QSizePolicy>
 #include <QHostAddress>
+#include <QListWidget>
+#include <QMenu>
+#include <QMutex>
 #include "global.h"
 #include "util.h"
-#include "multicolorledbar.h"
+#include "levelmeter.h"
+#include "settings.h"
 
 
 /* Classes ********************************************************************/
@@ -46,71 +50,105 @@ class CChannelFader : public QObject
     Q_OBJECT
 
 public:
-    CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
+    CChannelFader ( QWidget* pNW );
 
-    void SetText ( const CChannelInfo& ChanInfo );
-    QString GetReceivedName() { return strReceivedName; }
-    void SetChannelInfos ( const CChannelInfo& cChanInfo );
-    void Show() { pFrame->show(); }
-    void Hide() { pFrame->hide(); }
-    bool IsVisible() { return !pFrame->isHidden(); }
-    bool IsSolo() { return pcbSolo->isChecked(); }
-    bool IsMute() { return pcbMute->isChecked(); }
-    void SetGUIDesign ( const EGUIDesign eNewDesign );
-    void SetDisplayChannelLevel ( const bool eNDCL );
-    bool GetDisplayChannelLevel();
-    void SetDisplayPans ( const bool eNDP );
+    QString GetReceivedName() { return cReceivedChanInfo.strName; }
+    int     GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
+    QString GetReceivedCity() { return cReceivedChanInfo.strCity; }
+    void    SetChannelInfos ( const CChannelInfo& cChanInfo );
+    void    Show() { pFrame->show(); }
+    void    Hide() { pFrame->hide(); }
+    bool    IsVisible() { return !pFrame->isHidden(); }
+    bool    IsSolo() { return pcbSolo->isChecked(); }
+    bool    IsMute() { return pcbMute->isChecked(); }
+    int     GetGroupID() { return iGroupID; }
+    void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void    SetDisplayChannelLevel ( const bool eNDCL );
+    bool    GetDisplayChannelLevel();
+    void    SetDisplayPans ( const bool eNDP );
+    QFrame* GetMainWidget() { return pFrame; }
 
-    void UpdateSoloState ( const bool bNewOtherSoloState );
-    void SetFaderLevel ( const int iLevel );
     void SetPanValue ( const int iPan );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
+    void SetGroupID ( const int iNGroupID );
     void SetRemoteFaderIsMute ( const bool bIsMute );
-    int  GetFaderLevel() { return pFader->value(); }
-    int  GetPanValue() { return pPan->value(); }
-    void Reset();
-    void SetChannelLevel ( const uint16_t iLevel );
-    void SetIsMyOwnFader() { bIsMyOwnFader = true; }
+    void SetFaderLevel ( const double dLevel,
+                         const bool   bIsGroupUpdate = false );
+
+    int    GetFaderLevel() { return pFader->value(); }
+    double GetPreviousFaderLevel() { return dPreviousFaderLevel; }
+    int    GetPanValue() { return pPan->value(); }
+    void   Reset();
+    void   SetRunningNewClientCnt ( const int iNRunningNewClientCnt ) { iRunningNewClientCnt = iNRunningNewClientCnt; }
+    int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
+    void   SetChannelLevel ( const uint16_t iLevel );
+    void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
+    void   UpdateSoloState ( const bool bNewOtherSoloState );
 
 protected:
-    double CalcFaderGain ( const int value );
+    void   UpdateGroupIDDependencies();
     void   SetMute ( const bool bState );
-    void   SendFaderLevelToServer ( const int iLevel );
-    void   SendPanValueToServer ( const int iPan );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
+    void   SendPanValueToServer ( const int iPan );
+    void   SendFaderLevelToServer ( const double dLevel,
+                                    const bool   bIsGroupUpdate );
 
-    QFrame*            pFrame;
+    QFrame*      pFrame;
 
-    QWidget*           pLevelsBox;
-    QWidget*           pMuteSoloBox;
-    CMultiColorLEDBar* plbrChannelLevel;
-    QSlider*           pFader;
-    QDial*             pPan;
-    QLabel*            pPanLabel;
-    QLabel*            pInfoLabel;
+    QWidget*     pLevelsBox;
+    QWidget*     pMuteSoloBox;
+    CLevelMeter* plbrChannelLevel;
+    QSlider*     pFader;
+    QDial*       pPan;
+    QLabel*      pPanLabel;
+    QLabel*      pInfoLabel;
+    QHBoxLayout* pLabelGrid;
+    QVBoxLayout* pLabelPictGrid;
 
-    QCheckBox*         pcbMute;
-    QCheckBox*         pcbSolo;
+    QCheckBox*   pcbMute;
+    QCheckBox*   pcbSolo;
+    QCheckBox*   pcbGroup;
+    QMenu*       pGroupPopupMenu;
 
-    QGroupBox*         pLabelInstBox;
-    QLabel*            plblLabel;
-    QLabel*            plblInstrument;
-    QLabel*            plblCountryFlag;
+    QGroupBox*   pLabelInstBox;
+    QLabel*      plblLabel;
+    QLabel*      plblInstrument;
+    QLabel*      plblCountryFlag;
 
-    QString            strReceivedName;
+    CChannelInfo cReceivedChanInfo;
 
-    bool               bOtherChannelIsSolo;
-    bool               bIsMyOwnFader;
+    bool         bOtherChannelIsSolo;
+    bool         bIsMyOwnFader;
+    bool         bIsMutedAtServer;
+    double       dPreviousFaderLevel;
+    int          iGroupID;
+    QString      strGroupBaseText;
+    int          iRunningNewClientCnt;
+    int          iInstrPicMaxWidth;
+    EGUIDesign   eDesign;
 
 public slots:
-    void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
-    void OnPanValueChanged ( int value ) { SendPanValueToServer ( value ); }
+    void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, QGuiApplication::keyboardModifiers() == Qt::ShiftModifier ); /* isolate a channel from the group temporarily with shift-click-drag (#695) */ }
+
+    void OnPanValueChanged ( int value );
     void OnMuteStateChanged ( int value );
+    void OnGroupStateChanged ( int );
+
+    void OnGroupMenuGrpNone() { SetGroupID ( INVALID_INDEX ); }
+    void OnGroupMenuGrp1()    { SetGroupID ( 0 ); }
+    void OnGroupMenuGrp2()    { SetGroupID ( 1 ); }
+    void OnGroupMenuGrp3()    { SetGroupID ( 2 ); }
+    void OnGroupMenuGrp4()    { SetGroupID ( 3 ); }
 
 signals:
-    void gainValueChanged ( double value, bool bIsMyOwnFader );
-    void panValueChanged  ( double value );
+    void gainValueChanged ( float  value,
+                            bool   bIsMyOwnFader,
+                            bool   bIsGroupUpdate,
+                            bool   bSuppressServerUpdate,
+                            double dLevelRatio );
+
+    void panValueChanged  ( float value );
     void soloStateChanged ( int value );
 };
 
@@ -118,15 +156,29 @@ template<unsigned int slotId>
 class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
 {
 public:
-    void OnChGainValueChanged ( double dValue, bool bIsMyOwnFader ) { UpdateGainValue ( slotId - 1, dValue, bIsMyOwnFader ); }
-    void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
+    void OnChGainValueChanged ( float  fValue,
+                                bool   bIsMyOwnFader,
+                                bool   bIsGroupUpdate,
+                                bool   bSuppressServerUpdate,
+                                double dLevelRatio ) { UpdateGainValue ( slotId - 1,
+                                                                         fValue,
+                                                                         bIsMyOwnFader,
+                                                                         bIsGroupUpdate,
+                                                                         bSuppressServerUpdate,
+                                                                         dLevelRatio ); }
+
+    void OnChPanValueChanged ( float fValue ) { UpdatePanValue ( slotId - 1, fValue ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue,
-                                   const bool   bIsMyOwnFader ) = 0;
-    virtual void UpdatePanValue ( const int    iChannelIdx,
-                                  const double dValue ) = 0;
+                                   const float  fValue,
+                                   const bool   bIsMyOwnFader,
+                                   const bool   bIsGroupUpdate,
+                                   const bool   bSuppressServerUpdate,
+                                   const double dLevelRatio ) = 0;
+
+    virtual void UpdatePanValue ( const int   iChannelIdx,
+                                  const float fValue ) = 0;
 };
 
 template<>
@@ -140,30 +192,36 @@ class CAudioMixerBoard :
     Q_OBJECT
 
 public:
-    CAudioMixerBoard ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
+    CAudioMixerBoard ( QWidget* parent = nullptr );
 
-    void HideAll();
-    void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
-    void SetServerName ( const QString& strNewServerName );
-    void SetGUIDesign ( const EGUIDesign eNewDesign );
-    void SetDisplayChannelLevels ( const bool eNDCL );
-    void SetDisplayPans ( const bool eNDP );
-    void SetPanIsSupported();
-    void SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
-    void SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
+    virtual ~CAudioMixerBoard();
 
-    void SetFaderLevel ( const int iChannelIdx,
-                         const int iValue );
+    void        SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
+    void        HideAll();
+    void        ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
+    void        SetServerName ( const QString& strNewServerName );
+    QString     GetServerName() { return strServerName; }
+    void        SetGUIDesign ( const EGUIDesign eNewDesign );
+    void        SetDisplayPans ( const bool eNDP );
+    void        SetPanIsSupported();
+    void        SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
+    void        SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
 
-    void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
+    void        SetFaderLevel ( const int iChannelIdx,
+                                const int iValue );
 
-    // settings
-    CVector<QString> vecStoredFaderTags;
-    CVector<int>     vecStoredFaderLevels;
-    CVector<int>     vecStoredPanValues;
-    CVector<int>     vecStoredFaderIsSolo;
-    CVector<int>     vecStoredFaderIsMute;
-    int              iNewClientFaderLevel;
+    void        SetNumMixerPanelRows ( const int iNNumMixerPanelRows );
+    int         GetNumMixerPanelRows() { return iNumMixerPanelRows; }
+
+    void        SetFaderSorting ( const EChSortType eNChSortType );
+    EChSortType GetFaderSorting() { return eChSortType; }
+
+    void        SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
+
+    void        SetRecorderState ( const ERecorderState newRecorderState );
+    void        SetAllFaderLevelsToNewClientLevel();
+    void        StoreAllFaderSettings();
+    void        LoadAllFaderSettings();
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea
@@ -181,39 +239,49 @@ protected:
         }
     };
 
-    bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
-                                  int&                iStoredFaderLevel,
-                                  int&                iStoredPanValue,
-                                  bool&               bStoredFaderIsSolo,
-                                  bool&               bStoredFaderIsMute );
+    void ChangeFaderOrder ( const EChSortType eChSortType );
+
+    bool GetStoredFaderSettings ( const QString& strName,
+                                  int&           iStoredFaderLevel,
+                                  int&           iStoredPanValue,
+                                  bool&          bStoredFaderIsSolo,
+                                  bool&          bStoredFaderIsMute,
+                                  int&           iGroupID );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
+    void UpdateTitle();
 
-    void OnGainValueChanged ( const int    iChannelIdx,
-                              const double dValue );
-
+    CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
     CMixerBoardScrollArea*  pScrollArea;
-    QHBoxLayout*            pMainLayout;
-    bool                    bDisplayChannelLevels;
+    QGridLayout *           pMainLayout;
     bool                    bDisplayPans;
     bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
     int                     iMyChannelID;
+    int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
+    int                     iNumMixerPanelRows;
     QString                 strServerName;
+    ERecorderState          eRecorderState;
+    QMutex                  Mutex;
+    EChSortType             eChSortType;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue,
-                                   const bool   bIsMyOwnFader );
-    virtual void UpdatePanValue ( const int    iChannelIdx,
-                                  const double dValue );
+                                   const float  fValue,
+                                   const bool   bIsMyOwnFader,
+                                   const bool   bIsGroupUpdate,
+                                   const bool   bSuppressServerUpdate,
+                                   const double dLevelRatio );
+
+    virtual void UpdatePanValue ( const int   iChannelIdx,
+                                  const float fValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
 
 signals:
-    void ChangeChanGain ( int iId, double dGain, bool bIsMyOwnFader );
-    void ChangeChanPan ( int iId, double dPan );
+    void ChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader );
+    void ChangeChanPan ( int iId, float fPan );
     void NumClientsChanged ( int iNewNumClients );
 };

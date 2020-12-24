@@ -1,0 +1,26 @@
+name: "pre-release"
+
+on:
+  push:
+    branches:
+      - "autobuild_linux"
+jobs:
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      # ...
+      - name: Checkout Project
+        uses: actions/checkout@v1
+      - name: "Build & test"
+        run: cd distributions; sudo apt-get -qq update; sudo apt-get -qq -y upgrade; sudo apt-get -qq -y install devscripts build-essential debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools; mv debian ..; cd ..; debuild -b -us -uc; mv debian distributions; cd ..; cp *.deb jamulus/
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            *.deb

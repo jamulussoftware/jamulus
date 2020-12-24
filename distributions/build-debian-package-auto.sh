@@ -1,5 +1,8 @@
 #!/bin/sh -e
 
+# set armhf
+sudo dpkg --add-architecture armhf
+
 echo "Update system..."
 sudo apt-get -qq update
 sudo apt-get -qq -y upgrade
@@ -34,5 +37,8 @@ echo "${VERSION} building..."
 sed -i "s/é&%JAMVERSION%&è/${VERSION}/g" debian/control
 debuild -b -us -uc
 
+echo "Build armhf"
+
+debuilf -b -us -uc -aarmhf
 # copy for auto release
 cp ../*.deb ./

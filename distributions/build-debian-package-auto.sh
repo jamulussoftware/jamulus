@@ -18,7 +18,7 @@ VERSION=$(cat Jamulus.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
 DATE=$(date "+%a, %d %B %Y %T %Z" )
 echo "-- GitHub Actions <noemail@example.com> ${DATE}" >> debian/changelog
 echo "" >> debian/changelog
-echo "* See GitHub releases for changelog"
+echo "* See GitHub releases for changelog" >> debian/changelog
 echo "" >> debian/changelog
 echo "jamulus (${VERSION}-0) UNRELEASED; urgency=medium" >> debian/changelog
 

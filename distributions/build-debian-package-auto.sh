@@ -9,7 +9,7 @@ sudo apt-get -qq -y upgrade
 echo "Install dependencies..."
 
 sudo apt-get -qq -y install devscripts build-essential \
- debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools gcc-arm-linux-gnueabihf
+ debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools # gcc-arm-linux-gnueabihf
 
 cp -r debian ..
 cd ..
@@ -38,8 +38,8 @@ echo "${VERSION} building..."
 sed -i "s/é&%JAMVERSION%&è/${VERSION}/g" debian/control
 debuild -b -us -uc
 
-echo "Build armhf"
+#echo "Build armhf"
 
-debuild -b -us -uc -aarmhf
+#debuild -b -us -uc -aarmhf
 # copy for auto release
 cp ../*.deb ./

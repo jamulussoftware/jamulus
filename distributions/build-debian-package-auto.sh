@@ -38,6 +38,7 @@ echo "${VERSION} building..."
 sed -i "s/é&%JAMVERSION%&è/${VERSION}/g" debian/control
 debuild -b -us -uc
 
+sudo dpkg -i *.deb
 #echo "Build armhf"
 
 #debuild -b -us -uc -aarmhf

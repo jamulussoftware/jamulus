@@ -25,6 +25,7 @@ echo "" >> debian/changelog
 echo "  * See GitHub releases for changelog" >> debian/changelog
 echo "" >> debian/changelog
 echo "-- GitHub Actions <noemail@example.com> ${DATE}" >> debian/changelog
+echo "" >> debian/changelog
 cat distributions/debian/changelog >> debian/changelog
 
 # patch the control file
@@ -39,6 +40,6 @@ debuild -b -us -uc
 
 echo "Build armhf"
 
-debuilf -b -us -uc -aarmhf
+debuild -b -us -uc -aarmhf
 # copy for auto release
 cp ../*.deb ./

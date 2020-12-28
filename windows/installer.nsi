@@ -190,7 +190,7 @@ Function .onInit
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
         retrywrong:
-            ; check if old, wrongly installed jamulus exists
+            ; check if old, wrongly installed jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
              ClearErrors
              Var /GLOBAL OLD_WRONG_PATH_UNINST
              StrCpy $OLD_WRONG_PATH_UNINST ""
@@ -198,17 +198,17 @@ Function .onInit
              ${If} ${Errors}
              ${Else}
              ${IF} $UNINST_PATH == ""
-                   MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_EMPTY)" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
-                   goto quit
+                 MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_EMPTY)" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
+                 goto quit
              ${ELSE}
-                   MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND) $OLD_WRONG_PATH_UNINST" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
-                    goto quit
+                 MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND) $OLD_WRONG_PATH_UNINST" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
+                 goto quit
              ${ENDIF}
              idontcare:
                  MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
                  goto quit
               quit:
-                  Abort
+                 Abort
               continueinstall:
             ${EndIf}
         ${Else}

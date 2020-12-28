@@ -77,6 +77,15 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 ; LangString RUNNING_APP_MSG ${LANG_ITALIAN} \
 ;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
+LangString OLD_WRONG_REG_FOUND_EMPTY ${LANG_ENGLISH} \
+    "Due to a bug, an old version of Jamulus might be installed to a wrong path on your computer. We couldn't detect the path of the uninstaller, so there might also be another problem. If you ignore this message the installer will continue, but you might end up with multiple Jamulus installations. You could try to search for the Uninstaller of the old version in your Program Files or Program Files (x86) directory."
+
+LangString OLD_WRONG_REG_FOUND ${LANG_ENGLISH} \
+    "Due to a bug, an old version of Jamulus might be installed to a wrong path on your computer. If you ignore this message the installer will continue, but you might end up with multiple Jamulus installations. It is recommended to abort and restart the installer. To remove this old Jamulus version, please do so either via the Windows Uninstaller in settings or by launching the following file: "
+
+LangString OLD_WRONG_REG_FOUND_CONFIRM ${LANG_ENGLISH} \
+    "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
+
 ; Abort the installer/uninstaller if Jamulus is running
 !macro _AbortOnRunningApp
 
@@ -93,7 +102,6 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 
 ; Installer
 !macro InstallApplication buildArch
-
     !define prefix "${DEPLOY_PATH}\${buildArch}"
     !tempfile files
 
@@ -194,12 +202,34 @@ Function .onInit
 
     ${EndIf}
 
+  retrywrong:
+      ; check if old, wrongly installed jamulus exists
+      ClearErrors
+      Var /GLOBAL OLD_WRONG_PATH_UNINST
+      StrCpy $OLD_WRONG_PATH_UNINST ""
+      ReadRegStr $OLD_WRONG_PATH_UNINST HKLM "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Jamulus" "UninstallString"
+      ${If} ${Errors}
+      ${Else}
+      ${IF} $UNINST_PATH == ""
+               MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_EMPTY)" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
+               goto quit
+          ${ELSE}
+                MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND) $OLD_WRONG_PATH_UNINST" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
+                goto quit
+          ${ENDIF}
+          idontcare:
+            MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
+            goto quit
+          quit:
+            Abort
+          continueinstall:
+      ${EndIf}
+
     ; Install for all users
     SetShellVarContext all
 
     ; Select installer language
     !insertmacro MUI_LANGDLL_DISPLAY
-
 FunctionEnd
 
 ; Ensure Jamulus is installed into a new folder only, unless Jamulus is already installed there
@@ -250,7 +280,6 @@ FunctionEnd
 !macroend
 
 Section "un.Install"
-
     ; Delete the main application
     ${If} ${RunningX64}
         !insertmacro un.InstallFiles x86_64

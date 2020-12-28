@@ -189,8 +189,29 @@ Function .onInit
         ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
-
-    ${Else}
+        retrywrong:
+            ; check if old, wrongly installed jamulus exists
+             ClearErrors
+             Var /GLOBAL OLD_WRONG_PATH_UNINST
+             StrCpy $OLD_WRONG_PATH_UNINST ""
+             ReadRegStr $OLD_WRONG_PATH_UNINST HKLM "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Jamulus" "UninstallString"
+             ${If} ${Errors}
+             ${Else}
+             ${IF} $UNINST_PATH == ""
+                   MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_EMPTY)" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
+                   goto quit
+             ${ELSE}
+                   MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND) $OLD_WRONG_PATH_UNINST" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
+                    goto quit
+             ${ENDIF}
+             idontcare:
+                 MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
+                 goto quit
+              quit:
+                  Abort
+              continueinstall:
+            ${EndIf}
+        ${Else}
         SetRegView      32
         SectionSetFlags ${Install_x86}    ${SF_SELECTED}
         SectionSetFlags ${Install_x86_64} ${SECTION_OFF}
@@ -201,30 +222,6 @@ Function .onInit
         StrCpy     $INSTDIR "$PROGRAMFILES32\${APP_NAME}"
 
     ${EndIf}
-
-  retrywrong:
-      ; check if old, wrongly installed jamulus exists
-      ClearErrors
-      Var /GLOBAL OLD_WRONG_PATH_UNINST
-      StrCpy $OLD_WRONG_PATH_UNINST ""
-      ReadRegStr $OLD_WRONG_PATH_UNINST HKLM "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Jamulus" "UninstallString"
-      ${If} ${Errors}
-      ${Else}
-      ${IF} $UNINST_PATH == ""
-               MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_EMPTY)" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
-               goto quit
-          ${ELSE}
-                MessageBox MB_ABORTRETRYIGNORE|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND) $OLD_WRONG_PATH_UNINST" /sd IDABORT IDIGNORE idontcare IDRETRY retrywrong
-                goto quit
-          ${ENDIF}
-          idontcare:
-            MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_REG_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
-            goto quit
-          quit:
-            Abort
-          continueinstall:
-      ${EndIf}
-
     ; Install for all users
     SetShellVarContext all
 

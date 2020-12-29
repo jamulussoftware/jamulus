@@ -8,6 +8,7 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
+    lrelease \
     release
 
 QT += network \
@@ -21,6 +22,7 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
+LRELEASE_DIR = src/res/translation
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
@@ -666,16 +668,6 @@ DISTFILES += ChangeLog \
     README.md \
     distributions/jamulus.desktop.in \
     distributions/jamulus.png \
-    src/res/translation/translation_de_DE.qm \
-    src/res/translation/translation_fr_FR.qm \
-    src/res/translation/translation_pt_PT.qm \
-    src/res/translation/translation_pt_BR.qm \
-    src/res/translation/translation_es_ES.qm \
-    src/res/translation/translation_nl_NL.qm \
-    src/res/translation/translation_pl_PL.qm \
-    src/res/translation/translation_it_IT.qm \
-    src/res/translation/translation_sv_SE.qm \
-    src/res/translation/translation_sk_SK.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

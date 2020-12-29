@@ -77,6 +77,13 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 ; LangString RUNNING_APP_MSG ${LANG_ITALIAN} \
 ;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
+LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
+    "Due to a bug, an old version of Jamulus might be installed to a wrong path on your computer. Do you want to remove it before installing this new version (we strongly recommend this)?"
+
+LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
+    "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
+LangString OLD_WRONG_VER_REMOVE_FAILED ${LANG_ENGLISH} \
+     "FATAL: THE OLD UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
 ; Abort the installer/uninstaller if Jamulus is running
 !macro _AbortOnRunningApp
 
@@ -93,7 +100,6 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 
 ; Installer
 !macro InstallApplication buildArch
-
     !define prefix "${DEPLOY_PATH}\${buildArch}"
     !tempfile files
 
@@ -181,8 +187,27 @@ Function .onInit
         ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
+        
+        ; check if old, wrongly installed jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
+        IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" wrong_install_found continueinstall
 
-    ${Else}
+        wrong_install_found:
+            MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
+                goto removeold
+            idontcare:
+                MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
+                goto removeold
+            removeold:
+                ExecWait "$PROGRAMFILES32\Jamulus\Uninstall.exe" $0
+                ${IfNot} $0 == 0
+                  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
+                  goto quit
+                ${EndIf}
+                goto continueinstall
+            quit:
+                Abort
+        continueinstall:
+        ${Else}
         SetRegView      32
         SectionSetFlags ${Install_x86}    ${SF_SELECTED}
         SectionSetFlags ${Install_x86_64} ${SECTION_OFF}
@@ -193,13 +218,11 @@ Function .onInit
         StrCpy     $INSTDIR "$PROGRAMFILES32\${APP_NAME}"
 
     ${EndIf}
-
     ; Install for all users
     SetShellVarContext all
 
     ; Select installer language
     !insertmacro MUI_LANGDLL_DISPLAY
-
 FunctionEnd
 
 ; Ensure Jamulus is installed into a new folder only, unless Jamulus is already installed there
@@ -250,7 +273,6 @@ FunctionEnd
 !macroend
 
 Section "un.Install"
-
     ; Delete the main application
     ${If} ${RunningX64}
         !insertmacro un.InstallFiles x86_64

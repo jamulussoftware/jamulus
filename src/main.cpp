@@ -87,7 +87,7 @@ int main ( int argc, char** argv )
     QString      strServerInfo               = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
-    QString      strClientName               = APP_NAME;
+    QString      strClientName               = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -340,7 +340,7 @@ int main ( int argc, char** argv )
                                  "--clientname",
                                  strArgument ) )
         {
-            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            strClientName = strArgument;
             tsConsole << "- client name: " << strClientName << endl;
             CommandLineOptions << "--clientname";
             continue;

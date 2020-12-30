@@ -1342,7 +1342,7 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
 /// @brief Mix the audio data from all clients and send the mix to the jamstreamer
 void CServer::MixStream ( const int iNumClients )
 {
-    int               i, j;
+    int               i, j, k;
     CVector<float>&   vecfIntermProcBuf = vecvecfIntermediateProcBuf[0]; // use reference for faster access
     CVector<int16_t>& vecsSendData      = vecvecsSendData[0];            // use reference for faster access
 
@@ -1355,18 +1355,31 @@ void CServer::MixStream ( const int iNumClients )
         // get a reference to the audio data of the current client
         const CVector<int16_t>& vecsData = vecvecsData[j];
 
-        // stereo
-        for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
-        {
-            vecfIntermProcBuf[i] += vecsData[i];
-        }
+        if ( vecNumAudioChannels[j] == 1 )
+                {
+                    // mono: copy same mono data in both out stereo audio channels
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
+                    {
+                        // left/right channel
+                        vecfIntermProcBuf[k]     += vecsData[i];
+                        vecfIntermProcBuf[k + 1] += vecsData[i];
+                    }
+                }
+                else
+                {
+                    // stereo
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    {
+                        vecfIntermProcBuf[i] += vecsData[i];
+                    }
+                }
     }
 
-        // convert from double to short with clipping
-        for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
-        {
-            vecsSendData[i] = Float2Short ( vecfIntermProcBuf[i] );
-        }
+    // convert from double to short with clipping
+    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+    {
+        vecsSendData[i] = Float2Short ( vecfIntermProcBuf[i] );
+    }
 
     emit StreamFrame ( iServerFrameSizeSamples, vecsSendData );
 }

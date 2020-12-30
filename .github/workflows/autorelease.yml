@@ -14,7 +14,7 @@ jobs:
         include:
           - os: ubuntu-18.04
             build_command: cd distributions; sudo ./build-debian-package-auto.sh
-            artifact_name: jamulusEduLinux
+            artifact_name: *headless*
             asset_name: jamulusEduLinux
           #- os: windows-latest
           #  build_command: windows/deploy_windows.ps1; cp deploy/*.exe jamulusinstaller.exe

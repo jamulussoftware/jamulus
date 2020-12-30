@@ -405,6 +405,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // that jam recorder needs the frame size which is given to the jam
     // recorder in the SetRecordingDir() function)
     SetRecordingDir ( strRecordingDirName );
+    
+    // enable jam streaming
+    QThread* pthJamStreamer = new QThread;
+    streamer::CJamStreamer* pJamStreamer = new streamer::CJamStreamer();
+    pJamStreamer->moveToThread(pthJamStreamer);
+    QObject::connect( this, &CServer::StreamFrame, pJamStreamer, &streamer::CJamStreamer::process );
+    pthJamStreamer->start();
 
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software)
@@ -1256,6 +1263,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             vecsSendData[i] = Float2Short ( vecfIntermProcBuf[i] );
         }
     }
+
+    emit StreamFrame ( iServerFrameSizeSamples, vecsSendData );
 
     int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
     OpusCustomEncoder* pCurOpusEncoder         = nullptr;

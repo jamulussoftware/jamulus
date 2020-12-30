@@ -46,6 +46,7 @@
 #include "serverlogging.h"
 #include "serverlist.h"
 #include "recorder/jamcontroller.h"
+#include "streamer/jamstreamer.h"
 
 /* Definitions ****************************************************************/
 // no valid channel number
@@ -411,6 +412,8 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+
+    void StreamFrame ( const int iServerFrameSizeSamples, const CVector<int16_t> data );
 
     void CLVersionAndOSReceived ( CHostAddress           InetAddr,
                                   COSUtil::EOpSystemType eOSType,

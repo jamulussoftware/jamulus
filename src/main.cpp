@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -38,8 +38,11 @@
 #ifdef ANDROID
 # include <QtAndroidExtras/QtAndroid>
 #endif
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
 # include "mac/activity.h"
+#endif
+#if defined ( Q_OS_IOS )
+# include "ios/activity.h"
 #endif
 
 
@@ -55,7 +58,7 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-#if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
+#if defined( SERVER_BUNDLE ) && ( defined( Q_OS_MACX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
     bool         bIsClient                   = false;
 #else
@@ -577,9 +580,13 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
+# if defined (Q_OS_IOS)
+    QApplication* pApp =  new QApplication ( argc, argv );
+# else
     QCoreApplication* pApp = bUseGUI
         ? new QApplication ( argc, argv )
         : new QCoreApplication ( argc, argv );
+# endif
 #endif
 
 #ifdef ANDROID
@@ -756,7 +763,7 @@ int main ( int argc, char** argv )
             tsConsole << generr.GetErrorText() << endl;
         }
     }
-    
+
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
     activity.EndActivity();
 #endif

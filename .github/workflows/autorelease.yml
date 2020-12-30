@@ -20,7 +20,7 @@ jobs:
            # build_command: windows/deploy_windows.ps1; cp deploy/*.exe jamulusinstaller.exe
             #artifact_name: jamulusinstaller.exe
             #asset_name: jamulusEduWindows
-          - os: macos-latest
+          - os: macos-10.15
             build_command: mac/deploy_mac.sh; cp deploy/*.dmg jamulusInstaller.dmg
             artifact_name: jamulusInstaller.dmg
             asset_name: jamulusEduMac

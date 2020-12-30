@@ -38,3 +38,4 @@ distributions/jamulus.desktop
 .xcode
 Debug-iphoneos/
 Jamulus.xcodeproj
+jamulus_plugin_import.cpp

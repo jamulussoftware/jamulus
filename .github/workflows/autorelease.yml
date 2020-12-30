@@ -13,17 +13,17 @@ jobs:
       matrix:
         include:
           - os: ubuntu-18.04
-            build_command: cd distributions; sudo ./build-debian-package-auto.sh
-            artifact_name: *headless*
+            build_command: cd distributions; sudo ./build-debian-package-auto.sh; cp *headless*.deb deploy/jamulusheadless.deb
+            artifact_name: jamulusheadless.deb
             asset_name: jamulusEduLinux
           #- os: windows-latest
           #  build_command: windows/deploy_windows.ps1; cp deploy/*.exe jamulusinstaller.exe
           #  artifact_name: jamulusinstaller.exe
           #  asset_name: jamulusEduWindows
-          - os: macos-10.15
-            build_command: python -m pip install --upgrade pip; mac/deploy_mac.sh; cp deploy/*.dmg jamulusInstaller.dmg
-            artifact_name: jamulusInstaller.dmg
-            asset_name: jamulusEduMac
+          #- os: macos-10.15
+          #  build_command: python -m pip install --upgrade pip; mac/deploy_mac.sh; cp deploy/*.dmg jamulusInstaller.dmg
+          #  artifact_name: jamulusInstaller.dmg
+          #  asset_name: jamulusEduMac
 
     steps:
     - uses: actions/checkout@v2
@@ -35,6 +35,6 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/release/${{ matrix.artifact_name }}
+        file: deploy/${{ matrix.artifact_name }}
         asset_name: ${{ matrix.asset_name }}
         tag: testrelease

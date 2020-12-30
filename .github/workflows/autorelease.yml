@@ -16,10 +16,10 @@ jobs:
             build_command: cd distributions; sudo ./build-debian-package-auto.sh
             artifact_name: jamulusEduLinux
             asset_name: jamulusEduLinux
-          #- os: windows-latest
-           # build_command: windows/deploy_windows.ps1; cp deploy/*.exe jamulusinstaller.exe
-            #artifact_name: jamulusinstaller.exe
-            #asset_name: jamulusEduWindows
+          - os: windows-latest
+            build_command: windows/deploy_windows.ps1; cp deploy/*.exe jamulusinstaller.exe
+            artifact_name: jamulusinstaller.exe
+            asset_name: jamulusEduWindows
           - os: macos-10.15
             build_command: sudo -H pip install --upgrade --user biplist; mac/deploy_mac.sh; cp deploy/*.dmg jamulusInstaller.dmg
             artifact_name: jamulusInstaller.dmg

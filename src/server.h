@@ -315,6 +315,8 @@ protected:
     void MixEncodeTransmitData ( const int iChanCnt,
                                  const int iNumClients );
 
+    void MixStream ( const int iNumClients );
+
     virtual void customEvent ( QEvent* pEvent );
 
     // if server mode is normal or double system frame size

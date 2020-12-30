@@ -870,6 +870,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                         vecNumAudioChannels,
                                                                         vecvecsData,
                                                                         vecChannelLevels );
+        MixStream ( iNumClients );
 
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {
@@ -1264,8 +1265,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         }
     }
 
-    emit StreamFrame ( iServerFrameSizeSamples, vecsSendData );
-
     int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
     OpusCustomEncoder* pCurOpusEncoder         = nullptr;
 
@@ -1338,6 +1337,38 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
     }
 
     Q_UNUSED ( iUnused )
+}
+
+/// @brief Mix the audio data from all clients and send the mix to the jamstreamer
+void CServer::MixStream ( const int iNumClients )
+{
+    int               i, j;
+    CVector<float>&   vecfIntermProcBuf = vecvecfIntermediateProcBuf[0]; // use reference for faster access
+    CVector<int16_t>& vecsSendData      = vecvecsSendData[0];            // use reference for faster access
+
+    // init intermediate processing vector with zeros since we mix all channels on that vector
+    vecfIntermProcBuf.Reset ( 0 );
+
+    // Stereo target channel -----------------------------------------------
+    for ( j = 0; j < iNumClients; j++ )
+    {
+        // get a reference to the audio data of the current client
+        const CVector<int16_t>& vecsData = vecvecsData[j];
+
+        // stereo
+        for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+        {
+            vecfIntermProcBuf[i] += vecsData[i];
+        }
+    }
+
+        // convert from double to short with clipping
+        for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+        {
+            vecsSendData[i] = Float2Short ( vecfIntermProcBuf[i] );
+        }
+
+    emit StreamFrame ( iServerFrameSizeSamples, vecsSendData );
 }
 
 CVector<CChannelInfo> CServer::CreateChannelList()

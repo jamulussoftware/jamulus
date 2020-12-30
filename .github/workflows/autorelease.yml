@@ -1,0 +1,40 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    name: Publish for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-18.04
+            build_command: cd distributions; sudo ./build-debian-package-auto.sh
+            artifact_name: jamulusEduLinux
+            asset_name: jamulusEduLinux
+          - os: windows-latest
+            build_command: windows/deploy_windows.ps1; cp deploy/*.exe jamulusinstaller.exe
+            artifact_name: jamulusinstaller.exe
+            asset_name: jamulusEduWindows
+          - os: macos-latest
+            build_command: mac/deploy_mac.sh; cp deploy/*.dmg jamulusInstaller.dmg
+            artifact_name: jamulusInstaller.dmg
+            asset_name: jamulusEduMac
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+    - name: Build
+      run: ${{ matrix.build_command }}
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/release/${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}

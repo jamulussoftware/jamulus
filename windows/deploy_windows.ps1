@@ -1,8 +1,8 @@
 param(
     # Replace default path with system Qt installation folder if necessary
-    [string] $QtInstallPath = "C:\Qt\5.12.3",
-    [string] $QtCompile32 = "msvc2017",
-    [string] $QtCompile64 = "msvc2017_64",
+    [string] $QtInstallPath = "D:\a\qt\5.15.2",
+    [string] $QtCompile32 = "msvc2019",
+    [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",

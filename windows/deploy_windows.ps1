@@ -72,6 +72,9 @@ Function Install-Dependency
 # Install VSSetup (Visual Studio detection), ASIO SDK and NSIS Installer
 Function Install-Dependencies
 {
+    # for GH runner needed?
+    Install-Module PowershellGet -Force
+    
     Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     Install-Module -Name "VSSetup" -Scope CurrentUser -Force
     Install-Dependency -Uri $AsioSDKUrl `

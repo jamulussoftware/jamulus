@@ -580,7 +580,7 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
-# if defined (  Q_OS_IOS  )
+# if defined ( Q_OS_IOS )
     QApplication* pApp =  new QApplication ( argc, argv );
 # else
     QCoreApplication* pApp = bUseGUI

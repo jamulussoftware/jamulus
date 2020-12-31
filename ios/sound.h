@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2020
  *
  * Author(s):
- *  Volker Fischer
+ *  ann0see based on code from Volker Fischer
  *
  ******************************************************************************
  *

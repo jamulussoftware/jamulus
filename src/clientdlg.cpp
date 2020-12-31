@@ -659,6 +659,29 @@ void CClientDlg::UpdateAudioFaderSlider()
             lblAudioPanValue->setText ( tr ( "L" ) + " -" +
                 QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
         }
+
+
+// TEST "For the same situation L:0 R:100 is a completely transparent description."
+lblAudioPanValue->setText (
+    tr ( "L" ) + ":" + QString().setNum ( AUD_FADER_IN_MAX - iCurAudInFader ) + " " +
+    tr ( "R" ) + ":" + QString().setNum ( iCurAudInFader ) );
+
+// TEST use percentage
+if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
+{
+    // attenuation on right channel
+    lblAudioPanValue->setText ( tr ( "R" ) + ":" +
+        QString().setNum ( static_cast<float> ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) / AUD_FADER_IN_MIDDLE * 100 ) + " %" );
+}
+else
+{
+    // attenuation on left channel
+    lblAudioPanValue->setText ( tr ( "L" ) + ":" +
+        QString().setNum ( static_cast<float> ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) / AUD_FADER_IN_MIDDLE * 100 ) + " %" );
+}
+
+
+
     }
 }
 

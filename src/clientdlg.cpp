@@ -650,13 +650,13 @@ void CClientDlg::UpdateAudioFaderSlider()
         if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
         {
             // attenuation on right channel
-            lblAudioPanValue->setText ( tr ( "R" ) + " -" +
+            lblAudioPanValue->setText ( tr ( "L" ) + " -" +
                 QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
         }
         else
         {
             // attenuation on left channel
-            lblAudioPanValue->setText ( tr ( "L" ) + " -" +
+            lblAudioPanValue->setText ( tr ( "R" ) + " -" +
                 QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
         }
     }

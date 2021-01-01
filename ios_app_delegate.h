@@ -2,7 +2,7 @@
 //  ios_app_delegate.h
 //  Jamulus
 //
-//  Created by ***REMOVED*** on 01.01.21.
+//  Created by ann0see on 01.01.21.
 //
 
 #ifndef ios_app_delegate_h

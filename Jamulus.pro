@@ -150,6 +150,7 @@ win32 {
     QMAKE_INFO_PLIST = ios/Info.plist
     QT += macextras
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
+    HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus

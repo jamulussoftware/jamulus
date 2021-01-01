@@ -1,11 +1,11 @@
 
 #import "ios_app_delegate.h"
 
-@interface AppDelegate ()
+@interface QIOSApplicationDelegate ()
 
 @end
 
-@implementation AppDelegate
+@implementation QIOSApplicationDelegate
 
 
 

@@ -152,8 +152,6 @@ win32 {
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    HEADERS += ios/activity.h
-    OBJECTIVE_SOURCES += ios/activity.mm
     QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 ‚

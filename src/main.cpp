@@ -41,9 +41,6 @@
 #if defined ( Q_OS_MACX )
 # include "mac/activity.h"
 #endif
-#if defined ( Q_OS_IOS )
-# include "ios/activity.h"
-#endif
 
 
 // Implementation **************************************************************
@@ -528,7 +525,7 @@ int main ( int argc, char** argv )
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
-#if !( defined ( __APPLE__ ) || defined ( __MACOSX ) )
+#if !( defined ( Q_OS_MACX ) )
         exit ( 1 );
 #endif
     }
@@ -615,7 +612,7 @@ int main ( int argc, char** argv )
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.
     CActivity activity;
@@ -764,7 +761,7 @@ int main ( int argc, char** argv )
         }
     }
 
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
     activity.EndActivity();
 #endif
 

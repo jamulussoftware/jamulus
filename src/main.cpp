@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -38,7 +38,7 @@
 #ifdef ANDROID
 # include <QtAndroidExtras/QtAndroid>
 #endif
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
 # include "mac/activity.h"
 #endif
 
@@ -55,7 +55,7 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-#if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
+#if defined( SERVER_BUNDLE ) && ( defined( Q_OS_MACX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
     bool         bIsClient                   = false;
 #else
@@ -525,7 +525,7 @@ int main ( int argc, char** argv )
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
-#if !( defined ( __APPLE__ ) || defined ( __MACOSX ) )
+#if !( defined ( Q_OS_MACX ) )
         exit ( 1 );
 #endif
     }
@@ -577,9 +577,17 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
+# if defined ( Q_OS_IOS )
+    bIsClient = false;
+    bUseGUI = true;
+
+    // bUseMultithreading = true;
+    QApplication* pApp =  new QApplication ( argc, argv );
+# else
     QCoreApplication* pApp = bUseGUI
         ? new QApplication ( argc, argv )
         : new QCoreApplication ( argc, argv );
+# endif
 #endif
 
 #ifdef ANDROID
@@ -608,7 +616,7 @@ int main ( int argc, char** argv )
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.
     CActivity activity;
@@ -756,8 +764,8 @@ int main ( int argc, char** argv )
             tsConsole << generr.GetErrorText() << endl;
         }
     }
-    
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+
+#if defined ( Q_OS_MACX )
     activity.EndActivity();
 #endif
 

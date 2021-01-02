@@ -155,7 +155,6 @@ win32 {
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
-‚
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
         -framework AVFoundation \

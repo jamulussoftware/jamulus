@@ -9,6 +9,9 @@ param(
     [string] $NsisUrl = "https://jztkft.dl.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
 
+# change directory to the directory above (if needed)
+Set-Location -Path "$PSScriptRoot\..\"
+
 # Global constants
 $RootPath = "$PWD"
 $BuildPath = "$RootPath\build"
@@ -18,6 +21,7 @@ $AppName = "Jamulus"
 
 # Stop at all errors
 $ErrorActionPreference = "Stop"
+
 
 # Execute native command with errorlevel handling
 Function Execute-Native-Command {

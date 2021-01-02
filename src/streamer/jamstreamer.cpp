@@ -3,10 +3,13 @@
 using namespace streamer;
 
 // --- CONSTRUCTOR ---
-CJamStreamer::CJamStreamer() {
+CJamStreamer::CJamStreamer() {}
+
+CJamStreamer::CJamStreamer( QString strStreamDest ) {
     // create a pipe to ffmpeg called "pipeout" to being able to put out the pcm data to it
     pcm = 0; // it is necessary to initialise pcm
-    pipeout = popen("ffmpeg -y -f s16le -ar 48000 -ac 2 -i - /tmp/jamstream.wav", "w");
+    QString command = "ffmpeg -y -f s16le -ar 48000 -ac 2 -i - " + strStreamDest;
+    pipeout = popen(command.toUtf8().constData(), "w");
 }
 
 // --- PROCESS ---

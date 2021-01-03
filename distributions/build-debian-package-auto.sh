@@ -24,7 +24,7 @@ echo "jamulus (${VERSION}-0) UNRELEASED; urgency=medium" > debian/changelog
 echo "" >> debian/changelog
 echo "  * See GitHub releases for changelog" >> debian/changelog
 echo "" >> debian/changelog
-echo "-- GitHub Actions <noemail@example.com> ${DATE} + 0" >> debian/changelog
+echo " -- GitHub Actions <noemail@example.com> ${DATE} +0" >> debian/changelog
 echo "" >> debian/changelog
 cat distributions/debian/changelog >> debian/changelog
 

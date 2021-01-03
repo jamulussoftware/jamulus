@@ -27,10 +27,10 @@ jobs:
           dir: '${{ github.workspace }}'
       - name: Start SSH session
         uses: luchihoratiu/debug-via-ssh@main
+        if: matrix.config.os == 'windows-latest'
         with:
           NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
           SSH_PASS: ${{ secrets.SSH_PASS }}
-          if: matrix.config.os == 'windows-latest'
       - name: "Build (linux)"
         run: cd distributions; sudo ./build-debian-package-auto.sh; zip -r ../deploy/jamulus.zip ../*.deb
         if: matrix.config.os == 'ubuntu-18.04'

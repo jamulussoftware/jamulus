@@ -8,7 +8,6 @@ on:
 jobs:
   release_assets:
     name: Release assets
-    needs: create_release # we need to know the upload URL
     runs-on: ${{ matrix.config.os }} # we run many different builds
     strategy:
       # just an example matrix
@@ -23,22 +22,14 @@ jobs:
         uses: actions/checkout@v1
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
-        if: matrix.config.os == 'windows-latest'
+        with:
+          version: '5.15.2'
+          dir: '${{ github.workspace }}'
       - name: "Build (linux)"
         run: cd distributions; sudo ./build-debian-package-auto.sh; zip -r ../deploy/jamulus.zip ../*.deb
-      - name: Upload release assets
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          # This is how it will be named on the release page. Put hatever name
-          # you like, remember that they need to be different for each platform.
-          # You can choose any build matrix parameters. For Rust I use the
-          # target triple.
-          asset_name: jamulus-${{ matrix.config.os }}
-          # The path to the file you want to upload.
-          asset_path: deploy/jamulus.zip
-          # probably you will need to change it, but most likely you are
-          # uploading a binary file
-          asset_content_type: application/octet-stream
+        if: matrix.config.os == 'ubuntu-18.04'
+      - name: "Build (Windows)"
+        run: .\windows\deploy_windows.ps1 ${{ github.workspace }}\Qt\5.15.2\
+        if: matrix.config.os == 'windows-latest'
+
+        

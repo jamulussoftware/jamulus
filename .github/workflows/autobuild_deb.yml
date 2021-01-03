@@ -2,11 +2,11 @@ name: "Autobuild deb"
 
 on:
   push:
-    branches:
-      - "autobuild_linux"
+    tags:
+      - "r*"
 jobs:
   pre-release:
-    name: "Pre Release"
+    name: "Release"
     runs-on: "ubuntu-18.04"
     steps:
       - name: Checkout Project
@@ -16,8 +16,8 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "nightly"
-          prerelease: true
+          automatic_release_tag: "latest"
+          prerelease: false
           title: "Development Build"
           files: |
             *.deb

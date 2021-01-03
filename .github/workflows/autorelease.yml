@@ -6,35 +6,39 @@ on:
       - "eduTools"
 
 jobs:
-  publish:
-    name: Publish for ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+  release_assets:
+    name: Release assets
+    needs: create_release # we need to know the upload URL
+    runs-on: ${{ matrix.config.os }} # we run many different builds
     strategy:
+      # just an example matrix
       matrix:
-        include:
+        config:
           - os: ubuntu-18.04
-            build_command: cd distributions; sudo ./build-debian-package-auto.sh; cp *headless*.deb deploy/jamulusheadless.deb
-            artifact_name: jamulusheadless.deb
-            asset_name: jamulusEduLinux
-          #- os: windows-latest
-          #  build_command: windows/deploy_windows.ps1; cp deploy/*.exe jamulusinstaller.exe
-          #  artifact_name: jamulusinstaller.exe
-          #  asset_name: jamulusEduWindows
-          #- os: macos-10.15
-          #  build_command: python -m pip install --upgrade pip; mac/deploy_mac.sh; cp deploy/*.dmg jamulusInstaller.dmg
-          #  artifact_name: jamulusInstaller.dmg
-          #  asset_name: jamulusEduMac
-
+          - os: macos-10.15
+          - os: windows-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2
-    - name: Build
-      run: ${{ matrix.build_command }}
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: deploy/${{ matrix.artifact_name }}
-        asset_name: ${{ matrix.asset_name }}
-        tag: testrelease
+      # checkout of cource
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        if: matrix.config.os == "windows-latest"
+      - name: "Build (linux)"
+        run: cd distributions; sudo ./build-debian-package-auto.sh; zip -r ../deploy/jamulus.zip ../*.deb
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          # This is how it will be named on the release page. Put hatever name
+          # you like, remember that they need to be different for each platform.
+          # You can choose any build matrix parameters. For Rust I use the
+          # target triple.
+          asset_name: jamulus-${{ matrix.config.os }}
+          # The path to the file you want to upload.
+          asset_path: deploy/jamulus.zip
+          # probably you will need to change it, but most likely you are
+          # uploading a binary file
+          asset_content_type: application/octet-stream

@@ -35,7 +35,7 @@ jobs:
         run: cd distributions; sudo ./build-debian-package-auto.sh; zip -r ../deploy/jamulus.zip ../*.deb
         if: matrix.config.os == 'ubuntu-18.04'
       - name: "Build (Windows)"
-        run: .\windows\deploy_windows.ps1 ${{ github.workspace }}\Qt\5.15.2\
+        run: powershell .\windows\deploy_windows.ps1 ${{ github.workspace }}\Qt\5.15.2\
         if: matrix.config.os == 'windows-latest'
 
         

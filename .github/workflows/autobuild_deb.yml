@@ -17,4 +17,4 @@ jobs:
           prerelease: false
           title: "Automatic Build"
           files: |
-            *.deb
+            deploy/*.deb

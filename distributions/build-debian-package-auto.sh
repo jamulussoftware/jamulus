@@ -19,12 +19,12 @@ VERSION=$(cat Jamulus.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
 
 # patch changelog (with hack)
 
-DATE=$(date "+%a, %d %B %Y %T %Z" )
+DATE=$(date "+%a, %d %B %Y %T" )
 echo "jamulus (${VERSION}-0) UNRELEASED; urgency=medium" > debian/changelog
 echo "" >> debian/changelog
 echo "  * See GitHub releases for changelog" >> debian/changelog
 echo "" >> debian/changelog
-echo "-- GitHub Actions <noemail@example.com> ${DATE}" >> debian/changelog
+echo "-- GitHub Actions <noemail@example.com> ${DATE} + 0" >> debian/changelog
 echo "" >> debian/changelog
 cat distributions/debian/changelog >> debian/changelog
 

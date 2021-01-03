@@ -288,11 +288,11 @@ Section "un.Install"
     ${EndIf}
 
     ; Remove the Start Menu and desktop shortcuts
-    IfFileExists "$DESKTOP\${APP_NAME}.lnk" deletedtshortcut continueremove
-    deletedtshortcut:
+    IfFileExists "$DESKTOP\${APP_NAME}.lnk" deleteshortcut skipshortcut
+    deleteshortcut:
       Delete   "$DESKTOP\${APP_NAME}.lnk"
-      goto continueremove
-    continueremove:
+      goto skipshortcut
+    skipshortcut:
     RMDir /r "$SMPROGRAMS\${APP_NAME}"
 
     ; There may be an auto run entry in the registry for the server, remove it

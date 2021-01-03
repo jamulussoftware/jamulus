@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
-        if: matrix.config.os == "windows-latest"
+        if: matrix.config.os == 'windows-latest'
       - name: "Build (linux)"
         run: cd distributions; sudo ./build-debian-package-auto.sh; zip -r ../deploy/jamulus.zip ../*.deb
       - name: Upload release assets

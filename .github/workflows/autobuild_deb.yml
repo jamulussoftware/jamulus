@@ -1,9 +1,6 @@
 name: "Autobuild deb"
 
-on:
-  push:
-    tags:
-      - "r*"
+on: push
 jobs:
   pre-release:
     name: "Release"

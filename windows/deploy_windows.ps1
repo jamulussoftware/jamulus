@@ -8,6 +8,10 @@ param(
     [string] $NsisName = "nsis-3.06.1",
     [string] $NsisUrl = "https://jztkft.dl.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
+# for gh actions
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+Set-Location -Path "$PSScriptRoot\..\"
 
 # Global constants
 $RootPath = "$PWD"

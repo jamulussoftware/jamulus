@@ -79,8 +79,8 @@ Function Install-Dependencies
     # for GH runner needed?
     Install-Module PowershellGet -Force
     
-    Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force -SkipPublisherCheck
-    Install-Module -Name "VSSetup" -Scope CurrentUser -Force -SkipPublisherCheck
+    Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
+    Install-Module -Name "VSSetup" -Scope CurrentUser -Force
     Install-Dependency -Uri $AsioSDKUrl `
         -Name $AsioSDKName -Destination "ASIOSDK2"
     Install-Dependency -Uri $NsisUrl `

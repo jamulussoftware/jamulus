@@ -6,7 +6,7 @@ param(
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://jztkft.dl.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
 
 # change directory to the directory above (if needed)
@@ -48,6 +48,25 @@ Function Clean-Build-Environment
     New-Item -Path $DeployPath -ItemType Directory
 }
 
+# For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
+Function Get-RedirectedUrl {
+ 
+    Param (
+        [Parameter(Mandatory=$true)]
+        [String]$URL
+    )
+ 
+    $request = [System.Net.WebRequest]::Create($url)
+    $request.AllowAutoRedirect=$false
+    $response=$request.GetResponse()
+ 
+    if ($response.StatusCode -eq "Found")
+    {
+        $response.GetResponseHeader("Location")
+    }
+}
+
+
 # Download and uncompress dependency in ZIP format
 Function Install-Dependency
 {
@@ -64,6 +83,11 @@ Function Install-Dependency
 
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
     $TempDir = [System.IO.Path]::GetTempPath()
+
+    if ($Uri -Match "sourceforge")
+    {
+      $Uri = Get-RedirectedUrl -URL $Uri
+    }
 
     Invoke-WebRequest -Uri $Uri -OutFile $TempFileName
     echo $TempFileName

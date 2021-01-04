@@ -8,10 +8,12 @@ class CJamStreamer : public QObject {
 
 public:
     CJamStreamer();
-    CJamStreamer( QString strStreamDest );
+    void Init( const QString strStreamDest );
 
 public slots:
     void process( int iServerFrameSizeSamples, CVector<int16_t> data );
+    void OnStarted();
+    void OnStopped();
 
 private:
     QString strStreamDest; // stream destination to pass to ffmpeg as output part of arguments

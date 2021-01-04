@@ -411,8 +411,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
     if ( !strStreamDest.isEmpty() )
     {
         QThread* pthJamStreamer = new QThread;
-        streamer::CJamStreamer* pJamStreamer = new streamer::CJamStreamer( strStreamDest );
+        streamer::CJamStreamer* pJamStreamer = new streamer::CJamStreamer();
+        pJamStreamer->Init( strStreamDest );
         pJamStreamer->moveToThread(pthJamStreamer);
+        QObject::connect( this, &CServer::Started, pJamStreamer, &streamer::CJamStreamer::OnStarted );
+        QObject::connect( this, &CServer::Stopped, pJamStreamer, &streamer::CJamStreamer::OnStopped );
         QObject::connect( this, &CServer::StreamFrame, pJamStreamer, &streamer::CJamStreamer::process );
         pthJamStreamer->start();
     }

@@ -53,6 +53,10 @@ BrandingText "${APP_NAME} powers your online jam session"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
+!define MUI_FINISHPAGE_SHOWREADME ""
+!define MUI_FINISHPAGE_SHOWREADME_CHECKED
+!define MUI_FINISHPAGE_SHOWREADME_TEXT "$(DESKTOP_SET_SHORTCUT)"
+!define MUI_FINISHPAGE_SHOWREADME_FUNCTION createdesktopshortcut
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller page configuration
@@ -66,7 +70,8 @@ BrandingText "${APP_NAME} powers your online jam session"
 ; Additional languages can be added below, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
 !insertmacro MUI_LANGUAGE "English" ; The first language is the default
 ; !insertmacro MUI_LANGUAGE "Italian"
-
+LangString DESKTOP_SET_SHORTCUT ${LANG_ENGLISH} \
+    "Create Desktop shortcut"
 LangString INVALID_FOLDER_MSG ${LANG_ENGLISH} \
     "The destination folder already exists. Please enter a new destination folder."
 ; LangString INVALID_FOLDER_MSG ${LANG_ITALIAN} \
@@ -138,8 +143,7 @@ LangString OLD_WRONG_VER_REMOVE_FAILED ${LANG_ENGLISH} \
     ; Add the uninstaller
     WriteUninstaller "$INSTDIR\${UNINSTALL_EXE}"
 
-    ; Add the Start Menu and desktop shortcuts
-    CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+    ; Add the Start Menu shortcuts
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"           "$INSTDIR\${APP_EXE}"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\servericon.ico"  
@@ -241,6 +245,9 @@ Function AbortOnRunningApp
     !insertmacro _AbortOnRunningApp
 FunctionEnd
 
+Function createdesktopshortcut
+  CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+FunctionEnd
 
 ; Uninstaller
 !macro un.InstallFiles buildArch
@@ -281,7 +288,11 @@ Section "un.Install"
     ${EndIf}
 
     ; Remove the Start Menu and desktop shortcuts
-    Delete   "$DESKTOP\${APP_NAME}.lnk"
+    IfFileExists "$DESKTOP\${APP_NAME}.lnk" deleteshortcut skipshortcut
+    deleteshortcut:
+      Delete   "$DESKTOP\${APP_NAME}.lnk"
+      goto skipshortcut
+    skipshortcut:
     RMDir /r "$SMPROGRAMS\${APP_NAME}"
 
     ; There may be an auto run entry in the registry for the server, remove it

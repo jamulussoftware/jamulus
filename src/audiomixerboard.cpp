@@ -42,6 +42,7 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pPan                        = new QDial       ( pLevelsBox );
     pPanLabel                   = new QLabel      ( tr ( "Pan" ), pLevelsBox );
     pInfoLabel                  = new QLabel      ( "", pLevelsBox );
+    pInfoLabel->setMinimumSize(36, 36); // prevents jitter when muting/unmuting
 
     pMuteSoloBox                = new QWidget     ( pFrame );
     pcbMute                     = new QCheckBox   ( tr ( "Mute" ), pMuteSoloBox );
@@ -216,7 +217,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "          border-left:   20px transparent;"
             "          border-right:  -25px transparent; }"
             "QSlider::groove { image:          url();"
-            "                  padding-left:   -38px;"
+            "                  padding-left:   -34px;"
             "                  padding-top:    -10px;"
             "                  padding-bottom: -15px; }"
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );

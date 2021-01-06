@@ -42,7 +42,6 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pPan                        = new QDial       ( pLevelsBox );
     pPanLabel                   = new QLabel      ( tr ( "Pan" ), pLevelsBox );
     pInfoLabel                  = new QLabel      ( "", pLevelsBox );
-    pInfoLabel->setMinimumSize(36, 36); // prevents jitter when muting/unmuting
 
     pMuteSoloBox                = new QWidget     ( pFrame );
     pcbMute                     = new QCheckBox   ( tr ( "Mute" ), pMuteSoloBox );
@@ -82,13 +81,14 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup panning control
-    pPan->setRange          ( 0, AUD_MIX_PAN_MAX );
-    pPan->setValue          ( AUD_MIX_PAN_MAX / 2 );
-    pPan->setNotchesVisible ( true );
-    pPanInfoGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft );
-    pPanInfoGrid->addWidget ( pInfoLabel );
-    pPanGrid->addLayout     ( pPanInfoGrid );
-    pPanGrid->addWidget     ( pPan, 0, Qt::AlignHCenter );
+    pPan->setRange             ( 0, AUD_MIX_PAN_MAX );
+    pPan->setValue             ( AUD_MIX_PAN_MAX / 2 );
+    pPan->setNotchesVisible    ( true );
+    pInfoLabel->setMinimumSize ( 36, 36 ); // prevents jitter when muting/unmuting
+    pPanInfoGrid->addWidget    ( pPanLabel, 0, Qt::AlignLeft );
+    pPanInfoGrid->addWidget    ( pInfoLabel );
+    pPanGrid->addLayout        ( pPanInfoGrid );
+    pPanGrid->addWidget        ( pPan, 0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat ( Qt::PlainText );

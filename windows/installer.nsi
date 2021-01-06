@@ -87,8 +87,8 @@ LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
-LangString OLD_WRONG_VER_REMOVE_FAILED ${LANG_ENGLISH} \
-     "FATAL: THE OLD UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
+LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
+     "FATAL: THE UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
 ; Abort the installer/uninstaller if Jamulus is running
 !macro _AbortOnRunningApp
 
@@ -108,13 +108,28 @@ LangString OLD_WRONG_VER_REMOVE_FAILED ${LANG_ENGLISH} \
     !define prefix "${DEPLOY_PATH}\${buildArch}"
     !tempfile files
 
-    ; Find target folders
+    ; Find target folders (Probably here's an issue with quoting. If ${prefix} contains spaces, the installer folders aren't created in the right way.)
     !system 'cmd.exe /v /c "for /f "usebackq" %d in (`dir /b /s /ad "${prefix}"`) do \
         @(set "_d=%d" && echo CreateDirectory "$INSTDIR\!_d:${prefix}\=!" >> "${files}")"'
 
     ; Find target files
     !system 'cmd.exe /v /c "for /r "${prefix}" %f in (*.*) do \
         @(set "_f=%f" && echo File "/oname=$INSTDIR\!_f:${prefix}\=!" "!_f!" >> "${files}")"'
+
+    InitPluginsDir
+    IfFileExists "$INSTDIR\${UNINSTALL_EXE}" old_install_found continueinstall
+
+    old_install_found:
+        CreateDirectory "$pluginsdir\unold" ; Make sure plugins do not conflict with a old uninstaller 
+        CopyFiles /SILENT /FILESONLY "$INSTDIR\${UNINSTALL_EXE}" "$pluginsdir\unold"
+        ExecWait '"$pluginsdir\unold\${UNINSTALL_EXE}" /S _?=$INSTDIR' $0
+
+        ${IfNot} $0 == 0
+            MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
+            Abort
+        ${EndIf}
+
+    continueinstall:
 
     ; Install folders and files
     CreateDirectory "$INSTDIR"
@@ -154,7 +169,6 @@ LangString OLD_WRONG_VER_REMOVE_FAILED ${LANG_ENGLISH} \
 SectionGroup "InstallGroup"
 
     Section "Install" Install_x86_64
-
         ; Install the main application
         !insertmacro InstallApplication x86_64
         !insertmacro SetupShortcuts
@@ -204,7 +218,7 @@ Function .onInit
             removeold:
                 ExecWait "$PROGRAMFILES32\Jamulus\Uninstall.exe" $0
                 ${IfNot} $0 == 0
-                  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
+                  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
                   goto quit
                 ${EndIf}
                 goto continueinstall

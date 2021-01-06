@@ -116,7 +116,7 @@ LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
     !system 'cmd.exe /v /c "for /r "${prefix}" %f in (*.*) do \
         @(set "_f=%f" && echo File "/oname=$INSTDIR\!_f:${prefix}\=!" "!_f!" >> "${files}")"'
 
-    InitPluginsDir
+    InitPluginsDir ; see https://stackoverflow.com/questions/24595887/waiting-for-nsis-uninstaller-to-finish-in-nsis-installer-either-fails-or-the-uni
     IfFileExists "$INSTDIR\${UNINSTALL_EXE}" old_install_found continueinstall
 
     old_install_found:

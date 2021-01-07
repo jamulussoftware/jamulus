@@ -8,6 +8,7 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
+    lrelease \
     release
 
 QT += network \
@@ -21,6 +22,7 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
+LRELEASE_DIR = src/res/translation
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \

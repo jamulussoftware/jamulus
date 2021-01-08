@@ -2,7 +2,7 @@ language: cpp
 matrix:
   include:
   - os: linux
-    dist: xenial
+    dist: trusty
     before_install:
     - sudo apt-get update -qq
     - sudo apt-get install devscripts build-essential lintian dh-make

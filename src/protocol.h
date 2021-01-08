@@ -55,7 +55,7 @@
 #define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
 #define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
 #define PROTMESSID_LICENCE_REQUIRED           27 // licence required
-#define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // request the channel level list
+#define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // OLD (not used anymore) // TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
 #define PROTMESSID_VERSION_AND_OS             29 // version number and operating system
 #define PROTMESSID_CHANNEL_PAN                30 // set channel pan for mix
 #define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
@@ -83,6 +83,7 @@
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
+#define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE      2001 // a container for split messages
@@ -113,8 +114,8 @@ public:
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
     void CreateClientIDMes ( const int iChanID );
-    void CreateChanGainMes ( const int iChanID, const double dGain );
-    void CreateChanPanMes ( const int iChanID, const double dPan );
+    void CreateChanGainMes ( const int iChanID, const float fGain );
+    void CreateChanPanMes ( const int iChanID, const float fPan );
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted );
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
@@ -127,7 +128,10 @@ public:
     void CreateSplitMessSupportedMes();
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
-    void CreateReqChannelLevelListMes ( const bool bRCL );
+
+// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+void CreateReqChannelLevelListMes();
+
     void CreateVersionAndOSMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );
 
@@ -144,6 +148,8 @@ public:
                                          const CServerCoreInfo& ServerInfo );
     void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
     void CreateCLServerListMes         ( const CHostAddress&        InetAddr,
+                                         const CVector<CServerInfo> vecServerInfo );
+    void CreateCLRedServerListMes      ( const CHostAddress&        InetAddr,
                                          const CVector<CServerInfo> vecServerInfo );
     void CreateCLReqServerListMes      ( const CHostAddress& InetAddr );
     void CreateCLSendEmptyMesMes       ( const CHostAddress& InetAddr,
@@ -238,7 +244,8 @@ protected:
 
     void PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
                                  int&              iPos,
-                                 const QByteArray& sStringUTF8 );
+                                 const QByteArray& sStringUTF8,
+                                 const int         iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
 
     static uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
                                        int&                    iPos,
@@ -247,7 +254,8 @@ protected:
     bool GetStringFromStream ( const CVector<uint8_t>& vecIn,
                                int&                    iPos,
                                const int               iMaxStringLen,
-                               QString&                strOut );
+                               QString&                strOut,
+                               const int               iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
 
     void SendMessage();
 
@@ -274,7 +282,6 @@ protected:
     bool EvaluateReqSplitMessSupportMes();
     bool EvaluateSplitMessSupportedMes();
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
     bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
     bool EvaluateRecorderStateMes       ( const CVector<uint8_t>& vecData );
 
@@ -289,6 +296,8 @@ protected:
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
     bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLRedServerListMes      ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerListMes      ( const CHostAddress&     InetAddr );
     bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
@@ -333,8 +342,8 @@ signals:
     void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ClientIDReceived ( int iChanID );
-    void ChangeChanGain ( int iChanID, double dNewGain );
-    void ChangeChanPan ( int iChanID, double dNewPan );
+    void ChangeChanGain ( int iChanID, float fNewGain );
+    void ChangeChanPan ( int iChanID, float fNewPan );
     void MuteStateHasChangedReceived ( int iCurID, bool bIsMuted );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();
@@ -347,7 +356,6 @@ signals:
     void ReqSplitMessSupport();
     void SplitMessSupported();
     void LicenceRequired ( ELicenceType eLicenceType );
-    void ReqChannelLevelList ( bool bOptIn );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void RecorderStateReceived ( ERecorderState eRecorderState );
 
@@ -366,6 +374,8 @@ signals:
                                         QString                strVersion );
     void CLUnregisterServerReceived   ( CHostAddress           InetAddr );
     void CLServerListReceived         ( CHostAddress           InetAddr,
+                                        CVector<CServerInfo>   vecServerInfo );
+    void CLRedServerListReceived      ( CHostAddress           InetAddr,
                                         CVector<CServerInfo>   vecServerInfo );
     void CLReqServerList              ( CHostAddress           InetAddr );
     void CLSendEmptyMes               ( CHostAddress           TargetInetAddr );

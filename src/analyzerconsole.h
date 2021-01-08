@@ -45,9 +45,8 @@ class CAnalyzerConsole : public QDialog
     Q_OBJECT
 
 public:
-    CAnalyzerConsole ( CClient*        pNCliP,
-                       QWidget*        parent = nullptr,
-                       Qt::WindowFlags f = nullptr );
+    CAnalyzerConsole ( CClient* pNCliP,
+                       QWidget* parent = nullptr );
 
 
 protected:

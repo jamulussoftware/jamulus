@@ -25,20 +25,21 @@
 #pragma once
 
 #include <oboe/Oboe.h>
-#include <QMutex>
 #include "soundbase.h"
 #include "global.h"
 #include <QDebug>
 #include <android/log.h>
-
+#include "ring_buffer.h"
+#include <mutex>
 
 /* Classes ********************************************************************/
-class CSound : public CSoundBase, public oboe::AudioStreamCallback//, public IRenderableAudio, public IRestartable
+class CSound : public CSoundBase, public oboe::AudioStreamCallback
 {
 public:
+    static const uint8_t RING_FACTOR;
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
              void*          arg,
-             const int      iCtrlMIDIChannel,
+             const QString& strMIDISetup,
              const bool     ,
              const QString& );
     virtual ~CSound() {}
@@ -52,33 +53,24 @@ public:
     virtual void onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result );
     virtual void onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result );
 
-    // these variables should be protected but cannot since we want
-    // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
-
-    static void android_message_handler ( QtMsgType                 type,
-                                          const QMessageLogContext& context,
-                                          const QString&            message )
+    struct Stats 
     {
-        android_LogPriority priority = ANDROID_LOG_DEBUG;
-
-        switch ( type )
-        {
-        case QtDebugMsg:    priority = ANDROID_LOG_DEBUG; break;
-        case QtWarningMsg:  priority = ANDROID_LOG_WARN;  break;
-        case QtCriticalMsg: priority = ANDROID_LOG_ERROR; break;
-        case QtFatalMsg:    priority = ANDROID_LOG_FATAL; break;
-        };
-
-        __android_log_print ( priority, "Qt", "%s", qPrintable ( message ) );
+        Stats() { reset(); }
+        void reset();
+        void log() const;
+        std::size_t frames_in;
+        std::size_t frames_out;
+        std::size_t frames_filled_out;
+        std::size_t in_callback_calls;
+        std::size_t out_callback_calls;
+        std::size_t ring_overrun;
     };
 
-// TEST
-CVector<short> vecsTmpAudioInSndCrd;
-int            iModifiedInBufSize;
-
-    int            iOpenSLBufferSizeMono;
-    int            iOpenSLBufferSizeStereo;
+protected:
+    CVector<int16_t>  vecsTmpInputAudioSndCrdStereo;
+    RingBuffer<float> mOutBuffer;
+    int               iOboeBufferSizeMono;
+    int               iOboeBufferSizeStereo;
 
 private:
     void setupCommonStreamParams ( oboe::AudioStreamBuilder* builder );
@@ -88,17 +80,17 @@ private:
     void warnIfNotLowLatency ( oboe::ManagedStream& stream, QString streamName );
     void closeStream ( oboe::ManagedStream& stream );
 
+    oboe::DataCallbackResult onAudioInput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );
+    oboe::DataCallbackResult onAudioOutput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );
+
+    void addOutputData(int channel_count);
+
     oboe::ManagedStream  mRecordingStream;
     oboe::ManagedStream  mPlayStream;
-    AudioStreamCallback* mCallback;
 
     // used to reach a state where the input buffer is
     // empty and the garbage in the first 500ms or so is discarded
     static constexpr int32_t kNumCallbacksToDrain = 10;
     int32_t mCountCallbacksToDrain = kNumCallbacksToDrain;
-
-    // Used to reference this instance of class from within the static callback
-    CSound *pSound;
-
-    QMutex Mutex;
+    Stats   mStats;
 };

@@ -173,14 +173,12 @@ public:
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strServerNameForHTMLStatusFile,
               const QString&     strCentralServer,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
               const bool         bNSingleMixServerMode,
-              const bool         bNCentServPingServerInList,
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
@@ -211,6 +209,7 @@ public:
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
     bool GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
+    bool GetDisableRecording() { return bDisableRecording; }
     void RequestNewRecording() { JamController.RequestNewRecording(); }
 
     void SetEnableRecording ( bool bNewEnableRecording );
@@ -271,16 +270,9 @@ public:
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
 
-    void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
-    ELicenceType GetLicenceType() { return eLicenceType; }
-
 protected:
     // access functions for actual channels
-    bool IsConnected ( const int iChanNum )
-        { return vecChannels[iChanNum].IsConnected(); }
-
-    void StartStatusHTMLFileWriting ( const QString& strNewFileName,
-                                      const QString& strNewServerNameWithPort );
+    bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
 
     int GetFreeChan();
     int GetSingleMixMasterID();
@@ -309,9 +301,16 @@ protected:
 
     void WriteHTMLChannelList();
 
+    void DecodeReceiveDataBlocks ( const int iStartChanCnt,
+                                   const int iStopChanCnt,
+                                   const int iNumClients );
+
     void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                        const int iStopChanCnt,
                                        const int iNumClients );
+
+    void DecodeReceiveData ( const int iChanCnt,
+                             const int iNumClients );
 
     void MixEncodeTransmitData ( const int iChanCnt,
                                  const int iNumClients );
@@ -338,6 +337,7 @@ protected:
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;
     QMutex                     MutexWelcomeMessage;
+    bool                       bChannelIsNowDisconnected;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];
@@ -356,15 +356,15 @@ protected:
     CVector<QString>           vstrChatColors;
     CVector<int>               vecChanIDsCurConChan;
 
-    CVector<CVector<double> >  vecvecdGains;
-    CVector<CVector<double> >  vecvecdPannings;
+    CVector<CVector<float> >   vecvecfGains;
+    CVector<CVector<float> >   vecvecfPannings;
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<int16_t> > vecvecsSendData;
-    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
+    CVector<CVector<float> >   vecvecfIntermediateProcBuf;
     CVector<CVector<uint8_t> > vecvecbyCodedDataIn;
     CVector<CVector<uint8_t> > vecvecbyCodedDataOut;
 
@@ -383,7 +383,6 @@ protected:
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
-    QString                    strServerNameWithPort;
 
     CHighPrecisionTimer        HighPrecisionTimer;
 
@@ -488,10 +487,10 @@ public slots:
     void OnCLRegisterServerExReceived ( CHostAddress           InetAddr,
                                         CHostAddress           LInetAddr,
                                         CServerCoreInfo        ServerInfo,
-                                        COSUtil::EOpSystemType eOSType,
+                                        COSUtil::EOpSystemType ,
                                         QString                strVersion )
     {
-        ServerListManager.CentralServerRegisterServerEx ( InetAddr, LInetAddr, ServerInfo, eOSType, strVersion );
+        ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo, strVersion );
     }
 
     void OnCLRegisterServerResp ( CHostAddress  /* unused */,

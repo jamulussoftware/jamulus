@@ -29,8 +29,8 @@
 
 
 /* Implementation *************************************************************/
-CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
-    QWidget ( parent, f ),
+CLevelMeter::CLevelMeter ( QWidget* parent ) :
+    QWidget ( parent ),
     eLevelMeterType ( MT_BAR )
 {
     // initialize LED meter

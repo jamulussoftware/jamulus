@@ -48,15 +48,20 @@ void CJamController::SetEnableRecording  ( bool bNewEnableRecording, bool isRunn
 
     if ( bRecorderInitialised )
     {
+
+        // message only if the state appears to change
+        if ( bEnableRecording != bNewEnableRecording )
+        {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qInfo()
+            qInfo() << "Recording state" << ( bNewEnableRecording ? "enabled" : "disabled" );
+#endif
+        }
+
         // note that this block executes regardless of whether
         // what appears to be a change is being applied, to ensure
         // the requested state is the result
         bEnableRecording = bNewEnableRecording;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qInfo()
-        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
-#endif
 
         if ( !bEnableRecording )
         {

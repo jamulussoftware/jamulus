@@ -72,11 +72,6 @@ LED bar:      lbr
 //#define _DEBUG_
 #undef _DEBUG_
 
-// define this macro if the version and operating system debugging shall
-// be enabled in the client (the ping time column in the connect dialog then
-// shows the requested information instead of the ping time)
-#undef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-
 // version and application name (use version from qt prject file)
 #undef VERSION
 #define VERSION                          APP_VERSION
@@ -107,13 +102,13 @@ LED bar:      lbr
 #define CENTSERV_GENRE_CLASSICAL_FOLK    "jamulusclassical.fischvolk.de:22524"
 
 // getting started and software manual URL
-#define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Getting-Started"
-#define SERVER_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Running-a-Server"
-#define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
+#define CLIENT_GETTING_STARTED_URL       "https://jamulus.io/wiki/Getting-Started"
+#define SERVER_GETTING_STARTED_URL       "https://jamulus.io/wiki/Running-a-Server"
+#define SOFTWARE_MANUAL_URL              "https://jamulus.io/wiki/Software-Manual"
 
 // determining server internal address uses well-known host and port
-// (Google DNS, or something else reliable)
-#define WELL_KNOWN_HOST                  "8.8.8.8" // Google
+// (You can change the service used here to something like Cloudflare (1.1.1.1), Google DNS (8.8.8.8), or something else reliable)
+#define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
@@ -177,7 +172,7 @@ LED bar:      lbr
 #define YELLOW_BOUND_LED_BAR             5
 
 // maximum number of connected clients at the server (must not be larger than 256)
-#define MAX_NUM_CHANNELS                 100 // max number channels for server
+#define MAX_NUM_CHANNELS                 150 // max number channels for server
 
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS
@@ -232,7 +227,7 @@ LED bar:      lbr
 #define MAX_LEN_SERVER_NAME              20
 #define MAX_LEN_IP_ADDRESS               15
 #define MAX_LEN_SERVER_CITY              20
-#define MAX_LEN_VERSION_TEXT             20
+#define MAX_LEN_VERSION_TEXT             30
 
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \
@@ -240,6 +235,12 @@ LED bar:      lbr
     QCoreApplication::translate ( "global", "For more information use the ""What's " \
     "This"" help (help menu, right mouse button or Shift+F1)" ) + \
     "</i></font></div>"
+
+// server welcome message title (do not change for compatibility!)
+#define WELCOME_MESSAGE_PREFIX           "<b>Server Welcome Message:</b> "
+
+// mixer settings file name suffix
+#define MIX_SETTINGS_FILE_SUFFIX         "jch"
 
 #define _MAXSHORT                        32767
 #define _MINSHORT                        ( -32768 )

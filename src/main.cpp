@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -38,7 +38,7 @@
 #ifdef ANDROID
 # include <QtAndroidExtras/QtAndroid>
 #endif
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
 # include "mac/activity.h"
 #endif
 
@@ -55,7 +55,7 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-#if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
+#if defined( SERVER_BUNDLE ) && ( defined( Q_OS_MACX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
     bool         bIsClient                   = false;
 #else
@@ -69,27 +69,26 @@ int main ( int argc, char** argv )
     bool         bUseMultithreading          = false;
     bool         bShowAnalyzerConsole        = false;
     bool         bMuteStream                 = false;
+    bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
-    bool         bCentServPingServerInList   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     bool         bSingleMixServerMode        = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
-    int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
+    QString      strMIDISetup                = "";
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
     QString      strHTMLStatusFileName       = "";
-    QString      strServerName               = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
-    QString      strClientName               = APP_NAME;
+    QString      strClientName               = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -209,19 +208,6 @@ int main ( int argc, char** argv )
         }
 
 
-        // Ping servers in list for central server -----------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-g",
-                               "--pingservers" ) )
-        {
-            bCentServPingServerInList = true;
-            tsConsole << "- ping servers in slave server list" << endl;
-            CommandLineOptions << "--pingservers";
-            continue;
-        }
-
-
         // Disconnect all clients on quit --------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
@@ -293,18 +279,16 @@ int main ( int argc, char** argv )
 
 
         // Controller MIDI channel ---------------------------------------------
-        if ( GetNumericArgument ( tsConsole,
-                                  argc,
-                                  argv,
-                                  i,
-                                  "--ctrlmidich", // no short form
-                                  "--ctrlmidich",
-                                  0,
-                                  15,
-                                  rDbleArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--ctrlmidich", // no short form
+                                 "--ctrlmidich",
+                                 strArgument ) )
         {
-            iCtrlMIDIChannel = static_cast<int> ( rDbleArgument );
-            tsConsole << "- selected controller MIDI channel: " << iCtrlMIDIChannel << endl;
+            strMIDISetup = strArgument;
+            tsConsole << "- MIDI controller settings: " << strMIDISetup << endl;
             CommandLineOptions << "--ctrlmidich";
             continue;
         }
@@ -360,31 +344,17 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-a",
-                                 "--servername",
-                                 strArgument ) )
-        {
-            strServerName = strArgument;
-            tsConsole << "- server name for HTML status file: " << strServerName << endl;
-            CommandLineOptions << "--servername";
-            continue;
-        }
-
 
         // Client Name ---------------------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
                                  argv,
                                  i,
-                                 "--clientname",
+                                 "--clientname", // no short form
                                  "--clientname",
                                  strArgument ) )
         {
-            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            strClientName = strArgument;
             tsConsole << "- client name: " << strClientName << endl;
             CommandLineOptions << "--clientname";
             continue;
@@ -410,7 +380,7 @@ int main ( int argc, char** argv )
         // Disable recording on startup ----------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
-                               "--norecord",
+                               "--norecord", // no short form
                                "--norecord" ) )
         {
             bDisableRecording = true;
@@ -529,6 +499,19 @@ int main ( int argc, char** argv )
         }
 
 
+        // For headless client mute my own signal in personal mix --------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--mutemyown", // no short form
+                               "--mutemyown" ) )
+        {
+            bMuteMeInPersonalMix = true;
+            tsConsole << "- mute me in my personal mix" << endl;
+            CommandLineOptions << "--mutemyown";
+            continue;
+        }
+
+
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
              ( !strcmp ( argv[i], "-v" ) ) )
@@ -556,7 +539,7 @@ int main ( int argc, char** argv )
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
-#if !( defined ( __APPLE__ ) || defined ( __MACOSX ) )
+#if !( defined ( Q_OS_MACX ) )
         exit ( 1 );
 #endif
     }
@@ -579,6 +562,13 @@ int main ( int argc, char** argv )
     if ( !bIsClient && !bUseGUI && !strIniFileName.isEmpty() )
     {
         tsConsole << "No initialization file support in headless server mode." << endl;
+    }
+
+    // mute my own signal in personal mix is only supported for headless mode
+    if ( bIsClient && bUseGUI && bMuteMeInPersonalMix )
+    {
+        bMuteMeInPersonalMix = false;
+        tsConsole << "Mute my own signal in my personal mix is only supported in headless mode." << endl;
     }
 
     // per definition: if we are in "GUI" server mode and no central server
@@ -609,9 +599,17 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
+# if defined ( Q_OS_IOS )
+    bIsClient = false;
+    bUseGUI = true;
+
+    // bUseMultithreading = true;
+    QApplication* pApp =  new QApplication ( argc, argv );
+# else
     QCoreApplication* pApp = bUseGUI
         ? new QApplication ( argc, argv )
         : new QCoreApplication ( argc, argv );
+# endif
 #endif
 
 #ifdef ANDROID
@@ -640,7 +638,7 @@ int main ( int argc, char** argv )
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.
     CActivity activity;
@@ -664,9 +662,10 @@ int main ( int argc, char** argv )
             // actual client object
             CClient Client ( iPortNumber,
                              strConnOnStartupAddress,
-                             iCtrlMIDIChannel,
+                             strMIDISetup,
                              bNoAutoJackConnect,
-                             strClientName );
+                             strClientName,
+                             bMuteMeInPersonalMix );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -686,12 +685,11 @@ int main ( int argc, char** argv )
                 CClientDlg ClientDlg ( &Client,
                                        &Settings,
                                        strConnOnStartupAddress,
-                                       iCtrlMIDIChannel,
+                                       strMIDISetup,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
                                        bMuteStream,
-                                       nullptr,
-                                       Qt::Window );
+                                       nullptr );
 
                 // show dialog
                 ClientDlg.show();
@@ -714,14 +712,12 @@ int main ( int argc, char** argv )
                              strLoggingFileName,
                              iPortNumber,
                              strHTMLStatusFileName,
-                             strServerName,
                              strCentralServer,
                              strServerInfo,
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
                              bSingleMixServerMode,
-                             bCentServPingServerInList,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -749,8 +745,7 @@ int main ( int argc, char** argv )
                 CServerDlg ServerDlg ( &Server,
                                        &Settings,
                                        bStartMinimized,
-                                       nullptr,
-                                       Qt::Window );
+                                       nullptr );
 
                 // show dialog (if not the minimized flag is set)
                 if ( !bStartMinimized )
@@ -792,8 +787,8 @@ int main ( int argc, char** argv )
             tsConsole << generr.GetErrorText() << endl;
         }
     }
-    
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+
+#if defined ( Q_OS_MACX )
     activity.EndActivity();
 #endif
 
@@ -820,25 +815,17 @@ QString UsageArguments ( char **argv )
         "      --singlemix       single audio mix server mode where all clients\n"
         "                        hear the audio mix of the first connected client\n"
         "                        (cannot be combined with -F and -T)\n"
-        "  -a, --servername      server name, required for HTML status\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the central server\n"
         "                        (or 'localhost' to be a central server)\n"
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"
-        "  -g, --pingservers     ping servers in list to keep NAT port open\n"
-        "                        (central server only)\n"
         "  -l, --log             enable logging, set file name\n"
-        "  -L, --licence         a licence must be accepted on a new\n"
-        "                        connection\n"
+        "  -L, --licence         show an agreement window before users can connect\n"
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
-        "  -o, --serverinfo      infos of the server(s) in the format:\n"
-        "                        [name];[city];[country as QLocale ID]; ...\n"
-        "                        [server1 address];[server1 name]; ...\n"
-        "                        [server1 city]; ...\n"
-        "                        [server1 country as QLocale ID]; ...\n"
-        "                        [server2 address]; ...\n"
+        "  -o, --serverinfo      infos of this server in the format:\n"
+        "                        [name];[city];[country as QLocale ID]\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"
@@ -849,6 +836,7 @@ QString UsageArguments ( char **argv )
         "  -z, --startminimized  start minimizied\n"
         "\nClient only:\n"
         "  -M, --mutestream      starts the application in muted state\n"
+        "      --mutemyown       mute me in my personal mix (headless only)\n"
         "  -c, --connect         connect to given server address on startup\n"
         "  -j, --nojackconnect   disable auto Jack connections\n"
         "  --ctrlmidich          MIDI controller channel to listen\n"

@@ -176,9 +176,9 @@ MESSAGES (with connection)
         ... ------------------+-----------------------+ ...
         ...  4 bytes sam rate | 2 bytes audiocod type | ...
         ... ------------------+-----------------------+ ...
-        ... -----------------+----------------------+
-        ...  2 bytes version | 4 bytes audiocod arg |
-        ... -----------------+----------------------+
+        ... ---------------+----------------------+
+        ...  2 bytes flags | 4 bytes audiocod arg |
+        ... ---------------+----------------------+
 
     - "base netw size":  length of the base network packet (frame) in bytes
     - "block size fact": block size factor
@@ -190,8 +190,9 @@ MESSAGES (with connection)
                           - 1: CELT
                           - 2: OPUS
                           - 3: OPUS64
-    - "version":         version of the audio coder, if not used this value
-                         shall be set to 0
+    - "flags":           flags indicating network properties:
+                          - 0: none
+                          - 1: WITH_COUNTER (a packet counter is added to the audio packet)
     - "audiocod arg":    argument for the audio coder, if not used this value
                          shall be set to 0
 
@@ -216,15 +217,6 @@ MESSAGES (with connection)
     +---------------------+
     | 1 byte licence type |
     +---------------------+
-
-
-- PROTMESSID_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
-
-    +---------------+
-    | 1 byte option |
-    +---------------+
-
-    option is boolean, true to opt in, false to opt out
 
 
 - PROTMESSID_VERSION_AND_OS: Version number and operating system
@@ -336,6 +328,18 @@ CONNECTION LESS MESSAGES
 
     - "PROTMESSID_CLM_REGISTER_SERVER" means that exactly the same message body
       of the PROTMESSID_CLM_REGISTER_SERVER message is used
+
+
+- PROTMESSID_CLM_RED_SERVER_LIST: Reduced server list message (to have less UDP fragmentation)
+
+    for each registered server append following data:
+
+    +--------------------+------------------------------+ ...
+    | 4 bytes IP address | 2 bytes server internal port | ...
+    +--------------------+------------------------------+ ...
+        ... -----------------+----------------------------------+
+        ...  1 byte number n | n bytes UTF-8 string server name |
+        ... -----------------+----------------------------------+
 
 
 - PROTMESSID_CLM_REQ_SERVER_LIST: Request server list
@@ -830,10 +834,6 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     EvaluateLicenceRequiredMes ( vecbyMesBodyDataRef );
                     break;
 
-                case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
-                    EvaluateReqChannelLevelListMes ( vecbyMesBodyDataRef );
-                    break;
-
                 case PROTMESSID_VERSION_AND_OS:
                     EvaluateVersionAndOSMes ( vecbyMesBodyDataRef );
                     break;
@@ -881,6 +881,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
     case PROTMESSID_CLM_SERVER_LIST:
         EvaluateCLServerListMes ( InetAddr, vecbyMesBodyData );
+        break;
+
+    case PROTMESSID_CLM_RED_SERVER_LIST:
+        EvaluateCLRedServerListMes ( InetAddr, vecbyMesBodyData );
         break;
 
     case PROTMESSID_CLM_REQ_SERVER_LIST:
@@ -1019,7 +1023,7 @@ bool CProtocol::EvaluateClientIDMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
+void CProtocol::CreateChanGainMes ( const int iChanID, const float fGain )
 {
     CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
     int              iPos = 0;      // init position pointer
@@ -1029,7 +1033,7 @@ void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
 
     // actual gain, we convert from double with range 0..1 to integer
-    const int iCurGain = static_cast<int> ( dGain * ( 1 << 15 ) );
+    const int iCurGain = static_cast<int> ( fGain * ( 1 << 15 ) );
 
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurGain ), 2 );
 
@@ -1053,15 +1057,15 @@ bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
     const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // we convert the gain from integer to double with range 0..1
-    const double dNewGain = static_cast<double> ( iData ) / ( 1 << 15 );
+    const float fNewGain = static_cast<float> ( iData ) / ( 1 << 15 );
 
     // invoke message action
-    emit ChangeChanGain ( iCurID, dNewGain );
+    emit ChangeChanGain ( iCurID, fNewGain );
 
     return false; // no error
 }
 
-void CProtocol::CreateChanPanMes ( const int iChanID, const double dPan )
+void CProtocol::CreateChanPanMes ( const int iChanID, const float fPan )
 {
     CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
     int              iPos = 0;      // init position pointer
@@ -1070,8 +1074,8 @@ void CProtocol::CreateChanPanMes ( const int iChanID, const double dPan )
     // channel ID
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
 
-    // actual gain, we convert from double with range 0..1 to integer
-    const int iCurPan = static_cast<int> ( dPan * ( 1 << 15 ) );
+    // actual pan, we convert from double with range 0..1 to integer
+    const int iCurPan = static_cast<int> ( fPan * ( 1 << 15 ) );
 
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurPan ), 2 );
 
@@ -1094,11 +1098,11 @@ bool CProtocol::EvaluateChanPanMes ( const CVector<uint8_t> &vecData )
     // pan (read integer value)
     const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
-    // we convert the gain from integer to double with range 0..1
-    const double dNewPan = static_cast<double> ( iData ) / ( 1 << 15 );
+    // we convert the pan from integer to double with range 0..1
+    const float fNewPan = static_cast<float> ( iData ) / ( 1 << 15 );
 
     // invoke message action
-    emit ChangeChanPan ( iCurID, dNewPan );
+    emit ChangeChanPan ( iCurID, fNewPan );
 
     return false; // no error
 }
@@ -1463,8 +1467,8 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     // audio coding type (2 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.eAudioCodingType ), 2 );
 
-    // version (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iVersion ), 2 );
+    // flags (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.eFlags ), 2 );
 
     // argument for the audio coder (4 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iAudioCodingArg ), 4 );
@@ -1484,7 +1488,7 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
         1 /* num chan */ +
         4 /* sam rate */ +
         2 /* audiocod type */ +
-        2 /* version */ +
+        2 /* flags */ +
         4 /* audiocod arg */;
 
     // check size
@@ -1546,9 +1550,9 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     ReceivedNetwTranspProps.eAudioCodingType =
         static_cast<EAudComprType> ( iRecCodingType );
 
-    // version (2 bytes)
-    ReceivedNetwTranspProps.iVersion =
-        static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 2 ) );
+    // flags (2 bytes)
+    ReceivedNetwTranspProps.eFlags =
+        static_cast<ENetwFlags> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // argument for the audio coder (4 bytes)
     ReceivedNetwTranspProps.iAudioCodingArg =
@@ -1644,38 +1648,15 @@ void CProtocol::CreateOpusSupportedMes()
     CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED, CVector<uint8_t> ( 0 ) );
 }
 
-void CProtocol::CreateReqChannelLevelListMes ( const bool bRCL )
+// TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+void CProtocol::CreateReqChannelLevelListMes()
 {
     CVector<uint8_t> vecData ( 1 ); // 1 byte of data
     int              iPos = 0; // init position pointer
 
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( bRCL ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( true ), 1 );
 
     CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_LEVEL_LIST, vecData );
-}
-
-bool CProtocol::EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData )
-{
-    int iPos = 0; // init position pointer
-
-    // check size
-    if ( vecData.Size() != 1 )
-    {
-        return true; // return error code
-    }
-
-    // extract opt in / out for channel levels
-    uint32_t val = GetValFromStream ( vecData, iPos, 1 );
-
-    if ( val != 0 && val != 1 )
-    {
-        return true; // return error code
-    }
-
-    // invoke message action
-    emit ReqChannelLevelList ( static_cast<bool> ( val ) );
-
-    return false; // no error
 }
 
 void CProtocol::CreateVersionAndOSMes()
@@ -2323,6 +2304,103 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
     return false; // no error
 }
 
+void CProtocol::CreateCLRedServerListMes ( const CHostAddress&        InetAddr,
+                                           const CVector<CServerInfo> vecServerInfo )
+{
+    const int iNumServers = vecServerInfo.Size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( 0 );
+    int              iPos = 0; // init position pointer
+
+    for ( int i = 0; i < iNumServers; i++ )
+    {
+        // convert server list strings to utf-8
+        const QByteArray strUTF8Name = vecServerInfo[i].strName.toUtf8();
+
+        // size of current list entry
+        const int iCurListEntrLen =
+            4 /* IP address */ +
+            2 /* port number */ +
+            1 /* name utf-8 string size */ + strUTF8Name.size();
+
+        // make space for new data
+        vecData.Enlarge ( iCurListEntrLen );
+
+        // IP address (4 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> (
+            vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+
+        // port number (2 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
+
+        // name (note that the string length indicator is 1 in this special case)
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name, 1 );
+    }
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_RED_SERVER_LIST,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLRedServerListMes ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData )
+{
+    int                  iPos     = 0; // init position pointer
+    const int            iDataLen = vecData.Size();
+    CVector<CServerInfo> vecServerInfo ( 0 );
+
+    while ( iPos < iDataLen )
+    {
+        // check size (the next 6 bytes)
+        if ( ( iDataLen - iPos ) < 6 )
+        {
+            return true; // return error code
+        }
+
+        // IP address (4 bytes)
+        const quint32 iIpAddr = static_cast<quint32> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // port number (2 bytes)
+        const quint16 iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+        // server name (note that the string length indicator is 1 in this special case)
+        QString strName;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_NAME,
+                                   strName,
+                                   1 ) )
+        {
+            return true; // return error code
+        }
+
+        // add server information to vector
+        vecServerInfo.Add (
+            CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          strName,
+                          QLocale::AnyCountry, // set to any country since the information is not transmitted
+                          "", // empty city name since the information is not transmitted
+                          0, // per definition: if max. num. client is zero, we ignore the value in the server list
+                          false ) ); // assume not permanent since the information is not transmitted
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit CLRedServerListReceived ( InetAddr, vecServerInfo );
+
+    return false; // no error
+}
+
 void CProtocol::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
 {
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_SERVER_LIST,
@@ -2883,21 +2961,22 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn,
                                       int&                    iPos,
                                       const int               iMaxStringLen,
-                                      QString&                strOut )
+                                      QString&                strOut,
+                                      const int               iNumberOfBytsLen )
 {
 /*
     note: iPos is automatically incremented in this function
 */
     const int iInLen = vecIn.Size();
 
-    // check if at least two bytes are available
-    if ( ( iInLen - iPos ) < 2 )
+    // check if at least iNumberOfBytsLen bytes are available
+    if ( ( iInLen - iPos ) < iNumberOfBytsLen )
     {
         return true; // return error code
     }
 
-    // number of bytes for utf-8 string (2 bytes)
-    const int iStrUTF8Len = static_cast<int> ( GetValFromStream ( vecIn, iPos, 2 ) );
+    // number of bytes for utf-8 string (1 or 2 bytes)
+    const int iStrUTF8Len = static_cast<int> ( GetValFromStream ( vecIn, iPos, iNumberOfBytsLen ) );
 
     // (note that iPos was incremented by 2 in the above code!)
     if ( ( iInLen - iPos ) < iStrUTF8Len )
@@ -3034,13 +3113,14 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
 
 void CProtocol::PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
                                         int&              iPos,
-                                        const QByteArray& sStringUTF8 )
+                                        const QByteArray& sStringUTF8,
+                                        const int         iNumberOfBytsLen )
 {
     // get the utf-8 string size
     const int iStrUTF8Len = sStringUTF8.size();
 
-    // number of bytes for utf-8 string (2 bytes)
-    PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( iStrUTF8Len ), 2 );
+    // number of bytes for utf-8 string (iNumberOfBytsLen bytes)
+    PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( iStrUTF8Len ), iNumberOfBytsLen );
 
     // actual utf-8 string (n bytes)
     for ( int j = 0; j < iStrUTF8Len; j++ )

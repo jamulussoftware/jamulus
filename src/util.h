@@ -74,30 +74,23 @@ class CClient;  // forward declaration of CClient
 
 
 /* Global functions ***********************************************************/
-// converting double to short
-inline short Double2Short ( const double dInput )
+// converting float to short
+inline short Float2Short ( const float fInput )
 {
     // lower bound
-    if ( dInput < _MINSHORT )
+    if ( fInput < _MINSHORT )
     {
         return _MINSHORT;
     }
 
     // upper bound
-    if ( dInput > _MAXSHORT )
+    if ( fInput > _MAXSHORT )
     {
         return _MAXSHORT;
     }
 
-    return static_cast<short> ( dInput );
+    return static_cast<short> ( fInput );
 }
-
-// debug error handling
-void DebugError ( const QString& pchErDescr,
-                  const QString& pchPar1Descr, 
-                  const double   dPar1,
-                  const QString& pchPar2Descr,
-                  const double   dPar2 );
 
 // calculate the bit rate in bits per second from the number of coded bytes
 inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
@@ -150,47 +143,6 @@ public:
 
     // this function simply converts the type of size to integer
     inline int Size() const { return static_cast<int> ( std::vector<TData>::size() ); }
-
-    // This operator allows for a l-value assignment of this object:
-    // CVector[x] = y is possible
-    inline TData& operator[] ( const int iPos )
-    {
-#ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
-        {
-            DebugError ( "Writing vector out of bounds", "Vector size",
-                Size(), "New parameter", iPos );
-        }
-#endif
-        return std::vector<TData>::operator[] ( iPos );
-    }
-
-    inline TData operator[] ( const int iPos ) const
-    {
-#ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
-        {
-            DebugError ( "Reading vector out of bounds", "Vector size",
-                Size(), "New parameter", iPos );
-        }
-#endif
-        return std::vector<TData>::operator[] ( iPos );
-    }
-
-    inline CVector<TData>& operator= ( const CVector<TData>& vecI )
-    {
-#ifdef _DEBUG_
-        // vectors which shall be copied MUST have same size!
-        if ( vecI.Size() != Size() )
-        {
-            DebugError ( "Vector operator=() different size", "Vector size",
-                Size(), "New parameter", vecI.Size() );
-        }
-#endif
-        std::vector<TData>::operator= ( vecI );
-
-        return *this;
-    }
 };
 
 
@@ -240,9 +192,9 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
         {
             // only add old element if it is not the same as the
             // selected one
-            if ( operator[] ( iIdx ).compare ( strNewValue ) )
+            if ( std::vector<TData>::operator[] ( iIdx ).compare ( strNewValue ) )
             {
-                vstrTempList[iTempListCnt] = operator[] ( iIdx );
+                vstrTempList[iTempListCnt] = std::vector<TData>::operator[] ( iIdx );
 
                 iTempListCnt++;
             }
@@ -550,6 +502,15 @@ enum EAudComprType
 };
 
 
+// Network transport flags -----------------------------------------------------
+enum ENetwFlags
+{
+    // used for protocol -> enum values must be fixed!
+    NF_NONE = 0,
+    NF_WITH_COUNTER = 1 // using a network counter to correctly order UDP packets in jitter buffer
+};
+
+
 // Audio quality enum ----------------------------------------------------------
 enum EAudioQuality
 {
@@ -603,9 +564,12 @@ enum ERecorderState
 // Channel sort type -----------------------------------------------------------
 enum EChSortType
 {
-    ST_BY_NAME,
-    ST_BY_INSTRUMENT,
-    ST_BY_GROUPID
+    // used for settings -> enum values should be fixed
+    ST_NO_SORT = 0,
+    ST_BY_NAME = 1,
+    ST_BY_INSTRUMENT = 2,
+    ST_BY_GROUPID = 3,
+    ST_BY_CITY = 4
 };
 
 
@@ -638,7 +602,7 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
 
     case AT_GENRE_CLASSICAL_FOLK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choir" );
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choral" );
 
     default: // AT_DEFAULT
         return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );
@@ -738,9 +702,9 @@ class CStereoSignalLevelMeter
 public:
 // TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
 //      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size with a factor of 0.97.
+//      is ok for both numbers of samples frame size with a factor of 0.99.
     CStereoSignalLevelMeter ( const bool   bNIsStereoOut     = true,
-                              const double dNSmoothingFactor = 0.97 ) :
+                              const double dNSmoothingFactor = 0.99 ) :
         dSmoothingFactor ( dNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
 
     void Update ( const CVector<short>& vecsAudio,
@@ -894,7 +858,6 @@ class CLocale
 {
 public:
     static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
-    static ECSAddType              GetCentralServerAddressType ( const QLocale::Country eCountry );
     static QMap<QString, QString>  GetAvailableTranslations();
     static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
     static void                    LoadTranslation ( const QString     strLanguage,
@@ -1078,6 +1041,7 @@ public:
         iNumAudioChannels      ( 0 ),
         iSampleRate            ( 0 ),
         eAudioCodingType       ( CT_NONE ),
+        eFlags                 ( NF_NONE ),
         iAudioCodingArg        ( 0 ) {}
 
     CNetworkTransportProps ( const uint32_t      iNBNPS,
@@ -1085,14 +1049,14 @@ public:
                              const uint32_t      iNNACH,
                              const uint32_t      iNSR,
                              const EAudComprType eNACT,
-                             const uint32_t      iNVers,
+                             const ENetwFlags    eNFlags,
                              const int32_t       iNACA ) :
         iBaseNetworkPacketSize ( iNBNPS ),
         iBlockSizeFact         ( iNBSF ),
         iNumAudioChannels      ( iNNACH ),
         iSampleRate            ( iNSR ),
         eAudioCodingType       ( eNACT ),
-        iVersion               ( iNVers ),
+        eFlags                 ( eNFlags ),
         iAudioCodingArg        ( iNACA ) {}
 
     uint32_t      iBaseNetworkPacketSize;
@@ -1100,7 +1064,7 @@ public:
     uint32_t      iNumAudioChannels;
     uint32_t      iSampleRate;
     EAudComprType eAudioCodingType;
-    uint32_t      iVersion;
+    ENetwFlags    eFlags;
     int32_t       iAudioCodingArg;
 };
 
@@ -1172,40 +1136,40 @@ public:
     void Init ( const EAudChanConf eNAudioChannelConf,
                 const int          iNStereoBlockSizeSam,
                 const int          iSampleRate,
-                const double       rT60 = 1.1 );
+                const float        fT60 = 1.1f );
 
     void Clear();
     void Process ( CVector<int16_t>& vecsStereoInOut,
                    const bool        bReverbOnLeftChan,
-                   const double      dAttenuation );
+                   const float       fAttenuation );
 
 protected:
-    void setT60 ( const double rT60, const int iSampleRate );
+    void setT60 ( const float fT60, const int iSampleRate );
     bool isPrime ( const int number );
 
     class COnePole
     {
     public:
-        COnePole() : dA ( 0 ), dB ( 0 ) { Reset(); }
-        void setPole ( const double dPole );
-        double Calc ( const double dIn );
-        void Reset() { dLastSample = 0; }
+        COnePole() : fA ( 0 ), fB ( 0 ) { Reset(); }
+        void  setPole ( const float fPole );
+        float Calc ( const float fIn );
+        void  Reset() { fLastSample = 0; }
 
     protected:
-        double dA;
-        double dB;
-        double dLastSample;
+        float fA;
+        float fB;
+        float fLastSample;
     };
 
-    EAudChanConf  eAudioChannelConf;
-    int           iStereoBlockSizeSam;
-    CFIFO<double> allpassDelays[3];
-    CFIFO<double> combDelays[4];
-    COnePole      combFilters[4];
-    CFIFO<double> outLeftDelay;
-    CFIFO<double> outRightDelay;
-    double        allpassCoefficient;
-    double        combCoefficient[4];
+    EAudChanConf eAudioChannelConf;
+    int          iStereoBlockSizeSam;
+    CFIFO<float> allpassDelays[3];
+    CFIFO<float> combDelays[4];
+    COnePole     combFilters[4];
+    CFIFO<float> outLeftDelay;
+    CFIFO<float> outRightDelay;
+    float        allpassCoefficient;
+    float        combCoefficient[4];
 };
 
 
@@ -1270,30 +1234,30 @@ public:
 
     // calculate pan gains: in cross fade mode the pan center is attenuated
     // by 6 dB, otherwise the center equals full gain for both channels
-    static inline double GetLeftPan ( const double dPan, const bool bXFade)
+    static inline float GetLeftPan ( const float fPan, const bool bXFade)
     {
-        return bXFade ? 1 - dPan : std::min ( 0.5, 1 - dPan ) * 2;
+        return bXFade ? 1 - fPan : std::min ( 0.5f, 1 - fPan ) * 2;
     }
-    static inline double GetRightPan ( const double dPan, const bool bXFade)
+    static inline float GetRightPan ( const float fPan, const bool bXFade)
     {
-        return bXFade ? dPan : std::min ( 0.5, dPan ) * 2;
+        return bXFade ? fPan : std::min ( 0.5f, fPan ) * 2;
     }
 
     // calculate linear gain from fader values which are in dB
-    static double CalcFaderGain ( const double dValue )
+    static float CalcFaderGain ( const float fValue )
     {
         // convert actual slider range in gain values
         // and normalize so that maximum gain is 1
-        const double dInValueRange0_1 = dValue / AUD_MIX_FADER_MAX;
+        const float fInValueRange0_1 = fValue / AUD_MIX_FADER_MAX;
 
         // map range from 0..1 to range -35..0 dB and calculate linear gain
-        if ( dValue == 0 )
+        if ( fValue == 0 )
         {
             return 0; // -infinity
         }
         else
         {
-            return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
+            return powf ( 10.0f, ( fInValueRange0_1 * 35.0f - 35.0f ) / 20.0f );
         }
     }
 };

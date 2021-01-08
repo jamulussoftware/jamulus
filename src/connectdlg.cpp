@@ -26,20 +26,19 @@
 
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( CClient*        pNCliP,
-                           const bool      bNewShowCompleteRegList,
-                           QWidget*        parent,
-                           Qt::WindowFlags f )
-    : QDialog ( parent, f ),
-      pClient                  ( pNCliP ),
-      strCentralServerAddress  ( "" ),
-      strSelectedAddress       ( "" ),
-      strSelectedServerName    ( "" ),
-      bShowCompleteRegList     ( bNewShowCompleteRegList ),
-      bServerListReceived      ( false ),
-      bServerListItemWasChosen ( false ),
-      bListFilterWasActive     ( false ),
-      bShowAllMusicians        ( true )
+CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
+                           const bool       bNewShowCompleteRegList,
+                           QWidget*         parent )
+    : QDialog                    ( parent, Qt::Dialog ),
+      pSettings                  ( pNSetP ),
+      strSelectedAddress         ( "" ),
+      strSelectedServerName      ( "" ),
+      bShowCompleteRegList       ( bNewShowCompleteRegList ),
+      bServerListReceived        ( false ),
+      bReducedServerListReceived ( false ),
+      bServerListItemWasChosen   ( false ),
+      bListFilterWasActive       ( false ),
+      bShowAllMusicians          ( true )
 {
     setupUi ( this );
 
@@ -146,6 +145,9 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
     // set a placeholder text to explain how to filter occupied servers (#397)
     edtFilter->setPlaceholderText ( tr ( "Type # for occupied servers" ) );
 
+    // setup timers
+    TimerInitialSort.setSingleShot ( true ); // only once after list request
+
 #ifdef ANDROID
     // for the android version maximize the window
     setWindowState ( Qt::WindowMaximized );
@@ -154,9 +156,6 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
 
     // Connections -------------------------------------------------------------
     // list view
-    QObject::connect ( lvwServers, &QTreeWidget::itemSelectionChanged,
-        this, &CConnectDlg::OnServerListItemSelectionChanged );
-
     QObject::connect ( lvwServers, &QTreeWidget::itemDoubleClicked,
         this, &CConnectDlg::OnServerListItemDoubleClicked );
 
@@ -194,7 +193,7 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
         this, &CConnectDlg::OnTimerReRequestServList );
 }
 
-void CConnectDlg::Init ( const CVector<QString>& vstrIPAddresses )
+void CConnectDlg::showEvent ( QShowEvent* )
 {
     // load stored IP addresses in combo box
     cbxServerAddr->clear();
@@ -202,15 +201,12 @@ void CConnectDlg::Init ( const CVector<QString>& vstrIPAddresses )
 
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
-        if ( !vstrIPAddresses[iLEIdx].isEmpty() )
+        if ( !pSettings->vstrIPAddress[iLEIdx].isEmpty() )
         {
-            cbxServerAddr->addItem ( vstrIPAddresses[iLEIdx] );
+            cbxServerAddr->addItem ( pSettings->vstrIPAddress[iLEIdx] );
         }
     }
-}
 
-void CConnectDlg::showEvent ( QShowEvent* )
-{
     // on opening the connect dialg, we always want to request a
     // new updated server list per definition
     RequestServerList();
@@ -219,9 +215,10 @@ void CConnectDlg::showEvent ( QShowEvent* )
 void CConnectDlg::RequestServerList()
 {
     // reset flags
-    bServerListReceived      = false;
-    bServerListItemWasChosen = false;
-    bListFilterWasActive     = false;
+    bServerListReceived        = false;
+    bReducedServerListReceived = false;
+    bServerListItemWasChosen   = false;
+    bListFilterWasActive       = false;
 
     // clear current address and name
     strSelectedAddress    = "";
@@ -232,13 +229,15 @@ void CConnectDlg::RequestServerList()
 
     // update list combo box (disable events to avoid a signal)
     cbxCentServAddrType->blockSignals ( true );
-    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
+    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
     cbxCentServAddrType->blockSignals ( false );
 
-    // get the IP address of the central server (using the ParseNetworAddress
+    // Get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
-    // time to do it
-    if ( NetworkUtil().ParseNetworkAddress ( strCentralServerAddress,
+    // time to do it. Note that in case of custom central server address we
+    // use the first entry in the vector per definition.
+    if ( NetworkUtil().ParseNetworkAddress ( NetworkUtil::GetCentralServerAddress ( pSettings->eCentralServerAddressType,
+                                                                                    pSettings->vstrCentralServerAddress[0] ),
                                              CentralServerAddress ) )
     {
         // send the request for the server list
@@ -247,6 +246,7 @@ void CConnectDlg::RequestServerList()
         // start timer, if this message did not get any respond to retransmit
         // the server list request message
         TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
+        TimerInitialSort.start ( SERV_LIST_REQ_UPDATE_TIME_MS ); // reuse the time value
     }
 }
 
@@ -255,6 +255,13 @@ void CConnectDlg::hideEvent ( QHideEvent* )
     // if window is closed, stop timers
     TimerPing.stop();
     TimerReRequestServList.stop();
+}
+
+void CConnectDlg::OnCentServAddrTypeChanged ( int iTypeIdx )
+{
+    // store the new central server address type and request new list
+    pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( iTypeIdx );
+    RequestServerList();
 }
 
 void CConnectDlg::OnTimerReRequestServList()
@@ -270,11 +277,41 @@ void CConnectDlg::OnTimerReRequestServList()
 }
 
 void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
-                                  const CVector<CServerInfo>& vecServerInfo )
+                                  const CVector<CServerInfo>& vecServerInfo,
+                                  const bool                  bIsReducedServerList )
 {
-    // set flag and disable timer for resend server list request
-    bServerListReceived = true;
-    TimerReRequestServList.stop();
+    // If the normal list was received, we do not accept any further list
+    // updates (to avoid the reduced list overwrites the normal list (#657)). Also,
+    // we only accept a server list from the server address we have sent the
+    // request for this to (note that we cannot use the port number since the
+    // receive port and send port might be different at the central server).
+    if ( bServerListReceived ||
+         ( InetAddr.InetAddr != CentralServerAddress.InetAddr ) )
+    {
+        return;
+    }
+
+    // special treatment if a reduced server list was received
+    if ( bIsReducedServerList )
+    {
+        // make sure we only apply the reduced version list once
+        if ( bReducedServerListReceived )
+        {
+            // do nothing
+            return;
+        }
+        else
+        {
+            bReducedServerListReceived = true;
+        }
+    }
+    else
+    {
+        // set flag and disable timer for resend server list request if full list
+        // was received (i.e. not the reduced list)
+        bServerListReceived = true;
+        TimerReRequestServList.stop();
+    }
 
     // first clear list
     lvwServers->clear();
@@ -445,13 +482,6 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
                     // set correct picture
                     pNewChildListViewItem->setIcon ( 0, QIcon ( CountryFlagPixmap ) );
 
-                    // add the instrument information as text
-                    if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
-                    {
-                        sClientText.append ( " (" +
-                            CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
-                    }
-
                     bCountryFlagIsUsed = true;
                 }
             }
@@ -471,6 +501,13 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
                 }
             }
 
+            // add the instrument information as text
+            if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
+            {
+                sClientText.append ( " (" +
+                    CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
+            }
+
             // apply the client text to the list view item
             pNewChildListViewItem->setText ( 0, sClientText );
 
@@ -484,25 +521,6 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
 
         // the clients list may have changed, update the filter selection
         UpdateListFilter();
-    }
-}
-
-void CConnectDlg::OnServerListItemSelectionChanged()
-{
-    // get current selected item (we are only interested in the first selected
-    // item)
-    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
-
-    // if an item is clicked/selected, copy the server name to the combo box
-    if ( CurSelListItemList.count() > 0 )
-    {
-        // make sure no signals are send when we change the text
-        cbxServerAddr->blockSignals ( true );
-        {
-            cbxServerAddr->setEditText (
-                GetParentListViewItem ( CurSelListItemList[0] )->text ( 0 ) );
-        }
-        cbxServerAddr->blockSignals ( false );
     }
 }
 
@@ -522,6 +540,15 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     // in the server address combo box, a text was changed, remove selection
     // in the server list (if any)
     lvwServers->clearSelection();
+}
+
+void CConnectDlg::OnCustomCentralServerAddrChanged()
+{
+    // only update list if the custom server list is selected
+    if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
+    {
+        RequestServerList();
+    }
 }
 
 void CConnectDlg::ShowAllMusicians ( const bool bState )
@@ -560,33 +587,37 @@ void CConnectDlg::UpdateListFilter()
             QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
             bool             bFilterFound     = false;
 
-            // search server name
-            if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-            {
-                bFilterFound = true;
-            }
-
-            // search location
-            if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
-            {
-                bFilterFound = true;
-            }
-
-            // special case: filter for occupied servers
             // DEFINITION: if "#" is set at the beginning of the filter text, we show
             //             occupied servers (#397)
-            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) &&
-                 ( pCurListViewItem->childCount() > 0 ) )
+            if ( ( sFilterText.indexOf ( "#" ) == 0 ) && ( sFilterText.length() == 1 ) )
             {
-                bFilterFound = true;
-            }
-
-            // search children
-            for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
-            {
-                if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                // special case: filter for occupied servers
+                if ( pCurListViewItem->childCount() > 0 )
                 {
                     bFilterFound = true;
+                }
+            }
+            else
+            {
+                // search server name
+                if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                {
+                    bFilterFound = true;
+                }
+
+                // search location
+                if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                {
+                    bFilterFound = true;
+                }
+
+                // search children
+                for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
+                {
+                    if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                    {
+                        bFilterFound = true;
+                    }
                 }
             }
 
@@ -685,14 +716,24 @@ void CConnectDlg::OnTimerPing()
                 data ( 0, Qt::UserRole ).toString(),
                 CurServerAddress ) )
         {
-            // if address is valid, send ping or the version and OS request
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-            emit CreateCLServerListReqVerAndOSMes ( CurServerAddress );
-#else
-            emit CreateCLServerListPingMes ( CurServerAddress );
-#endif
+            // if address is valid, send ping message using a new thread
+            QtConcurrent::run ( this,
+                                &CConnectDlg::EmitCLServerListPingMes,
+                                CurServerAddress );
         }
     }
+}
+
+void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& CurServerAddress )
+{
+    // The ping time messages for all servers should not be sent all in a very
+    // short time since it showed that this leads to errors in the ping time
+    // measurement (#49). We therefore introduce a short delay for each server
+    // (since we are doing this in a separate thread for each server, we do not
+    // block the GUI).
+    QThread::msleep ( 11 );
+
+    emit CreateCLServerListPingMes ( CurServerAddress );
 }
 
 void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
@@ -767,15 +808,18 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         }
 
         // update number of clients text
-        if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
+        if ( pCurListViewItem->text ( 5 ).toInt() == 0 )
         {
-            pCurListViewItem->
-                setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
+            // special case: reduced server list
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) );
+        }
+        else if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
+        {
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
         }
         else
         {
-            pCurListViewItem->
-                setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
+            pCurListViewItem->setText ( 2, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( 5 ) );
         }
 
         // check if the number of child list items matches the number of
@@ -795,8 +839,9 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         // current item since the topLevelItem(iIdx) is then no longer valid.
         // To avoid that the list is sorted shortly before a double click (which
         // could lead to connecting an incorrect server) the sorting is disabled
-        // as long as the mouse is over the list (#293).
-        if ( bDoSorting && !bShowCompleteRegList && !lvwServers->underMouse() ) // do not sort if "show all servers"
+        // as long as the mouse is over the list (but it is not disabled for the
+        // initial timer of about 2s, see TimerInitialSort) (#293).
+        if ( bDoSorting && !bShowCompleteRegList && (TimerInitialSort.isActive() || !lvwServers->underMouse()) ) // do not sort if "show all servers"
         {
             lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
         }
@@ -876,28 +921,3 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
         delete pCurChildItem;
     }
 }
-
-#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-void CConnectDlg::SetVersionAndOSType ( CHostAddress           InetAddr,
-                                        COSUtil::EOpSystemType eOSType,
-                                        QString                strVersion )
-{
-    // apply the received version and OS type to the correct server list entry
-    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
-
-    if ( pCurListViewItem )
-    {
-// TEST since this is just a debug info, we just reuse the ping column (note
-// the we have to replace the ping message emit with the version and OS request
-// so that this works, see above code)
-pCurListViewItem->
-    setText ( 1, strVersion + "/" + COSUtil::GetOperatingSystemString ( eOSType ) );
-
-// a version and OS type was received, set item to visible
-if ( pCurListViewItem->isHidden() )
-{
-    pCurListViewItem->setHidden ( false );
-}
-    }
-}
-#endif

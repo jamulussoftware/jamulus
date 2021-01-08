@@ -17,7 +17,7 @@
         <key>CFBundleDevelopmentRegion</key>
         <string>en</string>
         <key>CFBundleIconFile</key>
-        <string>mainicon.icns</string>
+        <string>@ICON@</string>
         <key>CFBundleGetInfoString</key>
         <string>Created by Qt/QMake</string>
 

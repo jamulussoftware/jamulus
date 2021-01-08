@@ -2,7 +2,132 @@
 
 
 
-3.5.10git <- NOTE: the release version number will be 3.5.11
+3.6.2git <- NOTE: the release version number will be 3.6.3
+
+- show --clientname as first word in title to avoid clipping in Windows task bar (#789)
+
+
+TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
+
+
+
+
+
+3.6.2 (2020-12-12)
+
+- change Clear All Stored Solo Settings to clear Mute as well (#731)
+
+- avoid selecting IPv6 results from hostname lookup, coded by jarmar (#722)
+
+- added possibility to set MIDI offset for fader control to --ctrlmidich (#95)
+
+- detect if no audio Device is selected before trying to connect a server (#129)
+
+- on MacOS if an audio device is no longer available, show a warning
+  rather than switching to default automatically (#727)
+
+- bug fix: sliders move by themselves if fader groups are used on reconnect (#611)
+
+- bug fix: do not reset sound card channel selection on a device property change (#727)
+
+- bug fix: compiling Jamulus 3.6.1 is failing on Debian 9 Linode (#736)
+
+- bug fix: on MacOS Jamulus does not always select the previous sound card (#680)
+
+- bug fix: use new server icon on Mac server bundle and Windows installer (#737)
+
+- bug fix: ping times of servers which are further down the server list are too high (#49)
+
+
+3.6.1 (2020-11-21)
+
+- added menu entry "Set All Faders to New Client Level" (#622)
+
+- isolate a channel from the group temporarily with shift-click-drag (#695)
+
+- on shift-click the pan reset to 0 L/R (#707)
+
+- support multiple custom central server addresses (#698)
+
+- the Jamulus server now has a different icon, created by geheimerEichkater (#700)
+
+- support two rows for the mixer panel (#720)
+
+- changed RYG indicator lights with colour-blind compensation, created by geheimerEichkater (#57)
+
+- saving and loading mixer settings is now possible during an active connection and a
+  mixer settings file can be loaded with drag'n'drop (#706)
+
+- menu entry Clear All Stored Solo Settings is now enabled during an active connection
+
+- bug fix: the fader group property was not correctly loaded from the ini file
+
+
+3.6.0 (2020-10-25)
+
+- handle audio packets received out of order, coded by softins (#619)
+
+- most recently connected users appear on the RH side on the fader panel (#673)
+
+- improvements for the server multithreading, coded by kraney (#653)
+
+- removed Display Channel Levels setting and --servername (#638)
+
+- removed support for further server infos in --serverinfo since the preferred
+  way of registering a server is to do it using the protocol messages (#638)
+
+- removed -g, --pingservers since all Central servers must activate this function,
+  now it is activated by default and no command line argument is needed (#638)
+
+- added --mutemyown command line argument to mute my own signal in my personal mix,
+  only supported in headless client mode (#340)
+
+- added "Mountain Dulcimer" instrument icon, created by dora71 (#649)
+
+- added new instrument icons for "Scratching" and "Rapping"
+
+- replaced double types by floats for some of the signal processing, coded by hselasky (#544)
+
+- support permanent channel fader sorting (i.e., not only on request but always) (#666)
+
+- support sorting faders by channel city
+
+- if sorting the faders by instrument, we now sort by the name for the same instruments
+
+- improvements to the Android audio interface, coded by j-santander (#83)
+
+- bug fix: reduced server list is displayed instead of the normal list (#657)
+
+
+3.5.12 (2020-10-03)
+
+- added hyperlink support for the chat window, coded by jc-Rosichini (#591)
+
+- added new menu entry "Clear All Stored Solo Settings" (#616)
+
+- fade in all clients at the server when entering a server to avoid the volume
+  is at 100% when joining a server (#628)
+
+- added a qmake CONFIG flag for disabling the automatic version check (#370)
+
+- avoid confusion with the Server Address field on the connection setup window by
+  no longer showing the server name in that field since it is only intended for
+  entering IP addresses or valid server URLs (#365)
+
+- removed the "Show Creative Commons BY-NC-SA 4.0 Licence Dialog" setting from the
+  server GUI and changed the -L/--licence text in the licence dialog to "Do you agree
+  to the text in the chat window?" so that a licence text must now be given in the
+  server welcome message (#587, #367, #81)
+
+- added a protocol message for a reduced server list to improve the situation caused
+  by UDP packet fragmentation (#631, #255)
+
+- added translation: Slovak by jose1711 (#635)
+
+- bug fix: crash when using the jam recorder in the server, coded by pljones (#618)
+
+
+3.5.11 (2020-09-19)
 
 - support a check for updates (#370)
 
@@ -19,7 +144,7 @@
 
 - accessibility improvements, coded by chigkim (#498, #512)
 
-- added Jack audio audio latency calculation, coded by bflamig (#437)
+- added Jack audio latency calculation, coded by bflamig (#437)
 
 - show the server name in the title bar (#559)
 
@@ -30,10 +155,6 @@
 - bug fix: pan is not correctly initialized in the server on a new connection (#537)
 
 
-
-
-
-
 3.5.10 (2020-08-16)
 
 - do not change the server list order if the mouse is over the table to
@@ -42,7 +163,7 @@
 - if network name/address contains spaces, they are removed now,
   coded by dingodoppelt (#462)
 
-- improve compact skin by using smaller font size
+- improve Compact skin by using smaller font size
 
 - improve server audio mix processing for better clipping behavior
 
@@ -58,7 +179,7 @@
 
 - accessibility improvements, coded by chigkim (#499, #510, #514)
 
-- bug fix: fixed a stability issue in the server (should fix #480)
+- bug fix: fixed a stability issue in the server
 
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 
@@ -79,7 +200,7 @@
 
 - redesign of the server dialog (e.g. added welcome message setting)
 
-- save and restore mixer state (like fader, mute, etc.) (#377)
+- save and restore mixer state (like fader, mute, etc.) (#377),
   note that saving/loading of settings only works if not connected
 
 - scale channel instrument picture in Compact skin mode

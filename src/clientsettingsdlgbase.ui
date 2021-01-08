@@ -274,12 +274,6 @@
        <layout class="QHBoxLayout">
         <item>
          <widget class="QLabel" name="lblNetBufLabel">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Local</string>
           </property>
@@ -293,12 +287,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lblNetBufServerLabel">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Server</string>
           </property>
@@ -316,12 +304,6 @@
        <layout class="QHBoxLayout">
         <item>
          <widget class="QLabel" name="lblNetBuf">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Size</string>
           </property>
@@ -335,12 +317,6 @@
         </item>
         <item>
          <widget class="QLabel" name="lblNetBufServer">
-          <property name="minimumSize">
-           <size>
-            <width>50</width>
-            <height>0</height>
-           </size>
-          </property>
           <property name="text">
            <string>Size</string>
           </property>
@@ -413,64 +389,6 @@
            <enum>QSlider::TicksBothSides</enum>
           </property>
          </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout">
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="CMultiColorLED" name="ledNetw" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>
@@ -557,13 +475,6 @@
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="chbDisplayChannelLevels">
-        <property name="text">
-         <string>Display Channel Levels</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="lblCentralServerAddress">
         <property name="text">
          <string>Custom Central Server Address:</string>
@@ -571,12 +482,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="edtCentralServerAddress">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QComboBox" name="cbxCentralServerAddress">
+        <property name="editable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -706,6 +614,39 @@
         </item>
        </layout>
       </item>
+      <item>
+       <layout class="QHBoxLayout">
+        <item>
+         <widget class="QLabel" name="lblNetLEDLabel">
+          <property name="text">
+           <string>Local Jitter Buffer</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="CMultiColorLED" name="ledNetw" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
@@ -742,8 +683,7 @@
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxSkin</tabstop>
   <tabstop>cbxLanguage</tabstop>
-  <tabstop>chbDisplayChannelLevels</tabstop>
-  <tabstop>edtCentralServerAddress</tabstop>
+  <tabstop>cbxCentralServerAddress</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

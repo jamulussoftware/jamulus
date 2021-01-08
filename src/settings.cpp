@@ -280,6 +280,20 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     strLanguage = GetIniSetting ( IniXMLDocument, "client", "language",
                                   CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
+    // fader channel sorting
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "channelsort",
+         0, 4 /* ST_BY_CITY */, iValue ) )
+    {
+        eChannelSortType = static_cast<EChSortType> ( iValue );
+    }
+
+    // number of mixer panel rows
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "numrowsmixpan",
+         1, 2, iValue ) )
+    {
+        iNumMixerPanelRows = iValue;
+    }
+
     // name
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64",
@@ -336,20 +350,15 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     }
 
     // sound card selection
-    // special case with this setting: the sound card initialization depends
-    // on this setting call, therefore, if no setting file parameter could
-    // be retrieved, the sound card is initialized with a default setting
-    // defined here
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
-         1, MAX_NUMBER_SOUND_CARDS, iValue ) )
+    const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
+
+    if ( !strError.isEmpty() )
     {
-        pClient->SetSndCrdDev ( iValue );
-    }
-    else
-    {
-        // use "INVALID_INDEX" to tell the sound card driver that
-        // no device selection was done previously
-        pClient->SetSndCrdDev ( INVALID_INDEX );
+#ifndef HEADLESS
+        // special case: when settings are loaded no GUI is yet created, therefore
+        // we have to create a warning message box here directly
+        QMessageBox::warning ( nullptr, APP_NAME, strError );
+#endif
     }
 
     // sound card channel mapping settings: make sure these settings are
@@ -431,12 +440,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
     }
 
-    // display channel levels preference
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "displaychannellevels", bValue ) )
-    {
-        pClient->SetDisplayChannelLevels ( bValue );
-    }
-
     // audio channels
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels",
          0, 2 /* CC_STEREO */, iValue ) )
@@ -451,29 +454,41 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
-    // central server address
-    pClient->SetServerListCentralServerAddress (
-        GetIniSetting ( IniXMLDocument, "client", "centralservaddr" ) );
+// TODO compatibility to old version (< 3.6.1)
+// NOTE that the strCurAddr and "check for empty" can be removed if compatibility mode is removed
+vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralservaddr" );
+
+    // central server addresses
+    for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
+    {
+        const QString strCurAddr = GetIniSetting ( IniXMLDocument, "client",
+                                                   QString ( "centralservaddr%1" ).arg ( iIdx ), "" );
+
+        if ( !strCurAddr.isEmpty() )
+        {
+            vstrCentralServerAddress[iIdx] = strCurAddr;
+        }
+    }
 
     // central server address type
     if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
          0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {
-        pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
+        eCentralServerAddressType = static_cast<ECSAddType> ( iValue );
     }
     else
     {
         // if no address type is given, choose one from the operating system locale
-        pClient->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        eCentralServerAddressType = AT_DEFAULT;
     }
 
-// TODO compatibility to old version
+// TODO compatibility to old version (<3.4.7)
 if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
 {
     // only the case that manual was set in old ini must be considered
     if ( !bValue )
     {
-        pClient->SetCentralServerAddressType ( AT_CUSTOM );
+        eCentralServerAddressType = AT_CUSTOM;
     }
 }
 
@@ -571,10 +586,9 @@ void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocum
         }
 
         // stored fader group ID
-        // note that we only apply valid group numbers here
         if ( GetNumericIniSet ( IniXMLDocument, "client",
                                 QString ( "storedgroupid%1" ).arg ( iIdx ),
-                                0, MAX_NUM_FADER_GROUPS - 1, iValue ) )
+                                INVALID_INDEX, MAX_NUM_FADER_GROUPS - 1, iValue ) )
         {
             vecStoredFaderGroupID[iIdx] = iValue;
         }
@@ -604,6 +618,14 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // language
     PutIniSetting ( IniXMLDocument, "client", "language",
         strLanguage );
+
+    // fader channel sorting
+    SetNumericIniSet ( IniXMLDocument, "client", "channelsort",
+        static_cast<int> ( eChannelSortType ) );
+
+    // number of mixer panel rows
+    SetNumericIniSet ( IniXMLDocument, "client", "numrowsmixpan",
+        iNumMixerPanelRows );
 
     // name
     PutIniSetting ( IniXMLDocument, "client", "name_base64",
@@ -638,8 +660,8 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
         pClient->IsReverbOnLeftChan() );
 
     // sound card selection
-    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
-        pClient->GetSndCrdDev() );
+    PutIniSetting ( IniXMLDocument, "client", "auddev_base64",
+        ToBase64 ( pClient->GetSndCrdDev() ) );
 
     // sound card left input channel mapping
     SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
@@ -681,10 +703,6 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetNumericIniSet ( IniXMLDocument, "client", "guidesign",
         static_cast<int> ( pClient->GetGUIDesign() ) );
 
-    // display channel levels preference
-    SetFlagIniSet ( IniXMLDocument, "client", "displaychannellevels",
-        pClient->GetDisplayChannelLevels() );
-
     // audio channels
     SetNumericIniSet ( IniXMLDocument, "client", "audiochannels",
         static_cast<int> ( pClient->GetAudioChannels() ) );
@@ -693,13 +711,17 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetNumericIniSet ( IniXMLDocument, "client", "audioquality",
         static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // central server address
-    PutIniSetting ( IniXMLDocument, "client", "centralservaddr",
-        pClient->GetServerListCentralServerAddress() );
+    // central server addresses
+    for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
+    {
+        PutIniSetting ( IniXMLDocument, "client",
+                        QString ( "centralservaddr%1" ).arg ( iIdx ),
+                        vstrCentralServerAddress[iIdx] );
+    }
 
     // central server address type
     SetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
-        static_cast<int> ( pClient->GetCentralServerAddressType() ) );
+        static_cast<int> ( eCentralServerAddressType ) );
 
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "client", "winposmain_base64",
@@ -797,7 +819,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     else
     {
         // if no address type is given, choose one from the operating system locale
-        pServer->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        pServer->SetCentralServerAddressType ( AT_DEFAULT );
     }
 
 // TODO compatibility to old version
@@ -854,16 +876,6 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
          }
     }
 
-    // licence type
-    if ( !CommandLineOptions.contains ( "--licence" ) )
-    {
-        if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
-             0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
-        {
-            pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
-        }
-    }
-
     // welcome message
     if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
     {
@@ -878,6 +890,15 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     if ( !CommandLineOptions.contains ( "--recording" ) )
     {
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
+    }
+
+    // norecord flag
+    if ( !CommandLineOptions.contains ( "--norecord" ) )
+    {
+         if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
+         {
+             pServer->SetEnableRecording ( !bValue );
+         }
     }
 }
 
@@ -915,10 +936,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetFlagIniSet ( IniXMLDocument, "server", "autostartmin",
         pServer->GetAutoRunMinimized() );
 
-    // licence type
-    SetNumericIniSet ( IniXMLDocument, "server", "licencetype",
-        static_cast<int> ( pServer->GetLicenceType() ) );
-
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome",
         ToBase64 ( pServer->GetWelcomeMessage() ) );
@@ -930,4 +947,8 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64",
         ToBase64 ( pServer->GetRecordingDir() ) );
+
+    // norecord flag
+    SetFlagIniSet ( IniXMLDocument, "server", "norecord",
+        pServer->GetDisableRecording() );
 }

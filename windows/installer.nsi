@@ -83,7 +83,7 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 ;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
-    "Due to a bug, an old version of Jamulus might be installed to a wrong path on your computer. Do you want to remove it before installing this new version (we strongly recommend this)?"
+    "Due to a bug, a 64 Bit version of Jamulus might be installed to your 32 Bit Program Files folder. Do you want to remove it before installing this new version (we strongly recommend this)?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
@@ -216,7 +216,7 @@ Section Install
                     MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
                     goto removeold
                 removeold:
-                   ExecWait "$PROGRAMFILES32\Jamulus\Uninstall.exe" $0
+                    ExecWait '"$PROGRAMFILES32\Jamulus\Uninstall.exe" /S' $0
                     ${IfNot} $0 == 0
                       MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
                       goto quit

@@ -83,7 +83,7 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 ;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
-    "Due to a bug, an old version of Jamulus might be installed to a wrong path on your computer. Do you want to remove it before installing this new version (we strongly recommend this)?"
+    "Due to a bug, a 64 Bit version of Jamulus might be installed to your 32 Bit Program Files folder. Do you want to remove it before installing this new version (we strongly recommend this)?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
@@ -115,21 +115,23 @@ LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
     ; Find target files
     !system 'cmd.exe /v /c "for /r "${prefix}" %f in (*.*) do \
         @(set "_f=%f" && echo File "/oname=$INSTDIR\!_f:${prefix}\=!" "!_f!" >> "${files}")"'
+    ; to allow jumping in macros, NSIS reccomends to define unique IDs for labels https://nsis.sourceforge.io/Tutorial:_Using_labels_in_macro%27s
+    !define UniqueID ${__LINE__}
 
     InitPluginsDir ; see https://stackoverflow.com/questions/24595887/waiting-for-nsis-uninstaller-to-finish-in-nsis-installer-either-fails-or-the-uni
-    IfFileExists "$INSTDIR\${UNINSTALL_EXE}" old_install_found continueinstall
+    IfFileExists "$INSTDIR\${UNINSTALL_EXE}" 0 continue_${UniqueID}
 
-    old_install_found:
         CreateDirectory "$pluginsdir\unold" ; Make sure plugins do not conflict with a old uninstaller 
         CopyFiles /SILENT /FILESONLY "$INSTDIR\${UNINSTALL_EXE}" "$pluginsdir\unold"
         ExecWait '"$pluginsdir\unold\${UNINSTALL_EXE}" /S _?=$INSTDIR' $0
 
         ${IfNot} $0 == 0
-            MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
+            MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continue_${UniqueID}
             Abort
         ${EndIf}
 
-    continueinstall:
+    continue_${UniqueID}:
+    !undef UniqueID
 
     ; Install folders and files
     CreateDirectory "$INSTDIR"
@@ -166,69 +168,18 @@ LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
 
 !macroend
 
-SectionGroup "InstallGroup"
-
-    Section "Install" Install_x86_64
-        ; Install the main application
-        !insertmacro InstallApplication x86_64
-        !insertmacro SetupShortcuts
-
-        ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
-        ExecWait "$\"$INSTDIR\${VC_REDIST64_EXE}$\" /q /norestart"
-        Delete   "$INSTDIR\${VC_REDIST64_EXE}"
-
-    SectionEnd
-
-    Section "Install" Install_x86
-
-        ; Install the main application
-        !insertmacro InstallApplication x86
-        !insertmacro SetupShortcuts
-
-        ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
-        ExecWait "$\"$INSTDIR\${VC_REDIST32_EXE}$\" /q /norestart"
-        Delete   "$INSTDIR\${VC_REDIST32_EXE}"
-
-    SectionEnd
-
-SectionGroupEnd
-
 Function .onInit
 
     ; Set up registry access, installation folder and installer section for current architecture
     ${If} ${RunningX64}
         SetRegView      64
-        SectionSetFlags ${Install_x86_64} ${SF_SELECTED}
-        SectionSetFlags ${Install_x86}    ${SECTION_OFF}
 
         ; Set default installation folder, retrieve from registry if available
         ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
-        
-        ; check if old, wrongly installed jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
-        IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" wrong_install_found continueinstall
-
-        wrong_install_found:
-            MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
-                goto removeold
-            idontcare:
-                MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
-                goto removeold
-            removeold:
-                ExecWait "$PROGRAMFILES32\Jamulus\Uninstall.exe" $0
-                ${IfNot} $0 == 0
-                  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
-                  goto quit
-                ${EndIf}
-                goto continueinstall
-            quit:
-                Abort
-        continueinstall:
         ${Else}
         SetRegView      32
-        SectionSetFlags ${Install_x86}    ${SF_SELECTED}
-        SectionSetFlags ${Install_x86_64} ${SECTION_OFF}
 
         ; Set default installation folder, retrieve from registry if available
         ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
@@ -254,6 +205,43 @@ Function ValidateDestinationFolder
     ${endIf}
 
 FunctionEnd
+
+Section Install
+        ${If} ${RunningX64}
+            ; check if old, wrongly installed Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
+            IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" 0 continueinstall
+                MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
+                    goto removeold
+                idontcare:
+                    MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
+                    goto removeold
+                removeold:
+                    ExecWait '"$PROGRAMFILES32\Jamulus\Uninstall.exe" /S' $0
+                    ${IfNot} $0 == 0
+                      MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
+                      goto quit
+                    ${EndIf}
+                    goto continueinstall
+                quit:
+                    Abort
+            continueinstall:
+            ; Install the main application
+            !insertmacro InstallApplication x86_64
+            !insertmacro SetupShortcuts
+
+            ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
+            ExecWait "$\"$INSTDIR\${VC_REDIST64_EXE}$\" /q /norestart"
+            Delete   "$INSTDIR\${VC_REDIST64_EXE}"
+        ${Else}
+            ; Install the main application
+            !insertmacro InstallApplication x86
+            !insertmacro SetupShortcuts
+
+            ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
+            ExecWait "$\"$INSTDIR\${VC_REDIST32_EXE}$\" /q /norestart"
+            Delete   "$INSTDIR\${VC_REDIST32_EXE}"
+        ${EndIf}
+SectionEnd
 
 Function AbortOnRunningApp
     !insertmacro _AbortOnRunningApp

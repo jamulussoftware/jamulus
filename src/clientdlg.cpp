@@ -932,7 +932,7 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
             strWinTitle += " - " + QString::number ( iNumClients ) + " " + tr ( "users" );
         }
 
-        setWindowTitle ( strWinTitle + " - " + QString ( APP_NAME ) );
+        strWinTitle += " - " + QString ( APP_NAME );
     }
 
     setWindowTitle ( strWinTitle );

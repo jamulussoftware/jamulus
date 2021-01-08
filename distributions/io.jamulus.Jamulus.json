@@ -10,7 +10,11 @@
     "--share=ipc",
     "--socket=x11",
     "--socket=wayland",
-    "--device=dri"
+    "--share=network",
+    "--filesystem=xdg-run/pipewire-0",
+    "--socket=system-bus",
+    "--socket=pulseaudio",
+    "--device=all"
   ],
   "modules": [
     {
@@ -27,6 +31,9 @@
           "url": "https://github.com/jackaudio/jack2/archive/v1.9.16.tar.gz",
           "sha256": "e176d04de94dcaa3f9d32ca1825091e1b938783a78c84e7466abd06af7637d37"
         }
+      ],
+      "cleanup": [
+      	"*"
       ]
     },
     {

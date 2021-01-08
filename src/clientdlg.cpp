@@ -907,17 +907,23 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     // set the window title (and therefore also the task bar icon text of the OS)
     // according to the following specification (#559):
     // <ServerName> - <N> users - Jamulus
-    QString strWinTitle;
+    QString    strWinTitle;
+    const bool bClientNameIsUsed = !pClient->strClientName.isEmpty();
 
-    if ( !pClient->strClientName.isEmpty() )
+    if ( bClientNameIsUsed )
     {
-        strWinTitle += pClient->strClientName + " ";
+        // if --clientname is used, the APP_NAME must be the very first word in
+        // the title, otherwise some user scripts do not work anymore, see #789
+        strWinTitle += QString ( APP_NAME ) + " " + pClient->strClientName + " ";
     }
 
     if ( iNumClients == 0 )
     {
         // only application name
-        strWinTitle += QString ( APP_NAME );
+        if ( !bClientNameIsUsed ) // if --clientname is used, the APP_NAME is the first word in title
+        {
+            strWinTitle += QString ( APP_NAME );
+        }
     }
     else
     {
@@ -932,7 +938,10 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
             strWinTitle += " - " + QString::number ( iNumClients ) + " " + tr ( "users" );
         }
 
-        strWinTitle += " - " + QString ( APP_NAME );
+        if ( !bClientNameIsUsed ) // if --clientname is used, the APP_NAME is the first word in title
+        {
+            strWinTitle += " - " + QString ( APP_NAME );
+        }
     }
 
     setWindowTitle ( strWinTitle );

@@ -340,7 +340,7 @@ int main ( int argc, char** argv )
                                  "--clientname",
                                  strArgument ) )
         {
-            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            strClientName = strArgument;
             tsConsole << "- client name: " << strClientName << endl;
             CommandLineOptions << "--clientname";
             continue;

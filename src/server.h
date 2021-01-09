@@ -345,6 +345,7 @@ protected:
     // if server mode is normal or double system frame size
     bool                       bUseDoubleSystemFrameSize;
     int                        iServerFrameSizeSamples;
+
     // variables needed for multithreading support
     bool                      bUseMultithreading;
     QFutureSynchronizer<void> FutureSynchronizer;

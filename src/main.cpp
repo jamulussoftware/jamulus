@@ -75,7 +75,6 @@ int main ( int argc, char** argv )
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     bool         bEduModeEnabled             = false;
-    bool         bAllowRegisterEduMode       = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
@@ -439,18 +438,6 @@ int main ( int argc, char** argv )
             bEduModeEnabled    = true;
             tsConsole << "- enabld Edu-Mode with password " << endl;
             CommandLineOptions << "--edumodepassword";
-            continue;
-        }
-
-        // Allow edu mode servers on central server ----------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--allowedumode",
-                               "--allowedumode" ) )
-        {
-            bAllowRegisterEduMode = true;
-            tsConsole << "- Edu-Mode Servers can register on this central server" << endl;
-            CommandLineOptions << "--allowedumode";
             continue;
         }
 

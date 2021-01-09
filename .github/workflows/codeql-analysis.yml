@@ -60,7 +60,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
-       { make distclean || true }
+       make distclean || true
        qmake
        make
 

@@ -13,7 +13,7 @@ jobs:
       # just an example matrix
       matrix:
         config:
-          #- os: ubuntu-18.04
+          - os: ubuntu-18.04
           - os: macos-10.15
           - os: windows-latest
     steps:
@@ -35,7 +35,7 @@ jobs:
           dir: '${{ github.workspace }}'
           arch: 'win32_msvc2019'
       - name: "Build (linux)"
-        run: cd distributions; sudo ./build-debian-package-auto.sh; zip -r ../deploy/jamulus.zip ../*.deb
+        run: cd distributions; sudo ./build-debian-package-auto.sh
         if: matrix.config.os == 'ubuntu-18.04'
       - name: "Build (Windows)"
         run: powershell .\windows\deploy_windows.ps1 ${{ github.workspace }}\Qt\5.15.2\
@@ -43,4 +43,3 @@ jobs:
       - name: "Build (macOS)"
         run: brew install qt5; brew link qt5 --force; sh mac/deploy_mac.sh;
         if: matrix.config.os == 'macos-10.15'
-        

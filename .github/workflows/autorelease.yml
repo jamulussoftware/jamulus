@@ -34,10 +34,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           tag_name: testrelease
-          release_name: Test release ${{ github.ref }}
+          release_name: Test release
           body: |
-            Changes in this Release
-            - DEV release. No changelog
+            Changes in this Release: DEV release. No changelog
           draft: false
           prerelease: true
       - name: Install Qt

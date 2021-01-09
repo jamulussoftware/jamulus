@@ -585,7 +585,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
-        <location filename="../../clientdlg.cpp" line="659"/>
+        <location filename="../../clientdlg.cpp" line="653"/>
         <source>L</source>
         <translation>V</translation>
     </message>
@@ -726,7 +726,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="190"/>
-        <location filename="../../clientdlg.cpp" line="1211"/>
+        <location filename="../../clientdlg.cpp" line="1220"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Anslut</translation>
     </message>
@@ -791,12 +791,12 @@
         <translation>&amp;Rensa alla lagrade solo och tystade inställningar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1123"/>
+        <location filename="../../clientdlg.cpp" line="1132"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1139"/>
+        <location filename="../../clientdlg.cpp" line="1148"/>
         <source>Ok</source>
         <translation type="unfinished">Okej</translation>
     </message>
@@ -854,7 +854,7 @@
         <translation>Mitten</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="653"/>
+        <location filename="../../clientdlg.cpp" line="659"/>
         <source>R</source>
         <translation>H</translation>
     </message>
@@ -870,12 +870,12 @@
         <translation>Välj kanalinställningsfil</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="921"/>
+        <location filename="../../clientdlg.cpp" line="928"/>
         <source>user</source>
         <translation>användare</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="925"/>
+        <location filename="../../clientdlg.cpp" line="932"/>
         <source>users</source>
         <translation>användare</translation>
     </message>
@@ -884,7 +884,7 @@
         <translation type="vanished">Ljudkortet fungerar inte som det ska. Kontrollera enhetsvalet och drivrutinsinställningarna.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1186"/>
+        <location filename="../../clientdlg.cpp" line="1195"/>
         <source>D&amp;isconnect</source>
         <translation>Koppla &amp;ner</translation>
     </message>

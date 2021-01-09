@@ -823,7 +823,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="190"/>
-        <location filename="../../clientdlg.cpp" line="1211"/>
+        <location filename="../../clientdlg.cpp" line="1220"/>
         <source>C&amp;onnect</source>
         <translation>C&amp;onectar</translation>
     </message>
@@ -878,7 +878,7 @@
         <translation>Limpar Todas as &amp;Configurações de Solo e Mute</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1139"/>
+        <location filename="../../clientdlg.cpp" line="1148"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -906,13 +906,13 @@
         <translation>Centro</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="653"/>
+        <location filename="../../clientdlg.cpp" line="659"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
-        <location filename="../../clientdlg.cpp" line="659"/>
+        <location filename="../../clientdlg.cpp" line="653"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -1042,22 +1042,22 @@
         <translation>Selecione Arquivo de Configuraçao de Canal</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="921"/>
+        <location filename="../../clientdlg.cpp" line="928"/>
         <source>user</source>
         <translation>usuário</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="925"/>
+        <location filename="../../clientdlg.cpp" line="932"/>
         <source>users</source>
         <translation>usuários</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1123"/>
+        <location filename="../../clientdlg.cpp" line="1132"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation>Sua placa de som não está funcionando corretamente. Por favor abra a janela de ajustes e verifique a seleção do dispositivo e as configurações de driver.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1186"/>
+        <location filename="../../clientdlg.cpp" line="1195"/>
         <source>D&amp;isconnect</source>
         <translatorcomment>Opted by Desligar instead of Desconectar to keep same keyboard shortcut</translatorcomment>
         <translation>Desl&amp;igar</translation>

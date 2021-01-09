@@ -547,7 +547,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
-        <location filename="../../clientdlg.cpp" line="659"/>
+        <location filename="../../clientdlg.cpp" line="653"/>
         <source>L</source>
         <translation>Ľ</translation>
     </message>
@@ -713,7 +713,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="190"/>
-        <location filename="../../clientdlg.cpp" line="1211"/>
+        <location filename="../../clientdlg.cpp" line="1220"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Pripojiť</translation>
     </message>
@@ -783,7 +783,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1139"/>
+        <location filename="../../clientdlg.cpp" line="1148"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
@@ -832,7 +832,7 @@
         <translation>Stred</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="653"/>
+        <location filename="../../clientdlg.cpp" line="659"/>
         <source>R</source>
         <translation>P</translation>
     </message>
@@ -848,22 +848,22 @@
         <translation>Vyberte súbor s nastavením kanálov</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="921"/>
+        <location filename="../../clientdlg.cpp" line="928"/>
         <source>user</source>
         <translation>používateľ</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="925"/>
+        <location filename="../../clientdlg.cpp" line="932"/>
         <source>users</source>
         <translation>používatelia</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1123"/>
+        <location filename="../../clientdlg.cpp" line="1132"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1186"/>
+        <location filename="../../clientdlg.cpp" line="1195"/>
         <source>D&amp;isconnect</source>
         <translation>O&amp;dpojiť</translation>
     </message>

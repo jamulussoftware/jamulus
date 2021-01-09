@@ -8,6 +8,7 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
+    lrelease \
     release
 
 QT += network \
@@ -21,6 +22,7 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
+LRELEASE_DIR = src/res/translation
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
@@ -146,6 +148,21 @@ win32 {
         INCLUDEPATH += /usr/local/include
         LIBS += /usr/local/lib/libjack.dylib
     }
+} else:ios {
+    QMAKE_INFO_PLIST = ios/Info.plist
+    QT += macextras
+    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
+    HEADERS += ios/ios_app_delegate.h
+    HEADERS += ios/sound.h
+    OBJECTIVE_SOURCES += ios/sound.mm
+    QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus
+    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
+    LIBS += -framework CoreFoundation \
+        -framework CoreServices \
+        -framework AVFoundation \
+        -framework CoreMIDI \
+        -framework AudioToolbox \
+        -framework Foundation
 } else:android {
     # we want to compile with C++14
     CONFIG += c++14

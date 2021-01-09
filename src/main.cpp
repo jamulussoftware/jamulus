@@ -38,7 +38,7 @@
 #ifdef ANDROID
 # include <QtAndroidExtras/QtAndroid>
 #endif
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
 # include "mac/activity.h"
 #endif
 
@@ -55,7 +55,7 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-#if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
+#if defined( SERVER_BUNDLE ) && ( defined( Q_OS_MACX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
     bool         bIsClient                   = false;
 #else
@@ -555,7 +555,7 @@ int main ( int argc, char** argv )
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
-#if !( defined ( __APPLE__ ) || defined ( __MACOSX ) )
+#if !( defined ( Q_OS_MACX ) )
         exit ( 1 );
 #endif
     }
@@ -607,9 +607,17 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
+# if defined ( Q_OS_IOS )
+    bIsClient = false;
+    bUseGUI = true;
+
+    // bUseMultithreading = true;
+    QApplication* pApp =  new QApplication ( argc, argv );
+# else
     QCoreApplication* pApp = bUseGUI
         ? new QApplication ( argc, argv )
         : new QCoreApplication ( argc, argv );
+# endif
 #endif
 
 #ifdef ANDROID
@@ -638,7 +646,7 @@ int main ( int argc, char** argv )
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.
     CActivity activity;
@@ -787,7 +795,8 @@ int main ( int argc, char** argv )
             tsConsole << generr.GetErrorText() << endl;
         }
     }
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+
+#if defined ( Q_OS_MACX )
     activity.EndActivity();
 #endif
 

@@ -13,21 +13,21 @@ jobs:
       # just an example matrix
       matrix:
         config:
-          #- os: ubuntu-18.04
+          - os: ubuntu-18.04
           - os: macos-10.15
           - os: windows-latest
     steps:
       # checkout of cource
       - name: Checkout code
         uses: actions/checkout@v1
-      - name: Install Qt
+      - name: Install Qt (64 Bit)
         uses: jurplel/install-qt-action@v2
         if: matrix.config.os == 'windows-latest'
         with:
           version: '5.15.2'
           dir: '${{ github.workspace }}'
           arch: 'win64_msvc2019_64'
-      - name: Install Qt
+      - name: Install Qt (32 Bit)
         uses: jurplel/install-qt-action@v2
         if: matrix.config.os == 'windows-latest'
         with:
@@ -43,3 +43,6 @@ jobs:
       - name: "Build (macOS)"
         run: brew install qt5; brew link qt5 --force; sh mac/deploy_mac.sh;
         if: matrix.config.os == 'macos-10.15'
+      - name: "Build (Linux)"
+        run: cd distributions; sudo ./build-debian-package-auto.sh
+        if: matrix.config.os == 'ubuntu-18.04'

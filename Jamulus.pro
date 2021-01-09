@@ -61,10 +61,14 @@ win32 {
         windows/ASIOSDK2/host \
         windows/ASIOSDK2/host/pc
     mingw* {
-        LIBS += -lole32 \
+        QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+        LIBS += -lportaudio \
+            -lwinmm \
+            -lole32 \
+            -luuid \
+            -lsetupapi \
             -luser32 \
             -ladvapi32 \
-            -lwinmm \
             -lws2_32
     } else {
         QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93

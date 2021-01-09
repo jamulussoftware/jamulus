@@ -98,6 +98,9 @@ public slots:
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
+    void OnSoundcardInputActivated ( int iSndDevIdx );
+    void OnSoundcardOutputActivated ( int iSndDevIdx );
+    void OnSoundcardApiActivated (int iSndApiIdx );
     void OnLInChanActivated ( int iChanIdx );
     void OnRInChanActivated ( int iChanIdx );
     void OnLOutChanActivated ( int iChanIdx );

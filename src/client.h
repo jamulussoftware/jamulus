@@ -177,10 +177,19 @@ public:
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
     // sound card device selection
+    QStringList GetSndCrdApiNames()  { return Sound.GetApiNames(); }
     QStringList GetSndCrdDevNames()  { return Sound.GetDevNames(); }
+    QStringList GetSndCrdInDevNames()  { return Sound.GetInDevNames(); }
+    QStringList GetSndCrdOutDevNames()  { return Sound.GetOutDevNames(); }
 
     QString SetSndCrdDev ( const QString strNewDev );
     QString GetSndCrdDev() { return Sound.GetDev(); }
+    QString GetSndCrdInDev() { return Sound.GetInDev(); }
+    QString SetSndCrdInDev(const QString strNewDev);
+    QString GetSndCrdOutDev() { return Sound.GetOutDev(); }
+    QString SetSndCrdOutDev(const QString strNewDev);
+    void SetSndCrdApi ( int iNewApiIndex ) { Sound.setApi (iNewApiIndex); }
+    int GetSndCrdApi (  ) { return Sound.GetApi (); }
     void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
     // sound card channel selection
@@ -292,6 +301,9 @@ protected:
     int         PreparePingMessage();
     int         EvaluatePingMessage ( const int iMs );
     void        CreateServerJitterBufferMessage();
+
+    bool stopIfRunning();
+    QString resumeIfRunning(bool bWasRunning, const QString& strError);
 
     // only one channel is needed for client application
     CChannel                Channel;

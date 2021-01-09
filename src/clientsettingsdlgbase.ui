@@ -27,6 +27,21 @@
       <string>Soundcard</string>
      </property>
      <layout class="QVBoxLayout">
+       <item>
+         <layout class="QHBoxLayout">
+           <item>
+             <widget class="QLabel" name="lblApi">
+               <property name="text">
+                 <string>API</string>
+               </property>
+             </widget>
+           </item>
+           <item>
+             <widget class="QComboBox" name="cbxSoundApi">
+             </widget>
+           </item>
+         </layout>
+       </item>
       <item>
        <widget class="QLabel" name="lblSoundcardDevice">
         <property name="text">
@@ -49,6 +64,14 @@
          </size>
         </property>
        </widget>
+      </item>
+      <item>
+        <widget class="QComboBox" name="cbxSoundcardIn">
+        </widget>
+      </item>
+      <item>
+        <widget class="QComboBox" name="cbxSoundcardOut">
+        </widget>
       </item>
       <item>
        <widget class="QFrame" name="FrameSoundcardChannelSelection">

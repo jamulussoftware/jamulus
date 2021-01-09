@@ -505,7 +505,7 @@ void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
     }
 }
 
-QString CClient::SetSndCrdDev ( const QString strNewDev )
+bool CClient::stopIfRunning()
 {
     // if client was running then first
     // stop it and restart again after new initialization
@@ -514,9 +514,10 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
     {
         Sound.Stop();
     }
-
-    const QString strError = Sound.SetDev ( strNewDev );
-
+    return bWasRunning;
+}
+QString CClient::resumeIfRunning(bool bWasRunning, const QString& strError)
+{
     // init again because the sound card actual buffer size might
     // be changed on new device
     Init();
@@ -534,6 +535,22 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
     }
 
     return strError;
+}
+
+QString CClient::SetSndCrdDev ( const QString strNewDev )
+{
+    bool bWasRunning = stopIfRunning();
+    return resumeIfRunning(bWasRunning, Sound.SetDev ( strNewDev ));
+}
+QString CClient::SetSndCrdInDev ( const QString strNewDev )
+{
+    bool bWasRunning = stopIfRunning();
+    return resumeIfRunning(bWasRunning, Sound.SetInDev ( strNewDev ));
+}
+QString CClient::SetSndCrdOutDev ( const QString strNewDev )
+{
+    bool bWasRunning = stopIfRunning();
+    return resumeIfRunning(bWasRunning, Sound.SetOutDev ( strNewDev ));
 }
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )

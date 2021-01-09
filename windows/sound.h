@@ -36,6 +36,8 @@
 #include "asio.h"
 #include "asiodrivers.h"
 
+#include <portaudio.h>
+
 
 /* Definitions ****************************************************************/
 // stereo for input and output
@@ -60,75 +62,51 @@ public:
 
     virtual void OpenDriverSetup() { ASIOControlPanel(); }
 
-    // channel selection
-    virtual int     GetNumInputChannels() { return static_cast<int> ( lNumInChanPlusAddChan ); }
-    virtual QString GetInputChannelName ( const int iDiD ) { return channelInputName[iDiD]; }
-    virtual void    SetLeftInputChannel  ( const int iNewChan );
-    virtual void    SetRightInputChannel ( const int iNewChan );
-    virtual int     GetLeftInputChannel()  { return vSelectedInputChannels[0]; }
-    virtual int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
+    QStringList GetApiNames();
+    void setApi(PaHostApiIndex newApi);
+    int GetApi() { return selectedApi; }
 
-    virtual int     GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
-    virtual QString GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
-    virtual void    SetLeftOutputChannel  ( const int iNewChan );
-    virtual void    SetRightOutputChannel ( const int iNewChan );
-    virtual int     GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
-    virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
+    // device selection
+    QStringList GetDevNames();
+    QStringList GetInDevNames();
+    QStringList GetOutDevNames();
+    QString GetInDev() { return selectedInDev; }
+    QString GetOutDev(){ return selectedOutDev; }
+    virtual QString     SetDev ( const QString strDevName );
+    virtual QString     SetInDev ( const QString strDevName );
+    virtual QString     SetOutDev ( const QString strDevName );
+
+    // // channel selection
+    // virtual int     GetNumInputChannels() { return static_cast<int> ( lNumInChanPlusAddChan ); }
+    // virtual QString GetInputChannelName ( const int iDiD ) { return channelInputName[iDiD]; }
+    // virtual void    SetLeftInputChannel  ( const int iNewChan );
+    // virtual void    SetRightInputChannel ( const int iNewChan );
+    // virtual int     GetLeftInputChannel()  { return vSelectedInputChannels[0]; }
+    // virtual int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
+
+    // virtual int     GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
+    // virtual QString GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
+    // virtual void    SetLeftOutputChannel  ( const int iNewChan );
+    // virtual void    SetRightOutputChannel ( const int iNewChan );
+    // virtual int     GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
+    // virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
     virtual float   GetInOutLatencyMs() { return fInOutLatencyMs; }
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( QString strDriverName,
+    virtual QString  LoadAndInitializeDriver ( QString inDevName,
+                                               QString outDevName,
                                                bool    bOpenDriverSetup );
     virtual void     UnloadCurrentDriver();
-    int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
-    QString          CheckDeviceCapabilities();
-    bool             CheckSampleTypeSupported ( const ASIOSampleType SamType );
-    bool             CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType );
-    void             ResetChannelMapping();
-
-    int              iASIOBufferSizeMono;
-    int              iASIOBufferSizeStereo;
-
-    long             lNumInChan;
-    long             lNumInChanPlusAddChan; // includes additional "added" channels
-    long             lNumOutChan;
     float            fInOutLatencyMs;
-    CVector<int>     vSelectedInputChannels;
-    CVector<int>     vSelectedOutputChannels;
 
     CVector<int16_t> vecsMultChanAudioSndCrd;
 
-    QMutex           ASIOMutex;
+    static int paStreamCallback(const void *input, void *output, unsigned long frameCount, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData);
 
-    // utility functions
-    static int16_t   Flip16Bits ( const int16_t iIn );
-    static int32_t   Flip32Bits ( const int32_t iIn );
-    static int64_t   Flip64Bits ( const int64_t iIn );
-
-    // audio hardware buffer info
-    struct sHWBufferInfo
-    {
-        long lMinSize;
-        long lMaxSize;
-        long lPreferredSize;
-        long lGranularity;
-    } HWBufferInfo;
-
-    // ASIO stuff
-    ASIODriverInfo   driverInfo;
-    ASIOBufferInfo   bufferInfos[2 * MAX_NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
-    ASIOChannelInfo  channelInfosInput[MAX_NUM_IN_OUT_CHANNELS];
-    QString          channelInputName[MAX_NUM_IN_OUT_CHANNELS];
-    ASIOChannelInfo  channelInfosOutput[MAX_NUM_IN_OUT_CHANNELS];
-    bool             bASIOPostOutput;
-    ASIOCallbacks    asioCallbacks;
-
-    // callbacks
-    static void      bufferSwitch ( long index, ASIOBool processNow );
-    static ASIOTime* bufferSwitchTimeInfo ( ASIOTime* timeInfo, long index, ASIOBool processNow );
-    static void      sampleRateChanged ( ASIOSampleRate ) {}
-    static long      asioMessages ( long selector, long value, void* message, double* opt );
-
-    char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
+    PaHostApiIndex selectedApi;
+    CVector<const PaDeviceInfo*> paDeviceInfos;
+    PaStream* paStream;
+    int paStreamInChannels, paStreamOutChannels;
+    QString selectedInDev, selectedOutDev;
 };

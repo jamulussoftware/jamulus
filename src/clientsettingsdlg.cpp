@@ -381,8 +381,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
     // combo boxes
+    QObject::connect ( cbxSoundApi, QOverload<int>::of (&QComboBox::activated),
+                       this, &CClientSettingsDlg::OnSoundcardApiActivated );
+
     QObject::connect ( cbxSoundcard, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnSoundcardActivated );
+    QObject::connect ( cbxSoundcardIn, QOverload<int>::of (&QComboBox::activated),
+                       this, &CClientSettingsDlg::OnSoundcardInputActivated );
+    QObject::connect ( cbxSoundcardOut, QOverload<int>::of (&QComboBox::activated),
+                       this, &CClientSettingsDlg::OnSoundcardOutputActivated );
 
     QObject::connect ( cbxLInChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnLInChanActivated );
@@ -511,18 +518,36 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     }
 }
 
+static void resetComboBox(QComboBox* box, const QStringList& items, const QString& selected)
+{
+    box->clear();
+    foreach ( QString strDevName, items )
+    {
+        box->addItem ( strDevName );
+    }
+    if (!items.isEmpty()) {
+        box->addItem ("<None>");
+    }
+    box->setCurrentText ( selected );
+    box->setVisible (!items.isEmpty());
+}
+
 void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
 {
     // update combo box containing all available sound cards in the system
-    QStringList slSndCrdDevNames = pClient->GetSndCrdDevNames();
-    cbxSoundcard->clear();
+    QStringList slSndCrdApiNames = pClient->GetSndCrdApiNames();
+    cbxSoundApi->clear();
 
-    foreach ( QString strDevName, slSndCrdDevNames )
+    foreach ( QString strApiName, slSndCrdApiNames )
     {
-        cbxSoundcard->addItem ( strDevName );
+        cbxSoundApi->addItem ( strApiName );
     }
+    cbxSoundApi->setCurrentIndex (pClient->GetSndCrdApi());
 
-    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+    resetComboBox(cbxSoundcard, pClient->GetSndCrdDevNames(), pClient->GetSndCrdDev());
+    resetComboBox(cbxSoundcardIn, pClient->GetSndCrdInDevNames(), pClient->GetSndCrdInDev());
+    resetComboBox(cbxSoundcardOut, pClient->GetSndCrdOutDevNames(), pClient->GetSndCrdOutDev());
+
 
     // update input/output channel selection
 #if defined ( _WIN32 ) || defined ( __APPLE__ ) || defined ( __MACOSX )
@@ -601,6 +626,29 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
     UpdateSoundDeviceChannelSelectionFrame();
     UpdateDisplay();
 }
+void CClientSettingsDlg::OnSoundcardInputActivated ( int iSndDevIdx )
+{
+    pClient->SetSndCrdInDev ( cbxSoundcardIn->itemText ( iSndDevIdx ) );
+
+    UpdateSoundDeviceChannelSelectionFrame();
+    UpdateDisplay();
+}
+void CClientSettingsDlg::OnSoundcardOutputActivated ( int iSndDevIdx )
+{
+    pClient->SetSndCrdOutDev ( cbxSoundcardOut->itemText ( iSndDevIdx ) );
+
+    UpdateSoundDeviceChannelSelectionFrame();
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnSoundcardApiActivated (int iSndApiIdx )
+{
+    pClient->SetSndCrdApi (iSndApiIdx);
+
+    UpdateSoundDeviceChannelSelectionFrame();
+    UpdateDisplay();
+}
+
 
 void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
 {

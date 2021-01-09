@@ -60,8 +60,6 @@ public:
     virtual void Stop();
 
     // device selection
-    QStringList GetDevNames();
-    QString     SetDev ( const QString strDevName );
     QString     GetDev() { QMutexLocker locker ( &MutexDevProperties ); return strCurDevName; }
 
     virtual int     GetNumInputChannels() { return 2; }
@@ -91,9 +89,8 @@ public:
         { emit ReinitRequest ( eSndCrdResetType ); }
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
+    virtual QString  LoadAndInitializeDriver ( QString, QString, bool ) = 0; //{ return ""; }
     virtual void     UnloadCurrentDriver() {}
-    QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
     void             ParseCommandLineArgument ( const QString& strMIDISetup );
     QString          GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
 

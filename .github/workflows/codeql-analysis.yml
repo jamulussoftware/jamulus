@@ -60,6 +60,8 @@ jobs:
     #    uses a compiled language
 
     - run: |
+        sudo apt-get install --fix-missing
+        sudo apt-get install libinput-bin libinput10
         sudo apt install build-essential qt5-qmake qtdeclarative5-dev qt5-default qttools5-dev-tools libjack-jackd2-dev
         make distclean || true
         qmake

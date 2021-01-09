@@ -1,0 +1,62 @@
+name: "CodeQL for Windows"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '23 11 * * 6'
+
+jobs:
+  analyze-windows:
+    name: Analyze Windows (Server 2019)
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+        #language: [ 'cpp', 'javascript', 'python' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
+        # Learn more:
+        # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.2'
+        dir: '${{ github.workspace }}'
+        arch: 'win64_msvc2019_64'
+        tools: 'tools_qtcreator,4.14.0-0,qt.tools.qtcreator'
+
+    - name: Install ASIOSDK
+      shell: pwsh
+      run: |
+        Invoke-WebRequest -Uri "http://www.steinberg.net/asiosdk" -OutFile "asiosdk.zip"
+        Expand-Archive -Path "asiosdk.zip" -DestinationPath "ASIOSDK"
+        Get-ChildItem -Path "ASIOSDK/asiosdk_2*/*" -Recurse | Move-Item -Destination "windows/ASIOSDK2"
+
+    - name: Visual Studio shell
+      uses: egor-tensin/vs-shell@v2
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Build
+      shell: cmd
+      run: |
+        D:\a\jamulus\jamulus\Qt\5.15.2\msvc2019_64\bin\qmake.exe Jamulus.pro -spec win32-msvc
+        D:\a\jamulus\jamulus\Qt\Tools\QtCreator\bin\jom.exe qmake_all
+        D:\a\jamulus\jamulus\Qt\Tools\QtCreator\bin\jom.exe
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1

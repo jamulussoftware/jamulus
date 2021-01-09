@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -74,6 +74,8 @@ int main ( int argc, char** argv )
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
+    bool         bEduModeEnabled             = false;
+    bool         bAllowRegisterEduMode       = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
@@ -86,8 +88,9 @@ int main ( int argc, char** argv )
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
     QString      strServerListFilter         = "";
+    QString      strEduModePassword          = "";
     QString      strWelcomeMessage           = "";
-    QString      strClientName               = APP_NAME;
+    QString      strClientName               = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -340,7 +343,7 @@ int main ( int argc, char** argv )
                                  "--clientname",
                                  strArgument ) )
         {
-            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            strClientName = strArgument;
             tsConsole << "- client name: " << strClientName << endl;
             CommandLineOptions << "--clientname";
             continue;
@@ -423,6 +426,33 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Education mode password ---------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--edumodepassword", // no short argument
+                                 "--edumodepassword",
+                                 strArgument ) )
+        {
+            strEduModePassword = strArgument;
+            bEduModeEnabled    = true;
+            tsConsole << "- enabld Edu-Mode with password " << endl;
+            CommandLineOptions << "--edumodepassword";
+            continue;
+        }
+
+        // Allow edu mode servers on central server ----------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--allowedumode",
+                               "--allowedumode" ) )
+        {
+            bAllowRegisterEduMode = true;
+            tsConsole << "- Edu-Mode Servers can register on this central server" << endl;
+            CommandLineOptions << "--allowedumode";
+            continue;
+        }
 
         // Server welcome message ----------------------------------------------
         if ( GetStringArgument ( tsConsole,
@@ -687,10 +717,11 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             strEduModePassword,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
-                             bDisableRecording,
+                             bEduModeEnabled,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -756,7 +787,6 @@ int main ( int argc, char** argv )
             tsConsole << generr.GetErrorText() << endl;
         }
     }
-    
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
     activity.EndActivity();
 #endif
@@ -786,6 +816,8 @@ QString UsageArguments ( char **argv )
         "                        (or 'localhost' to be a central server)\n"
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
+        "  --edumodepassword     enable Edu-Mode and set following admin password\n"
+        "  --allowedumode        allow servers in Edu-Mode to register on this central server\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         show an agreement window before users can connect\n"

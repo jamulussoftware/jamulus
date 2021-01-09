@@ -907,14 +907,21 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     // set the window title (and therefore also the task bar icon text of the OS)
     // according to the following specification (#559):
     // <ServerName> - <N> users - Jamulus
+    QString strWinTitle;
+
+    if ( !pClient->strClientName.isEmpty() )
+    {
+        strWinTitle += pClient->strClientName + " ";
+    }
+
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( pClient->strClientName );
+        strWinTitle += QString ( APP_NAME );
     }
     else
     {
-        QString strWinTitle = MainMixerBoard->GetServerName();
+        strWinTitle += MainMixerBoard->GetServerName();
 
         if ( iNumClients == 1 )
         {
@@ -925,8 +932,10 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
             strWinTitle += " - " + QString::number ( iNumClients ) + " " + tr ( "users" );
         }
 
-        setWindowTitle ( strWinTitle + " - " + pClient->strClientName );
+        setWindowTitle ( strWinTitle + " - " + QString ( APP_NAME ) );
     }
+
+    setWindowTitle ( strWinTitle );
 
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
     // for MacOS only we show the number of connected clients as a

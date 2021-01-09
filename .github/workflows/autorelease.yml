@@ -14,8 +14,8 @@ jobs:
       matrix:
         config:
           os: [ ubuntu-18.04, macos-10.15, windows-latest ]
-          asset_path: [ deploy/Jamulus_latest_amd64.deb, deploy/*.dmg, deploy\*.exe ]
-          asset_name: [ jamulus_latest_ubuntu_amd64.deb, jamulus_latest_macOS.dmg, jamulus_latest_win.exe ]
+          asset_path: [ 'deploy/Jamulus_latest_amd64.deb', 'deploy/*.dmg', 'deploy\*.exe' ]
+          asset_name: [ 'jamulus_latest_ubuntu_amd64.deb', 'jamulus_latest_macOS.dmg', 'jamulus_latest_win.exe' ]
     steps:
       # checkout of cource
       - name: Checkout code

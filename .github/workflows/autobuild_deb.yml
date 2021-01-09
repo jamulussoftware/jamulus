@@ -1,0 +1,23 @@
+name: "Autobuild deb"
+
+on:
+  push:
+    tags:
+      - "r*"
+jobs:
+  pre-release:
+    name: "Release"
+    runs-on: "ubuntu-18.04"
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v1
+      - name: "Build package"
+        run: cd distributions; sudo ./build-debian-package-auto.sh
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Automatic Build"
+          files: |
+            deploy/*.deb

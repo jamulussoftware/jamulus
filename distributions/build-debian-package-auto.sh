@@ -19,12 +19,12 @@ VERSION=$(cat Jamulus.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
 
 # patch changelog (with hack)
 
-DATE=$(date "+%a, %d %B %Y %T %Z" )
+DATE=$(date "+%a, %d %B %Y %T" )
 echo "jamulus (${VERSION}-0) UNRELEASED; urgency=medium" > debian/changelog
 echo "" >> debian/changelog
 echo "  * See GitHub releases for changelog" >> debian/changelog
 echo "" >> debian/changelog
-echo "-- GitHub Actions <noemail@example.com> ${DATE}" >> debian/changelog
+echo " -- GitHub Actions <noemail@example.com> ${DATE} +0000" >> debian/changelog
 echo "" >> debian/changelog
 cat distributions/debian/changelog >> debian/changelog
 
@@ -38,8 +38,11 @@ echo "${VERSION} building..."
 sed -i "s/é&%JAMVERSION%&è/${VERSION}/g" debian/control
 debuild -b -us -uc
 
-#echo "Build armhf"
+mkdir deploy
 
 #debuild -b -us -uc -aarmhf
 # copy for auto release
-cp ../*.deb ./
+cp ../*.deb deploy/
+
+mv deploy/jamulus-headless*_amd64.deb deploy/Jamulus_headless_latest_amd64.deb
+mv deploy/jamulus*_amd64.deb deploy/Jamulus_latest_amd64.deb

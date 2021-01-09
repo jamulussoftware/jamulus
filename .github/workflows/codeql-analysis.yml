@@ -23,8 +23,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: trusty-qt512
-    #runs-on: ubuntu-latest
+    runs-on: [qt-runner, ubuntu-latest]
 
     strategy:
       fail-fast: false

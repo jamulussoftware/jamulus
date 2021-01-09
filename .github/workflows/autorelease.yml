@@ -1,0 +1,46 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - "eduTools"
+
+jobs:
+  release_assets:
+    name: Release assets
+    runs-on: ${{ matrix.config.os }} # we run many different builds
+    strategy:
+      # just an example matrix
+      matrix:
+        config:
+          #- os: ubuntu-18.04
+          - os: macos-10.15
+          - os: windows-latest
+    steps:
+      # checkout of cource
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        if: matrix.config.os == 'windows-latest'
+        with:
+          version: '5.15.2'
+          dir: '${{ github.workspace }}'
+          arch: 'win64_msvc2019_64'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        if: matrix.config.os == 'windows-latest'
+        with:
+          version: '5.15.2'
+          dir: '${{ github.workspace }}'
+          arch: 'win32_msvc2019'
+      - name: "Build (linux)"
+        run: cd distributions; sudo ./build-debian-package-auto.sh; zip -r ../deploy/jamulus.zip ../*.deb
+        if: matrix.config.os == 'ubuntu-18.04'
+      - name: "Build (Windows)"
+        run: powershell .\windows\deploy_windows.ps1 ${{ github.workspace }}\Qt\5.15.2\
+        if: matrix.config.os == 'windows-latest'
+      - name: "Build (macOS)"
+        run: brew install qt5; brew link qt5 --force; sh mac/deploy_mac.sh;
+        if: matrix.config.os == 'macos-10.15'
+        

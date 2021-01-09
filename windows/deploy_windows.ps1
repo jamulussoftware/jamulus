@@ -1,6 +1,6 @@
 param(
     # Replace default path with system Qt installation folder if necessary
-    [string] $QtInstallPath = "C:\Qt\5.12.3",
+    [string] $QtInstallPath = "D:\a\qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
@@ -8,6 +8,11 @@ param(
     [string] $NsisName = "nsis-3.06.1",
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
+# for gh actions
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+Set-Location -Path "$PSScriptRoot\..\"
 
 # change directory to the directory above (if needed)
 Set-Location -Path "$PSScriptRoot\..\"
@@ -50,16 +55,16 @@ Function Clean-Build-Environment
 
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
- 
+
     Param (
         [Parameter(Mandatory=$true)]
         [String]$URL
     )
- 
+
     $request = [System.Net.WebRequest]::Create($url)
     $request.AllowAutoRedirect=$false
     $response=$request.GetResponse()
- 
+
     if ($response.StatusCode -eq "Found")
     {
         $response.GetResponseHeader("Location")
@@ -131,6 +136,7 @@ Function Install-Dependencies
     if (-not (Get-PackageProvider -Name nuget).Name -eq "nuget") {
       Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     }
+    # Install-Module PowershellGet -Force
     Load-Module -m "VSSetup"
     Install-Dependency -Uri $AsioSDKUrl `
         -Name $AsioSDKName -Destination "ASIOSDK2"

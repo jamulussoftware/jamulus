@@ -66,7 +66,17 @@ public:
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
         CSoundBase ( "Jack", fpNewProcessCallback, arg, strMIDISetup ),
-        iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ), fInOutLatencyMs ( 0.0f ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
+        iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ), fInOutLatencyMs ( 0.0f )
+    {
+        QString strJackName = QString ( APP_NAME );
+
+        if ( !strJackClientName.isEmpty() )
+        {
+            strJackName += " " + strJackClientName;
+        }
+
+        OpenJack ( bNoAutoJackConnect, strJackName.toLocal8Bit().data() );
+    }
 
     virtual ~CSound() { CloseJack(); }
 

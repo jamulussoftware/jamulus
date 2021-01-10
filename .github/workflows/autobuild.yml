@@ -1,8 +1,9 @@
-name:                         Publish Release
+name:                         Publish EduTools Release
+
 on:
   push:
-    tags:
-      - "r*"
+    branches:
+      - "eduTools"
 jobs:
   create_release:
      name:                    Create release
@@ -16,7 +17,7 @@ jobs:
            uses:              dev-drprasad/delete-tag-and-release@v0.1.2
            with:
              delete_release:  false
-             tag_name:        latest # tag name to delete
+             tag_name:        edulatest # tag name to delete
            env:
              GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
          - name:              Get Jamulus build info
@@ -28,12 +29,12 @@ jobs:
            env:
              GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
            with:
-             tag_name:        latest
-             release_name:    Latest release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} (auto build)
+             tag_name:        edulatest
+             release_name:    Latest EduTools release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} (auto build)
              body:            |
-               Changes in release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }}: See the [changelog](https://github.com/corrados/jamulus/blob/master/ChangeLog).
+               This is an unofficial EduTools release. Changes of Jamulus for release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} can be found in the [changelog](https://github.com/corrados/jamulus/blob/master/ChangeLog) from the official project.
              draft:           false
-             prerelease:      false
+             prerelease:      true
   release_assets:
     name:                     Release assets
     needs:                    create_release

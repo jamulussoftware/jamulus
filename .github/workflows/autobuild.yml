@@ -50,9 +50,9 @@ jobs:
            - os:              macos-10.15
              asset_path:      deploy/Jamulus-installer-mac.dmg
              asset_name:      jamulus_latest_mac.dmg
-           #- os:             windows-latest
-           #  asset_path:     deploy\Jamulus-installer-win.exe
-           #  asset_name:     jamulus_latest_win.exe
+           - os:             windows-latest
+             asset_path:     deploy\Jamulus-installer-win.exe
+             asset_name:     jamulus_latest_win.exe
     steps:
       # checkout
       - name:                 Checkout code

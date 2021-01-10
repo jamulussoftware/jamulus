@@ -1,6 +1,6 @@
 ![Homepage picture](src/res/homepage/jamulusbannersmall.png)
 
-[![Build Status](https://travis-ci.org/corrados/jamulus.svg?branch=master)](https://travis-ci.org/corrados/jamulus)
+![CI Linux](https://github.com/ann0see/jamulus/workflows/CI%20Linux/badge.svg)
 
 Jamulus - Internet Jam Session Software
 =======================================

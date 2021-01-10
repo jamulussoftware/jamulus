@@ -12,13 +12,20 @@ jobs:
      outputs:
       upload_url:             ${{ steps.create_release.outputs.upload_url }}
      steps:
+         - name:              Remove tag
+           uses:              dev-drprasad/delete-tag-and-release@v0.1.2
+           with:
+             delete_release: false # default: false
+             tag_name:        latest # tag name to delete
+           env:
+             GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
          - name:              Prepare Release
            id:                create_release
            uses:              actions/create-release@v1
            env:
              GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
            with:
-             tag_name:        r-${{ github.sha }}
+             tag_name:        latest
              release_name:    Test release ${{ github.sha }}
              body:            |
                Changes in this Release: DEV release. No changelog

@@ -1,0 +1,97 @@
+name:                         Publish Release
+on:
+  push:
+    tags:
+      - "r*"
+jobs:
+  create_release:
+     name:                    Create release
+     runs-on:                 ubuntu-latest
+     outputs:
+      upload_url:             ${{ steps.create_release.outputs.upload_url }}
+     steps:
+         - name:              Remove latest tag
+           uses:              dev-drprasad/delete-tag-and-release@v0.1.2
+           with:
+             delete_release:  false
+             tag_name:        latest # tag name to delete
+           env:
+             GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
+         - name:              Prepare Release
+           id:                create_release
+           uses:              actions/create-release@v1
+           env:
+             GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
+           with:
+             tag_name:        latest
+             release_name:    Latest release (auto build)
+             body:            |
+               Changes in this release: See the [changelog](https://github.com/corrados/jamulus/blob/master/ChangeLog).
+             draft:           false
+             prerelease:      false
+  release_assets:
+    name:                     Release assets
+    needs:                    create_release
+    runs-on:                  ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+           - os:              ubuntu-18.04
+             asset_path:      deploy/Jamulus_latest_amd64.deb
+             asset_name:      jamulus_latest_ubuntu_amd64.deb
+             asset_path_two:  deploy/Jamulus_headless_latest_amd64.deb
+             asset_name_two:  jamulus_headless_latest_ubuntu_amd64.deb
+           - os:              macos-10.15
+             asset_path:      deploy/Jamulus-installer-mac.dmg
+             asset_name:      jamulus_latest_mac.dmg
+           #- os:             windows-latest
+           #  asset_path:     deploy\Jamulus-installer-win.exe
+           #  asset_name:     jamulus_latest_win.exe
+    steps:
+      # checkout
+      - name:                 Checkout code
+        uses:                 actions/checkout@v2
+      - name:                 Install Qt (64 Bit)
+        uses:                 jurplel/install-qt-action@v2
+        if:                   matrix.config.os == 'windows-latest'
+        with:
+          version:            '5.15.2'
+          dir:                '${{ github.workspace }}'
+          arch:               'win64_msvc2019_64'
+      - name:                 Install Qt (32 Bit)
+        uses:                 jurplel/install-qt-action@v2
+        if:                   matrix.config.os == 'windows-latest'
+        with:
+          version:            '5.15.2'
+          dir:                '${{ github.workspace }}'
+          arch:               'win32_msvc2019'
+      - name:                 "Build deb (Linux)"
+        run:                  cd distributions; sudo ./build-debian-package-auto.sh
+        if:                   matrix.config.os == 'ubuntu-18.04'
+      - name:                 "Build (Windows)"
+        run:                  powershell .\windows\deploy_windows.ps1 ${{ github.workspace }}\Qt\5.15.2\; cp deploy\Jamulus*installer-win.exe deploy\Jamulus-installer-win.exe
+        if:                   matrix.config.os == 'windows-latest'
+      - name:                 "Build (macOS)"
+        run:                  brew install qt5; brew link qt5 --force; sh mac/deploy_mac.sh; cp deploy/Jamulus-*installer-mac.dmg deploy/Jamulus-installer-mac.dmg
+        if:                   matrix.config.os == 'macos-10.15'
+      - name:                 Upload Release Asset 1
+        id:                   upload-release-asset
+        uses:                 actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:       ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }} # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path:         ${{ matrix.config.asset_path }}
+          asset_name:         ${{ matrix.config.asset_name }}
+          asset_content_type: application/octet-stream
+      - name:                 Upload Release Asset 2
+        if:                   matrix.config.asset_name_two != null
+        id:                   upload-release-asset-two
+        uses:                 actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:       ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:         ${{ needs.create_release.outputs.upload_url }}
+          asset_path:         ${{ matrix.config.asset_path_two }}
+          asset_name:         ${{ matrix.config.asset_name_two }}
+          asset_content_type: application/octet-stream

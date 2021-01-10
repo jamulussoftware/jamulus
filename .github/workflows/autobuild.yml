@@ -10,6 +10,8 @@ jobs:
      outputs:
       upload_url:             ${{ steps.create_release.outputs.upload_url }}
      steps:
+         - name:                 Checkout code
+           uses:                 actions/checkout@v2
          - name:              Remove latest tag
            uses:              dev-drprasad/delete-tag-and-release@v0.1.2
            with:

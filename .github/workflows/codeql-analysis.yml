@@ -65,9 +65,9 @@ jobs:
         arch: 'win64_msvc2019_64'
 
     - name: Find tools
-      run: |
-        cmd /c /s "dir /s/b \jom.exe"
-        cmd /c /s "dir /s/b \*make.exe"
+      shell: |
+        dir /s/b \jom.exe
+        dir /s/b \*make.exe
 
     - name: Checkout repository
       uses: actions/checkout@v2

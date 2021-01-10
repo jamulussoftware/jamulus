@@ -46,23 +46,26 @@
 # if defined ( _WIN32 ) && !defined ( JACK_REPLACES_ASIO )
 #  include "../windows/sound.h"
 # else
-#  if ( defined ( __APPLE__ ) || defined ( __MACOSX ) ) && !defined ( JACK_REPLACES_COREAUDIO )
+#  if ( defined ( Q_OS_MACX ) ) && !defined ( JACK_REPLACES_COREAUDIO )
 #   include "../mac/sound.h"
 #  else
-#   ifdef ANDROID
-#    include "../android/sound.h"
-#   else
-#    include "../linux/sound.h"
-#    ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
-#     include <sched.h>
-#     include <netdb.h>
+#   if defined ( Q_OS_IOS )
+#     include "../ios/sound.h"
+#    else
+#    ifdef ANDROID
+#     include "../android/sound.h"
+#    else
+#     include "../linux/sound.h"
+#     ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
+#      include <sched.h>
+#      include <netdb.h>
+#     endif
+#     include <socket.h>
 #    endif
-#    include <socket.h>
 #   endif
 #  endif
 # endif
 #endif
-
 
 /* Definitions ****************************************************************/
 // audio in fader range

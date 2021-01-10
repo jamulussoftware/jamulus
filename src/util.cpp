@@ -441,6 +441,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     txvContributors->setText (
         "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
         "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
+        "<p>ann0see (<a href=""https://github.com/ann0see"">ann0see</a>)</p>"
         "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
         "<p>Martin Schilde (<a href=""https://github.com/geheimerEichkater"">geheimerEichkater</a>)</p>"
         "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
@@ -468,12 +469,12 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
         "<p>Kris Raney (<a href=""https://github.com/kraney"">kraney</a>)</p>"
         "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
-        "<p>ann0see (<a href=""https://github.com/ann0see"">ann0see</a>)</p>"
         "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
         "<p>Julian Santander (<a href=""https://github.com/j-santander"">j-santander</a>)</p>"
         "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
         "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
         "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
+        "<p>ranfdev (<a href=""https://github.com/ranfdev"">ranfdev</a>)</p>"
         "<p>bspeer (<a href=""https://github.com/bspeer"">bspeer</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );

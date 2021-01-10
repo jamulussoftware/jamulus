@@ -7,6 +7,10 @@
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 
 
+TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
+
+
+
 
 
 3.6.2 (2020-12-12)

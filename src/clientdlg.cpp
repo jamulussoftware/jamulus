@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -650,13 +650,13 @@ void CClientDlg::UpdateAudioFaderSlider()
         if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
         {
             // attenuation on right channel
-            lblAudioPanValue->setText ( tr ( "R" ) + " -" +
+            lblAudioPanValue->setText ( tr ( "L" ) + " -" +
                 QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
         }
         else
         {
             // attenuation on left channel
-            lblAudioPanValue->setText ( tr ( "L" ) + " -" +
+            lblAudioPanValue->setText ( tr ( "R" ) + " -" +
                 QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
         }
     }
@@ -907,17 +907,23 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     // set the window title (and therefore also the task bar icon text of the OS)
     // according to the following specification (#559):
     // <ServerName> - <N> users - Jamulus
-    QString strWinTitle;
+    QString    strWinTitle;
+    const bool bClientNameIsUsed = !pClient->strClientName.isEmpty();
 
-    if ( !pClient->strClientName.isEmpty() )
+    if ( bClientNameIsUsed )
     {
-        strWinTitle += pClient->strClientName + " ";
+        // if --clientname is used, the APP_NAME must be the very first word in
+        // the title, otherwise some user scripts do not work anymore, see #789
+        strWinTitle += QString ( APP_NAME ) + " " + pClient->strClientName + " ";
     }
 
     if ( iNumClients == 0 )
     {
         // only application name
-        strWinTitle += QString ( APP_NAME );
+        if ( !bClientNameIsUsed ) // if --clientname is used, the APP_NAME is the first word in title
+        {
+            strWinTitle += QString ( APP_NAME );
+        }
     }
     else
     {
@@ -932,12 +938,15 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
             strWinTitle += " - " + QString::number ( iNumClients ) + " " + tr ( "users" );
         }
 
-        setWindowTitle ( strWinTitle + " - " + QString ( APP_NAME ) );
+        if ( !bClientNameIsUsed ) // if --clientname is used, the APP_NAME is the first word in title
+        {
+            strWinTitle += " - " + QString ( APP_NAME );
+        }
     }
 
     setWindowTitle ( strWinTitle );
 
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#if defined ( Q_OS_MACX )
     // for MacOS only we show the number of connected clients as a
     // badge label text if more than one user is connected
     // (only available in Qt5.2)
@@ -1306,7 +1315,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QCheckBox::indicator:checked {"
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
             "QCheckBox {              color:          rgb(220, 220, 220);"
-            "                         font:           bold; }" );            
+            "                         font:           bold; }" );
 
 #ifdef _WIN32
 // Workaround QT-Windows problem: This should not be necessary since in the

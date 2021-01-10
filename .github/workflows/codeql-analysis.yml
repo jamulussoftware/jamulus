@@ -69,7 +69,7 @@ jobs:
       run: |
         cd
         dir /s/b \jom.exe
-        dir /s/b \*make.exe
+        dir /s/b \nmake.exe
 
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -80,13 +80,13 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - name: Build Jamulus on Windows
+    #    nmake distclean
+    #    nmake qmake_all
+    #    nmake
+    - name: Run QMake
       shell: cmd
       run: |
-        nmake distclean
-        D:\a\jamulus\jamulus\Qt\5.15.2\msvc2019_64\bin\qmake.exe Jamulus/Jamulus.pro -spec win32-msvc
-        nmake qmake_all
-        nmake
+        %Qt5_Dir%/bin/qmake.exe Jamulus/Jamulus.pro -spec win32-msvc
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

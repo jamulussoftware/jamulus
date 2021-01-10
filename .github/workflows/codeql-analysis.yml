@@ -66,8 +66,8 @@ jobs:
 
     - name: Find tools
       run: |
-        cmd /s "dir /s/b \jom.exe"
-        cmd /s "dir /s/b \*make.exe"
+        cmd /c /s "dir /s/b \jom.exe"
+        cmd /c /s "dir /s/b \*make.exe"
 
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -81,7 +81,7 @@ jobs:
     - name: Build Jamulus on Windows
       run: |
         make distclean || true
-        D:\a\jamulus\jamulus\Qt\bin\qmake.exe -spec win32-msvc
+        D:/a/jamulus/jamulus/Qt/bin/qmake.exe -spec win32-msvc
         make
 
     - name: Perform CodeQL Analysis

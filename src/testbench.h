@@ -46,7 +46,7 @@ public:
         iPort    ( iNewPort )
     {
         sLAddress = GenRandomIPv4Address().toString();
-        iLPort = static_cast<quint16> ( GenRandomIntInRange ( -2, 10000 ) );
+        iLPort    = static_cast<quint16> ( GenRandomIntInRange ( -2, 10000 ) );
 
         // bind socket (try 100 port numbers)
         quint16 iPortIncrement = 0;     // start value: port number plus ten
@@ -154,12 +154,8 @@ public slots:
             break;
 
         case 7: // PROTMESSID_CHANNEL_INFOS
-            ChannelCoreInfo.eCountry =
-                static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
-
-            ChannelCoreInfo.eSkillLevel =
-                static_cast<ESkillLevel> ( GenRandomIntInRange ( 0, 3 ) );
-
+            ChannelCoreInfo.eCountry    = static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
+            ChannelCoreInfo.eSkillLevel = static_cast<ESkillLevel> ( GenRandomIntInRange ( 0, 3 ) );
             ChannelCoreInfo.iInstrument = GenRandomIntInRange ( 0, 100 );
             ChannelCoreInfo.strCity     = GenRandomString();
             ChannelCoreInfo.strName     = GenRandomString();
@@ -183,15 +179,13 @@ public slots:
             break;
 
         case 11: // PROTMESSID_NETW_TRANSPORT_PROPS
-            NetTrProps.eAudioCodingType =
-                static_cast<EAudComprType> ( GenRandomIntInRange ( 0, 2 ) );
-
+            NetTrProps.eAudioCodingType       = static_cast<EAudComprType> ( GenRandomIntInRange ( 0, 2 ) );
             NetTrProps.iAudioCodingArg        = GenRandomIntInRange ( -100, 100 );
             NetTrProps.iBaseNetworkPacketSize = GenRandomIntInRange ( -2, 1000 );
             NetTrProps.iBlockSizeFact         = GenRandomIntInRange ( -2, 100 );
             NetTrProps.iNumAudioChannels      = GenRandomIntInRange ( -2, 10 );
             NetTrProps.iSampleRate            = GenRandomIntInRange ( -2, 10000 );
-            NetTrProps.iVersion               = GenRandomIntInRange ( -2, 10000 );
+            NetTrProps.eFlags                 = static_cast<ENetwFlags> ( GenRandomIntInRange ( 0, 1 ) );
 
             Protocol.CreateNetwTranspPropsMes ( NetTrProps );
             break;
@@ -216,12 +210,8 @@ public slots:
             break;
 
         case 17: // PROTMESSID_CLM_REGISTER_SERVER
-            ServerInfo.bPermanentOnline =
-                static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
-
-            ServerInfo.eCountry =
-                static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
-
+            ServerInfo.bPermanentOnline = static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
+            ServerInfo.eCountry         = static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
             ServerInfo.iMaxNumClients   = GenRandomIntInRange ( -2, 10000 );
             ServerInfo.strCity          = GenRandomString();
             ServerInfo.strName          = GenRandomString();
@@ -236,12 +226,8 @@ public slots:
             break;
 
         case 19: // PROTMESSID_CLM_SERVER_LIST
-            vecServerInfo[0].bPermanentOnline =
-                static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
-
-            vecServerInfo[0].eCountry =
-                static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
-
+            vecServerInfo[0].bPermanentOnline = static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
+            vecServerInfo[0].eCountry         = static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
             vecServerInfo[0].HostAddr         = CurHostAddress;
             vecServerInfo[0].LHostAddr        = CurLocalAddress;
             vecServerInfo[0].iMaxNumClients   = GenRandomIntInRange ( -2, 10000 );

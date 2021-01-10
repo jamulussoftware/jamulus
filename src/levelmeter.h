@@ -52,7 +52,7 @@ public:
         MT_SLIM_BAR
     };
 
-    CLevelMeter ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
+    CLevelMeter ( QWidget* parent = nullptr );
     virtual ~CLevelMeter();
 
     void SetValue ( const double dValue );

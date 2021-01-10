@@ -28,9 +28,8 @@
 /* Implementation *************************************************************/
 CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
                                          CClientSettings* pNSetP,
-                                         QWidget*         parent,
-                                         Qt::WindowFlags  f ) :
-    QDialog   ( parent, f ),
+                                         QWidget*         parent ) :
+    QDialog   ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient   ( pNCliP ),
     pSettings ( pNSetP )
 {
@@ -193,12 +192,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     cbxSkin->setAccessibleName ( tr ( "Skin combo box" ) );
 
-    // display channel levels
-    chbDisplayChannelLevels->setWhatsThis ( "<b>" + tr ( "Display Channel Levels" ) + ":</b> " +
-        tr ( "If enabled, each client channel will display a pre-fader level bar." ) );
-
-    chbDisplayChannelLevels->setAccessibleName ( tr ( "Display channel levels check box" ) );
-
     // audio channels
     QString strAudioChannels = "<b>" + tr ( "Audio Channels" ) + ":</b> " + tr (
         "Selects the number of audio channels to be used for communication between "
@@ -253,8 +246,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         "server other than the default." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
+    cbxCentralServerAddress->setWhatsThis ( strCentrServAddr );
+    cbxCentralServerAddress->setAccessibleName ( tr ( "Central server address combo box" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr (  "Current Connection Status "
@@ -294,6 +287,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // init delay and other information controls
     ledNetw->Reset();
     ledOverallDelay->Reset();
+    ledNetw->SetType              ( CMultiColorLED::MT_INDICATOR );
+    ledOverallDelay->SetType      ( CMultiColorLED::MT_INDICATOR );
     lblPingTimeValue->setText     ( "---" );
     lblOverallDelayValue->setText ( "---" );
     lblUpstreamValue->setText     ( "---" );
@@ -306,19 +301,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     sldNetBufServer->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
-    // init combo box containing all available sound cards in the system
-    cbxSoundcard->clear();
-    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
-    {
-        cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
-    }
-    cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
-
     // init sound card channel selection frame
-    UpdateSoundChannelSelectionFrame();
-
-    // Display Channel Levels check box
-    chbDisplayChannelLevels->setCheckState ( pClient->GetDisplayChannelLevels() ? Qt::Checked : Qt::Unchecked );
+    UpdateSoundDeviceChannelSelectionFrame();
 
     // Audio Channels combo box
     cbxAudioChannels->clear();
@@ -344,8 +328,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // language combo box (corrects the setting if language not found)
     cbxLanguage->Init ( pSettings->strLanguage );
 
-    // custom central server address
-    edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
+    // init custom central server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
+    cbxCentralServerAddress->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
+    cbxCentralServerAddress->setInsertPolicy ( QComboBox::NoInsert );
 
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
@@ -385,9 +370,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         this, &CClientSettingsDlg::OnNetBufServerValueChanged );
 
     // check boxes
-    QObject::connect ( chbDisplayChannelLevels, &QCheckBox::stateChanged,
-        this, &CClientSettingsDlg::OnDisplayChannelLevelsStateChanged );
-
     QObject::connect ( chbAutoJitBuf, &QCheckBox::stateChanged,
         this, &CClientSettingsDlg::OnAutoJitBufStateChanged );
 
@@ -395,9 +377,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
 
     // line edits
-    QObject::connect ( edtCentralServerAddress, &QLineEdit::editingFinished,
-        this, &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
-
     QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished,
         this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
@@ -426,6 +405,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     QObject::connect ( cbxSkin, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnGUIDesignActivated );
 
+    QObject::connect ( cbxCentralServerAddress->lineEdit(), &QLineEdit::editingFinished,
+        this, &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
+
+    QObject::connect ( cbxCentralServerAddress, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
+
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged,
         this, &CClientSettingsDlg::OnLanguageChanged );
 
@@ -442,6 +427,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
+}
+
+void CClientSettingsDlg::showEvent ( QShowEvent* )
+{
+    UpdateDisplay();
+    UpdateCustomCentralServerComboBox();
 }
 
 void CClientSettingsDlg::UpdateJitterBufferFrame()
@@ -520,8 +511,20 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     }
 }
 
-void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
+void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
 {
+    // update combo box containing all available sound cards in the system
+    QStringList slSndCrdDevNames = pClient->GetSndCrdDevNames();
+    cbxSoundcard->clear();
+
+    foreach ( QString strDevName, slSndCrdDevNames )
+    {
+        cbxSoundcard->addItem ( strDevName );
+    }
+
+    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+
+    // update input/output channel selection
 #if defined ( _WIN32 ) || defined ( __APPLE__ ) || defined ( __MACOSX )
     int iSndChanIdx;
 
@@ -593,45 +596,34 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
-    const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
+    pClient->SetSndCrdDev ( cbxSoundcard->itemText ( iSndDevIdx ) );
 
-    if ( !strError.isEmpty() )
-    {
-        QMessageBox::critical ( this, APP_NAME,
-            QString ( tr ( "The selected audio device could not be used "
-            "because of the following error: " ) ) + strError +
-            QString ( tr ( " The previous driver will be selected." ) ),
-            tr ( "Ok" ), nullptr );
-
-        // recover old selection
-        cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
-    }
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
     UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnRInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnLOutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
+    UpdateSoundDeviceChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )
@@ -666,17 +658,24 @@ void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnDisplayChannelLevelsStateChanged ( int value )
-{
-    pClient->SetDisplayChannelLevels ( value != Qt::Unchecked );
-    emit DisplayChannelLevelsChanged();
-}
-
 void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 {
-    // store new setting in the client
-    pClient->SetServerListCentralServerAddress (
-        NetworkUtil::FixAddress ( edtCentralServerAddress->text() ) );
+    // if the user has selected and deleted an entry in the combo box list,
+    // we delete the corresponding entry in the central server address vector
+    if ( cbxCentralServerAddress->currentText().isEmpty() && cbxCentralServerAddress->currentData().isValid() )
+    {
+        pSettings->vstrCentralServerAddress[cbxCentralServerAddress->currentData().toInt()] = "";
+    }
+    else
+    {
+        // store new address at the top of the list, if the list was already
+        // full, the last element is thrown out
+        pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCentralServerAddress->currentText() ) );
+    }
+
+    // update combo box list and inform connect dialog about the new address
+    UpdateCustomCentralServerComboBox();
+    emit CustomCentralServerAddrChanged();
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
@@ -707,18 +706,20 @@ void CClientSettingsDlg::SetPingTimeResult ( const int                         i
     // a certain value
     if ( iPingTime > 500 )
     {
-        const QString sErrorText =
-            "<font color=""red""><b>&#62;500 ms</b></font>";
-
+        const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
         lblPingTimeValue->setText     ( sErrorText );
         lblOverallDelayValue->setText ( sErrorText );
     }
     else
     {
-        lblPingTimeValue->setText ( QString().setNum ( iPingTime ) + " ms" );
-        lblOverallDelayValue->setText (
-            QString().setNum ( iOverallDelayMs ) + " ms" );
+        lblPingTimeValue->setText     ( QString().setNum ( iPingTime ) + " ms" );
+        lblOverallDelayValue->setText ( QString().setNum ( iOverallDelayMs ) + " ms" );
     }
+
+    // update upstream rate information label (note that we update this together
+    // with the ping time since the network packet sequence number feature might
+    // be enabled at any time which has influence on the upstream rate)
+    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
 
     // set current LED status
     ledOverallDelay->SetLight ( eOverallDelayLEDColor );
@@ -737,10 +738,19 @@ void CClientSettingsDlg::UpdateDisplay()
         lblOverallDelayValue->setText ( "---" );
         lblUpstreamValue->setText     ( "---" );
     }
-    else
+}
+
+void CClientSettingsDlg::UpdateCustomCentralServerComboBox()
+{
+    cbxCentralServerAddress->clear();
+    cbxCentralServerAddress->clearEditText();
+
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
-        // update upstream rate information label (only if client is running)
-        lblUpstreamValue->setText (
-            QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
+        if ( !pSettings->vstrCentralServerAddress[iLEIdx].isEmpty() )
+        {
+            // store the index as user data to the combo box item, too
+            cbxCentralServerAddress->addItem ( pSettings->vstrCentralServerAddress[iLEIdx], iLEIdx );
+        }
     }
 }

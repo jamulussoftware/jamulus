@@ -29,18 +29,24 @@
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
-                         const int      iNewCtrlMIDIChannel ) :
+                         const QString& strMIDISetup ) :
     fpProcessCallback            ( fpNewProcessCallback ),
-    pProcessCallbackArg          ( pParg ), bRun ( false ),
+    pProcessCallbackArg          ( pParg ),
+    bRun                         ( false ),
+    bCallbackEntered             ( false ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
-    iCtrlMIDIChannel             ( iNewCtrlMIDIChannel )
+    iCtrlMIDIChannel             ( INVALID_MIDI_CH ),
+    iMIDIOffsetFader             ( 70 ) // Behringer X-TOUCH: offset of 0x46
 {
+    // parse the MIDI setup command line argument string
+    ParseCommandLineArgument ( strMIDISetup );
+
     // initializations for the sound card names (default)
     lNumDevs          = 1;
     strDriverNames[0] = strSystemDriverTechniqueName;
 
     // set current device
-    lCurDev = 0; // default device
+    strCurDevName = ""; // default device
 }
 
 void CSoundBase::Stop()
@@ -56,71 +62,72 @@ void CSoundBase::Stop()
 /******************************************************************************\
 * Device handling                                                              *
 \******************************************************************************/
-QString CSoundBase::SetDev ( const int iNewDev )
+QStringList CSoundBase::GetDevNames()
 {
+    QMutexLocker locker ( &MutexDevProperties );
+
+    QStringList slDevNames;
+
+    // put all device names in the string list
+    for ( int iDev = 0; iDev < lNumDevs; iDev++ )
+    {
+        slDevNames << strDriverNames[iDev];
+    }
+
+    return slDevNames;
+}
+
+
+QString CSoundBase::SetDev ( const QString strDevName )
+{
+    QMutexLocker locker ( &MutexDevProperties );
+
     // init return parameter with "no error"
     QString strReturn = "";
 
-    // first check if valid input parameter
-    if ( iNewDev >= lNumDevs )
-    {
-        // we should actually never get here...
-        return tr ( "Invalid device selection." );
-    }
+    // init flag for "load any driver"
+    bool bTryLoadAnyDriver = false;
 
     // check if an ASIO driver was already initialized
-    if ( lCurDev != INVALID_INDEX )
+    if ( !strCurDevName.isEmpty() )
     {
         // a device was already been initialized and is used, first clean up
         // driver
         UnloadCurrentDriver();
 
-        const QString strErrorMessage = LoadAndInitializeDriver ( iNewDev, false );
+        const QString strErrorMessage = LoadAndInitializeDriver ( strDevName, false );
 
         if ( !strErrorMessage.isEmpty() )
         {
-            if ( iNewDev != lCurDev )
+            if ( strDevName != strCurDevName )
             {
                 // loading and initializing the new driver failed, go back to
-                // original driver and display error message
-                LoadAndInitializeDriver ( lCurDev, false );
+                // original driver and create error message
+                LoadAndInitializeDriver ( strCurDevName, false );
+
+                // store error return message
+                strReturn = QString ( tr ( "The selected audio device could not be used "
+                    "because of the following error: " ) ) + strErrorMessage +
+                    QString ( tr ( " The previous driver will be selected." ) );
             }
             else
             {
-                // the same driver is used but the driver properties seems to
-                // have changed so that they are not compatible to our
-                // software anymore
-#ifndef HEADLESS
-                QMessageBox::critical (
-                    nullptr, APP_NAME, QString ( tr ( "The audio driver properties "
-                    "have changed to a state which is incompatible with this "
-                    "software. The selected audio device could not be used "
-                    "because of the following error:" ) + " <b>" ) +
-                    strErrorMessage +
-                    QString ( "</b><br><br>" + tr ( "Please restart the software." ) ),
-                    tr ( "Close" ), nullptr );
-#endif
-
-                _exit ( 0 );
+                // loading and initializing the current driver failed, try to find
+                // at least one usable driver
+                bTryLoadAnyDriver = true;
             }
-
-            // store error return message
-            strReturn = strErrorMessage;
         }
     }
     else
     {
-        // init flag for "load any driver"
-        bool bTryLoadAnyDriver = false;
-
-        if ( iNewDev != INVALID_INDEX )
+        if ( !strDevName.isEmpty() )
         {
             // This is the first time a driver is to be initialized, we first
             // try to load the selected driver, if this fails, we try to load
             // the first available driver in the system. If this fails, too, we
             // throw an error that no driver is available -> it does not make
             // sense to start the software if no audio hardware is available.
-            if ( !LoadAndInitializeDriver ( iNewDev, false ).isEmpty() )
+            if ( !LoadAndInitializeDriver ( strDevName, false ).isEmpty() )
             {
                 // loading and initializing the new driver failed, try to find
                 // at least one usable driver
@@ -132,43 +139,53 @@ QString CSoundBase::SetDev ( const int iNewDev )
             // try to find one usable driver (select the first valid driver)
             bTryLoadAnyDriver = true;
         }
+    }
 
-        if ( bTryLoadAnyDriver )
+    if ( bTryLoadAnyDriver )
+    {
+        // if a driver was previously selected, show a warning message
+        if ( !strDevName.isEmpty() )
         {
-            // try to load and initialize any valid driver
-            QVector<QString> vsErrorList = LoadAndInitializeFirstValidDriver();
+            strReturn = tr ( "The previously selected audio device "
+                "is no longer available or the audio driver properties have changed to a state which "
+                "is incompatible with this software. We now try to find a valid audio device. This new "
+                "audio device might cause audio feedback. So, before connecting to a server, please "
+                "check the audio device setting." );
+        }
 
-            if ( !vsErrorList.isEmpty() )
+        // try to load and initialize any valid driver
+        QVector<QString> vsErrorList = LoadAndInitializeFirstValidDriver();
+
+        if ( !vsErrorList.isEmpty() )
+        {
+            // create error message with all details
+            QString sErrorMessage = "<b>" + tr ( "No usable " ) +
+                strSystemDriverTechniqueName + tr ( " audio device "
+                "(driver) found." ) + "</b><br><br>" + tr (
+                "In the following there is a list of all available drivers "
+                "with the associated error message:" ) + "<ul>";
+
+            for ( int i = 0; i < lNumDevs; i++ )
             {
-                // create error message with all details
-                QString sErrorMessage = "<b>" + tr ( "No usable " ) +
-                    strSystemDriverTechniqueName + tr ( " audio device "
-                    "(driver) found." ) + "</b><br><br>" + tr (
-                    "In the following there is a list of all available drivers "
-                    "with the associated error message:" ) + "<ul>";
-
-                for ( int i = 0; i < lNumDevs; i++ )
-                {
-                    sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "</li>";
-                }
-                sErrorMessage += "</ul>";
+                sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "</li>";
+            }
+            sErrorMessage += "</ul>";
 
 #ifdef _WIN32
-                // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
-                // offer the user under Windows that we open the driver setups of all registered
-                // ASIO drivers
-                sErrorMessage = sErrorMessage + "<br/>" + tr ( "Do you want to open the ASIO driver setups?" );
+            // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
+            // offer the user under Windows that we open the driver setups of all registered
+            // ASIO drivers
+            sErrorMessage = sErrorMessage + "<br/>" + tr ( "Do you want to open the ASIO driver setups?" );
 
-                if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes|QMessageBox::No ) )
-                {
-                    LoadAndInitializeFirstValidDriver ( true );
-                }
+            if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes|QMessageBox::No ) )
+            {
+                LoadAndInitializeFirstValidDriver ( true );
+            }
 
-                sErrorMessage = APP_NAME + tr ( " could not be started because of audio interface issues." );
+            sErrorMessage = APP_NAME + tr ( " could not be started because of audio interface issues." );
 #endif
 
-                throw CGenErr ( sErrorMessage );
-            }
+            throw CGenErr ( sErrorMessage );
         }
     }
 
@@ -181,13 +198,13 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 
     // load and initialize first valid ASIO driver
     bool bValidDriverDetected = false;
-    int  iCurDriverIdx        = 0;
+    int  iDriverCnt           = 0;
 
     // try all available drivers in the system ("lNumDevs" devices)
-    while ( !bValidDriverDetected && ( iCurDriverIdx < lNumDevs ) )
+    while ( !bValidDriverDetected && ( iDriverCnt < lNumDevs ) )
     {
         // try to load and initialize current driver, store error message
-        const QString strCurError = LoadAndInitializeDriver ( iCurDriverIdx, bOpenDriverSetup );
+        const QString strCurError = LoadAndInitializeDriver ( GetDeviceName ( iDriverCnt ), bOpenDriverSetup );
 
         vsErrorList.append ( strCurError );
 
@@ -197,14 +214,14 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
             bValidDriverDetected = true;
 
             // store ID of selected driver
-            lCurDev = iCurDriverIdx;
+            strCurDevName = GetDeviceName ( iDriverCnt );
 
             // empty error list shows that init was successful
             vsErrorList.clear();
         }
 
         // try next driver
-        iCurDriverIdx++;
+        iDriverCnt++;
     }
 
     return vsErrorList;
@@ -215,6 +232,29 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 /******************************************************************************\
 * MIDI handling                                                                *
 \******************************************************************************/
+void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
+{
+    // parse the server info string according to definition:
+    // [MIDI channel];[offset for level]
+    if ( !strMIDISetup.isEmpty() )
+    {
+        // split the different parameter strings
+        const QStringList slMIDIParams = strMIDISetup.split ( ";" );
+
+        // [MIDI channel]
+        if ( slMIDIParams.count() >= 1 )
+        {
+            iCtrlMIDIChannel = slMIDIParams[0].toUInt();
+        }
+
+        // [offset for level]
+        if ( slMIDIParams.count() >= 2 )
+        {
+            iMIDIOffsetFader = slMIDIParams[1].toUInt();
+        }
+    }
+}
+
 void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
 {
     if ( vMIDIPaketBytes.Size() > 0 )
@@ -252,10 +292,10 @@ printf ( "\n" );
                         const int iFaderLevel = static_cast<int> ( static_cast<double> (
                             qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
 
-                        // Behringer X-TOUCH: offset of 0x46
-                        const int iChID = vMIDIPaketBytes[1] - 70;
+                        // consider offset for the faders
+                        const int iChID = vMIDIPaketBytes[1] - iMIDIOffsetFader;
 
-                        EmitControllerInFaderLevel ( iChID, iFaderLevel );
+                        emit ControllerInFaderLevel ( iChID, iFaderLevel );
                     }
                 }
             }

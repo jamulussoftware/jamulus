@@ -194,21 +194,21 @@ uint32_t CCRC::GetCRC()
 void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
                           const int          iNStereoBlockSizeSam,
                           const int          iSampleRate,
-                          const double       rT60 )
+                          const float        fT60 )
 {
     // store parameters
     eAudioChannelConf   = eNAudioChannelConf;
     iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
     // delay lengths for 44100 Hz sample rate
-    int          lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const double scaler     = static_cast<double> ( iSampleRate ) / 44100.0;
+    int         lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
+    const float scaler     = static_cast<float> ( iSampleRate ) / 44100.0f;
 
-    if ( scaler != 1.0 )
+    if ( scaler != 1.0f )
     {
         for ( int i = 0; i < 9; i++ )
         {
-            int delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
+            int delay = static_cast<int> ( floorf ( scaler * lengths[i] ) );
 
             if ( ( delay & 1 ) == 0 )
             {
@@ -232,13 +232,13 @@ void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
     for ( int i = 0; i < 4; i++ )
     {
         combDelays[i].Init ( lengths[i] );
-        combFilters[i].setPole ( 0.2 );
+        combFilters[i].setPole ( 0.2f );
     }
 
-    setT60 ( rT60, iSampleRate );
+    setT60 ( fT60, iSampleRate );
     outLeftDelay.Init ( lengths[7] );
     outRightDelay.Init ( lengths[8] );
-    allpassCoefficient = 0.7;
+    allpassCoefficient = 0.7f;
     Clear();
 }
 
@@ -255,7 +255,7 @@ bool CAudioReverb::isPrime ( const int number )
 
     if ( number & 1 )
     {
-        for ( int i = 3; i < static_cast<int> ( sqrt ( static_cast<double> ( number ) ) ) + 1; i += 2 )
+        for ( int i = 3; i < static_cast<int> ( sqrtf ( static_cast<float> ( number ) ) ) + 1; i += 2 )
         {
             if ( ( number % i ) == 0 )
             {
@@ -289,37 +289,37 @@ void CAudioReverb::Clear()
     outLeftDelay.Reset ( 0 );
 }
 
-void CAudioReverb::setT60 ( const double rT60,
-                            const int    iSampleRate )
+void CAudioReverb::setT60 ( const float fT60,
+                            const int   iSampleRate )
 {
     // set the reverberation T60 decay time
     for ( int i = 0; i < 4; i++ )
     {
-        combCoefficient[i] = pow ( 10.0, static_cast<double> ( -3.0 *
-            combDelays[i].Size() / ( rT60 * iSampleRate ) ) );
+        combCoefficient[i] = powf ( 10.0f, static_cast<float> ( -3.0f *
+            combDelays[i].Size() / ( fT60 * iSampleRate ) ) );
     }
 }
 
-void CAudioReverb::COnePole::setPole ( const double dPole )
+void CAudioReverb::COnePole::setPole ( const float fPole )
 {
     // calculate IIR filter coefficients based on the pole value
-    dA = -dPole;
-    dB = 1.0 - dPole;
+    fA = -fPole;
+    fB = 1.0f - fPole;
 }
 
-double CAudioReverb::COnePole::Calc ( const double dIn )
+float CAudioReverb::COnePole::Calc ( const float fIn )
 {
     // calculate IIR filter
-    dLastSample = dB * dIn - dA * dLastSample;
+    fLastSample = fB * fIn - fA * fLastSample;
 
-    return dLastSample;
+    return fLastSample;
 }
 
 void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
                              const bool        bReverbOnLeftChan,
-                             const double      dAttenuation )
+                             const float       fAttenuation )
 {
-    double dMixedInput, temp, temp0, temp1, temp2;
+    float fMixedInput, temp, temp0, temp1, temp2;
 
     for ( int i = 0; i < iStereoBlockSizeSam; i += 2 )
     {
@@ -327,49 +327,49 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
         // shall be input for the right channel)
         if ( eAudioChannelConf == CC_STEREO )
         {
-            dMixedInput = 0.5 * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
+            fMixedInput = 0.5f * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
         }
         else
         {
             if ( bReverbOnLeftChan )
             {
-                dMixedInput = vecsStereoInOut[i];
+                fMixedInput = vecsStereoInOut[i];
             }
             else
             {
-                dMixedInput = vecsStereoInOut[i + 1];
+                fMixedInput = vecsStereoInOut[i + 1];
             }
         }
 
-        temp = allpassDelays[0].Get();
-        temp0 = allpassCoefficient * temp;
-        temp0 += dMixedInput;
+        temp   = allpassDelays[0].Get();
+        temp0  = allpassCoefficient * temp;
+        temp0 += fMixedInput;
         allpassDelays[0].Add ( temp0 );
         temp0 = - ( allpassCoefficient * temp0 ) + temp;
 
-        temp = allpassDelays[1].Get();
-        temp1 = allpassCoefficient * temp;
+        temp   = allpassDelays[1].Get();
+        temp1  = allpassCoefficient * temp;
         temp1 += temp0;
         allpassDelays[1].Add ( temp1 );
         temp1 = - ( allpassCoefficient * temp1 ) + temp;
 
-        temp = allpassDelays[2].Get();
-        temp2 = allpassCoefficient * temp;
+        temp   = allpassDelays[2].Get();
+        temp2  = allpassCoefficient * temp;
         temp2 += temp1;
         allpassDelays[2].Add ( temp2 );
         temp2 = - ( allpassCoefficient * temp2 ) + temp;
 
-        const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
-        const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
-        const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
-        const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
+        const float temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
+        const float temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
+        const float temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
+        const float temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
 
         combDelays[0].Add ( temp3 );
         combDelays[1].Add ( temp4 );
         combDelays[2].Add ( temp5 );
         combDelays[3].Add ( temp6 );
 
-        const double filtout = temp3 + temp4 + temp5 + temp6;
+        const float filtout = temp3 + temp4 + temp5 + temp6;
 
         outLeftDelay.Add  ( filtout );
         outRightDelay.Add ( filtout );
@@ -378,16 +378,16 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
         // reverberation effect on both channels)
         if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
         {
-            vecsStereoInOut[i] = Double2Short (
-                ( 1.0 - dAttenuation ) * vecsStereoInOut[i] +
-                0.5 * dAttenuation * outLeftDelay.Get() );
+            vecsStereoInOut[i] = Float2Short (
+                ( 1.0f - fAttenuation ) * vecsStereoInOut[i] +
+                0.5f * fAttenuation * outLeftDelay.Get() );
         }
 
         if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
         {
-            vecsStereoInOut[i + 1] = Double2Short (
-                ( 1.0 - dAttenuation ) * vecsStereoInOut[i + 1] +
-                0.5 * dAttenuation * outRightDelay.Get() );
+            vecsStereoInOut[i + 1] = Float2Short (
+                ( 1.0f - fAttenuation ) * vecsStereoInOut[i + 1] +
+                0.5f * fAttenuation * outRightDelay.Get() );
         }
     }
 }
@@ -441,6 +441,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     txvContributors->setText (
         "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
         "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
+        "<p>ann0see (<a href=""https://github.com/ann0see"">ann0see</a>)</p>"
         "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
         "<p>Martin Schilde (<a href=""https://github.com/geheimerEichkater"">geheimerEichkater</a>)</p>"
         "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
@@ -456,18 +457,24 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
         "<p>Alberstein8 (<a href=""https://github.com/Alberstein8"">Alberstein8</a>)</p>"
         "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
+        "<p>Tony Mountifield (<a href=""https://github.com/softins"">softins</a>)</p>"
         "<p>HPS (<a href=""https://github.com/hselasky"">hselasky</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
         "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
+        "<p>Jakob Jarmar (<a href=""https://github.com/jarmar"">jarmar</a>)</p>"
         "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
         "<p>Nils Brederlow (<a href=""https://github.com/dingodoppelt"">dingodoppelt</a>)</p>"
         "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
         "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
+        "<p>Kris Raney (<a href=""https://github.com/kraney"">kraney</a>)</p>"
         "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
+        "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
+        "<p>Julian Santander (<a href=""https://github.com/j-santander"">j-santander</a>)</p>"
         "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
         "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
         "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
+        "<p>ranfdev (<a href=""https://github.com/ranfdev"">ranfdev</a>)</p>"
         "<p>bspeer (<a href=""https://github.com/bspeer"">bspeer</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
@@ -489,8 +496,11 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
         "<p><b>" + tr ( "Polish" ) + "</b></p>"
         "<p>Martyna Danysz (<a href=""https://github.com/Martyna27"">Martyna27</a>)</p>"
+        "<p>Tomasz Bojczuk (<a href=""https://github.com/SeeLook"">SeeLook</a>)</p>"
         "<p><b>" + tr ( "Swedish" ) + "</b></p>"
-        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>");
+        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>"
+        "<p><b>" + tr ( "Slovak" ) + "</b></p>"
+        "<p>Jose Riha (<a href=""https://github.com/jose1711"">jose1711</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -511,12 +521,11 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     - Decline button
 */
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
-    resize ( 700, 450 );
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
-    QTextBrowser* txvLicence = new QTextBrowser ( this );
-    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I &agree to the above licence terms" ), this );
+    QLabel*       lblLicence = new QLabel ( tr ( "This server requires you accept conditions before you can join. Please read these in the chat window." ), this );
+    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I have read the conditions and &agree." ), this );
     butAccept                = new QPushButton ( tr ( "Accept" ), this );
     QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
 
@@ -524,48 +533,12 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     pSubLayout->addWidget ( chbAgree );
     pSubLayout->addWidget ( butAccept );
     pSubLayout->addWidget ( butDecline );
-    pLayout->addWidget    ( txvLicence );
+    pLayout->addWidget    ( lblLicence );
     pLayout->addLayout    ( pSubLayout );
 
     // set some properties
     butAccept->setEnabled ( false );
     butAccept->setDefault ( true );
-    txvLicence->setOpenExternalLinks ( true );
-
-    // define the licence text (similar to what we have in Ninjam)
-    txvLicence->setText (
-        "<p><big>" + tr (
-        "By connecting to this server and agreeing to this notice, you agree to the "
-        "following:" ) + "</big></p><p><big>" + tr (
-        "You agree that all data, sounds, or other works transmitted to this server "
-        "are owned and created by you or your licensors, and that you are making these "
-        "data, sounds or other works available via the following Creative Commons "
-        "License (for more information on this license, see " ) +
-        "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
-        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):</big></p>"
-        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>"
-        "<p>" + tr ( "You are free to:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Share" ) + "</b> - " +
-        tr ( "copy and redistribute the material in any medium or format" ) + "</li>"
-        "<li><b>" + tr ( "Adapt" ) + "</b> - " +
-        tr ( "remix, transform, and build upon the material" ) + "</li>"
-        "</ul>" + tr ( "The licensor cannot revoke these freedoms as long as you follow the "
-        "license terms." ) + "</p>"
-        "<p>" + tr ( "Under the following terms:" ) +
-        "<ul>"
-        "<li><b>" + tr ( "Attribution" ) + "</b> - " +
-        tr ( "You must give appropriate credit, provide a link to the license, and indicate "
-        "if changes were made. You may do so in any reasonable manner, but not in any way "
-        "that suggests the licensor endorses you or your use." ) + "</li>"
-        "<li><b>" + tr ( "NonCommercial" ) + "</b> - " +
-        tr ( "You may not use the material for commercial purposes." ) + "</li>"
-        "<li><b>" + tr ( "ShareAlike" ) + "</b> - " +
-        tr ( "If you remix, transform, or build upon the material, you must distribute your "
-        "contributions under the same license as the original." ) + "</li>"
-        "</ul><b>" + tr ( "No additional restrictions" ) + "</b> — " +
-        tr ( "You may not apply legal terms or technological measures that legally restrict "
-        "others from doing anything the license permits." ) + "</p>" );
 
     QObject::connect ( chbAgree, &QCheckBox::stateChanged,
         this, &CLicenceDlg::OnAgreeStateChanged );
@@ -1011,18 +984,28 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 
-        if ( HostInfo.error() == QHostInfo::NoError )
-        {
-            // apply IP address to QT object
-             if ( !HostInfo.addresses().isEmpty() )
-             {
-                 // use the first IP address
-                 InetAddr = HostInfo.addresses().first();
-             }
-        }
-        else
+        if ( HostInfo.error() != QHostInfo::NoError )
         {
             return false; // invalid address
+        }
+
+        // use the first IPv4 address, if any
+        bool bFoundIPv4 = false;
+
+        foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
+        {
+            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+               InetAddr   = HostAddr;
+               bFoundIPv4 = true;
+               break;
+            }
+        }
+
+        if ( !bFoundIPv4 )
+        {
+            // only found IPv6 addresses
+            return false;
         }
     }
 
@@ -1130,6 +1113,9 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Ukulele" ), ":/png/instr/res/instruments/bassukulele.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mountain Dulcimer" ), ":/png/instr/res/instruments/mountaindulcimer.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Scratching" ), ":/png/instr/res/instruments/scratching.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Rapping" ), ":/png/instr/res/instruments/rapping.png", IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;
@@ -1199,13 +1185,11 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
     else
     {
-
 // NOTE: The following code was introduced to support old QT versions. The problem
 //       is that the number of countries displayed is less than the one displayed
 //       with the new code below (which is disabled). Therefore, as soon as the
 //       compatibility to the very old versions of QT is not required anymore, use
 //       the new code.
-
 // COMPATIBLE FOR OLD QT VERSIONS -> use a table:
         QString strISO3166 = "";
         switch ( static_cast<int> ( eCountry ) )
@@ -1401,7 +1385,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             strReturn = "";
         }
 
-
 // AT LEAST QT 4.8 IS REQUIRED:
 /*
         // There is no direct query of the country code in Qt, therefore we use a
@@ -1419,8 +1402,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             // the second split contains the name we need
             if ( vstrLocParts.size() > 1 )
             {
-                strReturn =
-                    ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+                strReturn = ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
 
                 // check if file actually exists, if not then invalidate reference
                 if ( !QFile::exists ( strReturn ) )
@@ -1441,23 +1423,6 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
 
     return strReturn;
-}
-
-ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountry )
-{
-// TODO this is the initial implementation and should be extended in the future,
-//      maybe there is/will be some function in Qt to get the continent
-    switch ( eCountry )
-    {
-    case QLocale::UnitedStates:
-    case QLocale::Canada:
-    case QLocale::Mexico:
-    case QLocale::Greenland:
-        return AT_ALL_GENRES;
-
-    default:
-        return AT_DEFAULT;
-    }
 }
 
 QMap<QString, QString> CLocale::GetAvailableTranslations()
@@ -1565,29 +1530,6 @@ QTextStream* ConsoleWriterFactory::get()
 /******************************************************************************\
 * Global Functions Implementation                                              *
 \******************************************************************************/
-void DebugError ( const QString& pchErDescr,
-                  const QString& pchPar1Descr, 
-                  const double   dPar1,
-                  const QString& pchPar2Descr,
-                  const double   dPar2 )
-{
-    QFile File ( "DebugError.dat" );
-    if ( File.open ( QIODevice::Append ) )
-    {
-        // append new line in logging file
-        QTextStream out ( &File );
-        out << pchErDescr << " ### " <<
-            pchPar1Descr << ": " << QString().setNum ( dPar1, 'f', 2 ) <<
-            " ### " <<
-            pchPar2Descr << ": " << QString().setNum ( dPar2, 'f', 2 ) <<
-            endl;
-
-        File.close();
-    }
-    printf ( "\nDebug error! For more information see test/DebugError.dat\n" );
-    exit ( 1 );
-}
-
 QString GetVersionAndNameStr ( const bool bWithHtml )
 {
     QString strVersionText = "";

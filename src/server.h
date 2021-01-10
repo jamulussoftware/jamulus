@@ -51,6 +51,10 @@
 // no valid channel number
 #define INVALID_CHANNEL_ID                  ( MAX_NUM_CHANNELS + 1 )
 
+// Edu-Mode features
+#define EDU_MODE_FEATURE_CHAT            0
+#define EDU_MODE_FEATURE_WAITINGRM       1
+
 
 /* Classes ********************************************************************/
 #if ( defined ( WIN32 ) || defined ( _WIN32 ) )
@@ -128,7 +132,13 @@ public:
 
     void OnChatTextReceivedCh ( QString strChatText )
     {
-        CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+        if ( strChatText.startsWith("/c/") )
+        {
+          InterpretAndExecuteChatCommand ( slotId - 1, strChatText );
+        } else
+        {
+          CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+        }
     }
 
     void OnMuteStateHasChangedCh ( int iChanID, bool bIsMuted )
@@ -147,8 +157,15 @@ protected:
 
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID ) = 0;
 
+    // edu mode
+    virtual bool EduModeIsFeatureDisabled( const int iFeature ) = 0;
+    virtual void EduModeSetFeatureDisabled( const int iFeature, const bool bFeatureStatus ) = 0;
+
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText ) = 0;
+
+    virtual void InterpretAndExecuteChatCommand ( const int      iCurChanID,
+                                                  const QString& strChatText ) = 0;
 
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
@@ -173,17 +190,18 @@ public:
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strServerNameForHTMLStatusFile,
               const QString&     strCentralServer,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
-              const bool         bNCentServPingServerInList,
+              const QString&     strEduModePassword,
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
               const bool         bNLogIP,
+              const bool         bDisableRecording,
+              const bool         bEduModeEnabled,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -205,11 +223,13 @@ public:
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr )
         { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-
+    bool EduModeEnabled()
+         { return bEduModeEnabled; }
     // Jam recorder ------------------------------------------------------------
     bool GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
     bool GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
+    bool GetDisableRecording() { return bDisableRecording; }
     void RequestNewRecording() { JamController.RequestNewRecording(); }
 
     void SetEnableRecording ( bool bNewEnableRecording );
@@ -217,7 +237,7 @@ public:
     QString GetRecordingDir() { return JamController.GetRecordingDir(); }
 
     void SetRecordingDir( QString newRecordingDir )
-        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples ); }
+        { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording ); }
 
     void CreateAndSendRecorderStateForAllConChannels();
 
@@ -272,16 +292,9 @@ public:
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
 
-    void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
-    ELicenceType GetLicenceType() { return eLicenceType; }
-
 protected:
     // access functions for actual channels
-    bool IsConnected ( const int iChanNum )
-        { return vecChannels[iChanNum].IsConnected(); }
-
-    void StartStatusHTMLFileWriting ( const QString& strNewFileName,
-                                      const QString& strNewServerNameWithPort );
+    bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
 
     int GetFreeChan();
     int FindChannel ( const CHostAddress& CheckAddr );
@@ -291,8 +304,16 @@ protected:
     virtual void CreateAndSendChanListForAllConChannels();
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID );
 
+    // edu mode features
+
+    virtual bool EduModeIsFeatureDisabled ( const int iFeature );
+    virtual void EduModeSetFeatureDisabled ( const int iFeature, const bool bFeatureStatus );
+
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
+
+    virtual void InterpretAndExecuteChatCommand ( const int      iCurChanID,
+                                                  const QString& strChatText );
 
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
@@ -309,9 +330,16 @@ protected:
 
     void WriteHTMLChannelList();
 
+    void DecodeReceiveDataBlocks ( const int iStartChanCnt,
+                                   const int iStopChanCnt,
+                                   const int iNumClients );
+
     void MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
                                        const int iStopChanCnt,
                                        const int iNumClients );
+
+    void DecodeReceiveData ( const int iChanCnt,
+                             const int iNumClients );
 
     void MixEncodeTransmitData ( const int iChanCnt,
                                  const int iNumClients );
@@ -330,6 +358,14 @@ protected:
                                           const CVector<int>&              vecNumAudioChannels,
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
+    // edu mode
+    bool                       bEduModeEnabled;
+    // true = disabled
+    bool bEduModeFeatures[2] =
+    {
+      false, // EDU_MODE_FEATURE_CHAT
+      false // EDU_MODE_FEATURE_WAITINGRM
+    };
 
     // log full ip adresses if true
     bool                       bLogIP;
@@ -341,6 +377,10 @@ protected:
     CProtocol                  ConnLessProtocol;
     QMutex                     Mutex;
     QMutex                     MutexWelcomeMessage;
+    bool                       bChannelIsNowDisconnected;
+
+    // edu mode
+    QString                    strEduModePassword;
 
     // audio encoder/decoder
     OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];
@@ -359,15 +399,15 @@ protected:
     CVector<QString>           vstrChatColors;
     CVector<int>               vecChanIDsCurConChan;
 
-    CVector<CVector<double> >  vecvecdGains;
-    CVector<CVector<double> >  vecvecdPannings;
+    CVector<CVector<float> >   vecvecfGains;
+    CVector<CVector<float> >   vecvecfPannings;
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
     CVector<CVector<int16_t> > vecvecsSendData;
-    CVector<CVector<double> >  vecvecsIntermediateProcBuf;
+    CVector<CVector<float> >   vecvecfIntermediateProcBuf;
     CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels
@@ -385,7 +425,6 @@ protected:
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
-    QString                    strServerNameWithPort;
 
     CHighPrecisionTimer        HighPrecisionTimer;
 
@@ -394,6 +433,7 @@ protected:
 
     // jam recorder
     recorder::CJamController   JamController;
+    bool bDisableRecording;
 
     // GUI settings
     bool                       bAutoRunMinimized;
@@ -488,10 +528,10 @@ public slots:
     void OnCLRegisterServerExReceived ( CHostAddress           InetAddr,
                                         CHostAddress           LInetAddr,
                                         CServerCoreInfo        ServerInfo,
-                                        COSUtil::EOpSystemType eOSType,
+                                        COSUtil::EOpSystemType ,
                                         QString                strVersion )
     {
-        ServerListManager.CentralServerRegisterServerEx ( InetAddr, LInetAddr, ServerInfo, eOSType, strVersion );
+        ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo, strVersion );
     }
 
     void OnCLRegisterServerResp ( CHostAddress  /* unused */,

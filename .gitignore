@@ -8,6 +8,8 @@ Makefile
 .cproject
 .project
 .settings
+.idea
+.vscode
 *.user
 *.user.*
 *.o
@@ -19,6 +21,7 @@ windows/ASIOSDK2
 windows/VC_redist.x64.exe
 windows/vc_redist.x86.exe
 windows/nsProcess.dll
+windows/NSIS
 debug/
 release/
 build/
@@ -33,3 +36,7 @@ distributions/jack2
 distributions/claudio_piano.sf2
 distributions/fluidsynth*
 distributions/jamulus.desktop
+.xcode
+Debug-iphoneos/
+Jamulus.xcodeproj
+jamulus_plugin_import.cpp

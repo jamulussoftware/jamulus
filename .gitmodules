@@ -19,3 +19,6 @@
 [submodule "tools/jamulus-docker"]
 	path = tools/jamulus-docker
 	url = https://github.com/grundic/jamulus-docker
+[submodule "tools/jamulus-server-remote"]
+	path = tools/jamulus-server-remote
+	url = https://github.com/vdellamea/jamulus-server-remote

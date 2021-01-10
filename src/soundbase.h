@@ -53,17 +53,16 @@ public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                  void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                  void*          pParg,
-                 const int      iNewCtrlMIDIChannel );
+                 const QString& strMIDISetup );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize ) { return iNewPrefMonoBufferSize; }
-    virtual void Start() { bRun = true; }
+    virtual void Start() { bRun = true; bCallbackEntered = false; }
     virtual void Stop();
 
     // device selection
-    virtual int     GetNumDev() { return lNumDevs; }
-    virtual QString GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
-    virtual QString SetDev ( const int );
-    virtual int     GetDev() { return lCurDev; }
+    QStringList GetDevNames();
+    QString     SetDev ( const QString strDevName );
+    QString     GetDev() { QMutexLocker locker ( &MutexDevProperties ); return strCurDevName; }
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
@@ -79,25 +78,24 @@ public:
     virtual int     GetLeftOutputChannel()  { return 0; }
     virtual int     GetRightOutputChannel() { return 1; }
 
-    virtual double  GetInOutLatencyMs() { return 0.0; } // "0.0" means no latency is available
+    virtual float   GetInOutLatencyMs() { return 0.0f; } // "0.0" means no latency is available
 
     virtual void    OpenDriverSetup() {}
 
     bool IsRunning() const { return bRun; }
+    bool IsCallbackEntered() const { return bCallbackEntered; }
 
     // TODO this should be protected but since it is used
     // in a callback function it has to be public -> better solution
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType )
         { emit ReinitRequest ( eSndCrdResetType ); }
 
-    void EmitControllerInFaderLevel ( const int iChannelIdx,
-                                      const int iValue ) { emit ControllerInFaderLevel ( iChannelIdx, iValue ); }
-
 protected:
-    // driver handling
-    virtual QString  LoadAndInitializeDriver ( int, bool ) { return ""; }
+    virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
     QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
+    void             ParseCommandLineArgument ( const QString& strMIDISetup );
+    QString          GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
 
     static void GetSelCHAndAddCH ( const int iSelCH,    const int iNumInChan,
                                    int&      iSelCHOut, int&      iSelAddCHOut )
@@ -127,19 +125,23 @@ protected:
     // callback function call for derived classes
     void ProcessCallback ( CVector<int16_t>& psData )
     {
+        bCallbackEntered = true;
         (*fpProcessCallback) ( psData, pProcessCallbackArg );
     }
 
     void ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 
     bool    bRun;
+    bool    bCallbackEntered;
     QMutex  MutexAudioProcessCallback;
+    QMutex  MutexDevProperties;
 
     QString strSystemDriverTechniqueName;
     int     iCtrlMIDIChannel;
+    int     iMIDIOffsetFader;
 
     long    lNumDevs;
-    long    lCurDev;
+    QString strCurDevName;
     QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:

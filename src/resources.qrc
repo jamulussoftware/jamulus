@@ -24,6 +24,9 @@
         <file alias="translation_pl">res/translation/translation_pl_PL.qm</file>
     </qresource>
     <qresource prefix="/translations">
+        <file alias="translation_sk">res/translation/translation_sk_SK.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
         <file alias="translation_sv">res/translation/translation_sv_SE.qm</file>
     </qresource>
 
@@ -35,6 +38,9 @@
         <file>res/CLEDGreySmall.png</file>
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellowSmall.png</file>
+        <file>res/IndicatorGreen.png</file>
+        <file>res/IndicatorYellow.png</file>
+        <file>res/IndicatorRed.png</file>
         <file>res/HLEDGreenSmall.png</file>
         <file>res/HLEDBlackSmall.png</file>
         <file>res/HLEDRedSmall.png</file>
@@ -55,8 +61,11 @@
         <file>res/instruments/drumset.png</file>
         <file>res/instruments/eguitar.png</file>
         <file>res/instruments/saxophone.png</file>
+        <file>res/instruments/scratching.png</file>
+        <file>res/instruments/rapping.png</file>
         <file>res/instruments/trumpet.png</file>
         <file>res/instruments/microphone.png</file>
+        <file>res/instruments/mountaindulcimer.png</file>
         <file>res/instruments/keyboard.png</file>
         <file>res/instruments/violin.png</file>
         <file>res/instruments/aguitar.png</file>
@@ -97,6 +106,7 @@
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>
+        <file>res/fronticonserver.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>

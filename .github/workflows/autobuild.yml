@@ -17,6 +17,9 @@ jobs:
              tag_name:        latest # tag name to delete
            env:
              GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
+         - name:              Get Jamulus build info
+           run:               sh .github/action_scripts/get_release_vars.sh
+           id:                jamulus-build-vars
          - name:              Prepare Release
            id:                create_release
            uses:              actions/create-release@v1
@@ -24,9 +27,9 @@ jobs:
              GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
            with:
              tag_name:        latest
-             release_name:    Latest release (auto build)
+             release_name:    Latest release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} (auto build)
              body:            |
-               Changes in this release: See the [changelog](https://github.com/corrados/jamulus/blob/master/ChangeLog).
+               Changes in release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }}: See the [changelog](https://github.com/corrados/jamulus/blob/master/ChangeLog).
              draft:           false
              prerelease:      false
   release_assets:

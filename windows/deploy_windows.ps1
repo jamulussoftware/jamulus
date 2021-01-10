@@ -66,6 +66,34 @@ Function Get-RedirectedUrl {
     }
 }
 
+function Load-Module ($m) { # see https://stackoverflow.com/a/51692402
+
+    # If module is imported say that and do nothing
+    if (Get-Module | Where-Object {$_.Name -eq $m}) {
+        write-host "Module $m is already imported."
+    }
+    else {
+
+        # If module is not imported, but available on disk then import
+        if (Get-Module -ListAvailable | Where-Object {$_.Name -eq $m}) {
+            Import-Module $m
+        }
+        else {
+
+            # If module is not imported, not available on disk, but is in online gallery then install and import
+            if (Find-Module -Name $m | Where-Object {$_.Name -eq $m}) {
+                Install-Module -Name $m -Force -Verbose -Scope CurrentUser
+                Import-Module $m
+            }
+            else {
+
+                # If module is not imported, not available and not in online gallery then abort
+                write-host "Module $m not imported, not available and not in online gallery, exiting."
+                EXIT 1
+            }
+        }
+    }
+}
 
 # Download and uncompress dependency in ZIP format
 Function Install-Dependency
@@ -100,8 +128,10 @@ Function Install-Dependency
 # Install VSSetup (Visual Studio detection), ASIO SDK and NSIS Installer
 Function Install-Dependencies
 {
-    Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
-    Install-Module -Name "VSSetup" -Scope CurrentUser -Force
+    if (-not (Get-PackageProvider -Name nuget).Name -eq "nuget") {
+      Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
+    }
+    Load-Module -m "VSSetup"
     Install-Dependency -Uri $AsioSDKUrl `
         -Name $AsioSDKName -Destination "ASIOSDK2"
     Install-Dependency -Uri $NsisUrl `

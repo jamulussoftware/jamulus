@@ -5,6 +5,7 @@
 !include "MUI2.nsh"      ; Modern UI
 !include "LogicLib.nsh"  ; Logical operators
 !include "Sections.nsh"  ; Support for section selection
+!include nsDialogs.nsh   ; Support custom pages with dialogs
 
 ; Compile-time definitions
 !define VC_REDIST32_EXE   "vc_redist.x86.exe"
@@ -48,6 +49,9 @@ BrandingText "${APP_NAME} powers your online jam session"
 ; Installer page configuration
 !define MUI_PAGE_CUSTOMFUNCTION_PRE AbortOnRunningApp
 !insertmacro MUI_PAGE_WELCOME
+
+Page Custom ASIOCheckInstalled ExitASIOInstalled
+
 !insertmacro MUI_PAGE_LICENSE "${ROOT_PATH}\COPYING"
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateDestinationFolder
 !insertmacro MUI_PAGE_DIRECTORY
@@ -89,7 +93,20 @@ LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
 LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
      "FATAL: THE UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
+LangString ASIO_DRIVER_HEADER ${LANG_ENGLISH} \
+     "ASIO driver"
+LangString ASIO_DRIVER_SUB ${LANG_ENGLISH} \
+     "To use Jamulus, you need an ASIO driver"
+LangString ASIO_DRIVER_EXPLAIN ${LANG_ENGLISH} \
+     "Jamulus needs an ASIO driver to provide low latency audio. You should install one now:"
+LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
+     "More information on jamulus.io"
+LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
+     "https://jamulus.io/wiki/Installation-for-Windows#setting-up-asio4all"
+LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
+     "We couldn't find an ASIO driver on your PC. Jamulus will not work without one. Do you still want to continue?"
 ; Abort the installer/uninstaller if Jamulus is running
+
 !macro _AbortOnRunningApp
 
     nsProcess::_FindProcess "${APP_EXE}"
@@ -102,6 +119,11 @@ LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
 
 !macroend
 
+; Define Dialog variables
+
+Var Dialog
+Var Label
+Var Button
 
 ; Installer
 !macro InstallApplication buildArch
@@ -249,6 +271,43 @@ FunctionEnd
 
 Function createdesktopshortcut
   CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+FunctionEnd
+
+Function ASIOCheckInstalled
+
+  ; insert ASIO install page if no ASIO driver was found
+  ClearErrors
+  EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+  IfErrors 0 ASIOExists
+        !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
+        nsDialogs::Create 1018
+        Pop $Dialog
+        
+        ${If} $Dialog == error
+            Abort
+        ${Endif}
+
+        ${NSD_CreateLabel} 0 0 100% 12u "$(ASIO_DRIVER_EXPLAIN)"
+        Pop $Label
+        ${NSD_CreateButton} 0 13u 100% 13u "$(ASIO_DRIVER_MORE_INFO)"
+        Pop $Button
+        ${NSD_OnClick} $Button OpenASIOHelpPage
+
+        nsDialogs::Show
+    ASIOExists:
+FunctionEnd
+
+Function OpenASIOHelpPage
+    ExecShell "open" "$(ASIO_DRIVER_MORE_INFO_URL)"
+FunctionEnd
+
+Function ExitASIOInstalled
+    ClearErrors
+    EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+    IfErrors 0 SkipMessage
+         MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
+             Abort
+    SkipMessage:
 FunctionEnd
 
 ; Uninstaller

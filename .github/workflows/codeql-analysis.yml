@@ -63,6 +63,7 @@ jobs:
         version: '5.15.2'
         dir: '${{ github.workspace }}'
         arch: 'win64_msvc2019_64'
+        tools: 'tools_qtcreator,4.14.0-0,qt.tools.qtcreator'
 
     - name: Visual Studio shell
       uses: egor-tensin/vs-shell@v2
@@ -70,8 +71,10 @@ jobs:
     - name: Find tools
       shell: cmd
       run: |
-        dir /s/b \jom.exe
-        dir /s/b \nmake.exe
+        dir /s/b C:\jom.exe
+        dir /s/b D:\jom.exe
+        dir /s/b C:\nmake.exe
+        dir /s/b D:\nmake.exe
         cd
 
     - name: Checkout repository

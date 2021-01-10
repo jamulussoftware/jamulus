@@ -814,7 +814,6 @@ QString UsageArguments ( char **argv )
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
         "  --edumodepassword     enable Edu-Mode and set following admin password\n"
-        "  --allowedumode        allow servers in Edu-Mode to register on this central server\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         show an agreement window before users can connect\n"

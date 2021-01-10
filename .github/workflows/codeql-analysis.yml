@@ -65,16 +65,13 @@ jobs:
         arch: 'win64_msvc2019_64'
         tools: 'tools_qtcreator,4.14.0-0,qt.tools.qtcreator'
 
-    - name: Visual Studio shell
-      uses: egor-tensin/vs-shell@v2
+    #- name: Visual Studio shell
+    #  uses: egor-tensin/vs-shell@v2
 
     - name: Find tools
       shell: cmd
       run: |
-        dir /s/b C:\jom.exe
-        dir /s/b D:\jom.exe
-        dir /s/b C:\nmake.exe
-        dir /s/b D:\nmake.exe
+        dir /s/b D:\a\jamulus\jamulus\Qt\jom.exe
         cd
 
     - name: Checkout repository
@@ -92,7 +89,10 @@ jobs:
     - name: Run QMake
       shell: cmd
       run: |
-        %Qt5_Dir%/bin/qmake.exe Jamulus/Jamulus.pro -spec win32-msvc
+        D:\a\jamulus\jamulus\Qt\bin\jom.exe distclean
+        D:\a\jamulus\jamulus\Qt\bin\qmake.exe Jamulus/Jamulus.pro -spec win32-msvc
+        D:\a\jamulus\jamulus\Qt\bin\jom.exe qmake_all
+        D:\a\jamulus\jamulus\Qt\bin\jom.exe
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

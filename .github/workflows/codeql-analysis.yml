@@ -64,12 +64,15 @@ jobs:
         dir: '${{ github.workspace }}'
         arch: 'win64_msvc2019_64'
 
+    - name: Visual Studio shell
+      uses: egor-tensin/vs-shell@v2
+
     - name: Find tools
       shell: cmd
       run: |
-        cd
         dir /s/b \jom.exe
         dir /s/b \nmake.exe
+        cd
 
     - name: Checkout repository
       uses: actions/checkout@v2

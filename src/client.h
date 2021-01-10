@@ -44,7 +44,12 @@
 #    include "vstsound.h"
 #else
 #    if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
-#        include "../windows/sound.h"
+#        ifdef USE_PORTAUDIO
+// FIXME: this shouldn't be windows specific
+#            include "portaudiosound.h"
+#        else
+#            include "../windows/sound.h"
+#        endif
 #    else
 #        if ( defined( Q_OS_MACX ) ) && !defined( JACK_REPLACES_COREAUDIO )
 #            include "../mac/sound.h"

@@ -57,13 +57,6 @@ jobs:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     steps:
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2
-      with:
-        version: '5.15.2'
-        dir: '${{ github.workspace }}'
-        arch: 'win64_msvc2019_64'
-
     - name: Checkout repository
       uses: actions/checkout@v2
 
@@ -73,9 +66,17 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - run: |
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.2'
+        dir: '${{ github.workspace }}'
+        arch: 'win64_msvc2019_64'
+
+    - name: Build Jamulus on Windows
+      run: |
         make distclean || true
-        qmake
+        D:\a\jamulus\jamulus\Qt\5.12.2\msvc2017_64-static\bin\qmake.exe -spec win32-msvc
         make
 
     - name: Perform CodeQL Analysis

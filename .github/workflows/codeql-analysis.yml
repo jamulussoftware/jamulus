@@ -67,7 +67,7 @@ jobs:
         sudo apt install build-essential qt5-qmake qtdeclarative5-dev qt5-default qttools5-dev-tools libjack-jackd2-dev
         make distclean || true
         qmake
-        make -j
+        make
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

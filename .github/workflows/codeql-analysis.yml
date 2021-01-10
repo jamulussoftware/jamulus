@@ -71,6 +71,7 @@ jobs:
     - name: Find tools
       shell: cmd
       run: |
+        dir /s/b D:\a\jamulus\jamulus\Qt\qmake.exe
         dir /s/b D:\a\jamulus\jamulus\Qt\jom.exe
         cd
 
@@ -89,10 +90,10 @@ jobs:
     - name: Run QMake
       shell: cmd
       run: |
-        D:\a\jamulus\jamulus\Qt\bin\jom.exe distclean
+        D:\a\jamulus\jamulus\Qt\Tools\QtCreator\bin\jom.exe distclean
         D:\a\jamulus\jamulus\Qt\bin\qmake.exe Jamulus/Jamulus.pro -spec win32-msvc
-        D:\a\jamulus\jamulus\Qt\bin\jom.exe qmake_all
-        D:\a\jamulus\jamulus\Qt\bin\jom.exe
+        D:\a\jamulus\jamulus\Qt\Tools\QtCreator\bin\jom.exe qmake_all
+        D:\a\jamulus\jamulus\Qt\Tools\QtCreator\bin\jom.exe
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

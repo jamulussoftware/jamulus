@@ -66,8 +66,8 @@ jobs:
 
     - name: Find tools
       run: |
-        dir /s/b \jom.exe
-        dir /s/b \*make.exe
+        cmd /s "dir /s/b \jom.exe"
+        cmd /s "dir /s/b \*make.exe"
 
     - name: Checkout repository
       uses: actions/checkout@v2

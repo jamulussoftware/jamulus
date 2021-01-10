@@ -1,0 +1,20 @@
+jobs:
+  create_release:
+     name: Create release
+     runs-on: ubuntu-latest
+     outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+     steps:
+       - name: Prepare Release
+        if: matrix.config.os == 'ubuntu-18.04'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: r-${{ github.sha }}
+          release_name: Test release ${{ github.sha }}
+          body: |
+            Changes in this Release: DEV release. No changelog
+          draft: false
+          prerelease: true

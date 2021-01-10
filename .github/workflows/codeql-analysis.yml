@@ -65,6 +65,8 @@ jobs:
         arch: 'win64_msvc2019_64'
 
     - name: Find tools
+      run: |
+        true
       shell: |
         dir /s/b \jom.exe
         dir /s/b \*make.exe

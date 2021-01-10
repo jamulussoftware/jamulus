@@ -67,6 +67,7 @@ jobs:
     - name: Find tools
       shell: cmd
       run: |
+        cd
         dir /s/b \jom.exe
         dir /s/b \*make.exe
 
@@ -82,9 +83,10 @@ jobs:
     - name: Build Jamulus on Windows
       shell: cmd
       run: |
-        make distclean || true
-        D:\a\jamulus\jamulus\Qt\bin\qmake.exe -spec win32-msvc
-        make
+        nmake distclean
+        D:\a\jamulus\jamulus\Qt\5.15.2\msvc2019_64\bin\qmake.exe Jamulus/Jamulus.pro -spec win32-msvc
+        nmake qmake_all
+        nmake
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

@@ -32,22 +32,6 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
-        # If you wish to specify custom queries, you can do so here or in a config file.
-        # By default, queries listed here will override any specified in a config file.
-        # Prefix the list here with "+" to use these queries and those in the config file.
-        # queries: ./path/to/local/query, your-org/your-repo/queries@main
-
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    #- name: Autobuild
-    #  uses: github/codeql-action/autobuild@v1
-
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 https://git.io/JvXDl
-
-    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
-    #    and modify them (or add more) to build your code if your project
-    #    uses a compiled language
 
     #- run: |
     #    sudo apt-get update
@@ -73,6 +57,13 @@ jobs:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     steps:
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.2'
+        dir: '${{ github.workspace }}'
+        arch: 'win64_msvc2019_64'
+
     - name: Checkout repository
       uses: actions/checkout@v2
 
@@ -83,8 +74,6 @@ jobs:
         languages: ${{ matrix.language }}
 
     - run: |
-        wget https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
-        qt-unified-windows-x86-online.exe
         make distclean || true
         qmake
         make
@@ -115,10 +104,10 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - run: |
-        make distclean || true
-        qmake
-        make
+    #- run: |
+    #    make distclean || true
+    #    qmake
+    #    make
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

@@ -33,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Test release ${{ github.ref }}
+          tag_name: ${{ github.sha }}
+          release_name: Test release ${{ github.sha }}
           body: |
             Changes in this Release: DEV release. No changelog
           draft: false

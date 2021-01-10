@@ -65,9 +65,8 @@ jobs:
         arch: 'win64_msvc2019_64'
 
     - name: Find tools
+      shell: cmd
       run: |
-        echo on
-      shell: |
         dir /s/b \jom.exe
         dir /s/b \*make.exe
 
@@ -81,9 +80,10 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build Jamulus on Windows
+      shell: cmd
       run: |
         make distclean || true
-        D:/a/jamulus/jamulus/Qt/bin/qmake.exe -spec win32-msvc
+        D:\a\jamulus\jamulus\Qt\bin\qmake.exe -spec win32-msvc
         make
 
     - name: Perform CodeQL Analysis

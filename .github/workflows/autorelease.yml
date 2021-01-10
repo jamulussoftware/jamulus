@@ -8,6 +8,7 @@ on:
 jobs:
   release_assets:
     name: Release assets
+    needs: create_release
     runs-on: ${{ matrix.config.os }} # we run many different builds
     strategy:
       # just an example matrix
@@ -23,22 +24,9 @@ jobs:
              asset_path: deploy\*.exe
              asset_name: jamulus_latest_win.exe
     steps:
-      # checkout of cource
+      # checkout
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Prepare Release
-        if: matrix.config.os == 'ubuntu-18.04'
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: r-${{ github.sha }}
-          release_name: Test release ${{ github.sha }}
-          body: |
-            Changes in this Release: DEV release. No changelog
-          draft: false
-          prerelease: true
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         if: matrix.config.os == 'windows-latest'
@@ -68,7 +56,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ needs.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ${{ matrix.config.asset_path }}
           asset_name: ${{ matrix.config.asset_name }}
           asset_content_type: application/octet-stream

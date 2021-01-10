@@ -80,7 +80,7 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pFader->setRange        ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
-    // setup panning control
+    // setup panning control and info label
     pPan->setRange             ( 0, AUD_MIX_PAN_MAX );
     pPan->setValue             ( AUD_MIX_PAN_MAX / 2 );
     pPan->setNotchesVisible    ( true );

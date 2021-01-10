@@ -199,6 +199,7 @@ public:
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
+              const bool         bDisableRecording,
               const bool         bEduModeEnabled,
               const ELicenceType eNLicenceType );
 

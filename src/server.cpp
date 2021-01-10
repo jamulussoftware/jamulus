@@ -233,6 +233,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const bool         bNUseMultithreading,
+                   const bool         bDisableRecording,
                    const bool         bNEduModeEnabled,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),

@@ -729,6 +729,7 @@ int main ( int argc, char** argv )
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
+                             bDisableRecording,
                              bEduModeEnabled,
                              eLicenceType );
 

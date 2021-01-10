@@ -49,12 +49,12 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    - run: |
-        sudo apt-get update
-        sudo apt install build-essential qt5-qmake qtdeclarative5-dev qt5-default qttools5-dev-tools libjack-jackd2-dev
-        make distclean || true
-        qmake
-        make
+    #- run: |
+    #    sudo apt-get update
+    #    sudo apt install build-essential qt5-qmake qtdeclarative5-dev qt5-default qttools5-dev-tools libjack-jackd2-dev
+    #    make distclean || true
+    #    qmake
+    #    make
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
@@ -83,6 +83,8 @@ jobs:
         languages: ${{ matrix.language }}
 
     - run: |
+        wget https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
+        qt-unified-windows-x86-online.exe
         make distclean || true
         qmake
         make

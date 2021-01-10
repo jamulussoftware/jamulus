@@ -76,7 +76,7 @@ jobs:
     - name: Build Jamulus on Windows
       run: |
         make distclean || true
-        D:\a\jamulus\jamulus\Qt\5.12.2\msvc2017_64-static\bin\qmake.exe -spec win32-msvc
+        D:\a\jamulus\jamulus\Qt\bin\qmake.exe -spec win32-msvc
         make
 
     - name: Perform CodeQL Analysis

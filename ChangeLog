@@ -2,7 +2,7 @@
 
 
 
-3.6.2git <- NOTE: the release version number will be 3.6.3
+### 3.6.2git <- NOTE: the release version number will be 3.6.3 ###
 
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 
@@ -13,7 +13,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 
 
 
-3.6.2 (2020-12-12)
+### 3.6.2 (2020-12-12) ###
 
 - change Clear All Stored Solo Settings to clear Mute as well (#731)
 
@@ -39,7 +39,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: ping times of servers which are further down the server list are too high (#49)
 
 
-3.6.1 (2020-11-21)
+### 3.6.1 (2020-11-21) ###
 
 - added menu entry "Set All Faders to New Client Level" (#622)
 
@@ -63,7 +63,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: the fader group property was not correctly loaded from the ini file
 
 
-3.6.0 (2020-10-25)
+### 3.6.0 (2020-10-25) ###
 
 - handle audio packets received out of order, coded by softins (#619)
 
@@ -99,7 +99,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: reduced server list is displayed instead of the normal list (#657)
 
 
-3.5.12 (2020-10-03)
+### 3.5.12 (2020-10-03) ###
 
 - added hyperlink support for the chat window, coded by jc-Rosichini (#591)
 
@@ -127,7 +127,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: crash when using the jam recorder in the server, coded by pljones (#618)
 
 
-3.5.11 (2020-09-19)
+### 3.5.11 (2020-09-19) ###
 
 - support a check for updates (#370)
 
@@ -155,7 +155,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: pan is not correctly initialized in the server on a new connection (#537)
 
 
-3.5.10 (2020-08-16)
+### 3.5.10 (2020-08-16) ###
 
 - do not change the server list order if the mouse is over the table to
   avoid selecting an incorrect server on a mouse double click (#293)
@@ -184,7 +184,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: --showallservers ping column sort is alphabetic (#201)
 
 
-3.5.9 (2020-07-19)
+### 3.5.9 (2020-07-19) ###
 
 - new app icon for Jamulus, created by geheimerEichkater (#410)
 
@@ -214,12 +214,12 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: grouping faders in the client should be proportional (see discussion in #202, #419)
 
 
-3.5.8 (2020-06-30)
+### 3.5.8 (2020-06-30) ###
 
 - bug fix: incorrect selection of UI language (#408)
 
 
-3.5.7 (2020-06-28)
+### 3.5.7 (2020-06-28) ###
 
 - add new "compact" skin, intended for large ensembles (#339)
 
@@ -246,7 +246,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
 
 
-3.5.6 (2020-06-09)
+### 3.5.6 (2020-06-09) ###
 
 - support sorting faders by channel name (#178)
 
@@ -268,7 +268,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
   by OS level Nap, Sleep, and Thread Priority systems, coded by AronVietti (#23)
 
 
-3.5.5 (2020-05-26)
+### 3.5.5 (2020-05-26) ###
 
 - added banjo/mandolin instrument icons created by atsampson (#283)
 
@@ -286,7 +286,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: server gain calculations were incorrect (introduced in version 3.5.4)
 
 
-3.5.4 (2020-05-24)
+### 3.5.4 (2020-05-24) ###
 
 - introduce genre-based server lists (#139)
 
@@ -307,7 +307,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: fixed misaligned tracks in recordings, coded by snayler, improved by pljones (#234)
 
 
-3.5.3 (2020-05-15)
+### 3.5.3 (2020-05-15) ###
 
 - correct unregister of headless server and RPP file creation on
   SIGINT/SIGTERM, coded by pljones (Tickets #130, #168)
@@ -338,7 +338,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - note: Jamulus is no longer compatible to Qt4
 
 
-3.5.2 (2020-04-24)
+### 3.5.2 (2020-04-24) ###
 
 - use audio level meter bars for normal skin
 
@@ -363,7 +363,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: fixed a crash with JackRouter 64 bit ASIO driver (#93, thanks to elliotclee)
 
 
-3.5.1 (2020-04-18)
+### 3.5.1 (2020-04-18) ###
 
 - added a Mute Stream button to hear your signal and the signal of the other clients but
   do not transmit your signal to the server so that the other clients cannot hear you
@@ -381,7 +381,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - the ping times in the server list are now more stable
 
 
-3.5.0 (2020-04-15)
+### 3.5.0 (2020-04-15) ###
 
 - added support for 64 samples OPUS packets in the client (if a sound card buffer size
   larger or equal than 128 samples is chosen, the legacy 128 samples OPUS packets are used)
@@ -397,7 +397,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: the server welcome message may appear twice if the server list was double clicked
 
 
-3.4.7 (2020-04-11)
+### 3.4.7 (2020-04-11) ###
 
 - added support for alternative Central Servers to solve the 200 server registration limit (#50)
 
@@ -409,7 +409,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - fixed server not visible if in same local network, coded by pljones (#27)
 
 
-3.4.6 (2020-04-09)
+### 3.4.6 (2020-04-09) ###
 
 - added support for channel meters, coded by pljones
 
@@ -420,7 +420,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - fixed low-res icon issue (#28)
 
 
-3.4.5 (2020-04-04)
+### 3.4.5 (2020-04-04) ###
 
 - audio fade-in at the server if a new client connects
 
@@ -435,7 +435,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: server list ping times may not be accurate and client list may not be retrieved
 
 
-3.4.4 (2020-03-25)
+### 3.4.4 (2020-03-25) ###
 
 - added support for controlling the audio mixer faders with a MIDI controller (MacOS and Linux)
 
@@ -446,14 +446,14 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - SVG server history graph, coded by pljones
 
 
-3.4.3 (2018-05-17)
+### 3.4.3 (2018-05-17) ###
 
 - for ASIO and 4 channel input, support mixing channels 1&2 with 3&4
 
 - bug fix: fixed a crash, running Jamulus on MacOS version "High Sierra"
 
 
-3.4.2 (2017-08-11)
+### 3.4.2 (2017-08-11) ###
 
 - removed old CELT library (minimum compatible version is now 3.3.1)
 
@@ -462,7 +462,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - Jack can be used instead of CoreAudio on MacOS (using qmake "CONFIG+=jackonmac")
 
 
-3.4.1 (2016-02-10)
+### 3.4.1 (2016-02-10) ###
 
 - show the number of connected clients in the MacOS task bar if more
   than one client is connected
@@ -476,12 +476,12 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: ping time measurement may be invalid for the Linux OS
 
 
-3.4.0 (2015-12-10)
+### 3.4.0 (2015-12-10) ###
 
 - show the names of the connected clients in the server list
 
 
-3.3.11 (2015-11-26)
+### 3.3.11 (2015-11-26) ###
 
 - added a new client fader level setting
 
@@ -491,14 +491,14 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - added support for audio channel selection for MacOS
 
 
-3.3.10 (2015-10-20)
+### 3.3.10 (2015-10-20) ###
 
 - changed the default central server URL
 
 - added support for server disconnection
 
 
-3.3.9 (2015-07-12)
+### 3.3.9 (2015-07-12) ###
 
 - another improvement of auto jitter buffer detection in very bad
   network conditions
@@ -508,7 +508,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: fixed a crash in the MacOS audio interface
 
 
-3.3.8 (2015-03-15)
+### 3.3.8 (2015-03-15) ###
 
 - improved audio quality in bad network conditions
 
@@ -519,7 +519,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - show info about sound card buffer size if not one of the standard sizes
 
 
-3.3.7 (2015-02-05)
+### 3.3.7 (2015-02-05) ###
 
 - added a musician profile dialog (some settings in the main window
   were removed)
@@ -531,14 +531,14 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - added new instrument picture for "Guitar+Vocal"
 
 
-3.3.6 (2015-01-25)
+### 3.3.6 (2015-01-25) ###
 
 - support for a country flag icon on the fader tag
 
 - a licence agreement dialog can be requested by the server
 
 
-3.3.5 (2014-07-30)
+### 3.3.5 (2014-07-30) ###
 
 - new compile config options for disabling old CELT, use OPUS in a shared
   library and change the executable name
@@ -546,7 +546,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - added a Linux jamulus.desktop file
 
 
-3.3.4 (2014-02-25)
+### 3.3.4 (2014-02-25) ###
 
 - true stereo reverberation effect (previously it was a mono reverberation
   effect on both stereo channels)
@@ -564,7 +564,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: the fader level could not be changed if the fader was on solo  
 
 
-3.3.3 (2013-12-30)
+### 3.3.3 (2013-12-30) ###
 
 - support for storing/recovering the window positions
 
@@ -580,14 +580,14 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: support for correct utf-8 storage of names in the ini-file
 
 
-3.3.2 (2013-08-24)
+### 3.3.2 (2013-08-24) ###
 
 - the connection setup dialog can now be opened during a connection
 
 - support for three audio quality settings: low, normal and high
 
 
-3.3.1 (2013-03-24)
+### 3.3.1 (2013-03-24) ###
 
 - enabled the OPUS codec
 
@@ -604,7 +604,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: the overall delay was not correctly calculated
 
 
-3.3.0 (2013-02-24)
+### 3.3.0 (2013-02-24) ###
 
 - renamed the software from llcon to Jamulus
 
@@ -618,7 +618,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: strings in the protocol are now utf-8 coded
 
 
-3.2.2 (2012-07-15)
+### 3.2.2 (2012-07-15) ###
 
 - changed auto jitter buffer property to reduce audio drop outs
 
@@ -627,7 +627,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: slave server unregistering may not be successful
 
 
-3.2.1 (2012-02-02)
+### 3.2.1 (2012-02-02) ###
 
 - support for audio device selection under Mac OS
 
@@ -640,7 +640,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: fixed crash on slave server unregistering
 
 
-3.2.0 (2011-07-23)
+### 3.2.0 (2011-07-23) ###
 
 - new GUI style of the main window, added switch for selecting the GUI style
   in the settings window
@@ -663,7 +663,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: fixed Jack audio interface instability
 
 
-3.1.2 (2011-03-02)
+### 3.1.2 (2011-03-02) ###
 
 - show warning in main window if audio delay is too long
 
@@ -672,14 +672,14 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: solo switch did not work correctly
 
 
-3.1.1 (2010-07-01)
+### 3.1.1 (2010-07-01) ###
 
 - added stereo audio channel support
 
 - added input/output audio channel mapping for ASIO audio interface
 
 
-3.1.0 (2010-03-16)
+### 3.1.0 (2010-03-16) ###
 
 - support for MacOS (using CoreAudio audio interface)
 
@@ -693,7 +693,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix for M-Audio Delta ASIO driver
 
 
-3.0.3 (2009-12-05)
+### 3.0.3 (2009-12-05) ###
 
 - accessibility improvements
 
@@ -714,7 +714,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: fix for disconnect issue at the server
 
 
-3.0.2 (2009-09-21)
+### 3.0.2 (2009-09-21) ###
 
 - new server features: for chat messages the time stamp is also shown, parsing
   of existing log file supported
@@ -732,7 +732,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
   the channel name was not updated correctly at the server
 
 
-3.0.1 (2009-08-23)
+### 3.0.1 (2009-08-23) ###
 
 - use low complexity CELT encoder profile, this lowers audio dropout
   probability on slow computers
@@ -744,7 +744,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
   of network trouble)
 
 
-3.0.0 (2009-08-19)
+### 3.0.0 (2009-08-19) ###
 
 - introduced new audio codec "CELT", not compatible to old versions
 
@@ -758,7 +758,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - various bug fixes (e.g. disconnecting did not work reliably)
 
 
-2.3.0 (2009-07-09)
+### 2.3.0 (2009-07-09) ###
 
 - new system sample rate of 33 kHz to improve audio quality, not compatible
   to old versions
@@ -768,7 +768,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - added command line argument for connecting a server at software start-up
 
 
-2.2.2 (2009-05-14)
+### 2.2.2 (2009-05-14) ###
 
 - "Mute" and "Solo" check boxes for each connected client fader
 
@@ -781,12 +781,12 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - better behaviour on disconnection (introduced disconnection protocol message)
 
 
-2.2.1 (2009-03-29)
+### 2.2.1 (2009-03-29) ###
 
 - bug fix and improvements for automatic jitter buffer size setting
 
 
-2.2.0 (2009-03-13)
+### 2.2.0 (2009-03-13) ###
 
 - added Jack audio interface (Linux)
 
@@ -802,7 +802,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
   clients)
 
 
-2.1.4 (2009-02-15)
+### 2.1.4 (2009-02-15) ###
 
 - added automatic jitter buffer size setting
 
@@ -812,7 +812,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
   significant CPU)
 
 
-2.1.3 (2008-11-02)
+### 2.1.3 (2008-11-02) ###
 
 - added sound card selection
 
@@ -821,7 +821,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - added total delay display
 
 
-2.1.2 (2008-08-15)
+### 2.1.2 (2008-08-15) ###
 
 - audio compression type can be selected (IMA ADPCM, MS ADPCM, None)
 
@@ -831,7 +831,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - bug fix: ping time measurement problems on Windows OS fixed
 
 
-2.1.1 (2008-08-03)
+### 2.1.1 (2008-08-03) ###
 
 - added a chat window
 
@@ -842,17 +842,17 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
 - ping time information in general settings dialog added
 
 
-2.1.0 (2008-07-17)
+### 2.1.0 (2008-07-17) ###
 
 - ASIO support
 
 
-2.0.0 (2008-03-29)
+### 2.0.0 (2008-03-29) ###
 
 - first QT4 compatible release
 
 
-0.9.9 (2007-09-10)
+### 0.9.9 (2007-09-10) ###
 
 - new client settings dialog
 
@@ -860,7 +860,7 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
   at the server
 
 
-0.9.4 (2006-03-10)
+### 0.9.4 (2006-03-10) ###
 
 - added a protocol mechanism, now it is possible to set the jitter buffer in the
   server according to the setting in the client (they are coupled now)
@@ -871,6 +871,6 @@ TODO fix crash if settings are changed in ASIO4All during a connection (containe
   size (improves latency)
 
 
-0.9.1 (2006-01-28)
+### 0.9.1 (2006-01-28) ###
 
 - initial version

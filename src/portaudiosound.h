@@ -32,6 +32,8 @@
 #include "soundbase.h"
 #include "global.h"
 
+#include <portaudio.h>
+
 class CSound : public CSoundBase
 {
 public:
@@ -40,4 +42,26 @@ public:
              const QString& strMIDISetup,
              const bool,
              const QString& );
+    virtual ~CSound();
+
+    virtual int  Init ( const int iNewPrefMonoBufferSize );
+    virtual void Start();
+    virtual void Stop();
+
+protected:
+    virtual QString LoadAndInitializeDriver ( QString, bool );
+    virtual void    UnloadCurrentDriver();
+
+    static int paStreamCallback ( const void*                     input,
+                                  void*                           output,
+                                  unsigned long                   frameCount,
+                                  const PaStreamCallbackTimeInfo* timeInfo,
+                                  PaStreamCallbackFlags           statusFlags,
+                                  void*                           userData );
+
+    PaHostApiIndex   asioIndex;
+    PaDeviceIndex    deviceIndex;
+    PaStream*        deviceStream;
+    int              iPrefMonoBufferSize;
+    CVector<int16_t> vecsAudioData;
 };

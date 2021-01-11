@@ -1055,3 +1055,6 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+
+# Some depreciated functions need to be kept for older versions to build
+DEFINES += QT_NO_DEPRECATED_WARNINGS

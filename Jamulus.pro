@@ -48,6 +48,10 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     CUSTOM_MODES \
     _REENTRANT
 
+# some depreciated functions need to be kept for older versions to build
+# TODO as soon as we drop support for the old Qt version, remove the following line
+DEFINES += QT_NO_DEPRECATED_WARNINGS
+
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
@@ -1055,6 +1059,3 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-
-# Some depreciated functions need to be kept for older versions to build
-DEFINES += QT_NO_DEPRECATED_WARNINGS

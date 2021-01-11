@@ -5,7 +5,8 @@
 
 echo "Update system..."
 sudo apt-get -qq update
-sudo apt-get -qq -y upgrade
+# We don't upgrade the packages. If this is needed, just uncomment this line
+# sudo apt-get -qq -y upgrade
 echo "Install dependencies..."
 
 sudo apt-get -qq -y install devscripts build-essential \

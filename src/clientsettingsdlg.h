@@ -37,6 +37,7 @@
 #include <QLayout>
 #include <QButtonGroup>
 #include <QMessageBox>
+#include <QKeyEvent>
 #include "global.h"
 #include "client.h"
 #include "settings.h"
@@ -107,6 +108,7 @@ public slots:
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
+    void keyPressEvent ( QKeyEvent *e );
 
 signals:
     void GUIDesignChanged();

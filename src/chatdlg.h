@@ -54,8 +54,7 @@ public slots:
     void OnClearChatHistory();
     void OnAnchorClicked ( const QUrl& Url );
 
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
+    void keyPressEvent ( QKeyEvent *e );
 
 signals:
     void NewLocalInputText ( QString strNewText );

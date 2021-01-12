@@ -754,3 +754,14 @@ void CClientSettingsDlg::UpdateCustomCentralServerComboBox()
         }
     }
 }
+
+void CClientSettingsDlg::keyPressEvent ( QKeyEvent *e ) // block escape key & fix android back key
+{
+#ifdef Q_OS_ANDROID
+    if ( e->key() == Qt::Key_Back ){
+        this->close(); // otherwise, dialog does not show properly again
+        return;
+    }
+#endif
+    QDialog::keyPressEvent ( e );
+}

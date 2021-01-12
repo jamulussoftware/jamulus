@@ -12,7 +12,7 @@ $/ = undef;
 my $ChangeLog = <$fh>;
 close $fh;
 
-if($ChangeLog =~ m/^### $Version (.*?)$(.*?)^###/sm) {
+if ( $ChangeLog =~ m/^### $Version (.*?)$(.*?)^###/sm ) {
     print $2;
 } else {
     print "No changelog found for this version.";

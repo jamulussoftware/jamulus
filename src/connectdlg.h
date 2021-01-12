@@ -31,6 +31,7 @@
 #include <QTimer>
 #include <QLocale>
 #include <QtConcurrent>
+#include <QKeyEvent>
 #include "global.h"
 #include "settings.h"
 #include "multicolorled.h"
@@ -108,6 +109,8 @@ public slots:
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+
+    void keyPressEvent ( QKeyEvent *e );
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

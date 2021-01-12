@@ -220,3 +220,13 @@ int CAnalyzerConsole::CalcYPosInGraph ( const double dAxisMin,
     return GraphGridFrame.y() + static_cast<int> (
         static_cast<double> ( GraphGridFrame.height() ) * ( 1 - dYValNorm ) );
 }
+
+void CAnalyzerConsole::keyPressEvent ( QKeyEvent *e )
+{
+    if (BOOL_CLOSE_DIALOGS_ON_BACKBUTTON && ( e->key() == Qt::Key_Back )){
+        this->close(); // otherwise, dialog does not show properly again in android
+        return;
+    }else{
+        QDialog::keyPressEvent ( e );
+    }
+}

@@ -31,6 +31,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QTimer>
+#include <QKeyEvent>
 #include "client.h"
 
 
@@ -87,4 +88,6 @@ protected:
 
 public slots:
     void OnTimerErrRateUpdate();
+
+    void keyPressEvent ( QKeyEvent *e );
 };

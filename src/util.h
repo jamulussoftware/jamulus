@@ -38,6 +38,7 @@
 # include <QLineEdit>
 # include <QDateTime>
 # include <QDesktopServices>
+# include <QKeyEvent>
 # include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
@@ -420,6 +421,8 @@ public slots:
     void OnCountryActivated ( int iCntryListItem );
     void OnCityTextChanged ( const QString& strNewName );
     void OnSkillActivated ( int iCntryListItem );
+
+    void keyPressEvent ( QKeyEvent *e );
 };
 
 

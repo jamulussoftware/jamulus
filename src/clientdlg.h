@@ -238,6 +238,5 @@ public slots:
 
     void accept() { close(); } // introduced by pljones
 
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
+    void keyPressEvent ( QKeyEvent *e );
 };

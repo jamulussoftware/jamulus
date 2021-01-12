@@ -921,3 +921,13 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
         delete pCurChildItem;
     }
 }
+
+void CConnectDlg::keyPressEvent ( QKeyEvent *e )
+{
+    if (BOOL_CLOSE_DIALOGS_ON_BACKBUTTON && ( e->key() == Qt::Key_Back )){
+        this->close(); // otherwise, dialog does not show properly again in android
+        return;
+    }else{
+        QDialog::keyPressEvent ( e );
+    }
+}

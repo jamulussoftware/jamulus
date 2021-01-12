@@ -146,7 +146,7 @@ void CChatDlg::keyPressEvent ( QKeyEvent *e ) // block escape key & fix android 
     if ( e->key() == Qt::Key_Escape ){
         ; // ignore escape key
     }else if (BOOL_CLOSE_DIALOGS_ON_BACKBUTTON && ( e->key() == Qt::Key_Back )){
-        this->close(); // otherwise, dialog does not show properly again
+        this->close(); // otherwise, dialog does not show properly again in android
         return;
     }else{
         QDialog::keyPressEvent ( e );

@@ -848,6 +848,16 @@ void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
     pClient->SetRemoteInfo();
 }
 
+void CMusProfDlg::keyPressEvent ( QKeyEvent *e )
+{
+    if (BOOL_CLOSE_DIALOGS_ON_BACKBUTTON && ( e->key() == Qt::Key_Back )){
+        this->close(); // otherwise, dialog does not show properly again in android
+        return;
+    }else{
+        QDialog::keyPressEvent ( e );
+    }
+}
+
 
 // Help menu -------------------------------------------------------------------
 CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )

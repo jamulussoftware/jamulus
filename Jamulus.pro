@@ -47,6 +47,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     USE_ALLOCA \
     CUSTOM_MODES \
     _REENTRANT
+DEFINES += "BOOL_CLOSE_DIALOGS_ON_BACKBUTTON=0" # fixes android ui issue
 
 # some depreciated functions need to be kept for older versions to build
 # TODO as soon as we drop support for the old Qt version, remove the following line
@@ -175,6 +176,9 @@ win32 {
 
     # enabled only for debugging on android devices
     DEFINES += ANDROIDDEBUG
+
+    DEFINES -= BOOL_CLOSE_DIALOGS_ON_BACKBUTTON=0  # fixes android ui issue
+    DEFINES += BOOL_CLOSE_DIALOGS_ON_BACKBUTTON=1  # fixes android ui issue
 
     target.path = /tmp/your_executable # path on device
     INSTALLS += target

@@ -38,7 +38,6 @@ echo "${VERSION} building..."
 
 sed -i "s/é&%JAMVERSION%&è/${VERSION}/g" debian/control
 
-exit 0
 debuild -b -us -uc
 
 mkdir deploy

@@ -31,8 +31,7 @@ jobs:
            with:
              tag_name:        latest
              release_name:    Latest release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} (auto build)
-             body:            |
-               Changes in release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }}: See the [changelog](https://github.com/corrados/jamulus/blob/master/ChangeLog).
+             body_path:       ${{ github.workspace }}/autoLatestChangelog.md
              draft:           false
              prerelease:      false
   release_assets:

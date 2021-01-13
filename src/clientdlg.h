@@ -41,6 +41,7 @@
 # include <QVersionNumber>
 #endif
 #include "global.h"
+#include "util.h"
 #include "client.h"
 #include "settings.h"
 #include "multicolorled.h"
@@ -69,7 +70,7 @@
 
 
 /* Classes ********************************************************************/
-class CClientDlg : public QDialog, private Ui_CClientDlgBase
+class CClientDlg : public CBaseDlg, private Ui_CClientDlgBase
 {
     Q_OBJECT
 
@@ -237,7 +238,4 @@ public slots:
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones
-
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 };

@@ -398,7 +398,7 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
 \******************************************************************************/
 // About dialog ----------------------------------------------------------------
 #ifndef HEADLESS
-CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
+CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 {
     setupUi ( this );
 
@@ -512,7 +512,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 
 
 // Licence dialog --------------------------------------------------------------
-CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
+CLicenceDlg::CLicenceDlg ( QWidget* parent ) : CBaseDlg ( parent )
 {
 /*
     The licence dialog is structured as follows:
@@ -555,8 +555,8 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
 // Musician profile dialog -----------------------------------------------------
 CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
                            QWidget* parent ) :
-    QDialog ( parent ),
-    pClient ( pNCliP )
+    CBaseDlg ( parent ),
+    pClient  ( pNCliP )
 {
 /*
     The musician profile dialog is structured as follows:

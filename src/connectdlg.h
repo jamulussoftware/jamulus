@@ -32,6 +32,7 @@
 #include <QLocale>
 #include <QtConcurrent>
 #include "global.h"
+#include "util.h"
 #include "settings.h"
 #include "multicolorled.h"
 #include "ui_connectdlgbase.h"
@@ -44,7 +45,7 @@
 
 
 /* Classes ********************************************************************/
-class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
+class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
 {
     Q_OBJECT
 

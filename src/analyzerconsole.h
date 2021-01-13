@@ -32,6 +32,7 @@
 #include <QPainter>
 #include <QTimer>
 #include "client.h"
+#include "util.h"
 
 
 /* Definitions ****************************************************************/
@@ -40,7 +41,7 @@
 
 
 /* Classes ********************************************************************/
-class CAnalyzerConsole : public QDialog
+class CAnalyzerConsole : public CBaseDlg
 {
     Q_OBJECT
 

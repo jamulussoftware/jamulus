@@ -38,6 +38,7 @@
 # include <QLineEdit>
 # include <QDateTime>
 # include <QDesktopServices>
+# include <QKeyEvent>
 # include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
@@ -368,8 +369,36 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 * GUI Utilities                                                                *
 \******************************************************************************/
 #ifndef HEADLESS
+// Dialog base class -----------------------------------------------------------
+class CBaseDlg : public QDialog
+{
+    Q_OBJECT
+
+public:
+    CBaseDlg ( QWidget*        parent = nullptr,
+               Qt::WindowFlags flags  = Qt::WindowFlags() ) : QDialog ( parent, flags ) {}
+
+public slots:
+    void keyPressEvent ( QKeyEvent* pEvent )
+    {
+        // block escape key
+        if ( pEvent->key() != Qt::Key_Escape )
+        {
+#ifdef ANDROID
+            if ( pEvent->key() == Qt::Key_Back )
+            {
+                close(); // otherwise, dialog does not show properly again in android (nefarius2001, #832)
+                return;
+            }
+#endif
+            QDialog::keyPressEvent ( pEvent );
+        }
+    }
+};
+
+
 // About dialog ----------------------------------------------------------------
-class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
+class CAboutDlg : public CBaseDlg, private Ui_CAboutDlgBase
 {
     Q_OBJECT
 
@@ -379,7 +408,7 @@ public:
 
 
 // Licence dialog --------------------------------------------------------------
-class CLicenceDlg : public QDialog
+class CLicenceDlg : public CBaseDlg
 {
     Q_OBJECT
 
@@ -395,7 +424,7 @@ public slots:
 
 
 // Musician profile dialog -----------------------------------------------------
-class CMusProfDlg : public QDialog
+class CMusProfDlg : public CBaseDlg
 {
     Q_OBJECT
 

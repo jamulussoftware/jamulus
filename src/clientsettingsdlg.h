@@ -38,6 +38,7 @@
 #include <QButtonGroup>
 #include <QMessageBox>
 #include "global.h"
+#include "util.h"
 #include "client.h"
 #include "settings.h"
 #include "multicolorled.h"
@@ -50,7 +51,7 @@
 
 
 /* Classes ********************************************************************/
-class CClientSettingsDlg : public QDialog, private Ui_CClientSettingsDlgBase
+class CClientSettingsDlg : public CBaseDlg, private Ui_CClientSettingsDlgBase
 {
     Q_OBJECT
 

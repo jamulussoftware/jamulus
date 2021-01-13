@@ -35,11 +35,12 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 #include "global.h"
+#include "util.h"
 #include "ui_chatdlgbase.h"
 
 
 /* Classes ********************************************************************/
-class CChatDlg : public QDialog, private Ui_CChatDlgBase
+class CChatDlg : public CBaseDlg, private Ui_CChatDlgBase
 {
     Q_OBJECT
 
@@ -53,9 +54,6 @@ public slots:
     void OnLocalInputTextTextChanged ( const QString& strNewText );
     void OnClearChatHistory();
     void OnAnchorClicked ( const QUrl& Url );
-
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 
 signals:
     void NewLocalInputText ( QString strNewText );

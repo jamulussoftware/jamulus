@@ -40,6 +40,7 @@
 # include <QVersionNumber>
 #endif
 #include "global.h"
+#include "util.h"
 #include "server.h"
 #include "settings.h"
 #include "ui_serverdlgbase.h"
@@ -57,7 +58,7 @@
 
 
 /* Classes ********************************************************************/
-class CServerDlg : public QDialog, private Ui_CServerDlgBase
+class CServerDlg : public CBaseDlg, private Ui_CServerDlgBase
 {
     Q_OBJECT
 
@@ -113,10 +114,6 @@ public slots:
     void OnSysTrayMenuExit() { close(); }
     void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
     void OnWelcomeMessageChanged() { pServer->SetWelcomeMessage ( tedWelcomeMessage->toPlainText() ); }
-
-    void keyPressEvent ( QKeyEvent *e ) // block escape key
-        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
-
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
     void OnRecordingDirClicked();

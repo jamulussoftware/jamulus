@@ -29,7 +29,7 @@
 CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
                            const bool       bNewShowCompleteRegList,
                            QWidget*         parent )
-    : QDialog                    ( parent, Qt::Dialog ),
+    : CBaseDlg                   ( parent, Qt::Dialog ),
       pSettings                  ( pNSetP ),
       strSelectedAddress         ( "" ),
       strSelectedServerName      ( "" ),

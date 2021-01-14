@@ -245,7 +245,7 @@ protected:
     void PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
                                  int&              iPos,
                                  const QByteArray& sStringUTF8,
-                                 const int         iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
+                                 const int         iNumberOfBytsLen = 2 ); // default is 2 bytes length indicator
 
     static uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
                                        int&                    iPos,
@@ -255,7 +255,7 @@ protected:
                                int&                    iPos,
                                const int               iMaxStringLen,
                                QString&                strOut,
-                               const int               iNumberOfBytsLen = 2 ); // default is 2 bytes lenght indicator
+                               const int               iNumberOfBytsLen = 2 ); // default is 2 bytes length indicator
 
     void SendMessage();
 

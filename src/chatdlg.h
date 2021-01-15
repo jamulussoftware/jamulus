@@ -50,7 +50,7 @@ public:
                QWidget*         parent = nullptr );
 
     void AddChatText ( QString strChatText );
-    void SaveChatHistory() { pSettings->SaveChat ( slMessageStorage ); }
+    void SaveChatHistory() { pSettings->SaveChat ( slMessageStorage.mid ( std::max ( 0, slMessageStorage.size() - MAX_CHAT_LINES_IN_HISTORY ) ) ); }
 
 protected:
     CClientSettings* pSettings;

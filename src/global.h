@@ -217,6 +217,8 @@ LED bar:      lbr
 // to SERVLIST_REGIST_INTERV_MINUTES)
 #define REGISTER_SERVER_RETRY_LIMIT      5 // count
 
+// maximum number of chat lines stored in the chat history file
+#define MAX_CHAT_LINES_IN_HISTORY        1000
 
 // Maximum length of fader tag and text message strings (Since for chat messages
 // some HTML code is added, we also have to define a second length which includes

@@ -40,7 +40,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed       ( !strMIDISetup.isEmpty() ),
     ClientSettingsDlg   ( pNCliP, pNSetP, parent ),
-    ChatDlg             ( parent ),
+    ChatDlg             ( pNSetP, parent ),
     ConnectDlg          ( pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole     ( pNCliP, parent ),
     MusicianProfileDlg  ( pNCliP, parent )
@@ -599,6 +599,8 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pSettings->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
     pSettings->eChannelSortType            = MainMixerBoard->GetFaderSorting();
     pSettings->iNumMixerPanelRows          = MainMixerBoard->GetNumMixerPanelRows();
+
+    ChatDlg.SaveChatHistory();
 
     // default implementation of this event handler routine
     Event->accept();

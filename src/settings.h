@@ -47,7 +47,8 @@ public:
     CSettings() :
         vecWindowPosMain ( ), // empty array
         strLanguage      ( "" ),
-        strFileName      ( "" )
+        strFileName      ( "" ),
+        strFileNameChat  ( "" )
     {
         QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
             this, &CSettings::OnAboutToQuit );
@@ -55,6 +56,9 @@ public:
 
     void Load ( const QList<QString> CommandLineOptions );
     void Save();
+
+    void LoadChat ( QStringList& slChat );
+    void SaveChat ( const QStringList& slChat );
 
     // common settings
     QByteArray vecWindowPosMain;
@@ -127,6 +131,7 @@ protected:
                          const QString& sValue = "" );
 
     QString strFileName;
+    QString strFileNameChat;
 
 public slots:
     void OnAboutToQuit() { Save(); }

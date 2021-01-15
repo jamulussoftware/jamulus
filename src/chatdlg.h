@@ -36,6 +36,7 @@
 #include <QMessageBox>
 #include "global.h"
 #include "util.h"
+#include "settings.h"
 #include "ui_chatdlgbase.h"
 
 
@@ -45,9 +46,15 @@ class CChatDlg : public CBaseDlg, private Ui_CChatDlgBase
     Q_OBJECT
 
 public:
-    CChatDlg ( QWidget* parent = nullptr );
+    CChatDlg ( CClientSettings* pNSetP,
+               QWidget*         parent = nullptr );
 
     void AddChatText ( QString strChatText );
+    void SaveChatHistory() { pSettings->SaveChat ( slMessageStorage ); }
+
+protected:
+    CClientSettings* pSettings;
+    QStringList      slMessageStorage;
 
 public slots:
     void OnSendText();

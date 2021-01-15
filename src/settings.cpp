@@ -50,6 +50,37 @@ void CSettings::Save()
     WriteToFile ( strFileName, IniXMLDocument );
 }
 
+void CSettings::LoadChat ( QStringList& slChat )
+{
+    QFile file ( strFileNameChat );
+
+    if ( file.open ( QIODevice::ReadOnly ) )
+    {
+        QTextStream Stream ( &file );
+        QString     strCurLine;
+
+        while ( Stream.readLineInto ( &strCurLine ) )
+        {
+            slChat << strCurLine;
+        }
+        file.close();
+    }
+}
+
+void CSettings::SaveChat ( const QStringList& slChat )
+{
+    QFile file ( strFileNameChat );
+
+    if ( file.open ( QIODevice::WriteOnly | QIODevice::Truncate ) )
+    {
+        for ( int i = 0; i < slChat.size(); i++ )
+        {
+            QTextStream ( &file ) << slChat[i] << endl;
+        }
+        file.close();
+    }
+}
+
 void CSettings::ReadFromFile ( const QString& strCurFileName,
                                QDomDocument&  XMLDocument )
 {
@@ -96,7 +127,8 @@ void CSettings::SetFileName ( const QString& sNFiName,
         }
 
         // append the actual file name
-        strFileName = sConfigDir + "/" + sDefaultFileName;
+        strFileName     = sConfigDir + "/" + sDefaultFileName;
+        strFileNameChat = sConfigDir + "/" + DEFAULT_CHAT_FILE_NAME;
     }
 }
 

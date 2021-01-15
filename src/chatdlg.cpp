@@ -26,8 +26,10 @@
 
 
 /* Implementation *************************************************************/
-CChatDlg::CChatDlg ( QWidget* parent ) :
-    CBaseDlg ( parent, Qt::Window ) // use Qt::Window to get min/max window buttons
+CChatDlg::CChatDlg ( CClientSettings* pNSetP,
+                     QWidget*         parent ) :
+    CBaseDlg  ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
+    pSettings ( pNSetP )
 {
     setupUi ( this );
 
@@ -57,6 +59,14 @@ CChatDlg::CChatDlg ( QWidget* parent ) :
 
     // set a placeholder text to make sure where to type the message in (#384)
     edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+
+    // load the chat history
+    pSettings->LoadChat ( slMessageStorage );
+
+    for ( int i = 0; i < slMessageStorage.size(); i++ )
+    {
+        txvChatWindow->append ( slMessageStorage[i] );
+    }
 
 
     // Menu  -------------------------------------------------------------------
@@ -107,6 +117,7 @@ void CChatDlg::OnClearChatHistory()
 {
     // clear chat window
     txvChatWindow->clear();
+    slMessageStorage.clear();
 }
 
 void CChatDlg::AddChatText ( QString strChatText )
@@ -124,8 +135,9 @@ void CChatDlg::AddChatText ( QString strChatText )
         strChatText.replace ( QRegExp ( "(https://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
     }
 
-    // add new text in chat window
+    // add new text in chat window and storage
     txvChatWindow->append ( strChatText );
+    slMessageStorage << strChatText;
 }
 
 void CChatDlg::OnAnchorClicked ( const QUrl& Url )

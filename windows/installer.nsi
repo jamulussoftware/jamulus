@@ -12,6 +12,7 @@
 !define VC_REDIST64_EXE   "vc_redist.x64.exe"
 !define APP_INSTALL_KEY   "Software\${APP_NAME}"
 !define APP_INSTALL_VALUE "InstallFolder"
+!define APP_INSTALL_ICON  "InstallDtIcon"
 !define AUTORUN_NAME      "${APP_NAME} Server"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
 !define APP_EXE           "${APP_NAME}.exe"
@@ -34,12 +35,12 @@ BrandingText "${APP_NAME} powers your online jam session"
 
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
-!define MUI_UNICON                     "${WINDOWS_PATH}\uninsticon.ico"
+!define MUI_UNICON                     "${WINDOWS_PATH}\mainicon.ico"
 !define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\uninstaller-welcome.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome.bmp"
 
 ; Store the installer language - must be placed before the installer page configuration
 !define MUI_LANGDLL_REGISTRY_ROOT      HKLM

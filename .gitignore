@@ -26,6 +26,9 @@ debug/
 release/
 build/
 deploy/
+debian/
+build-gui/
+build-nox/
 jamulus.sln
 jamulus.vcxproj
 jamulus.vcxproj.filters
@@ -40,3 +43,4 @@ distributions/jamulus.desktop
 Debug-iphoneos/
 Jamulus.xcodeproj
 jamulus_plugin_import.cpp
+autoLatestChangelog.md

@@ -151,7 +151,7 @@ void CChannel::SetEnable ( const bool bNEnStat )
     // disconnects from a server since we do not yet know if the next server we
     // connect to will support the sequence number. We use the SetEnable call in
     // the client for this task since at every start/stop it will call this
-    // function. NOTE that it is important to reset this paramter on SetEnable(false)
+    // function. NOTE that it is important to reset this parameter on SetEnable(false)
     // since the SetEnable(true) is set AFTER the Init() in the client -> we
     // simply set it regardless of the state which does not hurt.
     bUseSequenceNumber = false;

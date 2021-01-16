@@ -1,6 +1,5 @@
 ![Homepage picture](src/res/homepage/jamulusbannersmall.png)
 
-![CI Linux](https://github.com/ann0see/jamulus/workflows/CI%20Linux/badge.svg)
 
 Jamulus - Internet Jam Session Software
 =======================================
@@ -64,7 +63,7 @@ source:
 - Audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004
   (taken from "The Synthesis ToolKit in C++ (STK)"):
   http://ccrma.stanford.edu/software/stk
-  
+
 - Some pixmaps are from the Open Clip Art Library (OCAL): http://openclipart.org
 
 - Country flag icons from Mark James: http://www.famfamfam.com

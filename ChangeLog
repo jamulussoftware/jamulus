@@ -4,6 +4,8 @@
 
 ### 3.6.2git <- NOTE: the release version number will be 3.6.3 ###
 
+- support a chatlog on the client (#276)
+
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 
 

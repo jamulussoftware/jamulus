@@ -83,7 +83,7 @@ LED bar:      lbr
 // default names of the ini-file for client and server
 #define DEFAULT_INI_FILE_NAME            "Jamulus.ini"
 #define DEFAULT_INI_FILE_NAME_SERVER     "Jamulusserver.ini"
-#define DEFAULT_CHAT_FILE_NAME           "ChatHistory.txt"
+#define DEFAULT_CHAT_FILE_NAME           "Chathistory.txt"
 
 // file name for logging file
 #define DEFAULT_LOG_FILE_NAME            "Jamulussrvlog.txt"

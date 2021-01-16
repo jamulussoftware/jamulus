@@ -44,7 +44,8 @@ jobs:
            env:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
            with:
-             tag_name:              ${{ steps.jamulus-build-vars.outputs.PUSH_TAG }}
+             tag_name:              ${{ github.ref }}
+             #${{ steps.jamulus-build-vars.outputs.PUSH_TAG }}
              release_name:          Release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} (auto build)
              body_path:             ${{ github.workspace }}/autoLatestChangelog.md
              draft:                 false

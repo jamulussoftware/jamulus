@@ -58,21 +58,25 @@ jobs:
       matrix:
         config:
            - config_name:           Linux (normal)
+             target_os:             linux
              building_on_os:        ubuntu-18.04
              asset_path:            deploy/Jamulus_amd64.deb
              asset_name:            jamulus_${{ needs.create_release.outputs.version }}_ubuntu_amd64.deb
              asset_latest_name:     jamulus_latest_ubuntu_amd64.deb
            - config_name:           Linux (headless)
+             target_os:             linux
              building_on_os:        ubuntu-18.04
              asset_path:            deploy/Jamulus_headless_amd64.deb
              asset_name:            jamulus_headless_${{ needs.create_release.outputs.version }}_ubuntu_amd64.deb
              asset_latest_name:     jamulus_headless_ubuntu_amd64.deb
            - config_name:           MacOS
+             target_os:             macos
              building_on_os:        macos-10.15
              asset_path:            deploy/Jamulus-installer-mac.dmg
              asset_name:            jamulus_${{ needs.create_release.outputs.version }}_mac.dmg
              asset_latest_name:     jamulus_latest_mac.dmg
            #- config_name:          Windows
+           #  target_os:            windows
            #  building_on_os:       windows-latest
            #  asset_path:           ${{ github.workspace }}\deploy\Jamulus-installer-win.exe
            #  asset_latest_name:    jamulus_latest_win.exe
@@ -82,7 +86,7 @@ jobs:
       - name:                       Checkout code
         uses:                       actions/checkout@v2
         
-      # Install QT
+      # Install QT for windows (part of scripts in other os)
       - name:                       Install Qt (64 Bit)
         uses:                       jurplel/install-qt-action@v2
         if:                         matrix.config.building_on_os == 'windows-latest'
@@ -101,13 +105,13 @@ jobs:
       # Build
       - name:                       "Build deb (Linux)"
         run:                        sh linux/autorelease_linux.sh ${{ github.workspace }}
-        if:                         matrix.config.building_on_os == 'ubuntu-18.04'
+        if:                         matrix.config.target_os == 'linux'
       - name:                       "Build (Windows)"
         run:                        powershell .\windows\deploy_windows.ps1 ${{ github.workspace }}\Qt\5.15.2\; cp deploy\Jamulus*installer-win.exe deploy\Jamulus-installer-win.exe
-        if:                         matrix.config.building_on_os == 'windows-latest'
+        if:                         matrix.config.target_os == 'windows'
       - name:                       "Build (macOS)"
         run:                        sh mac/autorelease_mac.sh ${{ github.workspace }}
-        if:                         matrix.config.building_on_os == 'macos-10.15'
+        if:                         matrix.config.target_os == 'macos'
         
       # Upload tag
       - name:                       Upload Release Asset - Tag

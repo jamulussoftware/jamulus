@@ -20,7 +20,8 @@ jobs:
          - name:                    Get Jamulus build info
            run:                     sh ${{ github.workspace }}/.github/actions_scripts/get_release_vars.sh ${{ github.workspace }}
            id:                      jamulus-build-vars
-         - name:                    Remove latest tag
+         - name:                    Remove tag "latest"
+           continue-on-error:       true
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
            with:
              delete_release:        true
@@ -81,6 +82,12 @@ jobs:
            #  asset_path:           ${{ github.workspace }}\deploy\Jamulus-installer-win.exe
            #  asset_latest_name:    jamulus_latest_win.exe
            #  asset_name:           jamulus_${{ needs.create_release.outputs.upload_url }}_win.exe
+           - config_name:           AndroidAPK
+             target_os:             android
+             building_on_os:        ubuntu-18.04
+             asset_path:            android-build/build/outputs/apk/debug/android-build-debug.apk
+             asset_name:            jamulus_${{ needs.create_release.outputs.version }}_android.apk
+             asset_latest_name:     jamulus_latest_android.apk
     steps:
       # Checkout code
       - name:                       Checkout code
@@ -112,6 +119,9 @@ jobs:
       - name:                       "Build (macOS)"
         run:                        sh mac/autorelease_mac.sh ${{ github.workspace }}
         if:                         matrix.config.target_os == 'macos'
+      - name: Hello world action step
+        uses: ./distribute_android/ # Uses an action in the directory
+        if:                         matrix.config.target_os == 'android'
         
       # Upload tag
       - name:                       Upload Release Asset - Tag

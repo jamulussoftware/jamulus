@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "r*"
+  workflow_dispatch:
 jobs:
 
   ## Creates the releases on GitHub ##

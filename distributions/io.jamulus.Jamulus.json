@@ -43,7 +43,7 @@
         {
           "type": "git",
           "url": "../",
-          "branch": "master"
+          "branch": "eduTools"
         }
       ]
     }

@@ -2,8 +2,8 @@ name:                         Publish EduTools Release
 
 on:
   push:
-    branches:
-      - "eduTools"
+    tags:
+      - "r*"
 jobs:
 
   ## Creates the releases on GitHub ##

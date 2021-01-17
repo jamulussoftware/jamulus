@@ -6,7 +6,9 @@ param(
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
+    [string] $NSProcessName = "Plugin/nsProcessW.dll",
+    [string] $NSProcessUrl = "http://forums.winamp.com/attachment.php?attachmentid=54705&d=1610882327"
 )
 
 # change directory to the directory above (if needed)
@@ -112,7 +114,7 @@ Function Install-Dependency
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
     $TempDir = [System.IO.Path]::GetTempPath()
 
-    if ($Uri -Match "sourceforge")
+    if ($Uri -Match "downloads.sourceforge.net")
     {
       $Uri = Get-RedirectedUrl -URL $Uri
     }
@@ -136,6 +138,8 @@ Function Install-Dependencies
         -Name $AsioSDKName -Destination "ASIOSDK2"
     Install-Dependency -Uri $NsisUrl `
         -Name $NsisName -Destination "NSIS"
+    Install-Dependency -Uri $NSProcessUrl `
+        -Name $NSProcessName -Destination "nsProcess.dll"
 }
 
 # Setup environment variables and build tool paths

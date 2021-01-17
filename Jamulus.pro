@@ -309,6 +309,12 @@ win32 {
     # we want to compile with C++11
     CONFIG += c++11
 
+    # --as-needed avoids linking the final binary against unnecessary runtime
+    # libs. Most g++ versions already do that by default.
+    # However, Debian buster does not and would link against libQt5Concurrent
+    # unnecessarily without this workaround (#741):
+    QMAKE_LFLAGS += -Wl,--as-needed
+
     HEADERS += linux/sound.h
     SOURCES += linux/sound.cpp
 

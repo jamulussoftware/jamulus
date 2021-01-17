@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+# Create deb files
+
 # set armhf
 #sudo dpkg --add-architecture armhf
 

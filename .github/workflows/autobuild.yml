@@ -5,27 +5,32 @@ on:
     branches:
       - "eduTools"
 jobs:
+
+  ## Creates the releases on GitHub ##
   create_release:
      name:                          Create release
      runs-on:                       ubuntu-latest
-     outputs:
+     outputs: # The outputs the following steps give back are sent to the other job
       upload_url:                   ${{ steps.create_release.outputs.upload_url }}
       upload_latest_url:            ${{ steps.create_latest_release.outputs.upload_url }}
       version:                      ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }}
+
      steps:
          - name:                    Checkout code
            uses:                    actions/checkout@v2
-         - name:                    Get Jamulus build info
+         - name:                    Get Jamulus build info # Gets Changelog and version of this build
            run:                     sh ${{ github.workspace }}/.github/actions_scripts/get_release_vars.sh ${{ github.workspace }}
            id:                      jamulus-build-vars
-         - name:                    Remove latest tag
+         - name:                    Remove latest tag # removes the "latest" tag from the last version
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
            with:
              delete_release:  false
              tag_name:        edulatest # tag name to delete
            env:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
-         - name:                    Prepare latest release
+
+         # Actually create the release on GitHub
+         - name:                    Prepare latest release # create a release tagged latest
            id:                      create_latest_release
            uses:                    actions/create-release@v1
            env:
@@ -36,7 +41,8 @@ jobs:
              body_path:             ${{ github.workspace }}/autoLatestChangelog.md
              draft:                 false
              prerelease:            false
-         - name:                    Prepare tag release
+
+         - name:                    Prepare tag release # creates a release with the tag which triggered this action
            id:                      create_release
            uses:                    actions/create-release@v1
            env:
@@ -47,12 +53,14 @@ jobs:
              body_path:             ${{ github.workspace }}/autoLatestChangelog.md
              draft:                 false
              prerelease:            false
+
+  ## Builds and uploads the binaries ##
   release_assets:
     name:                           Release assets
     needs:                          create_release
     runs-on:                        ${{ matrix.config.os }}
     strategy:
-      matrix:
+      matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
         config:
            - os:                    ubuntu-18.04
              asset_path:            deploy/Jamulus_amd64.deb
@@ -69,10 +77,15 @@ jobs:
            #  asset_path:           ${{ github.workspace }}\deploy\Jamulus-installer-win.exe
            #  asset_latest_name:    jamulus_latest_win.exe
            #  asset_name:           jamulus_${{ needs.create_release.outputs.upload_url }}_win.exe
+
     steps:
-      # checkout
+
+      ### Setup ###
+
+      # Get the code
       - name:                       Checkout code
         uses:                       actions/checkout@v2
+      # Install Qt (currently Windows only)
       - name:                       Install Qt (64 Bit)
         uses:                       jurplel/install-qt-action@v2
         if:                         matrix.config.os == 'windows-latest'
@@ -87,6 +100,9 @@ jobs:
           version:                  '5.15.2'
           dir:                      '${{ github.workspace }}'
           arch:                     'win32_msvc2019'
+
+      ### Build ###
+
       - name:                       "Build deb (Linux)"
         run:                        sh linux/autorelease_linux.sh ${{ github.workspace }}
         if:                         matrix.config.os == 'ubuntu-18.04'
@@ -96,6 +112,10 @@ jobs:
       - name:                       "Build (macOS)"
         run:                        sh mac/autorelease_mac.sh ${{ github.workspace }}
         if:                         matrix.config.os == 'macos-10.15'
+
+      ### Upload releases ###
+
+      ## Upload assets to the release which is tagged with the tag that triggered this action.
       - name:                       Upload Release Asset 1
         id:                         upload-release-asset
         uses:                       actions/upload-release-asset@v1
@@ -106,6 +126,8 @@ jobs:
           asset_path:               ${{ matrix.config.asset_path }}
           asset_name:               ${{ matrix.config.asset_name }}
           asset_content_type:       application/octet-stream
+
+      # There might be two assets (at least for Debian)
       - name:                       Upload Release Asset 2
         if:                         matrix.config.asset_name_two != null
         id:                         upload-release-asset-two
@@ -118,7 +140,7 @@ jobs:
           asset_name:               ${{ matrix.config.asset_name_two }}
           asset_content_type:       application/octet-stream
 
-      #### LATEST version upload ####
+      ## Upload assets latest release
       - name:                       Upload latest Release Asset 1
         id:                         upload-latest-release-asset
         uses:                       actions/upload-release-asset@v1

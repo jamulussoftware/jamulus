@@ -12,6 +12,7 @@
 !define VC_REDIST64_EXE   "vc_redist.x64.exe"
 !define APP_INSTALL_KEY   "Software\${APP_NAME}"
 !define APP_INSTALL_VALUE "InstallFolder"
+!define APP_INSTALL_ICON  "InstallDtIcon"
 !define AUTORUN_NAME      "${APP_NAME} Server"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
 !define APP_EXE           "${APP_NAME}.exe"
@@ -34,12 +35,12 @@ BrandingText "${APP_NAME} powers your online jam session"
 
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
-!define MUI_UNICON                     "${WINDOWS_PATH}\uninsticon.ico"
+!define MUI_UNICON                     "${WINDOWS_PATH}\mainicon.ico"
 !define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\uninstaller-welcome.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome.bmp"
 
 ; Store the installer language - must be placed before the installer page configuration
 !define MUI_LANGDLL_REGISTRY_ROOT      HKLM
@@ -56,6 +57,7 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateDestinationFolder
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW FinishPage.Show
 !define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
 !define MUI_FINISHPAGE_SHOWREADME ""
 !define MUI_FINISHPAGE_SHOWREADME_CHECKED
@@ -125,6 +127,9 @@ Var Dialog
 Var Label
 Var Button
 
+; Define user choices
+
+Var bInstallDtIcon
 ; Installer
 !macro InstallApplication buildArch
     !define prefix "${DEPLOY_PATH}\${buildArch}"
@@ -200,7 +205,7 @@ Function .onInit
         ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
-        ${Else}
+    ${Else}
         SetRegView      32
 
         ; Set default installation folder, retrieve from registry if available
@@ -211,7 +216,10 @@ Function .onInit
     ${EndIf}
     ; Install for all users
     SetShellVarContext all
-
+    ; get user choices (open program, dt icon,...)
+    ReadRegStr $bInstallDtIcon  HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}"
+    IfErrors   0 +2
+    StrCpy $bInstallDtIcon "1"
     ; Select installer language
     !insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
@@ -265,11 +273,23 @@ Section Install
         ${EndIf}
 SectionEnd
 
+Function FinishPage.Show ; set the user choices if they were remembered
+    WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}" "0" ; this will be overwritten if the box is checked
+    ${If} $bInstallDtIcon == 1 ; Check the install desktop icon checkbox
+        SendMessage $mui.FinishPage.Showreadme ${BM_SETCHECK} ${BST_CHECKED} 0
+    ${Else}
+        SendMessage $mui.FinishPage.Showreadme ${BM_SETCHECK} ${BST_UNCHECKED} 0
+    ${EndIf}
+    ShowWindow $mui.FinishPage.Showreadme 1
+FunctionEnd
+
+
 Function AbortOnRunningApp
     !insertmacro _AbortOnRunningApp
 FunctionEnd
 
 Function createdesktopshortcut
+   WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}" "1" ; remember that icon should be installed next time
   CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
 FunctionEnd
 
@@ -304,10 +324,10 @@ FunctionEnd
 Function ExitASIOInstalled
     ClearErrors
     EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
-    IfErrors 0 SkipMessage
-         MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
-             Abort
-    SkipMessage:
+      IfErrors 0 SkipMessage
+       MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
+         Abort
+       SkipMessage:
 FunctionEnd
 
 ; Uninstaller

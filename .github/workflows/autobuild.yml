@@ -1,10 +1,12 @@
-name:                         Publish EduTools Release
+#### Automatically build and upload releases to GitHub ####
 
 on:
   push:
     tags:
-      - "r*"
+      - "r*" # run this action if a tag beginning with r is created
   workflow_dispatch:
+
+name:                               Publish Edu Tools Release
 jobs:
 
   ## Creates the releases on GitHub ##
@@ -25,8 +27,8 @@ jobs:
          - name:                    Remove latest tag # removes the "latest" tag from the last version
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
            with:
-             delete_release:  false
-             tag_name:        edulatest # tag name to delete
+             delete_release:        true
+             tag_name:              edulatest # tag name to delete
            env:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
 
@@ -38,7 +40,7 @@ jobs:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
            with:
              tag_name:              edulatest
-             release_name:          Latest release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} (auto build)
+             release_name:          Latest edu tools release ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }} (auto build)
              body_path:             ${{ github.workspace }}/autoLatestChangelog.md
              draft:                 false
              prerelease:            false

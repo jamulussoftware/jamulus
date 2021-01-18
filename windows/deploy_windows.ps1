@@ -1,6 +1,6 @@
 param(
     # Replace default path with system Qt installation folder if necessary
-    [string] $QtInstallPath = "D:\a\qt\5.15.2",
+    [string] $QtInstallPath = "C:\Qt\5.12.3",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "ASIOSDK2.3.2",
@@ -10,11 +10,6 @@ param(
     [string] $NSProcessName = "Plugin/nsProcessW.dll",
     [string] $NSProcessUrl = "http://forums.winamp.com/attachment.php?attachmentid=54705&d=1610882327"
 )
-# for gh actions
-if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
-Set-Location -Path "$PSScriptRoot\..\"
 
 # change directory to the directory above (if needed)
 Set-Location -Path "$PSScriptRoot\..\"
@@ -138,7 +133,6 @@ Function Install-Dependencies
     if (-not (Get-PackageProvider -Name nuget).Name -eq "nuget") {
       Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     }
-    # Install-Module PowershellGet -Force
     Load-Module -m "VSSetup"
     Install-Dependency -Uri $AsioSDKUrl `
         -Name $AsioSDKName -Destination "ASIOSDK2"

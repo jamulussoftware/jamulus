@@ -83,7 +83,6 @@ jobs:
              target_os:             windows
              building_on_os:        windows-latest
              asset_path:            deploy\Jamulus-installer-win.exe
-             asset_latest_name:     jamulus_latest_win.exe
              asset_name:            jamulus_${{ needs.create_release.outputs.version_name }}_win.exe
            - config_name:           AndroidAPK
              target_os:             android

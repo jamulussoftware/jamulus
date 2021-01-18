@@ -2,13 +2,12 @@
 
 on:
   push:
-    tags: # releases
+    tags:
       - "r*"
       - latest
-    branches: # pre-releases
+    branches:
       - "*"
 #      - master         # could be restricted to master, if all branches take too much build time
-#      - "autobuild*"   # development/debugging
 name:                               Publish Release
 jobs: 
   create_release:
@@ -24,7 +23,8 @@ jobs:
          - name:                    Checkout code
            uses:                    actions/checkout@v2
          
-         # Set variables for releases
+         # Set variables 
+         # Determine releas / pre-release
          - name:                    Get Jamulus build info
            run:                     sh ${{ github.workspace }}/.github/actions_scripts/get_release_vars.sh ${{ github.workspace }}
            id:                      jamulus-build-vars
@@ -94,6 +94,8 @@ jobs:
       # Checkout code
       - name:                       Checkout code
         uses:                       actions/checkout@v2
+        with:
+          submodules:               true
         
       # Install QT for windows (part of scripts in other os)
       - name:                       Install Qt (64 Bit)
@@ -121,8 +123,8 @@ jobs:
       - name:                       "Build (macOS)"
         run:                        sh mac/autorelease_mac.sh ${{ github.workspace }}
         if:                         matrix.config.target_os == 'macos'
-      - name: Hello world action step
-        uses: ./distribute_android/ # Uses an action in the directory
+      - name:                       "Build (Android)"
+        uses:                       ./distribute_android/ # Uses an action in the directory
         if:                         matrix.config.target_os == 'android'
         
       # Upload tag

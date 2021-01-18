@@ -25,7 +25,7 @@ RUN mkdir -p ${ANDROID_SDK_ROOT}/build-tools/latest/
 # Install Android sdk
 #https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
 #https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip 
-RUN zipfilename="erte"  && \
+RUN downloadfile="downloadfile"  && \
 	wget -q -O downloadfile https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip && \
     unzip -q downloadfile && \
     rm downloadfile && \
@@ -35,10 +35,11 @@ RUN zipfilename="erte"  && \
 # Install Android ndk
 #https://dl.google.com/android/repository/android-ndk-r19c-linux-x86_64.zip
 #https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip
-RUN wget https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip && \
-    unzip -q android-ndk-r21d-linux-x86_64.zip && \
-    mv android-ndk-r21d /opt/android/android-ndk && \
-    rm android-ndk-r21d-linux-x86_64.zip
+RUN downloadfile="downloadfile"  && \
+	wget -q -O downloadfile https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip && \
+    unzip -q downloadfile && \
+    rm downloadfile && \
+    mv android-ndk-r21d /opt/android/android-ndk
 
 # Add Android tools and platform tools to PATH
 ENV ANDROID_HOME /opt/android/android-sdk

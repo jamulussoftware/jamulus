@@ -1,7 +1,16 @@
 #!/bin/bash
 
-rm -r jamulus
-git clone --recurse-submodules -b update_oboe git@github.com:nefarius2001/jamulus.git
+# execute this file in an empty folder
 
-docker build -t myjambuild ./
-docker run --rm -v `pwd`/jamulus:/jamulus -w /jamulus -e CONFIG=release myjambuild
+#clean & download code & change into folder
+rm -r jamulus
+git clone --recurse-submodules https://github.com/corrados/jamulus.git
+cd jamulus
+
+####################################################
+### these two lines run in toplevel folder of repo##
+####################################################
+
+#build & run docker
+docker build -t myjambuild ./distribute_android
+docker run --rm -v `pwd`:/jamulus -w /jamulus -e CONFIG=release myjambuild

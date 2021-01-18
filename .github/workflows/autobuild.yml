@@ -1,3 +1,5 @@
+#### Automatically build and upload releases to GitHub ####
+
 on:
   push:
     tags: # releases
@@ -7,7 +9,6 @@ on:
       - "*"
 #      - master         # could be restricted to master, if all branches take too much build time
 #      - "autobuild*"   # development/debugging
-  workflow_dispatch:
 name:                               Publish Release
 jobs: 
   create_release:
@@ -17,6 +18,7 @@ jobs:
       upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
       version:                      ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }}
       version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
+
      steps:
          # Checkout code
          - name:                    Checkout code
@@ -36,7 +38,7 @@ jobs:
              tag_name:              ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
            env:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
-         # create release (empty)
+         # create release (empty, filled by next job)
          - name:                    'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
            id:                      create_release_step
            uses:                    actions/create-release@v1
@@ -60,7 +62,7 @@ jobs:
     needs:                          create_release
     runs-on:                        ${{ matrix.config.building_on_os }}
     strategy:
-      matrix:
+      matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
         config:
            - config_name:           Linux (normal)
              target_os:             linux

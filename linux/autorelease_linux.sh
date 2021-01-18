@@ -1,6 +1,8 @@
 #!/bin/sh -e
 
-# please run this script with the first parameter being the root of the repo
+# Sets up the environment for autobuild on Linux
+
+# Please run this script with the first parameter being the root of the repo
 if [ -z "${1}" ]; then
     echo "Please give the path to the repository root as second parameter to this script!"
     exit 1

@@ -1,1 +1,1 @@
-# Todo once the new installer is ready
+# Sets up the environment for autobuild on Windows

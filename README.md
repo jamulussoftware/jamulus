@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/corrados/jamulus.svg?branch=master)](https://travis-ci.org/corrados/jamulus)
 ![CodeQL](https://github.com/corrados/jamulus/workflows/CodeQL/badge.svg)
 
-Jamulus - Internet Jam Session Software
+Jamulus - Internet Jam Session Software  
 =======================================
 <img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/>
 

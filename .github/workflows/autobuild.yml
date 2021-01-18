@@ -96,22 +96,6 @@ jobs:
         with:
           submodules:               true
         
-      # Install QT for windows (part of scripts in other os)
-      - name:                       Install Qt (64 Bit)
-        uses:                       jurplel/install-qt-action@v2
-        if:                         matrix.config.building_on_os == 'windows-latest'
-        with:
-          version:                  '5.15.2'
-          dir:                      '${{ github.workspace }}'
-          arch:                     'win64_msvc2019_64'
-      - name:                       Install Qt (32 Bit)
-        uses:                       jurplel/install-qt-action@v2
-        if:                         matrix.config.building_on_os == 'windows-latest'
-        with:
-          version:                  '5.15.2'
-          dir:                      '${{ github.workspace }}'
-          arch:                     'win32_msvc2019'
-        
       # Build
       - name:                       "Build deb (Linux)"
         run:                        sh linux/autorelease_linux.sh ${{ github.workspace }}

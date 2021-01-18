@@ -22,10 +22,10 @@ if fullref.startswith("refs/tags/"):
 elif fullref.startswith("refs/heads/"):
     print('python is Head')
     is_prerelease=True
-    release_title="Pre-Release of {}".format(pushed_name)
+    release_title='Pre-Release of "{}"'.format(pushed_name)
 else:
     print('unknown git-reference type')
-    release_title="Pre-Release of {}".format(pushed_name)
+    release_title='Pre-Release of "{}"'.format(pushed_name)
     is_prerelease=True
     
 print("IS_PRERELEASE::{}".format(is_prerelease)) #debug output 

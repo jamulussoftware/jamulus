@@ -2,7 +2,7 @@
 
 This is a fork with some extra features I need (waiting room,...) and not an official version of Jamulus. 
 
-Jamulus - Internet Jam Session Software
+Jamulus (eduTools fork) - Internet Jam Session Software
 =======================================
 <img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/>
 

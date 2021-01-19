@@ -1,10 +1,10 @@
 ![Homepage picture](src/res/homepage/jamulusbannersmall.png)
 
-This is a fork with some extra features I need (waiting room,...) and not an official version of Jamulus. 
-
 Jamulus (eduTools fork) - Internet Jam Session Software
 =======================================
 <img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/>
+
+This is a fork with some extra features I need (waiting room, ...) and not an official version of Jamulus! Please use the official version from corrados: https://github.com/corrados/jamulus if you don't need my changes!
 
 The Jamulus software enables musicians to perform real-time jam sessions over the internet.
 There is one server running the Jamulus server software which collects the audio data from

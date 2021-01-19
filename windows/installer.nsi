@@ -104,7 +104,7 @@ LangString ASIO_DRIVER_EXPLAIN ${LANG_ENGLISH} \
 LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
      "More information on jamulus.io"
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
-     "https://jamulus.io/wiki/Installation-for-Windows#setting-up-asio4all"
+     "https://jamulus.io/wiki/Installation-for-Windows#asio"
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
      "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like ASIO4ALL now. More information on how to do this is described on jamulus.io and linked on the page you just were on. To return to this page, click 'No'. If you click 'Yes', the installation will continue."
 ; Abort the installer/uninstaller if Jamulus is running

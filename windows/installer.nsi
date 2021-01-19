@@ -89,7 +89,7 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 ;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
-    "Due to a bug, a 64 Bit version of Jamulus might be installed to your 32 Bit Program Files folder. Do you want to remove it before installing this new version (we strongly recommend this)?"
+    "We detected an old version of Jamulus in your 32 Bit Program Files folder. Most likely, this is due to a bug in the old installer of Jamulus. Do you want to automatically remove it before installing this new version (we strongly recommend doing so)?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
@@ -106,7 +106,7 @@ LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
      "https://jamulus.io/wiki/Installation-for-Windows#setting-up-asio4all"
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
-     "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like e.g. ASIO4ALL now (more information on this can is shown on jamulus.io and linked in the page you just were on. To show this page, to show this page, click no which will close this warning). Click yes to continue the installation."
+     "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like ASIO4ALL now. More information on how to do this is described on jamulus.io and linked on the page you just were on. To return to this page, click 'No'. If you click 'Yes', the installation will continue."
 ; Abort the installer/uninstaller if Jamulus is running
 
 !macro _AbortOnRunningApp

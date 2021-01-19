@@ -5,7 +5,7 @@
 !include "MUI2.nsh"      ; Modern UI
 !include "LogicLib.nsh"  ; Logical operators
 !include "Sections.nsh"  ; Support for section selection
-!include nsDialogs.nsh   ; Support custom pages with dialogs
+!include "nsDialogs.nsh" ; Support custom pages with dialogs
 
 ; Compile-time definitions
 !define VC_REDIST32_EXE   "vc_redist.x86.exe"
@@ -106,7 +106,7 @@ LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
      "https://jamulus.io/wiki/Installation-for-Windows#setting-up-asio4all"
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
-     "We couldn't find an ASIO driver on your PC. Jamulus will not work without one. Do you still want to continue?"
+     "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like e.g. ASIO4ALL now (more information on this can is shown on jamulus.io and linked in the page you just were on. To show this page, to show this page, click no which will close this warning). Click yes to continue the installation."
 ; Abort the installer/uninstaller if Jamulus is running
 
 !macro _AbortOnRunningApp

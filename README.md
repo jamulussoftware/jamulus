@@ -1,5 +1,6 @@
 ![Homepage picture](src/res/homepage/jamulusbannersmall.png)
 
+This is a fork with some extra features I need (waiting room,...) and not an official version of Jamulus. 
 
 Jamulus - Internet Jam Session Software
 =======================================

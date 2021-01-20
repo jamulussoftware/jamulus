@@ -89,7 +89,7 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 ;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
-    "We detected an old version of Jamulus in your 32 Bit Program Files folder. Most likely, this is due to a bug in the old installer of Jamulus. Do you want to automatically remove it before installing this new version (we strongly recommend doing so)?"
+    "We detected an old version of Jamulus in your 32 Bit Program Files folder. It is strongly recommended to remove it before installing a new version of Jamulus. Do you want to remove it now?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
@@ -100,9 +100,9 @@ LangString ASIO_DRIVER_HEADER ${LANG_ENGLISH} \
 LangString ASIO_DRIVER_SUB ${LANG_ENGLISH} \
      "To use Jamulus, you need an ASIO driver"
 LangString ASIO_DRIVER_EXPLAIN ${LANG_ENGLISH} \
-     "Jamulus needs an ASIO driver to provide low latency audio. You should install one now:"
+     "Jamulus needs an ASIO driver to provide low latency audio. More information:"
 LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
-     "More information on jamulus.io"
+     "More information about ASIO on jamulus.io"
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
      "https://jamulus.io/wiki/Installation-for-Windows#asio"
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \

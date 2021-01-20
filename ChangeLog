@@ -6,6 +6,8 @@
 
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 
+- improved Windows installer, coded by ann0see and doloopuntil (#792, #841)
+
 
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 

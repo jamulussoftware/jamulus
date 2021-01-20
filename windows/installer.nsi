@@ -5,7 +5,7 @@
 !include "MUI2.nsh"      ; Modern UI
 !include "LogicLib.nsh"  ; Logical operators
 !include "Sections.nsh"  ; Support for section selection
-!include nsDialogs.nsh   ; Support custom pages with dialogs
+!include "nsDialogs.nsh" ; Support custom pages with dialogs
 
 ; Compile-time definitions
 !define VC_REDIST32_EXE   "vc_redist.x86.exe"
@@ -89,7 +89,7 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
 ;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
-    "Due to a bug, a 64 Bit version of Jamulus might be installed to your 32 Bit Program Files folder. Do you want to remove it before installing this new version (we strongly recommend this)?"
+    "We detected an old version of Jamulus in your 32 Bit Program Files folder. It is strongly recommended to remove it before installing a new version of Jamulus. Do you want to remove it now?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
@@ -100,13 +100,13 @@ LangString ASIO_DRIVER_HEADER ${LANG_ENGLISH} \
 LangString ASIO_DRIVER_SUB ${LANG_ENGLISH} \
      "To use Jamulus, you need an ASIO driver"
 LangString ASIO_DRIVER_EXPLAIN ${LANG_ENGLISH} \
-     "Jamulus needs an ASIO driver to provide low latency audio. You should install one now:"
+     "Jamulus needs an ASIO driver to provide low latency audio. More information:"
 LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
-     "More information on jamulus.io"
+     "More information about ASIO on jamulus.io"
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
-     "https://jamulus.io/wiki/Installation-for-Windows#setting-up-asio4all"
+     "https://jamulus.io/wiki/Installation-for-Windows#asio"
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
-     "We couldn't find an ASIO driver on your PC. Jamulus will not work without one. Do you still want to continue?"
+     "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like ASIO4ALL now. More information on how to do this is described on jamulus.io and linked on the page you just were on. To return to this page, click 'No'. If you click 'Yes', the installation will continue."
 ; Abort the installer/uninstaller if Jamulus is running
 
 !macro _AbortOnRunningApp

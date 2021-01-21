@@ -32,6 +32,14 @@
 #include "soundbase.h"
 #include "global.h"
 
+#ifdef WIN32
+// copy the ASIO SDK in the llcon/windows directory: "llcon/windows/ASIOSDK2" to
+// get it work
+#    include "asiosys.h"
+#    include "asio.h"
+#    include "asiodrivers.h"
+#endif // WIN32
+
 #include <portaudio.h>
 
 class CSound : public CSoundBase
@@ -47,6 +55,15 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
+
+#ifdef WIN32
+    // Portaudio's function for this takes a device index as a parameter.  So it
+    // needs to reopen ASIO in order to get the right driver loaded.  Because of
+    // that it also requires passing HWND of the main window.  This is fairly
+    // awkward, so just call the ASIO function directly for the currently loaded
+    // driver.
+    virtual void OpenDriverSetup() { ASIOControlPanel(); }
+#endif // WIN32
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString, bool );

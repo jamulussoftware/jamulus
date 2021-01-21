@@ -124,6 +124,7 @@ jobs:
           asset_path:               ${{ matrix.config.asset_path }}
           asset_name:               ${{ matrix.config.asset_name }}
           asset_content_type:       application/octet-stream
+          
   ## Builds a Linux flatpack ##
   flatpak-builder:
     name: "Flatpak Builder"
@@ -134,6 +135,9 @@ jobs:
       options: --privileged
     steps:
     - uses: actions/checkout@v2
+    - name:                    Change branch name in manifest
+      run:                     python3 io.jamulus.Jamulus.prepare.py ${{ GITHUB_SHA }}
+      working-directory:       ./distributions/
     - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:
         bundle: "io.jamulus.Jamulus.flatpak"

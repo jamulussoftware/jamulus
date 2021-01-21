@@ -136,7 +136,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name:                    Change branch name in manifest
-      run:                     python3 io.jamulus.Jamulus.prepare.py ${{ GITHUB_SHA }}
+      run:                     python3 io.jamulus.Jamulus.prepare.py $GITHUB_SHA
       working-directory:       ./distributions/
     - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:

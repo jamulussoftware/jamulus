@@ -1,0 +1,11 @@
+name: 'Run Android-Build-Docker'
+description: 'Run Android-Build-Docker'
+#outputs:
+#  time: 
+#    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: ./Dockerfile
+  args:
+    - ${{ inputs.who-to-greet }}
+    - CONFIG=release

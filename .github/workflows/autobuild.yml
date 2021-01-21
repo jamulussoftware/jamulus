@@ -30,7 +30,7 @@ jobs:
            run:                     sh ${{ github.workspace }}/.github/actions_scripts/get_release_vars.sh ${{ github.workspace }}
            id:                      jamulus-build-vars
 
-         # remove tag "latest" from that release
+         # remove release, if it exists (with this releasetag)
          - name:                    Remove release, if existing (for latest and branches)
            continue-on-error:       true
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
@@ -39,7 +39,7 @@ jobs:
              tag_name:              ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
            env:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
-         # create release (empty, filled by next job)
+         # create release (empty, filled by next jobs)
          - name:                    'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
            id:                      create_release_step
            uses:                    actions/create-release@v1

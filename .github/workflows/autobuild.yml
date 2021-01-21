@@ -4,10 +4,10 @@ on:
   push:
     tags:
       - "r*"
-    #  - latest
-    #branches:
-    #  - "*"
-    #  - master         # could be restricted to master, if all branches take too much build time
+    branches:
+      - "*"
+    #  - master         
+    #  - *autobuild*
   workflow_dispatch:
 name:                               Publish Release
 jobs:

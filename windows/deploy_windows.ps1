@@ -26,7 +26,7 @@ $ErrorActionPreference = "Stop"
 
 
 # Execute native command with errorlevel handling
-Function Execute-Native-Command {
+Function Invoke-Native-Command {
     Param(
         [string] $Command,
         [string[]] $Arguments
@@ -52,27 +52,27 @@ Function Clean-Build-Environment
 
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
- 
+
     Param (
         [Parameter(Mandatory=$true)]
         [String]$URL
     )
- 
+
     $request = [System.Net.WebRequest]::Create($url)
     $request.AllowAutoRedirect=$false
     $response=$request.GetResponse()
- 
+
     if ($response.StatusCode -eq "Found")
     {
         $response.GetResponseHeader("Location")
     }
 }
 
-function Load-Module ($m) { # see https://stackoverflow.com/a/51692402
+function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402
 
     # If module is imported say that and do nothing
     if (Get-Module | Where-Object {$_.Name -eq $m}) {
-        write-host "Module $m is already imported."
+        Write-Output "Module $m is already imported."
     }
     else {
 
@@ -90,7 +90,7 @@ function Load-Module ($m) { # see https://stackoverflow.com/a/51692402
             else {
 
                 # If module is not imported, not available and not in online gallery then abort
-                write-host "Module $m not imported, not available and not in online gallery, exiting."
+                Write-Output "Module $m not imported, not available and not in online gallery, exiting."
                 EXIT 1
             }
         }
@@ -133,7 +133,7 @@ Function Install-Dependencies
     if (-not (Get-PackageProvider -Name nuget).Name -eq "nuget") {
       Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     }
-    Load-Module -m "VSSetup"
+    Initialize-Module-Here -m "VSSetup"
     Install-Dependency -Uri $AsioSDKUrl `
         -Name $AsioSDKName -Destination "ASIOSDK2"
     Install-Dependency -Uri $NsisUrl `
@@ -143,7 +143,7 @@ Function Install-Dependencies
 }
 
 # Setup environment variables and build tool paths
-Function Setup-Build-Environment
+Function Initialize-Build-Environment
 {
     param(
         [Parameter(Mandatory=$true)]
@@ -201,7 +201,7 @@ Function Setup-Build-Environment
 
     # Import environment variables set by vcvarsXX.bat into current scope
     $EnvDump = [System.IO.Path]::GetTempFileName()
-    Execute-Native-Command -Command "cmd" `
+    Invoke-Native-Command -Command "cmd" `
         -Arguments ("/c", "`"$VcVarsBin`" && set > `"$EnvDump`"")
 
     foreach ($_ in Get-Content -Path $EnvDump)
@@ -225,18 +225,18 @@ Function Build-App
         [string] $BuildArch
     )
 
-    Execute-Native-Command -Command "$Env:QtQmakePath" `
+    Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
         "-o", "$BuildPath\Makefile")
 
     Set-Location -Path $BuildPath
-    Execute-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
-    Execute-Native-Command -Command "$Env:QtWinDeployPath" `
+    Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$DeployPath\$BuildArch",
         "$BuildPath\$BuildConfig\$AppName.exe")
 
     Move-Item -Path "$BuildPath\$BuildConfig\$AppName.exe" -Destination "$DeployPath\$BuildArch" -Force
-    Execute-Native-Command -Command "nmake" -Arguments ("clean")
+    Invoke-Native-Command -Command "nmake" -Arguments ("clean")
     Set-Location -Path $RootPath
 }
 
@@ -251,7 +251,7 @@ function Build-App-Variants
     foreach ($_ in ("x86_64", "x86"))
     {
         $OriginalEnv = Get-ChildItem Env:
-        Setup-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
+        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
         Build-App -BuildConfig "release" -BuildArch $_
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
@@ -269,7 +269,7 @@ Function Build-Installer
         }
     }
 
-    Execute-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+    Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
         -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
         "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
         "$WindowsPath\installer.nsi")

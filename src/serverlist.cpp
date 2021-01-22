@@ -314,7 +314,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             if ( strVersion.isEmpty() ||
                  QVersionNumber::compare ( QVersionNumber::fromString ( strMinServerVersion ), QVersionNumber::fromString ( strVersion ) ) > 0 )
             {
-                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
+                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_VERSION_TOO_OLD );
                 return; // leave function early, i.e., we do not register this server
             }
 #endif

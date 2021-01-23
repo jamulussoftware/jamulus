@@ -21,6 +21,13 @@ if len(sys.argv) == 1:
     repo_path_on_disk = os.environ['GITHUB_WORKSPACE'] 
     release_version_name = get_jamulus_version(repo_path_on_disk)
     
+    os.system('perl "{}"/.github/actions_scripts/getChangelog.pl "{}"/ChangeLog "{}" > "{}"/autoLatestChangelog.md'.format(
+        os.environ['GITHUB_WORKSPACE'],
+        os.environ['GITHUB_WORKSPACE'],
+        release_version_name,
+        os.environ['GITHUB_WORKSPACE']
+    ))
+
 elif len(sys.argv) == 4:
     #fullref=sys.argv[1]
     #pushed_name=sys.argv[2]

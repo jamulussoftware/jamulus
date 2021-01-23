@@ -19,13 +19,12 @@ def get_jamulus_version(repo_path_on_disk):
 
 if len(sys.argv) == 1:
     repo_path_on_disk = os.environ['GITHUB_WORKSPACE'] 
-    jamulus_version = get_jamulus_version(repo_path_on_disk)
+    release_version_name = get_jamulus_version(repo_path_on_disk)
     
 elif len(sys.argv) == 4:
     #fullref=sys.argv[1]
     #pushed_name=sys.argv[2]
-    jamulus_version=sys.argv[3]
-    release_version_name = jamulus_version
+    release_version_name = sys.argv[3]
 else:
     print('Expecing 4 arguments, 1 script path and 3 parameters')
     print('Number of arguments:', len(sys.argv), 'arguments.')

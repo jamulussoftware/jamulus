@@ -32,7 +32,7 @@ jobs:
 
          # remove release, if it exists (with this releasetag)
          - name:                    Remove release, if existing (for latest and branches)
-           if:                      ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE  == "true" }}
+           if:                      ${{ contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true') }}
            continue-on-error:       true
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
            with:

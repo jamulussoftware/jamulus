@@ -38,7 +38,7 @@
 ##
 #############################################################################
 
-## https://code.qt.io/cgit/qbs/qbs.git/tree/scripts/install-qt.sh
+																												  
 
 set -eu
 
@@ -225,6 +225,22 @@ if ${INSTALLATION_IS_VALID}; then
     exit 0
 fi
 
+MIRRORS="\
+    http://download.qt.io \
+    http://ftp.acc.umu.se/mirror/qt.io/qtproject \
+    http://qt.mirrors.tds.net/qt \
+    http://ftp.fau.de/qtproject \
+"
+
+for MIRROR in ${MIRRORS}; do
+    if curl "${MIRROR}/online" -s -f -o /dev/null; then
+        break;
+    else
+        echo "Server ${MIRROR} not availabe. Trying next alternative..." >&2
+        MIRROR=""
+    fi
+done
+
 DOWNLOAD_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'install-qt'`
 
 #
@@ -233,13 +249,13 @@ DOWNLOAD_DIR=`mktemp -d 2>/dev/null || mktemp -d -t 'install-qt'`
 function compute_url(){
     local COMPONENT=$1
     local CURL="curl -s -L"
-    local BASE_URL="https://mirrors.ocf.berkeley.edu/qt/online/qtsdkrepository/${HOST_OS}/${TARGET_PLATFORM}"
+    local BASE_URL="${MIRROR}/online/qtsdkrepository/${HOST_OS}/${TARGET_PLATFORM}"
     local ANDROID_ARCH=$(echo ${TOOLCHAIN##android_})
 
     if [[ "${COMPONENT}" =~ "qtcreator" ]]; then
 
         SHORT_VERSION=${VERSION%??}
-        BASE_URL="https://mirrors.ocf.berkeley.edu/qt/official_releases/qtcreator"
+        BASE_URL="${MIRROR}/official_releases/qtcreator"
         REMOTE_PATH="${SHORT_VERSION}/${VERSION}/installer_source/${HOST_OS}/qtcreator.7z"
         echo "${BASE_URL}/${REMOTE_PATH}"
         return 0
@@ -304,7 +320,7 @@ for COMPONENT in ${COMPONENTS}; do
             SUBDIR="${TOOLCHAIN}"
         fi
 
-        if [ "${TARGET_PLATFORM}" == "android" ] && [ ! "${VERSION}" \< "6.0.0" ]; then
+        if [ "${TARGET_PLATFORM}" == "android" ] && [ ! "${QT_VERSION}" \< "6.0.0" ]; then
             CONF_FILE="${INSTALL_DIR}/${VERSION}/${SUBDIR}/bin/target_qt.conf"
             sed -i "s|target|../$TOOLCHAIN|g" "${CONF_FILE}"
             sed -i "/HostPrefix/ s|$|gcc_64|g" "${CONF_FILE}"

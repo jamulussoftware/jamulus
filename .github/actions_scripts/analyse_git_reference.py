@@ -2,25 +2,41 @@
 
 import sys
 import os
-if len(sys.argv) != 4:
+
+def get_jamulus_version(repo_path_on_disk):
+    jamulus_version = ""
+    with open (repo_path_on_disk + '/Jamulus.pro','r') as f:
+        pro_content = f.read()
+    pro_content = pro_content.replace('\r','')
+    pro_lines = pro_content.split('\n')
+    for line in pro_lines:
+        line = line.strip()
+        VERSION_LINE_STARTSWITH = 'VERSION = '
+        if line.startswith(VERSION_LINE_STARTSWITH):
+            jamulus_version = line[len(VERSION_LINE_STARTSWITH):]
+    return jamulus_version
+
+
+if len(sys.argv) == 1:
+    repo_path_on_disk = os.environ['GITHUB_WORKSPACE'] 
+    jamulus_version = get_jamulus_version(repo_path_on_disk)
+    
+elif len(sys.argv) == 4:
+    #fullref=sys.argv[1]
+    #pushed_name=sys.argv[2]
+    jamulus_version=sys.argv[3]
+    release_version_name = jamulus_version
+else:
     print('Expecing 4 arguments, 1 script path and 3 parameters')
     print('Number of arguments:', len(sys.argv), 'arguments.')
     print('Argument List:', str(sys.argv))
     raise Exception("wrong agruments")
     
-print('GITHUB_REF', os.environ['GITHUB_REF'])
 fullref=os.environ['GITHUB_REF']
 reflist = fullref.split("/", 2)
 pushed_name = reflist[2]
-print('fullref', fullref)
-print('pushed_name', pushed_name)
-print('reflist', reflist)
 
 
-fullref=sys.argv[1]
-pushed_name=sys.argv[2]
-jamulus_version=sys.argv[3]
-release_version_name = jamulus_version
 
 if fullref.startswith("refs/tags/"):
     print('this reference is a Tag')
@@ -53,7 +69,7 @@ elif fullref.startswith("refs/heads/"):
     release_title='Pre-Release of "{}"'.format(pushed_name)
     release_tag = "releasetag/"+pushed_name #better not use pure pushed name, creates a tag with the name of the branch, leads to ambiguous references => can not push to this branch easily
 else:
-    print('unknown git-reference type')
+    print('unknown git-reference type: ' + fullref)
     publish_to_release = False
     is_prerelease = True
     release_title='Pre-Release of "{}"'.format(pushed_name)

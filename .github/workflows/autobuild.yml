@@ -27,7 +27,7 @@ jobs:
          # Set variables
          # Determine release / pre-release
          - name:                    Get Jamulus build info, determine actions & variables
-           run:                     sh ${{ github.workspace }}/.github/actions_scripts/get_release_vars.sh ${{ github.workspace }}
+           run:                     python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
            id:                      jamulus-build-vars
 
          # remove release, if it exists (with this releasetag)

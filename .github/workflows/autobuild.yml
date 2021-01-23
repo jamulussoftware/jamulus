@@ -42,7 +42,7 @@ jobs:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
          # create release (empty, filled by next jobs)
          - name:                    'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
-           if:                      ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }} == "true"
+           if:                      false
            id:                      create_release_step
            uses:                    actions/create-release@v1
            env:

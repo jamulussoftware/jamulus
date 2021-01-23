@@ -1,6 +1,7 @@
 #### Automatically build and upload releases to GitHub ####
 
 on:
+  workflow_dispatch:
   push:
     tags:
     #  - "*"
@@ -8,7 +9,6 @@ on:
     #  - "*"
     #  - master         
     #  - *autobuild*
-    workflow_dispatch:
 name:                               Publish Release
 jobs:
   create_release:

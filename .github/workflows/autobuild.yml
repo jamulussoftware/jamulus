@@ -5,7 +5,7 @@ on:
     tags:
       - "r*"
     branches:
-      - "*"
+    #  - "*"
     #  - master         
     #  - *autobuild*
   workflow_dispatch:

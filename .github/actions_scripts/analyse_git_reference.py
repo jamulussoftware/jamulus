@@ -20,7 +20,7 @@ if fullref.startswith("refs/tags/"):
         is_prerelease = True
     else:
         print('this reference is a Release-Tag')
-        is_prerelease = True
+        is_prerelease = False
     if pushed_name == "latest":
         print('this reference is a Latest-Tag')
         release_version_name = "latest"

@@ -32,7 +32,7 @@ jobs:
 
          # remove release, if it exists (with this releasetag)
          - name:                    Remove release, if existing (for latest and branches)
-           if:                      ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
+           if:                      ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }} == "true"
            continue-on-error:       true
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
            with:
@@ -42,7 +42,7 @@ jobs:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
          # create release (empty, filled by next jobs)
          - name:                    'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
-           if:                      ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
+           if:                      ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }} == "true"
            id:                      create_release_step
            uses:                    actions/create-release@v1
            env:
@@ -117,7 +117,7 @@ jobs:
 
       # Upload release
       - name:                       Upload Release Asset - Tag
-        if:                         ${{ needs.create_release.outputs.PUBLISH_TO_RELEASE }}
+        if:                         ${{ needs.create_release.outputs.PUBLISH_TO_RELEASE }} == "true"
         id:                         upload-release-asset
         uses:                       actions/upload-release-asset@v1
         env:

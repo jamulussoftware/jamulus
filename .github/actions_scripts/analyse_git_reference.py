@@ -1,8 +1,19 @@
 #!/usr/bin/python3
 
+#
+# on a triggered github workflow, this file does the decisions and variagles like
+#   - shall the build be released (otherwise just run builds to check if there are errors)
+#   - is it a prerelease
+#   - title, tag etc of release_tag
+#
+# see the last lines of the file to see what variables are set
+#
+
+
 import sys
 import os
 
+# get the jamulus version from the .pro file
 def get_jamulus_version(repo_path_on_disk):
     jamulus_version = ""
     with open (repo_path_on_disk + '/Jamulus.pro','r') as f:
@@ -18,44 +29,43 @@ def get_jamulus_version(repo_path_on_disk):
 
 
 if len(sys.argv) == 1:
-    repo_path_on_disk = os.environ['GITHUB_WORKSPACE'] 
-    release_version_name = get_jamulus_version(repo_path_on_disk)
-    
-    os.system('perl "{}"/.github/actions_scripts/getChangelog.pl "{}"/ChangeLog "{}" > "{}"/autoLatestChangelog.md'.format(
-        os.environ['GITHUB_WORKSPACE'],
-        os.environ['GITHUB_WORKSPACE'],
-        release_version_name,
-        os.environ['GITHUB_WORKSPACE']
-    ))
-
-elif len(sys.argv) == 4:
-    #fullref=sys.argv[1]
-    #pushed_name=sys.argv[2]
-    release_version_name = sys.argv[3]
+   pass
 else:
-    print('Expecing 4 arguments, 1 script path and 3 parameters')
+    print('wrong number of arguments')
     print('Number of arguments:', len(sys.argv), 'arguments.')
     print('Argument List:', str(sys.argv))
     raise Exception("wrong agruments")
     
+# derive workspace-path
+repo_path_on_disk = os.environ['GITHUB_WORKSPACE'] 
+
+# derive git related variables
+release_version_name = get_jamulus_version(repo_path_on_disk)
 fullref=os.environ['GITHUB_REF']
 reflist = fullref.split("/", 2)
 pushed_name = reflist[2]
 
 
+# run Changelog-script
+os.system('perl "{}"/.github/actions_scripts/getChangelog.pl "{}"/ChangeLog "{}" > "{}"/autoLatestChangelog.md'.format(
+    os.environ['GITHUB_WORKSPACE'],
+    os.environ['GITHUB_WORKSPACE'],
+    release_version_name,
+    os.environ['GITHUB_WORKSPACE']
+))
 
+# decisions about release, prerelease, title and tag
 if fullref.startswith("refs/tags/"):
     print('this reference is a Tag')
-    publish_to_release = True
     release_tag = pushed_name # tag already exists
     release_title="Release {}  ({})".format(release_version_name, pushed_name)
     if pushed_name.startswith("r"):
+        publish_to_release = True
         if "beta" in pushed_name:
             print('this reference is a Beta-Release-Tag')
             is_prerelease = True
         else:
             print('this reference is a Release-Tag')
-            publish_to_release = True
             is_prerelease = False
     else:
         print('this reference is a Non-Release-Tag')
@@ -81,10 +91,12 @@ else:
     release_title='Pre-Release of "{}"'.format(pushed_name)
     release_tag = "releasetag/"+pushed_name #avoid ambiguity in references in all cases
 
+#helper function: set github variable and print it to console
 def set_github_variable(varname, varval):
     print("{}='{}'".format(varname, varval)) #console output
     print("::set-output name={}::{}".format(varname, varval))
 
+#set github-available variables
 set_github_variable("PUBLISH_TO_RELEASE", str(publish_to_release).lower())
 set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())
 set_github_variable("RELEASE_TITLE", release_title)

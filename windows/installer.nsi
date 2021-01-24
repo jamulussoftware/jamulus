@@ -72,42 +72,11 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
 
-; Supported languages configuration - languages other than English are disabled for now
-; Additional languages can be added below, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
-!insertmacro MUI_LANGUAGE "English" ; The first language is the default
-; !insertmacro MUI_LANGUAGE "Italian"
+; Supported languages configuration
+; Additional languages can be added in the file installerlng.nsi in the translate folder, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
 
-LangString DESKTOP_SET_SHORTCUT ${LANG_ENGLISH} \
-    "Create Desktop shortcut"
-LangString INVALID_FOLDER_MSG ${LANG_ENGLISH} \
-    "The destination folder already exists. Please enter a new destination folder."
-; LangString INVALID_FOLDER_MSG ${LANG_ITALIAN} \
-;   "La cartella di destinazione esiste già. Selezionare una nuova cartella di destinazione."
+!include "translate\installerlng.nsi"
 
-LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
-    "${APP_NAME} is running. Please close it and run the setup again."
-; LangString RUNNING_APP_MSG ${LANG_ITALIAN} \
-;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
-
-LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
-    "We detected an old version of Jamulus in your 32 Bit Program Files folder. It is strongly recommended to remove it before installing a new version of Jamulus. Do you want to remove it now?"
-
-LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
-    "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
-LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
-     "FATAL: THE UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
-LangString ASIO_DRIVER_HEADER ${LANG_ENGLISH} \
-     "ASIO driver"
-LangString ASIO_DRIVER_SUB ${LANG_ENGLISH} \
-     "To use Jamulus, you need an ASIO driver"
-LangString ASIO_DRIVER_EXPLAIN ${LANG_ENGLISH} \
-     "Jamulus needs an ASIO driver to provide low latency audio. More information:"
-LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
-     "More information about ASIO on jamulus.io"
-LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
-     "https://jamulus.io/wiki/Installation-for-Windows#asio"
-LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
-     "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like ASIO4ALL now. More information on how to do this is described on jamulus.io and linked on the page you just were on. To return to this page, click 'No'. If you click 'Yes', the installation will continue."
 ; Abort the installer/uninstaller if Jamulus is running
 
 !macro _AbortOnRunningApp

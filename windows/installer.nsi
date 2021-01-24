@@ -19,6 +19,8 @@
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define APP_UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 
+!define SF_USELECTED  0
+
 ; General
 SetCompressor         bzip2  ; Compression mode
 Unicode               true   ; Support all languages via Unicode
@@ -102,6 +104,7 @@ Var Button
 Var bInstallDtIcon
 
 ; Installer
+
 !macro InstallApplication buildArch
     !define prefix "${DEPLOY_PATH}\${buildArch}"
     !tempfile files
@@ -169,6 +172,71 @@ Var bInstallDtIcon
 
 !macroend
 
+!macro SecSelect SecId ; See https://nsis.sourceforge.io/Managing_Sections_on_Runtime
+    Push $0
+    IntOp $0 ${SF_SELECTED} | ${SF_RO}
+    SectionSetFlags ${SecId} $0
+    SectionSetInstTypes ${SecId} 1
+    Pop $0
+!macroend
+
+!define SelectSection '!insertmacro SecSelect'
+
+!macro SecUnSelect SecId
+  Push $0
+  IntOp $0 ${SF_USELECTED} | ${SF_RO}
+  SectionSetFlags ${SecId} $0
+  SectionSetText  ${SecId} ""
+  Pop $0
+!macroend
+
+!define UnSelectSection '!insertmacro SecUnSelect'
+
+Section "Install_64Bit" INST_64
+    ; check if old, wrongly installed Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
+    IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" 0 continueinstall
+
+        MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
+            goto removeold
+
+        idontcare: ; Clicked no
+            MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
+            goto removeold
+
+        removeold: ; Remove it
+            ExecWait '"$PROGRAMFILES32\Jamulus\Uninstall.exe" /S' $0
+            ${IfNot} $0 == 0
+                MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
+                goto quit
+            ${EndIf}
+            goto continueinstall
+
+        quit:
+            Abort
+
+    continueinstall:
+
+    ; Install the main application
+    !insertmacro InstallApplication x86_64
+    !insertmacro SetupShortcuts
+
+    ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
+    ExecWait "$\"$INSTDIR\${VC_REDIST64_EXE}$\" /q /norestart"
+    Delete   "$INSTDIR\${VC_REDIST64_EXE}"
+SectionEnd
+
+Section "Install_32Bit" INST_32
+
+    ; Install the main application
+    !insertmacro InstallApplication x86
+    !insertmacro SetupShortcuts
+
+    ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
+    ExecWait "$\"$INSTDIR\${VC_REDIST32_EXE}$\" /q /norestart"
+    Delete   "$INSTDIR\${VC_REDIST32_EXE}"
+
+SectionEnd
+
 Function .onInit
 
     ; Set up registry access, installation folder and installer section for current architecture
@@ -179,6 +247,11 @@ Function .onInit
         ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
+
+        ; enable the 64 bit install section
+        ${SelectSection} ${INST_64}
+        ${UnSelectSection} ${INST_32}
+
     ${Else}
         SetRegView      32
 
@@ -187,6 +260,9 @@ Function .onInit
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES32\${APP_NAME}"
 
+        ; enable the 32 bit install section
+        ${SelectSection} ${INST_32}
+        ${UnSelectSection} ${INST_64}
     ${EndIf}
 
     ; Install for all users
@@ -213,54 +289,6 @@ Function ValidateDestinationFolder
     ${endIf}
 
 FunctionEnd
-
-Section Install
-        ${If} ${RunningX64} ; could be handled with disabled sections probably
-
-            ; check if old, wrongly installed Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
-            IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" 0 continueinstall
-
-                MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
-                    goto removeold
-
-                idontcare: ; Clicked no
-                    MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
-                    goto removeold
-
-                removeold: ; Remove it
-                    ExecWait '"$PROGRAMFILES32\Jamulus\Uninstall.exe" /S' $0
-                    ${IfNot} $0 == 0
-                        MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
-                        goto quit
-                    ${EndIf}
-                    goto continueinstall
-
-                quit:
-                    Abort
-
-            continueinstall:
-
-            ; Install the main application
-            !insertmacro InstallApplication x86_64
-            !insertmacro SetupShortcuts
-
-            ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
-            ExecWait "$\"$INSTDIR\${VC_REDIST64_EXE}$\" /q /norestart"
-            Delete   "$INSTDIR\${VC_REDIST64_EXE}"
-
-        ${Else}
-
-            ; Install the main application
-            !insertmacro InstallApplication x86
-            !insertmacro SetupShortcuts
-
-            ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
-            ExecWait "$\"$INSTDIR\${VC_REDIST32_EXE}$\" /q /norestart"
-            Delete   "$INSTDIR\${VC_REDIST32_EXE}"
-
-        ${EndIf}
-
-SectionEnd
 
 Function FinishPage.Show ; set the user choices if they were remembered
 

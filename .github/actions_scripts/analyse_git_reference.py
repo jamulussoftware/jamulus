@@ -25,7 +25,8 @@ def get_jamulus_version(repo_path_on_disk):
         VERSION_LINE_STARTSWITH = 'VERSION = '
         if line.startswith(VERSION_LINE_STARTSWITH):
             jamulus_version = line[len(VERSION_LINE_STARTSWITH):]
-    return jamulus_version
+            return jamulus_version
+    return "UNKNOWN_VERSION"
 
 
 if len(sys.argv) == 1:

@@ -1,4 +1,4 @@
-VERSION = 3.6.2
+VERSION = 3.6.2dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -8,7 +8,12 @@ contains(CONFIG, "noupcasename") {
 
 #allow detailed version info for intermediate builds
 contains(CONFIG, "official_release_version") {
+	#for creating a new release:
+	# - count the VERSION up 
+	# - create a new commit
+	# - run build with "official_release_version" on it
     message(building an official release version)
+	VERSION = ($$replace(VERSION, dev, ))
 } else {
     GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
     VERSION = "$$VERSION"-$$GIT_DESCRIPTION

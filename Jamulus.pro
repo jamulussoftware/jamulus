@@ -12,8 +12,7 @@ contains(CONFIG, "official_release_version") {
 } else {
     GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
     VERSION = "$$VERSION"-$$GIT_DESCRIPTION
-    TARGET = "$$TARGET"-$$VERSION
-    message(building an intermediate version: $$TARGET)
+    message(building an intermediate version: $$VERSION)
 }
 
 

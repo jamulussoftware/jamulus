@@ -2,7 +2,9 @@
 
 
 
-### 3.6.2dev <- NOTE: the release version number will be 3.6.3 ###
+### 3.6.2git <- NOTE: the release version number will be 3.7.0 ###
+
+- introduced new server lists: Any Genre 2, Choral/Barbershop (#875)
 
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 

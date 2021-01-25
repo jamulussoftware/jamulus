@@ -10,6 +10,8 @@
 
 - improved Windows installer, coded by ann0see and doloopuntil (#792, #841)
 
+- support http links in the chat dialog, coded by hoffie (#879)
+
 
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 

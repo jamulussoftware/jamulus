@@ -469,10 +469,12 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
         "<p>Kris Raney (<a href=""https://github.com/kraney"">kraney</a>)</p>"
         "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
+        "<p>nefarius2001 (<a href=""https://github.com/nefarius2001"">nefarius2001</a>)</p>"
         "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
         "<p>Julian Santander (<a href=""https://github.com/j-santander"">j-santander</a>)</p>"
         "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
         "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
+        "<p>Christian Hoffmann (<a href=""https://github.com/hoffie"">hoffie</a>)</p>"
         "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
         "<p>James (<a href=""https://github.com/jdrage"">jdrage</a>)</p>"
         "<p>ranfdev (<a href=""https://github.com/ranfdev"">ranfdev</a>)</p>"
@@ -1040,10 +1042,12 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
     switch ( eCentralServerAddressType )
     {
     case AT_CUSTOM:               return strCentralServerAddress;
-    case AT_ALL_GENRES:           return CENTSERV_ALL_GENRES;
+    case AT_ANY_GENRE2:           return CENTSERV_ANY_GENRE2;
+    case AT_ANY_GENRE3:           return CENTSERV_ANY_GENRE3;
     case AT_GENRE_ROCK:           return CENTSERV_GENRE_ROCK;
     case AT_GENRE_JAZZ:           return CENTSERV_GENRE_JAZZ;
     case AT_GENRE_CLASSICAL_FOLK: return CENTSERV_GENRE_CLASSICAL_FOLK;
+    case AT_GENRE_CHORAL:         return CENTSERV_GENRE_CHORAL;
     default:                      return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }

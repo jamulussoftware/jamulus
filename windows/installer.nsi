@@ -19,6 +19,8 @@
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define APP_UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 
+!define SF_USELECTED  0
+
 ; General
 SetCompressor         bzip2  ; Compression mode
 Unicode               true   ; Support all languages via Unicode
@@ -72,41 +74,11 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_UNPAGE_FINISH
 
-; Supported languages configuration - languages other than English are disabled for now
-; Additional languages can be added below, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
-!insertmacro MUI_LANGUAGE "English" ; The first language is the default
-; !insertmacro MUI_LANGUAGE "Italian"
-LangString DESKTOP_SET_SHORTCUT ${LANG_ENGLISH} \
-    "Create Desktop shortcut"
-LangString INVALID_FOLDER_MSG ${LANG_ENGLISH} \
-    "The destination folder already exists. Please enter a new destination folder."
-; LangString INVALID_FOLDER_MSG ${LANG_ITALIAN} \
-;   "La cartella di destinazione esiste già. Selezionare una nuova cartella di destinazione."
+; Supported languages configuration
+; Additional languages can be added in the file installerlng.nsi in the translate folder, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
 
-LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
-    "${APP_NAME} is running. Please close it and run the setup again."
-; LangString RUNNING_APP_MSG ${LANG_ITALIAN} \
-;   "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
+!include "translate\installerlng.nsi"
 
-LangString OLD_WRONG_VER_FOUND ${LANG_ENGLISH} \
-    "We detected an old version of Jamulus in your 32 Bit Program Files folder. It is strongly recommended to remove it before installing a new version of Jamulus. Do you want to remove it now?"
-
-LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
-    "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
-LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
-     "FATAL: THE UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
-LangString ASIO_DRIVER_HEADER ${LANG_ENGLISH} \
-     "ASIO driver"
-LangString ASIO_DRIVER_SUB ${LANG_ENGLISH} \
-     "To use Jamulus, you need an ASIO driver"
-LangString ASIO_DRIVER_EXPLAIN ${LANG_ENGLISH} \
-     "Jamulus needs an ASIO driver to provide low latency audio. More information:"
-LangString ASIO_DRIVER_MORE_INFO ${LANG_ENGLISH} \
-     "More information about ASIO on jamulus.io"
-LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
-     "https://jamulus.io/wiki/Installation-for-Windows#asio"
-LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
-     "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like ASIO4ALL now. More information on how to do this is described on jamulus.io and linked on the page you just were on. To return to this page, click 'No'. If you click 'Yes', the installation will continue."
 ; Abort the installer/uninstaller if Jamulus is running
 
 !macro _AbortOnRunningApp
@@ -130,7 +102,9 @@ Var Button
 ; Define user choices
 
 Var bInstallDtIcon
+
 ; Installer
+
 !macro InstallApplication buildArch
     !define prefix "${DEPLOY_PATH}\${buildArch}"
     !tempfile files
@@ -142,13 +116,15 @@ Var bInstallDtIcon
     ; Find target files
     !system 'cmd.exe /v /c "for /r "${prefix}" %f in (*.*) do \
         @(set "_f=%f" && echo File "/oname=$INSTDIR\!_f:${prefix}\=!" "!_f!" >> "${files}")"'
-    ; to allow jumping in macros, NSIS reccomends to define unique IDs for labels https://nsis.sourceforge.io/Tutorial:_Using_labels_in_macro%27s
+
+    ; to allow jumping in macros, NSIS recommends to define unique IDs for labels https://nsis.sourceforge.io/Tutorial:_Using_labels_in_macro%27s
     !define UniqueID ${__LINE__}
 
     InitPluginsDir ; see https://stackoverflow.com/questions/24595887/waiting-for-nsis-uninstaller-to-finish-in-nsis-installer-either-fails-or-the-uni
     IfFileExists "$INSTDIR\${UNINSTALL_EXE}" 0 continue_${UniqueID}
 
-        CreateDirectory "$pluginsdir\unold" ; Make sure plugins do not conflict with a old uninstaller 
+        ; Make sure plugins do not conflict with a old uninstaller
+        CreateDirectory "$pluginsdir\unold"
         CopyFiles /SILENT /FILESONLY "$INSTDIR\${UNINSTALL_EXE}" "$pluginsdir\unold"
         ExecWait '"$pluginsdir\unold\${UNINSTALL_EXE}" /S _?=$INSTDIR' $0
 
@@ -167,6 +143,7 @@ Var bInstallDtIcon
     ; Add the redistribution license
     File "/oname=$INSTDIR\COPYING" "${ROOT_PATH}\COPYING"
     File "/oname=$INSTDIR\servericon.ico" "${SERVER_ICON}"
+
     ; Cleanup
     !delfile "${files}"
     !undef files
@@ -190,10 +167,75 @@ Var bInstallDtIcon
     ; Add the Start Menu shortcuts
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"           "$INSTDIR\${APP_EXE}"
-    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\servericon.ico"  
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\servericon.ico"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Uninstall.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
 !macroend
+
+!macro SecSelect SecId ; See https://nsis.sourceforge.io/Managing_Sections_on_Runtime
+    Push $0
+    IntOp $0 ${SF_SELECTED} | ${SF_RO}
+    SectionSetFlags ${SecId} $0
+    SectionSetInstTypes ${SecId} 1
+    Pop $0
+!macroend
+
+!define SelectSection '!insertmacro SecSelect'
+
+!macro SecUnSelect SecId
+  Push $0
+  IntOp $0 ${SF_USELECTED} | ${SF_RO}
+  SectionSetFlags ${SecId} $0
+  SectionSetText  ${SecId} ""
+  Pop $0
+!macroend
+
+!define UnSelectSection '!insertmacro SecUnSelect'
+
+Section "Install_64Bit" INST_64
+    ; check if old, wrongly installed Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
+    IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" 0 continueinstall
+
+        MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
+            goto removeold
+
+        idontcare: ; Clicked no
+            MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
+            goto removeold
+
+        removeold: ; Remove it
+            ExecWait '"$PROGRAMFILES32\Jamulus\Uninstall.exe" /S' $0
+            ${IfNot} $0 == 0
+                MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
+                goto quit
+            ${EndIf}
+            goto continueinstall
+
+        quit:
+            Abort
+
+    continueinstall:
+
+    ; Install the main application
+    !insertmacro InstallApplication x86_64
+    !insertmacro SetupShortcuts
+
+    ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
+    ExecWait "$\"$INSTDIR\${VC_REDIST64_EXE}$\" /q /norestart"
+    Delete   "$INSTDIR\${VC_REDIST64_EXE}"
+SectionEnd
+
+Section "Install_32Bit" INST_32
+
+    ; Install the main application
+    !insertmacro InstallApplication x86
+    !insertmacro SetupShortcuts
+
+    ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
+    ExecWait "$\"$INSTDIR\${VC_REDIST32_EXE}$\" /q /norestart"
+    Delete   "$INSTDIR\${VC_REDIST32_EXE}"
+
+SectionEnd
 
 Function .onInit
 
@@ -205,6 +247,11 @@ Function .onInit
         ReadRegStr $INSTDIR HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_VALUE}"
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES64\${APP_NAME}"
+
+        ; enable the 64 bit install section
+        ${SelectSection} ${INST_64}
+        ${UnSelectSection} ${INST_32}
+
     ${Else}
         SetRegView      32
 
@@ -213,15 +260,22 @@ Function .onInit
         IfErrors   0 +2
         StrCpy     $INSTDIR "$PROGRAMFILES32\${APP_NAME}"
 
+        ; enable the 32 bit install section
+        ${SelectSection} ${INST_32}
+        ${UnSelectSection} ${INST_64}
     ${EndIf}
+
     ; Install for all users
     SetShellVarContext all
+
     ; get user choices (open program, dt icon,...)
     ReadRegStr $bInstallDtIcon  HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}"
     IfErrors   0 +2
     StrCpy $bInstallDtIcon "1"
+
     ; Select installer language
     !insertmacro MUI_LANGDLL_DISPLAY
+
 FunctionEnd
 
 ; Ensure Jamulus is installed into a new folder only, unless Jamulus is already installed there
@@ -236,53 +290,18 @@ Function ValidateDestinationFolder
 
 FunctionEnd
 
-Section Install
-        ${If} ${RunningX64}
-            ; check if old, wrongly installed Jamulus exists. See https://stackoverflow.com/questions/27839860/nsis-check-if-registry-key-value-exists#27841158
-            IfFileExists "$PROGRAMFILES32\Jamulus\Uninstall.exe" 0 continueinstall
-                MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND)" /sd IDYES IDNO idontcare IDCANCEL quit
-                    goto removeold
-                idontcare:
-                    MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(OLD_WRONG_VER_FOUND_CONFIRM)" /sd IDNO IDYES continueinstall
-                    goto removeold
-                removeold:
-                    ExecWait '"$PROGRAMFILES32\Jamulus\Uninstall.exe" /S' $0
-                    ${IfNot} $0 == 0
-                      MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
-                      goto quit
-                    ${EndIf}
-                    goto continueinstall
-                quit:
-                    Abort
-            continueinstall:
-            ; Install the main application
-            !insertmacro InstallApplication x86_64
-            !insertmacro SetupShortcuts
-
-            ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
-            ExecWait "$\"$INSTDIR\${VC_REDIST64_EXE}$\" /q /norestart"
-            Delete   "$INSTDIR\${VC_REDIST64_EXE}"
-        ${Else}
-            ; Install the main application
-            !insertmacro InstallApplication x86
-            !insertmacro SetupShortcuts
-
-            ; Install Microsoft Visual Studio redistributables and remove the installer afterwards
-            ExecWait "$\"$INSTDIR\${VC_REDIST32_EXE}$\" /q /norestart"
-            Delete   "$INSTDIR\${VC_REDIST32_EXE}"
-        ${EndIf}
-SectionEnd
-
 Function FinishPage.Show ; set the user choices if they were remembered
+
     WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}" "0" ; this will be overwritten if the box is checked
     ${If} $bInstallDtIcon == 1 ; Check the install desktop icon checkbox
         SendMessage $mui.FinishPage.Showreadme ${BM_SETCHECK} ${BST_CHECKED} 0
     ${Else}
         SendMessage $mui.FinishPage.Showreadme ${BM_SETCHECK} ${BST_UNCHECKED} 0
     ${EndIf}
-    ShowWindow $mui.FinishPage.Showreadme 1
-FunctionEnd
 
+    ShowWindow $mui.FinishPage.Showreadme 1
+
+FunctionEnd
 
 Function AbortOnRunningApp
     !insertmacro _AbortOnRunningApp
@@ -290,19 +309,19 @@ FunctionEnd
 
 Function createdesktopshortcut
    WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}" "1" ; remember that icon should be installed next time
-  CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+   CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
 FunctionEnd
 
 Function ASIOCheckInstalled
 
-  ; insert ASIO install page if no ASIO driver was found
-  ClearErrors
-  EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
-  IfErrors 0 ASIOExists
+    ; insert ASIO install page if no ASIO driver was found
+    ClearErrors
+    EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+
+    IfErrors 0 ASIOExists
         !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
         nsDialogs::Create 1018
         Pop $Dialog
-        
         ${If} $Dialog == error
             Abort
         ${Endif}
@@ -314,7 +333,9 @@ Function ASIOCheckInstalled
         ${NSD_OnClick} $Button OpenASIOHelpPage
 
         nsDialogs::Show
+
     ASIOExists:
+
 FunctionEnd
 
 Function OpenASIOHelpPage
@@ -324,10 +345,11 @@ FunctionEnd
 Function ExitASIOInstalled
     ClearErrors
     EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
-      IfErrors 0 SkipMessage
-       MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
-         Abort
-       SkipMessage:
+    IfErrors 0 SkipMessage
+        MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
+            Abort
+   SkipMessage:
+
 FunctionEnd
 
 ; Uninstaller
@@ -369,11 +391,10 @@ Section "un.Install"
     ${EndIf}
 
     ; Remove the Start Menu and desktop shortcuts
-    IfFileExists "$DESKTOP\${APP_NAME}.lnk" deleteshortcut skipshortcut
-    deleteshortcut:
-      Delete   "$DESKTOP\${APP_NAME}.lnk"
-      goto skipshortcut
+    IfFileExists "$DESKTOP\${APP_NAME}.lnk" 0 skipshortcut
+        Delete   "$DESKTOP\${APP_NAME}.lnk"
     skipshortcut:
+
     RMDir /r "$SMPROGRAMS\${APP_NAME}"
 
     ; There may be an auto run entry in the registry for the server, remove it

@@ -6,20 +6,14 @@ contains(CONFIG, "noupcasename") {
     TARGET = jamulus
 }
 
-#allow detailed version info for intermediate builds
-contains(CONFIG, "official_release_version") {
-	#for creating a new release:
-	# - count the VERSION up 
-	# - create a new commit
-	# - run build with "official_release_version" on it
-    message(building an official release version)
-	VERSION = ($$replace(VERSION, dev, ))
-} else {
+# allow detailed version info for intermediate builds (#475)
+contains(VERSION, .*dev.*) {
     GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
     VERSION = "$$VERSION"-$$GIT_DESCRIPTION
     message(building an intermediate version: $$VERSION)
+} else {
+    message(building a final release version: $$VERSION)
 }
-
 
 CONFIG += qt \
     thread \
@@ -1073,7 +1067,7 @@ contains(CONFIG, "opus_shared_lib") {
     DISTFILES += $$DISTFILES_OPUS
 }
 
-# disable version check if requested
+# disable version check if requested (#370)
 contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)
     DEFINES += DISABLE_VERSION_CHECK

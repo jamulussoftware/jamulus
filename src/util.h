@@ -607,11 +607,13 @@ enum ECSAddType
 {
     // used for settings -> enum values should be fixed
     AT_DEFAULT = 0,
-    AT_ALL_GENRES = 1,
-    AT_GENRE_ROCK = 2,
-    AT_GENRE_JAZZ = 3,
-    AT_GENRE_CLASSICAL_FOLK = 4,
-    AT_CUSTOM = 5 // Must be the last entry!
+    AT_ANY_GENRE2 = 1,
+    AT_ANY_GENRE3 = 2,
+    AT_GENRE_ROCK = 3,
+    AT_GENRE_JAZZ = 4,
+    AT_GENRE_CLASSICAL_FOLK = 5,
+    AT_GENRE_CHORAL = 6,
+    AT_CUSTOM = 7 // Must be the last entry!
 };
 
 inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
@@ -621,8 +623,11 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
     case AT_CUSTOM:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
 
-    case AT_ALL_GENRES:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "All Genres" );
+    case AT_ANY_GENRE2:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 2" );
+
+    case AT_ANY_GENRE3:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 3" );
 
     case AT_GENRE_ROCK:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock" );
@@ -631,10 +636,13 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
 
     case AT_GENRE_CLASSICAL_FOLK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choral" );
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk" );
+
+    case AT_GENRE_CHORAL:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Choral/Barbershop" );
 
     default: // AT_DEFAULT
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 1" );
     }
 }
 

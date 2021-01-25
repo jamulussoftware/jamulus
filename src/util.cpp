@@ -469,6 +469,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
         "<p>Kris Raney (<a href=""https://github.com/kraney"">kraney</a>)</p>"
         "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
+        "<p>nefarius2001 (<a href=""https://github.com/nefarius2001"">nefarius2001</a>)</p>"
         "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
         "<p>Julian Santander (<a href=""https://github.com/j-santander"">j-santander</a>)</p>"
         "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"

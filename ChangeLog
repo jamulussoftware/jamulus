@@ -12,6 +12,9 @@
 
 - support http links in the chat dialog, coded by hoffie (#879)
 
+- support Github actions for CodeQL, Publish Release, Autobuild Flatpak,
+  coded by pljones, ann0see, ranfdev
+
 
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 

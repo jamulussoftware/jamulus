@@ -786,7 +786,7 @@ QString UsageArguments ( char **argv )
         "                        supported for headless server mode)\n"
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set your local port number\n"
-        "  -t, --notranslation   disable translation (use englisch language)\n"
+        "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
         "  -d, --discononquit    disconnect all clients on quit\n"

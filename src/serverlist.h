@@ -128,6 +128,7 @@ public:
                          const QString& sNCentServAddr,
                          const QString& strServerInfo,
                          const QString& strServerListFilter,
+                         const QString& strServerPublicIP,
                          const int      iNumChannels,
                          CProtocol*     pNConLProt );
 

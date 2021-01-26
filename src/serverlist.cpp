@@ -29,6 +29,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
+                                         const QString& strServerPublicIP,
                                          const int      iNumChannels,
                                          CProtocol*     pNConLProt )
     : eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
@@ -41,7 +42,18 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     SetCentralServerAddress ( sNCentServAddr );
 
     // set the server internal address, including internal port number
-    SlaveCurLocalHostAddress = CHostAddress( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
+    QHostAddress qhaServerPublicIP;
+    if ( strServerPublicIP == "" )
+    {
+        // No user-supplied override via --serverpublicip -> use auto-detection
+        qhaServerPublicIP = NetworkUtil::GetLocalAddress().InetAddr;
+    }
+    else
+    {
+        // User-supplied --serverpublicip
+        qhaServerPublicIP = QHostAddress ( strServerPublicIP );
+    }
+    SlaveCurLocalHostAddress = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
     // prepare the server info information
     QStringList slServInfoSeparateParams;

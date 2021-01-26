@@ -603,6 +603,9 @@ void CServer::OnNewConnection ( int          iChID,
         vecChannels[iChID].SetBlocked ( true );
     }
 
+    // Log off channel on new connection
+    vecChannels[iChID].SetAdmin( false );
+    
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );

@@ -948,7 +948,8 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1157"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translatorcomment>Ok</translatorcomment>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>&amp;Clear All Stored Solo Settings</source>
@@ -1036,7 +1037,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1141"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se la tua interfaccia non funziona correttamente, apri la schermata dei settaggi e controlla se è stata selezionata l&apos;interfaccia corretta ed il suo relativo driver.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1204"/>
@@ -1723,12 +1724,12 @@
     <message>
         <location filename="../../util.h" line="627"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i Generi 2</translation>
     </message>
     <message>
         <location filename="../../util.h" line="630"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i Generi 3</translation>
     </message>
     <message>
         <location filename="../../util.h" line="633"/>
@@ -1743,17 +1744,17 @@
     <message>
         <location filename="../../util.h" line="639"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation>Genere Classica / Folk</translation>
     </message>
     <message>
         <location filename="../../util.h" line="642"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation>Genere Corale / Barbershop</translation>
     </message>
     <message>
         <location filename="../../util.h" line="645"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i Generi 1</translation>
     </message>
     <message>
         <source>Genre Classical/Folk/Choral</source>
@@ -1897,7 +1898,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="622"/>
         <source>Local Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter Locale</translation>
     </message>
     <message>
         <source>Fancy Skin</source>
@@ -3266,17 +3267,17 @@
         <location filename="../../../mac/sound.cpp" line="339"/>
         <location filename="../../../windows/sound.cpp" line="60"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;attuale interfaccia selezionata non è disponibile nel sistema.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;input selezionato non è stato trovato.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;usicta audio selezionata non è stata trovata.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -3371,17 +3372,17 @@
     <message>
         <location filename="../../soundbase.cpp" line="109"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished">La scheda audio selezionata non può essere usata per i seguenti motivi: </translation>
+        <translation>La scheda audio selezionata non può essere usata per i seguenti motivi: </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="111"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"> Sarà ripristinato il driver precedentemente usato.</translation>
+        <translation> Sarà ripristinato il driver precedentemente usato.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="149"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>La precedente interfaccia audio non è stata trovata o il driver è stato cambiato con uno incompatibile con questo software. Verrà cercata un&apos;interfaccia audio valida. Questa nuova interfaccia potrebbe causare ritorni di seganle audio. Prima di connettersi ad un server controllare i settaggi della scheda.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="162"/>

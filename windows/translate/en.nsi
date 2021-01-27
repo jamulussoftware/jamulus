@@ -34,4 +34,4 @@ LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ENGLISH} \
      "https://jamulus.io/wiki/Installation-for-Windows#asio"
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ENGLISH} \
-     "To provide low latency audio, ${APP_NAME} needs an ASIO driver. We couldn't find one on your PC, so you should install one like ASIO4ALL (More information on jamulus.io under Installation for Windows). Do you still want to continue with the installation of ${APP_NAME} first?"
+     "${APP_NAME} needs an ASIO audio driver to work, but we couldn't find one on your PC. You should install one like ASIO4ALL (More information on jamulus.io under Installation for Windows). Do you still want to continue with the installation of ${APP_NAME} first?"

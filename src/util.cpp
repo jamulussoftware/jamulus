@@ -1059,6 +1059,28 @@ QString NetworkUtil::FixAddress ( const QString& strAddress )
     return strAddress.simplified().replace ( " ", "" );
 }
 
+// Return whether the given HostAdress is within a private IP range
+// as per RFC 1918 & RFC 5735.
+bool NetworkUtil::IsPrivateNetworkIP ( const QHostAddress &qhAddr )
+{
+    // https://www.rfc-editor.org/rfc/rfc1918
+    // https://www.rfc-editor.org/rfc/rfc5735
+    static QList<QPair<QHostAddress, int>> addresses =
+    {
+        QPair<QHostAddress, int> ( QHostAddress ( "10.0.0.0" ), 8 ),
+        QPair<QHostAddress, int> ( QHostAddress ( "127.0.0.0" ), 8 ),
+        QPair<QHostAddress, int> ( QHostAddress ( "172.16.0.0" ), 12 ),
+        QPair<QHostAddress, int> ( QHostAddress ( "192.168.0.0" ), 16 ),
+    };
+
+    foreach ( auto item, addresses ) {
+        if ( qhAddr.isInSubnet ( item ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )

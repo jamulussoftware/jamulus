@@ -455,6 +455,20 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                 {
                     vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
                 }
+                else if ( !NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr ) &&
+                          NetworkUtil::IsPrivateNetworkIP ( vecServerInfo[iIdx].HostAddr.InetAddr ) &&
+                          !NetworkUtil::IsPrivateNetworkIP ( ServerList[iIdx].LHostAddr.InetAddr ) )
+                {
+                    // We've got a request from a public client, the server
+                    // list's entry's primary address is a private address,
+                    // but it supplied an additional public address using
+                    // --serverpublicip.
+                    // In this case, use the latter.
+                    // This is common when running a central server with slave
+                    // servers behind a NAT and dealing with external, public
+                    // clients.
+                    vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
+                }
                 else
                 {
                     // create "send empty message" for all registered servers

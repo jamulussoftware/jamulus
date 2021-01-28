@@ -1,4 +1,4 @@
-![Homepage picture](src/res/homepage/jamulusbannersmall.png)
+[![Homepage picture](src/res/homepage/jamulusbannersmall.png)](https://jamulus.io)
 
 [![Build Status](https://travis-ci.org/corrados/jamulus.svg?branch=master)](https://travis-ci.org/corrados/jamulus)
 ![CodeQL](https://github.com/corrados/jamulus/workflows/CodeQL/badge.svg)
@@ -12,14 +12,14 @@ There is one server running the Jamulus server software which collects the audio
 each Jamulus client, mixes the audio data and sends the mix back to each client.
 
 Jamulus is __Open Source software__ ([GPL, GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html))
-and runs under __Windows__ ([ASIO](http://www.steinberg.net)),
+and runs under __Windows__ ([ASIO](https://www.steinberg.net)),
 __MacOS__ ([Core Audio](https://developer.apple.com/documentation/coreaudio)) and
-__Linux__ ([Jack](http://jackaudio.org)).
+__Linux__ ([Jack](https://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
 
-![Sourceforge logo](http://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)
+[![Sourceforge logo](https://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)](https://sourceforge.net/projects/llcon)
 
-The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon).
+The project is hosted at [Sourceforge.net](https://sourceforge.net/projects/llcon).
 
 
 

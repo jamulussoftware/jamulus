@@ -793,12 +793,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1141"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ditt ljudkort fungerar inte korrekt. Öppna inställningar och kontrollera enhetsvalet och drivrutinsinställningarna.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1157"/>
         <source>Ok</source>
-        <translation type="unfinished">Okej</translation>
+        <translation>Okej</translation>
     </message>
     <message>
         <source>&amp;Clear All Stored Solo Settings</source>
@@ -1448,12 +1448,12 @@
     <message>
         <location filename="../../util.h" line="627"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla genrer 2</translation>
     </message>
     <message>
         <location filename="../../util.h" line="630"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla genrer 3</translation>
     </message>
     <message>
         <location filename="../../util.h" line="633"/>
@@ -1468,17 +1468,17 @@
     <message>
         <location filename="../../util.h" line="639"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre Klassisk/Folkmusik</translation>
     </message>
     <message>
         <location filename="../../util.h" line="642"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre Choral/Barbershop</translation>
     </message>
     <message>
         <location filename="../../util.h" line="645"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla genrer 1</translation>
     </message>
     <message>
         <source>Genre Classical/Folk/Choral</source>
@@ -1622,7 +1622,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="622"/>
         <source>Local Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal jitterbuffert</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
@@ -2284,7 +2284,7 @@
     <message>
         <location filename="../../util.cpp" line="1118"/>
         <source>Vocal Lead</source>
-        <translation>Sång (Solist)</translation>
+        <translation>Sång (melodistämma)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1119"/>
@@ -2691,7 +2691,7 @@
     <message>
         <location filename="../../util.h" line="678"/>
         <source>Registration failed</source>
-        <translation>Registrering misslyckades</translation>
+        <translation>Registreringen misslyckades</translation>
     </message>
     <message>
         <location filename="../../util.h" line="681"/>
@@ -2701,7 +2701,7 @@
     <message>
         <location filename="../../util.h" line="684"/>
         <source>Registered</source>
-        <translation>Regisrterad</translation>
+        <translation>Registrerad</translation>
     </message>
     <message>
         <location filename="../../util.h" line="687"/>
@@ -2923,17 +2923,17 @@
         <location filename="../../../mac/sound.cpp" line="339"/>
         <location filename="../../../windows/sound.cpp" line="60"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vald ljudenhet är inte längre tillgänglig för programmet.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vald ljudingång är inte längre tillgänglig.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vald ljudutgång är inte längre tillgänglig.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -3028,17 +3028,17 @@
     <message>
         <location filename="../../soundbase.cpp" line="109"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished">Den valda ljudenheten kunde inte användas på grund av följande fel: </translation>
+        <translation>Den valda ljudenheten kunde inte användas på grund av följande fel: </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="111"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"> Den föregående drivrutinen kommer att väljas.</translation>
+        <translation> Den föregående drivrutinen kommer att väljas.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="149"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den tidigare valda ljudenheten är inte längre tillgänglig eller egenskaperna för ljuddrivrutinen har ändrats till ett tillstånd som inte fungerar med den här programvaran. Vi försöker nu hitta en giltig ljudenhet. Den här nya ljudenheten kan orsaka ljudåterkoppling så innan du ansluter till en server, kontrollera inställningen för ljudenheten.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="162"/>

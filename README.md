@@ -5,7 +5,7 @@
 
 Jamulus - Internet Jam Session Software
 =======================================
-<img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/>
+<a href="https://jamulus.io/"><img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/></a>
 
 The Jamulus software enables musicians to perform real-time jam sessions over the internet.
 There is one server running the Jamulus server software which collects the audio data from
@@ -23,10 +23,10 @@ The project is hosted at [Sourceforge.net](https://sourceforge.net/projects/llco
 
 
 
-Installation and Getting Started
---------------------------------
+Installation
+------------
 
-[Please see this overview](https://jamulus.io/wiki/Getting-Started) containing instructions for installing and using Jamulus for your platform.
+[Please see the Getting Started page](https://jamulus.io/wiki/Getting-Started) containing instructions for installing and using Jamulus for your platform.
 
 
 Help

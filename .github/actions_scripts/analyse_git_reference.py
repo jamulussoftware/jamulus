@@ -60,23 +60,25 @@ if fullref.startswith("refs/tags/"):
     print('this reference is a Tag')
     release_tag = pushed_name # tag already exists
     release_title="Release {}  ({})".format(release_version_name, pushed_name)
+    
     if pushed_name.startswith("r"):
-        publish_to_release = True
         if "beta" in pushed_name:
             print('this reference is a Beta-Release-Tag')
+            publish_to_release = True
             is_prerelease = True
         else:
             print('this reference is a Release-Tag')
+            publish_to_release = True
             is_prerelease = False
     else:
         print('this reference is a Non-Release-Tag')
         publish_to_release = False
         is_prerelease = True # just in case
     
-        
     if pushed_name == "latest":
         print('this reference is a Latest-Tag')
         publish_to_release = True
+        is_prerelease = False
         release_version_name = "latest"
         release_title='Release "latest"'
 elif fullref.startswith("refs/heads/"):

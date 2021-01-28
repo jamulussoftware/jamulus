@@ -5,6 +5,7 @@ on:
   push:
     tags:
       - "r*"
+      - "latest"
     #branches:
     #  - "*"
     #  - master         

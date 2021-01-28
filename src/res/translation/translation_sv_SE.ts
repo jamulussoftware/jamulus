@@ -2284,7 +2284,7 @@
     <message>
         <location filename="../../util.cpp" line="1118"/>
         <source>Vocal Lead</source>
-        <translation>Sång (Solist)</translation>
+        <translation>Sång (melodistämma)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1119"/>
@@ -2691,7 +2691,7 @@
     <message>
         <location filename="../../util.h" line="678"/>
         <source>Registration failed</source>
-        <translation>Registrering misslyckades</translation>
+        <translation>Registreringen misslyckades</translation>
     </message>
     <message>
         <location filename="../../util.h" line="681"/>
@@ -2701,7 +2701,7 @@
     <message>
         <location filename="../../util.h" line="684"/>
         <source>Registered</source>
-        <translation>Regisrterad</translation>
+        <translation>Registrerad</translation>
     </message>
     <message>
         <location filename="../../util.h" line="687"/>

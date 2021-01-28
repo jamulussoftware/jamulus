@@ -439,6 +439,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     // contributors list
     txvContributors->setText (
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
         "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
         "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
         "<p>ann0see (<a href=""https://github.com/ann0see"">ann0see</a>)</p>"

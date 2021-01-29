@@ -38,7 +38,7 @@ jobs:
            continue-on-error:       true
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
            with:
-             delete_release:        false
+             delete_release:        true
              tag_name:              ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
            env:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,5 @@
 [![Homepage picture](src/res/homepage/jamulusbannersmall.png)](https://jamulus.io)
 
-[![Build Status](https://travis-ci.org/jamulussoftware/jamulus.svg?branch=master)](https://travis-ci.org/jamulussoftware/jamulus)
 ![CodeQL](https://github.com/jamulussoftware/jamulus/workflows/CodeQL/badge.svg)
 
 Jamulus - Internet Jam Session Software

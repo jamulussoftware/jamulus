@@ -80,7 +80,7 @@ win32 {
             -lwinmm \
             -lws2_32
     } else {
-        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93
+        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/jamulussoftware/jamulus/issues/93
         LIBS += ole32.lib \
             user32.lib \
             advapi32.lib \
@@ -168,7 +168,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework CoreFoundation \
         -framework CoreServices \

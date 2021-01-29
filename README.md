@@ -1,7 +1,7 @@
 [![Homepage picture](src/res/homepage/jamulusbannersmall.png)](https://jamulus.io)
 
-[![Build Status](https://travis-ci.org/corrados/jamulus.svg?branch=master)](https://travis-ci.org/corrados/jamulus)
-![CodeQL](https://github.com/corrados/jamulus/workflows/CodeQL/badge.svg)
+[![Build Status](https://travis-ci.org/jamulussoftware/jamulus.svg?branch=master)](https://travis-ci.org/jamulussoftware/jamulus)
+![CodeQL](https://github.com/jamulussoftware/jamulus/workflows/CodeQL/badge.svg)
 
 Jamulus - Internet Jam Session Software
 =======================================
@@ -36,7 +36,7 @@ Official documentation for Jamulus is on the [Jamulus homepage](https://jamulus.
 
 See also the [discussion forums](https://sourceforge.net/p/llcon/discussion). If you have issues, feel free to ask for help there.
 
-Bugs and feature requests can be [reported here](https://github.com/corrados/jamulus/issues)
+Bugs and feature requests can be [reported here](https://github.com/jamulussoftware/jamulus/issues)
 
 
 Compilation
@@ -71,4 +71,4 @@ source:
 - Country flag icons from Mark James: http://www.famfamfam.com
 
 We would also like to acknowledge the contributors listed in the
-[Github Contributors list](https://github.com/corrados/jamulus/graphs/contributors).
+[Github Contributors list](https://github.com/jamulussoftware/jamulus/graphs/contributors).

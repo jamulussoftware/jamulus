@@ -1,0 +1,7 @@
+name: 'Run Android-Build-Docker'
+description: 'Run Android-Build-Docker'
+runs:
+  using: 'docker'
+  image: ./Dockerfile
+  args:
+    - CONFIG=release

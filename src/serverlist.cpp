@@ -387,7 +387,7 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
 {
     if ( bIsCentralServer && bEnabled )
     {
-        qInfo() << qUtf8Printable( QString( "Requested to unregister entry for " )
+        qInfo() << qUtf8Printable( QString( "Requested to unregister entry for %1" )
             .arg( InetAddr.toString() ) );
 
         QMutexLocker locker ( &Mutex );
@@ -585,7 +585,7 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
     // output regirstation result/update on the console
-    qInfo() << qUtf8Printable( QString( "Server Registration Status update: " )
+    qInfo() << qUtf8Printable( QString( "Server Registration Status update: %1" )
         .arg( svrRegStatusToString ( eNSvrRegStatus ) ) );
 
     // store the state and inform the GUI about the new status

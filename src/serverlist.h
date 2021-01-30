@@ -190,7 +190,6 @@ protected:
     QTimer                  TimerCLRegisterServerResp;
 
     QMutex                  Mutex;
-    QTextStream&            tsConsoleStream;
 
     QList<CServerListEntry> ServerList;
 

@@ -31,8 +31,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& strServerListFilter,
                                          const int      iNumChannels,
                                          CProtocol*     pNConLProt )
-    : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
-      eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
+    : eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
       strMinServerVersion       ( "" ), // disable version check with empty version
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
@@ -116,7 +115,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
             {
                 vWhiteList << CurWhiteListAddress;
-                tsConsoleStream << "Whitelist entry added: " << CurWhiteListAddress.toString() << endl;
+                qInfo() << qUtf8Printable( QString( "Whitelist entry added: %1" )
+                    .arg( CurWhiteListAddress.toString() ) );
             }
         }
     }
@@ -292,7 +292,8 @@ void CServerListManager::OnTimerPollList()
 
     foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
     {
-        tsConsoleStream << "Expired entry for " << HostAddr.toString() << endl;
+        qInfo() << qUtf8Printable( QString( "Expired entry for %1" )
+            .arg( HostAddr.toString() ) );
     }
 }
 
@@ -303,9 +304,8 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
 {
     if ( bIsCentralServer && bEnabled )
     {
-        tsConsoleStream << "Requested to register entry for "
-                        << InetAddr.toString() << " (" << LInetAddr.toString() << ")"
-                        << ": " << ServerInfo.strName << endl;
+        qInfo() << qUtf8Printable( QString( "Requested to register entry for %1 (%2): %3")
+            .arg( InetAddr.toString() ).arg( LInetAddr.toString() ).arg( ServerInfo.strName ) );
 
         // check for minimum server version
         if ( !strMinServerVersion.isEmpty() )
@@ -387,8 +387,8 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
 {
     if ( bIsCentralServer && bEnabled )
     {
-        tsConsoleStream << "Requested to unregister entry for "
-                        << InetAddr.toString() << endl;
+        qInfo() << qUtf8Printable( QString( "Requested to unregister entry for " )
+            .arg( InetAddr.toString() ) );
 
         QMutexLocker locker ( &Mutex );
 
@@ -585,7 +585,8 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
     // output regirstation result/update on the console
-    tsConsoleStream << "Server Registration Status update: " << svrRegStatusToString ( eNSvrRegStatus ) << endl;
+    qInfo() << qUtf8Printable( QString( "Server Registration Status update: " )
+        .arg( svrRegStatusToString ( eNSvrRegStatus ) ) );
 
     // store the state and inform the GUI about the new status
     eSvrRegStatus = eNSvrRegStatus;

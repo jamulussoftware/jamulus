@@ -325,16 +325,14 @@ bool    GetFlagArgument ( char**  argv,
                           QString strShortOpt,
                           QString strLongOpt );
 
-bool    GetStringArgument ( QTextStream& tsConsole,
-                            int          argc,
+bool    GetStringArgument ( int          argc,
                             char**       argv,
                             int&         i,
                             QString      strShortOpt,
                             QString      strLongOpt,
                             QString&     strArg );
 
-bool    GetNumericArgument ( QTextStream& tsConsole,
-                             int          argc,
+bool    GetNumericArgument ( int          argc,
                              char**       argv,
                              int&         i,
                              QString      strShortOpt,

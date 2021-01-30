@@ -29,6 +29,7 @@
 #include <QFile>
 #include <QString>
 #include <QTimer>
+#include <iostream>
 #include "global.h"
 #include "util.h"
 

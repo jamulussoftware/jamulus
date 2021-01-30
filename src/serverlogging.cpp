@@ -52,7 +52,7 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr,
     const QString strLogStr = CurTimeDatetoLogString() + ", " +
         ClientInetAddr.toString() + ", connected (" + QString::number ( iNumberOfConnectedClients ) + ")";
 
-    qInfo() << qUtf8Printable( strLogStr ); // on console
+    cout << strLogStr.toStdString() << std::endl; // on console
     *this << strLogStr; // in log file
 }
 
@@ -61,7 +61,7 @@ void CServerLogging::AddServerStopped()
     const QString strLogStr = CurTimeDatetoLogString() + ",, server idling "
         "-------------------------------------";
 
-    qInfo() << qUtf8Printable( strLogStr ); // on console
+    cout << strLogStr.toStdString() << std::endl; // on console
     *this << strLogStr; // in log file
 }
 

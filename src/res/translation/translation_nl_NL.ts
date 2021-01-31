@@ -1024,7 +1024,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1141"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation>Uw geluidskaart werkt niet correct. Open het Instellingsvenster en controleer  apparaatselectie en bestuurprogramma-instellingen.</translation>
+        <translation>Uw geluidskaart werkt niet goed. Open het Instellingsvenster en controleer apparaatselectie en bestuurprogramma-instellingen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1204"/>
@@ -1190,7 +1190,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="95"/>
         <source>Sound card device selector combo box</source>
-        <translation>Geluidskaart apparaat selector combo box</translation>
+        <translation>Geluidskaart apparaatselectie combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="99"/>
@@ -1205,12 +1205,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="108"/>
         <source>Sound Card Channel Mapping</source>
-        <translation>Geluidskaartkanalen in kaart brengen</translation>
+        <translation>Geluidskaart kanaaltoewijzing</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="109"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation>In het geval dat het geselecteerde geluidskaartapparaat meer dan één ingangs- of uitgangskanaal biedt, zijn de instellingen voor het ingangs- en uitgangskanaal in kaart brengen zichtbaar.</translation>
+        <translation>In het geval dat het geselecteerde geluidskaartapparaat meer dan één ingangs- of uitgangskanaal biedt, zijn de instellingen voor het ingangs- en uitgangskanaal toewijzing zichtbaar.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="111"/>
@@ -1225,12 +1225,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="119"/>
         <source>Left input channel selection combo box</source>
-        <translation>Linker ingangskanaal selectie combo box</translation>
+        <translation>Linker ingangskanaal selectie combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="121"/>
         <source>Right input channel selection combo box</source>
-        <translation>Juiste ingangskanaal selectie combo box</translation>
+        <translation>Juiste ingangskanaal selectie combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="123"/>
@@ -1240,7 +1240,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
         <source>Right output channel selection combo box</source>
-        <translation>Rechter uitgangskanaal selectie combo box</translation>
+        <translation>Rechter uitgangskanaal selectie combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
@@ -1265,7 +1265,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="138"/>
         <source>Sound Card Buffer Delay</source>
-        <translation>Geluidskaartbuffervertraging</translation>
+        <translation>Geluidskaart buffervertraging</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of the </source>
@@ -1390,7 +1390,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="219"/>
         <source>Audio channels combo box</source>
-        <translation>Audiokanalen combo-box</translation>
+        <translation>Audiokanalen combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
@@ -1404,7 +1404,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="229"/>
         <source>Audio quality combo box</source>
-        <translation>Audiokwaliteit combo-box</translation>
+        <translation>Audiokwaliteit combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="232"/>
@@ -1776,7 +1776,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="83"/>
         <source>Input Channel Mapping</source>
-        <translation>Invoerkanaal Mapping</translation>
+        <translation>Invoerkanaaltoewijzing</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="103"/>
@@ -1793,7 +1793,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="140"/>
         <source>Output Channel Mapping</source>
-        <translation>Uitgangskanaal in kaart brengen</translation>
+        <translation>Uitvoerkanaaltoewijzing</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="213"/>
@@ -1823,7 +1823,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="247"/>
         <source>Driver Setup</source>
-        <translation>Stuurprogramma-instelling</translation>
+        <translation>Stuurprogramma-instellingen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="263"/>
@@ -2366,7 +2366,7 @@
     <message>
         <location filename="../../util.cpp" line="737"/>
         <source>Skill level combo box</source>
-        <translation>Combo-box voor vaardigheidsniveau</translation>
+        <translation>Combobox voor vaardigheidsniveau</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1075"/>
@@ -2743,7 +2743,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="96"/>
         <source>Server name line edit</source>
-        <translation>Servernaam lijnbewerking</translation>
+        <translation>Servernaam bewerking</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="99"/>
@@ -2773,7 +2773,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="117"/>
         <source>Country where the server is located combo box</source>
-        <translation>Land waar de server zich bevindt combo box</translation>
+        <translation>Land waar de server zich bevindt combobox</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="121"/>

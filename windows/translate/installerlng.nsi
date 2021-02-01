@@ -10,3 +10,6 @@
 
 ; !insertmacro MUI_LANGUAGE "Italian"
 ; !include "translate\it.nsi" ; include italian
+
+!insertmacro MUI_LANGUAGE "Dutch"
+!include "translate\nl.nsi"

@@ -21,7 +21,7 @@ assignees: ''
 <!-- If applicable, add screenshots to help explain your problem. -->
 
 **Operating system**
-e.g. Windows/macOS/Linux
+<!-- Add the operating system you are running, e.g. Windows 10 Version 20H2, macOS 10.15.5, Ubuntu Linux 20.10. Also add where you got Jamulus from, e.g. if you downloaded it from the internet, if you got it from your Linux distribution or if you built from source. -->
 
 **Version of Jamulus**
 

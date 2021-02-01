@@ -39,6 +39,7 @@ jobs:
       with:
         version: '5.15.2'
         dir: '${{ github.workspace }}'
+        extra: '--base https://download.qt.io/official_releases/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz'
       if: matrix.os == 'macos-latest'
 
     - name: Install Qt on Windows
@@ -48,6 +49,7 @@ jobs:
         dir: '${{ github.workspace }}'
         arch: 'win64_msvc2019_64'
         tools: 'tools_qtcreator,4.14.0-0,qt.tools.qtcreator'
+        extra: '--base https://download.qt.io/official_releases/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz'
       if: matrix.os == 'windows-latest'
 
     - name: Install ASIOSDK

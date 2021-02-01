@@ -167,6 +167,9 @@ MESSAGES (with connection)
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
+    - "UTF-8 string": the chat message (plain text from client to server;
+      HTML from server to client)
+
 
 - PROTMESSID_NETW_TRANSPORT_PROPS: Properties for network transport
 

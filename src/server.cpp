@@ -716,9 +716,8 @@ void CServer::OnAboutToQuit()
 
 void CServer::OnHandledSignal ( int sigNum )
 {
-    // show the signal number on the command line (note that this does not work for the Windows command line)
-// TODO we should use the ConsoleWriterFactory() instead of qDebug()
-    qDebug() << "OnHandledSignal: " << sigNum;
+    // show the signal number on the console (note that this may not work for Windows)
+    qDebug() << qUtf8Printable( QString( "OnHandledSignal: %1" ).arg( sigNum ) );
 
 #ifdef _WIN32
     // Windows does not actually get OnHandledSignal triggered

@@ -325,6 +325,9 @@
           <property name="text">
            <string>&amp;Mute Myself</string>
           </property>
+          <property name="shortcut">
+           <string>M</string>
+          </property>
          </widget>
         </item>
         <item>

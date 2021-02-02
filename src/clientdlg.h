@@ -143,6 +143,10 @@ public slots:
                                     const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx,
                                                                                          iValue ); }
 
+    void OnControllerInPanValue ( const int iChannelIdx,
+                                  const int iValue ) { MainMixerBoard->SetPanValue ( iChannelIdx,
+                                                                                     iValue ); }
+
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 

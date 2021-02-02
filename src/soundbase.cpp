@@ -385,7 +385,16 @@ printf ( "\n" );
                                 emit ControllerInFaderLevel ( cCtrl.iChannel, iFaderLevel );
                             }
                             break;
+                        case Pan:
+                            {
+                                // Pan levels need to be symmetric between 1 and 127
+                                const int iPanValue = static_cast<int> (
+                                    static_cast<double> (
+                                        qMax ( iValue, 1 ) - 1) / 126 * AUD_MIX_PAN_MAX );
 
+                                emit ControllerInPanValue ( cCtrl.iChannel, iPanValue );
+                            }
+                            break;
                         default:
                             break;
                         }

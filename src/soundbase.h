@@ -164,4 +164,5 @@ protected:
 signals:
     void ReinitRequest ( int iSndCrdResetType );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
+    void ControllerInPanValue ( int iChannelIdx, int iValue );
 };

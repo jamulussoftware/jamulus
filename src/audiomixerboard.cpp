@@ -1246,6 +1246,20 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
     }
 }
 
+void CAudioMixerBoard::SetPanValue ( const int iChannelIdx,
+                                     const int iValue )
+{
+    // only apply new pan value if channel index is valid and the panner is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS )
+           && bDisplayPans )
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetPanValue ( iValue );
+        }
+    }
+}
+
 void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
 {
     QMutexLocker locker ( &Mutex );

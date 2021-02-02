@@ -210,6 +210,9 @@ public:
     void            SetFaderLevel ( const int iChannelIdx,
                                 const int iValue );
 
+    void            SetPanValue ( const int iChannelIdx,
+                                  const int iValue );
+
     void            SetNumMixerPanelRows ( const int iNNumMixerPanelRows );
     int             GetNumMixerPanelRows() { return iNumMixerPanelRows; }
 

@@ -17,6 +17,8 @@
 
 - more detailed version number of unreleased version, coded by nefarius2001 (#475)
 
+- remove ConsoleWriterFactory (#926)
+
 
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 

@@ -16,7 +16,7 @@ LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_DUTCH} \
     "Als u doorgaat zonder het te verwijderen, kan de installatie mogelijk mislukken! Weet u zeker dat u de oude versie niet wil verwijderen?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_DUTCH} \
-     "FATALE FOUT: HET DE-INSTALLATIEPROGRAMMA HEEFT NIET GEWERKT. Zodra u op OK klikt zal de oude versie op uw PC blijven en proberen we de nieuwe versie te installeren. U kunt ook op annuleren klikken en het zelf proberen te verwijderen."
+     "FATALE FOUT: het is helaas niet gelukt de oude versie te verwijderen. Zodra u op OK klikt zal de oude versie op uw PC blijven en proberen we de nieuwe versie te installeren. U kunt ook op annuleren klikken en het zelf proberen te verwijderen."
 
 LangString ASIO_DRIVER_HEADER ${LANG_DUTCH} \
      "ASIO stuurprogramma"

@@ -36,7 +36,7 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
     bCallbackEntered             ( false ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
     iCtrlMIDIChannel             ( INVALID_MIDI_CH ),
-    iMIDIOffsetFader             ( 70 ) // Behringer X-TOUCH: offset of 0x46
+    aMidiCtls                    ( 128 )
 {
     // parse the MIDI setup command line argument string
     ParseCommandLineArgument ( strMIDISetup );
@@ -234,7 +234,12 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
 \******************************************************************************/
 void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
 {
-    // parse the server info string according to definition:
+    int iMIDIOffsetFader = 70; // Behringer X-TOUCH: offset of 0x46
+
+    // parse the server info string according to definition: there is
+    // the legacy definition with just one or two numbers that only
+    // provides a definition for the controller offset of the level
+    // controllers (default 70 for the sake of Behringer X-Touch)
     // [MIDI channel];[offset for level]
     if ( !strMIDISetup.isEmpty() )
     {
@@ -251,6 +256,13 @@ void CSoundBase::ParseCommandLineArgument ( const QString& strMIDISetup )
         if ( slMIDIParams.count() >= 2 )
         {
             iMIDIOffsetFader = slMIDIParams[1].toUInt();
+        }
+
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            if ( i + iMIDIOffsetFader > 127 )
+                break;
+            aMidiCtls[i + iMIDIOffsetFader] = { EMidiCtlType::Fader, i };
         }
     }
 }
@@ -287,15 +299,26 @@ printf ( "\n" );
                     // make sure packet is long enough
                     if ( vMIDIPaketBytes.Size() > 2 )
                     {
-                        // we are assuming that the controller number is the same
-                        // as the audio fader index and the range is 0-127
-                        const int iFaderLevel = static_cast<int> ( static_cast<double> (
-                            qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
+                        const auto &cCtrl = aMidiCtls[qMin ( vMIDIPaketBytes[1], uint8_t ( 127 ) )];
+                        const int iValue = qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) );
+                        switch ( cCtrl.eType )
+                        {
+                        case Fader:
+                            {
+                                // we are assuming that the controller number is the same
+                                // as the audio fader index and the range is 0-127
+                                const int iFaderLevel = static_cast<int> (
+                                    static_cast<double> ( iValue ) / 127 * AUD_MIX_FADER_MAX );
 
-                        // consider offset for the faders
-                        const int iChID = vMIDIPaketBytes[1] - iMIDIOffsetFader;
+                                // consider offset for the faders
 
-                        emit ControllerInFaderLevel ( iChID, iFaderLevel );
+                                emit ControllerInFaderLevel ( cCtrl.iChannel, iFaderLevel );
+                            }
+                            break;
+
+                        default:
+                            break;
+                        }
                     }
                 }
             }

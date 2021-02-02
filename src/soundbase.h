@@ -43,6 +43,23 @@ enum ESndCrdResetType
     RS_RELOAD_RESTART_AND_INIT
 };
 
+enum EMidiCtlType
+{
+    Fader = 0,
+    Pan,
+    Solo,
+    Mute,
+    None
+};
+
+class CMidiCtlEntry {
+public:
+    CMidiCtlEntry ( EMidiCtlType eT = EMidiCtlType::None, int iC = 0 )
+        : eType ( eT ), iChannel ( iC )
+        { }
+    EMidiCtlType eType;
+    int iChannel;
+};
 
 /* Classes ********************************************************************/
 class CSoundBase : public QThread
@@ -138,7 +155,7 @@ protected:
 
     QString strSystemDriverTechniqueName;
     int     iCtrlMIDIChannel;
-    int     iMIDIOffsetFader;
+    QVector<CMidiCtlEntry> aMidiCtls;
 
     long    lNumDevs;
     QString strCurDevName;

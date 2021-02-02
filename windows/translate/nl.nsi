@@ -7,7 +7,7 @@ LangString INVALID_FOLDER_MSG ${LANG_DUTCH} \
     "De doelmap bestaat al. Kies een nieuwe doelmap."
 
 LangString RUNNING_APP_MSG ${LANG_DUTCH} \
-    "${APP_NAME} loopt nog. Sluit het programma en start de installatie opnieuw.."
+    "${APP_NAME} loopt nog. Sluit het programma en start de installatie opnieuw."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_DUTCH} \
     "We hebben een oudere versie van ${APP_NAME} in de 32 Bit Program Files map gevonden. Deze kan het beste worden verwijderd alvorens een nieuwe versie van ${APP_NAME} te installeren. Wilt u het nu laten verwijderen?"

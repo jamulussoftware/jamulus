@@ -27,7 +27,6 @@
 #include <QThread>
 #include <QDateTime>
 #include <QFile>
-#include <QTextStream>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 # include <QVersionNumber>
 #endif

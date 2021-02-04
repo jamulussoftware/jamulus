@@ -114,14 +114,14 @@ void CChatDlg::AddChatText ( QString strChatText )
     // notify accessibility plugin that text has changed
     QAccessible::updateAccessibility ( new QAccessibleValueChangeEvent ( txvChatWindow, strChatText ) );
 
-    // analyze strChatText to check if hyperlink (limit ourselves to https://) but do not
+    // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
     // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
     // coding hisself and we should not mess with that)
     if ( !strChatText.contains ( QRegExp ( "href\\s*=|src\\s*=" ) ) )
     {
-        // searches for all occurrences of https and cuts until a space (\S matches any non-white-space
+        // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
         // character and the + means that matches the previous element one or more times.)
-        strChatText.replace ( QRegExp ( "(https://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
+        strChatText.replace ( QRegExp ( "(https?://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
     }
 
     // add new text in chat window
@@ -130,8 +130,8 @@ void CChatDlg::AddChatText ( QString strChatText )
 
 void CChatDlg::OnAnchorClicked ( const QUrl& Url )
 {
-    // only allow https URLs to be opened in an external browser
-    if ( Url.scheme() == QLatin1String ( "https" ) )
+    // only allow http(s) URLs to be opened in an external browser
+    if ( Url.scheme() == QLatin1String ( "https" ) || Url.scheme() == QLatin1String ( "http" ) )
     {
         if ( QMessageBox::question ( this, APP_NAME, tr ( "Do you want to open the link" ) + " <b>" + Url.toString() +
                                      "</b> " + tr ( "in an external browser?" ), QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )

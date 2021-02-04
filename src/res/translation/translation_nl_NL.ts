@@ -2909,7 +2909,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="181"/>
         <source>Server Welcome Message</source>
-        <translation>Welkomsbericht server</translation>
+        <translation>Welkomstbericht server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="182"/>
@@ -3105,7 +3105,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="191"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation>Welkomsbericht Chatvenster (HTML/CSS mogelijk)</translation>
+        <translation>Welkomstbericht Chatvenster (HTML/CSS mogelijk)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="209"/>

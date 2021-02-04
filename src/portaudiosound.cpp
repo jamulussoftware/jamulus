@@ -46,7 +46,9 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
                  const QString& ) :
     CSoundBase ( "portaudio", fpNewProcessCallback, arg, strMIDISetup ),
     deviceIndex ( -1 ),
-    deviceStream ( NULL )
+    deviceStream ( NULL ),
+    vSelectedInputChannels ( NUM_IN_OUT_CHANNELS ),
+    vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS )
 {
     pThisSound = this;
 
@@ -132,7 +134,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         iPrefMonoBufferSize = iNewPrefMonoBufferSize;
     }
 
-    vecsAudioData.Init ( iPrefMonoBufferSize * 2 );
+    vecsAudioData.Init ( iPrefMonoBufferSize * NUM_IN_OUT_CHANNELS );
     if ( deviceStream && deviceIndex >= 0 )
     {
         ReinitializeDriver ( deviceIndex );
@@ -157,6 +159,82 @@ PaDeviceIndex CSound::DeviceIndexFromName ( const QString& strDriverName )
     return -1;
 }
 
+int CSound::GetNumInputChannels()
+{
+    if ( deviceIndex >= 0 )
+    {
+        const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( deviceIndex );
+        return deviceInfo->maxInputChannels;
+    }
+    return CSoundBase::GetNumInputChannels();
+}
+int CSound::GetNumOutputChannels()
+{
+    if ( deviceIndex >= 0 )
+    {
+        const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( deviceIndex );
+        return deviceInfo->maxOutputChannels;
+    }
+    return CSoundBase::GetNumOutputChannels();
+}
+
+QString CSound::GetInputChannelName ( const int channel )
+{
+    if ( deviceIndex >= 0 )
+    {
+        const char* channelName;
+        PaError err = PaAsio_GetInputChannelName ( deviceIndex, channel, &channelName );
+        if ( err == paNoError )
+        {
+            return QString ( channelName );
+        }
+    }
+    return CSoundBase::GetInputChannelName ( channel );
+}
+QString CSound::GetOutputChannelName ( const int channel )
+{
+    if ( deviceIndex >= 0 )
+    {
+        const char* channelName;
+        PaError err = PaAsio_GetOutputChannelName ( deviceIndex, channel, &channelName );
+        if ( err == paNoError )
+        {
+            return QString ( channelName );
+        }
+    }
+    return CSoundBase::GetOutputChannelName ( channel );
+}
+
+void CSound::SetLeftInputChannel ( const int channel )
+{
+    if ( channel < GetNumInputChannels() )
+    {
+        vSelectedInputChannels[0] = channel;
+    }
+}
+void CSound::SetRightInputChannel ( const int channel )
+{
+    if ( channel < GetNumInputChannels() )
+    {
+        vSelectedInputChannels[1] = channel;
+    }
+}
+
+void CSound::SetLeftOutputChannel ( const int channel )
+{
+    if ( channel < GetNumOutputChannels() )
+    {
+        vSelectedOutputChannels[0] = channel;
+    }
+}
+void CSound::SetRightOutputChannel ( const int channel )
+{
+    if ( channel < GetNumOutputChannels() )
+    {
+        vSelectedOutputChannels[1] = channel;
+    }
+}
+
 QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDriverSetup )
 {
     (void) bOpenDriverSetup; // FIXME: respect this
@@ -173,10 +251,11 @@ QString CSound::ReinitializeDriver ( int devIndex )
 {
     const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( devIndex );
 
-    if ( deviceInfo->maxInputChannels < 2 || deviceInfo->maxOutputChannels < 2 )
+    if ( deviceInfo->maxInputChannels < NUM_IN_OUT_CHANNELS ||
+         deviceInfo->maxOutputChannels < NUM_IN_OUT_CHANNELS )
     {
         // FIXME: handle mono devices.
-        return tr ( "Less than 2 channels supported" );
+        return tr ( "Less than 2 channels not supported" );
     }
 
     if ( deviceStream != NULL )
@@ -187,18 +266,30 @@ QString CSound::ReinitializeDriver ( int devIndex )
     }
 
     PaStreamParameters paInputParams;
+    PaAsioStreamInfo   asioInputInfo;
     paInputParams.device                    = devIndex;
-    paInputParams.channelCount              = std::min ( 2, deviceInfo->maxInputChannels );
+    paInputParams.channelCount              = std::min ( NUM_IN_OUT_CHANNELS, deviceInfo->maxInputChannels );
     paInputParams.sampleFormat              = paInt16;
     paInputParams.suggestedLatency          = deviceInfo->defaultLowInputLatency;
-    paInputParams.hostApiSpecificStreamInfo = NULL;
+    paInputParams.hostApiSpecificStreamInfo = &asioInputInfo;
+    asioInputInfo.size                      = sizeof asioInputInfo;
+    asioInputInfo.hostApiType               = paASIO;
+    asioInputInfo.version                   = 1;
+    asioInputInfo.flags                     = paAsioUseChannelSelectors;
+    asioInputInfo.channelSelectors          = &vSelectedInputChannels[0];
 
     PaStreamParameters paOutputParams;
+    PaAsioStreamInfo   asioOutputInfo;
     paOutputParams.device                    = devIndex;
-    paOutputParams.channelCount              = std::min ( 2, deviceInfo->maxOutputChannels );
+    paOutputParams.channelCount              = std::min ( NUM_IN_OUT_CHANNELS, deviceInfo->maxOutputChannels );
     paOutputParams.sampleFormat              = paInt16;
     paOutputParams.suggestedLatency          = deviceInfo->defaultLowOutputLatency;
-    paOutputParams.hostApiSpecificStreamInfo = NULL;
+    paOutputParams.hostApiSpecificStreamInfo = &asioOutputInfo;
+    asioOutputInfo.size                      = sizeof asioOutputInfo;
+    asioOutputInfo.hostApiType               = paASIO;
+    asioOutputInfo.version                   = 1;
+    asioOutputInfo.flags                     = paAsioUseChannelSelectors;
+    asioOutputInfo.channelSelectors          = &vSelectedOutputChannels[0];
 
     PaError err = Pa_OpenStream ( &deviceStream,
                                   &paInputParams,
@@ -213,6 +304,8 @@ QString CSound::ReinitializeDriver ( int devIndex )
     {
         return tr ( "Could not open Portaudio stream: %1, %2" ).arg ( Pa_GetErrorText ( err ) ).arg ( Pa_GetLastHostErrorInfo()->errorText );
     }
+
+    strCurDevName = deviceInfo->name;
 
     deviceIndex = devIndex;
     return "";
@@ -242,12 +335,12 @@ int CSound::paStreamCallback ( const void*                     input,
     CVector<int16_t>& vecsAudioData = pSound->vecsAudioData;
 
     // CAPTURE ---------------------------------
-    memcpy ( &vecsAudioData[0], input, sizeof ( int16_t ) * frameCount * 2 );
+    memcpy ( &vecsAudioData[0], input, sizeof ( int16_t ) * frameCount * NUM_IN_OUT_CHANNELS );
 
     pSound->ProcessCallback ( vecsAudioData );
 
     // PLAYBACK ------------------------------------------------------------
-    memcpy ( output, &vecsAudioData[0], sizeof ( int16_t ) * frameCount * 2 );
+    memcpy ( output, &vecsAudioData[0], sizeof ( int16_t ) * frameCount * NUM_IN_OUT_CHANNELS );
 
     return paContinue;
 }

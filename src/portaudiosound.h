@@ -42,6 +42,8 @@
 
 #include <portaudio.h>
 
+#define NUM_IN_OUT_CHANNELS 2 // always stereo
+
 class CSound : public CSoundBase
 {
 public:
@@ -55,6 +57,20 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
+
+    virtual int     GetNumInputChannels();
+    virtual QString GetInputChannelName ( const int );
+    virtual void    SetLeftInputChannel ( const int );
+    virtual void    SetRightInputChannel ( const int );
+    virtual int     GetLeftInputChannel() { return vSelectedInputChannels[0]; }
+    virtual int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
+
+    virtual int     GetNumOutputChannels();
+    virtual QString GetOutputChannelName ( const int );
+    virtual void    SetLeftOutputChannel ( const int );
+    virtual void    SetRightOutputChannel ( const int );
+    virtual int     GetLeftOutputChannel() { return vSelectedOutputChannels[0]; }
+    virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
 #ifdef WIN32
     // Portaudio's function for this takes a device index as a parameter.  So it
@@ -82,6 +98,8 @@ protected:
     PaHostApiIndex   asioIndex;
     PaDeviceIndex    deviceIndex;
     PaStream*        deviceStream;
+    CVector<int>     vSelectedInputChannels;
+    CVector<int>     vSelectedOutputChannels;
     int              iPrefMonoBufferSize;
     CVector<int16_t> vecsAudioData;
 };

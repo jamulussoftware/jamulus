@@ -10,3 +10,6 @@
 
 ; !insertmacro MUI_LANGUAGE "Italian"
 ; !include "..\src\res\translation\wininstaller\it.nsi" ; include italian
+
+!insertmacro MUI_LANGUAGE "Dutch"
+!include "..\src\res\translation\wininstaller\nl.nsi"

@@ -18,8 +18,7 @@
 !define APP_EXE           "${APP_NAME}.exe"
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define APP_UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
-
-!define SF_USELECTED  0
+!define SF_USELECTED      0
 
 ; General
 SetCompressor         bzip2  ; Compression mode
@@ -38,11 +37,11 @@ BrandingText "${APP_NAME} powers your online jam session"
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
 !define MUI_UNICON                     "${WINDOWS_PATH}\mainicon.ico"
-!define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
+!define SERVER_ICON                    "${ROOT_PATH}\src\res\win-jamulus-server-icon.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome.bmp"
+!define MUI_HEADERIMAGE_BITMAP         "${ROOT_PATH}\src\res\win-installer-banner.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP   "${ROOT_PATH}\src\res\win-installer-welcome.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${ROOT_PATH}\src\res\win-installer-welcome.bmp"
 
 ; Store the installer language - must be placed before the installer page configuration
 !define MUI_LANGDLL_REGISTRY_ROOT      HKLM
@@ -77,7 +76,7 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 ; Supported languages configuration
 ; Additional languages can be added in the file installerlng.nsi in the translate folder, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
 
-!include "translate\installerlng.nsi"
+!include "${ROOT_PATH}\src\res\translation\wininstaller\installerlng.nsi"
 
 ; Abort the installer/uninstaller if Jamulus is running
 

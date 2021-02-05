@@ -8,11 +8,16 @@ contains(CONFIG, "noupcasename") {
 
 # allow detailed version info for intermediate builds (#475)
 contains(VERSION, .*dev.*) {
-    GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
-    VERSION = "$$VERSION"-$$GIT_DESCRIPTION
-    message(building an intermediate version: $$VERSION)
+    exists(".git/config"){
+        GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
+        VERSION = "$$VERSION"-$$GIT_DESCRIPTION
+        message("building version \"$$VERSION\" (intermediate in git repository)")
+    }else{
+        VERSION = "$$VERSION"-nogit
+        message("building version \"$$VERSION\" (intermediate without git repository)")
+    }
 } else {
-    message(building a final release version: $$VERSION)
+    message("building version \"$$VERSION\" (release)")
 }
 
 CONFIG += qt \

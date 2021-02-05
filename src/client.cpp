@@ -187,6 +187,12 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &Sound, &CSound::ControllerInPanValue,
         this, &CClient::OnControllerInPanValue );
 
+    QObject::connect ( &Sound, &CSound::ControllerInFaderIsSolo,
+        this, &CClient::OnControllerInFaderIsSolo );
+
+    QObject::connect ( &Sound, &CSound::ControllerInFaderIsMute,
+        this, &CClient::OnControllerInFaderIsMute );
+
     QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived,
         this, &CClient::OnInvalidPacketReceived );
 
@@ -721,6 +727,30 @@ void CClient::OnControllerInPanValue ( int iChannelIdx,
 #endif
 
     emit ControllerInPanValue ( iChannelIdx, iValue );
+}
+
+void CClient::OnControllerInFaderIsSolo ( int iChannelIdx,
+                                          bool bIsSolo )
+{
+    // in case of a headless client the buttons are not displayed so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // FIXME: no idea what to do here.
+#endif
+
+    emit ControllerInFaderIsSolo ( iChannelIdx, bIsSolo );
+}
+
+void CClient::OnControllerInFaderIsMute ( int iChannelIdx,
+                                          bool bIsMute )
+{
+    // in case of a headless client the buttons are not displayed so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // FIXME: no idea what to do here.
+#endif
+
+    emit ControllerInFaderIsMute ( iChannelIdx, bIsMute );
 }
 
 void CClient::OnClientIDReceived ( int iChanID )

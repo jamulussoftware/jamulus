@@ -395,6 +395,20 @@ printf ( "\n" );
                                 emit ControllerInPanValue ( cCtrl.iChannel, iPanValue );
                             }
                             break;
+                        case Solo:
+                            {
+                                // We depend on toggles reflecting the desired state
+                                emit ControllerInFaderIsSolo ( cCtrl.iChannel,
+                                                               iValue >= 0x40);
+                            }
+                            break;
+                        case Mute:
+                            {
+                                // We depend on toggles reflecting the desired state
+                                emit ControllerInFaderIsMute ( cCtrl.iChannel,
+                                                               iValue >= 0x40);
+                            }
+                            break;
                         default:
                             break;
                         }

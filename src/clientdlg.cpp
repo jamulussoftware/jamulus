@@ -490,6 +490,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::ControllerInPanValue,
         this, &CClientDlg::OnControllerInPanValue );
 
+    QObject::connect ( pClient, &CClient::ControllerInFaderIsSolo,
+        this, &CClientDlg::OnControllerInFaderIsSolo );
+
+    QObject::connect ( pClient, &CClient::ControllerInFaderIsMute,
+        this, &CClientDlg::OnControllerInFaderIsMute );
+
     QObject::connect ( pClient, &CClient::CLChannelLevelListReceived,
         this, &CClientDlg::OnCLChannelLevelListReceived );
 

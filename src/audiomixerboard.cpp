@@ -1260,6 +1260,33 @@ void CAudioMixerBoard::SetPanValue ( const int iChannelIdx,
     }
 }
 
+void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx,
+                                        const bool bIsSolo )
+{
+    // only apply solo if channel index is valid and the fader is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetFaderIsSolo ( bIsSolo );
+        }
+    }
+}
+
+void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx,
+                                        const bool bIsMute )
+{
+    // only apply mute if channel index is valid and the fader is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetFaderIsMute ( bIsMute );
+        }
+    }
+}
+
 void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
 {
     QMutexLocker locker ( &Mutex );

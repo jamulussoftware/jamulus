@@ -208,10 +208,16 @@ public:
     void            SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
 
     void            SetFaderLevel ( const int iChannelIdx,
-                                const int iValue );
+                                    const int iValue );
 
     void            SetPanValue ( const int iChannelIdx,
                                   const int iValue );
+
+    void            SetFaderIsSolo ( const int iChannelIdx,
+                                     const bool bIsSolo );
+
+    void            SetFaderIsMute ( const int iChannelIdx,
+                                     const bool bIsMute );
 
     void            SetNumMixerPanelRows ( const int iNNumMixerPanelRows );
     int             GetNumMixerPanelRows() { return iNumMixerPanelRows; }

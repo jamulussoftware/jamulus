@@ -147,6 +147,14 @@ public slots:
                                   const int iValue ) { MainMixerBoard->SetPanValue ( iChannelIdx,
                                                                                      iValue ); }
 
+    void OnControllerInFaderIsSolo ( const int iChannelIdx,
+                                     const bool bIsSolo ) { MainMixerBoard->SetFaderIsSolo ( iChannelIdx,
+                                                                                             bIsSolo ); }
+
+    void OnControllerInFaderIsMute ( const int iChannelIdx,
+                                     const bool bIsMute ) { MainMixerBoard->SetFaderIsMute ( iChannelIdx,
+                                                                                             bIsMute ); }
+
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 

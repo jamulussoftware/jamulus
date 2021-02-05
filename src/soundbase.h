@@ -165,4 +165,6 @@ signals:
     void ReinitRequest ( int iSndCrdResetType );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );
+    void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
+    void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
 };

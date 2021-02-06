@@ -220,6 +220,8 @@ public:
 
     void        SetRecorderState ( const ERecorderState newRecorderState );
     void        SetAllFaderLevelsToNewClientLevel();
+    void        SetAllPanLeftRight();
+    void        SetAllPanRandom();
     void        StoreAllFaderSettings();
     void        LoadAllFaderSettings();
 
@@ -266,6 +268,7 @@ protected:
     ERecorderState          eRecorderState;
     QMutex                  Mutex;
     EChSortType             eChSortType;
+    CVector<int>            veciChannelOrder;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const float  fValue,

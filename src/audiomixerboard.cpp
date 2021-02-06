@@ -24,6 +24,7 @@
 
 #include "audiomixerboard.h"
 
+#include <QRandomGenerator>
 
 /******************************************************************************\
 * CChanneFader                                                                 *
@@ -1075,12 +1076,15 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     // the widget from the layout first but it is moved to the new position automatically
     int iVisibleFaderCnt = 0;
 
+    veciChannelOrder.clear();
+
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         const int iCurFaderID = PairList[i].second;
 
         if ( vecpChanFader[iCurFaderID]->IsVisible() )
         {
+            veciChannelOrder.push_back(iCurFaderID);
             // per definition: the fader order is colum-first/row-second (note that
             // the value in iNumFadersFirstRow defines how many rows we will get)
             pMainLayout->addWidget ( vecpChanFader[iCurFaderID]->GetMainWidget(),
@@ -1260,6 +1264,52 @@ void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
             // same fader level now
             vecpChanFader[i]->SetFaderLevel (
                 pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX, true );
+        }
+    }
+}
+
+void CAudioMixerBoard::SetAllPanLeftRight() 
+{
+    QMutexLocker locker ( &Mutex );
+
+    int iNumConnectedClients = veciChannelOrder.size();
+
+    if ( iNumConnectedClients < 3) {
+        return;
+    }
+    
+    int iCount = 0;
+    int halfCount = iNumConnectedClients / 2;
+
+    for ( const int iChannelID : veciChannelOrder )
+    {
+        // set my channel to middle
+        if ( iChannelID == iMyChannelID )
+        {
+            vecpChanFader[iChannelID]->SetPanValue ( 50 );
+            continue;
+        }
+
+        // leave a spot in the middle for My Channel
+        if ( iCount == halfCount ) 
+        {
+            iCount += 2;
+        }
+
+        vecpChanFader[iChannelID]->SetPanValue ( iCount++ * AUD_MIX_PAN_MAX / iNumConnectedClients );
+    }
+}
+
+void CAudioMixerBoard::SetAllPanRandom()
+{
+    QMutexLocker locker ( &Mutex );
+
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        // only apply to visible faders and not to my own channel fader
+        if ( vecpChanFader[i]->IsVisible() && ( i != iMyChannelID ) )
+        {
+            vecpChanFader[i]->SetPanValue ( QRandomGenerator::global()->bounded(AUD_MIX_PAN_MAX) );
         }
     }
 }

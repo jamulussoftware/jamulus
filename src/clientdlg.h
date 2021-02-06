@@ -163,6 +163,8 @@ public slots:
     void OnUseTowRowsForMixerPanel ( bool Checked ) { MainMixerBoard->SetNumMixerPanelRows ( Checked ? 2 : 1 ); }
     void OnClearAllStoredSoloMuteSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
+    void OnSetAllPanLeftRight() { MainMixerBoard->SetAllPanLeftRight(); }
+    void OnSetAllPanRandom() { MainMixerBoard->SetAllPanRandom(); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );

@@ -336,6 +336,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
         SLOT ( OnSetAllFadersToNewClientLevel() ), QKeySequence ( Qt::CTRL + Qt::Key_L ) );
 
+    pEditMenu->addAction ( tr ( "Set All Pan values distribute from left to right" ), this,
+        SLOT ( OnSetAllPanLeftRight() ), QKeySequence ( Qt::CTRL + Qt::SHIFT + Qt::Key_P ) );
+
+    pEditMenu->addAction ( tr ( "Set All Pan randomly" ), this,
+        SLOT ( OnSetAllPanRandom() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
+
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );

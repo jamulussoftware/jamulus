@@ -421,10 +421,20 @@ CServer::CServer ( const int          iNewMaxNumChan,
         vecChannels[i].SetEnable ( true );
     }
 
-    // introduced by kraney (#653): "increased the size of the thread pool"
-    if ( bUseMultithreading )
+    int iAvailableCores = QThread::idealThreadCount();
+
+    // setup QThreadPool if multithreading is active and possible
+    if ( bUseMultithreading && iAvailableCores > 1 )
     {
-        QThreadPool::globalInstance()->setMaxThreadCount ( QThread::idealThreadCount() * 4 );
+        // set maximum thread count to available -1 to keep one thread for the main event loop
+        iMaxNumThreads = iAvailableCores - 1;
+        qDebug() << "multithreading enabled, setting thread count to" << iMaxNumThreads;
+        QThreadPool::globalInstance()->setMaxThreadCount ( iMaxNumThreads );
+    }
+    else
+    {
+        qDebug() << "found only one core, disable multithreading";
+        bUseMultithreading = false;
     }
 
 
@@ -837,9 +847,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         else
         {
             // processing with multithreading
-// TODO optimization of the MTBlockSize value
-            const int iMTBlockSize = 10; // every 10 users a new thread is created
-            const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
+            // spread work equally among available threads
+            // since decoding is a much lighter workload, only create new tasks for every 10 clients
+            // measurements by menzels suggest it is ~6% (decode) vs 60% (encode) of process cpu time
+            const int iNumBlocks   = std::min(iNumClients / 10 + 1, iMaxNumThreads);
+            const int iMTBlockSize = (iNumClients - 1) / iNumBlocks + 1; 
 
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
@@ -920,11 +932,9 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // processing with multithreading
         if ( bUseMultithreading )
         {
-            // introduced by kraney (#653): each thread must complete within the 1 or 2ms time budget for the timer
-// TODO determine at startup by running a small benchmark
-            const int iMaximumMixOpsInTimeBudget = 500; // approximate limit as observed on GCP e2-standard instance
-            const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
-            const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
+            // spread work equally among available threads
+            const int iNumBlocks   = std::min(iNumClients, iMaxNumThreads);
+            const int iMTBlockSize = (iNumClients - 1) / iNumBlocks + 1;
 
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
@@ -1392,26 +1402,26 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
         for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
         {
-            // OPUS encoding
-            if ( pCurOpusEncoder != nullptr )
-            {
-// TODO find a better place than this: the setting does not change all the time so for speed
-//      optimization it would be better to set it only if the network frame size is changed
-opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+        // OPUS encoding
+        if ( pCurOpusEncoder != nullptr )
+        {
+            // TODO find a better place than this: the setting does not change all the time so for speed
+            //      optimization it would be better to set it only if the network frame size is changed
+            opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
-                                               iClientFrameSizeSamples,
-                                               &vecvecbyCodedData[iChanCnt][0],
-                                               iCeltNumCodedBytes );
+                                            &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                            iClientFrameSizeSamples,
+                                            &vecvecbyCodedData[iChanCnt][0],
+                                            iCeltNumCodedBytes );
             }
 
             // send separate mix to current clients
             vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
                                                         vecvecbyCodedData[iChanCnt],
                                                         iCeltNumCodedBytes );
+            }
         }
-    }
 
     Q_UNUSED ( iUnused )
 }

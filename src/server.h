@@ -332,6 +332,7 @@ protected:
 
     // variables needed for multithreading support
     bool                      bUseMultithreading;
+    int                       iMaxNumThreads;
     QFutureSynchronizer<void> FutureSynchronizer;
 
     bool CreateLevelsForAllConChannels  ( const int                        iNumClients,

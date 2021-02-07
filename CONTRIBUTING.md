@@ -7,4 +7,4 @@ Please have a look at this list to facilitate your contribution:
 * Make sure (if possible) that your code compiles on Windows/Mac/Linux.
 * Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
 
-Look here for other further guidelines: https://github.com/jamulussoftware/jamulus/issues/596
+Look here for other further guidelines: https://github.com/jamulussoftware/jamulus/discussions/915

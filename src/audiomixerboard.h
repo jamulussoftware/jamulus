@@ -219,6 +219,8 @@ public:
     void        SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
     void        SetRecorderState ( const ERecorderState newRecorderState );
+    ERecorderState  GetRecorderState () { return eRecorderState; };
+
     void        SetAllFaderLevelsToNewClientLevel();
     void        StoreAllFaderSettings();
     void        LoadAllFaderSettings();

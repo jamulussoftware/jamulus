@@ -19,6 +19,9 @@
 
 - remove ConsoleWriterFactory (#926)
 
+- add new --serverpublicip option to support central servers behind NAT,
+  coded by hoffie (#954)
+
 
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 

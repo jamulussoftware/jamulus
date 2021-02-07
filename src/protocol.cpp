@@ -303,6 +303,9 @@ CONNECTION LESS MESSAGES
       NOTE: In the PROTMESSID_CLM_SERVER_LIST list, this field will be empty
       as only the initial IP address should be used by the client.  Where
       necessary, that value will contain the server internal address.
+      When running a central server and a slave server behind the same NAT,
+      this field is used the other way round: It will contain the public
+      IP in this case which will be served to clients from the Internet.
 
 
 - PROTMESSID_CLM_REGISTER_SERVER_EX: Register a server, providing extended server

@@ -620,7 +620,7 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
 
 void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
 {
-    plbrChannelLevel->SetValue ( iLevel );
+    plbrChannelLevel->SetValue ( iLevel * dPreviousFaderLevel * 0.01 );
 }
 
 void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )

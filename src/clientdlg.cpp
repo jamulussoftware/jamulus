@@ -40,7 +40,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed       ( !strMIDISetup.isEmpty() ),
     eLastRecorderState  ( RS_UNDEFINED ),       // for SetMixerBoardDeco
-    eLastDesign         ( GD_ORIGINAL ),        //
+    eLastDesign         ( GD_ORIGINAL ),        //          "
     ClientSettingsDlg   ( pNCliP, pNSetP, parent ),
     ChatDlg             ( parent ),
     ConnectDlg          ( pNSetP, bNewShowComplRegConnList, parent ),
@@ -1361,13 +1361,13 @@ rbtReverbSelR->setStyleSheet ( "" );
 void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderState )
 {
     MainMixerBoard->SetRecorderState ( newRecorderState );
-    SetMixerBoardDeco( newRecorderState, pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
 }
 
 void CClientDlg::OnGUIDesignChanged()
 {
     SetGUIDesign ( pClient->GetGUIDesign() );
-    SetMixerBoardDeco(  MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
 }
 
 void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  )
@@ -1380,17 +1380,30 @@ void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, cons
 
     if( newRecorderState == RS_RECORDING )
     {
-        MainMixerBoard->setStyleSheet( "QGroupBox::title { subcontrol-origin: margin; subcontrol-position: left top; left: 7px; color: rgb(255,255,255); background-color: rgb(255,0,0); }" );
+        MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin; "
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(255,255,255);"
+                    "                   background-color: rgb(255,0,0); }" );
     }
     else
     {
         if( eNewDesign == GD_ORIGINAL)
         {
-            MainMixerBoard->setStyleSheet( "QGroupBox::title { subcontrol-origin: margin; subcontrol-position: left top; left: 7px; color: rgb(220,220,220); }" );
+            MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin;"
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(220,220,220); }" );
         }
         else
         {
-            MainMixerBoard->setStyleSheet( "QGroupBox::title { subcontrol-origin: margin; subcontrol-position: left top; left: 7px; color: rgb(0,0,0); }" );
+            MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin;"
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(0,0,0); }" );
         }
     }
 }

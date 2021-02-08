@@ -1373,12 +1373,12 @@ void CClientDlg::OnGUIDesignChanged()
 void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  )
 {
     // return if no change
-    if( (newRecorderState == eLastRecorderState) && (eNewDesign == eLastDesign) )
+    if ( ( newRecorderState == eLastRecorderState ) && ( eNewDesign == eLastDesign ) )
         return;
     eLastRecorderState = newRecorderState;
     eLastDesign = eNewDesign;
 
-    if( newRecorderState == RS_RECORDING )
+    if ( newRecorderState == RS_RECORDING )
     {
         MainMixerBoard->setStyleSheet (
                     "QGroupBox::title { subcontrol-origin: margin; "
@@ -1389,7 +1389,7 @@ void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, cons
     }
     else
     {
-        if( eNewDesign == GD_ORIGINAL)
+        if ( eNewDesign == GD_ORIGINAL )
         {
             MainMixerBoard->setStyleSheet (
                     "QGroupBox::title { subcontrol-origin: margin;"

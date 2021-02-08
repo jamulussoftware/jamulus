@@ -196,34 +196,34 @@ public:
 
     virtual ~CAudioMixerBoard();
 
-    void        SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
-    void        HideAll();
-    void        ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
-    void        SetServerName ( const QString& strNewServerName );
-    QString     GetServerName() { return strServerName; }
-    void        SetGUIDesign ( const EGUIDesign eNewDesign );
-    void        SetDisplayPans ( const bool eNDP );
-    void        SetPanIsSupported();
-    void        SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
-    void        SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
+    void            SetSettingsPointer ( CClientSettings* pNSet ) { pSettings = pNSet; }
+    void            HideAll();
+    void            ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
+    void            SetServerName ( const QString& strNewServerName );
+    QString         GetServerName() { return strServerName; }
+    void            SetGUIDesign ( const EGUIDesign eNewDesign );
+    void            SetDisplayPans ( const bool eNDP );
+    void            SetPanIsSupported();
+    void            SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
+    void            SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
 
-    void        SetFaderLevel ( const int iChannelIdx,
+    void            SetFaderLevel ( const int iChannelIdx,
                                 const int iValue );
 
-    void        SetNumMixerPanelRows ( const int iNNumMixerPanelRows );
-    int         GetNumMixerPanelRows() { return iNumMixerPanelRows; }
+    void            SetNumMixerPanelRows ( const int iNNumMixerPanelRows );
+    int             GetNumMixerPanelRows() { return iNumMixerPanelRows; }
 
-    void        SetFaderSorting ( const EChSortType eNChSortType );
-    EChSortType GetFaderSorting() { return eChSortType; }
+    void            SetFaderSorting ( const EChSortType eNChSortType );
+    EChSortType     GetFaderSorting() { return eChSortType; }
 
-    void        SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
+    void            SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
     void            SetRecorderState ( const ERecorderState newRecorderState );
     ERecorderState  GetRecorderState() { return eRecorderState; };
 
-    void        SetAllFaderLevelsToNewClientLevel();
-    void        StoreAllFaderSettings();
-    void        LoadAllFaderSettings();
+    void            SetAllFaderLevelsToNewClientLevel();
+    void            StoreAllFaderSettings();
+    void            LoadAllFaderSettings();
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea

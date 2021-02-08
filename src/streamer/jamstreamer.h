@@ -1,3 +1,4 @@
+#ifndef _WIN32
 #include <QObject>
 #include "../util.h"
 
@@ -21,3 +22,4 @@ private:
     int16_t *pcm; // pointer to pcm which will hold the raw pcm data from the server, to be initialised in the constructor
 };
 }
+#endif

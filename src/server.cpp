@@ -406,10 +406,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // that jam recorder needs the frame size which is given to the jam
     // recorder in the SetRecordingDir() function)
     SetRecordingDir ( strRecordingDirName );
-    
+#ifndef _WIN32    
     // enable jam streaming
     if ( !strStreamDest.isEmpty() )
     {
+        bStream = true;
         QThread* pthJamStreamer = new QThread;
         streamer::CJamStreamer* pJamStreamer = new streamer::CJamStreamer();
         pJamStreamer->Init( strStreamDest );
@@ -419,7 +420,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
         QObject::connect( this, &CServer::StreamFrame, pJamStreamer, &streamer::CJamStreamer::process );
         pthJamStreamer->start();
     }
-
+#endif
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software)
     for ( i = 0; i < iMaxNumChannels; i++ )
@@ -877,7 +878,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                         vecNumAudioChannels,
                                                                         vecvecsData,
                                                                         vecChannelLevels );
-        MixStream ( iNumClients );
+#ifndef _WIN32
+        if ( bStream == true ) {
+            MixStream ( iNumClients );
+        }
+#endif
 
         for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
         {

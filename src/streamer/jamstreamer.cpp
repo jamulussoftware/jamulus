@@ -1,3 +1,4 @@
+#ifndef _WIN32
 #include "jamstreamer.h"
 
 using namespace streamer;
@@ -33,3 +34,4 @@ void CJamStreamer::OnStarted() {
 void CJamStreamer::OnStopped() {
     pclose(pipeout);
 }
+#endif

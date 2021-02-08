@@ -370,16 +370,16 @@ int main ( int argc, char** argv )
         }
 
 
-        // Stream destination -------------------------------------------------
+        // Stream destination ---------------------------------------------------------
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--streamto",
+                                 "--streamto", // no short form
                                  "--streamto",
                                  strArgument ) )
         {
             strStreamDest = strArgument;
-            qInfo() << qUtf8Printable( QString("- stream destination: %1" )
+            qInfo() << qUtf8Printable( QString( "- stream destination: %1" )
                 .arg( strStreamDest ) );
             CommandLineOptions << "--streamto";
             continue;

@@ -371,8 +371,7 @@ int main ( int argc, char** argv )
 
 
         // Stream destination -------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
+        if ( GetStringArgument ( argc,
                                  argv,
                                  i,
                                  "--streamto",
@@ -380,7 +379,8 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strStreamDest = strArgument;
-            tsConsole << "- stream destination: " << strStreamDest << endl;
+            qInfo() << qUtf8Printable( QString("- stream destination: %1" )
+                .arg( strStreamDest ) );
             CommandLineOptions << "--streamto";
             continue;
         }

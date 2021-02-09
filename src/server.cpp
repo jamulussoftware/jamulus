@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -229,14 +229,20 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strServerPublicIP,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
+                   const QString&     strNEduModePassword,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const bool         bNUseMultithreading,
+                   const bool         bNLogIP,
                    const bool         bDisableRecording,
+                   const bool         bNEduModeEnabled,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading          ( bNUseMultithreading ),
+    bEduModeEnabled             ( bNEduModeEnabled ),
+    bLogIP                      ( bNLogIP ),
     iMaxNumChannels             ( iNewMaxNumChan ),
+    strEduModePassword          ( strNEduModePassword ),
     Socket                      ( this, iPortNumber ),
     Logging                     ( ),
     iFrameCount                 ( 0 ),
@@ -377,6 +383,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     {
         Logging.Start ( strLoggingFileName );
     }
+
+    // enable logging full ip (if requested)
+    Logging.SetLogIP( bLogIP );
 
     // HTML status file writing
     if ( !strServerHTMLFileListName.isEmpty() )
@@ -590,6 +599,15 @@ void CServer::OnNewConnection ( int          iChID,
 {
     QMutexLocker locker ( &Mutex );
 
+    // if Edu-Mode is enabled and waitingroom is on, block him
+    if ( bEduModeEnabled && ! EduModeIsFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM ) )
+    {
+        vecChannels[iChID].SetBlocked ( true );
+    }
+
+    // Log off channel on new connection
+    vecChannels[iChID].SetAdmin( false );
+
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
@@ -638,6 +656,19 @@ void CServer::OnNewConnection ( int          iChID,
 
             vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
         }
+
+        if ( bEduModeEnabled )
+        {
+
+            QString strEduModeIsEnabledFormatted =
+                "<b style='color: red;'>EDU-MODE is on.</b><br>You may be KICKED/MUTED/... by the admin!";
+
+            if ( ! EduModeIsFeatureDisabled ( EDU_MODE_FEATURE_WAITINGRM ) )
+            {
+                strEduModeIsEnabledFormatted += "<br><b><span style='color: red;'>Waiting Room is on.</span><br>You can not hear others because waiting room mode is enabled. Please wait for an admin to enable you.</b>";
+            }
+          vecChannels[iChID].CreateChatTextMes ( strEduModeIsEnabledFormatted );
+        }
     }
     MutexWelcomeMessage.unlock();
 
@@ -659,6 +690,21 @@ void CServer::OnNewConnection ( int          iChID,
 
     // logging of new connected channel
     Logging.AddNewConnection ( RecHostAddr.InetAddr, GetNumberOfConnectedClients() );
+
+    if ( bEduModeEnabled && ! EduModeIsFeatureDisabled ( EDU_MODE_FEATURE_WAITINGRM ))
+    { // send join message to admin
+        const QString sChID =  QString::number(iChID);
+        const QString strActualMessageText =
+            "<table style='background-color:#2ca2c8;color:#ffffff;'><tr><td>New: At <b>" +
+            QTime::currentTime().toString ( "hh:mm" ) + "</b> a new user with the ID <b>" + sChID.toHtmlEscaped() + "</b> joined. Please enable this user with /c/ubl "+ sChID.toHtmlEscaped() +"</td></tr></table>";
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            if ( vecChannels[i].IsConnected() && vecChannels[i].IsAdmin() )
+            {
+                vecChannels[i].CreateChatTextMes ( strActualMessageText );
+            }
+        }
+    }
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )
@@ -1125,7 +1171,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
     // get actual ID of current channel
     const int iCurChanID = vecChanIDsCurConChan[iChanCnt];
-
+    const bool currentClientBlocked = vecChannels[iCurChanID].IsBlocked();
     // init intermediate processing vector with zeros since we mix all channels on that vector
     vecfIntermProcBuf.Reset ( 0 );
 
@@ -1135,6 +1181,13 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
+            // check if client is blocked.
+            // one can always hear himself --> if we currently iterate through the blocked client we do send him audio
+            if ( ( j != iCurChanID && vecChannels[j].IsBlocked() ) || ( j != iCurChanID && currentClientBlocked ) )
+            {
+                continue;
+            }
+
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const float             fGain    = vecvecfGains[iChanCnt][j];
@@ -1193,6 +1246,13 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // Stereo target channel -----------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
+
+            // check if the client j is blocked
+            if ( ( j != iCurChanID && vecChannels[j].IsBlocked() ) || ( j != iCurChanID && currentClientBlocked ) )
+            {
+                continue;
+            }
+
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const float             fGain    = vecvecfGains[iChanCnt][j];
@@ -1382,6 +1442,16 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 
+bool CServer::EduModeIsFeatureDisabled( const int iFeature )
+{
+    return bEduModeFeatures[iFeature];
+}
+
+void CServer::EduModeSetFeatureDisabled( const int iFeature, const bool bFeatureStatus )
+{
+    bEduModeFeatures[iFeature] = bFeatureStatus;
+}
+
 void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                        const QString& strChatText )
 {
@@ -1394,20 +1464,147 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
 
     const QString strActualMessageText =
-        "<font color=""" + sCurColor + """>(" +
-        QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
+        "<small style='color:" + sCurColor + ";'>[" +
+        QTime::currentTime().toString ( "hh:mm" ) + "] <b>" +
         ChanName.toHtmlEscaped() +
-        "</b></font> " + strChatText;
+        "</b></small><br />" + strChatText;
 
-
-    // Send chat text to all connected clients ---------------------------------
-    for ( int i = 0; i < iMaxNumChannels; i++ )
+    // check if chat is disabled
+    if ( bEduModeEnabled && EduModeIsFeatureDisabled( EDU_MODE_FEATURE_CHAT ) )
     {
-        if ( vecChannels[i].IsConnected() )
+        vecChannels[iCurChanID].CreateChatTextMes( "<span style='color:red;'>ERROR</span>: Chat is disabled." );
+    }
+    else
+    {
+        // Send chat text to all connected clients ---------------------------------
+        for ( int i = 0; i < iMaxNumChannels; i++ )
         {
-            // send message
-            vecChannels[i].CreateChatTextMes ( strActualMessageText );
+            if ( vecChannels[i].IsConnected() )
+            {
+                // send message
+                vecChannels[i].CreateChatTextMes ( strActualMessageText );
+            }
         }
+    }
+
+}
+void CServer::InterpretAndExecuteChatCommand ( const int iCurChanID,
+                                               const QString& strChatText )
+{
+    QString strChatCmd = strChatText;
+    strChatCmd.remove ( 0, 3 );
+    QString ChanName = vecChannels[iCurChanID].GetName(); // to greet the user
+
+    if ( strChatCmd == strEduModePassword && bEduModeEnabled )
+    {
+        vecChannels[iCurChanID].SetAdmin( true );
+        vecChannels[iCurChanID].CreateChatTextMes ( "Hi " + ChanName.toHtmlEscaped() + " You are an admin now.");
+    }
+    else if ( strChatCmd == "ls" && vecChannels[iCurChanID].IsAdmin() )
+    {   // list status of channels
+        vecChannels[iCurChanID].CreateChatTextMes ( "Hi " + ChanName.toHtmlEscaped() + ". Getting all IDs and names...");
+        // generate var to send
+        QString blocked = "";
+        QString channelListText = "<br><b>Channels names and nums: </b><table><tr style=\"font-weight: bold;\"><td>ID</td><td>Display name</td><td>Blocked</td></tr>";
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                QString id = QString::number(i);
+                if (vecChannels[i].IsBlocked())
+                {
+                    blocked = "<b style='color:red;'>Yes</b>";
+                } else {
+                    blocked = "<span style='color:green;'>No</span>";
+                }
+
+                channelListText += "<tr><td><b>" + id.toHtmlEscaped() + "</b></td><td>" + vecChannels[i].GetName().toHtmlEscaped() + "</td><td>" + blocked + "</td></tr>";
+
+            }
+        }
+        channelListText += "</table>";
+        vecChannels[iCurChanID].CreateChatTextMes ( channelListText );
+    }
+    else if ( strChatCmd.startsWith ( "disableChat" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_CHAT, true );
+        vecChannels[iCurChanID].CreateChatTextMes ( "Disabled Chat." );
+    }
+    else if ( strChatCmd.startsWith ( "enableChat" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_CHAT, false );
+        vecChannels[iCurChanID].CreateChatTextMes ( "Enabled Chat." );
+    }
+    else if ( strChatCmd.startsWith ( "bl" ) && vecChannels[iCurChanID].IsAdmin() )
+    {   // block user
+        QRegExp rMoveAway ( "bl\\s+([0-9]+)" );
+        bool bMatched = rMoveAway.exactMatch ( strChatCmd );
+        if ( !bMatched )
+        {
+            vecChannels[iCurChanID].CreateChatTextMes ( "<span style='color:red;'>Invalid parameter. Please try again.</span>" );
+        }
+        else
+        {
+            int iBlockedID = rMoveAway.capturedTexts()[1].toInt();
+            if ( iBlockedID < iMaxNumChannels && vecChannels[iBlockedID].IsConnected() )
+            {
+                vecChannels[iBlockedID].SetBlocked ( true );
+                vecChannels[iCurChanID].CreateChatTextMes ( "Blocked  " +  vecChannels[iBlockedID].GetName().toHtmlEscaped() );
+                vecChannels[iBlockedID].CreateChatTextMes ( "You have been blocked." );
+            }
+            else
+            {
+              vecChannels[iCurChanID].CreateChatTextMes ( "<span style='color:red;'>Invalid Channel ID.</span>" );
+            }
+        }
+
+    }
+    else if ( strChatCmd.startsWith ( "ubl" ) && vecChannels[iCurChanID].IsAdmin() )
+    {  // unblock
+        QRegExp rEnableID ( "ubl\\s+([0-9]+)" );
+        bool bMatched = rEnableID.exactMatch ( strChatCmd );
+        if ( !bMatched )
+        {
+            vecChannels[iCurChanID].CreateChatTextMes ( "<span style='color:red;'>Invalid parameter. Please try again.</span>" );
+        }
+        else
+        {
+            int iBlockedID = rEnableID.capturedTexts()[1].toInt();
+            if ( iBlockedID < iMaxNumChannels && vecChannels[iBlockedID].IsConnected() )
+            {
+                vecChannels[iBlockedID].SetBlocked ( false );
+                vecChannels[iCurChanID].CreateChatTextMes ( "Unblocked " +  vecChannels[iBlockedID].GetName().toHtmlEscaped() );
+                vecChannels[iBlockedID].CreateChatTextMes ( "You have been unblocked." );
+            }
+            else
+            {
+              vecChannels[iCurChanID].CreateChatTextMes ( "<span style='color:red;'>Invalid Channel ID.</span>" );
+            }
+        }
+
+    }
+    else if ( strChatCmd.startsWith( "enableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM, false );
+        vecChannels[iCurChanID].CreateChatTextMes ( "Enabled waiting room. New users will not be able to hear others." );
+    }
+    else if ( strChatCmd.startsWith( "disableWaitingRoom" ) && vecChannels[iCurChanID].IsAdmin() )
+    {
+        EduModeSetFeatureDisabled( EDU_MODE_FEATURE_WAITINGRM, true );
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                // send message
+                vecChannels[i].CreateChatTextMes ( "Waiting room mode was disabled. You are now unblocked." );
+                vecChannels[i].SetBlocked ( false );
+            }
+        }
+        vecChannels[iCurChanID].CreateChatTextMes ( "Disabled waiting room. Everybody can hear others now." );
+    }
+    else
+    {
+        vecChannels[iCurChanID].CreateChatTextMes ( "<span style='color:red;'>This command was invalid or you don't have the correct permissions. Are you logged in?</span>");
     }
 }
 

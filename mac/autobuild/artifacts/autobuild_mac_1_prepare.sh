@@ -14,8 +14,17 @@ echo "Install dependencies..."
 brew install qt5
 brew link qt5 --force
 
-echo "Run deploy script..."
-sh ${1}/mac/deploy_mac.sh
 
-# Move the created installer to deploy
-cp ${1}/deploy/Jamulus-*installer-mac.dmg ${1}/deploy/Jamulus-installer-mac.dmg
+
+
+
+
+
+echo "find  script..."
+echo "$0"
+echo "find  script..."
+echo realpath "$0"
+echo "find deploy script..."
+ls ${1}
+echo "find deploy script..."
+ls ${1}/mac/*

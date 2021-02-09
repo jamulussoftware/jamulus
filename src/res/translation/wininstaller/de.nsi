@@ -16,7 +16,7 @@ LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_GERMAN} \
     "Wenn du ohne sie zu löschen weitermachst, könnte es sein, dass deine Installation nicht mehr korrekt funktioniert. Bist du sicher, dass du die alte Version wirklich nicht löschen möchtest?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_GERMAN} \
-     "FATALER FEHLER: DAS DEINSTALLATIONSPROGRAMM HAT EINEN FEHLER GEMELDET. Wenn du auf OK klickst, wird eine alte Version auf deinem PC verbleiben und das Installationsprogramm weiterarbeiten und die neue Version installieren. Du kannst auch auf Abbrechen klicken und versuchen sie selbst per Hand zu deinstallieren."
+     "Leider konnte die alte Version nicht deinstalliert werden. Trotzdem wird nun versucht die neue zu installieren, aber du kannst auch auf Abbrechen klicken um zu versuchen, die alte Version selber zu entfernen."
 
 LangString ASIO_DRIVER_HEADER ${LANG_GERMAN} \
      "ASIO Treiber"

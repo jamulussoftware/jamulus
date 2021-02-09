@@ -75,9 +75,9 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 !insertmacro MUI_UNPAGE_FINISH
 
 ; Supported languages configuration
-; Additional languages can be added in the file installerlng.nsi in the translate folder, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
+; Additional languages can be added in the file installerlng.nsi in the wininstaller folder, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
 
-!include "translate\installerlng.nsi"
+!include "${ROOT_PATH}\src\res\translation\wininstaller\installerlng.nsi"
 
 ; Abort the installer/uninstaller if Jamulus is running
 

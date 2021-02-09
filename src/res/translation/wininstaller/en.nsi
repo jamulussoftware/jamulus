@@ -16,7 +16,7 @@ LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ENGLISH} \
     "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_ENGLISH} \
-     "FATAL: THE UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
+     "Sorry, we couldn't uninstall the old version. We'll try to install the new one, but you can also press cancel and try to remove the old version on your own."
 
 LangString ASIO_DRIVER_HEADER ${LANG_ENGLISH} \
      "ASIO driver"

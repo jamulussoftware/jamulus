@@ -29,6 +29,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
+                                         const QString& strServerPublicIP,
                                          const int      iNumChannels,
                                          CProtocol*     pNConLProt )
     : eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
@@ -41,7 +42,18 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     SetCentralServerAddress ( sNCentServAddr );
 
     // set the server internal address, including internal port number
-    SlaveCurLocalHostAddress = CHostAddress( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
+    QHostAddress qhaServerPublicIP;
+    if ( strServerPublicIP == "" )
+    {
+        // No user-supplied override via --serverpublicip -> use auto-detection
+        qhaServerPublicIP = NetworkUtil::GetLocalAddress().InetAddr;
+    }
+    else
+    {
+        // User-supplied --serverpublicip
+        qhaServerPublicIP = QHostAddress ( strServerPublicIP );
+    }
+    SlaveCurLocalHostAddress = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
     // prepare the server info information
     QStringList slServInfoSeparateParams;
@@ -441,6 +453,20 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                 // to allow for NAT.
                 if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
                 {
+                    vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
+                }
+                else if ( !NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr ) &&
+                          NetworkUtil::IsPrivateNetworkIP ( vecServerInfo[iIdx].HostAddr.InetAddr ) &&
+                          !NetworkUtil::IsPrivateNetworkIP ( ServerList[iIdx].LHostAddr.InetAddr ) )
+                {
+                    // We've got a request from a public client, the server
+                    // list's entry's primary address is a private address,
+                    // but it supplied an additional public address using
+                    // --serverpublicip.
+                    // In this case, use the latter.
+                    // This is common when running a central server with slave
+                    // servers behind a NAT and dealing with external, public
+                    // clients.
                     vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
                 }
                 else

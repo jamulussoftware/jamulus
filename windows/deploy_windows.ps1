@@ -270,6 +270,7 @@ Function Build-Installer
         "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
         "$WindowsPath\installer.nsi")
 }
+
 # Build and copy NS-Process dll
 Function Build-NSProcess
 {
@@ -290,7 +291,7 @@ Function Build-NSProcess
    
         Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
         Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
-       $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
+        $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
 }
 

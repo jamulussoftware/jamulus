@@ -12,7 +12,7 @@ public:
     void Init( const QString strStreamDest );
 
 public slots:
-    void process( int iServerFrameSizeSamples, CVector<int16_t> data );
+    void process( int iServerFrameSizeSamples, const CVector<int16_t>& data );
     void OnStarted();
     void OnStopped();
 

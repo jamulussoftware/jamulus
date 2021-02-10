@@ -419,7 +419,7 @@ signals:
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
 
-    void StreamFrame ( const int iServerFrameSizeSamples, const CVector<int16_t> data );
+    void StreamFrame ( const int iServerFrameSizeSamples, const CVector<int16_t>& data );
 
     void CLVersionAndOSReceived ( CHostAddress           InetAddr,
                                   COSUtil::EOpSystemType eOSType,

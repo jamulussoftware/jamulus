@@ -6,7 +6,7 @@ using namespace streamer;
 CJamStreamer::CJamStreamer() {}
 
 // put the received pcm data into the pipe to ffmpeg
-void CJamStreamer::process( int iServerFrameSizeSamples, CVector<int16_t> data ) {
+void CJamStreamer::process( int iServerFrameSizeSamples, const CVector<int16_t>& data ) {
     fwrite(&data[0], 2, ( 2 * iServerFrameSizeSamples ), pipeout);
 }
 

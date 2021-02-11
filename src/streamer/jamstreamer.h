@@ -1,5 +1,6 @@
 #ifndef _WIN32
 #include <QObject>
+#include <QProcess>
 #include "../util.h"
 
 namespace streamer {
@@ -18,7 +19,7 @@ public slots:
 
 private:
     QString strStreamDest; // stream destination to pass to ffmpeg as output part of arguments
-    FILE *pipeout; // pipe for putting out the pcm data to ffmpeg
+    QProcess qproc; // ffmpeg subprocess
 };
 }
 #endif

@@ -12,6 +12,7 @@
 
 import sys
 import os
+import subprocess
 
 # get the jamulus version from the .pro file
 def get_jamulus_version(repo_path_on_disk):
@@ -28,6 +29,10 @@ def get_jamulus_version(repo_path_on_disk):
             return jamulus_version
     return "UNKNOWN_VERSION"
 
+def get_git_hash():
+    return subprocess.check_output(['git', 'describe', '--match=xxxxxxxxxxxxxxxxxxxx', '--always', '--abbrev', '--dirty']).decode('ascii').strip()
+    #return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
+    #return subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'])
 
 if len(sys.argv) == 1:
    pass
@@ -41,7 +46,15 @@ else:
 repo_path_on_disk = os.environ['GITHUB_WORKSPACE'] 
 
 # derive git related variables
-release_version_name = get_jamulus_version(repo_path_on_disk)
+version_from_changelog = get_jamulus_version(repo_path_on_disk)
+if "dev" in version_from_changelog:
+    release_version_name = "{}-{}".format(version_from_changelog, get_git_hash())
+    print("building an intermediate version: ", release_version_name)
+else:
+    release_version_name = version_from_changelog
+    print("building a release version: ", release_version_name)
+
+
 fullref=os.environ['GITHUB_REF']
 reflist = fullref.split("/", 2)
 pushed_name = reflist[2]
@@ -51,7 +64,7 @@ pushed_name = reflist[2]
 os.system('perl "{}"/.github/actions_scripts/getChangelog.pl "{}"/ChangeLog "{}" > "{}"/autoLatestChangelog.md'.format(
     os.environ['GITHUB_WORKSPACE'],
     os.environ['GITHUB_WORKSPACE'],
-    release_version_name,
+    version_from_changelog,
     os.environ['GITHUB_WORKSPACE']
 ))
 
@@ -74,7 +87,7 @@ if fullref.startswith("refs/tags/"):
         print('this reference is a Non-Release-Tag')
         publish_to_release = False
         is_prerelease = True # just in case
-    
+
     if pushed_name == "latest":
         print('this reference is a Latest-Tag')
         publish_to_release = True
@@ -107,3 +120,5 @@ set_github_variable("RELEASE_TAG", release_tag)
 set_github_variable("PUSHED_NAME", pushed_name)
 set_github_variable("JAMULUS_VERSION", release_version_name)
 set_github_variable("RELEASE_VERSION_NAME", release_version_name)
+set_github_variable("X_GITHUB_WORKSPACE", os.environ['GITHUB_WORKSPACE'])
+set_github_variable("BUILD_FLATPACK", str(True).lower())

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import sys
 import json
 
@@ -24,3 +25,17 @@ else:
 print("write {}".format(jsonfilename))
 with open(jsonfilename,'w') as file:
     json.dump(data, file, indent=2)
+
+
+
+#helper function: set github variable and print it to console
+def set_github_variable(varname, varval):
+    print("{}='{}'".format(varname, varval)) #console output
+    print("::set-output name={}::{}".format(varname, varval))
+
+#set github-available variables
+jamulus_buildversionstring = os.environ['jamulus_buildversionstring'] 
+flatpak_name = "jamulus_{:}_flatpak".format(jamulus_buildversionstring)
+set_github_variable("flatpak_name", flatpak_name)
+flatpak_bundle = "{:}.flatpak".format(flatpak_name)
+set_github_variable("flatpak_bundle", flatpak_bundle)

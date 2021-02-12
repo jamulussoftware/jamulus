@@ -710,6 +710,9 @@ void CClientDlg::OnConnectDlgAccepted()
         // get the address from the connect dialog
         QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
+        // hide label connect to server
+        lblConnectToServer->hide();
+
         // only store new host address in our data base if the address is
         // not empty and it was not a server list item (only the addresses
         // typed in manually are stored by definition)
@@ -1238,6 +1241,9 @@ void CClientDlg::Disconnect()
     TimerSigMet.stop();
     lbrInputLevelL->SetValue ( 0 );
     lbrInputLevelR->SetValue ( 0 );
+
+    // show connect to server message
+    lblConnectToServer->show();
 
     // stop other timers
     TimerBuffersLED.stop();

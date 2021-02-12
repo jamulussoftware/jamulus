@@ -80,10 +80,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lbrInputLevelL->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelL->setToolTip               ( strInpLevHTT );
+    lbrInputLevelL->setEnabled               ( false );
     lbrInputLevelR->setWhatsThis             ( strInpLevH );
     lbrInputLevelR->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelR->setToolTip               ( strInpLevHTT );
+    lbrInputLevelR->setEnabled               ( false );
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
@@ -712,7 +714,8 @@ void CClientDlg::OnConnectDlgAccepted()
 
         // hide label connect to server
         lblConnectToServer->hide();
-
+        lbrInputLevelL->setEnabled ( true );
+        lbrInputLevelR->setEnabled ( true );
         // only store new host address in our data base if the address is
         // not empty and it was not a server list item (only the addresses
         // typed in manually are stored by definition)
@@ -1239,6 +1242,8 @@ void CClientDlg::Disconnect()
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();
+    lbrInputLevelL->setEnabled ( false );
+    lbrInputLevelR->setEnabled ( false );
     lbrInputLevelL->SetValue ( 0 );
     lbrInputLevelR->SetValue ( 0 );
 

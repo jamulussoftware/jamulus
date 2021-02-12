@@ -23,10 +23,11 @@ void CJamStreamer::OnStarted() {
         QObject::connect ( qproc, QOverload<int, QProcess::ExitStatus>::of( &QProcess::finished ), this, &CJamStreamer::onFinished );
         qproc->setStandardOutputFile ( QProcess::nullDevice() );
     }
-    QStringList argumentList = { "ffmpeg", "-loglevel", "fatal",
+    QStringList argumentList = { "-loglevel", "error",
                                  "-y", "-f", "s16le",
                                  "-ar", "48000", "-ac", "2",
-                                 "-i", "-", strStreamDest };
+                                 "-i", "-" };
+    argumentList += strStreamDest.split( QRegExp("\\s+") );
     // Note that program name is also repeated as first argument
     qproc->start ( "ffmpeg", argumentList );
 }

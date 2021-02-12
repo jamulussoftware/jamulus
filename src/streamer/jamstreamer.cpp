@@ -19,6 +19,7 @@ void CJamStreamer::OnStarted() {
     if ( !qproc )
     {
         qproc = new QProcess;
+        QObject::connect ( qproc, &QProcess::errorOccurred, this, &CJamStreamer::onError );
     }
     QStringList argumentList = { "ffmpeg", "-y", "-f", "s16le",
                                  "-ar", "48000", "-ac", "2",
@@ -26,6 +27,36 @@ void CJamStreamer::OnStarted() {
     // Note that program name is also repeated as first argument
     qproc->start ( "ffmpeg", argumentList, QIODevice::WriteOnly );
 }
+
+void CJamStreamer::onError(QProcess::ProcessError error)
+{
+    QString errDesc;
+    switch (error) {
+    case QProcess::FailedToStart:
+        errDesc = "failed to start";
+        break;
+    case QProcess::Crashed:
+        errDesc = "crashed";
+        break;
+    case QProcess::Timedout:
+        errDesc = "timed out";
+        break;
+    case QProcess::WriteError:
+        errDesc = "write error";
+        break;
+    case QProcess::ReadError:
+        errDesc = "read error";
+        break;
+    case QProcess::UnknownError:
+        errDesc = "unknown error";
+        break;
+    default:
+        errDesc = "UNKNOWN unknown error";
+        break;
+    }
+    qWarning() << "QProcess Error: " << errDesc << "\n";
+}
+
 
 void CJamStreamer::OnStopped() {
     qproc->closeWriteChannel ();

@@ -19,7 +19,7 @@ public slots:
 
 private:
     QString strStreamDest; // stream destination to pass to ffmpeg as output part of arguments
-    QProcess qproc; // ffmpeg subprocess
+    QProcess* qproc; // ffmpeg subprocess
 };
 }
 #endif

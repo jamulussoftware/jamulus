@@ -20,7 +20,7 @@ void CJamStreamer::OnStarted() {
     {
         qproc = new QProcess;
         QObject::connect ( qproc, &QProcess::errorOccurred, this, &CJamStreamer::onError );
-        qproc->setStandardErrorFile ( "ffmpeg.stderr.txt" );
+        QObject::connect ( qproc, QOverload<int, QProcess::ExitStatus>::of( &QProcess::finished ), this, &CJamStreamer::onFinished );
         qproc->setStandardOutputFile ( QProcess::nullDevice() );
     }
     QStringList argumentList = { "ffmpeg", "-loglevel", "fatal",
@@ -28,7 +28,7 @@ void CJamStreamer::OnStarted() {
                                  "-ar", "48000", "-ac", "2",
                                  "-i", "-", strStreamDest };
     // Note that program name is also repeated as first argument
-    qproc->start ( "ffmpeg", argumentList, QIODevice::WriteOnly );
+    qproc->start ( "ffmpeg", argumentList );
 }
 
 void CJamStreamer::onError(QProcess::ProcessError error)
@@ -60,6 +60,12 @@ void CJamStreamer::onError(QProcess::ProcessError error)
     qWarning() << "QProcess Error: " << errDesc << "\n";
 }
 
+void CJamStreamer::onFinished( int exitCode, QProcess::ExitStatus exitStatus )
+{
+    Q_UNUSED ( exitStatus );
+    QByteArray stderr = qproc->readAllStandardError ();
+    qInfo() << "ffmpeg exited with exitCode" << exitCode << ", stderr:" << stderr;
+}
 
 void CJamStreamer::OnStopped() {
     qproc->closeWriteChannel ();

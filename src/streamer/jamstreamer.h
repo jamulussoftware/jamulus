@@ -18,6 +18,7 @@ public slots:
     void OnStopped();
 private slots:
     void onError(QProcess::ProcessError error);
+    void onFinished( int exitCode, QProcess::ExitStatus exitStatus );
 
 private:
     QString strStreamDest; // stream destination to pass to ffmpeg as output part of arguments

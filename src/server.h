@@ -47,6 +47,8 @@
 #include "serverlist.h"
 #include "recorder/jamcontroller.h"
 
+#include "ThreadPool.h"
+
 /* Definitions ****************************************************************/
 // no valid channel number
 #define INVALID_CHANNEL_ID                  ( MAX_NUM_CHANNELS + 1 )
@@ -415,6 +417,8 @@ protected:
     bool                       bDisconnectAllClientsOnQuit;
 
     CSignalHandler*            pSignalHandler;
+
+    std::unique_ptr<ThreadPool>tpThreadPool;
 
 signals:
     void Started();

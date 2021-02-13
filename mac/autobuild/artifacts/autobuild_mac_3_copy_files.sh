@@ -2,6 +2,11 @@
 
 # autobuild_3_copy_files: copy the built files to deploy folder
 
+
+####################
+###  PARAMETERS  ###
+####################
+
 if [ ! -z "${1}" ]; then
 	THIS_JAMULUS_PROJECT_PATH="${1}"
 elif [ ! -z "${jamulus_project_path}" ]; then
@@ -13,6 +18,10 @@ else
     exit 1
 fi
 
+
+###################
+###  PROCEDURE  ###
+###################
 
 cd ${THIS_JAMULUS_PROJECT_PATH}
 

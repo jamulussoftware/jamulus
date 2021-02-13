@@ -3,6 +3,9 @@
 # autobuild_1_prepare: set up environment, install Qt & dependencies
 
 
+###################
+###  PROCEDURE  ###
+###################
 
 #FROM ubuntu:18.04
 #based on https://gitlab.com/vikingsoftware/qt5.12.4androiddocker

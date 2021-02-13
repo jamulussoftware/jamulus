@@ -1,22 +1,11 @@
-# Sets up the environment for autobuild on Windows
+# Powershell
+
+# autobuild_1_prepare: set up environment, install Qt & dependencies
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+###################
+###  PROCEDURE  ###
+###################
 
 echo "Install Qt..."
 # Install Qt

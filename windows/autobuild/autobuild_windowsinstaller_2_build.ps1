@@ -1,4 +1,11 @@
-# Sets up the environment for autobuild on Windows
+# Powershell
+
+# autobuild_2_build: actual build process
+
+
+####################
+###  PARAMETERS  ###
+####################
 
 # Get the source path via parameter
 param (
@@ -14,7 +21,9 @@ if(($jamulus_project_path -eq $null) -or ($jamulus_project_path -eq "")){
 }
 
 
-
+###################
+###  PROCEDURE  ###
+###################
 
 echo "Build installer..."
 # Build the installer

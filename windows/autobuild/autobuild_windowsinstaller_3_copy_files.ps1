@@ -1,4 +1,11 @@
-# Sets up the environment for autobuild on Windows
+# Powershell
+
+# autobuild_3_copy_files: copy the built files to deploy folder
+
+
+####################
+###  PARAMETERS  ###
+####################
 
 # Get the source path via parameter
 param (
@@ -20,7 +27,9 @@ if(($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq 
 }
 
 
-
+###################
+###  PROCEDURE  ###
+###################
 
 # Rename the file
 echo "rename"

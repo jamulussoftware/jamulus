@@ -2,6 +2,11 @@
 
 # autobuild_1_prepare: set up environment, install Qt & dependencies
 
+
+####################
+###  PARAMETERS  ###
+####################
+
 if [ ! -z "${1}" ]; then
 	THIS_JAMULUS_PROJECT_PATH="${1}"
 elif [ ! -z "${jamulus_project_path}" ]; then
@@ -14,6 +19,9 @@ else
 fi
 
 
+###################
+###  PROCEDURE  ###
+###################
 
 #USING GITHUB ACTION HERE
 #

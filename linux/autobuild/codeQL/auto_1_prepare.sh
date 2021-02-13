@@ -3,12 +3,9 @@
 # autobuild_1_prepare: set up environment, install Qt & dependencies
 
 
-
-
-
-
-
-# Sets up the environment for autobuild on Linux
+###################
+###  PROCEDURE  ###
+###################
 
 echo "Update system..."
 sudo apt-get -qq update

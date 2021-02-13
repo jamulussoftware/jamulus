@@ -106,6 +106,8 @@ protected:
     bool               bConnected;
     bool               bConnectDlgWasShown;
     bool               bMIDICtrlUsed;
+    ERecorderState     eLastRecorderState;
+    EGUIDesign         eLastDesign;
     QTimer             TimerSigMet;
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;
@@ -229,11 +231,9 @@ public slots:
 
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
-    void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
-
-    void OnRecorderStateReceived ( ERecorderState eRecorderState )
-        { MainMixerBoard->SetRecorderState ( eRecorderState ); }
-
+    void OnGUIDesignChanged();
+    void OnRecorderStateReceived ( ERecorderState eRecorderState );
+    void SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  );
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 

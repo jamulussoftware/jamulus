@@ -26,6 +26,8 @@
 
 - Escape chat messages at the server. This will no longer allow html formated chat messages due to security reasons (#939)
 
+- Highlight the fact that the server is recording in the Mixerboard title (#968), coded by dcorson-ticino.com
+
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 
 

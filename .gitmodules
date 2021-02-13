@@ -1,24 +1,24 @@
 [submodule "libs/oboe"]
 	path = libs/oboe
-	url = ../../github.com/google/oboe.git
+	url = ../../google/oboe.git
 [submodule "tools/jamulus-php"]
 	path = tools/jamulus-php
-	url = ../../github.com/softins/jamulus-php
+	url = ../../softins/jamulus-php
 [submodule "tools/jamulus-web"]
 	path = tools/jamulus-web
-	url = ../../github.com/softins/jamulus-web
+	url = ../../softins/jamulus-web
 [submodule "tools/jamulus-wireshark"]
 	path = tools/jamulus-wireshark
-	url = ../../github.com/softins/jamulus-wireshark
+	url = ../../softins/jamulus-wireshark
 [submodule "tools/jamulus-historytool"]
 	path = tools/jamulus-historytool
-	url = ../../github.com/pljones/jamulus-historytool
+	url = ../../pljones/jamulus-historytool
 [submodule "tools/jamulus-jamexporter"]
 	path = tools/jamulus-jamexporter
-	url = ../../github.com/pljones/jamulus-jamexporter
+	url = ../../pljones/jamulus-jamexporter
 [submodule "tools/jamulus-docker"]
 	path = tools/jamulus-docker
-	url = ../../github.com/grundic/jamulus-docker
+	url = ../../grundic/jamulus-docker
 [submodule "tools/jamulus-server-remote"]
 	path = tools/jamulus-server-remote
-	url = ../../github.com/vdellamea/jamulus-server-remote
+	url = ../../vdellamea/jamulus-server-remote

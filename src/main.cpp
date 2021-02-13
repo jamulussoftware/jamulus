@@ -851,6 +851,8 @@ QString UsageArguments ( char **argv )
         "      --serverpublicip  specify your public IP address when\n"
         "                        running a slave and your own central server\n"
         "                        behind the same NAT\n"
+        "      --streamto        pass ffmpeg output arguments to stream a stereo mix\n"
+        "                        from the server (see \"ffmpeg -h\" for reference)\n"
         "\nClient only:\n"
         "  -M, --mutestream      starts the application in muted state\n"
         "      --mutemyown       mute me in my personal mix (headless only)\n"

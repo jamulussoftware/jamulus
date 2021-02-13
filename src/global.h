@@ -234,8 +234,8 @@ LED bar:      lbr
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \
     "<br><div align=right><font size=-1><i>" + \
-    QCoreApplication::translate ( "global", "For more information use the ""What's " \
-    "This"" help (help menu, right mouse button or Shift+F1)" ) + \
+    QCoreApplication::translate ( "global", "For more information use the \"What's " \
+    "This\" help (help menu, right mouse button or Shift+F1)" ) + \
     "</i></font></div>"
 
 // server welcome message title (do not change for compatibility!)

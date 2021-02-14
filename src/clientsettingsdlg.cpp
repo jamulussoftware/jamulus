@@ -175,9 +175,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
    // Driver setup button
    QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b>" +
-       tr ( "The sound card driver settings button opens the driver settings pannel of "
-       "your sound card. Some drivers allow you to change buffer settings, others like the "
-       "ASIO4ALL let you choose input or outputs of your device(s). "
+       tr ( "This opens the driver settings of your sound card. Some drivers "
+       "allow you to change buffer settings, others like ASIO4ALL "
+       "let you choose input or outputs of your device(s). "
        "More information can be found on jamulus.io." );
 
    QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: " ) + APP_NAME +

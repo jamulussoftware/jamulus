@@ -13,14 +13,14 @@ param (
     [string] $jamulus_buildversionstring = $Env:jamulus_buildversionstring
 )
 # Sanity check of parameters
-if(($jamulus_project_path -eq $null) -or ($jamulus_project_path -eq "")){
+if (($jamulus_project_path -eq $null) -or ($jamulus_project_path -eq "")) {
     throw "expecting ""jamulus_project_path"" as parameter or ENV"
-}elseif (!(Test-Path -Path $jamulus_project_path)){
+} elseif (!(Test-Path -Path $jamulus_project_path)) {
     throw "non.existing jamulus_project_path: $jamulus_project_path"
-}else{
+} else {
     echo "jamulus_project_path is valid: $jamulus_project_path"
 }
-if(($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq "")){
+if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq "")) {
     echo "expecting ""jamulus_buildversionstring"" as parameter or ENV"
     echo "using ""NoVersion"" as jamulus_buildversionstring for filenames"
     $jamulus_buildversionstring = "NoVersion"
@@ -42,7 +42,7 @@ cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_pa
 
 Function github_output_value
 {
-    param(
+    param (
         [Parameter(Mandatory=$true)]
         [string] $name,
         [Parameter(Mandatory=$true)]

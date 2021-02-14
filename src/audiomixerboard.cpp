@@ -458,7 +458,7 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     if ( bIsMute )
     {
         // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
-        pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
+        pInfoLabel->setText ( "<font color=\"orange\">&#128263;</font>" );
     }
     else
     {

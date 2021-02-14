@@ -706,7 +706,7 @@ void CClientSettingsDlg::SetPingTimeResult ( const int                         i
     // a certain value
     if ( iPingTime > 500 )
     {
-        const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
+        const QString sErrorText = "<font color=\"red\"><b>&#62;500 ms</b></font>";
         lblPingTimeValue->setText     ( sErrorText );
         lblOverallDelayValue->setText ( sErrorText );
     }

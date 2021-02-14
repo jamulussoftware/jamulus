@@ -3432,7 +3432,7 @@
     <name>global</name>
     <message>
         <location filename="../../global.h" line="237"/>
-        <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
+        <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
         <translation>Per maggiori informazioni usare il comando &quot;Cos&apos;è Questo&quot; (Menù Aiuto, Tasto destro del mouse oppure Shift+F1)</translation>
     </message>
 </context>

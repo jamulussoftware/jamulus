@@ -1,32 +1,31 @@
-![Homepage picture](src/res/homepage/jamulusbannersmall.png)
+[![Homepage picture](src/res/homepage/jamulusbannersmall.png)](https://jamulus.io)
 
-[![Build Status](https://travis-ci.org/corrados/jamulus.svg?branch=master)](https://travis-ci.org/corrados/jamulus)
-![CodeQL](https://github.com/corrados/jamulus/workflows/CodeQL/badge.svg)
+![CodeQL](https://github.com/jamulussoftware/jamulus/workflows/CodeQL/badge.svg)
 
 Jamulus - Internet Jam Session Software
 =======================================
-<img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/>
+<a href="https://jamulus.io/"><img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/></a>
 
 The Jamulus software enables musicians to perform real-time jam sessions over the internet.
 There is one server running the Jamulus server software which collects the audio data from
 each Jamulus client, mixes the audio data and sends the mix back to each client.
 
-Jamulus is __Open Source software__ ([GPL, GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html))
-and runs under __Windows__ ([ASIO](http://www.steinberg.net)),
+Jamulus is [__free and open source software__](https://www.gnu.org/philosophy/free-sw.en.html) (FOSS) licensed under the [GPL](http://www.gnu.org/licenses/gpl-2.0.html) 
+and runs under __Windows__ ([ASIO](https://www.steinberg.net)),
 __MacOS__ ([Core Audio](https://developer.apple.com/documentation/coreaudio)) and
-__Linux__ ([Jack](http://jackaudio.org)).
+__Linux__ ([Jack](https://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
 
-![Sourceforge logo](http://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)
+[![Sourceforge logo](https://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)](https://sourceforge.net/projects/llcon)
 
-The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon).
+The project is hosted at [Sourceforge.net](https://sourceforge.net/projects/llcon).
 
 
 
-Installation and Getting Started
---------------------------------
+Installation
+------------
 
-[Please see this overview](https://jamulus.io/wiki/Getting-Started) containing instructions for installing and using Jamulus for your platform.
+[Please see the Getting Started page](https://jamulus.io/wiki/Getting-Started) containing instructions for installing and using Jamulus for your platform.
 
 
 Help
@@ -36,7 +35,7 @@ Official documentation for Jamulus is on the [Jamulus homepage](https://jamulus.
 
 See also the [discussion forums](https://sourceforge.net/p/llcon/discussion). If you have issues, feel free to ask for help there.
 
-Bugs and feature requests can be [reported here](https://github.com/corrados/jamulus/issues)
+Bugs and feature requests can be [reported here](https://github.com/jamulussoftware/jamulus/issues)
 
 
 Compilation
@@ -71,4 +70,4 @@ source:
 - Country flag icons from Mark James: http://www.famfamfam.com
 
 We would also like to acknowledge the contributors listed in the
-[Github Contributors list](https://github.com/corrados/jamulus/graphs/contributors).
+[Github Contributors list](https://github.com/jamulussoftware/jamulus/graphs/contributors).

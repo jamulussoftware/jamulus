@@ -226,6 +226,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strCentralServer,
                    const QString&     strServerInfo,
                    const QString&     strServerListFilter,
+                   const QString&     strServerPublicIP,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
                    const bool         bNDisconnectAllClientsOnQuit,
@@ -245,6 +246,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     ServerListManager           ( iPortNumber,
                                   strCentralServer,
                                   strServerInfo,
+                                  strServerPublicIP,
                                   strServerListFilter,
                                   iNewMaxNumChan,
                                   &ConnLessProtocol ),
@@ -716,9 +718,8 @@ void CServer::OnAboutToQuit()
 
 void CServer::OnHandledSignal ( int sigNum )
 {
-    // show the signal number on the command line (note that this does not work for the Windows command line)
-// TODO we should use the ConsoleWriterFactory() instead of qDebug()
-    qDebug() << "OnHandledSignal: " << sigNum;
+    // show the signal number on the console (note that this may not work for Windows)
+    qDebug() << qUtf8Printable( QString( "OnHandledSignal: %1" ).arg( sigNum ) );
 
 #ifdef _WIN32
     // Windows does not actually get OnHandledSignal triggered
@@ -1393,10 +1394,10 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
 
     const QString strActualMessageText =
-        "<font color=""" + sCurColor + """>(" +
+        "<font color=\"" + sCurColor + "\">(" +
         QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
         ChanName.toHtmlEscaped() +
-        "</b></font> " + strChatText;
+        "</b></font> " + strChatText.toHtmlEscaped();
 
 
     // Send chat text to all connected clients ---------------------------------

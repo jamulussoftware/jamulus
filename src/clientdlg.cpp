@@ -39,6 +39,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed       ( !strMIDISetup.isEmpty() ),
+    eLastRecorderState  ( RS_UNDEFINED ),       // for SetMixerBoardDeco
+    eLastDesign         ( GD_ORIGINAL ),        //          "
     ClientSettingsDlg   ( pNCliP, pNSetP, parent ),
     ChatDlg             ( parent ),
     ConnectDlg          ( pNSetP, bNewShowComplRegConnList, parent ),
@@ -222,7 +224,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblGlobalInfoLabel->hide();
 
     // prepare update check info label (invisible by default)
-    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + QString ( APP_NAME ) + " " +
                               tr ( "software upgrade available" ) + "</b></font>" );
     lblUpdateCheck->hide();
 
@@ -767,6 +769,7 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
+        SetMixerBoardDeco( RS_UNDEFINED, pClient->GetGUIDesign() );
     }
     else
     {
@@ -1353,4 +1356,54 @@ rbtReverbSelR->setStyleSheet ( "" );
 
     // also apply GUI design to child GUI controls
     MainMixerBoard->SetGUIDesign ( eNewDesign );
+}
+
+void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderState )
+{
+    MainMixerBoard->SetRecorderState ( newRecorderState );
+    SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
+}
+
+void CClientDlg::OnGUIDesignChanged()
+{
+    SetGUIDesign ( pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
+}
+
+void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  )
+{
+    // return if no change
+    if ( ( newRecorderState == eLastRecorderState ) && ( eNewDesign == eLastDesign ) )
+        return;
+    eLastRecorderState = newRecorderState;
+    eLastDesign = eNewDesign;
+
+    if ( newRecorderState == RS_RECORDING )
+    {
+        MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin; "
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(255,255,255);"
+                    "                   background-color: rgb(255,0,0); }" );
+    }
+    else
+    {
+        if ( eNewDesign == GD_ORIGINAL )
+        {
+            MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin;"
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(220,220,220); }" );
+        }
+        else
+        {
+            MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin;"
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(0,0,0); }" );
+        }
+    }
 }

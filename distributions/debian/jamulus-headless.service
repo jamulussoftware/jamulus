@@ -5,10 +5,26 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-Restart=always
-RestartSec=1
 User=jamulus
-ExecStart=/bin/sh -c '/usr/bin/jamulus-headless -s -n --servername $(uname -n) -l /var/log/jamulus -e jamulus.fischvolk.de -g -o "$(uname -n);;"'
+Group=nogroup
+NoNewPrivileges=true
+ProtectSystem=true
+ProtectHome=true
+Nice=-20
+IOSchedulingClass=realtime
+IOSchedulingPriority=0
+
+#### Change this to publish this server, set genre, location and other parameters.
+#### See https://jamulus.io/wiki/Command-Line-Options ####
+ExecStart=/bin/sh -c '/usr/bin/jamulus-headless -s -n'
+
+
+Restart=on-failure
+RestartSec=30
+StandardOutput=journal
+StandardError=inherit
+SyslogIdentifier=jamulus
+
 
 [Install]
 WantedBy=multi-user.target

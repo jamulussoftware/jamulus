@@ -242,10 +242,12 @@ lvwClients->setMinimumHeight ( 140 );
     // central server address type combo box
     cbxCentServAddrType->clear();
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ALL_GENRES ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE3 ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
@@ -333,7 +335,7 @@ lvwClients->setMinimumHeight ( 140 );
     tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
 
     // prepare update check info label (invisible by default)
-    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + QString ( APP_NAME ) + " " +
                               tr ( "software upgrade available" ) + "</b></font>" );
     lblUpdateCheck->hide();
 
@@ -688,11 +690,11 @@ void CServerDlg::UpdateGUIDependencies()
     case SRS_CENTRAL_SVR_FULL:
     case SRS_VERSION_TOO_OLD:
     case SRS_NOT_FULFILL_REQUIREMENTS:
-        strStatus = "<font color=""red""><b>" + strStatus + "</b></font>";
+        strStatus = "<font color=\"red\"><b>" + strStatus + "</b></font>";
         break;
 
     case SRS_REGISTERED:
-        strStatus = "<font color=""darkGreen""><b>" + strStatus + "</b></font>";
+        strStatus = "<font color=\"darkGreen\"><b>" + strStatus + "</b></font>";
         break;
 
     default:

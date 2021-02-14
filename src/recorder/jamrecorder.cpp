@@ -312,29 +312,20 @@ QString CJamRecorder::Init()
 
     if ( !fi.exists() && !QDir().mkpath ( recordBaseDir.absolutePath() ) )
     {
-        errmsg = recordBaseDir.absolutePath() + " does not exist but could not be created";
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qCritical()
-        qCritical() << errmsg;
-#endif
+        errmsg = QString( "'%1' does not exist but could not be created." ).arg( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable( errmsg );
         return errmsg;
     }
     if (!fi.isDir())
     {
-        errmsg = recordBaseDir.absolutePath() + " exists but is not a directory";
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qCritical()
-        qCritical() << errmsg;
-#endif
+        errmsg = QString( "'%1' exists but is not a directory" ).arg( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable( errmsg );
         return errmsg;
     }
     if (!fi.isWritable())
     {
-        errmsg = recordBaseDir.absolutePath() + " is a directory but cannot be written to";
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qCritical()
-        qCritical() << errmsg;
-#endif
+        errmsg = QString( "'%1' is a directory but cannot be written to" ).arg( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable( errmsg );
         return errmsg;
     }
 

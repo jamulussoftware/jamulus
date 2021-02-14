@@ -5,7 +5,7 @@ DISTRO="Debian"
 LINVERSION="0.0"
 
 # Get Jamulus Release Name with "curl" and "grep"  
-R=`curl -s https://api.github.com/repos/corrados/jamulus/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")'` 
+R=`curl -s https://api.github.com/repos/jamulussoftware/jamulus/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")'` 
 echo "Jamulus Installation Script for $DISTRO $LINVERSION"
 echo "Release: $R"
 INSTALLJAMULUS="no"
@@ -15,7 +15,7 @@ while true; do
         [Yy]* ) 
            echo "Start Installation $DISTRO $LINVERSION"
            echo "(1) Fetch Release $R from GitHub"
-           wget https://github.com/corrados/jamulus/archive/$R.tar.gz 
+           wget https://github.com/jamulussoftware/jamulus/archive/$R.tar.gz 
            echo "(2) Extract Source Code for Jamulus Release $R from GitHub"
            tar -xvf $R.tar.gz
            echo "(3) Delete ${R}.tar.gz from GitHub"

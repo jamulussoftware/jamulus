@@ -28,7 +28,6 @@
 #include <QFile>
 #include <QSettings>
 #include <QDir>
-#include <QTextStream>
 #ifndef HEADLESS
 # include <QMessageBox>
 #endif

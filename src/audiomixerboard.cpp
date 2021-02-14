@@ -81,14 +81,14 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup panning control and info label
-    pPan->setRange             ( 0, AUD_MIX_PAN_MAX );
-    pPan->setValue             ( AUD_MIX_PAN_MAX / 2 );
-    pPan->setNotchesVisible    ( true );
-    pInfoLabel->setMinimumSize ( 36, 36 ); // prevents jitter when muting/unmuting
-    pPanInfoGrid->addWidget    ( pPanLabel, 0, Qt::AlignLeft );
-    pPanInfoGrid->addWidget    ( pInfoLabel );
-    pPanGrid->addLayout        ( pPanInfoGrid );
-    pPanGrid->addWidget        ( pPan, 0, Qt::AlignHCenter );
+    pPan->setRange               ( 0, AUD_MIX_PAN_MAX );
+    pPan->setValue               ( AUD_MIX_PAN_MAX / 2 );
+    pPan->setNotchesVisible      ( true );
+    pInfoLabel->setMinimumHeight ( 15 ); // prevents jitter when muting/unmuting (#811)
+    pPanInfoGrid->addWidget      ( pPanLabel, 0, Qt::AlignLeft );
+    pPanInfoGrid->addWidget      ( pInfoLabel );
+    pPanGrid->addLayout          ( pPanInfoGrid );
+    pPanGrid->addWidget          ( pPan, 0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat ( Qt::PlainText );
@@ -458,7 +458,7 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     if ( bIsMute )
     {
         // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
-        pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
+        pInfoLabel->setText ( "<font color=\"orange\">&#128263;</font>" );
     }
     else
     {

@@ -2,10 +2,31 @@
 
 
 
-### 3.6.2git <- NOTE: the release version number will be 3.6.3 ###
+### 3.6.2dev <- NOTE: the release version number will be 3.7.0 ###
+
+- introduced new server lists: Any Genre 2, Choral/Barbershop (#875)
 
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 
+- improved Windows installer, coded by ann0see and doloopuntil (#792, #841)
+
+- support http links in the chat dialog, coded by hoffie (#879)
+
+- support Github actions for CodeQL, Publish Release, Autobuild Flatpak,
+  coded by pljones, nefarius2001, ann0see, ranfdev.
+
+- more detailed version number of unreleased version, coded by nefarius2001 (#475)
+
+- remove ConsoleWriterFactory - to resolve suspected memory leak (#926)
+
+- add new --serverpublicip option to support central servers behind NAT,
+  coded by hoffie (#954)
+
+- replaced low-quality background image (fancy skin) of mixerboard (#970)
+
+- Escape chat messages at the server. This will no longer allow html formated chat messages due to security reasons (#939)
+
+- Highlight the fact that the server is recording in the Mixerboard title (#968), coded by dcorson-ticino.com
 
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 

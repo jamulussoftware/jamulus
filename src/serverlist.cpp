@@ -29,10 +29,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
+                                         const QString& strServerPublicIP,
                                          const int      iNumChannels,
                                          CProtocol*     pNConLProt )
-    : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
-      eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
+    : eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
       strMinServerVersion       ( "" ), // disable version check with empty version
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
@@ -42,7 +42,18 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     SetCentralServerAddress ( sNCentServAddr );
 
     // set the server internal address, including internal port number
-    SlaveCurLocalHostAddress = CHostAddress( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
+    QHostAddress qhaServerPublicIP;
+    if ( strServerPublicIP == "" )
+    {
+        // No user-supplied override via --serverpublicip -> use auto-detection
+        qhaServerPublicIP = NetworkUtil::GetLocalAddress().InetAddr;
+    }
+    else
+    {
+        // User-supplied --serverpublicip
+        qhaServerPublicIP = QHostAddress ( strServerPublicIP );
+    }
+    SlaveCurLocalHostAddress = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
     // prepare the server info information
     QStringList slServInfoSeparateParams;
@@ -116,7 +127,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
             {
                 vWhiteList << CurWhiteListAddress;
-                tsConsoleStream << "Whitelist entry added: " << CurWhiteListAddress.toString() << endl;
+                qInfo() << qUtf8Printable( QString( "Whitelist entry added: %1" )
+                    .arg( CurWhiteListAddress.toString() ) );
             }
         }
     }
@@ -292,7 +304,8 @@ void CServerListManager::OnTimerPollList()
 
     foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
     {
-        tsConsoleStream << "Expired entry for " << HostAddr.toString() << endl;
+        qInfo() << qUtf8Printable( QString( "Expired entry for %1" )
+            .arg( HostAddr.toString() ) );
     }
 }
 
@@ -303,9 +316,8 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
 {
     if ( bIsCentralServer && bEnabled )
     {
-        tsConsoleStream << "Requested to register entry for "
-                        << InetAddr.toString() << " (" << LInetAddr.toString() << ")"
-                        << ": " << ServerInfo.strName << endl;
+        qInfo() << qUtf8Printable( QString( "Requested to register entry for %1 (%2): %3")
+            .arg( InetAddr.toString() ).arg( LInetAddr.toString() ).arg( ServerInfo.strName ) );
 
         // check for minimum server version
         if ( !strMinServerVersion.isEmpty() )
@@ -314,7 +326,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             if ( strVersion.isEmpty() ||
                  QVersionNumber::compare ( QVersionNumber::fromString ( strMinServerVersion ), QVersionNumber::fromString ( strVersion ) ) > 0 )
             {
-                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_NOT_FULFILL_REQIREMENTS );
+                pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, SRR_VERSION_TOO_OLD );
                 return; // leave function early, i.e., we do not register this server
             }
 #endif
@@ -387,8 +399,8 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
 {
     if ( bIsCentralServer && bEnabled )
     {
-        tsConsoleStream << "Requested to unregister entry for "
-                        << InetAddr.toString() << endl;
+        qInfo() << qUtf8Printable( QString( "Requested to unregister entry for %1" )
+            .arg( InetAddr.toString() ) );
 
         QMutexLocker locker ( &Mutex );
 
@@ -441,6 +453,20 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                 // to allow for NAT.
                 if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
                 {
+                    vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
+                }
+                else if ( !NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr ) &&
+                          NetworkUtil::IsPrivateNetworkIP ( vecServerInfo[iIdx].HostAddr.InetAddr ) &&
+                          !NetworkUtil::IsPrivateNetworkIP ( ServerList[iIdx].LHostAddr.InetAddr ) )
+                {
+                    // We've got a request from a public client, the server
+                    // list's entry's primary address is a private address,
+                    // but it supplied an additional public address using
+                    // --serverpublicip.
+                    // In this case, use the latter.
+                    // This is common when running a central server with slave
+                    // servers behind a NAT and dealing with external, public
+                    // clients.
                     vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
                 }
                 else
@@ -585,7 +611,8 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
     // output regirstation result/update on the console
-    tsConsoleStream << "Server Registration Status update: " << svrRegStatusToString ( eNSvrRegStatus ) << endl;
+    qInfo() << qUtf8Printable( QString( "Server Registration Status update: %1" )
+        .arg( svrRegStatusToString ( eNSvrRegStatus ) ) );
 
     // store the state and inform the GUI about the new status
     eSvrRegStatus = eNSvrRegStatus;

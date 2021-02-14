@@ -23,16 +23,6 @@ fi
 ###  PROCEDURE  ###
 ###################
 
-#USING GITHUB ACTION HERE
-#
-#    - name: Install Qt on MacOS
-#      uses: jurplel/install-qt-action@v2
-#      with:
-#        version: '5.15.2'
-#        dir: '${{ github.workspace }}'
-        
-
-
 # please run this script with the first parameter being the root of the repo
 if [ -z "${jamulus_project_path}" ]; then
     echo "Please give the path to the repository root as environment parameter 'jamulus_project_path' to this script!"

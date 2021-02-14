@@ -17,8 +17,6 @@
 #     for  the  tag that is named "latest":
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix as the release "latest"
-
-releases are triggered only if ((is_tag) && (pattern "r_*" or "latest")) => not by requests, not by branches
 #
 
 

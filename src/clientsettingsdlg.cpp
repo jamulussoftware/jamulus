@@ -174,7 +174,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         "change the buffer size." ) + TOOLTIP_COM_END_TEXT;
 
    // Driver setup button
-   QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + "</b>" +
+   QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b>" +
        tr ( "The sound card driver settings button opens the driver settings pannel of "
        "your sound card. Some drivers allow you to change buffer settings, others like the "
        "ASIO4ALL let you choose input or outputs of your device(s). "

@@ -152,7 +152,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         "from within the application. "
         "In this case the buffer delay setting is disabled and has to be "
         "changed using the sound card driver. On Windows, press the "
-        "ASIO Setup button to open the driver settings panel. On Linux, "
+        "ASIO Device Settings button to open the driver settings panel. On Linux, "
         "use the Jack configuration tool to change the buffer size." ) + "<br>" + tr (
         "If no buffer size is selected and all settings are disabled, an "
         "unsupported buffer size is used by the driver. The application "
@@ -169,12 +169,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
         "disabled, it is prohibited by the audio driver to modify this "
         "setting from within the software. "
-        "On Windows, press the ASIO Setup button to open the "
+        "On Windows, press the ASIO Device Settings button to open the "
         "driver settings panel. On Linux, use the Jack configuration tool to "
         "change the buffer size." ) + TOOLTIP_COM_END_TEXT;
 
    // Driver setup button
-   QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b>" +
+   QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b> " +
        tr ( "This opens the driver settings of your sound card. Some drivers "
        "allow you to change buffer settings, others like ASIO4ALL "
        "let you choose input or outputs of your device(s). "
@@ -196,7 +196,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
     butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
-    butDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
+    butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
 
     // fancy skin

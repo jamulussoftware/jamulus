@@ -173,6 +173,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         "driver settings panel. On Linux, use the Jack configuration tool to "
         "change the buffer size." ) + TOOLTIP_COM_END_TEXT;
 
+   // Driver setup button
+   QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b>" +
+       tr ( "The sound card driver settings button opens the driver settings pannel of "
+       "your sound card. Some drivers allow you to change buffer settings, others like the "
+       "ASIO4ALL let you choose input or outputs of your device(s). "
+       "More information can be found on jamulus.io." );
+
+   QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: " ) + APP_NAME +
+       tr ( " currently only supports devices supporting a sample rate of " )
+       + QString().setNum ( SYSTEM_SAMPLE_RATE_HZ  ) + tr ( "Hz. "
+       "You will not be able to select a driver/device which doesn't. "
+       "For more help see jamulus.io." ) + TOOLTIP_COM_END_TEXT;
+
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
     rbtBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
@@ -182,9 +195,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
-    butDriverSetup->setWhatsThis ( strSndCrdBufDelay );
+    butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
     butDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
-    butDriverSetup->setToolTip ( strSndCrdBufDelayTT );
+    butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
 
     // fancy skin
     cbxSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr (

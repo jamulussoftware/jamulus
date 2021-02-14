@@ -391,6 +391,9 @@ protected slots:
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
     void OnControllerInFaderLevel ( int iChannelIdx, int iValue );
+    void OnControllerInPanValue ( int iChannelIdx, int iValue );
+    void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
+    void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void OnClientIDReceived ( int iChanID );
 
 signals:
@@ -426,4 +429,7 @@ signals:
     void Disconnected();
     void SoundDeviceChanged ( QString strError );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
+    void ControllerInPanValue ( int iChannelIdx, int iValue );
+    void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
+    void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
 };

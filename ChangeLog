@@ -28,6 +28,10 @@
 
 - Highlight the fact that the server is recording in the Mixerboard title (#968), coded by dcorson-ticino.com
 
+- Implement new --ctrlmidich syntax allowing to specify fader, pan, mute,
+  solo buttons (#945).  Implementation for mute&solo buttons for now is
+  only for toggle controllers and does not support headless operation yet.
+
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 
 

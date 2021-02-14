@@ -12,7 +12,7 @@ param (
     [string] $jamulus_project_path = $Env:jamulus_project_path
 )
 # Sanity check of parameters
-if (($jamulus_project_path -eq $null) -or ($jamulus_project_path -eq "")) {
+if (("$jamulus_project_path" -eq $null) -or ("$jamulus_project_path" -eq "")) {
     throw "expecting ""jamulus_project_path"" as parameter or ENV"
 } elseif (!(Test-Path -Path $jamulus_project_path)) {
     throw "non.existing jamulus_project_path: $jamulus_project_path"

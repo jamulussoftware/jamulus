@@ -483,7 +483,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Martin Passing (<a href=\"https://github.com/passing\">passing</a>)</p>"
         "<p>DonC (<a href=\"https://github.com/dcorson-ticino-com\">dcorson</a>)</p>"
         "<p>David Kastrup (<a href=\"https://github.com/dakhubgit\">dakhubgit</a>)</p>"
-        "<p>jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
+        "<p>Jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." );
 

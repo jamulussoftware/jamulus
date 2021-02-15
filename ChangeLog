@@ -4,7 +4,11 @@
 
 ### 3.6.2dev <- NOTE: the release version number will be 3.7.0 ###
 
-- introduced new server lists: Any Genre 2, Choral/Barbershop (#875)
+- introduced new server lists: Any Genre 3, Choral/Barbershop (#875),
+  also renamed Default to Any Genre 1, Any Genre to Any Genre 2,
+  and Classical/Folk/Choral to Classical/Folk.
+
+- central server addresses are now in jamulus.io instead of fischvolk.de (#919)
 
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 

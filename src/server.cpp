@@ -436,9 +436,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
             // set maximum thread count to available -1 to keep one core for the gui, timer and receive threads
             iMaxNumThreads = iAvailableCores - 1;
             qDebug() << "multithreading enabled, setting thread count to" << iMaxNumThreads;
-            QThreadPool::globalInstance()->setMaxThreadCount ( iMaxNumThreads );
+            // QThreadPool::globalInstance()->setMaxThreadCount ( iMaxNumThreads );
 
             tpThreadPool = std::unique_ptr<ThreadPool>( new ThreadPool{static_cast<size_t>(iMaxNumThreads)} );
+            Futures.reserve(iMaxNumThreads);
         }
     }
 
@@ -816,9 +817,18 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 */
     // Get data from all connected clients -------------------------------------
     // some inits
-    int iNumClients           = 0; // init connected client counter
+    int  iNumClients          = 0; // init connected client counter
     bool bUseMT               = bUseMultithreading || iNumClients >= 10;
+    int  iNumBlocks           = 0; // init number of blocks for multithreading
+    int  iMTBlockSize         = 0; // init block size for multithreading
     bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
+
+    if ( bUseMT ) 
+    {
+        // spread work equally among available threads
+        iNumBlocks   = std::min( iNumClients, iMaxNumThreads );
+        iMTBlockSize = ( iNumClients - 1 ) / iNumBlocks + 1;
+    }
 
     {
         // Make put and get calls thread safe. 
@@ -841,30 +851,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // prepare and decode connected channels
         if ( !bUseMT )
         {
-            for ( int iChanCnt = 0; iChanCnt < iNumClients; iChanCnt++ )
-            {
-                DecodeReceiveData ( iChanCnt, iNumClients );
-            }
+            DecodeReceiveDataBlocks ( this, 0, iNumClients - 1, iNumClients );
         }
         else
         {
-            
-            // std::vector<int> v(iNumClients) ; 
-            // std::iota (std::begin(v), std::end(v), 0); 
-
-            // auto future = QtConcurrent::map(v, [this, iNumClients](int iChanCnt){ DecodeReceiveData(iChanCnt, iNumClients);});
-
-            // future.waitForFinished();
-
             // processing with multithreading
-            // spread work equally among available threads
-            // since decoding is a much lighter workload, only create new tasks for every 10 clients
-            // measurements by menzels suggest it is ~6% (decode) vs 60% (encode) of process cpu time
-            const int iNumBlocks   = std::min(iNumClients / 10 + 1, iMaxNumThreads);
-            const int iMTBlockSize = (iNumClients - 1) / iNumBlocks + 1; 
-
-            std::vector<std::future<void>> futureVec;
-
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
                 // The work for OPUS decoding is distributed over all available processor cores.
@@ -873,21 +864,21 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 const int iStartChanCnt = iBlockCnt * iMTBlockSize;
                 const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
-                futureVec.push_back(tpThreadPool->enqueue([this, iNumClients](int iStartChanCnt, int iStopChanCnt){ 
-                        DecodeReceiveDataBlocks(iStartChanCnt, iStopChanCnt, iNumClients);
-                    }, iStartChanCnt, iStopChanCnt));
+                Futures.push_back ( tpThreadPool->enqueue ( CServer::DecodeReceiveDataBlocks, 
+                                                    this, iStartChanCnt, iStopChanCnt, iNumClients ) );
 
-                // FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
-                //                                                    &CServer::DecodeReceiveDataBlocks,
+                // FutureSynchronizer.addFuture ( QtConcurrent::run ( &CServer::DecodeReceiveDataBlocks,
+                //                                                    this,
                 //                                                    iStartChanCnt,
                 //                                                    iStopChanCnt,
                 //                                                    iNumClients ) );
             }
 
-            for(auto& future : futureVec) {
+            // make sure all concurrent run threads have finished when we leave this function
+            for ( auto& future : Futures ) {
                 future.wait();
             }
-            // make sure all concurrent run threads have finished when we leave this function
+            Futures.clear();
             // FutureSynchronizer.waitForFinished();
             // FutureSynchronizer.clearFutures();
         }
@@ -950,19 +941,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // processing with multithreading
         if ( bUseMT )
         {
-            // std::vector<int> v(iNumClients); 
-            // std::iota (std::begin(v), std::end(v), 0); 
-
-            // auto future = QtConcurrent::map(v, [this, iNumClients](int iChanCnt){ MixEncodeTransmitData(iChanCnt, iNumClients);});
-
-            // future.waitForFinished();
-
-            // spread work equally among available threads
-            const int iNumBlocks   = std::min(iNumClients / 10 + 1, iMaxNumThreads);
-            const int iMTBlockSize = (iNumClients - 1) / iNumBlocks + 1;
-
-            std::vector<std::future<void>> futureVec;
-
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {
                 // Generate a separate mix for each channel, OPUS encode the
@@ -973,21 +951,21 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 const int iStartChanCnt = iBlockCnt * iMTBlockSize;
                 const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
-                futureVec.push_back(tpThreadPool->enqueue([this, iNumClients](int iStartChanCnt, int iStopChanCnt){ 
-                        MixEncodeTransmitDataBlocks(iStartChanCnt, iStopChanCnt, iNumClients);
-                    }, iStartChanCnt, iStopChanCnt));
+                Futures.push_back ( tpThreadPool->enqueue ( CServer::MixEncodeTransmitDataBlocks, 
+                                                    this, iStartChanCnt, iStopChanCnt, iNumClients ) );
 
-                // FutureSynchronizer.addFuture ( QtConcurrent::run ( this,
-                //                                                    &CServer::MixEncodeTransmitDataBlocks,
+                // FutureSynchronizer.addFuture ( QtConcurrent::run ( &CServer::MixEncodeTransmitDataBlocks,
+                //                                                    this,
                 //                                                    iStartChanCnt,
                 //                                                    iStopChanCnt,
                 //                                                    iNumClients ) );
             }
 
-            for(auto& future : futureVec) {
-                future.wait();
-            }
             // make sure all concurrent run threads have finished when we leave this function
+            for ( auto& fFuture : Futures ) {
+                fFuture.wait();
+            }
+            Futures.clear();
             // FutureSynchronizer.waitForFinished();
             // FutureSynchronizer.clearFutures();
         }
@@ -1010,25 +988,27 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     }
 }
 
-void CServer::DecodeReceiveDataBlocks ( const int iStartChanCnt,
+void CServer::DecodeReceiveDataBlocks ( CServer*  sServer, 
+                                        const int iStartChanCnt,
                                         const int iStopChanCnt,
                                         const int iNumClients )
 {
     // loop over all channels in the current block, needed for multithreading support
     for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )
     {
-        DecodeReceiveData ( iChanCnt, iNumClients );
+        sServer->DecodeReceiveData ( iChanCnt, iNumClients );
     }
 }
 
-void CServer::MixEncodeTransmitDataBlocks ( const int iStartChanCnt,
+void CServer::MixEncodeTransmitDataBlocks ( CServer*  sServer, 
+                                            const int iStartChanCnt,
                                             const int iStopChanCnt,
                                             const int iNumClients )
 {
     // loop over all channels in the current block, needed for multithreading support
     for ( int iChanCnt = iStartChanCnt; iChanCnt <= iStopChanCnt; iChanCnt++ )
     {
-        MixEncodeTransmitData ( iChanCnt, iNumClients );
+        sServer->MixEncodeTransmitData ( iChanCnt, iNumClients );
     }
 }
 

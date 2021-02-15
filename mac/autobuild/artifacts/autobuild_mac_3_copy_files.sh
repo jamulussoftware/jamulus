@@ -23,25 +23,25 @@ fi
 ###  PROCEDURE  ###
 ###################
 
-cd ${THIS_JAMULUS_PROJECT_PATH}
+cd "${THIS_JAMULUS_PROJECT_PATH}"
 
 echo ""
 echo ""
 echo "ls GITROOT/deploy/"
-ls ${THIS_JAMULUS_PROJECT_PATH}/deploy/
+ls "${THIS_JAMULUS_PROJECT_PATH}"/deploy/
 echo ""
 
 echo ""
 echo ""
 artifact_deploy_filename=jamulus_${jamulus_buildversionstring}_mac.dmg
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename}"
-mv ${THIS_JAMULUS_PROJECT_PATH}/deploy/Jamulus-*installer-mac.dmg ${THIS_JAMULUS_PROJECT_PATH}/deploy/${artifact_deploy_filename}
+mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Jamulus-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
 
 
 echo ""
 echo ""
 echo "ls GITROOT/deploy/"
-ls ${THIS_JAMULUS_PROJECT_PATH}/deploy/
+ls "${THIS_JAMULUS_PROJECT_PATH}"/deploy/
 echo ""
 
 

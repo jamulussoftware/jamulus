@@ -23,8 +23,7 @@ fi
 ###  PROCEDURE  ###
 ###################
 
-cd ${THIS_JAMULUS_PROJECT_PATH}
+cd "${THIS_JAMULUS_PROJECT_PATH}"
 
 echo "Run deploy script..."
 sh ${THIS_JAMULUS_PROJECT_PATH}/mac/deploy_mac.sh
-

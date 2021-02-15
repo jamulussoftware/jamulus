@@ -14,4 +14,4 @@ sudo apt-get -qq update
 # We don't upgrade the packages. If this is needed, just uncomment this line
 # sudo apt-get -qq -y upgrade
 echo "Install dependencies..."
-sudo apt-get -qq -y install devscripts build-essential  debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools
+sudo apt-get -qq -y install devscripts build-essential debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools

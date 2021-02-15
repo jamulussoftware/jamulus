@@ -23,9 +23,9 @@ fi
 ###  PROCEDURE  ###
 ###################
 
-cd ${THIS_JAMULUS_PROJECT_PATH}
-        
-        
+cd "${THIS_JAMULUS_PROJECT_PATH}"
+
+
 echo "Building... qmake"
 if [-x /Users/runner/work/jamulus/jamulus/Qt/5.15.2/clang_64/bin/qmake]
 then

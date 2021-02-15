@@ -26,15 +26,15 @@ on:
     tags:
       - "r*"
       - "latest"
-    branches:     
+    branches:
       - "autobuild*"  # for developers: branches starting with autobuild will be built and evaluated on each push
       - "autobuild/*" # for developers: branches starting with autobuild will be built and evaluated on each push
-      - master
+      - "master"
     #  - "*"
   pull_request: # The branches below must be a subset of the branches in "push"
-    branches: 
+    branches:
       - master
-  
+
 name:                               Auto-Build
 jobs:
   create_release:
@@ -47,7 +47,7 @@ jobs:
       version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
       x_github_workspace:           ${{ steps.jamulus-build-vars.outputs.X_GITHUB_WORKSPACE }} #needed, because matrix can not directly access ${{ github.workspace }} aparrently
       build_flatpack:               ${{ steps.jamulus-build-vars.outputs.BUILD_FLATPACK }}
-      
+
 
      steps:
          # Checkout code
@@ -96,7 +96,7 @@ jobs:
     strategy:
       fail-fast:                    false
       matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-        config:             
+        config:
            - config_name:           AndroidAPK (artifact+codeql)
              target_os:             android
              building_on_os:        ubuntu-20.04
@@ -104,47 +104,47 @@ jobs:
              cmd2_build:            "sh android/autobuild/autobuild_apk_2_build.sh "
              cmd3_postbuild:        "sh android/autobuild/autobuild_apk_3_copy_files.sh "
              uses_codeql:           true
-             
+
            - config_name:           Linux (codeQL)
              target_os:             linux
              building_on_os:        ubuntu-20.04
              cmd1_prebuild:         "sh linux/autobuild/codeQL/auto_1_prepare.sh ${{ needs.create_release.outputs.x_github_workspace }}"
-             cmd2_build:            "sh linux/autobuild/codeQL/auto_2_build_qt_project.sh "
-             cmd3_postbuild:        "sh linux/autobuild/codeQL/auto_3_copy_files.sh " 
+             cmd2_build:            "sh linux/autobuild/codeQL/auto_2_build_qt_project.sh"
+             cmd3_postbuild:        "sh linux/autobuild/codeQL/auto_3_copy_files.sh"
              uses_codeql:           true
-        
+
            - config_name:           Linux (artifacts)
              target_os:             linux
              building_on_os:        ubuntu-20.04
-             cmd1_prebuild:         "sh linux/autobuild/artifacts/autobuild_deb_1_prepare.sh "
-             cmd2_build:            "sh linux/autobuild/artifacts/autobuild_deb_2_build.sh "
-             cmd3_postbuild:        "sh linux/autobuild/artifacts/autobuild_deb_3_copy_files.sh "
+             cmd1_prebuild:         "sh linux/autobuild/artifacts/autobuild_deb_1_prepare.sh"
+             cmd2_build:            "sh linux/autobuild/artifacts/autobuild_deb_2_build.sh"
+             cmd3_postbuild:        "sh linux/autobuild/artifacts/autobuild_deb_3_copy_files.sh"
              uses_codeql:           false
-             
+
            - config_name:           MacOS (codeQL)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "sh mac/autobuild/codeQL/autobuild_mac_1_prepare.sh "
-             cmd2_build:            "sh mac/autobuild/codeQL/autobuild_mac_2_build.sh "
-             cmd3_postbuild:        "sh mac/autobuild/codeQL/autobuild_mac_3_copy_files.sh "
+             cmd1_prebuild:         "sh mac/autobuild/codeQL/autobuild_mac_1_prepare.sh"
+             cmd2_build:            "sh mac/autobuild/codeQL/autobuild_mac_2_build.sh"
+             cmd3_postbuild:        "sh mac/autobuild/codeQL/autobuild_mac_3_copy_files.sh"
              uses_codeql:           true
-             
+
            - config_name:           MacOS (artifacts)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "sh mac/autobuild/artifacts/autobuild_mac_1_prepare.sh "
-             cmd2_build:            "sh mac/autobuild/artifacts/autobuild_mac_2_build.sh "
-             cmd3_postbuild:        "sh mac/autobuild/artifacts/autobuild_mac_3_copy_files.sh "
+             cmd1_prebuild:         "sh mac/autobuild/artifacts/autobuild_mac_1_prepare.sh"
+             cmd2_build:            "sh mac/autobuild/artifacts/autobuild_mac_2_build.sh"
+             cmd3_postbuild:        "sh mac/autobuild/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
-             
+
            - config_name:           Windows (artifact+codeql)
              target_os:             windows
              building_on_os:        windows-latest
-             cmd1_prebuild:         powershell ./windows/autobuild/autobuild_windowsinstaller_1_prepare.ps1
-             cmd2_build:            powershell ./windows/autobuild/autobuild_windowsinstaller_2_build.ps1
-             cmd3_postbuild:        powershell ./windows/autobuild/autobuild_windowsinstaller_3_copy_files.ps1
-             uses_codeql:           true 
-         
+             cmd1_prebuild:         powershell .\windows\autobuild\autobuild_windowsinstaller_1_prepare.ps1
+             cmd2_build:            powershell .\windows\autobuild\autobuild_windowsinstaller_2_build.ps1
+             cmd3_postbuild:        powershell .\windows\autobuild\autobuild_windowsinstaller_3_copy_files.ps1
+             uses_codeql:           true
+
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
       # Checkout code
@@ -152,7 +152,7 @@ jobs:
         uses:                       actions/checkout@v2
         with:
           submodules:               true
-          
+
       # Prepare (install QT & dependencies)
       - name:                       "Prepare for ${{ matrix.config.config_name }}"
         if:                         ${{ matrix.config.cmd1_prebuild }}
@@ -161,25 +161,25 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'  # allow setting environment variables
           jamulus_project_path:     ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
-          
+
       # Initialize CodeQL tools for code-scanning for security
       - name:                       Initialize CodeQL
-        if:                         matrix.config.uses_codeql 
+        if:                         matrix.config.uses_codeql
         uses:                       github/codeql-action/init@v1
         with:
-          languages: 'cpp' 
+          languages: 'cpp'
           # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
           # Learn more:
           # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
       # Build
       - name:                       "Build for ${{ matrix.config.config_name }}"
-        if:                         ${{ matrix.config.cmd2_build }} 
+        if:                         ${{ matrix.config.cmd2_build }}
         run:                        ${{ matrix.config.cmd2_build }} ${{ github.workspace }}
         env:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
-                
+
       - name:                       "Post-Build for ${{ matrix.config.config_name }}"
         id:                         step_cmd3_postbuild
         if:                         ${{ matrix.config.cmd3_postbuild }}
@@ -187,7 +187,7 @@ jobs:
         env:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
-        
+
       # Upload Artifact to Job
       - name:                       Upload Artifact 1 to Job
         if:                         ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
@@ -197,7 +197,7 @@ jobs:
           path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           retention-days:           31
           if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
-          
+
       # Upload Artifact to Job
       - name:                       Upload Artifact 2 to Job
         if:                         ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
@@ -232,13 +232,13 @@ jobs:
           asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
           asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
           asset_content_type:       application/octet-stream
-          
+
       # Run CodeQL tools for code-scanning for security
       - name:                       Perform CodeQL Analysis
-        if:                         matrix.config.uses_codeql   
+        if:                         matrix.config.uses_codeql
         uses:                       github/codeql-action/analyze@v1
-        
-          
+
+
   ## Builds a Linux flatpack ##
   flatpak-builder:
     name: "Build Flatpak (artifact)"
@@ -258,24 +258,24 @@ jobs:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
     - uses:                       bilelmoussaoui/flatpak-github-actions@v2
-      with: 
+      with:
         bundle:                   "${{ steps.flatpak-prepare.outputs.flatpak_bundle }}"
         manifest-path:            "distributions/io.jamulus.Jamulus.json"
-        
+
     # download artifact
     - id:                         flatpak-download
       uses:                       actions/download-artifact@v2
       with:
         name:                     ${{ steps.flatpak-prepare.outputs.flatpak_name }}
         path:                     ~/${{ steps.flatpak-prepare.outputs.flatpak_name }}
-        
+
     - name:                       echo download-path
       run:                        "echo ${{steps.flatpak-download.outputs.download-path}}"
     - name:                       ls download-path
       run:                        "ls ${{steps.flatpak-download.outputs.download-path}}"
     - name:                       ls githome ~
       run:                        "ls ~/"
-        
+
     # Upload Artifact to Release
     - name:                       Upload Flatpack
       if:                         ${{ contains(needs.create_release.outputs.publish_to_release, 'true') }}

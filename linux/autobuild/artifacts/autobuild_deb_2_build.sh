@@ -17,12 +17,12 @@ else
     echo "Please give the path to the repository root as environment variable 'jamulus_project_path' or parameter to this script!"
     exit 1
 fi
-    
+
 
 ###################
 ###  PROCEDURE  ###
-###################    
-        
-cd ${THIS_JAMULUS_PROJECT_PATH}/distributions
+###################
 
-sudo ./build-debian-package-auto.sh
+cd "${THIS_JAMULUS_PROJECT_PATH}"/distributions
+
+sh ./build-debian-package-auto.sh

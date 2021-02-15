@@ -29,10 +29,8 @@ if [ -z "${jamulus_project_path}" ]; then
     exit 1
 fi
 
-cd ${GITHUB_WORKSPACE}
+cd "${GITHUB_WORKSPACE}"
 
 echo "Install dependencies..."
 brew install qt5
 brew link qt5 --force
-
-

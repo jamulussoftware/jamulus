@@ -23,10 +23,10 @@ fi
 ###  PROCEDURE  ###
 ###################
 
-cd ${THIS_JAMULUS_PROJECT_PATH}
+cd "${THIS_JAMULUS_PROJECT_PATH}"
 
 #$QTDIR/bin/qmake -spec android-clang CONFIG+=$CONFIG
-$QTDIR/bin/qmake -spec android-clang CONFIG+=release
+"${QTDIR}"/bin/qmake -spec android-clang CONFIG+=release
 echo .
 echo .
 echo .
@@ -36,9 +36,9 @@ echo .
 echo .
 echo .
 echo .
-$ANDROID_NDK_ROOT/prebuilt/$ANDROID_NDK_HOST/bin/make INSTALL_ROOT=android-build -f Makefile install
+"${ANDROID_NDK_ROOT}"/prebuilt/"${ANDROID_NDK_HOST}"/bin/make INSTALL_ROOT=android-build -f Makefile install
 echo .
 echo .
 echo .
 echo .
-$QTDIR/bin/androiddeployqt --input $(ls *.json) --output android-build --android-platform android-30 --jdk $JAVA_HOME --gradle 
+"${QTDIR}"/bin/androiddeployqt --input $(ls *.json) --output android-build --android-platform android-30 --jdk "${JAVA_HOME}" --gradle

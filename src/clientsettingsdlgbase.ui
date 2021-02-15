@@ -28,7 +28,7 @@
      </property>
      <layout class="QVBoxLayout">
       <item>
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="grbSoundcardDevice">
         <property name="title">
          <string>Device</string>
         </property>
@@ -667,6 +667,8 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>cbxSoundcard</tabstop>
+  <tabstop>butDriverSetup</tabstop>
   <tabstop>cbxLInChan</tabstop>
   <tabstop>cbxRInChan</tabstop>
   <tabstop>cbxLOutChan</tabstop>

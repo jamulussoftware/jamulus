@@ -1441,7 +1441,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             //      optimization it would be better to set it only if the network frame size is changed
             opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-            for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+            for ( size_t iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
                                             &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],

@@ -1437,9 +1437,9 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // OPUS encoding
         if ( pCurOpusEncoder != nullptr )
         {
-            // TODO find a better place than this: the setting does not change all the time so for speed
-            //      optimization it would be better to set it only if the network frame size is changed
-            opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+// TODO find a better place than this: the setting does not change all the time so for speed
+//      optimization it would be better to set it only if the network frame size is changed
+opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
             for ( size_t iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {
@@ -1449,10 +1449,10 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                                             &vecvecbyCodedData[iChanCnt][0],
                                             iCeltNumCodedBytes );
 
-            // send separate mix to current clients
-            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                        vecvecbyCodedData[iChanCnt],
-                                                        iCeltNumCodedBytes );
+                // send separate mix to current clients
+                vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                            vecvecbyCodedData[iChanCnt],
+                                                            iCeltNumCodedBytes );
             }
         }
     }

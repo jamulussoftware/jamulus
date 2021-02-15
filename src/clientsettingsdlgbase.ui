@@ -668,6 +668,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>cbxSoundcard</tabstop>
+  <tabstop>butDriverSetup</tabstop>
   <tabstop>cbxLInChan</tabstop>
   <tabstop>cbxRInChan</tabstop>
   <tabstop>cbxLOutChan</tabstop>
@@ -676,7 +677,6 @@
   <tabstop>rbtBufferDelayPreferred</tabstop>
   <tabstop>rbtBufferDelayDefault</tabstop>
   <tabstop>rbtBufferDelaySafe</tabstop>
-  <tabstop>butDriverSetup</tabstop>
   <tabstop>chbAutoJitBuf</tabstop>
   <tabstop>sldNetBuf</tabstop>
   <tabstop>sldNetBufServer</tabstop>

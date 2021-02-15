@@ -31,6 +31,8 @@
 - Implement new --ctrlmidich syntax allowing to specify fader, pan, mute,
   solo buttons (#945).  Implementation for mute&solo buttons for now is
   only for toggle controllers and does not support headless operation yet.
+  
+- Move ASIO Setup button on Windows below driver selection (#977), coded by mulyaj and ann0see
 
 TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
 

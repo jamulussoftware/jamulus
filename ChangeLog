@@ -17,8 +17,6 @@
 
 - more detailed version number of unreleased version, coded by nefarius2001 (#475)
 
-- remove ConsoleWriterFactory - to resolve suspected memory leak (#926)
-
 - add new --serverpublicip option to support central servers behind NAT,
   coded by hoffie (#954)
 
@@ -34,7 +32,9 @@
   
 - Move ASIO Setup button on Windows below driver selection (#977), coded by mulyaj and ann0see
 
-TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
+- bug fix: remove ConsoleWriterFactory - to resolve suspected memory leak (#926)
+
+- bug fix: fix crash if settings are changed in ASIO4ALL during a connection (contained in #796). Hotfix. Debugged by corrados
 
 
 

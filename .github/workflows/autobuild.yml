@@ -92,7 +92,7 @@ jobs:
       fail-fast:                    false
       matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
         config:
-           - config_name:           AndroidAPK (artifact+codeql)
+           - config_name:           AndroidAPK (artifact+codeQL)
              target_os:             android
              building_on_os:        ubuntu-20.04
              cmd1_prebuild:         "sh ./autobuild/android/autobuild_apk_1_prepare.sh "
@@ -100,21 +100,13 @@ jobs:
              cmd3_postbuild:        "./autobuild/android/autobuild_apk_3_copy_files.sh "
              uses_codeql:           true
 
-           - config_name:           Linux (codeQL)
+           - config_name:           Linux (artifacts+codeQL)
              target_os:             linux
              building_on_os:        ubuntu-20.04
-             cmd1_prebuild:         "./autobuild/linux/codeQL/auto_1_prepare.sh ${{ needs.create_release.outputs.x_github_workspace }}"
-             cmd2_build:            "./autobuild/linux/codeQL/auto_2_build_qt_project.sh"
-             cmd3_postbuild:        "./autobuild/linux/codeQL/auto_3_copy_files.sh"
+             cmd1_prebuild:         "sh ./autobuild/linux/autobuild_deb_1_prepare.sh"
+             cmd2_build:            "./autobuild/linux/autobuild_deb_2_build.sh"
+             cmd3_postbuild:        "./autobuild/linux/autobuild_deb_3_copy_files.sh"
              uses_codeql:           true
-
-           - config_name:           Linux (artifacts)
-             target_os:             linux
-             building_on_os:        ubuntu-20.04
-             cmd1_prebuild:         "./autobuild/linux/artifacts/autobuild_deb_1_prepare.sh"
-             cmd2_build:            "./autobuild/linux/artifacts/autobuild_deb_2_build.sh"
-             cmd3_postbuild:        "./autobuild/linux/artifacts/autobuild_deb_3_copy_files.sh"
-             uses_codeql:           false
 
            - config_name:           MacOS (codeQL)
              target_os:             macos
@@ -132,7 +124,7 @@ jobs:
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
 
-           - config_name:           Windows (artifact+codeql)
+           - config_name:           Windows (artifact+codeQL)
              target_os:             windows
              building_on_os:        windows-latest
              cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1

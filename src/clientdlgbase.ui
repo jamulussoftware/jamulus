@@ -581,7 +581,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Setup your audio, connect to a server and start jamming!</string>
+             <string>Set up your audio, connect to a server and start jamming!</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

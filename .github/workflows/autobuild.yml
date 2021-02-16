@@ -14,9 +14,6 @@
 #     for every tag that starts with 'r_' (and not contains 'beta'):
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix as a release
-#     for  the  tag that is named "latest":
-#          - do CodeQl while building for every platform
-#          - publish the created binaries/packs only as artifacts/appendix as the release "latest"
 #
 
 
@@ -25,7 +22,6 @@ on:
   push:
     tags:
       - "r*"
-      - "latest"
     branches:
       - "autobuild*"  # for developers: branches starting with autobuild will be built and evaluated on each push
       - "autobuild/*" # for developers: branches starting with autobuild will be built and evaluated on each push
@@ -60,7 +56,7 @@ jobs:
            id:                      jamulus-build-vars
 
          # remove release, if it exists (with this releasetag)
-         - name:                    Remove release, if existing (for latest and branches)
+         - name:                    Remove release, if existing (for branches)
            if:                      ${{ contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true') }}
            continue-on-error:       true
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2

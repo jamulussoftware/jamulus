@@ -60,7 +60,8 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW FinishPage.Show
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION FinishPage.Run
 !define MUI_FINISHPAGE_SHOWREADME ""
 !define MUI_FINISHPAGE_SHOWREADME_CHECKED
 !define MUI_FINISHPAGE_SHOWREADME_TEXT "$(DESKTOP_SET_SHORTCUT)"
@@ -301,6 +302,10 @@ Function FinishPage.Show ; set the user choices if they were remembered
 
     ShowWindow $mui.FinishPage.Showreadme 1
 
+FunctionEnd
+
+Function FinishPage.Run ; run the app
+    Exec '"$WINDIR\explorer.exe" "$INSTDIR\${APP_EXE}"' ; see http://mdb-blog.blogspot.com/2013/01/nsis-lunch-program-as-user-from-uac.html and http://nsis.sourceforge.net/Run_an_application_shortcut_after_an_install
 FunctionEnd
 
 Function AbortOnRunningApp

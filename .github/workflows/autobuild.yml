@@ -99,49 +99,49 @@ jobs:
            - config_name:           AndroidAPK (artifact+codeql)
              target_os:             android
              building_on_os:        ubuntu-20.04
-             cmd1_prebuild:         "sh android/autobuild/autobuild_apk_1_prepare.sh "
-             cmd2_build:            "sh android/autobuild/autobuild_apk_2_build.sh "
-             cmd3_postbuild:        "sh android/autobuild/autobuild_apk_3_copy_files.sh "
+             cmd1_prebuild:         "sh autobuild/android/autobuild_apk_1_prepare.sh "
+             cmd2_build:            "sh autobuild/android/autobuild_apk_2_build.sh "
+             cmd3_postbuild:        "sh autobuild/android/autobuild_apk_3_copy_files.sh "
              uses_codeql:           true
 
            - config_name:           Linux (codeQL)
              target_os:             linux
              building_on_os:        ubuntu-20.04
-             cmd1_prebuild:         "sh linux/autobuild/codeQL/auto_1_prepare.sh ${{ needs.create_release.outputs.x_github_workspace }}"
-             cmd2_build:            "sh linux/autobuild/codeQL/auto_2_build_qt_project.sh"
-             cmd3_postbuild:        "sh linux/autobuild/codeQL/auto_3_copy_files.sh"
+             cmd1_prebuild:         "sh autobuild/linux/codeQL/auto_1_prepare.sh ${{ needs.create_release.outputs.x_github_workspace }}"
+             cmd2_build:            "sh autobuild/linux/codeQL/auto_2_build_qt_project.sh"
+             cmd3_postbuild:        "sh autobuild/linux/codeQL/auto_3_copy_files.sh"
              uses_codeql:           true
 
            - config_name:           Linux (artifacts)
              target_os:             linux
              building_on_os:        ubuntu-20.04
-             cmd1_prebuild:         "sh linux/autobuild/artifacts/autobuild_deb_1_prepare.sh"
-             cmd2_build:            "sh linux/autobuild/artifacts/autobuild_deb_2_build.sh"
-             cmd3_postbuild:        "sh linux/autobuild/artifacts/autobuild_deb_3_copy_files.sh"
+             cmd1_prebuild:         "sh autobuild/linux/artifacts/autobuild_deb_1_prepare.sh"
+             cmd2_build:            "sh autobuild/linux/artifacts/autobuild_deb_2_build.sh"
+             cmd3_postbuild:        "sh autobuild/linux/artifacts/autobuild_deb_3_copy_files.sh"
              uses_codeql:           false
 
            - config_name:           MacOS (codeQL)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "sh mac/autobuild/codeQL/autobuild_mac_1_prepare.sh"
-             cmd2_build:            "sh mac/autobuild/codeQL/autobuild_mac_2_build.sh"
-             cmd3_postbuild:        "sh mac/autobuild/codeQL/autobuild_mac_3_copy_files.sh"
+             cmd1_prebuild:         "sh autobuild/mac/codeQL/autobuild_mac_1_prepare.sh"
+             cmd2_build:            "sh autobuild/mac/codeQL/autobuild_mac_2_build.sh"
+             cmd3_postbuild:        "sh autobuild/mac/codeQL/autobuild_mac_3_copy_files.sh"
              uses_codeql:           true
 
            - config_name:           MacOS (artifacts)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "sh mac/autobuild/artifacts/autobuild_mac_1_prepare.sh"
-             cmd2_build:            "sh mac/autobuild/artifacts/autobuild_mac_2_build.sh"
-             cmd3_postbuild:        "sh mac/autobuild/artifacts/autobuild_mac_3_copy_files.sh"
+             cmd1_prebuild:         "sh autobuild/mac/artifacts/autobuild_mac_1_prepare.sh"
+             cmd2_build:            "sh autobuild/mac/artifacts/autobuild_mac_2_build.sh"
+             cmd3_postbuild:        "sh autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
 
            - config_name:           Windows (artifact+codeql)
              target_os:             windows
              building_on_os:        windows-latest
-             cmd1_prebuild:         powershell .\windows\autobuild\autobuild_windowsinstaller_1_prepare.ps1
-             cmd2_build:            powershell .\windows\autobuild\autobuild_windowsinstaller_2_build.ps1
-             cmd3_postbuild:        powershell .\windows\autobuild\autobuild_windowsinstaller_3_copy_files.ps1
+             cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1
+             cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
+             cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
              uses_codeql:           true
 
     runs-on:                        ${{ matrix.config.building_on_os }}

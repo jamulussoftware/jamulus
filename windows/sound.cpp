@@ -75,16 +75,15 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        // only reset the channel mapping if a new device was selected
-        if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
-        {
-            // the device has changed, per definition we reset the channel
-            // mapping to the defaults (first two available channels)
-            ResetChannelMapping();
+// TODO: In order to fix https://github.com/jamulussoftware/jamulus/issues/796 we reset the channel mapping on every property change. This is not ideal. 
+	    
+// the device has changed, per definition we reset the channel
+// mapping to the defaults (first two available channels)
+ResetChannelMapping();
 
-            // store ID of selected driver if initialization was successful
-            strCurDevName = cDriverNames[iDriverIdx];
-        }
+// store ID of selected driver if initialization was successful
+strCurDevName = cDriverNames[iDriverIdx];
+
     }
     else
     {

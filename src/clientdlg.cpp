@@ -340,6 +340,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
         SLOT ( OnSetAllFadersToNewClientLevel() ), QKeySequence ( Qt::CTRL + Qt::Key_L ) );
 
+    pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this,
+        SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );

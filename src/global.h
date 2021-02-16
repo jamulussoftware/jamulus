@@ -152,6 +152,9 @@ LED bar:      lbr
 #define AUD_MIX_FADER_MAX                100
 #define AUD_MIX_PAN_MAX                  100
 
+// coefficient for averaging channel levels for automatic fader adjustment
+#define AUTO_FADER_ADJUST_ALPHA          0.2
+
 // maximum number of fader groups (must be consistent to audiomixerboard implementation)
 #define MAX_NUM_FADER_GROUPS             4
 

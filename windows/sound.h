@@ -45,8 +45,6 @@
 /* Classes ********************************************************************/
 class CSound : public CSoundBase
 {
-    Q_OBJECT
-
 public:
     CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
              void*          arg,

@@ -400,7 +400,6 @@ HEADERS += src/buffer.h \
     src/channel.h \
     src/client.h \
     src/global.h \
-    src/multicolorled.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
     src/server.h \
@@ -423,7 +422,8 @@ HEADERS_GUI = src/audiomixerboard.h \
     src/clientdlg.h \
     src/serverdlg.h \
     src/levelmeter.h \
-    src/analyzerconsole.h
+    src/analyzerconsole.h \
+    src/multicolorled.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \

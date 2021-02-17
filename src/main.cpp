@@ -578,9 +578,17 @@ int main ( int argc, char** argv )
         qWarning() << "Mute my own signal in my personal mix is only supported in headless mode.";
     }
 
-    if ( !strServerPublicIP.isEmpty() && ( strCentralServer.isEmpty() || bIsClient ) )
+    if ( !strServerPublicIP.isEmpty() )
     {
-        qWarning() << "Server Public IP will only take effect when registering a server with a central server.";
+        QHostAddress InetAddr;
+        if ( !InetAddr.setAddress ( strServerPublicIP ) )
+        {
+            qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
+        }
+        if ( strCentralServer.isEmpty() || bIsClient )
+        {
+            qWarning() << "Server Public IP will only take effect when registering a server with a central server.";
+        }
     }
 
     // per definition: if we are in "GUI" server mode and no central server

@@ -3,7 +3,7 @@
 
 using namespace streamer;
 
-CJamStreamer::CJamStreamer() {}
+CJamStreamer::CJamStreamer() : qproc ( NULL ) {}
 
 // put the received pcm data into the pipe to ffmpeg
 void CJamStreamer::process( int iServerFrameSizeSamples, const CVector<int16_t>& data ) {

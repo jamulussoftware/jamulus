@@ -94,7 +94,6 @@ int main ( int argc, char** argv )
         freopen("CONOUT$", "w", stderr);
     }
 #endif
-
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"

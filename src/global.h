@@ -108,11 +108,10 @@ LED bar:      lbr
 #define SERVER_GETTING_STARTED_URL       "https://jamulus.io/wiki/Running-a-Server"
 #define SOFTWARE_MANUAL_URL              "https://jamulus.io/wiki/Software-Manual"
 
-// determining server internal address uses well-known host and port
-// (You can change the service used here to something like Cloudflare (1.1.1.1), Google DNS (8.8.8.8), or something else reliable)
-#define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
-#define WELL_KNOWN_PORT                  53        // DNS
-#define IP_LOOKUP_TIMEOUT                500       // ms
+// determining the server's external address requires setting
+// up a socket to a public IP address.
+#define WELL_KNOWN_HOST                  "192.0.2.1" // Reserved IP as per RFC 5737
+#define IP_LOOKUP_TIMEOUT                500         // ms
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz

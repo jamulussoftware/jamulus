@@ -1024,8 +1024,11 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
 
 CHostAddress NetworkUtil::GetLocalAddress()
 {
-    QTcpSocket socket;
-    socket.connectToHost ( WELL_KNOWN_HOST, WELL_KNOWN_PORT );
+    QUdpSocket socket;
+    // As we are using UDP, the connectToHost() does not generate any traffic at all.
+    // We just require a socket which is pointed towards the Internet in
+    // order to find our the IP of our own external interface.
+    socket.connectToHost ( WELL_KNOWN_HOST, DEFAULT_PORT_NUMBER );
 
     if ( socket.waitForConnected ( IP_LOOKUP_TIMEOUT ) )
     {

@@ -59,6 +59,8 @@
 #if WITH_SOUND
 class CSound : public CSoundBase
 {
+    Q_OBJECT
+
 public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
              void*          arg,

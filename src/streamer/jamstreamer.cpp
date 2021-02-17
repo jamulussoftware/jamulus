@@ -14,7 +14,6 @@ void CJamStreamer::Init( const QString strStreamDest ) {
     this->strStreamDest = strStreamDest;
 }
 
-// create a pipe to ffmpeg called "pipeout" to being able to put out the pcm data to it
 void CJamStreamer::OnStarted() {
     if ( !qproc )
     {

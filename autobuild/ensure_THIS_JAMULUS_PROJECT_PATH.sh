@@ -27,7 +27,7 @@ if [ -d "$THIS_JAMULUS_PROJECT_PATH" ]; then
   #python -c "import os; print(os.path.abspath(\"${THIS_JAMULUS_PROJECT_PATH}\"));"
   echo "THIS_JAMULUS_PROJECT_PATH exists (absolute): ${THIS_JAMULUS_PROJECT_PATH}"
 else
-    echo "ERROR: non-existing THIS_JAMULUS_PROJECT_PATH: ${THIS_JAMULUS_PROJECT_PATH}"
+    echo "ERROR: THIS_JAMULUS_PROJECT_PATH must reference an existing directory: \"${THIS_JAMULUS_PROJECT_PATH}\""
     exit 1
 fi
 

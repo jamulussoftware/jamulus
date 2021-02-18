@@ -35,6 +35,8 @@
 /* Classes ********************************************************************/
 class CSound : public CSoundBase, public oboe::AudioStreamCallback
 {
+    Q_OBJECT
+
 public:
     static const uint8_t RING_FACTOR;
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),

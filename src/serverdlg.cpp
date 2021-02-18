@@ -335,7 +335,7 @@ lvwClients->setMinimumHeight ( 140 );
     tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
 
     // prepare update check info label (invisible by default)
-    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + QString ( APP_NAME ) + " " +
                               tr ( "software upgrade available" ) + "</b></font>" );
     lblUpdateCheck->hide();
 
@@ -690,11 +690,11 @@ void CServerDlg::UpdateGUIDependencies()
     case SRS_CENTRAL_SVR_FULL:
     case SRS_VERSION_TOO_OLD:
     case SRS_NOT_FULFILL_REQUIREMENTS:
-        strStatus = "<font color=""red""><b>" + strStatus + "</b></font>";
+        strStatus = "<font color=\"red\"><b>" + strStatus + "</b></font>";
         break;
 
     case SRS_REGISTERED:
-        strStatus = "<font color=""darkGreen""><b>" + strStatus + "</b></font>";
+        strStatus = "<font color=\"darkGreen\"><b>" + strStatus + "</b></font>";
         break;
 
     default:

@@ -1394,7 +1394,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
 
     const QString strActualMessageText =
-        "<font color=""" + sCurColor + """>(" +
+        "<font color=\"" + sCurColor + "\">(" +
         QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
         ChanName.toHtmlEscaped() +
         "</b></font> " + strChatText.toHtmlEscaped();

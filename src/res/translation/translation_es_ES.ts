@@ -3491,8 +3491,8 @@
     <name>global</name>
     <message>
         <location filename="../../global.h" line="237"/>
-        <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
-        <translation>Para más información utiliza ¿Qué es Esto? (menú de ayuda, botón derecho del ratón o Shift+F1)</translation>
+        <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
+        <translation>Para más información utiliza &quot;¿Qué es Esto?&quot; (menú de ayuda, botón derecho del ratón o Shift+F1)</translation>
     </message>
 </context>
 </TS>

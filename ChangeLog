@@ -4,7 +4,11 @@
 
 ### 3.6.2dev <- NOTE: the release version number will be 3.7.0 ###
 
-- introduced new server lists: Any Genre 2, Choral/Barbershop (#875)
+- introduced new server lists: Any Genre 3, Choral/Barbershop (#875),
+  also renamed Default to Any Genre 1, Any Genre to Any Genre 2,
+  and Classical/Folk/Choral to Classical/Folk.
+
+- central server addresses are now in jamulus.io instead of fischvolk.de (#919)
 
 - show --clientname as first word in title to avoid clipping in Windows task bar (#789)
 
@@ -13,11 +17,9 @@
 - support http links in the chat dialog, coded by hoffie (#879)
 
 - support Github actions for CodeQL, Publish Release, Autobuild Flatpak,
-  coded by pljones, ann0see, ranfdev
+  coded by pljones, nefarius2001, ann0see, ranfdev.
 
 - more detailed version number of unreleased version, coded by nefarius2001 (#475)
-
-- remove ConsoleWriterFactory (#926)
 
 - add new --serverpublicip option to support central servers behind NAT,
   coded by hoffie (#954)
@@ -28,7 +30,17 @@
 
 - Highlight the fact that the server is recording in the Mixerboard title (#968), coded by dcorson-ticino.com
 
-TODO fix crash if settings are changed in ASIO4All during a connection (contained in #796)
+- Implement new --ctrlmidich syntax allowing to specify fader, pan, mute,
+  solo buttons (#945).  Implementation for mute&solo buttons for now is
+  only for toggle controllers and does not support headless operation yet.
+  
+- Move ASIO Setup button on Windows below driver selection (#977), coded by mulyaj and ann0see
+
+- Gray out input levels and show a message if you're not connected to a server (#847)
+
+- bug fix: remove ConsoleWriterFactory - to resolve suspected memory leak (#926)
+
+- bug fix: fix crash if settings are changed in ASIO4ALL during a connection (contained in #796). Reverts #727 for Windows
 
 
 

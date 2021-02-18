@@ -407,6 +407,8 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strServerPublicIP = strArgument;
+            qInfo() << qUtf8Printable( QString( "- server public IP: %1" )
+                .arg( strServerPublicIP ) );
             CommandLineOptions << "--serverpublicip";
             continue;
         }
@@ -574,6 +576,19 @@ int main ( int argc, char** argv )
     {
         bMuteMeInPersonalMix = false;
         qWarning() << "Mute my own signal in my personal mix is only supported in headless mode.";
+    }
+
+    if ( !strServerPublicIP.isEmpty() )
+    {
+        QHostAddress InetAddr;
+        if ( !InetAddr.setAddress ( strServerPublicIP ) )
+        {
+            qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
+        }
+        if ( strCentralServer.isEmpty() || bIsClient )
+        {
+            qWarning() << "Server Public IP will only take effect when registering a server with a central server.";
+        }
     }
 
     // per definition: if we are in "GUI" server mode and no central server

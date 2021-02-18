@@ -458,7 +458,7 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     if ( bIsMute )
     {
         // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
-        pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
+        pInfoLabel->setText ( "<font color=\"orange\">&#128263;</font>" );
     }
     else
     {
@@ -1242,6 +1242,47 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
         if ( vecpChanFader[iChannelIdx]->IsVisible() )
         {
             vecpChanFader[iChannelIdx]->SetFaderLevel ( iValue );
+        }
+    }
+}
+
+void CAudioMixerBoard::SetPanValue ( const int iChannelIdx,
+                                     const int iValue )
+{
+    // only apply new pan value if channel index is valid and the panner is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS )
+           && bDisplayPans )
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetPanValue ( iValue );
+        }
+    }
+}
+
+void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx,
+                                        const bool bIsSolo )
+{
+    // only apply solo if channel index is valid and the fader is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetFaderIsSolo ( bIsSolo );
+        }
+    }
+}
+
+void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx,
+                                        const bool bIsMute )
+{
+    // only apply mute if channel index is valid and the fader is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetFaderIsMute ( bIsMute );
         }
     }
 }

@@ -13,6 +13,7 @@
 !define APP_INSTALL_KEY   "Software\${APP_NAME}"
 !define APP_INSTALL_VALUE "InstallFolder"
 !define APP_INSTALL_ICON  "InstallDtIcon"
+!define APP_RUN           "RunAppAfterInstall"
 !define AUTORUN_NAME      "${APP_NAME} Server"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
 !define APP_EXE           "${APP_NAME}.exe"
@@ -30,7 +31,7 @@ RequestExecutionLevel admin  ; Administrator privileges are required for install
 Name         "${APP_NAME}"
 OutFile      "${DEPLOY_PATH}\${APP_NAME}-${APP_VERSION}-installer-win.exe"
 Caption      "${APP_NAME} ${APP_VERSION} Installer"
-BrandingText "${APP_NAME} Make music online. With friends. For free."
+BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
  ; Additional plugin location (for nsProcess)
 !addplugindir "${WINDOWS_PATH}"
@@ -60,7 +61,8 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW FinishPage.Show
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${APP_EXE}"
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION FinishPage.Run
 !define MUI_FINISHPAGE_SHOWREADME ""
 !define MUI_FINISHPAGE_SHOWREADME_CHECKED
 !define MUI_FINISHPAGE_SHOWREADME_TEXT "$(DESKTOP_SET_SHORTCUT)"
@@ -102,6 +104,7 @@ Var Button
 ; Define user choices
 
 Var bInstallDtIcon
+Var bRunApp
 
 ; Installer
 
@@ -269,6 +272,10 @@ Function .onInit
     SetShellVarContext all
 
     ; get user choices (open program, dt icon,...)
+    ReadRegStr $bRunApp HKLM "${APP_INSTALL_KEY}" "${APP_RUN}"
+    IfErrors   0 +2
+    StrCpy $bRunApp "1"
+
     ReadRegStr $bInstallDtIcon  HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}"
     IfErrors   0 +2
     StrCpy $bInstallDtIcon "1"
@@ -301,6 +308,20 @@ Function FinishPage.Show ; set the user choices if they were remembered
 
     ShowWindow $mui.FinishPage.Showreadme 1
 
+    WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_RUN}" "0" ; this will be overwritten if the box is checked
+    ${If} $bRunApp == 1 ; Check the run checkbox
+        SendMessage $mui.FinishPage.Run ${BM_SETCHECK} ${BST_CHECKED} 0
+    ${Else}
+        SendMessage $mui.FinishPage.Run ${BM_SETCHECK} ${BST_UNCHECKED} 0
+    ${EndIf}
+
+    ShowWindow $mui.FinishPage.Run 1
+
+FunctionEnd
+
+Function FinishPage.Run ; run the app
+    WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_RUN}" "1" ; remember that app should run next time
+    Exec '"$WINDIR\explorer.exe" "$INSTDIR\${APP_EXE}"' ; see http://mdb-blog.blogspot.com/2013/01/nsis-lunch-program-as-user-from-uac.html and http://nsis.sourceforge.net/Run_an_application_shortcut_after_an_install
 FunctionEnd
 
 Function AbortOnRunningApp

@@ -40,6 +40,8 @@
 /* Classes ********************************************************************/
 class CMultiColorLED : public QLabel
 {
+    Q_OBJECT
+
 public:
     enum ELightColor
     {

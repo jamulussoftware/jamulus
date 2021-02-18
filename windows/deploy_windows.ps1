@@ -6,9 +6,7 @@ param(
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
-    [string] $NSProcessName = "Plugin/nsProcessW.dll",
-    [string] $NSProcessUrl = "http://forums.winamp.com/attachment.php?attachmentid=54705&d=1610882327"
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
 
 # change directory to the directory above (if needed)
@@ -138,8 +136,6 @@ Function Install-Dependencies
         -Name $AsioSDKName -Destination "ASIOSDK2"
     Install-Dependency -Uri $NsisUrl `
         -Name $NsisName -Destination "NSIS"
-    Install-Dependency -Uri $NSProcessUrl `
-        -Name $NSProcessName -Destination "nsProcess.dll"
 }
 
 # Setup environment variables and build tool paths
@@ -275,7 +271,32 @@ Function Build-Installer
         "$WindowsPath\installer.nsi")
 }
 
+# Build and copy NS-Process dll
+Function Build-NSProcess
+{
+    param(
+        [Parameter(Mandatory=$true)]
+        [string] $QtInstallPath
+    )
+    if (!(Test-Path -path "$WindowsPath\nsProcess.dll")) {
+
+        echo "Building nsProcess..."
+
+        $OriginalEnv = Get-ChildItem Env:
+        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch "x86"
+    
+        Invoke-Native-Command -Command "msbuild" `
+            -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
+            "/p:Platform=Win32")
+   
+        Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
+        Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
+        $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
+    }
+}
+
 Clean-Build-Environment
 Install-Dependencies
 Build-App-Variants -QtInstallPath $QtInstallPath
+Build-NSProcess -QtInstallPath $QtInstallPath
 Build-Installer

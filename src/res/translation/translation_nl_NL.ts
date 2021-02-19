@@ -276,7 +276,7 @@
     </message>
     <message>
         <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
-        <translation type="vanished">Geeft het pre-fader-audioniveau van dit kanaal weer.  Alle verbonden clients op de server krijgen een audioniveau toegewezen, dezelfde waarde voor elke client.</translation>
+        <translation type="vanished">Geeft het pre-fader-audioniveau van dit kanaal weer. Alle verbonden clients op de server krijgen een audioniveau toegewezen, dezelfde waarde voor elke client.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="140"/>
@@ -465,7 +465,7 @@
         <location filename="../../audiomixerboard.cpp" line="795"/>
         <location filename="../../audiomixerboard.cpp" line="801"/>
         <source>Skill Level</source>
-        <translation>Vaardigheidssniveau</translation>
+        <translation>Vaardigheidsniveau</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="822"/>

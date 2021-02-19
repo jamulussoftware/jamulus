@@ -30,7 +30,8 @@ CJamController::CJamController() :
     bRecorderInitialised ( false ),
     bEnableRecording     ( false ),
     strRecordingDir      ( "" ),
-    pthJamRecorder       ( nullptr )
+    pthJamRecorder       ( nullptr ),
+    pJamRecorder         ( nullptr )
 {
 }
 
@@ -77,15 +78,25 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
                                        int     iServerFrameSizeSamples,
                                        bool    bDisableRecording )
 {
-    if ( bRecorderInitialised && pthJamRecorder != nullptr )
+    if ( bRecorderInitialised )
     {
-        // We have a thread and we want to start a new one.
-        // We only want one running.
-        // This could take time, unfortunately.
-        // Hopefully changing recording directory will NOT happen during a long jam...
-        emit EndRecorderThread();
-        pthJamRecorder->wait();
-        pthJamRecorder = nullptr;
+        if ( pthJamRecorder != nullptr )
+        {
+            // We have a thread and we want to start a new one.
+            // We only want one running.
+            // This could take time, unfortunately.
+            // Hopefully changing recording directory will NOT happen during a long jam...
+            emit EndRecorderThread();
+            pthJamRecorder->wait();
+            delete pthJamRecorder;
+            pthJamRecorder = nullptr;
+        }
+        if ( pJamRecorder != nullptr )
+        {
+            // We have a recorder running already. Terminate it.
+            delete pJamRecorder;
+            pJamRecorder = nullptr;
+        }
     }
 
     if ( !newRecordingDir.isEmpty() )

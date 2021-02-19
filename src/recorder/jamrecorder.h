@@ -108,6 +108,8 @@ public:
 
     CJamSession(QDir recordBaseDir);
 
+    virtual ~CJamSession();
+
     void Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples);
 
     void End();

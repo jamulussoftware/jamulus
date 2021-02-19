@@ -89,6 +89,7 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iSe
 void CJamClient::Disconnect()
 {
     static_cast<CWaveStream*>(out)->finalise();
+    delete out;
     out = nullptr;
 
     wavFile->close();
@@ -132,6 +133,21 @@ CJamSession::CJamSession(QDir recordBaseDir) :
 
     // Explicitly set all the pointers to "empty"
     vecptrJamClients.fill(nullptr);
+}
+
+/**
+ * @brief CJamSession::~CJamSession
+ */
+CJamSession::~CJamSession()
+{
+    for (int i = 0; i < jamClientConnections.count(); i++ )
+    {
+        if ( jamClientConnections[i] )
+        {
+            delete jamClientConnections[i];
+            jamClientConnections[i] = nullptr;
+        }
+    }
 }
 
 /**

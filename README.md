@@ -1,6 +1,6 @@
 [![Homepage picture](src/res/homepage/jamulusbannersmall.png)](https://jamulus.io)
 
-![CodeQL](https://github.com/jamulussoftware/jamulus/workflows/CodeQL/badge.svg)
+[![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
 Jamulus - Internet Jam Session Software
 =======================================

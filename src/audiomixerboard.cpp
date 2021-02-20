@@ -1327,7 +1327,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
 
             // do not adjust channels with zero level to full level since
             // the channel might simply be silent at the moment
-            if ( leveldB < AUTO_FADER_NOISE_THRESHOLD_DB )
+            if ( leveldB > AUTO_FADER_NOISE_THRESHOLD_DB )
             {
                 // compute new level
                 float newdBLevel = -leveldB + AUTO_FADER_TARGET_LEVEL_DB;

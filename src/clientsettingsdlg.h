@@ -97,6 +97,7 @@ public slots:
     void OnEnableOPUS64StateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
+    void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );

@@ -78,7 +78,7 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iSe
 
     for(int i = 0; i < numChannels * iServerFrameSizeSamples; i++)
     {
-        if (out) *out << pcm[i];
+        *out << pcm[i];
     }
 
     frameCount++;

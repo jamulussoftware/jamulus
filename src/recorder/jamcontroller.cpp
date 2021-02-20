@@ -91,16 +91,16 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
             delete pthJamRecorder;
             pthJamRecorder = nullptr;
         }
+    }
+
+    if ( !newRecordingDir.isEmpty() )
+    {
         if ( pJamRecorder != nullptr )
         {
             // We have a recorder running already. Terminate it.
             delete pJamRecorder;
             pJamRecorder = nullptr;
         }
-    }
-
-    if ( !newRecordingDir.isEmpty() )
-    {
         pJamRecorder = new recorder::CJamRecorder ( newRecordingDir, iServerFrameSizeSamples );
         strRecorderErrMsg = pJamRecorder->Init();
         bRecorderInitialised = ( strRecorderErrMsg == QString::null );

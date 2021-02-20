@@ -45,7 +45,8 @@ CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString
     startFrame (frame),
     numChannels (static_cast<uint16_t>(_numChannels)),
     name (name),
-    address (address)
+    address (address),
+    out (nullptr)
 {
     // At this point we may not have much of a name
     QString fileName = ClientName() + "-" + QString::number(frame) + "-" + QString::number(_numChannels);
@@ -77,7 +78,7 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iSe
 
     for(int i = 0; i < numChannels * iServerFrameSizeSamples; i++)
     {
-        *out << pcm[i];
+        if (out) *out << pcm[i];
     }
 
     frameCount++;
@@ -88,9 +89,12 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iSe
  */
 void CJamClient::Disconnect()
 {
-    static_cast<CWaveStream*>(out)->finalise();
-    delete out;
-    out = nullptr;
+    if (out)
+    {
+        static_cast<CWaveStream*>(out)->finalise();
+        delete out;
+        out = nullptr;
+    }
 
     wavFile->close();
 

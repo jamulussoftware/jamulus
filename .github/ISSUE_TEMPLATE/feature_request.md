@@ -1,6 +1,6 @@
 ---
 name: Feature
-about: Agreed specificaiton for a feature or enhancement
+about: Agreed specification for a feature or enhancement
 title: ''
 labels: 'feature'
 assignees: ''
@@ -15,7 +15,7 @@ assignees: ''
 <!-- A clear and concise description of what you want to happen. --> 
 
 **Describe alternatives that have been considered**
-<!-- If more than one alternative has been discussed, please briefly list those together with a reason(s) why they were decided against. This will help prevent a repeat of the previous discussions. Reference any relevant discussion threads if possible. -->
+<!-- If some alternatives have been discussed, please briefly list those together with a reason(s) why they were decided against. This prevents a repeat of the previous discussions. Reference any relevant discussion threads if possible, and consider tagging the main participants. -->
 
 
 

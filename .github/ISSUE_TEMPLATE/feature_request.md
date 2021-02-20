@@ -1,6 +1,6 @@
 ---
 name: Feature
-about: Agreed specificaiton for a feature request or enhancement
+about: Agreed specificaiton for a feature or enhancement
 title: ''
 labels: 'feature'
 assignees: ''
@@ -9,9 +9,13 @@ assignees: ''
 <!-- Thanks for opening a new feature request! -->
 
 **Has this feature been discussed and generally agreed?**
-<!-- Please ensure that your feature is a clearly specified piece of work that can be reasonably actioned by someone without too much help. If not, please post it in Discussions first so that it can become so. -->
+<!-- Don't worry about requesting something that hasn't been discussed - we'll just move it to Discussion if we think it's unclear. But ideally, issues should have an agreed specification such that anyone could action it without much help. -->
 
 **Describe the solution you'd like**
 <!-- A clear and concise description of what you want to happen. --> 
+
+**Describe alternatives that have been considered**
+<!-- If more than one alternative has been discussed, please briefly list those together with a reason(s) why they were decided against. This will help prevent a repeat of the previous discussions. Reference any relevant discussion threads if possible. -->
+
 
 

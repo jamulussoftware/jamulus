@@ -1317,37 +1317,28 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )
     {
         // only apply to visible faders (and not to my own channel fader)
-        if ( vecpChanFader[i]->IsVisible() && ( true /* i != iMyChannelID */ ) )
+        if ( vecpChanFader[i]->IsVisible() && ( i != iMyChannelID ) )
         {
-            // get averaged level meter value (range 0...8)
-            float levelMeter = vecAvgLevels[i];
-
-            // map meter output level to deciber (range -50dB...0dB)
+            // map averaged meter output level to decibels
             // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
-            float leveldB = levelMeter *
+            float leveldB = vecAvgLevels[i] *
                 ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) /
                 NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
 
-            // map decibels to linear level
-            // level = pow ( 10.0f, level / 20.0f );
-
             // do not adjust channels with zero level to full level since
             // the channel might simply be silent at the moment
-            if ( leveldB < -40.0f )
+            if ( leveldB < AUTO_FADER_NOISE_THRESHOLD_DB )
             {
-                // specify target level
-                float targetdBLevel = -30.0f;
-
                 // compute new level
-                float newdBLevel = -leveldB + targetdBLevel;
+                float newdBLevel = -leveldB + AUTO_FADER_TARGET_LEVEL_DB;
 
-                // map range from -35..0 dB to 0..1
-                float newVal = (newdBLevel + 35.0f) / 35.0f;
+                // map range from decibels to fader level
+                // (this inverts MathUtils::CalcFaderGain)
+                float newFaderLevel = (newdBLevel + 35.0f) / 35.0f *
+                    AUD_MIX_FADER_MAX;
 
                 // set fader level
-                vecpChanFader[i]->SetFaderLevel ( newVal * AUD_MIX_FADER_MAX, true );
-
-                // printf("%.2f dB => %.2f dB\n", leveldB, newdBLevel);
+                vecpChanFader[i]->SetFaderLevel ( newFaderLevel, true );
             }
         }
     }
@@ -1551,13 +1542,13 @@ void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLev
 {
     const int iNumChannelLevels = vecChannelLevel.Size();
     int       i                 = 0;
-    float     alpha             = AUTO_FADER_ADJUST_ALPHA;
 
     for ( int iChId = 0; iChId < MAX_NUM_CHANNELS; iChId++ )
     {
         if ( vecpChanFader[iChId]->IsVisible() && ( i < iNumChannelLevels ) )
         {
             // compute exponential moving average
+            float alpha = AUTO_FADER_ADJUST_ALPHA;
             vecAvgLevels[iChId] = (1.0f - alpha) * vecAvgLevels[iChId] +
                 alpha * vecChannelLevel[i];
 

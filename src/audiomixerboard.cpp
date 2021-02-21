@@ -1548,9 +1548,9 @@ void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLev
         if ( vecpChanFader[iChId]->IsVisible() && ( i < iNumChannelLevels ) )
         {
             // compute exponential moving average
-            float alpha = AUTO_FADER_ADJUST_ALPHA;
-            vecAvgLevels[iChId] = (1.0f - alpha) * vecAvgLevels[iChId] +
-                alpha * vecChannelLevel[i];
+            vecAvgLevels[iChId] =
+                (1.0f - AUTO_FADER_ADJUST_ALPHA) * vecAvgLevels[iChId] +
+                AUTO_FADER_ADJUST_ALPHA * vecChannelLevel[i];
 
             vecpChanFader[iChId]->SetChannelLevel ( vecChannelLevel[i++] );
 

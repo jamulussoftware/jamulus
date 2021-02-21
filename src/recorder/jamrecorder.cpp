@@ -144,6 +144,7 @@ CJamSession::CJamSession(QDir recordBaseDir) :
  */
 CJamSession::~CJamSession()
 {
+    // free up any active jamClientConnections
     for (int i = 0; i < jamClientConnections.count(); i++ )
     {
         if ( jamClientConnections[i] )

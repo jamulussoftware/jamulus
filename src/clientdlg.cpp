@@ -874,6 +874,7 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         if ( !LicenceDlg.exec() )
         {
             Disconnect();
+            SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
         }
 
         // unmute the client output stream if local mute button is not pressed

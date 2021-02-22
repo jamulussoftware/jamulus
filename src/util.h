@@ -25,7 +25,7 @@
 #pragma once
 
 #include <QCoreApplication>
-#include <QTcpSocket>
+#include <QUdpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
 #ifndef HEADLESS

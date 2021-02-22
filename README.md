@@ -6,9 +6,9 @@ Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/></a>
 
-The Jamulus software enables musicians to perform real-time jam sessions over the internet.
-There is one server running the Jamulus server software which collects the audio data from
-each Jamulus client, mixes the audio data and sends the mix back to each client.
+Jamulus enables musicians to perform in real-time together over the internet.
+A Jamulus server collects the incoming audio data from
+each Jamulus client, mixes that data and then sends that mix back to each client where a local mix can be applied. Jamulus can support large numbers of clients with minimal latency and modest bandwidth requirements. 
 
 Jamulus is [__free and open source software__](https://www.gnu.org/philosophy/free-sw.en.html) (FOSS) licensed under the [GPL](http://www.gnu.org/licenses/gpl-2.0.html) 
 and runs under __Windows__ ([ASIO](https://www.steinberg.net)),

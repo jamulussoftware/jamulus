@@ -837,6 +837,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     iNumMixerPanelRows   ( 1 ),
     strServerName        ( "" ),
     eRecorderState       ( RS_UNDEFINED ),
+    eDesign              ( GD_ORIGINAL ),
     eChSortType          ( ST_NO_SORT )
 {
     // add group box and hboxlayout
@@ -938,6 +939,8 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
+    eDesign = eNewDesign;
+
     // move the channels tighter together in slim fader mode
     if ( eNewDesign == GD_SLIMFADER )
     {
@@ -994,6 +997,9 @@ void CAudioMixerBoard::HideAll()
 
     // use original order of channel (by server ID)
     ChangeFaderOrder ( ST_NO_SORT );
+
+    // Reset recording indication styleSheet
+    setStyleSheet( "" );
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
@@ -1099,6 +1105,16 @@ void CAudioMixerBoard::UpdateTitle()
     if ( eRecorderState == RS_RECORDING )
     {
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin; "
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(255,255,255);"
+                    "                   background-color: rgb(255,0,0); }" );
+    }
+    else
+    {
+        setStyleSheet ( "" );
     }
 
     setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );

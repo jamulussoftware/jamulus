@@ -118,7 +118,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2021 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -952,7 +952,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustaw dźwięk, połącz się z serwerem i zacznij jam sesion!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>
@@ -1005,7 +1005,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="88"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation> pod systemem operacyjnym Windows. W systemie MacOS/Linux nie ma możliwości wyboru karty dźwiękowej. Jeśli wybrany sterownik ASIO nie jest prawidłowy, wyświetlany jest komunikat o błędzie i wybierany jest poprzedni prawidłowy sterownik.</translation>
+        <translation> w systemie operacyjnym Windows. W systemie MacOS/Linux nie ma możliwości wyboru karty dźwiękowej. Jeśli wybrany sterownik ASIO nie jest prawidłowy, wyświetlany jest komunikat o błędzie i wybierany jest poprzedni prawidłowy sterownik.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="90"/>
@@ -1085,7 +1085,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektóre sterowniki kart dźwiękowych nie pozwalają na zmianę opóźnienia bufora z poziomu aplikacji. W tym przypadku ustawienie opóźnienia bufora jest wyłączone i musi zostać zmienione za pomocą sterownika karty dźwiękowej. W systemie Windows, naciśnij przycisk Ustawienia ASIO, aby otworzyć panel ustawień ASIO. W systemie Linux, aby zmienić rozmiar bufora użyj programu do konfiguracji serwera JACK.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="165"/>
@@ -1095,32 +1095,32 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeśli ustawienia opóźnienia bufora są wyłączone, sterownik audio nie może modyfikować tego ustawienia z poziomu programu. W systemie Windows naciśnij przycisk Ustawienia ASIO, aby otworzyć panel ustawień sterownika. W systemie Linux, użyj narzędzia konfiguracyjnego JACK-a do zmiany rozmiaru bufora.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustawienia sterownika karty dźwiękowej</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwiera ustawienia sterownika karty dźwiękowej. Niektóre sterowniki pozwalają na zmianę ustawień bufora, a inne, jak ASIO4ALL dają możliwość wyboru urządzenia dźwiękowego dla wejścia i wyjścia. Więcej informacji na stronie jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
         <source>Opens the driver settings. Note: </source>
-        <translation type="unfinished"></translation>
+        <translation>Otwiera ustawienia sterownika. Wskazówka: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="unfinished"></translation>
+        <translation> aktualnie wspierane są tylko urządzenia dźwiękowe obsługujące częstotliwość próbkowania </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hz. Nie da się wybrać urządzenia/sterownika które tego nie obsługuje. Aby znaleźć więcej pomocy, zobacz stronę jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="193"/>
@@ -1214,7 +1214,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Przycisk ustawień ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
@@ -1394,7 +1394,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="294"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustawienia urządzeń ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="329"/>
@@ -1840,7 +1840,7 @@
     <message>
         <location filename="../../util.cpp" line="873"/>
         <source>What&apos;s &amp;This</source>
-        <translation>&amp;Co to</translation>
+        <translation>&amp;Co to jest</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="875"/>
@@ -1970,7 +1970,7 @@
     <message>
         <location filename="../../util.cpp" line="730"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation>Podane tutaj informacje pojawią się przy twoim suwaku na mikserze w czasie połączenia z serwerem Jamulus-a. Taka etykieta pokaże się także u każdego uczestnika podłączonego do tego serwera co ty.</translation>
+        <translation>Podane tutaj informacje pojawią się przy twoim suwaku na mikserze w czasie połączenia z serwerem Jamulus-a. Taka etykieta pokaże się także u każdego uczestnika podłączonego do tego samego serwera.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="736"/>
@@ -2750,7 +2750,7 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="60"/>
         <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
-        <translation>Częstotliwość próbkowania serwera Jack jest inna niż wymagana. Wymagana częstotliwość próbkowania wynosi:</translation>
+        <translation>Częstotliwość próbkowania serwera JACK jest inna niż wymagana. Wymagana częstotliwość próbkowania wynosi:</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
@@ -2771,17 +2771,17 @@
         <location filename="../../../linux/sound.cpp" line="88"/>
         <location filename="../../../linux/sound.cpp" line="99"/>
         <source>The Jack port registering failed.</source>
-        <translation>Rejestracja portu Jack&apos;a nie powiodła się.</translation>
+        <translation>Rejestracja portu JACK-a nie powiodła się.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="110"/>
         <source>Cannot activate the Jack client.</source>
-        <translation>Nie może aktywować klienta Jacka.</translation>
+        <translation>Nie może aktywować klienta JACK-a.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="216"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
-        <translation>Serwer Jack został wyłączony. Ten program wymaga serwera Jack&apos;a do uruchomienia. Spróbuj zrestartować oprogramowanie, aby rozwiązać problem.</translation>
+        <translation>Serwer JACK został wyłączony. Ten program wymaga serwera JACK do działania. Spróbuj zrestartować oprogramowanie, aby rozwiązać problem.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="136"/>
@@ -2973,7 +2973,7 @@
     <message>
         <location filename="../../global.h" line="237"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
-        <translation>Aby uzyskać więcej informacji użyj &quot;Co to&quot; (Pomoc, prawy przycisk myszy lub Shift+F1)</translation>
+        <translation>Aby uzyskać więcej informacji użyj „Co to jest” (z menu Pomoc lub prawy przycisk myszy lub Shift+F1)</translation>
     </message>
 </context>
 </TS>

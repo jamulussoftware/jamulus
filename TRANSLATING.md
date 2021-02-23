@@ -214,7 +214,7 @@ Add a simple commit message in the first box below the file list, (the "Update f
 
 Commit the changes to the local git repo by clicking on **Commit to <branch>**.
 
-Click on **Publish branch**. This will push the branch to your own repo on Github.
+Click on **Publish branch** or **Push origin**. This will push the branch to your own repo on Github. (It will say **Publish branch** for a new branch, or **Push origin** if the branch has already been published).
 
 There will now be a section offering **Create Pull Request**. Click on that to create the PR to the upstream repository.
 

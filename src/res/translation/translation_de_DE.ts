@@ -154,6 +154,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
+        <translatorcomment>Could also stay in english language, since this is also common in german</translatorcomment>
         <translation>Copyright (C) 2005-2021 liegt beim Jamulus Entwickler Team</translation>
     </message>
     <message>

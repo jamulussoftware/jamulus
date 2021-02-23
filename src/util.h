@@ -51,7 +51,6 @@
 #include <vector>
 #include <algorithm>
 #include "global.h"
-using namespace std; // because of the library: "vector"
 #ifdef _WIN32
 # include <winsock2.h>
 # include <ws2ipdef.h>

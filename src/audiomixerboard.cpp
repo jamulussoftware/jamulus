@@ -413,10 +413,10 @@ void CChannelFader::SetFaderLevel ( const double dLevel,
         // server about the change (block the signal of the fader since we want to
         // call SendFaderLevelToServer with a special additional parameter)
         pFader->blockSignals ( true );
-        pFader->setValue     ( min ( AUD_MIX_FADER_MAX, MathUtils::round ( dLevel ) ) );
+        pFader->setValue     ( std::min ( AUD_MIX_FADER_MAX, MathUtils::round ( dLevel ) ) );
         pFader->blockSignals ( false );
 
-        SendFaderLevelToServer ( min ( static_cast<double> ( AUD_MIX_FADER_MAX ), dLevel ), bIsGroupUpdate );
+        SendFaderLevelToServer ( std::min ( static_cast<double> ( AUD_MIX_FADER_MAX ), dLevel ), bIsGroupUpdate );
 
         if ( dLevel > AUD_MIX_FADER_MAX )
         {

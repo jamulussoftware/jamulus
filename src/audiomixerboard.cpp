@@ -1314,6 +1314,18 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
 {
     QMutexLocker locker ( &Mutex );
 
+    // initialize variables used for statistics
+    float vecMinLevel[MAX_NUM_FADER_GROUPS + 1];
+    float vecMaxLevel[MAX_NUM_FADER_GROUPS + 1];
+    int   vecChannelsPerGroup[MAX_NUM_FADER_GROUPS + 1];
+    for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
+    {
+        vecMinLevel[i] = UPPER_BOUND_SIG_METER;
+        vecMaxLevel[i] = LOW_BOUND_SIG_METER;
+        vecChannelsPerGroup[i] = 0;
+    }
+
+    // compute min/max level per group and number of channels per group
     for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )
     {
         // only apply to visible faders (and not to my own channel fader)
@@ -1325,20 +1337,105 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
                 ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) /
                 NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
 
-            // do not adjust channels with zero level to full level since
+            int group = vecpChanFader[i]->GetGroupID();
+            if ( group == INVALID_INDEX )
+                group = 4;
+
+            if ( leveldB >= AUTO_FADER_NOISE_THRESHOLD_DB )
+            {
+                vecMinLevel[group] = fmin ( vecMinLevel[group], leveldB );
+                vecMaxLevel[group] = fmax ( vecMaxLevel[group], leveldB );
+            }
+            ++vecChannelsPerGroup[group];
+        }
+    }
+
+    // compute the number of active groups (at least one channel)
+    int cntActiveGroups = 0;
+    for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
+    {
+        cntActiveGroups += vecChannelsPerGroup[i] > 0;
+    }
+
+    // only my channel is active, nothing to do
+    if ( cntActiveGroups == 0 )
+        return;
+
+    // compute target level for each group
+    // (prevent clipping when each group contributes at maximum level)
+    float targetLevelPerGroup = -20.0f * log10 ( cntActiveGroups );
+
+    // compute target levels for the channels of each group individually
+    float vecTargetChannelLevel[MAX_NUM_FADER_GROUPS + 1];
+    float levelOffset = 0.0f;
+    float minFader = 0.0f;
+    for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
+    {
+        // compute the target level for each channel in the current group
+        // (prevent clipping when each channel in this group contributes at
+        // the maximum level)
+        vecTargetChannelLevel[i] = vecChannelsPerGroup[i] > 0 ?
+            targetLevelPerGroup - 20.0f * log10 ( vecChannelsPerGroup[i] ) :
+            0.0f;
+
+        // since we can only attenuate channels but not amplify, we have to
+        // check that the weakest (min) channel can be brought to the target
+        // level
+        if ( vecTargetChannelLevel[i] > vecMinLevel[i] )
+        {
+            // otherwise, we adjust the level offset in such a way that
+            // the level can be reached
+            levelOffset = fmin ( levelOffset,
+                vecMinLevel[i] - vecTargetChannelLevel[i] );
+
+            // compute the minimum necessary fader setting
+            minFader = fmin ( minFader, -vecMaxLevel[i] +
+                vecTargetChannelLevel[i] + levelOffset );
+        }
+    }
+
+    // take minimum fader value into account
+    // very weak channels would actually require strong channels to be
+    // attenuated to a large amount; however, the attenuation is limited by
+    // the faders
+    if ( minFader < -35.0f )
+        levelOffset += -35.0f - minFader;
+
+    // adjust all levels
+    for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )
+    {
+        // only apply to visible faders (and not to my own channel fader)
+        if ( vecpChanFader[i]->IsVisible() && ( i != iMyChannelID ) )
+        {
+            // map averaged meter output level to decibels
+            // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
+            float leveldB = vecAvgLevels[i] *
+                ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) /
+                NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
+
+            int group = vecpChanFader[i]->GetGroupID();
+            if ( group == INVALID_INDEX )
+                group = 4;
+
+            // do not adjust channels with almost zero level to full level since
             // the channel might simply be silent at the moment
-            if ( leveldB > AUTO_FADER_NOISE_THRESHOLD_DB )
+            if ( leveldB >= AUTO_FADER_NOISE_THRESHOLD_DB )
             {
                 // compute new level
-                float newdBLevel = -leveldB + AUTO_FADER_TARGET_LEVEL_DB;
+                float newdBLevel = -leveldB + vecTargetChannelLevel[group] +
+                    levelOffset;
 
                 // map range from decibels to fader level
                 // (this inverts MathUtils::CalcFaderGain)
-                float newFaderLevel = (newdBLevel + 35.0f) / 35.0f *
+                float newFaderLevel = ( newdBLevel + 35.0f ) / 35.0f *
                     AUD_MIX_FADER_MAX;
 
+                // limit fader
+                newFaderLevel = fmin ( fmax ( newFaderLevel, 0.0f),
+                    float ( AUD_MIX_FADER_MAX ) );
+
                 // set fader level
-                vecpChanFader[i]->SetFaderLevel ( newFaderLevel, true );
+                vecpChanFader[i]->SetFaderLevel ( newFaderLevel, false );
             }
         }
     }

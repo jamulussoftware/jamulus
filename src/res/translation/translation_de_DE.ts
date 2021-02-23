@@ -154,8 +154,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translatorcomment>Could also stay in english language, since this is also common in german</translatorcomment>
-        <translation>Copyright (C) 2005-2021 liegt beim Jamulus Entwickler Team</translation>
+        <translation>Copyright (C) 2005-2021 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -1137,7 +1136,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation>Stelle bitte das Audiointerface ein , verbinde Dich mit einem Server und beginne mit dem Jammen !</translation>
+        <translation>Richte deine Soundkarte ein, verbinde Dich mit einem Server und beginne zu Jammen !</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>
@@ -1325,7 +1324,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation>Aktuell werden nur Geräte unterstützt die eine Sample Rate von </translation>
+        <translation> unterstützt aktuell nur Geräte, die eine Sample Rate von</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
@@ -1345,7 +1344,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="294"/>
         <source>ASIO Device Settings</source>
-        <translation>ASIO-Einstellungen</translation>
+        <translation>ASIO-Geräte-Einstellungen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>

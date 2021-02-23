@@ -952,11 +952,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-<<<<<<< HEAD
         <translation>Ustaw dźwięk, połącz się z serwerem i zacznij jam sesion!</translation>
-=======
-        <translation>Ustaw dźwięk, połącz się z serwerem i zacznij jamsesion!</translation>
->>>>>>> c3274303f1a18bb95c7d3c41cbf09f6e7985883d
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>

@@ -721,10 +721,6 @@ void CClientDlg::OnConnectDlgAccepted()
         // get the address from the connect dialog
         QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
-        // hide label connect to server
-        lblConnectToServer->hide();
-        lbrInputLevelL->setEnabled ( true );
-        lbrInputLevelR->setEnabled ( true );
         // only store new host address in our data base if the address is
         // not empty and it was not a server list item (only the addresses
         // typed in manually are stored by definition)
@@ -1217,6 +1213,11 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
             return;
         }
+
+        // hide label connect to server
+        lblConnectToServer->hide();
+        lbrInputLevelL->setEnabled ( true );
+        lbrInputLevelR->setEnabled ( true );
 
         // change connect button text to "disconnect"
         butConnect->setText ( tr ( "D&isconnect" ) );

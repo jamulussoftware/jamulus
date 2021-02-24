@@ -1105,12 +1105,7 @@ void CAudioMixerBoard::UpdateTitle()
     if ( eRecorderState == RS_RECORDING )
     {
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
-        setStyleSheet (
-                    "QGroupBox::title { subcontrol-origin: margin; "
-                    "                   subcontrol-position: left top;"
-                    "                   left: 7px;"
-                    "                   color: rgb(255,255,255);"
-                    "                   background-color: rgb(255,0,0); }" );
+        setStyleSheet ( AM_RECORDING_STYLE );
     }
     else
     {

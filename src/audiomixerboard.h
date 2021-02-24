@@ -184,6 +184,11 @@ protected:
 template<>
 class CAudioMixerBoardSlots<0> {};
 
+#define AM_RECORDING_STYLE "QGroupBox::title { subcontrol-origin: margin; \
+                           subcontrol-position: left top; \
+                           left: 7px; \
+                           color: rgb(255,255,255); \
+                           background-color: rgb(255,0,0); }"
 
 class CAudioMixerBoard :
     public QGroupBox,

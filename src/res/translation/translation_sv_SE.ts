@@ -119,7 +119,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Upphovsrätt (C) 2005-2021 The Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -973,7 +973,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ställ in ditt ljud, anslut till en server och börja jamma!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>
@@ -1165,47 +1165,48 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vissa ljudkortdrivrutiner tillåter inte att buffertfördröjningen ändras inifrån programmet. I detta fall är inställningen för buffertfördröjning inaktiverad och måste ändras med hjälp av ljudkortdrivrutinen. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>ASIO enhetsinställningar</translatorcomment>
+        <translation>Om buffertfördröjningsinställningarna är inaktiverade är det förbjudet för ljuddrivrutinen att ändra denna inställning inifrån programvaran. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljudkortsinställningar</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta öppnar drivrutinsinställningarna för ditt ljudkort. Vissa drivrutiner låter dig ändra buffertinställningar, andra som ASIO4ALL låter dig välja in- eller utgångar från din enhet (er). Mer information finns på jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
         <source>Opens the driver settings. Note: </source>
-        <translation type="unfinished"></translation>
+        <translation>Öppnardrivrutinsinställningarna. Notera: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="unfinished"></translation>
+        <translation> stöder för närvarande endast enheter som stöder en samplingsfrekvens på </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hz. Du kommer inte att kunna välja en drivrutin/enhet som inte gör det. För mer hjälp se jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation>ASIO enhetsinställningsknapp</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="294"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ASIO enhetsinställningar</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>

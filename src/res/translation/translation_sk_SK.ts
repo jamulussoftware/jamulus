@@ -91,7 +91,7 @@
     <message>
         <location filename="../../util.cpp" line="510"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>slovenčina</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="517"/>
@@ -306,7 +306,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="151"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prečiarknutý reproduktor: Zobrazí sa vtedy, ak vás iný klient stíšil.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="156"/>
@@ -491,12 +491,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="136"/>
         <source>Do you want to open the link</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcete otvoriť prepojenie</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="137"/>
         <source>in an external browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>v externom prehliadači?</translation>
     </message>
 </context>
 <context>
@@ -547,7 +547,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="99"/>
         <source>Local Audio Input Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Miestny prelínač zvukového vstupu</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="106"/>
@@ -568,7 +568,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="113"/>
         <source>Local audio input fader (left/right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Miestny prelínač zvukového vstupu (ľavý/pravý)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="142"/>
@@ -633,7 +633,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="131"/>
         <source>Reverb Channel Selection</source>
-        <translation>Výber kanálu pre reverb</translation>
+        <translation>Výber kanála pre reverb</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="132"/>
@@ -970,7 +970,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="50"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavenia jitter bufferu je preto kompromisom medzi kvalitou zvuku a celkového oneskorenia.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="75"/>
@@ -1531,7 +1531,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="152"/>
         <source>Output Channel Mapping</source>
-        <translation>Mapovanie výstupného kanálu</translation>
+        <translation>Mapovanie výstupného kanála</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="225"/>
@@ -1799,7 +1799,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="96"/>
         <source>Server Address</source>
-        <translation type="unfinished">Adresa servera</translation>
+        <translation>Adresa servera</translation>
     </message>
     <message>
         <source>Server Name/Address</source>
@@ -1867,22 +1867,22 @@
     <message>
         <location filename="../../util.cpp" line="535"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento server od vás pred pripojením vyžaduje akceptovanie podmienok. Prosím, prečítajte si ich v okne chatu.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="536"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prečítal som si podmienky a &amp;akceptujem ich.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="537"/>
         <source>Accept</source>
-        <translation>Súhlasím</translation>
+        <translation>Akceptovať</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="538"/>
         <source>Decline</source>
-        <translation>Nesúhlasím</translation>
+        <translation>Odmietnuť</translation>
     </message>
     <message>
         <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
@@ -1982,12 +1982,12 @@
     <message>
         <location filename="../../util.cpp" line="726"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sem napíšte vaše meno alebo prezývku, aby ostatní hudobníci vedeli, s kým majú tú česť. Rovnako môžete pridať obrázok hudobného nástroja, na ktorý hráte a vlajku krajiny, v ktorej sa nachádzate. Je možné pridať aj mesto a úroveň hry na hudobný nástroj.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="730"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>To, čo sem napíšete sa zobrazí pri vašom prelínači na mixéri po tom, ako sa pripojíte k Jamulus serveru. Táto menovka sa rovnako zobrazí každému klientovi, ktorý sa pripojí k tomu istému serveru ako vy.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="736"/>
@@ -2247,7 +2247,7 @@
     <message>
         <location filename="../../util.cpp" line="1150"/>
         <source>Rapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Repovanie</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="300"/>
@@ -2790,12 +2790,12 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation type="unfinished"></translation>
+        <translation>Ubezpečte sa, že nastavenie Snímky/Perióda je nastavené na nízku hodnotu ako </translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>
         <source> to achieve a low delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>, aby ste dosiahli nízke oneskorenie.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="88"/>
@@ -2872,7 +2872,7 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="127"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
-        <translation type="unfinished"></translation>
+        <translation>Zvukové zariadenie nepodporuje požadovanú vzorkovaciu frekvenciu. Požadovaná vzorkovacia frekvencia je: </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="140"/>

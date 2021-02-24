@@ -837,7 +837,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     iNumMixerPanelRows   ( 1 ),
     strServerName        ( "" ),
     eRecorderState       ( RS_UNDEFINED ),
-    eDesign              ( GD_ORIGINAL ),
     eChSortType          ( ST_NO_SORT )
 {
     // add group box and hboxlayout
@@ -939,8 +938,6 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
-    eDesign = eNewDesign;
-
     // move the channels tighter together in slim fader mode
     if ( eNewDesign == GD_SLIMFADER )
     {

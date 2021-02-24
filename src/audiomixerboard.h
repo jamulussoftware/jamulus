@@ -269,7 +269,6 @@ protected:
     int                     iNumMixerPanelRows;
     QString                 strServerName;
     ERecorderState          eRecorderState;
-    EGUIDesign              eDesign;
     QMutex                  Mutex;
     EChSortType             eChSortType;
 

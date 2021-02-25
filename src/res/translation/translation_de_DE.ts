@@ -1334,7 +1334,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation>ASIO-Einstellungs Knopf</translation>
+        <translation>ASIO-Geräte-Einstellungs-Knopf</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>

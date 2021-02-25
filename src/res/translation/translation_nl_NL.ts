@@ -1314,7 +1314,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation>ASIO Device Settings drukknop</translation>
+        <translation>ASIO Apparaatinstellingen drukknop</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of the </source>
@@ -3401,7 +3401,7 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="538"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation> software vereist de lage-latency audio-interface ASIO om goed te kunnen werken. Dit is geen standaard Windows audio-interface en daarom is een speciale audio-stuurprogramma vereist. Ofwel heeft uw geluidskaart een native ASIO driver (die wordt aanbevolen), ofwel wilt u alternatieve drivers gebruiken zoals de ASIO4All driver.</translation>
+        <translation> software vereist de lage-latency audio-interface ASIO om goed te kunnen werken. Dit is geen standaard Windows audio-interface en daarom is een speciale audio-stuurprogramma vereist. Ofwel heeft uw geluidskaart een native ASIO stuurprogramma (die wordt aanbevolen), ofwel wilt u alternatieve drivers gebruiken zoals het ASIO4All stuurpogramma.</translation>
     </message>
 </context>
 <context>

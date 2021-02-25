@@ -1136,7 +1136,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation>Richte deine Soundkarte ein, verbinde Dich mit einem Server und beginne zu Jammen !</translation>
+        <translation>Richte deine Soundkarte ein, verbinde Dich mit einem Server und beginne zu jammen!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>

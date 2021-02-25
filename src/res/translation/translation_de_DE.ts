@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation>Einige Audiotreiber verhindern das Umstellen der Puffer Verzögerung aus einer Anwendung heraus. In diesem Falle wird die Einstellung der Puffer-Verzögerung in Jamulus deaktiviert und sollte daher im Treiber des Audiointerface selbst geändert werden. Unter Windows kann man diese Einstellung über den Knopf &quot;ASIO-Einstellungen&quot; erreichen. Unter Linux sollte man das Jack-Configuration-Tool verwenden um die Puffergrösse zu ändern.</translation>
+        <translation>Einige Audiotreiber verhindern das Umstellen der Puffer-Verzögerung aus einer Anwendung heraus. In diesem Falle wird die Einstellung der Puffer-Verzögerung in Jamulus deaktiviert und sollte daher im Treiber des Audiointerfaces selbst geändert werden. Unter Windows kann man diese Einstellung über den Knopf &quot;ASIO-Geräte-Einstellungen&quot; erreichen. Unter Linux sollte man das Jack-Configuration-Tool verwenden, um die Puffergrösse zu ändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>

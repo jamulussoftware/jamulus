@@ -118,7 +118,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Copyright (C) 2005-2021 L&apos;équipe de développement de Jamulus</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -1095,7 +1095,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Certains pilotes d'interface audio ne permettent pas de modifier la taille de la mémoire tampon depuis l'application. Dans ce cas, ce paramètre est désactivé et doit être modifié à l'aide du pilote de l'interface audio. Sous windows, appuyez sur le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous GNU/Linux, utilisez l'outil de configuration Jack pour modifier la taille de la mémoire tampon.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="160"/>
@@ -1110,7 +1110,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bouton-poussoir des paramètres du périphérique ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="112"/>
@@ -1120,32 +1120,32 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Si les paramètres de taille de la mémoire tampon sont désactivés, le pilote audio ne permet pas de modifier ce paramètre depuis le logiciel. Sous Windows, appuyez sur le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l'outil de configuration Jack pour modifier la taille de la mémoire tampon.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paramètres du pilote de l'interface audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cela ouvre les paramètres du pilote de votre interface audio. Certains pilotes vous permettent de modifier les paramètres de la mémoire tampon, d'autres comme ASIO4ALL vous permettent de choisir l'entrée ou les sorties de votre (vos) périphérique (s). Plus d'informations peuvent être trouvées sur jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
         <source>Opens the driver settings. Note: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ouvre les paramètres du pilote. Note:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ne prend en charge actuellement que les périphériques compatibles avec une fréquence d'échantillonnage de</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hz. Vous ne pourrez pas sélectionner un pilote / périphérique incompatible. Pour plus d'informations, consultez jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="190"/>
@@ -1384,7 +1384,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="294"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paramètres du périphérique ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="329"/>
@@ -1428,12 +1428,12 @@
     <message>
         <location filename="../../util.h" line="614"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tous les genres 2</translation>
     </message>
     <message>
         <location filename="../../util.h" line="617"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tous les genres 3</translation>
     </message>
     <message>
         <location filename="../../util.h" line="620"/>
@@ -1448,17 +1448,17 @@
     <message>
         <location filename="../../util.h" line="626"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Genre Classic/Folk</translation>
     </message>
     <message>
         <location filename="../../util.h" line="629"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Genre chorale/Salon de coiffure</translation>
     </message>
     <message>
         <location filename="../../util.h" line="632"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tous les genres 1</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1646,7 +1646,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="624"/>
         <source>Local Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tampon de gigue local</translation>
     </message>
 </context>
 <context>

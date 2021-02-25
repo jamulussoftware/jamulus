@@ -995,6 +995,9 @@ void CAudioMixerBoard::HideAll()
     // use original order of channel (by server ID)
     ChangeFaderOrder ( ST_NO_SORT );
 
+    // Reset recording indication styleSheet
+    setStyleSheet( "" );
+
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
@@ -1099,6 +1102,11 @@ void CAudioMixerBoard::UpdateTitle()
     if ( eRecorderState == RS_RECORDING )
     {
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        setStyleSheet ( AM_RECORDING_STYLE );
+    }
+    else
+    {
+        setStyleSheet ( "" );
     }
 
     setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );

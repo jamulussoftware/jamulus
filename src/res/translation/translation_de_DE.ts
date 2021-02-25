@@ -1314,7 +1314,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation>Dies öffnet die Treiber-Einstellungen der Soundkarte. Einige Treiber erlauben die Änderung der Puffer-Einstellungen, andere wie z.B. ASIO4ALL ermöglichen es Dir, die Audio Ein- und Ausgänge Deiner angeschlossenen Audiogeräte auszuwählen. Weitere Informationen hierzu findest Du auf jamulus.io.</translation>
+        <translation>Öffnet die Treiber-Einstellungen der Soundkarte. Einige Treiber erlauben die Änderung der Puffer-Einstellungen, andere wie z.B. ASIO4ALL ermöglichen es Dir, die Audio Ein- und Ausgänge Deiner angeschlossenen Audiogeräte auszuwählen. Weitere Informationen hierzu findest Du auf jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>

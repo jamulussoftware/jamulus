@@ -1304,7 +1304,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation>Wenn die Puffer-Verzögerungs-Einstellungen deaktiviert sind , verbietet der Audio-Treiber die entsprechenden Änderungen aus der Anwendung heraus. In Windows betätige hierzu den Button &quot;ASIO-Einstellung&quot;. Unter Linux benutze das &quot;Jack Configuration Tool&quot; um die Puffergrösse zu ändern.</translation>
+        <translation>Wenn die Puffer-Verzögerungs-Einstellungen deaktiviert sind, verbietet der Audio-Treiber die entsprechenden Änderungen aus der Anwendung heraus. Um die Treiber-Einstellungen unter Windows zu öffnen, betätige den Button &quot;ASIO-Geräte-Einstellungen&quot;. Um die Puffergröße unter Linux zu ändern, benutze das &quot;Jack Configuration Tool&quot;.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>

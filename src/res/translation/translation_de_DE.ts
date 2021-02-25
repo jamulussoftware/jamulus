@@ -154,7 +154,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2021 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -1136,7 +1136,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Richte deine Soundkarte ein, verbinde Dich mit einem Server und beginne zu jammen!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>
@@ -1299,42 +1299,42 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Einige Audiotreiber verhindern das Umstellen der Puffer-Verzögerung aus einer Anwendung heraus. In diesem Falle wird die Einstellung der Puffer-Verzögerung in Jamulus deaktiviert und sollte daher im Treiber des Audiointerfaces selbst geändert werden. Unter Windows kann man diese Einstellung über den Knopf &quot;ASIO-Geräte-Einstellungen&quot; erreichen. Unter Linux sollte man das Jack-Configuration-Tool verwenden, um die Puffergrösse zu ändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn die Puffer-Verzögerungs-Einstellungen deaktiviert sind, verbietet der Audio-Treiber die entsprechenden Änderungen aus der Anwendung heraus. Um die Treiber-Einstellungen unter Windows zu öffnen, betätige den Button &quot;ASIO-Geräte-Einstellungen&quot;. Um die Puffergröße unter Linux zu ändern, benutze das &quot;Jack Configuration Tool&quot;.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Soundkarten Einstellungen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies öffnet die Treiber-Einstellungen der Soundkarte. Einige Treiber erlauben die Änderung der Puffer-Einstellungen, andere wie z.B. ASIO4ALL ermöglichen es Dir, die Audio Ein- und Ausgänge Deiner angeschlossenen Audiogeräte auszuwählen. Weitere Informationen hierzu findest Du auf jamulus.io</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
         <source>Opens the driver settings. Note: </source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet die Treibereinstellungen. Beachte:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="unfinished"></translation>
+        <translation> unterstützt aktuell nur Geräte, die eine Sample Rate von</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hz erlauben. Es ist ist nicht möglich, einen Treiber / ein Gerät auszuwählen, welches dies nicht unterstützt. Für weitere Hilfe siehe jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation>ASIO-Geräte-Einstellungs-Knopf</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
@@ -1344,7 +1344,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="294"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ASIO-Geräte-Einstellungen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
@@ -1756,12 +1756,12 @@
     <message>
         <location filename="../../util.h" line="614"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Genres 2</translation>
     </message>
     <message>
         <location filename="../../util.h" line="617"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Genres 3</translation>
     </message>
     <message>
         <location filename="../../util.h" line="620"/>
@@ -1776,17 +1776,17 @@
     <message>
         <location filename="../../util.h" line="626"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre Klassik/Volksmusik</translation>
     </message>
     <message>
         <location filename="../../util.h" line="629"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre Chor/Barbershop</translation>
     </message>
     <message>
         <location filename="../../util.h" line="632"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Genres 1</translation>
     </message>
     <message>
         <source>Genre Rock/Jazz</source>
@@ -1971,7 +1971,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="624"/>
         <source>Local Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Jitterbuffer</translation>
     </message>
     <message>
         <source>Fancy Skin</source>

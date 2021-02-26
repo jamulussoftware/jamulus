@@ -502,6 +502,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Giuseppe Sapienza (<a href=\"https://github.com/dzpex\">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"
         "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
+        "<p>Roland Moschel (<a href=\"https://github.com/rolamos\">rolamos</a>)</p>"
         "<p><b>" + tr ( "Polish" ) + "</b></p>"
         "<p>Martyna Danysz (<a href=\"https://github.com/Martyna27\">Martyna27</a>)</p>"
         "<p>Tomasz Bojczuk (<a href=\"https://github.com/SeeLook\">SeeLook</a>)</p>"
@@ -1024,7 +1025,10 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
 
 CHostAddress NetworkUtil::GetLocalAddress()
 {
-    QTcpSocket socket;
+    QUdpSocket socket;
+    // As we are using UDP, the connectToHost() does not generate any traffic at all.
+    // We just require a socket which is pointed towards the Internet in
+    // order to find out the IP of our own external interface:
     socket.connectToHost ( WELL_KNOWN_HOST, WELL_KNOWN_PORT );
 
     if ( socket.waitForConnected ( IP_LOOKUP_TIMEOUT ) )

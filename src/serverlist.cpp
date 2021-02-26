@@ -53,6 +53,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         // User-supplied --serverpublicip
         qhaServerPublicIP = QHostAddress ( strServerPublicIP );
     }
+    qDebug() << "Using" << qhaServerPublicIP.toString() << "as external IP.";
     SlaveCurLocalHostAddress = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
     // prepare the server info information

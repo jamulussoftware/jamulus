@@ -102,7 +102,7 @@ jobs:
 
            - config_name:           Linux (artifacts+codeQL)
              target_os:             linux
-             building_on_os:        ubuntu-20.04
+             building_on_os:        ubuntu-18.04
              cmd1_prebuild:         "sh ./autobuild/linux/autobuild_deb_1_prepare.sh" # this step needs sh instead of bash for permissions
              cmd2_build:            "./autobuild/linux/autobuild_deb_2_build.sh"
              cmd3_postbuild:        "./autobuild/linux/autobuild_deb_3_copy_files.sh"
@@ -224,4 +224,3 @@ jobs:
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.uses_codeql
         uses:                       github/codeql-action/analyze@v1
-

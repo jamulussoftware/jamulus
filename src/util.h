@@ -25,7 +25,7 @@
 #pragma once
 
 #include <QCoreApplication>
-#include <QTcpSocket>
+#include <QUdpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
 #ifndef HEADLESS
@@ -51,7 +51,6 @@
 #include <vector>
 #include <algorithm>
 #include "global.h"
-using namespace std; // because of the library: "vector"
 #ifdef _WIN32
 # include <winsock2.h>
 # include <ws2ipdef.h>

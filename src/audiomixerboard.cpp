@@ -413,10 +413,10 @@ void CChannelFader::SetFaderLevel ( const double dLevel,
         // server about the change (block the signal of the fader since we want to
         // call SendFaderLevelToServer with a special additional parameter)
         pFader->blockSignals ( true );
-        pFader->setValue     ( min ( AUD_MIX_FADER_MAX, MathUtils::round ( dLevel ) ) );
+        pFader->setValue     ( std::min ( AUD_MIX_FADER_MAX, MathUtils::round ( dLevel ) ) );
         pFader->blockSignals ( false );
 
-        SendFaderLevelToServer ( min ( static_cast<double> ( AUD_MIX_FADER_MAX ), dLevel ), bIsGroupUpdate );
+        SendFaderLevelToServer ( std::min ( static_cast<double> ( AUD_MIX_FADER_MAX ), dLevel ), bIsGroupUpdate );
 
         if ( dLevel > AUD_MIX_FADER_MAX )
         {
@@ -995,6 +995,9 @@ void CAudioMixerBoard::HideAll()
     // use original order of channel (by server ID)
     ChangeFaderOrder ( ST_NO_SORT );
 
+    // Reset recording indication styleSheet
+    setStyleSheet( "" );
+
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
@@ -1099,6 +1102,11 @@ void CAudioMixerBoard::UpdateTitle()
     if ( eRecorderState == RS_RECORDING )
     {
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        setStyleSheet ( AM_RECORDING_STYLE );
+    }
+    else
+    {
+        setStyleSheet ( "" );
     }
 
     setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );

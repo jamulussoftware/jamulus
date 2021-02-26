@@ -40,7 +40,7 @@ CActivity::~CActivity()
 
 void CActivity::BeginActivity()
 {
-    NSActivityOptions options = NSActivityBackground | NSActivityIdleSystemSleepDisabled | NSActivityLatencyCritical;
+    NSActivityOptions options = NSActivityBackground | NSActivityIdleDisplaySleepDisabled | NSActivityIdleSystemSleepDisabled | NSActivityLatencyCritical;
     
     pActivity->activityId = [[NSProcessInfo processInfo] beginActivityWithOptions: options reason:@"Jamulus provides low latency audio processing and should not be inturrupted by system throttling."];
 }

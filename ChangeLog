@@ -42,7 +42,10 @@
 
 - bug fix: fix crash if settings are changed in ASIO4ALL during a connection (contained in #796). Reverts #727 for Windows
 
+- Avoid screen from sleeping or starting screen saver for Mac (#834)
 
+- stop sending traffic to CloudFlare as part of the external IP detection
+  logic (#633, #1092), suggested by atsampson, coded by hoffie
 
 
 

@@ -152,6 +152,9 @@ LED bar:      lbr
 #define AUD_MIX_FADER_MAX                100
 #define AUD_MIX_PAN_MAX                  100
 
+// range of audio mixer fader
+#define AUD_MIX_FADER_RANGE_DB           35.0f
+
 // coefficient for averaging channel levels for automatic fader adjustment
 #define AUTO_FADER_ADJUST_ALPHA          0.2f
 

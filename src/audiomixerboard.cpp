@@ -1399,8 +1399,8 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     // very weak channels would actually require strong channels to be
     // attenuated to a large amount; however, the attenuation is limited by
     // the faders
-    if ( minFader < -35.0f )
-        levelOffset += -35.0f - minFader;
+    if ( minFader < -AUD_MIX_FADER_RANGE_DB )
+        levelOffset += -AUD_MIX_FADER_RANGE_DB - minFader;
 
     // adjust all levels
     for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )
@@ -1428,8 +1428,8 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
 
                 // map range from decibels to fader level
                 // (this inverts MathUtils::CalcFaderGain)
-                float newFaderLevel = ( newdBLevel + 35.0f ) / 35.0f *
-                    AUD_MIX_FADER_MAX;
+                float newFaderLevel = ( newdBLevel / AUD_MIX_FADER_RANGE_DB +
+                    1.0f ) * AUD_MIX_FADER_MAX;
 
                 // limit fader
                 newFaderLevel = fmin ( fmax ( newFaderLevel, 0.0f),

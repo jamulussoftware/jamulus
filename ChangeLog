@@ -44,6 +44,9 @@
 
 - Avoid screen from sleeping or starting screen saver for Mac (#834)
 
+- stop sending traffic to CloudFlare as part of the external IP detection
+  logic (#633, #1092), suggested by atsampson, coded by hoffie
+
 
 
 ### 3.6.2 (2020-12-12) ###

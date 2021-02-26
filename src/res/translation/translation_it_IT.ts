@@ -1587,7 +1587,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation>Aprirà il software di gestione della scheda audio. I driver danno la possibilità di modificare i valori del buffer delay e in alcuni casi, come con gli ASIO$ALL di scegliere gli input e gli output da usare. Altre informazioni sono disponibili sul sito jamulus.io.</translation>
+        <translation type="unfinished">Aprirà il software di gestione della scheda audio. I driver danno la possibilità di modificare i valori del buffer delay e in alcuni casi, come con gli ASIO4ALL di scegliere gli input e gli output da usare. Altre informazioni sono disponibili sul sito jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>

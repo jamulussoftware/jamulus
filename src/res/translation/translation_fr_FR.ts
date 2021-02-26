@@ -1135,12 +1135,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
         <source>Opens the driver settings. Note: </source>
-        <translation>Ouvre les paramètres du pilote. Note:</translation>
+        <translation>Ouvre les paramètres du pilote. Note : </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation>ne prend en charge actuellement que les périphériques compatibles avec une fréquence d'échantillonnage de</translation>
+        <translation> ne prend en charge actuellement que les périphériques compatibles avec une fréquence d'échantillonnage de </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>

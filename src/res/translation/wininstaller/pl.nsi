@@ -1,4 +1,4 @@
-; English translation
+; Polish translation
 
 LangString DESKTOP_SET_SHORTCUT ${LANG_POLISH} \
     "Utwórz skrót na pulpicie"

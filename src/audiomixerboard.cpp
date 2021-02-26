@@ -857,7 +857,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     // create all mixer controls and make them invisible
     vecpChanFader.Init ( MAX_NUM_CHANNELS );
 
-    vecAvgLevels.Init ( MAX_NUM_CHANNELS );
+    vecAvgLevels.Init ( MAX_NUM_CHANNELS, 0.0f );
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1147,6 +1147,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     {
                         // the fader was not in use, reset everything for new client
                         vecpChanFader[i]->Reset();
+                        vecAvgLevels[i] = 0.0f;
 
                         // check if this is my own fader and set fader property
                         if ( i == iMyChannelID )

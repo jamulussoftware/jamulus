@@ -1435,7 +1435,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
                     float ( AUD_MIX_FADER_MAX ) );
 
                 // set fader level
-                vecpChanFader[i]->SetFaderLevel ( newFaderLevel, false );
+                vecpChanFader[i]->SetFaderLevel ( newFaderLevel, true );
             }
         }
     }

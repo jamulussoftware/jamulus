@@ -493,6 +493,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Daryl Hanlon (<a href=\"https://github.com/ignotus666\">ignotus666</a>)</p>"
         "<p><b>" + tr ( "French" ) + "</b></p>"
         "<p>Olivier Humbert (<a href=\"https://github.com/trebmuh\">trebmuh</a>)</p>"
+        "<p>Julien Taverna (<a href=\"https://github.com/jujudusud\">jujudusud</a>)</p>"
         "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
         "<p>Miguel de Matos (<a href=\"https://github.com/Snayler\">Snayler</a>)</p>"
         "<p>Melcon Moraes (<a href=\"https://github.com/melcon\">melcon</a>)</p>"

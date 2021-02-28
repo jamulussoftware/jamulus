@@ -1,21 +1,22 @@
 ---
-name: Feature request
-about: Suggest a new idea for Jamulus (not an improvement of an existing function)
+name: Feature
+about: Agreed specification for a feature or enhancement
 title: ''
-labels: 'feature request'
+labels: 'feature'
 assignees: ''
 ---
 
-<!-- Thanks for opening a new feature request! Please keep in mind that Jamulus achieves low latency audio by reducing complexity and following the "Keep it simple and stupid" approach. Adding new features may result in more processing and maintenance overhead, so please be sure that your feature can not be achieved by different approaches/software too. Make it clear, why here. -->
+<!-- Thanks for specifying a new feature! -->
 
-**Is your feature request related to a problem? Please describe.**
-<!--A clear and concise description of what the problem is. Ex. I'm always frustrated when [...] -->
+**Has this feature been discussed and generally agreed?**
+<!-- Don't worry about requesting something that hasn't been discussed - we'll just move it to Discussion if we think it's unclear. But ideally, issues should have an agreed specification such that anyone could action it without much help. -->
 
 **Describe the solution you'd like**
-<! --A clear and concise description of what you want to happen. --> 
 
-**Describe alternatives you've considered**
-<!-- A clear and concise description of any alternative solutions or features you've considered. -->
+<!-- A clear and concise description of what you want to happen. --> 
 
-**Additional context**
-<!-- Add any other context or screenshots about the feature request here. -->
+**Describe alternatives that have been considered**
+<!-- If some alternatives have been discussed, please briefly list those together with a reason(s) why they were decided against. This prevents a repeat of the previous discussions. Reference any relevant discussion threads if possible, and consider tagging the main participants. -->
+
+
+

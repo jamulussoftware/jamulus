@@ -53,7 +53,7 @@
 #include "global.h"
 #ifdef _WIN32
 # include <winsock2.h>
-# include <ws2ipdef.h>
+# include <ws2tcpip.h>
 # include <windows.h>
 # include <mmsystem.h>
 #elif defined ( __APPLE__ ) || defined ( __MACOSX )

@@ -69,6 +69,7 @@ int main ( int argc, char** argv )
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
+    bool         bDelayPan                   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
@@ -381,6 +382,29 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Disable delayed panning on startup ----------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--nodelayedpan", // no short form
+                               "--nodelayedpan" ) )
+        {
+            bDelayPan = false;
+            qInfo() << "- starting without delayed panning";
+            CommandLineOptions << "--nodelayedpan";
+            continue;
+        }
+
+        // Enable delayed panning on startup ----------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-P",
+                               "--delayedpanning" ) )
+        {
+            bDelayPan = true;
+            qInfo() << "- starting with delayed panning";
+            CommandLineOptions << "--delayedpanning";
+            continue;
+        }
 
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( argc,
@@ -742,6 +766,7 @@ int main ( int argc, char** argv )
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
+                             bDelayPan,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -845,6 +870,8 @@ QString UsageArguments ( char **argv )
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of this server in the format:\n"
         "                        [name];[city];[country as QLocale ID]\n"
+        "  -P, --delayedpan      start with delayed panning enabled\n"
+        "      --nodelayedpan    start with delayed panning disabled\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"

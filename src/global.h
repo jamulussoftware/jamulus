@@ -96,7 +96,6 @@ LED bar:      lbr
 //******************************************************************************************
 // additional buffer for delay panning   200601
 #define MAX_DELAY_PANNING_SAMPLES        64  //  32 --> 64
-#define PANNING_TYPE_DEFAULT              1  // 2 = delay panning 
 //******************************************************************************************
 
 // default server address and port numbers

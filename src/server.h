@@ -186,6 +186,7 @@ public:
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
               const bool         bDisableRecording,
+              const bool         bNDelayPan,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -326,9 +327,6 @@ protected:
     bool                       bUseDoubleSystemFrameSize;
     int                        iServerFrameSizeSamples;
 
-    // for delay panning
-    bool                       bDelayPan;
-
     // variables needed for multithreading support
     bool                      bUseMultithreading;
     QFutureSynchronizer<void> FutureSynchronizer;
@@ -403,6 +401,9 @@ protected:
 
     // GUI settings
     bool                       bAutoRunMinimized;
+
+    // for delay panning
+    bool                       bDelayPan;
 
     // messaging
     QString                    strWelcomeMessage;

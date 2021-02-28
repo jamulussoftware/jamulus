@@ -233,6 +233,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNUseDoubleSystemFrameSize,
                    const bool         bNUseMultithreading,
                    const bool         bDisableRecording,
+                   const bool         bNDelayPan,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading          ( bNUseMultithreading ),
@@ -252,6 +253,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   &ConnLessProtocol ),
     bDisableRecording           ( bDisableRecording ),
     bAutoRunMinimized           ( false ),
+    bDelayPan                   ( bNDelayPan ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler              ( CSignalHandler::getSingletonP() )
@@ -329,8 +331,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
     {
         iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
-
-    bDelayPan = PANNING_TYPE_DEFAULT == 2;
 
     // To avoid audio clitches, in the entire realtime timer audio processing
     // routine including the ProcessData no memory must be allocated. Since we

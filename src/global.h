@@ -103,6 +103,10 @@ LED bar:      lbr
 #define CENTSERV_GENRE_CLASSICAL_FOLK    "classical.jamulus.io:22524"
 #define CENTSERV_GENRE_CHORAL            "choral.jamulus.io:22724"
 
+// servers to check for new versions
+#define UPDATECHECK1_ADDRESS             "updatecheck1.jamulus.io:22124"
+#define UPDATECHECK2_ADDRESS             "updatecheck2.jamulus.io:22324"
+
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL       "https://jamulus.io/wiki/Getting-Started"
 #define SERVER_GETTING_STARTED_URL       "https://jamulus.io/wiki/Running-a-Server"

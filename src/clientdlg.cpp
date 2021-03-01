@@ -573,7 +573,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // chance and the update check is not time-critical at all)
     CHostAddress CentServerHostAddress;
 
-    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    // Send the request to two servers for redundancy if either or both of them
+    // has a higher release version number, the reply will trigger the notification.
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, CentServerHostAddress ) )
+    {
+        pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+    }
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, CentServerHostAddress ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
     }
@@ -847,7 +855,17 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
 {
     // update check
 #if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) ) && !defined ( DISABLE_VERSION_CHECK )
-    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    int mySuffixIndex;
+    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+    int serverSuffixIndex;
+    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+    qDebug() << "My version: " << myVersion << " suffix: " << QString( VERSION ).mid( mySuffixIndex );
+    qDebug() << "Server version: " << serverVersion << " suffix: " << strVersion.mid( serverSuffixIndex );
+
+    // only compare if the server version has no suffix (such as dev or beta)
+    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
     {
         // show the label and hide it after one minute again
         lblUpdateCheck->show();

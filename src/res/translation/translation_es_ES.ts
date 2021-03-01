@@ -1987,7 +1987,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="624"/>
         <source>Local Jitter Buffer</source>
-        <translation>Jitter Buffer ocal</translation>
+        <translation type="unfinished">Jitter Buffer Local</translation>
     </message>
     <message>
         <source>Fancy Skin</source>

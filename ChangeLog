@@ -47,7 +47,9 @@
 - stop sending traffic to CloudFlare as part of the external IP detection
   logic (#633, #1092), suggested by atsampson, coded by hoffie
 
-
+- Improve update version detection (#1155)
+  Check two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
+  Ignore the server version if it is not a release, due to a suffix such as dev, alpha or beta.
 
 ### 3.6.2 (2020-12-12) ###
 

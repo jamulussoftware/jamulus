@@ -1260,7 +1260,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                             }
                             else
                                 vecfIntermProcBuf[k + 1] += vecsData[iRpan];
-                            ;
                         }
                         else
                         {

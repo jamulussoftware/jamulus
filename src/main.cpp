@@ -382,18 +382,6 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Disable delayed panning on startup ----------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--nodelayedpan", // no short form
-                               "--nodelayedpan" ) )
-        {
-            bDelayPan = false;
-            qInfo() << "- starting without delayed panning";
-            CommandLineOptions << "--nodelayedpan";
-            continue;
-        }
-
         // Enable delayed panning on startup ----------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
@@ -871,7 +859,6 @@ QString UsageArguments ( char **argv )
         "  -o, --serverinfo      infos of this server in the format:\n"
         "                        [name];[city];[country as QLocale ID]\n"
         "  -P, --delayedpan      start with delayed panning enabled\n"
-        "      --nodelayedpan    start with delayed panning disabled\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"

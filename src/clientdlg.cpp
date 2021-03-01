@@ -861,9 +861,6 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
     int serverSuffixIndex;
     QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
 
-    qDebug() << "My version: " << myVersion << " suffix: " << QString( VERSION ).mid( mySuffixIndex );
-    qDebug() << "Server version: " << serverVersion << " suffix: " << strVersion.mid( serverSuffixIndex );
-
     // only compare if the server version has no suffix (such as dev or beta)
     if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
     {

@@ -1322,7 +1322,6 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translatorcomment>https:// prefix here too?</translatorcomment>
         <translation>Abre definições de driver para sua placa de som. Alguns drivers permitem mudanças na configuração de buffer, outros como ASIO4ALL permitem escolher entradas e saídas do seu(s) dispositivo(s). Mais informações pode ser encontrada em jamulus.io.</translation>
     </message>
     <message>
@@ -1338,7 +1337,6 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translatorcomment>Shouldn&apos;t the URL have the https:// prefix?</translatorcomment>
         <translation>Hz. Não será possível selecion um driver/dispositivo que não suporta. Para mais ajuda veja jamulus.io.</translation>
     </message>
     <message>

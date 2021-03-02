@@ -31,7 +31,7 @@ LangString ASIO_DRIVER_MORE_INFO ${LANG_SPANISH} \
      "Más información sobre ASIO en jamulus.io"
 
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_SPANISH} \
-     "https://jamulus.io/wiki/Installation-for-Windows#asio"
+     "https://jamulus.io/es/wiki/Installation-for-Windows#asio"
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_SPANISH} \
      "${APP_NAME} necesita un driver de audio ASIO para funcionar, pero no hemos podido encontrar ninguno en tu PC. Deberías instalar uno como ASIO4ALL (más información en jamulus.io, en Instalación en Windows). ¿Aún quieres seguir con la instalación de ${APP_NAME} primero?"

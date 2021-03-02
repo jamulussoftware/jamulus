@@ -1182,30 +1182,27 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                         }
                     }
 
-                    // restore gain (if new name is different from the current one)
-                    if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
-                    {
-                        // the text has actually changed, search in the list of
-                        // stored settings if we have a matching entry
-                        int  iStoredFaderLevel;
-                        int  iStoredPanValue;
-                        bool bStoredFaderIsSolo;
-                        bool bStoredFaderIsMute;
-                        int  iGroupID;
+                    // restore gain:
+                    // the text has actually changed, search in the list of
+                    // stored settings if we have a matching entry
+                    int  iStoredFaderLevel;
+                    int  iStoredPanValue;
+                    bool bStoredFaderIsSolo;
+                    bool bStoredFaderIsMute;
+                    int  iGroupID;
 
-                        if ( GetStoredFaderSettings ( vecChanInfo[j].strName,
-                                                      iStoredFaderLevel,
-                                                      iStoredPanValue,
-                                                      bStoredFaderIsSolo,
-                                                      bStoredFaderIsMute,
-                                                      iGroupID ) )
-                        {
-                            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel, true ); // suppress group update
-                            vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
-                            vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
-                            vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
-                            vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
-                        }
+                    if ( GetStoredFaderSettings ( vecChanInfo[j].strName,
+                                                  iStoredFaderLevel,
+                                                  iStoredPanValue,
+                                                  bStoredFaderIsSolo,
+                                                  bStoredFaderIsMute,
+                                                  iGroupID ) )
+                    {
+                        vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel, true ); // suppress group update
+                        vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
+                        vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
+                        vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
+                        vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
                     }
 
                     // set the channel infos

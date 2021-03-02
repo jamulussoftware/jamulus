@@ -1323,10 +1323,10 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                             if ( iRpan < 0 )
                             {                                            // get from second
                                 iRpan = iRpan + iServerFrameSizeSamples; //
-                                vecfIntermProcBuf[k + 2] += vecsData2[iRpan] * fGainR;
+                                vecfIntermProcBuf[k + 1] += vecsData2[iRpan] * fGainR;
                             }
                             else
-                                vecfIntermProcBuf[k + 2] += vecsData[iRpan] * fGainR;
+                                vecfIntermProcBuf[k + 1] += vecsData[iRpan] * fGainR;
                         }
                         else
                         {

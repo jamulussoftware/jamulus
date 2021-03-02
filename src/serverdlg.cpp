@@ -447,23 +447,23 @@ lvwClients->setMinimumHeight ( 140 );
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 
-    // query the central server version number needed for update check (note
+    // query the update server version number needed for update check (note
     // that the connection less message respond may not make it back but that
     // is not critical since the next time Jamulus is started we have another
     // chance and the update check is not time-critical at all)
-    CHostAddress CentServerHostAddress;
+    CHostAddress UpdateServerHostAddress;
 
     // Send the request to two servers for redundancy if either or both of them
     // has a higher release version number, the reply will trigger the notification.
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, CentServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress ) )
     {
-        pServer->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+        pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, CentServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress ) )
     {
-        pServer->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+        pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 }
 

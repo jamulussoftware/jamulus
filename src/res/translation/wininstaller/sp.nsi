@@ -1,6 +1,6 @@
 ; SPANISH translation
 
-LangString DESKTOP_SET_SHORTCUT ${LANG_ENGLISH} \
+LangString DESKTOP_SET_SHORTCUT ${LANG_SPANISH} \
     "Crear acceso directo en Escritorio"
 
 LangString INVALID_FOLDER_MSG ${LANG_SPANISH} \

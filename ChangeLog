@@ -47,9 +47,14 @@
 - stop sending traffic to CloudFlare as part of the external IP detection
   logic (#633, #1092), suggested by atsampson, coded by hoffie
 
+- bug fix: properly restore mixer levels after reconnecting to a restarted
+  server. updating the server or the client is sufficient to fix this. coded
+  by hoffie (#955, #1009, #1010)
+
 - Improve update version detection (#1155)
   Check two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
   Ignore the server version if it is not a release, due to a suffix such as dev, alpha or beta.
+
 
 ### 3.6.2 (2020-12-12) ###
 

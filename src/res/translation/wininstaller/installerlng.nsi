@@ -19,3 +19,6 @@
 
 !insertmacro MUI_LANGUAGE "French"
 !include "${ROOT_PATH}\src\res\translation\wininstaller\fr.nsi"
+
+!insertmacro MUI_LANGUAGE "Spanish"
+!include "${ROOT_PATH}\src\res\translation\wininstaller\es.nsi"

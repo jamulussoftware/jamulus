@@ -879,8 +879,8 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation>Limpar Todas as &amp;Configurações de Solo e Mute</translation>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
+        <translation>Limpar Todas as Configurações de &amp;Solo e Mute</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1175"/>
@@ -890,7 +890,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>E&amp;xit</source>
-        <translation>&amp;Sair</translation>
+        <translation>S&amp;air</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
@@ -1027,7 +1027,7 @@
         <translation>Ordenar os Canais por &amp;Cidade</translation>
     </message>
     <message>
-        <source>&amp;Clear All Stored Solo Settings</source>
+        <source>Clear &amp;All Stored Solo Settings</source>
         <translation type="vanished">&amp;Limpar Todos Ajustes de Solo Armazenados</translation>
     </message>
     <message>
@@ -2193,7 +2193,7 @@
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>&amp;Help</source>
-        <translation>&amp;Ajuda</translation>
+        <translation>A&amp;juda</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="865"/>

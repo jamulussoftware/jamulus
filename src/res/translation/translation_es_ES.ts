@@ -171,7 +171,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation>A&amp;cerca de</translation>
+        <translation>&amp;Acerca de</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
@@ -870,7 +870,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="273"/>
         <source>&amp;Settings...</source>
-        <translation>&amp;Configuración...</translation>
+        <translation>C&amp;onfiguración...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="279"/>
@@ -884,8 +884,8 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation>Eliminar Todas las &amp;Configuraciones de Solo y Mute</translation>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
+        <translation>&amp;Eliminar Todas las Configuraciones de Solo y Mute</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1175"/>
@@ -895,7 +895,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>E&amp;xit</source>
-        <translation>S&amp;alir</translation>
+        <translation>&amp;Salir</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
@@ -1028,8 +1028,8 @@
         <translation>Ordenar Usuarios por &amp;Ciudad</translation>
     </message>
     <message>
-        <source>&amp;Clear All Stored Solo Settings</source>
-        <translation type="vanished">Eliminar &amp;Configuraciones Guardadas de Solo</translation>
+        <source>Clear &amp;All Stored Solo Settings</source>
+        <translation type="vanished">&amp;Eliminar Configuraciones Guardadas de Solo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="340"/>
@@ -2213,13 +2213,13 @@
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>&amp;Help</source>
-        <translation>&amp;Ayuda</translation>
+        <translation>A&amp;yuda</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="865"/>
         <location filename="../../util.cpp" line="870"/>
         <source>Getting &amp;Started...</source>
-        <translation>Cómo &amp;Empezar...</translation>
+        <translation>&amp;Cómo Empezar...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="866"/>
@@ -2229,7 +2229,7 @@
     <message>
         <location filename="../../util.cpp" line="873"/>
         <source>What&apos;s &amp;This</source>
-        <translation>Qué es &amp;Esto</translation>
+        <translation>&amp;Qué es Esto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="875"/>
@@ -3060,7 +3060,7 @@
         <location filename="../../serverdlg.cpp" line="191"/>
         <location filename="../../serverdlg.cpp" line="352"/>
         <source>E&amp;xit</source>
-        <translation>S&amp;alir</translation>
+        <translation>&amp;Salir</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="197"/>

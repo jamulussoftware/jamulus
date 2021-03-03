@@ -1316,15 +1316,15 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     QMutexLocker locker ( &Mutex );
 
     // initialize variables used for statistics
-    float vecMinLevel[MAX_NUM_FADER_GROUPS + 1];
     float vecMaxLevel[MAX_NUM_FADER_GROUPS + 1];
     int   vecChannelsPerGroup[MAX_NUM_FADER_GROUPS + 1];
     for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
     {
-        vecMinLevel[i] = UPPER_BOUND_SIG_METER;
         vecMaxLevel[i] = LOW_BOUND_SIG_METER;
         vecChannelsPerGroup[i] = 0;
     }
+    CVector<CVector<float>> levels;
+    levels.resize ( MAX_NUM_FADER_GROUPS + 1 );
 
     // compute min/max level per group and number of channels per group
     for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )
@@ -1344,29 +1344,37 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
 
             if ( leveldB >= AUTO_FADER_NOISE_THRESHOLD_DB )
             {
-                vecMinLevel[group] = fmin ( vecMinLevel[group], leveldB );
                 vecMaxLevel[group] = fmax ( vecMaxLevel[group], leveldB );
+                levels[group].Add ( leveldB );
             }
             ++vecChannelsPerGroup[group];
         }
     }
 
+    // sort levels for later median computation
+    for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
+    {
+        std::sort ( levels[i].begin(), levels[i].end() );
+    }
+
     // compute the number of active groups (at least one channel)
     int cntActiveGroups = 0;
-    for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
+    for ( int i = 0; i < MAX_NUM_FADER_GROUPS; ++i )
     {
         cntActiveGroups += vecChannelsPerGroup[i] > 0;
     }
 
     // only my channel is active, nothing to do
-    if ( cntActiveGroups == 0 )
+    if ( cntActiveGroups == 0 &&
+        vecChannelsPerGroup[MAX_NUM_FADER_GROUPS] == 0 )
     {
         return;
     }
 
     // compute target level for each group
     // (prevent clipping when each group contributes at maximum level)
-    float targetLevelPerGroup = -20.0f * log10 ( cntActiveGroups );
+    float targetLevelPerGroup = -20.0f * log10 (
+        std::max ( cntActiveGroups, 1 ) );
 
     // compute target levels for the channels of each group individually
     float vecTargetChannelLevel[MAX_NUM_FADER_GROUPS + 1];
@@ -1381,15 +1389,21 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
             targetLevelPerGroup - 20.0f * log10 ( vecChannelsPerGroup[i] ) :
             0.0f;
 
+        // get median level
+        int cntChannels = levels[i].Size();
+        if ( cntChannels == 0 )
+            continue;
+        float refLevel = levels[i][cntChannels / 2];
+
         // since we can only attenuate channels but not amplify, we have to
-        // check that the weakest (min) channel can be brought to the target
+        // check that the reference channel can be brought to the target
         // level
-        if ( vecTargetChannelLevel[i] > vecMinLevel[i] )
+        if ( refLevel < vecTargetChannelLevel[i] )
         {
             // otherwise, we adjust the level offset in such a way that
             // the level can be reached
             levelOffset = fmin ( levelOffset,
-                vecMinLevel[i] - vecTargetChannelLevel[i] );
+                refLevel - vecTargetChannelLevel[i] );
 
             // compute the minimum necessary fader setting
             minFader = fmin ( minFader, -vecMaxLevel[i] +
@@ -1418,7 +1432,17 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
 
             int group = vecpChanFader[i]->GetGroupID();
             if ( group == INVALID_INDEX )
-                group = 4;
+            {
+                if ( cntActiveGroups > 0 )
+                {
+                    // do not adjust the channels without group in group mode
+                    continue;
+                }
+                else
+                {
+                    group = 4;
+                }
+            }
 
             // do not adjust channels with almost zero level to full level since
             // the channel might simply be silent at the moment

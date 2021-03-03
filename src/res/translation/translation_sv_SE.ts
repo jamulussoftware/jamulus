@@ -752,7 +752,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="264"/>
         <source>&amp;Connection Setup...</source>
-        <translation>Anslutnings&amp;inställningar...</translation>
+        <translation>&amp;Anslutningsinställningar...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="267"/>
@@ -772,12 +772,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="279"/>
         <source>&amp;Analyzer Console...</source>
-        <translation>&amp;Analyskonsol...</translation>
+        <translation>Analys&amp;konsol...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="287"/>
         <source>N&amp;o User Sorting</source>
-        <translation>I&amp;ngen kanalstortering</translation>
+        <translation>Ingen kanalst&amp;ortering</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="299"/>
@@ -791,7 +791,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>&amp;Rensa alla lagrade solo och tystade inställningar</translation>
     </message>
     <message>
@@ -805,13 +805,13 @@
         <translation>Okej</translation>
     </message>
     <message>
-        <source>&amp;Clear All Stored Solo Settings</source>
+        <source>Clear &amp;All Stored Solo Settings</source>
         <translation type="vanished">&amp;Rensa alla lagrade soloinställningar</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="340"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation>Ställ in alla mixers till ny klient&amp;nivå</translation>
+        <translation>&amp;Ställ in alla mixers till ny klientnivå</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
@@ -928,7 +928,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="333"/>
         <source>&amp;Settings</source>
-        <translation>In&amp;ställningar</translation>
+        <translation>&amp;Inställningar</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="340"/>

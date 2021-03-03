@@ -729,7 +729,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="247"/>
         <source>&amp;File</source>
-        <translation>&amp;Plik</translation>
+        <translation>P&amp;lik</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="249"/>
@@ -769,7 +769,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="279"/>
         <source>&amp;Analyzer Console...</source>
-        <translation>&amp;Konsola analizatora...</translation>
+        <translation>Konsola &amp;analizatora...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="287"/>
@@ -802,7 +802,7 @@
         <translation>Ok</translation>
     </message>
     <message>
-        <source>&amp;Clear All Stored Solo Settings</source>
+        <source>Clear &amp;All Stored Solo Settings</source>
         <translation type="vanished">Wy&amp;czyść wszystkie zachowane ustawienia użytkowników</translation>
     </message>
     <message>
@@ -827,7 +827,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>Wy&amp;czyść wszystkie ustawienia solo/wycissz</translation>
     </message>
     <message>
@@ -1824,7 +1824,7 @@
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>&amp;Help</source>
-        <translation>&amp;Pomoc</translation>
+        <translation>P&amp;omoc</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="865"/>

@@ -334,7 +334,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     NumRowsAction->setChecked ( pSettings->iNumMixerPanelRows > 1 );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
-    pEditMenu->addAction ( tr ( "&Clear All Stored Solo and Mute Settings" ), this,
+    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this,
         SLOT ( OnClearAllStoredSoloMuteSettings() ) );
 
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,

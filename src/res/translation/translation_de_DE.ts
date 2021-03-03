@@ -864,7 +864,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>&amp;Lösche alle gespeicherten Solo- und Mute-Einstellungen</translation>
     </message>
     <message>
@@ -1017,7 +1017,7 @@
         <translation>Sortiere die Kanäle nach der &amp;Stadt</translation>
     </message>
     <message>
-        <source>&amp;Clear All Stored Solo Settings</source>
+        <source>Clear &amp;All Stored Solo Settings</source>
         <translation type="vanished">&amp;Lösche alle gespeicherten Solo-Einstellungen</translation>
     </message>
     <message>

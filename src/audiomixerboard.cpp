@@ -1340,7 +1340,9 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
 
             int group = vecpChanFader[i]->GetGroupID();
             if ( group == INVALID_INDEX )
-                group = 4;
+            {
+                group = MAX_NUM_FADER_GROUPS;
+            }
 
             if ( leveldB >= AUTO_FADER_NOISE_THRESHOLD_DB )
             {
@@ -1392,7 +1394,9 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
         // get median level
         int cntChannels = levels[i].Size();
         if ( cntChannels == 0 )
+        {
             continue;
+        }
         float refLevel = levels[i][cntChannels / 2];
 
         // since we can only attenuate channels but not amplify, we have to
@@ -1440,7 +1444,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
                 }
                 else
                 {
-                    group = 4;
+                    group = MAX_NUM_FADER_GROUPS;
                 }
             }
 

@@ -347,9 +347,9 @@ Function ASIOCheckInstalled
             Abort
         ${Endif}
 
-        ${NSD_CreateLabel} 0 0 100% 12u "$(ASIO_DRIVER_EXPLAIN)"
+        ${NSD_CreateLabel} 0 0 100% 20u "$(ASIO_DRIVER_EXPLAIN)"
         Pop $Label
-        ${NSD_CreateButton} 0 13u 100% 13u "$(ASIO_DRIVER_MORE_INFO)"
+        ${NSD_CreateButton} 0 21u 100% 15u "$(ASIO_DRIVER_MORE_INFO)"
         Pop $Button
         ${NSD_OnClick} $Button OpenASIOHelpPage
 

@@ -55,6 +55,16 @@
   Check two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
   Ignore the server version if it is not a release, due to a suffix such as dev, alpha or beta.
 
+- Windows installer interface now supports English, Dutch, French, German, Polish and Spanish.
+
+- bug fix: Fixed some memory leaks in server recording (#1073)
+
+- bug fix: Adjusted some accelerator keys in translations to avoid duplication (#1165)
+
+- Release now builds .deb installation packages for Ubuntu/Debian (#1100)
+  Compatible with Ubuntu 18 and 20.
+
+- Release now builds .apk installation packages for Android (#880)
 
 ### 3.6.2 (2020-12-12) ###
 

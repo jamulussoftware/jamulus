@@ -62,9 +62,9 @@
 - bug fix: Adjusted some accelerator keys in translations to avoid duplication (#1165)
 
 - Release now builds .deb installation packages for Ubuntu/Debian (#1100)
-  Compatible with Ubuntu 18 and 20.
+  Compatible with Ubuntu 18.04 or later.
 
-- Release now builds .apk installation packages for Android (#880)
+- Release now builds experimental .apk installation packages for Android (#880)
 
 ### 3.6.2 (2020-12-12) ###
 

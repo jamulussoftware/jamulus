@@ -85,6 +85,7 @@ protected:
     virtual QString LoadAndInitializeDriver ( QString, bool );
     QString         ReinitializeDriver ( int devIndex );
     virtual void    UnloadCurrentDriver();
+    int             InitPa();
 
     PaDeviceIndex DeviceIndexFromName ( const QString& strDriverName );
 

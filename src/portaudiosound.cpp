@@ -28,15 +28,10 @@
 #include "portaudiosound.h"
 #include <pa_asio.h>
 
-// Needed for buffer size change callback
+// Needed for reset request callback
 static CSound* pThisSound;
 
-static void bufferSizeChangeCallback( long newBufferSize )
-{
-    (void) newBufferSize;
-    pThisSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT );
-}
-static void resetRequestCallback() { pThisSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT ); }
+static void resetRequestCallback() { pThisSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT ); }
 
 
 CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
@@ -52,13 +47,23 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
 {
     pThisSound = this;
 
+    lNumDevs = std::min ( InitPa(), MAX_NUMBER_SOUND_CARDS );
+    for ( int i = 0; i < lNumDevs; i++ )
+    {
+        PaDeviceIndex       devIndex = Pa_HostApiDeviceIndexToDeviceIndex ( asioIndex, i );
+        const PaDeviceInfo* devInfo  = Pa_GetDeviceInfo ( devIndex );
+        strDriverNames[i]            = devInfo->name;
+    }
+}
+
+int CSound::InitPa()
+{
     PaError err = Pa_Initialize();
     if ( err != paNoError )
     {
         throw CGenErr ( tr ( "Failed to initialize PortAudio: %1" ).arg ( Pa_GetErrorText ( err ) ) );
     }
 
-    PaAsio_RegisterBufferSizeChangeCallback ( &bufferSizeChangeCallback );
     PaAsio_RegisterResetRequestCallback ( &resetRequestCallback );
 
     // Find ASIO API index.  TODO: support non-ASIO APIs.
@@ -84,13 +89,7 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
     }
     asioIndex = apiIndex;
 
-    lNumDevs = std::min ( apiInfo->deviceCount, MAX_NUMBER_SOUND_CARDS );
-    for ( int i = 0; i < lNumDevs; i++ )
-    {
-        PaDeviceIndex       devIndex = Pa_HostApiDeviceIndexToDeviceIndex ( asioIndex, i );
-        const PaDeviceInfo* devInfo  = Pa_GetDeviceInfo ( devIndex );
-        strDriverNames[i]            = devInfo->name;
-    }
+    return apiInfo->deviceCount;
 }
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
@@ -147,7 +146,14 @@ CSound::~CSound() { Pa_Terminate(); }
 
 PaDeviceIndex CSound::DeviceIndexFromName ( const QString& strDriverName )
 {
-    for ( int i = 0; i < lNumDevs; i++ )
+    if ( asioIndex < 0 )
+    {
+        InitPa();
+    }
+
+    const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( asioIndex );
+
+    for ( int i = 0; i < apiInfo->deviceCount; i++ )
     {
         PaDeviceIndex devIndex = Pa_HostApiDeviceIndexToDeviceIndex ( asioIndex, i );
         const PaDeviceInfo* devInfo = Pa_GetDeviceInfo ( devIndex );
@@ -318,6 +324,11 @@ void CSound::UnloadCurrentDriver()
         Pa_CloseStream ( deviceStream );
         deviceStream = NULL;
         deviceIndex  = -1;
+    }
+    if ( asioIndex >= 0 )
+    {
+        Pa_Terminate();
+        asioIndex = -1;
     }
 }
 

@@ -17,5 +17,5 @@ jobs:
       uses: srggrs/assign-one-project-github-action@1.2.0
       if: github.event.action == 'opened'
       with:
-        project: 'https://github.com/orgs/jamulussoftware/projects/2'
+        project: 'https://api.github.com/projects/11859384'
         column_name: 'Triage'

@@ -18,4 +18,4 @@ jobs:
       if: github.event.action == 'opened'
       with:
         project: 'https://github.com/orgs/jamulussoftware/projects/2'
-        column_name: 0
+        column_name: 'Triage'

@@ -25,7 +25,7 @@ LangString ASIO_DRIVER_SUB ${LANG_SWEDISH} \
      "För att kunna använda Jamulus behöver du en ASIO-ljuddrivrutin"
 
 LangString ASIO_DRIVER_EXPLAIN ${LANG_SWEDISH} \
-     "Jamulus behöver en ASIO-ljuddrivrutin för att ge ljud med låg latens. Mer information:"
+     "${APP_NAME} behöver en ASIO-ljuddrivrutin för att ge ljud med låg latens. Mer information:"
 
 LangString ASIO_DRIVER_MORE_INFO ${LANG_SWEDISH} \
      "Mer information om ASIO hittar du på jamulus.io"

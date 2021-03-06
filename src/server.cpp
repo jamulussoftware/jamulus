@@ -818,17 +818,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     // Get data from all connected clients -------------------------------------
     // some inits
     int  iNumClients          = 0; // init connected client counter
-    bool bUseMT               = bUseMultithreading || iNumClients >= 10;
+    bool bUseMT               = false;
     int  iNumBlocks           = 0; // init number of blocks for multithreading
     int  iMTBlockSize         = 0; // init block size for multithreading
     bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
-
-    if ( bUseMT ) 
-    {
-        // spread work equally among available threads
-        iNumBlocks   = std::min( iNumClients, iMaxNumThreads );
-        iMTBlockSize = ( iNumClients - 1 ) / iNumBlocks + 1;
-    }
 
     {
         // Make put and get calls thread safe. 
@@ -848,6 +841,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             }
         }
 
+        bUseMT = bUseMultithreading && iNumClients >= 10;
+
         // prepare and decode connected channels
         if ( !bUseMT )
         {
@@ -855,6 +850,10 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         }
         else
         {
+            // spread work equally among available threads
+            iNumBlocks   = std::min( iNumClients, iMaxNumThreads );
+            iMTBlockSize = ( iNumClients - 1 ) / iNumBlocks + 1;
+
             // processing with multithreading
             for ( int iBlockCnt = 0; iBlockCnt < iNumBlocks; iBlockCnt++ )
             {

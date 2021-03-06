@@ -151,6 +151,7 @@ public:
         iNumMixerPanelRows          ( 1 ),
         vstrCentralServerAddress    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         eCentralServerAddressType   ( AT_DEFAULT ),
+        bEnableFeedbackDetection    ( true ),
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
         vecWindowPosConnect         ( ), // empty array
@@ -178,6 +179,7 @@ public:
     int              iNumMixerPanelRows;
     CVector<QString> vstrCentralServerAddress;
     ECSAddType       eCentralServerAddressType;
+    bool             bEnableFeedbackDetection;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;

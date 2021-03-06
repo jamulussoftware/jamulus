@@ -1146,7 +1146,7 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
         TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS );
     }
 
-    if ( TimerDetectFeedback.isActive() )
+    if ( pSettings->bEnableFeedbackDetection && TimerDetectFeedback.isActive() )
     {
         TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS );
         bDetectFeedback = true;
@@ -1205,10 +1205,13 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         TimerBuffersLED.start         ( BUFFER_LED_UPDATE_TIME_MS );
         TimerPing.start               ( PING_UPDATE_TIME_MS );
         TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
-        TimerDetectFeedback.start     ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
 
-        // enable audio feedback detection
-        bDetectFeedback = true;
+        // audio feedback detection
+        if ( pSettings->bEnableFeedbackDetection )
+        {
+            TimerDetectFeedback.start     ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+            bDetectFeedback = true;
+        }
     }
 }
 

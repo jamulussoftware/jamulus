@@ -1032,16 +1032,35 @@ void CClientDlg::OnTimerSigMet()
     lbrInputLevelL->SetValue ( pClient->GetLevelForMeterdBLeft() );
     lbrInputLevelR->SetValue ( pClient->GetLevelForMeterdBRight() );
 
-    if ( bDetectFeedback && pClient->GetLevelForMeterdBLeft() > 7.5 )
+    if ( bDetectFeedback &&
+        ( pClient->GetLevelForMeterdBLeft() > NUM_STEPS_LED_BAR - 0.5  ||
+        pClient->GetLevelForMeterdBRight() > NUM_STEPS_LED_BAR - 0.5 ) )
     {
         // mute locally and mute channel
         chbLocalMute->setCheckState ( Qt::Checked );
         MainMixerBoard->MuteMyChannel();
 
-        QMessageBox::warning ( this, APP_NAME, tr ( "Audio feedback detected.\n"
+        // show message box about feedback issue
+        QCheckBox* chb = new QCheckBox ( tr ( "Enable feedback detection" ) );
+        chb->setCheckState ( pSettings->bEnableFeedbackDetection ?
+            Qt::Checked : Qt::Unchecked );
+        QMessageBox msgbox;
+        msgbox.setText ( tr ( "Audio feedback detected.\n\n"
             "We muted your channel and activated 'Mute Myself'. Please "
             "solve the feedback issue first and unmute yourself afterwards. "
             "Did you plug-in earphones?") );
+        msgbox.setIcon ( QMessageBox::Icon::Warning );
+        msgbox.addButton ( QMessageBox::Ok );
+        msgbox.setDefaultButton ( QMessageBox::Ok );
+        msgbox.setCheckBox ( chb );
+
+        QObject::connect( chb, &QCheckBox::stateChanged, [this](int state)
+            {
+                ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked );
+            }
+        );
+
+        msgbox.exec();
     }
 }
 

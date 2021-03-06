@@ -123,7 +123,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation>O &amp;programe</translation>
+        <translation>&amp;O programe</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
@@ -481,7 +481,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="64"/>
         <source>&amp;Edit</source>
-        <translation>Ú&amp;pravy</translation>
+        <translation>Úp&amp;ravy</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="66"/>
@@ -754,7 +754,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="273"/>
         <source>&amp;Settings...</source>
-        <translation>&amp;Nastavenia...</translation>
+        <translation>N&amp;astavenia...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="279"/>
@@ -778,7 +778,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -809,7 +809,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
         <source>&amp;Edit</source>
-        <translation>Ú&amp;pravy</translation>
+        <translation>Úp&amp;ravy</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>
@@ -1821,7 +1821,7 @@
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>&amp;Help</source>
-        <translation>Pomo&amp;cník</translation>
+        <translation>Po&amp;mocník</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="865"/>

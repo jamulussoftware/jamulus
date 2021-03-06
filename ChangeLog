@@ -16,7 +16,7 @@
 
 - support http links in the chat dialog, coded by hoffie (#879)
 
-- support Github actions for CodeQL, Publish Release, Autobuild Flatpak,
+- support Github actions for CodeQL, Autobuild, Publish Release,
   coded by pljones, nefarius2001, ann0see, ranfdev.
 
 - more detailed version number of unreleased version, coded by nefarius2001 (#475)
@@ -24,30 +24,48 @@
 - add new --serverpublicip option to support central servers behind NAT,
   coded by hoffie (#954)
 
-- replaced low-quality background image (fancy skin) of mixerboard (#970)
+- replaced low-quality background image (fancy skin) of mixerboard, created by passing (#970)
 
-- Escape chat messages at the server. This will no longer allow html formated chat messages due to security reasons (#939)
+- Escape chat messages at the server. This will no longer allow html formated chat messages due to security reasons,
+  coded by atsampson (#939)
 
 - Highlight the fact that the server is recording in the Mixerboard title (#968), coded by dcorson-ticino.com
 
 - Implement new --ctrlmidich syntax allowing to specify fader, pan, mute,
   solo buttons (#945).  Implementation for mute&solo buttons for now is
-  only for toggle controllers and does not support headless operation yet.
+  only for toggle controllers and does not support headless operation yet, coded by dakhubgit
   
 - Move ASIO Setup button on Windows below driver selection (#977), coded by mulyaj and ann0see
 
-- Gray out input levels and show a message if you're not connected to a server (#847)
+- Gray out input levels and show a message if you're not connected to a server, coded by ann0see (#847, #983)
 
-- bug fix: remove ConsoleWriterFactory - to resolve suspected memory leak (#926)
+- bug fix: remove ConsoleWriterFactory - to resolve suspected memory leak, coded by pljones (#926)
 
 - bug fix: fix crash if settings are changed in ASIO4ALL during a connection (contained in #796). Reverts #727 for Windows
 
-- Avoid screen from sleeping or starting screen saver for Mac (#834)
+- Avoid screen from sleeping or starting screen saver for Mac, coded by jerogee (#834)
 
 - stop sending traffic to CloudFlare as part of the external IP detection
   logic (#633, #1092), suggested by atsampson, coded by hoffie
 
+- bug fix: properly restore mixer levels after reconnecting to a restarted
+  server. updating the server or the client is sufficient to fix this. coded
+  by hoffie (#955, #1009, #1010)
 
+- Improve update version detection, coded by softins (#1155)
+  Check two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
+  Ignore the server version if it is not a release, due to a suffix such as dev, alpha or beta.
+
+- Windows installer interface now supports English, Dutch, French, German, Polish and Spanish.
+
+- bug fix: Fixed some memory leaks in server recording, coded by softins (#1073)
+
+- bug fix: Adjusted some accelerator keys in translations to avoid duplication (#1165)
+
+- Release now builds .deb installation packages for Ubuntu/Debian, coded by ann0see (#1100)
+  Compatible with Ubuntu 18.04 or later.
+
+- Release now builds experimental .apk installation packages for Android, coded by nefarius2001 (#880)
 
 ### 3.6.2 (2020-12-12) ###
 

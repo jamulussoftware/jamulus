@@ -15,11 +15,6 @@ __MacOS__ ([Core Audio](https://developer.apple.com/documentation/coreaudio)) an
 __Linux__ ([Jack](https://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
 
-[![Sourceforge logo](https://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)](https://sourceforge.net/projects/llcon)
-
-The project is hosted at [Sourceforge.net](https://sourceforge.net/projects/llcon).
-
-
 
 Installation
 ------------
@@ -32,7 +27,7 @@ Help
 
 Official documentation for Jamulus is on the [Jamulus homepage](https://jamulus.io)
 
-See also the [discussion forums](https://sourceforge.net/p/llcon/discussion). If you have issues, feel free to ask for help there.
+See also the [discussion forums](https://github.com/jamulussoftware/jamulus/discussions). If you have issues, feel free to ask for help there.
 
 Bugs and feature requests can be [reported here](https://github.com/jamulussoftware/jamulus/issues)
 

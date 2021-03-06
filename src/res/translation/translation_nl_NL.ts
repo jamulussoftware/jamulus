@@ -183,7 +183,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="198"/>
         <source>&amp;OK</source>
-        <translation>&amp;OK</translation>
+        <translation>O&amp;K</translation>
     </message>
 </context>
 <context>
@@ -889,12 +889,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="247"/>
         <source>&amp;File</source>
-        <translation>&amp;Bestand</translation>
+        <translation>Be&amp;stand</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="262"/>
         <source>&amp;View</source>
-        <translation>&amp;Bekijken</translation>
+        <translation>Be&amp;kijken</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="264"/>
@@ -938,7 +938,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>&amp;Wis Alle Opgeslagen Solo- en Demp-instellingen</translation>
     </message>
     <message>
@@ -947,13 +947,13 @@
         <translation>Ok</translation>
     </message>
     <message>
-        <source>&amp;Clear All Stored Solo Settings</source>
+        <source>Clear &amp;All Stored Solo Settings</source>
         <translation type="vanished">&amp;Wis Alle Opgeslagen Solo-instellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="340"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation>Zet Alle Faders op Nieuwe-Client-&amp;Niveau</translation>
+        <translation>&amp;Zet Alle Faders op Nieuwe-Client-Niveau</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
@@ -973,7 +973,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Bewerken</translation>
+        <translation>Be&amp;werken</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>

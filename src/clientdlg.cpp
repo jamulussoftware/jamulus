@@ -334,7 +334,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     NumRowsAction->setChecked ( pSettings->iNumMixerPanelRows > 1 );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
-    pEditMenu->addAction ( tr ( "&Clear All Stored Solo and Mute Settings" ), this,
+    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this,
         SLOT ( OnClearAllStoredSoloMuteSettings() ) );
 
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
@@ -567,15 +567,23 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         chbLocalMute->setCheckState ( Qt::Checked );
     }
 
-    // query the central server version number needed for update check (note
+    // query the update server version number needed for update check (note
     // that the connection less message respond may not make it back but that
     // is not critical since the next time Jamulus is started we have another
     // chance and the update check is not time-critical at all)
-    CHostAddress CentServerHostAddress;
+    CHostAddress UpdateServerHostAddress;
 
-    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    // Send the request to two servers for redundancy if either or both of them
+    // has a higher release version number, the reply will trigger the notification.
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress ) )
     {
-        pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+    }
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress ) )
+    {
+        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 }
 
@@ -847,7 +855,14 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
 {
     // update check
 #if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) ) && !defined ( DISABLE_VERSION_CHECK )
-    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    int mySuffixIndex;
+    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+    int serverSuffixIndex;
+    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+    // only compare if the server version has no suffix (such as dev or beta)
+    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
     {
         // show the label and hide it after one minute again
         lblUpdateCheck->show();

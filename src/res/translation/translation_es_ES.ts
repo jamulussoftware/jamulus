@@ -166,12 +166,12 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2021 El Equipo de Desarrollo de Jamulus</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation>A&amp;cerca de</translation>
+        <translation>&amp;Acerca de</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
@@ -870,7 +870,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="273"/>
         <source>&amp;Settings...</source>
-        <translation>&amp;Configuración...</translation>
+        <translation>C&amp;onfiguración...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="279"/>
@@ -884,8 +884,8 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation>Eliminar Todas las &amp;Configuraciones de Solo y Mute</translation>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
+        <translation>&amp;Eliminar Todas las Configuraciones de Solo y Mute</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1175"/>
@@ -895,7 +895,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>E&amp;xit</source>
-        <translation>S&amp;alir</translation>
+        <translation>&amp;Salir</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
@@ -1028,8 +1028,8 @@
         <translation>Ordenar Usuarios por &amp;Ciudad</translation>
     </message>
     <message>
-        <source>&amp;Clear All Stored Solo Settings</source>
-        <translation type="vanished">Eliminar &amp;Configuraciones Guardadas de Solo</translation>
+        <source>Clear &amp;All Stored Solo Settings</source>
+        <translation type="vanished">&amp;Eliminar Configuraciones Guardadas de Solo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="340"/>
@@ -1148,7 +1148,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Configura tu audio,conéctate a un servidor y ¡empieza a tocar!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>
@@ -1311,42 +1311,42 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunos drivers de tarjeta de sonido no permiten cambiar el retardo de buffer desde la aplicación. En este caso se deshabilita la configuración del retardo de buffer y se debe cambiar utilizando el driver de la tarjeta de sonido. En Windows, haz clic en el botón de Configuración del Dispositivo ASIO para abrir el panel de configuración. En Linux, utiliza la herramienta de configuración de JACK para cambiar el tamaño del buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si la configuración del retardo de buffer está deshabilitada, el driver de audio no permite cambiar este ajuste desde la aplicación. En Windows, haz clic en el botón de Configuración del Dispositivo ASIO para abrir el panel de configuración. En Linux, utiliza la herramienta de configuración de JACK para cambiar el tamaño del buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración de la tarjeta de sonido</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esto abre la configuración del driver de tu tarjeta de sonido. Algunos drivers te permiten cambiar la configuración del buffer; otros como ASIO4ALL te permiten escoger las entradas o salidas de tu(s) dispositivo(s). Se puede encontrar más información en jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
         <source>Opens the driver settings. Note: </source>
-        <translation type="unfinished"></translation>
+        <translation>Abre la configuración del driver. Nota: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="unfinished"></translation>
+        <translation> actualmente solo soporta dispositivos con una tasa de muestreo de </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hz. No podrás seleccionar un driver/dispositivo que no lo haga. Para más ayuda, ver jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botón de Configuración Dispositivo ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
@@ -1356,7 +1356,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="294"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración Dispositivo ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
@@ -1565,12 +1565,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="287"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation>Si este indicador LED se vuelve rojo, no te divertirás demasiado utilizando el software </translation>
+        <translation>Si este indicador LED se vuelve rojo, no te divertirás demasiado utilizando el </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="289"/>
         <source> software.</source>
-        <translation> .</translation>
+        <translation> software.</translation>
     </message>
     <message>
         <source>ASIO Setup</source>
@@ -1585,7 +1585,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="223"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation>aumentará la tasa de datos. Asegúrate de que tu tasa de subida no excede el valor de subida disponible con tu ancho de banda de Internet.</translation>
+        <translation> aumentará la tasa de datos. Asegúrate de que tu tasa de subida no excede el valor de subida disponible con tu ancho de banda de Internet.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="323"/>
@@ -1776,12 +1776,12 @@
     <message>
         <location filename="../../util.h" line="614"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Cualquier Género 2</translation>
     </message>
     <message>
         <location filename="../../util.h" line="617"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Cualquier Género 3</translation>
     </message>
     <message>
         <location filename="../../util.h" line="620"/>
@@ -1796,17 +1796,17 @@
     <message>
         <location filename="../../util.h" line="626"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation>Género Clásico/Folk</translation>
     </message>
     <message>
         <location filename="../../util.h" line="629"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation>Género Coral/Barbershop</translation>
     </message>
     <message>
         <location filename="../../util.h" line="632"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cualquier Género 1</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1987,7 +1987,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="624"/>
         <source>Local Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter Buffer Local</translation>
     </message>
     <message>
         <source>Fancy Skin</source>
@@ -2213,13 +2213,13 @@
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>&amp;Help</source>
-        <translation>&amp;Ayuda</translation>
+        <translation>A&amp;yuda</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="865"/>
         <location filename="../../util.cpp" line="870"/>
         <source>Getting &amp;Started...</source>
-        <translation>Cómo &amp;Empezar...</translation>
+        <translation>&amp;Cómo Empezar...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="866"/>
@@ -2229,7 +2229,7 @@
     <message>
         <location filename="../../util.cpp" line="873"/>
         <source>What&apos;s &amp;This</source>
-        <translation>Qué es &amp;Esto</translation>
+        <translation>&amp;Qué es Esto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="875"/>
@@ -3060,7 +3060,7 @@
         <location filename="../../serverdlg.cpp" line="191"/>
         <location filename="../../serverdlg.cpp" line="352"/>
         <source>E&amp;xit</source>
-        <translation>S&amp;alir</translation>
+        <translation>&amp;Salir</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="197"/>

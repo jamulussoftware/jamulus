@@ -736,7 +736,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>Effa&amp;cer tous les paramètres Solo et Muet enregistrés</translation>
     </message>
     <message>

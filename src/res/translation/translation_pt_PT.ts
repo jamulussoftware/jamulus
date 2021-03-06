@@ -123,7 +123,7 @@
     <message>
         <location filename="../../util.cpp" line="510"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Eslovaco</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="517"/>
@@ -166,7 +166,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2021 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -455,7 +455,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="744"/>
         <source>Alias/Name</source>
-        <translation>Nome/Alcunha</translation>
+        <translation>Nome/Pseudónimo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="751"/>
@@ -477,7 +477,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="822"/>
         <source>Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Pseudónimo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="788"/>
@@ -571,12 +571,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="136"/>
         <source>Do you want to open the link</source>
-        <translation type="unfinished"></translation>
+        <translation>Quer abrir o link</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="137"/>
         <source>in an external browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>num navegador externo?</translation>
     </message>
 </context>
 <context>
@@ -832,7 +832,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="230"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>actualização de software disponível</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="247"/>
@@ -872,17 +872,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="329"/>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Usar Painel de Mistura de Duas Linhas</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="337"/>
-        <source>&amp;Clear All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <source>Clear &amp;All Stored Solo and Mute Settings</source>
+        <translation>Limpar &amp;Todas as Configurações de Solo e Mudo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1175"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
@@ -1001,32 +1001,32 @@
     <message>
         <location filename="../../clientdlg.cpp" line="287"/>
         <source>N&amp;o User Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>Nã&amp;o Ordenar Canais</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>
         <source>Sort Users by &amp;Name</source>
-        <translation>Ordenar Utilizadores por &amp;Nome</translation>
+        <translation>Ordenar Canais por &amp;Nome</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="293"/>
         <source>Sort Users by &amp;Instrument</source>
-        <translation>Ordenar canais por &amp;Instrumento</translation>
+        <translation>Ordenar Canais por &amp;Instrumento</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="296"/>
         <source>Sort Users by &amp;Group</source>
-        <translation>Ordenar canais por &amp;Grupo</translation>
+        <translation>Ordenar Canais por &amp;Grupo</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="299"/>
         <source>Sort Users by &amp;City</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordenar Canais por &amp;Cidade</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="340"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Definir Todos os Canais para Níve&amp;l de Novo Cliente</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="762"/>
@@ -1052,7 +1052,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1159"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>A sua placa de som não está a funcionar correctamente. Abra a janela das definições e verifique a selecção do dispositivo e as configurações do driver.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1222"/>
@@ -1140,12 +1140,12 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Configure o seu áudio, ligue-se a um servidor e comece a tocar!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificação de actualização</translation>
     </message>
 </context>
 <context>
@@ -1299,42 +1299,42 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alguns drivers da placa de som não permitem que o atraso do buffer seja definido a partir da aplicação. Nesse case, a configuração de atraso do buffer é desabilitada e terá que ser alterada usando o driver da placa de som. No Windows, pressione o botão Definições do Dispositivo ASIO para abrir o painel de configurações do driver. No Linux, use a ferramenta de configuração Jack para alterar o tamanho do buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se as configurações de atraso do buffer estiverem desactivadas, o driver de áudio não permite essa configuração através da aplicação. No Windows, pressione o botão Definições do Dispositivo ASIO para abrir o painel de configurações do driver. No Linux, use a ferramenta de configuração Jack para alterar o tamanho do buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="177"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Definições do driver da placa de som</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Isto abre as configurações do driver da sua placa de som. Alguns drivers permitem que altere as configurações do buffer, outros como o ASIO4ALL permitem que escolha a entrada ou saída do(s) seu(s) dispositivo(s). Mais informações podem ser encontradas em jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
         <source>Opens the driver settings. Note: </source>
-        <translation type="unfinished"></translation>
+        <translation>Abre as configurações do driver. Nota: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="unfinished"></translation>
+        <translation> de momento apenas suporta dispositivos que suportem uma taxa de amostragem de </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hz. Não poderá seleccionar um driver/dispositivo que não suporte. Para obter ajuda, visite jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botão das Definições do Dispositivo ASIO</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of the </source>
@@ -1693,7 +1693,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
         <source>Central server address combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caixa de Selecção do Servidor Central</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="267"/>
@@ -1708,7 +1708,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="294"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Definições do Dispositivo ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="329"/>
@@ -1752,37 +1752,37 @@
     <message>
         <location filename="../../util.h" line="614"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualquer Estilo 2</translation>
     </message>
     <message>
         <location filename="../../util.h" line="617"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualquer Estilo 3</translation>
     </message>
     <message>
         <location filename="../../util.h" line="620"/>
         <source>Genre Rock</source>
-        <translation>Servidor Rock</translation>
+        <translation>Estilo Rock</translation>
     </message>
     <message>
         <location filename="../../util.h" line="623"/>
         <source>Genre Jazz</source>
-        <translation>Servidor Jazz</translation>
+        <translation>Estilo Jazz</translation>
     </message>
     <message>
         <location filename="../../util.h" line="626"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo Clássico/Folk</translation>
     </message>
     <message>
         <location filename="../../util.h" line="629"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo Coral/Barbershop</translation>
     </message>
     <message>
         <location filename="../../util.h" line="632"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualquer Estilo 1</translation>
     </message>
     <message>
         <source>Genre Rock/Jazz</source>
@@ -1967,7 +1967,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="624"/>
         <source>Local Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter Buffer Local</translation>
     </message>
     <message>
         <source>Fancy Skin</source>
@@ -2231,12 +2231,12 @@
     <message>
         <location filename="../../util.cpp" line="535"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este servidor requer que aceite as condições antes de poder entrar. Por favor leia as condições na janela de mensagens.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="536"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Li &amp;as condições e concordo.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="537"/>
@@ -2665,17 +2665,17 @@
     <message>
         <location filename="../../util.cpp" line="1148"/>
         <source>Mountain Dulcimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Saltério dos Apalaches</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1149"/>
         <source>Scratching</source>
-        <translation type="unfinished"></translation>
+        <translation>Scratching</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1150"/>
         <source>Rapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapping</translation>
     </message>
     <message>
         <location filename="../../settings.cpp" line="300"/>
@@ -2998,7 +2998,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="339"/>
         <source>software upgrade available</source>
-        <translation type="unfinished"></translation>
+        <translation>actualização de software disponível</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="805"/>
@@ -3198,7 +3198,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="288"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificação de actualização</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="68"/>
@@ -3339,17 +3339,17 @@
         <location filename="../../../mac/sound.cpp" line="339"/>
         <location filename="../../../windows/sound.cpp" line="60"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>O dispositivo de áudio actualmente seleccionado não se encontra presente no sistema.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>O dispositivo de entrada de áudio não se encontra disponível.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>O dispositivo de saída de áudio não se encontra disponível.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -3449,17 +3449,17 @@
     <message>
         <location filename="../../soundbase.cpp" line="121"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished">O dispositivo de áudio selecionado não pôde ser usado devido ao seguinte erro: </translation>
+        <translation>O dispositivo de áudio selecionado não pôde ser usado devido ao seguinte erro: </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="123"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"> O driver anterior será selecionado.</translation>
+        <translation> O driver seleccionado anteriormente será utilizado.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="161"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>O dispositivo de áudio seleccionado anteriormente deixou de estar disponível, ou as propriedades do driver de áudio foram alteradas para um estado incompatível com este software. Iremos tentar encontrar um dispositivo áudio válido. Este novo dispositivo de áudio poderá causar feedback de áudio. Antes de se ligar a um servidor, verifique a configuração do dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="174"/>

@@ -742,12 +742,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="247"/>
         <source>&amp;File</source>
-        <translation>&amp;Fil</translation>
+        <translation>&amp;Arkiv</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="262"/>
         <source>&amp;View</source>
-        <translation>&amp;Vy</translation>
+        <translation>&amp;Visa</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="264"/>
@@ -777,7 +777,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="287"/>
         <source>N&amp;o User Sorting</source>
-        <translation>Ingen kanalst&amp;ortering</translation>
+        <translation>Ingen kanals&amp;ortering</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="299"/>

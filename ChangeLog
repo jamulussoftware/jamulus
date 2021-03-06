@@ -16,7 +16,7 @@
 
 - support http links in the chat dialog, coded by hoffie (#879)
 
-- support Github actions for CodeQL, Publish Release, Autobuild Flatpak,
+- support Github actions for CodeQL, Autobuild, Publish Release,
   coded by pljones, nefarius2001, ann0see, ranfdev.
 
 - more detailed version number of unreleased version, coded by nefarius2001 (#475)

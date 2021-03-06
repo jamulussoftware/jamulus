@@ -273,10 +273,13 @@ QString CSound::ReinitializeDriver ( int devIndex )
 
     PaStreamParameters paInputParams;
     PaAsioStreamInfo   asioInputInfo;
-    paInputParams.device                    = devIndex;
-    paInputParams.channelCount              = std::min ( NUM_IN_OUT_CHANNELS, deviceInfo->maxInputChannels );
-    paInputParams.sampleFormat              = paInt16;
-    paInputParams.suggestedLatency          = deviceInfo->defaultLowInputLatency;
+    paInputParams.device       = devIndex;
+    paInputParams.channelCount = std::min (NUM_IN_OUT_CHANNELS, deviceInfo->maxInputChannels);
+    paInputParams.sampleFormat = paInt16;
+    // NOTE: Setting latency to deviceInfo->defaultLowInputLatency seems like it
+    // would be sensible, but gives an overly large buffer size at least in the
+    // case of ASIO4ALL.  Put 0 instead.
+    paInputParams.suggestedLatency          = 0;
     paInputParams.hostApiSpecificStreamInfo = &asioInputInfo;
     asioInputInfo.size                      = sizeof asioInputInfo;
     asioInputInfo.hostApiType               = paASIO;
@@ -289,7 +292,7 @@ QString CSound::ReinitializeDriver ( int devIndex )
     paOutputParams.device                    = devIndex;
     paOutputParams.channelCount              = std::min ( NUM_IN_OUT_CHANNELS, deviceInfo->maxOutputChannels );
     paOutputParams.sampleFormat              = paInt16;
-    paOutputParams.suggestedLatency          = deviceInfo->defaultLowOutputLatency;
+    paOutputParams.suggestedLatency          = 0; // See paInputParams.suggestedLatency commentary.
     paOutputParams.hostApiSpecificStreamInfo = &asioOutputInfo;
     asioOutputInfo.size                      = sizeof asioOutputInfo;
     asioOutputInfo.hostApiType               = paASIO;
@@ -331,6 +334,23 @@ void CSound::UnloadCurrentDriver()
         asioIndex = -1;
     }
 }
+
+#ifdef WIN32
+void CSound::OpenDriverSetup()
+{
+    if ( deviceStream )
+    {
+        // PaAsio_ShowControlPanel() doesn't work when the device is opened.
+        ASIOControlPanel();
+    }
+    else
+    {
+        int index = DeviceIndexFromName ( strCurDevName );
+        // pass NULL (?) for system specific ptr.
+        PaAsio_ShowControlPanel ( index, NULL );
+    }
+}
+#endif // WIN32
 
 int CSound::paStreamCallback ( const void*                     input,
                                void*                           output,

@@ -73,12 +73,7 @@ public:
     virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
 #ifdef WIN32
-    // Portaudio's function for this takes a device index as a parameter.  So it
-    // needs to reopen ASIO in order to get the right driver loaded.  Because of
-    // that it also requires passing HWND of the main window.  This is fairly
-    // awkward, so just call the ASIO function directly for the currently loaded
-    // driver.
-    virtual void OpenDriverSetup() { ASIOControlPanel(); }
+    virtual void OpenDriverSetup();
 #endif // WIN32
 
 protected:

@@ -12,6 +12,7 @@
 
 import sys
 import os
+import re
 import subprocess
 
 # get the jamulus version from the .pro file
@@ -75,14 +76,14 @@ if fullref.startswith("refs/tags/"):
     release_title="Release {}  ({})".format(release_version_name, pushed_name)
     
     if pushed_name.startswith("r"):
-        if "beta" in pushed_name:
-            print('this reference is a Beta-Release-Tag')
-            publish_to_release = True
-            is_prerelease = True
-        else:
+        if re.match(r'^r\d+_\d+_\d+$', pushed_name):
             print('this reference is a Release-Tag')
             publish_to_release = True
             is_prerelease = False
+        else:
+            print('this reference is a Non-Release-Tag')
+            publish_to_release = True
+            is_prerelease = True
     else:
         print('this reference is a Non-Release-Tag')
         publish_to_release = False

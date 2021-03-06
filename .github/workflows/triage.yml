@@ -1,0 +1,21 @@
+name: Auto Assign to Triage
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  assign_one_project:
+    runs-on: ubuntu-latest
+    name: Assign to Triage
+    steps:
+    - name: Put new issues and pull requests into triage
+      uses:
+      if: github.event.action == 'opened'
+      with:
+        project: 'https://github.com/orgs/jamulussoftware/projects/2'
+        column_name: 'Triage'

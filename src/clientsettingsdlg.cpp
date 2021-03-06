@@ -152,7 +152,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         "from within the application. "
         "In this case the buffer delay setting is disabled and has to be "
         "changed using the sound card driver. On Windows, press the "
-        "ASIO Setup button to open the driver settings panel. On Linux, "
+        "ASIO Device Settings button to open the driver settings panel. On Linux, "
         "use the Jack configuration tool to change the buffer size." ) + "<br>" + tr (
         "If no buffer size is selected and all settings are disabled, an "
         "unsupported buffer size is used by the driver. The application "
@@ -169,9 +169,22 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
         "disabled, it is prohibited by the audio driver to modify this "
         "setting from within the software. "
-        "On Windows, press the ASIO Setup button to open the "
+        "On Windows, press the ASIO Device Settings button to open the "
         "driver settings panel. On Linux, use the Jack configuration tool to "
         "change the buffer size." ) + TOOLTIP_COM_END_TEXT;
+
+   // Driver setup button
+   QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b> " +
+       tr ( "This opens the driver settings of your sound card. Some drivers "
+       "allow you to change buffer settings, others like ASIO4ALL "
+       "let you choose input or outputs of your device(s). "
+       "More information can be found on jamulus.io." );
+
+   QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: " ) + APP_NAME +
+       tr ( " currently only supports devices supporting a sample rate of " )
+       + QString().setNum ( SYSTEM_SAMPLE_RATE_HZ  ) + tr ( "Hz. "
+       "You will not be able to select a driver/device which doesn't. "
+       "For more help see jamulus.io." ) + TOOLTIP_COM_END_TEXT;
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
@@ -182,9 +195,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
-    butDriverSetup->setWhatsThis ( strSndCrdBufDelay );
-    butDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
-    butDriverSetup->setToolTip ( strSndCrdBufDelayTT );
+    butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
+    butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
+    butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
 
     // fancy skin
     cbxSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr (
@@ -278,7 +291,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     // init driver button
 #ifdef _WIN32
-    butDriverSetup->setText ( tr ( "ASIO Setup" ) );
+    butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
 #else
     // no use for this button for MacOS/Linux right now -> hide it
     butDriverSetup->hide();
@@ -706,7 +719,7 @@ void CClientSettingsDlg::SetPingTimeResult ( const int                         i
     // a certain value
     if ( iPingTime > 500 )
     {
-        const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
+        const QString sErrorText = "<font color=\"red\"><b>&#62;500 ms</b></font>";
         lblPingTimeValue->setText     ( sErrorText );
         lblOverallDelayValue->setText ( sErrorText );
     }

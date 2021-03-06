@@ -45,7 +45,8 @@ CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString
     startFrame (frame),
     numChannels (static_cast<uint16_t>(_numChannels)),
     name (name),
-    address (address)
+    address (address),
+    out (nullptr)
 {
     // At this point we may not have much of a name
     QString fileName = ClientName() + "-" + QString::number(frame) + "-" + QString::number(_numChannels);
@@ -88,8 +89,12 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iSe
  */
 void CJamClient::Disconnect()
 {
-    static_cast<CWaveStream*>(out)->finalise();
-    out = nullptr;
+    if (out)
+    {
+        static_cast<CWaveStream*>(out)->finalise();
+        delete out;
+        out = nullptr;
+    }
 
     wavFile->close();
 
@@ -132,6 +137,22 @@ CJamSession::CJamSession(QDir recordBaseDir) :
 
     // Explicitly set all the pointers to "empty"
     vecptrJamClients.fill(nullptr);
+}
+
+/**
+ * @brief CJamSession::~CJamSession
+ */
+CJamSession::~CJamSession()
+{
+    // free up any active jamClientConnections
+    for (int i = 0; i < jamClientConnections.count(); i++ )
+    {
+        if ( jamClientConnections[i] )
+        {
+            delete jamClientConnections[i];
+            jamClientConnections[i] = nullptr;
+        }
+    }
 }
 
 /**
@@ -312,29 +333,20 @@ QString CJamRecorder::Init()
 
     if ( !fi.exists() && !QDir().mkpath ( recordBaseDir.absolutePath() ) )
     {
-        errmsg = recordBaseDir.absolutePath() + " does not exist but could not be created";
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qCritical()
-        qCritical() << errmsg;
-#endif
+        errmsg = QString( "'%1' does not exist but could not be created." ).arg( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable( errmsg );
         return errmsg;
     }
     if (!fi.isDir())
     {
-        errmsg = recordBaseDir.absolutePath() + " exists but is not a directory";
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qCritical()
-        qCritical() << errmsg;
-#endif
+        errmsg = QString( "'%1' exists but is not a directory" ).arg( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable( errmsg );
         return errmsg;
     }
     if (!fi.isWritable())
     {
-        errmsg = recordBaseDir.absolutePath() + " is a directory but cannot be written to";
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qCritical()
-        qCritical() << errmsg;
-#endif
+        errmsg = QString( "'%1' is a directory but cannot be written to" ).arg( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable( errmsg );
         return errmsg;
     }
 

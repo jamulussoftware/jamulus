@@ -94,14 +94,18 @@ LED bar:      lbr
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 
 // default server address and port numbers
-#define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
+#define DEFAULT_SERVER_ADDRESS           "anygenre1.jamulus.io"
 #define DEFAULT_PORT_NUMBER              22124
-#define CENTSERV_ANY_GENRE2              "jamulusanygenre2.fischvolk.de:22224"
-#define CENTSERV_ANY_GENRE3              "jamulusanygenre3.fischvolk.de:22624"
-#define CENTSERV_GENRE_ROCK              "jamulusrock.fischvolk.de:22424"
-#define CENTSERV_GENRE_JAZZ              "jamulusjazz.fischvolk.de:22324"
-#define CENTSERV_GENRE_CLASSICAL_FOLK    "jamulusclassical.fischvolk.de:22524"
-#define CENTSERV_GENRE_CHORAL            "jamuluschoral.fischvolk.de:22724"
+#define CENTSERV_ANY_GENRE2              "anygenre2.jamulus.io:22224"
+#define CENTSERV_ANY_GENRE3              "anygenre3.jamulus.io:22624"
+#define CENTSERV_GENRE_ROCK              "rock.jamulus.io:22424"
+#define CENTSERV_GENRE_JAZZ              "jazz.jamulus.io:22324"
+#define CENTSERV_GENRE_CLASSICAL_FOLK    "classical.jamulus.io:22524"
+#define CENTSERV_GENRE_CHORAL            "choral.jamulus.io:22724"
+
+// servers to check for new versions
+#define UPDATECHECK1_ADDRESS             "updatecheck1.jamulus.io"
+#define UPDATECHECK2_ADDRESS             "updatecheck2.jamulus.io"
 
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL       "https://jamulus.io/wiki/Getting-Started"
@@ -109,10 +113,12 @@ LED bar:      lbr
 #define SOFTWARE_MANUAL_URL              "https://jamulus.io/wiki/Software-Manual"
 
 // determining server internal address uses well-known host and port
-// (You can change the service used here to something like Cloudflare (1.1.1.1), Google DNS (8.8.8.8), or something else reliable)
-#define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
-#define WELL_KNOWN_PORT                  53        // DNS
-#define IP_LOOKUP_TIMEOUT                500       // ms
+// We just need a valid, public Internet IP here. We will not send any
+// traffic there as we will only set up an UDP socket without sending any
+// data.
+#define WELL_KNOWN_HOST                  "1.1.1.1"           // CloudFlare
+#define WELL_KNOWN_PORT                  DEFAULT_PORT_NUMBER
+#define IP_LOOKUP_TIMEOUT                500                 // ms
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz
@@ -234,8 +240,8 @@ LED bar:      lbr
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \
     "<br><div align=right><font size=-1><i>" + \
-    QCoreApplication::translate ( "global", "For more information use the ""What's " \
-    "This"" help (help menu, right mouse button or Shift+F1)" ) + \
+    QCoreApplication::translate ( "global", "For more information use the \"What's " \
+    "This\" help (help menu, right mouse button or Shift+F1)" ) + \
     "</i></font></div>"
 
 // server welcome message title (do not change for compatibility!)
@@ -325,16 +331,14 @@ bool    GetFlagArgument ( char**  argv,
                           QString strShortOpt,
                           QString strLongOpt );
 
-bool    GetStringArgument ( QTextStream& tsConsole,
-                            int          argc,
+bool    GetStringArgument ( int          argc,
                             char**       argv,
                             int&         i,
                             QString      strShortOpt,
                             QString      strLongOpt,
                             QString&     strArg );
 
-bool    GetNumericArgument ( QTextStream& tsConsole,
-                             int          argc,
+bool    GetNumericArgument ( int          argc,
                              char**       argv,
                              int&         i,
                              QString      strShortOpt,

@@ -28,26 +28,38 @@
      </property>
      <layout class="QVBoxLayout">
       <item>
-       <widget class="QLabel" name="lblSoundcardDevice">
-        <property name="text">
+       <widget class="QGroupBox" name="grbSoundcardDevice">
+        <property name="title">
          <string>Device</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cbxSoundcard">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>153</width>
-          <height>0</height>
-         </size>
-        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QComboBox" name="cbxSoundcard">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>153</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="butDriverSetup">
+           <property name="text">
+            <string>Driver Setup</string>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
@@ -238,16 +250,6 @@
           <widget class="QRadioButton" name="rbtBufferDelaySafe">
            <property name="text">
             <string>(safe)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="butDriverSetup">
-           <property name="text">
-            <string>Driver Setup</string>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -666,6 +668,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>cbxSoundcard</tabstop>
+  <tabstop>butDriverSetup</tabstop>
   <tabstop>cbxLInChan</tabstop>
   <tabstop>cbxRInChan</tabstop>
   <tabstop>cbxLOutChan</tabstop>
@@ -674,7 +677,6 @@
   <tabstop>rbtBufferDelayPreferred</tabstop>
   <tabstop>rbtBufferDelayDefault</tabstop>
   <tabstop>rbtBufferDelaySafe</tabstop>
-  <tabstop>butDriverSetup</tabstop>
   <tabstop>chbAutoJitBuf</tabstop>
   <tabstop>sldNetBuf</tabstop>
   <tabstop>sldNetBufServer</tabstop>

@@ -39,6 +39,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed       ( !strMIDISetup.isEmpty() ),
+    eLastRecorderState  ( RS_UNDEFINED ),       // for SetMixerBoardDeco
+    eLastDesign         ( GD_ORIGINAL ),        //          "
     ClientSettingsDlg   ( pNCliP, pNSetP, parent ),
     ChatDlg             ( parent ),
     ConnectDlg          ( pNSetP, bNewShowComplRegConnList, parent ),
@@ -78,10 +80,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lbrInputLevelL->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelL->setToolTip               ( strInpLevHTT );
+    lbrInputLevelL->setEnabled               ( false );
     lbrInputLevelR->setWhatsThis             ( strInpLevH );
     lbrInputLevelR->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelR->setToolTip               ( strInpLevHTT );
+    lbrInputLevelR->setEnabled               ( false );
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
@@ -222,7 +226,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblGlobalInfoLabel->hide();
 
     // prepare update check info label (invisible by default)
-    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + QString ( APP_NAME ) + " " +
                               tr ( "software upgrade available" ) + "</b></font>" );
     lblUpdateCheck->hide();
 
@@ -330,7 +334,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     NumRowsAction->setChecked ( pSettings->iNumMixerPanelRows > 1 );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
-    pEditMenu->addAction ( tr ( "&Clear All Stored Solo and Mute Settings" ), this,
+    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this,
         SLOT ( OnClearAllStoredSoloMuteSettings() ) );
 
     pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ), this,
@@ -491,6 +495,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::ControllerInFaderLevel,
         this, &CClientDlg::OnControllerInFaderLevel );
 
+    QObject::connect ( pClient, &CClient::ControllerInPanValue,
+        this, &CClientDlg::OnControllerInPanValue );
+
+    QObject::connect ( pClient, &CClient::ControllerInFaderIsSolo,
+        this, &CClientDlg::OnControllerInFaderIsSolo );
+
+    QObject::connect ( pClient, &CClient::ControllerInFaderIsMute,
+        this, &CClientDlg::OnControllerInFaderIsMute );
+
     QObject::connect ( pClient, &CClient::CLChannelLevelListReceived,
         this, &CClientDlg::OnCLChannelLevelListReceived );
 
@@ -560,15 +573,23 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
         chbLocalMute->setCheckState ( Qt::Checked );
     }
 
-    // query the central server version number needed for update check (note
+    // query the update server version number needed for update check (note
     // that the connection less message respond may not make it back but that
     // is not critical since the next time Jamulus is started we have another
     // chance and the update check is not time-critical at all)
-    CHostAddress CentServerHostAddress;
+    CHostAddress UpdateServerHostAddress;
 
-    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    // Send the request to two servers for redundancy if either or both of them
+    // has a higher release version number, the reply will trigger the notification.
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress ) )
     {
-        pClient->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+    }
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress ) )
+    {
+        pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 }
 
@@ -773,6 +794,7 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
+        SetMixerBoardDeco( RS_UNDEFINED, pClient->GetGUIDesign() );
     }
     else
     {
@@ -839,7 +861,14 @@ void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
 {
     // update check
 #if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) ) && !defined ( DISABLE_VERSION_CHECK )
-    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    int mySuffixIndex;
+    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+    int serverSuffixIndex;
+    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+    // only compare if the server version has no suffix (such as dev or beta)
+    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
     {
         // show the label and hide it after one minute again
         lblUpdateCheck->show();
@@ -1206,6 +1235,11 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             return;
         }
 
+        // hide label connect to server
+        lblConnectToServer->hide();
+        lbrInputLevelL->setEnabled ( true );
+        lbrInputLevelR->setEnabled ( true );
+
         // change connect button text to "disconnect"
         butConnect->setText ( tr ( "D&isconnect" ) );
 
@@ -1239,8 +1273,13 @@ void CClientDlg::Disconnect()
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();
+    lbrInputLevelL->setEnabled ( false );
+    lbrInputLevelR->setEnabled ( false );
     lbrInputLevelL->SetValue ( 0 );
     lbrInputLevelR->SetValue ( 0 );
+
+    // show connect to server message
+    lblConnectToServer->show();
 
     // stop other timers
     TimerBuffersLED.stop();
@@ -1359,4 +1398,54 @@ rbtReverbSelR->setStyleSheet ( "" );
 
     // also apply GUI design to child GUI controls
     MainMixerBoard->SetGUIDesign ( eNewDesign );
+}
+
+void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderState )
+{
+    MainMixerBoard->SetRecorderState ( newRecorderState );
+    SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
+}
+
+void CClientDlg::OnGUIDesignChanged()
+{
+    SetGUIDesign ( pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
+}
+
+void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  )
+{
+    // return if no change
+    if ( ( newRecorderState == eLastRecorderState ) && ( eNewDesign == eLastDesign ) )
+        return;
+    eLastRecorderState = newRecorderState;
+    eLastDesign = eNewDesign;
+
+    if ( newRecorderState == RS_RECORDING )
+    {
+        MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin; "
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(255,255,255);"
+                    "                   background-color: rgb(255,0,0); }" );
+    }
+    else
+    {
+        if ( eNewDesign == GD_ORIGINAL )
+        {
+            MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin;"
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(220,220,220); }" );
+        }
+        else
+        {
+            MainMixerBoard->setStyleSheet (
+                    "QGroupBox::title { subcontrol-origin: margin;"
+                    "                   subcontrol-position: left top;"
+                    "                   left: 7px;"
+                    "                   color: rgb(0,0,0); }" );
+        }
+    }
 }

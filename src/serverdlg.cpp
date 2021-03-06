@@ -335,7 +335,7 @@ lvwClients->setMinimumHeight ( 140 );
     tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
 
     // prepare update check info label (invisible by default)
-    lblUpdateCheck->setText ( "<font color=""red""><b>" + QString ( APP_NAME ) + " " +
+    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + QString ( APP_NAME ) + " " +
                               tr ( "software upgrade available" ) + "</b></font>" );
     lblUpdateCheck->hide();
 
@@ -447,15 +447,23 @@ lvwClients->setMinimumHeight ( 140 );
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 
-    // query the central server version number needed for update check (note
+    // query the update server version number needed for update check (note
     // that the connection less message respond may not make it back but that
     // is not critical since the next time Jamulus is started we have another
     // chance and the update check is not time-critical at all)
-    CHostAddress CentServerHostAddress;
+    CHostAddress UpdateServerHostAddress;
 
-    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    // Send the request to two servers for redundancy if either or both of them
+    // has a higher release version number, the reply will trigger the notification.
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress ) )
     {
-        pServer->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+        pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+    }
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress ) )
+    {
+        pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 }
 
@@ -619,7 +627,14 @@ void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
 {
     // update check
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    int mySuffixIndex;
+    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+    int serverSuffixIndex;
+    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+    // only compare if the server version has no suffix (such as dev or beta)
+    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
     {
         lblUpdateCheck->show();
     }
@@ -690,11 +705,11 @@ void CServerDlg::UpdateGUIDependencies()
     case SRS_CENTRAL_SVR_FULL:
     case SRS_VERSION_TOO_OLD:
     case SRS_NOT_FULFILL_REQUIREMENTS:
-        strStatus = "<font color=""red""><b>" + strStatus + "</b></font>";
+        strStatus = "<font color=\"red\"><b>" + strStatus + "</b></font>";
         break;
 
     case SRS_REGISTERED:
-        strStatus = "<font color=""darkGreen""><b>" + strStatus + "</b></font>";
+        strStatus = "<font color=\"darkGreen\"><b>" + strStatus + "</b></font>";
         break;
 
     default:

@@ -25,7 +25,7 @@
 #pragma once
 
 #include <QCoreApplication>
-#include <QTcpSocket>
+#include <QUdpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
 #ifndef HEADLESS
@@ -51,7 +51,6 @@
 #include <vector>
 #include <algorithm>
 #include "global.h"
-using namespace std; // because of the library: "vector"
 #ifdef _WIN32
 # include <winsock2.h>
 # include <ws2ipdef.h>
@@ -492,19 +491,6 @@ signals:
     void LanguageChanged ( QString strLanguage );
 };
 #endif
-
-
-// Console writer factory ------------------------------------------------------
-// this class was written by pljones
-class ConsoleWriterFactory
-{
-public:
-    ConsoleWriterFactory() : ptsConsole ( nullptr ) { }
-    QTextStream* get();
-
-private:
-    QTextStream* ptsConsole;
-};
 
 
 /******************************************************************************\
@@ -1117,6 +1103,7 @@ public:
     static CHostAddress GetLocalAddress();
     static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
                                                   const QString&   strCentralServerAddress );
+    static bool         IsPrivateNetworkIP ( const QHostAddress& qhAddr );
 };
 
 

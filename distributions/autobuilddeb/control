@@ -26,7 +26,7 @@ Description: Low latency Audio Server/Client
 
 Package: jamulus-headless
 Architecture: any
-Depends: libqt5core5a (>= 5.5.0), libqt5gui5 (>= 5.0.2) | libqt5gui5-gles (>= 5.0.2), libqt5network5 (>= 5.0.2), libqt5widgets5 (>= 5.2.0), libqt5xml5 (>= 5.0.2)
+Depends: libqt5core5a (>= 5.5.0), libqt5network5 (>= 5.0.2), libqt5xml5 (>= 5.0.2)
 Description: Low latency Audio Server (headless)
  The Jamulus software enables musicians to perform real-time jam sessions over
  the internet. There is one server running the Jamulus server software which

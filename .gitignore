@@ -22,6 +22,7 @@ windows/VC_redist.x64.exe
 windows/vc_redist.x86.exe
 windows/nsProcess.dll
 windows/NSIS
+windows/nsProcess/Release/
 debug/
 release/
 build/

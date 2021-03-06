@@ -176,6 +176,7 @@ public:
               const QString&     strCentralServer,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
+              const QString&     strServerPublicIP,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
               const bool         bNDisconnectAllClientsOnQuit,

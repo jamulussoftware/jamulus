@@ -1,9 +1,23 @@
-VERSION = 3.6.2git
+VERSION = 3.6.2dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)
     TARGET = jamulus
+}
+
+# allow detailed version info for intermediate builds (#475)
+contains(VERSION, .*dev.*) {
+    exists(".git/config"){
+        GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
+        VERSION = "$$VERSION"-$$GIT_DESCRIPTION
+        message("building version \"$$VERSION\" (intermediate in git repository)")
+    }else{
+        VERSION = "$$VERSION"-nogit
+        message("building version \"$$VERSION\" (intermediate without git repository)")
+    }
+} else {
+    message("building version \"$$VERSION\" (release)")
 }
 
 CONFIG += qt \
@@ -71,7 +85,7 @@ win32 {
             -lwinmm \
             -lws2_32
     } else {
-        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93
+        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/jamulussoftware/jamulus/issues/93
         LIBS += ole32.lib \
             user32.lib \
             advapi32.lib \
@@ -159,7 +173,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.corrados.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -386,7 +400,6 @@ HEADERS += src/buffer.h \
     src/channel.h \
     src/client.h \
     src/global.h \
-    src/multicolorled.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
     src/server.h \
@@ -409,7 +422,8 @@ HEADERS_GUI = src/audiomixerboard.h \
     src/clientdlg.h \
     src/serverdlg.h \
     src/levelmeter.h \
-    src/analyzerconsole.h
+    src/analyzerconsole.h \
+    src/multicolorled.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
@@ -1058,7 +1072,7 @@ contains(CONFIG, "opus_shared_lib") {
     DISTFILES += $$DISTFILES_OPUS
 }
 
-# disable version check if requested
+# disable version check if requested (#370)
 contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)
     DEFINES += DISABLE_VERSION_CHECK

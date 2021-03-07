@@ -8,8 +8,8 @@
 !insertmacro MUI_LANGUAGE "German"
 !include "${ROOT_PATH}\src\res\translation\wininstaller\de.nsi"
 
-; !insertmacro MUI_LANGUAGE "Italian"
-; !include "${ROOT_PATH}\src\res\translation\wininstaller\it.nsi" ; include italian
+!insertmacro MUI_LANGUAGE "Italian"
+!include "${ROOT_PATH}\src\res\translation\wininstaller\it.nsi" ; include italian
 
 !insertmacro MUI_LANGUAGE "Dutch"
 !include "${ROOT_PATH}\src\res\translation\wininstaller\nl.nsi"

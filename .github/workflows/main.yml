@@ -1,0 +1,14 @@
+on:
+  issues:
+    types: [opened]
+name: Issue opened
+jobs:
+  assign:
+    name: Assign new issues to triage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign issues to Tracking
+        uses: technote-space/create-project-card-action@v1
+        with:
+          PROJECT: Tracking
+          COLUMN: Triage

@@ -12,3 +12,5 @@ jobs:
         with:
           PROJECT: Tracking
           COLUMN: Triage
+          CHECK_ORG_PROJECT: true
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

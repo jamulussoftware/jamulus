@@ -8,10 +8,10 @@
 #     for every pull-request to master:
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix of the github-action-run (not as release), and only retain those files for limited period
-#     for every tag that starts with 'r_' and contains 'beta':
+#     for every tag that starts with 'r' and has an arbitrary suffix (e.g. beta1, rc1, etc.)
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix as a prerelease
-#     for every tag that starts with 'r_' (and not contains 'beta'):
+#     for every tag that starts with 'r' and does not have any suffix:
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix as a release
 #

@@ -56,7 +56,7 @@
   Check two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
   Ignore the server version if it is not a release, due to a suffix such as dev, alpha or beta.
 
-- Windows installer interface now supports English, Dutch, French, German, Polish and Spanish.
+- Windows installer interface now supports English, Dutch, French, German, Polish, Spanish and Swedish.
 
 - bug fix: Fixed some memory leaks in server recording, coded by softins (#1073)
 

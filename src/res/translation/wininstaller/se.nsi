@@ -34,4 +34,4 @@ LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_SWEDISH} \
      "https://jamulus.io/wiki/Installation-for-Windows#asio"
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_SWEDISH} \
-     "${APP_NAME} behöver en ASIO-ljuddrivrutin för att fungera, men vi kunde inte hitta någon på din dator. Du bör installera en som ASIO4ALL (Mer information på jamulus.io under $\"Installation for Windows$\"). Vill du fortfarande fortsätta med installationen av $ {APP_NAME} först?"
+     "${APP_NAME} behöver en ASIO-ljuddrivrutin för att fungera, men vi kunde inte hitta någon på din dator. Du bör installera en som ASIO4ALL (Mer information på jamulus.io under $\"Installation for Windows$\"). Vill du fortfarande fortsätta med installationen av ${APP_NAME} först?"

@@ -1433,7 +1433,7 @@
     <message>
         <location filename="../../util.h" line="629"/>
         <source>Genre Choral/Barbershop</source>
-        <translation>Genre chorale/salon de coiffure</translation>
+        <translation>Genre chorale/barbershop</translation>
     </message>
     <message>
         <location filename="../../util.h" line="632"/>

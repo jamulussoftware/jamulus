@@ -62,6 +62,11 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
 
     loadAsioDriver ( cDriverNames[iDriverIdx] );
 
+    // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
+    // should be set, but we haven't being doing that and it seems to work
+    // okay...
+    memset ( &driverInfo, 0, sizeof driverInfo );
+
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
     {
         // clean up and return error string

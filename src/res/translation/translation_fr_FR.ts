@@ -1213,10 +1213,6 @@
         <translation> .</translation>
     </message>
     <message>
-        <source>ASIO Setup</source>
-        <translation>Paramètres ASIO</translation>
-    </message>
-    <message>
         <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <location filename="../../clientsettingsdlg.cpp" line="322"/>
         <source>Mono</source>

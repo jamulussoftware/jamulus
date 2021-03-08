@@ -11,7 +11,7 @@ for LANGUAGE_FILE in ${LANGUAGE_FILES}; do
     echo
     echo "* ${LANGUAGE_FILE}"
     echo -n "  - Checking language file is included in ${INSTALLERLNG}... "
-    if grep -qF $(tr '/' '\\' <<<"${LANGUAGE_FILE}") "${BASE_DIR}/${INSTALLERLNG}"; then
+    if grep -q '^!include "\${ROOT_PATH}\\'$(tr '/' '\\' <<<"${LANGUAGE_FILE}" | sed -re 's|\\|\0\0|g')'"' "${BASE_DIR}/${INSTALLERLNG}"; then
         echo "ok"
     else
         echo "ERROR"
@@ -53,7 +53,7 @@ for LANGUAGE_FILE in ${LANGUAGE_FILES}; do
 
     echo -n "  - Checking if LANG_ macro is in ${INSTALLERLNG}..."
     LANG_NAME="$(sort -u <<<"${LANG_MACROS}" | sed -rne 's/\$\{LANG_(.*)\}/\1/p')"
-    if grep -qi '!insertmacro MUI_LANGUAGE "'"${LANG_NAME}"'"' "$BASE_DIR/${INSTALLERLNG}"; then
+    if grep -qi '^!insertmacro MUI_LANGUAGE "'"${LANG_NAME}"'"' "$BASE_DIR/${INSTALLERLNG}"; then
         echo "ok"
     else
         echo "ERROR, not found"

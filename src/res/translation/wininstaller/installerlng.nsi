@@ -28,3 +28,6 @@
 
 !insertmacro MUI_LANGUAGE "PortugueseBR"
 !include "${ROOT_PATH}\src\res\translation\wininstaller\pt_br.nsi"
+
+!insertmacro MUI_LANGUAGE "Portuguese"
+!include "${ROOT_PATH}\src\res\translation\wininstaller\pt.nsi"

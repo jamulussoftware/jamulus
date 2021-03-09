@@ -732,7 +732,7 @@
         <location filename="../../clientdlg.cpp" line="194"/>
         <location filename="../../clientdlg.cpp" line="1247"/>
         <source>C&amp;onnect</source>
-        <translation>&amp;Anslut</translation>
+        <translation>A&amp;nslut</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="230"/>

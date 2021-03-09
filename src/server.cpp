@@ -1210,7 +1210,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
     {
         // Stereo target channel -----------------------------------------------
 
-        const int maxPanDelay = MAX_DELAY_PANNING_SAMPLES; // 32  -->  64
+        const int maxPanDelay = MAX_DELAY_PANNING_SAMPLES;
 
         int iLpan, iRpan, iPan;
 
@@ -1222,7 +1222,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
             const float             fGain    = vecvecfGains[iChanCnt][j];
             const float             fPan     = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
-            const int iPanDel = lround( (float)(2 * maxPanDelay - 2) * (vecvecfPannings[iChanCnt][j] - 0.5f) );
+            const int iPanDel = lround( (float)( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
             const int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
             const int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
 
@@ -1231,138 +1231,89 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             const float fGainL = MathUtils::GetLeftPan ( fPan, false ) * fGain;
             const float fGainR = MathUtils::GetRightPan ( fPan, false ) * fGain;
 
-            // if channel gain is 1, avoid multiplication for speed optimization
-            if ( ( fGainL == 1.0f ) && ( fGainR == 1.0f ) )
+            if ( vecNumAudioChannels[j] == 1 )
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                // mono: copy same mono data in both out stereo audio channels
+                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                 {
-                    // mono: copy same mono data in both out stereo audio channels
-                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
+                    // left/right channel
+                    if ( bDelayPan )
                     {
-                        if ( bDelayPan )
+                        // pan address shift
+
+                        // left channel
+                        iLpan = i - iPanDelL;
+                        if ( iLpan < 0 )
                         {
-                            // pan address shift
-                            // left channel
-                            iLpan = i - iPanDelL;
-                            if ( iLpan < 0 )
-                            {                                            // get from second
-                                iLpan = iLpan + iServerFrameSizeSamples; //
-                                vecfIntermProcBuf[k] += vecsData2[iLpan];
-                            }
-                            else
-                                vecfIntermProcBuf[k] += vecsData[iLpan];
-                            // right channel
-                            iRpan = i - iPanDelR;
-                            if ( iRpan < 0 )
-                            {                                            // get from second
-                                iRpan = iRpan + iServerFrameSizeSamples; //
-                                vecfIntermProcBuf[k + 1] += vecsData2[iRpan];
-                            }
-                            else
-                                vecfIntermProcBuf[k + 1] += vecsData[iRpan];
+                            // get from second
+                            iLpan = iLpan + iServerFrameSizeSamples;
+                            vecfIntermProcBuf[k] += vecsData2[iLpan] * fGainL;
                         }
                         else
                         {
-                            // left/right channel
-                            vecfIntermProcBuf[k] += vecsData[i];
-                            vecfIntermProcBuf[k + 1] += vecsData[i];
+                            vecfIntermProcBuf[k] += vecsData[iLpan] * fGainL;
+                        }
+
+                        // right channel
+                        iRpan = i - iPanDelR;
+                        if ( iRpan < 0 )
+                        {
+                            // get from second
+                            iRpan = iRpan + iServerFrameSizeSamples;
+                            vecfIntermProcBuf[k + 1] += vecsData2[iRpan] * fGainR;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[k + 1] += vecsData[iRpan] * fGainR;
                         }
                     }
-                }
-                else
-                {
-                    // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    else
                     {
-                        if ( bDelayPan )
-                        {
-                            // pan address shift
-                            iLpan = i - iPanDelL;
-                            iRpan = i - iPanDelR;
-                            if ( (i & 1) == 0 )
-                                iPan = i - 2 * iPanDelL; // if even : left channel
-                            else
-                                iPan = i - 2 * iPanDelR; // if odd  : right channel
-                            // interleaved channels
-                            if ( iPan < 0 )
-                            {                                              // get from second
-                                iPan = iPan + 2 * iServerFrameSizeSamples; //  2*iServerFrameSizeSamples;
-                                vecfIntermProcBuf[i] += vecsData2[iPan]; //
-                            }
-                            else
-                                vecfIntermProcBuf[i] += vecsData[iPan]; //*** korr200605
-                        }
-                        else
-                            vecfIntermProcBuf[i] += vecsData[i];
+                        vecfIntermProcBuf[k] += vecsData[i] * fGainL;
+                        vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
                     }
                 }
             }
             else
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                // stereo
+                for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                 {
-                    // mono: copy same mono data in both out stereo audio channels
-                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
+                    // left/right channel
+                    if ( bDelayPan )
                     {
-                        // left/right channel
-                        if ( bDelayPan )
+                        // pan address shift
+                        if ( (i & 1) == 0 )
                         {
-                            // pan address shift
-                            // left channel
-                            iLpan = i - iPanDelL;
-                            if ( iLpan < 0 )
-                            {                                            // get from second
-                                iLpan = iLpan + iServerFrameSizeSamples; //
-                                vecfIntermProcBuf[k] += vecsData2[iLpan] * fGainL;
-                            }
-                            else
-                                vecfIntermProcBuf[k] += vecsData[iLpan] * fGainL;
-                            // right channel
-                            iRpan = i - iPanDelR;
-                            if ( iRpan < 0 )
-                            {                                            // get from second
-                                iRpan = iRpan + iServerFrameSizeSamples; //
-                                vecfIntermProcBuf[k + 1] += vecsData2[iRpan] * fGainR;
-                            }
-                            else
-                                vecfIntermProcBuf[k + 1] += vecsData[iRpan] * fGainR;
+                            iPan = i - 2 * iPanDelL; // if even : left channel
                         }
                         else
                         {
-                            vecfIntermProcBuf[k] += vecsData[i] * fGainL;
-                            vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
+                            iPan = i - 2 * iPanDelR; // if odd  : right channel
+                        }
+                        // interleaved channels
+                        if ( iPan < 0 )
+                        {
+                            // get from second
+                            iPan = iPan + 2 * iServerFrameSizeSamples;
+                            vecfIntermProcBuf[i] += vecsData2[iPan] * fGain;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[i] += vecsData[iPan] * fGain;
                         }
                     }
-                }
-                else
-                {
-                    // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    else
                     {
-                        // left/right channel
-
-                        if ( bDelayPan )
+                        if ( (i & 1) == 0 )
                         {
-                            // pan address shift
-                            if ( (i & 1) == 0 )
-                                iPan = i - 2 * iPanDelL; // if even : left channel
-                            else
-                                iPan = i - 2 * iPanDelR; // if odd  : right channel
-                            // interleaved channels
-                            if ( iPan < 0 )
-                            {                                              // get from second
-                                iPan = iPan + 2 * iServerFrameSizeSamples; //
-                                vecfIntermProcBuf[i] += vecsData2[iPan] * fGain;
-                            }
-                            else
-                                vecfIntermProcBuf[i] += vecsData[iPan] * fGain;
+                            // if even : left channel
+                            vecfIntermProcBuf[i] += vecsData[i] * fGainL;
                         }
                         else
                         {
-                            if ( (i & 1) == 0 ) // if even : left channel
-                                vecfIntermProcBuf[i] += vecsData[i] * fGainL;
-                            else // if odd  : right channel
-                                vecfIntermProcBuf[i] += vecsData[i] * fGainR;
+                            // if odd  : right channel
+                            vecfIntermProcBuf[i] += vecsData[i] * fGainR;
                         }
                     }
                 }

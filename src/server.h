@@ -21,9 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
-//******************************************************************************************
-//  Pan-Delay code added by Detlef Hennings, www.eclim.de,   2020-06
-//******************************************************************************************
 
 #pragma once
 
@@ -225,7 +222,7 @@ public:
 
     void CreateAndSendRecorderStateForAllConChannels();
 
-    //**************************** delay panning
+    // delay panning
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
     bool IsDelayPanningEnabled() { return bDelayPan; }
 

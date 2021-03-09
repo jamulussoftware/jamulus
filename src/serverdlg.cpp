@@ -315,7 +315,6 @@ lvwClients->setMinimumHeight ( 140 );
     ModifyAutoStartEntry ( bCurAutoStartMinState );
 #endif
 
-    //*******************************************************************
     // update delay panning check box
     if ( pServer->IsDelayPanningEnabled() )
     {
@@ -393,7 +392,7 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableRecorderStateChanged );
 
-    //**************************** delay panning
+    // delay panning
     QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableDelayPanningStateChanged );
 

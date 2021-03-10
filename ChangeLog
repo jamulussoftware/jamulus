@@ -18,66 +18,66 @@
   in the Windows task bar (#789).
 
 - Active recording state is now highlighted in the mixerboard title (#968).
-  (contributed by dcorson-ticino-com)
+  (contributed by @dcorson-ticino-com)
 
 - Client window makes it more obvious when not connected to a server by
   graying out input levels and showing a message (#847, #983).
-  (contributed by ann0see)
+  (contributed by @ann0see)
 
 - Screensaver and screen blanking are now prevented on Macs (#834).
-  (contributed by jerogee)
+  (contributed by @jerogee)
 
 - Windows installer has been improved (#792, #841).
-  (contributed by ann0see and doloopuntil)
+  (contributed by @ann0see and @doloopuntil)
 
 - Windows installer interface now supports English, Dutch, French, German, Italian, Polish, Portuguese, Spanish and Swedish.
-  (contributed by jerogee, jujudusud, ann0see, dzpex, SeeLook, Snayler,
-  melcon, ignotus666 and genesisproject2020)
+  (contributed by @jerogee, @jujudusud, @ann0see, @dzpex, @SeeLook, @Snayler,
+  @melcon, @ignotus666 and @genesisproject2020)
 
 - Windows ASIO Setup button placement has been improved to be below the driver
   selection (#977).
-  (contributed by mulyaj and ann0see)
+  (contributed by @mulyaj and @ann0see)
 
 - Chat dialog has gained support for auto-linking http addresses (#879).
-  (contributed by hoffie)
+  (contributed by @hoffie)
 
 - Chat messages no longer allow HTML-formatted chat messages due to security
   reasons (#939).
   HTML formatting in Welcome messages will continue to work.
-  (contributed by atsampson)
+  (contributed by @atsampson)
 
 - Mixerboard background image quality in the Fancy skin has been improved (#970).
-  (contributed by passing)
+  (contributed by @passing)
 
 - MIDI controller logic has been improved to support fader, pan, mute and solo
   buttons in --ctrlmidich syntax (#945).
   Mute & solo buttons are only for toggle-type controllers and do not support
   headless operation yet.
-  (contributed by dakhubgit)
+  (contributed by @dakhubgit)
 
 - Servers connected to central servers behind the same NAT can now be made
   accessible to public clients via the newly added --serverpublicip option (#954).
-  (contributed by hoffie)
+  (contributed by @hoffie)
 
 - External IP detection no longer generates traffic to Cloudflare (#633, #1092).
-  (contributed by atsampson and hoffie)
+  (contributed by @atsampson and @hoffie)
 
 - Version update detection has been improved (#1155):
     * The check now uses two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
     * The server version is now ignored if it is not a release, due to a suffix such as dev, alpha or beta.
-  (contributed by softins)
+  (contributed by @softins)
 
 - Official Ubuntu/Debian packages are now built and published as part of the
   release (#1100).
   The packages are compatible with Ubuntu 18.04 or later.
-  (contributed by ann0see)
+  (contributed by @ann0see)
 
 - Experimental .apk installation packages for Android are now provided (#880).
-  (contributed by nefarius2001)
+  (contributed by @nefarius2001)
 
 - Bug fix: A suspected memory leak has been solved by removing usage of
   ConsoleWriterFactory (#926).
-  (contributed by pljones)
+  (contributed by @pljones)
 
 - Bug fix: A crash when settings are changed in ASIO4ALL during a connection
   has been fixed (#796).
@@ -85,23 +85,23 @@
 - Bug fix: Fader levels, mute and solo state are now restored properly when reconnecting to a restarted
   server (#955, #1010).
   This is a server-side fix.
-  (contributed by hoffie)
+  (contributed by @hoffie)
 
 - Bug fix: Multiple memory leaks in the server's recording feature have been fixed (#1073).
-  (contributed by softins)
+  (contributed by @softins)
 
 - Bug fix: Menu accelerator keys have been fixed in multiple translations (#1165).
-  (contributed by softins)
+  (contributed by @softins)
 
 - Bug fix: Windows sound driver lacked driverInfo initialisation (#1194).
-  (coded by npostavs)
+  (coded by @npostavs)
 
 - Internal build and release process have been re-designed, automated and
   moved to Github.
-  (contributed by pljones, nefarius2001, ann0see, ranfdev)
+  (contributed by @pljones, @nefarius2001, @ann0see, @ranfdev)
 
 - Internal development builds now contain a detailed version number (#475).
-  (contributed by nefarius2001)
+  (contributed by @nefarius2001)
 
 
 - GUI translation updates:

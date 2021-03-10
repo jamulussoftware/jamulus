@@ -2,7 +2,7 @@
 
 
 
-### 3.6.2dev <- NOTE: the release version number will be 3.7.0 ###
+### 3.7.0rc1 <- NOTE: the release version number will be 3.7.0 ###
 
 - introduced new server lists: Any Genre 3, Choral/Barbershop (#875),
   also renamed Default to Any Genre 1, Any Genre to Any Genre 2,

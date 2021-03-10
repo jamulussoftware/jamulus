@@ -31,6 +31,8 @@
   (contributed by ann0see and doloopuntil)
 
 - Windows installer interface now supports English, Dutch, French, German, Italian, Polish, Portuguese, Spanish and Swedish.
+  (contributed by jerogee, jujudusud, ann0see, dzpex, SeeLook, Snayler,
+  melcon, ignotus666 and genesisproject2020)
 
 - Windows ASIO Setup button placement has been improved to be below the driver
   selection (#977).

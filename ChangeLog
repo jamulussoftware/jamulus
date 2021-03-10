@@ -55,7 +55,7 @@
   Check two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
   Ignore the server version if it is not a release, due to a suffix such as dev, alpha or beta.
 
-- Windows installer interface now supports English, Dutch, French, German, Polish, Spanish and Swedish.
+- Windows installer interface now supports English, Dutch, French, German, Italian, Polish, Portuguese, Spanish and Swedish.
 
 - bug fix: Fixed some memory leaks in server recording, coded by softins (#1073)
 
@@ -65,6 +65,8 @@
   Compatible with Ubuntu 18.04 or later.
 
 - Release now builds experimental .apk installation packages for Android, coded by nefarius2001 (#880)
+
+- bug fix: Added missing driverInfo initialisation in Windows sound driver, coded by npostavs (#1194)
 
 ### 3.6.2 (2020-12-12) ###
 

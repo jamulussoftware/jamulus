@@ -1045,7 +1045,7 @@ void CClientDlg::OnTimerSigMet()
         chb->setCheckState ( pSettings->bEnableFeedbackDetection ?
             Qt::Checked : Qt::Unchecked );
         QMessageBox msgbox;
-        msgbox.setText ( tr ( "Audio feedback detected.\n\n"
+        msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
             "We muted your channel and activated 'Mute Myself'. Please "
             "solve the feedback issue first and unmute yourself afterwards. "
             "Did you plug-in earphones?") );
@@ -1228,7 +1228,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         // audio feedback detection
         if ( pSettings->bEnableFeedbackDetection )
         {
-            TimerDetectFeedback.start     ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
             bDetectFeedback = true;
         }
     }

@@ -44,6 +44,16 @@
        <string>Jitter Buffer Size</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Channels</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>   </string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

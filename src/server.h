@@ -274,6 +274,9 @@ public:
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
 
+    int GetClientNumAudioChannels ( const int iChanNum )
+        { return vecChannels[iChanNum].GetNumAudioChannels(); }
+	
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }

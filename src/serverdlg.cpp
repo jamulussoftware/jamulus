@@ -219,10 +219,11 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
     }
 
     // set up list view for connected clients
-    lvwClients->setColumnWidth ( 0, 170 );
-    lvwClients->setColumnWidth ( 1, 200 );
+    lvwClients->setColumnWidth ( 0, 170 );  // 170 //  IP:port
+    lvwClients->setColumnWidth ( 1, 200 );  // 200 //  Name
+    lvwClients->setColumnWidth ( 2, 120 );  //  60 //  Buf-Frames
+    lvwClients->setColumnWidth ( 3, 50 );   //         Channels
     lvwClients->clear();
-
 
 // TEST workaround for resize problem of window after iconize in task bar
 lvwClients->setMinimumWidth ( 170 + 130 + 60 + 205 );
@@ -687,6 +688,10 @@ void CServerDlg::OnTimer()
                 // jitter buffer size (polling for updates)
                 vecpListViewItems[i]->setText ( 2,
                     QString().setNum ( veciJitBufNumFrames[i] ) );
+
+                // show num of audio channels
+                int iNumAudioChs = pServer->GetClientNumAudioChannels ( i );
+                vecpListViewItems[i]->setText ( 3, QString().setNum ( iNumAudioChs ) );
 
                 vecpListViewItems[i]->setHidden ( false );
             }

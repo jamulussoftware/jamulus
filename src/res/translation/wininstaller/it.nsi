@@ -10,7 +10,7 @@ LangString RUNNING_APP_MSG ${LANG_ITALIAN} \
    "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ITALIAN} \
-    "E' stata trovata una precedente versione di Jamulus nella cartella Programmi. E' altamente consigliato rimuoverla prima di procedere con l'insallazione di una nuova versine di Jamulus. Vuoi rimuoverla adesso?"
+    "E' stata trovata una precedente versione di Jamulus nella cartella Programmi. E' altamente consigliato rimuoverla prima di procedere con l'insallazione di una nuova versione di Jamulus. Vuoi rimuoverla adesso?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ITALIAN} \
     "Se non viene cancellata l'installazione potrebbe non andare a buona fine! Sei sicuro di voler continuare?"

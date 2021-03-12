@@ -5,17 +5,28 @@
 ### 3.7.0rc1 <- NOTE: the release version number will be 3.7.0 ###
 
 - Server lists have been reorganized to make room for more servers (#875):
-    * Default has been renamed to Any Genre 1.
-    * Any Genre has been renamed to Any Genre 2.
-    * Any Genre 3 has been added.
-    * Choral/Barbershop has been added.
-    * Classical/Folk/Choral has been renamed to Classical/Folk.
+  * Default has been renamed to Any Genre 1.
+  * Any Genre has been renamed to Any Genre 2.
+  * Any Genre 3 has been added.
+  * Choral/Barbershop has been added.
+  * Classical/Folk/Choral has been renamed to Classical/Folk.
 
 - Central server addresses have been moved to the jamulus.io domain (#919).
   The fischvolk.de addresses are deprecated.
 
-- UI: If a name is provided using --clientname, that name is shown first in the window title,
+- GUI: If a name is provided using --clientname, that name is shown first in the window title,
   to avoid clipping in the Windows task bar (#789).
+
+- GUI: Translations have been updated:
+  * Dutch, by @jerogee (#1110)
+  * French, by @trebmuh & @jujudusud (#1199 & #1113)
+  * German, by @rolamos (#1097)
+  * Italian, by @dzpex (#1112)
+  * Polish, by @SeeLook (#1099)
+  * Portugese, by @melcon & @Snayler (#1141 & #1168)
+  * Slovak, by @jose1711 (#1104)
+  * Spanish, by @ignotus666 (#1152)
+  * Swedish, by @genesisproject2020 (#1182 & #1106)
 
 - Active recording state is now highlighted in the mixerboard title (#968).
   (contributed by @dcorson-ticino-com)
@@ -104,17 +115,6 @@
 - Internal development builds now contain a detailed version number (#475).
   (contributed by @nefarius2001)
 
-
-- GUI translation updates:
-  French, by trebmuh & jujudusud (#1199 & #1113)
-  Swedish, by genesisproject2020 (#1182 & #1106)
-  Portugese, by melcon & Snayler (#1141 & #1168)
-  Spanish, by ignotus666 (#1152)
-  Italian, by dzpex (#1112)
-  Dutch, by jerogee (#1110)
-  Slovak, by jose1711 (#1104)
-  Polish, by SeeLook (#1099)
-  German, by rolamos (#1097)
 
 ### 3.6.2 (2020-12-12) ###
 

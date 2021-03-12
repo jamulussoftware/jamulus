@@ -68,6 +68,17 @@
 
 - bug fix: Added missing driverInfo initialisation in Windows sound driver, coded by npostavs (#1194)
 
+- GUI translation updates:
+  French, by trebmuh & jujudusud (#1199 & #1113)
+  Swedish, by genesisproject2020 (#1182 & #1106)
+  Portugese, by melcon & Snayler (#1141 & #1168)
+  Spanish, by ignotus666 (#1152)
+  Italian, by dzpex (#1112)
+  Dutch, by jerogee (#1110)
+  Slovak, by jose1711 (#1104)
+  Polish, by SeeLook (#1099)
+  German, by rolamos (#1097)
+
 ### 3.6.2 (2020-12-12) ###
 
 - change Clear All Stored Solo Settings to clear Mute as well (#731)

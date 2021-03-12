@@ -6,16 +6,16 @@
 
 - Server lists have been reorganized to make room for more servers (#875):
     * Default has been renamed to Any Genre 1.
-	* Any Genre has been renamed to Any Genre 2.
-	* Any Genre 3 has been added.
-	* Choral/Barbershop has been added.
-	* Classical/Folk/Choral has been renamed to Classical/Folk.
+    * Any Genre has been renamed to Any Genre 2.
+    * Any Genre 3 has been added.
+    * Choral/Barbershop has been added.
+    * Classical/Folk/Choral has been renamed to Classical/Folk.
 
 - Central server addresses have been moved to the jamulus.io domain (#919).
   The fischvolk.de addresses are deprecated.
 
-- Window title now includes --clientname as the first word to avoid clipping
-  in the Windows task bar (#789).
+- UI: If a name is provided using --clientname, that name is shown first in the window title,
+  to avoid clipping in the Windows task bar (#789).
 
 - Active recording state is now highlighted in the mixerboard title (#968).
   (contributed by @dcorson-ticino-com)
@@ -64,7 +64,8 @@
 
 - Version update detection has been improved (#1155):
     * The check now uses two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
-    * The server version is now ignored if it is not a release, due to a suffix such as dev, alpha or beta.
+    * The server version is now ignored if it is not a release, due to a
+      suffix such as dev, beta or rc.
   (contributed by @softins)
 
 - Official Ubuntu/Debian packages are now built and published as part of the

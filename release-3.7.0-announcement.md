@@ -7,7 +7,7 @@ This release re-organizes Server lists to make room for more servers:
 - Choral/Barbershop has been added.
 - Classical/Folk/Choral has been renamed to Classical/Folk.
 
-Besides that, numerous of usability improvements, enhancements, bugfixes and optimizations have been integrated.
+Besides that, numerous usability improvements, enhancements, bugfixes and optimizations have been integrated.
 Please find all the details in the [Changelog](https://github.com/jamulussoftware/jamulus/releases/tag/r3_7_0).
 
 Downloads (primarily on Github, alternatively on [SourceForge](https://sourceforge.net/projects/llcon/files/latest/download)):

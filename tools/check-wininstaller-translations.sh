@@ -11,7 +11,7 @@ for LANGUAGE_FILE in ${LANGUAGE_FILES}; do
     echo
     echo "* ${LANGUAGE_FILE}"
     echo -n "  - Checking language file is included in ${INSTALLERLNG}... "
-    if grep -q '^!include "\${ROOT_PATH}\\'$(tr '/' '\\' <<<"${LANGUAGE_FILE}" | sed -re 's|\\|\0\0|g')'"' "${BASE_DIR}/${INSTALLERLNG}"; then
+    if grep -q '^!include "\${ROOT_PATH}\\'$(sed -re 's|/|\\\\|g' <<<"${LANGUAGE_FILE}")'"' "${BASE_DIR}/${INSTALLERLNG}"; then
         echo "ok"
     else
         echo "ERROR"

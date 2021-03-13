@@ -22,8 +22,9 @@ We want to use this opportunity to thank Volker again. Creating Jamulus and push
 Starting with this release, the project will be led by the Main Developers Team.
 
 Thanks to everyone who did their part to make this release happen:
-- Code contributors: @ann0see @atsampson @dakhubgit @dcorson-ticino-com @doloopuntil @dzpex @genesisproject2020 @hoffie @ignotus666 @jerogee @jujudusud @melcon @mulyaj @nefarius2001 @npostavs @passing @pljones @ranfdev @SeeLook @Snayler @softins
-- Translators: @dzpex @genesisproject2020 @ignotus666 @jerogee @jose1711 @jujudusud @melcon @rolamos @SeeLook @Snayler @trebmuh
+- Code contributors: @ann0see @atsampson @corrados @dakhubgit @dcorson-ticino-com @doloopuntil @freddii @geheimerEichkater @gilgongo @hoffie @jdrage @jerogee @jujudusud @mirabilos @mulyaj @nefarius2001 @npostavs @passing @pljones @ranfdev @softins @tormodvolden @vdellamea
+- Application translators: @SeeLook @Snayler @ann0see @corrados @dzpex @genesisproject2020 @hoffie @ignotus666 @jerogee @jose1711 @jujudusud @melcon @pljones @rolamos @softins @trebmuh
+- Website contributors/translators: @achim-grosse-oetringhaus @ann0see @dzpex @gegeweb @gilgongo @hoffie @ignotus666 @jdrage @mulyaj @trebmuh @vdellamea
 - Main Developers: @ann0see @gilgongo @hoffie @pljones @softins
 - ... and lots of people who brought new ideas or suggestions, guided their local colleagues or helped in various other ways!
 

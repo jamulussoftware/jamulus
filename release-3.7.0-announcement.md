@@ -10,7 +10,7 @@ This release re-organizes Server lists to make room for more servers:
 Besides that, tens of usability improvements, enhancements, bugfixes and optimizations have been integrated.
 Please find all the details in the [Changelog](https://github.com/jamulussoftware/jamulus/releases/tag/r3_7_0).
 
-Downloads:
+Downloads (primarily on Github, alternatively on [SourceForge](https://sourceforge.net/projects/llcon/files/latest/download)):
 - [Windows](https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_3.7.0_win.exe)
 - [Mac](https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_3.7.0_mac.dmg)
 - [Debian/Ubuntu (amd64)](https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_3.7.0_ubuntu_amd64.deb), alternative: [headless version](https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_headless_3.7.0_ubuntu_amd64.deb)

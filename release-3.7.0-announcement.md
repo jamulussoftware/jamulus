@@ -19,7 +19,7 @@ Downloads (primarily on Github, alternatively on [SourceForge](https://sourcefor
 This is the first release after the founder, developer and project lead of Jamulus, Volker Fischer (@corrados), [decided to leave the project](https://github.com/jamulussoftware/jamulus/discussions/928).
 We want to use this opportunity to thank Volker again. Creating Jamulus and pushing it to the point where it is today was and is a huge accomplishment! Thanks, Volker!
 
-Starting with this release, the project will be lead by the Main Developers Team.
+Starting with this release, the project will be led by the Main Developers Team.
 
 Thanks to everyone who did their part to make this release happen:
 - Code contributors: @ann0see @atsampson @dakhubgit @dcorson-ticino-com @doloopuntil @dzpex @genesisproject2020 @hoffie @ignotus666 @jerogee @jujudusud @melcon @mulyaj @nefarius2001 @npostavs @passing @pljones @ranfdev @SeeLook @Snayler @softins

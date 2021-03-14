@@ -24,6 +24,12 @@ CONFIG += qt \
     thread \
     lrelease
 
+CONFIG (portaudio) {
+    message("driver WINDOWS portaudio")
+} else {
+    message("driver WINDOWS standard")
+}
+
 QT += network \
     xml \
     concurrent

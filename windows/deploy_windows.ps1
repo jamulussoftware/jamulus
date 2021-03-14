@@ -221,9 +221,19 @@ Function Build-App
         [string] $BuildArch
     )
 
-    Invoke-Native-Command -Command "$Env:QtQmakePath" `
+    if ($Env:jamulus_build_config) {
+        # implemented for portaudio-variant
+        echo "jamulus_build_config: additional config ""$Env:jamulus_build_config"""
+        Invoke-Native-Command -Command "$Env:QtQmakePath" `
+            -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", "CONFIG+=$Env:jamulus_build_config", `
+            "-o", "$BuildPath\Makefile")
+    } else {
+        echo "jamulus_build_config: no additional config "
+        Invoke-Native-Command -Command "$Env:QtQmakePath" `
         -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
         "-o", "$BuildPath\Makefile")
+    }
+        
 
     Set-Location -Path $BuildPath
     Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")

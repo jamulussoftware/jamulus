@@ -103,6 +103,7 @@ public:
 
     virtual float GetInOutLatencyMs() { return 0.0f; } // "0.0" means no latency is available
 
+    virtual bool HasControlPanel() { return false; } // only true with ASIO (Windows)
     virtual void OpenDriverSetup() {}
 
     bool IsRunning() const { return bRun; }

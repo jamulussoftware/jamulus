@@ -51,7 +51,7 @@ public:
              void*          arg,
              const QString& strMIDISetup,
              const bool,
-             const QString& );
+             const QString& apiName );
     virtual ~CSound();
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
@@ -72,17 +72,20 @@ public:
     virtual int     GetLeftOutputChannel() { return vSelectedOutputChannels[0]; }
     virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
+    static QString GetPaApiNames();
+
 #ifdef WIN32
     virtual void OpenDriverSetup();
+    virtual bool HasControlPanel() { return strSelectApiName.compare ( "ASIO", Qt::CaseInsensitive ) == 0; }
 #endif // WIN32
 
 protected:
     virtual QString LoadAndInitializeDriver ( QString, bool );
-    QString         ReinitializeDriver ( int devIndex );
+    QString         ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outIndex );
     virtual void    UnloadCurrentDriver();
     int             InitPa();
 
-    PaDeviceIndex DeviceIndexFromName ( const QString& strDriverName );
+    bool DeviceIndexFromName ( const QString& strDriverName, PaDeviceIndex& inIndex, PaDeviceIndex& outIndex );
 
     static int paStreamCallback ( const void*                     input,
                                   void*                           output,
@@ -91,8 +94,12 @@ protected:
                                   PaStreamCallbackFlags           statusFlags,
                                   void*                           userData );
 
-    PaHostApiIndex   asioIndex;
-    PaDeviceIndex    deviceIndex;
+    const QString  strSelectApiName;
+    PaHostApiIndex selectedApiIndex;
+    PaDeviceIndex  paInputDeviceIndices[MAX_NUMBER_SOUND_CARDS];
+    PaDeviceIndex  paOutputDeviceIndices[MAX_NUMBER_SOUND_CARDS];
+
+    PaDeviceIndex    inDeviceIndex, outDeviceIndex;
     PaStream*        deviceStream;
     CVector<int>     vSelectedInputChannels;
     CVector<int>     vSelectedOutputChannels;

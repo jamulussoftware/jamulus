@@ -38,22 +38,84 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
                  void*          arg,
                  const QString& strMIDISetup,
                  const bool,
-                 const QString& ) :
+                 const QString& strApiName ) :
     CSoundBase ( "portaudio", fpNewProcessCallback, arg, strMIDISetup ),
-    deviceIndex ( -1 ),
+    strSelectApiName ( strApiName.isEmpty() ? "ASIO" : strApiName ),
+    inDeviceIndex ( -1 ),
+    outDeviceIndex ( -1 ),
     deviceStream ( NULL ),
     vSelectedInputChannels ( NUM_IN_OUT_CHANNELS ),
     vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS )
 {
     pThisSound = this;
 
-    lNumDevs = std::min ( InitPa(), MAX_NUMBER_SOUND_CARDS );
-    for ( int i = 0; i < lNumDevs; i++ )
+    int numPortAudioDevices = std::min ( InitPa(), MAX_NUMBER_SOUND_CARDS );
+    lNumDevs                = 0;
+    for ( int i = 0; i < numPortAudioDevices; i++ )
     {
-        PaDeviceIndex       devIndex = Pa_HostApiDeviceIndexToDeviceIndex ( asioIndex, i );
+        PaDeviceIndex       devIndex = Pa_HostApiDeviceIndexToDeviceIndex ( selectedApiIndex, i );
         const PaDeviceInfo* devInfo  = Pa_GetDeviceInfo ( devIndex );
-        strDriverNames[i]            = devInfo->name;
+        if ( devInfo->maxInputChannels > 0 && devInfo->maxOutputChannels > 0 )
+        {
+            // Duplex device.
+            paInputDeviceIndices[lNumDevs]  = devIndex;
+            paOutputDeviceIndices[lNumDevs] = devIndex;
+            strDriverNames[lNumDevs++]      = devInfo->name;
+        }
+        else if ( devInfo->maxInputChannels > 0)
+        {
+            // For each input device, construct virtual duplex devices by
+            // combining it with every output device (i.e., Cartesian product of
+            // input and output devices).
+            for ( int j = 0; j < numPortAudioDevices; j++ )
+            {
+                PaDeviceIndex       outDevIndex = Pa_HostApiDeviceIndexToDeviceIndex ( selectedApiIndex, j );
+                const PaDeviceInfo* outDevInfo  = Pa_GetDeviceInfo ( outDevIndex );
+                if ( outDevInfo->maxOutputChannels > 0 && outDevInfo->maxInputChannels == 0 )
+                {
+                    paInputDeviceIndices[lNumDevs]  = devIndex;
+                    paOutputDeviceIndices[lNumDevs] = outDevIndex;
+                    strDriverNames[lNumDevs++]      = QString ( "in: " ) + devInfo->name + "/out: " + outDevInfo->name;
+                }
+            }
+        }
     }
+}
+
+QString CSound::GetPaApiNames()
+{
+    // NOTE: It is okay to initialize PortAudio even if it already has been
+    // initialized, so long as every Pa_Initialize call is balanced with a
+    // Pa_Terminate.
+    class PaInitInScope
+    {
+    public:
+        PaError err;
+        PaInitInScope() : err ( Pa_Initialize() ) {}
+        ~PaInitInScope() { Pa_Terminate(); }
+    } paInScope;
+
+    if ( paInScope.err != paNoError )
+    {
+        return "";
+    }
+
+    PaHostApiIndex apiCount = Pa_GetHostApiCount();
+    if ( apiCount < 0 )
+    {
+        return "";
+    }
+
+    QStringList apiNames;
+    for ( PaHostApiIndex i = 0; i < apiCount; i++ )
+    {
+        const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( i );
+        QString name                 = apiInfo->name;
+        name                         = name.section ( ' ', -1 ); // Drop "Windows " from "Windows <apiname>" names.
+        apiNames << name;
+    }
+
+    return apiNames.join ( ", " );
 }
 
 int CSound::InitPa()
@@ -64,40 +126,48 @@ int CSound::InitPa()
         throw CGenErr ( tr ( "Failed to initialize PortAudio: %1" ).arg ( Pa_GetErrorText ( err ) ) );
     }
 
-    PaAsio_RegisterResetRequestCallback ( &resetRequestCallback );
-
-    // Find ASIO API index.  TODO: support non-ASIO APIs.
     PaHostApiIndex apiCount = Pa_GetHostApiCount();
     if ( apiCount < 0 )
     {
         throw CGenErr ( tr ( "Failed to get API count" ) );
     }
+
     PaHostApiIndex       apiIndex = -1;
     const PaHostApiInfo* apiInfo  = NULL;
     for ( PaHostApiIndex i = 0; i < apiCount; i++ )
     {
-        apiInfo = Pa_GetHostApiInfo ( i );
-        if ( apiInfo->type == paASIO )
+        apiInfo      = Pa_GetHostApiInfo ( i );
+        QString name = apiInfo->name;
+        name         = name.section ( ' ', -1 ); // Drop "Windows " from "Windows <apiname>" names.
+        if ( strSelectApiName.compare ( name, Qt::CaseInsensitive ) == 0 )
         {
+#ifdef _WIN32
+            if ( apiInfo->type == paASIO )
+            {
+                PaAsio_RegisterResetRequestCallback ( &resetRequestCallback );
+            }
+#endif // _WIN32
+
             apiIndex = i;
             break;
         }
     }
     if ( apiIndex < 0 || apiInfo->deviceCount == 0 )
     {
-        throw CGenErr ( tr ( "No ASIO devices found" ) );
+        throw CGenErr ( tr ( "No %1 devices found" ).arg ( strSelectApiName ) );
     }
-    asioIndex = apiIndex;
+    selectedApiIndex = apiIndex;
 
     return apiInfo->deviceCount;
 }
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
-    if ( deviceIndex >= 0 )
+    const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( selectedApiIndex );
+    if ( inDeviceIndex >= 0 && apiInfo->type == paASIO )
     {
         long minBufferSize, maxBufferSize, prefBufferSize, granularity;
-        PaAsio_GetAvailableBufferSizes ( deviceIndex, &minBufferSize, &maxBufferSize, &prefBufferSize, &granularity );
+        PaAsio_GetAvailableBufferSizes ( inDeviceIndex, &minBufferSize, &maxBufferSize, &prefBufferSize, &granularity );
         if ( granularity == 0 ) // no options, just take the preferred one.
         {
             iPrefMonoBufferSize = prefBufferSize;
@@ -134,9 +204,9 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     }
 
     vecsAudioData.Init ( iPrefMonoBufferSize * NUM_IN_OUT_CHANNELS );
-    if ( deviceStream && deviceIndex >= 0 )
+    if ( deviceStream && inDeviceIndex >= 0 )
     {
-        ReinitializeDriver ( deviceIndex );
+        ReinitializeDriver ( inDeviceIndex, outDeviceIndex );
     }
 
     return CSoundBase::Init ( iPrefMonoBufferSize );
@@ -144,41 +214,50 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 
 CSound::~CSound() { Pa_Terminate(); }
 
-PaDeviceIndex CSound::DeviceIndexFromName ( const QString& strDriverName )
+bool CSound::DeviceIndexFromName ( const QString& strDriverName, PaDeviceIndex& inIndex, PaDeviceIndex& outIndex )
 {
-    if ( asioIndex < 0 )
+    inIndex  = -1;
+    outIndex = -1;
+
+    if ( selectedApiIndex < 0 )
     {
         InitPa();
     }
 
-    const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( asioIndex );
-
-    for ( int i = 0; i < apiInfo->deviceCount; i++ )
+    // find driver index from given driver name
+    int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
-        PaDeviceIndex devIndex = Pa_HostApiDeviceIndexToDeviceIndex ( asioIndex, i );
-        const PaDeviceInfo* devInfo = Pa_GetDeviceInfo ( devIndex );
-        if ( strDriverName.compare ( devInfo->name ) == 0 )
+        if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
         {
-            return devIndex;
+            iDriverIdx = i;
         }
     }
-    return -1;
+
+    if ( iDriverIdx == INVALID_INDEX )
+    {
+        return false;
+    }
+
+    inIndex  = paInputDeviceIndices[iDriverIdx];
+    outIndex = paOutputDeviceIndices[iDriverIdx];
+    return true;
 }
 
 int CSound::GetNumInputChannels()
 {
-    if ( deviceIndex >= 0 )
+    if ( inDeviceIndex >= 0 )
     {
-        const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( deviceIndex );
+        const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( inDeviceIndex );
         return deviceInfo->maxInputChannels;
     }
     return CSoundBase::GetNumInputChannels();
 }
 int CSound::GetNumOutputChannels()
 {
-    if ( deviceIndex >= 0 )
+    if ( outDeviceIndex >= 0 )
     {
-        const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( deviceIndex );
+        const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( outDeviceIndex );
         return deviceInfo->maxOutputChannels;
     }
     return CSoundBase::GetNumOutputChannels();
@@ -186,10 +265,11 @@ int CSound::GetNumOutputChannels()
 
 QString CSound::GetInputChannelName ( const int channel )
 {
-    if ( deviceIndex >= 0 )
+    const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( selectedApiIndex );
+    if ( inDeviceIndex >= 0 && apiInfo->type == paASIO )
     {
         const char* channelName;
-        PaError err = PaAsio_GetInputChannelName ( deviceIndex, channel, &channelName );
+        PaError err = PaAsio_GetInputChannelName ( inDeviceIndex, channel, &channelName );
         if ( err == paNoError )
         {
             return QString ( channelName );
@@ -199,10 +279,11 @@ QString CSound::GetInputChannelName ( const int channel )
 }
 QString CSound::GetOutputChannelName ( const int channel )
 {
-    if ( deviceIndex >= 0 )
+    const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( selectedApiIndex );
+    if ( outDeviceIndex >= 0 && apiInfo->type == paASIO )
     {
         const char* channelName;
-        PaError err = PaAsio_GetOutputChannelName ( deviceIndex, channel, &channelName );
+        PaError err = PaAsio_GetOutputChannelName ( outDeviceIndex, channel, &channelName );
         if ( err == paNoError )
         {
             return QString ( channelName );
@@ -245,20 +326,27 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
 {
     (void) bOpenDriverSetup; // FIXME: respect this
 
-    int devIndex = DeviceIndexFromName ( strDriverName );
-    if ( devIndex < 0 )
+    PaDeviceIndex inIndex, outIndex;
+    bool          haveDevice = DeviceIndexFromName ( strDriverName, inIndex, outIndex );
+    if ( !haveDevice )
     {
         return tr ( "The current selected audio device is no longer present in the system." );
     }
-    return ReinitializeDriver ( devIndex );
+    QString err = ReinitializeDriver ( inIndex, outIndex );
+    if ( err.isEmpty() )
+    {
+        strCurDevName = strDriverName;
+    }
+    return err;
 }
 
-QString CSound::ReinitializeDriver ( int devIndex )
+QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outIndex )
 {
-    const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo ( devIndex );
+    const PaDeviceInfo* inDeviceInfo  = Pa_GetDeviceInfo ( inIndex );
+    const PaDeviceInfo* outDeviceInfo = Pa_GetDeviceInfo ( outIndex );
 
-    if ( deviceInfo->maxInputChannels < NUM_IN_OUT_CHANNELS ||
-         deviceInfo->maxOutputChannels < NUM_IN_OUT_CHANNELS )
+    if ( inDeviceInfo->maxInputChannels < NUM_IN_OUT_CHANNELS ||
+         outDeviceInfo->maxOutputChannels < NUM_IN_OUT_CHANNELS )
     {
         // FIXME: handle mono devices.
         return tr ( "Less than 2 channels not supported" );
@@ -267,38 +355,55 @@ QString CSound::ReinitializeDriver ( int devIndex )
     if ( deviceStream != NULL )
     {
         Pa_CloseStream ( deviceStream );
-        deviceStream = NULL;
-        deviceIndex = -1;
+        deviceStream   = NULL;
+        inDeviceIndex  = -1;
+        outDeviceIndex = -1;
     }
+
+    const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( selectedApiIndex );
 
     PaStreamParameters paInputParams;
     PaAsioStreamInfo   asioInputInfo;
-    paInputParams.device       = devIndex;
-    paInputParams.channelCount = std::min (NUM_IN_OUT_CHANNELS, deviceInfo->maxInputChannels);
+    paInputParams.device       = inIndex;
+    paInputParams.channelCount = std::min ( NUM_IN_OUT_CHANNELS, inDeviceInfo->maxInputChannels );
     paInputParams.sampleFormat = paInt16;
     // NOTE: Setting latency to deviceInfo->defaultLowInputLatency seems like it
     // would be sensible, but gives an overly large buffer size at least in the
     // case of ASIO4ALL.  Put 0 instead.
-    paInputParams.suggestedLatency          = 0;
-    paInputParams.hostApiSpecificStreamInfo = &asioInputInfo;
-    asioInputInfo.size                      = sizeof asioInputInfo;
-    asioInputInfo.hostApiType               = paASIO;
-    asioInputInfo.version                   = 1;
-    asioInputInfo.flags                     = paAsioUseChannelSelectors;
-    asioInputInfo.channelSelectors          = &vSelectedInputChannels[0];
+    paInputParams.suggestedLatency = 0;
+    if ( apiInfo->type == paASIO )
+    {
+        paInputParams.hostApiSpecificStreamInfo = &asioInputInfo;
+        asioInputInfo.size                      = sizeof asioInputInfo;
+        asioInputInfo.hostApiType               = paASIO;
+        asioInputInfo.version                   = 1;
+        asioInputInfo.flags                     = paAsioUseChannelSelectors;
+        asioInputInfo.channelSelectors          = &vSelectedInputChannels[0];
+    }
+    else
+    {
+        paInputParams.hostApiSpecificStreamInfo = NULL;
+    }
 
     PaStreamParameters paOutputParams;
     PaAsioStreamInfo   asioOutputInfo;
-    paOutputParams.device                    = devIndex;
-    paOutputParams.channelCount              = std::min ( NUM_IN_OUT_CHANNELS, deviceInfo->maxOutputChannels );
-    paOutputParams.sampleFormat              = paInt16;
-    paOutputParams.suggestedLatency          = 0; // See paInputParams.suggestedLatency commentary.
-    paOutputParams.hostApiSpecificStreamInfo = &asioOutputInfo;
-    asioOutputInfo.size                      = sizeof asioOutputInfo;
-    asioOutputInfo.hostApiType               = paASIO;
-    asioOutputInfo.version                   = 1;
-    asioOutputInfo.flags                     = paAsioUseChannelSelectors;
-    asioOutputInfo.channelSelectors          = &vSelectedOutputChannels[0];
+    paOutputParams.device           = outIndex;
+    paOutputParams.channelCount     = std::min (NUM_IN_OUT_CHANNELS, outDeviceInfo->maxOutputChannels);
+    paOutputParams.sampleFormat     = paInt16;
+    paOutputParams.suggestedLatency = 0; // See paInputParams.suggestedLatency commentary.
+    if ( apiInfo->type == paASIO )
+    {
+        paOutputParams.hostApiSpecificStreamInfo = &asioOutputInfo;
+        asioOutputInfo.size                      = sizeof asioOutputInfo;
+        asioOutputInfo.hostApiType               = paASIO;
+        asioOutputInfo.version                   = 1;
+        asioOutputInfo.flags                     = paAsioUseChannelSelectors;
+        asioOutputInfo.channelSelectors          = &vSelectedOutputChannels[0];
+    }
+    else
+    {
+        paOutputParams.hostApiSpecificStreamInfo = NULL;
+    }
 
     PaError err = Pa_OpenStream ( &deviceStream,
                                   &paInputParams,
@@ -314,9 +419,8 @@ QString CSound::ReinitializeDriver ( int devIndex )
         return tr ( "Could not open Portaudio stream: %1, %2" ).arg ( Pa_GetErrorText ( err ) ).arg ( Pa_GetLastHostErrorInfo()->errorText );
     }
 
-    strCurDevName = deviceInfo->name;
-
-    deviceIndex = devIndex;
+    inDeviceIndex  = inIndex;
+    outDeviceIndex = outIndex;
     return "";
 }
 
@@ -325,13 +429,14 @@ void CSound::UnloadCurrentDriver()
     if ( deviceStream != NULL )
     {
         Pa_CloseStream ( deviceStream );
-        deviceStream = NULL;
-        deviceIndex  = -1;
+        deviceStream   = NULL;
+        inDeviceIndex  = -1;
+        outDeviceIndex = -1;
     }
-    if ( asioIndex >= 0 )
+    if ( selectedApiIndex >= 0 )
     {
         Pa_Terminate();
-        asioIndex = -1;
+        selectedApiIndex = -1;
     }
 }
 
@@ -345,9 +450,10 @@ void CSound::OpenDriverSetup()
     }
     else
     {
-        int index = DeviceIndexFromName ( strCurDevName );
+        PaDeviceIndex inIndex, outIndex;
+        DeviceIndexFromName ( strCurDevName, inIndex, outIndex );
         // pass NULL (?) for system specific ptr.
-        PaAsio_ShowControlPanel ( index, NULL );
+        PaAsio_ShowControlPanel ( inIndex, NULL );
     }
 }
 #endif // WIN32

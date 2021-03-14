@@ -368,12 +368,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
     // init driver button
-#ifdef _WIN32
-    butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
-#else
-    // no use for this button for MacOS/Linux right now -> hide it
-    butDriverSetup->hide();
-#endif
+    if ( pNCliP->HasControlPanel() )
+    {
+        butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
+    }
+    else
+    {
+        butDriverSetup->hide();
+    }
 
     // init audio in fader
     sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );

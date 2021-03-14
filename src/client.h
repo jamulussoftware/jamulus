@@ -199,6 +199,8 @@ public:
     int     GetSndCrdLeftOutputChannel() { return Sound.GetLeftOutputChannel(); }
     int     GetSndCrdRightOutputChannel() { return Sound.GetRightOutputChannel(); }
 
+    bool HasControlPanel() { return Sound.HasControlPanel(); }
+
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }
 

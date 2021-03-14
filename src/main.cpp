@@ -96,6 +96,7 @@ int main ( int argc, char** argv )
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
+    QString      strApiName                  = "";
 
 #if !defined( HEADLESS ) && defined( _WIN32 )
     if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
@@ -245,6 +246,16 @@ int main ( int argc, char** argv )
             CommandLineOptions << "--ctrlmidich";
             continue;
         }
+
+#ifdef USE_PORTAUDIO
+        if ( GetStringArgument ( argc, argv, i, "--api", "--api", strArgument ) )
+        {
+            strApiName = strArgument;
+            qInfo() << QString ( "- PortAudio API: %1" ).arg ( strApiName );
+            CommandLineOptions << "--api";
+            continue;
+        }
+#endif // USE_PORTAUDIO
 
         // Use logging ---------------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
@@ -602,8 +613,17 @@ int main ( int argc, char** argv )
         {
             // Client:
             // actual client object
-            CClient
-                Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, strMIDISetup, bNoAutoJackConnect, strClientName, bMuteMeInPersonalMix );
+            CClient Client ( iPortNumber,
+                             iQosNumber,
+                             strConnOnStartupAddress,
+                             strMIDISetup,
+                             bNoAutoJackConnect,
+#if defined (_WIN32) && defined (USE_PORTAUDIO)
+                             strApiName, // TODO: don't abuse Jack client name for this.
+#else
+                             strClientName,
+#endif
+                             bMuteMeInPersonalMix );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -786,6 +806,10 @@ QString UsageArguments ( char** argv )
            "  -j, --nojackconnect   disable auto JACK connections\n"
            "      --ctrlmidich      MIDI controller channel to listen\n"
            "      --clientname      client name (window title and JACK client name)\n"
+#ifdef USE_PORTAUDIO
+           "      --api             choose which PortAudio API to use, possible choices:\n"
+           "                        " + CSound::GetPaApiNames() + "\n"
+#endif // USE_PORTAUDIO
            "\n"
            "Example: " + QString ( argv[0] ) + " -s --inifile myinifile.ini\n"
            "\n"

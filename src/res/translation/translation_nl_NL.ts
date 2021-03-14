@@ -997,7 +997,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="659"/>
         <source>Center</source>
-        <translation>Centrum</translation>
+        <translation>Midden</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="672"/>
@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="392"/>
         <source>Center</source>
-        <translation>Centrum</translation>
+        <translation>Midden</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="466"/>

@@ -1327,6 +1327,9 @@ void CClientDlg::UpdateDisplay()
 
 void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
+    // remove any styling from the mixer board - reapply after changing skin
+    MainMixerBoard->setStyleSheet ( "" );
+
     // apply GUI design to current window
     switch ( eNewDesign )
     {

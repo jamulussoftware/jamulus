@@ -1,3 +1,4 @@
+; EDIT by ann0see: See the README.txt file in this folder
 !ifndef REGISTRY_NSH
 !define REGISTRY_NSH
 !include "${NSISDIR}\Examples\System\system.nsh"

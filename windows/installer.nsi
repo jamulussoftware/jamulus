@@ -231,12 +231,12 @@ Section "Install_64Bit" INST_64
                 ; check if new key already exists. If this is the case, we'll not continue
                 ClearErrors
                 EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9" 0
-                IfErrors 0 EnumStart ; if the above line gives an error, it can not find the key --> We'll continue
+                IfErrors 0 EnumStart ; if the above line gives an error, it cannot find the key --> We'll continue
 
-                ; check if old key already exists. If this is true, we'll continue and move the content of the old one to the new one.
+                ; check if old key exists. If this is true, we'll continue and move the content of the old one to the new one.
                 ClearErrors
                 EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" 0
-                IfErrors EnumStart 0 ; if the above line gives an error, it can not find the key --> skip this user
+                IfErrors EnumStart 0 ; if the above line gives an error, it cannot find the key --> skip this user
 
                 ; copy the registry key
                 ${COPY_REGISTRY_KEY} HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9"

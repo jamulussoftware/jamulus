@@ -1102,11 +1102,6 @@ void CAudioMixerBoard::UpdateTitle()
     if ( eRecorderState == RS_RECORDING )
     {
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
-        setStyleSheet ( AM_RECORDING_STYLE );
-    }
-    else
-    {
-        setStyleSheet ( "" );
     }
 
     setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );

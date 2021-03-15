@@ -2,7 +2,7 @@
 
 
 
-### 3.7.0rc1 <- NOTE: the release version number will be 3.7.0 ###
+### 3.7.0rc2 <- NOTE: the release version number will be 3.7.0 ###
 
 - Server lists have been reorganized to make room for more servers (#875):
   * Default has been renamed to Any Genre 1.

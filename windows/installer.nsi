@@ -1,11 +1,13 @@
 ; Jamulus NSIS Installer with Modern User Interface
 
 ; Includes
-!include "x64.nsh"       ; 64bit architecture support
-!include "MUI2.nsh"      ; Modern UI
-!include "LogicLib.nsh"  ; Logical operators
-!include "Sections.nsh"  ; Support for section selection
-!include "nsDialogs.nsh" ; Support custom pages with dialogs
+!include "x64.nsh"                             ; 64bit architecture support
+!include "MUI2.nsh"                            ; Modern UI
+!include "LogicLib.nsh"                        ; Logical operators
+!include "Sections.nsh"                        ; Support for section selection
+!include "nsDialogs.nsh"                       ; Support custom pages with dialogs
+!include "NSISCopyRegistryKey\registry.nsh"    ; Support moving registry keys
+
 
 ; Compile-time definitions
 !define VC_REDIST32_EXE   "vc_redist.x86.exe"
@@ -35,6 +37,10 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
  ; Additional plugin location (for nsProcess)
 !addplugindir "${WINDOWS_PATH}"
+
+; Add support for copying registry keys
+
+!insertmacro COPY_REGISTRY_KEY
 
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
@@ -212,6 +218,32 @@ Section "Install_64Bit" INST_64
                 MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_VER_REMOVE_FAILED)" /sd IDCANCEL IDOK continueinstall
                 goto quit
             ${EndIf}
+
+            ; Copy old ASIO4ALL registry configuration
+
+            IntOp $0 0 + 0
+            EnumStart:
+                EnumRegKey $R1 HKEY_USERS "" $0 ; foreach user
+                IntOp $0 $0 + 1
+                StrCmp $R1 ".DEFAULT" EnumStart
+                StrCmp $R1 "" EnumEnd
+
+                ; check if new key already exists. If this is the case, we'll not continue
+                ClearErrors
+                EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9" 0
+                IfErrors 0 EnumStart ; if the above line gives an error, it can not find the key --> We'll continue
+
+                ; check if old key already exists. If this is true, we'll continue and move the content of the old one to the new one.
+                ClearErrors
+                EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" 0
+                IfErrors EnumStart 0 ; if the above line gives an error, it can not find the key --> skip this user
+
+                ; copy the registry key
+                ${COPY_REGISTRY_KEY} HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9"
+
+                goto EnumStart
+            EnumEnd:
+
             goto continueinstall
 
         quit:

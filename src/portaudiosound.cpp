@@ -369,8 +369,10 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
     paInputParams.sampleFormat = paInt16;
     // NOTE: Setting latency to deviceInfo->defaultLowInputLatency seems like it
     // would be sensible, but gives an overly large buffer size at least in the
-    // case of ASIO4ALL.  Put 0 instead.
-    paInputParams.suggestedLatency = 0;
+    // case of ASIO4ALL.  On the other hand, putting 0 causes an error with
+    // WDM-KS devices.  Put a latency value that corresponds to our intended.
+    // buffer size.
+    paInputParams.suggestedLatency = (PaTime) iPrefMonoBufferSize / SYSTEM_SAMPLE_RATE_HZ;
     if ( apiInfo->type == paASIO )
     {
         paInputParams.hostApiSpecificStreamInfo = &asioInputInfo;
@@ -388,9 +390,9 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
     PaStreamParameters paOutputParams;
     PaAsioStreamInfo   asioOutputInfo;
     paOutputParams.device           = outIndex;
-    paOutputParams.channelCount     = std::min (NUM_IN_OUT_CHANNELS, outDeviceInfo->maxOutputChannels);
+    paOutputParams.channelCount     = std::min ( NUM_IN_OUT_CHANNELS, outDeviceInfo->maxOutputChannels );
     paOutputParams.sampleFormat     = paInt16;
-    paOutputParams.suggestedLatency = 0; // See paInputParams.suggestedLatency commentary.
+    paOutputParams.suggestedLatency = paInputParams.suggestedLatency;
     if ( apiInfo->type == paASIO )
     {
         paOutputParams.hostApiSpecificStreamInfo = &asioOutputInfo;

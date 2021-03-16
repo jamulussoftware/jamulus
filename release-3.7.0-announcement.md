@@ -10,6 +10,9 @@ This release re-organizes Server lists to make room for more servers:
 Besides that, numerous usability improvements, enhancements, bugfixes and optimizations have been integrated.
 Please find all the details in the [Changelog](https://github.com/jamulussoftware/jamulus/releases/tag/r3_7_0).
 
+Note: If you are using ASIO4ALL, we strongly suggest that you take a screenshot of your ASIO4ALL settings before upgrading.
+The installer will try its best to migrate your settings, but it may fail to do so when using custom installation paths.
+
 Downloads (primarily on Github, alternatively on [SourceForge](https://sourceforge.net/projects/llcon/files/latest/download)):
 - [Windows](https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_3.7.0_win.exe)
 - [Mac](https://github.com/jamulussoftware/jamulus/releases/download/r3_7_0/jamulus_3.7.0_mac.dmg)

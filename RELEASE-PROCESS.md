@@ -1,6 +1,6 @@
 # Release Process for Jamulus
 
-This document lists the exact steps required to generate either a pre-release (beta, rc) or full release of Jamulus.
+This document lists the exact steps required for a developer with write access to generate either a pre-release (beta, rc) or full release of Jamulus.
 
 ## Once to set up
 
@@ -21,7 +21,7 @@ nothing to commit, working tree clean
 
 ## Steps for a specific release
 
-First make sure all Pull Requests that should be included in the release have been merged.
+First make sure all Pull Requests that should be included in the release have been merged in Github.
 
 Next, change to the above directory `jamulus-upstream`, checkout `master` and ensure it is up to date:
 
@@ -72,7 +72,7 @@ In `ChangeLog`, for a pre-release, change the first version heading as follows:
 ### 3.7.0rc2 <- NOTE: the release version number will be 3.7.0 ###
 ```
 
-for a proper release, change it as follows, remiving the NOTE and including the release date:
+for a proper release, change it as follows, removing the NOTE and including the release date:
 
 ```
 ### 3.7.0 (2021-03-17) ###
@@ -86,7 +86,7 @@ $ git commit -am'Update version to 3.7.0 for release'
 $ git push
 ```
 
-Now add the required tag and push the tag. This will start the automated release process on Github:
+Now add the required tag locally and then push the tag. This will start the automated release process on Github:
 
 ```
 $ git tag r3_7_0

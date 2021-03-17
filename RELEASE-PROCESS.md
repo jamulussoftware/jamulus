@@ -98,7 +98,7 @@ $ git push origin tag r3_7_0
 This needs the `--force` option to overwrite the existing `latest` tag and move it to the current commit:
 
 ```
-$ git tag latest
+$ git tag --force latest
 $ git push --force origin tag latest
 ```
 

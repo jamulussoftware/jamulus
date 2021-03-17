@@ -14,7 +14,7 @@ Nice=-20
 IOSchedulingClass=realtime
 IOSchedulingPriority=0
 
-#### Change this to publish this server, set genre, location and other parameters. It is recommended to overwrite this file via `systemctl edit jamulus-headless.service`
+#### Change this to publish this server, set genre, location and other parameters. It is recommended to override this file via `systemctl edit jamulus-headless.service`
 #### See https://jamulus.io/wiki/Command-Line-Options ####
 # ExecStart=/bin/sh -c '/usr/bin/jamulus-headless -s -n'
 

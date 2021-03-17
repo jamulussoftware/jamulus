@@ -93,6 +93,17 @@ $ git tag r3_7_0
 $ git push origin tag r3_7_0
 ```
 
+## If this is a proper release, move the `latest` tag
+
+This needs the `--force` option to overwrite the existing `latest` tag and move it to the current commit:
+
+```
+$ git tag latest
+$ git push --force origin tag latest
+```
+
+For a pre-release, the `latest` tag should not be updated, but continue to point to the last proper release.
+
 ## Make the master branch ready for post-release development
 
 This can be done immediately after pushing the above tag, there is no need to wait.

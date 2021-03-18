@@ -1420,7 +1420,9 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     // attenuated to a large amount; however, the attenuation is limited by
     // the faders
     if ( minFader < -AUD_MIX_FADER_RANGE_DB )
+    {
         levelOffset += -AUD_MIX_FADER_RANGE_DB - minFader;
+    }
 
     // adjust all levels
     for ( int i = 0; i < MAX_NUM_CHANNELS; ++i )

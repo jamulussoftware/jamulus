@@ -565,6 +565,14 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
+#ifdef SERVER_ONLY
+    if ( bIsClient )
+    {
+        qCritical() << "Only --server mode is supported in this build with nosound.";
+        exit ( 1 );
+    }
+#endif
+
     // the inifile is not supported for the headless server mode
     if ( !bIsClient && !bUseGUI && !strIniFileName.isEmpty() )
     {

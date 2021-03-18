@@ -22,7 +22,6 @@ contains(VERSION, .*dev.*) {
 
 CONFIG += qt \
     thread \
-    lrelease \
     release
 
 QT += network \
@@ -36,7 +35,6 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
-LRELEASE_DIR = src/res/translation
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
@@ -47,6 +45,12 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_sk_SK.ts \
     src/res/translation/translation_it_IT.ts \
     src/res/translation/translation_sv_SE.ts
+
+lrelease.output = src/res/translation/${QMAKE_FILE_BASE}.qm
+lrelease.commands = lrelease ${QMAKE_FILE_NAME}
+lrelease.input = TRANSLATIONS
+lrelease.CONFIG = no_link target_predeps
+QMAKE_EXTRA_COMPILERS += lrelease
 
 INCLUDEPATH += src
 

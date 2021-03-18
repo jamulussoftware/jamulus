@@ -1379,7 +1379,7 @@
         <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Normal</source>
-        <translation>Normale</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="331"/>

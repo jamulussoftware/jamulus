@@ -57,16 +57,16 @@ class CSocket : public QObject
 
 public:
     CSocket ( CChannel*     pNewChannel,
-              const quint16 iPortNumber )
+              const quint16 iPortNumber, const quint16 iQosNumber )
         : pChannel ( pNewChannel ),
           bIsClient ( true ),
-          bJitterBufferOK ( true ) { Init ( iPortNumber ); }
+          bJitterBufferOK ( true ) { Init ( iPortNumber, iQosNumber ); }
 
     CSocket ( CServer*      pNServP,
-              const quint16 iPortNumber )
+              const quint16 iPortNumber, const quint16 iQosNumber )
         : pServer ( pNServP ),
           bIsClient ( false ),
-          bJitterBufferOK ( true ) { Init ( iPortNumber ); }
+          bJitterBufferOK ( true ) { Init ( iPortNumber, iQosNumber ); }
 
     virtual ~CSocket();
 
@@ -77,7 +77,7 @@ public:
     void Close();
 
 protected:
-    void Init ( const quint16 iPortNumber );
+    void Init ( const quint16 iPortNumber, const quint16 iQosNumber );
 
 #ifdef _WIN32
     SOCKET           UdpSocket;
@@ -134,12 +134,12 @@ class CHighPrioSocket : public QObject
 
 public:
     CHighPrioSocket ( CChannel*     pNewChannel,
-                      const quint16 iPortNumber )
-        : Socket ( pNewChannel, iPortNumber ) { Init(); }
+                      const quint16 iPortNumber, const quint16 iQosNumber )
+        : Socket ( pNewChannel, iPortNumber, iQosNumber ) { Init(); }
 
     CHighPrioSocket ( CServer*      pNewServer,
-                      const quint16 iPortNumber )
-        : Socket ( pNewServer, iPortNumber ) { Init(); }
+                      const quint16 iPortNumber, const quint16 iQosNumber )
+        : Socket ( pNewServer, iPortNumber, iQosNumber ) { Init(); }
 
     virtual ~CHighPrioSocket()
     {

@@ -94,6 +94,7 @@ LED bar:      lbr
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 
 // default server address and port numbers
+#define DEFAULT_QOS_NUMBER               128  // CS4 (Quality of Service)
 #define DEFAULT_SERVER_ADDRESS           "anygenre1.jamulus.io"
 #define DEFAULT_PORT_NUMBER              22124
 #define CENTSERV_ANY_GENRE2              "anygenre2.jamulus.io:22224"

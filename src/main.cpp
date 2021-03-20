@@ -74,6 +74,7 @@ int main ( int argc, char** argv )
     bool         bCustomPortNumberGiven      = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
+    quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strMIDISetup                = "";
     QString      strConnOnStartupAddress     = "";
@@ -317,6 +318,24 @@ int main ( int argc, char** argv )
             qInfo() << qUtf8Printable( QString( "- selected port number: %1" )
                 .arg( iPortNumber ) );
             CommandLineOptions << "--port";
+            continue;
+        }
+
+
+        // Quality of Service --------------------------------------------------
+        if ( GetNumericArgument ( argc,
+                                  argv,
+                                  i,
+                                  "-Q",
+                                  "--qos",
+                                  0,
+                                  255,
+                                  rDbleArgument ) )
+        {
+            iQosNumber            = static_cast<quint16> ( rDbleArgument );
+            qInfo() << qUtf8Printable( QString( "- selected tos value: %1" )
+                .arg( iQosNumber ) );
+            CommandLineOptions << "--qos";
             continue;
         }
 
@@ -673,6 +692,7 @@ int main ( int argc, char** argv )
             // Client:
             // actual client object
             CClient Client ( iPortNumber,
+                             iQosNumber,
                              strConnOnStartupAddress,
                              strMIDISetup,
                              bNoAutoJackConnect,
@@ -723,6 +743,7 @@ int main ( int argc, char** argv )
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
                              iPortNumber,
+                             iQosNumber,
                              strHTMLStatusFileName,
                              strCentralServer,
                              strServerInfo,
@@ -823,6 +844,7 @@ QString UsageArguments ( char **argv )
         "                        supported for headless server mode)\n"
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set your local port number\n"
+        "  -Q, --qos             set QoS: DF=0 AF31=104 CS4=128default EF=184\n"
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"

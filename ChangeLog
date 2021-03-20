@@ -1,7 +1,8 @@
 
 ### 3.7.0dev <- NOTE: the release version number will be 3.7.1 ###
 
-
+- Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
+  (contributed by @JohannesBrx)
 
 ### 3.7.0 (2021-03-17) ###
 

@@ -1281,7 +1281,8 @@ public:
         }
         else
         {
-            return powf ( 10.0f, ( fInValueRange0_1 * 35.0f - 35.0f ) / 20.0f );
+            return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) *
+                AUD_MIX_FADER_RANGE_DB / 20.0f );
         }
     }
 };

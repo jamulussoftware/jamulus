@@ -118,8 +118,8 @@ Var bRunApp
     !define prefix "${DEPLOY_PATH}\${buildArch}"
     !tempfile files
 
-    ; Find target folders (Probably here's an issue with quoting. If ${prefix} contains spaces, the installer folders aren't created in the right way.)
-    !system 'cmd.exe /v /c "for /f "usebackq" %d in (`dir /b /s /ad "${prefix}"`) do \
+    ; Find target folders (#864 resolved by adding delims= to the for command. This prevents splitting path names when the path contains spaces)
+    !system 'cmd.exe /v /c "for /f "usebackq delims=" %d in (`dir /b /s /ad "${prefix}"`) do \
         @(set "_d=%d" && echo CreateDirectory "$INSTDIR\!_d:${prefix}\=!" >> "${files}")"'
 
     ; Find target files
@@ -415,8 +415,8 @@ FunctionEnd
     !system 'cmd.exe /v /c "for /r "${prefix}" %f in (*.*) do \
         @(set "_f=%f" && echo Delete "$INSTDIR\!_f:${prefix}\=!" >> "${files}")"'
 
-    ; Find target folders in reverse order to ensure they can be deleted when empty
-    !system 'cmd.exe /v /c "for /f "usebackq" %d in \
+    ; Find target folders in reverse order to ensure they can be deleted when empty (include delims= to prevent splitting path names when the path contains spaces)
+    !system 'cmd.exe /v /c "for /f "usebackq delims=" %d in \
         (`dir /b /s /ad "${prefix}" ^| C:\Windows\System32\sort.exe /r`) do \
         @(set "_d=%d" && echo RMDir "$INSTDIR\!_d:${prefix}\=!" >> "${files}")"'
 

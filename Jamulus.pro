@@ -1082,6 +1082,9 @@ contains(CONFIG, "opus_shared_lib") {
 
     contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
         msvc {
+            # According to opus/win32/config.h, "no special compiler
+            # flags necessary" when using msvc.  It always supports
+            # SSE intrinsics, but doesn't auto-vectorize.
             SOURCES += $$SOURCES_OPUS_ARCH
         } else {
             # Arch-specific files need special compiler flags, but we

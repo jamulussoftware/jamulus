@@ -340,7 +340,10 @@ win32 {
     DEFINES += HAVE_STDINT_H
 
     # only include jack support if CONFIG nosound is not set
-    !contains(CONFIG, "nosound") {
+    contains(CONFIG, "nosound") {
+        message(Restricting build to server-only due to CONFIG+=nosound.)
+        DEFINES += SERVER_ONLY
+    } else {
         message(Jack Audio Interface Enabled.)
 
         contains(CONFIG, "raspijamulus") {

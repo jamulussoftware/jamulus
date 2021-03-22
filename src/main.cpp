@@ -382,15 +382,15 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Enable delayed panning on startup ----------------------------------------
+        // Enable delay panning on startup ----------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
                                "-P",
-                               "--delayedpanning" ) )
+                               "--delaypan" ) )
         {
             bDelayPan = true;
-            qInfo() << "- starting with delayed panning";
-            CommandLineOptions << "--delayedpanning";
+            qInfo() << "- starting with delay panning";
+            CommandLineOptions << "--delaypan";
             continue;
         }
 
@@ -858,7 +858,7 @@ QString UsageArguments ( char **argv )
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of this server in the format:\n"
         "                        [name];[city];[country as QLocale ID]\n"
-        "  -P, --delayedpan      start with delayed panning enabled\n"
+        "  -P, --delaypan        start with delay panning enabled\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"

@@ -93,6 +93,9 @@ LED bar:      lbr
 #define SYSTEM_FRAME_SIZE_SAMPLES        64
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 
+// additional buffer for delay panning
+#define MAX_DELAY_PANNING_SAMPLES        64
+
 // default server address and port numbers
 #define DEFAULT_SERVER_ADDRESS           "anygenre1.jamulus.io"
 #define DEFAULT_PORT_NUMBER              22124

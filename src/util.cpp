@@ -502,6 +502,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Melcon Moraes (<a href=\"https://github.com/melcon\">melcon</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
         "<p>Jeroen Geertzen (<a href=\"https://github.com/jerogee\">jerogee</a>)</p>"
+        "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
         "<p>Giuseppe Sapienza (<a href=\"https://github.com/dzpex\">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"

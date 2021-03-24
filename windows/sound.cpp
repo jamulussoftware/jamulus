@@ -109,8 +109,15 @@ strCurDevName = cDriverNames[iDriverIdx];
 void CSound::UnloadCurrentDriver()
 {
     // clean up ASIO stuff
-    ASIOStop();
-    ASIODisposeBuffers();
+    if ( bRun )
+    {
+        Stop();
+    }
+    if ( bufferInfos[0].buffers[0] )
+    {
+        ASIODisposeBuffers();
+        bufferInfos[0].buffers[0] = NULL;
+    }
     ASIOExit();
     asioDrivers->removeCurrentDriver();
 }
@@ -524,6 +531,10 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
 
     // init pointer to our sound object
     pSound = this;
+
+    // We assume NULL'd pointers in this structure indicate that buffers are not
+    // allocated yet (see UnloadCurrentDriver).
+    memset ( bufferInfos, 0, sizeof bufferInfos );
 
     // get available ASIO driver names in system
     for ( i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )

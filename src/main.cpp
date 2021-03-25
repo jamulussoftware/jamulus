@@ -122,7 +122,7 @@ int main ( int argc, char** argv )
                                "--singlemix" ) )
         {
             bSingleMixServerMode = true;
-            tsConsole << "- single audio mix mode" << endl;
+            qInfo() << "- single audio mix mode";
             CommandLineOptions << "--singlemix";
             continue;
         }
@@ -642,7 +642,7 @@ int main ( int argc, char** argv )
     // the single mix mode cannot be combined with multithreading and fast update
     if ( bSingleMixServerMode && ( bUseMultithreading || !bUseDoubleSystemFrameSize ) )
     {
-        tsConsole << "Single mix mode cannot be combined with --fastupdate or --multithreading." << endl;
+        qCritical() << "Single mix mode cannot be combined with --fastupdate or --multithreading.";
         bUseMultithreading        = false;
         bUseDoubleSystemFrameSize = true;
     }

@@ -257,7 +257,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bDelayPan                   ( bNDelayPan ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
-    pSignalHandler              ( CSignalHandler::getSingletonP() )
+    pSignalHandler              ( CSignalHandler::getSingletonP() ),
+    bSingleMixServerMode        ( bNSingleMixServerMode )
 {
     int iOpusError;
     int i;

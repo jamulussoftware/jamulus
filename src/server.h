@@ -412,6 +412,7 @@ protected:
     bool                       bDisconnectAllClientsOnQuit;
 
     CSignalHandler*            pSignalHandler;
+    bool                       bSingleMixServerMode;
 
 signals:
     void Started();

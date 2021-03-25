@@ -1156,7 +1156,18 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         {
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
-            const float             fGain    = vecvecfGains[iChanCnt][j];
+            float                   fGain    = vecvecfGains[iChanCnt][j];
+
+            if ( bSingleMixServerMode )
+            {
+                // overwrite gain with the gain of the master client (same mix for everybody, except ...)
+                fGain    = vecvecfGains[0][j];
+                // mute people's own channel (we don't want them to hear themselves in the common mix!)
+                if ( iChanCnt == j )
+                {
+                    fGain = 0.0f;
+                }
+            }
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( fGain == 1.0f )
@@ -1221,11 +1232,23 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const CVector<int16_t>& vecsData2 = vecvecsData2[j];
 
-            const float             fGain    = vecvecfGains[iChanCnt][j];
-            const float             fPan     = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
+            float fGain    = vecvecfGains[iChanCnt][j];
+            float fPan     = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
             const int iPanDel = lround( (float)( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
             const int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
             const int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
+
+            if ( bSingleMixServerMode )
+            {
+                // overwrite gain with the gain of the master client (same mix for everybody, except ...)
+                fGain = vecvecfGains[0][j];
+                fPan  = vecvecfPannings[0][j];
+                // mute people's own channel (we don't want them to hear themselves in the common mix!)
+                if ( iChanCnt == j )
+                {
+                    fGain = 0.0f;
+                }
+            }
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels

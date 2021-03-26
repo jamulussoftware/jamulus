@@ -63,6 +63,8 @@ public:
     bool    IsMute() { return pcbMute->isChecked(); }
     int     GetGroupID() { return iGroupID; }
     void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void    Disable ( );
+    void    Enable ( );
     void    SetDisplayChannelLevel ( const bool eNDCL );
     bool    GetDisplayChannelLevel();
     void    SetDisplayPans ( const bool eNDP );
@@ -265,6 +267,8 @@ protected:
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
     void UpdateTitle();
+    void Disable ();
+    void Enable ();
 
     CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;

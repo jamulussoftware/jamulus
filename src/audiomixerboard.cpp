@@ -273,6 +273,22 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     SetChannelInfos ( cReceivedChanInfo );
 }
 
+void CChannelFader::Disable ()
+{
+    pPan->setDisabled(true);
+    pFader->setDisabled(true);
+    pcbMute->setDisabled(true);
+    pcbSolo->setDisabled(true);
+}
+
+void CChannelFader::Enable ()
+{
+    pPan->setDisabled(false);
+    pFader->setDisabled(false);
+    pcbMute->setDisabled(false);
+    pcbSolo->setDisabled(false);
+}
+
 void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
 {
     plbrChannelLevel->setHidden ( !eNDCL );
@@ -1110,16 +1126,42 @@ void CAudioMixerBoard::UpdateTitle()
 
     if ( eSingleMixState == SM_ENABLED )
     {
-        // todo: disable controls if we are not client 0
-        // todo: maybe display single mix master's name here
-        setTitle ( strTitlePrefix + tr ( "Single Mix at: " ) + strServerName );
+        if ( iMyChannelID == 0 )
+        {
+            // SM_ENABLED but iMyChannelID = 0 (we are the "master"), so won't disable controls
+            setTitle ( strTitlePrefix + tr ( "Single Mix (you control!) at: " ) + strServerName );
+        }
+        else
+        {
+            Disable();
+            setTitle ( strTitlePrefix + tr ( "Single Mix at: " ) + strServerName );
+        }
     }
     else
     {
+        Enable();
         setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
     }
 
     setAccessibleName ( title() );
+}
+
+void CAudioMixerBoard::Disable()
+{
+    qInfo() << "CAudioMixerBoard::Disable()";
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->Disable();
+    }
+}
+
+void CAudioMixerBoard::Enable()
+{
+    qInfo() << "CAudioMixerBoard::Enable()";
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->Enable();
+    }
 }
 
 void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState )

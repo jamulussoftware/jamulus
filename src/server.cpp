@@ -663,6 +663,9 @@ void CServer::OnNewConnection ( int          iChID,
     // send recording state message on connection
     vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
 
+    // todo: send single mix state message on connection
+    // vecChannels[iChID].CreateSingleMixStateMes ( JamController.GetRecorderState() );
+
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();
@@ -1518,6 +1521,22 @@ void CServer::CreateAndSendRecorderStateForAllConChannels()
         {
             // send message
             vecChannels[i].CreateRecorderStateMes ( eRecorderState );
+        }
+    }
+}
+
+void CServer::CreateAndSendSingleMixStateForAllConChannels()
+{
+    // todo: get single mix state
+    ESingleMixState eSingleMixState = JamController.GetRecorderState();
+
+    // now send recorder state to all connected clients
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // send message
+            vecChannels[i].CreateSingleMixStateMes ( eSingleMixState );
         }
     }
 }

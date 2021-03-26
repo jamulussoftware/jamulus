@@ -576,6 +576,17 @@ enum ERecorderState
 };
 
 
+// Server single mix state enum ------------------------------------------------
+enum ESingleMixState
+{
+    // used for protocol -> enum values must be fixed!
+    SM_UNDEFINED = 0,
+    SM_NOT_INITIALISED = 1,
+    SM_NOT_ENABLED = 2,
+    SM_ENABLED = 3
+};
+
+
 // Channel sort type -----------------------------------------------------------
 enum EChSortType
 {

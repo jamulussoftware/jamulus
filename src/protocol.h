@@ -63,6 +63,7 @@
 #define PROTMESSID_RECORDER_STATE             33 // contains the state of the jam recorder (ERecorderState)
 #define PROTMESSID_REQ_SPLIT_MESS_SUPPORT     34 // request support for split messages
 #define PROTMESSID_SPLIT_MESS_SUPPORTED       35 // split messages are supported
+#define PROTMESSID_SINGLEMIX_STATE            36 // contains the state of the single mix (ESingleMixState)
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -134,6 +135,8 @@ void CreateReqChannelLevelListMes();
 
     void CreateVersionAndOSMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );
+    // todo: figure out if this piece of code should have the new singlemix handling
+    // void CreateSingleMixStateMes ( const ESingleMixState eSingleMixState );
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
@@ -284,6 +287,7 @@ protected:
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
     bool EvaluateRecorderStateMes       ( const CVector<uint8_t>& vecData );
+    bool EvaluateSingleMixStateMes      ( const CVector<uint8_t>& vecData );
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -358,6 +362,7 @@ signals:
     void LicenceRequired ( ELicenceType eLicenceType );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void RecorderStateReceived ( ERecorderState eRecorderState );
+    void SingleMixStateReceived ( ESingleMixState eSingleMixState );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );

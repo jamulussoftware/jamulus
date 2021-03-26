@@ -393,6 +393,9 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableRecorderStateChanged );
 
+    QObject::connect ( chbEnableSingleMix, &QCheckBox::stateChanged,
+        this, &CServerDlg::OnEnableSingleMixStateChanged );
+
     // delay panning
     QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableDelayPanningStateChanged );

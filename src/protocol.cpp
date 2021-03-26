@@ -847,6 +847,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                 case PROTMESSID_RECORDER_STATE:
                     EvaluateRecorderStateMes ( vecbyMesBodyDataRef );
                     break;
+
+                case PROTMESSID_SINGLEMIX_STATE:
+                    EvaluateSingleMixStateMes ( vecbyMesBodyDataRef );
+                    break;
                 }
             }
 
@@ -1742,6 +1746,18 @@ void CProtocol::CreateRecorderStateMes ( const ERecorderState eRecorderState )
     CreateAndSendMessage ( PROTMESSID_RECORDER_STATE, vecData );
 }
 
+void CProtocol::CreateSingleMixStateMes ( const ESingleMixState eSingleMixState )
+{
+    CVector<uint8_t> vecData ( 1 ); // 1 byte of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    // server single mix state (1 byte)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eSingleMixState ), 1 );
+
+    CreateAndSendMessage ( PROTMESSID_SINGLEMIX_STATE, vecData );
+}
+
 bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
 {
     int iPos = 0; // init position pointer
@@ -1766,6 +1782,35 @@ bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
 
     // invoke message action
     emit RecorderStateReceived ( static_cast<ERecorderState> ( iRecorderState ) );
+
+    return false; // no error
+}
+
+// this function is basically a copy of EvaluateRecorderStateMes only on SingleMixState
+bool CProtocol::EvaluateSingleMixStateMes(const CVector<uint8_t>& vecData)
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 1 )
+    {
+        return true; // return error code
+    }
+
+    // server single mix state (1 byte)
+    const int iSingleMixState =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // note that SM_UNDEFINED is only internally used
+    if ( ( iSingleMixState != SM_NOT_INITIALISED ) &&
+         ( iSingleMixState != SM_NOT_ENABLED ) &&
+         ( iSingleMixState != SM_ENABLED ) )
+    {
+        return true;
+    }
+
+    // invoke message action
+    emit SingleMixStateReceived ( static_cast<ESingleMixState> ( iSingleMixState ) );
 
     return false; // no error
 }

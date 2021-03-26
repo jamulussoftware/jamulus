@@ -836,6 +836,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     iNumMixerPanelRows   ( 1 ),
     strServerName        ( "" ),
     eRecorderState       ( RS_UNDEFINED ),
+    eSingleMixState      ( SM_UNDEFINED ),
     eChSortType          ( ST_NO_SORT )
 {
     // add group box and hboxlayout
@@ -844,6 +845,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     pScrollArea                  = new CMixerBoardScrollArea ( this );
     pMainLayout                  = new QGridLayout ( pMixerWidget );
 
+    // todo: make "personal mix at" dynamic depending on `eSingleMixState` (e.g. into "{master's name}'s mix at"
     setAccessibleName ( "Personal Mix at the Server groupbox" );
     setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + ":</b> " + tr (
         "When connected to a server, the controls here allow you to set your "
@@ -990,6 +992,7 @@ void CAudioMixerBoard::HideAll()
     bIsPanSupported      = false;
     bNoFaderVisible      = true;
     eRecorderState       = RS_UNDEFINED;
+    eSingleMixState      = SM_UNDEFINED;
     iMyChannelID         = INVALID_INDEX;
     iRunningNewClientCnt = 0; // reset running counter on new server connection
 
@@ -1105,7 +1108,16 @@ void CAudioMixerBoard::UpdateTitle()
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
     }
 
-    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
+    if ( eSingleMixState == SM_ENABLED )
+    {
+        // todo: display single mix master's name here
+        setTitle ( strTitlePrefix + tr ( "Single Mix at: " ) + strServerName );
+    }
+    else
+    {
+        setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
+    }
+
     setAccessibleName ( title() );
 }
 
@@ -1113,6 +1125,13 @@ void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState 
 {
     // store the new recorder state and update the title
     eRecorderState = newRecorderState;
+    UpdateTitle();
+}
+
+void CAudioMixerBoard::SetSingleMixState ( const ESingleMixState newSingleMixState )
+{
+    // store the new single mix state and update the title
+    eSingleMixState = newSingleMixState;
     UpdateTitle();
 }
 

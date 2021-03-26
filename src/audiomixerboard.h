@@ -229,6 +229,9 @@ public:
     void            SetRecorderState ( const ERecorderState newRecorderState );
     ERecorderState  GetRecorderState() { return eRecorderState; };
 
+    void            SetSingleMixState ( const ESingleMixState newSingleMixState );
+    ESingleMixState GetSingleMixState() { return eSingleMixState; };
+
     void            SetAllFaderLevelsToNewClientLevel();
     void            StoreAllFaderSettings();
     void            LoadAllFaderSettings();
@@ -275,6 +278,7 @@ protected:
     int                     iNumMixerPanelRows;
     QString                 strServerName;
     ERecorderState          eRecorderState;
+    ESingleMixState         eSingleMixState;
     QMutex                  Mutex;
     EChSortType             eChSortType;
     CVector<float>          vecAvgLevels;

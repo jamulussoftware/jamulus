@@ -44,6 +44,7 @@ public:
     QString GetRecordingDir() { return strRecordingDir; }
     void SetRecordingDir ( QString newRecordingDir, int iServerFrameSizeSamples, bool bDisableRecording );
     ERecorderState GetRecorderState();
+    // todo: Do we need to do sth here for ESingleMixState?
 
 private:
     CServer* pServer;

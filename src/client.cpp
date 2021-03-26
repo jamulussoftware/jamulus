@@ -150,6 +150,9 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &Channel, &CChannel::RecorderStateReceived,
         this, &CClient::RecorderStateReceived );
 
+    QObject::connect ( &Channel, &CChannel::SingleMixStateReceived,
+        this, &CClient::SingleMixStateReceived );
+
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLMessReadyForSending,
         this, &CClient::OnSendCLProtMessage );
 

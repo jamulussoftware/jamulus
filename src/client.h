@@ -405,6 +405,7 @@ signals:
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void PingTimeReceived ( int iPingTime );
     void RecorderStateReceived ( ERecorderState eRecorderState );
+    void SingleMixStateReceived ( ESingleMixState eSingleMixState );
 
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );

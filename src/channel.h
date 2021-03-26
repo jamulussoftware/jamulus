@@ -176,6 +176,9 @@ void CreateReqChannelLevelListMes() { Protocol.CreateReqChannelLevelListMes(); }
     void CreateRecorderStateMes ( const ERecorderState eRecorderState )
         { Protocol.CreateRecorderStateMes ( eRecorderState ); }
 
+    void CreateSingleMixStateMes ( const ESingleMixState eSingleMixState )
+        { Protocol.CreateSingleMixStateMes ( eSingleMixState ); }
+
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
     double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio,
@@ -300,6 +303,7 @@ signals:
     void LicenceRequired ( ELicenceType eLicenceType );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void RecorderStateReceived ( ERecorderState eRecorderState );
+    void SingleMixStateReceived ( ESingleMixState eSingleMixState );
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,

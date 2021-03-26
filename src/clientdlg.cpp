@@ -793,7 +793,7 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
-        SetMixerBoardDeco( RS_UNDEFINED, SM_UNDEFINED, pClient->GetGUIDesign() );
+        SetMixerBoardDeco( RS_UNDEFINED, pClient->GetGUIDesign() );
     }
     else
     {
@@ -1404,38 +1404,31 @@ rbtReverbSelR->setStyleSheet ( "" );
 
 void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderState )
 {
-    qInfo() << "OnRecorderStateReceived";
     MainMixerBoard->SetRecorderState ( newRecorderState );
-    SetMixerBoardDeco ( newRecorderState, eLastSingleMixState, pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
 }
 
 void CClientDlg::OnSingleMixStateReceived (  const ESingleMixState newSingleMixState )
 {
-    qInfo() << "OnSingleMixStateReceived";
     MainMixerBoard->SetSingleMixState ( newSingleMixState );
     // todo: make calls to this nicer (or the signature) by clearly separating the state change check from the call
-    SetMixerBoardDeco ( eLastRecorderState, newSingleMixState, pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( eLastRecorderState, pClient->GetGUIDesign() );
 }
 
 void CClientDlg::OnGUIDesignChanged()
 {
     SetGUIDesign ( pClient->GetGUIDesign() );
-    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), MainMixerBoard->GetSingleMixState(), pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
 }
 
-// todo: can we overload the signature here with either ERecorderState or ESingleMixState as 1st arg? (not a c++ coder myself)
-void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const ESingleMixState newSingleMixState,
-                                     const EGUIDesign eNewDesign  )
+void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  )
 {
     // return if no change
-    if ( ( newRecorderState == eLastRecorderState ) && ( newSingleMixState == eLastSingleMixState )
-         && ( eNewDesign == eLastDesign ) )
+    if ( ( newRecorderState == eLastRecorderState ) && ( eNewDesign == eLastDesign ) )
         return;
     eLastRecorderState = newRecorderState;
-    eLastSingleMixState = newSingleMixState;
     eLastDesign = eNewDesign;
 
-    // todo: disable solo, mute, fader and pan controls when SM_ENABLED
     if ( newRecorderState == RS_RECORDING )
     {
         MainMixerBoard->setStyleSheet (

@@ -663,7 +663,6 @@ void CServer::OnNewConnection ( int          iChID,
     // send recording state message on connection
     vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
 
-    // todo: send single mix state message on connection
     ESingleMixState eSingleMixState = SM_NOT_ENABLED;
     
     if ( CServer::bSingleMixServerMode == TRUE )

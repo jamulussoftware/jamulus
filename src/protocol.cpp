@@ -1782,7 +1782,6 @@ bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
     }
 
     // invoke message action
-    qInfo() << "emit RecorderStateReceived";
     emit RecorderStateReceived ( static_cast<ERecorderState> ( iRecorderState ) );
 
     return false; // no error
@@ -1812,7 +1811,6 @@ bool CProtocol::EvaluateSingleMixStateMes(const CVector<uint8_t>& vecData)
     }
 
     // invoke message action
-    qInfo() << "emit SingleMixStateReceived";
     emit SingleMixStateReceived ( static_cast<ESingleMixState> ( iSingleMixState ) );
 
     return false; // no error

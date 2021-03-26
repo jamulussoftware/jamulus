@@ -861,7 +861,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     pScrollArea                  = new CMixerBoardScrollArea ( this );
     pMainLayout                  = new QGridLayout ( pMixerWidget );
 
-    // todo: make "personal mix at" dynamic depending on `eSingleMixState` (e.g. into "{master's name}'s mix at"
     setAccessibleName ( "Personal Mix at the Server groupbox" );
     setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + ":</b> " + tr (
         "When connected to a server, the controls here allow you to set your "
@@ -1148,7 +1147,6 @@ void CAudioMixerBoard::UpdateTitle()
 
 void CAudioMixerBoard::Disable()
 {
-    qInfo() << "CAudioMixerBoard::Disable()";
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->Disable();
@@ -1157,7 +1155,6 @@ void CAudioMixerBoard::Disable()
 
 void CAudioMixerBoard::Enable()
 {
-    qInfo() << "CAudioMixerBoard::Enable()";
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->Enable();

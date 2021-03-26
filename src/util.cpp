@@ -539,7 +539,9 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : CBaseDlg ( parent )
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
-    QLabel*       lblLicence = new QLabel ( tr ( "This server requires you accept conditions before you can join. Please read these in the chat window." ), this );
+    QLabel*       lblLicence = new QLabel ( tr ( "This server requires you accept conditions before you can join." ) +
+                                            "<br/><br/>" +
+                                            tr ( "Please read these in the chat window." ), this );
     QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I have read the conditions and &agree." ), this );
     butAccept                = new QPushButton ( tr ( "Accept" ), this );
     QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
@@ -554,6 +556,9 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : CBaseDlg ( parent )
     // set some properties
     butAccept->setEnabled ( false );
     butAccept->setDefault ( true );
+
+    QObject::connect ( this, &CLicenceDlg::show,
+        this, &CLicenceDlg::OnShow );
 
     QObject::connect ( chbAgree, &QCheckBox::stateChanged,
         this, &CLicenceDlg::OnAgreeStateChanged );

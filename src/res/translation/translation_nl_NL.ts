@@ -2201,96 +2201,29 @@
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <source>I &amp;agree to the above licence terms</source>
-        <translation type="vanished">Ik &amp;stem in met bovenstaande licentievoorwaarden</translation>
+        <location filename="../../util.cpp" line="541"/>
+        <source>This server requires you accept conditions before you can join.</source>
+        <translation>Deze server vereist dat u voorwaarden accepteert voor het verbinen.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="535"/>
-        <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation>Deze server vereist dat u voorwaarden accepteert voor het verbinen. Lees deze in het chatvenster.</translation>
+        <location filename="../../util.cpp" line="543"/>
+        <source>Please read these in the chat window.</source>
+        <translation>Lees deze in het chatvenster.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="536"/>
+        <location filename="../../util.cpp" line="544"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Ik heb de voorwaarden gelezen en &amp;stem in.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="537"/>
+        <location filename="../../util.cpp" line="545"/>
         <source>Accept</source>
         <translation>Accepteer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="538"/>
+        <location filename="../../util.cpp" line="546"/>
         <source>Decline</source>
         <translation>Niet akkoord</translation>
-    </message>
-    <message>
-        <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="vanished">Door verbinding te maken met deze server en akkoord te gaan met deze mededeling, gaat u akkoord met het volgende:</translation>
-    </message>
-    <message>
-        <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation type="vanished">U gaat ermee akkoord dat alle gegevens, geluiden of andere werken die naar deze server worden verzonden, eigendom zijn van en gemaakt zijn door u of uw licentiegevers, en dat u deze gegevens, geluiden of andere werken beschikbaar stelt via de volgende Creative Commons Licentie (voor meer informatie over deze licentie, zie </translation>
-    </message>
-    <message>
-        <source>You are free to:</source>
-        <translation type="vanished">Je staat vrij om:</translation>
-    </message>
-    <message>
-        <source>Share</source>
-        <translation type="vanished">het materiaal</translation>
-    </message>
-    <message>
-        <source>copy and redistribute the material in any medium or format</source>
-        <translation type="vanished">te delen, te kopiëren en te herdistribueren in elk medium of formaat</translation>
-    </message>
-    <message>
-        <source>Adapt</source>
-        <translation type="vanished">Aanpassen</translation>
-    </message>
-    <message>
-        <source>remix, transform, and build upon the material</source>
-        <translation type="vanished">remixen, transformeren en bouwen op het materiaal</translation>
-    </message>
-    <message>
-        <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation type="vanished">De licentiegever kan deze vrijheden niet herroepen zolang u zich aan de licentievoorwaarden houdt.</translation>
-    </message>
-    <message>
-        <source>Under the following terms:</source>
-        <translation type="vanished">Onder de volgende voorwaarden:</translation>
-    </message>
-    <message>
-        <source>Attribution</source>
-        <translation type="vanished">Naamsvermelding</translation>
-    </message>
-    <message>
-        <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation type="vanished">U moet de juiste erkenning geven, een link naar de licentie geven en aangeven of er wijzigingen zijn aangebracht. U mag dit op elke redelijke manier doen, maar niet op een manier die suggereert dat de licentiegever u of uw gebruik goedkeurt.</translation>
-    </message>
-    <message>
-        <source>NonCommercial</source>
-        <translation type="vanished">Niet-commercieel</translation>
-    </message>
-    <message>
-        <source>You may not use the material for commercial purposes.</source>
-        <translation type="vanished">U mag het materiaal niet voor commerciële doeleinden gebruiken.</translation>
-    </message>
-    <message>
-        <source>ShareAlike</source>
-        <translation type="vanished">hareAlike</translation>
-    </message>
-    <message>
-        <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
-        <translation type="vanished">Als u het materiaal remixt, transformeert of uitbouwt, moet u uw bijdragen distribueren onder dezelfde licentie als het origineel.</translation>
-    </message>
-    <message>
-        <source>No additional restrictions</source>
-        <translation type="vanished">Geen extra beperkingen</translation>
-    </message>
-    <message>
-        <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
-        <translation type="vanished">U mag geen wettelijke voorwaarden of technologische maatregelen toepassen die anderen wettelijk beperken om iets te doen wat de licentie toestaat.</translation>
     </message>
 </context>
 <context>

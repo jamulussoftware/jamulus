@@ -419,7 +419,15 @@ protected:
     QPushButton* butAccept;
 
 public slots:
-    void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
+    void OnShow() { setFocus(); }
+    void OnAgreeStateChanged ( int value )
+    {
+        butAccept->setEnabled ( value == Qt::Checked );
+        if ( value == Qt::Checked )
+        {
+            butAccept->setFocus();
+        }
+    }
 };
 
 

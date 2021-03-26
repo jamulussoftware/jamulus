@@ -1861,44 +1861,29 @@
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <source>I &amp;agree to the above licence terms</source>
-        <translation type="vanished">&amp;Súhlasím s licenčnými podmienkami vyššie</translation>
+        <location filename="../../util.cpp" line="541"/>
+        <source>This server requires you accept conditions before you can join.</source>
+        <translation>Tento server od vás pred pripojením vyžaduje akceptovanie podmienok.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="535"/>
-        <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation>Tento server od vás pred pripojením vyžaduje akceptovanie podmienok. Prosím, prečítajte si ich v okne chatu.</translation>
+        <location filename="../../util.cpp" line="543"/>
+        <source>Please read these in the chat window.</source>
+        <translation>Prosím, prečítajte si ich v okne chatu.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="536"/>
+        <location filename="../../util.cpp" line="544"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Prečítal som si podmienky a &amp;akceptujem ich.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="537"/>
+        <location filename="../../util.cpp" line="545"/>
         <source>Accept</source>
         <translation>Akceptovať</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="538"/>
+        <location filename="../../util.cpp" line="546"/>
         <source>Decline</source>
         <translation>Odmietnuť</translation>
-    </message>
-    <message>
-        <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="vanished">Pripojením sa na tento server a prijatím tohto oznámenia, súhlasíte s nasledovným:</translation>
-    </message>
-    <message>
-        <source>Share</source>
-        <translation type="vanished">Zdieľať</translation>
-    </message>
-    <message>
-        <source>ShareAlike</source>
-        <translation type="vanished">ShareAlike</translation>
-    </message>
-    <message>
-        <source>No additional restrictions</source>
-        <translation type="vanished">Žiadne ďalšie obmedzenia</translation>
     </message>
 </context>
 <context>

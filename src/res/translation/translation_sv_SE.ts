@@ -1907,96 +1907,29 @@
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <source>I &amp;agree to the above licence terms</source>
-        <translation type="vanished">Jag &amp;accepterar ovanstående licensvillkor</translation>
+        <location filename="../../util.cpp" line="541"/>
+        <source>This server requires you accept conditions before you can join.</source>
+        <translation>Denna server kräver att du accepterar villkoren innan du kan gå med.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="535"/>
-        <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation>Denna server kräver att du accepterar villkoren innan du kan gå med. Läs dem i chattfönstret.</translation>
+        <location filename="../../util.cpp" line="543"/>
+        <source>Please read these in the chat window.</source>
+        <translation>Läs dem i chattfönstret.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="536"/>
+        <location filename="../../util.cpp" line="544"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Jag har &amp;läst villkoren och håller med.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="537"/>
+        <location filename="../../util.cpp" line="545"/>
         <source>Accept</source>
         <translation>Acceptera</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="538"/>
+        <location filename="../../util.cpp" line="546"/>
         <source>Decline</source>
         <translation>Neka</translation>
-    </message>
-    <message>
-        <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="vanished">Genom att ansluta till denna server och godkänna detta meddelande, samtycker du till följande:</translation>
-    </message>
-    <message>
-        <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation type="vanished">Du accepterar att all data, ljud eller andra verk som överförs till denna server ägs och skapas av dig eller dina licensgivare, och att du gör dessa data, ljud eller andra verk tillgängliga via följande Creative Commons-licens (för mer information om detta licens, se </translation>
-    </message>
-    <message>
-        <source>You are free to:</source>
-        <translation type="vanished">Du är fri att:</translation>
-    </message>
-    <message>
-        <source>Share</source>
-        <translation type="vanished">Dela</translation>
-    </message>
-    <message>
-        <source>copy and redistribute the material in any medium or format</source>
-        <translation type="vanished">kopiera och omfördela materialet i vilket medium eller format som helst</translation>
-    </message>
-    <message>
-        <source>Adapt</source>
-        <translation type="vanished">Anpssa</translation>
-    </message>
-    <message>
-        <source>remix, transform, and build upon the material</source>
-        <translation type="vanished">remixa, transformera och bygga vidare på materialet</translation>
-    </message>
-    <message>
-        <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation type="vanished">Licensgivaren kan inte återkalla dessa friheter så länge du följer licensvillkoren.</translation>
-    </message>
-    <message>
-        <source>Under the following terms:</source>
-        <translation type="vanished">Under följande villkor:</translation>
-    </message>
-    <message>
-        <source>Attribution</source>
-        <translation type="vanished">Erkännande</translation>
-    </message>
-    <message>
-        <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation type="vanished">Du måste ge lämplig kredit, ange en länk till licensen och ange om ändringar gjordes. Du kan göra det på något rimligt sätt, men inte på något sätt som antyder att licensgivaren godkänner dig eller din användning.</translation>
-    </message>
-    <message>
-        <source>NonCommercial</source>
-        <translation type="vanished">Ickekommersiell</translation>
-    </message>
-    <message>
-        <source>You may not use the material for commercial purposes.</source>
-        <translation type="vanished">Du får inte använda materialet för kommersiella ändamål.</translation>
-    </message>
-    <message>
-        <source>ShareAlike</source>
-        <translation type="vanished">Dela lika</translation>
-    </message>
-    <message>
-        <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
-        <translation type="vanished">Om du remixar, omvandlar eller bygger på materialet måste du distribuera dina bidrag under samma licens som originalet.</translation>
-    </message>
-    <message>
-        <source>No additional restrictions</source>
-        <translation type="vanished">Inga ytterligare begränsningar</translation>
-    </message>
-    <message>
-        <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
-        <translation type="vanished">Du får inte tillämpa juridiska villkor eller tekniska åtgärder som lagligen begränsar andra från att göra något som licensen tillåter.</translation>
     </message>
 </context>
 <context>

@@ -1817,22 +1817,27 @@
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <location filename="../../util.cpp" line="535"/>
-        <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation>Ce serveur exige que vous acceptiez des conditions avant de pouvoir le rejoindre. Veuillez les lire dans la fenêtre de tchate.</translation>
+        <location filename="../../util.cpp" line="541"/>
+        <source>This server requires you accept conditions before you can join.</source>
+        <translation>Ce serveur exige que vous acceptiez des conditions avant de pouvoir le rejoindre.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="536"/>
+        <location filename="../../util.cpp" line="543"/>
+        <source>Please read these in the chat window.</source>
+        <translation>Veuillez les lire dans la fenêtre de tchate.</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="544"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>J&apos;ai lu les conditions et les &amp;accepte.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="537"/>
+        <location filename="../../util.cpp" line="545"/>
         <source>Accept</source>
         <translation>Accepter</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="538"/>
+        <location filename="../../util.cpp" line="546"/>
         <source>Decline</source>
         <translation>Décliner</translation>
     </message>

@@ -2210,96 +2210,29 @@
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <source>I &amp;agree to the above licence terms</source>
-        <translation type="vanished">&amp;Accetto i termini di licenza</translation>
+        <location filename="../../util.cpp" line="541"/>
+        <source>This server requires you accept conditions before you can join.</source>
+        <translation>Il server richiede che tu accetti le condizioni prima di accedere.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="535"/>
-        <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation>Il server richiede che tu accetti le condizioni prima di accedere. Leggi il regolamento nella finestra di chat.</translation>
+        <location filename="../../util.cpp" line="543"/>
+        <source>Please read these in the chat window.</source>
+        <translation>Leggi il regolamento nella finestra di chat.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="536"/>
+        <location filename="../../util.cpp" line="544"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Ho letto ed &amp;accetto.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="537"/>
+        <location filename="../../util.cpp" line="545"/>
         <source>Accept</source>
         <translation>Accetto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="538"/>
+        <location filename="../../util.cpp" line="546"/>
         <source>Decline</source>
         <translation>Declino</translation>
-    </message>
-    <message>
-        <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="vanished">Collegandosi a questo server e accettando questo avviso, si accetta quanto segue:</translation>
-    </message>
-    <message>
-        <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation type="vanished">Dichiari che tutti i dati, audio o altre opere trasmessi a questo server sono di tua proprietà e creati da te o dai tuoi licenziatari e che rendi questi dati, audio o altre opere disponibili a terzi mediante la seguente Licenza Creative Commons (per ulteriori informazioni su questa licenza, vedere </translation>
-    </message>
-    <message>
-        <source>You are free to:</source>
-        <translation type="vanished">Sei libero di:</translation>
-    </message>
-    <message>
-        <source>Share</source>
-        <translation type="vanished">Condividere</translation>
-    </message>
-    <message>
-        <source>copy and redistribute the material in any medium or format</source>
-        <translation type="vanished">copiare e ridistribuire il materiale in qualsiasi supporto o formato</translation>
-    </message>
-    <message>
-        <source>Adapt</source>
-        <translation type="vanished">Adattare</translation>
-    </message>
-    <message>
-        <source>remix, transform, and build upon the material</source>
-        <translation type="vanished">remixare, trasformare e modificare il materiale</translation>
-    </message>
-    <message>
-        <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation type="vanished">Il licenziante non può revocare queste libertà fintanto che segui i termini della licenza.</translation>
-    </message>
-    <message>
-        <source>Under the following terms:</source>
-        <translation type="vanished">Sotto i seguenti requisiti:</translation>
-    </message>
-    <message>
-        <source>Attribution</source>
-        <translation type="vanished">Attribuzione</translation>
-    </message>
-    <message>
-        <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation type="vanished">È necessario accreditare in modo appropriato, fornire un collegamento alla licenza e indicare se sono state apportate modifiche. Puoi farlo in modo ragionevole, ma non in modo tale da suggerire a te o al tuo utilizzo il supporto del licenziante.</translation>
-    </message>
-    <message>
-        <source>NonCommercial</source>
-        <translation type="vanished">Non Commerciale</translation>
-    </message>
-    <message>
-        <source>You may not use the material for commercial purposes.</source>
-        <translation type="vanished">Non è possibile utilizzare il materiale a fini commerciali.</translation>
-    </message>
-    <message>
-        <source>ShareAlike</source>
-        <translation type="vanished">Condividere allo stesso modo</translation>
-    </message>
-    <message>
-        <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
-        <translation type="vanished">Se remixate, trasformate o sviluppate il materiale, dovete distribuire i vostri contributi con la stessa licenza dell&apos;originale.</translation>
-    </message>
-    <message>
-        <source>No additional restrictions</source>
-        <translation type="vanished">Nessuna restrizione aggiuntiva</translation>
-    </message>
-    <message>
-        <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
-        <translation type="vanished">Non è possibile applicare termini legali o misure tecnologiche che impediscono legalmente ad altre persone di fare qualsiasi cosa consentita dalla licenza.</translation>
     </message>
 </context>
 <context>

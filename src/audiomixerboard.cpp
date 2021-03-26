@@ -1110,7 +1110,8 @@ void CAudioMixerBoard::UpdateTitle()
 
     if ( eSingleMixState == SM_ENABLED )
     {
-        // todo: display single mix master's name here
+        // todo: disable controls if we are not client 0
+        // todo: maybe display single mix master's name here
         setTitle ( strTitlePrefix + tr ( "Single Mix at: " ) + strServerName );
     }
     else

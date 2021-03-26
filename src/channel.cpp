@@ -120,6 +120,9 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
     QObject::connect ( &Protocol, &CProtocol::RecorderStateReceived,
         this, &CChannel::RecorderStateReceived );
+    
+    QObject::connect ( &Protocol, &CProtocol::SingleMixStateReceived,
+        this, &CChannel::SingleMixStateReceived );
 }
 
 bool CChannel::ProtocolIsEnabled()

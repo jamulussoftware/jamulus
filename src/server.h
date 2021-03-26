@@ -222,6 +222,7 @@ public:
         { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording ); }
 
     void CreateAndSendRecorderStateForAllConChannels();
+    void CreateAndSendSingleMixStateForAllConChannels();
 
     // delay panning
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }

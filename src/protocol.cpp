@@ -1748,6 +1748,7 @@ void CProtocol::CreateRecorderStateMes ( const ERecorderState eRecorderState )
 
 void CProtocol::CreateSingleMixStateMes ( const ESingleMixState eSingleMixState )
 {
+    qInfo() << "CreateSingleMixStateMes()";
     CVector<uint8_t> vecData ( 1 ); // 1 byte of data
     int              iPos = 0;      // init position pointer
 
@@ -1781,6 +1782,7 @@ bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
     }
 
     // invoke message action
+    qInfo() << "emit RecorderStateReceived";
     emit RecorderStateReceived ( static_cast<ERecorderState> ( iRecorderState ) );
 
     return false; // no error
@@ -1810,6 +1812,7 @@ bool CProtocol::EvaluateSingleMixStateMes(const CVector<uint8_t>& vecData)
     }
 
     // invoke message action
+    qInfo() << "emit SingleMixStateReceived";
     emit SingleMixStateReceived ( static_cast<ESingleMixState> ( iSingleMixState ) );
 
     return false; // no error

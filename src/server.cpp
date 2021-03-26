@@ -664,7 +664,15 @@ void CServer::OnNewConnection ( int          iChID,
     vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
 
     // todo: send single mix state message on connection
-    // vecChannels[iChID].CreateSingleMixStateMes ( JamController.GetRecorderState() );
+    ESingleMixState eSingleMixState = SM_NOT_ENABLED;
+    
+    if ( CServer::bSingleMixServerMode == TRUE )
+    {
+        qInfo() << "eSingleMixState = SM_ENABLED;";
+        eSingleMixState = SM_ENABLED;
+    }
+    
+    vecChannels[iChID].CreateSingleMixStateMes ( eSingleMixState );
 
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
@@ -1527,15 +1535,22 @@ void CServer::CreateAndSendRecorderStateForAllConChannels()
 
 void CServer::CreateAndSendSingleMixStateForAllConChannels()
 {
-    // todo: get single mix state
-    ESingleMixState eSingleMixState = JamController.GetRecorderState();
-
-    // now send recorder state to all connected clients
+    ESingleMixState eSingleMixState = SM_NOT_ENABLED;
+    
+    if ( CServer::bSingleMixServerMode == TRUE )
+    {
+        qInfo() << "eSingleMixState = SM_ENABLED;";
+        eSingleMixState = SM_ENABLED;
+    }
+        
+    // now send single mix state to all connected clients
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
             // send message
+            
+            qInfo() << "Sending SingleMixStateMes";
             vecChannels[i].CreateSingleMixStateMes ( eSingleMixState );
         }
     }

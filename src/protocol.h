@@ -136,7 +136,7 @@ void CreateReqChannelLevelListMes();
     void CreateVersionAndOSMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );
     // todo: figure out if this piece of code should have the new singlemix handling
-    // void CreateSingleMixStateMes ( const ESingleMixState eSingleMixState );
+    void CreateSingleMixStateMes ( const ESingleMixState eSingleMixState );
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,

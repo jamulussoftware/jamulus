@@ -98,8 +98,8 @@ public slots:
     void OnStartOnOSStartStateChanged ( int value );
     void OnEnableRecorderStateChanged ( int value )
         { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
-    void OnEnableSingleMixStateChanged ( int value )
-        { pServer->SetSingleMix ( Qt::CheckState::Checked == value ); }
+//    void OnEnableSingleMixStateChanged ( int value )
+//        { pServer->SetEnableSingleMix ( Qt::CheckState::Checked == value ); }
     void OnCentralServerAddressEditingFinished();
     void OnServerNameTextChanged ( const QString& strNewName );
     void OnLocationCityTextChanged ( const QString& strNewCity );

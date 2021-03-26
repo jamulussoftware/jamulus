@@ -793,7 +793,7 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
-        SetMixerBoardDeco( RS_UNDEFINED, pClient->GetGUIDesign() );
+        SetMixerBoardDeco( RS_UNDEFINED, SM_UNDEFINED, pClient->GetGUIDesign() );
     }
     else
     {
@@ -1404,12 +1404,14 @@ rbtReverbSelR->setStyleSheet ( "" );
 
 void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderState )
 {
+    qInfo() << "OnRecorderStateReceived";
     MainMixerBoard->SetRecorderState ( newRecorderState );
     SetMixerBoardDeco ( newRecorderState, eLastSingleMixState, pClient->GetGUIDesign() );
 }
 
 void CClientDlg::OnSingleMixStateReceived (  const ESingleMixState newSingleMixState )
 {
+    qInfo() << "OnSingleMixStateReceived";
     MainMixerBoard->SetSingleMixState ( newSingleMixState );
     // todo: make calls to this nicer (or the signature) by clearly separating the state change check from the call
     SetMixerBoardDeco ( eLastRecorderState, newSingleMixState, pClient->GetGUIDesign() );
@@ -1418,11 +1420,11 @@ void CClientDlg::OnSingleMixStateReceived (  const ESingleMixState newSingleMixS
 void CClientDlg::OnGUIDesignChanged()
 {
     SetGUIDesign ( pClient->GetGUIDesign() );
-    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
+    SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), MainMixerBoard->GetSingleMixState(), pClient->GetGUIDesign() );
 }
 
 // todo: can we overload the signature here with either ERecorderState or ESingleMixState as 1st arg? (not a c++ coder myself)
-void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const ESingleMixState,
+void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const ESingleMixState newSingleMixState,
                                      const EGUIDesign eNewDesign  )
 {
     // return if no change

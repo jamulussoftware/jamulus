@@ -25,7 +25,7 @@
 #pragma once
 
 #include <QCoreApplication>
-#include <QTcpSocket>
+#include <QUdpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
 #ifndef HEADLESS
@@ -51,7 +51,6 @@
 #include <vector>
 #include <algorithm>
 #include "global.h"
-using namespace std; // because of the library: "vector"
 #ifdef _WIN32
 # include <winsock2.h>
 # include <ws2ipdef.h>
@@ -1282,7 +1281,8 @@ public:
         }
         else
         {
-            return powf ( 10.0f, ( fInValueRange0_1 * 35.0f - 35.0f ) / 20.0f );
+            return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) *
+                AUD_MIX_FADER_RANGE_DB / 20.0f );
         }
     }
 };

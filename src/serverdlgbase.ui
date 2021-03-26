@@ -27,7 +27,7 @@
       <bool>false</bool>
      </property>
      <property name="columnCount">
-      <number>3</number>
+      <number>4</number>
      </property>
      <column>
       <property name="text">
@@ -42,6 +42,11 @@
      <column>
       <property name="text">
        <string>Jitter Buffer Size</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Channels</string>
       </property>
      </column>
     </widget>
@@ -262,6 +267,13 @@
         <widget class="QCheckBox" name="chbStartOnOSStart">
          <property name="text">
           <string>Start Minimized on Windows Start</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chbEnableDelayPanning">
+         <property name="text">
+          <string>Enable delay panning</string>
          </property>
         </widget>
        </item>

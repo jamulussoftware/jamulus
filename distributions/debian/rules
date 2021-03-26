@@ -6,7 +6,7 @@ export QT_SELECT=qt5
 	dh $@
 
 override_dh_auto_configure:
-	mkdir -p build-gui && cd build-gui && qmake TARGET=jamulus PREFIX=/usr ../Jamulus.pro
+	mkdir -p build-gui && cd build-gui && qmake "CONFIG+=noupcasename" PREFIX=/usr ../Jamulus.pro
 	mkdir -p build-nox && cd build-nox && qmake "CONFIG+=nosound headless" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro
 
 override_dh_auto_build:

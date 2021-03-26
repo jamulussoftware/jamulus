@@ -45,7 +45,8 @@ CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString
     startFrame (frame),
     numChannels (static_cast<uint16_t>(_numChannels)),
     name (name),
-    address (address)
+    address (address),
+    out (nullptr)
 {
     // At this point we may not have much of a name
     QString fileName = ClientName() + "-" + QString::number(frame) + "-" + QString::number(_numChannels);
@@ -88,8 +89,12 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iSe
  */
 void CJamClient::Disconnect()
 {
-    static_cast<CWaveStream*>(out)->finalise();
-    out = nullptr;
+    if (out)
+    {
+        static_cast<CWaveStream*>(out)->finalise();
+        delete out;
+        out = nullptr;
+    }
 
     wavFile->close();
 
@@ -132,6 +137,22 @@ CJamSession::CJamSession(QDir recordBaseDir) :
 
     // Explicitly set all the pointers to "empty"
     vecptrJamClients.fill(nullptr);
+}
+
+/**
+ * @brief CJamSession::~CJamSession
+ */
+CJamSession::~CJamSession()
+{
+    // free up any active jamClientConnections
+    for (int i = 0; i < jamClientConnections.count(); i++ )
+    {
+        if ( jamClientConnections[i] )
+        {
+            delete jamClientConnections[i];
+            jamClientConnections[i] = nullptr;
+        }
+    }
 }
 
 /**

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2021
  *
  * Author(s):
  *  Volker Fischer
@@ -203,6 +203,7 @@ public:
               const bool         bNLogIP,
               const bool         bDisableRecording,
               const bool         bEduModeEnabled,
+              const bool         bNDelayPan,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -242,6 +243,9 @@ public:
 
     void CreateAndSendRecorderStateForAllConChannels();
 
+    // delay panning
+    void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
+    bool IsDelayPanningEnabled() { return bDelayPan; }
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
@@ -292,6 +296,9 @@ public:
     // GUI settings ------------------------------------------------------------
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
+
+    int GetClientNumAudioChannels ( const int iChanNum )
+        { return vecChannels[iChanNum].GetNumAudioChannels(); }
 
 protected:
     // access functions for actual channels
@@ -403,6 +410,7 @@ protected:
     CVector<CVector<float> >   vecvecfGains;
     CVector<CVector<float> >   vecvecfPannings;
     CVector<CVector<int16_t> > vecvecsData;
+    CVector<CVector<int16_t> > vecvecsData2;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
@@ -438,6 +446,9 @@ protected:
 
     // GUI settings
     bool                       bAutoRunMinimized;
+
+    // for delay panning
+    bool                       bDelayPan;
 
     // messaging
     QString                    strWelcomeMessage;

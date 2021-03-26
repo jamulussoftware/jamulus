@@ -106,6 +106,8 @@ protected:
     bool               bConnected;
     bool               bConnectDlgWasShown;
     bool               bMIDICtrlUsed;
+    ERecorderState     eLastRecorderState;
+    EGUIDesign         eLastDesign;
     QTimer             TimerSigMet;
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;
@@ -141,6 +143,18 @@ public slots:
                                     const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx,
                                                                                          iValue ); }
 
+    void OnControllerInPanValue ( const int iChannelIdx,
+                                  const int iValue ) { MainMixerBoard->SetPanValue ( iChannelIdx,
+                                                                                     iValue ); }
+
+    void OnControllerInFaderIsSolo ( const int iChannelIdx,
+                                     const bool bIsSolo ) { MainMixerBoard->SetFaderIsSolo ( iChannelIdx,
+                                                                                             bIsSolo ); }
+
+    void OnControllerInFaderIsMute ( const int iChannelIdx,
+                                     const bool bIsMute ) { MainMixerBoard->SetFaderIsMute ( iChannelIdx,
+                                                                                             bIsMute ); }
+
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 
@@ -163,6 +177,7 @@ public slots:
     void OnUseTowRowsForMixerPanel ( bool Checked ) { MainMixerBoard->SetNumMixerPanelRows ( Checked ? 2 : 1 ); }
     void OnClearAllStoredSoloMuteSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
+    void OnAutoAdjustAllFaderLevels() { MainMixerBoard->AutoAdjustAllFaderLevels(); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
@@ -229,11 +244,9 @@ public slots:
 
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
-    void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
-
-    void OnRecorderStateReceived ( ERecorderState eRecorderState )
-        { MainMixerBoard->SetRecorderState ( eRecorderState ); }
-
+    void OnGUIDesignChanged();
+    void OnRecorderStateReceived ( ERecorderState eRecorderState );
+    void SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  );
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 

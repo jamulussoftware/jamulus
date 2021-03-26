@@ -1,25 +1,48 @@
 #### Automatically build and upload releases to GitHub ####
 
+
+# see analyse_git_reference.py for implementation of the logic:
+#     for every push to a branch starting with "autobuild": (can be used during development for tighter supervision of builds)
+#          - do CodeQl while building for every platform
+#          - publish the created binaries/packs only as artifacts/appendix of the github-action-run (not as release), and only retain those files for limited period
+#     for every pull-request to master:
+#          - do CodeQl while building for every platform
+#          - publish the created binaries/packs only as artifacts/appendix of the github-action-run (not as release), and only retain those files for limited period
+#     for every tag that starts with 'r' and has an arbitrary suffix (e.g. beta1, rc1, etc.)
+#          - do CodeQl while building for every platform
+#          - publish the created binaries/packs only as artifacts/appendix as a prerelease
+#     for every tag that starts with 'r' and does not have any suffix:
+#          - do CodeQl while building for every platform
+#          - publish the created binaries/packs only as artifacts/appendix as a release
+#
+
+
 on:
   workflow_dispatch:
   push:
     tags:
       - "r*"
-      - "latest"
-    #branches:
+    branches:
+      - "autobuild*"  # for developers: branches starting with autobuild will be built and evaluated on each push
+      - "autobuild/*" # for developers: branches starting with autobuild will be built and evaluated on each push
+      - "master"
     #  - "*"
-    #  - master         
-    #  - *autobuild*
-name:                               Publish Release
+  pull_request: # The branches below must be a subset of the branches in "push"
+    branches:
+      - master
+
+name:                               Auto-Build
 jobs:
   create_release:
-     name:                          Create release
-     runs-on:                       ubuntu-latest
+     name:                          Prepare Auto-Build/Release
+     runs-on:                       ubuntu-20.04
      outputs:
       publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
       version:                      ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }}
       version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
+      x_github_workspace:           ${{ steps.jamulus-build-vars.outputs.X_GITHUB_WORKSPACE }} #needed, because matrix can not directly access ${{ github.workspace }} aparrently
+
 
      steps:
          # Checkout code
@@ -33,7 +56,7 @@ jobs:
            id:                      jamulus-build-vars
 
          # remove release, if it exists (with this releasetag)
-         - name:                    Remove release, if existing (for latest and branches)
+         - name:                    Remove release, if existing (for branches)
            if:                      ${{ contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true') }}
            continue-on-error:       true
            uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
@@ -65,100 +88,139 @@ jobs:
   release_assets:
     name:                           Build assets for ${{ matrix.config.config_name }}
     needs:                          create_release
-    runs-on:                        ${{ matrix.config.building_on_os }}
     strategy:
       fail-fast:                    false
       matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
         config:
-           - config_name:           Linux (normal)
+           - config_name:           AndroidAPK (artifact+codeQL)
+             target_os:             android
+             building_on_os:        ubuntu-20.04
+             cmd1_prebuild:         "sh ./autobuild/android/autobuild_apk_1_prepare.sh" # this step needs sh instead of bash for permissions
+             cmd2_build:            "./autobuild/android/autobuild_apk_2_build.sh"
+             cmd3_postbuild:        "./autobuild/android/autobuild_apk_3_copy_files.sh"
+             uses_codeql:           true
+
+           - config_name:           Linux (artifacts+codeQL)
              target_os:             linux
              building_on_os:        ubuntu-18.04
-             asset_path:            deploy/Jamulus_amd64.deb
-             asset_name:            jamulus_${{ needs.create_release.outputs.version_name }}_ubuntu_amd64.deb
-           - config_name:           Linux (headless)
-             target_os:             linux
-             building_on_os:        ubuntu-18.04
-             asset_path:            deploy/Jamulus_headless_amd64.deb
-             asset_name:            jamulus_headless_${{ needs.create_release.outputs.version_name }}_ubuntu_amd64.deb
-           - config_name:           MacOS
+             cmd1_prebuild:         "sh ./autobuild/linux/autobuild_deb_1_prepare.sh" # this step needs sh instead of bash for permissions
+             cmd2_build:            "./autobuild/linux/autobuild_deb_2_build.sh"
+             cmd3_postbuild:        "./autobuild/linux/autobuild_deb_3_copy_files.sh"
+             uses_codeql:           true
+
+           - config_name:           MacOS (codeQL)
              target_os:             macos
              building_on_os:        macos-10.15
-             asset_path:            deploy/Jamulus-installer-mac.dmg
-             asset_name:            jamulus_${{ needs.create_release.outputs.version_name }}_mac.dmg
-           - config_name:           Windows
+             cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh"
+             cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
+             cmd3_postbuild:        false
+             uses_codeql:           true
+
+           - config_name:           MacOS (artifacts)
+             target_os:             macos
+             building_on_os:        macos-10.15
+             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh"
+             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
+             cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
+             uses_codeql:           false
+
+           - config_name:           Windows (artifact+codeQL)
              target_os:             windows
              building_on_os:        windows-latest
-             asset_path:            deploy\Jamulus-installer-win.exe
-             asset_name:            jamulus_${{ needs.create_release.outputs.version_name }}_win.exe
-           - config_name:           AndroidAPK
-             target_os:             android
-             building_on_os:        ubuntu-18.04
-             asset_path:            android-build/build/outputs/apk/debug/android-build-debug.apk
-             asset_name:            jamulus_${{ needs.create_release.outputs.version_name }}_android.apk
-    steps:
+             cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1
+             cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
+             cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
+             uses_codeql:           true
 
+    runs-on:                        ${{ matrix.config.building_on_os }}
+    steps:
       # Checkout code
       - name:                       Checkout code
         uses:                       actions/checkout@v2
         with:
           submodules:               true
 
-      # Build
-      - name:                       "Build deb (Linux)"
-        run:                        sh linux/autorelease_linux.sh ${{ github.workspace }}
-        if:                         matrix.config.target_os == 'linux'
-      - name:                       "Build (Windows)"
-        run:                        powershell .\windows\autorelease_windows.ps1 -sourcepath "${{ github.workspace }}"
-        if:                         matrix.config.target_os == 'windows'
-      - name:                       "Build (macOS)"
-        run:                        sh mac/autorelease_mac.sh ${{ github.workspace }}
-        if:                         matrix.config.target_os == 'macos'
-      - name:                       "Build (Android)"
-        uses:                       ./android/automated_build/ # Uses an action in the directory
-        if:                         matrix.config.target_os == 'android'
+      # Prepare (install QT & dependencies)
+      - name:                       "Prepare for ${{ matrix.config.config_name }}"
+        if:                         ${{ matrix.config.cmd1_prebuild }}
+        run:                        ${{ matrix.config.cmd1_prebuild }}
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'  # allow setting environment variables
+          jamulus_project_path:     ${{ github.workspace }}
+          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
-      # Upload release
-      - name:                       Upload Release Asset - Tag
-        if:                         ${{ contains(needs.create_release.outputs.publish_to_release, 'true') }}
-        id:                         upload-release-asset
+      # Initialize CodeQL tools for code-scanning for security
+      - name:                       Initialize CodeQL
+        if:                         matrix.config.uses_codeql
+        uses:                       github/codeql-action/init@v1
+        with:
+          languages: 'cpp'
+          # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
+          # Learn more:
+          # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
+
+      # Build
+      - name:                       "Build for ${{ matrix.config.config_name }}"
+        if:                         ${{ matrix.config.cmd2_build }}
+        run:                        ${{ matrix.config.cmd2_build }} ${{ github.workspace }}
+        env:
+          jamulus_project_path:       ${{ github.workspace }}
+          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+
+      - name:                       "Post-Build for ${{ matrix.config.config_name }}"
+        id:                         step_cmd3_postbuild
+        if:                         ${{ matrix.config.cmd3_postbuild }}
+        run:                        ${{ matrix.config.cmd3_postbuild }} ${{ github.workspace }}
+        env:
+          jamulus_project_path:       ${{ github.workspace }}
+          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+
+      # Upload Artifact to Job
+      - name:                       Upload Artifact 1 to Job
+        if:                         ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+        uses:                       actions/upload-artifact@v2
+        with:
+          name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          retention-days:           31
+          if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
+
+      # Upload Artifact to Job
+      - name:                       Upload Artifact 2 to Job
+        if:                         ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+        uses:                       actions/upload-artifact@v2
+        with:
+          name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          retention-days:           31
+          if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
+
+      # Upload Artifact to Release
+      - name:                       Upload Artifact 1 to Release
+        if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') &&  contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        id:                         upload-release-asset1
         uses:                       actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url:               ${{ needs.create_release.outputs.upload_url }} # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path:               ${{ matrix.config.asset_path }}
-          asset_name:               ${{ matrix.config.asset_name }}
+          asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_content_type:       application/octet-stream
-          
-  ## Builds a Linux flatpack ##
-  flatpak-builder:
-    name: "Flatpak Builder"
-    runs-on: ubuntu-latest
-    needs: [create_release]
-    container:
-      image: docker.io/bilelmoussaoui/flatpak-github-actions
-      options: --privileged
-    steps:
-    - uses: actions/checkout@v2
-    - name:                    Change branch name in manifest
-      run:                     python3 io.jamulus.Jamulus.prepare.py $GITHUB_SHA
-      working-directory:       ./distributions/
-    - uses: bilelmoussaoui/flatpak-github-actions@v2
-      with:
-        bundle: "io.jamulus.Jamulus.flatpak"
-        manifest-path: "distributions/io.jamulus.Jamulus.json"
-    - uses: actions/download-artifact@v2
-      with:
-        name: io.jamulus.Jamulus
-        path: ~/io.jamulus.Jamulus
-    - name:                       Upload Flatpack
-      if:                         ${{ contains(needs.create_release.outputs.publish_to_release, 'true') }}
-      id:                         upload-release-asset
-      uses:                       actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url:               ${{ needs.create_release.outputs.upload_url }} # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path:               /github/home/io.jamulus.Jamulus/io.jamulus.Jamulus.flatpak
-        asset_name:               io.jamulus.Jamulus.flatpak
-        asset_content_type:       application/octet-stream
+      # Upload Artifact to Release
+      - name:                       Upload Artifact 2 to Release
+        if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_2 != '') &&  contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        id:                         upload-release-asset2
+        uses:                       actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url:               ${{ needs.create_release.outputs.upload_url }} # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          asset_content_type:       application/octet-stream
+
+      # Run CodeQL tools for code-scanning for security
+      - name:                       Perform CodeQL Analysis
+        if:                         matrix.config.uses_codeql
+        uses:                       github/codeql-action/analyze@v1

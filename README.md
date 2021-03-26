@@ -1,25 +1,19 @@
 [![Homepage picture](src/res/homepage/jamulusbannersmall.png)](https://jamulus.io)
 
-![CodeQL](https://github.com/jamulussoftware/jamulus/workflows/CodeQL/badge.svg)
+[![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
 Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/></a>
 
-The Jamulus software enables musicians to perform real-time jam sessions over the internet.
-There is one server running the Jamulus server software which collects the audio data from
-each Jamulus client, mixes the audio data and sends the mix back to each client.
+Jamulus enables musicians to perform in real-time together over the internet.
+A Jamulus server collects the incoming audio data from each Jamulus client, mixes that data and then sends that mix back to each client. Jamulus can support large numbers of clients with minimal latency and modest bandwidth requirements. 
 
-Jamulus is __Open Source software__ ([GPL, GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html))
+Jamulus is [__free and open source software__](https://www.gnu.org/philosophy/free-sw.en.html) (FOSS) licensed under the [GPL](http://www.gnu.org/licenses/gpl-2.0.html) 
 and runs under __Windows__ ([ASIO](https://www.steinberg.net)),
 __MacOS__ ([Core Audio](https://developer.apple.com/documentation/coreaudio)) and
 __Linux__ ([Jack](https://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
-
-[![Sourceforge logo](https://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)](https://sourceforge.net/projects/llcon)
-
-The project is hosted at [Sourceforge.net](https://sourceforge.net/projects/llcon).
-
 
 
 Installation
@@ -33,7 +27,7 @@ Help
 
 Official documentation for Jamulus is on the [Jamulus homepage](https://jamulus.io)
 
-See also the [discussion forums](https://sourceforge.net/p/llcon/discussion). If you have issues, feel free to ask for help there.
+See also the [discussion forums](https://github.com/jamulussoftware/jamulus/discussions). If you have issues, feel free to ask for help there.
 
 Bugs and feature requests can be [reported here](https://github.com/jamulussoftware/jamulus/issues)
 

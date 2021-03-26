@@ -1,4 +1,4 @@
-VERSION = 3.6.2dev
+VERSION = 3.7.0dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -340,7 +340,10 @@ win32 {
     DEFINES += HAVE_STDINT_H
 
     # only include jack support if CONFIG nosound is not set
-    !contains(CONFIG, "nosound") {
+    contains(CONFIG, "nosound") {
+        message(Restricting build to server-only due to CONFIG+=nosound.)
+        DEFINES += SERVER_ONLY
+    } else {
         message(Jack Audio Interface Enabled.)
 
         contains(CONFIG, "raspijamulus") {
@@ -400,7 +403,6 @@ HEADERS += src/buffer.h \
     src/channel.h \
     src/client.h \
     src/global.h \
-    src/multicolorled.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
     src/server.h \
@@ -423,7 +425,8 @@ HEADERS_GUI = src/audiomixerboard.h \
     src/clientdlg.h \
     src/serverdlg.h \
     src/levelmeter.h \
-    src/analyzerconsole.h
+    src/analyzerconsole.h \
+    src/multicolorled.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \

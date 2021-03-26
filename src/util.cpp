@@ -426,85 +426,95 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
     txvLibraries->setText (
         tr ( "This app uses the following libraries, resources or code snippets:" ) +
         "<br><p>" + tr ( "Qt cross-platform application framework" ) +
-        ", <i><a href=""http://www.qt.io"">http://www.qt.io</a></i></p>"
+        ", <i><a href=\"http://www.qt.io\">http://www.qt.io</a></i></p>"
         "<p>Opus Interactive Audio Codec"
-        ", <i><a href=""http://www.opus-codec.org"">http://www.opus-codec.org</a></i></p>"
+        ", <i><a href=\"http://www.opus-codec.org\">http://www.opus-codec.org</a></i></p>"
         "<p>" + tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-        ", 1995 - 2004, <i><a href=""http://ccrma.stanford.edu/software/stk"">"
+        ", 1995 - 2004, <i><a href=\"http://ccrma.stanford.edu/software/stk\">"
         "The Synthesis ToolKit in C++ (STK)</a></i></p>"
         "<p>" + tr ( "Some pixmaps are from the" ) + " Open Clip Art Library (OCAL), "
-        "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></p>"
+        "<i><a href=\"http://openclipart.org\">http://openclipart.org</a></i></p>"
         "<p>" + tr ( "Country flag icons by Mark James" ) +
-        ", <i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></p>" );
+        ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" );
 
     // contributors list
     txvContributors->setText (
-        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
-        "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
-        "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
-        "<p>ann0see (<a href=""https://github.com/ann0see"">ann0see</a>)</p>"
-        "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
-        "<p>Martin Schilde (<a href=""https://github.com/geheimerEichkater"">geheimerEichkater</a>)</p>"
-        "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
-        "<p>Marc jr. Landolt (<a href=""https://github.com/braindef"">braindef</a>)</p>"
-        "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
-        "<p>Tarmo Johannes (<a href=""https://github.com/tarmoj"">tarmoj</a>)</p>"
-        "<p>mirabilos (<a href=""https://github.com/mirabilos"">mirabilos</a>)</p>"
-        "<p>Hector Martin (<a href=""https://github.com/marcan"">marcan</a>)</p>"
-        "<p>newlaurent62 (<a href=""https://github.com/newlaurent62"">newlaurent62</a>)</p>"
-        "<p>AronVietti (<a href=""https://github.com/AronVietti"">AronVietti</a>)</p>"
-        "<p>Emlyn Bolton (<a href=""https://github.com/emlynmac"">emlynmac</a>)</p>"
-        "<p>Jos van den Oever (<a href=""https://github.com/vandenoever"">vandenoever</a>)</p>"
-        "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
-        "<p>Alberstein8 (<a href=""https://github.com/Alberstein8"">Alberstein8</a>)</p>"
-        "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
-        "<p>Tony Mountifield (<a href=""https://github.com/softins"">softins</a>)</p>"
-        "<p>HPS (<a href=""https://github.com/hselasky"">hselasky</a>)</p>"
-        "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
-        "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
-        "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
-        "<p>Jakob Jarmar (<a href=""https://github.com/jarmar"">jarmar</a>)</p>"
-        "<p>Stefan Weil (<a href=""https://github.com/stweil"">stweil</a>)</p>"
-        "<p>Nils Brederlow (<a href=""https://github.com/dingodoppelt"">dingodoppelt</a>)</p>"
-        "<p>Sebastian Krzyszkowiak (<a href=""https://github.com/dos1"">dos1</a>)</p>"
-        "<p>Bryan Flamig (<a href=""https://github.com/bflamig"">bflamig</a>)</p>"
-        "<p>Kris Raney (<a href=""https://github.com/kraney"">kraney</a>)</p>"
-        "<p>dszgit (<a href=""https://github.com/dszgit"">dszgit</a>)</p>"
-        "<p>nefarius2001 (<a href=""https://github.com/nefarius2001"">nefarius2001</a>)</p>"
-        "<p>jc-Rosichini (<a href=""https://github.com/jc-Rosichini"">jc-Rosichini</a>)</p>"
-        "<p>Julian Santander (<a href=""https://github.com/j-santander"">j-santander</a>)</p>"
-        "<p>chigkim (<a href=""https://github.com/chigkim"">chigkim</a>)</p>"
-        "<p>Bodo (<a href=""https://github.com/bomm"">bomm</a>)</p>"
-        "<p>Christian Hoffmann (<a href=""https://github.com/hoffie"">hoffie</a>)</p>"
-        "<p>jp8 (<a href=""https://github.com/jp8"">jp8</a>)</p>"
-        "<p>James (<a href=""https://github.com/jdrage"">jdrage</a>)</p>"
-        "<p>ranfdev (<a href=""https://github.com/ranfdev"">ranfdev</a>)</p>"
-        "<p>bspeer (<a href=""https://github.com/bspeer"">bspeer</a>)</p>"
+        "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
+        "<p>Peter L. Jones (<a href=\"https://github.com/pljones\">pljones</a>)</p>"
+        "<p>Jonathan Baker-Bates (<a href=\"https://github.com/gilgongo\">gilgongo</a>)</p>"
+        "<p>ann0see (<a href=\"https://github.com/ann0see\">ann0see</a>)</p>"
+        "<p>Daniele Masato (<a href=\"https://github.com/doloopuntil\">doloopuntil</a>)</p>"
+        "<p>Martin Schilde (<a href=\"https://github.com/geheimerEichkater\">geheimerEichkater</a>)</p>"
+        "<p>Simon Tomlinson (<a href=\"https://github.com/sthenos\">sthenos</a>)</p>"
+        "<p>Marc jr. Landolt (<a href=\"https://github.com/braindef\">braindef</a>)</p>"
+        "<p>Olivier Humbert (<a href=\"https://github.com/trebmuh\">trebmuh</a>)</p>"
+        "<p>Tarmo Johannes (<a href=\"https://github.com/tarmoj\">tarmoj</a>)</p>"
+        "<p>mirabilos (<a href=\"https://github.com/mirabilos\">mirabilos</a>)</p>"
+        "<p>Hector Martin (<a href=\"https://github.com/marcan\">marcan</a>)</p>"
+        "<p>newlaurent62 (<a href=\"https://github.com/newlaurent62\">newlaurent62</a>)</p>"
+        "<p>AronVietti (<a href=\"https://github.com/AronVietti\">AronVietti</a>)</p>"
+        "<p>Emlyn Bolton (<a href=\"https://github.com/emlynmac\">emlynmac</a>)</p>"
+        "<p>Jos van den Oever (<a href=\"https://github.com/vandenoever\">vandenoever</a>)</p>"
+        "<p>Tormod Volden (<a href=\"https://github.com/tormodvolden\">tormodvolden</a>)</p>"
+        "<p>Alberstein8 (<a href=\"https://github.com/Alberstein8\">Alberstein8</a>)</p>"
+        "<p>Gauthier Fleutot Östervall (<a href=\"https://github.com/fleutot\">fleutot</a>)</p>"
+        "<p>Tony Mountifield (<a href=\"https://github.com/softins\">softins</a>)</p>"
+        "<p>HPS (<a href=\"https://github.com/hselasky\">hselasky</a>)</p>"
+        "<p>Stanislas Michalak (<a href=\"https://github.com/stanislas-m\">stanislas-m</a>)</p>"
+        "<p>JP Cimalando (<a href=\"https://github.com/jpcima\">jpcima</a>)</p>"
+        "<p>Adam Sampson (<a href=\"https://github.com/atsampson\">atsampson</a>)</p>"
+        "<p>Jakob Jarmar (<a href=\"https://github.com/jarmar\">jarmar</a>)</p>"
+        "<p>Stefan Weil (<a href=\"https://github.com/stweil\">stweil</a>)</p>"
+        "<p>Nils Brederlow (<a href=\"https://github.com/dingodoppelt\">dingodoppelt</a>)</p>"
+        "<p>Sebastian Krzyszkowiak (<a href=\"https://github.com/dos1\">dos1</a>)</p>"
+        "<p>Bryan Flamig (<a href=\"https://github.com/bflamig\">bflamig</a>)</p>"
+        "<p>Kris Raney (<a href=\"https://github.com/kraney\">kraney</a>)</p>"
+        "<p>dszgit (<a href=\"https://github.com/dszgit\">dszgit</a>)</p>"
+        "<p>nefarius2001 (<a href=\"https://github.com/nefarius2001\">nefarius2001</a>)</p>"
+        "<p>jc-Rosichini (<a href=\"https://github.com/jc-Rosichini\">jc-Rosichini</a>)</p>"
+        "<p>Julian Santander (<a href=\"https://github.com/j-santander\">j-santander</a>)</p>"
+        "<p>chigkim (<a href=\"https://github.com/chigkim\">chigkim</a>)</p>"
+        "<p>Bodo (<a href=\"https://github.com/bomm\">bomm</a>)</p>"
+        "<p>Christian Hoffmann (<a href=\"https://github.com/hoffie\">hoffie</a>)</p>"
+        "<p>jp8 (<a href=\"https://github.com/jp8\">jp8</a>)</p>"
+        "<p>James (<a href=\"https://github.com/jdrage\">jdrage</a>)</p>"
+        "<p>ranfdev (<a href=\"https://github.com/ranfdev\">ranfdev</a>)</p>"
+        "<p>bspeer (<a href=\"https://github.com/bspeer\">bspeer</a>)</p>"
+        "<p>Martin Passing (<a href=\"https://github.com/passing\">passing</a>)</p>"
+        "<p>DonC (<a href=\"https://github.com/dcorson-ticino-com\">dcorson</a>)</p>"
+        "<p>David Kastrup (<a href=\"https://github.com/dakhubgit\">dakhubgit</a>)</p>"
+        "<p>Jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
+        "<p>Noam Postavsky (<a href=\"https://github.com/npostavs\">npostavs</a>)</p>"
+        "<p>Johannes Brauers (<a href=\"https://github.com/JohannesBrx\">JohannesBrx</a>)</p>"
+        "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
-        "<a href=""https://github.com/jamulussoftware/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
+        "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." );
 
     // translators
     txvTranslation->setText (
         "<p><b>" + tr ( "Spanish" ) + "</b></p>"
-        "<p>Daryl Hanlon (<a href=""https://github.com/ignotus666"">ignotus666</a>)</p>"
+        "<p>Daryl Hanlon (<a href=\"https://github.com/ignotus666\">ignotus666</a>)</p>"
         "<p><b>" + tr ( "French" ) + "</b></p>"
-        "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
+        "<p>Olivier Humbert (<a href=\"https://github.com/trebmuh\">trebmuh</a>)</p>"
+        "<p>Julien Taverna (<a href=\"https://github.com/jujudusud\">jujudusud</a>)</p>"
         "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
-        "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
-        "<p>Melcon Moraes (<a href=""https://github.com/melcon"">melcon</a>)</p>"
+        "<p>Miguel de Matos (<a href=\"https://github.com/Snayler\">Snayler</a>)</p>"
+        "<p>Melcon Moraes (<a href=\"https://github.com/melcon\">melcon</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
-        "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
+        "<p>Jeroen Geertzen (<a href=\"https://github.com/jerogee\">jerogee</a>)</p>"
+        "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
-        "<p>Giuseppe Sapienza (<a href=""https://github.com/dzpex"">dzpex</a>)</p>"
+        "<p>Giuseppe Sapienza (<a href=\"https://github.com/dzpex\">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"
-        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>"
+        "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
+        "<p>Roland Moschel (<a href=\"https://github.com/rolamos\">rolamos</a>)</p>"
         "<p><b>" + tr ( "Polish" ) + "</b></p>"
-        "<p>Martyna Danysz (<a href=""https://github.com/Martyna27"">Martyna27</a>)</p>"
-        "<p>Tomasz Bojczuk (<a href=""https://github.com/SeeLook"">SeeLook</a>)</p>"
+        "<p>Martyna Danysz (<a href=\"https://github.com/Martyna27\">Martyna27</a>)</p>"
+        "<p>Tomasz Bojczuk (<a href=\"https://github.com/SeeLook\">SeeLook</a>)</p>"
         "<p><b>" + tr ( "Swedish" ) + "</b></p>"
-        "<p>Daniel (<a href=""https://github.com/genesisproject2020"">genesisproject2020</a>)</p>"
+        "<p>Daniel (<a href=\"https://github.com/genesisproject2020\">genesisproject2020</a>)</p>"
         "<p><b>" + tr ( "Slovak" ) + "</b></p>"
-        "<p>Jose Riha (<a href=""https://github.com/jose1711"">jose1711</a>)</p>" );
+        "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -1020,7 +1030,10 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
 
 CHostAddress NetworkUtil::GetLocalAddress()
 {
-    QTcpSocket socket;
+    QUdpSocket socket;
+    // As we are using UDP, the connectToHost() does not generate any traffic at all.
+    // We just require a socket which is pointed towards the Internet in
+    // order to find out the IP of our own external interface:
     socket.connectToHost ( WELL_KNOWN_HOST, WELL_KNOWN_PORT );
 
     if ( socket.waitForConnected ( IP_LOOKUP_TIMEOUT ) )

@@ -184,6 +184,15 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &Sound, &CSound::ControllerInFaderLevel,
         this, &CClient::OnControllerInFaderLevel );
 
+    QObject::connect ( &Sound, &CSound::ControllerInPanValue,
+        this, &CClient::OnControllerInPanValue );
+
+    QObject::connect ( &Sound, &CSound::ControllerInFaderIsSolo,
+        this, &CClient::OnControllerInFaderIsSolo );
+
+    QObject::connect ( &Sound, &CSound::ControllerInFaderIsMute,
+        this, &CClient::OnControllerInFaderIsMute );
+
     QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived,
         this, &CClient::OnInvalidPacketReceived );
 
@@ -705,6 +714,43 @@ void CClient::OnControllerInFaderLevel ( int iChannelIdx,
 #endif
 
     emit ControllerInFaderLevel ( iChannelIdx, iValue );
+}
+
+void CClient::OnControllerInPanValue ( int iChannelIdx,
+                                       int iValue )
+{
+    // in case of a headless client the panners cannot be moved so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // channel index is valid
+    SetRemoteChanPan ( iChannelIdx, static_cast<float>( iValue ) / AUD_MIX_PAN_MAX);
+#endif
+
+    emit ControllerInPanValue ( iChannelIdx, iValue );
+}
+
+void CClient::OnControllerInFaderIsSolo ( int iChannelIdx,
+                                          bool bIsSolo )
+{
+    // in case of a headless client the buttons are not displayed so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // FIXME: no idea what to do here.
+#endif
+
+    emit ControllerInFaderIsSolo ( iChannelIdx, bIsSolo );
+}
+
+void CClient::OnControllerInFaderIsMute ( int iChannelIdx,
+                                          bool bIsMute )
+{
+    // in case of a headless client the buttons are not displayed so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // FIXME: no idea what to do here.
+#endif
+
+    emit ControllerInFaderIsMute ( iChannelIdx, bIsMute );
 }
 
 void CClient::OnClientIDReceived ( int iChanID )

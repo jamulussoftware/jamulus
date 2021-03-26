@@ -236,6 +236,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNLogIP,
                    const bool         bDisableRecording,
                    const bool         bNEduModeEnabled,
+                   const bool         bNDelayPan,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading          ( bNUseMultithreading ),
@@ -258,6 +259,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   &ConnLessProtocol ),
     bDisableRecording           ( bDisableRecording ),
     bAutoRunMinimized           ( false ),
+    bDelayPan                   ( bNDelayPan ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler              ( CSignalHandler::getSingletonP() )
@@ -336,7 +338,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
         iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
 
-
     // To avoid audio clitches, in the entire realtime timer audio processing
     // routine including the ProcessData no memory must be allocated. Since we
     // do not know the required sizes for the vectors, we allocate memory for
@@ -347,6 +348,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecfGains.Init                  ( iMaxNumChannels );
     vecvecfPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
+    vecvecsData2.Init                  ( iMaxNumChannels );
     vecvecsSendData.Init               ( iMaxNumChannels );
     vecvecfIntermediateProcBuf.Init    ( iMaxNumChannels );
     vecvecbyCodedData.Init             ( iMaxNumChannels );
@@ -363,6 +365,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
         // we always use stereo audio buffers (which is the worst case)
         vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        vecvecsData2[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // (note that we only allocate iMaxNumChannels buffers for the send
         // and coded data because of the OMP implementation)
@@ -611,6 +614,11 @@ void CServer::OnNewConnection ( int          iChID,
     // inform the client about its own ID at the server (note that this
     // must be the first message to be sent for a new connection)
     vecChannels[iChID].CreateClientIDMes ( iChID );
+
+    // Send an empty channel list in order to force clients to reset their
+    // audio mixer state. This is required to trigger clients to re-send their
+    // gain levels upon reconnecting after server restarts.
+    vecChannels[iChID].CreateConClientListMes ( CVector<CChannelInfo> (0) );
 
     // query support for split messages in the client
     vecChannels[iChID].CreateReqSplitMessSupportMes();
@@ -975,6 +983,16 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             FutureSynchronizer.waitForFinished();
             FutureSynchronizer.clearFutures();
         }
+        if ( bDelayPan )
+        {
+            for ( int i = 0; i < iNumClients; i++ )
+            {
+                for ( int j = 0; j < 2 * (iServerFrameSizeSamples); j++ )
+                {
+                    vecvecsData2[i][j] = vecvecsData[i][j];
+                }
+            }
+        }
     }
     else
     {
@@ -1244,6 +1262,11 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
     else
     {
         // Stereo target channel -----------------------------------------------
+
+        const int maxPanDelay = MAX_DELAY_PANNING_SAMPLES;
+
+        int iLpan, iRpan, iPan;
+
         for ( j = 0; j < iNumClients; j++ )
         {
 
@@ -1255,56 +1278,103 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
+            const CVector<int16_t>& vecsData2 = vecvecsData2[j];
+
             const float             fGain    = vecvecfGains[iChanCnt][j];
-            const float             fPan     = vecvecfPannings[iChanCnt][j];
+            const float             fPan     = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
+            const int iPanDel = lround( (float)( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
+            const int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
+            const int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
             const float fGainL = MathUtils::GetLeftPan ( fPan, false ) * fGain;
             const float fGainR = MathUtils::GetRightPan ( fPan, false ) * fGain;
 
-            // if channel gain is 1, avoid multiplication for speed optimization
-            if ( ( fGainL == 1.0f ) && ( fGainR == 1.0f ) )
+            if ( vecNumAudioChannels[j] == 1 )
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                // mono: copy same mono data in both out stereo audio channels
+                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                 {
-                    // mono: copy same mono data in both out stereo audio channels
-                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
+                    // left/right channel
+                    if ( bDelayPan )
                     {
-                        // left/right channel
-                        vecfIntermProcBuf[k]     += vecsData[i];
-                        vecfIntermProcBuf[k + 1] += vecsData[i];
+                        // pan address shift
+
+                        // left channel
+                        iLpan = i - iPanDelL;
+                        if ( iLpan < 0 )
+                        {
+                            // get from second
+                            iLpan = iLpan + iServerFrameSizeSamples;
+                            vecfIntermProcBuf[k] += vecsData2[iLpan] * fGainL;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[k] += vecsData[iLpan] * fGainL;
+                        }
+
+                        // right channel
+                        iRpan = i - iPanDelR;
+                        if ( iRpan < 0 )
+                        {
+                            // get from second
+                            iRpan = iRpan + iServerFrameSizeSamples;
+                            vecfIntermProcBuf[k + 1] += vecsData2[iRpan] * fGainR;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[k + 1] += vecsData[iRpan] * fGainR;
+                        }
                     }
-                }
-                else
-                {
-                    // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    else
                     {
-                        vecfIntermProcBuf[i] += vecsData[i];
+                        vecfIntermProcBuf[k] += vecsData[i] * fGainL;
+                        vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
                     }
                 }
             }
             else
             {
-                if ( vecNumAudioChannels[j] == 1 )
+                // stereo
+                for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                 {
-                    // mono: copy same mono data in both out stereo audio channels
-                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
+                    // left/right channel
+                    if ( bDelayPan )
                     {
-                        // left/right channel
-                        vecfIntermProcBuf[k]     += vecsData[i] * fGainL;
-                        vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
+                        // pan address shift
+                        if ( (i & 1) == 0 )
+                        {
+                            iPan = i - 2 * iPanDelL; // if even : left channel
+                        }
+                        else
+                        {
+                            iPan = i - 2 * iPanDelR; // if odd  : right channel
+                        }
+                        // interleaved channels
+                        if ( iPan < 0 )
+                        {
+                            // get from second
+                            iPan = iPan + 2 * iServerFrameSizeSamples;
+                            vecfIntermProcBuf[i] += vecsData2[iPan] * fGain;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[i] += vecsData[iPan] * fGain;
+                        }
                     }
-                }
-                else
-                {
-                    // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
+                    else
                     {
-                        // left/right channel
-                        vecfIntermProcBuf[i]     += vecsData[i] *     fGainL;
-                        vecfIntermProcBuf[i + 1] += vecsData[i + 1] * fGainR;
+                        if ( (i & 1) == 0 )
+                        {
+                            // if even : left channel
+                            vecfIntermProcBuf[i] += vecsData[i] * fGainL;
+                        }
+                        else
+                        {
+                            // if odd  : right channel
+                            vecfIntermProcBuf[i] += vecsData[i] * fGainR;
+                        }
                     }
                 }
             }
@@ -1467,7 +1537,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
         "<small style='color:" + sCurColor + ";'>[" +
         QTime::currentTime().toString ( "hh:mm" ) + "] <b>" +
         ChanName.toHtmlEscaped() +
-        "</b></small><br />" + strChatText;
+        "</b></small><br />" + strChatText.toHtmlEscaped();
 
     // check if chat is disabled
     if ( bEduModeEnabled && EduModeIsFeatureDisabled( EDU_MODE_FEATURE_CHAT ) )

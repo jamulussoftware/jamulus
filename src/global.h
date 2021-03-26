@@ -93,6 +93,9 @@ LED bar:      lbr
 #define SYSTEM_FRAME_SIZE_SAMPLES        64
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 
+// additional buffer for delay panning
+#define MAX_DELAY_PANNING_SAMPLES        64
+
 // default server address and port numbers
 #define DEFAULT_SERVER_ADDRESS           "anygenre1.jamulus.io"
 #define DEFAULT_PORT_NUMBER              22124
@@ -103,16 +106,22 @@ LED bar:      lbr
 #define CENTSERV_GENRE_CLASSICAL_FOLK    "classical.jamulus.io:22524"
 #define CENTSERV_GENRE_CHORAL            "choral.jamulus.io:22724"
 
+// servers to check for new versions
+#define UPDATECHECK1_ADDRESS             "updatecheck1.jamulus.io"
+#define UPDATECHECK2_ADDRESS             "updatecheck2.jamulus.io"
+
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL       "https://jamulus.io/wiki/Getting-Started"
 #define SERVER_GETTING_STARTED_URL       "https://jamulus.io/wiki/Running-a-Server"
 #define SOFTWARE_MANUAL_URL              "https://jamulus.io/wiki/Software-Manual"
 
 // determining server internal address uses well-known host and port
-// (You can change the service used here to something like Cloudflare (1.1.1.1), Google DNS (8.8.8.8), or something else reliable)
-#define WELL_KNOWN_HOST                  "1.1.1.1" // CloudFlare
-#define WELL_KNOWN_PORT                  53        // DNS
-#define IP_LOOKUP_TIMEOUT                500       // ms
+// We just need a valid, public Internet IP here. We will not send any
+// traffic there as we will only set up an UDP socket without sending any
+// data.
+#define WELL_KNOWN_HOST                  "1.1.1.1"           // CloudFlare
+#define WELL_KNOWN_PORT                  DEFAULT_PORT_NUMBER
+#define IP_LOOKUP_TIMEOUT                500                 // ms
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz
@@ -145,6 +154,19 @@ LED bar:      lbr
 // audio mixer fader and panning maximum value
 #define AUD_MIX_FADER_MAX                100
 #define AUD_MIX_PAN_MAX                  100
+
+// range of audio mixer fader
+#define AUD_MIX_FADER_RANGE_DB           35.0f
+
+// coefficient for averaging channel levels for automatic fader adjustment
+#define AUTO_FADER_ADJUST_ALPHA          0.2f
+
+// target level for auto fader adjustment in decibels
+#define AUTO_FADER_TARGET_LEVEL_DB       -30.0f
+
+// threshold in decibels below which the channel is considered as noise
+// and not adjusted
+#define AUTO_FADER_NOISE_THRESHOLD_DB    -40.0f
 
 // maximum number of fader groups (must be consistent to audiomixerboard implementation)
 #define MAX_NUM_FADER_GROUPS             4
@@ -234,8 +256,8 @@ LED bar:      lbr
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \
     "<br><div align=right><font size=-1><i>" + \
-    QCoreApplication::translate ( "global", "For more information use the ""What's " \
-    "This"" help (help menu, right mouse button or Shift+F1)" ) + \
+    QCoreApplication::translate ( "global", "For more information use the \"What's " \
+    "This\" help (help menu, right mouse button or Shift+F1)" ) + \
     "</i></font></div>"
 
 // server welcome message title (do not change for compatibility!)

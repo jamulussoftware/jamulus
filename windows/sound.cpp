@@ -62,6 +62,11 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
 
     loadAsioDriver ( cDriverNames[iDriverIdx] );
 
+    // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
+    // should be set, but we haven't being doing that and it seems to work
+    // okay...
+    memset ( &driverInfo, 0, sizeof driverInfo );
+
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
     {
         // clean up and return error string
@@ -75,16 +80,15 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        // only reset the channel mapping if a new device was selected
-        if ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 )
-        {
-            // the device has changed, per definition we reset the channel
-            // mapping to the defaults (first two available channels)
-            ResetChannelMapping();
+// TODO: In order to fix https://github.com/jamulussoftware/jamulus/issues/796 we reset the channel mapping on every property change. This is not ideal. 
+	    
+// the device has changed, per definition we reset the channel
+// mapping to the defaults (first two available channels)
+ResetChannelMapping();
 
-            // store ID of selected driver if initialization was successful
-            strCurDevName = cDriverNames[iDriverIdx];
-        }
+// store ID of selected driver if initialization was successful
+strCurDevName = cDriverNames[iDriverIdx];
+
     }
     else
     {
@@ -105,8 +109,15 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
 void CSound::UnloadCurrentDriver()
 {
     // clean up ASIO stuff
-    ASIOStop();
-    ASIODisposeBuffers();
+    if ( bRun )
+    {
+        Stop();
+    }
+    if ( bufferInfos[0].buffers[0] )
+    {
+        ASIODisposeBuffers();
+        bufferInfos[0].buffers[0] = NULL;
+    }
     ASIOExit();
     asioDrivers->removeCurrentDriver();
 }
@@ -520,6 +531,10 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
 
     // init pointer to our sound object
     pSound = this;
+
+    // We assume NULL'd pointers in this structure indicate that buffers are not
+    // allocated yet (see UnloadCurrentDriver).
+    memset ( bufferInfos, 0, sizeof bufferInfos );
 
     // get available ASIO driver names in system
     for ( i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )

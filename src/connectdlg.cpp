@@ -145,7 +145,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
     }
 
     // set a placeholder text to explain how to filter occupied servers (#397)
-    edtFilter->setPlaceholderText ( tr ( "Type # for occupied servers" ) );
+    edtFilter->setPlaceholderText ( tr ( "Filter text, or # for occupied servers" ) );
 
     // setup timers
     TimerInitialSort.setSingleShot ( true ); // only once after list request

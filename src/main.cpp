@@ -82,6 +82,7 @@ int main ( int argc, char** argv )
     QString      strHTMLStatusFileName       = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
+    QString      strStreamDest               = "";
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
@@ -366,6 +367,22 @@ int main ( int argc, char** argv )
             qInfo() << qUtf8Printable( QString("- recording directory name: %1" )
                 .arg( strRecordingDirName ) );
             CommandLineOptions << "--recording";
+            continue;
+        }
+
+
+        // Stream destination ---------------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--streamto", // no short form
+                                 "--streamto",
+                                 strArgument ) )
+        {
+            strStreamDest = strArgument;
+            qInfo() << qUtf8Printable( QString( "- stream destination: %1" )
+                .arg( strStreamDest ) );
+            CommandLineOptions << "--streamto";
             continue;
         }
 
@@ -750,6 +767,7 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             strStreamDest,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -870,6 +888,8 @@ QString UsageArguments ( char **argv )
         "      --serverpublicip  specify your public IP address when\n"
         "                        running a slave and your own central server\n"
         "                        behind the same NAT\n"
+        "      --streamto        pass ffmpeg output arguments to stream a stereo mix\n"
+        "                        from the server (see \"ffmpeg -h\" for reference)\n"
         "\nClient only:\n"
         "  -M, --mutestream      starts the application in muted state\n"
         "      --mutemyown       mute me in my personal mix (headless only)\n"

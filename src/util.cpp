@@ -580,7 +580,6 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     - label with combo box for skill level
     - OK button
 */
-    setWindowTitle ( tr ( "Musician Profile" ) );
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
 
     QVBoxLayout* pLayout        = new QVBoxLayout ( this );
@@ -1580,4 +1579,14 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
     strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License (GPL)" );
 
     return strVersionText;
+}
+
+QString MakeClientNameTitle ( QString win, QString client )
+{
+    QString sReturnString = win;
+    if( !client.isEmpty() )
+    {
+        sReturnString += " - " + client;
+    }
+    return ( sReturnString );
 }

@@ -1003,7 +1003,7 @@ void CClientDlg::ShowConnectionSetupDialog()
     // show connect dialog
     bConnectDlgWasShown = true;
     ConnectDlg.show();
-    ConnectDlg.setWindowTitle ( MakeClientNameTitle( tr ( "Connect" ) , pClient->strClientName ) );
+    ConnectDlg.setWindowTitle( MakeClientNameTitle( tr ( "Connect" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
     ConnectDlg.raise();
@@ -1014,7 +1014,7 @@ void CClientDlg::ShowMusicianProfileDialog()
 {
     // show musician profile dialog
     MusicianProfileDlg.show();
-    MusicianProfileDlg.setWindowTitle ( MakeClientNameTitle( tr ( "Musician Profile" ) , pClient->strClientName ) );
+    MusicianProfileDlg.setWindowTitle( MakeClientNameTitle( tr ( "Musician Profile" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
     MusicianProfileDlg.raise();
@@ -1025,7 +1025,7 @@ void CClientDlg::ShowGeneralSettings()
 {
     // open general settings dialog
     ClientSettingsDlg.show();
-    ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle( tr ( "Settings" ) , pClient->strClientName ) );
+    ClientSettingsDlg.setWindowTitle( MakeClientNameTitle( tr ( "Settings" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
     ClientSettingsDlg.raise();
@@ -1035,7 +1035,7 @@ void CClientDlg::ShowGeneralSettings()
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 {
     ChatDlg.show();
-    ChatDlg.setWindowTitle ( MakeClientNameTitle( tr ( "Chat" ) , pClient->strClientName ) );
+    ChatDlg.setWindowTitle( MakeClientNameTitle( tr ( "Chat" ) , pClient->strClientName ) );
 
     if ( bForceRaise )
     {

@@ -325,8 +325,8 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream,
 
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    std::size_t to_write = numFrames*oboeStream->getChannelCount();
-    std::size_t count    = std::min ( mOutBuffer.size(), to_write );
+    int32_t to_write = numFrames*oboeStream->getChannelCount();
+    int32_t count    = std::min ( mOutBuffer.size(), to_write );
 
     mOutBuffer.get ( (float*) audioData, count );
 

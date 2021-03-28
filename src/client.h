@@ -343,6 +343,7 @@ protected:
     bool bFraSiFactPrefSupported;
     bool bFraSiFactDefSupported;
     bool bFraSiFactSafeSupported;
+    bool bLoadedDriverWithoutErrors;
 
     int iMonoBlockSizeSam;
     int iStereoBlockSizeSam;

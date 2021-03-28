@@ -482,6 +482,7 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
 
     const QString strError = Sound.SetDev ( strNewDev );
 
+    bLoadedDriverWithoutErrors = strError.isEmpty();
     // init again because the sound card actual buffer size might
     // be changed on new device
     Init();
@@ -492,11 +493,8 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
         Sound.Start();
     }
 
-    // in case of an error inform the GUI about it
-    if ( !strError.isEmpty() )
-    {
-        emit SoundDeviceChanged ( strError );
-    }
+    // inform the GUI about change in state
+    emit SoundDeviceChanged ( strError );
 
     return strError;
 }
@@ -769,6 +767,14 @@ void CClient::Init()
     const int iFraSizePreffered = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
     const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT;
     const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE;
+
+    if ( !bLoadedDriverWithoutErrors )
+    {
+        bFraSiFactPrefSupported = false;
+        bFraSiFactDefSupported  = false;
+        bFraSiFactSafeSupported = false;
+        return;
+    }
 
 #if defined( Q_OS_IOS )
     bFraSiFactPrefSupported = true; // to reduce sound init time, because we know it's supported in iOS

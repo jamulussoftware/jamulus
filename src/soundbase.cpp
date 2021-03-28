@@ -76,10 +76,18 @@ QStringList CSoundBase::GetDevNames()
 
     QStringList slDevNames;
 
+    bool currentInList = false;
+
     // put all device names in the string list
     for ( int iDev = 0; iDev < lNumDevs; iDev++ )
     {
+        currentInList |= ( strDriverNames[iDev] == strCurDevName );
         slDevNames << strDriverNames[iDev];
+    }
+
+    if ( !currentInList )
+    {
+        slDevNames << strCurDevName;
     }
 
     return slDevNames;
@@ -89,111 +97,9 @@ QString CSoundBase::SetDev ( const QString strDevName )
 {
     QMutexLocker locker ( &MutexDevProperties );
 
-    // init return parameter with "no error"
-    QString strReturn = "";
+    strCurDevName = strDevName; // Update current device, even if loading fails.
 
-    // init flag for "load any driver"
-    bool bTryLoadAnyDriver = false;
-
-    // check if an ASIO driver was already initialized
-    if ( !strCurDevName.isEmpty() )
-    {
-        // a device was already been initialized and is used, first clean up
-        // driver
-        UnloadCurrentDriver();
-
-        const QString strErrorMessage = LoadAndInitializeDriver ( strDevName, false );
-
-        if ( !strErrorMessage.isEmpty() )
-        {
-            if ( strDevName != strCurDevName )
-            {
-                // loading and initializing the new driver failed, go back to
-                // original driver and create error message
-                LoadAndInitializeDriver ( strCurDevName, false );
-
-                // store error return message
-                strReturn = QString ( tr ( "Can't use the selected audio device "
-                                           "because of the following error: %1 "
-                                           "The previous driver will be selected." )
-                                          .arg ( strErrorMessage ) );
-            }
-            else
-            {
-                // loading and initializing the current driver failed, try to find
-                // at least one usable driver
-                bTryLoadAnyDriver = true;
-            }
-        }
-    }
-    else
-    {
-        if ( !strDevName.isEmpty() )
-        {
-            // This is the first time a driver is to be initialized, we first
-            // try to load the selected driver, if this fails, we try to load
-            // the first available driver in the system. If this fails, too, we
-            // throw an error that no driver is available -> it does not make
-            // sense to start the software if no audio hardware is available.
-            if ( !LoadAndInitializeDriver ( strDevName, false ).isEmpty() )
-            {
-                // loading and initializing the new driver failed, try to find
-                // at least one usable driver
-                bTryLoadAnyDriver = true;
-            }
-        }
-        else
-        {
-            // try to find one usable driver (select the first valid driver)
-            bTryLoadAnyDriver = true;
-        }
-    }
-
-    if ( bTryLoadAnyDriver )
-    {
-        // if a driver was previously selected, show a warning message
-        if ( !strDevName.isEmpty() )
-        {
-            strReturn = tr ( "The previously selected audio device "
-                             "is no longer available or the driver has changed to an incompatible state."
-                             "We'll attempt to find a valid audio device, but this new audio device may cause feedback."
-                             "Before connecting to a server, please check your audio device settings." );
-        }
-
-        // try to load and initialize any valid driver
-        QVector<QString> vsErrorList = LoadAndInitializeFirstValidDriver();
-
-        if ( !vsErrorList.isEmpty() )
-        {
-            // create error message with all details
-            QString sErrorMessage = "<b>" + QString ( tr ( "No usable %1 audio device found." ) ).arg ( strSystemDriverTechniqueName ) +
-                                    "</b><br><br>" + tr ( "These are all the available drivers with error messages:" ) + "<ul>";
-
-            for ( int i = 0; i < lNumDevs; i++ )
-            {
-                sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "</li>";
-            }
-            sErrorMessage += "</ul>";
-
-#ifdef _WIN32
-            // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
-            // offer the user under Windows that we open the driver setups of all registered
-            // ASIO drivers
-            sErrorMessage += "<br/>" + tr ( "Do you want to open the ASIO driver setup to try changing your configuration to a working state?" );
-
-            if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes | QMessageBox::No ) )
-            {
-                LoadAndInitializeFirstValidDriver ( true );
-            }
-
-            sErrorMessage = QString ( tr ( "Can't start %1. Please restart %1 and check/reconfigure your audio settings." ) ).arg ( APP_NAME );
-#endif
-
-            throw CGenErr ( sErrorMessage );
-        }
-    }
-
-    return strReturn;
+    return LoadAndInitializeDriver ( strDevName, false );
 }
 
 QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup )

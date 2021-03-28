@@ -145,6 +145,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                TOOLTIP_COM_END_TEXT );
 #    endif
 
+    lblErrors->setText ( pSettings->strLoadErrors );
+    lblErrors->setWordWrap ( true );
+
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = "<b>" + tr ( "Sound Card Channel Mapping" ) + ":</b> " +
                                 tr ( "If the selected sound card device offers more than one "
@@ -784,6 +787,8 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize, c
     return QString().setNum ( static_cast<double> ( iFrameSize ) * 2 * 1000 / SYSTEM_SAMPLE_RATE_HZ, 'f', 2 ) + " ms (" +
            QString().setNum ( iFrameSize ) + strAddText + ")";
 }
+
+void CClientSettingsDlg::SetDeviceErrors ( const QString& strError ) { lblErrors->setText ( strError ); }
 
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {

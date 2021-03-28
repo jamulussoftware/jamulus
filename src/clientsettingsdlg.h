@@ -58,6 +58,7 @@ public:
 
     void UpdateUploadRate();
     void UpdateDisplay();
+    void SetDeviceErrors ( const QString& strError );
     void UpdateSoundDeviceChannelSelectionFrame();
 
     void SetEnableFeedbackDetection ( bool enable );

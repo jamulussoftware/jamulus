@@ -369,6 +369,10 @@
             </spacer>
            </item>
            <item>
+             <widget class="QLabel" name="lblErrors">
+             </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="butDriverSetup">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

@@ -1002,50 +1002,50 @@ void CClientDlg::ShowConnectionSetupDialog()
 {
     // show connect dialog
     bConnectDlgWasShown = true;
-    ConnectDlg.show();
-    ConnectDlg.setWindowTitle( MakeClientNameTitle( tr ( "Connect" ) , pClient->strClientName ) );
+    ConnectDlg.show ();
+    ConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
-    ConnectDlg.raise();
-    ConnectDlg.activateWindow();
+    ConnectDlg.raise ();
+    ConnectDlg.activateWindow ();
 }
 
 void CClientDlg::ShowMusicianProfileDialog()
 {
     // show musician profile dialog
-    MusicianProfileDlg.show();
-    MusicianProfileDlg.setWindowTitle( MakeClientNameTitle( tr ( "Musician Profile" ) , pClient->strClientName ) );
+    MusicianProfileDlg.show ();
+    MusicianProfileDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Musician Profile" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
-    MusicianProfileDlg.raise();
-    MusicianProfileDlg.activateWindow();
+    MusicianProfileDlg.raise ();
+    MusicianProfileDlg.activateWindow ();
 }
 
 void CClientDlg::ShowGeneralSettings()
 {
     // open general settings dialog
-    ClientSettingsDlg.show();
-    ClientSettingsDlg.setWindowTitle( MakeClientNameTitle( tr ( "Settings" ) , pClient->strClientName ) );
+    ClientSettingsDlg.show ();
+    ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Settings" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
-    ClientSettingsDlg.raise();
-    ClientSettingsDlg.activateWindow();
+    ClientSettingsDlg.raise ();
+    ClientSettingsDlg.activateWindow ();
 }
 
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 {
-    ChatDlg.show();
-    ChatDlg.setWindowTitle( MakeClientNameTitle( tr ( "Chat" ) , pClient->strClientName ) );
+    ChatDlg.show ();
+    ChatDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Chat" ) , pClient->strClientName ) );
 
     if ( bForceRaise )
     {
         // make sure dialog is upfront and has focus
-        ChatDlg.showNormal();
-        ChatDlg.raise();
-        ChatDlg.activateWindow();
+        ChatDlg.showNormal ();
+        ChatDlg.raise ();
+        ChatDlg.activateWindow ();
     }
 
-    UpdateDisplay();
+    UpdateDisplay ();
 }
 
 void CClientDlg::ShowAnalyzerConsole()

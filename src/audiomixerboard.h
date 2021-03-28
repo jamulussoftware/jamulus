@@ -267,8 +267,8 @@ protected:
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
     void UpdateTitle();
-    void Disable ();
-    void Enable ();
+    void DisableAllFaders ();
+    void EnableAllFaders ();
 
     CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;

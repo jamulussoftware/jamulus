@@ -219,23 +219,23 @@ void CHighPrecisionTimer::run()
 
 
 // CServer implementation ******************************************************
-CServer::CServer ( const int          iNewMaxNumChan,
-                   const QString&     strLoggingFileName,
-                   const quint16      iPortNumber,
-                   const QString&     strHTMLStatusFileName,
-                   const QString&     strCentralServer,
-                   const QString&     strServerInfo,
-                   const QString&     strServerListFilter,
-                   const QString&     strServerPublicIP,
-                   const QString&     strNewWelcomeMessage,
-                   const QString&     strRecordingDirName,
-                   const bool         bNSingleMixServerMode,
-                   const bool         bNDisconnectAllClientsOnQuit,
-                   const bool         bNUseDoubleSystemFrameSize,
-                   const bool         bNUseMultithreading,
-                   const bool         bDisableRecording,
-                   const bool         bNDelayPan,
-                   const ELicenceType eNLicenceType ) :
+CServer::CServer ( const int             iNewMaxNumChan,
+                   const QString&        strLoggingFileName,
+                   const quint16         iPortNumber,
+                   const QString&        strHTMLStatusFileName,
+                   const QString&        strCentralServer,
+                   const QString&        strServerInfo,
+                   const QString&        strServerListFilter,
+                   const QString&        strServerPublicIP,
+                   const QString&        strNewWelcomeMessage,
+                   const QString&        strRecordingDirName,
+                   const ESingleMixState eSingleMixServerMode,
+                   const bool            bNDisconnectAllClientsOnQuit,
+                   const bool            bNUseDoubleSystemFrameSize,
+                   const bool            bNUseMultithreading,
+                   const bool            bDisableRecording,
+                   const bool            bNDelayPan,
+                   const ELicenceType    eNLicenceType ) :
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading          ( bNUseMultithreading ),
     iMaxNumChannels             ( iNewMaxNumChan ),
@@ -258,7 +258,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler              ( CSignalHandler::getSingletonP() ),
-    bSingleMixServerMode        ( bNSingleMixServerMode )
+    eSingleMixServerMode        ( eSingleMixServerMode )
 {
     int iOpusError;
     int i;
@@ -662,16 +662,9 @@ void CServer::OnNewConnection ( int          iChID,
 
     // send recording state message on connection
     vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
-
-    ESingleMixState eSingleMixState = SM_NOT_ENABLED;
     
-    if ( CServer::bSingleMixServerMode == TRUE )
-    {
-        qInfo() << "eSingleMixState = SM_ENABLED;";
-        eSingleMixState = SM_ENABLED;
-    }
-    
-    vecChannels[iChID].CreateSingleMixStateMes ( eSingleMixState );
+    // send single mix state message on connection
+    vecChannels[iChID].CreateSingleMixStateMes ( eSingleMixServerMode );
 
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
@@ -1169,15 +1162,15 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             const CVector<int16_t>& vecsData = vecvecsData[j];
             float                   fGain    = vecvecfGains[iChanCnt][j];
 
-            if ( bSingleMixServerMode )
+            // overwrite gain with the master's gain in --singlemix
+            if ( eSingleMixServerMode == SM_ENABLED || eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
             {
-                // overwrite gain with the gain of the master client (same mix for everybody, except ...)
                 fGain    = vecvecfGains[0][j];
-                // mute people's own channel (we don't want them to hear themselves in the common mix!)
-                if ( iChanCnt == j )
-                {
-                    fGain = 0.0f;
-                }
+            }
+            // except in --singlemix 'no-monitor' mode, mute one's own channel
+            if ( iChanCnt == j && eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
+            {
+                fGain = 0.0f;
             }
 
             // if channel gain is 1, avoid multiplication for speed optimization
@@ -1248,17 +1241,17 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             const int iPanDel = lround( (float)( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
             const int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
             const int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
-
-            if ( bSingleMixServerMode )
+            
+            // overwrite gain/pan with the master's gain/pan in --singlemix
+            if ( eSingleMixServerMode == SM_ENABLED || eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
             {
-                // overwrite gain with the gain of the master client (same mix for everybody, except ...)
                 fGain = vecvecfGains[0][j];
                 fPan  = vecvecfPannings[0][j];
-                // mute people's own channel (we don't want them to hear themselves in the common mix!)
-                if ( iChanCnt == j )
-                {
-                    fGain = 0.0f;
-                }
+            }
+            // except in --singlemix 'no-monitor' mode, mute one's own channel
+            if ( iChanCnt == j && eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
+            {
+                fGain = 0.0f;
             }
 
             // calculate combined gain/pan for each stereo channel where we define
@@ -1534,23 +1527,13 @@ void CServer::CreateAndSendRecorderStateForAllConChannels()
 
 void CServer::CreateAndSendSingleMixStateForAllConChannels()
 {
-    ESingleMixState eSingleMixState = SM_NOT_ENABLED;
-    
-    if ( CServer::bSingleMixServerMode == TRUE )
-    {
-        qInfo() << "eSingleMixState = SM_ENABLED;";
-        eSingleMixState = SM_ENABLED;
-    }
-        
     // now send single mix state to all connected clients
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
             // send message
-            
-            qInfo() << "Sending SingleMixStateMes";
-            vecChannels[i].CreateSingleMixStateMes ( eSingleMixState );
+            vecChannels[i].CreateSingleMixStateMes ( eSingleMixServerMode );
         }
     }
 }

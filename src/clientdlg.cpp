@@ -1361,6 +1361,10 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         image:          url(:/png/fader/res/ledbuttonnotpressed.png); }"
             "QCheckBox::indicator:checked {"
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
+            "QCheckBox::disabled {"
+            "                         color:          rgb(110, 110, 110); }"
+            "QCheckBox::indicator::disabled {"
+            "                         image:          url(:/png/fader/res/ledbuttondisabled.png); }"
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
 
@@ -1411,8 +1415,7 @@ void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderStat
 void CClientDlg::OnSingleMixStateReceived (  const ESingleMixState newSingleMixState )
 {
     MainMixerBoard->SetSingleMixState ( newSingleMixState );
-    // todo: make calls to this nicer (or the signature) by clearly separating the state change check from the call
-    SetMixerBoardDeco ( eLastRecorderState, pClient->GetGUIDesign() );
+    SetGUIDesign ( pClient->GetGUIDesign() );
 }
 
 void CClientDlg::OnGUIDesignChanged()

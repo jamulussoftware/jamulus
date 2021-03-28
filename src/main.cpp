@@ -55,41 +55,41 @@ int main ( int argc, char** argv )
     // arguments
 #if defined( SERVER_BUNDLE ) && ( defined( Q_OS_MACX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
-    bool         bIsClient                   = false;
+    bool            bIsClient                   = false;
 #else
-    bool         bIsClient                   = true;
+    bool            bIsClient                   = true;
 #endif
-    bool         bUseGUI                     = true;
-    bool         bStartMinimized             = false;
-    bool         bShowComplRegConnList       = false;
-    bool         bDisconnectAllClientsOnQuit = false;
-    bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
-    bool         bUseMultithreading          = false;
-    bool         bShowAnalyzerConsole        = false;
-    bool         bMuteStream                 = false;
-    bool         bMuteMeInPersonalMix        = false;
-    bool         bDisableRecording           = false;
-    bool         bDelayPan                   = false;
-    bool         bNoAutoJackConnect          = false;
-    bool         bUseTranslation             = true;
-    bool         bCustomPortNumberGiven      = false;
-    bool         bSingleMixServerMode        = false;
-    int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
-    quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
-    ELicenceType eLicenceType                = LT_NO_LICENCE;
-    QString      strMIDISetup                = "";
-    QString      strConnOnStartupAddress     = "";
-    QString      strIniFileName              = "";
-    QString      strHTMLStatusFileName       = "";
-    QString      strLoggingFileName          = "";
-    QString      strRecordingDirName         = "";
-    QString      strCentralServer            = "";
-    QString      strServerInfo               = "";
-    QString      strServerPublicIP           = "";
-    QString      strServerListFilter         = "";
-    QString      strWelcomeMessage           = "";
-    QString      strClientName               = "";
-
+    bool            bUseGUI                     = true;
+    bool            bStartMinimized             = false;
+    bool            bShowComplRegConnList       = false;
+    bool            bDisconnectAllClientsOnQuit = false;
+    bool            bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
+    bool            bUseMultithreading          = false;
+    bool            bShowAnalyzerConsole        = false;
+    bool            bMuteStream                 = false;
+    bool            bMuteMeInPersonalMix        = false;
+    bool            bDisableRecording           = false;
+    bool            bDelayPan                   = false;
+    bool            bNoAutoJackConnect          = false;
+    bool            bUseTranslation             = true;
+    bool            bCustomPortNumberGiven      = false;
+    ESingleMixState eSingleMixServerMode        = SM_UNDEFINED;
+    int             iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
+    quint16         iPortNumber                 = DEFAULT_PORT_NUMBER;
+    ELicenceType    eLicenceType                = LT_NO_LICENCE;
+    QString         strMIDISetup                = "";
+    QString         strConnOnStartupAddress     = "";
+    QString         strIniFileName              = "";
+    QString         strHTMLStatusFileName       = "";
+    QString         strLoggingFileName          = "";
+    QString         strRecordingDirName         = "";
+    QString         strCentralServer            = "";
+    QString         strServerInfo               = "";
+    QString         strServerPublicIP           = "";
+    QString         strServerListFilter         = "";
+    QString         strWelcomeMessage           = "";
+    QString         strClientName               = "";
+   
 #if !defined(HEADLESS) && defined(_WIN32)
     if (AttachConsole(ATTACH_PARENT_PROCESS)) {
         freopen("CONOUT$", "w", stdout);
@@ -116,13 +116,28 @@ int main ( int argc, char** argv )
 
 
         // Single audio mix server mode flag -----------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--singlemix", // no short form
-                               "--singlemix" ) )
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--singlemix", // no short form
+                                 "--singlemix",
+                                 strArgument ) )
         {
-            bSingleMixServerMode = true;
-            qInfo() << "- single audio mix mode";
+            if ( strArgument == "monitor" )
+            {
+                eSingleMixServerMode = SM_ENABLED;
+                qInfo() << "- single mix server mode (with monitoring)";
+            }
+            else if ( strArgument == "no-monitor" )
+            {
+                eSingleMixServerMode = SM_ENABLED_NO_MONITORING;
+                qInfo() << "- single mix server mode (without monitoring)";
+            }
+            else
+            {
+                qCritical() << "Illegal mode for --singlemix. Allowed modes: monitor, no-monitor.";
+                exit ( 1 );
+            }
             CommandLineOptions << "--singlemix";
             continue;
         }
@@ -640,7 +655,8 @@ int main ( int argc, char** argv )
     }
 
     // the single mix mode cannot be combined with multithreading and fast update
-    if ( bSingleMixServerMode && ( bUseMultithreading || !bUseDoubleSystemFrameSize ) )
+    if ( ( eSingleMixServerMode == SM_ENABLED || eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
+        && ( bUseMultithreading || !bUseDoubleSystemFrameSize ) )
     {
         qCritical() << "Single mix mode cannot be combined with --fastupdate or --multithreading.";
         bUseMultithreading        = false;
@@ -772,7 +788,7 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
-                             bSingleMixServerMode,
+                             eSingleMixServerMode,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -870,8 +886,11 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
-        "      --singlemix       single audio mix server mode where all clients\n"
-        "                        hear the audio mix of the first connected client\n"
+        "      --singlemix       'monitor' or 'no-monitor'\n"
+        "                        single audio mix server mode where all clients\n"
+        "                        hear the mix of the first connected client\n"
+        "                        (where 'no-monitor' will exclude each client's\n"
+        "                        own channel from the otherwise identical mix)"
         "                        (cannot be combined with -F and -T)\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the server list on which to register\n"

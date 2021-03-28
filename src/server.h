@@ -169,23 +169,23 @@ class CServer :
     Q_OBJECT
 
 public:
-    CServer ( const int          iNewMaxNumChan,
-              const QString&     strLoggingFileName,
-              const quint16      iPortNumber,
-              const QString&     strHTMLStatusFileName,
-              const QString&     strCentralServer,
-              const QString&     strServerInfo,
-              const QString&     strServerListFilter,
-              const QString&     strServerPublicIP,
-              const QString&     strNewWelcomeMessage,
-              const QString&     strRecordingDirName,
-              const bool         bNSingleMixServerMode,
-              const bool         bNDisconnectAllClientsOnQuit,
-              const bool         bNUseDoubleSystemFrameSize,
-              const bool         bNUseMultithreading,
-              const bool         bDisableRecording,
-              const bool         bNDelayPan,
-              const ELicenceType eNLicenceType );
+    CServer ( const int             iNewMaxNumChan,
+              const QString&        strLoggingFileName,
+              const quint16         iPortNumber,
+              const QString&        strHTMLStatusFileName,
+              const QString&        strCentralServer,
+              const QString&        strServerInfo,
+              const QString&        strServerListFilter,
+              const QString&        strServerPublicIP,
+              const QString&        strNewWelcomeMessage,
+              const QString&        strRecordingDirName,
+              const ESingleMixState eSingleMixServerMode,
+              const bool            bNDisconnectAllClientsOnQuit,
+              const bool            bNUseDoubleSystemFrameSize,
+              const bool            bNUseMultithreading,
+              const bool            bDisableRecording,
+              const bool            bNDelayPan,
+              const ELicenceType    eNLicenceType );
 
     virtual ~CServer();
 
@@ -413,7 +413,7 @@ protected:
     bool                       bDisconnectAllClientsOnQuit;
 
     CSignalHandler*            pSignalHandler;
-    bool                       bSingleMixServerMode;
+    ESingleMixState            eSingleMixServerMode;
 
 signals:
     void Started();

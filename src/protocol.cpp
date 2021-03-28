@@ -1803,9 +1803,9 @@ bool CProtocol::EvaluateSingleMixStateMes(const CVector<uint8_t>& vecData)
         static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // note that SM_UNDEFINED is only internally used
-    if ( ( iSingleMixState != SM_NOT_INITIALISED ) &&
-         ( iSingleMixState != SM_NOT_ENABLED ) &&
-         ( iSingleMixState != SM_ENABLED ) )
+    if ( ( iSingleMixState != SM_NOT_ENABLED ) &&
+         ( iSingleMixState != SM_ENABLED ) &&
+         ( iSingleMixState != SM_ENABLED_NO_MONITORING ) )
     {
         return true;
     }

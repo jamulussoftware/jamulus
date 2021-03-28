@@ -220,7 +220,8 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                  padding-left:   -34px;"
             "                  padding-top:    -10px;"
             "                  padding-bottom: -15px; }"
-            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
+            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }"
+            "QSlider::handle::disabled { image: url(:/png/fader/res/faderhandledisabled.png); }" );
 
         pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
         pLabelInstBox->setMinimumHeight     ( 52 ); // maximum height of the instrument+flag pictures
@@ -1116,36 +1117,40 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
 void CAudioMixerBoard::UpdateTitle()
 {
-    QString strTitlePrefix = "";
 
+    QList<QString> title_parts;
+    
     if ( eRecorderState == RS_RECORDING )
     {
-        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        title_parts.append("[" + tr ( "RECORDING ACTIVE" ) + "] ");
     }
 
-    if ( eSingleMixState == SM_ENABLED )
+    if ( eSingleMixState == SM_ENABLED || eSingleMixState == SM_ENABLED_NO_MONITORING )
     {
         if ( iMyChannelID == 0 )
         {
-            // SM_ENABLED but iMyChannelID = 0 (we are the "master"), so won't disable controls
-            setTitle ( strTitlePrefix + tr ( "Single Mix (you control!) at: " ) + strServerName );
+            title_parts.append( "YOU CONTROL: " );
         }
-        else
+        
+        title_parts.append("Server Mix ");
+        
+        if ( eSingleMixState == SM_ENABLED_NO_MONITORING )
         {
-            Disable();
-            setTitle ( strTitlePrefix + tr ( "Single Mix at: " ) + strServerName );
+            title_parts.append("(without monitoring) ");
         }
     }
     else
     {
-        Enable();
-        setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
+        title_parts.append("Personal Mix ");
     }
-
+    
+    title_parts.append("at: ");
+    title_parts.append(strServerName);
+    setTitle ( title_parts.join("") );
     setAccessibleName ( title() );
 }
 
-void CAudioMixerBoard::Disable()
+void CAudioMixerBoard::DisableAllFaders()
 {
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1153,7 +1158,7 @@ void CAudioMixerBoard::Disable()
     }
 }
 
-void CAudioMixerBoard::Enable()
+void CAudioMixerBoard::EnableAllFaders()
 {
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1173,6 +1178,22 @@ void CAudioMixerBoard::SetSingleMixState ( const ESingleMixState newSingleMixSta
     // store the new single mix state and update the title
     eSingleMixState = newSingleMixState;
     UpdateTitle();
+    
+    // if the server runs --singlemix and we are not the master (channelID 0), disable all faders
+    if ( ( eSingleMixState == SM_ENABLED || eSingleMixState == SM_ENABLED_NO_MONITORING )
+        && iMyChannelID != 0 )
+    {
+        DisableAllFaders();
+    }
+    else
+    {
+        EnableAllFaders();
+    }
+    
+    if ( eSingleMixState == SM_ENABLED_NO_MONITORING )
+    {
+        // todo: Indicate that our own channel is muted
+    }
 }
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )

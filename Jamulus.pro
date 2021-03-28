@@ -723,6 +723,7 @@ DISTFILES += ChangeLog \
     src/res/IndicatorRed.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
+    src/res/faderhandledisabled.png \
     src/res/faderhandlesmall.png \
     src/res/HLEDGreen.png \
     src/res/HLEDGreenSmall.png \
@@ -734,6 +735,7 @@ DISTFILES += ChangeLog \
     src/res/HLEDYellowSmall.png \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
+    src/res/ledbuttondisabled.png \
     src/res/fronticon.png \
     src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \

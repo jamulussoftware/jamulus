@@ -18,7 +18,10 @@ If a feature or function can be achieved in another way by another system or met
 There are other solutions for real time online jamming available. But Jamulus stands alone with its client/server system, minimalistic GUI and simple functionality. 
 
 ### Source code consistency
-Respect the existing code style: Tab size=4, insert spaces.
+- Respect the existing code style: Tab size=4, insert spaces.
+- Space before and after ( and ), except no space between ) and ;, and no space before an empty ().
+- All bodies of if, else, while, for, etc., to be enclosed in braces { and }, usually on separate lines.
+
 Make sure (if possible) that your code compiles on Windows/Mac/Linux.
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
 

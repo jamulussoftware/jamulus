@@ -29,7 +29,7 @@ Do not use diff/patch to send your code changes but create a Github fork of the 
 Each new feature or bug fix must be documented in the ChangeLog. If a new contributor/translator adds code to the Jamulus project, he/she should be added to the contributor/translator list in the About dialog of the Jamulus software (see in `src/util.cpp` in the constructor function `CAboutDlg::CAboutDlg()`).
 
 ### Merging Pull Requests
-The git master branch is protected so that at least two reviews must be done before the pull request can be merged. If a pull request received at least two positive reviews, any of the main developers can initiate the merge.
+The git master branch is protected to require at least two reviews by the main developers before the pull request can be merged. If a pull request receives at least two positive reviews, any of the main developers can initiate the merge.
 
 ---
 

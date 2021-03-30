@@ -89,13 +89,6 @@ int main ( int argc, char** argv )
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
 
-#if !defined(HEADLESS) && defined(_WIN32)
-    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-        freopen("CONOUT$", "w", stdout);
-        freopen("CONOUT$", "w", stderr);
-    }
-#endif
-
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"
@@ -625,6 +618,12 @@ int main ( int argc, char** argv )
         iPortNumber += 10; // increment by 10
     }
 
+#if defined(_WIN32)
+    if (bUseGUI && AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
+    }
+#endif
 
     // Application/GUI setup ---------------------------------------------------
     // Application object

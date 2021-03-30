@@ -66,7 +66,8 @@ public:
              void*          arg,
              const QString& strMIDISetup,
              const bool     bNoAutoJackConnect,
-             const QString& strJackClientName ) :
+             const QString& strJackClientName,
+             const QString& strJackServerName ) :
         CSoundBase ( "Jack", fpNewProcessCallback, arg, strMIDISetup ),
         iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ), fInOutLatencyMs ( 0.0f )
     {
@@ -77,7 +78,7 @@ public:
             strJackName += " " + strJackClientName;
         }
 
-        OpenJack ( bNoAutoJackConnect, strJackName.toLocal8Bit().data() );
+        OpenJack ( bNoAutoJackConnect, strJackName.toLocal8Bit().data(), strJackServerName.toLocal8Bit().data() );
     }
 
     virtual ~CSound() { CloseJack(); }
@@ -103,7 +104,8 @@ public:
 
 protected:
     void OpenJack ( const bool  bNoAutoJackConnect,
-                    const char* jackClientName );
+                    const char* jackClientName,
+                    const char* jackServerName );
 
     void CloseJack();
 
@@ -127,6 +129,7 @@ public:
              void*          pParg,
              const QString& strMIDISetup,
              const bool     ,
+             const QString&,
              const QString& ) :
         CSoundBase ( "nosound", fpNewProcessCallback, pParg, strMIDISetup ),
         HighPrecisionTimer ( true ) { HighPrecisionTimer.Start();

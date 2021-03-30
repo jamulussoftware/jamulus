@@ -28,12 +28,16 @@
 
 #ifdef WITH_SOUND
 void CSound::OpenJack ( const bool  bNoAutoJackConnect,
-                        const char* jackClientName )
+                        const char* jackClientName,
+                        const char* jackServerName )
 {
     jack_status_t JackStatus;
 
     // try to become a client of the JACK server
-    pJackClient = jack_client_open ( jackClientName, JackNullOption, &JackStatus );
+    if (strlen(jackServerName) > 0)
+        pJackClient = jack_client_open ( jackClientName, JackServerName, &JackStatus, jackServerName );
+    else
+        pJackClient = jack_client_open ( jackClientName, JackNullOption, &JackStatus );
 
     if ( pJackClient == nullptr )
     {

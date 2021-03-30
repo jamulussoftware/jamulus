@@ -43,6 +43,7 @@ public:
              void*          arg,
              const QString& strMIDISetup,
              const bool     ,
+             const QString&,
              const QString& );
     virtual ~CSound() {}
 

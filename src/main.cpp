@@ -88,6 +88,7 @@ int main ( int argc, char** argv )
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
+    QString      strJackServerName           = "";
 
 #if !defined(HEADLESS) && defined(_WIN32)
     if (AttachConsole(ATTACH_PARENT_PROCESS)) {
@@ -531,6 +532,22 @@ int main ( int argc, char** argv )
             continue;
         }
 
+#ifdef WITH_SOUND
+        // Jack server name ----------------------------------------------------
+        if ( GetStringArgument ( argc,
+                               argv,
+                               i,
+                               "--jackservername", // no short form
+                               "--jackservername",
+                               strArgument ) )
+        {
+            strJackServerName = strArgument;
+            qInfo() << qUtf8Printable( QString( "- jack server name: %1" )
+                .arg( strJackServerName ) );
+            CommandLineOptions << "--jackservername";
+            continue;
+        }
+#endif
 
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
@@ -697,7 +714,8 @@ int main ( int argc, char** argv )
                              strMIDISetup,
                              bNoAutoJackConnect,
                              strClientName,
-                             bMuteMeInPersonalMix );
+                             bMuteMeInPersonalMix,
+                             strJackServerName );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -875,6 +893,9 @@ QString UsageArguments ( char **argv )
         "      --mutemyown       mute me in my personal mix (headless only)\n"
         "  -c, --connect         connect to given server address on startup\n"
         "  -j, --nojackconnect   disable auto Jack connections\n"
+#ifdef WITH_SOUND
+        "      --jackservername  use specific Jack server instance\n"
+#endif
         "      --ctrlmidich      MIDI controller channel to listen\n"
         "      --clientname      client name (window title and jack client name)\n"
         "\nExample: " + QString ( argv[0] ) + " -s --inifile myinifile.ini\n";

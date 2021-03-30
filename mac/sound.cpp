@@ -30,6 +30,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
                  void*          arg,
                  const QString& strMIDISetup,
                  const bool     ,
+                 const QString&,
                  const QString& ) :
     CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, strMIDISetup ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )

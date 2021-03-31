@@ -690,7 +690,7 @@ void CClientDlg::OnConnectDlgAccepted()
             if ( strSelectedAddress.isEmpty() )
             {
                 strSelectedAddress = DEFAULT_SERVER_ADDRESS;
-                strMixerBoardLabel = tr ( "Central Server" );
+                strMixerBoardLabel = tr ( "Directory Server" );
             }
         }
 

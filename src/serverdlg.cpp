@@ -61,7 +61,7 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
         tr ( "If the Make My Server Public check box is checked, this server registers "
-        "itself at the central server so that all users of the application "
+        "itself at the directory server so that all users of the application "
         "can see the server in the connect dialog server list and "
         "connect to it. The registration of the server is renewed periodically "
         "to make sure that all servers in the connect dialog server list are "
@@ -70,20 +70,20 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
     // register server status label
     lblRegSvrStatus->setWhatsThis ( "<b>" + tr ( "Register Server Status" ) + ":</b> " +
         tr ( "If the Make My Server Public check box is checked, this will show "
-        "whether registration with the central server is successful. If the "
+        "whether registration with the directory server is successful. If the "
         "registration failed, please choose another server list." ) );
 
     // custom directory server address
-    QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
-        tr ( "The custom central server address is the IP address or URL of the central "
+    QString strCentrServAddr = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
+        tr ( "The custom directory server address is the IP address or URL of the directory "
         "server at which the server list of the connection dialog is managed." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
     edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
+    edtCentralServerAddress->setAccessibleName ( tr ( "Directory server address line edit" ) );
 
     cbxCentServAddrType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " + tr (
-        "Selects the server list (i.e. central server address) in which your server will be added." ) );
+        "Selects the server list (i.e. directory server address) in which your server will be added." ) );
     cbxCentServAddrType->setAccessibleName ( tr ( "Server list selection combo box" ) );
 
     // server name

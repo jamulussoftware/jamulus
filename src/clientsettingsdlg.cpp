@@ -300,13 +300,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
     // custom directory server address
-    QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
-        tr ( "Leave this blank unless you need to enter the address of a central "
+    QString strCentrServAddr = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
+        tr ( "Leave this blank unless you need to enter the address of a directory "
         "server other than the default." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
     cbxCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    cbxCentralServerAddress->setAccessibleName ( tr ( "Central server address combo box" ) );
+    cbxCentralServerAddress->setAccessibleName ( tr ( "Directory server address combo box" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr (  "Current Connection Status "

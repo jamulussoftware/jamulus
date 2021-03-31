@@ -5,6 +5,8 @@
 
 - Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
   (contributed by @JohannesBrx)
+  
+- Bug fix: Channel mapping now only resets if the sound card or the numbers of channels changed
 
 ### 3.7.0 (2021-03-17) ###
 

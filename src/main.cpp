@@ -69,6 +69,7 @@ int main ( int argc, char** argv )
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
+    bool         bDelayPan                   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
@@ -417,6 +418,17 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Enable delay panning on startup ----------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-P",
+                               "--delaypan" ) )
+        {
+            bDelayPan = true;
+            qInfo() << "- starting with delay panning";
+            CommandLineOptions << "--delaypan";
+            continue;
+        }
 
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( argc,
@@ -601,6 +613,14 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
+#ifdef SERVER_ONLY
+    if ( bIsClient )
+    {
+        qCritical() << "Only --server mode is supported in this build with nosound.";
+        exit ( 1 );
+    }
+#endif
+
     // the inifile is not supported for the headless server mode
     if ( !bIsClient && !bUseGUI && !strIniFileName.isEmpty() )
     {
@@ -771,6 +791,7 @@ int main ( int argc, char** argv )
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
+                             bDelayPan,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -876,6 +897,7 @@ QString UsageArguments ( char **argv )
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of this server in the format:\n"
         "                        [name];[city];[country as QLocale ID]\n"
+        "  -P, --delaypan        start with delay panning enabled\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"

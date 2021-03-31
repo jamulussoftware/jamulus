@@ -1410,7 +1410,6 @@ CVector<CChannelInfo> CServer::CreateChannelList()
     {
         if ( vecChannels[i].IsConnected() )
         {
-            // append channel ID, IP address and channel name to storing vectors
             vecChanInfo.Add ( CChannelInfo (
                 i, // ID
                 vecChannels[i].GetChanInfo() ) );

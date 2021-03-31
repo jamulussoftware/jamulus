@@ -1038,7 +1038,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="762"/>
-        <source>Central Server</source>
+        <source>Directory Server</source>
         <translation>Servidor Central</translation>
     </message>
     <message>
@@ -1350,7 +1350,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Central server address combo box</source>
+        <source>Directory server address combo box</source>
         <translation>Campo para dirección servidor central</translation>
     </message>
     <message>
@@ -1522,27 +1522,27 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Dirección Personalizada Servidor Central</translation>
     </message>
     <message>
-        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
+        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
         <translation type="vanished">La dirección personalizada del servidor central es la dirección IP o URL del servidor central en el cual se gestiona la lista de servidores de la ventana de conexión. Esta dirección solo se utiliza si se selecciona la lista personalizada en la ventana de conexión.</translation>
     </message>
     <message>
-        <source>Central Server Address</source>
+        <source>Directory Server Address</source>
         <translation type="vanished">Dirección Servidor Central</translation>
     </message>
     <message>
-        <source>The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <source>The directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
         <translation type="vanished">La dirección del servidor central es la dirección IP o URL del servidor central en el que se gestiona la lista de servidores en la ventana de conexión. Aquí se puede escoger la región local de entre los servidores centrales por defecto o se puede especificar una dirección manualmente.</translation>
     </message>
     <message>
-        <source>Default central server type combo box</source>
+        <source>Default directory server type combo box</source>
         <translation type="vanished">Selección servidor central</translation>
     </message>
     <message>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation type="vanished">Dirección servidor central</translation>
     </message>
     <message>
@@ -1718,7 +1718,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="258"/>
-        <source>Leave this blank unless you need to enter the address of a central server other than the default.</source>
+        <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation>Deja esto en blanco a menos que necesites escribir la dirección de un servidor distinto a los que hay por defecto.</translation>
     </message>
     <message>
@@ -1999,11 +1999,11 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="482"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Dirección Personalizada Servidor Central:</translation>
     </message>
     <message>
-        <source>Central Server Address:</source>
+        <source>Directory Server Address:</source>
         <translation type="vanished">Dirección Servidor Central:</translation>
     </message>
     <message>
@@ -2037,11 +2037,11 @@
         <translation>Lista Servidores</translation>
     </message>
     <message>
-        <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
+        <source>The server list shows a list of available servers which are registered at the directory server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
         <translation type="vanished">La lista de servidores muestra una lista de servidores disponibles que se encuentran registrados en el servidor central. Escoge un servidor de la lista y pulsa el botón de conectar para conectarte a este servidor. También es posible realizar la conexión haciendo doble clic en un servidor de la lista. Si un servidor está ocupado, se puede desplegar una lista de los músicos conectados al pulsar el icono al lado del nombre. Los servidores permanentes se muestran en negrita.</translation>
     </message>
     <message>
-        <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
+        <source>Note that it may take some time to retrieve the server list from the directory server. If no valid directory server address is specified in the settings, no server list will be available.</source>
         <translation type="vanished">Ten en cuenta que puede llevar un tiempo recuperar la lista de servidores del servidor central. Si no se especifica una dirección válida en la configuración, no habrá ninguna lista de servidores disponible.</translation>
     </message>
     <message>
@@ -2759,7 +2759,7 @@
         <translation>Mi Servidor es Público</translation>
     </message>
     <message>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all </source>
         <translation type="vanished">Si se activa Mi Servidor es Público, este servidor se registra en el servidor central para que todos los usuarios de </translation>
     </message>
     <message>
@@ -2772,24 +2772,24 @@
         <translation>Estado Registro Servidor</translation>
     </message>
     <message>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful.</source>
         <translation type="vanished">Si se ha activado Mi Servidor es Público, esto mostrará si se ha registrado en el servidor central con éxito.</translation>
     </message>
     <message>
-        <source>Central Server Address</source>
+        <source>Directory Server Address</source>
         <translation type="vanished">Dirección Servidor Central</translation>
     </message>
     <message>
-        <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <source>The Directory server address is the IP address or URL of the directory server at which this server is registered. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
         <translation type="vanished">La dirección del Servidor Central es la dirección IP o URL del servidor central en el que se ha registrado este servidor. Aquí se puede escoger la región local de entre los servidores centrales por defecto o se puede especificar una dirección manualmente.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="72"/>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
         <translation>Si se activa Mi Servidor es Público, se mostrará si el registro con el servidor central ha tenido éxito. Si el registro falla, por favor escoge otra lista de servidores.</translation>
     </message>
     <message>
-        <source>Default central server type combo box</source>
+        <source>Default directory server type combo box</source>
         <translation type="vanished">Selección servidor central</translation>
     </message>
     <message>
@@ -2799,22 +2799,22 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="63"/>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation>Si se activa Mi Servidor es Público, este servidor se registra en el servidor central para que todos los usuarios de la aplicación puedan ver el servidor en la lista de servidores de la ventana de conexión y conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentren realmente disponibles.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="77"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Dirección Personalizada Servidor Central</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="78"/>
-        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
         <translation>La dirección personalizada del servidor central es la dirección IP o URL del servidor central en el cual se gestiona la lista de servidores de la ventana de conexión.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation>Dirección servidor central</translation>
     </message>
     <message>
@@ -2824,7 +2824,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
-        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
         <translation>Selecciona la lista de servidores (por ej. dirección servidor central) al que se añadirá tu servidor.</translation>
     </message>
     <message>
@@ -3166,7 +3166,7 @@
     </message>
     <message>
         <location filename="../../util.h" line="674"/>
-        <source>Central Server full</source>
+        <source>Directory Server full</source>
         <translation>Servidor Central lleno</translation>
     </message>
     <message>
@@ -3250,7 +3250,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="252"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Dirección Personalizada Servidor Central:</translation>
     </message>
     <message>
@@ -3274,7 +3274,7 @@
         <translation>Idioma</translation>
     </message>
     <message>
-        <source>Central Server Address:</source>
+        <source>Directory Server Address:</source>
         <translation type="vanished">Dirección Servidor Central:</translation>
     </message>
     <message>

@@ -3,7 +3,7 @@
 
 - The term "Central server" has been replaced with "Directory server" (#1407). @pljones
 
-- Settings window made Tabbed including User_Profile, Basic & Advanced.
+- Settings window made Tabbed including My_Profile, Audio/Network & Advanced.
   User Profile window removed.
   Input Pan placed in Advanced tab and removed from main window.
   (contributed by @dcorson-ticino-com)

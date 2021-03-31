@@ -1027,7 +1027,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="762"/>
-        <source>Central Server</source>
+        <source>Directory Server</source>
         <translation>Zentralserver</translation>
     </message>
     <message>
@@ -1338,7 +1338,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Central server address combo box</source>
+        <source>Directory server address combo box</source>
         <translation>Zentralserveradresse Combo-Box</translation>
     </message>
     <message>
@@ -1510,27 +1510,27 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Benutzerdefinierte Zentralserveradresse</translation>
     </message>
     <message>
-        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
+        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
         <translation type="vanished">Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverliste organisiert und bereitstellt. Diese Adresse wird nur benutzt, wenn die benutzerdefinierte Serverliste im Verbindungsdialog ausgewählt wird.</translation>
     </message>
     <message>
-        <source>Central Server Address</source>
+        <source>Directory Server Address</source>
         <translation type="vanished">Zentralserveradresse</translation>
     </message>
     <message>
-        <source>The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <source>The directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
         <translation type="vanished">Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverliste organisiert und bereitstellt. Mit der Zentralserveradresse kann entweder die örtliche Region festgelegt werden (durch Auswahl des entsprechenden vorgegebenen Zentralservers) oder man gibt eine beliebige Adresse manuell ein.</translation>
     </message>
     <message>
-        <source>Default central server type combo box</source>
+        <source>Default directory server type combo box</source>
         <translation type="vanished">Voreingestellter Zentralservertyp Auswahlbox</translation>
     </message>
     <message>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation type="vanished">Zentralserveradresse Eingabefeld</translation>
     </message>
     <message>
@@ -1706,7 +1706,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="258"/>
-        <source>Leave this blank unless you need to enter the address of a central server other than the default.</source>
+        <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation>Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverliste organisiert und bereitstellt. Diese Adresse wird nur benutzt, wenn die benutzerdefinierte Serverliste im Verbindungsdialog ausgewählt wird.</translation>
     </message>
     <message>
@@ -1983,11 +1983,11 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="482"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Benutzerdefinierte Zentralserveradresse:</translation>
     </message>
     <message>
-        <source>Central Server Address:</source>
+        <source>Directory Server Address:</source>
         <translation type="vanished">Zentralserveradresse:</translation>
     </message>
     <message>
@@ -2021,11 +2021,11 @@
         <translation>Severliste</translation>
     </message>
     <message>
-        <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
+        <source>The server list shows a list of available servers which are registered at the directory server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
         <translation type="vanished">Die Serverliste zeigt eine Liste von verfügbaren Server, die sich am Zentralserver registriert haben. Markiere einen Server von der Liste und drücke den Knopf Verbinden um eine Verbindung zu dem Server aufzubauen. Alternativ kann man auch den Server in der Liste direkt doppelklicken. Wenn ein Server belegt ist, dann wird eine Liste der verbundenen Musikern angezeigt. Server, die länger online sind (permanente Server) werden in Fettschrift dargestellt.</translation>
     </message>
     <message>
-        <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
+        <source>Note that it may take some time to retrieve the server list from the directory server. If no valid directory server address is specified in the settings, no server list will be available.</source>
         <translation type="vanished">Es kann einen Moment dauern, bis die Serverliste vom Zentralserver empfangen wird. Falls keine gültige Zentralserveradresse in den Einstellungen angegeben ist, kann keine Liste angezeigt werden.</translation>
     </message>
     <message>
@@ -2735,7 +2735,7 @@
         <translation>Veröffentliche meinen Server</translation>
     </message>
     <message>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all </source>
         <translation type="vanished">Mit dieser Funktion wird der eigene Server in der Serverliste des Zentralservers registriert so dass alle anderen Applikationsnutzer den </translation>
     </message>
     <message>
@@ -2748,28 +2748,28 @@
         <translation>Registrierungsstatus</translation>
     </message>
     <message>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful.</source>
         <translation type="vanished">Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht.</translation>
     </message>
     <message>
-        <source>Central Server Address</source>
+        <source>Directory Server Address</source>
         <translation type="vanished">Zentralserveradresse</translation>
     </message>
     <message>
-        <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <source>The Directory server address is the IP address or URL of the directory server at which this server is registered. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
         <translation type="vanished">Die Zentralserveradrees ist die IP-Adresse oder URL des Zentralservers bei dem man sich registrieren möchte. Mit dem Zentralservertyp legt man die Region fest, in der man sich befindet. Außerdem kann eine freie Adresse eingetragen werden.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="72"/>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
         <translation>Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht. Wenn die Registrierung fehlgeschlagen ist, dann wähle eine andere Serverliste aus.</translation>
     </message>
     <message>
-        <source>The Central server address is the IP address or URL of the central server at which this server is registered. Pre-defined server addresses are available</source>
+        <source>The Directory server address is the IP address or URL of the directory server at which this server is registered. Pre-defined server addresses are available</source>
         <translation type="vanished">Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers bei dem man sich registrieren möchte. Vordefinierte Serveradressen sind verfügbar.</translation>
     </message>
     <message>
-        <source>Default central server type combo box</source>
+        <source>Default directory server type combo box</source>
         <translation type="vanished">Voreingestellter Zentralservertyp Auswahlbox</translation>
     </message>
     <message>
@@ -2779,22 +2779,22 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="63"/>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation>Mit dieser Funktion wird der eigene Server in der Serverliste des Zentralservers registriert so dass alle anderen Applikationsnutzer den Server in der Liste sehen können und sich mit ihm verbinden können. Die Registrierung mit dem Zentralserver wird periodisch erneuert um sicherzugehen, dass alle registrierten Server auch wirklich erreichbar sind.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="77"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Benutzerdefinierte Zentralserveradresse</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="78"/>
-        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
         <translation>Die benutzerdefinierte Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverliste für den Verbindungsdialog bereitstellt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation>Zentralserveradresse Eingabefeld</translation>
     </message>
     <message>
@@ -2804,7 +2804,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
-        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
         <translation>Wählt die Serverliste (d.h. die Zentralserveradresse) aus, in welche dein Server registriert werden soll.</translation>
     </message>
     <message>
@@ -3146,7 +3146,7 @@
     </message>
     <message>
         <location filename="../../util.h" line="674"/>
-        <source>Central Server full</source>
+        <source>Directory Server full</source>
         <translation>Zentralserver voll</translation>
     </message>
     <message>
@@ -3230,7 +3230,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="252"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Benutzerdefinierte Zentralserveradresse:</translation>
     </message>
     <message>
@@ -3254,7 +3254,7 @@
         <translation>Sprache</translation>
     </message>
     <message>
-        <source>Central Server Address:</source>
+        <source>Directory Server Address:</source>
         <translation type="vanished">Zentralserveradresse</translation>
     </message>
     <message>

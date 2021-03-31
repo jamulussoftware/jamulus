@@ -80,7 +80,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
     }
 
     // check device capabilities if it fulfills our requirements
-    const QString strStat = CheckDeviceCapabilities();
+    const QString strStat = CheckDeviceCapabilities(); // also sets lNumInChan and lNumOutChan
 
     // check if device is capable
     if ( strStat.isEmpty() )

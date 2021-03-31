@@ -768,16 +768,19 @@ public:
 
     CHostAddress() :
         InetAddr ( static_cast<quint32> ( 0 ) ),
-        iPort ( 0 ) {}
+        iPort ( 0 ),
+        LocalAddr ( static_cast<quint32> ( 0 ) ) {}
 
     CHostAddress ( const QHostAddress NInetAddr,
                    const quint16      iNPort ) :
         InetAddr ( NInetAddr ),
-        iPort    ( iNPort ) {}
+        iPort    ( iNPort ),
+        LocalAddr ( static_cast<quint32> ( 0 )) {}
 
     CHostAddress ( const CHostAddress& NHAddr ) :
         InetAddr ( NHAddr.InetAddr ),
-        iPort    ( NHAddr.iPort ) {}
+        iPort    ( NHAddr.iPort ),
+        LocalAddr ( static_cast<quint32> ( 0 )) {}
 
     // copy operator
     CHostAddress& operator= ( const CHostAddress& NHAddr )
@@ -819,6 +822,8 @@ public:
 
     QHostAddress InetAddr;
     quint16      iPort;
+    QHostAddress LocalAddr;
+    quint16 	 lPort;
 };
 
 
@@ -1097,7 +1102,9 @@ class NetworkUtil
 {
 public:
     static bool ParseNetworkAddress ( QString       strAddress,
-                                      CHostAddress& HostAddress );
+                                      CHostAddress& HostAddress,
+                                      int inetmode=0);
+    
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
@@ -1281,8 +1288,7 @@ public:
         }
         else
         {
-            return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) *
-                AUD_MIX_FADER_RANGE_DB / 20.0f );
+            return powf ( 10.0f, ( fInValueRange0_1 * 35.0f - 35.0f ) / 20.0f );
         }
     }
 };

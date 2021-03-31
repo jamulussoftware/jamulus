@@ -46,6 +46,7 @@ public:
     CSettings() :
         vecWindowPosMain ( ), // empty array
         strLanguage      ( "" ),
+        iipmode ( 0 ),
         strFileName      ( "" )
     {
         QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
@@ -58,6 +59,7 @@ public:
     // common settings
     QByteArray vecWindowPosMain;
     QString    strLanguage;
+    int iipmode;
 
 protected:
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) = 0;

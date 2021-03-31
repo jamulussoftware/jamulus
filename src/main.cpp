@@ -69,7 +69,6 @@ int main ( int argc, char** argv )
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
-    bool         bDelayPan                   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
@@ -88,6 +87,7 @@ int main ( int argc, char** argv )
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
+    int		 ipmode = 0;
 
 #if !defined(HEADLESS) && defined(_WIN32)
     if (AttachConsole(ATTACH_PARENT_PROCESS)) {
@@ -140,6 +140,41 @@ int main ( int argc, char** argv )
             continue;
         }
 
+	// Use ipv4 protocol
+	if ( GetFlagArgument ( argv,
+				i,
+				"-4",
+				"--ipv4" ))
+	{
+	    switch (ipmode)
+	    {
+		    case 0: ipmode = 1; break;
+		    case 1: break;
+		    case 2: ipmode = 3; break;
+		    case 3: break;
+		    default: break;
+	    }
+	    CommandLineOptions << "--ipv4";
+	    continue;
+	}
+
+	// Use ipv6 protocol
+	if ( GetFlagArgument ( argv,
+				i,
+				"-6",
+				"--ipv6" ))
+	{
+	    switch (ipmode)
+	    {
+		    case 0: ipmode = 2; break;
+		    case 1: ipmode = 0; break;
+		    case 2: break;
+		    case 3: break;
+		    default: break;
+	    }
+	    CommandLineOptions << "--ipv6";
+	    continue;
+	}
 
         // Use 64 samples frame size mode --------------------------------------
         if ( GetFlagArgument ( argv,
@@ -382,17 +417,6 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Enable delay panning on startup ----------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-P",
-                               "--delaypan" ) )
-        {
-            bDelayPan = true;
-            qInfo() << "- starting with delay panning";
-            CommandLineOptions << "--delaypan";
-            continue;
-        }
 
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( argc,
@@ -577,14 +601,6 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
-#ifdef SERVER_ONLY
-    if ( bIsClient )
-    {
-        qCritical() << "Only --server mode is supported in this build with nosound.";
-        exit ( 1 );
-    }
-#endif
-
     // the inifile is not supported for the headless server mode
     if ( !bIsClient && !bUseGUI && !strIniFileName.isEmpty() )
     {
@@ -697,7 +713,8 @@ int main ( int argc, char** argv )
                              strMIDISetup,
                              bNoAutoJackConnect,
                              strClientName,
-                             bMuteMeInPersonalMix );
+                             bMuteMeInPersonalMix,
+			     ipmode );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -754,7 +771,6 @@ int main ( int argc, char** argv )
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
-                             bDelayPan,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -846,6 +862,8 @@ QString UsageArguments ( char **argv )
         "  -p, --port            set your local port number\n"
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
+	"  -4, --ipv4		 use IPv4 Protocol\n"
+	"  -6  --ipv6		 use IPv6 Protocol (order of -4 and -6 will be followed\n"
         "\nServer only:\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the server list on which to register\n"
@@ -858,7 +876,6 @@ QString UsageArguments ( char **argv )
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of this server in the format:\n"
         "                        [name];[city];[country as QLocale ID]\n"
-        "  -P, --delaypan        start with delay panning enabled\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"

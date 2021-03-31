@@ -465,7 +465,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
 // NOTE that the strCurAddr and "check for empty" can be removed if compatibility mode is removed
 vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralservaddr" );
 
-    // central server addresses
+    // directory server addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         const QString strCurAddr = GetIniSetting ( IniXMLDocument, "client",
@@ -477,7 +477,7 @@ vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "central
         }
     }
 
-    // central server address type
+    // directory server address type
     if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
          0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {
@@ -712,7 +712,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetNumericIniSet ( IniXMLDocument, "client", "audioquality",
         static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // central server addresses
+    // directory server addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         PutIniSetting ( IniXMLDocument, "client",
@@ -720,7 +720,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
                         vstrCentralServerAddress[iIdx] );
     }
 
-    // central server address type
+    // directory server address type
     SetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
         static_cast<int> ( eCentralServerAddressType ) );
 
@@ -802,8 +802,8 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     int  iValue;
     bool bValue;
 
-    // central server address type (note that it is important
-    // to set this setting prior to the "central server address")
+    // directory server address type (note that it is important
+    // to set this setting prior to the "directory server address")
     if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype",
          0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {
@@ -811,7 +811,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
     }
     else
     {
-        // if no address type is given, choose one from the operating system locale
+        // if no address type is given, use the default directory server
         pServer->SetCentralServerAddressType ( AT_DEFAULT );
     }
 
@@ -825,10 +825,11 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     }
 }
 
-    if ( !CommandLineOptions.contains ( "--centralserver" ) )
+    if ( !CommandLineOptions.contains ( "--centralserver" ) &&
+         !CommandLineOptions.contains ( "--directoryserver" ) )
     {
-        // central server address (to be set after the "use default central
-        // server address)
+        // directory server address (to be set after the "use default directory
+        // server" address)
         pServer->SetServerListCentralServerAddress (
             GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
     }
@@ -897,11 +898,11 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 {
-    // central server address
+    // directory server address
     PutIniSetting ( IniXMLDocument, "server", "centralservaddr",
         pServer->GetServerListCentralServerAddress() );
 
-    // central server address type
+    // directory server address type
     SetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype",
         static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 

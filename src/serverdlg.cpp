@@ -73,7 +73,7 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
         "whether registration with the central server is successful. If the "
         "registration failed, please choose another server list." ) );
 
-    // custom central server address
+    // custom directory server address
     QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
         tr ( "The custom central server address is the IP address or URL of the central "
         "server at which the server list of the connection dialog is managed." );
@@ -240,7 +240,7 @@ lvwClients->setMinimumHeight ( 140 );
         vecpListViewItems[i]->setHidden ( true );
     }
 
-    // central server address type combo box
+    // directory server address type combo box
     cbxCentServAddrType->clear();
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
@@ -252,7 +252,7 @@ lvwClients->setMinimumHeight ( 140 );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
-    // custom central server address
+    // custom directory server address
     edtCentralServerAddress->setText ( pServer->GetServerListCentralServerAddress() );
 
     // update server name line edit

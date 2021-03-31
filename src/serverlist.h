@@ -1,43 +1,47 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2021
  *
  * Author(s):
  *  Volker Fischer
+ *  pljones
  *
 
-Currently, if you want to run a private server, you have to open the firewall of
-your computer at the correct ports and introduce a port forwarding at your
-router to get it work. Using a central server simplifies the process. The user
-who wants to run a server just registers his server a the central server
-and a mechanism implemented in the protocol opens the firewall similar to STUN.
+Originally, if you wanted to run a server, you had to open the firewall of your
+computer at the correct ports and introduce a port forwarding at your router
+to get it work.
+
+Whilst the above can work, using a directory server simplifies the process. The user
+who wants to run a server just registers his server with a directory server
+and a mechanism implemented in the protocol opens the firewall, similar to STUN.
 
 REQUIREMENTS:
 
-The client sets the URL of the central server and can get a list of all
-currently activated and registered private servers. If the user clicks on
-the server of his choice, he gets connected to this server.
+The client sets the URL of the directory server and can get a list of all
+currently activated and registered servers. If the user clicks on the server
+of his choice, he gets connected to this server.
 
 The server list must be available in both cases: if the client is connected to
-the central server or not.
+a server or not.
 
-The server list contains the name of the server, an optional topic, an optional
-location, the number of connected users and a ping time which is updated as
-long as the server list is visible (similar to the ping measurement in the
-general settings dialog). Additional information may be also present in the list
-like reliability of the server, etc.
+The server list contains the name of the server, an optional location, the number
+of connected users and a ping time which is updated as long as the server list
+is visible (similar to the ping measurement in the general settings dialog).
+Additional information may be also present in the list, like reliability of
+the server, etc.
 
 CONNECTION PROCESS:
 
-The private server contacts the central server and registers through some
-protocol mechanism.
+A server contacts the directory server and registers through some protocol mechanism.
 
-If a client requests the server list from the central server, the central server
-sends the IP address of the client to each registered private servers so that
-they can immediately send a "firewall opening" UDP packet to this IP address.
-If the client now sends ping messages to each of the private servers in the
-list, the firewalls and routers are prepared for receiving UDP packets from this
-IP address and will tunnel it through. Note: this mechanism will not work in a
-private network.
+If a client requests the server list from a directory server, the directory server
+sends the IP address of the client to each registered server so that they can
+immediately send a "firewall opening" UDP packet to this IP address.
+
+If the client now sends ping messages to each of the servers in the list, the
+server firewalls and routers are prepared for receiving UDP packets from this
+IP address and will tunnel it through.
+
+Note: this mechanism will not work in a private network.
 
  ******************************************************************************
  *

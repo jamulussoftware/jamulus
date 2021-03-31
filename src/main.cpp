@@ -402,7 +402,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Enable delay panning on startup ----------------------------------------
+        // Enable delay panning on startup -------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
                                "-P",
@@ -414,7 +414,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Central server ------------------------------------------------------
+        // Directory server ----------------------------------------------------
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
@@ -438,14 +438,14 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strCentralServer = strArgument;
-            qInfo() << qUtf8Printable( QString( "- central server: %1" )
+            qInfo() << qUtf8Printable( QString( "- directory server: %1" )
                 .arg( strCentralServer ) );
-            CommandLineOptions << "--centralserver";
+            CommandLineOptions << "--directoryserver";
             continue;
         }
 
 
-        // Server Public IP --------------------------------------------------
+        // Server Public IP ----------------------------------------------------
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
@@ -658,7 +658,7 @@ int main ( int argc, char** argv )
         }
         if ( strCentralServer.isEmpty() || bIsClient )
         {
-            qWarning() << "Server Public IP will only take effect when registering a server with a central server.";
+            qWarning() << "Server Public IP will only take effect when registering a server with a directory server.";
         }
     }
 
@@ -671,8 +671,8 @@ int main ( int argc, char** argv )
         }
     }
 
-    // per definition: if we are in "GUI" server mode and no central server
-    // address is given, we use the default central server address
+    // per definition: if we are in "GUI" server mode and no directory server
+    // address is given, we use the default directory server address
     if ( !bIsClient && bUseGUI && strCentralServer.isEmpty() )
     {
         strCentralServer = DEFAULT_SERVER_ADDRESS;
@@ -932,7 +932,7 @@ QString UsageArguments ( char **argv )
         "  -w, --welcomemessage  welcome message on connect\n"
         "  -z, --startminimized  start minimizied\n"
         "      --serverpublicip  specify your public IP address when\n"
-        "                        running a slave and your own central server\n"
+        "                        running a slave and your own directory server\n"
         "                        behind the same NAT\n"
         "      --serverbindip    specify the IP address the server will bind to\n"
         "\nClient only:\n"

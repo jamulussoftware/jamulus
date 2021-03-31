@@ -93,10 +93,8 @@ protected:
     int              iASIOBufferSizeStereo;
 
     long             lNumInChan;
-    long             lNumInChanPrev = INVALID_INDEX; // number of channels of previous sound card/driver state
     long             lNumInChanPlusAddChan; // includes additional "added" channels
     long             lNumOutChan;
-    long             lNumOutChanPrev = INVALID_INDEX; 
     float            fInOutLatencyMs;
     CVector<int>     vSelectedInputChannels;
     CVector<int>     vSelectedOutputChannels;

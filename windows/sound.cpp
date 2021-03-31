@@ -60,13 +60,10 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
         return tr ( "The current selected audio device is no longer present in the system." );
     }
 
-    // Save number of channels from last driver (if we're not on the first run)
+    // Save number of channels from last driver
     // Need to save these (but not the driver name) as CheckDeviceCapabilities() overwrites them
-    if ( lNumInChanPrev != INVALID_INDEX && lNumOutChanPrev != INVALID_INDEX )
-    {
-        lNumInChanPrev = lNumInChan;
-        lNumOutChanPrev = lNumOutChan;
-    }
+    long lNumInChanPrev = lNumInChan;
+    long lNumOutChanPrev = lNumOutChan;
 
     loadAsioDriver ( cDriverNames[iDriverIdx] );
 
@@ -98,10 +95,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
 
             // mapping to the defaults (first two available channels)
             ResetChannelMapping();
-
-            // save the new number of in/out channels
-            lNumInChanPrev = lNumInChan;
-            lNumOutChanPrev = lNumOutChan;
 
             // store ID of selected driver if initialization was successful
             strCurDevName = cDriverNames[iDriverIdx];

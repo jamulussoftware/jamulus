@@ -212,6 +212,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     sldAudioReverb->setValue ( iCurAudReverb );
     sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
+    // init input boost
+    pClient->SetInputBoost ( pSettings->iInputBoost );
+
     // init reverb channel
     UpdateRevSelection();
 

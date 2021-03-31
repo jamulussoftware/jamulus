@@ -419,6 +419,21 @@ int main ( int argc, char** argv )
                                  argv,
                                  i,
                                  "-e",
+                                 "--directoryserver",
+                                 strArgument ) )
+        {
+            strCentralServer = strArgument;
+            qInfo() << qUtf8Printable( QString( "- directory server: %1" )
+                .arg( strCentralServer ) );
+            CommandLineOptions << "--directoryserver";
+            continue;
+        }
+
+        // Central server ** D E P R E C A T E D ** ----------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--centralserver", // no short form
                                  "--centralserver",
                                  strArgument ) )
         {
@@ -897,8 +912,8 @@ QString UsageArguments ( char **argv )
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
-        "  -e, --centralserver   address of the server list on which to register\n"
-        "                        (or 'localhost' to be a server list)\n"
+        "  -e, --directoryserver address of the directory server with which to register\n"
+        "                        (or 'localhost' to host a server list on this server)\n"
         "  -f, --listfilter      server list whitelist filter in the format:\n"
         "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"

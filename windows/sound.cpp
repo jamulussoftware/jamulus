@@ -60,6 +60,11 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
         return tr ( "The current selected audio device is no longer present in the system." );
     }
 
+    // Save number of channels from last driver
+    // Need to save these (but not the driver name) as CheckDeviceCapabilities() overwrites them
+    long lNumInChanPrev = lNumInChan;
+    long lNumOutChanPrev = lNumOutChan;
+
     loadAsioDriver ( cDriverNames[iDriverIdx] );
 
     // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
@@ -75,20 +80,25 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName,
     }
 
     // check device capabilities if it fulfills our requirements
-    const QString strStat = CheckDeviceCapabilities();
+    const QString strStat = CheckDeviceCapabilities(); // also sets lNumInChan and lNumOutChan
 
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-// TODO: In order to fix https://github.com/jamulussoftware/jamulus/issues/796 we reset the channel mapping on every property change. This is not ideal. 
-	    
-// the device has changed, per definition we reset the channel
-// mapping to the defaults (first two available channels)
-ResetChannelMapping();
+        // Reset channel mapping if the sound card name has changed or the number of channels has changed
+        if ( ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) ||
+             ( lNumInChanPrev != lNumInChan ) ||
+             ( lNumOutChanPrev != lNumOutChan ) )
+        {
+            // In order to fix https://github.com/jamulussoftware/jamulus/issues/796
+            // this code runs after a change in the ASIO driver (not when changing the ASIO input selection.)
 
-// store ID of selected driver if initialization was successful
-strCurDevName = cDriverNames[iDriverIdx];
+            // mapping to the defaults (first two available channels)
+            ResetChannelMapping();
 
+            // store ID of selected driver if initialization was successful
+            strCurDevName = cDriverNames[iDriverIdx];
+        }
     }
     else
     {
@@ -334,7 +344,7 @@ _exit(1);
         }
         else
         {
-            // ASIO SDK 2.2: "Notes: When minimum and maximum buffer size are 
+            // ASIO SDK 2.2: "Notes: When minimum and maximum buffer size are
             // equal, the preferred buffer size has to be the same value as
             // well; granularity should be 0 in this case."
             if ( HWBufferInfo.lMinSize == HWBufferInfo.lMaxSize )

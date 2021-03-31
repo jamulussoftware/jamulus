@@ -5,8 +5,17 @@
 
 - Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
   (contributed by @JohannesBrx)
+
+- The mute button is now also shown in mono mode (#1074)
+  (contributed by @npostavs)
+
+- Bug fix: Channel mapping on Windows now only resets if the sound card or the numbers of channels changed (#1347)
+
+- Bug fix: Jamulus should now close itself correctly if a non-working device was selected (#872)
+  (contributed by @npostavs)
   
-- Bug fix: Channel mapping now only resets if the sound card or the numbers of channels changed
+- Bug fix: The Windows installer now correctly compiles in a path with spaces (#864)
+  (contributed by @henkdegroot)
 
 ### 3.7.0 (2021-03-17) ###
 

@@ -104,7 +104,7 @@ win32 {
         SOURCES -= windows/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_ASIO
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
         INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
@@ -160,7 +160,7 @@ win32 {
         SOURCES -= mac/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
         LIBS += /usr/local/lib/libjack.dylib
@@ -353,7 +353,7 @@ win32 {
             PKGCONFIG += jack
         }
 
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
     }
 
     isEmpty(PREFIX) {

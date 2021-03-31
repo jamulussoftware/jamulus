@@ -38,7 +38,7 @@
 #include "soundbase.h"
 #include "global.h"
 
-#if WITH_SOUND
+#if WITH_JACK
 # include <jack/jack.h>
 # include <jack/midiport.h>
 #endif
@@ -56,7 +56,7 @@
 
 
 /* Classes ********************************************************************/
-#if WITH_SOUND
+#if WITH_JACK
 class CSound : public CSoundBase
 {
     Q_OBJECT
@@ -142,4 +142,4 @@ public:
 public slots:
     void OnTimer() { vecsTemp.Reset ( 0 ); if ( IsRunning() ) { ProcessCallback ( vecsTemp ); } }
 };
-#endif // WITH_SOUND
+#endif // WITH_JACK

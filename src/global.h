@@ -253,6 +253,11 @@ LED bar:      lbr
 #define MAX_LEN_SERVER_CITY              20
 #define MAX_LEN_VERSION_TEXT             30
 
+// define Settings tab indexes
+#define SETTING_TAB_USER                 0
+#define SETTING_TAB_BASIC                1
+#define SETTING_TAB_ADVANCED             2
+
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT             \
     "<br><div align=right><font size=-1><i>" + \
@@ -293,7 +298,6 @@ typedef unsigned int       uint32_t;
 typedef unsigned short     uint16_t;
 typedef unsigned char      uint8_t;
 #endif
-
 
 /* Pseudo enum definitions -------------------------------------------------- */
 // definition for custom event

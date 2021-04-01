@@ -565,302 +565,6 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : CBaseDlg ( parent )
 }
 
 
-// Musician profile dialog -----------------------------------------------------
-CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
-                           QWidget* parent ) :
-    CBaseDlg ( parent ),
-    pClient  ( pNCliP )
-{
-/*
-    The musician profile dialog is structured as follows:
-    - label with edit box for alias/name
-    - label with combo box for instrument
-    - label with combo box for country flag
-    - label with edit box for city
-    - label with combo box for skill level
-    - OK button
-*/
-    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
-
-    QVBoxLayout* pLayout        = new QVBoxLayout ( this );
-    QHBoxLayout* pButSubLayout  = new QHBoxLayout;
-    QLabel*      plblAlias      = new QLabel ( tr ( "Alias/Name" ), this );
-    pedtAlias                   = new QLineEdit ( this );
-    QLabel*      plblInstrument = new QLabel ( tr ( "Instrument" ), this );
-    pcbxInstrument              = new QComboBox ( this );
-    QLabel*      plblCountry    = new QLabel ( tr ( "Country" ), this );
-    pcbxCountry                 = new QComboBox ( this );
-    QLabel*      plblCity       = new QLabel ( tr ( "City" ), this );
-    pedtCity                    = new QLineEdit ( this );
-    QLabel*      plblSkill      = new QLabel ( tr ( "Skill" ), this );
-    pcbxSkill                   = new QComboBox ( this );
-    QPushButton* butClose       = new QPushButton ( tr ( "&Close" ), this );
-
-    QGridLayout* pGridLayout = new QGridLayout;
-    plblAlias->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
-    pGridLayout->addWidget ( plblAlias, 0, 0 );
-    pGridLayout->addWidget ( pedtAlias, 0, 1 );
-
-    plblInstrument->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
-    pGridLayout->addWidget ( plblInstrument, 1, 0 );
-    pGridLayout->addWidget ( pcbxInstrument, 1, 1 );
-
-    plblCountry->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
-    pGridLayout->addWidget ( plblCountry, 2, 0 );
-    pGridLayout->addWidget ( pcbxCountry, 2, 1 );
-
-    plblCity->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
-    pGridLayout->addWidget ( plblCity, 3, 0 );
-    pGridLayout->addWidget ( pedtCity, 3, 1 );
-
-    plblSkill->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
-    pGridLayout->addWidget ( plblSkill, 4, 0 );
-    pGridLayout->addWidget ( pcbxSkill, 4, 1 );
-
-    pButSubLayout->addStretch();
-    pButSubLayout->addWidget ( butClose );
-    pLayout->addLayout ( pGridLayout );
-    pLayout->addLayout ( pButSubLayout );
-
-    // we do not want to close button to be a default one (the mouse pointer
-    // may jump to that button which we want to avoid)
-    butClose->setAutoDefault ( false );
-    butClose->setDefault ( false );
-
-
-    // Instrument pictures combo box -------------------------------------------
-    // add an entry for all known instruments
-    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
-    {
-        // create a combo box item with text, image and background color
-        QColor InstrColor;
-
-        pcbxInstrument->addItem ( QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
-                                  CInstPictures::GetName ( iCurInst ),
-                                  iCurInst );
-
-        switch ( CInstPictures::GetCategory ( iCurInst ) )
-        {
-        case CInstPictures::IC_OTHER_INSTRUMENT:      InstrColor = QColor ( Qt::blue );   break;
-        case CInstPictures::IC_WIND_INSTRUMENT:       InstrColor = QColor ( Qt::green );  break;
-        case CInstPictures::IC_STRING_INSTRUMENT:     InstrColor = QColor ( Qt::red );    break;
-        case CInstPictures::IC_PLUCKING_INSTRUMENT:   InstrColor = QColor ( Qt::cyan );   break;
-        case CInstPictures::IC_PERCUSSION_INSTRUMENT: InstrColor = QColor ( Qt::white );  break;
-        case CInstPictures::IC_KEYBOARD_INSTRUMENT:   InstrColor = QColor ( Qt::yellow ); break;
-        case CInstPictures::IC_MULTIPLE_INSTRUMENT:   InstrColor = QColor ( Qt::black );  break;
-        }
-
-        InstrColor.setAlpha ( 10 );
-        pcbxInstrument->setItemData ( iCurInst, InstrColor, Qt::BackgroundRole );
-    }
-
-    // sort the items in alphabetical order
-    pcbxInstrument->model()->sort ( 0 );
-
-
-    // Country flag icons combo box --------------------------------------------
-    // add an entry for all known country flags
-    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
-          iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
-    {
-        // exclude the "None" entry since it is added after the sorting
-        if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
-        {
-            // get current country enum
-            QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
-
-            // try to load icon from resource file name
-            QIcon CurFlagIcon;
-            CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
-
-            // only add the entry if a flag is available
-            if ( !CurFlagIcon.isNull() )
-            {
-                // create a combo box item with text and image
-                pcbxCountry->addItem ( QIcon ( CurFlagIcon ),
-                                       QLocale::countryToString ( eCountry ),
-                                       iCurCntry );
-            }
-        }
-    }
-
-    // sort country combo box items in alphabetical order
-    pcbxCountry->model()->sort ( 0, Qt::AscendingOrder );
-
-    // the "None" country gets a special icon and is the very first item
-    QIcon FlagNoneIcon;
-    FlagNoneIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
-    pcbxCountry->insertItem ( 0,
-                              FlagNoneIcon,
-                              tr ( "None" ),
-                              static_cast<int> ( QLocale::AnyCountry ) );
-
-
-    // Skill level combo box ---------------------------------------------------
-    // create a pixmap showing the skill level colors
-    QPixmap SLPixmap ( 16, 11 ); // same size as the country flags
-
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_NOT_SET,
-                                      RGBCOL_G_SL_NOT_SET,
-                                      RGBCOL_B_SL_NOT_SET ) );
-
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "None" ), SL_NOT_SET );
-
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER,
-                                      RGBCOL_G_SL_BEGINNER,
-                                      RGBCOL_B_SL_BEGINNER ) );
-
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Beginner" ), SL_BEGINNER );
-
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE,
-                                      RGBCOL_G_SL_INTERMEDIATE,
-                                      RGBCOL_B_SL_INTERMEDIATE ) );
-
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Intermediate" ), SL_INTERMEDIATE );
-
-    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL,
-                                      RGBCOL_G_SL_SL_PROFESSIONAL,
-                                      RGBCOL_B_SL_SL_PROFESSIONAL ) );
-
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Expert" ), SL_PROFESSIONAL );
-
-
-    // Add help text to controls -----------------------------------------------
-    // fader tag
-    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
-         tr ( "Write your name or an alias here so the other musicians you want to "
-        "play with know who you are. You may also add a picture of the instrument "
-        "you play and a flag of the country you are located in. "
-        "Your city and skill level playing your instrument may also be added." ) +
-        "<br>" + tr ( "What you set here will appear at your fader on the mixer "
-        "board when you are connected to a Jamulus server. This tag will "
-        "also be shown at each client which is connected to the same server as "
-        "you." );
-
-    pedtAlias->setWhatsThis ( strFaderTag );
-    pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
-    pcbxInstrument->setWhatsThis ( strFaderTag );
-    pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
-    pcbxCountry->setWhatsThis ( strFaderTag );
-    pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
-    pedtCity->setWhatsThis ( strFaderTag );
-    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
-    pcbxSkill->setWhatsThis ( strFaderTag );
-    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
-
-
-    // Connections -------------------------------------------------------------
-    QObject::connect ( pedtAlias, &QLineEdit::textChanged,
-        this, &CMusProfDlg::OnAliasTextChanged );
-
-    QObject::connect ( pcbxInstrument, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
-        this, &CMusProfDlg::OnInstrumentActivated );
-
-    QObject::connect ( pcbxCountry, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
-        this, &CMusProfDlg::OnCountryActivated );
-
-    QObject::connect ( pedtCity, &QLineEdit::textChanged,
-        this, &CMusProfDlg::OnCityTextChanged );
-
-    QObject::connect ( pcbxSkill, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
-        this, &CMusProfDlg::OnSkillActivated );
-
-    QObject::connect ( butClose, &QPushButton::clicked,
-        this, &CMusProfDlg::accept );
-}
-
-void CMusProfDlg::showEvent ( QShowEvent* )
-{
-    // Update the controls with the current client settings --------------------
-
-    // set the name
-    pedtAlias->setText ( pClient->ChannelInfo.strName );
-
-    // select current instrument
-    pcbxInstrument->setCurrentIndex (
-        pcbxInstrument->findData ( pClient->ChannelInfo.iInstrument ) );
-
-    // select current country
-    pcbxCountry->setCurrentIndex (
-        pcbxCountry->findData (
-        static_cast<int> ( pClient->ChannelInfo.eCountry ) ) );
-
-    // set the city
-    pedtCity->setText ( pClient->ChannelInfo.strCity );
-
-    // select the skill level
-    pcbxSkill->setCurrentIndex (
-        pcbxSkill->findData (
-        static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
-}
-
-void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
-{
-    // check length
-    if ( strNewName.length() <= MAX_LEN_FADER_TAG )
-    {
-        // refresh internal name parameter
-        pClient->ChannelInfo.strName = strNewName;
-
-        // update channel info at the server
-        pClient->SetRemoteInfo();
-    }
-    else
-    {
-        // text is too long, update control with shortened text
-        pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
-    }
-}
-
-void CMusProfDlg::OnInstrumentActivated ( int iCntryListItem )
-{
-    // set the new value in the data base
-    pClient->ChannelInfo.iInstrument =
-        pcbxInstrument->itemData ( iCntryListItem ).toInt();
-
-    // update channel info at the server
-    pClient->SetRemoteInfo();
-}
-
-void CMusProfDlg::OnCountryActivated ( int iCntryListItem )
-{
-    // set the new value in the data base
-    pClient->ChannelInfo.eCountry = static_cast<QLocale::Country> (
-        pcbxCountry->itemData ( iCntryListItem ).toInt() );
-
-    // update channel info at the server
-    pClient->SetRemoteInfo();
-}
-
-void CMusProfDlg::OnCityTextChanged ( const QString& strNewCity )
-{
-    // check length
-    if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
-    {
-        // refresh internal name parameter
-        pClient->ChannelInfo.strCity = strNewCity;
-
-        // update channel info at the server
-        pClient->SetRemoteInfo();
-    }
-    else
-    {
-        // text is too long, update control with shortened text
-        pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
-    }
-}
-
-void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
-{
-    // set the new value in the data base
-    pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> (
-        pcbxSkill->itemData ( iCntryListItem ).toInt() );
-
-    // update channel info at the server
-    pClient->SetRemoteInfo();
-}
-
-
 // Help menu -------------------------------------------------------------------
 CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )
 {
@@ -1108,54 +812,54 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         // NOTE: Do not change the order of any instrument in the future!
         // NOTE: The very first entry is the "not used" element per definition.
         vecDataBase.Init ( 0 ); // first clear all existing data since we create the list be adding entries
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "None" ), ":/png/instr/res/instruments/none.png", IC_OTHER_INSTRUMENT ) ); // special first element
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Drum Set" ), ":/png/instr/res/instruments/drumset.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Djembe" ), ":/png/instr/res/instruments/djembe.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Electric Guitar" ), ":/png/instr/res/instruments/eguitar.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Acoustic Guitar" ), ":/png/instr/res/instruments/aguitar.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Guitar" ), ":/png/instr/res/instruments/bassguitar.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Keyboard" ), ":/png/instr/res/instruments/keyboard.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Synthesizer" ), ":/png/instr/res/instruments/synthesizer.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Grand Piano" ), ":/png/instr/res/instruments/grandpiano.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Accordion" ), ":/png/instr/res/instruments/accordeon.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal" ), ":/png/instr/res/instruments/vocal.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Microphone" ), ":/png/instr/res/instruments/microphone.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Harmonica" ), ":/png/instr/res/instruments/harmonica.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Trumpet" ), ":/png/instr/res/instruments/trumpet.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Trombone" ), ":/png/instr/res/instruments/trombone.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "French Horn" ), ":/png/instr/res/instruments/frenchhorn.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Tuba" ), ":/png/instr/res/instruments/tuba.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Saxophone" ), ":/png/instr/res/instruments/saxophone.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Clarinet" ), ":/png/instr/res/instruments/clarinet.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Flute" ), ":/png/instr/res/instruments/flute.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Violin" ), ":/png/instr/res/instruments/violin.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Cello" ), ":/png/instr/res/instruments/cello.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Double Bass" ), ":/png/instr/res/instruments/doublebass.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Recorder" ), ":/png/instr/res/instruments/recorder.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Streamer" ), ":/png/instr/res/instruments/streamer.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Listener" ), ":/png/instr/res/instruments/listener.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Guitar+Vocal" ), ":/png/instr/res/instruments/guitarvocal.png", IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Keyboard+Vocal" ), ":/png/instr/res/instruments/keyboardvocal.png", IC_MULTIPLE_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bodhran" ), ":/png/instr/res/instruments/bodhran.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bassoon" ), ":/png/instr/res/instruments/bassoon.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Oboe" ), ":/png/instr/res/instruments/oboe.png", IC_WIND_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Harp" ), ":/png/instr/res/instruments/harp.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Viola" ), ":/png/instr/res/instruments/viola.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Congas" ), ":/png/instr/res/instruments/congas.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bongo" ), ":/png/instr/res/instruments/bongo.png", IC_PERCUSSION_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Bass" ), ":/png/instr/res/instruments/vocalbass.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Tenor" ), ":/png/instr/res/instruments/vocaltenor.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Alto" ), ":/png/instr/res/instruments/vocalalto.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Soprano" ), ":/png/instr/res/instruments/vocalsoprano.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Banjo" ), ":/png/instr/res/instruments/banjo.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mandolin" ), ":/png/instr/res/instruments/mandolin.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Ukulele" ), ":/png/instr/res/instruments/ukulele.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bass Ukulele" ), ":/png/instr/res/instruments/bassukulele.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Mountain Dulcimer" ), ":/png/instr/res/instruments/mountaindulcimer.png", IC_STRING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Scratching" ), ":/png/instr/res/instruments/scratching.png", IC_OTHER_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Rapping" ), ":/png/instr/res/instruments/rapping.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "None" ), ":/png/instr/res/instruments/none.png", IC_OTHER_INSTRUMENT ) ); // special first element
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Drum Set" ), ":/png/instr/res/instruments/drumset.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Djembe" ), ":/png/instr/res/instruments/djembe.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Electric Guitar" ), ":/png/instr/res/instruments/eguitar.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Acoustic Guitar" ), ":/png/instr/res/instruments/aguitar.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Guitar" ), ":/png/instr/res/instruments/bassguitar.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard" ), ":/png/instr/res/instruments/keyboard.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Synthesizer" ), ":/png/instr/res/instruments/synthesizer.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Grand Piano" ), ":/png/instr/res/instruments/grandpiano.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Accordion" ), ":/png/instr/res/instruments/accordeon.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal" ), ":/png/instr/res/instruments/vocal.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Microphone" ), ":/png/instr/res/instruments/microphone.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harmonica" ), ":/png/instr/res/instruments/harmonica.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trumpet" ), ":/png/instr/res/instruments/trumpet.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Trombone" ), ":/png/instr/res/instruments/trombone.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "French Horn" ), ":/png/instr/res/instruments/frenchhorn.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Tuba" ), ":/png/instr/res/instruments/tuba.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Saxophone" ), ":/png/instr/res/instruments/saxophone.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Clarinet" ), ":/png/instr/res/instruments/clarinet.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Flute" ), ":/png/instr/res/instruments/flute.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Violin" ), ":/png/instr/res/instruments/violin.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Cello" ), ":/png/instr/res/instruments/cello.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Double Bass" ), ":/png/instr/res/instruments/doublebass.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Recorder" ), ":/png/instr/res/instruments/recorder.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Streamer" ), ":/png/instr/res/instruments/streamer.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Listener" ), ":/png/instr/res/instruments/listener.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Guitar+Vocal" ), ":/png/instr/res/instruments/guitarvocal.png", IC_MULTIPLE_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Keyboard+Vocal" ), ":/png/instr/res/instruments/keyboardvocal.png", IC_MULTIPLE_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bodhran" ), ":/png/instr/res/instruments/bodhran.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bassoon" ), ":/png/instr/res/instruments/bassoon.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Oboe" ), ":/png/instr/res/instruments/oboe.png", IC_WIND_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Harp" ), ":/png/instr/res/instruments/harp.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Viola" ), ":/png/instr/res/instruments/viola.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Congas" ), ":/png/instr/res/instruments/congas.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bongo" ), ":/png/instr/res/instruments/bongo.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Bass" ), ":/png/instr/res/instruments/vocalbass.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Tenor" ), ":/png/instr/res/instruments/vocaltenor.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Alto" ), ":/png/instr/res/instruments/vocalalto.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Soprano" ), ":/png/instr/res/instruments/vocalsoprano.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Banjo" ), ":/png/instr/res/instruments/banjo.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mandolin" ), ":/png/instr/res/instruments/mandolin.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Ukulele" ), ":/png/instr/res/instruments/ukulele.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Bass Ukulele" ), ":/png/instr/res/instruments/bassukulele.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Baritone" ), ":/png/instr/res/instruments/vocalbaritone.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vocal Lead" ), ":/png/instr/res/instruments/vocallead.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Mountain Dulcimer" ), ":/png/instr/res/instruments/mountaindulcimer.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Scratching" ), ":/png/instr/res/instruments/scratching.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Rapping" ), ":/png/instr/res/instruments/rapping.png", IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;

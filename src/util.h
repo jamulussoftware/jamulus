@@ -423,35 +423,6 @@ public slots:
 };
 
 
-// Musician profile dialog -----------------------------------------------------
-class CMusProfDlg : public CBaseDlg
-{
-    Q_OBJECT
-
-public:
-    CMusProfDlg ( CClient* pNCliP,
-                  QWidget* parent = nullptr );
-
-protected:
-    virtual void showEvent ( QShowEvent* );
-
-    QLineEdit* pedtAlias;
-    QComboBox* pcbxInstrument;
-    QComboBox* pcbxCountry;
-    QLineEdit* pedtCity;
-    QComboBox* pcbxSkill;
-
-    CClient* pClient;
-
-public slots:
-    void OnAliasTextChanged ( const QString& strNewName );
-    void OnInstrumentActivated ( int iCntryListItem );
-    void OnCountryActivated ( int iCntryListItem );
-    void OnCityTextChanged ( const QString& strNewName );
-    void OnSkillActivated ( int iCntryListItem );
-};
-
-
 // Help menu -------------------------------------------------------------------
 class CHelpMenu : public QMenu
 {

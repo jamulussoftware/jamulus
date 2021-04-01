@@ -367,8 +367,26 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setWhatsThis ( strDetectFeedback );
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
+    if ( pNCliP->GetExtraSettings() != PaApiWasapiModes )
+    {
+        rbtWasapiShared->hide();
+        rbtWasapiLowLatency->hide();
+        rbtWasapiExclusive->hide();
+    }
+    else
+    {
+        // PortAudio doesn't support low latency mode yet, see
+        // https://github.com/PortAudio/portaudio/issues/385.
+        rbtWasapiLowLatency->hide();
+
+        rbtWasapiShared->setChecked ( rbtWasapiShared ); // TODO: Save choice in settings
+        WasapiModeButtonGroup.addButton ( rbtWasapiShared );
+        WasapiModeButtonGroup.addButton ( rbtWasapiLowLatency );
+        WasapiModeButtonGroup.addButton ( rbtWasapiExclusive );
+    }
+
     // init driver button
-    if ( pNCliP->HasControlPanel() )
+    if ( pNCliP->GetExtraSettings() == PaApiControlPanel )
     {
         butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
     }
@@ -665,6 +683,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        static_cast<void ( QButtonGroup::* ) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
                        this,
                        &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
+    QObject::connect ( &WasapiModeButtonGroup,
+                       static_cast<void ( QButtonGroup::* ) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
+                       this,
+                       &CClientSettingsDlg::OnWasapiModeButtonGroupClicked );
 
     // spinners
     QObject::connect ( spnMixerRows,
@@ -982,6 +1004,22 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
     }
 
     UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnWasapiModeButtonGroupClicked ( QAbstractButton* button )
+{
+    if ( button == rbtWasapiExclusive )
+    {
+        pClient->SetSndCrdWasapiMode ( WasapiModeExclusive );
+    }
+    else if ( button == rbtWasapiLowLatency )
+    {
+        pClient->SetSndCrdWasapiMode ( WasapiModeLowLatency );
+    }
+    else // if ( button == rbtWasapiShared )
+    {
+        pClient->SetSndCrdWasapiMode ( WasapiModeShared );
+    }
 }
 
 void CClientSettingsDlg::UpdateUploadRate()

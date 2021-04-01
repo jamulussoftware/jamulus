@@ -51,6 +51,20 @@ enum EMidiCtlType
     None
 };
 
+enum EPaApiSettings
+{
+    PaApiNoExtraSettings = 0,
+    PaApiControlPanel, // ASIO
+    PaApiWasapiModes,  // WASAPI
+};
+
+enum PaWasapiMode
+{
+    WasapiModeShared = 0,
+    WasapiModeLowLatency,
+    WasapiModeExclusive,
+};
+
 class CMidiCtlEntry
 {
 public:
@@ -103,8 +117,9 @@ public:
 
     virtual float GetInOutLatencyMs() { return 0.0f; } // "0.0" means no latency is available
 
-    virtual bool HasControlPanel() { return false; } // only true with ASIO (Windows)
-    virtual void OpenDriverSetup() {}
+    virtual void           OpenDriverSetup() {}
+    virtual EPaApiSettings GetExtraSettings() { return PaApiNoExtraSettings; }
+    virtual void           SetWasapiMode ( PaWasapiMode mode ) { (void) mode; }
 
     bool IsRunning() const { return bRun; }
     bool IsCallbackEntered() const { return bCallbackEntered; }

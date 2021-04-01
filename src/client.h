@@ -199,7 +199,8 @@ public:
     int     GetSndCrdLeftOutputChannel() { return Sound.GetLeftOutputChannel(); }
     int     GetSndCrdRightOutputChannel() { return Sound.GetRightOutputChannel(); }
 
-    bool HasControlPanel() { return Sound.HasControlPanel(); }
+    EPaApiSettings GetExtraSettings() { return Sound.GetExtraSettings(); }
+    void           SetSndCrdWasapiMode ( PaWasapiMode mode ) { Sound.SetWasapiMode ( mode ); }
 
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }

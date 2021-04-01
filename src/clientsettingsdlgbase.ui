@@ -359,6 +359,31 @@
             </spacer>
            </item>
            <item>
+             <layout class="QVBoxLayout">
+               <item>
+                 <widget class="QRadioButton" name="rbtWasapiShared">
+                   <property name="text">
+                     <string>Shared</string>
+                   </property>
+                 </widget>
+               </item>
+               <item>
+                 <widget class="QRadioButton" name="rbtWasapiLowLatency">
+                   <property name="text">
+                     <string>Low Latency</string>
+                   </property>
+                 </widget>
+               </item>
+               <item>
+                 <widget class="QRadioButton" name="rbtWasapiExclusive">
+                   <property name="text">
+                     <string>Exclusive</string>
+                   </property>
+                 </widget>
+               </item>
+             </layout>
+           </item>
+           <item>
             <widget class="QPushButton" name="butDriverSetup">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

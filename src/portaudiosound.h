@@ -74,9 +74,12 @@ public:
 
     static QString GetPaApiNames();
 
+    virtual EPaApiSettings GetExtraSettings();
+    virtual void SetWasapiMode ( PaWasapiMode mode );
+
+
 #ifdef WIN32
     virtual void OpenDriverSetup();
-    virtual bool HasControlPanel() { return strSelectApiName.compare ( "ASIO", Qt::CaseInsensitive ) == 0; }
 #endif // WIN32
 
 protected:
@@ -99,6 +102,7 @@ protected:
     PaDeviceIndex  paInputDeviceIndices[MAX_NUMBER_SOUND_CARDS];
     PaDeviceIndex  paOutputDeviceIndices[MAX_NUMBER_SOUND_CARDS];
 
+    int              wasapiFlag;
     PaDeviceIndex    inDeviceIndex, outDeviceIndex;
     PaStream*        deviceStream;
     CVector<int>     vSelectedInputChannels;

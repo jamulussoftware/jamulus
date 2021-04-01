@@ -26,7 +26,10 @@
 \******************************************************************************/
 
 #include "portaudiosound.h"
-#include <pa_asio.h>
+#ifdef _WIN32
+#    include <pa_asio.h>
+#    include <pa_win_wasapi.h>
+#endif // WIN32
 
 // Needed for reset request callback
 static CSound* pThisSound;
@@ -340,6 +343,37 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     return err;
 }
 
+void CSound::SetWasapiMode ( PaWasapiMode mode )
+{
+    switch ( mode )
+    {
+    case WasapiModeExclusive:
+        wasapiFlag = paWinWasapiExclusive;
+        break;
+
+        // PortAudio doesn't support low latency mode yet, see
+        // https://github.com/PortAudio/portaudio/issues/385.
+    case WasapiModeLowLatency:
+    case WasapiModeShared:
+    default:
+        wasapiFlag = 0;
+        break;
+    }
+    if ( inDeviceIndex > 0 || outDeviceIndex > 0 )
+    {
+        bool running = bRun;
+        if ( running )
+        {
+            Stop();
+        }
+        ReinitializeDriver ( inDeviceIndex, outDeviceIndex );
+        if ( running )
+        {
+            Start();
+        }
+    }
+}
+
 QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outIndex )
 {
     const PaDeviceInfo* inDeviceInfo  = Pa_GetDeviceInfo ( inIndex );
@@ -364,6 +398,7 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
 
     PaStreamParameters paInputParams;
     PaAsioStreamInfo   asioInputInfo;
+    PaWasapiStreamInfo wasapiInputInfo;
     paInputParams.device       = inIndex;
     paInputParams.channelCount = std::min ( NUM_IN_OUT_CHANNELS, inDeviceInfo->maxInputChannels );
     paInputParams.sampleFormat = paInt16;
@@ -382,6 +417,15 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
         asioInputInfo.flags                     = paAsioUseChannelSelectors;
         asioInputInfo.channelSelectors          = &vSelectedInputChannels[0];
     }
+    else if ( apiInfo->type == paWASAPI )
+    {
+        paInputParams.hostApiSpecificStreamInfo = &wasapiInputInfo;
+        memset ( &wasapiInputInfo, 0, sizeof wasapiInputInfo );
+        wasapiInputInfo.hostApiType = paWASAPI;
+        wasapiInputInfo.size        = sizeof wasapiInputInfo;
+        wasapiInputInfo.version     = 1;
+        wasapiInputInfo.flags       = wasapiFlag;
+    }
     else
     {
         paInputParams.hostApiSpecificStreamInfo = NULL;
@@ -389,6 +433,7 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
 
     PaStreamParameters paOutputParams;
     PaAsioStreamInfo   asioOutputInfo;
+    PaWasapiStreamInfo wasapiOutputInfo;
     paOutputParams.device           = outIndex;
     paOutputParams.channelCount     = std::min ( NUM_IN_OUT_CHANNELS, outDeviceInfo->maxOutputChannels );
     paOutputParams.sampleFormat     = paInt16;
@@ -401,6 +446,15 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
         asioOutputInfo.version                   = 1;
         asioOutputInfo.flags                     = paAsioUseChannelSelectors;
         asioOutputInfo.channelSelectors          = &vSelectedOutputChannels[0];
+    }
+    else if ( apiInfo->type == paWASAPI )
+    {
+        paOutputParams.hostApiSpecificStreamInfo = &wasapiOutputInfo;
+        memset ( &wasapiOutputInfo, 0, sizeof wasapiOutputInfo );
+        wasapiOutputInfo.hostApiType = paWASAPI;
+        wasapiOutputInfo.size        = sizeof wasapiOutputInfo;
+        wasapiOutputInfo.version     = 1;
+        wasapiOutputInfo.flags       = wasapiFlag;
     }
     else
     {
@@ -439,6 +493,24 @@ void CSound::UnloadCurrentDriver()
     {
         Pa_Terminate();
         selectedApiIndex = -1;
+    }
+}
+
+EPaApiSettings CSound::GetExtraSettings()
+{
+#ifdef WIN32
+    if ( strSelectApiName.compare ( "ASIO", Qt::CaseInsensitive ) == 0 )
+    {
+        return PaApiControlPanel;
+    }
+    else if ( strSelectApiName.compare ( "WASAPI", Qt::CaseInsensitive ) == 0 )
+    {
+        return PaApiWasapiModes;
+    }
+    else
+#endif // WIN32
+    {
+        return PaApiNoExtraSettings;
     }
 }
 

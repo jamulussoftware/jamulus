@@ -1212,7 +1212,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
         const int maxPanDelay = MAX_DELAY_PANNING_SAMPLES;
 
-        int iPanDelL, iPanDelR, iPanDel;
+        int iPanDelL = 0, iPanDelR = 0, iPanDel;
         int iLpan, iRpan, iPan;
 
         for ( j = 0; j < iNumClients; j++ )

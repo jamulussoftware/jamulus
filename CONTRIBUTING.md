@@ -36,7 +36,7 @@ git push --force ;# update your working branch on your fork
 ### Supported platforms
 We strive to support the following platforms and versions:
 - Windows 10 <!-- Is this the only version? Do we have to specify a specific sub-version? -->
-- Mac <!-- Which versions? -->
+- macOS <!-- Which versions? -->
 - Ubuntu Linux 18.04 or later, Debian 10 or later, most Linux flavors with recent enough Qt versions
 <!-- Do we support BSD? I think a recent discussion was about FreeBSD? -->
 <!-- Should we already list Android? If so, what platforms/versions? -->

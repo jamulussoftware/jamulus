@@ -45,7 +45,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ChatDlg             ( parent ),
     ConnectDlg          ( pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole     ( pNCliP, parent )
-//    MusicianProfileDlg  ( pNCliP, parent )
 {
     setupUi ( this );
 

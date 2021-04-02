@@ -24,6 +24,17 @@ There are other solutions for real time online jamming available. But Jamulus st
 
 Make sure (if possible) that your code compiles on Windows/Mac/Linux.
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
+
+If there are conflicts with jamulussoftware/jamulus showing when you go to raise the pull request, resolve those locally:
+~~~
+git checkout master ;# checkout your local master
+git pull upstream master --tags ;# refresh from jamulussoftware/jamulus (i.e. use your upstream remote name)
+git push --tags --force ;# update your fork's master
+git checkout - ;# back to your working branch
+git rebase master ;# replay your changes onto the latest code
+git push --force ;# update your working branch on your fork
+~~~
+
 ### Supported platforms
 We strive to support the following platforms and versions:
 - Windows 10 <!-- Is this the only version? Do we have to specify a specific sub-version? -->

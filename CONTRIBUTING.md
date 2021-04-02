@@ -14,9 +14,6 @@ This has been, and must continue to be, the most important requirement. It is pa
 ### [Keep it Simple and Stupid](https://en.wikipedia.org/wiki/KISS_principle) and [Do One Thing and Do It Well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)
 If a feature or function can be achieved in another way by another system or method, then that is preferable to building that feature into Jamulus. 
 
-### Focus on and improve the strengths of Jamulus
-There are other solutions for real time online jamming available. But Jamulus stands alone with its client/server system, minimalistic GUI and simple functionality. 
-
 ### Source code consistency
 - Respect the existing code style: Tab size=4, insert spaces.
 - Space before and after `(` and `)`, except no space between `)` and `;`, and no space before an empty `()`.

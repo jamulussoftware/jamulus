@@ -20,7 +20,7 @@ There are other solutions for real time online jamming available. But Jamulus st
 ### Source code consistency
 - Respect the existing code style: Tab size=4, insert spaces.
 - Space before and after `(` and `)`, except no space between `)` and `;`, and no space before an empty `()`.
-- All bodies of `if`, `else`, `while`, `for`, etc., to be enclosed in braces `{` and `}`, usually on separate lines.
+- All bodies of `if`, `else`, `while`, `for`, etc., to be enclosed in braces `{` and `}`, on separate lines.
 
 Make sure (if possible) that your code compiles on Windows/Mac/Linux.
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
@@ -36,4 +36,3 @@ The git master branch is protected to require at least two reviews by the main d
 ## Want to get involved in other ways? 
 
 We always need help with documentation, translation and anything else. Have a look at our [overview for contributors](https://jamulus.io/wiki/Contribution).
-

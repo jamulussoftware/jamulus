@@ -102,6 +102,32 @@ void CJamClient::Disconnect()
     wavFile = nullptr;
 }
 
+/**
+ * @brief CJamClient::TranslateChars Replace non-ASCII chars with nearest equivalent, if any
+ */
+QString CJamClient::TranslateChars (const QString& input) const
+{
+    static const char charmap[128] = {
+        '_', '_', ',', 'f', '"', '_', '_', '_', '^', '%', 'S', '<', 'E', '_', 'Z', '_',
+        '_', '\'', '\'', '"', '"', '_', '-', '-', '~', '_', 's', '>', 'e', '_', 'z', 'Y',
+        ' ', '_', '_', '_', '_', 'Y', '|', '_', '_', '_', 'a', '"', '-', '_', '_', '_',
+        '_', '_', '_', '_', '_', 'u', '_', '.', ',', '_', 'o', '"', '_', '_', '_', '_',
+        'A', 'A', 'A', 'A', 'A', 'A', 'E', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I',
+        'D', 'N', 'O', 'O', 'O', 'O', 'O', 'x', 'O', 'U', 'U', 'U', 'U', 'Y', 'P', 'S',
+        'a', 'a', 'a', 'a', 'a', 'a', 'e', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i',
+        'd', 'n', 'o', 'o', 'o', 'o', 'o', '_', 'o', 'u', 'u', 'u', 'u', 'y', 'p', 'y'
+    };
+
+    QByteArray r = input.toLatin1();
+
+    for (auto &c : r)
+    {
+        c = (c >= 128) ? charmap[c - 128] : (c >= 32) ? c : '_';
+    }
+
+    return QString::fromLatin1(r);
+}
+
 /* ********************************************************************************************************
  * CJamSession
  * ********************************************************************************************************/

@@ -79,7 +79,7 @@ public:
     qint64       StartFrame()       { return startFrame; }
     qint64       FrameCount()       { return frameCount; }
     uint16_t     NumAudioChannels() { return numChannels; }
-    QString      ClientName()       { return name.leftJustified(4, '_', false).replace(QRegExp("[-.:/\\ ]"), "_")
+    QString      ClientName()       { return TranslateChars(name).leftJustified(4, '_', false).replace(QRegExp("[-.:/\\ ]"), "_")
                                                 .append("-")
                                                 .append(address.toString(CHostAddress::EStringMode::SM_IP_NO_LAST_BYTE_PORT).replace(QRegExp("[-.:/\\ ]"), "_"))
                                              ;
@@ -89,6 +89,8 @@ public:
     QString      FileName()         { return filename; }
 
 private:
+    QString TranslateChars ( const QString& input ) const;
+
     const qint64       startFrame;
     const uint16_t     numChannels;
           QString      name;

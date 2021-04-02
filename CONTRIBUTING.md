@@ -26,7 +26,9 @@ Make sure (if possible) that your code compiles on Windows/Mac/Linux.
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
 
 ### Documentation/Acknowledgements
-Each new feature or bug fix must be documented in the ChangeLog. If a new contributor/translator adds code to the Jamulus project, he/she should be added to the contributor/translator list in the About dialog of the Jamulus software (see in `src/util.cpp` in the constructor function `CAboutDlg::CAboutDlg()`).
+Each new feature or bug fix must be documented in the ChangeLog. Please provide a single-sentence suggestion for that as part of your pull request description. Do not modify the ChangeLog file as part of your PR as it will lead to conflicts.
+
+If you are a first-time contributor/translator, please add yourself to the contributor/translator list in the About dialog of the Jamulus software (see in `src/util.cpp` in the constructor function `CAboutDlg::CAboutDlg()`).
 
 ### Merging Pull Requests
 The git master branch is protected to require at least two reviews by the main developers before the pull request can be merged. If a pull request receives at least two positive reviews, any of the main developers can initiate the merge.

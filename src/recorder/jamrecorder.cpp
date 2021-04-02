@@ -122,7 +122,8 @@ QString CJamClient::TranslateChars (const QString& input) const
 
     for (auto &c : r)
     {
-        c = (c >= 128) ? charmap[c - 128] : (c >= 32) ? c : '_';
+        unsigned char uc = c;
+        c = (uc >= 128) ? charmap[uc - 128] : (uc >= 32) ? c : '_';
     }
 
     return QString::fromLatin1(r);

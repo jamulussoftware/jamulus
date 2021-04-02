@@ -4,7 +4,7 @@
 
 - If the [Github issue](https://github.com/jamulussoftware/jamulus/issues) for your feature/bug fix already exists, write a message in that issue saying you want to work on it. 
 - Otherwise, please [post on the GitHub Discussions](https://github.com/jamulussoftware/jamulus/discussions) and say that you are planning to do some coding and explain why. Then we can discuss the specification. 
-- Please only start coding after we have agreed to a specification.
+- Please only start coding after we have agreed to a specification to avoid putting lots of work into something which may not get accepted later.
 
 ## Jamulus project/source code general principles
 
@@ -36,5 +36,4 @@ The git master branch is protected to require at least two reviews by the main d
 ## Want to get involved in other ways? 
 
 We always need help with documentation, translation and anything else. Have a look at our [overview for contributors](https://jamulus.io/wiki/Contribution).
-
 

@@ -24,7 +24,20 @@ There are other solutions for real time online jamming available. But Jamulus st
 
 Make sure (if possible) that your code compiles on Windows/Mac/Linux.
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
+### Supported platforms
+We strive to support the following platforms and versions:
+- Windows 10 <!-- Is this the only version? Do we have to specify a specific sub-version? -->
+- Mac <!-- Which versions? -->
+- Ubuntu Linux 18.04 or later, Debian 10 or later, most Linux flavors with recent enough Qt versions
+<!-- Do we support BSD? I think a recent discussion was about FreeBSD? -->
+<!-- Should we already list Android? If so, what platforms/versions? -->
 
+The minimum Qt version to support is 5.X <-- What is it? -->
+
+Please try hard to avoid breaking any of them by avoiding to introduce platform-specific code and checking if any newly introduced Qt calls are available in our minimum Qt version.
+
+### Dependencies
+If your code requires new dependencies, be extra sure that those are available on all supported platforms and that the introduction of those has been discussed and accepted.
 ### Documentation/Acknowledgements
 Each new feature or bug fix must be documented in the ChangeLog. Please provide a single-sentence suggestion for that as part of your pull request description. Do not modify the ChangeLog file as part of your PR as it will lead to conflicts.
 

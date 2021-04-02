@@ -22,8 +22,9 @@ There are other solutions for real time online jamming available. But Jamulus st
 - Space before and after `(` and `)`, except no space between `)` and `;`, and no space before an empty `()`.
 - All bodies of `if`, `else`, `while`, `for`, etc., to be enclosed in braces `{` and `}`, on separate lines.
 
-Make sure (if possible) that your code compiles on Windows/Mac/Linux.
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
+
+Please check your Github fork. It should build your branch for all the supported platforms (though not all supported platform versions) when you push. Make sure there are no errors. If there are, resolve them before creating a pull request.
 
 If there are conflicts with jamulussoftware/jamulus showing when you go to raise the pull request, resolve those locally:
 ~~~

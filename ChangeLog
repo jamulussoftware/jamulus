@@ -25,9 +25,6 @@
 - Added client name,  if defined, in dialog titles
   (contributed by @dcorson-ticino-com)
 
-- Added client name,  if defined, in dialog titles
-  (contributed by @dcorson-ticino-com)
-
 ### 3.7.0 (2021-03-17) ###
 
 - Server lists have been reorganized to make room for more servers (#875):

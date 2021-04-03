@@ -29,6 +29,8 @@
 CChannel::CChannel ( const bool bNIsServer ) :
     vecfGains              ( MAX_NUM_CHANNELS, 1.0f ),
     vecfPannings           ( MAX_NUM_CHANNELS, 0.5f ),
+    vecbSingleMixSolos     ( MAX_NUM_CHANNELS, FALSE ),
+    bAnyChannelIsSingleMixSolo ( FALSE ),
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
     bUseSequenceNumber     ( false ), // this is important since in the client we reset on Channel.SetEnable ( false )
@@ -87,6 +89,9 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
     QObject::connect ( &Protocol, &CProtocol::ChangeChanPan,
         this, &CChannel::OnChangeChanPan );
+    
+    QObject::connect ( &Protocol, &CProtocol::ChangeChanSingleMixSolo,
+        this, &CChannel::OnChangeChanSingleMixSolo );
 
     QObject::connect ( &Protocol, &CProtocol::ClientIDReceived,
         this, &CChannel::ClientIDReceived );
@@ -361,6 +366,52 @@ float CChannel::GetPan ( const int iChanID )
     }
 }
 
+void CChannel::SetSingleMixSolo ( const int  iChanID,
+                                  const bool bNewIsSolo )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // set value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        vecbSingleMixSolos[iChanID] = bNewIsSolo;
+    }
+    
+    // update bAnyChannelIsSingleMixSolo helper bool
+    //  (try to avoid checking all channels for their solo status)
+    if ( bNewIsSolo == TRUE )
+    {
+        bAnyChannelIsSingleMixSolo = TRUE;
+    }
+    else  // but now we have to
+    {
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            if ( vecbSingleMixSolos[i] == TRUE )
+            {
+                bAnyChannelIsSingleMixSolo = TRUE;
+                return;
+            }
+        }
+        bAnyChannelIsSingleMixSolo = FALSE;
+    }
+}
+
+bool CChannel::GetSingleMixSolo ( const int iChanID )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // get value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        return vecbSingleMixSolos[iChanID];
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
     // apply value (if different from previous one)
@@ -431,6 +482,13 @@ void CChannel::OnChangeChanPan ( int   iChanID,
                                  float fNewPan )
 {
     SetPan ( iChanID, fNewPan );
+}
+
+void CChannel::OnChangeChanSingleMixSolo ( int  iChanID,
+                                           bool bNewIsSolo )
+{
+    qInfo() << "OnChangeChanSingleMixSolo";
+    SetSingleMixSolo ( iChanID, bNewIsSolo );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )

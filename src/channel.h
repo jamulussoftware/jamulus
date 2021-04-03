@@ -109,6 +109,7 @@ public:
     void CreateReqChanInfoMes() { Protocol.CreateReqChanInfoMes(); }
     void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
+    void CreateSingleMixSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo ) { Protocol.CreateSingleMixSoloStateHasChangedMes ( iChanID, bIsSolo ); }
 
     void SetGain ( const int iChanID, const float fNewGain );
     float GetGain ( const int iChanID );
@@ -116,12 +117,19 @@ public:
 
     void SetPan ( const int iChanID, const float fNewPan );
     float GetPan ( const int iChanID );
+    
+    void SetSingleMixSolo ( const int iChanID, const bool bNewIsSolo );
+    bool GetSingleMixSolo ( const int iChanID );
+    bool IsAnyChannelSingleMixSolo () { return bAnyChannelIsSingleMixSolo; };
 
     void SetRemoteChanGain ( const int iId, const float fGain )
         { Protocol.CreateChanGainMes ( iId, fGain ); }
 
     void SetRemoteChanPan ( const int iId, const float fPan )
         { Protocol.CreateChanPanMes ( iId, fPan ); }
+    
+    void SetRemoteChanSingleMixSolo ( const int iId, bool bIsSolo )
+        { Protocol.CreateSingleMixSoloStateHasChangedMes ( iId, bIsSolo ); }
 
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
                                const bool bPreserve = false );
@@ -210,6 +218,8 @@ protected:
     // mixer and effect settings
     CVector<float>          vecfGains;
     CVector<float>          vecfPannings;
+    CVector<bool>           vecbSingleMixSolos;
+    bool                    bAnyChannelIsSingleMixSolo;
 
     // network jitter-buffer
     CNetBufWithStats        SockBuf;
@@ -251,6 +261,7 @@ public slots:
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnChangeChanGain ( int iChanID, float fNewGain );
     void OnChangeChanPan ( int iChanID, float fNewPan );
+    void OnChangeChanSingleMixSolo ( int iChanID, bool bIsSolo );
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
@@ -297,6 +308,8 @@ signals:
     void ClientIDReceived ( int iChanID );
     void MuteStateHasChanged ( int iChanID, bool bIsMuted );
     void MuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
+//    void SingleMixSoloStateHasChanged ( int iChanID, bool bIsSolo );
+    void SingleMixSoloStateHasChangedReceived ( int iChanID, bool bIsSolo );
     void ReqChanInfo();
     void ChatTextReceived ( QString strChatText );
     void ReqNetTranspProps();

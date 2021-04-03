@@ -1162,16 +1162,25 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             const CVector<int16_t>& vecsData = vecvecsData[j];
             float                   fGain    = vecvecfGains[iChanCnt][j];
 
-            // overwrite gain with the master's gain in --singlemix
+            // Extra care for --singlemix -------------------------------------
+            // overwrite gain with the master's gain
             if ( eSingleMixServerMode == SM_ENABLED || eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
             {
-                fGain    = vecvecfGains[0][j];
+                fGain = vecvecfGains[0][j];
             }
-            // except in --singlemix 'no-monitor' mode, mute one's own channel
+            // let non-mix masters at least control their own channel
+            // todo: enable in client UI
             if ( iChanCnt == j && eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
             {
-                fGain = 0.0f;
+                fGain = vecvecfGains[iChanCnt][j];
             }
+            // let the mix master solo people just for himself
+            if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
+            {
+                // by muting all channels for the mix master that are not solo'd
+                if ( !vecChannels[0].GetSingleMixSolo(j) ) { fGain = 0.0f; }
+            }
+            // -----------------------------------------------------------------
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( fGain == 1.0f )

@@ -115,6 +115,12 @@ MESSAGES (with connection)
     +-------------------+-----------------+
     | 1 byte channel ID | 1 byte is muted |
     +-------------------+-----------------+
+ 
+ - PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED: Mix master in --singlemix solo'd somebody
+
+     +-------------------+-----------------+
+     | 1 byte channel ID | 1 byte is solo  |
+     +-------------------+-----------------+
 
 
 - PROTMESSID_CONN_CLIENTS_LIST: Information about connected clients
@@ -799,6 +805,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                 case PROTMESSID_MUTE_STATE_CHANGED:
                     EvaluateMuteStateHasChangedMes ( vecbyMesBodyDataRef );
                     break;
+                        
+                case PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED:
+                    EvaluateSingleMixSoloStateHasChangedMes ( vecbyMesBodyDataRef );
+                    break;
 
                 case PROTMESSID_CONN_CLIENTS_LIST:
                     EvaluateConClientListMes ( vecbyMesBodyDataRef );
@@ -1132,6 +1142,21 @@ void CProtocol::CreateMuteStateHasChangedMes ( const int iChanID, const bool bIs
     CreateAndSendMessage ( PROTMESSID_MUTE_STATE_CHANGED, vecData );
 }
 
+void CProtocol::CreateSingleMixSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo )
+{
+    CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    // channel ID
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
+
+    // solo state
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( bIsSolo ), 1 );
+
+    CreateAndSendMessage ( PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED, vecData );
+}
+
 bool CProtocol::EvaluateMuteStateHasChangedMes ( const CVector<uint8_t> &vecData )
 {
     int iPos = 0; // init position pointer
@@ -1150,6 +1175,28 @@ bool CProtocol::EvaluateMuteStateHasChangedMes ( const CVector<uint8_t> &vecData
 
     // invoke message action
     emit MuteStateHasChangedReceived ( iCurID, bIsMuted );
+
+    return false; // no error
+}
+
+bool CProtocol::EvaluateSingleMixSoloStateHasChangedMes ( const CVector<uint8_t> &vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 2 )
+    {
+        return true; // return error code
+    }
+
+    // channel ID
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // mute state
+    const bool bIsSolo = static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // invoke message action
+    emit ChangeChanSingleMixSolo ( iCurID, bIsSolo );
 
     return false; // no error
 }

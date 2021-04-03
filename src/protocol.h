@@ -35,35 +35,36 @@
 
 /* Definitions ****************************************************************/
 // protocol message IDs
-#define PROTMESSID_ILLEGAL                     0 // illegal ID
-#define PROTMESSID_ACKN                        1 // acknowledge
-#define PROTMESSID_JITT_BUF_SIZE              10 // jitter buffer size
-#define PROTMESSID_REQ_JITT_BUF_SIZE          11 // request jitter buffer size
-#define PROTMESSID_NET_BLSI_FACTOR            12 // OLD (not used anymore)
-#define PROTMESSID_CHANNEL_GAIN               13 // set channel gain for mix
-#define PROTMESSID_CONN_CLIENTS_LIST_NAME     14 // OLD (not used anymore)
-#define PROTMESSID_SERVER_FULL                15 // OLD (not used anymore)
-#define PROTMESSID_REQ_CONN_CLIENTS_LIST      16 // request connected client list
-#define PROTMESSID_CHANNEL_NAME               17 // OLD (not used anymore)
-#define PROTMESSID_CHAT_TEXT                  18 // contains a chat text
-#define PROTMESSID_PING_MS                    19 // OLD (not used anymore)
-#define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
-#define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
-#define PROTMESSID_DISCONNECTION              22 // OLD (not used anymore)
-#define PROTMESSID_REQ_CHANNEL_INFOS          23 // request channel infos for fader tag
-#define PROTMESSID_CONN_CLIENTS_LIST          24 // channel infos for connected clients
-#define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
-#define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
-#define PROTMESSID_LICENCE_REQUIRED           27 // licence required
-#define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // OLD (not used anymore) // TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
-#define PROTMESSID_VERSION_AND_OS             29 // version number and operating system
-#define PROTMESSID_CHANNEL_PAN                30 // set channel pan for mix
-#define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
-#define PROTMESSID_CLIENT_ID                  32 // current user ID and server status
-#define PROTMESSID_RECORDER_STATE             33 // contains the state of the jam recorder (ERecorderState)
-#define PROTMESSID_REQ_SPLIT_MESS_SUPPORT     34 // request support for split messages
-#define PROTMESSID_SPLIT_MESS_SUPPORTED       35 // split messages are supported
-#define PROTMESSID_SINGLEMIX_STATE            36 // contains the state of the single mix (ESingleMixState)
+#define PROTMESSID_ILLEGAL                       0 // illegal ID
+#define PROTMESSID_ACKN                          1 // acknowledge
+#define PROTMESSID_JITT_BUF_SIZE                10 // jitter buffer size
+#define PROTMESSID_REQ_JITT_BUF_SIZE            11 // request jitter buffer size
+#define PROTMESSID_NET_BLSI_FACTOR              12 // OLD (not used anymore)
+#define PROTMESSID_CHANNEL_GAIN                 13 // set channel gain for mix
+#define PROTMESSID_CONN_CLIENTS_LIST_NAME       14 // OLD (not used anymore)
+#define PROTMESSID_SERVER_FULL                  15 // OLD (not used anymore)
+#define PROTMESSID_REQ_CONN_CLIENTS_LIST        16 // request connected client list
+#define PROTMESSID_CHANNEL_NAME                 17 // OLD (not used anymore)
+#define PROTMESSID_CHAT_TEXT                    18 // contains a chat text
+#define PROTMESSID_PING_MS                      19 // OLD (not used anymore)
+#define PROTMESSID_NETW_TRANSPORT_PROPS         20 // properties for network transport
+#define PROTMESSID_REQ_NETW_TRANSPORT_PROPS     21 // request properties for network transport
+#define PROTMESSID_DISCONNECTION                22 // OLD (not used anymore)
+#define PROTMESSID_REQ_CHANNEL_INFOS            23 // request channel infos for fader tag
+#define PROTMESSID_CONN_CLIENTS_LIST            24 // channel infos for connected clients
+#define PROTMESSID_CHANNEL_INFOS                25 // set channel infos
+#define PROTMESSID_OPUS_SUPPORTED               26 // tells that OPUS codec is supported
+#define PROTMESSID_LICENCE_REQUIRED             27 // licence required
+#define PROTMESSID_REQ_CHANNEL_LEVEL_LIST       28 // OLD (not used anymore) // TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
+#define PROTMESSID_VERSION_AND_OS               29 // version number and operating system
+#define PROTMESSID_CHANNEL_PAN                  30 // set channel pan for mix
+#define PROTMESSID_MUTE_STATE_CHANGED           31 // mute state of your signal at another client has changed
+#define PROTMESSID_CLIENT_ID                    32 // current user ID and server status
+#define PROTMESSID_RECORDER_STATE               33 // contains the state of the jam recorder (ERecorderState)
+#define PROTMESSID_REQ_SPLIT_MESS_SUPPORT       34 // request support for split messages
+#define PROTMESSID_SPLIT_MESS_SUPPORTED         35 // split messages are supported
+#define PROTMESSID_SINGLEMIX_STATE              36 // contains the state of the single mix (ESingleMixState)
+#define PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED 37 // singlemix solo state of your signal at another client has changed
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -118,6 +119,7 @@ public:
     void CreateChanGainMes ( const int iChanID, const float fGain );
     void CreateChanPanMes ( const int iChanID, const float fPan );
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted );
+    void CreateSingleMixSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo );
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
     void CreateChanInfoMes ( const CChannelCoreInfo ChanInfo );
@@ -275,6 +277,7 @@ protected:
     bool EvaluateChanGainMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateChanPanMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateMuteStateHasChangedMes ( const CVector<uint8_t>& vecData );
+    bool EvaluateSingleMixSoloStateHasChangedMes ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes       ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
     bool EvaluateChanInfoMes            ( const CVector<uint8_t>& vecData );
@@ -348,7 +351,9 @@ signals:
     void ClientIDReceived ( int iChanID );
     void ChangeChanGain ( int iChanID, float fNewGain );
     void ChangeChanPan ( int iChanID, float fNewPan );
+    void ChangeChanSingleMixSolo ( int iChanID, bool bIsSolo );
     void MuteStateHasChangedReceived ( int iCurID, bool bIsMuted );
+//    void SingleMixSoloStateHasChangedReceived ( int iCurID, bool bIsSolo );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();
     void ReqConnClientsList();

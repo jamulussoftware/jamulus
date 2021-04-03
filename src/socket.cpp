@@ -41,7 +41,7 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
     // create the UDP socket
     UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
     //
-    const char tos = (const char) iQosNumber;  // Quality of Service
+    const char tos = (char) iQosNumber;  // Quality of Service
     setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof(tos) );
 
     // allocate memory for network receive and send buffer in samples

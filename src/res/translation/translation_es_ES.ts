@@ -3323,8 +3323,8 @@
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
-        <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation>Puedes utilizar una herramiento como &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; para ajustar la tasa de muestreo del servidor Jack.</translation>
+        <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;http://qjackctl.sourceforge.net&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
+        <translation>Puedes utilizar una herramiento como &lt;i&gt;&lt;a href=&quot;http://qjackctl.sourceforge.net&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; para ajustar la tasa de muestreo del servidor Jack.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>

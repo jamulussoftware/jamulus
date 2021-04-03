@@ -313,8 +313,13 @@ public slots:
             Protocol.CreateMuteStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ),
                                                     GenRandomIntInRange ( 0, 1 ) );
             break;
+                
+        case 34: // PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED
+            Protocol.CreateSingleMixSoloStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ),
+                                                             GenRandomIntInRange ( 0, 1 ) );
+            break;
 
-        case 34: // PROTMESSID_CLIENT_ID
+        case 35: // PROTMESSID_CLIENT_ID
             Protocol.CreateClientIDMes ( GenRandomIntInRange ( -2, 20 ) );
             break;
         }

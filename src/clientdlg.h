@@ -204,6 +204,9 @@ public slots:
 
     void OnChangeChanPan ( int iId, float fPan )
         { pClient->SetRemoteChanPan ( iId, fPan ); }
+    
+    void OnChangeChanSingleMixSolo ( int iChanID, bool bIsSolo )
+        { pClient->SetRemoteChanSingleMixSolo ( iChanID, bIsSolo ); }
 
     void OnNewLocalInputText ( QString strChatText )
         { pClient->CreateChatTextMes ( strChatText ); }

@@ -620,16 +620,25 @@ void CChannelFader::SetMute ( const bool bState )
     }
 }
 
-void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
+void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState, bool bIsSingleMix )
 {
     // store state (must be done before the SetMute() call!)
     bOtherChannelIsSolo = bNewOtherSoloState;
 
-    // mute overwrites solo -> if mute is active, do not change anything
-    if ( !pcbMute->isChecked() )
+    // If we are in singlemix mode, don't mute any channels but send a special message to the server
+    //  that will solo the selected channels only for us being the singlemix master
+    if ( bIsSingleMix )
     {
-        // mute channel if we are not solo but another channel is solo
-        SetMute ( bOtherChannelIsSolo && !IsSolo() );
+        emit singleMixSoloValueChanged( IsSolo() );
+    }
+    else
+    {
+        // mute overwrites solo -> if mute is active, do not change anything
+        if ( !pcbMute->isChecked() )
+        {
+            // mute channel if we are not solo but another channel is solo
+            SetMute ( bOtherChannelIsSolo && !IsSolo() );
+        }
     }
 }
 
@@ -918,6 +927,9 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 
     void ( CAudioMixerBoard::* pPanValueChanged )( float ) =
         &CAudioMixerBoardSlots<slotId>::OnChPanValueChanged;
+    
+    void ( CAudioMixerBoard::* pSingleMixSoloValueChanged )( bool ) =
+        &CAudioMixerBoardSlots<slotId>::OnChSingleMixSoloValueChanged;
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
         this, &CAudioMixerBoard::UpdateSoloStates );
@@ -927,6 +939,9 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::panValueChanged,
         this, pPanValueChanged );
+    
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::singleMixSoloValueChanged,
+        this, pSingleMixSoloValueChanged );
 
     connectFaderSignalsToMixerBoardSlots<slotId - 1>();
 }
@@ -1608,6 +1623,7 @@ void CAudioMixerBoard::UpdateSoloStates()
 {
     // first check if any channel has a solo state active
     bool bAnyChannelIsSolo = false;
+    bool bSingleMixMaster = iMyChannelID == 0 && ( eSingleMixState == SM_ENABLED || eSingleMixState == SM_ENABLED_NO_MONITORING );
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1618,13 +1634,13 @@ void CAudioMixerBoard::UpdateSoloStates()
             continue;
         }
     }
-
+    
     // now update the solo state of all active faders
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecpChanFader[i]->IsVisible() )
         {
-            vecpChanFader[i]->UpdateSoloState ( bAnyChannelIsSolo );
+            vecpChanFader[i]->UpdateSoloState ( bAnyChannelIsSolo, bSingleMixMaster );
         }
     }
 }
@@ -1667,6 +1683,13 @@ void CAudioMixerBoard::UpdatePanValue ( const int   iChannelIdx,
                                         const float fValue )
 {
     emit ChangeChanPan ( iChannelIdx, fValue );
+}
+
+
+void CAudioMixerBoard::UpdateSingleMixSoloValue ( const int  iChannelIdx,
+                                                  const bool bValue )
+{
+    emit ChangeChanSingleMixSolo( iChannelIdx, bValue );
 }
 
 void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )

@@ -242,6 +242,9 @@ public:
 
     void SetRemoteChanPan ( const int iId, const float fPan )
         { Channel.SetRemoteChanPan ( iId, fPan ); }
+    
+    void SetRemoteChanSingleMixSolo ( int iChanID, bool bIsSolo )
+        { Channel.SetRemoteChanSingleMixSolo ( iChanID, bIsSolo ); }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 

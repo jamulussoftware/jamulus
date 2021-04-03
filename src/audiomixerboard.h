@@ -86,7 +86,7 @@ public:
     int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
     void   SetChannelLevel ( const uint16_t iLevel );
     void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
-    void   UpdateSoloState ( const bool bNewOtherSoloState );
+    void   UpdateSoloState ( const bool bNewOtherSoloState, bool bIsSingleMix );
 
 protected:
     void   UpdateGroupIDDependencies();
@@ -152,6 +152,7 @@ signals:
 
     void panValueChanged  ( float value );
     void soloStateChanged ( int value );
+    void singleMixSoloValueChanged  ( bool value );
 };
 
 template<unsigned int slotId>
@@ -170,6 +171,8 @@ public:
                                                                          dLevelRatio ); }
 
     void OnChPanValueChanged ( float fValue ) { UpdatePanValue ( slotId - 1, fValue ); }
+    
+    void OnChSingleMixSoloValueChanged ( bool iIsSolo ) { UpdateSingleMixSoloValue ( slotId -1, iIsSolo ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
@@ -181,6 +184,9 @@ protected:
 
     virtual void UpdatePanValue ( const int   iChannelIdx,
                                   const float fValue ) = 0;
+    
+    virtual void UpdateSingleMixSoloValue ( const int   iChannelIdx,
+                                            const bool bValue ) = 0;
 };
 
 template<>
@@ -296,6 +302,9 @@ protected:
 
     virtual void UpdatePanValue ( const int   iChannelIdx,
                                   const float fValue );
+    
+    virtual void UpdateSingleMixSoloValue ( const int  iChannelIdx,
+                                            const bool bValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
@@ -303,5 +312,6 @@ protected:
 signals:
     void ChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader );
     void ChangeChanPan ( int iId, float fPan );
+    void ChangeChanSingleMixSolo ( int iChanID, bool bIsSolo );
     void NumClientsChanged ( int iNewNumClients );
 };

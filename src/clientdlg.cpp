@@ -529,6 +529,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanPan,
         this, &CClientDlg::OnChangeChanPan );
+    
+    QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanSingleMixSolo,
+        this, &CClientDlg::OnChangeChanSingleMixSolo );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::NumClientsChanged,
         this, &CClientDlg::OnNumClientsChanged );

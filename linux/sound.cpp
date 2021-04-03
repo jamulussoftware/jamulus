@@ -26,7 +26,7 @@
 
 #include "sound.h"
 
-#ifdef WITH_SOUND
+#ifdef WITH_JACK
 void CSound::OpenJack ( const bool  bNoAutoJackConnect,
                         const char* jackClientName )
 {
@@ -360,4 +360,4 @@ void CSound::shutdownCallback ( void* arg )
     pSound->bJackWasShutDown = true;
     pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT );
 }
-#endif // WITH_SOUND
+#endif // WITH_JACK

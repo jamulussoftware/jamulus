@@ -35,7 +35,7 @@ Bugs and feature requests can be [reported here](https://github.com/jamulussoftw
 Compilation
 -----------
 
-[Please see these instructions](https://jamulus.io/wiki/Compiling)
+[Please see these instructions](COMPILING.md)
 
 
 Contributing

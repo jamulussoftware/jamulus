@@ -116,28 +116,13 @@ int main ( int argc, char** argv )
 
 
         // Single audio mix server mode flag -----------------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--singlemix", // no short form
-                                 "--singlemix",
-                                 strArgument ) )
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--singlemix", // no short form
+                               "--singlemix" ) )
         {
-            if ( strArgument == "monitor" )
-            {
-                eSingleMixServerMode = SM_ENABLED;
-                qInfo() << "- single mix server mode (with monitoring)";
-            }
-            else if ( strArgument == "no-monitor" )
-            {
-                eSingleMixServerMode = SM_ENABLED_NO_MONITORING;
-                qInfo() << "- single mix server mode (without monitoring)";
-            }
-            else
-            {
-                qCritical() << "Illegal mode for --singlemix. Allowed modes: monitor, no-monitor.";
-                exit ( 1 );
-            }
+            eSingleMixServerMode = SM_ENABLED;
+            qInfo() << "- single audio mix mode";
             CommandLineOptions << "--singlemix";
             continue;
         }
@@ -886,12 +871,12 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
-        "      --singlemix       'monitor' or 'no-monitor'\n"
-        "                        single audio mix server mode where all clients\n"
-        "                        hear the mix of the first connected client\n"
-        "                        (where 'no-monitor' will exclude each client's\n"
-        "                        own channel from the otherwise identical mix)"
-        "                        (cannot be combined with -F and -T)\n"
+        "      --singlemix       single audio mix server mode where all clients\n"
+        "                        hear the mix of the mix master (first conn. client)\n"
+        "                        (non-mix masters can still control their own channel\n"
+        "                        in their own mix (i.e. monitoring) and the mix master's\n"
+        "                        SOLO'd channels will only apply to his own mix)\n"
+        "                        (cannot be combined with -F and -T)\n" // todo change that!
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the server list on which to register\n"
         "                        (or 'localhost' to be a server list)\n"

@@ -1169,7 +1169,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                 fGain = vecvecfGains[0][j];
             }
             // let non-mix masters at least control their own channel's gain in their own mix (i.e. monitoring)
-            // todo: enable in client UI
             if ( iChanCnt == j )
             {
                 fGain = vecvecfGains[iChanCnt][j];
@@ -1259,7 +1258,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                 fPan  = vecvecfPannings[0][j];
             }
             // let non-mix masters at least control their own channel's gain/pan in their own mix (i.e. monitoring)
-            // todo: enable in client UI
             if ( iChanCnt == j )
             {
                 fGain = vecvecfGains[iChanCnt][j];

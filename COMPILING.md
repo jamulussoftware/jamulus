@@ -1,4 +1,7 @@
-Jamulus can be compiled for Linux, Windows and macOS as follows.
+Jamulus can be compiled for Linux, Windows and macOS as follows. Alernatively, you may wish to use one of the contributed [installation scripts](https://github.com/jamulussoftware/installscripts).
+
+---
+
 
 ## Download sources
 

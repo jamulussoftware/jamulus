@@ -279,19 +279,14 @@ void CChannelFader::Disable ()
 {
     bIsEnabled = false;
     
-    pPan->disconnect();
     pPan->setDisabled(true);
-    pFader->disconnect();
     pFader->setDisabled(true);
-    pcbMute->disconnect();
     pcbMute->setDisabled(true);
-    pcbSolo->disconnect();
     pcbSolo->setDisabled(true);
 }
 
 void CChannelFader::Enable ()
 {
-    // todo: do we ever need enable actually? or will faders just be deleted and re-created during re-connect?
     bIsEnabled = true;
     pPan->setDisabled(false);
     pFader->setDisabled(false);
@@ -1209,8 +1204,6 @@ void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState 
 
 void CAudioMixerBoard::SetSingleMixState ( const ESingleMixState newSingleMixState )
 {
-    // TODO: even a singlemix-aware server apparently does not send a SM_DISABLED message
-    
     // store the new single mix state and update the title
     eSingleMixState = newSingleMixState;
     UpdateTitle();

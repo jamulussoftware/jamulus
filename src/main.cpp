@@ -639,17 +639,6 @@ int main ( int argc, char** argv )
         iPortNumber += 10; // increment by 10
     }
 
-    // the single mix mode cannot be combined with multithreading and fast update
-    // todo change this
-    if ( ( eSingleMixServerMode == SM_ENABLED )
-        && ( bUseMultithreading || !bUseDoubleSystemFrameSize ) )
-    {
-        qCritical() << "Single mix mode cannot be combined with --fastupdate or --multithreading.";
-        bUseMultithreading        = false;
-        bUseDoubleSystemFrameSize = true;
-    }
-
-
     // Application/GUI setup ---------------------------------------------------
     // Application object
 #ifdef HEADLESS
@@ -877,7 +866,6 @@ QString UsageArguments ( char **argv )
         "                        (non-mix masters can still control their own channel\n"
         "                        in their own mix (i.e. monitoring) and the mix master's\n"
         "                        SOLO'd channels will only apply to his own mix)\n"
-        "                        (cannot be combined with -F and -T)\n" // todo change that!
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the server list on which to register\n"
         "                        (or 'localhost' to be a server list)\n"

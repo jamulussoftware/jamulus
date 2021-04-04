@@ -487,6 +487,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Noam Postavsky (<a href=\"https://github.com/npostavs\">npostavs</a>)</p>"
         "<p>Johannes Brauers (<a href=\"https://github.com/JohannesBrx\">JohannesBrx</a>)</p>"
         "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
+        "<p>Martin Kaistra (<a href=\"https://github.com/djfun\">djfun</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." );
 
@@ -580,7 +581,6 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     - label with combo box for skill level
     - OK button
 */
-    setWindowTitle ( tr ( "Musician Profile" ) );
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
 
     QVBoxLayout* pLayout        = new QVBoxLayout ( this );
@@ -1580,4 +1580,14 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
     strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License (GPL)" );
 
     return strVersionText;
+}
+
+QString MakeClientNameTitle ( QString win, QString client )
+{
+    QString sReturnString = win;
+    if( !client.isEmpty() )
+    {
+        sReturnString += " - " + client;
+    }
+    return ( sReturnString );
 }

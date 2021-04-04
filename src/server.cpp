@@ -1236,6 +1236,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
         const int maxPanDelay = MAX_DELAY_PANNING_SAMPLES;
 
+        int iPanDelL = 0, iPanDelR = 0, iPanDel;
         int iLpan, iRpan, iPan;
 
         for ( j = 0; j < iNumClients; j++ )
@@ -1255,13 +1256,13 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             if ( eSingleMixServerMode == SM_ENABLED )
             {
                 fGain = vecvecfGains[0][j];
-                fPan  = vecvecfPannings[0][j];
+                fPan  = bDelayPan ? 0.5f : vecvecfPannings[0][j];
             }
             // let non-mix masters at least control their own channel's gain/pan in their own mix (i.e. monitoring)
             if ( iChanCnt == j )
             {
                 fGain = vecvecfGains[iChanCnt][j];
-                fPan  = vecvecfPannings[iChanCnt][j];
+                fPan  = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
             }
             // let the mix master solo people just for himself ...
             if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
@@ -1275,6 +1276,13 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             // the panning that center equals full gain for both channels
             const float fGainL = MathUtils::GetLeftPan ( fPan, false ) * fGain;
             const float fGainR = MathUtils::GetRightPan ( fPan, false ) * fGain;
+
+            if ( bDelayPan )
+            {
+                iPanDel = lround( (float)( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
+                iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
+                iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
+            }
 
             if ( vecNumAudioChannels[j] == 1 )
             {

@@ -246,6 +246,8 @@ public:
     void SetRemoteChanSingleMixSolo ( int iChanID, bool bIsSolo )
         { Channel.SetRemoteChanSingleMixSolo ( iChanID, bIsSolo ); }
 
+    void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
+
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
     void CreateChatTextMes ( const QString& strChatText )
@@ -334,6 +336,7 @@ protected:
     bool                    bReverbOnLeftChan;
     int                     iReverbLevel;
     CAudioReverb            AudioReverb;
+    int                     iInputBoost;
 
     int                     iSndCrdPrefFrameSizeFactor;
     int                     iSndCrdFrameSizeFactor;

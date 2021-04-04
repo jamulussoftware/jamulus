@@ -1164,7 +1164,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
             // Extra care for --singlemix -------------------------------------
             // overwrite everybody's gain with the master's gain
-            if ( eSingleMixServerMode == SM_ENABLED || eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
+            if ( eSingleMixServerMode == SM_ENABLED )
             {
                 fGain = vecvecfGains[0][j];
             }
@@ -1253,7 +1253,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             
             // Extra care for --singlemix -------------------------------------
             // overwrite everybody's gain/pan with the master's gain/pan
-            if ( eSingleMixServerMode == SM_ENABLED || eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
+            if ( eSingleMixServerMode == SM_ENABLED )
             {
                 fGain = vecvecfGains[0][j];
                 fPan  = vecvecfPannings[0][j];

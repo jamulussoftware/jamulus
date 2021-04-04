@@ -1851,8 +1851,7 @@ bool CProtocol::EvaluateSingleMixStateMes(const CVector<uint8_t>& vecData)
 
     // note that SM_UNDEFINED is only internally used
     if ( ( iSingleMixState != SM_NOT_ENABLED ) &&
-         ( iSingleMixState != SM_ENABLED ) &&
-         ( iSingleMixState != SM_ENABLED_NO_MONITORING ) )
+         ( iSingleMixState != SM_ENABLED ) )
     {
         return true;
     }

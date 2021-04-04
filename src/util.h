@@ -582,8 +582,7 @@ enum ESingleMixState
     // used for protocol -> enum values must be fixed!
     SM_UNDEFINED = 0,
     SM_NOT_ENABLED = 1,
-    SM_ENABLED = 2,
-    SM_ENABLED_NO_MONITORING = 3
+    SM_ENABLED = 2
 };
 
 

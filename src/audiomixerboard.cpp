@@ -29,6 +29,7 @@
 * CChanneFader                                                                 *
 \******************************************************************************/
 CChannelFader::CChannelFader ( QWidget* pNW ) :
+    bIsEnabled( TRUE ),
     eDesign ( GD_STANDARD )
 {
     // create new GUI control objects and store pointers to them (note that
@@ -276,14 +277,22 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
 void CChannelFader::Disable ()
 {
+    bIsEnabled = false;
+    
+    pPan->disconnect();
     pPan->setDisabled(true);
+    pFader->disconnect();
     pFader->setDisabled(true);
+    pcbMute->disconnect();
     pcbMute->setDisabled(true);
+    pcbSolo->disconnect();
     pcbSolo->setDisabled(true);
 }
 
 void CChannelFader::Enable ()
 {
+    // todo: do we ever need enable actually? or will faders just be deleted and re-created during re-connect?
+    bIsEnabled = true;
     pPan->setDisabled(false);
     pFader->setDisabled(false);
     pcbMute->setDisabled(false);
@@ -422,6 +431,7 @@ void CChannelFader::Reset()
 void CChannelFader::SetFaderLevel ( const double dLevel,
                                     const bool   bIsGroupUpdate )
 {
+    if (!bIsEnabled) return;
     // first make a range check
     if ( dLevel >= 0 )
     {
@@ -1140,7 +1150,7 @@ void CAudioMixerBoard::UpdateTitle()
         title_parts.append("[" + tr ( "RECORDING ACTIVE" ) + "] ");
     }
 
-    if ( eSingleMixState == SM_ENABLED || eSingleMixState == SM_ENABLED_NO_MONITORING )
+    if ( eSingleMixState == SM_ENABLED )
     {
         if ( iMyChannelID == 0 )
         {
@@ -1148,11 +1158,6 @@ void CAudioMixerBoard::UpdateTitle()
         }
         
         title_parts.append("Server Mix ");
-        
-        if ( eSingleMixState == SM_ENABLED_NO_MONITORING )
-        {
-            title_parts.append("(without monitoring) ");
-        }
     }
     else
     {
@@ -1169,6 +1174,11 @@ void CAudioMixerBoard::DisableAllFaders()
 {
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
+        if ( i == iMyChannelID )
+        {
+            // Do not disable our own fader in the mix, so we can control our monitoring still
+            continue;
+        }
         vecpChanFader[i]->Disable();
     }
 }
@@ -1195,19 +1205,13 @@ void CAudioMixerBoard::SetSingleMixState ( const ESingleMixState newSingleMixSta
     UpdateTitle();
     
     // if the server runs --singlemix and we are not the master (channelID 0), disable all faders
-    if ( ( eSingleMixState == SM_ENABLED || eSingleMixState == SM_ENABLED_NO_MONITORING )
-        && iMyChannelID != 0 )
+    if ( eSingleMixState == SM_ENABLED && iMyChannelID != 0 )
     {
         DisableAllFaders();
     }
     else
-    {
+{
         EnableAllFaders();
-    }
-    
-    if ( eSingleMixState == SM_ENABLED_NO_MONITORING )
-    {
-        // todo: Indicate that our own channel is muted
     }
 }
 
@@ -1339,7 +1343,7 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
     // only apply new fader level if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetFaderLevel ( iValue );
         }
@@ -1353,7 +1357,7 @@ void CAudioMixerBoard::SetPanValue ( const int iChannelIdx,
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS )
            && bDisplayPans )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetPanValue ( iValue );
         }
@@ -1367,7 +1371,7 @@ void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx,
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
 
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetFaderIsSolo ( bIsSolo );
         }
@@ -1380,7 +1384,7 @@ void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx,
     // only apply mute if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetFaderIsMute ( bIsMute );
         }
@@ -1612,7 +1616,7 @@ void CAudioMixerBoard::SetRemoteFaderIsMute ( const int  iChannelIdx,
     // only apply remote mute state if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetRemoteFaderIsMute ( bIsMute );
         }
@@ -1623,7 +1627,7 @@ void CAudioMixerBoard::UpdateSoloStates()
 {
     // first check if any channel has a solo state active
     bool bAnyChannelIsSolo = false;
-    bool bSingleMixMaster = iMyChannelID == 0 && ( eSingleMixState == SM_ENABLED || eSingleMixState == SM_ENABLED_NO_MONITORING );
+    bool bSingleMixMaster = iMyChannelID == 0 && ( eSingleMixState == SM_ENABLED );
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {

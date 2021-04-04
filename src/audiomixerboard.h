@@ -59,6 +59,7 @@ public:
     void    Show() { pFrame->show(); }
     void    Hide() { pFrame->hide(); }
     bool    IsVisible() { return !pFrame->isHidden(); }
+    bool    IsEnabled() { return bIsEnabled; };
     bool    IsSolo() { return pcbSolo->isChecked(); }
     bool    IsMute() { return pcbMute->isChecked(); }
     int     GetGroupID() { return iGroupID; }
@@ -123,6 +124,7 @@ protected:
     bool         bOtherChannelIsSolo;
     bool         bIsMyOwnFader;
     bool         bIsMutedAtServer;
+    bool         bIsEnabled;
     double       dPreviousFaderLevel;
     int          iGroupID;
     QString      strGroupBaseText;

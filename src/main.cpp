@@ -640,7 +640,8 @@ int main ( int argc, char** argv )
     }
 
     // the single mix mode cannot be combined with multithreading and fast update
-    if ( ( eSingleMixServerMode == SM_ENABLED || eSingleMixServerMode == SM_ENABLED_NO_MONITORING )
+    // todo change this
+    if ( ( eSingleMixServerMode == SM_ENABLED )
         && ( bUseMultithreading || !bUseDoubleSystemFrameSize ) )
     {
         qCritical() << "Single mix mode cannot be combined with --fastupdate or --multithreading.";

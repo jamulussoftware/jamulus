@@ -29,8 +29,8 @@
 CChannel::CChannel ( const bool bNIsServer ) :
     vecfGains              ( MAX_NUM_CHANNELS, 1.0f ),
     vecfPannings           ( MAX_NUM_CHANNELS, 0.5f ),
-    vecbSingleMixSolos     ( MAX_NUM_CHANNELS, FALSE ),
-    bAnyChannelIsSingleMixSolo ( FALSE ),
+    vecbSingleMixSolos     ( MAX_NUM_CHANNELS, false ),
+    bAnyChannelIsSingleMixSolo ( false ),
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
     bUseSequenceNumber     ( false ), // this is important since in the client we reset on Channel.SetEnable ( false )
@@ -379,21 +379,21 @@ void CChannel::SetSingleMixSolo ( const int  iChanID,
     
     // update bAnyChannelIsSingleMixSolo helper bool
     //  (try to avoid checking all channels for their solo status)
-    if ( bNewIsSolo == TRUE )
+    if ( bNewIsSolo == true )
     {
-        bAnyChannelIsSingleMixSolo = TRUE;
+        bAnyChannelIsSingleMixSolo = true;
     }
     else  // but now we have to
     {
         for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
-            if ( vecbSingleMixSolos[i] == TRUE )
+            if ( vecbSingleMixSolos[i] == true )
             {
-                bAnyChannelIsSingleMixSolo = TRUE;
+                bAnyChannelIsSingleMixSolo = true;
                 return;
             }
         }
-        bAnyChannelIsSingleMixSolo = FALSE;
+        bAnyChannelIsSingleMixSolo = false;
     }
 }
 
@@ -408,7 +408,7 @@ bool CChannel::GetSingleMixSolo ( const int iChanID )
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 

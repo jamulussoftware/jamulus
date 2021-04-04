@@ -29,7 +29,7 @@
 * CChanneFader                                                                 *
 \******************************************************************************/
 CChannelFader::CChannelFader ( QWidget* pNW ) :
-    bIsEnabled( TRUE ),
+    bIsEnabled( true ),
     eDesign ( GD_STANDARD )
 {
     // create new GUI control objects and store pointers to them (note that

@@ -1795,7 +1795,6 @@ void CProtocol::CreateRecorderStateMes ( const ERecorderState eRecorderState )
 
 void CProtocol::CreateSingleMixStateMes ( const ESingleMixState eSingleMixState )
 {
-    qInfo() << "CreateSingleMixStateMes()";
     CVector<uint8_t> vecData ( 1 ); // 1 byte of data
     int              iPos = 0;      // init position pointer
 

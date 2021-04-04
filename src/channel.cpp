@@ -487,7 +487,6 @@ void CChannel::OnChangeChanPan ( int   iChanID,
 void CChannel::OnChangeChanSingleMixSolo ( int  iChanID,
                                            bool bNewIsSolo )
 {
-    qInfo() << "OnChangeChanSingleMixSolo";
     SetSingleMixSolo ( iChanID, bNewIsSolo );
 }
 

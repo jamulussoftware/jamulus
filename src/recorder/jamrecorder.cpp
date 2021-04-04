@@ -103,18 +103,27 @@ void CJamClient::Disconnect()
 }
 
 /**
- * @brief CJamClient::TranslateChars Replace non-ASCII chars with nearest equivalent, if any
+ * @brief CJamClient::TranslateChars Replace non-ASCII chars with nearest equivalent, if any, and change all punctuation to _
  */
 QString CJamClient::TranslateChars (const QString& input) const
 {
-    static const char charmap[128] = {
-        '_', '_', ',', 'f', '"', '_', '_', '_', '^', '%', 'S', '<', 'E', '_', 'Z', '_',
-        '_', '\'', '\'', '"', '"', '_', '-', '-', '~', '_', 's', '>', 'e', '_', 'z', 'Y',
-        ' ', '_', '_', '_', '_', 'Y', '|', '_', '_', '_', 'a', '"', '-', '_', '_', '_',
-        '_', '_', '_', '_', '_', 'u', '_', '.', ',', '_', 'o', '"', '_', '_', '_', '_',
-        'A', 'A', 'A', 'A', 'A', 'A', 'E', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I',
+    // Allow letters and numbers
+    static const char charmap[256] = {
+        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_', '_', '_', '_', '_', '_',
+        '_', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+        'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '_', '_', '_', '_', '_',
+        '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+        'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '_', '_', '_', '_', '_',
+        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', 'S', '_', 'O', '_', 'Z', '_',
+        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', 's', '_', 'o', '_', 'z', 'Y',
+        '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
+        '_', '_', '2', '3', '_', 'u', '_', '_', '_', '1', '_', '_', '_', '_', '_', '_',
+        'A', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I',
         'D', 'N', 'O', 'O', 'O', 'O', 'O', 'x', 'O', 'U', 'U', 'U', 'U', 'Y', 'P', 'S',
-        'a', 'a', 'a', 'a', 'a', 'a', 'e', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i',
+        'a', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i',
         'd', 'n', 'o', 'o', 'o', 'o', 'o', '_', 'o', 'u', 'u', 'u', 'u', 'y', 'p', 'y'
     };
 
@@ -123,7 +132,7 @@ QString CJamClient::TranslateChars (const QString& input) const
     for (auto &c : r)
     {
         unsigned char uc = c;
-        c = (uc >= 128) ? charmap[uc - 128] : (uc >= 32) ? c : '_';
+        c = charmap[uc];
     }
 
     return QString::fromLatin1(r);

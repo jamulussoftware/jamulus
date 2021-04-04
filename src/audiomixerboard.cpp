@@ -1142,6 +1142,15 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
 void CAudioMixerBoard::UpdateTitle()
 {
+    // if the server runs --singlemix and we are not the master (channelID 0), disable all faders
+    if ( eSingleMixState == SM_ENABLED && iMyChannelID != 0 )
+    {
+        DisableFaders();
+    }
+    else
+    {
+        EnableFaders();
+    }
 
     QList<QString> title_parts;
     
@@ -1170,7 +1179,7 @@ void CAudioMixerBoard::UpdateTitle()
     setAccessibleName ( title() );
 }
 
-void CAudioMixerBoard::DisableAllFaders()
+void CAudioMixerBoard::DisableFaders()
 {
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1183,7 +1192,7 @@ void CAudioMixerBoard::DisableAllFaders()
     }
 }
 
-void CAudioMixerBoard::EnableAllFaders()
+void CAudioMixerBoard::EnableFaders()
 {
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1200,19 +1209,11 @@ void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState 
 
 void CAudioMixerBoard::SetSingleMixState ( const ESingleMixState newSingleMixState )
 {
+    // TODO: even a singlemix-aware server apparently does not send a SM_DISABLED message
+    
     // store the new single mix state and update the title
     eSingleMixState = newSingleMixState;
     UpdateTitle();
-    
-    // if the server runs --singlemix and we are not the master (channelID 0), disable all faders
-    if ( eSingleMixState == SM_ENABLED && iMyChannelID != 0 )
-    {
-        DisableAllFaders();
-    }
-    else
-{
-        EnableAllFaders();
-    }
 }
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )

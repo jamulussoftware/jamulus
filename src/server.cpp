@@ -1247,9 +1247,9 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 
             float fGain    = vecvecfGains[iChanCnt][j];
             float fPan     = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
-            const int iPanDel = lround( (float)( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
-            const int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
-            const int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
+            int iPanDel = lround( (float)( 2 * maxPanDelay - 2 ) * ( vecvecfPannings[iChanCnt][j] - 0.5f ) );
+            int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
+            int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
             
             // Extra care for --singlemix -------------------------------------
             // overwrite everybody's gain/pan with the master's gain/pan

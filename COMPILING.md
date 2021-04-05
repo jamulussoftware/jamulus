@@ -41,7 +41,7 @@ qmake Jamulus.pro
 make clean
 make
 sudo make install
-~~~
+```
 
 This puts the Jamulus binary into `/usr/local/bin`.
 
@@ -145,5 +145,4 @@ Schemes:
 `xcodebuild build`
 
 Will build the file and make it available in `./Release/Jamulus.app`
-
 

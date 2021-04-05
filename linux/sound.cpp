@@ -60,7 +60,7 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
         throw CGenErr ( tr ( "The Jack server sample rate is different from "
             "the required one. The required sample rate is:" ) + " <b>" +
             QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz</b>. " + tr ( "You can "
-            "use a tool like <i><a href=\"http://qjackctl.sourceforge.net\">QJackCtl</a></i> "
+            "use a tool like <i><a href=\"https://qjackctl.sourceforge.io\">QJackCtl</a></i> "
             "to adjust the Jack server sample rate." ) + "<br>" + tr ( "Make sure to set the "
             "Frames/Period to a low value like " ) +
             QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) +

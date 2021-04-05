@@ -1163,21 +1163,21 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             float                   fGain    = vecvecfGains[iChanCnt][j];
 
             // Extra care for --singlemix -------------------------------------
-            // overwrite everybody's gain with the master's gain
             if ( eSingleMixServerMode == SM_ENABLED )
             {
+                // overwrite everybody's gain with the master's gain
                 fGain = vecvecfGains[0][j];
-            }
-            // let non-mix masters at least control their own channel's gain in their own mix (i.e. monitoring)
-            if ( iChanCnt == j )
-            {
-                fGain = vecvecfGains[iChanCnt][j];
-            }
-            // let the mix master solo people just for himself ...
-            if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
-            {
-                // ... by muting all channels for the mix master that are not solo'd
-                if ( !vecChannels[0].GetSingleMixSolo(j) ) { fGain = 0.0f; }
+                // except: let everybody control the master's as well as their own channel's gain in their mix
+                if ( j == 0 || j == iChanCnt )
+                {
+                    fGain = vecvecfGains[iChanCnt][j];
+                }
+                // except: let the mix master solo people just for himself ...
+                if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
+                {
+                    // ... by muting all channels for the mix master that are not solo'd
+                    if ( !vecChannels[0].GetSingleMixSolo(j) ) { fGain = 0.0f; }
+                }
             }
             // -----------------------------------------------------------------
 
@@ -1252,23 +1252,24 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
             
             // Extra care for --singlemix -------------------------------------
-            // overwrite everybody's gain/pan with the master's gain/pan
             if ( eSingleMixServerMode == SM_ENABLED )
             {
+                // overwrite everybody's gain/pan with the master's gain/pan
                 fGain = vecvecfGains[0][j];
                 fPan  = bDelayPan ? 0.5f : vecvecfPannings[0][j];
-            }
-            // let non-mix masters at least control their own channel's gain/pan in their own mix (i.e. monitoring)
-            if ( iChanCnt == j )
-            {
-                fGain = vecvecfGains[iChanCnt][j];
-                fPan  = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
-            }
-            // let the mix master solo people just for himself ...
-            if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
-            {
-                // ... by muting all channels for the mix master that are not solo'd
-                if ( !vecChannels[0].GetSingleMixSolo(j) ) { fGain = 0.0f; }
+            
+                // except: let everybody control the master's as well as their own channel's gain/pan in their mix
+                if ( j == 0 || j == iChanCnt )
+                {
+                    fGain = vecvecfGains[iChanCnt][j];
+                    fPan  = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
+                }
+                // except: let the mix master solo people just for himself ...
+                if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
+                {
+                    // ... by muting all channels for the mix master that are not solo'd
+                    if ( !vecChannels[0].GetSingleMixSolo(j) ) { fGain = 0.0f; }
+                }
             }
             // -----------------------------------------------------------------
 

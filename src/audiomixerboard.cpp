@@ -1178,9 +1178,9 @@ void CAudioMixerBoard::DisableFaders()
 {
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        if ( i == iMyChannelID )
+        if ( i == 0 || i == iMyChannelID )
         {
-            // Do not disable our own fader in the mix, so we can control our monitoring still
+            // Do not disable the master's our own fader in the mix, so we can control those
             continue;
         }
         vecpChanFader[i]->Disable();

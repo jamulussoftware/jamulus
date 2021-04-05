@@ -49,10 +49,6 @@ This puts the Jamulus binary into `/usr/local/bin`.
 
 * The "make clean" command is essential to remove the automatically generated Qt files which are present in the .tar.gz file and may not match the Qt version you are using.
 
-* To use an external shared OPUS library instead of the built-in one use qmake `"CONFIG+=opus_shared_lib" Jamulus.pro`.
-
-* To use this file configure the software with `qmake "CONFIG+=noupcasename" Jamulus.pro` to make sure the output target name of this software is **j**amulus instead of **J**amulus.
-
 * Users of Raspberry Pi: You may want to compile the client on another machine and run the binary on the Raspberry Pi. In which case the only libraries you need to run it are those for a [headless server](Server-Linux#running-a-headless-server) build, but _with_ the JACK sound packages. In particular, have a look at the footnote for the headless build.
 
 * As of version 3.5.3, Jamulus is no longer compatible with Qt4.

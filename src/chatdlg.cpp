@@ -68,8 +68,8 @@ CChatDlg::CChatDlg ( QWidget* parent ) :
 
     pMenu->addMenu ( pEditMenu );
 #if defined ( Q_OS_IOS )
-    QAction *action = pMenu->addAction (tr ( "&Close" ));
-    connect(action, SIGNAL(triggered()), this, SLOT(close()));
+    QAction *action = pMenu->addAction ( tr ( "&Close" ) );
+    connect ( action, SIGNAL( triggered() ), this, SLOT ( close() ) );
 #endif
 
     // Now tell the layout about the menu

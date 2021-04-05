@@ -26,7 +26,7 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 * qt5-qtdeclarative-devel
 * jack-audio-connection-kit-dbus
-* libqt5Concurrent5
+* libqt5concurrent5
 * jack-audio-connection-kit-devel
 
 #### For all desktop distributions

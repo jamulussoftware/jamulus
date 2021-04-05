@@ -87,7 +87,7 @@ public:
     int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
     void   SetChannelLevel ( const uint16_t iLevel );
     void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
-    void   UpdateSoloState ( const bool bNewOtherSoloState, bool bIsSingleMix );
+    void   UpdateSoloState ( const bool bNewOtherSoloState, bool bIsMixMaster );
 
 protected:
     void   UpdateGroupIDDependencies();
@@ -154,7 +154,7 @@ signals:
 
     void panValueChanged  ( float value );
     void soloStateChanged ( int value );
-    void singleMixSoloValueChanged  ( bool value );
+    void mixMasterSecretSoloValueChanged  ( bool value );
 };
 
 template<unsigned int slotId>
@@ -174,7 +174,7 @@ public:
 
     void OnChPanValueChanged ( float fValue ) { UpdatePanValue ( slotId - 1, fValue ); }
     
-    void OnChSingleMixSoloValueChanged ( bool iIsSolo ) { UpdateSingleMixSoloValue ( slotId -1, iIsSolo ); }
+    void OnChMixMasterSecretSoloValueChanged ( bool iIsSolo ) { UpdateMixMasterSecretSoloValue ( slotId -1, iIsSolo ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
@@ -187,7 +187,7 @@ protected:
     virtual void UpdatePanValue ( const int   iChannelIdx,
                                   const float fValue ) = 0;
     
-    virtual void UpdateSingleMixSoloValue ( const int   iChannelIdx,
+    virtual void UpdateMixMasterSecretSoloValue ( const int   iChannelIdx,
                                             const bool bValue ) = 0;
 };
 
@@ -239,8 +239,8 @@ public:
     void            SetRecorderState ( const ERecorderState newRecorderState );
     ERecorderState  GetRecorderState() { return eRecorderState; };
 
-    void            SetSingleMixState ( const ESingleMixState newSingleMixState );
-    ESingleMixState GetSingleMixState() { return eSingleMixState; };
+    void            SetMasterMixState ( const EMasterMixState newMasterMixState );
+    EMasterMixState GetMasterMixState() { return eMasterMixState; };
 
     void            SetAllFaderLevelsToNewClientLevel();
     void            StoreAllFaderSettings();
@@ -290,7 +290,7 @@ protected:
     int                     iNumMixerPanelRows;
     QString                 strServerName;
     ERecorderState          eRecorderState;
-    ESingleMixState         eSingleMixState;
+    EMasterMixState         eMasterMixState;
     QMutex                  Mutex;
     EChSortType             eChSortType;
     CVector<float>          vecAvgLevels;
@@ -305,7 +305,7 @@ protected:
     virtual void UpdatePanValue ( const int   iChannelIdx,
                                   const float fValue );
     
-    virtual void UpdateSingleMixSoloValue ( const int  iChannelIdx,
+    virtual void UpdateMixMasterSecretSoloValue ( const int  iChannelIdx,
                                             const bool bValue );
 
     template<unsigned int slotId>
@@ -314,6 +314,6 @@ protected:
 signals:
     void ChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader );
     void ChangeChanPan ( int iId, float fPan );
-    void ChangeChanSingleMixSolo ( int iChanID, bool bIsSolo );
+    void ChangeChanMixMasterSecretSolo ( int iChanID, bool bIsSolo );
     void NumClientsChanged ( int iNewNumClients );
 };

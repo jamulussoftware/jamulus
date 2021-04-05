@@ -116,7 +116,7 @@ MESSAGES (with connection)
     | 1 byte channel ID | 1 byte is muted |
     +-------------------+-----------------+
  
- - PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED: Mix master in --singlemix solo'd somebody
+ - PROTMESSID_MASTERMIX_SOLO_STATE_CHANGED: Mix master in --mastermix secretly solo's somebody
 
      +-------------------+-----------------+
      | 1 byte channel ID | 1 byte is solo  |
@@ -806,8 +806,8 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     EvaluateMuteStateHasChangedMes ( vecbyMesBodyDataRef );
                     break;
                         
-                case PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED:
-                    EvaluateSingleMixSoloStateHasChangedMes ( vecbyMesBodyDataRef );
+                case PROTMESSID_MIXMASTER_SECRET_SOLO_STATE_CHANGED:
+                    EvaluateMixMasterSecretSoloStateHasChangedMes ( vecbyMesBodyDataRef );
                     break;
 
                 case PROTMESSID_CONN_CLIENTS_LIST:
@@ -858,8 +858,8 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     EvaluateRecorderStateMes ( vecbyMesBodyDataRef );
                     break;
 
-                case PROTMESSID_SINGLEMIX_STATE:
-                    EvaluateSingleMixStateMes ( vecbyMesBodyDataRef );
+                case PROTMESSID_MASTERMIX_STATE:
+                    EvaluateMasterMixStateMes ( vecbyMesBodyDataRef );
                     break;
                 }
             }
@@ -1142,7 +1142,7 @@ void CProtocol::CreateMuteStateHasChangedMes ( const int iChanID, const bool bIs
     CreateAndSendMessage ( PROTMESSID_MUTE_STATE_CHANGED, vecData );
 }
 
-void CProtocol::CreateSingleMixSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo )
+void CProtocol::CreateMasterMixSecretSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo )
 {
     CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
     int              iPos = 0;      // init position pointer
@@ -1154,7 +1154,7 @@ void CProtocol::CreateSingleMixSoloStateHasChangedMes ( const int iChanID, const
     // solo state
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( bIsSolo ), 1 );
 
-    CreateAndSendMessage ( PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED, vecData );
+    CreateAndSendMessage ( PROTMESSID_MIXMASTER_SECRET_SOLO_STATE_CHANGED, vecData );
 }
 
 bool CProtocol::EvaluateMuteStateHasChangedMes ( const CVector<uint8_t> &vecData )
@@ -1179,7 +1179,7 @@ bool CProtocol::EvaluateMuteStateHasChangedMes ( const CVector<uint8_t> &vecData
     return false; // no error
 }
 
-bool CProtocol::EvaluateSingleMixSoloStateHasChangedMes ( const CVector<uint8_t> &vecData )
+bool CProtocol::EvaluateMixMasterSecretSoloStateHasChangedMes ( const CVector<uint8_t> &vecData )
 {
     int iPos = 0; // init position pointer
 
@@ -1196,7 +1196,7 @@ bool CProtocol::EvaluateSingleMixSoloStateHasChangedMes ( const CVector<uint8_t>
     const bool bIsSolo = static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // invoke message action
-    emit ChangeChanSingleMixSolo ( iCurID, bIsSolo );
+    emit ChangeChanMixMasterSecretSolo ( iCurID, bIsSolo );
 
     return false; // no error
 }
@@ -1793,16 +1793,16 @@ void CProtocol::CreateRecorderStateMes ( const ERecorderState eRecorderState )
     CreateAndSendMessage ( PROTMESSID_RECORDER_STATE, vecData );
 }
 
-void CProtocol::CreateSingleMixStateMes ( const ESingleMixState eSingleMixState )
+void CProtocol::CreateMasterMixStateMes ( const EMasterMixState eMasterMixState )
 {
     CVector<uint8_t> vecData ( 1 ); // 1 byte of data
     int              iPos = 0;      // init position pointer
 
     // build data vector
     // server single mix state (1 byte)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eSingleMixState ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eMasterMixState ), 1 );
 
-    CreateAndSendMessage ( PROTMESSID_SINGLEMIX_STATE, vecData );
+    CreateAndSendMessage ( PROTMESSID_MASTERMIX_STATE, vecData );
 }
 
 bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
@@ -1833,8 +1833,8 @@ bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
     return false; // no error
 }
 
-// this function is basically a copy of EvaluateRecorderStateMes only on SingleMixState
-bool CProtocol::EvaluateSingleMixStateMes(const CVector<uint8_t>& vecData)
+// this function is basically a copy of EvaluateRecorderStateMes only on MasterMixState
+bool CProtocol::EvaluateMasterMixStateMes(const CVector<uint8_t>& vecData)
 {
     int iPos = 0; // init position pointer
 
@@ -1845,18 +1845,18 @@ bool CProtocol::EvaluateSingleMixStateMes(const CVector<uint8_t>& vecData)
     }
 
     // server single mix state (1 byte)
-    const int iSingleMixState =
+    const int iMasterMixState =
         static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // note that SM_UNDEFINED is only internally used
-    if ( ( iSingleMixState != SM_NOT_ENABLED ) &&
-         ( iSingleMixState != SM_ENABLED ) )
+    if ( ( iMasterMixState != MM_NOT_ENABLED ) &&
+         ( iMasterMixState != MM_ENABLED ) )
     {
         return true;
     }
 
     // invoke message action
-    emit SingleMixStateReceived ( static_cast<ESingleMixState> ( iSingleMixState ) );
+    emit MasterMixStateReceived ( static_cast<EMasterMixState> ( iMasterMixState ) );
 
     return false; // no error
 }

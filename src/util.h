@@ -578,12 +578,12 @@ enum ERecorderState
 
 
 // Server single mix state enum ------------------------------------------------
-enum ESingleMixState
+enum EMasterMixState
 {
     // used for protocol -> enum values must be fixed!
-    SM_UNDEFINED = 0,
-    SM_NOT_ENABLED = 1,
-    SM_ENABLED = 2
+    MM_UNDEFINED = 0,
+    MM_NOT_ENABLED = 1,
+    MM_ENABLED = 2
 };
 
 

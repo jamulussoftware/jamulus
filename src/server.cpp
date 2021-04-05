@@ -229,7 +229,7 @@ CServer::CServer ( const int             iNewMaxNumChan,
                    const QString&        strServerPublicIP,
                    const QString&        strNewWelcomeMessage,
                    const QString&        strRecordingDirName,
-                   const ESingleMixState eSingleMixServerMode,
+                   const EMasterMixState eMasterMixServerMode,
                    const bool            bNDisconnectAllClientsOnQuit,
                    const bool            bNUseDoubleSystemFrameSize,
                    const bool            bNUseMultithreading,
@@ -258,7 +258,7 @@ CServer::CServer ( const int             iNewMaxNumChan,
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler              ( CSignalHandler::getSingletonP() ),
-    eSingleMixServerMode        ( eSingleMixServerMode )
+    eMasterMixServerMode        ( eMasterMixServerMode )
 {
     int iOpusError;
     int i;
@@ -664,7 +664,7 @@ void CServer::OnNewConnection ( int          iChID,
     vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
     
     // send single mix state message on connection
-    vecChannels[iChID].CreateSingleMixStateMes ( eSingleMixServerMode );
+    vecChannels[iChID].CreateMasterMixStateMes ( eMasterMixServerMode );
 
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
@@ -1162,8 +1162,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             const CVector<int16_t>& vecsData = vecvecsData[j];
             float                   fGain    = vecvecfGains[iChanCnt][j];
 
-            // Extra care for --singlemix -------------------------------------
-            if ( eSingleMixServerMode == SM_ENABLED )
+            // Extra care for --mastermix -------------------------------------
+            if ( eMasterMixServerMode == MM_ENABLED )
             {
                 // overwrite everybody's gain with the master's gain
                 fGain = vecvecfGains[0][j];
@@ -1173,10 +1173,10 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     fGain = vecvecfGains[iChanCnt][j];
                 }
                 // except: let the mix master solo people just for himself ...
-                if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
+                if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelMixMasterSecretSolo() )
                 {
                     // ... by muting all channels for the mix master that are not solo'd
-                    if ( !vecChannels[0].GetSingleMixSolo(j) ) { fGain = 0.0f; }
+                    if ( !vecChannels[0].GetMixMasterSecretSolo(j) ) { fGain = 0.0f; }
                 }
             }
             // -----------------------------------------------------------------
@@ -1251,8 +1251,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
             int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
             
-            // Extra care for --singlemix -------------------------------------
-            if ( eSingleMixServerMode == SM_ENABLED )
+            // Extra care for --mastermix -------------------------------------
+            if ( eMasterMixServerMode == MM_ENABLED )
             {
                 // overwrite everybody's gain/pan with the master's gain/pan
                 fGain = vecvecfGains[0][j];
@@ -1265,10 +1265,10 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     fPan  = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
                 }
                 // except: let the mix master solo people just for himself ...
-                if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelSingleMixSolo() )
+                if ( iChanCnt == 0 && vecChannels[0].IsAnyChannelMixMasterSecretSolo() )
                 {
                     // ... by muting all channels for the mix master that are not solo'd
-                    if ( !vecChannels[0].GetSingleMixSolo(j) ) { fGain = 0.0f; }
+                    if ( !vecChannels[0].GetMixMasterSecretSolo(j) ) { fGain = 0.0f; }
                 }
             }
             // -----------------------------------------------------------------
@@ -1551,7 +1551,7 @@ void CServer::CreateAndSendRecorderStateForAllConChannels()
     }
 }
 
-void CServer::CreateAndSendSingleMixStateForAllConChannels()
+void CServer::CreateAndSendMasterMixStateForAllConChannels()
 {
     // now send single mix state to all connected clients
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1559,7 +1559,7 @@ void CServer::CreateAndSendSingleMixStateForAllConChannels()
         if ( vecChannels[i].IsConnected() )
         {
             // send message
-            vecChannels[i].CreateSingleMixStateMes ( eSingleMixServerMode );
+            vecChannels[i].CreateMasterMixStateMes ( eMasterMixServerMode );
         }
     }
 }

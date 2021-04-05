@@ -314,8 +314,8 @@ public slots:
                                                     GenRandomIntInRange ( 0, 1 ) );
             break;
                 
-        case 34: // PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED
-            Protocol.CreateSingleMixSoloStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ),
+        case 34: // PROTMESSID_MIXMASTER_SECRET_SOLO_STATE_CHANGED
+            Protocol.CreateMasterMixSecretSoloStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ),
                                                              GenRandomIntInRange ( 0, 1 ) );
             break;
 

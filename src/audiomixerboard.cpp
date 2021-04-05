@@ -625,16 +625,16 @@ void CChannelFader::SetMute ( const bool bState )
     }
 }
 
-void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState, bool bIsSingleMix )
+void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState, bool bIsMixMaster )
 {
     // store state (must be done before the SetMute() call!)
     bOtherChannelIsSolo = bNewOtherSoloState;
 
-    // If we are in singlemix mode, don't mute any channels but send a special message to the server
-    //  that will solo the selected channels only for us being the singlemix master
-    if ( bIsSingleMix )
+    // If we are in the mix master in --mastermix mode, don't mute any channels but send a
+    //  special message to the server that will solo the selected channels only for us
+    if ( bIsMixMaster )
     {
-        emit singleMixSoloValueChanged( IsSolo() );
+        emit mixMasterSecretSoloValueChanged( IsSolo() );
     }
     else
     {
@@ -867,7 +867,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     iNumMixerPanelRows   ( 1 ),
     strServerName        ( "" ),
     eRecorderState       ( RS_UNDEFINED ),
-    eSingleMixState      ( SM_UNDEFINED ),
+    eMasterMixState      ( MM_UNDEFINED ),
     eChSortType          ( ST_NO_SORT )
 {
     // add group box and hboxlayout
@@ -933,8 +933,8 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
     void ( CAudioMixerBoard::* pPanValueChanged )( float ) =
         &CAudioMixerBoardSlots<slotId>::OnChPanValueChanged;
     
-    void ( CAudioMixerBoard::* pSingleMixSoloValueChanged )( bool ) =
-        &CAudioMixerBoardSlots<slotId>::OnChSingleMixSoloValueChanged;
+    void ( CAudioMixerBoard::* pMixMasterSecretSoloValueChanged )( bool ) =
+        &CAudioMixerBoardSlots<slotId>::OnChMixMasterSecretSoloValueChanged;
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
         this, &CAudioMixerBoard::UpdateSoloStates );
@@ -945,8 +945,8 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::panValueChanged,
         this, pPanValueChanged );
     
-    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::singleMixSoloValueChanged,
-        this, pSingleMixSoloValueChanged );
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::mixMasterSecretSoloValueChanged,
+        this, pMixMasterSecretSoloValueChanged );
 
     connectFaderSignalsToMixerBoardSlots<slotId - 1>();
 }
@@ -1028,7 +1028,7 @@ void CAudioMixerBoard::HideAll()
     bIsPanSupported      = false;
     bNoFaderVisible      = true;
     eRecorderState       = RS_UNDEFINED;
-    eSingleMixState      = SM_UNDEFINED;
+    eMasterMixState      = MM_UNDEFINED;
     iMyChannelID         = INVALID_INDEX;
     iRunningNewClientCnt = 0; // reset running counter on new server connection
 
@@ -1137,8 +1137,8 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
 void CAudioMixerBoard::UpdateTitle()
 {
-    // if the server runs --singlemix and we are not the master (channelID 0), disable all faders
-    if ( eSingleMixState == SM_ENABLED && iMyChannelID != 0 )
+    // if the server runs --mastermix and we are not the master (channelID 0), disable all faders
+    if ( eMasterMixState == MM_ENABLED && iMyChannelID != 0 )
     {
         DisableFaders();
     }
@@ -1154,7 +1154,7 @@ void CAudioMixerBoard::UpdateTitle()
         title_parts.append("[" + tr ( "RECORDING ACTIVE" ) + "] ");
     }
 
-    if ( eSingleMixState == SM_ENABLED )
+    if ( eMasterMixState == MM_ENABLED )
     {
         if ( iMyChannelID == 0 )
         {
@@ -1202,10 +1202,10 @@ void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState 
     UpdateTitle();
 }
 
-void CAudioMixerBoard::SetSingleMixState ( const ESingleMixState newSingleMixState )
+void CAudioMixerBoard::SetMasterMixState ( const EMasterMixState newMasterMixState )
 {
     // store the new single mix state and update the title
-    eSingleMixState = newSingleMixState;
+    eMasterMixState = newMasterMixState;
     UpdateTitle();
 }
 
@@ -1621,7 +1621,7 @@ void CAudioMixerBoard::UpdateSoloStates()
 {
     // first check if any channel has a solo state active
     bool bAnyChannelIsSolo = false;
-    bool bSingleMixMaster = iMyChannelID == 0 && ( eSingleMixState == SM_ENABLED );
+    bool bIsMixMaster = iMyChannelID == 0 && ( eMasterMixState == MM_ENABLED );
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1638,7 +1638,7 @@ void CAudioMixerBoard::UpdateSoloStates()
     {
         if ( vecpChanFader[i]->IsVisible() )
         {
-            vecpChanFader[i]->UpdateSoloState ( bAnyChannelIsSolo, bSingleMixMaster );
+            vecpChanFader[i]->UpdateSoloState ( bAnyChannelIsSolo, bIsMixMaster );
         }
     }
 }
@@ -1684,10 +1684,10 @@ void CAudioMixerBoard::UpdatePanValue ( const int   iChannelIdx,
 }
 
 
-void CAudioMixerBoard::UpdateSingleMixSoloValue ( const int  iChannelIdx,
+void CAudioMixerBoard::UpdateMixMasterSecretSoloValue ( const int  iChannelIdx,
                                                   const bool bValue )
 {
-    emit ChangeChanSingleMixSolo( iChannelIdx, bValue );
+    emit ChangeChanMixMasterSecretSolo( iChannelIdx, bValue );
 }
 
 void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )

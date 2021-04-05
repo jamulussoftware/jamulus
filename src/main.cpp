@@ -73,7 +73,7 @@ int main ( int argc, char** argv )
     bool            bNoAutoJackConnect          = false;
     bool            bUseTranslation             = true;
     bool            bCustomPortNumberGiven      = false;
-    ESingleMixState eSingleMixServerMode        = SM_UNDEFINED;
+    EMasterMixState eMasterMixServerMode        = MM_UNDEFINED;
     int             iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16         iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType    eLicenceType                = LT_NO_LICENCE;
@@ -118,12 +118,12 @@ int main ( int argc, char** argv )
         // Single audio mix server mode flag -----------------------------------
         if ( GetFlagArgument ( argv,
                                i,
-                               "--singlemix", // no short form
-                               "--singlemix" ) )
+                               "--mastermix", // no short form
+                               "--mastermix" ) )
         {
-            eSingleMixServerMode = SM_ENABLED;
-            qInfo() << "- single audio mix mode";
-            CommandLineOptions << "--singlemix";
+            eMasterMixServerMode = MM_ENABLED;
+            qInfo() << "- master mix audio mode";
+            CommandLineOptions << "--mastermix";
             continue;
         }
 
@@ -763,7 +763,7 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
-                             eSingleMixServerMode,
+                             eMasterMixServerMode,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -861,11 +861,11 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
-        "      --singlemix       single audio mix server mode where all clients\n"
-        "                        hear the mix of the mix master (first conn. client)\n"
-        "                        (non-mix masters can still control their own channel\n"
-        "                        in their own mix (i.e. monitoring) and the mix master's\n"
-        "                        SOLO'd channels will only apply to his own mix)\n"
+        "      --mastermix       master mix server mode where all clients hear the\n"
+        "                        mix of the mix master (i.e. first conn. client after idle)\n"
+        "                        (note: the mix master can secretly solo others and\n"
+        "                        non-mix masters can still control their own as well as\n"
+        "                        the mix master's channel in their own mix)\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the server list on which to register\n"
         "                        (or 'localhost' to be a server list)\n"

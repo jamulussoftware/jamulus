@@ -179,7 +179,7 @@ public:
               const QString&        strServerPublicIP,
               const QString&        strNewWelcomeMessage,
               const QString&        strRecordingDirName,
-              const ESingleMixState eSingleMixServerMode,
+              const EMasterMixState eMasterMixServerMode,
               const bool            bNDisconnectAllClientsOnQuit,
               const bool            bNUseDoubleSystemFrameSize,
               const bool            bNUseMultithreading,
@@ -222,7 +222,7 @@ public:
         { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording ); }
 
     void CreateAndSendRecorderStateForAllConChannels();
-    void CreateAndSendSingleMixStateForAllConChannels();
+    void CreateAndSendMasterMixStateForAllConChannels();
 
     // delay panning
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
@@ -413,7 +413,7 @@ protected:
     bool                       bDisconnectAllClientsOnQuit;
 
     CSignalHandler*            pSignalHandler;
-    ESingleMixState            eSingleMixServerMode;
+    EMasterMixState            eMasterMixServerMode;
 
 signals:
     void Started();

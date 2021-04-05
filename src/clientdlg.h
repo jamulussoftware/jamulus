@@ -205,8 +205,8 @@ public slots:
     void OnChangeChanPan ( int iId, float fPan )
         { pClient->SetRemoteChanPan ( iId, fPan ); }
     
-    void OnChangeChanSingleMixSolo ( int iChanID, bool bIsSolo )
-        { pClient->SetRemoteChanSingleMixSolo ( iChanID, bIsSolo ); }
+    void OnChangeChanMixMasterSecretSolo ( int iChanID, bool bIsSolo )
+        { pClient->SetRemoteChanMixMasterSecretSolo ( iChanID, bIsSolo ); }
 
     void OnNewLocalInputText ( QString strChatText )
         { pClient->CreateChatTextMes ( strChatText ); }
@@ -249,7 +249,7 @@ public slots:
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
-    void OnSingleMixStateReceived ( ESingleMixState eSingleMixState );
+    void OnMasterMixStateReceived ( EMasterMixState eMasterMixState );
     void SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  );
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );

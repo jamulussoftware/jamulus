@@ -63,8 +63,8 @@
 #define PROTMESSID_RECORDER_STATE               33 // contains the state of the jam recorder (ERecorderState)
 #define PROTMESSID_REQ_SPLIT_MESS_SUPPORT       34 // request support for split messages
 #define PROTMESSID_SPLIT_MESS_SUPPORTED         35 // split messages are supported
-#define PROTMESSID_SINGLEMIX_STATE              36 // contains the state of the single mix (ESingleMixState)
-#define PROTMESSID_SINGLEMIX_SOLO_STATE_CHANGED 37 // singlemix solo state of your signal at another client has changed
+#define PROTMESSID_MASTERMIX_STATE              36 // contains the state of the master mix (EMasterMixState)
+#define PROTMESSID_MIXMASTER_SECRET_SOLO_STATE_CHANGED 37 // mastermix secret solo state of your signal at another client has changed
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -119,7 +119,7 @@ public:
     void CreateChanGainMes ( const int iChanID, const float fGain );
     void CreateChanPanMes ( const int iChanID, const float fPan );
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted );
-    void CreateSingleMixSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo );
+    void CreateMasterMixSecretSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo );
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
     void CreateChanInfoMes ( const CChannelCoreInfo ChanInfo );
@@ -137,7 +137,7 @@ void CreateReqChannelLevelListMes();
 
     void CreateVersionAndOSMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );
-    void CreateSingleMixStateMes ( const ESingleMixState eSingleMixState );
+    void CreateMasterMixStateMes ( const EMasterMixState eMasterMixState );
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
@@ -276,7 +276,7 @@ protected:
     bool EvaluateChanGainMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateChanPanMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateMuteStateHasChangedMes ( const CVector<uint8_t>& vecData );
-    bool EvaluateSingleMixSoloStateHasChangedMes ( const CVector<uint8_t>& vecData );
+    bool EvaluateMixMasterSecretSoloStateHasChangedMes ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes       ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
     bool EvaluateChanInfoMes            ( const CVector<uint8_t>& vecData );
@@ -289,7 +289,7 @@ protected:
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
     bool EvaluateRecorderStateMes       ( const CVector<uint8_t>& vecData );
-    bool EvaluateSingleMixStateMes      ( const CVector<uint8_t>& vecData );
+    bool EvaluateMasterMixStateMes      ( const CVector<uint8_t>& vecData );
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -350,9 +350,8 @@ signals:
     void ClientIDReceived ( int iChanID );
     void ChangeChanGain ( int iChanID, float fNewGain );
     void ChangeChanPan ( int iChanID, float fNewPan );
-    void ChangeChanSingleMixSolo ( int iChanID, bool bIsSolo );
+    void ChangeChanMixMasterSecretSolo ( int iChanID, bool bIsSolo );
     void MuteStateHasChangedReceived ( int iCurID, bool bIsMuted );
-//    void SingleMixSoloStateHasChangedReceived ( int iCurID, bool bIsSolo );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();
     void ReqConnClientsList();
@@ -366,7 +365,7 @@ signals:
     void LicenceRequired ( ELicenceType eLicenceType );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void RecorderStateReceived ( ERecorderState eRecorderState );
-    void SingleMixStateReceived ( ESingleMixState eSingleMixState );
+    void MasterMixStateReceived ( EMasterMixState eMasterMixState );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );

@@ -468,8 +468,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::RecorderStateReceived,
         this, &CClientDlg::OnRecorderStateReceived );
 
-    QObject::connect ( pClient, &CClient::SingleMixStateReceived,
-        this, &CClientDlg::OnSingleMixStateReceived );
+    QObject::connect ( pClient, &CClient::MasterMixStateReceived,
+        this, &CClientDlg::OnMasterMixStateReceived );
 
     // This connection is a special case. On receiving a licence required message via the
     // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
@@ -532,8 +532,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanPan,
         this, &CClientDlg::OnChangeChanPan );
     
-    QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanSingleMixSolo,
-        this, &CClientDlg::OnChangeChanSingleMixSolo );
+    QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanMixMasterSecretSolo,
+        this, &CClientDlg::OnChangeChanMixMasterSecretSolo );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::NumClientsChanged,
         this, &CClientDlg::OnNumClientsChanged );
@@ -1421,9 +1421,9 @@ void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderStat
     SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
 }
 
-void CClientDlg::OnSingleMixStateReceived (  const ESingleMixState newSingleMixState )
+void CClientDlg::OnMasterMixStateReceived (  const EMasterMixState newMasterMixState )
 {
-    MainMixerBoard->SetSingleMixState ( newSingleMixState );
+    MainMixerBoard->SetMasterMixState ( newMasterMixState );
     SetGUIDesign ( pClient->GetGUIDesign() );
 }
 

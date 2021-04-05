@@ -51,8 +51,6 @@ This puts the Jamulus binary into `/usr/local/bin`.
 
 * Users of Raspberry Pi: You may want to compile the client on another machine and run the binary on the Raspberry Pi. In which case the only libraries you need to run it are those for a [headless server](Server-Linux#running-a-headless-server) build, but _with_ the JACK sound packages. 
 
-* As of version 3.5.3, Jamulus is no longer compatible with Qt4.
-
 
 ### “Headless” server build
 

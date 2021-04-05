@@ -34,6 +34,9 @@
 #ifndef _WIN32
 # include <netinet/in.h>
 # include <sys/socket.h>
+#else
+# include <WS2tcpip.h>
+# include <MSWSock.h>
 #endif
 
 
@@ -98,7 +101,10 @@ protected:
     bool             bIsClient;
 
     bool             bJitterBufferOK;
-
+#ifdef _WIN32
+    LPFN_WSARECVMSG lpWSARecvMsg = NULL;
+    LPFN_WSASENDMSG lpWSASendMsg = NULL;
+#endif
 public:
     void OnDataReceived();
 

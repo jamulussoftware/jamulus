@@ -34,7 +34,7 @@ git push --force ;# update your working branch on your fork
 ~~~
 
 ### Supported platforms
-We strive to support the following platforms and versions:
+We support the following platforms and versions:
 - Windows 10 <!-- Is this the only version? Do we have to specify a specific sub-version? -->
 - macOS <!-- Which versions? -->
 - Ubuntu Linux 18.04 or later, Debian 10 or later, most Linux flavors with recent enough Qt versions
@@ -43,10 +43,11 @@ We strive to support the following platforms and versions:
 
 The minimum Qt version to support is 5.X <-- What is it? -->
 
-Please try hard to avoid breaking any of them by avoiding to introduce platform-specific code and checking if any newly introduced Qt calls are available in our minimum Qt version.
+Please try to avoid breaking any of them by introducing platform-specific code. Check to see if any newly introduced Qt calls are available in the minimum Qt version.
 
 ### Dependencies
-If your code requires new dependencies, be extra sure that those are available on all supported platforms and that the introduction of those has been discussed and accepted.
+If your code requires new dependencies, be sure that those are available on all supported platforms and that the introduction of those dependencies has been discussed and accepted.
+
 ### Documentation/Acknowledgements
 Each new feature or bug fix must be documented in the ChangeLog. Please provide a single-sentence suggestion for that as part of your pull request description. Do not modify the ChangeLog file as part of your PR as it will lead to conflicts.
 

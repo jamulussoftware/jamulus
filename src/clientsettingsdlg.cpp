@@ -35,6 +35,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 {
     setupUi ( this );
 
+#if defined ( Q_OS_IOS )
+    // IOS needs menu to close
+    QMenuBar* pMenu     = new QMenuBar ( this );
+    QAction *action = pMenu->addAction (tr ( "&Close" ));
+    connect(action, SIGNAL(triggered()), this, SLOT(close()));
+
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );
+#endif
+
 
     // Add help text to controls -----------------------------------------------
     // jitter buffer

@@ -69,7 +69,7 @@ Compile the sources to ignore the JACK sound library:
 ~~~
 qmake "CONFIG+=nosound headless" Jamulus.pro
 make clean
-Make
+make
 ~~~
 
 To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](/wiki/Command-Line-Options), and [this information](/wiki/Tips-Tricks-More#controlling-recording-on-linux-headless-servers) on controlling recordings on headless servers.
@@ -155,7 +155,6 @@ Schemes:
 `xcodebuild build`
 
 Will build the file and make it available in `./Release/Jamulus.app`
-
 
 
 

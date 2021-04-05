@@ -1,4 +1,4 @@
-Jamulus can be compiled for Linux, Windows and macOS as follows. Alernatively, you may wish to use one of the contributed [installation scripts](https://github.com/jamulussoftware/installscripts).
+Jamulus can be compiled for Linux, Windows and macOS as follows. Alernatively, you may wish to use one of the contributed [installation scripts](https://github.com/jamulussoftware/installscripts). There are also reports from people who successfully compile and run Jamulus on BSDs.
 
 ---
 
@@ -155,6 +155,5 @@ Schemes:
 `xcodebuild build`
 
 Will build the file and make it available in `./Release/Jamulus.app`
-
 
 

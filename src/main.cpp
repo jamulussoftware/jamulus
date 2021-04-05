@@ -632,7 +632,7 @@ int main ( int argc, char** argv )
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
 # if defined ( Q_OS_IOS )
-    bIsClient = false;
+    bIsClient = true;
     bUseGUI = true;
 
     // bUseMultithreading = true;

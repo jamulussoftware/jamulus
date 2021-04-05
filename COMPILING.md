@@ -15,19 +15,19 @@ For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/mast
 
 On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian Buster release or later:
 
-* Build-essential
-* Qt5-qmake
-* Qtdeclarative5-dev
-* Qt5-default
-* Qttools5-dev-tools
-* Libjack-jackd2-dev
+* build-essential
+* qt5-qmake
+* qtdeclarative5-dev
+* qt5-default
+* qttools5-dev-tools
+* libjack-jackd2-dev
 
 #### On Fedora
 
-* Qt5-qtdeclarative-devel
-* Jack-audio-connection-kit-dbus
-* libQt5Concurrent5
-* Jack-audio-connection-kit-devel
+* qt5-qtdeclarative-devel
+* jack-audio-connection-kit-dbus
+* libqt5Concurrent5
+* jack-audio-connection-kit-devel
 
 #### For all desktop distributions
 

@@ -1,4 +1,4 @@
-Jamulus can be compiled for Linux, Windows and macOS as follows. Alernatively, you may wish to use one of the contributed [installation scripts](https://github.com/jamulussoftware/installscripts). There are also reports from people who successfully compile and run Jamulus on BSDs.
+Jamulus can be compiled for Linux, Windows and macOS as follows. Note also the contributed [installation scripts](https://github.com/jamulussoftware/installscripts) for use unattended installs. There are also reports from people who successfully compile and run Jamulus on BSDs.
 
 ---
 
@@ -36,8 +36,7 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 ### Standard desktop build
 
-~~~
-qmake Jamulus.pro
+```qmake Jamulus.pro
 make clean
 make
 sudo make install
@@ -60,11 +59,10 @@ Also, although not strictly necessary, we recommend using the headless flag to s
 
 Compile the sources to ignore the JACK sound library:
 
-~~~
-qmake "CONFIG+=nosound headless" Jamulus.pro
+```qmake "CONFIG+=nosound headless" Jamulus.pro
 make clean
 make
-~~~
+```
 
 To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](/wiki/Command-Line-Options), and [this information](/wiki/Tips-Tricks-More#controlling-recording-on-linux-headless-servers) on controlling recordings on headless servers.
 
@@ -106,10 +104,9 @@ Most users will probably want to use this method:
 ## macOS
 You will need XCode and Qt as follows:
 
-~~~
-brew install qt5
+```brew install qt5
 brew link qt5 --force
-~~~
+```
 
 ### Generate XCode Project file
 
@@ -121,22 +118,20 @@ brew link qt5 --force
 
 will prompt
 
-~~~
-Targets:
+```Targets:
     Jamulus
     Qt Preprocess
 
 Build Configurations:
     Debug
     Release
-~~~
+```
 
 If no build configuration is specified and `-scheme` is not passed then "Release" is used.
 
-~~~
-Schemes:
+```Schemes:
     Jamulus
-~~~
+```
 
 ### Build the project
 

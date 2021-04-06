@@ -25,6 +25,13 @@
 #include "socket.h"
 #include "server.h"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
+#include <arpa/inet.h>
+#endif
+
 
 /* Implementation *************************************************************/
 void CSocket::Init ( const quint16 iPortNumber )
@@ -39,15 +46,19 @@ void CSocket::Init ( const quint16 iPortNumber )
 #endif
 
     // create the UDP socket
-    UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
+    UdpSocket = socket ( AF_INET6, SOCK_DGRAM, 0 );
+    // The IPV6_V6ONLY socket option must be false in order for the socket to listen on both protocols.
+    // On Linux it's false by default on most (all?) distros, but on Windows it is true by default
+    const uint8_t no = 0;
+    setsockopt( UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char *)&no, sizeof( no ) );
 
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
     // preinitialize socket in address (only the port number is missing)
-    sockaddr_in UdpSocketInAddr;
-    UdpSocketInAddr.sin_family      = AF_INET;
-    UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
+    struct sockaddr_in6 UdpSocketInAddr;
+    UdpSocketInAddr.sin6_family = AF_INET6;
+    UdpSocketInAddr.sin6_addr   = in6addr_any;
 
     // initialize the listening socket
     bool bSuccess;
@@ -57,11 +68,11 @@ void CSocket::Init ( const quint16 iPortNumber )
         if ( iPortNumber == 0 )
         {
             // if port number is 0, bind the client to a random available port
-            UdpSocketInAddr.sin_port = htons ( 0 );
+            UdpSocketInAddr.sin6_port = htons ( 0 );
 
             bSuccess = ( ::bind ( UdpSocket ,
                                 (sockaddr*) &UdpSocketInAddr,
-                                sizeof ( sockaddr_in ) ) == 0 );
+                                sizeof ( struct sockaddr_in6 ) ) == 0 );
         }
         else
         {
@@ -77,11 +88,11 @@ void CSocket::Init ( const quint16 iPortNumber )
 
             while ( !bSuccess && ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
             {
-                UdpSocketInAddr.sin_port = htons ( startingPortNumber + iClientPortIncrement );
+                UdpSocketInAddr.sin6_port = htons ( startingPortNumber + iClientPortIncrement );
 
                 bSuccess = ( ::bind ( UdpSocket ,
                                       (sockaddr*) &UdpSocketInAddr,
-                                      sizeof ( sockaddr_in ) ) == 0 );
+                                      sizeof ( struct sockaddr_in6 ) ) == 0 );
 
                 iClientPortIncrement++;
             }
@@ -92,11 +103,11 @@ void CSocket::Init ( const quint16 iPortNumber )
         // for the server, only try the given port number and do not try out
         // other port numbers to bind since it is important that the server
         // gets the desired port number
-        UdpSocketInAddr.sin_port = htons ( iPortNumber );
+        UdpSocketInAddr.sin6_port = htons ( iPortNumber );
 
         bSuccess = ( ::bind ( UdpSocket ,
                               (sockaddr*) &UdpSocketInAddr,
-                              sizeof ( sockaddr_in ) ) == 0 );
+                              sizeof ( struct sockaddr_in6 ) ) == 0 );
     }
 
     if ( !bSuccess )
@@ -181,19 +192,36 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
         // send packet through network (we have to convert the constant unsigned
         // char vector in "const char*", for this we first convert the const
         // uint8_t vector in a read/write uint8_t vector and then do the cast to
-        // const char*)
-        sockaddr_in UdpSocketOutAddr;
+        // const char *)
+        if (HostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol) {
 
-        UdpSocketOutAddr.sin_family      = AF_INET;
-        UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
-        UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
+            sockaddr_in UdpSocketOutAddr;
+            UdpSocketOutAddr.sin_family      = AF_INET;
+            UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
+            UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
-        sendto ( UdpSocket,
-                 (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                 iVecSizeOut,
-                 0,
-                 (sockaddr*) &UdpSocketOutAddr,
-                 sizeof ( sockaddr_in ) );
+            sendto ( UdpSocket,
+                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                     iVecSizeOut,
+                     0,
+                     (sockaddr*) &UdpSocketOutAddr,
+                     sizeof ( UdpSocketOutAddr ) );
+
+        } else {
+
+            sockaddr_in6 UdpSocketOutAddr;
+
+            UdpSocketOutAddr.sin6_family = AF_INET6;
+            UdpSocketOutAddr.sin6_port   = htons ( HostAddr.iPort );
+            inet_pton(AF_INET6, HostAddr.InetAddr.toString().toLocal8Bit().constData(), &UdpSocketOutAddr.sin6_addr);
+
+            sendto ( UdpSocket,
+                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                     iVecSizeOut,
+                     0,
+                     (sockaddr*) &UdpSocketOutAddr,
+                     sizeof ( UdpSocketOutAddr ) );
+        }
     }
 }
 
@@ -223,18 +251,19 @@ void CSocket::OnDataReceived()
 */
 
     // read block from network interface and query address of sender
-    sockaddr_in SenderAddr;
+    struct sockaddr_storage addrstorage;
+    struct sockaddr_in6 *in6;
 #ifdef _WIN32
-    int SenderAddrSize = sizeof ( sockaddr_in );
+    int SenderAddrSize = sizeof ( struct sockaddr_storage );
 #else
-    socklen_t SenderAddrSize = sizeof ( sockaddr_in );
+    socklen_t SenderAddrSize = sizeof ( struct sockaddr_storage );
 #endif
 
     const long iNumBytesRead = recvfrom ( UdpSocket,
                                           (char*) &vecbyRecBuf[0],
                                           MAX_SIZE_BYTES_NETW_BUF,
                                           0,
-                                          (sockaddr*) &SenderAddr,
+                                          (sockaddr*) &addrstorage,
                                           &SenderAddrSize );
 
     // check if an error occurred or no data could be read
@@ -243,10 +272,14 @@ void CSocket::OnDataReceived()
         return;
     }
 
-    // convert address of client
-    RecHostAddr.InetAddr.setAddress ( ntohl ( SenderAddr.sin_addr.s_addr ) );
-    RecHostAddr.iPort = ntohs ( SenderAddr.sin_port );
-
+    in6 = reinterpret_cast<struct sockaddr_in6 *>(&addrstorage);
+    if (IN6_IS_ADDR_V4MAPPED(&(in6->sin6_addr))) {
+        RecHostAddr.InetAddr.setAddress ( ntohl (*((uint32_t*)in6->sin6_addr.s6_addr + 3) ) );
+        RecHostAddr.iPort = ntohs ( in6->sin6_port );
+    } else {
+        RecHostAddr.InetAddr.setAddress( in6->sin6_addr.s6_addr );
+        RecHostAddr.iPort = ntohs ( in6->sin6_port );
+    }
 
     // check if this is a protocol message
     int              iRecCounter;

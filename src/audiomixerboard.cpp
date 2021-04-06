@@ -634,6 +634,8 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // Label text --------------------------------------------------------------
 
     QString strModText = cChanInfo.strName;
+    QTextBoundaryFinder tbfName ( QTextBoundaryFinder::Grapheme, cChanInfo.strName );
+    int iBreakPos;
 
     // apply break position and font size depending on the selected design
     if ( eDesign == GD_SLIMFADER )
@@ -642,10 +644,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         plblLabel->setStyleSheet ( "QLabel { color: black; }" );
 
         // break at every 4th character
-        for ( int iInsPos = 4; iInsPos <= strModText.size() - 1; iInsPos += 4 + 1 )
-        {
-            strModText.insert ( iInsPos, "\n" );
-        }
+        iBreakPos = 4;
     }
     else
     {
@@ -653,11 +652,18 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         plblLabel->setStyleSheet ( "QLabel { color: black; font: bold; }" );
 
         // break text at predefined position
-        const int iBreakPos = MAX_LEN_FADER_TAG / 2;
+        iBreakPos = MAX_LEN_FADER_TAG / 2;
+    }
 
-        if ( strModText.length() > iBreakPos )
-        {
-            strModText.insert ( iBreakPos, QString ( "\n" ) );
+    int iInsPos = iBreakPos;
+    int iCount = 0;
+    int iLineNumber = 0;
+    while ( tbfName.toNextBoundary() != -1 ) {
+        ++iCount;
+        if ( iCount == iInsPos ) {
+            strModText.insert ( tbfName.position() + iLineNumber, QString ( "\n" ) );
+            iLineNumber ++;
+            iInsPos += iBreakPos;
         }
     }
 

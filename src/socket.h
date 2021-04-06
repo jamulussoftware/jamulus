@@ -101,6 +101,7 @@ protected:
     bool             bIsClient;
 
     bool             bJitterBufferOK;
+    char	sockmode = 6;
 #ifdef _WIN32
     LPFN_WSARECVMSG lpWSARecvMsg = NULL;
     LPFN_WSASENDMSG lpWSASendMsg = NULL;

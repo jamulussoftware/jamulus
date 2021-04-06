@@ -156,6 +156,14 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
 #endif
 
 
+    // add "Delete Server" to cbxServerAddr context menu
+    cbxServerAddr->setContextMenuPolicy ( Qt::CustomContextMenu );
+    m_deleteAction = new QAction ( tr ( "Delete Server" ), this );
+    connect ( m_deleteAction, SIGNAL ( triggered() ),
+              this, SLOT ( deleteServer() ));
+    connect ( cbxServerAddr, SIGNAL ( customContextMenuRequested ( QPoint ) ),
+              this, SLOT ( contextMenuRequest() ) );
+
     // Connections -------------------------------------------------------------
     // list view
     QObject::connect ( lvwServers, &QTreeWidget::itemDoubleClicked,
@@ -921,5 +929,33 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
 
         // delete the object to avoid a memory leak
         delete pCurChildItem;
+    }
+}
+
+void CConnectDlg::contextMenuRequest()
+{
+    // add line to context menu, is dynamic, made at each request
+    QMenu* menu = cbxServerAddr->lineEdit()->createStandardContextMenu();
+    menu->addSeparator();
+    menu->addAction ( m_deleteAction );
+    menu->popup ( QCursor::pos() );
+    connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
+}
+
+void CConnectDlg::deleteServer()
+{
+    // delete selected line from cbxServerAddr
+    cbxServerAddr->removeItem ( cbxServerAddr->currentIndex() );
+
+    // Update IP addresse list
+    int iCount = qMax ( cbxServerAddr->count(), MAX_NUM_SERVER_ADDR_ITEMS );
+    int iIdx = 0;
+    for ( iIdx = 0; iIdx < iCount; iIdx++ )
+    {
+        pSettings->vstrIPAddress[iIdx] = cbxServerAddr->itemText ( iIdx );
+    }
+    while ( iIdx++ < MAX_NUM_SERVER_ADDR_ITEMS )
+    {
+        pSettings->vstrIPAddress[iIdx] = "";
     }
 }

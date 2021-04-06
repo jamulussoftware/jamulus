@@ -92,6 +92,7 @@ protected:
     CHostAddress     CentralServerAddress;
     QString          strSelectedAddress;
     QString          strSelectedServerName;
+    QAction *        m_deleteAction;
     bool             bShowCompleteRegList;
     bool             bServerListReceived;
     bool             bReducedServerListReceived;
@@ -109,6 +110,8 @@ public slots:
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void contextMenuRequest();
+    void deleteServer ();
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

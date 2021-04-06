@@ -396,6 +396,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     UpdateSoundCardFrame();
 
+    // add "Delete Server" to cbxCentralServerAddress context menu
+    cbxCentralServerAddress->setContextMenuPolicy ( Qt::CustomContextMenu ) ;
+    m_deleteAction = new QAction ( tr ( "Delete Server" ), this );
+    connect ( m_deleteAction, SIGNAL ( triggered() ),
+              this, SLOT ( deleteServer() ));
+    connect ( cbxCentralServerAddress, SIGNAL ( customContextMenuRequested ( QPoint ) ),
+              this, SLOT ( contextMenuRequest() ) );
 
     // Connections -------------------------------------------------------------
     // timers
@@ -803,4 +810,32 @@ void CClientSettingsDlg::OnInputBoostChanged()
     // index is zero-based while boost factor must be 1-based:
     pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
     pClient->SetInputBoost ( pSettings->iInputBoost );
+}
+
+void CClientSettingsDlg::contextMenuRequest()
+{
+    // add line to context menu, is dynamic, made at each request
+    QMenu* menu = cbxCentralServerAddress->lineEdit()->createStandardContextMenu();
+    menu->addSeparator();
+    menu->addAction ( m_deleteAction );
+    menu->popup ( QCursor::pos() );
+    connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
+}
+
+void CClientSettingsDlg::deleteServer ()
+{
+    // delete selected line from cbxCentralServerAddress
+    cbxCentralServerAddress->removeItem ( cbxCentralServerAddress->currentIndex() );
+
+    // Update IP addresse list
+    int iCount = qMax ( cbxCentralServerAddress->count(), MAX_NUM_SERVER_ADDR_ITEMS );
+    int iIdx;
+    for ( iIdx = 0; iIdx < iCount; iIdx++ )
+    {
+        pSettings->vstrCentralServerAddress[iIdx] = cbxCentralServerAddress->itemText ( iIdx );
+    }
+    while ( iIdx++ < MAX_NUM_SERVER_ADDR_ITEMS )
+    {
+        pSettings->vstrCentralServerAddress[iIdx] = "";
+    }
 }

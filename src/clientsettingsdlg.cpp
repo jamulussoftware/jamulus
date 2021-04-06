@@ -253,6 +253,24 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     edtNewClientLevel->setWhatsThis ( strNewClientLevel );
     edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
 
+    // input boost
+    QString strInputBoost = "<b>" + tr ( "Input Boost" ) + ":</b> " +
+        tr ( "This setting allows you to increase your input signal level "
+        "by factors up to 10 (+20dB)."
+        "If your sound is too quiet, first try to increase the level by "
+        "getting closer to the microphone, adjusting your sound equipment "
+        "or increasing levels in your operating system's input settings. "
+        "Only if this fails, set a factor here. "
+        "If your sound is too loud, sounds distorted and is clipping, this "
+        "option will not help. Do not use it. The distortion will still be "
+        "there. Instead, decrease your input level by getting farther away "
+        "from your microphone, adjusting your sound equipment "
+        "or by decreasing your operating system's input settings."
+        );
+    lblInputBoost->setWhatsThis ( strInputBoost );
+    cbxInputBoost->setWhatsThis ( strInputBoost );
+    cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
+
     // custom central server address
     QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
         tr ( "Leave this blank unless you need to enter the address of a central "
@@ -348,6 +366,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
 
+    // Input Boost combo box
+    cbxInputBoost->clear();
+    cbxInputBoost->addItem ( tr ( "None" ) );
+    for ( int i = 2; i <= 10; i++ ) {
+        cbxInputBoost->addItem ( QString( "%1x" ).arg( i ) );
+    }
+    // factor is 1-based while index is 0-based:
+    cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
+
     // update enable small network buffers check box
     chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
 
@@ -426,6 +453,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged,
         this, &CClientSettingsDlg::OnLanguageChanged );
+
+    QObject::connect ( cbxInputBoost, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnInputBoostChanged );
 
     // buttons
     QObject::connect ( butDriverSetup, &QPushButton::clicked,
@@ -766,4 +796,11 @@ void CClientSettingsDlg::UpdateCustomCentralServerComboBox()
             cbxCentralServerAddress->addItem ( pSettings->vstrCentralServerAddress[iLEIdx], iLEIdx );
         }
     }
+}
+
+void CClientSettingsDlg::OnInputBoostChanged()
+{
+    // index is zero-based while boost factor must be 1-based:
+    pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
+    pClient->SetInputBoost ( pSettings->iInputBoost );
 }

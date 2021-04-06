@@ -422,6 +422,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="lblInputBoost">
+            <property name="text">
+             <string>Input Boost</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="lblNewClientLevel">
             <property name="text">
              <string>New Client Level</string>
@@ -451,6 +458,9 @@
           </item>
           <item>
            <widget class="QComboBox" name="cbxAudioQuality"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cbxInputBoost"/>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -682,6 +692,7 @@
   <tabstop>sldNetBufServer</tabstop>
   <tabstop>cbxAudioChannels</tabstop>
   <tabstop>cbxAudioQuality</tabstop>
+  <tabstop>cbxInputBoost</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxSkin</tabstop>
   <tabstop>cbxLanguage</tabstop>

@@ -49,7 +49,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 {
     setupUi ( this );
 
-
     // Add help text to controls -----------------------------------------------
     // input level meter
     QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " + tr ( "This shows "
@@ -211,6 +210,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     const int iCurAudReverb = pClient->GetReverbLevel();
     sldAudioReverb->setValue ( iCurAudReverb );
     sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
+
+    // init input boost
+    pClient->SetInputBoost ( pSettings->iInputBoost );
 
     // init reverb channel
     UpdateRevSelection();
@@ -945,7 +947,7 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     {
         // if --clientname is used, the APP_NAME must be the very first word in
         // the title, otherwise some user scripts do not work anymore, see #789
-        strWinTitle += QString ( APP_NAME ) + " " + pClient->strClientName + " ";
+        strWinTitle += QString ( APP_NAME ) + " - " + pClient->strClientName + " ";
     }
 
     if ( iNumClients == 0 )
@@ -1001,6 +1003,7 @@ void CClientDlg::ShowConnectionSetupDialog()
     // show connect dialog
     bConnectDlgWasShown = true;
     ConnectDlg.show();
+    ConnectDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Connect" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
     ConnectDlg.raise();
@@ -1011,6 +1014,7 @@ void CClientDlg::ShowMusicianProfileDialog()
 {
     // show musician profile dialog
     MusicianProfileDlg.show();
+    MusicianProfileDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Musician Profile" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
     MusicianProfileDlg.raise();
@@ -1021,6 +1025,7 @@ void CClientDlg::ShowGeneralSettings()
 {
     // open general settings dialog
     ClientSettingsDlg.show();
+    ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Settings" ) , pClient->strClientName ) );
 
     // make sure dialog is upfront and has focus
     ClientSettingsDlg.raise();
@@ -1030,6 +1035,7 @@ void CClientDlg::ShowGeneralSettings()
 void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 {
     ChatDlg.show();
+    ChatDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Chat" ) , pClient->strClientName ) );
 
     if ( bForceRaise )
     {

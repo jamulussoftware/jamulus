@@ -3272,8 +3272,8 @@
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
-        <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation>U kunt een tool als &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; gebruiken om de sample rate van de Jack-server aan te passen.</translation>
+        <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
+        <translation>U kunt een tool als &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; gebruiken om de sample rate van de Jack-server aan te passen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>

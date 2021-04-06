@@ -2754,8 +2754,8 @@
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
-        <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation>Możesz użyć programu &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; aby ustawić częstotliwość próbkowania JACK-a.</translation>
+        <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
+        <translation>Możesz użyć programu &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; aby ustawić częstotliwość próbkowania JACK-a.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>

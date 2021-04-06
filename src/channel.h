@@ -109,6 +109,7 @@ public:
     void CreateReqChanInfoMes() { Protocol.CreateReqChanInfoMes(); }
     void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
+    void CreateMixMasterSecretSoloStateHasChangedMes ( const int iChanID, const bool bIsSolo ) { Protocol.CreateMasterMixSecretSoloStateHasChangedMes ( iChanID, bIsSolo ); }
 
     void SetGain ( const int iChanID, const float fNewGain );
     float GetGain ( const int iChanID );
@@ -116,12 +117,19 @@ public:
 
     void SetPan ( const int iChanID, const float fNewPan );
     float GetPan ( const int iChanID );
+    
+    void SetMixMasterSecretSolo ( const int iChanID, const bool bNewIsSolo );
+    bool GetMixMasterSecretSolo ( const int iChanID );
+    bool IsAnyChannelMixMasterSecretSolo () { return bAnyChannelIsMixMasterSecretSolo; };
 
     void SetRemoteChanGain ( const int iId, const float fGain )
         { Protocol.CreateChanGainMes ( iId, fGain ); }
 
     void SetRemoteChanPan ( const int iId, const float fPan )
         { Protocol.CreateChanPanMes ( iId, fPan ); }
+    
+    void SetRemoteChanMixMasterSecretSolo ( const int iId, bool bIsSolo )
+        { Protocol.CreateMasterMixSecretSoloStateHasChangedMes ( iId, bIsSolo ); }
 
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
                                const bool bPreserve = false );
@@ -176,6 +184,9 @@ void CreateReqChannelLevelListMes() { Protocol.CreateReqChannelLevelListMes(); }
     void CreateRecorderStateMes ( const ERecorderState eRecorderState )
         { Protocol.CreateRecorderStateMes ( eRecorderState ); }
 
+    void CreateMasterMixStateMes ( const EMasterMixState eMasterMixState )
+        { Protocol.CreateMasterMixStateMes ( eMasterMixState ); }
+
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
     double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio,
@@ -207,6 +218,8 @@ protected:
     // mixer and effect settings
     CVector<float>          vecfGains;
     CVector<float>          vecfPannings;
+    CVector<bool>           vecbMixMasterSecretSolos;
+    bool                    bAnyChannelIsMixMasterSecretSolo;
 
     // network jitter-buffer
     CNetBufWithStats        SockBuf;
@@ -248,6 +261,7 @@ public slots:
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnChangeChanGain ( int iChanID, float fNewGain );
     void OnChangeChanPan ( int iChanID, float fNewPan );
+    void OnChangeChanMixMasterSecretSolo ( int iChanID, bool bIsSolo );
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
@@ -294,12 +308,14 @@ signals:
     void ClientIDReceived ( int iChanID );
     void MuteStateHasChanged ( int iChanID, bool bIsMuted );
     void MuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
+    void MixMasterSecretSoloStateHasChangedReceived ( int iChanID, bool bIsSolo );
     void ReqChanInfo();
     void ChatTextReceived ( QString strChatText );
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void RecorderStateReceived ( ERecorderState eRecorderState );
+    void MasterMixStateReceived ( EMasterMixState eMasterMixState );
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,

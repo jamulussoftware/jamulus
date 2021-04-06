@@ -49,9 +49,11 @@
     <qresource prefix="/png/fader">
         <file>res/faderbackground.png</file>
         <file>res/faderhandle.png</file>
+        <file>res/faderhandledisabled.png</file>
         <file>res/faderhandlesmall.png</file>
         <file>res/ledbuttonnotpressed.png</file>
         <file>res/ledbuttonpressed.png</file>
+        <file>res/ledbuttondisabled.png</file>
         <file>res/mixerboardbackground.png</file>
     </qresource>
     <qresource prefix="/png/instr">

@@ -242,6 +242,9 @@ public:
 
     void SetRemoteChanPan ( const int iId, const float fPan )
         { Channel.SetRemoteChanPan ( iId, fPan ); }
+    
+    void SetRemoteChanMixMasterSecretSolo ( int iChanID, bool bIsSolo )
+        { Channel.SetRemoteChanMixMasterSecretSolo ( iChanID, bIsSolo ); }
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 
@@ -408,6 +411,7 @@ signals:
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void PingTimeReceived ( int iPingTime );
     void RecorderStateReceived ( ERecorderState eRecorderState );
+    void MasterMixStateReceived ( EMasterMixState eMasterMixState );
 
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );

@@ -55,40 +55,41 @@ int main ( int argc, char** argv )
     // arguments
 #if defined( SERVER_BUNDLE ) && ( defined( Q_OS_MACX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
-    bool         bIsClient                   = false;
+    bool            bIsClient                   = false;
 #else
-    bool         bIsClient                   = true;
+    bool            bIsClient                   = true;
 #endif
-    bool         bUseGUI                     = true;
-    bool         bStartMinimized             = false;
-    bool         bShowComplRegConnList       = false;
-    bool         bDisconnectAllClientsOnQuit = false;
-    bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
-    bool         bUseMultithreading          = false;
-    bool         bShowAnalyzerConsole        = false;
-    bool         bMuteStream                 = false;
-    bool         bMuteMeInPersonalMix        = false;
-    bool         bDisableRecording           = false;
-    bool         bDelayPan                   = false;
-    bool         bNoAutoJackConnect          = false;
-    bool         bUseTranslation             = true;
-    bool         bCustomPortNumberGiven      = false;
-    int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
-    quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
-    ELicenceType eLicenceType                = LT_NO_LICENCE;
-    QString      strMIDISetup                = "";
-    QString      strConnOnStartupAddress     = "";
-    QString      strIniFileName              = "";
-    QString      strHTMLStatusFileName       = "";
-    QString      strLoggingFileName          = "";
-    QString      strRecordingDirName         = "";
-    QString      strCentralServer            = "";
-    QString      strServerInfo               = "";
-    QString      strServerPublicIP           = "";
-    QString      strServerListFilter         = "";
-    QString      strWelcomeMessage           = "";
-    QString      strClientName               = "";
-
+    bool            bUseGUI                     = true;
+    bool            bStartMinimized             = false;
+    bool            bShowComplRegConnList       = false;
+    bool            bDisconnectAllClientsOnQuit = false;
+    bool            bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
+    bool            bUseMultithreading          = false;
+    bool            bShowAnalyzerConsole        = false;
+    bool            bMuteStream                 = false;
+    bool            bMuteMeInPersonalMix        = false;
+    bool            bDisableRecording           = false;
+    bool            bDelayPan                   = false;
+    bool            bNoAutoJackConnect          = false;
+    bool            bUseTranslation             = true;
+    bool            bCustomPortNumberGiven      = false;
+    EMasterMixState eMasterMixServerMode        = MM_UNDEFINED;
+    int             iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
+    quint16         iPortNumber                 = DEFAULT_PORT_NUMBER;
+    ELicenceType    eLicenceType                = LT_NO_LICENCE;
+    QString         strMIDISetup                = "";
+    QString         strConnOnStartupAddress     = "";
+    QString         strIniFileName              = "";
+    QString         strHTMLStatusFileName       = "";
+    QString         strLoggingFileName          = "";
+    QString         strRecordingDirName         = "";
+    QString         strCentralServer            = "";
+    QString         strServerInfo               = "";
+    QString         strServerPublicIP           = "";
+    QString         strServerListFilter         = "";
+    QString         strWelcomeMessage           = "";
+    QString         strClientName               = "";
+   
 #if !defined(HEADLESS) && defined(_WIN32)
     if (AttachConsole(ATTACH_PARENT_PROCESS)) {
         freopen("CONOUT$", "w", stdout);
@@ -110,6 +111,19 @@ int main ( int argc, char** argv )
             bIsClient = false;
             qInfo() << "- server mode chosen";
             CommandLineOptions << "--server";
+            continue;
+        }
+
+
+        // Single audio mix server mode flag -----------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--mastermix", // no short form
+                               "--mastermix" ) )
+        {
+            eMasterMixServerMode = MM_ENABLED;
+            qInfo() << "- master mix audio mode";
+            CommandLineOptions << "--mastermix";
             continue;
         }
 
@@ -625,7 +639,6 @@ int main ( int argc, char** argv )
         iPortNumber += 10; // increment by 10
     }
 
-
     // Application/GUI setup ---------------------------------------------------
     // Application object
 #ifdef HEADLESS
@@ -750,6 +763,7 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             eMasterMixServerMode,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -847,6 +861,13 @@ QString UsageArguments ( char **argv )
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
+        "      --mastermix       Master mix server mode where all clients hear the\n"
+        "                        mix of the mix master with two exceptions:\n"
+        "                        - They still control their own channel in their mix\n"
+        "                        - They still control the mix master in their mix\n"
+        "                        The mix master is the first client to connect\n"
+        "                        and can solo others 'secretly' (i.e. without\n"
+        "                        affecting the shared mix)\n"
         "  -d, --discononquit    disconnect all clients on quit\n"
         "  -e, --centralserver   address of the server list on which to register\n"
         "                        (or 'localhost' to be a server list)\n"

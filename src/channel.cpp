@@ -29,6 +29,8 @@
 CChannel::CChannel ( const bool bNIsServer ) :
     vecfGains              ( MAX_NUM_CHANNELS, 1.0f ),
     vecfPannings           ( MAX_NUM_CHANNELS, 0.5f ),
+    vecbMixMasterSecretSolos     ( MAX_NUM_CHANNELS, false ),
+    bAnyChannelIsMixMasterSecretSolo ( false ),
     iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
     bUseSequenceNumber     ( false ), // this is important since in the client we reset on Channel.SetEnable ( false )
@@ -87,6 +89,9 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
     QObject::connect ( &Protocol, &CProtocol::ChangeChanPan,
         this, &CChannel::OnChangeChanPan );
+    
+    QObject::connect ( &Protocol, &CProtocol::ChangeChanMixMasterSecretSolo,
+        this, &CChannel::OnChangeChanMixMasterSecretSolo );
 
     QObject::connect ( &Protocol, &CProtocol::ClientIDReceived,
         this, &CChannel::ClientIDReceived );
@@ -120,6 +125,9 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
     QObject::connect ( &Protocol, &CProtocol::RecorderStateReceived,
         this, &CChannel::RecorderStateReceived );
+    
+    QObject::connect ( &Protocol, &CProtocol::MasterMixStateReceived,
+        this, &CChannel::MasterMixStateReceived );
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -358,6 +366,52 @@ float CChannel::GetPan ( const int iChanID )
     }
 }
 
+void CChannel::SetMixMasterSecretSolo ( const int  iChanID,
+                                  const bool bNewIsSolo )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // set value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        vecbMixMasterSecretSolos[iChanID] = bNewIsSolo;
+    }
+    
+    // update bAnyChannelIsMixMasterSecretSolo helper bool
+    //  (try to avoid checking all channels for their solo status)
+    if ( bNewIsSolo == true )
+    {
+        bAnyChannelIsMixMasterSecretSolo = true;
+    }
+    else  // but now we have to
+    {
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            if ( vecbMixMasterSecretSolos[i] == true )
+            {
+                bAnyChannelIsMixMasterSecretSolo = true;
+                return;
+            }
+        }
+        bAnyChannelIsMixMasterSecretSolo = false;
+    }
+}
+
+bool CChannel::GetMixMasterSecretSolo ( const int iChanID )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // get value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        return vecbMixMasterSecretSolos[iChanID];
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
     // apply value (if different from previous one)
@@ -428,6 +482,12 @@ void CChannel::OnChangeChanPan ( int   iChanID,
                                  float fNewPan )
 {
     SetPan ( iChanID, fNewPan );
+}
+
+void CChannel::OnChangeChanMixMasterSecretSolo ( int  iChanID,
+                                           bool bNewIsSolo )
+{
+    SetMixMasterSecretSolo ( iChanID, bNewIsSolo );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )

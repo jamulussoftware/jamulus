@@ -169,22 +169,23 @@ class CServer :
     Q_OBJECT
 
 public:
-    CServer ( const int          iNewMaxNumChan,
-              const QString&     strLoggingFileName,
-              const quint16      iPortNumber,
-              const QString&     strHTMLStatusFileName,
-              const QString&     strCentralServer,
-              const QString&     strServerInfo,
-              const QString&     strServerListFilter,
-              const QString&     strServerPublicIP,
-              const QString&     strNewWelcomeMessage,
-              const QString&     strRecordingDirName,
-              const bool         bNDisconnectAllClientsOnQuit,
-              const bool         bNUseDoubleSystemFrameSize,
-              const bool         bNUseMultithreading,
-              const bool         bDisableRecording,
-              const bool         bNDelayPan,
-              const ELicenceType eNLicenceType );
+    CServer ( const int             iNewMaxNumChan,
+              const QString&        strLoggingFileName,
+              const quint16         iPortNumber,
+              const QString&        strHTMLStatusFileName,
+              const QString&        strCentralServer,
+              const QString&        strServerInfo,
+              const QString&        strServerListFilter,
+              const QString&        strServerPublicIP,
+              const QString&        strNewWelcomeMessage,
+              const QString&        strRecordingDirName,
+              const EMasterMixState eMasterMixServerMode,
+              const bool            bNDisconnectAllClientsOnQuit,
+              const bool            bNUseDoubleSystemFrameSize,
+              const bool            bNUseMultithreading,
+              const bool            bDisableRecording,
+              const bool            bNDelayPan,
+              const ELicenceType    eNLicenceType );
 
     virtual ~CServer();
 
@@ -221,6 +222,7 @@ public:
         { JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording ); }
 
     void CreateAndSendRecorderStateForAllConChannels();
+    void CreateAndSendMasterMixStateForAllConChannels();
 
     // delay panning
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
@@ -411,6 +413,7 @@ protected:
     bool                       bDisconnectAllClientsOnQuit;
 
     CSignalHandler*            pSignalHandler;
+    EMasterMixState            eMasterMixServerMode;
 
 signals:
     void Started();

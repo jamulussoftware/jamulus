@@ -59,10 +59,13 @@ public:
     void    Show() { pFrame->show(); }
     void    Hide() { pFrame->hide(); }
     bool    IsVisible() { return !pFrame->isHidden(); }
+    bool    IsEnabled() { return bIsEnabled; };
     bool    IsSolo() { return pcbSolo->isChecked(); }
     bool    IsMute() { return pcbMute->isChecked(); }
     int     GetGroupID() { return iGroupID; }
     void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void    Disable ( );
+    void    Enable ( );
     void    SetDisplayChannelLevel ( const bool eNDCL );
     bool    GetDisplayChannelLevel();
     void    SetDisplayPans ( const bool eNDP );
@@ -84,7 +87,7 @@ public:
     int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
     void   SetChannelLevel ( const uint16_t iLevel );
     void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
-    void   UpdateSoloState ( const bool bNewOtherSoloState );
+    void   UpdateSoloState ( const bool bNewOtherSoloState, bool bIsMixMaster );
 
 protected:
     void   UpdateGroupIDDependencies();
@@ -121,6 +124,7 @@ protected:
     bool         bOtherChannelIsSolo;
     bool         bIsMyOwnFader;
     bool         bIsMutedAtServer;
+    bool         bIsEnabled;
     double       dPreviousFaderLevel;
     int          iGroupID;
     QString      strGroupBaseText;
@@ -150,6 +154,7 @@ signals:
 
     void panValueChanged  ( float value );
     void soloStateChanged ( int value );
+    void mixMasterSecretSoloValueChanged  ( bool value );
 };
 
 template<unsigned int slotId>
@@ -168,6 +173,8 @@ public:
                                                                          dLevelRatio ); }
 
     void OnChPanValueChanged ( float fValue ) { UpdatePanValue ( slotId - 1, fValue ); }
+    
+    void OnChMixMasterSecretSoloValueChanged ( bool iIsSolo ) { UpdateMixMasterSecretSoloValue ( slotId -1, iIsSolo ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
@@ -179,6 +186,9 @@ protected:
 
     virtual void UpdatePanValue ( const int   iChannelIdx,
                                   const float fValue ) = 0;
+    
+    virtual void UpdateMixMasterSecretSoloValue ( const int   iChannelIdx,
+                                            const bool bValue ) = 0;
 };
 
 template<>
@@ -229,6 +239,9 @@ public:
     void            SetRecorderState ( const ERecorderState newRecorderState );
     ERecorderState  GetRecorderState() { return eRecorderState; };
 
+    void            SetMasterMixState ( const EMasterMixState newMasterMixState );
+    EMasterMixState GetMasterMixState() { return eMasterMixState; };
+
     void            SetAllFaderLevelsToNewClientLevel();
     void            StoreAllFaderSettings();
     void            LoadAllFaderSettings();
@@ -262,6 +275,8 @@ protected:
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
     void UpdateTitle();
+    void DisableFaders ();
+    void EnableFaders ();
 
     CClientSettings*        pSettings;
     CVector<CChannelFader*> vecpChanFader;
@@ -275,6 +290,7 @@ protected:
     int                     iNumMixerPanelRows;
     QString                 strServerName;
     ERecorderState          eRecorderState;
+    EMasterMixState         eMasterMixState;
     QMutex                  Mutex;
     EChSortType             eChSortType;
     CVector<float>          vecAvgLevels;
@@ -288,6 +304,9 @@ protected:
 
     virtual void UpdatePanValue ( const int   iChannelIdx,
                                   const float fValue );
+    
+    virtual void UpdateMixMasterSecretSoloValue ( const int  iChannelIdx,
+                                            const bool bValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
@@ -295,5 +314,6 @@ protected:
 signals:
     void ChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader );
     void ChangeChanPan ( int iId, float fPan );
+    void ChangeChanMixMasterSecretSolo ( int iChanID, bool bIsSolo );
     void NumClientsChanged ( int iNewNumClients );
 };

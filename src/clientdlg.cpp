@@ -468,6 +468,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::RecorderStateReceived,
         this, &CClientDlg::OnRecorderStateReceived );
 
+    QObject::connect ( pClient, &CClient::MasterMixStateReceived,
+        this, &CClientDlg::OnMasterMixStateReceived );
+
     // This connection is a special case. On receiving a licence required message via the
     // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
     // a queued connection to make sure the core protocol mechanism is not blocked, too.
@@ -528,6 +531,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanPan,
         this, &CClientDlg::OnChangeChanPan );
+    
+    QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanMixMasterSecretSolo,
+        this, &CClientDlg::OnChangeChanMixMasterSecretSolo );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::NumClientsChanged,
         this, &CClientDlg::OnNumClientsChanged );
@@ -1364,6 +1370,10 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         image:          url(:/png/fader/res/ledbuttonnotpressed.png); }"
             "QCheckBox::indicator:checked {"
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
+            "QCheckBox::disabled {"
+            "                         color:          rgb(110, 110, 110); }"
+            "QCheckBox::indicator::disabled {"
+            "                         image:          url(:/png/fader/res/ledbuttondisabled.png); }"
             "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );
 
@@ -1409,6 +1419,12 @@ void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderStat
 {
     MainMixerBoard->SetRecorderState ( newRecorderState );
     SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
+}
+
+void CClientDlg::OnMasterMixStateReceived (  const EMasterMixState newMasterMixState )
+{
+    MainMixerBoard->SetMasterMixState ( newMasterMixState );
+    SetGUIDesign ( pClient->GetGUIDesign() );
 }
 
 void CClientDlg::OnGUIDesignChanged()

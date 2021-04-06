@@ -29,6 +29,7 @@
 * CChanneFader                                                                 *
 \******************************************************************************/
 CChannelFader::CChannelFader ( QWidget* pNW ) :
+    bIsEnabled( true ),
     eDesign ( GD_STANDARD )
 {
     // create new GUI control objects and store pointers to them (note that
@@ -220,7 +221,8 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                  padding-left:   -34px;"
             "                  padding-top:    -10px;"
             "                  padding-bottom: -15px; }"
-            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
+            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }"
+            "QSlider::handle::disabled { image: url(:/png/fader/res/faderhandledisabled.png); }" );
 
         pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
         pLabelInstBox->setMinimumHeight     ( 52 ); // maximum height of the instrument+flag pictures
@@ -271,6 +273,25 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
     // the instrument picture might need scaling after a style change
     SetChannelInfos ( cReceivedChanInfo );
+}
+
+void CChannelFader::Disable ()
+{
+    bIsEnabled = false;
+    
+    pPan->setDisabled(true);
+    pFader->setDisabled(true);
+    pcbMute->setDisabled(true);
+    pcbSolo->setDisabled(true);
+}
+
+void CChannelFader::Enable ()
+{
+    bIsEnabled = true;
+    pPan->setDisabled(false);
+    pFader->setDisabled(false);
+    pcbMute->setDisabled(false);
+    pcbSolo->setDisabled(false);
 }
 
 void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
@@ -405,6 +426,7 @@ void CChannelFader::Reset()
 void CChannelFader::SetFaderLevel ( const double dLevel,
                                     const bool   bIsGroupUpdate )
 {
+    if (!bIsEnabled) return;
     // first make a range check
     if ( dLevel >= 0 )
     {
@@ -603,16 +625,25 @@ void CChannelFader::SetMute ( const bool bState )
     }
 }
 
-void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
+void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState, bool bIsMixMaster )
 {
     // store state (must be done before the SetMute() call!)
     bOtherChannelIsSolo = bNewOtherSoloState;
 
-    // mute overwrites solo -> if mute is active, do not change anything
-    if ( !pcbMute->isChecked() )
+    // If we are in the mix master in --mastermix mode, don't mute any channels but send a
+    //  special message to the server that will solo the selected channels only for us
+    if ( bIsMixMaster )
     {
-        // mute channel if we are not solo but another channel is solo
-        SetMute ( bOtherChannelIsSolo && !IsSolo() );
+        emit mixMasterSecretSoloValueChanged( IsSolo() );
+    }
+    else
+    {
+        // mute overwrites solo -> if mute is active, do not change anything
+        if ( !pcbMute->isChecked() )
+        {
+            // mute channel if we are not solo but another channel is solo
+            SetMute ( bOtherChannelIsSolo && !IsSolo() );
+        }
     }
 }
 
@@ -836,6 +867,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     iNumMixerPanelRows   ( 1 ),
     strServerName        ( "" ),
     eRecorderState       ( RS_UNDEFINED ),
+    eMasterMixState      ( MM_UNDEFINED ),
     eChSortType          ( ST_NO_SORT )
 {
     // add group box and hboxlayout
@@ -900,6 +932,9 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 
     void ( CAudioMixerBoard::* pPanValueChanged )( float ) =
         &CAudioMixerBoardSlots<slotId>::OnChPanValueChanged;
+    
+    void ( CAudioMixerBoard::* pMixMasterSecretSoloValueChanged )( bool ) =
+        &CAudioMixerBoardSlots<slotId>::OnChMixMasterSecretSoloValueChanged;
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
         this, &CAudioMixerBoard::UpdateSoloStates );
@@ -909,6 +944,9 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::panValueChanged,
         this, pPanValueChanged );
+    
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::mixMasterSecretSoloValueChanged,
+        this, pMixMasterSecretSoloValueChanged );
 
     connectFaderSignalsToMixerBoardSlots<slotId - 1>();
 }
@@ -990,6 +1028,7 @@ void CAudioMixerBoard::HideAll()
     bIsPanSupported      = false;
     bNoFaderVisible      = true;
     eRecorderState       = RS_UNDEFINED;
+    eMasterMixState      = MM_UNDEFINED;
     iMyChannelID         = INVALID_INDEX;
     iRunningNewClientCnt = 0; // reset running counter on new server connection
 
@@ -1098,21 +1137,75 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
 void CAudioMixerBoard::UpdateTitle()
 {
-    QString strTitlePrefix = "";
-
-    if ( eRecorderState == RS_RECORDING )
+    // if the server runs --mastermix and we are not the master (channelID 0), disable all faders
+    if ( eMasterMixState == MM_ENABLED && iMyChannelID != 0 )
     {
-        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        DisableFaders();
+    }
+    else
+    {
+        EnableFaders();
     }
 
-    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
+    QList<QString> title_parts;
+    
+    if ( eRecorderState == RS_RECORDING )
+    {
+        title_parts.append("[" + tr ( "RECORDING ACTIVE" ) + "] ");
+    }
+
+    if ( eMasterMixState == MM_ENABLED )
+    {
+        if ( iMyChannelID == 0 )
+        {
+            title_parts.append( "YOU CONTROL: " );
+        }
+        
+        title_parts.append("Server Mix ");
+    }
+    else
+    {
+        title_parts.append("Personal Mix ");
+    }
+    
+    title_parts.append("at: ");
+    title_parts.append(strServerName);
+    setTitle ( title_parts.join("") );
     setAccessibleName ( title() );
+}
+
+void CAudioMixerBoard::DisableFaders()
+{
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        if ( i == 0 || i == iMyChannelID )
+        {
+            // Do not disable the master's our own fader in the mix, so we can control those
+            continue;
+        }
+        vecpChanFader[i]->Disable();
+    }
+}
+
+void CAudioMixerBoard::EnableFaders()
+{
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->Enable();
+    }
 }
 
 void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState )
 {
     // store the new recorder state and update the title
     eRecorderState = newRecorderState;
+    UpdateTitle();
+}
+
+void CAudioMixerBoard::SetMasterMixState ( const EMasterMixState newMasterMixState )
+{
+    // store the new single mix state and update the title
+    eMasterMixState = newMasterMixState;
     UpdateTitle();
 }
 
@@ -1244,7 +1337,7 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
     // only apply new fader level if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetFaderLevel ( iValue );
         }
@@ -1258,7 +1351,7 @@ void CAudioMixerBoard::SetPanValue ( const int iChannelIdx,
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS )
            && bDisplayPans )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetPanValue ( iValue );
         }
@@ -1272,7 +1365,7 @@ void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx,
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
 
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetFaderIsSolo ( bIsSolo );
         }
@@ -1285,7 +1378,7 @@ void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx,
     // only apply mute if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetFaderIsMute ( bIsMute );
         }
@@ -1517,7 +1610,7 @@ void CAudioMixerBoard::SetRemoteFaderIsMute ( const int  iChannelIdx,
     // only apply remote mute state if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
     {
-        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        if ( vecpChanFader[iChannelIdx]->IsVisible() && vecpChanFader[iChannelIdx]->IsEnabled() )
         {
             vecpChanFader[iChannelIdx]->SetRemoteFaderIsMute ( bIsMute );
         }
@@ -1528,6 +1621,7 @@ void CAudioMixerBoard::UpdateSoloStates()
 {
     // first check if any channel has a solo state active
     bool bAnyChannelIsSolo = false;
+    bool bIsMixMaster = iMyChannelID == 0 && ( eMasterMixState == MM_ENABLED );
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1538,13 +1632,13 @@ void CAudioMixerBoard::UpdateSoloStates()
             continue;
         }
     }
-
+    
     // now update the solo state of all active faders
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecpChanFader[i]->IsVisible() )
         {
-            vecpChanFader[i]->UpdateSoloState ( bAnyChannelIsSolo );
+            vecpChanFader[i]->UpdateSoloState ( bAnyChannelIsSolo, bIsMixMaster );
         }
     }
 }
@@ -1587,6 +1681,13 @@ void CAudioMixerBoard::UpdatePanValue ( const int   iChannelIdx,
                                         const float fValue )
 {
     emit ChangeChanPan ( iChannelIdx, fValue );
+}
+
+
+void CAudioMixerBoard::UpdateMixMasterSecretSoloValue ( const int  iChannelIdx,
+                                                  const bool bValue )
+{
+    emit ChangeChanMixMasterSecretSolo( iChannelIdx, bValue );
 }
 
 void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )

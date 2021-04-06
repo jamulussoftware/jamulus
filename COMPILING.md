@@ -36,7 +36,8 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 ### Standard desktop build
 
-```qmake Jamulus.pro
+```
+qmake Jamulus.pro
 make clean
 make
 sudo make install
@@ -60,7 +61,8 @@ Also, although not strictly necessary, we recommend using the headless flag to s
 
 Compile the sources to ignore the JACK sound library:
 
-```qmake "CONFIG+=nosound headless" Jamulus.pro
+```
+qmake "CONFIG+=nosound headless" Jamulus.pro
 make clean
 make
 ```
@@ -101,7 +103,8 @@ Most users will probably want to use this method:
 ## macOS
 You will need XCode and Qt as follows:
 
-```brew install qt5
+```
+brew install qt5
 brew link qt5 --force
 ```
 
@@ -115,7 +118,8 @@ brew link qt5 --force
 
 will prompt
 
-```Targets:
+```
+Targets:
     Jamulus
     Qt Preprocess
 
@@ -126,7 +130,8 @@ Build Configurations:
 
 If no build configuration is specified and `-scheme` is not passed then "Release" is used.
 
-```Schemes:
+```
+Schemes:
     Jamulus
 ```
 

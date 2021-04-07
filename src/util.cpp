@@ -795,6 +795,18 @@ void CMusProfDlg::showEvent ( QShowEvent* )
         static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
 }
 
+static inline QString TruncateString ( QString str, int position )
+{
+    QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
+
+    tbfString.setPosition ( position );
+    if ( !tbfString.isAtBoundary() ) {
+        tbfString.toPreviousBoundary();
+        position = tbfString.position();
+    }
+    return str.left ( position );
+}
+
 void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
 {
     // check length
@@ -809,7 +821,7 @@ void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
     else
     {
         // text is too long, update control with shortened text
-        pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
+        pedtAlias->setText ( TruncateString ( strNewName, MAX_LEN_FADER_TAG ) );
     }
 }
 

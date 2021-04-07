@@ -39,6 +39,7 @@
 # include <QDateTime>
 # include <QDesktopServices>
 # include <QKeyEvent>
+# include <QTextBoundaryFinder>
 # include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>

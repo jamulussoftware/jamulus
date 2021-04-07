@@ -23,6 +23,9 @@
 \******************************************************************************/
 
 #pragma once
+#ifndef __APLLE_USE_RFC_3542
+#define __APPLE_USE_RFC_3542
+#endif
 
 #include <QObject>
 #include <QThread>

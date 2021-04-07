@@ -397,7 +397,7 @@ int main ( int argc, char** argv )
                                "--norecord" ) )
         {
             bDisableRecording = true;
-            qInfo() << "- recording will not be enabled";
+            qInfo() << "- recording will not take place until enabled";
             CommandLineOptions << "--norecord";
             continue;
         }

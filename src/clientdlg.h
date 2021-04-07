@@ -121,6 +121,8 @@ protected:
     virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
     void         UpdateDisplay();
 
+    void SetErrorMessage ( const QString& message );
+
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;

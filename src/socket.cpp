@@ -300,7 +300,6 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
 #ifndef _WIN32
             msghdr m;
             struct iovec iov[1];
-            int rv;
             char pktinfo[100];
             m.msg_name = (sockaddr*) &UdpSocketOutAddr;
             m.msg_namelen = sizeof ( sockaddr_in6 );
@@ -352,8 +351,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                memcpy(CMSG_DATA(cmsg),&HostAddr.LocalAddr,16);
                m.msg_controllen += CMSG_SPACE(16);          
             }
-            rv=sendmsg(UdpSocket,&m,0);
-            if (rv<0) fprintf(stderr, "%s\n", strerror(errno));
+            sendmsg(UdpSocket,&m,0);
 #else
             WSAMSG m;
             WSABUF iov[1];

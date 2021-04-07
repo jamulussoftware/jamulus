@@ -92,7 +92,7 @@ protected:
     CHostAddress     CentralServerAddress;
     QString          strSelectedAddress;
     QString          strSelectedServerName;
-    QAction *        m_deleteAction;
+    QAction *        qaDeleteAction;
     bool             bShowCompleteRegList;
     bool             bServerListReceived;
     bool             bReducedServerListReceived;

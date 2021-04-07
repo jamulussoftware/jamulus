@@ -88,7 +88,7 @@ protected:
     CClientSettings* pSettings;
     QTimer           TimerStatus;
     QButtonGroup     SndCrdBufferDelayButtonGroup;
-    QAction *        m_deleteAction;
+    QAction *        qaDeleteAction;
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }
@@ -111,7 +111,7 @@ public slots:
     void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void contextMenuRequest();
-    void deleteServer ();
+    void deleteServer();
 
 signals:
     void GUIDesignChanged();

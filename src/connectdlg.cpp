@@ -157,7 +157,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
 
     // add "Delete Server" to cbxServerAddr context menu
     cbxServerAddr->setContextMenuPolicy ( Qt::CustomContextMenu );
-    m_deleteAction = new QAction ( tr ( "Delete Server" ), this );
+    qaDeleteAction = new QAction ( tr ( "Delete Server" ), this );
 
     // Connections -------------------------------------------------------------
     // list view
@@ -198,7 +198,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
         this, &CConnectDlg::OnTimerReRequestServList );
 
     // for combobox context menu
-    QObject::connect  ( m_deleteAction, &QAction::triggered ,
+    QObject::connect  ( qaDeleteAction, &QAction::triggered ,
               this, &CConnectDlg::deleteServer );
 
     QObject::connect ( cbxServerAddr, &CConnectDlg::customContextMenuRequested,
@@ -939,7 +939,7 @@ void CConnectDlg::contextMenuRequest()
     // add line to context menu, is dynamic, made at each request
     QMenu* menu = cbxServerAddr->lineEdit()->createStandardContextMenu();
     menu->addSeparator();
-    menu->addAction ( m_deleteAction );
+    menu->addAction ( qaDeleteAction );
     menu->popup ( QCursor::pos() );
     connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
 }

@@ -397,8 +397,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     UpdateSoundCardFrame();
 
     // add "Delete Server" to cbxCentralServerAddress context menu
-    cbxCentralServerAddress->setContextMenuPolicy ( Qt::CustomContextMenu ) ;
-    m_deleteAction = new QAction ( tr ( "Delete Server" ), this );
+    cbxCentralServerAddress->setContextMenuPolicy ( Qt::CustomContextMenu );
+    qaDeleteAction = new QAction ( tr ( "Delete Server" ), this );
 
     // Connections -------------------------------------------------------------
     // timers
@@ -470,7 +470,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
 
     // for combobox context menu
-    QObject::connect  ( m_deleteAction, &QAction::triggered ,
+    QObject::connect  ( qaDeleteAction, &QAction::triggered,
               this, &CClientSettingsDlg::deleteServer );
 
     QObject::connect ( cbxCentralServerAddress, &CClientSettingsDlg::customContextMenuRequested,
@@ -819,9 +819,9 @@ void CClientSettingsDlg::contextMenuRequest()
     // add line to context menu, is dynamic, made at each request
     QMenu* menu = cbxCentralServerAddress->lineEdit()->createStandardContextMenu();
     menu->addSeparator();
-    menu->addAction ( m_deleteAction );
+    menu->addAction ( qaDeleteAction );
     menu->popup ( QCursor::pos() );
-    connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
+    connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater() ) );
 }
 
 void CClientSettingsDlg::deleteServer ()

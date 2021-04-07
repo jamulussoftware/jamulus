@@ -46,6 +46,8 @@ public:
     ERecorderState GetRecorderState();
 
 private:
+    void OnRecordingFailed ( QString error );
+
     CServer* pServer;
 
     bool          bRecorderInitialised;

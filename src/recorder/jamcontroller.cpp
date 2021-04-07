@@ -160,6 +160,10 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         QObject::connect ( pJamRecorder, &CJamRecorder::RecordingSessionStarted,
             this, &CJamController::RecordingSessionStarted );
 
+        // from the recorder to the controller
+        QObject::connect ( pJamRecorder, &CJamRecorder::RecordingFailed,
+            this, &CJamController::OnRecordingFailed );
+
         pthJamRecorder->start ( QThread::NormalPriority );
 
     }
@@ -167,6 +171,18 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
     {
         strRecordingDir = "";
     }
+}
+
+void CJamController::OnRecordingFailed ( QString error )
+{
+    if ( !bEnableRecording )
+    {
+        // Recording has already been stopped, possibly
+        // by a previous OnRecordingFailed call from another client/thread.
+        return;
+    }
+    qWarning() << "Could not start recording:" << error;
+    SetEnableRecording ( false, true );
 }
 
 ERecorderState CJamController::GetRecorderState()

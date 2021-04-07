@@ -178,6 +178,7 @@ private:
 
 signals:
     void RecordingSessionStarted ( QString sessionDir );
+    void RecordingFailed ( QString error );
 
 public slots:
     /**

@@ -396,13 +396,29 @@ void CJamRecorder::Start() {
     // Ensure any previous cleaning up has been done.
     OnEnd();
 
+    QString error;
+
     // needs to be after OnEnd() as that also locks
     ChIdMutex.lock();
     {
-        currentSession = new CJamSession( recordBaseDir );
-        isRecording = true;
+        try
+        {
+            currentSession = new CJamSession( recordBaseDir );
+            isRecording = true;
+        }
+        catch ( const std::runtime_error& err )
+        {
+            currentSession = nullptr;
+            error = err.what();
+        }
     }
     ChIdMutex.unlock();
+
+    if ( !currentSession )
+    {
+        emit RecordingFailed ( error );
+        return;
+    }
 
     emit RecordingSessionStarted ( currentSession->SessionDir().path() );
 }
@@ -583,6 +599,12 @@ void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddre
     if ( !isRecording )
     {
         Start();
+    }
+
+    // Start() may have failed, so check again:
+    if ( !isRecording )
+    {
+        return;
     }
 
     // needs to be after Start() as that also locks

@@ -399,10 +399,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // add "Delete Server" to cbxCentralServerAddress context menu
     cbxCentralServerAddress->setContextMenuPolicy ( Qt::CustomContextMenu ) ;
     m_deleteAction = new QAction ( tr ( "Delete Server" ), this );
-    connect ( m_deleteAction, SIGNAL ( triggered() ),
-              this, SLOT ( deleteServer() ));
-    connect ( cbxCentralServerAddress, SIGNAL ( customContextMenuRequested ( QPoint ) ),
-              this, SLOT ( contextMenuRequest() ) );
 
     // Connections -------------------------------------------------------------
     // timers
@@ -473,6 +469,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         static_cast<void (QButtonGroup::*) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
         this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
 
+    // for combobox context menu
+    QObject::connect  ( m_deleteAction, &QAction::triggered ,
+              this, &CClientSettingsDlg::deleteServer );
+
+    QObject::connect ( cbxCentralServerAddress, &CClientSettingsDlg::customContextMenuRequested,
+              this, &CClientSettingsDlg::contextMenuRequest );
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar

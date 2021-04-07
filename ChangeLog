@@ -1,6 +1,9 @@
 
 ### 3.7.0dev <- NOTE: the release version number will be 3.7.1 ###
 
+- ServerAddr and CentralServer comboboxes, right click allows deleting from the server list
+  (contributed by @dcorson-ticino-com)
+
 - Added Pan-Delay code by Detlef Hennings, www.eclim.de
 
 - Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).

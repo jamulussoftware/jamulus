@@ -160,7 +160,7 @@ CJamSession::CJamSession(QDir recordBaseDir) :
 
     if (!fi.exists() && !QDir().mkpath(sessionDir.absolutePath()))
     {
-        throw std::runtime_error( (sessionDir.absolutePath() + " does not exist but could not be created").toStdString() );
+        throw std::runtime_error( (sessionDir.absolutePath() + " does not exist and could not be created").toStdString() );
     }
     if (!fi.isDir())
     {

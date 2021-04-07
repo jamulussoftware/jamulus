@@ -24,7 +24,7 @@
 
 #include "util.h"
 #include "client.h"
-
+#include "socket.h"
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
@@ -953,7 +953,8 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
 bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
-                                        CHostAddress& HostAddress )
+                                        CHostAddress& HostAddress,
+                                        int inetmode)
 {
     QHostAddress InetAddr;
     quint16      iNetPort = DEFAULT_PORT_NUMBER;
@@ -1004,21 +1005,62 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
         }
 
         // use the first IPv4 address, if any
-        bool bFoundIPv4 = false;
+        bool bFoundIPx = false;
 
         foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
         {
-            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            if ( (inetmode <= 1) && (HostAddr.protocol() == QAbstractSocket::IPv4Protocol ))
             {
                InetAddr   = HostAddr;
-               bFoundIPv4 = true;
+               bFoundIPx = true;
                break;
+            }
+            if ((inetmode >= 2) && (HostAddr.protocol() == QAbstractSocket::IPv6Protocol ))
+            {
+                InetAddr = HostAddr;
+                bFoundIPx = true;
+                break;
             }
         }
 
-        if ( !bFoundIPv4 )
+        if ( !bFoundIPx )
         {
+            switch (inetmode)
+            {
+                case 0: // ipv4 first then ipv6
+                    foreach (const QHostAddress Hostaddr, HostInfo.addresses() )
+                    {
+                        if (Hostaddr.protocol() == QAbstractSocket::IPv6Protocol )
+                        {
+                            InetAddr = Hostaddr;
+                            bFoundIPx = true;
+                            break;
+                        }
+                    }
+                    break;
+                case 1: // ipv4 only
+                case 2: // ipv6 only
+                    return false;
+                    break;
+                case 3: // ipv6 first, then ipv4
+                                       
+                    foreach (const QHostAddress Hostaddr, HostInfo.addresses() )
+                    {
+                        if (Hostaddr.protocol() == QAbstractSocket::IPv4Protocol )
+                        {
+                            InetAddr = Hostaddr;
+                            bFoundIPx = true;
+                            break;
+                        }
+                    }
+                    break;
+                default: break; 
+            } // switch
             // only found IPv6 addresses
+            //return false;
+        } // if !bfoundIPx
+        if (!bFoundIPx) 
+        {
             return false;
         }
     }
@@ -1027,6 +1069,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
 
     return true;
 }
+
 
 CHostAddress NetworkUtil::GetLocalAddress()
 {

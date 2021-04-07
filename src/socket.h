@@ -23,6 +23,9 @@
 \******************************************************************************/
 
 #pragma once
+#ifndef __APLLE_USE_RFC_3542
+#define __APPLE_USE_RFC_3542
+#endif
 
 #include <QObject>
 #include <QThread>
@@ -34,6 +37,9 @@
 #ifndef _WIN32
 # include <netinet/in.h>
 # include <sys/socket.h>
+#else
+# include <WS2tcpip.h>
+# include <MSWSock.h>
 #endif
 
 
@@ -98,7 +104,11 @@ protected:
     bool             bIsClient;
 
     bool             bJitterBufferOK;
-
+    char	sockmode = 6;
+#ifdef _WIN32
+    LPFN_WSARECVMSG lpWSARecvMsg = NULL;
+    LPFN_WSASENDMSG lpWSASendMsg = NULL;
+#endif
 public:
     void OnDataReceived();
 

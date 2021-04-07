@@ -373,6 +373,13 @@
              </widget>
            </item>
            <item>
+             <widget class="QPushButton" name="butTryLoadAnyDriver">
+               <property name="text">
+                 <string>Auto Select Device</string>
+               </property>
+             </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="butDriverSetup">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

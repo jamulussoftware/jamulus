@@ -694,6 +694,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // Driver Setup button is only available for Windows when JACK is not used
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
 #endif
+    QObject::connect ( butTryLoadAnyDriver, &QPushButton::clicked, this, &CClientSettingsDlg::OnTryLoadAnyDriverClicked );
 
     // misc
     // sliders
@@ -918,6 +919,14 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 {
     pClient->SetServerSockBufNumFrames ( value );
     UpdateJitterBufferFrame();
+}
+
+void CClientSettingsDlg::OnTryLoadAnyDriverClicked()
+{
+    pClient->TryLoadAnyDev();
+
+    UpdateSoundDeviceChannelSelectionFrame();
+    UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )

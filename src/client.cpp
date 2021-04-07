@@ -470,18 +470,8 @@ void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
     }
 }
 
-QString CClient::SetSndCrdDev ( const QString strNewDev )
+QString CClient::HandleDeviceChange ( bool bWasRunning, const QString& strError )
 {
-    // if client was running then first
-    // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
-
-    const QString strError = Sound.SetDev ( strNewDev );
-
     bLoadedDriverWithoutErrors = strError.isEmpty();
     // init again because the sound card actual buffer size might
     // be changed on new device
@@ -497,6 +487,36 @@ QString CClient::SetSndCrdDev ( const QString strNewDev )
     emit SoundDeviceChanged ( strError );
 
     return strError;
+}
+
+QString CClient::SetSndCrdDev ( const QString strNewDev )
+{
+    // if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    const QString strError = Sound.SetDev ( strNewDev );
+
+    return HandleDeviceChange ( bWasRunning, strError );
+}
+
+QString CClient::TryLoadAnyDev()
+{
+    // if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    const QString strError = Sound.LoadAndInitializeFirstValidDriver();
+
+    return HandleDeviceChange ( bWasRunning, strError );
 }
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )

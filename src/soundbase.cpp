@@ -102,7 +102,7 @@ QString CSoundBase::SetDev ( const QString strDevName )
     return LoadAndInitializeDriver ( strDevName, false );
 }
 
-QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup )
+QString CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup )
 {
     QVector<QString> vsErrorList;
 
@@ -134,7 +134,24 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpe
         iDriverCnt++;
     }
 
-    return vsErrorList;
+    if ( !vsErrorList.isEmpty() )
+    {
+        // create error message with all details
+        QString sErrorMessage = "<b>" + tr ( "No usable " ) + strSystemDriverTechniqueName + tr ( " audio device (driver) found." ) + "</b><br><br>" +
+                                tr ( "In the following there is a list of all available drivers "
+                                     "with the associated error message:" ) +
+                                "<ul>";
+
+        for ( int i = 0; i < lNumDevs; i++ )
+        {
+            sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "</li>";
+        }
+        sErrorMessage += "</ul>";
+
+        return sErrorMessage;
+    }
+
+    return "";
 }
 
 /******************************************************************************\

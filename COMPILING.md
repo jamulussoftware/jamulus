@@ -63,7 +63,6 @@ Compile the sources to ignore the JACK sound library:
 
 ```
 qmake "CONFIG+=nosound headless" Jamulus.pro
-make clean
 make
 ```
 

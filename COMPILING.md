@@ -38,18 +38,13 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 ```
 qmake Jamulus.pro
-make clean
 make
 sudo make install
 ```
 
 This puts the Jamulus binary into `/usr/local/bin`.
 
-#### Notes
-
-* The "make clean" command is essential to remove the automatically generated Qt files which are present in the .tar.gz file and may not match the Qt version you are using.
-
-* Users of Raspberry Pi: You may want to compile the client on another machine and run the binary on the Raspberry Pi. In which case the only libraries you need to run it are those for a [headless server](Server-Linux#running-a-headless-server) build, but _with_ the JACK sound packages. 
+**Users of Raspberry Pi** You may want to compile the client on another machine and run the binary on the Raspberry Pi. In which case the only libraries you need to run it are those for a [headless server](Server-Linux#running-a-headless-server) build, but _with_ the JACK sound packages. 
 
 
 ### “Headless” server build

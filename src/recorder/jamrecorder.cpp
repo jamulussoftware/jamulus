@@ -532,6 +532,8 @@ void CJamRecorder::AudacityLofFromCurrentSession()
 /**
  * @brief CJamRecorder::SessionDirToReaper Replica of CJamRecorder::OnEnd() but using the directory contents to construct the CReaperProject object
  * @param strSessionDirName
+ *
+ * This is used for testing and is not called from the regular Jamulus code.
  */
 void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFrameSizeSamples)
 {

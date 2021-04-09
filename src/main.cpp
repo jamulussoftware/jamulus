@@ -844,7 +844,7 @@ QString UsageArguments ( char **argv )
         "                        supported for headless server mode)\n"
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set your local port number\n"
-        "  -Q, --qos             request quality of service in the IP header\n"
+        "  -Q, --qos             request quality of service in the IP header octet\n"
         "                        (e.g. --qos 0) DF=0 AF31=104 CS4=128default EF=184\n"
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"

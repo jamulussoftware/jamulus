@@ -51,18 +51,17 @@ sudo make install
 
 ### “Headless” server build
 
+Although not strictly necessary, we recommend using the headless flag to speed up the build process. Gentoo users may also be able to avoid installing some dependencies as a consequence. Compiling with the headless flag means you can avoid installing some of the dependent packages, save some disk space and/or speed up your build time. 
+
 Note that you don’t need to install the JACK package(s) for a headless build. If you plan to run headless on Gentoo, or are compiling under Ubuntu for use on another Ubuntu machine, the only packages you should need for a headless build are `qtcore`, `qtnetwork`, `qtconcurrent` and `qtxml` (both for building and running the server).
-
-Also, although not strictly necessary, we recommend using the headless flag to speed up the build process. Gentoo users may also be able to avoid installing some dependencies as a consequence. Compiling with the headless flag means you can avoid installing some of the dependent packages, save some disk space and/or speed up your build time. 
-
 
 Compile the sources to ignore the JACK sound library:
 
 ```
-make distclean # reccommended
+make distclean ;# reccommended
 qmake "CONFIG+=nosound headless"
 make
-sudo make install # optional
+sudo make install ;# optional
 ```
 
 To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](/wiki/Command-Line-Options), and [this information](/wiki/Tips-Tricks-More#controlling-recording-on-linux-headless-servers) on controlling recordings on headless servers.

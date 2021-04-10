@@ -1534,7 +1534,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="323"/>
         <source>Mono-in/Stereo-out</source>
-        <translation>Mono-in/Stereo-out</translation>
+        <translation>Mono-in/Stereo-uit</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="214"/>
@@ -1634,7 +1634,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="216"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
-        <translation>Het audiosignaal naar de server is mono maar wat terugkomt is stereo. Dit is handig als de gelsuidskaart het instrument op een invoerkanaal heeft en de microfoon op een ander. In dat geval kunnen de twee signalen gemixed worden naar een monokanaal terwijl de server mix in stereo blijft.</translation>
+        <translation>Het audiosignaal naar de server is mono maar wat terugkomt is stereo. Dit is handig als de geluidskaart het instrument op een invoerkanaal heeft en de microfoon op een ander. In dat geval kunnen de twee signalen gemixed worden naar een monokanaal terwijl de server mix in stereo blijft.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="223"/>
@@ -1781,7 +1781,7 @@
         <location filename="../../clientsettingsdlg.cpp" line="456"/>
         <location filename="../../clientsettingsdlg.cpp" line="460"/>
         <source>Size: </source>
-        <translation>Size: </translation>
+        <translation>Grootte: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="517"/>
@@ -1899,7 +1899,7 @@
         <location filename="../../clientsettingsdlgbase.ui" line="310"/>
         <location filename="../../clientsettingsdlgbase.ui" line="323"/>
         <source>Size</source>
-        <translation>Size</translation>
+        <translation>Grootte</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="403"/>
@@ -3272,8 +3272,8 @@
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
-        <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation>U kunt een tool als &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; gebruiken om de sample rate van de Jack-server aan te passen.</translation>
+        <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
+        <translation>U kunt een tool als &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; gebruiken om de sample rate van de Jack-server aan te passen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>

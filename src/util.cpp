@@ -486,6 +486,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
         "<p>Noam Postavsky (<a href=\"https://github.com/npostavs\">npostavs</a>)</p>"
         "<p>David Savinkoff (<a href=\"https://github.com/DavidSavinkoff\">DavidSavinkoff</a>)</p>"
+        "<p>Johannes Brauers (<a href=\"https://github.com/JohannesBrx\">JohannesBrx</a>)</p>"
+        "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
+        "<p>Martin Kaistra (<a href=\"https://github.com/djfun\">djfun</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." );
 
@@ -501,6 +504,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Melcon Moraes (<a href=\"https://github.com/melcon\">melcon</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
         "<p>Jeroen Geertzen (<a href=\"https://github.com/jerogee\">jerogee</a>)</p>"
+        "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
         "<p>Giuseppe Sapienza (<a href=\"https://github.com/dzpex\">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"
@@ -578,7 +582,6 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     - label with combo box for skill level
     - OK button
 */
-    setWindowTitle ( tr ( "Musician Profile" ) );
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
 
     QVBoxLayout* pLayout        = new QVBoxLayout ( this );
@@ -1578,4 +1581,14 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
     strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License (GPL)" );
 
     return strVersionText;
+}
+
+QString MakeClientNameTitle ( QString win, QString client )
+{
+    QString sReturnString = win;
+    if( !client.isEmpty() )
+    {
+        sReturnString += " - " + client;
+    }
+    return ( sReturnString );
 }

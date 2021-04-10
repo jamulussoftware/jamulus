@@ -115,6 +115,7 @@ public slots:
     void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
     void OnWelcomeMessageChanged() { pServer->SetWelcomeMessage ( tedWelcomeMessage->toPlainText() ); }
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
+    void OnEnableDelayPanningStateChanged ( int value ) { pServer->SetEnableDelayPanning ( Qt::CheckState::Checked == value ); }
     void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
     void OnRecordingDirClicked();
     void OnClearRecordingDirClicked();

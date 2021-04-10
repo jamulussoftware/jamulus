@@ -143,7 +143,6 @@ public slots:
 
         case 4: // PROTMESSID_CONN_CLIENTS_LIST
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
-            vecChanInfo[0].iIpAddr = GenRandomIPv4Address().toIPv4Address();
             vecChanInfo[0].strName = GenRandomString();
 
             Protocol.CreateConClientListMes ( vecChanInfo );
@@ -278,7 +277,6 @@ public slots:
 
         case 28: // PROTMESSID_CLM_CONN_CLIENTS_LIST
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
-            vecChanInfo[0].iIpAddr = GenRandomIPv4Address().toIPv4Address();
             vecChanInfo[0].strName = GenRandomString();
 
             Protocol.CreateCLConnClientsListMes ( CurHostAddress, vecChanInfo );

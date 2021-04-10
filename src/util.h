@@ -950,18 +950,14 @@ class CChannelInfo : public CChannelCoreInfo
 {
 public:
     CChannelInfo() :
-        iChanID ( 0 ),
-        iIpAddr ( 0 ) {}
+        iChanID ( 0 ) {}
 
     CChannelInfo ( const int               NiID,
-                   const quint32           NiIP,
                    const CChannelCoreInfo& NCorInf ) :
         CChannelCoreInfo ( NCorInf ),
-        iChanID ( NiID ),
-        iIpAddr ( NiIP ) {}
+        iChanID ( NiID ) {}
 
     CChannelInfo ( const int               NiID,
-                   const quint32           NiIP,
                    const QString           NsName,
                    const QLocale::Country& NeCountry,
                    const QString&          NsCity,
@@ -972,14 +968,10 @@ public:
                            NsCity,
                            NiInstrument,
                            NeSkillLevel ),
-        iChanID ( NiID ),
-        iIpAddr ( NiIP ) {}
+        iChanID ( NiID ) {}
 
     // ID of the channel
     int     iChanID;
-
-    // IP address of the channel
-    quint32 iIpAddr;
 };
 
 

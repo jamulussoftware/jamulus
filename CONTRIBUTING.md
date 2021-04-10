@@ -41,7 +41,7 @@ We support the following platforms and versions:
 <!-- Do we support BSD? I think a recent discussion was about FreeBSD? -->
 <!-- Should we already list Android? If so, what platforms/versions? -->
 
-The minimum Qt version to support is 5.X <-- What is it? -->
+The minimum Qt version to support is 5.9
 
 Please try to avoid breaking any of them by introducing platform-specific code. Check to see if any newly introduced Qt calls are available in the minimum Qt version.
 

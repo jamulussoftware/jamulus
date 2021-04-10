@@ -21,7 +21,7 @@ If a feature or function can be achieved in another way by another system or met
 
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
 
-Please check your Github fork. It should build your branch for all the supported platforms (though not all supported platform versions) when you push. Make sure there are no errors. If there are, resolve them before creating a pull request.
+Please run a local build test. Make sure there are no errors. After opening a pull request, keep an eye on the CI checks for quality or compile issues and fix them as required.
 
 If there are conflicts with jamulussoftware/jamulus showing when you go to raise the pull request, resolve those locally:
 ~~~

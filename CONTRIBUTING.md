@@ -41,9 +41,7 @@ We support the following platforms and versions:
 <!-- Do we support BSD? I think a recent discussion was about FreeBSD? -->
 <!-- Should we already list Android? If so, what platforms/versions? -->
 
-The minimum Qt version to support is 5.9
-
-Please try to avoid breaking any of them by introducing platform-specific code. Check to see if any newly introduced Qt calls are available in the minimum Qt version.
+Please try to avoid breaking any of them by introducing platform-specific code. Check to see if any newly introduced Qt calls are available in the minimum supported Qt version, which is currently 5.9. Note that code _style_ in a file may be Qt 4.x, and while you should normally stick to existing style if making large-scale changes, then updating to Qt 5.9 style is encouraged.
 
 ### Dependencies
 If your code requires new dependencies, be sure that those are available on all supported platforms and that the introduction of those dependencies has been discussed and accepted.

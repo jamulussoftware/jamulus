@@ -1,5 +1,5 @@
 ---
-name: Feature
+name: Specified Feature
 about: Agreed specification for a feature or enhancement
 title: ''
 labels: 'feature'

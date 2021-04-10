@@ -37,12 +37,13 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 ### Standard desktop build
 
 ```
-qmake Jamulus.pro
+make distclean
+qmake
 make
 sudo make install
 ```
 
-This puts the Jamulus binary into `/usr/local/bin`.
+`make distclean` is optional but ensures a clean build environment. `make install` is optional and puts the Jamulus binary into `/usr/local/bin`.
 
 **Users of Raspberry Pi** You may want to compile the client on another machine and run the binary on the Raspberry Pi. In which case the only libraries you need to run it are those for a [headless server](Server-Linux#running-a-headless-server) build, but _with_ the JACK sound packages. 
 
@@ -57,8 +58,10 @@ Also, although not strictly necessary, we recommend using the headless flag to s
 Compile the sources to ignore the JACK sound library:
 
 ```
-qmake "CONFIG+=nosound headless" Jamulus.pro
+make distclean # reccommended
+qmake "CONFIG+=nosound headless"
 make
+sudo make install # optional
 ```
 
 To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](/wiki/Command-Line-Options), and [this information](/wiki/Tips-Tricks-More#controlling-recording-on-linux-headless-servers) on controlling recordings on headless servers.

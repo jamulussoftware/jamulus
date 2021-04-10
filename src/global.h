@@ -97,6 +97,7 @@ LED bar:      lbr
 #define MAX_DELAY_PANNING_SAMPLES        64
 
 // default server address and port numbers
+#define DEFAULT_QOS_NUMBER               128  // CS4 (Quality of Service)
 #define DEFAULT_SERVER_ADDRESS           "anygenre1.jamulus.io"
 #define DEFAULT_PORT_NUMBER              22124
 #define CENTSERV_ANY_GENRE2              "anygenre2.jamulus.io:22224"

@@ -51,7 +51,7 @@ If your code requires new dependencies, be sure that those are available on all 
 ### Ownership
 The submitter of an Issue or a PR is responsible for its care and feeding, answering all questions directed at them, and making agreed amends if needed. 
 
-So as to reduce effort for others in understanding a PR or an Issue, authors are strongly encouraged to update their initial posts/PR descriptions or title to reflect the current state of play, amends, enhancements, outstanding issues etc. Admins reserve the right to do this for them if need be.
+So as to reduce effort for others in understanding a PR or an Issue, authors are strongly encouraged to update their initial posts/PR descriptions or title to reflect the current state of play, amends, enhancements, outstanding issues etc. Admins reserve the right to do this as they see fit.
 
 ### Documentation/Acknowledgements
 Each new feature or bug fix must be documented in the ChangeLog. Please provide a single-sentence suggestion for that as part of your pull request description. Do not modify the ChangeLog file as part of your PR as it will lead to conflicts.

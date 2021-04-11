@@ -1,0 +1,8 @@
+contact_links:
+  - name: Support Request or Question
+    url: https://github.com/jamulussoftware/jamulus/discussions/new
+    about: Please ask questions by opening a new Discussion.
+
+  - name: Idea/Feature Request
+    url: https://github.com/jamulussoftware/jamulus/discussions/new
+    about: Please open a Discussion if you have ideas for new features or functions.

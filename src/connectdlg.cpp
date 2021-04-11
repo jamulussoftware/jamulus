@@ -936,12 +936,8 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
 
 void CConnectDlg::contextMenuRequest()
 {
-    // add line to context menu, is dynamic, made at each request
-    QMenu* menu = cbxServerAddr->lineEdit()->createStandardContextMenu();
-    menu->addSeparator();
-    menu->addAction ( qaDeleteAction );
-    menu->popup ( QCursor::pos() );
-    connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
+    // add line to context menu
+gfContextMenuRequest( cbxServerAddr, qaDeleteAction );
 }
 
 void CConnectDlg::deleteServer()

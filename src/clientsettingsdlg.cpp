@@ -816,12 +816,8 @@ void CClientSettingsDlg::OnInputBoostChanged()
 
 void CClientSettingsDlg::contextMenuRequest()
 {
-    // add line to context menu, is dynamic, made at each request
-    QMenu* menu = cbxCentralServerAddress->lineEdit()->createStandardContextMenu();
-    menu->addSeparator();
-    menu->addAction ( qaDeleteAction );
-    menu->popup ( QCursor::pos() );
-    connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater() ) );
+    // add line to context menu
+    gfContextMenuRequest( cbxCentralServerAddress, qaDeleteAction );
 }
 
 void CClientSettingsDlg::deleteServer ()

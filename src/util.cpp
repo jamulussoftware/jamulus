@@ -1591,3 +1591,13 @@ QString MakeClientNameTitle ( QString win, QString client )
     }
     return ( sReturnString );
 }
+
+void gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction )
+{
+    // add line to context menu, is dynamic, made at each request
+    QMenu* menu = pComboBox->lineEdit()->createStandardContextMenu();
+    menu->addSeparator();
+    menu->addAction ( pAction );
+    menu->popup ( QCursor::pos() );
+    QObject::connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
+}

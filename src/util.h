@@ -101,6 +101,7 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
 
 QString GetVersionAndNameStr ( const bool bWithHtml = true );
 QString MakeClientNameTitle ( QString win, QString client );
+void    gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction );
 
 
 /******************************************************************************\

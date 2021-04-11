@@ -1592,6 +1592,7 @@ QString MakeClientNameTitle ( QString win, QString client )
     return ( sReturnString );
 }
 
+#ifndef HEADLESS
 void gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction )
 {
     // add line to context menu, is dynamic, made at each request
@@ -1601,3 +1602,4 @@ void gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction )
     menu->popup ( QCursor::pos() );
     QObject::connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
 }
+#endif

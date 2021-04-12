@@ -825,7 +825,7 @@ void CClientSettingsDlg::deleteServer ()
     // delete selected line from cbxCentralServerAddress
     cbxCentralServerAddress->removeItem ( cbxCentralServerAddress->currentIndex() );
 
-    // Update IP addresse list
+    // Update IP address list
     int iCount = qMax ( cbxCentralServerAddress->count(), MAX_NUM_SERVER_ADDR_ITEMS );
     int iIdx;
     for ( iIdx = 0; iIdx < iCount; iIdx++ )

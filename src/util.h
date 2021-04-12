@@ -101,9 +101,6 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
 
 QString GetVersionAndNameStr ( const bool bWithHtml = true );
 QString MakeClientNameTitle ( QString win, QString client );
-#ifndef HEADLESS
-void    gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction );
-#endif
 
 
 /******************************************************************************\
@@ -494,6 +491,9 @@ public slots:
 signals:
     void LanguageChanged ( QString strLanguage );
 };
+
+/*** Global GUI Function ********************************/
+void    gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction );
 #endif
 
 

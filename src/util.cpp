@@ -945,6 +945,17 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
         emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
     }
 }
+
+/*** Global GUI Function ********************************/
+void gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction )
+{
+    // add line to context menu, is dynamic, made at each request
+    QMenu* menu = pComboBox->lineEdit()->createStandardContextMenu();
+    menu->addSeparator();
+    menu->addAction ( pAction );
+    menu->popup ( QCursor::pos() );
+    QObject::connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
+}
 #endif
 
 
@@ -1591,15 +1602,3 @@ QString MakeClientNameTitle ( QString win, QString client )
     }
     return ( sReturnString );
 }
-
-#ifndef HEADLESS
-void gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction )
-{
-    // add line to context menu, is dynamic, made at each request
-    QMenu* menu = pComboBox->lineEdit()->createStandardContextMenu();
-    menu->addSeparator();
-    menu->addAction ( pAction );
-    menu->popup ( QCursor::pos() );
-    QObject::connect ( menu, SIGNAL ( aboutToHide() ), menu, SLOT ( deleteLater()) );
-}
-#endif

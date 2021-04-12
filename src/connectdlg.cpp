@@ -937,7 +937,7 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
 void CConnectDlg::contextMenuRequest()
 {
     // add line to context menu
-gfContextMenuRequest( cbxServerAddr, qaDeleteAction );
+    gfContextMenuRequest( cbxServerAddr, qaDeleteAction );
 }
 
 void CConnectDlg::deleteServer()

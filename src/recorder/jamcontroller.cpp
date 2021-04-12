@@ -26,7 +26,8 @@
 
 using namespace recorder;
 
-CJamController::CJamController() :
+CJamController::CJamController( CServer* pNServer ) :
+    pServer              ( pNServer ),
     bRecorderInitialised ( false ),
     bEnableRecording     ( false ),
     strRecordingDir      ( "" ),
@@ -182,7 +183,10 @@ void CJamController::OnRecordingFailed ( QString error )
         return;
     }
     qWarning() << "Could not start recording:" << error;
-    SetEnableRecording ( false, true );
+    // Turn off recording until it is manually re-enabled via UI or signals.
+    // This needs to be done from the CServer side to cover all relevant
+    // state.
+    pServer->SetEnableRecording ( false );
 }
 
 ERecorderState CJamController::GetRecorderState()

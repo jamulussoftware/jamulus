@@ -182,6 +182,7 @@ void CJamController::OnRecordingFailed ( QString error )
         // by a previous OnRecordingFailed call from another client/thread.
         return;
     }
+    strRecorderErrMsg = error;
     qWarning() << "Could not start recording:" << error;
     // Turn off recording until it is manually re-enabled via UI or signals.
     // This needs to be done from the CServer side to cover all relevant

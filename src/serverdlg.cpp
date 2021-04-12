@@ -600,6 +600,12 @@ void CServerDlg::OnServerStopped()
 void CServerDlg::OnStopRecorder()
 {
     UpdateRecorderStatus ( QString::null );
+    if ( pServer->GetRecorderErrMsg() != QString::null )
+    {
+        QMessageBox::warning ( this, APP_NAME, tr ( "Recorder failed to start. "
+            "Please check available disk space and permissions and try again. "
+            "Error: " ) + pServer->GetRecorderErrMsg() );
+    }
 }
 
 void CServerDlg::OnRecordingDirClicked()

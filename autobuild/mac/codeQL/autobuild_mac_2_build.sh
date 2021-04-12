@@ -7,12 +7,13 @@
 ###  PARAMETERS  ###
 ####################
 
-echo working dir `pwd`
-echo '${0}' is "'${0}'"
-echo '${BASH_SOURCE[0]}' is "'${BASH_SOURCE[0]}'"
-echo '$THIS_JAMULUS_PROJECT_PATH' is "'${THIS_JAMULUS_PROJECT_PATH}'"
+#echo working dir `pwd`
+#echo '${0}' is "'${0}'"
+#echo '${BASH_SOURCE[0]}' is "'${BASH_SOURCE[0]}'"
+#echo '$THIS_JAMULUS_PROJECT_PATH' is "'${THIS_JAMULUS_PROJECT_PATH}'"
 
-source "$(dirname $(readlink "${0}"))/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
+#source "$(dirname $(readlink "${0}"))/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
 
 ###################
 ###  PROCEDURE  ###

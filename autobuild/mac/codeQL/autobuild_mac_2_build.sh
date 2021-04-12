@@ -17,9 +17,9 @@ cd "${THIS_JAMULUS_PROJECT_PATH}"
 
 
 echo "Building... qmake"
-if [-x /Users/runner/work/jamulus/jamulus/Qt/5.15.2/clang_64/bin/qmake]
+if [-x /Users/runner/work/jamulus/jamulus/Qt/5.9.9/clang_64/bin/qmake]
 then
-    /Users/runner/work/jamulus/jamulus/Qt/5.15.2/clang_64/bin/qmake
+    /Users/runner/work/jamulus/jamulus/Qt/5.9.9/clang_64/bin/qmake
 else
     qmake
 fi

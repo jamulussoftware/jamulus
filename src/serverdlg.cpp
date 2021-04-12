@@ -849,6 +849,10 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
         strRecorderStatus = SREC_NOT_INITIALISED;
     }
 
+    chbEnableRecorder->blockSignals ( true );
+    chbEnableRecorder->setChecked ( strRecorderStatus != SREC_NOT_ENABLED );
+    chbEnableRecorder->blockSignals ( false );
+
     edtRecordingDir->setText ( strRecordingDir );
     edtCurrentSessionDir->setEnabled ( bIsRecording );
     lblRecorderStatus->setText ( strRecorderStatus );

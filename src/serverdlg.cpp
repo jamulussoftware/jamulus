@@ -854,6 +854,9 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
     chbEnableRecorder->blockSignals ( false );
 
     edtRecordingDir->setText ( strRecordingDir );
+    edtRecordingDir->setEnabled ( !bIsRecording );
+    pbtRecordingDir->setEnabled ( !bIsRecording );
+    tbtClearRecordingDir->setEnabled ( !bIsRecording );
     edtCurrentSessionDir->setEnabled ( bIsRecording );
     lblRecorderStatus->setText ( strRecorderStatus );
     pbtNewRecording->setEnabled ( bIsRecording );

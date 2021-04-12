@@ -396,6 +396,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     UpdateSoundCardFrame();
 
+    // add "Delete Server" to cbxCentralServerAddress context menu
+    cbxCentralServerAddress->setContextMenuPolicy ( Qt::CustomContextMenu );
+    qaDeleteAction = new QAction ( tr ( "Delete Server" ), this );
 
     // Connections -------------------------------------------------------------
     // timers
@@ -466,6 +469,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         static_cast<void (QButtonGroup::*) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
         this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
 
+    // for combobox context menu
+    QObject::connect  ( qaDeleteAction, &QAction::triggered,
+              this, &CClientSettingsDlg::deleteServer );
+
+    QObject::connect ( cbxCentralServerAddress, &CClientSettingsDlg::customContextMenuRequested,
+              this, &CClientSettingsDlg::contextMenuRequest );
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -803,4 +812,28 @@ void CClientSettingsDlg::OnInputBoostChanged()
     // index is zero-based while boost factor must be 1-based:
     pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
     pClient->SetInputBoost ( pSettings->iInputBoost );
+}
+
+void CClientSettingsDlg::contextMenuRequest()
+{
+    // add line to context menu
+    gfContextMenuRequest( cbxCentralServerAddress, qaDeleteAction );
+}
+
+void CClientSettingsDlg::deleteServer ()
+{
+    // delete selected line from cbxCentralServerAddress
+    cbxCentralServerAddress->removeItem ( cbxCentralServerAddress->currentIndex() );
+
+    // Update IP address list
+    int iCount = qMax ( cbxCentralServerAddress->count(), MAX_NUM_SERVER_ADDR_ITEMS );
+    int iIdx;
+    for ( iIdx = 0; iIdx < iCount; iIdx++ )
+    {
+        pSettings->vstrCentralServerAddress[iIdx] = cbxCentralServerAddress->itemText ( iIdx );
+    }
+    while ( iIdx++ < MAX_NUM_SERVER_ADDR_ITEMS )
+    {
+        pSettings->vstrCentralServerAddress[iIdx] = "";
+    }
 }

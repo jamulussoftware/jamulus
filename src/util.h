@@ -491,6 +491,9 @@ public slots:
 signals:
     void LanguageChanged ( QString strLanguage );
 };
+
+/*** Global GUI Function ********************************/
+void    gfContextMenuRequest( QComboBox * pComboBox, QAction * pAction );
 #endif
 
 

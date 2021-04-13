@@ -307,6 +307,7 @@ protected:
     inline void connectChannelSignalsToServerSlots();
 
     void WriteHTMLChannelList();
+    void WriteHTMLServerQuit();
 
     void DecodeReceiveDataBlocks ( const int iStartChanCnt,
                                    const int iStopChanCnt,

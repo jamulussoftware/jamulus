@@ -96,7 +96,7 @@ static opus_int16 *compute_ebands(opus_int32 Fs, int frame_size, int res, int *n
    if (Fs == 400*(opus_int32)frame_size)
    {
       *nbEBands = sizeof(eband5ms)/sizeof(eband5ms[0])-1;
-      eBands = opus_alloc(sizeof(opus_int16)*(*nbEBands+1));
+      eBands = (opus_int16*)opus_alloc(sizeof(opus_int16)*(*nbEBands+1));
       for (i=0;i<*nbEBands+1;i++)
          eBands[i] = eband5ms[i];
       return eBands;
@@ -114,7 +114,7 @@ static opus_int16 *compute_ebands(opus_int32 Fs, int frame_size, int res, int *n
    low = (bark_freq[lin]+res/2)/res;
    high = nBark-lin;
    *nbEBands = low+high;
-   eBands = opus_alloc(sizeof(opus_int16)*(*nbEBands+2));
+   eBands = (opus_int16*)opus_alloc(sizeof(opus_int16)*(*nbEBands+2));
 
    if (eBands==NULL)
       return NULL;
@@ -171,7 +171,7 @@ static void compute_allocation_table(CELTMode *mode)
    int maxBands = sizeof(eband5ms)/sizeof(eband5ms[0])-1;
 
    mode->nbAllocVectors = BITALLOC_SIZE;
-   allocVectors = opus_alloc(sizeof(unsigned char)*(BITALLOC_SIZE*mode->nbEBands));
+   allocVectors = (unsigned char*)opus_alloc(sizeof(unsigned char)*(BITALLOC_SIZE*mode->nbEBands));
    if (allocVectors==NULL)
       return;
 
@@ -305,7 +305,7 @@ CELTMode *opus_custom_mode_create(opus_int32 Fs, int frame_size, int *error)
       return NULL;
    }
 
-   mode = opus_alloc(sizeof(CELTMode));
+   mode = (CELTMode*)opus_alloc(sizeof(CELTMode));
    if (mode==NULL)
       goto failure;
    mode->Fs = Fs;

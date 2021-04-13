@@ -1163,10 +1163,7 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
     if ( !strError.isEmpty() )
     {
         // the sound device setup has a problem, disconnect any active connection
-        if ( pClient->IsRunning() )
-        {
-            Disconnect();
-        }
+        Disconnect();
 
         // show the error message of the device setup
         QMessageBox::critical ( this, APP_NAME, strError, tr ( "Ok" ), nullptr );

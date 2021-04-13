@@ -346,7 +346,8 @@ protected:
     bool bFraSiFactPrefSupported;
     bool bFraSiFactDefSupported;
     bool bFraSiFactSafeSupported;
-    bool bLoadedDriverWithoutErrors;
+
+    QString strDriverLoadErrors;
 
     int iMonoBlockSizeSam;
     int iStereoBlockSizeSam;

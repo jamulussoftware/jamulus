@@ -74,11 +74,14 @@ public:
 
     void UpdateDisplay();
     void UpdateSoundDeviceChannelSelectionFrame();
+    void SetTabIdx( int iIdx ) { iTabIdx = iIdx; }
+    int  iTabIdx;
 
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
     void    UpdateCustomCentralServerComboBox();
+    void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int     iFrameSize,
                                          const QString strAddText = "" );
 
@@ -109,6 +112,14 @@ public slots:
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
+    void OnAliasTextChanged ( const QString& strNewName );
+    void OnInstrumentActivated ( int iCntryListItem );
+    void OnCountryActivated ( int iCntryListItem );
+    void OnCityTextChanged ( const QString& strNewName );
+    void OnSkillActivated ( int iCntryListItem );
+    void OnTabChanged();
+    void OnMakeTabChange ( int iTabIdx );
+    void OnAudioPanValueChanged ( int value );
 
 signals:
     void GUIDesignChanged();

@@ -353,14 +353,19 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pMenu->addMenu ( pEditMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
-    // iOS: change device - Android !(not yet) supported
-    QAction *action = pMenu->addAction ( tr ( "Builtin Mic" ) );
-    connect ( action, SIGNAL ( triggered() ), this, SLOT ( setBuiltinMic() ) );
+#if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
+    // Mobile input  --------------------------------------------------------------
+    QMenu* pMobileMenu = new QMenu ( tr ( "&Mobile input" ), this );
 
-    action = pMenu->addAction ( tr ( "External Dev" ) );
-    connect ( action, SIGNAL ( triggered() ), this, SLOT ( unsetBuiltinMic() ) );
+    pMobileMenu->addAction ( tr ( "Builtin Mic" ), this,
+        SLOT ( setBuiltinMic() ) );
 
-    
+    pMobileMenu->addAction ( tr ( "External Dev" ), this,
+        SLOT ( unsetBuiltinMic() ) );
+      
+    pMenu->addMenu ( pMobileMenu );
+#endif
+      
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 

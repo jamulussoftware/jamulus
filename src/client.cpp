@@ -1298,7 +1298,5 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 void CClient::SetBuiltinMic ( const bool mic )
 {
     // iOS only, Android !(not yet) supported
-#if defined (Q_OS_IOS) || defined (Q_OS_ANDROID)
     Sound.setBuiltinInput( mic );
-#endif
 }

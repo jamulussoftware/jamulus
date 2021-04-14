@@ -379,13 +379,6 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
     const PaDeviceInfo* inDeviceInfo  = Pa_GetDeviceInfo ( inIndex );
     const PaDeviceInfo* outDeviceInfo = Pa_GetDeviceInfo ( outIndex );
 
-    if ( inDeviceInfo->maxInputChannels < NUM_IN_OUT_CHANNELS ||
-         outDeviceInfo->maxOutputChannels < NUM_IN_OUT_CHANNELS )
-    {
-        // FIXME: handle mono devices.
-        return tr ( "Less than 2 channels not supported" );
-    }
-
     if ( deviceStream != NULL )
     {
         Pa_CloseStream ( deviceStream );
@@ -401,6 +394,7 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
     PaWasapiStreamInfo wasapiInputInfo;
     paInputParams.device       = inIndex;
     paInputParams.channelCount = std::min ( NUM_IN_OUT_CHANNELS, inDeviceInfo->maxInputChannels );
+    bMonoInput                 = ( paInputParams.channelCount == 1 );
     paInputParams.sampleFormat = paInt16;
     // NOTE: Setting latency to deviceInfo->defaultLowInputLatency seems like it
     // would be sensible, but gives an overly large buffer size at least in the
@@ -436,6 +430,7 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
     PaWasapiStreamInfo wasapiOutputInfo;
     paOutputParams.device           = outIndex;
     paOutputParams.channelCount     = std::min ( NUM_IN_OUT_CHANNELS, outDeviceInfo->maxOutputChannels );
+    bMonoOutput                     = ( paOutputParams.channelCount == 1 );
     paOutputParams.sampleFormat     = paInt16;
     paOutputParams.suggestedLatency = paInputParams.suggestedLatency;
     if ( apiInfo->type == paASIO )
@@ -546,12 +541,36 @@ int CSound::paStreamCallback ( const void*                     input,
     CVector<int16_t>& vecsAudioData = pSound->vecsAudioData;
 
     // CAPTURE ---------------------------------
-    memcpy ( &vecsAudioData[0], input, sizeof ( int16_t ) * frameCount * NUM_IN_OUT_CHANNELS );
+    if ( pSound->bMonoInput )
+    {
+        const uint16_t* inputFrames = static_cast<const uint16_t*> ( input );
+        for ( unsigned long frame = 0; frame < frameCount; frame++ )
+        {
+            vecsAudioData[NUM_IN_OUT_CHANNELS * frame]     = inputFrames[frame];
+            vecsAudioData[NUM_IN_OUT_CHANNELS * frame + 1] = inputFrames[frame];
+        }
+    }
+    else
+    {
+        memcpy ( &vecsAudioData[0], input, sizeof ( int16_t ) * frameCount * NUM_IN_OUT_CHANNELS );
+    }
 
     pSound->ProcessCallback ( vecsAudioData );
 
     // PLAYBACK ------------------------------------------------------------
-    memcpy ( output, &vecsAudioData[0], sizeof ( int16_t ) * frameCount * NUM_IN_OUT_CHANNELS );
+    if ( pSound->bMonoOutput )
+    {
+        uint16_t* outputFrames = static_cast<uint16_t*> ( output );
+        for ( unsigned long frame = 0; frame < frameCount; frame++ )
+        {
+            // Should this be averaged instead of added?
+            outputFrames[frame] = vecsAudioData[NUM_IN_OUT_CHANNELS * frame] + vecsAudioData[NUM_IN_OUT_CHANNELS * frame + 1];
+        }
+    }
+    else
+    {
+        memcpy ( output, &vecsAudioData[0], sizeof ( int16_t ) * frameCount * NUM_IN_OUT_CHANNELS );
+    }
 
     return paContinue;
 }

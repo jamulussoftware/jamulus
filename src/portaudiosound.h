@@ -104,6 +104,7 @@ protected:
 
     int              wasapiFlag;
     PaDeviceIndex    inDeviceIndex, outDeviceIndex;
+    bool             bMonoInput, bMonoOutput;
     PaStream*        deviceStream;
     CVector<int>     vSelectedInputChannels;
     CVector<int>     vSelectedOutputChannels;

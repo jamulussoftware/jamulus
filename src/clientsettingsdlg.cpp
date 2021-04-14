@@ -35,7 +35,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 {
     setupUi ( this );
 
-#if defined ( Q_OS_IOS ) || defined ( ANDROID )
+#if defined ( Q_OS_IOS ) || defined ( Q_OS_ANDROID )
     // iOS needs menu to close - and Android too
     QMenuBar* pMenu = new QMenuBar ( this );
     QAction *action = pMenu->addAction ( tr ( "&Close" ) );

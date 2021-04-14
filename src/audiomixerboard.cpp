@@ -216,7 +216,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "          border-bottom: 10px transparent;"
             "          border-left:   20px transparent;"
             "          border-right:  -25px transparent; }"
-            "QSlider::groove { image:          url();"
+            "QSlider::groove { image:          url(:/png/fader/res/1x1.png);"
             "                  padding-left:   -34px;"
             "                  padding-top:    -10px;"
             "                  padding-bottom: -15px; }"

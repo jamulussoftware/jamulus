@@ -47,6 +47,7 @@ public:
     virtual void Start();
     virtual void Stop();
     virtual void processBufferList(AudioBufferList*, CSound*);
+    virtual void setBuiltinInput(bool builtinmic);
 
     AudioUnit      audioUnit;
 

@@ -160,7 +160,7 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
     // set the session's sample rate 48000 - the only supported by Jamulus ?
     [sessionInstance setPreferredSampleRate:48000 error:&error];
     [[AVAudioSession sharedInstance] setActive:YES error:&error];
-
+    
     OSStatus status;
     
     // Describe audio component
@@ -240,7 +240,6 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
     // Initialise
     status = AudioUnitInitialize(audioUnit);
     checkStatus(status);
-
     
   return iCoreAudioBufferSizeMono;
 }
@@ -259,4 +258,22 @@ void CSound::Stop()
     checkStatus(err);
     // call base class
     CSoundBase::Stop();
+}
+
+void CSound::setBuiltinInput(bool builtinmic)
+{
+    NSError *error = nil;
+
+    AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
+    //assumming iOS only has max 2 inputs: 0 for builtin mic and 1 for external device
+    if ( builtinmic )
+    {
+        [sessionInstance setPreferredInput:sessionInstance.availableInputs[0] error:&error];
+    }
+    else
+    {
+        unsigned long lastInput = sessionInstance.availableInputs.count - 1;
+        [sessionInstance setPreferredInput:sessionInstance.availableInputs[lastInput] error:&error];
+    }
+    //TODO - error checking
 }

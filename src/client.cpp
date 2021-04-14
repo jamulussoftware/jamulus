@@ -1294,3 +1294,11 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 
     return MathUtils::round ( fTotalBufferDelayMs + iPingTimeMs );
 }
+
+void CClient::SetBuiltinMic ( const BOOL mic )
+{
+    // iOS only, Android not yet supported
+#if defined (Q_OS_IOS)
+    Sound.setBuiltinInput( mic );
+#endif
+}

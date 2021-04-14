@@ -251,4 +251,14 @@ public slots:
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones
+    
+    void setBuiltinMic()
+    {
+        pClient->SetBuiltinMic (true);
+    }
+
+    void unsetBuiltinMic()
+    {
+        pClient->SetBuiltinMic (false);
+    }
 };

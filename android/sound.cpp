@@ -388,8 +388,8 @@ void CSound::setBuiltinInput(bool builtinmic)
     inBuilder.setCallback(this);
     setupCommonStreamParams ( &inBuilder );
   
-    if (builtinmic) inBuilder.setDeviceId(0); //shooting blind - hoping builtin mic id == 0
-    else (!builtinmic) inBuilder.setDeviceId(kUnspecified);
+    if (builtinmic) inBuilder.setDeviceId(1); //shooting blind - hoping builtin mic id == 1
+    else (!builtinmic) inBuilder.setDeviceId(oboe::kUnspecified);
     
 
     result = inBuilder.openManagedStream ( mRecordingStream );
@@ -398,7 +398,7 @@ void CSound::setBuiltinInput(bool builtinmic)
     {
         //closeStream ( mPlayStream );
         //return;
-        inBuilder.setDeviceId(kUnspecified);
+        inBuilder.setDeviceId(oboe::kUnspecified);
         inBuilder.openManagedStream ( mRecordingStream );
     }
 

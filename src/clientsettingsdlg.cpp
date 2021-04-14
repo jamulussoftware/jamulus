@@ -34,15 +34,18 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     pSettings ( pNSetP )
 {
     setupUi ( this );
-
+ 
+#if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
     // iOS needs menu to close - and Android too
     QMenuBar* pMenu = new QMenuBar ( this );
-    QAction *action = pMenu->addAction ( tr ( "&Close" ) );
-    connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
+    QMenu* pCloseMenu = new QMenu ( tr ( "Close" ), this );
 
+    pCloseMenu->addAction ( tr ( "Close" ), this,
+        SLOT ( close() ) );
+    pMenu->addMenu ( pCloseMenu );
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
-
+#endif
 
     // Add help text to controls -----------------------------------------------
     // jitter buffer

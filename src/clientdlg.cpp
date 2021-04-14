@@ -353,7 +353,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pMenu->addMenu ( pEditMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
-#if defined ( Q_OS_IOS ) || defined ( ANDROID )
+#if defined ( Q_OS_IOS ) || defined ( Q_OS_ANDROID )
     // iOS: change device - Android !(not yet) supported
     QAction *action = pMenu->addAction ( tr ( "Builtin Mic" ) );
     connect ( action, SIGNAL ( triggered() ), this, SLOT ( setBuiltinMic() ) );

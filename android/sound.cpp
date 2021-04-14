@@ -373,3 +373,39 @@ void CSound::Stats::log() const
              << ",out_callback_calls: " << out_callback_calls
              << ",ring_overrun: " << ring_overrun;
 }
+
+void CSound::setBuiltinInput(bool builtinmic)
+{
+    closeStream ( mRecordingStream );
+  
+    oboe::AudioStreamBuilder inBuilder;
+
+    // Setup input stream
+    inBuilder.setDirection ( oboe::Direction::Input );
+
+    // Only set callback for the input direction
+    // the output will be handled writing directly on the stream
+    inBuilder.setCallback(this);
+    setupCommonStreamParams ( &inBuilder );
+  
+    if (builtinmic) inBuilder.setDeviceId(0); //shooting blind - hoping builtin mic id == 0
+    else (!builtinmic) inBuilder.setDeviceId(kUnspecified);
+    
+
+    result = inBuilder.openManagedStream ( mRecordingStream );
+
+    if ( result != oboe::Result::OK )
+    {
+        //closeStream ( mPlayStream );
+        //return;
+        inBuilder.setDeviceId(kUnspecified);
+        inBuilder.openManagedStream ( mRecordingStream );
+    }
+
+    mRecordingStream->setBufferSizeInFrames ( iOboeBufferSizeStereo );
+
+    warnIfNotLowLatency ( mRecordingStream, "RecordStream" );
+    printStreamDetails ( mRecordingStream );
+
+    mRecordingStream->requestStart();
+}

@@ -67,11 +67,15 @@ CChatDlg::CChatDlg ( QWidget* parent ) :
         SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
 
     pMenu->addMenu ( pEditMenu );
-#if defined ( Q_OS_IOS ) || defined ( ANDROID )
+#if defined ( Q_OS_IOS ) 
     QAction *action = pMenu->addAction ( tr ( "&Close" ) );
     connect ( action, SIGNAL( triggered() ), this, SLOT ( close() ) );
 #endif
 
+#if defined ( ANDROID )
+    pEditMenu->addAction ( tr ( "&Close" ), this,
+        SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
+#endif
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 

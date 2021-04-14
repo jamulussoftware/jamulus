@@ -389,10 +389,10 @@ void CSound::setBuiltinInput(bool builtinmic)
     setupCommonStreamParams ( &inBuilder );
   
     if (builtinmic) inBuilder.setDeviceId(1); //shooting blind - hoping builtin mic id == 1
-    else (!builtinmic) inBuilder.setDeviceId(oboe::kUnspecified);
+    else inBuilder.setDeviceId(oboe::kUnspecified);
     
 
-    result = inBuilder.openManagedStream ( mRecordingStream );
+    oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
 
     if ( result != oboe::Result::OK )
     {

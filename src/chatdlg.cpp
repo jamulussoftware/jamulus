@@ -72,7 +72,7 @@ CChatDlg::CChatDlg ( QWidget* parent ) :
     connect ( action, SIGNAL( triggered() ), this, SLOT ( close() ) );
 #endif
 
-#if defined ( ANDROID )
+#if defined ( ANDROID ) || defined ( Q_OS_ANDROID )
     pEditMenu->addAction ( tr ( "&Close" ), this,
         SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
 #endif

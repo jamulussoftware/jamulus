@@ -176,6 +176,8 @@ Var bRunApp
     ; Add the Start Menu shortcuts
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"           "$INSTDIR\${APP_EXE}"
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} WASAPI.lnk"    "$INSTDIR\${APP_EXE}" "--inifile %APPDATA%\jamulus\wasapi.ini --api WASAPI"
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} WDM.lnk"       "$INSTDIR\${APP_EXE}" "--inifile %APPDATA%\jamulus\wdm-ks.ini --api WDM-KS"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s" "$INSTDIR\servericon.ico"
     CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Uninstall.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 

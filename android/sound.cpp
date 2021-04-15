@@ -24,6 +24,7 @@
 
 #include "sound.h"
 #include "androiddebug.cpp"
+#include <QMessageBox> //NGOCDH DEBUG
 
 /* Implementation *************************************************************/
 
@@ -116,6 +117,7 @@ void CSound::openStreams()
     warnIfNotLowLatency ( mRecordingStream, "RecordStream" );
     printStreamDetails ( mRecordingStream );
     printStreamDetails ( mPlayStream );
+    QMessageBox::warning ( this, APP_NAME, QString::number ( stream->getDeviceId() ) ); //DEBUG NGOCDH
 }
 
 void CSound::printStreamDetails ( oboe::ManagedStream& stream )

@@ -1194,7 +1194,7 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
     else
     {
       #if defined ( ANDROID ) || defined ( Q_OS_ANDROID )
-        QMessageBox::warning ( this, APP_NAME, QString::number ( pClient->Sound.mRecordingStream->getDeviceId() ) ); //DEBUG NGOCDH
+        QMessageBox::warning ( this, APP_NAME, pClient->Sound.getAvailableDevices() ); //DEBUG NGOCDH
       #endif
     }
 }

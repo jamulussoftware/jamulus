@@ -73,11 +73,6 @@ public:
 /*NGOCDH */
     QString getAvailableDevices()
     {
-        auto sampleRates = OboeAudioIODevice::getDefaultSampleRates();
-
-        inputDevices .add ({ "System Default (Input)",  oboe::kUnspecified, sampleRates, 1 });
-        outputDevices.add ({ "System Default (Output)", oboe::kUnspecified, sampleRates, 2 });
-
         if (! supportsDevicesInfo())
             return;
 
@@ -125,8 +120,79 @@ public:
         for (auto& device : outputDevices)
         {
             strAvailableDevices = strAvailableDevices + "name = " + device.name;
-            strAvailableDevices = strAvailableDevices + ", id = " + String (device.id) + "; ";
+            strAvailableDevices = strAvailableDevices + ", id = " + QString (device.id) + "; ";
         }
+    }
+    
+    bool supportsDevicesInfo() const
+    {
+        static auto result = getAndroidSDKVersion() >= 23;
+        return result;
+    }
+
+    void addDevice (const LocalRef<jobject>& device, JNIEnv* env)
+    {
+        auto deviceClass = LocalRef<jclass> ((jclass) env->FindClass ("android/media/AudioDeviceInfo"));
+
+        jmethodID getProductNameMethod = env->GetMethodID (deviceClass, "getProductName",
+                                                           "()Ljava/lang/CharSequence;");
+
+        jmethodID getTypeMethod          = env->GetMethodID (deviceClass, "getType", "()I");
+        jmethodID getIdMethod            = env->GetMethodID (deviceClass, "getId", "()I");
+        jmethodID getSampleRatesMethod   = env->GetMethodID (deviceClass, "getSampleRates", "()[I");
+        jmethodID getChannelCountsMethod = env->GetMethodID (deviceClass, "getChannelCounts", "()[I");
+        jmethodID isSourceMethod         = env->GetMethodID (deviceClass, "isSource", "()Z");
+
+        auto deviceTypeString = deviceTypeToString (env->CallIntMethod (device, getTypeMethod));
+
+        if (deviceTypeString.isEmpty()) // unknown device
+            return;
+
+        auto name = QString ((jstring) env->CallObjectMethod (device, getProductNameMethod)) + " " + deviceTypeString;
+        auto id = env->CallIntMethod (device, getIdMethod);
+        auto isInput  = env->CallBooleanMethod (device, isSourceMethod);
+        auto& devices = isInput ? inputDevices : outputDevices;
+
+        devices.add ({ name, id, [], [] });
+    }
+
+    static QString deviceTypeToString (int type)
+    {
+        switch (type)
+        {
+            case 0:   return {};
+            case 1:   return "built-in earphone speaker";
+            case 2:   return "built-in speaker";
+            case 3:   return "wired headset";
+            case 4:   return "wired headphones";
+            case 5:   return "line analog";
+            case 6:   return "line digital";
+            case 7:   return "Bluetooth device typically used for telephony";
+            case 8:   return "Bluetooth device supporting the A2DP profile";
+            case 9:   return "HDMI";
+            case 10:  return "HDMI audio return channel";
+            case 11:  return "USB device";
+            case 12:  return "USB accessory";
+            case 13:  return "DOCK";
+            case 14:  return "FM";
+            case 15:  return "built-in microphone";
+            case 16:  return "FM tuner";
+            case 17:  return "TV tuner";
+            case 18:  return "telephony";
+            case 19:  return "auxiliary line-level connectors";
+            case 20:  return "IP";
+            case 21:  return "BUS";
+            case 22:  return "USB headset";
+            case 23:  return "hearing aid";
+            case 24:  return "built-in speaker safe";
+            case 25:  return {};
+            default:  jassertfalse; return {}; // type not supported yet, needs to be added!
+        }
+    }
+    
+    inline LocalRef<jstring> javaString (const QString& s)
+    {
+        return LocalRef<jstring> (getEnv()->NewStringUTF (s.toUtf8()));//(s.toUTF8()));
     }
 /*end of NGOCDH */    
 
@@ -181,7 +247,7 @@ private:
 
     void JNICALL javainitialiseJamulus (JNIEnv* env, jobject /*jclass*/, jobject context)
     {
-        Thread::initialiseJamulusJava (env, context);
+        QThread::initialiseJamulusJava (env, context);
     }
         // step 1
     // this method is called automatically by Java VM
@@ -219,7 +285,7 @@ private:
         return JNI_VERSION_1_6;
     }
 
-    void Thread::initialiseJamulusJava (void* jniEnv, void* context)
+    void QThread::initialiseJamulusJava (void* jniEnv, void* context)
     {
         static CriticalSection cs;
         ScopedLock lock (cs);

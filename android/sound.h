@@ -68,6 +68,7 @@ public:
         std::size_t out_callback_calls;
         std::size_t ring_overrun;
     };
+    oboe::ManagedStream  mRecordingStream; //NGOCDH DEBUG
 
 protected:
     CVector<int16_t>  vecsTmpInputAudioSndCrdStereo;
@@ -88,7 +89,7 @@ private:
 
     void addOutputData(int channel_count);
 
-    oboe::ManagedStream  mRecordingStream;
+    //oboe::ManagedStream  mRecordingStream;
     oboe::ManagedStream  mPlayStream;
 
     // used to reach a state where the input buffer is

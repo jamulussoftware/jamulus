@@ -1191,6 +1191,12 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
         QMessageBox::warning ( this, APP_NAME, tr ( "Your sound card is not working correctly. "
             "Please open the settings dialog and check the device selection and the driver settings." ) );
     }
+    else
+    {
+      #if defined ( ANDROID ) || defined ( Q_OS_ANDROID )
+        QMessageBox::warning ( this, APP_NAME, QString::number ( pClient->Sound.mRecordingStream->getDeviceId() ) ); //DEBUG NGOCDH
+      #endif
+    }
 }
 
 void CClientDlg::OnSoundDeviceChanged ( QString strError )

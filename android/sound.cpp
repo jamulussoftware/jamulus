@@ -388,16 +388,19 @@ void CSound::setBuiltinInput(bool builtinmic)
     inBuilder.setCallback(this);
     setupCommonStreamParams ( &inBuilder );
   
-    if (builtinmic) inBuilder.setDeviceId(-1); //shooting blind - hoping builtin mic id == 1
-    else inBuilder.setDeviceId(oboe::kUnspecified);
-    
-
-    oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
-
-    if ( result != oboe::Result::OK )
+    if (builtinmic) 
     {
-        //closeStream ( mPlayStream );
-        //return;
+        for(int i=1; i< 100; i++)
+        {
+            inBuilder.setDeviceId(i); //shooting blind - hoping builtin mic id == 1
+
+            oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+            //if ( result == oboe::Result::OK && mRecordingStream->getDeviceId()==i ) break;
+            if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
+        }
+    }
+    else
+    {
         inBuilder.setDeviceId(oboe::kUnspecified);
         inBuilder.openManagedStream ( mRecordingStream );
     }

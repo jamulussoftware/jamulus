@@ -390,7 +390,7 @@ void CSound::setBuiltinInput(bool builtinmic)
   
     if (builtinmic) 
     {
-        int i;
+        /*int i;
         for(i=1; i< 100; i++)
         {
             inBuilder.setDeviceId(i); //shooting blind - trying positive numbers
@@ -407,7 +407,14 @@ void CSound::setBuiltinInput(bool builtinmic)
                 oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
                 if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
                 //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
-            }
+            }*/
+        inBuilder.setDeviceId(7);
+        oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+        if ( result != oboe::Result::OK )
+        {
+            inBuilder.setDeviceId(oboe::kUnspecified);
+            oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+        }
     }
     else
     {

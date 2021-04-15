@@ -286,8 +286,6 @@ public:
     CSound* GetSound() { return &Sound; }
 #endif
 
-    CSound                  Sound; //NGOCDH DEBUG - check device id
-
 protected:
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
@@ -329,7 +327,7 @@ protected:
     CVector<unsigned char>  vecCeltData;
 
     CHighPrioSocket         Socket;
-    //CSound                  Sound; //DEBUG move to public 
+    CSound                  Sound; 
     CStereoSignalLevelMeter SignalLevelMeter;
 
     CVector<uint8_t>        vecbyNetwData;

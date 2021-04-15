@@ -71,7 +71,57 @@ public:
     };
 
 /*NGOCDH */
-    DECLARE_JNI_CLASS (AndroidContext, "android/content/Context")
+#define CREATE_JNI_METHOD(methodID, stringName, params)          methodID = resolveMethod (env, stringName, params);
+#define CREATE_JNI_STATICMETHOD(methodID, stringName, params)    methodID = resolveStaticMethod (env, stringName, params);
+#define CREATE_JNI_FIELD(fieldID, stringName, signature)         fieldID  = resolveField (env, stringName, signature);
+#define CREATE_JNI_STATICFIELD(fieldID, stringName, signature)   fieldID  = resolveStaticField (env, stringName, signature);
+#define CREATE_JNI_CALLBACK(callbackName, stringName, signature) callbacks.add ({stringName, signature, (void*) callbackName});
+#define DECLARE_JNI_METHOD(methodID, stringName, params)         jmethodID methodID;
+#define DECLARE_JNI_FIELD(fieldID, stringName, signature)        jfieldID  fieldID;
+#define DECLARE_JNI_CALLBACK(fieldID, stringName, signature)
+
+#define DECLARE_JNI_CLASS_WITH_BYTECODE(CppClassName, javaPath, minSDK, byteCodeData, byteCodeSize) \
+    class CppClassName ## _Class   : public JNIClassBase \
+    { \
+    public: \
+        CppClassName ## _Class() : JNIClassBase (javaPath, minSDK, byteCodeData, byteCodeSize) {} \
+    \
+        void initialiseFields (JNIEnv* env) \
+        { \
+            Array<JNINativeMethod> callbacks; \
+            JNI_CLASS_MEMBERS (CREATE_JNI_METHOD, CREATE_JNI_STATICMETHOD, CREATE_JNI_FIELD, CREATE_JNI_STATICFIELD, CREATE_JNI_CALLBACK); \
+            resolveCallbacks (env, callbacks); \
+        } \
+    \
+        JNI_CLASS_MEMBERS (DECLARE_JNI_METHOD, DECLARE_JNI_METHOD, DECLARE_JNI_FIELD, DECLARE_JNI_FIELD, DECLARE_JNI_CALLBACK) \
+    }; \
+    static CppClassName ## _Class CppClassName;
+
+//==============================================================================
+#define DECLARE_JNI_CLASS_WITH_MIN_SDK(CppClassName, javaPath, minSDK) \
+    DECLARE_JNI_CLASS_WITH_BYTECODE (CppClassName, javaPath, minSDK, nullptr, 0)
+
+//==============================================================================
+#define DECLARE_JNI_CLASS(CppClassName, javaPath) \
+    DECLARE_JNI_CLASS_WITH_MIN_SDK (CppClassName, javaPath, 16)
+
+//==============================================================================
+#define JNI_CLASS_MEMBERS(METHOD, STATICMETHOD, FIELD, STATICFIELD, CALLBACK) \
+ METHOD (getAssets,                            "getAssets",                       "()Landroid/content/res/AssetManager;") \
+ METHOD (getSystemService,                     "getSystemService",                "(Ljava/lang/String;)Ljava/lang/Object;") \
+ METHOD (getPackageManager,                    "getPackageManager",               "()Landroid/content/pm/PackageManager;") \
+ METHOD (getPackageName,                       "getPackageName",                  "()Ljava/lang/String;") \
+ METHOD (getResources,                         "getResources",                    "()Landroid/content/res/Resources;") \
+ METHOD (bindService,                          "bindService",                     "(Landroid/content/Intent;Landroid/content/ServiceConnection;I)Z") \
+ METHOD (unbindService,                        "unbindService",                   "(Landroid/content/ServiceConnection;)V") \
+ METHOD (startActivity,                        "startActivity",                   "(Landroid/content/Intent;)V") \
+ METHOD (getContentResolver,                   "getContentResolver",              "()Landroid/content/ContentResolver;") \
+ METHOD (getApplicationContext,                "getApplicationContext",           "()Landroid/content/Context;") \
+ METHOD (getApplicationInfo,                   "getApplicationInfo",              "()Landroid/content/pm/ApplicationInfo;") \
+ METHOD (checkCallingOrSelfPermission,         "checkCallingOrSelfPermission",    "(Ljava/lang/String;)I") \
+ METHOD (getCacheDir,                          "getCacheDir",                     "()Ljava/io/File;")
+
+    DECLARE_JNI_CLASS (AndroidContext, "android/content/Context");
     LocalRef<jobject> getAppContext() noexcept
     {
         auto* env = getEnv();
@@ -80,7 +130,7 @@ public:
         // You did not call Thread::initialiseJUCE which must be called at least once in your apk
         // before using any JUCE APIs. The Projucer will automatically generate java code
         // which will invoke Thread::initialiseJUCE for you.
-        jassert (env != nullptr && context != nullptr);
+        //jassert (env != nullptr && context != nullptr);
 
         if (context == nullptr)
             return LocalRef<jobject>();
@@ -94,7 +144,7 @@ public:
             return LocalRef<jobject> (env->NewLocalRef (context));
 
         return applicationContext;
-    }
+    };
 
 
 
@@ -136,7 +186,7 @@ public:
 
         
         return strAvailableDevices;
-    }
+    };
     
 /*end of NGOCDH */    
 
@@ -187,12 +237,12 @@ private:
         // which will invoke Thread::initialiseJUCE for you.
         //jassertfalse;
         return nullptr;
-    }
+    };
 
-    void JNICALL javainitialiseJamulus (JNIEnv* env, jobject /*jclass*/, jobject context)
-    {
-        QThread::initialiseJamulusJava (env, context);
-    }
+    //void JNICALL javainitialiseJamulus (JNIEnv* env, jobject /*jclass*/, jobject context)
+    //{
+    //    QThread::initialiseJamulusJava (env, context);
+    //}
         // step 1
     // this method is called automatically by Java VM
     // after the .so file is loaded
@@ -227,9 +277,9 @@ private:
         JNIClassBase::initialiseAllClasses (env);
 
         return JNI_VERSION_1_6;
-    }
+    };
 
-    void QThread::initialiseJamulusJava (void* jniEnv, void* context)
+    /*void QThread::initialiseJamulusJava (void* jniEnv, void* context)
     {
         static CriticalSection cs;
         ScopedLock lock (cs);
@@ -249,9 +299,12 @@ private:
             androidJNIJavaVM = javaVM;
         }
 
-    }
+    }*/
     
-    
+    inline LocalRef<jstring> javaString (const QString& s)
+    {
+        return LocalRef<jstring> (getEnv()->NewStringUTF (s.toUtf8()));//(s.toUTF8()));
+    };
 
     QString getDeviceInfo (const LocalRef<jobject>& device, JNIEnv* env)
     {
@@ -269,15 +322,15 @@ private:
         auto deviceTypeString = deviceTypeToString (env->CallIntMethod (device, getTypeMethod));
 
         if (deviceTypeString.isEmpty()) // unknown device
-            return;
+            return "";
 
         auto name = QString ((jstring) env->CallObjectMethod (device, getProductNameMethod)) + " " + deviceTypeString;
         auto id = env->CallIntMethod (device, getIdMethod);
         auto isInput  = env->CallBooleanMethod (device, isSourceMethod);
-        auto& devices = isInput ? inputDevices : outputDevices;
+        //auto& devices = isInput ? inputDevices : outputDevices;
 
         return (isInput ? QString("In: "):QString("Out: ")) + name + " - " + id + "; ";
-    }
+    };
 
     static QString deviceTypeToString (int type)
     {
@@ -311,15 +364,50 @@ private:
             case 25:  return {};
             default:  return {};//jassertfalse; return {}; // type not supported yet, needs to be added!
         }
-    }
-    
-    inline LocalRef<jstring> javaString (const QString& s)
-    {
-        return LocalRef<jstring> (getEnv()->NewStringUTF (s.toUtf8()));//(s.toUTF8()));
-    }
+    };
     
 };
 
+class JNIClassBase
+{
+public:
+    explicit JNIClassBase (const char* classPath, int minSDK, const void* byteCode, size_t byteCodeSize);
+    virtual ~JNIClassBase();
+
+    inline operator jclass() const noexcept  { return classRef; }
+
+    static void initialiseAllClasses (JNIEnv*);
+    static void releaseAllClasses (JNIEnv*);
+
+    inline const char* getClassPath() const noexcept { return classPath; }
+
+protected:
+    virtual void initialiseFields (JNIEnv*) = 0;
+
+    jmethodID resolveMethod (JNIEnv*, const char* methodName, const char* params);
+    jmethodID resolveStaticMethod (JNIEnv*, const char* methodName, const char* params);
+    jfieldID resolveField (JNIEnv*, const char* fieldName, const char* signature);
+    jfieldID resolveStaticField (JNIEnv*, const char* fieldName, const char* signature);
+    void resolveCallbacks (JNIEnv*, const Array<JNINativeMethod>&);
+
+private:
+    friend struct SystemJavaClassComparator;
+
+    const char* const classPath;
+    const void* byteCode;
+    size_t byteCodeSize;
+
+    int minSDK;
+    jclass classRef = nullptr;
+
+    static Array<JNIClassBase*>& getClasses();
+    void initialise (JNIEnv*);
+    void release (JNIEnv*);
+    void tryLoadingClassWithClassLoader (JNIEnv* env, jobject classLoader);
+
+};
+
+    
 template <typename JavaType>
 class LocalRef
 {

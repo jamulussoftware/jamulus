@@ -388,7 +388,7 @@ void CSound::setBuiltinInput(bool builtinmic)
     inBuilder.setCallback(this);
     setupCommonStreamParams ( &inBuilder );
   
-    if (builtinmic) inBuilder.setDeviceId(1); //shooting blind - hoping builtin mic id == 1
+    if (builtinmic) inBuilder.setDeviceId(-1); //shooting blind - hoping builtin mic id == 1
     else inBuilder.setDeviceId(oboe::kUnspecified);
     
 

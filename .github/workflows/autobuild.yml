@@ -100,37 +100,6 @@ jobs:
              cmd3_postbuild:        "./autobuild/android/autobuild_apk_3_copy_files.sh"
              uses_codeql:           true
 
-           - config_name:           Linux (artifacts+codeQL)
-             target_os:             linux
-             building_on_os:        ubuntu-18.04
-             cmd1_prebuild:         "sh ./autobuild/linux/autobuild_deb_1_prepare.sh" # this step needs sh instead of bash for permissions
-             cmd2_build:            "./autobuild/linux/autobuild_deb_2_build.sh"
-             cmd3_postbuild:        "./autobuild/linux/autobuild_deb_3_copy_files.sh"
-             uses_codeql:           true
-
-           - config_name:           MacOS (codeQL)
-             target_os:             macos
-             building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh"
-             cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
-             cmd3_postbuild:        false
-             uses_codeql:           true
-
-           - config_name:           MacOS (artifacts)
-             target_os:             macos
-             building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
-             cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
-             uses_codeql:           false
-
-           - config_name:           Windows (artifact+codeQL)
-             target_os:             windows
-             building_on_os:        windows-latest
-             cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1
-             cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
-             cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
-             uses_codeql:           true
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:

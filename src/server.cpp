@@ -723,6 +723,11 @@ void CServer::OnAboutToQuit()
     {
         UnregisterSlaveServer();
     }
+
+    if ( bWriteStatusHTMLFile )
+    {
+        WriteHTMLServerQuit();
+    }
 }
 
 void CServer::OnHandledSignal ( int sigNum )
@@ -1744,6 +1749,21 @@ void CServer::WriteHTMLChannelList()
             streamFileOut << "</ul>\n";
         }
     }
+}
+
+void CServer::WriteHTMLServerQuit()
+{
+    // prepare file and stream
+    QFile serverFileListFile ( strServerHTMLFileListName );
+
+    if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
+    {
+        return;
+    }
+
+    QTextStream streamFileOut ( &serverFileListFile );
+    streamFileOut << "  Server terminated\n";
+    serverFileListFile.close();
 }
 
 void CServer::customEvent ( QEvent* pEvent )

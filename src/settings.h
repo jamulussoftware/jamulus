@@ -153,11 +153,9 @@ public:
         eCentralServerAddressType   ( AT_DEFAULT ),
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
-        vecWindowPosProfile         ( ), // empty array
         vecWindowPosConnect         ( ), // empty array
         bWindowWasShownSettings     ( false ),
         bWindowWasShownChat         ( false ),
-        bWindowWasShownProfile      ( false ),
         bWindowWasShownConnect      ( false ),
         pClient                     ( pNCliP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
@@ -184,11 +182,9 @@ public:
     // window position/state settings
     QByteArray vecWindowPosSettings;
     QByteArray vecWindowPosChat;
-    QByteArray vecWindowPosProfile;
     QByteArray vecWindowPosConnect;
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
-    bool       bWindowWasShownProfile;
     bool       bWindowWasShownConnect;
 
 protected:

@@ -47,6 +47,24 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
 
     // Add help text to controls -----------------------------------------------
+    // local audio input fader
+    QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
+        tr ( "Controls the relative levels of the left and right local audio "
+        "channels. For a mono signal it acts as a pan between the two channels."
+        "For example, if a microphone is connected to "
+        "the right input channel and an instrument is connected to the left "
+        "input channel which is much louder than the microphone, move the "
+        "audio fader in a direction where the label above the fader shows " ) +
+        "<i>" + tr ( "L" ) + " -x</i>" + tr ( ", where" ) + " <i>x</i> " +
+        tr ( "is the current attenuation indicator." );
+
+    lblAudioPan->setWhatsThis      ( strAudFader );
+    lblAudioPanValue->setWhatsThis ( strAudFader );
+    sldAudioPan->setWhatsThis      ( strAudFader );
+
+    sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
+
+
     // jitter buffer
     QString strJitterBufferSize = "<b>" + tr ( "Jitter Buffer Size" ) + ":</b> " + tr (
         "The jitter buffer compensates for network and sound card timing jitters. The "
@@ -325,6 +343,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     butDriverSetup->hide();
 #endif
 
+    // init audio in fader
+    sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
+    sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
+    UpdateAudioFaderSlider();
+
     // init delay and other information controls
     ledNetw->Reset();
     ledOverallDelay->Reset();
@@ -406,6 +429,124 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 
     UpdateSoundCardFrame();
 
+    // Add help text to controls -----------------------------------------------
+    // Musician Profile
+    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
+         tr ( "Write your name or an alias here so the other musicians you want to "
+        "play with know who you are. You may also add a picture of the instrument "
+        "you play and a flag of the country you are located in. "
+        "Your city and skill level playing your instrument may also be added." ) +
+        "<br>" + tr ( "What you set here will appear at your fader on the mixer "
+        "board when you are connected to a Jamulus server. This tag will "
+        "also be shown at each client which is connected to the same server as "
+        "you." );
+
+    pedtAlias->setWhatsThis ( strFaderTag );
+    pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
+    pcbxInstrument->setWhatsThis ( strFaderTag );
+    pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
+    pcbxCountry->setWhatsThis ( strFaderTag );
+    pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
+    pedtCity->setWhatsThis ( strFaderTag );
+    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
+    pcbxSkill->setWhatsThis ( strFaderTag );
+    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
+
+    // Instrument pictures combo box -------------------------------------------
+    // add an entry for all known instruments
+    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
+    {
+        // create a combo box item with text, image and background color
+        QColor InstrColor;
+
+        pcbxInstrument->addItem ( QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
+                                  CInstPictures::GetName ( iCurInst ),
+                                  iCurInst );
+
+        switch ( CInstPictures::GetCategory ( iCurInst ) )
+        {
+        case CInstPictures::IC_OTHER_INSTRUMENT:      InstrColor = QColor ( Qt::blue );   break;
+        case CInstPictures::IC_WIND_INSTRUMENT:       InstrColor = QColor ( Qt::green );  break;
+        case CInstPictures::IC_STRING_INSTRUMENT:     InstrColor = QColor ( Qt::red );    break;
+        case CInstPictures::IC_PLUCKING_INSTRUMENT:   InstrColor = QColor ( Qt::cyan );   break;
+        case CInstPictures::IC_PERCUSSION_INSTRUMENT: InstrColor = QColor ( Qt::white );  break;
+        case CInstPictures::IC_KEYBOARD_INSTRUMENT:   InstrColor = QColor ( Qt::yellow ); break;
+        case CInstPictures::IC_MULTIPLE_INSTRUMENT:   InstrColor = QColor ( Qt::black );  break;
+        }
+
+        InstrColor.setAlpha ( 10 );
+        pcbxInstrument->setItemData ( iCurInst, InstrColor, Qt::BackgroundRole );
+    }
+
+    // sort the items in alphabetical order
+    pcbxInstrument->model()->sort ( 0 );
+
+    // Country flag icons combo box --------------------------------------------
+    // add an entry for all known country flags
+    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
+          iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
+    {
+        // exclude the "None" entry since it is added after the sorting
+        if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
+        {
+            // get current country enum
+            QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
+
+            // try to load icon from resource file name
+            QIcon CurFlagIcon;
+            CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
+
+            // only add the entry if a flag is available
+            if ( !CurFlagIcon.isNull() )
+            {
+                // create a combo box item with text and image
+                pcbxCountry->addItem ( QIcon ( CurFlagIcon ),
+                                       QLocale::countryToString ( eCountry ),
+                                       iCurCntry );
+            }
+        }
+    }
+
+    // sort country combo box items in alphabetical order
+    pcbxCountry->model()->sort ( 0, Qt::AscendingOrder );
+
+    // the "None" country gets a special icon and is the very first item
+    QIcon FlagNoneIcon;
+    FlagNoneIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
+    pcbxCountry->insertItem ( 0,
+                              FlagNoneIcon,
+                              tr ( "None" ),
+                              static_cast<int> ( QLocale::AnyCountry ) );
+
+
+    // Skill level combo box ---------------------------------------------------
+    // create a pixmap showing the skill level colors
+    QPixmap SLPixmap ( 16, 11 ); // same size as the country flags
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_NOT_SET,
+                                      RGBCOL_G_SL_NOT_SET,
+                                      RGBCOL_B_SL_NOT_SET ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "None" ), SL_NOT_SET );
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER,
+                                      RGBCOL_G_SL_BEGINNER,
+                                      RGBCOL_B_SL_BEGINNER ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Beginner" ), SL_BEGINNER );
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE,
+                                      RGBCOL_G_SL_INTERMEDIATE,
+                                      RGBCOL_B_SL_INTERMEDIATE ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Intermediate" ), SL_INTERMEDIATE );
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL,
+                                      RGBCOL_G_SL_SL_PROFESSIONAL,
+                                      RGBCOL_B_SL_SL_PROFESSIONAL ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Expert" ), SL_PROFESSIONAL );
+
 
     // Connections -------------------------------------------------------------
     // timers
@@ -472,10 +613,34 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         this, &CClientSettingsDlg::OnDriverSetupClicked );
 
     // misc
+    // sliders
+    QObject::connect ( sldAudioPan, &QSlider::valueChanged,
+        this, &CClientSettingsDlg::OnAudioPanValueChanged );
+
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
         static_cast<void (QButtonGroup::*) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
         this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
 
+    // Musician Profile
+    QObject::connect ( pedtAlias, &QLineEdit::textChanged,
+        this, &CClientSettingsDlg::OnAliasTextChanged );
+
+    QObject::connect ( pcbxInstrument, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnInstrumentActivated );
+
+    QObject::connect ( pcbxCountry, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnCountryActivated );
+
+    QObject::connect ( pedtCity, &QLineEdit::textChanged,
+        this, &CClientSettingsDlg::OnCityTextChanged );
+
+    QObject::connect ( pcbxSkill, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnSkillActivated );
+
+    QObject::connect ( tabSettings, &QTabWidget::currentChanged,
+        this, &CClientSettingsDlg::OnTabChanged );
+
+    tabSettings->setCurrentIndex ( iTabIdx );
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -486,6 +651,26 @@ void CClientSettingsDlg::showEvent ( QShowEvent* )
 {
     UpdateDisplay();
     UpdateCustomCentralServerComboBox();
+
+    // set the name
+    pedtAlias->setText ( pClient->ChannelInfo.strName );
+
+    // select current instrument
+    pcbxInstrument->setCurrentIndex (
+        pcbxInstrument->findData ( pClient->ChannelInfo.iInstrument ) );
+
+    // select current country
+    pcbxCountry->setCurrentIndex (
+        pcbxCountry->findData (
+        static_cast<int> ( pClient->ChannelInfo.eCountry ) ) );
+
+    // set the city
+    pedtCity->setText ( pClient->ChannelInfo.strCity );
+
+    // select the skill level
+    pcbxSkill->setCurrentIndex (
+        pcbxSkill->findData (
+        static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
 }
 
 void CClientSettingsDlg::UpdateJitterBufferFrame()
@@ -814,3 +999,117 @@ void CClientSettingsDlg::OnInputBoostChanged()
     pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
     pClient->SetInputBoost ( pSettings->iInputBoost );
 }
+
+void CClientSettingsDlg::OnAliasTextChanged ( const QString& strNewName )
+{
+    // check length
+    if ( strNewName.length() <= MAX_LEN_FADER_TAG )
+    {
+        // refresh internal name parameter
+        pClient->ChannelInfo.strName = strNewName;
+
+        // update channel info at the server
+        pClient->SetRemoteInfo();
+    }
+    else
+    {
+        // text is too long, update control with shortened text
+        pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
+    }
+}
+
+void CClientSettingsDlg::OnInstrumentActivated ( int iCntryListItem )
+{
+    // set the new value in the data base
+    pClient->ChannelInfo.iInstrument =
+        pcbxInstrument->itemData ( iCntryListItem ).toInt();
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
+}
+
+void CClientSettingsDlg::OnCountryActivated ( int iCntryListItem )
+{
+    // set the new value in the data base
+    pClient->ChannelInfo.eCountry = static_cast<QLocale::Country> (
+        pcbxCountry->itemData ( iCntryListItem ).toInt() );
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
+}
+
+void CClientSettingsDlg::OnCityTextChanged ( const QString& strNewCity )
+{
+    // check length
+    if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
+    {
+        // refresh internal name parameter
+        pClient->ChannelInfo.strCity = strNewCity;
+
+        // update channel info at the server
+        pClient->SetRemoteInfo();
+    }
+    else
+    {
+        // text is too long, update control with shortened text
+        pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
+    }
+}
+
+void CClientSettingsDlg::OnSkillActivated ( int iCntryListItem )
+{
+    // set the new value in the data base
+    pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> (
+        pcbxSkill->itemData ( iCntryListItem ).toInt() );
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
+}
+
+void CClientSettingsDlg::OnMakeTabChange ( int iTab )
+{
+    tabSettings->setCurrentIndex ( iTab );
+
+    iTabIdx = iTab;
+}
+
+void CClientSettingsDlg::OnTabChanged ( void )
+{
+    iTabIdx = tabSettings->currentIndex();
+}
+
+void CClientSettingsDlg::UpdateAudioFaderSlider()
+{
+    // update slider and label of audio fader
+    const int iCurAudInFader = pClient->GetAudioInFader();
+    sldAudioPan->setValue ( iCurAudInFader );
+
+    // show in label the center position and what channel is
+    // attenuated
+    if ( iCurAudInFader == AUD_FADER_IN_MIDDLE )
+    {
+        lblAudioPanValue->setText ( tr ( "Center" ) );
+    }
+    else
+    {
+        if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
+        {
+            // attenuation on right channel
+            lblAudioPanValue->setText ( tr ( "L" ) + " -" +
+                QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
+        }
+        else
+        {
+            // attenuation on left channel
+            lblAudioPanValue->setText ( tr ( "R" ) + " -" +
+                QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
+        }
+    }
+}
+
+void CClientSettingsDlg::OnAudioPanValueChanged ( int value )
+{
+    pClient->SetAudioInFader ( value );
+    UpdateAudioFaderSlider();
+}
+

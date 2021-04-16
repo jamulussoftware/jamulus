@@ -261,4 +261,8 @@ public slots:
     {
         pClient->SetBuiltinMic (false);
     }
+    
+signals:
+    void SendTabChange ( int iTabIdx );
+
 };

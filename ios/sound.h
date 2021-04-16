@@ -29,7 +29,7 @@
 #include "soundbase.h"
 #include "global.h"
 
-#import <Foundation/Foundation.h>
+//#import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
 class CSound : public CSoundBase
@@ -57,7 +57,6 @@ public:
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
     
-    BOOL           _audioChainIsBeingReconstructed;
 
 protected:
     MIDIPortRef    midiInPortRef;

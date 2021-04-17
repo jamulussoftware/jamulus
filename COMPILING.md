@@ -31,7 +31,7 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 * qt5-qtdeclarative-devel
 * jack-audio-connection-kit-dbus
-* libqt5concurrent5
+* libqt5concurrent5 (qt5-linguist for Fedora 33)
 * jack-audio-connection-kit-devel
 
 #### For all desktop distributions
@@ -43,7 +43,7 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 ```
 make distclean
-qmake
+qmake ;# qmake-qt5 on Fedora 33
 make
 sudo make install
 ```

@@ -218,6 +218,9 @@ public:
         return iAvData;
     }
 
+    bool isFull() const { return eBufState == BS_FULL; }
+    bool isEmpty() const { return eBufState == BS_EMPTY; }
+
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
 

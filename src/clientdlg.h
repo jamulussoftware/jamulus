@@ -195,6 +195,9 @@ public slots:
     void OnReverbSelRClicked()
         { pClient->SetReverbOnLeftChan ( false ); }
 
+    void OnFeedbackDetectionChanged ( int state )
+        { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
+
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );

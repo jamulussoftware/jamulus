@@ -1054,11 +1054,8 @@ void CClientDlg::OnTimerSigMet()
         msgbox.setDefaultButton ( QMessageBox::Ok );
         msgbox.setCheckBox ( chb );
 
-        QObject::connect( chb, &QCheckBox::stateChanged, [this](int state)
-            {
-                ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked );
-            }
-        );
+        QObject::connect ( chb, &QCheckBox::stateChanged,
+            this, &CClientDlg::OnFeedbackDetectionChanged );
 
         msgbox.exec();
     }

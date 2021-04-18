@@ -58,6 +58,8 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSi
     veciTimeOutIntervals[1] = 1;
     veciTimeOutIntervals[2] = 0;
 
+    Timer.setTimerType ( Qt::PreciseTimer );
+
     // connect timer timeout signal
     QObject::connect ( &Timer, &QTimer::timeout,
         this, &CHighPrecisionTimer::OnTimer );

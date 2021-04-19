@@ -387,7 +387,7 @@ void CSound::setBuiltinInput(bool builtinmic)
     // the output will be handled writing directly on the stream
     inBuilder.setCallback(this);
     setupCommonStreamParams ( &inBuilder );
-    if ( inBuilder.isAAudioSupported() ) inBuilder.setAudioApi( AudioApi::AAudio );
+    if ( inBuilder.isAAudioSupported() ) inBuilder.setAudioApi( oboe::AudioApi::AAudio );
   
     if (builtinmic) 
     {
@@ -415,7 +415,7 @@ void CSound::setBuiltinInput(bool builtinmic)
         if ( result != oboe::Result::OK )
         {
             inBuilder.setDeviceId(oboe::kUnspecified);
-            oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+            result = inBuilder.openManagedStream ( mRecordingStream );
         }
     }
     else

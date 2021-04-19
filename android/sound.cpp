@@ -391,7 +391,7 @@ void CSound::setBuiltinInput(bool builtinmic)
   
     if (builtinmic) 
     {
-        oboe::Result result;
+        /*oboe::Result result;
         int i;
         for(i=1; i< 100; i++)
         {
@@ -400,7 +400,7 @@ void CSound::setBuiltinInput(bool builtinmic)
             result = inBuilder.openManagedStream ( mRecordingStream );
             if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
             //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
-        }
+        }*/
         /*if( mRecordingStream->getDeviceId() != i )
             for(i=-1; i> -100; i--)
             {
@@ -410,11 +410,11 @@ void CSound::setBuiltinInput(bool builtinmic)
                 if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
                 //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
             }*/
-        //inBuilder.setDeviceId(9);
-        //oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+        inBuilder.setDeviceId(9);
+        oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
         if ( result != oboe::Result::OK )
         {
-            inBuilder.setDeviceId(oboe::kUnspecified);
+            inBuilder.setDeviceId( oboe::kUnspecified );
             result = inBuilder.openManagedStream ( mRecordingStream );
         }
     }

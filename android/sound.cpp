@@ -387,29 +387,31 @@ void CSound::setBuiltinInput(bool builtinmic)
     // the output will be handled writing directly on the stream
     inBuilder.setCallback(this);
     setupCommonStreamParams ( &inBuilder );
+    if ( inBuilder.isAAudioSupported() ) inBuilder.setAudioApi( AudioApi::AAudio );
   
     if (builtinmic) 
     {
-        /*int i;
+        oboe::Result result;
+        int i;
         for(i=1; i< 100; i++)
         {
             inBuilder.setDeviceId(i); //shooting blind - trying positive numbers
 
-            oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+            result = inBuilder.openManagedStream ( mRecordingStream );
             if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
             //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
         }
-        if( mRecordingStream->getDeviceId() != i )
+        /*if( mRecordingStream->getDeviceId() != i )
             for(i=-1; i> -100; i--)
             {
                 inBuilder.setDeviceId(i); //shooting blind - negative now
 
-                oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+                result = inBuilder.openManagedStream ( mRecordingStream );
                 if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
                 //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
             }*/
-        inBuilder.setDeviceId(9);
-        oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+        //inBuilder.setDeviceId(9);
+        //oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
         if ( result != oboe::Result::OK )
         {
             inBuilder.setDeviceId(oboe::kUnspecified);

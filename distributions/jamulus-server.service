@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=jamulus
-ExecStart=/bin/sh -c '/usr/bin/jamulus -s -n -l /var/log/jamulus -e jamulus.fischvolk.de -g -o "$(uname -n);;"'
+ExecStart=/bin/sh -c 'exec /usr/bin/jamulus -s -n -l /var/log/jamulus -e anygenre3.jamulus.io -g -o "$(uname -n);;"'
 
 [Install]
 WantedBy=multi-user.target

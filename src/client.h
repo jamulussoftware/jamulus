@@ -182,7 +182,11 @@ public:
     QString TryLoadAnyDev();
     QString SetSndCrdDev ( const QString strNewDev );
     QString GetSndCrdDev() { return Sound.GetDev(); }
-    void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
+    void    OpenSndCrdDriverSetup()
+    {
+        if ( !GetSndCrdDev().isEmpty() )
+            Sound.OpenDriverSetup();
+    }
 
     // sound card channel selection
     int     GetSndCrdNumInputChannels() { return Sound.GetNumInputChannels(); }

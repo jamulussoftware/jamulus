@@ -97,8 +97,14 @@ QString CSoundBase::SetDev ( const QString strDevName )
 {
     QMutexLocker locker ( &MutexDevProperties );
 
-    strCurDevName = strDevName; // Update current device, even if loading fails.
+    if ( !strCurDevName.isEmpty() )
+    {
+        // a device was already been initialized and is used, first clean up
+        // driver
+        UnloadCurrentDriver();
+    }
 
+    strCurDevName = strDevName; // Update current device, even if loading fails.
     return LoadAndInitializeDriver ( strDevName, false );
 }
 
@@ -106,32 +112,26 @@ QString CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSe
 {
     QVector<QString> vsErrorList;
 
-    // load and initialize first valid ASIO driver
-    bool bValidDriverDetected = false;
-    int  iDriverCnt           = 0;
-
     // try all available drivers in the system ("lNumDevs" devices)
-    while ( !bValidDriverDetected && ( iDriverCnt < lNumDevs ) )
+    for ( int iDriverCnt = 0; iDriverCnt < lNumDevs; iDriverCnt++ )
     {
+        if ( !strCurDevName.isEmpty() )
+        {
+            UnloadCurrentDriver();
+        }
+
         // try to load and initialize current driver, store error message
-        const QString strCurError = LoadAndInitializeDriver ( GetDeviceName ( iDriverCnt ), bOpenDriverSetup );
+        strCurDevName             = GetDeviceName ( iDriverCnt );
+        const QString strCurError = LoadAndInitializeDriver ( strCurDevName, bOpenDriverSetup );
 
         vsErrorList.append ( strCurError );
 
         if ( strCurError.isEmpty() )
         {
-            // initialization was successful
-            bValidDriverDetected = true;
-
-            // store ID of selected driver
-            strCurDevName = GetDeviceName ( iDriverCnt );
-
             // empty error list shows that init was successful
             vsErrorList.clear();
+            break;
         }
-
-        // try next driver
-        iDriverCnt++;
     }
 
     if ( !vsErrorList.isEmpty() )
@@ -148,6 +148,7 @@ QString CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSe
         }
         sErrorMessage += "</ul>";
 
+        strCurDevName = ""; // clear device selection.
         return sErrorMessage;
     }
 

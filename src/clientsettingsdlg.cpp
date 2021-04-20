@@ -844,7 +844,9 @@ void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
         cbxSoundcard->addItem ( strDevName );
     }
 
-    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+    const QString& sSndCrdName = pClient->GetSndCrdDev();
+    cbxSoundcard->setCurrentText ( sSndCrdName );
+    butDriverSetup->setEnabled ( !sSndCrdName.isEmpty() );
 
     // update input/output channel selection
 #if defined( _WIN32 ) || defined( __APPLE__ ) || defined( __MACOSX )

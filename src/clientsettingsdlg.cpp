@@ -1130,5 +1130,5 @@ void CClientSettingsDlg::OnBuiltInMicIdChanged()
 {
     // index is zero-based while boost factor must be 1-based:
     pSettings->iBuiltInMicId = edtBuiltInMicId->text().toInt();
-    pClient->SetInputDeviceId ( pSettings->iBuiltInMicId );
+    pClient->SetBuiltInMicId ( pSettings->iBuiltInMicId ); //change value in variable only, not yet effective
 }

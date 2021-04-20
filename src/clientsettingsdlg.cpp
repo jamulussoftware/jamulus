@@ -35,8 +35,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 {
     setupUi ( this );
  
-#if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
-    // iOS needs menu to close - and Android too
+#if defined ( Q_OS_IOS )  
+    // iOS needs menu to close
     QMenuBar* pMenu = new QMenuBar ( this );
     QAction *action = pMenu->addAction ( tr ( "&Close" ) );
     connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
@@ -45,6 +45,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     layout()->setMenuBar ( pMenu );
 #endif
 
+#if defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
+    // Android too
+    QMenuBar* pMenu = new QMenuBar ( this );
+    QMenu* pCloseMenu = new QMenu ( tr ( "Close" ), this );
+    pCloseMenu->addAction ( tr ( "Close" ), this, SLOT ( close() ) );
+    pMenu->addMenu ( pCloseMenu );
+
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );    
+#endif
     // Add help text to controls -----------------------------------------------
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +

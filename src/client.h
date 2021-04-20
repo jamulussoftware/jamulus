@@ -245,6 +245,9 @@ public:
         { Channel.SetRemoteChanPan ( iId, fPan ); }
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
+    
+    void SetBuiltInMicId ( const int iNewMicId ) { iBuiltInMicId = iNewMicId; }
+    int GetBuiltInMicId () { return iBuiltInMicId; }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 

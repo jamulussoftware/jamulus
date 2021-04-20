@@ -337,7 +337,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pMobileMenu->addAction ( tr ( "Builtin Mic" ), this,
         SLOT ( setBuiltinMic() ) );
 
-    pMobileMenu->addAction ( tr ( "External Dev" ), this,
+    pMobileMenu->addAction ( tr ( "Auto" ), this,
         SLOT ( unsetBuiltinMic() ) );
       
     pMenu->addMenu ( pMobileMenu );

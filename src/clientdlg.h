@@ -255,7 +255,7 @@ public slots:
         pClient->SetInputDeviceId ( 1 );
     #endif
     #if defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
-        pClient->SetInputDeviceId ( pClient->iBuiltInMicId );
+        pClient->SetInputDeviceId ( pClient->GetBuiltInMicId() );
     #endif
     }
 

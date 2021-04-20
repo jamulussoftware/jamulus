@@ -46,8 +46,8 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
-    virtual void processBufferList(AudioBufferList*, CSound*);
-    virtual void setBuiltinInput(bool builtinmic);
+    virtual void processBufferList( AudioBufferList*, CSound* );
+    virtual void SetInputDeviceId( int deviceid );
 
     AudioUnit      audioUnit;
 

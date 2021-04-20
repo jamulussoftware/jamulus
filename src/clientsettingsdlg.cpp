@@ -300,6 +300,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
+    // Built-in Mic
+    QString strBuiltInMic = "<b>" + tr ( "Built-in Mic Device Id" ) + ":</b> " +
+        tr ( "Choose Input device Id. Use LiveEffect for references." );
+    lblBuiltInMicId->setWhatsThis ( strBuiltInMic );
+    edtBuiltInMicId->setWhatsThis ( strBuiltInMic );
+    edtBuiltInMicId->setAccessibleName ( tr ( "Built-in Mic Device Id edit box" ) );
+      
     // custom central server address
     QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
         tr ( "Leave this blank unless you need to enter the address of a central "
@@ -358,6 +365,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     lblOverallDelayValue->setText ( "---" );
     lblUpstreamValue->setText     ( "---" );
     edtNewClientLevel->setValidator ( new QIntValidator ( 0, 100, this ) ); // % range from 0-100
+    edtBuiltInMicId->setValidator ( new QIntValidator ( 0, 1000, this ) ); //input device - from 0 to 1000
 
 
     // init slider controls ---
@@ -572,6 +580,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished,
         this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
+    // line edits
+    QObject::connect ( edtBuiltInMicId, &QLineEdit::editingFinished,
+        this, &CClientSettingsDlg::OnBuiltInMicIdChanged );
+      
     // combo boxes
     QObject::connect ( cbxSoundcard, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnSoundcardActivated );
@@ -1114,3 +1126,9 @@ void CClientSettingsDlg::OnAudioPanValueChanged ( int value )
     UpdateAudioFaderSlider();
 }
 
+void CClientSettingsDlg::OnBuiltInMicIdChanged()
+{
+    // index is zero-based while boost factor must be 1-based:
+    pSettings->iBuiltInMicId = edtBuiltInMicId->text().toInt();
+    pClient->SetInputDeviceId ( pSettings->iBuiltInMicId );
+}

@@ -411,7 +411,7 @@ void CSound::setBuiltinInput(bool builtinmic)
                 if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
                 //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
             }*/
-        inBuilder.setDeviceId(7);
+        inBuilder.setDeviceId(20);
         oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
         if ( result != oboe::Result::OK )
         {

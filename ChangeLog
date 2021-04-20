@@ -1,49 +1,136 @@
 
+### 3.7.0dev <- NOTE: the release version number will be 3.7.1 ###
 
+- Settings window made Tabbed including User_Profile, Basic & Advanced.
+  User Profile window removed.
+  Input Pan placed in Advanced tab and removed from main window.
+  (contributed by @dcorson-ticino-com)
 
+- Added Pan-Delay code by Detlef Hennings, www.eclim.de
 
-### 3.6.2dev <- NOTE: the release version number will be 3.7.0 ###
+- Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
+  (contributed by @JohannesBrx)
 
-- introduced new server lists: Any Genre 3, Choral/Barbershop (#875),
-  also renamed Default to Any Genre 1, Any Genre to Any Genre 2,
-  and Classical/Folk/Choral to Classical/Folk.
+- The mute button is now also shown in mono mode (#1074)
+  (contributed by @npostavs)
 
-- central server addresses are now in jamulus.io instead of fischvolk.de (#919)
+- Bug fix: Channel mapping on Windows now only resets if the sound card or the numbers of channels changed (#1347)
 
-- show --clientname as first word in title to avoid clipping in Windows task bar (#789)
-
-- improved Windows installer, coded by ann0see and doloopuntil (#792, #841)
-
-- support http links in the chat dialog, coded by hoffie (#879)
-
-- support Github actions for CodeQL, Publish Release, Autobuild Flatpak,
-  coded by pljones, nefarius2001, ann0see, ranfdev.
-
-- more detailed version number of unreleased version, coded by nefarius2001 (#475)
-
-- add new --serverpublicip option to support central servers behind NAT,
-  coded by hoffie (#954)
-
-- replaced low-quality background image (fancy skin) of mixerboard (#970)
-
-- Escape chat messages at the server. This will no longer allow html formated chat messages due to security reasons (#939)
-
-- Highlight the fact that the server is recording in the Mixerboard title (#968), coded by dcorson-ticino.com
-
-- Implement new --ctrlmidich syntax allowing to specify fader, pan, mute,
-  solo buttons (#945).  Implementation for mute&solo buttons for now is
-  only for toggle controllers and does not support headless operation yet.
+- Bug fix: Jamulus should now close itself correctly if a non-working device was selected (#872)
+  (contributed by @npostavs)
   
-- Move ASIO Setup button on Windows below driver selection (#977), coded by mulyaj and ann0see
+- Bug fix: The Windows installer now correctly compiles in a path with spaces (#864)
+  (contributed by @henkdegroot)
 
-- Gray out input levels and show a message if you're not connected to a server (#847)
+- Added client name,  if defined, in dialog titles
+  (contributed by @dcorson-ticino-com)
 
-- bug fix: remove ConsoleWriterFactory - to resolve suspected memory leak (#926)
+### 3.7.0 (2021-03-17) ###
 
-- bug fix: fix crash if settings are changed in ASIO4ALL during a connection (contained in #796). Reverts #727 for Windows
+- Server lists have been reorganized to make room for more servers (#875):
+  * Default has been renamed to Any Genre 1.
+  * Any Genre has been renamed to Any Genre 2.
+  * Any Genre 3 has been added.
+  * Choral/Barbershop has been added.
+  * Classical/Folk/Choral has been renamed to Classical/Folk.
 
-- Avoid screen from sleeping or starting screen saver for Mac (#834)
+- Central server addresses have been moved to the jamulus.io domain (#919).
+  The fischvolk.de addresses are deprecated.
 
+- GUI: If a name is provided using --clientname, that name is shown first in the window title, to avoid clipping in the Windows task bar (#789).
+
+- GUI: Translations have been updated:
+  * Dutch, by @jerogee (#1110)
+  * French, by @trebmuh & @jujudusud (#1199 & #1113)
+  * German, by @rolamos (#1097)
+  * Italian, by @dzpex (#1112)
+  * Polish, by @SeeLook (#1099)
+  * Portugese, by @melcon & @Snayler (#1141 & #1168)
+  * Slovak, by @jose1711 (#1104)
+  * Spanish, by @ignotus666 (#1152)
+  * Swedish, by @genesisproject2020 (#1182 & #1106)
+
+- Active recording state is now highlighted in the mixerboard title (#968).
+  (contributed by @dcorson-ticino-com)
+
+- Client window makes it more obvious when not connected to a server by graying out input levels and showing a message (#847, #983).
+  (contributed by @ann0see)
+
+- Screensaver and screen blanking are now prevented on Macs (#834).
+  (contributed by @jerogee)
+
+- Windows installer has been improved (#792, #841).
+  Note: If you are using ASIO4ALL, we strongly suggest that you take a screenshot
+  of your ASIO4ALL settings before upgrading. The installer will try its best to
+  migrate your settings, but it may fail to do so when using custom
+  installation paths.
+  (contributed by @ann0see and @doloopuntil)
+
+- Windows installer interface now supports English, Dutch, French, German, Italian, Polish, Portuguese, Spanish and Swedish.
+  (contributed by @jerogee, @jujudusud, @ann0see, @dzpex, @SeeLook, @Snayler,
+  @melcon, @ignotus666 and @genesisproject2020)
+
+- Windows ASIO Setup button placement has been improved to be below the driver selection (#977).
+  (contributed by @mulyaj and @ann0see)
+
+- Chat dialog has gained support for auto-linking http addresses (#879).
+  (contributed by @hoffie)
+
+- Chat messages no longer allow HTML-formatted chat messages due to security reasons (#939).
+  HTML formatting in Welcome messages will continue to work.
+  (contributed by @atsampson)
+
+- Mixerboard background image quality in the Fancy skin has been improved (#970).
+  (contributed by @passing)
+
+- MIDI controller logic has been improved to support fader, pan, mute and solo buttons in --ctrlmidich syntax (#945).
+  Mute & solo buttons are only for toggle-type controllers and do not support
+  headless operation yet.
+  (contributed by @dakhubgit)
+
+- Servers connected to central servers behind the same NAT can now be made accessible to public clients via the newly added --serverpublicip option (#954).
+  (contributed by @hoffie)
+
+- External IP detection no longer generates traffic to Cloudflare (#633, #1092).
+  (contributed by @atsampson and @hoffie)
+
+- Version update detection has been improved (#1155):
+    * The check now uses two servers instead of one (updatecheck1.jamulus.io and updatecheck2.jamulus.io).
+    * The server version is now ignored if it is not a release, due to a
+      suffix such as dev, beta or rc.
+  (contributed by @softins)
+
+- Official Ubuntu/Debian packages are now built and published as part of the release (#1100).
+  The packages are compatible with Ubuntu 18.04 or later.
+  (contributed by @ann0see)
+
+- Experimental .apk installation packages for Android are now provided (#880).
+  (contributed by @nefarius2001)
+
+- Bug fix: A suspected memory leak has been solved by removing usage of ConsoleWriterFactory (#926).
+  (contributed by @pljones)
+
+- Bug fix: Changing ASIO driver properties like switching input/outputs in ASIO4ALL now resets input/output channel mapping in Jamulus again (#796).
+  This was done to solve a bug with ASIO4ALL introduced in the last version.
+
+- Bug fix: Fader levels, mute and solo state are now restored properly when reconnecting to a restarted server (#955, #1010).
+  This is a server-side fix.
+  (contributed by @hoffie)
+
+- Bug fix: Multiple memory leaks in the server's recording feature have been fixed (#1073).
+  (contributed by @softins)
+
+- Bug fix: Menu accelerator keys have been fixed in multiple translations (#1165).
+  (contributed by @softins)
+
+- Bug fix: Windows sound driver lacked driverInfo initialisation (#1194).
+  (coded by @npostavs)
+
+- Internal build and release process have been re-designed, automated and moved to Github.
+  (contributed by @pljones, @nefarius2001, @ann0see, @ranfdev)
+
+- Internal development builds now contain a detailed version number (#475).
+  (contributed by @nefarius2001)
 
 
 ### 3.6.2 (2020-12-12) ###

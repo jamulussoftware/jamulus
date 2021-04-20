@@ -123,7 +123,6 @@ protected:
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
-    CMusProfDlg        MusicianProfileDlg;
 
 public slots:
     void OnConnectDisconBut();
@@ -177,12 +176,11 @@ public slots:
     void OnUseTowRowsForMixerPanel ( bool Checked ) { MainMixerBoard->SetNumMixerPanelRows ( Checked ? 2 : 1 ); }
     void OnClearAllStoredSoloMuteSettings();
     void OnSetAllFadersToNewClientLevel() { MainMixerBoard->SetAllFaderLevelsToNewClientLevel(); }
+    void OnAutoAdjustAllFaderLevels() { MainMixerBoard->AutoAdjustAllFaderLevels(); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
-
-    void OnAudioPanValueChanged ( int value );
 
     void OnAudioReverbValueChanged ( int value )
         { pClient->SetReverbLevel ( value ); }
@@ -250,4 +248,8 @@ public slots:
     void OnNumClientsChanged ( int iNewNumClients );
 
     void accept() { close(); } // introduced by pljones
+
+signals:
+    void SendTabChange ( int iTabIdx );
+
 };

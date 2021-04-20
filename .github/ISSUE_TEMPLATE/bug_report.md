@@ -4,7 +4,6 @@ about: Create a report to help us improve
 title: ''
 labels: bug
 assignees: ''
-
 ---
 
 **Describe the bug**
@@ -12,7 +11,6 @@ assignees: ''
 
 **To Reproduce**
 <!-- Steps to reproduce the behavior: -->
-
 
 **Expected behavior**
 <!-- A clear and concise description of what you expected to happen. -->
@@ -25,5 +23,6 @@ assignees: ''
 
 **Version of Jamulus**
 <!-- Get this from the Help > About menu or from the `Jamulus --version` command line -->
+
 **Additional context**
 <!-- Add any other context about the problem here. -->

@@ -53,7 +53,7 @@ public:
              const QString& strMIDISetup,
              const bool     ,
              const QString& );
-    
+
     virtual ~CSound() { UnloadCurrentDriver(); }
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );

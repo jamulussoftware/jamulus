@@ -109,6 +109,7 @@ class CClient : public QObject
 
 public:
     CClient ( const quint16  iPortNumber,
+              const quint16  iQosNumber,
               const QString& strConnOnStartupAddress,
               const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
@@ -243,6 +244,8 @@ public:
     void SetRemoteChanPan ( const int iId, const float fPan )
         { Channel.SetRemoteChanPan ( iId, fPan ); }
 
+    void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
+
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
     void CreateChatTextMes ( const QString& strChatText )
@@ -331,6 +334,7 @@ protected:
     bool                    bReverbOnLeftChan;
     int                     iReverbLevel;
     CAudioReverb            AudioReverb;
+    int                     iInputBoost;
 
     int                     iSndCrdPrefFrameSizeFactor;
     int                     iSndCrdFrameSizeFactor;

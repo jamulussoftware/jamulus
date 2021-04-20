@@ -1,7 +1,7 @@
 ; Italian translation
 
 LangString DESKTOP_SET_SHORTCUT ${LANG_ITALIAN} \
-    "Create Desktop shortcut"
+    "Crea collegamento su Desktop"
 
 LangString INVALID_FOLDER_MSG ${LANG_ITALIAN} \
    "La cartella di destinazione esiste già. Selezionare una nuova cartella di destinazione."
@@ -10,28 +10,28 @@ LangString RUNNING_APP_MSG ${LANG_ITALIAN} \
    "${APP_NAME} è in esecuzione. Chiudere l'applicazione prima di eseguire l'installazione."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_ITALIAN} \
-    "We detected an old version of Jamulus in your 32 Bit Program Files folder. It is strongly recommended to remove it before installing a new version of Jamulus. Do you want to remove it now?"
+    "E' stata trovata una precedente versione di Jamulus nella cartella Programmi. E' altamente consigliato rimuoverla prima di procedere con l'insallazione di una nuova versione di Jamulus. Vuoi rimuoverla adesso?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_ITALIAN} \
-    "If you continue without removing it, your installation might be broken! Are you sure you don't want to remove the old version?"
+    "Se non viene cancellata l'installazione potrebbe non andare a buona fine! Sei sicuro di voler continuare?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_ITALIAN} \
-     "FATAL: THE UNINSTALLER FAILED. Once you click on OK the old version will remain on your PC and we will try to install the new version too. You can also press cancel and try to remove it on your own."
+     "ERRORE: L'UNISTALLERE HA FALLITO. Cliccando OK la vecchia versione rimarrà installata nel PC verrà tentato comunque di installare la nuova versione. Premi Cancel per provare ad eliminarla manualmente."
 
 LangString ASIO_DRIVER_HEADER ${LANG_ITALIAN} \
      "ASIO driver"
 
 LangString ASIO_DRIVER_SUB ${LANG_ITALIAN} \
-     "To use Jamulus, you need an ASIO driver"
+     "Per usare Jamulus hai bisogno dei driver ASIO"
 
 LangString ASIO_DRIVER_EXPLAIN ${LANG_ITALIAN} \
-     "Jamulus needs an ASIO driver to provide low latency audio. More information:"
+     "Jamulus ha bisogno dei driver ASIO al fine di garantire una bassa latenza audio. Maggiori Informazioni:"
 
 LangString ASIO_DRIVER_MORE_INFO ${LANG_ITALIAN} \
-     "More information about ASIO on jamulus.io"
+     "Maggiori informazioni sui driver ASIO disponibili su jamulus.io"
 
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_ITALIAN} \
      "https://jamulus.io/wiki/Installation-for-Windows#asio"
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_ITALIAN} \
-     "To provide low latency audio, Jamulus needs an ASIO driver. We couldn't find one on your PC, so you should install one like ASIO4ALL now. More information on how to do this is described on jamulus.io and linked on the page you just were on. To return to this page, click 'No'. If you click 'Yes', the installation will continue."
+     "Per assicurare una bassa latenza, Jamulus usa i driver ASIO. Questi non sono presenti sul PC, puoi installarne una versione come gli ASIO4ALL. Maggiori informazione su jamulus.io, trovi il link nella pagina in cui ti trovavi. Per tornarci premi su NO. Se premi 'Si', l'installazione continuerà."

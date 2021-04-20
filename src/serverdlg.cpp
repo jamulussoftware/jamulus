@@ -219,10 +219,11 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
     }
 
     // set up list view for connected clients
-    lvwClients->setColumnWidth ( 0, 170 );
-    lvwClients->setColumnWidth ( 1, 200 );
+    lvwClients->setColumnWidth ( 0, 170 );  // 170 //  IP:port
+    lvwClients->setColumnWidth ( 1, 200 );  // 200 //  Name
+    lvwClients->setColumnWidth ( 2, 120 );  //  60 //  Buf-Frames
+    lvwClients->setColumnWidth ( 3, 50 );   //         Channels
     lvwClients->clear();
-
 
 // TEST workaround for resize problem of window after iconize in task bar
 lvwClients->setMinimumWidth ( 170 + 130 + 60 + 205 );
@@ -315,6 +316,16 @@ lvwClients->setMinimumHeight ( 140 );
     ModifyAutoStartEntry ( bCurAutoStartMinState );
 #endif
 
+    // update delay panning check box
+    if ( pServer->IsDelayPanningEnabled() )
+    {
+        chbEnableDelayPanning->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        chbEnableDelayPanning->setCheckState(Qt::Unchecked);
+    }
+
     // Recorder controls
     chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
     edtCurrentSessionDir->setText ( "" );
@@ -382,6 +393,10 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableRecorderStateChanged );
 
+    // delay panning
+    QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged,
+        this, &CServerDlg::OnEnableDelayPanningStateChanged );
+
     // line edits
     QObject::connect ( edtCentralServerAddress, &QLineEdit::editingFinished,
         this, &CServerDlg::OnCentralServerAddressEditingFinished );
@@ -447,15 +462,23 @@ lvwClients->setMinimumHeight ( 140 );
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 
-    // query the central server version number needed for update check (note
+    // query the update server version number needed for update check (note
     // that the connection less message respond may not make it back but that
     // is not critical since the next time Jamulus is started we have another
     // chance and the update check is not time-critical at all)
-    CHostAddress CentServerHostAddress;
+    CHostAddress UpdateServerHostAddress;
 
-    if ( NetworkUtil().ParseNetworkAddress ( DEFAULT_SERVER_ADDRESS, CentServerHostAddress ) )
+    // Send the request to two servers for redundancy if either or both of them
+    // has a higher release version number, the reply will trigger the notification.
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress ) )
     {
-        pServer->CreateCLServerListReqVerAndOSMes ( CentServerHostAddress );
+        pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
+    }
+
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress ) )
+    {
+        pServer->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 }
 
@@ -619,7 +642,14 @@ void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress           ,
 {
     // update check
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber::fromString ( VERSION ) ) > 0 )
+    int mySuffixIndex;
+    QVersionNumber myVersion = QVersionNumber::fromString ( VERSION, &mySuffixIndex );
+
+    int serverSuffixIndex;
+    QVersionNumber serverVersion = QVersionNumber::fromString ( strVersion, &serverSuffixIndex );
+
+    // only compare if the server version has no suffix (such as dev or beta)
+    if ( strVersion.size() == serverSuffixIndex && QVersionNumber::compare ( serverVersion, myVersion ) > 0 )
     {
         lblUpdateCheck->show();
     }
@@ -658,6 +688,10 @@ void CServerDlg::OnTimer()
                 // jitter buffer size (polling for updates)
                 vecpListViewItems[i]->setText ( 2,
                     QString().setNum ( veciJitBufNumFrames[i] ) );
+
+                // show num of audio channels
+                int iNumAudioChs = pServer->GetClientNumAudioChannels ( i );
+                vecpListViewItems[i]->setText ( 3, QString().setNum ( iNumAudioChs ) );
 
                 vecpListViewItems[i]->setHidden ( false );
             }

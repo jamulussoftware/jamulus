@@ -145,6 +145,7 @@ public:
         vecStoredFaderGroupID       ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
         vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel        ( 100 ),
+        iInputBoost                 ( 1 ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType            ( ST_NO_SORT ),
         iNumMixerPanelRows          ( 1 ),
@@ -152,11 +153,9 @@ public:
         eCentralServerAddressType   ( AT_DEFAULT ),
         vecWindowPosSettings        ( ), // empty array
         vecWindowPosChat            ( ), // empty array
-        vecWindowPosProfile         ( ), // empty array
         vecWindowPosConnect         ( ), // empty array
         bWindowWasShownSettings     ( false ),
         bWindowWasShownChat         ( false ),
-        bWindowWasShownProfile      ( false ),
         bWindowWasShownConnect      ( false ),
         pClient                     ( pNCliP )
         { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
@@ -173,6 +172,7 @@ public:
     CVector<int>     vecStoredFaderGroupID;
     CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
+    int              iInputBoost;
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
     int              iNumMixerPanelRows;
@@ -182,11 +182,9 @@ public:
     // window position/state settings
     QByteArray vecWindowPosSettings;
     QByteArray vecWindowPosChat;
-    QByteArray vecWindowPosProfile;
     QByteArray vecWindowPosConnect;
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
-    bool       bWindowWasShownProfile;
     bool       bWindowWasShownConnect;
 
 protected:

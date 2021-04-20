@@ -26,11 +26,18 @@
 
 #include "sound.h"
 
-#ifdef WITH_SOUND
+#ifdef WITH_JACK
 void CSound::OpenJack ( const bool  bNoAutoJackConnect,
                         const char* jackClientName )
 {
     jack_status_t JackStatus;
+    const char *serverName;
+
+    if ( ( serverName = getenv( "JACK_DEFAULT_SERVER" ) ) == NULL ) {
+        serverName = "default";
+    }
+    qInfo() << qUtf8Printable( QString( "Connecting to jack \"%1\" instance (use the JACK_DEFAULT_SERVER environment variable to change this)." )
+        .arg( serverName ) );
 
     // try to become a client of the JACK server
     pJackClient = jack_client_open ( jackClientName, JackNullOption, &JackStatus );
@@ -60,7 +67,7 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
         throw CGenErr ( tr ( "The Jack server sample rate is different from "
             "the required one. The required sample rate is:" ) + " <b>" +
             QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz</b>. " + tr ( "You can "
-            "use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
+            "use a tool like <i><a href=\"https://qjackctl.sourceforge.io\">QJackCtl</a></i> "
             "to adjust the Jack server sample rate." ) + "<br>" + tr ( "Make sure to set the "
             "Frames/Period to a low value like " ) +
             QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) +
@@ -360,4 +367,4 @@ void CSound::shutdownCallback ( void* arg )
     pSound->bJackWasShutDown = true;
     pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT );
 }
-#endif // WITH_SOUND
+#endif // WITH_JACK

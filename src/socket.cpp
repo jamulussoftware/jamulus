@@ -27,7 +27,7 @@
 
 
 /* Implementation *************************************************************/
-void CSocket::Init ( const quint16 iPortNumber )
+void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
 {
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
@@ -40,6 +40,9 @@ void CSocket::Init ( const quint16 iPortNumber )
 
     // create the UDP socket
     UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
+    //
+    const char tos = (char) iQosNumber;  // Quality of Service
+    setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof(tos) );
 
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );

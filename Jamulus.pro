@@ -1,4 +1,4 @@
-VERSION = 3.6.2dev
+VERSION = 3.7.0dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -54,11 +54,10 @@ INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/celt \
     libs/opus/silk \
     libs/opus/silk/float \
-    libs/opus/silk/fixed
+    libs/opus/silk/fixed \
+    libs/opus
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
-    OPUS_BUILD \
-    USE_ALLOCA \
     CUSTOM_MODES \
     _REENTRANT
 
@@ -105,7 +104,7 @@ win32 {
         SOURCES -= windows/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_ASIO
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
         INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
@@ -161,7 +160,7 @@ win32 {
         SOURCES -= mac/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
         LIBS += /usr/local/lib/libjack.dylib
@@ -340,7 +339,10 @@ win32 {
     DEFINES += HAVE_STDINT_H
 
     # only include jack support if CONFIG nosound is not set
-    !contains(CONFIG, "nosound") {
+    contains(CONFIG, "nosound") {
+        message(Restricting build to server-only due to CONFIG+=nosound.)
+        DEFINES += SERVER_ONLY
+    } else {
         message(Jack Audio Interface Enabled.)
 
         contains(CONFIG, "raspijamulus") {
@@ -351,7 +353,7 @@ win32 {
             PKGCONFIG += jack
         }
 
-        DEFINES += WITH_SOUND
+        DEFINES += WITH_JACK
     }
 
     isEmpty(PREFIX) {
@@ -494,7 +496,8 @@ HEADERS_OPUS_ARM = libs/opus/celt/arm/armcpu.h \
 HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/pitch_sse.h \
     libs/opus/celt/x86/vq_sse.h \
-    libs/opus/celt/x86/x86cpu.h
+    libs/opus/celt/x86/x86cpu.h \
+    $$files(libs/opus/silk/x86/*.h)
 
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
@@ -655,36 +658,44 @@ SOURCES_OPUS = libs/opus/celt/bands.c \
 
 SOURCES_OPUS_ARM = libs/opus/celt/arm/armcpu.c \
     libs/opus/celt/arm/arm_celt_map.c \
-    libs/opus/silk/arm/arm_silk_map.c
+    libs/opus/silk/arm/arm_silk_map.c \
+    libs/opus/silk/arm/arm_silk_map.c \
+    libs/opus/silk/arm/biquad_alt_neon_intr.c \
+    libs/opus/silk/arm/LPC_inv_pred_gain_neon_intr.c \
+    libs/opus/silk/arm/NSQ_del_dec_neon_intr.c \
+    libs/opus/silk/arm/NSQ_neon.c \
+    libs/opus/celt/arm/celt_neon_intr.c \
+    libs/opus/celt/arm/pitch_neon_intr.c \
+    libs/opus/celt/arm/celt_fft_ne10.c \
+    libs/opus/celt/arm/celt_mdct_ne10.c
 
-SOURCES_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
-    libs/opus/celt/x86/pitch_sse.c \
-    libs/opus/celt/x86/pitch_sse2.c \
-    libs/opus/celt/x86/pitch_sse4_1.c \
-    libs/opus/celt/x86/vq_sse2.c \
+SOURCES_OPUS_X86_SSE = libs/opus/celt/x86/x86cpu.c \
     libs/opus/celt/x86/x86_celt_map.c \
-    libs/opus/celt/x86/x86cpu.c
+    libs/opus/celt/x86/pitch_sse.c
+SOURCES_OPUS_X86_SSE2 = libs/opus/celt/x86/pitch_sse2.c \
+     libs/opus/celt/x86/vq_sse2.c
+SOURCES_OPUS_X86_SSE4 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
+     libs/opus/celt/x86/pitch_sse4_1.c \
+     libs/opus/silk/x86/NSQ_sse4_1.c \
+     libs/opus/silk/x86/NSQ_del_dec_sse4_1.c \
+     libs/opus/silk/x86/x86_silk_map.c \
+     libs/opus/silk/x86/VAD_sse4_1.c \
+     libs/opus/silk/x86/VQ_WMat_EC_sse4_1.c
 
-android {
-    contains(ANDROID_ARCHITECTURE, arm) | contains(ANDROID_ARCHITECTURE, arm64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_ARM
-        SOURCE_OPUS += $$SOURCES_OPUS_ARM
-    } else:contains(ANDROID_ARCHITECTURE, x86) | contains(ANDROID_ARCHITECTURE, x86_64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_X86
-        SOURCE_OPUS += $$SOURCES_OPUS_X86
-    }
-} else:win32 | unix | macx {
-    contains(QT_ARCH, arm) | contains(QT_ARCH, arm64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_ARM
-        SOURCE_OPUS += $$SOURCES_OPUS_ARM
-    } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_X86
-        SOURCE_OPUS += $$SOURCES_OPUS_X86
-    }
-    win32 {
-        HEADERS_OPUS += libs/opus/win32/config.h
-    }
+contains(QT_ARCH, armeabi-v7a) | contains(QT_ARCH, arm64-v8a) {
+    HEADERS_OPUS += $$HEADERS_OPUS_ARM
+    SOURCES_OPUS_ARCH += $$SOURCES_OPUS_ARM
+    DEFINES_OPUS += OPUS_ARM_PRESUME_NEON=1 OPUS_ARM_PRESUME_NEON_INTR=1
+    contains(QT_ARCH, arm64-v8a):DEFINES_OPUS += OPUS_ARM_PRESUME_AARCH64_NEON_INTR
+} else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
+    HEADERS_OPUS += $$HEADERS_OPUS_X86
+    SOURCES_OPUS_ARCH += $$SOURCES_OPUS_X86_SSE $$SOURCES_OPUS_X86_SSE2 $$SOURCES_OPUS_X86_SSE4
+    DEFINES_OPUS += OPUS_X86_MAY_HAVE_SSE OPUS_X86_MAY_HAVE_SSE2 OPUS_X86_MAY_HAVE_SSE4_1
+    # x86_64 implies SSE2
+    contains(QT_ARCH, x86_64):DEFINES_OPUS += OPUS_X86_PRESUME_SSE=1 OPUS_X86_PRESUME_SSE2=1
+    DEFINES_OPUS += CPU_INFO_BY_C
 }
+DEFINES_OPUS += OPUS_BUILD=1 USE_ALLOCA=1 OPUS_HAVE_RTCD=1 HAVE_LRINTF=1 HAVE_LRINT=1
 
 DISTFILES += ChangeLog \
     COPYING \
@@ -1066,10 +1077,45 @@ contains(CONFIG, "opus_shared_lib") {
         DEFINES += USE_OPUS_SHARED_LIB
     }
 } else {
+    DEFINES += $$DEFINES_OPUS
     INCLUDEPATH += $$INCLUDEPATH_OPUS
     HEADERS += $$HEADERS_OPUS
     SOURCES += $$SOURCES_OPUS
     DISTFILES += $$DISTFILES_OPUS
+
+    contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
+        msvc {
+            # According to opus/win32/config.h, "no special compiler
+            # flags necessary" when using msvc.  It always supports
+            # SSE intrinsics, but doesn't auto-vectorize.
+            SOURCES += $$SOURCES_OPUS_ARCH
+        } else {
+            # Arch-specific files need special compiler flags, but we
+            # can't use those flags for other files because otherwise we
+            # might end up with vectorized code that the CPU doesn't
+            # support.  For windows, libs/opus/win32/config.h says no
+            # compiler flags are needed.
+            sse_cc.name = sse_cc
+            sse_cc.input = SOURCES_OPUS_X86_SSE
+            sse_cc.dependency_type = TYPE_C
+            sse_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse_cc.commands = ${CC} -msse $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
+            sse_cc.variable_out = OBJECTS
+            sse2_cc.name = sse2_cc
+            sse2_cc.input = SOURCES_OPUS_X86_SSE2
+            sse2_cc.dependency_type = TYPE_C
+            sse2_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse2_cc.commands = ${CC} -msse2 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
+            sse2_cc.variable_out = OBJECTS
+            sse4_cc.name = sse4_cc
+            sse4_cc.input = SOURCES_OPUS_X86_SSE4
+            sse4_cc.dependency_type = TYPE_C
+            sse4_cc.output = ${QMAKE_VAR_OBJECTS_DIR}${QMAKE_FILE_IN_BASE}$${first(QMAKE_EXT_OBJ)}
+            sse4_cc.commands = ${CC} -msse4 $(CFLAGS) $(INCPATH) -c ${QMAKE_FILE_IN} -o ${QMAKE_FILE_OUT}
+            sse4_cc.variable_out = OBJECTS
+            QMAKE_EXTRA_COMPILERS += sse_cc sse2_cc sse4_cc
+        }
+    }
 }
 
 # disable version check if requested (#370)

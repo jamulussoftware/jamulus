@@ -124,9 +124,9 @@ MESSAGES (with connection)
     +-------------------+-----------------+--------------------+ ...
     | 1 byte channel ID | 2 bytes country | 4 bytes instrument | ...
     +-------------------+-----------------+--------------------+ ...
-        ... --------------------+--------------------+ ...
-        ...  1 byte skill level | 4 bytes IP address | ...
-        ... --------------------+--------------------+ ...
+        ... --------------------+--------------------------------------+ ...
+        ...  1 byte skill level | 4 bytes zero (used to be IP address) | ...
+        ... --------------------+--------------------------------------+ ...
         ... ------------------+---------------------------+
         ...  2 bytes number n | n bytes UTF-8 string name |
         ... ------------------+---------------------------+
@@ -1191,9 +1191,8 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInf
         PutValOnStream ( vecData, iPos,
             static_cast<uint32_t> ( vecChanInfo[i].eSkillLevel ), 1 );
 
-        // IP address (4 bytes)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
+        // used to be IP address before #316 (4 bytes)
+        PutValOnStream ( vecData, iPos, 0, 4 );
 
         // name
         PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
@@ -1235,9 +1234,8 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
         const ESkillLevel eSkillLevel =
             static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
 
-        // IP address (4 bytes)
-        const int iIpAddr =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+        // used to be IP address, zero since #316 (4 bytes)
+        iPos += 4;
 
         // name
         QString strCurName;
@@ -1261,7 +1259,6 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
 
         // add channel information to vector
         vecChanInfo.Add ( CChannelInfo ( iChanID,
-                                         iIpAddr,
                                          strCurName,
                                          eCountry,
                                          strCurCity,
@@ -2610,8 +2607,8 @@ void CProtocol::CreateCLConnClientsListMes ( const CHostAddress&          InetAd
         // skill level (1 byte)
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].eSkillLevel ), 1 );
 
-        // IP address (4 bytes)
-        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
+        // used to be IP address before #316 (4 bytes)
+        PutValOnStream ( vecData, iPos, 0, 4 );
 
         // name
         PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
@@ -2652,8 +2649,8 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress&     InetAddr,
         // skill level (1 byte)
         const ESkillLevel eSkillLevel = static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
 
-        // IP address (4 bytes)
-        const int iIpAddr = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+        // used to be IP address, zero since #316 (4 bytes)
+        iPos += 4;
 
         // name
         QString strCurName;
@@ -2677,7 +2674,6 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress&     InetAddr,
 
         // add channel information to vector
         vecChanInfo.Add ( CChannelInfo ( iChanID,
-                                         iIpAddr,
                                          strCurName,
                                          eCountry,
                                          strCurCity,

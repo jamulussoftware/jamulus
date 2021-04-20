@@ -69,11 +69,13 @@ int main ( int argc, char** argv )
     bool         bMuteStream                 = false;
     bool         bMuteMeInPersonalMix        = false;
     bool         bDisableRecording           = false;
+    bool         bDelayPan                   = false;
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
+    quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strMIDISetup                = "";
     QString      strConnOnStartupAddress     = "";
@@ -321,6 +323,24 @@ int main ( int argc, char** argv )
         }
 
 
+        // Quality of Service --------------------------------------------------
+        if ( GetNumericArgument ( argc,
+                                  argv,
+                                  i,
+                                  "-Q",
+                                  "--qos",
+                                  0,
+                                  255,
+                                  rDbleArgument ) )
+        {
+            iQosNumber            = static_cast<quint16> ( rDbleArgument );
+            qInfo() << qUtf8Printable( QString( "- selected QoS value: %1" )
+                .arg( iQosNumber ) );
+            CommandLineOptions << "--qos";
+            continue;
+        }
+
+
         // HTML status file ----------------------------------------------------
         if ( GetStringArgument ( argc,
                                  argv,
@@ -381,6 +401,17 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Enable delay panning on startup ----------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-P",
+                               "--delaypan" ) )
+        {
+            bDelayPan = true;
+            qInfo() << "- starting with delay panning";
+            CommandLineOptions << "--delaypan";
+            continue;
+        }
 
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( argc,
@@ -565,6 +596,14 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
+#ifdef SERVER_ONLY
+    if ( bIsClient )
+    {
+        qCritical() << "Only --server mode is supported in this build with nosound.";
+        exit ( 1 );
+    }
+#endif
+
     // the inifile is not supported for the headless server mode
     if ( !bIsClient && !bUseGUI && !strIniFileName.isEmpty() )
     {
@@ -673,6 +712,7 @@ int main ( int argc, char** argv )
             // Client:
             // actual client object
             CClient Client ( iPortNumber,
+                             iQosNumber,
                              strConnOnStartupAddress,
                              strMIDISetup,
                              bNoAutoJackConnect,
@@ -723,6 +763,7 @@ int main ( int argc, char** argv )
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
                              iPortNumber,
+                             iQosNumber,
                              strHTMLStatusFileName,
                              strCentralServer,
                              strServerInfo,
@@ -734,6 +775,7 @@ int main ( int argc, char** argv )
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
                              bDisableRecording,
+                             bDelayPan,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -817,12 +859,14 @@ QString UsageArguments ( char **argv )
 {
     return
         "Usage: " + QString ( argv[0] ) + " [option] [optional argument]\n"
-        "\nRecognized options:\n"
+        "\nGeneral options:\n"
         "  -h, -?, --help        display this help text and exit\n"
         "  -i, --inifile         initialization file name (not\n"
         "                        supported for headless server mode)\n"
         "  -n, --nogui           disable GUI\n"
-        "  -p, --port            set your local port number\n"
+        "  -p, --port            set the local port number\n"
+        "  -Q, --qos             set the quality of service DSCP value. Default is 128. Disable with 0 \n"
+        "                        (QoS is ignored by Windows, but see website for futher information)\n"
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
@@ -837,6 +881,7 @@ QString UsageArguments ( char **argv )
         "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of this server in the format:\n"
         "                        [name];[city];[country as QLocale ID]\n"
+        "  -P, --delaypan        start with delay panning enabled\n"
         "  -R, --recording       sets directory to contain recorded jams\n"
         "      --norecord        disables recording (when enabled by default by -R)\n"
         "  -s, --server          start server\n"

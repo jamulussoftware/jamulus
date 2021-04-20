@@ -184,12 +184,6 @@ protected:
 template<>
 class CAudioMixerBoardSlots<0> {};
 
-#define AM_RECORDING_STYLE "QGroupBox::title { subcontrol-origin: margin; \
-                           subcontrol-position: left top; \
-                           left: 7px; \
-                           color: rgb(255,255,255); \
-                           background-color: rgb(255,0,0); }"
-
 class CAudioMixerBoard :
     public QGroupBox,
     public CAudioMixerBoardSlots<MAX_NUM_CHANNELS>
@@ -238,6 +232,7 @@ public:
     void            SetAllFaderLevelsToNewClientLevel();
     void            StoreAllFaderSettings();
     void            LoadAllFaderSettings();
+    void            AutoAdjustAllFaderLevels();
 
 protected:
     class CMixerBoardScrollArea : public QScrollArea
@@ -282,6 +277,7 @@ protected:
     ERecorderState          eRecorderState;
     QMutex                  Mutex;
     EChSortType             eChSortType;
+    CVector<float>          vecAvgLevels;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const float  fValue,

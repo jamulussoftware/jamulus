@@ -27,6 +27,7 @@
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
+                   const quint16  iQosNumber,
                    const QString& strConnOnStartupAddress,
                    const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
@@ -46,11 +47,12 @@ CClient::CClient ( const quint16  iPortNumber,
     bIsInitializationPhase           ( true ),
     bMuteOutStream                   ( false ),
     fMuteOutStreamGain               ( 1.0f ),
-    Socket                           ( &Channel, iPortNumber ),
+    Socket                           ( &Channel, iPortNumber, iQosNumber ),
     Sound                            ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),
+    iInputBoost                      ( 1 ),
     iSndCrdPrefFrameSizeFactor       ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor           ( FRAME_SIZE_FACTOR_DEFAULT ),
     bSndCrdConversionBufferRequired  ( false ),
@@ -1053,6 +1055,16 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // Transmit signal ---------------------------------------------------------
+
+    if ( iInputBoost != 1 ) {
+        // apply a general gain boost to all audio input:
+        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+        {
+            vecsStereoSndCrd[j + 1] = static_cast<int16_t> ( iInputBoost * vecsStereoSndCrd[j + 1] );
+            vecsStereoSndCrd[j]     = static_cast<int16_t> ( iInputBoost * vecsStereoSndCrd[j] );
+        }
+    }
+
     // update stereo signal level meter (not needed in headless mode)
 #ifndef HEADLESS
     SignalLevelMeter.Update ( vecsStereoSndCrd,

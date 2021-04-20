@@ -270,6 +270,13 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         iNewClientFaderLevel = iValue;
     }
 
+    // input boost
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "inputboost",
+         1, 10, iValue ) )
+    {
+        iInputBoost = iValue;
+    }
+
     // connect dialog show all musicians
     if ( GetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians", bValue ) )
     {
@@ -504,10 +511,6 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
     vecWindowPosChat = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "client", "winposchat_base64" ) );
 
-    // window position of the musician profile window
-    vecWindowPosProfile = FromBase64ToByteArray (
-        GetIniSetting ( IniXMLDocument, "client", "winposprofile_base64" ) );
-
     // window position of the connect window
     vecWindowPosConnect = FromBase64ToByteArray (
         GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
@@ -522,12 +525,6 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
     if ( GetFlagIniSet ( IniXMLDocument, "client", "winvischat", bValue ) )
     {
         bWindowWasShownChat = bValue;
-    }
-
-    // visibility state of the musician profile window
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisprofile", bValue ) )
-    {
-        bWindowWasShownProfile = bValue;
     }
 
     // visibility state of the connect window
@@ -610,6 +607,10 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // new client level
     SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
         iNewClientFaderLevel );
+
+    // input boost
+    SetNumericIniSet ( IniXMLDocument, "client", "inputboost",
+        iInputBoost );
 
     // connect dialog show all musicians
     SetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians",
@@ -735,10 +736,6 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     PutIniSetting ( IniXMLDocument, "client", "winposchat_base64",
         ToBase64 ( vecWindowPosChat ) );
 
-    // window position of the musician profile window
-    PutIniSetting ( IniXMLDocument, "client", "winposprofile_base64",
-        ToBase64 ( vecWindowPosProfile ) );
-
     // window position of the connect window
     PutIniSetting ( IniXMLDocument, "client", "winposcon_base64",
         ToBase64 ( vecWindowPosConnect ) );
@@ -750,10 +747,6 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // visibility state of the chat window
     SetFlagIniSet ( IniXMLDocument, "client", "winvischat",
         bWindowWasShownChat );
-
-    // visibility state of the musician profile window
-    SetFlagIniSet ( IniXMLDocument, "client", "winvisprofile",
-        bWindowWasShownProfile );
 
     // visibility state of the connect window
     SetFlagIniSet ( IniXMLDocument, "client", "winviscon",

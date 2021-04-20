@@ -47,7 +47,7 @@ public:
     virtual void Start();
     virtual void Stop();
     virtual void processBufferList ( AudioBufferList*, CSound* );
-    virtual void SetInputDeviceId ( int deviceid );
+    virtual void setBuiltinInput ( bool mic );
 
     AudioUnit      audioUnit;
 

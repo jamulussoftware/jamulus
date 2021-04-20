@@ -275,7 +275,7 @@ public:
     void GetBufErrorRates ( CVector<double>& vecErrRates, double& dLimit, double& dMaxUpLimit )
         { Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit ); }
 
-    void SetBuiltinMic ( const bool mic ); //for mobile devices - Android not yet supported
+    void SetInputDeviceId ( const int deviceid ); //for mobile devices - 0 for external devices
     
     // settings
     CChannelCoreInfo ChannelInfo;
@@ -337,6 +337,7 @@ protected:
     int                     iReverbLevel;
     CAudioReverb            AudioReverb;
     int                     iInputBoost;
+    int                     iBuiltInMicId;
 
     int                     iSndCrdPrefFrameSizeFactor;
     int                     iSndCrdFrameSizeFactor;

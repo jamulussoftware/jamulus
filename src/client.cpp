@@ -53,6 +53,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),
     iInputBoost                      ( 1 ),
+    iBuiltInMicId                    ( 0 ),
     iSndCrdPrefFrameSizeFactor       ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor           ( FRAME_SIZE_FACTOR_DEFAULT ),
     bSndCrdConversionBufferRequired  ( false ),
@@ -1295,10 +1296,10 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     return MathUtils::round ( fTotalBufferDelayMs + iPingTimeMs );
 }
 
-void CClient::SetBuiltinMic ( const bool mic )
+void CClient::SetInputDeviceId ( const int deviceid )
 {
 #if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
     // iOS only, Android !(not yet) supported
-    Sound.setBuiltinInput( mic );
+    Sound.SetInputDeviceId( deviceid );
 #endif
 }

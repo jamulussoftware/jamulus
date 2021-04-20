@@ -31,7 +31,6 @@
 #include <android/log.h>
 #include "ring_buffer.h"
 #include <mutex>
-#include "jni.h"
 
 /* Classes ********************************************************************/
 class CSound : public CSoundBase, public oboe::AudioStreamCallback

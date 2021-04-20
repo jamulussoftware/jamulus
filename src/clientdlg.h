@@ -251,15 +251,18 @@ public slots:
     
     void setBuiltinMic()
     {
-    #if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
-        pClient->SetBuiltinMic (true);
+    #if defined ( Q_OS_IOS )
+        pClient->SetBuiltinMic ( 1 );
+    #endif
+    #if defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
+        pClient->SetBuiltinMic ( pClient->iBuiltInMicId );
     #endif
     }
 
     void unsetBuiltinMic()
     {
     #if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
-        pClient->SetBuiltinMic (false);
+        pClient->SetBuiltinMic ( 0 );
     #endif
     }
     

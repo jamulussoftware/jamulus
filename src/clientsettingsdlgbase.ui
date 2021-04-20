@@ -1073,7 +1073,7 @@
              <item>
               <widget class="QLabel" name="lblBuiltInMicId">
                <property name="text">
-                <string>Built-in mic device Id</string>
+                <string>Built-in Mic DeviceId (Android only)</string>
                </property>
               </widget>
              </item>

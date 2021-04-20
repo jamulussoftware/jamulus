@@ -374,7 +374,7 @@ void CSound::Stats::log() const
              << ",ring_overrun: " << ring_overrun;
 }
 
-void CSound::setBuiltinInput(bool builtinmic)
+void CSound::SetInputDeviceId ( int deviceid ) //0 for external device (auto to be exact)
 {
     closeStream ( mRecordingStream );
   
@@ -387,43 +387,17 @@ void CSound::setBuiltinInput(bool builtinmic)
     // the output will be handled writing directly on the stream
     inBuilder.setCallback(this);
     setupCommonStreamParams ( &inBuilder );
-      
-    if (builtinmic) 
-    {
-        if ( inBuilder.isAAudioSupported() ) inBuilder.setAudioApi( oboe::AudioApi::AAudio );
-        /*oboe::Result result;
-        int i;
-        for(i=100; i > 0; i--)
-        {
-            inBuilder.setDeviceId(i); //shooting blind - trying positive numbers
 
-            result = inBuilder.openManagedStream ( mRecordingStream );
-            //if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
-            //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
-            if ( mRecordingStream->getDeviceId() == i ) break;
-        }*/
-        /*if( mRecordingStream->getDeviceId() != i )
-            for(i=-1; i> -100; i--)
-            {
-                inBuilder.setDeviceId(i); //shooting blind - negative now
-
-                result = inBuilder.openManagedStream ( mRecordingStream );
-                if ( result == oboe::Result::OK && mRecordingStream->getDeviceId() == i ) break;
-                //if ( result == oboe::Result::OK ) break; // there's a chance mRecordingStream->getDeviceId() always =0
-            }*/
-        inBuilder.setDeviceId(20);
-        oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
-        if ( result != oboe::Result::OK )
-        {
-            inBuilder.setDeviceId( oboe::kUnspecified );
-            result = inBuilder.openManagedStream ( mRecordingStream );
-        }
-    }
-    else
+    if ( inBuilder.isAAudioSupported() ) inBuilder.setAudioApi( oboe::AudioApi::AAudio );
+   
+    inBuilder.setDeviceId(deviceid);
+    oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
+    if ( result != oboe::Result::OK )
     {
-        inBuilder.setDeviceId(oboe::kUnspecified);
-        inBuilder.openManagedStream ( mRecordingStream );
+        inBuilder.setDeviceId( oboe::kUnspecified );
+        result = inBuilder.openManagedStream ( mRecordingStream );
     }
+
 
     mRecordingStream->setBufferSizeInFrames ( iOboeBufferSizeStereo );
 

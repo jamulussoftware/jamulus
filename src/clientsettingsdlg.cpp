@@ -38,11 +38,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
 #if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
     // iOS needs menu to close - and Android too
     QMenuBar* pMenu = new QMenuBar ( this );
-    QMenu* pCloseMenu = new QMenu ( tr ( "Close" ), this );
+    QAction *action = pMenu->addAction ( tr ( "&Close" ) );
+    connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
 
-    pCloseMenu->addAction ( tr ( "Close" ), this,
-        SLOT ( close() ) );
-    pMenu->addMenu ( pCloseMenu );
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 #endif

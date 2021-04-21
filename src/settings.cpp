@@ -296,7 +296,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
 
     // number of mixer panel rows
     if ( GetNumericIniSet ( IniXMLDocument, "client", "numrowsmixpan",
-         1, 2, iValue ) )
+         1, 8, iValue ) )
     {
         iNumMixerPanelRows = iValue;
     }

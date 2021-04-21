@@ -125,4 +125,5 @@ signals:
     void GUIDesignChanged();
     void AudioChannelsChanged();
     void CustomCentralServerAddrChanged();
+    void NumMixerPanelRowsChanged ( int value );
 };

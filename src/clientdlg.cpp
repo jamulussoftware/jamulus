@@ -164,6 +164,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // set the settings pointer to the mixer board (must be done early)
     MainMixerBoard->SetSettingsPointer ( pSettings );
+    MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
     // reset mixer board
     MainMixerBoard->HideAll();
@@ -304,14 +305,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     MainMixerBoard->SetFaderSorting ( pSettings->eChannelSortType );
 
     pEditMenu->addSeparator();
-
-    QAction* NumRowsAction = pEditMenu->addAction ( tr ( "Use &Two Rows Mixer Panel" ), this,
-        SLOT ( OnUseTowRowsForMixerPanel ( bool ) ) );
-
-    // initialize the "use two rows for mixer panel" menu entry (is checkable)
-    NumRowsAction->setCheckable ( true );
-    NumRowsAction->setChecked ( pSettings->iNumMixerPanelRows > 1 );
-    MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
 
     pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this,
         SLOT ( OnClearAllStoredSoloMuteSettings() ) );
@@ -484,6 +477,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::CustomCentralServerAddrChanged,
         &ConnectDlg, &CConnectDlg::OnCustomCentralServerAddrChanged );
+
+    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::NumMixerPanelRowsChanged,
+        this, &CClientDlg::OnNumMixerPanelRowsChanged );
 
     QObject::connect ( this, &CClientDlg::SendTabChange,
         &ClientSettingsDlg, &CClientSettingsDlg::OnMakeTabChange );

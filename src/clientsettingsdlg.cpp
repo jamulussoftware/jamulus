@@ -334,6 +334,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         "you will not have much fun using the " ) + APP_NAME +
         tr ( " software." ) + TOOLTIP_COM_END_TEXT );
 
+    QString strNumMixerPanelRows = "<b>" + tr ( "Number of Mixer Panel Rows" ) + ":</b> " +
+        tr ( "Adjust the number of rows used to arrange the mixer panel." );
+    lblMixerRows->setWhatsThis ( strNumMixerPanelRows );
+    spnMixerRows->setWhatsThis ( strNumMixerPanelRows );
+    spnMixerRows->setAccessibleName ( tr ( "Number of Mixer Panel Rows spin box" ) );
 
     // init driver button
 #ifdef _WIN32
@@ -407,6 +412,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     }
     // factor is 1-based while index is 0-based:
     cbxInputBoost->setCurrentIndex ( pSettings->iInputBoost - 1 );
+
+    // init number of mixer rows
+    spnMixerRows->setValue ( pSettings->iNumMixerPanelRows );
 
     // update enable small network buffers check box
     chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
@@ -620,6 +628,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
         static_cast<void (QButtonGroup::*) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
         this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
+
+    // spinners
+    QObject::connect ( spnMixerRows, static_cast<void (QSpinBox::*) ( int )> ( &QSpinBox::valueChanged ),
+        this, &CClientSettingsDlg::NumMixerPanelRowsChanged );
 
     // Musician Profile
     QObject::connect ( pedtAlias, &QLineEdit::textChanged,

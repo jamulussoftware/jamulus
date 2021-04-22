@@ -67,6 +67,10 @@ CChatDlg::CChatDlg ( QWidget* parent ) :
         SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
 
     pMenu->addMenu ( pEditMenu );
+#if defined ( Q_OS_IOS )
+    QAction *action = pMenu->addAction ( tr ( "&Close" ) );
+    connect ( action, SIGNAL( triggered() ), this, SLOT ( close() ) );
+#endif
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );

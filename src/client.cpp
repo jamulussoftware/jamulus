@@ -1299,7 +1299,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 void CClient::SetInputDeviceId ( const int deviceid )
 {
 #if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
-    // iOS only, Android !(not yet) supported
-    Sound.SetInputDeviceId( deviceid );
+    // iOS ok, Android experimental
+    Sound.SetInputDeviceId ( deviceid );
 #endif
 }

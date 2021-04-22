@@ -308,13 +308,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
+#if defined ( Q_OS_ANDROID ) or defined ( ANDROID ) //Built-Mic for Android - experimental feature - requires User inputting correct deviceId
     // Built-in Mic
     QString strBuiltInMic = "<b>" + tr ( "Built-in Mic Device Id" ) + ":</b> " +
         tr ( "Choose Input device Id. Use LiveEffect for references." );
     lblBuiltInMicId->setWhatsThis ( strBuiltInMic );
     edtBuiltInMicId->setWhatsThis ( strBuiltInMic );
     edtBuiltInMicId->setAccessibleName ( tr ( "Built-in Mic Device Id edit box" ) );
-      
+#else
+    if ( horizontalLayout_14 ) horizontalLayout_14->deleteLater();
+    if ( lblBuiltInMicId ) lblBuiltInMicId->deleteLater();
+    if ( edtBuiltInMicId ) edtBuiltInMicId->deleteLater();
+#endif
+
     // custom central server address
     QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
         tr ( "Leave this blank unless you need to enter the address of a central "

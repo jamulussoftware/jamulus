@@ -135,11 +135,7 @@ public slots:
     void OnMuteStateChanged ( int value );
     void OnGroupStateChanged ( int );
 
-    void OnGroupMenuGrpNone() { SetGroupID ( INVALID_INDEX ); }
-    void OnGroupMenuGrp1()    { SetGroupID ( 0 ); }
-    void OnGroupMenuGrp2()    { SetGroupID ( 1 ); }
-    void OnGroupMenuGrp3()    { SetGroupID ( 2 ); }
-    void OnGroupMenuGrp4()    { SetGroupID ( 3 ); }
+    void OnGroupMenuGrp ( int iGrp ) { SetGroupID ( iGrp ); }
 
 signals:
     void gainValueChanged ( float  value,

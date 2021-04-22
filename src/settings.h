@@ -110,33 +110,34 @@ class CClientSettings : public CSettings
 {
 public:
     CClientSettings ( CClient* pNCliP, const QString& sNFiName ) :
-        CSettings(),
-        vecStoredFaderTags ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-        vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-        vecStoredPanValues ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-        vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-        vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-        vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
-        vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-        iNewClientFaderLevel ( 100 ),
-        iInputBoost ( 1 ),
-        iSettingsTab ( SETTING_TAB_AUDIONET ),
+        CSettings                   ( ),
+        vecStoredFaderTags          ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+        vecStoredFaderLevels        ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+        vecStoredPanValues          ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
+        vecStoredFaderIsSolo        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+        vecStoredFaderIsMute        ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+        vecStoredFaderGroupID       ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
+        vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+        vstrFAVName                 ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        vstrFAVAddress              ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        vstrFAVMaxUsers             ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        vstrFAVDirectory            ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        iNewClientFaderLevel        ( 100 ),
+        iInputBoost                 ( 1 ),
         bConnectDlgShowAllMusicians ( true ),
-        eChannelSortType ( ST_NO_SORT ),
-        iNumMixerPanelRows ( 1 ),
-        vstrCentralServerAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-        eCentralServerAddressType ( AT_DEFAULT ),
-        bEnableFeedbackDetection ( true ),
-        vecWindowPosSettings(), // empty array
-        vecWindowPosChat(),     // empty array
-        vecWindowPosConnect(),  // empty array
-        bWindowWasShownSettings ( false ),
-        bWindowWasShownChat ( false ),
-        bWindowWasShownConnect ( false ),
-        pClient ( pNCliP )
-    {
-        SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
-    }
+        eChannelSortType            ( ST_NO_SORT ),
+        iNumMixerPanelRows          ( 1 ),
+        vstrCentralServerAddress    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+        eCentralServerAddressType   ( AT_DEFAULT ),
+        vecWindowPosSettings        ( ), // empty array
+        vecWindowPosChat            ( ), // empty array
+        vecWindowPosConnect         ( ), // empty array
+        bWindowWasShownSettings     ( false ),
+        bWindowWasShownChat         ( false ),
+        bWindowWasShownConnect      ( false ),
+        bFavoriteWasShownConnect    ( false ),
+        pClient                     ( pNCliP )
+        { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME ); }
 
     void LoadFaderSettings ( const QString& strCurFileName );
     void SaveFaderSettings ( const QString& strCurFileName );
@@ -149,6 +150,10 @@ public:
     CVector<int>     vecStoredFaderIsMute;
     CVector<int>     vecStoredFaderGroupID;
     CVector<QString> vstrIPAddress;
+    CVector<QString> vstrFAVName;
+    CVector<QString> vstrFAVAddress;
+    CVector<QString> vstrFAVMaxUsers;
+    CVector<QString> vstrFAVDirectory;
     int              iNewClientFaderLevel;
     int              iInputBoost;
     int              iSettingsTab;
@@ -166,6 +171,7 @@ public:
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
+    bool       bFavoriteWasShownConnect;
 
 protected:
     // No CommandLineOptions used when reading Client inifile

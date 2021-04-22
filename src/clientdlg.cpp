@@ -96,6 +96,15 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
 
+
+    // add to favorites button
+    butAddtoFavorites->setWhatsThis ( "<b>" + tr ( "Add to Favorites Button" ) + ":</b> " +
+        tr ( "Click this button to add the currently connected server to the Favorites list"
+        "of the Connect window.  This button is disabled when not connected to a server." ) );
+
+    butAddtoFavorites->setAccessibleName (
+        tr ( "Add to Favorites button" ) );
+
     // reverberation level
     QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
                            tr ( "Reverb can be applied to one local mono audio channel or to both "
@@ -389,6 +398,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
 
+    QObject::connect ( butAddtoFavorites, &QPushButton::clicked,
+        &ConnectDlg, &CConnectDlg::OnAddtoFavorites );
+
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
 
@@ -497,7 +509,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
+<<<<<<< HEAD
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+=======
+    // disable Add to Favorites button by default
+    butAddtoFavorites->setEnabled(false);
+>>>>>>> 2eaf6151 (Favorites functionality)
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -696,7 +713,14 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
+<<<<<<< HEAD
         SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
+=======
+        SetMixerBoardDeco( RS_UNDEFINED, pClient->GetGUIDesign() );
+
+        // disable Add to Favorites button
+        butAddtoFavorites->setEnabled(false);
+>>>>>>> 2eaf6151 (Favorites functionality)
     }
     else
     {
@@ -1165,6 +1189,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
         // set server name in audio mixer group box title
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
+
+        // enable Add to Favorites button
+        butAddtoFavorites->setEnabled(true);
 
         // start timer for level meter bar and ping time measurement
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );

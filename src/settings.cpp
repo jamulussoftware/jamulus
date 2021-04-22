@@ -237,6 +237,29 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         vstrIPAddress[iIdx] = GetIniSetting ( IniXMLDocument, "client", QString ( "ipaddress%1" ).arg ( iIdx ), "" );
     }
 
+    // Favorites shown ?
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "favshown", bValue ) )
+    {
+        bFavoriteWasShownConnect = bValue;
+    }
+
+    // FAVORITE addresses
+    QString strT;
+    QStringList listT;
+    for ( iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
+    {
+        strT =
+            GetIniSetting ( IniXMLDocument, "client",
+                            QString ( "favname%1" ).arg ( iIdx ), "" );
+        listT = strT.split(QLatin1Char(','));
+        if( (!listT[0].isEmpty()) && listT.size() == 4 ) {
+            vstrFAVAddress[iIdx]   = listT[0];
+            vstrFAVMaxUsers[iIdx]  = listT[1];
+            vstrFAVDirectory[iIdx] = listT[2];
+            vstrFAVName[iIdx]      = FromBase64ToString ( listT[3] );
+        }
+    }
+
     // new client level
     if ( GetNumericIniSet ( IniXMLDocument, "client", "newclientlevel", 0, 100, iValue ) )
     {
@@ -554,6 +577,21 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         PutIniSetting ( IniXMLDocument, "client", QString ( "ipaddress%1" ).arg ( iIdx ), vstrIPAddress[iIdx] );
+    }
+
+    // visibility state of favorites tab
+    SetFlagIniSet ( IniXMLDocument, "client", "favshown",
+        bFavoriteWasShownConnect );
+
+    // Favorite info
+    QString strT;
+    for ( iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
+    {
+        strT = vstrFAVAddress[iIdx] + "," + vstrFAVMaxUsers[iIdx] + "," +
+               vstrFAVDirectory[iIdx] + "," + ToBase64 ( vstrFAVName[iIdx] );
+        PutIniSetting ( IniXMLDocument, "client",
+                        QString ( "favname%1" ).arg ( iIdx ),
+                        strT );
     }
 
     // new client level

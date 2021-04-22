@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
-    <height>490</height>
+    <width>462</width>
+    <height>546</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -53,7 +53,7 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -73,7 +73,7 @@
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>20</width>
-                  <height>10</height>
+                  <height>5</height>
                  </size>
                 </property>
                </spacer>
@@ -105,7 +105,7 @@
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>10</width>
-                  <height>10</height>
+                  <height>5</height>
                  </size>
                 </property>
                </spacer>
@@ -211,6 +211,9 @@
                <spacer>
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::MinimumExpanding</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -475,6 +478,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="butAddtoFavorites">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>Add to Favorites</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -485,65 +498,72 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QVBoxLayout">
           <item>
-           <widget class="QLabel" name="lblGlobalInfoLabel">
-            <property name="text">
-             <string>MUTED (Other people won't hear you)</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="margin">
-             <number>6</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetMinimumSize</enum>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>9</number>
+           <layout class="QVBoxLayout">
+            <property name="spacing">
+             <number>3</number>
             </property>
             <item>
-             <widget class="QLabel" name="lblConnectToServer">
+             <widget class="QLabel" name="lblGlobalInfoLabel">
+              <property name="text">
+               <string>MUTED (Other people won't hear you)</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="margin">
+               <number>6</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetMinimumSize</enum>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>9</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="lblConnectToServer">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Set up your audio, connect to a server and start jamming!</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="CAudioMixerBoard" name="MainMixerBoard" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblUpdateCheck">
               <property name="text">
-               <string>Set up your audio, connect to a server and start jamming!</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <string>Update check</string>
               </property>
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="CAudioMixerBoard" name="MainMixerBoard" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblUpdateCheck">
-            <property name="text">
-             <string>Update check</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>
@@ -573,10 +593,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>butConnect</tabstop>
   <tabstop>chbLocalMute</tabstop>
-  <tabstop>chbSettings</tabstop>
-  <tabstop>chbChat</tabstop>
   <tabstop>sldAudioReverb</tabstop>
   <tabstop>rbtReverbSelL</tabstop>
   <tabstop>rbtReverbSelR</tabstop>

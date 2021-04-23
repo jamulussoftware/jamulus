@@ -1082,7 +1082,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
         if ( vecpChanFader[iCurFaderID]->IsVisible() )
         {
             // per definition: the fader order is colum-first/row-second (note that
-            // the value in iNumFadersFirstRow defines how many rows we will get)
+            // the value in iNumFadersFirstRows defines how many rows we will get)
             pMainLayout->addWidget ( vecpChanFader[iCurFaderID]->GetMainWidget(),
                     iVisibleFaderCnt % iNumMixerPanelRows,
                     iVisibleFaderCnt / iNumMixerPanelRows );

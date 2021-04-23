@@ -96,15 +96,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     butConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
 
-
-    // add to favorites button
-    butAddtoFavorites->setWhatsThis ( "<b>" + tr ( "Add to Favorites Button" ) + ":</b> " +
-        tr ( "Click this button to add the currently connected server to the Favorites list"
-        "of the Connect window.  This button is disabled when not connected to a server." ) );
-
-    butAddtoFavorites->setAccessibleName (
-        tr ( "Add to Favorites button" ) );
-
     // reverberation level
     QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
                            tr ( "Reverb can be applied to one local mono audio channel or to both "
@@ -348,12 +339,20 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
 
+    // Add to Favorites "button" -----------------------------------------------
+    paFAVAction = new QAction ( tr ( "Add to &Favorites" ) );
+    QObject::connect ( paFAVAction, SIGNAL( triggered() ), &ConnectDlg, SLOT( OnAddtoFavorites() ) );
+    paFAVAction->setEnabled ( false );
+
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pFileMenu );
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
+    pMenu->addMenu ( "|" );
+    pMenu->addAction ( paFAVAction );
+    pMenu->addMenu ( "|" );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
@@ -397,9 +396,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Connections -------------------------------------------------------------
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
-
-    QObject::connect ( butAddtoFavorites, &QPushButton::clicked,
-        &ConnectDlg, &CConnectDlg::OnAddtoFavorites );
 
     // check boxes
     QObject::connect ( chbSettings, &QCheckBox::stateChanged, this, &CClientDlg::OnSettingsStateChanged );
@@ -509,12 +505,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
-<<<<<<< HEAD
-    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
-=======
     // disable Add to Favorites button by default
-    butAddtoFavorites->setEnabled(false);
->>>>>>> 2eaf6151 (Favorites functionality)
+    paFAVAction->setEnabled( false );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -713,14 +705,10 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
-<<<<<<< HEAD
-        SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
-=======
         SetMixerBoardDeco( RS_UNDEFINED, pClient->GetGUIDesign() );
 
         // disable Add to Favorites button
-        butAddtoFavorites->setEnabled(false);
->>>>>>> 2eaf6151 (Favorites functionality)
+        paFAVAction->setEnabled( false );
     }
     else
     {
@@ -1191,7 +1179,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
         // enable Add to Favorites button
-        butAddtoFavorites->setEnabled(true);
+        paFAVAction->setEnabled( true );
 
         // start timer for level meter bar and ping time measurement
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );

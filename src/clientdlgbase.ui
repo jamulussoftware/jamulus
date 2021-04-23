@@ -478,16 +478,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="butAddtoFavorites">
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string>Add to Favorites</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>

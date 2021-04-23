@@ -50,7 +50,6 @@ class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
 public:
     CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent = nullptr );
 
-    void OnAddtoFavorites();
     void ThisFAVtoTop();
     void OnTabChange();
     void FillFavoritesTab();
@@ -107,6 +106,7 @@ protected:
     bool             bShowAllMusicians;
 
 public slots:
+    void OnAddtoFavorites();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
     void OnCentServAddrTypeChanged ( int iTypeIdx );

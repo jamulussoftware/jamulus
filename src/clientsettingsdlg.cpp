@@ -34,9 +34,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
 #if defined( Q_OS_IOS )
     // IOS needs menu to close
-    QMenuBar* pMenu  = new QMenuBar ( this );
-    QAction*  action = pMenu->addAction ( tr ( "&Close" ) );
     QMenuBar* pMenu = new QMenuBar ( this );
+    QAction*  action = pMenu->addAction ( tr ( "&Close" ) );
     connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );

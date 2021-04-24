@@ -43,7 +43,7 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 ```
 make distclean
-qmake ;# qmake-qt5 on Fedora 33
+qmake # qmake-qt5 on Fedora 33
 make
 sudo make install
 ```

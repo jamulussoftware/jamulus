@@ -24,9 +24,9 @@
    <item>
     <widget class="QTabWidget" name="tabSettings">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="tab_0_profile">
+     <widget class="QWidget" name="tab_0_User">
       <attribute name="title">
        <string>User Setup</string>
       </attribute>
@@ -269,7 +269,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_1_Basic">
+     <widget class="QWidget" name="tab_1_AudioNet">
       <attribute name="title">
        <string>Audio/Network Setup</string>
       </attribute>

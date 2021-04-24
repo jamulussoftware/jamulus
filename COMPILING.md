@@ -50,9 +50,6 @@ sudo make install
 
 `make distclean` is optional but ensures a clean build environment. `make install` is optional and puts the Jamulus binary into `/usr/local/bin`.
 
-**Users of Raspberry Pi** You may want to compile the client on another machine and run the binary on the Raspberry Pi. In which case the only libraries you need to run it are those for a [headless server](Server-Linux#running-a-headless-server) build, but _with_ the JACK sound packages. 
-
-
 ### “Headless” server build
 
 Although not strictly necessary, we recommend using the headless flag to avoid having to install some of the dependent packages, save some disk space and/or speed up your build time. 

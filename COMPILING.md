@@ -55,7 +55,7 @@ sudo make install
 
 ### “Headless” server build
 
-Although not strictly necessary, we recommend using the headless flag to speed up the build process. Gentoo users may also be able to avoid installing some dependencies as a consequence. Compiling with the headless flag means you can avoid installing some of the dependent packages, save some disk space and/or speed up your build time. 
+Although not strictly necessary, we recommend using the headless flag to avoid having to install some of the dependent packages, save some disk space and/or speed up your build time. 
 
 Note that you don’t need to install the JACK package(s) for a headless build. If you plan to run headless on Gentoo, or are compiling under Ubuntu for use on another Ubuntu machine, the only packages you should need for a headless build are `qtcore`, `qtnetwork`, `qtconcurrent` and `qtxml` (both for building and running the server).
 

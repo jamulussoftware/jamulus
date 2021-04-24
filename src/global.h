@@ -256,7 +256,7 @@ LED bar:      lbr
 
 // define Settings tab indexes
 #define SETTING_TAB_USER                 0
-#define SETTING_TAB_BASIC                1
+#define SETTING_TAB_AUDIONET             1
 #define SETTING_TAB_ADVANCED             2
 
 // common tool tip bottom line text

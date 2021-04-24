@@ -948,7 +948,7 @@ void CClientDlg::ShowMusicianProfileDialog()
 void CClientDlg::ShowGeneralSettings()
 {
     // open general settings dialog
-    emit SendTabChange ( SETTING_TAB_BASIC );
+    emit SendTabChange ( SETTING_TAB_AUDIONET );
     ClientSettingsDlg.show();
     ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Settings" ) , pClient->strClientName ) );
 

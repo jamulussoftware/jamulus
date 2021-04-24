@@ -62,7 +62,7 @@ Note that you don’t need to install the JACK package(s) for a headless build. 
 Compile the sources to ignore the JACK sound library:
 
 ```
-make distclean ;# reccommended
+make distclean # recommended
 qmake "CONFIG+=nosound headless"
 make
 sudo make install ;# optional

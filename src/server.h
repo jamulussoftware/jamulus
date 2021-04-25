@@ -171,6 +171,7 @@ class CServer :
 public:
     CServer ( const int          iNewMaxNumChan,
               const QString&     strLoggingFileName,
+              const QString&     strServerBindIP,
               const quint16      iPortNumber,
               const quint16      iQosNumber,
               const QString&     strHTMLStatusFileName,

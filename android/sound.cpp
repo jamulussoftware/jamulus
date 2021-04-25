@@ -29,15 +29,11 @@
 
 const uint8_t CSound::RING_FACTOR = 20;
 
-CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-                 void*          arg,
-                 const QString& strMIDISetup,
-                 const bool     ,
-                 const QString& ) :
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const QString& strMIDISetup, const bool, const QString& ) :
     CSoundBase ( "Oboe", fpNewProcessCallback, arg, strMIDISetup )
 {
 #ifdef ANDROIDDEBUG
-    qInstallMessageHandler(myMessageHandler);
+    qInstallMessageHandler ( myMessageHandler );
 #endif
 }
 
@@ -45,14 +41,13 @@ void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
 {
     // We request EXCLUSIVE mode since this will give us the lowest possible
     // latency. If EXCLUSIVE mode isn't available the builder will fall back to SHARED mode
-    builder
-            ->setFormat(oboe::AudioFormat::I16)
-            ->setSharingMode(oboe::SharingMode::Exclusive)
-            ->setChannelCount(oboe::ChannelCount::Stereo)
-            ->setSampleRate(SYSTEM_SAMPLE_RATE_HZ)
-            ->setFramesPerCallback(iOboeBufferSizeMono)
-            ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Medium)
-            ->setPerformanceMode(oboe::PerformanceMode::LowLatency);
+    builder->setFormat ( oboe::AudioFormat::I16 )
+        ->setSharingMode ( oboe::SharingMode::Exclusive )
+        ->setChannelCount ( oboe::ChannelCount::Stereo )
+        ->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ )
+        ->setFramesPerCallback ( iOboeBufferSizeMono )
+        ->setSampleRateConversionQuality ( oboe::SampleRateConversionQuality::Medium )
+        ->setPerformanceMode ( oboe::PerformanceMode::LowLatency );
 
     return;
 }
@@ -66,14 +61,12 @@ void CSound::closeStream ( oboe::ManagedStream& stream )
 
         if ( result != oboe::Result::OK || requestStopRes != oboe::Result::OK )
         {
-            throw CGenErr ( tr ( "Error closing stream: $s",
-                                 oboe::convertToText ( result ) ) );
+            throw CGenErr ( tr ( "Error closing stream: $s", oboe::convertToText ( result ) ) );
         }
 
         stream.reset();
     }
 }
-
 
 void CSound::openStreams()
 {
@@ -81,7 +74,7 @@ void CSound::openStreams()
     oboe::AudioStreamBuilder inBuilder, outBuilder;
 
     outBuilder.setDirection ( oboe::Direction::Output );
-    outBuilder.setCallback(this);
+    outBuilder.setCallback ( this );
     setupCommonStreamParams ( &outBuilder );
 
     oboe::Result result = outBuilder.openManagedStream ( mPlayStream );
@@ -100,7 +93,7 @@ void CSound::openStreams()
 
     // Only set callback for the input direction
     // the output will be handled writing directly on the stream
-    inBuilder.setCallback(this);
+    inBuilder.setCallback ( this );
     setupCommonStreamParams ( &inBuilder );
 
     result = inBuilder.openManagedStream ( mRecordingStream );
@@ -120,7 +113,7 @@ void CSound::openStreams()
 
 void CSound::printStreamDetails ( oboe::ManagedStream& stream )
 {
-    QString sDirection              = ( stream->getDirection()==oboe::Direction::Input ? "Input" : "Output" );
+    QString sDirection              = ( stream->getDirection() == oboe::Direction::Input ? "Input" : "Output" );
     QString sFramesPerBurst         = QString::number ( stream->getFramesPerBurst() );
     QString sBufferSizeInFrames     = QString::number ( stream->getBufferSizeInFrames() );
     QString sBytesPerFrame          = QString::number ( stream->getBytesPerFrame() );
@@ -130,24 +123,15 @@ void CSound::printStreamDetails ( oboe::ManagedStream& stream )
     QString sSharingMode            = ( stream->getSharingMode() == oboe::SharingMode::Exclusive ? "Exclusive" : "Shared" );
     QString sDeviceID               = QString::number ( stream->getDeviceId() );
     QString sSampleRate             = QString::number ( stream->getSampleRate() );
-    QString sAudioFormat            = ( stream->getFormat()==oboe::AudioFormat::I16 ? "I16" : "Float" );
+    QString sAudioFormat            = ( stream->getFormat() == oboe::AudioFormat::I16 ? "I16" : "Float" );
     QString sFramesPerCallback      = QString::number ( stream->getFramesPerCallback() );
-    qInfo() << "Stream details: [sDirection: " << sDirection <<
-               ", FramesPerBurst: "            << sFramesPerBurst <<
-               ", BufferSizeInFrames: "        << sBufferSizeInFrames <<
-               ", BytesPerFrame: "             << sBytesPerFrame <<
-               ", BytesPerSample: "            << sBytesPerSample <<
-               ", BufferCapacityInFrames: "    << sBufferCapacityInFrames <<
-               ", PerformanceMode: "           << sPerformanceMode <<
-               ", SharingMode: "               << sSharingMode <<
-               ", DeviceID: "                  << sDeviceID <<
-               ", SampleRate: "                << sSampleRate <<
-               ", AudioFormat: "               << sAudioFormat <<
-               ", FramesPerCallback: "         << sFramesPerCallback << "]";
+    qInfo() << "Stream details: [sDirection: " << sDirection << ", FramesPerBurst: " << sFramesPerBurst << ", BufferSizeInFrames: " << sBufferSizeInFrames
+            << ", BytesPerFrame: " << sBytesPerFrame << ", BytesPerSample: " << sBytesPerSample << ", BufferCapacityInFrames: " << sBufferCapacityInFrames
+            << ", PerformanceMode: " << sPerformanceMode << ", SharingMode: " << sSharingMode << ", DeviceID: " << sDeviceID << ", SampleRate: " << sSampleRate
+            << ", AudioFormat: " << sAudioFormat << ", FramesPerCallback: " << sFramesPerCallback << "]";
 }
 
-void CSound::warnIfNotLowLatency ( oboe::ManagedStream& stream,
-                                   QString              streamName )
+void CSound::warnIfNotLowLatency ( oboe::ManagedStream& stream, QString streamName )
 {
     if ( stream->getPerformanceMode() != oboe::PerformanceMode::LowLatency )
     {
@@ -203,9 +187,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 // This is the main callback method for when an audio stream is ready to publish data to an output stream
 // or has received data on an input stream. As per manual much be very careful not to do anything in this back that
 // can cause delays such as sleeping, file processing, allocate memory, etc.
-oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
-                                                void*              audioData,
-                                                int32_t            numFrames )
+oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames )
 {
     // only process if we are running
     if ( !bRun )
@@ -220,12 +202,12 @@ oboe::DataCallbackResult CSound::onAudioReady ( oboe::AudioStream* oboeStream,
 
     if ( oboeStream == mRecordingStream.get() && audioData )
     {
-        return onAudioInput(oboeStream, audioData, numFrames);
+        return onAudioInput ( oboeStream, audioData, numFrames );
     }
 
-    if ( oboeStream == mPlayStream.get() && audioData)
+    if ( oboeStream == mPlayStream.get() && audioData )
     {
-        return onAudioOutput(oboeStream, audioData, numFrames);
+        return onAudioOutput ( oboeStream, audioData, numFrames );
     }
 
     return oboe::DataCallbackResult::Continue;
@@ -252,7 +234,7 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
     int16_t* floatData = static_cast<int16_t*> ( audioData );
 
     // Copy recording data to internal vector
-    memcpy(vecsTmpInputAudioSndCrdStereo.data(),floatData,sizeof(int16_t)*numFrames * oboeStream->getChannelCount());
+    memcpy ( vecsTmpInputAudioSndCrdStereo.data(), floatData, sizeof ( int16_t ) * numFrames * oboeStream->getChannelCount() );
 
     if ( numFrames != iOboeBufferSizeMono )
     {
@@ -262,15 +244,15 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
     mStats.frames_in += numFrames;
 
     // Tell parent class that we've put some data ready to send to the server
-    ProcessCallback ( vecsTmpInputAudioSndCrdStereo  );
+    ProcessCallback ( vecsTmpInputAudioSndCrdStereo );
 
     // The callback has placed in the vector the samples to play
-    addOutputData(oboeStream->getChannelCount());
+    addOutputData ( oboeStream->getChannelCount() );
 
     return oboe::DataCallbackResult::Continue;
 }
 
-void CSound::addOutputData(int channel_count)
+void CSound::addOutputData ( int channel_count )
 {
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
@@ -278,10 +260,10 @@ void CSound::addOutputData(int channel_count)
     if ( vecsTmpInputAudioSndCrdStereo.empty() )
     {
         // prime output stream buffer with silence
-        vecsTmpInputAudioSndCrdStereo.resize(iOboeBufferSizeMono* channel_count, 0);
+        vecsTmpInputAudioSndCrdStereo.resize ( iOboeBufferSizeMono * channel_count, 0 );
     }
 
-    mOutBuffer.Put(vecsTmpInputAudioSndCrdStereo, iOboeBufferSizeMono * channel_count);
+    mOutBuffer.Put ( vecsTmpInputAudioSndCrdStereo, iOboeBufferSizeMono * channel_count );
 
     if ( mOutBuffer.isFull() )
     {
@@ -289,22 +271,20 @@ void CSound::addOutputData(int channel_count)
     }
 }
 
-oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream,
-                                                 void*              audioData,
-                                                 int32_t            numFrames )
+oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames )
 {
     mStats.frames_out += numFrames;
     mStats.out_callback_calls++;
 
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    std::size_t to_write = numFrames*oboeStream->getChannelCount();
-    std::size_t count    = std::min ( (std::size_t)mOutBuffer.GetAvailData(), to_write );
-    CVector<int16_t> outBuffer(count);
+    std::size_t      to_write = numFrames * oboeStream->getChannelCount();
+    std::size_t      count    = std::min ( (std::size_t) mOutBuffer.GetAvailData(), to_write );
+    CVector<int16_t> outBuffer ( count );
 
     mOutBuffer.Get ( outBuffer, count );
 
-    memcpy(audioData,outBuffer.data(),count*sizeof(int16_t));
+    memcpy ( audioData, outBuffer.data(), count * sizeof ( int16_t ) );
 
     if ( to_write > count )
     {
@@ -316,20 +296,18 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream,
 }
 
 // TODO better handling of stream closing errors
-void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream,
-                                 oboe::Result       result )
+void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result )
 {
-    qDebug() << "CSound::onErrorAfterClose: " << oboe::convertToText(result);
+    qDebug() << "CSound::onErrorAfterClose: " << oboe::convertToText ( result );
 }
 
 // TODO better handling of stream closing errors
-void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream,
-                                  oboe::Result       result )
+void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result )
 {
-    qDebug() << "CSound::onErrorBeforeClose: " << oboe::convertToText(result);
+    qDebug() << "CSound::onErrorBeforeClose: " << oboe::convertToText ( result );
 }
 
-void CSound::Stats::reset() 
+void CSound::Stats::reset()
 {
     frames_in          = 0;
     frames_out         = 0;
@@ -339,13 +317,9 @@ void CSound::Stats::reset()
     ring_overrun       = 0;
 }
 
-void CSound::Stats::log() const 
+void CSound::Stats::log() const
 {
     qDebug() << "Stats: "
-             << "frames_in: " << frames_in
-             << ",frames_out: " << frames_out
-             << ",frames_filled_out: " << frames_filled_out
-             << ",in_callback_calls: " << in_callback_calls
-             << ",out_callback_calls: " << out_callback_calls
-             << ",ring_overrun: " << ring_overrun;
+             << "frames_in: " << frames_in << ",frames_out: " << frames_out << ",frames_filled_out: " << frames_filled_out
+             << ",in_callback_calls: " << in_callback_calls << ",out_callback_calls: " << out_callback_calls << ",ring_overrun: " << ring_overrun;
 }

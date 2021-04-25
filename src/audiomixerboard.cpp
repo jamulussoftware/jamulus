@@ -1071,6 +1071,11 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     // sort the channels according to the first of the pair
     std::stable_sort ( PairList.begin(), PairList.end() );
 
+    // we want to distribute iNumVisibleFaders across the first row, then the next, etc
+    // up to iNumMixerPanelRows.  So row wants to start at 0 until we get to some number,
+    // then increase, where "some number" means we get no more than iNumMixerPanelRows.
+    const int iNumFadersFirstRow = 1 + ( iNumVisibleFaders / iNumMixerPanelRows );
+
     // add channels to the layout in the new order, note that it is not required to remove
     // the widget from the layout first but it is moved to the new position automatically
     int iVisibleFaderCnt = 0;
@@ -1081,11 +1086,11 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
         if ( vecpChanFader[iCurFaderID]->IsVisible() )
         {
-            // per definition: the fader order is colum-first/row-second (note that
-            // the value in iNumFadersFirstRows defines how many rows we will get)
+            // channels are added row-first, up to iNumFadersFirstRow, then onto
+            // the next row.
             pMainLayout->addWidget ( vecpChanFader[iCurFaderID]->GetMainWidget(),
-                    iVisibleFaderCnt % iNumMixerPanelRows,
-                    iVisibleFaderCnt / iNumMixerPanelRows );
+                    iVisibleFaderCnt / iNumFadersFirstRow,
+                    iVisibleFaderCnt % iNumFadersFirstRow );
 
             iVisibleFaderCnt++;
         }

@@ -24,10 +24,11 @@
 
 #include "socket.h"
 #include "server.h"
+#include <arpa/inet.h>
 
 
 /* Implementation *************************************************************/
-void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
+void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
 {
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
@@ -49,8 +50,13 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
 
     // preinitialize socket in address (only the port number is missing)
     sockaddr_in UdpSocketInAddr;
-    UdpSocketInAddr.sin_family      = AF_INET;
-    UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
+    UdpSocketInAddr.sin_family = AF_INET;
+    if (strServerBindIP.isEmpty()) {
+      UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
+    }
+    else {
+      UdpSocketInAddr.sin_addr.s_addr = inet_addr(strServerBindIP.toLocal8Bit().data());
+    }
 
     // initialize the listening socket
     bool bSuccess;

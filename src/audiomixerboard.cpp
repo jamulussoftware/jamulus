@@ -1074,7 +1074,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     // we want to distribute iNumVisibleFaders across the first row, then the next, etc
     // up to iNumMixerPanelRows.  So row wants to start at 0 until we get to some number,
     // then increase, where "some number" means we get no more than iNumMixerPanelRows.
-    const int iNumFadersFirstRow = 1 + ( iNumVisibleFaders / iNumMixerPanelRows );
+    const int iNumFadersFirstRow = ( iNumVisibleFaders + iNumMixerPanelRows - 1 ) / iNumMixerPanelRows;
 
     // add channels to the layout in the new order, note that it is not required to remove
     // the widget from the layout first but it is moved to the new position automatically

@@ -24,11 +24,11 @@
    <item>
     <widget class="QTabWidget" name="tabSettings">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_0_User">
       <attribute name="title">
-       <string>User Setup</string>
+       <string>My Profile</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_11">
        <item>

@@ -31,7 +31,7 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 
 * qt5-qtdeclarative-devel
 * jack-audio-connection-kit-dbus
-* libqt5concurrent5 (qt5-linguist for Fedora 33)
+* qt5-qtbase (qt5-linguist for Fedora 33)
 * jack-audio-connection-kit-devel
 
 #### For all desktop distributions

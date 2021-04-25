@@ -889,7 +889,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="247"/>
         <source>&amp;File</source>
-        <translation>Be&amp;stand</translation>
+        <translation>&amp;Bestand</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="262"/>
@@ -909,7 +909,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="270"/>
         <source>C&amp;hat...</source>
-        <translation>C&amp;hat...</translation>
+        <translation>&amp;Chat...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="273"/>
@@ -1071,7 +1071,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="333"/>
         <source>&amp;Settings</source>
-        <translation>In&amp;stellingen</translation>
+        <translation>&amp;Instellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="340"/>

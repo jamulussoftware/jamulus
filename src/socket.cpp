@@ -24,7 +24,6 @@
 
 #include "socket.h"
 #include "server.h"
-#include <arpa/inet.h>
 
 
 /* Implementation *************************************************************/
@@ -55,7 +54,7 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
       UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
     }
     else {
-      UdpSocketInAddr.sin_addr.s_addr = inet_addr(strServerBindIP.toLocal8Bit().data());
+      UdpSocketInAddr.sin_addr.s_addr = htonl ( QHostAddress( strServerBindIP ).toIPv4Address() );
     }
 
     // initialize the listening socket

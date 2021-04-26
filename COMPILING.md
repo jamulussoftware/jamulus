@@ -27,12 +27,13 @@ On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian 
 * qttools5-dev-tools
 * libjack-jackd2-dev
 
-#### On Fedora
+#### On Fedora 33+
 
 * qt5-qtdeclarative-devel
 * jack-audio-connection-kit-dbus
-* qt5-qtbase (qt5-linguist for Fedora 33)
+* qt5-qtbase
 * jack-audio-connection-kit-devel
+* qt5-linguist
 
 #### For all desktop distributions
 

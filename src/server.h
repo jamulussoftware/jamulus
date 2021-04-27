@@ -415,6 +415,8 @@ protected:
 
     CSignalHandler*            pSignalHandler;
 
+    QList<QRegExp>             qlPermittedChatTagPatterns;
+
 signals:
     void Started();
     void Stopped();

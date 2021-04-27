@@ -426,6 +426,20 @@ CServer::CServer ( const int          iNewMaxNumChan,
         QThreadPool::globalInstance()->setMaxThreadCount ( QThread::idealThreadCount() * 4 );
     }
 
+    // initialize chat html sanitization patterns:
+    static QList<QString> qlPermittedChatTagNames = {
+        "b",
+        "i",
+        "p",
+        "pre",
+        "u",
+    };
+    foreach ( auto tag, qlPermittedChatTagNames )
+    {
+        QRegExp pattern = QRegExp ( "&lt;(" + tag + ")&gt;([^<>]+)&lt;/" + tag + "&gt;" );
+        pattern.setMinimal ( true ); // non-greedy matching
+        qlPermittedChatTagPatterns << pattern;
+    }
 
     // Connections -------------------------------------------------------------
     // connect timer timeout signal
@@ -1475,11 +1489,19 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     // use different colors
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
 
+    // escape all html tags, but selectively allow safe tags again:
+    QString strChatTextFiltered = strChatText.toHtmlEscaped();
+    foreach ( auto pattern, qlPermittedChatTagPatterns )
+    {
+        strChatTextFiltered = strChatTextFiltered.replace ( pattern, "<\\1>\\2</\\1>" );
+    }
+    strChatTextFiltered = strChatTextFiltered.replace ( "&lt;br&gt;", "<br>" );
+
     const QString strActualMessageText =
         "<font color=\"" + sCurColor + "\">(" +
         QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
         ChanName.toHtmlEscaped() +
-        "</b></font> " + strChatText.toHtmlEscaped();
+        "</b></font> " + strChatTextFiltered;
 
 
     // Send chat text to all connected clients ---------------------------------

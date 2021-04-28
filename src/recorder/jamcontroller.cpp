@@ -92,13 +92,6 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
 
     if ( !newRecordingDir.isEmpty() )
     {
-        if ( pJamRecorder != nullptr )
-        {
-            // We have a reference to a CJamRecorder instance that should now have finished.
-            // Clean up the instance before replacing it.
-            delete pJamRecorder;
-            pJamRecorder = nullptr;
-        }
         pJamRecorder = new recorder::CJamRecorder ( newRecordingDir, iServerFrameSizeSamples );
         strRecorderErrMsg = pJamRecorder->Init();
         bRecorderInitialised = ( strRecorderErrMsg == QString::null );

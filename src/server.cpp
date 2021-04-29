@@ -665,6 +665,9 @@ void CServer::OnNewConnection ( int          iChID,
     // send recording state message on connection
     vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
 
+    // ensure that all other clients know about the new one
+    CreateAndSendChanListForAllConChannels();
+
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();

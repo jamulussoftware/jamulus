@@ -560,13 +560,10 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     // in case we do not have a driver available, throw error
     if ( lNumDevs == 0 )
     {
-        throw CGenErr ( "<b>" + tr ( "No ASIO audio device (driver) found." ) + "</b><br><br>" +
-            tr ( "The " ) + APP_NAME + tr ( " software requires the low latency audio "
-            "interface ASIO to work properly. This is not a standard "
-            "Windows audio interface and therefore a special audio driver is "
-            "required. Either your sound card has a native ASIO driver (which "
-            "is recommended) or you might want to use alternative drivers like "
-            "the ASIO4All driver." ) );
+        throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
+            QString ( tr ( "Please install an ASIO driver before running %1. "
+            "If you own a device with ASIO support, install its official ASIO driver. "
+            "If not, you'll need to use a driver like ASIO4ALL." ) ).arg ( APP_NAME ) );
     }
     asioDrivers->removeCurrentDriver();
 

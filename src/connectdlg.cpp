@@ -257,7 +257,6 @@ void CConnectDlg::RequestServerList()
     // reset flags
     bServerListReceived        = false;
     bReducedServerListReceived = false;
-    bServerListItemWasChosen   = false;
     bListFilterWasActive       = false;
 
     // clear server list view
@@ -314,8 +313,64 @@ void CConnectDlg::OnTimerReRequestServList()
 
 void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )
 {
-    // Use Directories
-    FillServerTab( InetAddr, vecServerInfo, bIsReducedServerList );
+    if( pSettings->bFavoriteWasShownConnect == CONTAB_SERVERS )
+    {
+        // Use Directories
+        FillServerTab( InetAddr, vecServerInfo, bIsReducedServerList );
+    }
+    else
+    {
+        UpdateFAVIPs( InetAddr, vecServerInfo, bIsReducedServerList );
+    }
+}
+
+void CConnectDlg::UpdateFAVIPs( const CHostAddress&         InetAddr,
+                                 const CVector<CServerInfo>& vecServerInfo,
+                                 const bool                  bIsReducedServerList )
+{
+
+    if ( bServerListReceived || bIsReducedServerList )
+    {
+        return;
+    }
+    const int iServerInfoLen = vecServerInfo.Size();
+    const int iServerListLen = lvwFavorites->topLevelItemCount();
+    int qtyThisDirectory = 0;
+
+    // to shorten search, find quantity of servers from this directory
+    for ( int iJdx = 0; iJdx < iServerListLen; iJdx++ )
+    {
+        if( lvwFavorites->topLevelItem ( iJdx )->data ( 3, Qt::UserRole ) == ecsSelectedDirectECS )
+        {
+           qtyThisDirectory++;
+        }
+    }
+
+    for ( int iIdx = 0; qtyThisDirectory && (iIdx < iServerInfoLen); iIdx++ )
+    {
+        for ( int iJdx = 0; iJdx < iServerListLen; iJdx++ )
+        {
+            // if right directory server and identical name strings
+            if ( ( lvwFavorites->topLevelItem ( iJdx )->data ( 3, Qt::UserRole ) == ecsSelectedDirectECS ) &&
+                 ( !lvwFavorites->topLevelItem ( iJdx )->text ( 0 ).compare( vecServerInfo[iIdx].strName ) ) )
+            {
+                qtyThisDirectory--;
+                // if IP addresses are not the same, update in Favorites using value from server
+                if( lvwFavorites->topLevelItem ( iJdx )->data ( 0, Qt::UserRole ).toString() != vecServerInfo[iIdx].HostAddr.toString() &&
+                    vecServerInfo[iIdx].HostAddr.toString() != "0.0.0.0:0" )  // special case, don't update directory servers
+                {
+                    lvwFavorites->topLevelItem ( iJdx )->setData ( 0, Qt::UserRole, vecServerInfo[iIdx].HostAddr.toString() );
+                    pSettings->vstrFAVAddress[iJdx] = vecServerInfo[iIdx].HostAddr.toString();
+                }
+                // if max num clients not the same, update in Favorites using value from server
+                if( lvwFavorites->topLevelItem ( iJdx )->text ( 5 ) != QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) )
+                {
+                    lvwFavorites->topLevelItem ( iJdx )->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
+                    pSettings->vstrFAVAddress[iJdx] = QString().setNum ( vecServerInfo[iIdx].iMaxNumClients );
+                }
+            }
+        }
+    }
 }
 
 void CConnectDlg::FillServerTab( const CHostAddress&         InetAddr,
@@ -756,6 +811,7 @@ void CConnectDlg::OnConnectClicked()
     {
         // Server list, Directory is in combobox
         strSelectedDirectory = csCentServAddrTypeToString ( pSettings->eCentralServerAddressType );
+        ecsSelectedDirectECS = pSettings->eCentralServerAddressType;
     }
 
     // tell the parent window that the connection shall be initiated
@@ -764,26 +820,88 @@ void CConnectDlg::OnConnectClicked()
 
 void CConnectDlg::OnTimerPing()
 {
-    // point pList to correct tab list
+    CHostAddress ServerAddress;
+
+    // point pList to correct table list
     QTreeWidget * pList = ( pSettings->bFavoriteWasShownConnect == CONTAB_FAVORITES ) ? lvwFavorites : lvwServers;
-    QString qstr = ( pSettings->bFavoriteWasShownConnect == CONTAB_FAVORITES ) ? "FavPing" : "ServPing" ;
+
+    int iServerListLen = pList->topLevelItemCount();
+
+    // if Favorites, check if servers aren't responding, send server request if so to open ports
+    if( pSettings->bFavoriteWasShownConnect == CONTAB_FAVORITES )
+    {
+        // iWasSent, bitfield to remember which directorys have been queried
+        int iWasSent = 0;
+
+        // pList->topLevelItem ( iIdx )->data ( 1 ) stores sequencer
+        //  val == 0, first timeout -> skip, check if no directory (privat server), set val to 4 to do no request
+        //  val == 1, check if no ping arrived, send Server List Query to corresponding Directory if the case.
+        //  val == 2, ping requested, but not seen
+        //  val == 3, ping seen, set in SetPingTimeAndNumClientsResult
+        //  val == 4, do nothing (privat server)
+        for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+        {
+            int iSequence = pList->topLevelItem ( iIdx )->data ( 1 , Qt::UserRole ).toInt();
+            // skip first time
+            if ( iSequence == 0 )
+            {
+                if ( pList->topLevelItem ( iIdx )->text ( 3 ).isEmpty() )  // no directory server
+                {
+                    pList->topLevelItem ( iIdx )->setData ( 1 , Qt::UserRole, 4 );  // do no request
+                    pList->topLevelItem ( iIdx )->setText ( 3, tr ( "Private Server" ) );
+                }
+                pList->topLevelItem ( iIdx )->setData ( 1 , Qt::UserRole, 1 );  // set to second time
+            }
+            else
+            // no ping seen
+            if ( iSequence == 1 )
+            {
+                // if no ping response, request server list from corresponding Directory
+                ecsSelectedDirectECS = static_cast<ECSAddType> ( pList->topLevelItem ( iIdx )->data ( 3, Qt::UserRole ).toInt() );
+
+                // if this directory not previously queried
+                if ( ( iWasSent & ( 1<<( (int)ecsSelectedDirectECS ) ) ) == 0 )
+                {
+                    iWasSent |= 1<<( (int)ecsSelectedDirectECS );
+                    // set sequencer to query sent
+                    pList->topLevelItem ( iIdx )->setData ( 1 , Qt::UserRole, 2 );
+                    if ( NetworkUtil().ParseNetworkAddress ( NetworkUtil::GetCentralServerAddress ( ecsSelectedDirectECS,
+                                                                                                    pSettings->vstrCentralServerAddress[0] ),
+                                                                                                    ServerAddress ) )
+                    {
+                        // send the request for the server list
+                        emit ReqServerListQuery ( ServerAddress );
+                        break;
+                    }
+                }
+            }
+            else
+            // query sent, but no ping seen
+            if ( iSequence == 2 )
+            {
+                // was sent, but no ping seen, display offline
+                pList->topLevelItem ( iIdx )->setText ( 1 , "  offline" );
+            }
+
+        }
+    }
 
     // send ping messages to the servers in the corresponding list
-    const int iServerListLen = pList->topLevelItemCount();
+    iServerListLen = pList->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
-        CHostAddress CurServerAddress;
-
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
         if ( NetworkUtil().ParseNetworkAddress (
                 pList->topLevelItem ( iIdx )->
                 data ( 0, Qt::UserRole ).toString(),
-                CurServerAddress ) )
+                ServerAddress ) )
         {
             // if address is valid, send ping message using a new thread
-            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, CurServerAddress );
+            QtConcurrent::run ( this,
+                                &CConnectDlg::EmitCLServerListPingMes,
+                                ServerAddress );
         }
     }
 }
@@ -814,6 +932,9 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         // check if this is the first time a ping time is set
         const bool bIsFirstPing = pCurListViewItem->text ( 1 ).isEmpty();
         bool       bDoSorting   = false;
+        // retain that a ping has been received from this server
+        pCurListViewItem->setData ( 1, Qt::UserRole, 3 );
+
 
         // update minimum ping time column (invisible, used for sorting) if
         // the new value is smaller than the old value
@@ -1010,22 +1131,23 @@ void CConnectDlg::FillFavoritesTab()
     // add list item for each server in the Favorite list
     for ( int iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
     {
-        CHostAddress CurHostAddress;
+        // break loop if Address is empty
+        if ( pSettings->vstrFAVAddress[iIdx].isEmpty() )
+        {
+            break;
+        }
+//        CHostAddress CurHostAddress;
 
         QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwFavorites );
         pNewListViewItem->setHidden ( false );
 
         NetworkUtil::ParseNetworkAddress ( pSettings->vstrFAVAddress[iIdx], CurHostAddress );
 
-        // break loop if Address is empty
-        if ( pSettings->vstrFAVAddress[iIdx].isEmpty() )
-        {
-            break;
-        }
         // 0: server name
-        // 1: ping time
+        // 1: ping time, text->ping time, data->has received ping response (as int)
+        //       data-> 0 no response, 1 ping not seen, 2 directory query sent, 3 ping seen, 4 private server
         // 2: number of musicians (including additional strings like " (full)")
-        // 3: location  // for Directory Server
+        // 3: Directory Server, text->name, data->ECS (as int)
         // 4: minimum ping time (invisible)
         // 5: maximum number of clients (invisible)
 
@@ -1043,9 +1165,11 @@ void CConnectDlg::FillFavoritesTab()
         CurPingTimeFont.setBold ( true );
         pNewListViewItem->setFont ( 1, CurPingTimeFont );
         pNewListViewItem->setText ( 1, "     ?" );
+        pNewListViewItem->setData ( 1, Qt::UserRole, 0 );
 
-        pNewListViewItem->setText ( 2, "    ?" );
-        pNewListViewItem->setText ( 3, pSettings->vstrFAVDirectory[iIdx]);
+        pNewListViewItem->setText ( 2, "" );
+        pNewListViewItem->setText ( 3, pSettings->vstrFAVDirectory[iIdx] );
+        pNewListViewItem->setData ( 3, Qt::UserRole, pSettings->vecsFAVDirectECS[iIdx] );
 
         // init the minimum ping time with a large number (note that this number
         // must fit in an integer type)
@@ -1075,7 +1199,6 @@ void CConnectDlg::OnAddtoFavorites()
     {
         if( strSelectedAddress == pSettings->vstrFAVAddress[iIdx] )
         {
-            dupIdx = iIdx;
             break;
         }
     }
@@ -1090,6 +1213,7 @@ void CConnectDlg::OnAddtoFavorites()
             pSettings->vstrFAVAddress[iIdx]   = pSettings->vstrFAVAddress[iIdx-1];
             pSettings->vstrFAVName[iIdx]      = pSettings->vstrFAVName[iIdx-1];
             pSettings->vstrFAVDirectory[iIdx] = pSettings->vstrFAVDirectory[iIdx-1];
+            pSettings->vecsFAVDirectECS[iIdx] = pSettings->vecsFAVDirectECS[iIdx-1];
             pSettings->vstrFAVMaxUsers[iIdx]  = pSettings->vstrFAVMaxUsers[iIdx-1];
         }
     }
@@ -1101,6 +1225,7 @@ void CConnectDlg::OnAddtoFavorites()
             pSettings->vstrFAVAddress[iIdx]   = pSettings->vstrFAVAddress[iIdx-1];
             pSettings->vstrFAVName[iIdx]      = pSettings->vstrFAVName[iIdx-1];
             pSettings->vstrFAVDirectory[iIdx] = pSettings->vstrFAVDirectory[iIdx-1];
+            pSettings->vecsFAVDirectECS[iIdx] = pSettings->vecsFAVDirectECS[iIdx-1];
             pSettings->vstrFAVMaxUsers[iIdx]  = pSettings->vstrFAVMaxUsers[iIdx-1];
         }
     }
@@ -1110,25 +1235,28 @@ void CConnectDlg::OnAddtoFavorites()
     pSettings->vstrFAVAddress[0]   = strSelectedAddress;
     pSettings->vstrFAVMaxUsers[0]  = strSelectedMaxUsers;
     pSettings->vstrFAVDirectory[0] = strSelectedDirectory;
+    pSettings->vecsFAVDirectECS[0] = ecsSelectedDirectECS;
 }
 
 void CConnectDlg::ThisFAVtoTop()
 {
     int iIdx = 0, dupIdx = 0;
     QString strName, strMax, strDirectory;
+    ECSAddType ecsSave;
 
     // Look for selected server
-    for ( iIdx = 0; iIdx <= MAX_NUM_FAVORITE_ADDR_ITEMS-1; iIdx++ )
+    for ( iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
     {
         if( strSelectedAddress == pSettings->vstrFAVAddress[iIdx] )
         {
-            dupIdx = iIdx;
             break;
         }
     }
+    dupIdx = iIdx;
     strName      = pSettings->vstrFAVName[dupIdx];
     strMax       = pSettings->vstrFAVMaxUsers[dupIdx];
     strDirectory = pSettings->vstrFAVDirectory[dupIdx];
+    ecsSave      = pSettings->vecsFAVDirectECS[dupIdx];
 
     // push down to free first line
     for ( iIdx = dupIdx; iIdx > 0; iIdx-- )
@@ -1136,6 +1264,7 @@ void CConnectDlg::ThisFAVtoTop()
         pSettings->vstrFAVAddress[iIdx]   = pSettings->vstrFAVAddress[iIdx-1];
         pSettings->vstrFAVName[iIdx]      = pSettings->vstrFAVName[iIdx-1];
         pSettings->vstrFAVDirectory[iIdx] = pSettings->vstrFAVDirectory[iIdx-1];
+        pSettings->vecsFAVDirectECS[iIdx] = pSettings->vecsFAVDirectECS[iIdx-1];
         pSettings->vstrFAVMaxUsers[iIdx]  = pSettings->vstrFAVMaxUsers[iIdx-1];
     }
     // move to top
@@ -1143,6 +1272,7 @@ void CConnectDlg::ThisFAVtoTop()
     pSettings->vstrFAVName[0]      = strName;
     pSettings->vstrFAVMaxUsers[0]  = strMax;
     pSettings->vstrFAVDirectory[0] = strDirectory;
+    pSettings->vecsFAVDirectECS[0] = ecsSave;
 }
 
 

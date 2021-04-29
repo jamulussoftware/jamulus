@@ -252,11 +252,12 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
             GetIniSetting ( IniXMLDocument, "client",
                             QString ( "favname%1" ).arg ( iIdx ), "" );
         listT = strT.split(QLatin1Char(','));
-        if( (!listT[0].isEmpty()) && listT.size() == 4 ) {
+        if( (!listT[0].isEmpty()) && listT.size() == 5 ) {
             vstrFAVAddress[iIdx]   = listT[0];
             vstrFAVMaxUsers[iIdx]  = listT[1];
             vstrFAVDirectory[iIdx] = listT[2];
             vstrFAVName[iIdx]      = FromBase64ToString ( listT[3] );
+            vecsFAVDirectECS[iIdx] = static_cast<ECSAddType>(listT[4].toInt());
         }
     }
 
@@ -587,8 +588,13 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     QString strT;
     for ( iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
     {
-        strT = vstrFAVAddress[iIdx] + "," + vstrFAVMaxUsers[iIdx] + "," +
-               vstrFAVDirectory[iIdx] + "," + ToBase64 ( vstrFAVName[iIdx] );
+        strT = "";
+        if( !vstrFAVAddress[iIdx].isEmpty() )
+        {
+            strT = vstrFAVAddress[iIdx] + "," + vstrFAVMaxUsers[iIdx] + "," +
+               vstrFAVDirectory[iIdx] + "," + ToBase64 ( vstrFAVName[iIdx] ) +
+               "," + QString::number( static_cast<int>(vecsFAVDirectECS[iIdx]) );
+        }
         PutIniSetting ( IniXMLDocument, "client",
                         QString ( "favname%1" ).arg ( iIdx ),
                         strT );

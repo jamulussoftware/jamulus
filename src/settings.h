@@ -122,7 +122,7 @@ public:
         vstrFAVAddress              ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
         vstrFAVMaxUsers             ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
         vstrFAVDirectory            ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
-        iNewClientFaderLevel        ( 100 ),
+        vecsFAVDirectECS            ( MAX_NUM_FAVORITE_ADDR_ITEMS, AT_DEFAULT ),
         iInputBoost                 ( 1 ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType            ( ST_NO_SORT ),
@@ -154,6 +154,7 @@ public:
     CVector<QString> vstrFAVAddress;
     CVector<QString> vstrFAVMaxUsers;
     CVector<QString> vstrFAVDirectory;
+    CVector<ECSAddType> vecsFAVDirectECS;
     int              iNewClientFaderLevel;
     int              iInputBoost;
     int              iSettingsTab;

@@ -66,6 +66,10 @@ public:
                                       const CVector<CServerInfo>& vecServerInfo,
                                       const bool                  bIsReducedServerList );
 
+    void UpdateFAVIPs( const CHostAddress&         InetAddr,
+                                     const CVector<CServerInfo>& vecServerInfo,
+                                     const bool                  bIsReducedServerList );
+
     void SetConnClientsList ( const CHostAddress&          InetAddr,
                               const CVector<CChannelInfo>& vecChanInfo );
 
@@ -98,6 +102,7 @@ protected:
     QString          strSelectedServerName;
     QString          strSelectedMaxUsers;
     QString          strSelectedDirectory;
+    ECSAddType       ecsSelectedDirectECS;
     bool             bShowCompleteRegList;
     bool             bServerListReceived;
     bool             bReducedServerListReceived;

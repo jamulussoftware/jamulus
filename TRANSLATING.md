@@ -2,21 +2,17 @@
 
 This guide is written to provide instructions from scratch for contributing to the translation of the Jamulus application to other languages.
 
-There are two parts:
-
-1. Instructions for getting set up, which only needs to be done once.
-
-2. The workflow for updating and contributing translations as a part of the preparation for a release of Jamulus.
-
-----
-## Setting up
-
 The code for Jamulus is open source, and is managed and made available via the Github site.
 
-The translator must be able to do the following steps:
+For completeness, this document describes the use both of GitHub (using `git`) and of _Qt Linguist_.
 
-* Fork the Jamulus code into their own Github repository.
-* Clone their own repository to their computer, using either:
+----
+## Introduction
+
+The translator must be able to do the following steps, which will each be explained further down:
+
+* Create their own linked copy ("repository" or "repo") of Jamulus in GitHub. This is called Forking.
+* Copy ("clone") their own repository to their computer, using either:
   - Command line `git`, or
   - [Github Desktop](https://docs.github.com/en/desktop)
 * Update their own local repo from the upstream master branch.
@@ -25,6 +21,15 @@ The translator must be able to do the following steps:
 * Commit the updated `.ts` file to the branch their own local git repo.
 * Push the branch from their local repo to their own repo on Github.
 * Raise a Pull Request (PR) for the merging of the updated file into the upstream repo by the developers.
+
+This guide contains two main parts:
+
+1. Instructions for getting set up, which only needs to be done once.
+
+2. The workflow for updating and contributing translations as a part of the preparation for a release of Jamulus.
+
+----
+## 1. Setting up
 
 ### Visit github.com
 
@@ -120,7 +125,7 @@ Under Linux
 Instructions for use are in the [Qt Linguist Manual](https://doc.qt.io/qt-5/qtlinguist-index.html)
 
 ----
-## Doing a translation
+## 2. Doing a translation
 
 ### Get the most up-to-date files and set up a new branch
 
@@ -142,13 +147,15 @@ git rebase upstream/master
 git push
 ```
 
-Finally, create a new branch for the changes that will be done (do not just do them on `master`):
+Finally, create a new branch for the changes that will be done (do not just do them on `master`).
+The actual name of the branch is not critical, since the branch will be deleted after being merged,
+but it's worth choosing a meaningful name:
 
 ```
-git checkout -b v370-german
+git checkout -b translate-r3_7_0-german
 ```
 
-(The branch name is chosen by the user; the above name v370-german is an example for the German translation of V3.7.0)
+(The branch name is chosen by the user; the above name translate-r3_7_0-german is an example for the German translation of V3.7.0)
 
 The branch will be used later as the source of a Pull Request.
 
@@ -158,7 +165,7 @@ Select the current repository as `jamulus`, and the current branch as `master`.
 
 Click on "Fetch origin" to get fully up to date with upstream.
 
-Drop down the "Current Branch" menu and click on the **New Branch** button. Give the branch a name such as `v370-german` and click **Create Branch**.
+Drop down the "Current Branch" menu and click on the **New Branch** button. Give the branch a meaningful name such as `translate-r3_7_0-german` and click **Create Branch**.
 
 Do not click on **Publish branch** just yet.
 
@@ -170,7 +177,7 @@ In this directory are translation source files for each language, each with a `.
 
 Open the `.ts` file for the language being worked on.
 
-Each context in the left-hand column represents a source file or graphica form containing translatable strings. The icon beside each shows a green tick if there is nothing further to be done,
+Each context in the left-hand column represents a source file or graphical form containing translatable words and phrases ("strings"). The icon beside each shows a green tick if there is nothing further to be done,
 a yellow tick if a translation needs attention, and a question mark if there are untranslated strings.
 
 After clicking on a Context, the list of strings needing translation is shown, with a green tick beside the ones that have been done. The right-hand pane will show either the source code or the form,
@@ -182,16 +189,17 @@ Again, strings with a question mark require translation.
 
 After some or all of the required strings have been translated, the file can be saved.
 
-### Submit the updated translation as a PR
+### Submit the updated translation as a Pull Request (PR)
 
 Once all translations have been done, the branch containing the changes must be commited to your own repo, pushed to Github (`origin`) and then a Pull Request raised to the upstream repo.
 
 #### With git command line tools
 
-First, check the current branch with `git status`, to make sure it is correct, and then do a commit:
+First, check the current branch with `git status`, to make sure it is correct, and then do a commit,
+with a commit message describing the change, for example:
 
 ```
-git commit -am 'Updated translations for v3.7.0'
+git commit -am 'Update German translations for v3.7.0'
 ```
 
 Then do a `git push`.
@@ -199,18 +207,19 @@ Then do a `git push`.
 It will probably tell you to set the upstream repository for tracking, and conveniently gives the command for copying and pasting:
 
 ```
-git push --set-upstream origin v370-german
+git push --set-upstream origin translate-r3_7_0-german
 ```
 
 Finally, go to the Github website where it will most likely offer a banner saying there is a recent commit and offering to raise a Pull Request. Do so.
 
 #### With Github Desktop
 
-Select the current repository as `jamulus`, and the branch that was created above, such as `v370-german`.
+Select the current repository as `jamulus`, and the branch that was created above, such as `translate-r3_7_0-german`.
 
 The changed file(s) should be listed in the left-hand column as `src/res/translation/translation_xx_YY.ts`. When the file is selected, the differences will be displayed in the main panel.
 
-Add a simple commit message in the first box below the file list, (the "Update filename" box), and add any extra description in the Description box (optional, probably not required).
+Add a simple commit message in the first box below the file list, (e.g. change "Update filename" 
+to something like "Update German translations for v3.7.0"), and add any extra description in the Description box (optional, probably not required).
 
 Commit the changes to the local git repo by clicking on **Commit to <branch>**.
 

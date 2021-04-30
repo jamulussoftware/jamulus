@@ -343,7 +343,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     if ( pSettings->bWindowWasShownSettings )
     {
-        ShowGeneralSettings();
+        ShowGeneralSettings( pSettings->iSettingsTab );
     }
 
     // chat window
@@ -862,6 +862,16 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
     SetMyWindowTitle ( iNewNumClients );
 }
 
+void CClientDlg::OnOpenGeneralSettings()
+{
+    ShowGeneralSettings( SETTING_TAB_AUDIONET );
+}
+
+void CClientDlg::OnOpenMusicianProfileDialog()
+{
+    ShowGeneralSettings( SETTING_TAB_USER );
+}
+
 void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 {
     // set the window title (and therefore also the task bar icon text of the OS)
@@ -937,22 +947,10 @@ void CClientDlg::ShowConnectionSetupDialog()
     ConnectDlg.activateWindow();
 }
 
-void CClientDlg::ShowMusicianProfileDialog()
-{
-    // show musician profile dialog
-    emit SendTabChange ( SETTING_TAB_USER );
-    ClientSettingsDlg.show();
-    ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Settings" ) , pClient->strClientName ) );
-
-    // make sure dialog is upfront and has focus
-    ClientSettingsDlg.raise();
-    ClientSettingsDlg.activateWindow();
-}
-
-void CClientDlg::ShowGeneralSettings()
+void CClientDlg::ShowGeneralSettings( int iTab )
 {
     // open general settings dialog
-    emit SendTabChange ( SETTING_TAB_AUDIONET );
+    emit SendTabChange ( iTab );
     ClientSettingsDlg.show();
     ClientSettingsDlg.setWindowTitle ( MakeClientNameTitle ( tr ( "Settings" ) , pClient->strClientName ) );
 
@@ -991,7 +989,7 @@ void CClientDlg::OnSettingsStateChanged ( int value )
 {
     if ( value == Qt::Checked )
     {
-        ShowGeneralSettings();
+        ShowGeneralSettings( SETTING_TAB_AUDIONET );
     }
     else
     {

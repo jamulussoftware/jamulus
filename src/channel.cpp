@@ -37,6 +37,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
     bIsServer              ( bNIsServer ),
+    bIsIdentified          ( false ),
     iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
     SignalLevelMeter       ( false, 0.5 ) // server mode with mono out and faster smoothing
 {
@@ -360,6 +361,8 @@ float CChannel::GetPan ( const int iChanID )
 
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
+    bIsIdentified = true;
+
     // apply value (if different from previous one)
     if ( ChannelInfo != NChanInf )
     {
@@ -725,6 +728,11 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
                                    const CVector<uint8_t>& vecbyNPacket,
                                    const int               iNPacketLen )
 {
+    if (bIsServer && !bIsIdentified)
+    {
+        return;
+    }
+
     QMutexLocker locker ( &MutexConvBuf );
 
     // use conversion buffer to convert sound card block size in network

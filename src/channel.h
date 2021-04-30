@@ -228,6 +228,7 @@ protected:
 
     bool                    bIsEnabled;
     bool                    bIsServer;
+    bool                    bIsIdentified;
 
     int                     iNetwFrameSizeFact;
     int                     iNetwFrameSize;

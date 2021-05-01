@@ -614,8 +614,8 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
                     eRet = PS_AUDIO_ERR;
                 }
 
-                // manage audio fade-in counter
-                if ( iFadeInCnt < iFadeInCntMax )
+                // manage audio fade-in counter, after channel is identified
+                if ( bIsIdentified && iFadeInCnt < iFadeInCntMax )
                 {
                     iFadeInCnt++;
                 }

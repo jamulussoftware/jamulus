@@ -361,7 +361,7 @@ float CChannel::GetPan ( const int iChanID )
 
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
-    bIsIdentified = true;
+    bIsIdentified = true;   // Indicate we have received channel info
 
     // apply value (if different from previous one)
     if ( ChannelInfo != NChanInf )
@@ -730,7 +730,7 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
 {
     if (bIsServer && !bIsIdentified)
     {
-        return;
+        return;     // A server will not send audio to a client until that client has sent channel info
     }
 
     QMutexLocker locker ( &MutexConvBuf );

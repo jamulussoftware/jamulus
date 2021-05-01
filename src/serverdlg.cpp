@@ -600,6 +600,12 @@ void CServerDlg::OnServerStopped()
 void CServerDlg::OnStopRecorder()
 {
     UpdateRecorderStatus ( QString::null );
+    if ( pServer->GetRecorderErrMsg() != QString::null )
+    {
+        QMessageBox::warning ( this, APP_NAME, tr ( "Recorder failed to start. "
+            "Please check available disk space and permissions and try again. "
+            "Error: " ) + pServer->GetRecorderErrMsg() );
+    }
 }
 
 void CServerDlg::OnRecordingDirClicked()
@@ -843,7 +849,14 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
         strRecorderStatus = SREC_NOT_INITIALISED;
     }
 
+    chbEnableRecorder->blockSignals ( true );
+    chbEnableRecorder->setChecked ( strRecorderStatus != SREC_NOT_ENABLED );
+    chbEnableRecorder->blockSignals ( false );
+
     edtRecordingDir->setText ( strRecordingDir );
+    edtRecordingDir->setEnabled ( !bIsRecording );
+    pbtRecordingDir->setEnabled ( !bIsRecording );
+    tbtClearRecordingDir->setEnabled ( !bIsRecording );
     edtCurrentSessionDir->setEnabled ( bIsRecording );
     lblRecorderStatus->setText ( strRecorderStatus );
     pbtNewRecording->setEnabled ( bIsRecording );

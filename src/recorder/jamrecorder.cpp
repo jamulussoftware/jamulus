@@ -60,7 +60,7 @@ CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString
     wavFile = new QFile(recordBaseDir.absoluteFilePath(fileName));
     if (!wavFile->open(QFile::OpenMode(QIODevice::OpenModeFlag::ReadWrite))) // need to allow rewriting headers
     {
-        throw new std::runtime_error( ("Could not write to WAV file "  + wavFile->fileName()).toStdString() );
+        throw CGenErr ( "Could not write to WAV file "  + wavFile->fileName() );
     }
     out = new CWaveStream(wavFile, numChannels);
 
@@ -160,15 +160,15 @@ CJamSession::CJamSession(QDir recordBaseDir) :
 
     if (!fi.exists() && !QDir().mkpath(sessionDir.absolutePath()))
     {
-        throw std::runtime_error( (sessionDir.absolutePath() + " does not exist but could not be created").toStdString() );
+        throw CGenErr ( sessionDir.absolutePath() + " does not exist and could not be created" );
     }
     if (!fi.isDir())
     {
-        throw std::runtime_error( (sessionDir.absolutePath() + " exists but is not a directory").toStdString() );
+        throw CGenErr ( sessionDir.absolutePath() + " exists but is not a directory" );
     }
     if (!fi.isWritable())
     {
-        throw std::runtime_error( (sessionDir.absolutePath() + " is a directory but cannot be written to").toStdString() );
+        throw CGenErr ( sessionDir.absolutePath() + " is a directory but cannot be written to" );
     }
 
     // Explicitly set all the pointers to "empty"
@@ -396,13 +396,29 @@ void CJamRecorder::Start() {
     // Ensure any previous cleaning up has been done.
     OnEnd();
 
+    QString error;
+
     // needs to be after OnEnd() as that also locks
     ChIdMutex.lock();
     {
-        currentSession = new CJamSession( recordBaseDir );
-        isRecording = true;
+        try
+        {
+            currentSession = new CJamSession( recordBaseDir );
+            isRecording = true;
+        }
+        catch ( const CGenErr& err )
+        {
+            currentSession = nullptr;
+            error = err.GetErrorText();
+        }
     }
     ChIdMutex.unlock();
+
+    if ( !currentSession )
+    {
+        emit RecordingFailed ( error );
+        return;
+    }
 
     emit RecordingSessionStarted ( currentSession->SessionDir().path() );
 }
@@ -516,13 +532,15 @@ void CJamRecorder::AudacityLofFromCurrentSession()
 /**
  * @brief CJamRecorder::SessionDirToReaper Replica of CJamRecorder::OnEnd() but using the directory contents to construct the CReaperProject object
  * @param strSessionDirName
+ *
+ * This is used for testing and is not called from the regular Jamulus code.
  */
 void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFrameSizeSamples)
 {
     const QFileInfo fiSessionDir(QDir::cleanPath(strSessionDirName));
     if (!fiSessionDir.exists() || !fiSessionDir.isDir())
     {
-        throw std::runtime_error( (fiSessionDir.absoluteFilePath() + " does not exist or is not a directory.  Aborting.").toStdString() );
+        throw CGenErr ( fiSessionDir.absoluteFilePath() + " does not exist or is not a directory.  Aborting." );
     }
 
     const QDir dSessionDir(fiSessionDir.absoluteFilePath());
@@ -530,12 +548,13 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFram
     const QFileInfo fiRPP(reaperProjectFileName);
     if (fiRPP.exists())
     {
-        throw std::runtime_error( (fiRPP.absoluteFilePath() + " exists and will not be overwritten.  Aborting.").toStdString() );
+        throw CGenErr ( fiRPP.absoluteFilePath() + " exists and will not be overwritten.  Aborting." );
     }
 
     QFile outf (fiRPP.absoluteFilePath());
-    if (!outf.open(QFile::WriteOnly)) {
-        throw std::runtime_error( (fiRPP.absoluteFilePath() + " could not be written.  Aborting.").toStdString() );
+    if ( !outf.open ( QFile::WriteOnly ) )
+    {
+        throw CGenErr ( fiRPP.absoluteFilePath() + " could not be written.  Aborting." );
     }
     QTextStream out(&outf);
 
@@ -583,6 +602,12 @@ void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddre
     if ( !isRecording )
     {
         Start();
+    }
+
+    // Start() may have failed, so check again:
+    if ( !isRecording )
+    {
+        return;
     }
 
     // needs to be after Start() as that also locks

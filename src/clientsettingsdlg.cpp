@@ -666,7 +666,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     QObject::connect ( tabSettings, &QTabWidget::currentChanged,
         this, &CClientSettingsDlg::OnTabChanged );
 
-    tabSettings->setCurrentIndex ( pSettings->iSettingsTab ); //pSettings->iSettingsTab
+    tabSettings->setCurrentIndex ( pSettings->iSettingsTab );
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar

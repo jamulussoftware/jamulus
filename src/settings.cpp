@@ -540,7 +540,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
 
     // selected Settings Tab
     if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab",
-         0, 3, iValue ) )
+         0, 2, iValue ) )
     {
         iSettingsTab = iValue;
     }

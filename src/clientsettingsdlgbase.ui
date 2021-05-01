@@ -24,13 +24,16 @@
    <item>
     <widget class="QTabWidget" name="tabSettings">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
+     </property>
+     <property name="usesScrollButtons">
+      <bool>true</bool>
      </property>
      <widget class="QWidget" name="tab_0_User">
       <attribute name="title">
        <string>My Profile</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_11">
+      <layout class="QVBoxLayout" name="verticalLayout_16">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
@@ -213,6 +216,13 @@
                     </property>
                    </widget>
                   </item>
+                  <item>
+                   <widget class="QLabel" name="lblMixerRows">
+                    <property name="text">
+                     <string>Mixer Rows</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </item>
                 <item>
@@ -227,6 +237,19 @@
                       <width>150</width>
                       <height>0</height>
                      </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="spnMixerRows">
+                    <property name="alignment">
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    </property>
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>8</number>
                     </property>
                    </widget>
                   </item>
@@ -1091,39 +1114,6 @@
              </item>
              <item>
               <spacer name="verticalSpacer_13">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="lblMixerRows">
-               <property name="text">
-                <string>Mixer Rows</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="spnMixerRows">
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>8</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_14">
                <property name="orientation">
                 <enum>Qt::Vertical</enum>
                </property>

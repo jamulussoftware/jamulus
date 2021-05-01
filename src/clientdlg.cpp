@@ -864,12 +864,12 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 
 void CClientDlg::OnOpenGeneralSettings()
 {
-    ShowGeneralSettings( SETTING_TAB_AUDIONET );
+    ShowGeneralSettings ( SETTING_TAB_AUDIONET );
 }
 
 void CClientDlg::OnOpenMusicianProfileDialog()
 {
-    ShowGeneralSettings( SETTING_TAB_USER );
+    ShowGeneralSettings ( SETTING_TAB_USER );
 }
 
 void CClientDlg::SetMyWindowTitle ( const int iNumClients )

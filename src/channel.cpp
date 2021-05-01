@@ -615,7 +615,7 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
                 }
 
                 // manage audio fade-in counter, after channel is identified
-                if ( bIsIdentified && iFadeInCnt < iFadeInCntMax )
+                if ( iFadeInCnt < iFadeInCntMax && bIsIdentified )
                 {
                     iFadeInCnt++;
                 }

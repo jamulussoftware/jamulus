@@ -728,9 +728,11 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
                                    const CVector<uint8_t>& vecbyNPacket,
                                    const int               iNPacketLen )
 {
+    // From v3.8.0 onwards, a server will not send audio to a client until that client has sent channel info.
+    // This addresses #1243 but means that clients earlier than v3.3.0 (24 Feb 2013) will no longer be compatible.
     if ( bIsServer && !bIsIdentified )
     {
-        return;     // A server will not send audio to a client until that client has sent channel info
+        return;
     }
 
     QMutexLocker locker ( &MutexConvBuf );

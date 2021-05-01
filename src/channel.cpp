@@ -728,7 +728,7 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
                                    const CVector<uint8_t>& vecbyNPacket,
                                    const int               iNPacketLen )
 {
-    if (bIsServer && !bIsIdentified)
+    if ( bIsServer && !bIsIdentified )
     {
         return;     // A server will not send audio to a client until that client has sent channel info
     }

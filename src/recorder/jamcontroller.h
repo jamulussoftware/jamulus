@@ -34,7 +34,7 @@ class CJamController : public QObject
 {
     Q_OBJECT
 public:
-    explicit CJamController();
+    explicit CJamController( CServer* pNServer );
 
     bool GetRecorderInitialised() { return bRecorderInitialised; }
     QString GetRecorderErrMsg() { return strRecorderErrMsg; }
@@ -46,7 +46,9 @@ public:
     ERecorderState GetRecorderState();
 
 private:
-    CServer* pServer;
+    void OnRecordingFailed ( QString error );
+
+    CServer*      pServer;
 
     bool          bRecorderInitialised;
     bool          bEnableRecording;
@@ -72,5 +74,10 @@ signals:
 };
 
 }
+
+// This must be included AFTER the above definition of class CJamController,
+// because server.h defines CServer, which contains an instance of CJamController,
+// and therefore needs to know the its size.
+#include "../server.h"
 
 Q_DECLARE_METATYPE(int16_t)

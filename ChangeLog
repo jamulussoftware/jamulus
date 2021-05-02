@@ -1,6 +1,8 @@
 
 ### 3.7.0dev <- NOTE: the release version number will be 3.7.1 ###
 
+- The term "Central server" has been replaced with "Directory server" (#1407). @pljones
+
 - Settings window made Tabbed including My_Profile, Audio/Network & Advanced.
   User Profile window removed.
   Input Pan placed in Advanced tab and removed from main window.

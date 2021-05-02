@@ -299,14 +299,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
-    // custom central server address
-    QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
-        tr ( "Leave this blank unless you need to enter the address of a central "
+    // custom directory server address
+    QString strCentrServAddr = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
+        tr ( "Leave this blank unless you need to enter the address of a directory "
         "server other than the default." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
     cbxCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    cbxCentralServerAddress->setAccessibleName ( tr ( "Central server address combo box" ) );
+    cbxCentralServerAddress->setAccessibleName ( tr ( "Directory server address combo box" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr (  "Current Connection Status "
@@ -397,7 +397,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     // language combo box (corrects the setting if language not found)
     cbxLanguage->Init ( pSettings->strLanguage );
 
-    // init custom central server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
+    // init custom directory server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
     cbxCentralServerAddress->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxCentralServerAddress->setInsertPolicy ( QComboBox::NoInsert );
 
@@ -911,7 +911,7 @@ void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
 void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 {
     // if the user has selected and deleted an entry in the combo box list,
-    // we delete the corresponding entry in the central server address vector
+    // we delete the corresponding entry in the directory server address vector
     if ( cbxCentralServerAddress->currentText().isEmpty() && cbxCentralServerAddress->currentData().isValid() )
     {
         pSettings->vstrCentralServerAddress[cbxCentralServerAddress->currentData().toInt()] = "";

@@ -838,7 +838,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="762"/>
-        <source>Central Server</source>
+        <source>Directory Server</source>
         <translation>Serveur central</translation>
     </message>
     <message>
@@ -1194,7 +1194,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Adresse personnalisée du serveur central</translation>
     </message>
     <message>
@@ -1342,12 +1342,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="258"/>
-        <source>Leave this blank unless you need to enter the address of a central server other than the default.</source>
+        <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation>Laissez ce champ vide, sauf si vous devez entrer l&apos;adresse d&apos;un serveur central autre que celui par défaut.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Central server address combo box</source>
+        <source>Directory server address combo box</source>
         <translation>Boîte combo d&apos;adresses du serveur central</translation>
     </message>
     <message>
@@ -1590,7 +1590,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="482"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Adresse personnalisée du serveur central : </translation>
     </message>
     <message>
@@ -2225,7 +2225,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="72"/>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
         <translation>Si la case Rendre mon serveur public est cochée, cela indiquera si l&apos;enregistrement auprès du serveur central est réussi. Si l&apos;enregistrement a échoué, veuillez choisir une autre liste de serveurs.</translation>
     </message>
     <message>
@@ -2235,22 +2235,22 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="63"/>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation>Si la case Rendre mon serveur public est cochée, ce serveur s&apos;enregistre sur le serveur central afin que tous les utilisateurs de l&apos;application puissent voir le serveur dans la liste des serveurs de dialogue de connexion et s&apos;y connecter. L&apos;inscription du serveur est renouvelé périodiquement pour s&apos;assurer que tous les serveurs de la liste des serveurs du dialogue de connexion sont effectivement disponibles.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="77"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Adresse personnalisée du serveur central</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="78"/>
-        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
         <translation>L&apos;adresse personnalisée du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central sur lequel la liste des serveurs du dialogue de connexion est gérée.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation>Ligne d&apos;édition pour l&apos;adresse du serveur central</translation>
     </message>
     <message>
@@ -2260,7 +2260,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
-        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
         <translation>Sélectionne la liste de serveurs (c-à-d l&apos;adresse du serveur central) dans laquelle votre serveur sera ajouté.</translation>
     </message>
     <message>
@@ -2574,7 +2574,7 @@
     </message>
     <message>
         <location filename="../../util.h" line="674"/>
-        <source>Central Server full</source>
+        <source>Directory Server full</source>
         <translation>Serveur central rempli</translation>
     </message>
     <message>
@@ -2654,7 +2654,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="252"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Adresse personnalisée du serveur central :</translation>
     </message>
     <message>

@@ -255,6 +255,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   strServerListFilter,
                                   iNewMaxNumChan,
                                   &ConnLessProtocol ),
+    JamController               ( this ),
     bDisableRecording           ( bDisableRecording ),
     bAutoRunMinimized           ( false ),
     bDelayPan                   ( bNDelayPan ),
@@ -721,7 +722,7 @@ void CServer::OnAboutToQuit()
 
     Stop();
 
-    // if server was registered at the central server, unregister on shutdown
+    // if server was registered at the directory server, unregister on shutdown
     if ( GetServerListEnabled() )
     {
         UnregisterSlaveServer();

@@ -471,7 +471,7 @@ public slots:
     void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
     {
         // only send empty message if server list is enabled and this is not
-        // the central server
+        // a directory server
         if ( ServerListManager.GetEnabled() &&
              !ServerListManager.GetIsCentralServer() )
         {

@@ -560,7 +560,7 @@ enum EChSortType
 };
 
 
-// Central server address type -------------------------------------------------
+// Directory server address type -----------------------------------------------
 enum ECSAddType
 {
     // used for settings -> enum values should be fixed
@@ -642,7 +642,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
         return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
     case SRS_CENTRAL_SVR_FULL:
-        return QCoreApplication::translate ( "CServerDlg", "Central Server full" );
+        return QCoreApplication::translate ( "CServerDlg", "Directory Server full" );
 
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
@@ -655,7 +655,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 }
 
 
-// Central server registration outcome -----------------------------------------
+// Directory server registration outcome ---------------------------------------
 enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!

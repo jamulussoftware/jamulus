@@ -71,7 +71,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
         "IP address or URL. It also stores old URLs in the combo box list." ) );
 
-    // central server address type combo box
+    // directory server address type combo box
     cbxCentServAddrType->clear();
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
@@ -234,9 +234,9 @@ void CConnectDlg::RequestServerList()
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
     cbxCentServAddrType->blockSignals ( false );
 
-    // Get the IP address of the central server (using the ParseNetworAddress
+    // Get the IP address of the directory server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
-    // time to do it. Note that in case of custom central server address we
+    // time to do it. Note that in case of custom directory server address we
     // use the first entry in the vector per definition.
     if ( NetworkUtil().ParseNetworkAddress ( NetworkUtil::GetCentralServerAddress ( pSettings->eCentralServerAddressType,
                                                                                     pSettings->vstrCentralServerAddress[0] ),
@@ -261,7 +261,7 @@ void CConnectDlg::hideEvent ( QHideEvent* )
 
 void CConnectDlg::OnCentServAddrTypeChanged ( int iTypeIdx )
 {
-    // store the new central server address type and request new list
+    // store the new directory server address type and request new list
     pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( iTypeIdx );
     RequestServerList();
 }
@@ -286,7 +286,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     // updates (to avoid the reduced list overwrites the normal list (#657)). Also,
     // we only accept a server list from the server address we have sent the
     // request for this to (note that we cannot use the port number since the
-    // receive port and send port might be different at the central server).
+    // receive port and send port might be different at the directory server).
     if ( bServerListReceived ||
          ( InetAddr.InetAddr != CentralServerAddress.InetAddr ) )
     {
@@ -324,7 +324,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     for ( int iIdx = 0; iIdx < iServerInfoLen; iIdx++ )
     {
         // get the host address, note that for the very first entry which is
-        // the central server, we have to use the receive host address
+        // the directory server, we have to use the receive host address
         // instead
         CHostAddress CurHostAddress;
 
@@ -334,7 +334,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         }
         else
         {
-            // substitute the receive host address for central server
+            // substitute the receive host address for directory server
             CurHostAddress = InetAddr;
         }
 

@@ -44,12 +44,11 @@ Contributing
 See the [contributing instructions](CONTRIBUTING.md)
 
 
-Acknowledgments
+Acknowledgements
 ---------------
 
-This code contains open source code from different sources. The developer(s) want
-to thank the developer of this code for making their efforts available under open
-source:
+Jamulus contains code from different sources (see also [COPYING](COPYING)). The developers wish
+to thank the maintainers of these projects for making their efforts available to us under their respective licences:
 
 - Qt cross-platform application framework: http://www.qt.io
 

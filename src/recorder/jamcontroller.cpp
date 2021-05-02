@@ -26,7 +26,8 @@
 
 using namespace recorder;
 
-CJamController::CJamController() :
+CJamController::CJamController( CServer* pNServer ) :
+    pServer              ( pNServer ),
     bRecorderInitialised ( false ),
     bEnableRecording     ( false ),
     strRecordingDir      ( "" ),
@@ -92,13 +93,6 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
 
     if ( !newRecordingDir.isEmpty() )
     {
-        if ( pJamRecorder != nullptr )
-        {
-            // We have a reference to a CJamRecorder instance that should now have finished.
-            // Clean up the instance before replacing it.
-            delete pJamRecorder;
-            pJamRecorder = nullptr;
-        }
         pJamRecorder = new recorder::CJamRecorder ( newRecordingDir, iServerFrameSizeSamples );
         strRecorderErrMsg = pJamRecorder->Init();
         bRecorderInitialised = ( strRecorderErrMsg == QString::null );
@@ -160,6 +154,10 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
         QObject::connect ( pJamRecorder, &CJamRecorder::RecordingSessionStarted,
             this, &CJamController::RecordingSessionStarted );
 
+        // from the recorder to the controller
+        QObject::connect ( pJamRecorder, &CJamRecorder::RecordingFailed,
+            this, &CJamController::OnRecordingFailed );
+
         pthJamRecorder->start ( QThread::NormalPriority );
 
     }
@@ -167,6 +165,22 @@ void CJamController::SetRecordingDir ( QString newRecordingDir,
     {
         strRecordingDir = "";
     }
+}
+
+void CJamController::OnRecordingFailed ( QString error )
+{
+    if ( !bEnableRecording )
+    {
+        // Recording has already been stopped, possibly
+        // by a previous OnRecordingFailed call from another client/thread.
+        return;
+    }
+    strRecorderErrMsg = error;
+    qWarning() << "Could not start recording:" << error;
+    // Turn off recording until it is manually re-enabled via UI or signals.
+    // This needs to be done from the CServer side to cover all relevant
+    // state.
+    pServer->SetEnableRecording ( false );
 }
 
 ERecorderState CJamController::GetRecorderState()

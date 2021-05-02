@@ -209,7 +209,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="849"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation>Indien verbonden met de server kan hier de lokale mix ingesteld worden zonder dat hetgeen anderen van je horen wordt beïnvloed. De titel toont de servernaam en indien bekend of er audio wordt opgenomen.</translation>
+        <translation>Indien verbonden met de server kan hier de lokale mix ingesteld worden zonder dat hetgeen anderen horen wordt beïnvloed. De titel toont de servernaam en indien bekend is of er audio wordt opgenomen.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="926"/>
@@ -367,7 +367,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="151"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
-        <translation>Doorgestreepte luidspreker: Geeft aan dat een andere muzikant je gedempt heeft.</translation>
+        <translation>Doorgestreepte luidspreker: Geeft aan dat een andere muzikant u gedempt heeft.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="156"/>
@@ -749,7 +749,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="55"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
-        <translation>Dit toont het niveau van de twee stereokanalen voor je audio-invoer.</translation>
+        <translation>Dit toont het niveau van de twee stereokanalen voor de audio-invoer.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="61"/>
@@ -759,7 +759,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="67"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation>Voor goed gebruik moet u de zang of het instrument niet via de luidspreker of koptelefoon moeten horen als de software niet verbonden is. Dit kan worden bereikt door het dempen van je audiokanaal in de Playback mixer (niet de opnamemixer!).</translation>
+        <translation>Voor goed gebruik van de applicatie moet u de zang of het instrument niet via de luidspreker of koptelefoon horen als de software niet verbonden is. Dit kan worden bereikt door het dempen van het audiokanaal in de afspeelmixer (niet de opnamemixer!).</translation>
     </message>
     <message>
         <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the application.</source>
@@ -828,7 +828,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="92"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation>Laat een dialoog zien waarin je een server kan selecteren om mee te verbinden. Indien reeds verbonden verbreekt deze knop de verbinding.</translation>
+        <translation>Laat een dialoog zien waarin u een server kunt selecteren om mee te verbinden. Indien reeds verbonden verbreekt deze knop de verbinding.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="143"/>
@@ -1111,12 +1111,12 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="554"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>GEDEMPT (Anderen horen je niet)</translation>
+        <translation>GEDEMPT (Anderen horen u niet)</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="584"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation>Stel je audio in, maak verbinding met een server en begin met jammen!</translation>
+        <translation>Stel de audio in, maak verbinding met een server en begin met jammen!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="606"/>
@@ -2386,7 +2386,7 @@
     <message>
         <location filename="../../util.cpp" line="726"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation>Stel hier je naam of een alias in zodat de andere muzikanten met wie je wilt spelen weten wie je bent. Daarnaast kun je een instrumentfoto van het instrument dat je bespeelt en een vlag van het land waar je woont, instellen. De stad waar je woont en je vaardigheidsniveau kunnen ook worden toegevoegd.</translation>
+        <translation>Stel hier uw naam of een alias in zodat de andere muzikanten met wie u wilt spelen weten wie u bent. Daarnaast kunt u een instrumentfoto van het instrument dat u bespeelt en een vlag van het land waar u woont, instellen. De stad waar u woont en uw vaardigheidsniveau kunnen ook worden toegevoegd.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="730"/>
@@ -2788,7 +2788,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
-        <translation>De servernaam identificeert je server in de serverlijst. Als er geen naam wordt opgegeven zal het IP-adres worden getoond.</translation>
+        <translation>De servernaam identificeert uw server in de serverlijst. Als er geen naam wordt opgegeven zal het IP-adres worden getoond.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="96"/>

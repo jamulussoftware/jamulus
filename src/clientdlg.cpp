@@ -243,16 +243,19 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
 
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
-        SLOT ( OnOpenConnectionSetupDialog() ) );
+        SLOT ( OnOpenConnectionSetupDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
 
     pViewMenu->addAction ( tr ( "My &Profile..." ), this,
-        SLOT ( OnOpenMusicianProfileDialog() ) );
+        SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
 
     pViewMenu->addAction ( tr ( "C&hat..." ), this,
-        SLOT ( OnOpenChatDialog() ) );
+        SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
 
-    pViewMenu->addAction ( tr ( "&Settings..." ), this,
-        SLOT ( OnOpenGeneralSettings() ) );
+    pViewMenu->addAction ( tr ( "Audio/Network &Settings..." ), this,
+        SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
+
+    pViewMenu->addAction ( tr ( "A&dvanced Settings..." ), this,
+        SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
 
     // optionally show analyzer console entry
     if ( bShowAnalyzerConsole )
@@ -862,12 +865,17 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
     SetMyWindowTitle ( iNewNumClients );
 }
 
-void CClientDlg::OnOpenGeneralSettings()
+void CClientDlg::OnOpenAudioNetSettings()
 {
     ShowGeneralSettings ( SETTING_TAB_AUDIONET );
 }
 
-void CClientDlg::OnOpenMusicianProfileDialog()
+void CClientDlg::OnOpenAdvancedSettings()
+{
+    ShowGeneralSettings ( SETTING_TAB_ADVANCED );
+}
+
+void CClientDlg::OnOpenUserProfileSettings()
 {
     ShowGeneralSettings ( SETTING_TAB_USER );
 }

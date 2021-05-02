@@ -167,8 +167,9 @@ public slots:
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
-    void OnOpenMusicianProfileDialog();
-    void OnOpenGeneralSettings();
+    void OnOpenUserProfileSettings();
+    void OnOpenAudioNetSettings();
+    void OnOpenAdvancedSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnNoSortChannels()           { MainMixerBoard->SetFaderSorting ( ST_NO_SORT ); }

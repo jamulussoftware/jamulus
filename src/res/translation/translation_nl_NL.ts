@@ -1006,7 +1006,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="762"/>
-        <source>Central Server</source>
+        <source>Directory Server</source>
         <translation>Centrale Server</translation>
     </message>
     <message>
@@ -1470,23 +1470,23 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Eigen centrale serveradres</translation>
     </message>
     <message>
-        <source>Central Server Address</source>
+        <source>Directory Server Address</source>
         <translation type="vanished">Centraal Serveradres</translation>
     </message>
     <message>
-        <source>The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <source>The directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
         <translation type="vanished">Het centrale serveradres is het IP-adres of de URL van de centrale server waarop de serverlijst van het verbindingsdialoogvenster wordt beheerd. Met het centraal serveradrestype kan ofwel de lokale regio worden geselecteerd van de standaard centrale servers, ofwel kan een handmatig adres worden opgegeven.</translation>
     </message>
     <message>
-        <source>Default central server type combo box</source>
+        <source>Default directory server type combo box</source>
         <translation type="vanished">Centraal serveradrestype combo box</translation>
     </message>
     <message>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation type="vanished">Centraal serveradres bewerking van de lijn</translation>
     </message>
     <message>
@@ -1658,12 +1658,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="258"/>
-        <source>Leave this blank unless you need to enter the address of a central server other than the default.</source>
+        <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation>Laat dit leeg tenzij u een centraal serveradres wilt invoeren dat anders is dan de standaard.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Central server address combo box</source>
+        <source>Directory server address combo box</source>
         <translation>Centrale serveradres combobox</translation>
     </message>
     <message>
@@ -1951,11 +1951,11 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="482"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Eigen centrale serveradres:</translation>
     </message>
     <message>
-        <source>Central Server Address:</source>
+        <source>Directory Server Address:</source>
         <translation type="vanished">Centraal Serveradres:</translation>
     </message>
     <message>
@@ -1989,11 +1989,11 @@
         <translation>Serverlijst</translation>
     </message>
     <message>
-        <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
+        <source>The server list shows a list of available servers which are registered at the directory server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
         <translation type="vanished">De serverlijst toont een lijst van beschikbare servers die op de centrale server zijn geregistreerd. Selecteer een server uit de lijst en druk op de verbindingsknop om verbinding te maken met deze server. U kunt ook dubbelklikken op een server uit de lijst om verbinding te maken met deze server. Als een server bezet is, is een lijst van de verbonden muzikanten beschikbaar door het lijstitem uit te breiden. Permanente servers worden vetgedrukt weergegeven.</translation>
     </message>
     <message>
-        <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
+        <source>Note that it may take some time to retrieve the server list from the directory server. If no valid directory server address is specified in the settings, no server list will be available.</source>
         <translation type="vanished">Merk op dat het enige tijd kan duren om de serverlijst op te halen van de centrale server. Als er geen geldig centraal serveradres is opgegeven in de instellingen, zal er geen serverlijst beschikbaar zijn.</translation>
     </message>
     <message>
@@ -2703,7 +2703,7 @@
         <translation>Maak Mijn Server Openbaar</translation>
     </message>
     <message>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all </source>
         <translation type="vanished">Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, registreert deze server zichzelf op de centrale server zodat alle </translation>
     </message>
     <message>
@@ -2716,24 +2716,24 @@
         <translation>Tabblad Serverstatus</translation>
     </message>
     <message>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful.</source>
         <translation type="vanished">Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, zal dit het succes van de registratie bij de centrale server laten zien.</translation>
     </message>
     <message>
-        <source>Central Server Address</source>
+        <source>Directory Server Address</source>
         <translation type="vanished">Centrale Serveradres</translation>
     </message>
     <message>
-        <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <source>The Directory server address is the IP address or URL of the directory server at which this server is registered. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
         <translation type="vanished">Het adres van de centrale server is het IP-adres of de URL van de centrale server waarop deze server is geregistreerd. Met het type centraal serveradres kan ofwel de lokale regio worden geselecteerd van de standaard centrale servers of kan een handmatig adres worden opgegeven.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="72"/>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
         <translation>Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, laat dit zien of registratie bij de centrale server is gelukt. Indien registratie mislukt, kies een andere serverlijst.</translation>
     </message>
     <message>
-        <source>Default central server type combo box</source>
+        <source>Default directory server type combo box</source>
         <translation type="vanished">Standaard centrale server type combo box</translation>
     </message>
     <message>
@@ -2743,22 +2743,22 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="63"/>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation>Indien de Maak mijn server openbaar checkbox is aangevinkt registreert deze server zichzelf bij de centrale server. Hierdoor kunnen alle gebruikers deze zien en er verbinding mee leggen. De registratie wordt periodiek vernieuwd om ervoor te zorgen dat alle servers in de serverlijst ook daadwerkelijk beschikbaar zijn.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="77"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Eigen centrale serveradres</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="78"/>
-        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
         <translation>Het eigen centrale serveradres is het IP-adres of de URL van de centrale server die de serverlijst laat zien in de Verbindingsinstellingen.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation>Centrale server adresbewerking van de lijn</translation>
     </message>
     <message>
@@ -2768,7 +2768,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
-        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
         <translation>Selecteert de serverlijst (i.e. het centrale serveradres) waarin je server zal worden toegevoegd.</translation>
     </message>
     <message>
@@ -3110,7 +3110,7 @@
     </message>
     <message>
         <location filename="../../util.h" line="674"/>
-        <source>Central Server full</source>
+        <source>Directory Server full</source>
         <translation>Centrale server vol</translation>
     </message>
     <message>
@@ -3194,7 +3194,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="252"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Eigen centrale serveradres:</translation>
     </message>
     <message>
@@ -3218,7 +3218,7 @@
         <translation>Taal</translation>
     </message>
     <message>
-        <source>Central Server Address:</source>
+        <source>Directory Server Address:</source>
         <translation type="vanished">Adres Centrale Server:</translation>
     </message>
     <message>

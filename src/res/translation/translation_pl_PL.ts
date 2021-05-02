@@ -842,7 +842,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="762"/>
-        <source>Central Server</source>
+        <source>Directory Server</source>
         <translation>Serwer centralny</translation>
     </message>
     <message>
@@ -1218,7 +1218,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Własny adres centralnego serwera</translation>
     </message>
     <message>
@@ -1373,12 +1373,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="258"/>
-        <source>Leave this blank unless you need to enter the address of a central server other than the default.</source>
+        <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation>Należy pozostawić to puste pole, chyba że konieczne jest wprowadzenie adresu centralnego serwera innego niż domyślny.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Central server address combo box</source>
+        <source>Directory server address combo box</source>
         <translation>Lista wyboru serwera  centralnego</translation>
     </message>
     <message>
@@ -1630,7 +1630,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="482"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Własny adres serwera centralnego:</translation>
     </message>
     <message>
@@ -2272,22 +2272,22 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="72"/>
-        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
         <translation>Jeśli pole wyboru Ustaw serwer jako publiczny jest zaznaczone, pokazuje, czy rejestracja na centralnym serwerze zakończyła się sukcesem. Jeśli rejestracja nie powiodła się, wybierz inny serwer z listy.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="77"/>
-        <source>Custom Central Server Address</source>
+        <source>Custom Directory Server Address</source>
         <translation>Własny adres serwera centralnego</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="78"/>
-        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
         <translation>Niestandardowy adres centralnego serwera to adres IP lub adres URL centralnego serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
-        <source>Central server address line edit</source>
+        <source>Directory server address line edit</source>
         <translation>Edycja linii adresowej centralnego serwera</translation>
     </message>
     <message>
@@ -2297,7 +2297,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
-        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
         <translation>Wybiera adres serwera (np. adres serwera centralnego), na listę którego zostanie dodany nasz serwer.</translation>
     </message>
     <message>
@@ -2506,7 +2506,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="63"/>
-        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation>Jeśli pole wyboru Ustaw serwer jako publiczny jest zaznaczone, serwer ten rejestruje się na centralnym serwerze, tak aby wszyscy użytkownicy aplikacji mogli zobaczyć serwer na liście serwerów połączeń i połączyć się z nim. Rejestracja serwera jest okresowo odnawiana, aby upewnić się, że wszystkie serwery na liście serwerów połączeniowych są rzeczywiście dostępne.</translation>
     </message>
     <message>
@@ -2621,7 +2621,7 @@
     </message>
     <message>
         <location filename="../../util.h" line="674"/>
-        <source>Central Server full</source>
+        <source>Directory Server full</source>
         <translation>Pełny serwer centralny</translation>
     </message>
     <message>
@@ -2721,7 +2721,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="252"/>
-        <source>Custom Central Server Address:</source>
+        <source>Custom Directory Server Address:</source>
         <translation>Własny adres serwera centralnego:</translation>
     </message>
     <message>

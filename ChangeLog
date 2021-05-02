@@ -11,6 +11,9 @@
 - Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
   (contributed by @JohannesBrx)
 
+- Added basic audio feedback detection (#1179).
+  (contributed by @JohannesBrx)
+
 - The mute button is now also shown in mono mode (#1074)
   (contributed by @npostavs)
 

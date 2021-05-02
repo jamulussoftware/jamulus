@@ -77,6 +77,8 @@ public:
     void SetTabIdx( int iIdx ) { iTabIdx = iIdx; }
     int  iTabIdx;
 
+    void SetEnableFeedbackDetection ( bool enable );
+
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
@@ -98,6 +100,7 @@ public slots:
     void OnNetBufServerValueChanged ( int value );
     void OnAutoJitBufStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
+    void OnFeedbackDetectionChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnInputBoostChanged();

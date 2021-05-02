@@ -212,6 +212,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // setup timers
     TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
+    TimerDetectFeedback.setSingleShot ( true );
 
 
     // Connect on startup ------------------------------------------------------
@@ -393,6 +394,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( &TimerCheckAudioDeviceOk, &QTimer::timeout,
         this, &CClientDlg::OnTimerCheckAudioDeviceOk );
+
+    QObject::connect ( &TimerDetectFeedback, &QTimer::timeout,
+        this, &CClientDlg::OnTimerDetectFeedback );
 
     QObject::connect ( sldAudioReverb, &QSlider::valueChanged,
         this, &CClientDlg::OnAudioReverbValueChanged );
@@ -1027,6 +1031,33 @@ void CClientDlg::OnTimerSigMet()
     // show current level
     lbrInputLevelL->SetValue ( pClient->GetLevelForMeterdBLeft() );
     lbrInputLevelR->SetValue ( pClient->GetLevelForMeterdBRight() );
+
+    if ( bDetectFeedback &&
+        ( pClient->GetLevelForMeterdBLeft() > NUM_STEPS_LED_BAR - 0.5  ||
+        pClient->GetLevelForMeterdBRight() > NUM_STEPS_LED_BAR - 0.5 ) )
+    {
+        // mute locally and mute channel
+        chbLocalMute->setCheckState ( Qt::Checked );
+        MainMixerBoard->MuteMyChannel();
+
+        // show message box about feedback issue
+        QCheckBox* chb = new QCheckBox ( tr ( "Enable feedback detection" ) );
+        chb->setCheckState ( pSettings->bEnableFeedbackDetection ?
+            Qt::Checked : Qt::Unchecked );
+        QMessageBox msgbox;
+        msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
+            "We muted your channel and activated 'Mute Myself'. Please solve "
+            "the feedback issue first and unmute yourself afterwards." ) );
+        msgbox.setIcon ( QMessageBox::Icon::Warning );
+        msgbox.addButton ( QMessageBox::Ok );
+        msgbox.setDefaultButton ( QMessageBox::Ok );
+        msgbox.setCheckBox ( chb );
+
+        QObject::connect ( chb, &QCheckBox::stateChanged,
+            this, &CClientDlg::OnFeedbackDetectionChanged );
+
+        msgbox.exec();
+    }
 }
 
 void CClientDlg::OnTimerBuffersLED()
@@ -1105,6 +1136,11 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
     }
 }
 
+void CClientDlg::OnTimerDetectFeedback()
+{
+    bDetectFeedback = false;
+}
+
 void CClientDlg::OnSoundDeviceChanged ( QString strError )
 {
     if ( !strError.isEmpty() )
@@ -1123,6 +1159,12 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
     if ( TimerCheckAudioDeviceOk.isActive() )
     {
         TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS );
+    }
+
+    if ( pSettings->bEnableFeedbackDetection && TimerDetectFeedback.isActive() )
+    {
+        TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS );
+        bDetectFeedback = true;
     }
 
     // update the settings dialog
@@ -1178,6 +1220,13 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         TimerBuffersLED.start         ( BUFFER_LED_UPDATE_TIME_MS );
         TimerPing.start               ( PING_UPDATE_TIME_MS );
         TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
+
+        // audio feedback detection
+        if ( pSettings->bEnableFeedbackDetection )
+        {
+            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+            bDetectFeedback = true;
+        }
     }
 }
 
@@ -1212,6 +1261,8 @@ void CClientDlg::Disconnect()
     TimerBuffersLED.stop();
     TimerPing.stop();
     TimerCheckAudioDeviceOk.stop();
+    TimerDetectFeedback.stop();
+    bDetectFeedback = false;
 
 
 // TODO is this still required???

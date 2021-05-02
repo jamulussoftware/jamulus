@@ -277,6 +277,11 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         iInputBoost = iValue;
     }
 
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection", bValue ) )
+    {
+        bEnableFeedbackDetection = bValue;
+    }
+
     // connect dialog show all musicians
     if ( GetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians", bValue ) )
     {
@@ -611,6 +616,10 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // input boost
     SetNumericIniSet ( IniXMLDocument, "client", "inputboost",
         iInputBoost );
+
+    // feedback detection
+    SetFlagIniSet ( IniXMLDocument, "client", "enablefeedbackdetection",
+        bEnableFeedbackDetection );
 
     // connect dialog show all musicians
     SetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians",

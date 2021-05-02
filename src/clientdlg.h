@@ -64,6 +64,7 @@
 #define BUFFER_LED_UPDATE_TIME_MS   300   // ms
 #define LED_BAR_UPDATE_TIME_MS      1000  // ms
 #define CHECK_AUDIO_DEV_OK_TIME_MS  5000  // ms
+#define DETECT_FEEDBACK_TIME_MS     3000  // ms
 
 // number of ping times > upper bound until error message is shown
 #define NUM_HIGH_PINGS_UNTIL_ERROR  5
@@ -106,6 +107,7 @@ protected:
     bool               bConnected;
     bool               bConnectDlgWasShown;
     bool               bMIDICtrlUsed;
+    bool               bDetectFeedback;
     ERecorderState     eLastRecorderState;
     EGUIDesign         eLastDesign;
     QTimer             TimerSigMet;
@@ -113,6 +115,7 @@ protected:
     QTimer             TimerStatus;
     QTimer             TimerPing;
     QTimer             TimerCheckAudioDeviceOk;
+    QTimer             TimerDetectFeedback;
 
     virtual void       closeEvent     ( QCloseEvent*     Event );
     virtual void       dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
@@ -129,6 +132,7 @@ public slots:
     void OnTimerSigMet();
     void OnTimerBuffersLED();
     void OnTimerCheckAudioDeviceOk();
+    void OnTimerDetectFeedback();
 
     void OnTimerStatus() { UpdateDisplay(); }
 
@@ -190,6 +194,9 @@ public slots:
 
     void OnReverbSelRClicked()
         { pClient->SetReverbOnLeftChan ( false ); }
+
+    void OnFeedbackDetectionChanged ( int state )
+        { ClientSettingsDlg.SetEnableFeedbackDetection ( state == Qt::Checked ); }
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );

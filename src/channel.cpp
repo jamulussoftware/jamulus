@@ -37,6 +37,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
     bIsServer              ( bNIsServer ),
+    bIsIdentified          ( false ),
     iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
     SignalLevelMeter       ( false, 0.5 ) // server mode with mono out and faster smoothing
 {
@@ -360,6 +361,8 @@ float CChannel::GetPan ( const int iChanID )
 
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
+    bIsIdentified = true;   // Indicate we have received channel info
+
     // apply value (if different from previous one)
     if ( ChannelInfo != NChanInf )
     {
@@ -611,8 +614,8 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
                     eRet = PS_AUDIO_ERR;
                 }
 
-                // manage audio fade-in counter
-                if ( iFadeInCnt < iFadeInCntMax )
+                // manage audio fade-in counter, after channel is identified
+                if ( iFadeInCnt < iFadeInCntMax && bIsIdentified )
                 {
                     iFadeInCnt++;
                 }
@@ -725,6 +728,13 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
                                    const CVector<uint8_t>& vecbyNPacket,
                                    const int               iNPacketLen )
 {
+    // From v3.8.0 onwards, a server will not send audio to a client until that client has sent channel info.
+    // This addresses #1243 but means that clients earlier than v3.3.0 (24 Feb 2013) will no longer be compatible.
+    if ( bIsServer && !bIsIdentified )
+    {
+        return;
+    }
+
     QMutexLocker locker ( &MutexConvBuf );
 
     // use conversion buffer to convert sound card block size in network

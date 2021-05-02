@@ -98,7 +98,7 @@ public:
     bool GetAddress ( CHostAddress& RetAddr );
     const CHostAddress& GetAddress() const { return InetAddr; }
 
-    void ResetInfo() { ChannelInfo = CChannelCoreInfo(); } // reset does not emit a message
+    void ResetInfo() { bIsIdentified = false; ChannelInfo = CChannelCoreInfo(); } // reset does not emit a message
     QString GetName();
     void SetChanInfo ( const CChannelCoreInfo& NChanInf );
     CChannelCoreInfo& GetChanInfo() { return ChannelInfo; }
@@ -228,6 +228,7 @@ protected:
 
     bool                    bIsEnabled;
     bool                    bIsServer;
+    bool                    bIsIdentified;
 
     int                     iNetwFrameSizeFact;
     int                     iNetwFrameSize;

@@ -1046,9 +1046,8 @@ void CClientDlg::OnTimerSigMet()
             Qt::Checked : Qt::Unchecked );
         QMessageBox msgbox;
         msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
-            "We muted your channel and activated 'Mute Myself'. Please "
-            "solve the feedback issue first and unmute yourself afterwards. "
-            "Did you plug-in earphones?") );
+            "We muted your channel and activated 'Mute Myself'. Please solve "
+            "the feedback issue first and unmute yourself afterwards." ) );
         msgbox.setIcon ( QMessageBox::Icon::Warning );
         msgbox.addButton ( QMessageBox::Ok );
         msgbox.setDefaultButton ( QMessageBox::Ok );

@@ -340,6 +340,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     spnMixerRows->setWhatsThis ( strNumMixerPanelRows );
     spnMixerRows->setAccessibleName ( tr ( "Number of Mixer Panel Rows spin box" ) );
 
+    QString strDetectFeedback = "<b>" + tr ( "Feedback Protection" ) + ":</b> " +
+        tr ( "Enable feedback protection to detect acoustic feedback between "
+        "microphone and speakers." );
+    lblDetectFeedback->setWhatsThis ( strDetectFeedback );
+    chbDetectFeedback->setWhatsThis ( strDetectFeedback );
+    chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
+
     // init driver button
 #ifdef _WIN32
     butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );

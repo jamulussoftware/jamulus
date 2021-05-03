@@ -481,7 +481,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>ranfdev (<a href=\"https://github.com/ranfdev\">ranfdev</a>)</p>"
         "<p>bspeer (<a href=\"https://github.com/bspeer\">bspeer</a>)</p>"
         "<p>Martin Passing (<a href=\"https://github.com/passing\">passing</a>)</p>"
-        "<p>DonC (<a href=\"https://github.com/dcorson-ticino-com\">dcorson</a>)</p>"
+        "<p>DonC (<a href=\"https://github.com/dcorson-ticino-com\">dcorson-ticino-com</a>)</p>"
         "<p>David Kastrup (<a href=\"https://github.com/dakhubgit\">dakhubgit</a>)</p>"
         "<p>Jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
         "<p>Noam Postavsky (<a href=\"https://github.com/npostavs\">npostavs</a>)</p>"
@@ -493,6 +493,13 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Burkhard Volkemer (<a href=\"https://github.com/buv\">buv</a>)</p>"
         "<p>Magnus Groß (<a href=\"https://github.com/vimpostor\">vimpostor</a>)</p>"
         "<p>Julien Taverna (<a href=\"https://github.com/jujudusud\">jujudusud</a>)</p>"
+        "<p>Detlef Hennings (<a href=\"https://github.com/DetlefHennings\">DetlefHennings</a>)</p>"
+        "<p>drummer1154 (<a href=\"https://github.com/drummer1154\">drummer1154</a>)</p>"
+        "<p>helgeerbe (<a href=\"https://github.com/helgeerbe\">helgeerbe</a>)</p>"
+        "<p>Hk1020 (<a href=\"https://github.com/Hk1020\">Hk1020</a>)</p>"
+        "<p>Jeroen van Veldhuizen (<a href=\"https://github.com/jeroenvv\">jeroenvv</a>)</p>"
+        "<p>Reinhard (<a href=\"https://github.com/reinhardwh\">reinhardwh</a>)</p>"
+        "<p>Stefan Menzel (<a href=\"https://github.com/menzels\">menzels</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." );
 

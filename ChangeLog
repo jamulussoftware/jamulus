@@ -1,34 +1,112 @@
 
-### 3.7.0dev <- NOTE: the release version number will be 3.7.1 ###
+### 3.7.0dev <- NOTE: the release version number will be 3.8.0 ###
 
-- The term "Central server" has been replaced with "Directory server" (#1407). @pljones
+- The term "Central server" has been replaced with "Directory server" (#1407).
+  (contributed by @pljones)
 
-- Settings window made Tabbed including My_Profile, Audio/Network & Advanced.
-  User Profile window removed.
-  Input Pan placed in Advanced tab and removed from main window.
+- GUI: Settings window has been reorganized into tabs (#1415, #1554, #1542):
+    * User Profile window has been integrated into the settings window.
+    * Input Pan has been moved to the newly created Advanced tab and removed from main window.
+    * Network and stats have been moved to the right in the Settings window.
+  (contributed by @dcorson-ticino-com, @pljones)
+
+- GUI: Support for more than two mixer rows has been added (#1549, #1560).
+  (contributed by @pljones)
+
+- GUI: --clientname also works in dialog titles now (#1352, 1370).
   (contributed by @dcorson-ticino-com)
 
-- Added Pan-Delay code by Detlef Hennings, www.eclim.de
+- GUI: Translations have been updated
+  * Dutch, by @henkdegroot (#1562, #1556)
+  * French, by @trebmuh (#1299)
+  (further updates to follow until the final release)
 
-- Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
+- Client: Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
   (contributed by @JohannesBrx)
 
-- Added basic audio feedback detection (#1179).
+- Client: Basic audio feedback detection has been added (#1179).
   (contributed by @JohannesBrx)
 
-- The mute button is now also shown in mono mode (#1074)
+- Network: Support for DSCP Quality of Service flags has been added (#1310).
+  This is supposed to lead to improved network performance.
+  It is enabled by default.
+  On Windows, this requires additional configuration in order to work.
+  (contributed by @DavidSavinkoff)
+
+- Client: Support for input gain boost has been added (#1222, #1030)
+  (contributed by @hoffie)
+
+- Client: Grouping support has been extended to allow for up to eight groups (#1551).
+  (contributed by @pljones)
+
+- Client: A hint regarding non-default Jack support has been added (#1397, #1438).
+  (contributed by @djfun)
+
+- Server: Support for Delay Panning has been added (#332, #567, #1151, #1417):
+  This feature can be enabled on servers using the new --delaypan option.
+  Enabling this feature will slightly increase server CPU usage.
+  It can create a much more realistic spatial sound impression for clients
+  that are set to Stereo or Mono-in/Stereo-out mode.
+  (contributed by @DetlefHennings, @Hk1020, @softins)
+
+- Server: Half-connected clients will no longer receive audio (#1243, #1589):
+  Note: This breaks compatibility with client versions before 3.3.0 (Feb 2013).
+  If you update your server, ensure that all clients use 3.3.0 or later as well.
+  (contributed by @softins)
+
+- Server: HTML status file is now emptied on exit (#1423, #1427)
+  (contributed by @hoffie, @drummer1154)
+
+- Server: An explicit bind address can now be specified (#141, #1561).
+  This can be done by the new --serverbindip option.
+  (contributed by @buv)
+
+- Recorder: Compatibility with third-party tools such as Audacity has been improved (#1384, #1424, #1437).
+  Non-ASCII characters are now stripped out when creating filenames.
+  (contributed by @softins, @gilgongo, @reinhardwh)
+
+- Recorder: Failures to start recording no longer result in crashes (#1163, #1289, #1463)
+  (contributed by @hoffie, @softins, @pljones)
+
+- Recorder: Logging has been improved (#1284, #1463).
+  (contributed by @hoffie, @drummer1154)
+
+- Bug fix: The mute indicator is now also shown in mono mode (#1074).
   (contributed by @npostavs)
 
-- Bug fix: Channel mapping on Windows now only resets if the sound card or the numbers of channels changed (#1347)
+- Bug fix: Channel mapping on Windows now only resets if the sound card or the numbers of channels changed (#1347).
+  (contributed by @ann0see)
 
-- Bug fix: Jamulus should now close itself correctly if a non-working device was selected (#872)
+- Bug fix: Jamulus client should now close itself correctly if a non-working device was selected (#872).
   (contributed by @npostavs)
-  
-- Bug fix: The Windows installer now correctly compiles in a path with spaces (#864)
+
+- Bug fix: Server no longer crashes while changing the recording directory (#1501, #1573).
+  (contributed by @henkdegroot, @hoffie, @softins)
+
+- Bug fix: Example systemd unit has been fixed to avoid crashing when sending signals (#1515, #1518).
+  (contributed by @softins, @helgeerbe, @gilgongo)
+
+- Bug fix: The Windows installer now correctly compiles in a path with spaces (#864, #1319).
   (contributed by @henkdegroot)
 
-- Added client name,  if defined, in dialog titles
-  (contributed by @dcorson-ticino-com)
+- Performance: Opus encoding/decoding now uses machine-specific optimizations again (#1105).
+  (contributed by @npostavs)
+
+- Performance: Timer configuration for Windows has been improved (#1536).
+  (contributed by @npostavs)
+
+- iOS support is being worked on (#1450)
+  (contributed by @jeroenvv)
+
+- Build: Creation of debug builds has been simplified (#1516).
+  (contributed by @hoffie)
+
+- Internal constants for Jack usage have been renamed (#1429).
+  (contributed by @djfun)
+
+- Internal legacy IP address variables have been cleaned up (#1400).
+  (contributed by @wferi)
+
 
 ### 3.7.0 (2021-03-17) ###
 

@@ -538,6 +538,13 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
         bWindowWasShownConnect = bValue;
     }
 
+    // selected Settings Tab
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "settingstab",
+         0, 2, iValue ) )
+    {
+        iSettingsTab = iValue;
+    }
+
     // fader settings
     ReadFaderSettingsFromXML ( IniXMLDocument );
 }
@@ -760,6 +767,10 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // visibility state of the connect window
     SetFlagIniSet ( IniXMLDocument, "client", "winviscon",
         bWindowWasShownConnect );
+
+    // Settings Tab
+    SetNumericIniSet ( IniXMLDocument, "client", "settingstab",
+        iSettingsTab );
 
     // fader settings
     WriteFaderSettingsToXML ( IniXMLDocument );

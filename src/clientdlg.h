@@ -89,8 +89,7 @@ protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
     void               SetMyWindowTitle ( const int iNumClients );
     void               ShowConnectionSetupDialog();
-    void               ShowMusicianProfileDialog();
-    void               ShowGeneralSettings();
+    void               ShowGeneralSettings( int iTab );
     void               ShowChatWindow ( const bool bForceRaise = true );
     void               ShowAnalyzerConsole();
     void               UpdateAudioFaderSlider();
@@ -168,8 +167,9 @@ public slots:
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
-    void OnOpenMusicianProfileDialog() { ShowMusicianProfileDialog(); }
-    void OnOpenGeneralSettings() { ShowGeneralSettings(); }
+    void OnOpenUserProfileSettings();
+    void OnOpenAudioNetSettings();
+    void OnOpenAdvancedSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnNoSortChannels()           { MainMixerBoard->SetFaderSorting ( ST_NO_SORT ); }

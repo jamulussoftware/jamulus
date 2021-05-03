@@ -666,7 +666,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     QObject::connect ( tabSettings, &QTabWidget::currentChanged,
         this, &CClientSettingsDlg::OnTabChanged );
 
-    tabSettings->setCurrentIndex ( iTabIdx );
+    tabSettings->setCurrentIndex ( pSettings->iSettingsTab );
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -1108,12 +1108,12 @@ void CClientSettingsDlg::OnMakeTabChange ( int iTab )
 {
     tabSettings->setCurrentIndex ( iTab );
 
-    iTabIdx = iTab;
+    pSettings->iSettingsTab = iTab;
 }
 
 void CClientSettingsDlg::OnTabChanged ( void )
 {
-    iTabIdx = tabSettings->currentIndex();
+    pSettings->iSettingsTab = tabSettings->currentIndex();
 }
 
 void CClientSettingsDlg::UpdateAudioFaderSlider()

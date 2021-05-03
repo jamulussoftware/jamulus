@@ -146,6 +146,7 @@ public:
         vstrIPAddress               ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel        ( 100 ),
         iInputBoost                 ( 1 ),
+        iSettingsTab                ( SETTING_TAB_AUDIONET ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType            ( ST_NO_SORT ),
         iNumMixerPanelRows          ( 1 ),
@@ -174,6 +175,7 @@ public:
     CVector<QString> vstrIPAddress;
     int              iNewClientFaderLevel;
     int              iInputBoost;
+    int              iSettingsTab;
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
     int              iNumMixerPanelRows;

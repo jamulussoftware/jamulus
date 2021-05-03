@@ -74,8 +74,6 @@ public:
 
     void UpdateDisplay();
     void UpdateSoundDeviceChannelSelectionFrame();
-    void SetTabIdx( int iIdx ) { iTabIdx = iIdx; }
-    int  iTabIdx;
 
     void SetEnableFeedbackDetection ( bool enable );
 

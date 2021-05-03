@@ -245,11 +245,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
         SLOT ( OnOpenConnectionSetupDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
 
-    pViewMenu->addAction ( tr ( "My &Profile..." ), this,
-        SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
-
     pViewMenu->addAction ( tr ( "C&hat..." ), this,
         SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
+
+    pViewMenu->addAction ( tr ( "My &Profile..." ), this,
+        SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
 
     pViewMenu->addAction ( tr ( "Audio/Network &Settings..." ), this,
         SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );

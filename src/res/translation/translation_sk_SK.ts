@@ -39,62 +39,62 @@
         <translation>Vlajky krajín: Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="487"/>
+        <location filename="../../util.cpp" line="494"/>
         <source>For details on the contributions check out the </source>
         <translation>Podrobnosti o prispievateľoch nájdete na </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="488"/>
+        <location filename="../../util.cpp" line="495"/>
         <source>Github Contributors list</source>
         <translation>Zoznam prispievateľov na Githube</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="492"/>
+        <location filename="../../util.cpp" line="499"/>
         <source>Spanish</source>
         <translation>španielčina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="494"/>
+        <location filename="../../util.cpp" line="501"/>
         <source>French</source>
         <translation>francúzština</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="496"/>
+        <location filename="../../util.cpp" line="504"/>
         <source>Portuguese</source>
         <translation>portugalčina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="499"/>
+        <location filename="../../util.cpp" line="507"/>
         <source>Dutch</source>
         <translation>holandčina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="501"/>
+        <location filename="../../util.cpp" line="510"/>
         <source>Italian</source>
         <translation>taliančina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="503"/>
+        <location filename="../../util.cpp" line="512"/>
         <source>German</source>
         <translation>nemčina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="505"/>
+        <location filename="../../util.cpp" line="515"/>
         <source>Polish</source>
         <translation>poľština</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="508"/>
+        <location filename="../../util.cpp" line="518"/>
         <source>Swedish</source>
         <translation>švédčina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="510"/>
+        <location filename="../../util.cpp" line="520"/>
         <source>Slovak</source>
         <translation>slovenčina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="517"/>
+        <location filename="../../util.cpp" line="527"/>
         <source>About </source>
         <translation>O programe </translation>
     </message>
@@ -162,32 +162,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="849"/>
+        <location filename="../../audiomixerboard.cpp" line="881"/>
         <source>Personal Mix at the Server</source>
         <translation>Osobný mix servera</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="849"/>
+        <location filename="../../audiomixerboard.cpp" line="881"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Po pripojení sa na server vám tieto ovládacie prvky umožnia lokálne mixovať zvuk bez toho, aby ste tým ovplyvnili to, čo od vás budú počuť ostatní. Nadpis okna zobrazuje názov servera a, ak je táto informácia k dispozícii, či je aktívne nahrávanie.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="926"/>
+        <location filename="../../audiomixerboard.cpp" line="960"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="935"/>
+        <location filename="../../audiomixerboard.cpp" line="969"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>P O K U S   O   P R I P O J E N I E</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1101"/>
+        <location filename="../../audiomixerboard.cpp" line="1139"/>
         <source>RECORDING ACTIVE</source>
         <translation>NAHRÁVANIE AKTÍVNE</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1104"/>
+        <location filename="../../audiomixerboard.cpp" line="1142"/>
         <source>Personal Mix at: </source>
         <translation>Osobný mix na: </translation>
     </message>
@@ -196,92 +196,92 @@
     <name>CChannelFader</name>
     <message>
         <location filename="../../audiomixerboard.cpp" line="43"/>
-        <location filename="../../audiomixerboard.cpp" line="244"/>
-        <location filename="../../audiomixerboard.cpp" line="260"/>
+        <location filename="../../audiomixerboard.cpp" line="246"/>
+        <location filename="../../audiomixerboard.cpp" line="262"/>
         <source>Pan</source>
         <translation>Posúvanie</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="47"/>
-        <location filename="../../audiomixerboard.cpp" line="161"/>
-        <location filename="../../audiomixerboard.cpp" line="261"/>
+        <location filename="../../audiomixerboard.cpp" line="163"/>
+        <location filename="../../audiomixerboard.cpp" line="263"/>
         <source>Mute</source>
         <translation>Stíšiť</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="48"/>
-        <location filename="../../audiomixerboard.cpp" line="165"/>
-        <location filename="../../audiomixerboard.cpp" line="262"/>
+        <location filename="../../audiomixerboard.cpp" line="167"/>
+        <location filename="../../audiomixerboard.cpp" line="264"/>
         <source>Solo</source>
         <translation>Sólo</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="137"/>
+        <location filename="../../audiomixerboard.cpp" line="139"/>
         <source>Channel Level</source>
         <translation>Úroveň kanála</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Input level of the current audio channel at the server</source>
         <translation>Vstupná úroveň aktuálneho audio kanála na serveri</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="143"/>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
         <source>Mixer Fader</source>
         <translation>Prelínač mixéra</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="146"/>
+        <location filename="../../audiomixerboard.cpp" line="148"/>
         <source>Local mix level setting of the current audio channel at the server</source>
         <translation>Nastavenie úrovne miestneho mixu aktuálneho audio kanála na serveri</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="149"/>
+        <location filename="../../audiomixerboard.cpp" line="151"/>
         <source>Status Indicator</source>
         <translation>Stavový indikátor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="149"/>
+        <location filename="../../audiomixerboard.cpp" line="151"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
         <translation>Zobrazuje indikáciu stavu klienta, ktorý je priradený k tomuto kanálu. Podporované indikátory sú:</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="154"/>
+        <location filename="../../audiomixerboard.cpp" line="156"/>
         <source>Status indicator label</source>
         <translation>Menovka stavového indikátora</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="156"/>
+        <location filename="../../audiomixerboard.cpp" line="158"/>
         <source>Panning</source>
         <translation>Posúvanie</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="159"/>
+        <location filename="../../audiomixerboard.cpp" line="161"/>
         <source>Local panning position of the current audio channel at the server</source>
         <translation>Miesto posúvanie pozície aktuálneho zvukového kanála na serveri</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="161"/>
+        <location filename="../../audiomixerboard.cpp" line="163"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation>Audio kanál môžete vypnúť pomocou zaškrtávacieho políčka Stíšiť.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="163"/>
+        <location filename="../../audiomixerboard.cpp" line="165"/>
         <source>Mute button</source>
         <translation>Tlačidlo Stíšenia</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="169"/>
+        <location filename="../../audiomixerboard.cpp" line="171"/>
         <source>Solo button</source>
         <translation>Tlačidlo Sóla</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="176"/>
+        <location filename="../../audiomixerboard.cpp" line="178"/>
         <source>Fader Tag</source>
         <translation>Značka prelínača</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="138"/>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -291,152 +291,149 @@
         <translation>&amp;Bez zoskupovania</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="67"/>
-        <location filename="../../audiomixerboard.cpp" line="68"/>
-        <location filename="../../audiomixerboard.cpp" line="69"/>
         <location filename="../../audiomixerboard.cpp" line="70"/>
         <source>Assign to group</source>
         <translation>Priradiť do skupiny</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="143"/>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
         <translation>Upraví úroveň zvuku pre tento kanál. Všetkým klientom pripojeným k serveru bude priradený zvukový prelínač a umožní im lokálne mixovanie.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="151"/>
+        <location filename="../../audiomixerboard.cpp" line="153"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
         <translation>Prečiarknutý reproduktor: Zobrazí sa vtedy, ak vás iný klient stíšil.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="156"/>
+        <location filename="../../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="165"/>
+        <location filename="../../audiomixerboard.cpp" line="167"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="171"/>
+        <location filename="../../audiomixerboard.cpp" line="173"/>
         <source>Group</source>
         <translation>Zoskupiť</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="171"/>
+        <location filename="../../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="174"/>
+        <location filename="../../audiomixerboard.cpp" line="176"/>
         <source>Group button</source>
         <translation>Tlačidlo Zoskupiť</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="176"/>
+        <location filename="../../audiomixerboard.cpp" line="178"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
         <translation>Značka prelínača identifikuje pripojeného klienta. Názov značky, obrázok vášho nástroja a vlajku vašej krajiny môžete nastaviť v hlavnom okne.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="181"/>
+        <location filename="../../audiomixerboard.cpp" line="183"/>
         <source>Mixer channel instrument picture</source>
         <translation>Obrázok hud. nástroja kanála mixéra</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="183"/>
+        <location filename="../../audiomixerboard.cpp" line="185"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>Menovka kanála mixéra (značka prelínača)</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="185"/>
+        <location filename="../../audiomixerboard.cpp" line="187"/>
         <source>Mixer channel country flag</source>
         <translation>Vlajka krajiny na kanáli mixéra</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="229"/>
+        <location filename="../../audiomixerboard.cpp" line="231"/>
         <source>PAN</source>
         <translation>PAN</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="230"/>
+        <location filename="../../audiomixerboard.cpp" line="232"/>
         <source>MUTE</source>
         <translation>STÍŠIŤ</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="231"/>
+        <location filename="../../audiomixerboard.cpp" line="233"/>
         <source>SOLO</source>
         <translation>SÓLO</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="232"/>
+        <location filename="../../audiomixerboard.cpp" line="234"/>
         <source>GRP</source>
         <translation>SKP</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="245"/>
+        <location filename="../../audiomixerboard.cpp" line="247"/>
         <source>M</source>
         <translation>M</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="246"/>
+        <location filename="../../audiomixerboard.cpp" line="248"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="247"/>
+        <location filename="../../audiomixerboard.cpp" line="249"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="263"/>
+        <location filename="../../audiomixerboard.cpp" line="265"/>
         <source>Grp</source>
         <translation>Skp</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="744"/>
+        <location filename="../../audiomixerboard.cpp" line="776"/>
         <source>Alias/Name</source>
         <translation>Prez/Meno</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="751"/>
+        <location filename="../../audiomixerboard.cpp" line="783"/>
         <source>Instrument</source>
         <translation>Hud. nástroj</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="761"/>
+        <location filename="../../audiomixerboard.cpp" line="793"/>
         <source>Location</source>
         <translation>Miesto</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="789"/>
-        <location filename="../../audiomixerboard.cpp" line="795"/>
-        <location filename="../../audiomixerboard.cpp" line="801"/>
+        <location filename="../../audiomixerboard.cpp" line="821"/>
+        <location filename="../../audiomixerboard.cpp" line="827"/>
+        <location filename="../../audiomixerboard.cpp" line="833"/>
         <source>Skill Level</source>
         <translation>Úroveň hrania</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="822"/>
+        <location filename="../../audiomixerboard.cpp" line="854"/>
         <source>Alias</source>
         <translation>Prezývka</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="788"/>
+        <location filename="../../audiomixerboard.cpp" line="820"/>
         <source>Beginner</source>
         <translation>Začiatočník</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="794"/>
+        <location filename="../../audiomixerboard.cpp" line="826"/>
         <source>Intermediate</source>
         <translation>Pokročilý</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="800"/>
+        <location filename="../../audiomixerboard.cpp" line="832"/>
         <source>Expert</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="813"/>
+        <location filename="../../audiomixerboard.cpp" line="845"/>
         <source>Musician Profile</source>
         <translation>Profil hudobníka</translation>
     </message>
@@ -489,12 +486,17 @@
         <translation>&amp;Vyčistiť históriu chatu</translation>
     </message>
     <message>
-        <location filename="../../chatdlg.cpp" line="136"/>
+        <location filename="../../chatdlg.cpp" line="71"/>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Zavrieť</translation>
+    </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="140"/>
         <source>Do you want to open the link</source>
         <translation>Chcete otvoriť prepojenie</translation>
     </message>
     <message>
-        <location filename="../../chatdlg.cpp" line="137"/>
+        <location filename="../../chatdlg.cpp" line="141"/>
         <source>in an external browser?</source>
         <translation>v externom prehliadači?</translation>
     </message>
@@ -515,314 +517,312 @@
 <context>
     <name>CClientDlg</name>
     <message>
-        <location filename="../../clientdlg.cpp" line="55"/>
+        <location filename="../../clientdlg.cpp" line="53"/>
         <source>Input Level Meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="58"/>
+        <location filename="../../clientdlg.cpp" line="56"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="73"/>
+        <location filename="../../clientdlg.cpp" line="71"/>
         <source>Input level meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="74"/>
+        <location filename="../../clientdlg.cpp" line="72"/>
         <source>Simulates an analog LED level meter.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="91"/>
+        <location filename="../../clientdlg.cpp" line="89"/>
         <source>Connect/Disconnect Button</source>
         <translation>Tlačidlo Pripojiť/Odpojiť</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="96"/>
+        <location filename="../../clientdlg.cpp" line="94"/>
         <source>Connect and disconnect toggle button</source>
         <translation>Tlačidlo Pripojiť/Odpojiť</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="99"/>
         <source>Local Audio Input Fader</source>
-        <translation>Miestny prelínač zvukového vstupu</translation>
+        <translation type="vanished">Miestny prelínač zvukového vstupu</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="106"/>
-        <location filename="../../clientdlg.cpp" line="666"/>
         <source>L</source>
-        <translation>Ľ</translation>
+        <translation type="vanished">Ľ</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="106"/>
         <source>, where</source>
-        <translation>, kde</translation>
+        <translation type="vanished">, kde</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="107"/>
         <source>is the current attenuation indicator.</source>
-        <translation>je indikátor aktuálneho útlmu.</translation>
+        <translation type="vanished">je indikátor aktuálneho útlmu.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="113"/>
         <source>Local audio input fader (left/right)</source>
-        <translation>Miestny prelínač zvukového vstupu (ľavý/pravý)</translation>
+        <translation type="vanished">Miestny prelínač zvukového vstupu (ľavý/pravý)</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="142"/>
+        <location filename="../../clientdlg.cpp" line="123"/>
         <source>Delay Status LED</source>
         <translation>Dióda stavu oneskorenia</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="159"/>
+        <location filename="../../clientdlg.cpp" line="140"/>
         <source>Delay status LED indicator</source>
         <translation>LED indikátor stavu oneskorenia</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="162"/>
+        <location filename="../../clientdlg.cpp" line="143"/>
         <source>Buffers Status LED</source>
         <translation>Dióda stavu bufferov</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="167"/>
+        <location filename="../../clientdlg.cpp" line="148"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="55"/>
+        <location filename="../../clientdlg.cpp" line="53"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="61"/>
+        <location filename="../../clientdlg.cpp" line="59"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="67"/>
+        <location filename="../../clientdlg.cpp" line="65"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="92"/>
+        <location filename="../../clientdlg.cpp" line="90"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="100"/>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientdlg.cpp" line="116"/>
+        <location filename="../../clientdlg.cpp" line="97"/>
         <source>Reverb effect</source>
         <translation>Efekt odrazu (reverb)</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="117"/>
+        <location filename="../../clientdlg.cpp" line="98"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="128"/>
+        <location filename="../../clientdlg.cpp" line="109"/>
         <source>Reverb effect level setting</source>
         <translation>Nastavenie sily efektu odrazu (reverb)</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="131"/>
+        <location filename="../../clientdlg.cpp" line="112"/>
         <source>Reverb Channel Selection</source>
         <translation>Výber kanála pre reverb</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="132"/>
+        <location filename="../../clientdlg.cpp" line="113"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="137"/>
+        <location filename="../../clientdlg.cpp" line="118"/>
         <source>Left channel selection for reverb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="139"/>
+        <location filename="../../clientdlg.cpp" line="120"/>
         <source>Right channel selection for reverb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="143"/>
+        <location filename="../../clientdlg.cpp" line="124"/>
         <source>Shows the current audio delay status:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="145"/>
+        <location filename="../../clientdlg.cpp" line="126"/>
         <source>Green</source>
         <translation>Zelená</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="145"/>
+        <location filename="../../clientdlg.cpp" line="126"/>
         <source>The delay is perfect for a jam session.</source>
         <translation>Oneskorenie je perfektné pre džemovanie.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="147"/>
+        <location filename="../../clientdlg.cpp" line="128"/>
         <source>Yellow</source>
         <translation>Žltá</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="147"/>
+        <location filename="../../clientdlg.cpp" line="128"/>
         <source>A session is still possible but it may be harder to play.</source>
         <translation>Džemovanie je stále možné, ale hranie môže byť sťažené.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="149"/>
+        <location filename="../../clientdlg.cpp" line="130"/>
         <source>Red</source>
         <translation>Červená</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="149"/>
+        <location filename="../../clientdlg.cpp" line="130"/>
         <source>The delay is too large for jamming.</source>
         <translation>Oneskorenie je príliš veľké na džemovanie.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="155"/>
+        <location filename="../../clientdlg.cpp" line="136"/>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
         <translation>Ak sa dióda zmení na červenú, veľa zábavy si s touto aplikáciou neužijete.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="163"/>
+        <location filename="../../clientdlg.cpp" line="144"/>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
         <translation>Dióda stavu bufferov ukazuje aktuálny stav audio/streamovania. Ak je jej farba červená, audio stream je prerušený. Príčinou môže byť jeden z nasledujúcich problémov:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="169"/>
+        <location filename="../../clientdlg.cpp" line="150"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
         <translation>Oneskorenie buffera (veľkosť buffera) zvukovej karty je príliš malé (pozrite Nastavenia).</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="171"/>
+        <location filename="../../clientdlg.cpp" line="152"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
         <translation>Rýchlosť uploadu alebo downloadu streamu je príliš vysoká vzhľadom na vašu rýchlosť internetového pripojenia.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="173"/>
+        <location filename="../../clientdlg.cpp" line="154"/>
         <source>The CPU of the client or server is at 100%.</source>
         <translation>Procesor na klientovi alebo serveri je vytažený na 100%.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="179"/>
+        <location filename="../../clientdlg.cpp" line="160"/>
         <source>Buffers status LED indicator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="194"/>
-        <location filename="../../clientdlg.cpp" line="1247"/>
+        <location filename="../../clientdlg.cpp" line="176"/>
+        <location filename="../../clientdlg.cpp" line="1251"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Pripojiť</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="230"/>
+        <location filename="../../clientdlg.cpp" line="210"/>
         <source>software upgrade available</source>
         <translation>dostupná aktualizácia softvéru</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="247"/>
+        <location filename="../../clientdlg.cpp" line="228"/>
         <source>&amp;File</source>
         <translation>&amp;Súbor</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="262"/>
+        <location filename="../../clientdlg.cpp" line="243"/>
         <source>&amp;View</source>
         <translation>Pohľ&amp;ad</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="264"/>
+        <location filename="../../clientdlg.cpp" line="245"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Nastavenie pripojenia...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="267"/>
+        <location filename="../../clientdlg.cpp" line="251"/>
         <source>My &amp;Profile...</source>
         <translation>Môj &amp;profil...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="270"/>
+        <location filename="../../clientdlg.cpp" line="248"/>
         <source>C&amp;hat...</source>
         <translation>&amp;Chat...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="273"/>
         <source>&amp;Settings...</source>
-        <translation>N&amp;astavenia...</translation>
+        <translation type="vanished">N&amp;astavenia...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="279"/>
+        <location filename="../../clientdlg.cpp" line="263"/>
         <source>&amp;Analyzer Console...</source>
         <translation>&amp;Konzola analyzátora...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="287"/>
+        <location filename="../../clientdlg.cpp" line="271"/>
         <source>N&amp;o User Sorting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="299"/>
+        <location filename="../../clientdlg.cpp" line="283"/>
         <source>Sort Users by &amp;City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="329"/>
-        <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientdlg.cpp" line="337"/>
+        <location filename="../../clientdlg.cpp" line="313"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="340"/>
+        <location filename="../../clientdlg.cpp" line="316"/>
         <source>Set All Faders to New Client &amp;Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1175"/>
+        <location filename="../../clientdlg.cpp" line="319"/>
+        <source>Auto-Adjust all &amp;Faders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="1161"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="257"/>
+        <location filename="../../clientdlg.cpp" line="238"/>
         <source>E&amp;xit</source>
         <translation>U&amp;končiť</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="249"/>
+        <location filename="../../clientdlg.cpp" line="230"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>&amp;Načítať nastavenia kanálov mixéra...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="252"/>
+        <location filename="../../clientdlg.cpp" line="233"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>&amp;Uložiť nastavenia kanálov mixéra...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="285"/>
+        <location filename="../../clientdlg.cpp" line="254"/>
+        <source>Audio/Network &amp;Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="257"/>
+        <source>A&amp;dvanced Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="269"/>
         <source>&amp;Edit</source>
         <translation>Úp&amp;ravy</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="290"/>
+        <location filename="../../clientdlg.cpp" line="274"/>
         <source>Sort Users by &amp;Name</source>
         <translation>Triediť používateľov kanálov podľa &amp;mena</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="293"/>
+        <location filename="../../clientdlg.cpp" line="277"/>
         <source>Sort Users by &amp;Instrument</source>
         <translation>Triediť používateľov kanálov podľa &amp;nástroja</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="296"/>
+        <location filename="../../clientdlg.cpp" line="280"/>
         <source>Sort Users by &amp;Group</source>
         <translation>Triediť používateľov kanálov podľa &amp;skupiny</translation>
     </message>
@@ -831,43 +831,68 @@
         <translation type="obsolete">Żaden</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="659"/>
         <source>Center</source>
-        <translation>Stred</translation>
+        <translation type="vanished">Stred</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="672"/>
         <source>R</source>
-        <translation>P</translation>
+        <translation type="vanished">P</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="762"/>
+        <location filename="../../clientdlg.cpp" line="700"/>
         <source>Directory Server</source>
         <translation>Centrálny server</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="808"/>
-        <location filename="../../clientdlg.cpp" line="823"/>
+        <location filename="../../clientdlg.cpp" line="746"/>
+        <location filename="../../clientdlg.cpp" line="761"/>
         <source>Select Channel Setup File</source>
         <translation>Vyberte súbor s nastavením kanálov</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="952"/>
+        <location filename="../../clientdlg.cpp" line="912"/>
         <source>user</source>
         <translation>používateľ</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="956"/>
+        <location filename="../../clientdlg.cpp" line="916"/>
         <source>users</source>
         <translation>používatelia</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1159"/>
+        <location filename="../../clientdlg.cpp" line="951"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="963"/>
+        <source>Settings</source>
+        <translation type="unfinished">Nastavenia</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="973"/>
+        <source>Chat</source>
+        <translation type="unfinished">Chat</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="1050"/>
+        <source>Enable feedback detection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="1054"/>
+        <source>Audio feedback or loud signal detected.
+
+We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="1140"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1222"/>
+        <location filename="../../clientdlg.cpp" line="1219"/>
         <source>D&amp;isconnect</source>
         <translation>O&amp;dpojiť</translation>
     </message>
@@ -875,87 +900,85 @@
 <context>
     <name>CClientDlgBase</name>
     <message>
-        <location filename="../../clientdlgbase.ui" line="116"/>
+        <location filename="../../clientdlgbase.ui" line="228"/>
         <source>Delay</source>
         <translation>Oneskorenie</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="168"/>
+        <location filename="../../clientdlgbase.ui" line="283"/>
         <source>Buffers</source>
         <translation>Buffery</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="229"/>
+        <location filename="../../clientdlgbase.ui" line="344"/>
         <source>Input</source>
         <translation>Vstup</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="277"/>
+        <location filename="../../clientdlgbase.ui" line="392"/>
         <source>L</source>
         <translation>Ľ</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="287"/>
+        <location filename="../../clientdlgbase.ui" line="402"/>
         <source>R</source>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="326"/>
+        <location filename="../../clientdlgbase.ui" line="441"/>
         <source>&amp;Mute Myself</source>
         <translation>&amp;Stíšiť ma</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="333"/>
+        <location filename="../../clientdlgbase.ui" line="448"/>
         <source>&amp;Settings</source>
         <translation>&amp;Nastavenia</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="340"/>
+        <location filename="../../clientdlgbase.ui" line="455"/>
         <source>&amp;Chat</source>
         <translation>&amp;Chat</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="347"/>
+        <location filename="../../clientdlgbase.ui" line="468"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Pripojiť</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="376"/>
         <source>Pan</source>
-        <translation>Posun</translation>
+        <translation type="vanished">Posun</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="392"/>
         <source>Center</source>
-        <translation>Stred</translation>
+        <translation type="vanished">Stred</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="466"/>
+        <location filename="../../clientdlgbase.ui" line="123"/>
         <source>Reverb</source>
         <translation>Ozvena (rev)</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="532"/>
+        <location filename="../../clientdlgbase.ui" line="195"/>
         <source>Left</source>
         <translation>Ľavý</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="539"/>
+        <location filename="../../clientdlgbase.ui" line="202"/>
         <source>Right</source>
         <translation>Pravý</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="554"/>
+        <location filename="../../clientdlgbase.ui" line="492"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
         <translation>STÍŠENÉ (Nebude vás počuť)</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="584"/>
+        <location filename="../../clientdlgbase.ui" line="522"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="606"/>
+        <location filename="../../clientdlgbase.ui" line="544"/>
         <source>Update check</source>
         <translation>Kontrola aktualizácií</translation>
     </message>
@@ -963,281 +986,380 @@
 <context>
     <name>CClientSettingsDlg</name>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="41"/>
+        <location filename="../../clientsettingsdlg.cpp" line="69"/>
         <source>Jitter Buffer Size</source>
         <translation>Veľkosť jitter buffera</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="50"/>
+        <location filename="../../clientsettingsdlg.cpp" line="78"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation>Nastavenia jitter bufferu je preto kompromisom medzi kvalitou zvuku a celkového oneskorenia.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="75"/>
+        <location filename="../../clientsettingsdlg.cpp" line="103"/>
         <source>Local jitter buffer slider control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="78"/>
+        <location filename="../../clientsettingsdlg.cpp" line="106"/>
         <source>Server jitter buffer slider control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="80"/>
+        <location filename="../../clientsettingsdlg.cpp" line="108"/>
         <source>Auto jitter buffer switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="82"/>
+        <location filename="../../clientsettingsdlg.cpp" line="110"/>
         <source>Jitter buffer status LED indicator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="86"/>
+        <location filename="../../clientsettingsdlg.cpp" line="114"/>
         <source>Sound Card Device</source>
         <translation>Zariadenie zvukovej karty</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="87"/>
+        <location filename="../../clientsettingsdlg.cpp" line="115"/>
         <source>The ASIO driver (sound card) can be selected using </source>
         <translation>Ovládač (zvukovej karty) ASIO môžete vybrať použitím </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="88"/>
+        <location filename="../../clientsettingsdlg.cpp" line="116"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="90"/>
+        <location filename="../../clientsettingsdlg.cpp" line="118"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="95"/>
+        <location filename="../../clientsettingsdlg.cpp" line="123"/>
         <source>Sound card device selector combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="102"/>
+        <location filename="../../clientsettingsdlg.cpp" line="130"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="108"/>
+        <location filename="../../clientsettingsdlg.cpp" line="136"/>
         <source>Sound Card Channel Mapping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="111"/>
+        <location filename="../../clientsettingsdlg.cpp" line="139"/>
         <source>For each </source>
         <translation>Pre každý </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="112"/>
+        <location filename="../../clientsettingsdlg.cpp" line="140"/>
         <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
         <translation> vstupný/výstupný kanál (ľavý a pravý kanál) môžete vybrať iný kanál zvukovej karty.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="119"/>
+        <location filename="../../clientsettingsdlg.cpp" line="147"/>
         <source>Left input channel selection combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="121"/>
+        <location filename="../../clientsettingsdlg.cpp" line="149"/>
         <source>Right input channel selection combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="123"/>
+        <location filename="../../clientsettingsdlg.cpp" line="151"/>
         <source>Left output channel selection combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="125"/>
+        <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>Right output channel selection combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="128"/>
+        <location filename="../../clientsettingsdlg.cpp" line="156"/>
         <source>Enable Small Network Buffers</source>
         <translation type="unfinished">Povoliť malé sieťové buffre</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="128"/>
+        <location filename="../../clientsettingsdlg.cpp" line="156"/>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="135"/>
+        <location filename="../../clientsettingsdlg.cpp" line="163"/>
         <source>Enable small network buffers check box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="138"/>
+        <location filename="../../clientsettingsdlg.cpp" line="166"/>
         <source>Sound Card Buffer Delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="141"/>
+        <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>Three buffer sizes are supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="150"/>
+        <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="165"/>
+        <location filename="../../clientsettingsdlg.cpp" line="193"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="169"/>
+        <location filename="../../clientsettingsdlg.cpp" line="197"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="177"/>
+        <location filename="../../clientsettingsdlg.cpp" line="205"/>
         <source>Sound card driver settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="178"/>
+        <location filename="../../clientsettingsdlg.cpp" line="206"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="183"/>
+        <location filename="../../clientsettingsdlg.cpp" line="211"/>
         <source>Opens the driver settings. Note: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="184"/>
+        <location filename="../../clientsettingsdlg.cpp" line="212"/>
         <source> currently only supports devices supporting a sample rate of </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="185"/>
+        <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="193"/>
+        <location filename="../../clientsettingsdlg.cpp" line="221"/>
         <source>128 samples setting radio button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="196"/>
+        <location filename="../../clientsettingsdlg.cpp" line="224"/>
         <source>256 samples setting radio button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="263"/>
+        <location filename="../../clientsettingsdlg.cpp" line="285"/>
+        <source>Input Boost</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="286"/>
+        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="300"/>
+        <source>Input Boost combo box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="309"/>
         <source>Directory server address combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
+        <source>Number of Mixer Panel Rows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="338"/>
+        <source>Adjust the number of rows used to arrange the mixer panel.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="341"/>
+        <source>Number of Mixer Panel Rows spin box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="343"/>
+        <source>Feedback Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="344"/>
+        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="348"/>
+        <source>Feedback Protection check box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="400"/>
         <source>Fancy</source>
         <translation>Efektný</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="338"/>
+        <location filename="../../clientsettingsdlg.cpp" line="401"/>
         <source>Compact</source>
         <translation>Kompaktný</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="416"/>
+        <location filename="../../clientsettingsdlg.cpp" line="537"/>
+        <location filename="../../clientsettingsdlg.cpp" line="549"/>
+        <location filename="../../util.cpp" line="819"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="1129"/>
+        <source>Center</source>
+        <translation type="unfinished">Stred</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="1142"/>
+        <source>R</source>
+        <translation type="unfinished">P</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
         <translation type="vanished">Zobraziť úrovne kanálov</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="209"/>
+        <location filename="../../clientsettingsdlg.cpp" line="237"/>
         <source>Audio Channels</source>
         <translation>Zvukové kanály</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="223"/>
+        <location filename="../../clientsettingsdlg.cpp" line="251"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="232"/>
+        <location filename="../../clientsettingsdlg.cpp" line="260"/>
         <source>Audio channels combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="235"/>
+        <location filename="../../clientsettingsdlg.cpp" line="263"/>
         <source>Audio Quality</source>
         <translation>Kvalita zvuku</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="242"/>
+        <location filename="../../clientsettingsdlg.cpp" line="270"/>
         <source>Audio quality combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="245"/>
+        <location filename="../../clientsettingsdlg.cpp" line="273"/>
         <source>New Client Level</source>
         <translation>Úroveň nového klienta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="254"/>
+        <location filename="../../clientsettingsdlg.cpp" line="282"/>
         <source>New client level edit box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="266"/>
+        <location filename="../../clientsettingsdlg.cpp" line="312"/>
         <source>Current Connection Status Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="99"/>
+        <location filename="../../clientsettingsdlg.cpp" line="127"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="109"/>
+        <location filename="../../clientsettingsdlg.cpp" line="41"/>
+        <source>&amp;Close</source>
+        <translation type="unfinished">&amp;Zavrieť</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="51"/>
+        <source>Local Audio Input Fader</source>
+        <translation type="unfinished">Miestny prelínač zvukového vstupu</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="52"/>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="58"/>
+        <location filename="../../clientsettingsdlg.cpp" line="1136"/>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="58"/>
+        <source>, where</source>
+        <translation type="unfinished">, kde</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="59"/>
+        <source>is the current attenuation indicator.</source>
+        <translation type="unfinished">je indikátor aktuálneho útlmu.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="65"/>
+        <source>Local audio input fader (left/right)</source>
+        <translation type="unfinished">Miestny prelínač zvukového vstupu (ľavý/pravý)</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="137"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="131"/>
+        <location filename="../../clientsettingsdlg.cpp" line="159"/>
         <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="160"/>
+        <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="190"/>
+        <location filename="../../clientsettingsdlg.cpp" line="218"/>
         <source>64 samples setting radio button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="199"/>
+        <location filename="../../clientsettingsdlg.cpp" line="227"/>
         <source>ASIO Device Settings push button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="257"/>
+        <location filename="../../clientsettingsdlg.cpp" line="303"/>
         <source>Custom Directory Server Address</source>
         <translation>Adresa vlastného centrálneho servera</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="274"/>
+        <location filename="../../clientsettingsdlg.cpp" line="320"/>
         <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="287"/>
+        <location filename="../../clientsettingsdlg.cpp" line="333"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="289"/>
+        <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source> software.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1246,60 +1368,60 @@
         <translation type="vanished">Nastavenie ASIO</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="213"/>
-        <location filename="../../clientsettingsdlg.cpp" line="322"/>
+        <location filename="../../clientsettingsdlg.cpp" line="241"/>
+        <location filename="../../clientsettingsdlg.cpp" line="385"/>
         <source>Mono</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="323"/>
+        <location filename="../../clientsettingsdlg.cpp" line="386"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-dnu/Stereo-von</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="214"/>
-        <location filename="../../clientsettingsdlg.cpp" line="223"/>
-        <location filename="../../clientsettingsdlg.cpp" line="324"/>
+        <location filename="../../clientsettingsdlg.cpp" line="242"/>
+        <location filename="../../clientsettingsdlg.cpp" line="251"/>
+        <location filename="../../clientsettingsdlg.cpp" line="387"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="41"/>
+        <location filename="../../clientsettingsdlg.cpp" line="69"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="45"/>
+        <location filename="../../clientsettingsdlg.cpp" line="73"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="52"/>
+        <location filename="../../clientsettingsdlg.cpp" line="80"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="59"/>
+        <location filename="../../clientsettingsdlg.cpp" line="87"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="139"/>
+        <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="144"/>
+        <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="146"/>
+        <location filename="../../clientsettingsdlg.cpp" line="174"/>
         <source>128 samples: Should work for most available sound cards.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="148"/>
+        <location filename="../../clientsettingsdlg.cpp" line="176"/>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1308,108 +1430,108 @@
         <translation type="vanished">Niektoré ovládače zvukových kariet nepovoľujú meniť oneskorenie buffera z prostredia aplikácie. V takom prípade je nastavenie oneskorenia buffera neaktívne a musíte ho zmeniť použitím ovládača zvukovej karty. Vo Windows kliknite na tlačidlo Nastaviť ASIO a otvoríte ovládací panel ovládača. V LInuxe použite pre zmenu veľkosti buffera konfiguračný nástroj Jack.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="156"/>
+        <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The application will still work with this setting but with restricted performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="203"/>
+        <location filename="../../clientsettingsdlg.cpp" line="231"/>
         <source>Skin</source>
         <translation type="unfinished">Vzhľad</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="203"/>
+        <location filename="../../clientsettingsdlg.cpp" line="231"/>
         <source>Select the skin to be used for the main window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="206"/>
+        <location filename="../../clientsettingsdlg.cpp" line="234"/>
         <source>Skin combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="209"/>
+        <location filename="../../clientsettingsdlg.cpp" line="237"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="213"/>
+        <location filename="../../clientsettingsdlg.cpp" line="241"/>
         <source>and </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="214"/>
+        <location filename="../../clientsettingsdlg.cpp" line="242"/>
         <source>These modes use one and two audio channels respectively.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="216"/>
+        <location filename="../../clientsettingsdlg.cpp" line="244"/>
         <source>Mono in/Stereo-out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="216"/>
+        <location filename="../../clientsettingsdlg.cpp" line="244"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="223"/>
+        <location filename="../../clientsettingsdlg.cpp" line="251"/>
         <source>Enabling </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="226"/>
+        <location filename="../../clientsettingsdlg.cpp" line="254"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="235"/>
+        <location filename="../../clientsettingsdlg.cpp" line="263"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="246"/>
+        <location filename="../../clientsettingsdlg.cpp" line="274"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="258"/>
+        <location filename="../../clientsettingsdlg.cpp" line="304"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="267"/>
+        <location filename="../../clientsettingsdlg.cpp" line="313"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="272"/>
+        <location filename="../../clientsettingsdlg.cpp" line="318"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="294"/>
+        <location filename="../../clientsettingsdlg.cpp" line="352"/>
         <source>ASIO Device Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="329"/>
+        <location filename="../../clientsettingsdlg.cpp" line="392"/>
         <source>Low</source>
         <translation>Nízka</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="330"/>
-        <location filename="../../clientsettingsdlg.cpp" line="336"/>
+        <location filename="../../clientsettingsdlg.cpp" line="393"/>
+        <location filename="../../clientsettingsdlg.cpp" line="399"/>
         <source>Normal</source>
         <translation>Normálna</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../../clientsettingsdlg.cpp" line="394"/>
         <source>High</source>
         <translation>Vysoká</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="611"/>
+        <location filename="../../util.h" line="582"/>
         <source>Custom</source>
         <translation>Vlastný</translation>
     </message>
@@ -1418,37 +1540,37 @@
         <translation type="vanished">Všetky žánre</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="614"/>
+        <location filename="../../util.h" line="585"/>
         <source>Any Genre 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.h" line="617"/>
+        <location filename="../../util.h" line="588"/>
         <source>Any Genre 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.h" line="620"/>
+        <location filename="../../util.h" line="591"/>
         <source>Genre Rock</source>
         <translation>Žáner Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="623"/>
+        <location filename="../../util.h" line="594"/>
         <source>Genre Jazz</source>
         <translation>Žáner Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="626"/>
+        <location filename="../../util.h" line="597"/>
         <source>Genre Classical/Folk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.h" line="629"/>
+        <location filename="../../util.h" line="600"/>
         <source>Genre Choral/Barbershop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../util.h" line="632"/>
+        <location filename="../../util.h" line="603"/>
         <source>Any Genre 1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1461,23 +1583,78 @@
         <translation type="vanished">Predvolený</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="360"/>
+        <location filename="../../clientsettingsdlg.cpp" line="439"/>
         <source>preferred</source>
         <translation>preferované</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="456"/>
-        <location filename="../../clientsettingsdlg.cpp" line="460"/>
+        <location filename="../../clientsettingsdlg.cpp" line="453"/>
+        <source>Musician Profile</source>
+        <translation type="unfinished">Profil hudobníka</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="454"/>
+        <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
+        <translation type="unfinished">Sem napíšte vaše meno alebo prezývku, aby ostatní hudobníci vedeli, s kým majú tú česť. Rovnako môžete pridať obrázok hudobného nástroja, na ktorý hráte a vlajku krajiny, v ktorej sa nachádzate. Je možné pridať aj mesto a úroveň hry na hudobný nástroj.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="458"/>
+        <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
+        <translation type="unfinished">To, čo sem napíšete sa zobrazí pri vašom prelínači na mixéri po tom, ako sa pripojíte k Jamulus serveru. Táto menovka sa rovnako zobrazí každému klientovi, ktorý sa pripojí k tomu istému serveru ako vy.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="464"/>
+        <source>Alias or name edit box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="466"/>
+        <source>Instrument picture button</source>
+        <translation type="unfinished">Tlačidlo s obrázkom hud. nástroja</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="468"/>
+        <source>Country flag button</source>
+        <translation type="unfinished">Tlačidlo s vlajkou krajiny</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="470"/>
+        <source>City edit box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="472"/>
+        <source>Skill level combo box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="555"/>
+        <source>Beginner</source>
+        <translation type="unfinished">Začiatočník</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="561"/>
+        <source>Intermediate</source>
+        <translation type="unfinished">Pokročilý</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="567"/>
+        <source>Expert</source>
+        <translation type="unfinished">Expert</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="707"/>
+        <location filename="../../clientsettingsdlg.cpp" line="711"/>
         <source>Size: </source>
         <translation>Veľkosť: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="517"/>
+        <location filename="../../clientsettingsdlg.cpp" line="768"/>
         <source>Buffer Delay</source>
         <translation>Oneskorenie buffera</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="522"/>
+        <location filename="../../clientsettingsdlg.cpp" line="773"/>
         <source>Buffer Delay: </source>
         <translation>Oneskorenie buffera: </translation>
     </message>
@@ -1493,6 +1670,241 @@
         <source>Ok</source>
         <translation type="vanished">Ok</translation>
     </message>
+    <message>
+        <location filename="../../util.cpp" line="820"/>
+        <source>Drum Set</source>
+        <translation type="unfinished">Bicie</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="821"/>
+        <source>Djembe</source>
+        <translation type="unfinished">Djembe</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="822"/>
+        <source>Electric Guitar</source>
+        <translation type="unfinished">Elektrická gitara</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="823"/>
+        <source>Acoustic Guitar</source>
+        <translation type="unfinished">Akustická gitara</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="824"/>
+        <source>Bass Guitar</source>
+        <translation type="unfinished">Basová gitara</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="825"/>
+        <source>Keyboard</source>
+        <translation type="unfinished">Keyboard</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="826"/>
+        <source>Synthesizer</source>
+        <translation type="unfinished">Syntetizátor</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="827"/>
+        <source>Grand Piano</source>
+        <translation type="unfinished">Koncertné krídlo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="828"/>
+        <source>Accordion</source>
+        <translation type="unfinished">Akordeón</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="829"/>
+        <source>Vocal</source>
+        <translation type="unfinished">Vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="830"/>
+        <source>Microphone</source>
+        <translation type="unfinished">Mikrofón</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="831"/>
+        <source>Harmonica</source>
+        <translation type="unfinished">Ústna harmonika</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="832"/>
+        <source>Trumpet</source>
+        <translation type="unfinished">Trúbka</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="833"/>
+        <source>Trombone</source>
+        <translation type="unfinished">Trombón</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="834"/>
+        <source>French Horn</source>
+        <translation type="unfinished">Lesný roh</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="835"/>
+        <source>Tuba</source>
+        <translation type="unfinished">Tuba</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="836"/>
+        <source>Saxophone</source>
+        <translation type="unfinished">Saxofón</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="837"/>
+        <source>Clarinet</source>
+        <translation type="unfinished">Klarinet</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="838"/>
+        <source>Flute</source>
+        <translation type="unfinished">Flauta</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="839"/>
+        <source>Violin</source>
+        <translation type="unfinished">Husle</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="840"/>
+        <source>Cello</source>
+        <translation type="unfinished">Violončelo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="841"/>
+        <source>Double Bass</source>
+        <translation type="unfinished">Kontrabas</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="842"/>
+        <source>Recorder</source>
+        <translation type="unfinished">Zobcová flauta</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="843"/>
+        <source>Streamer</source>
+        <translation type="unfinished">Streamovač</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="844"/>
+        <source>Listener</source>
+        <translation type="unfinished">Poslucháč</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="845"/>
+        <source>Guitar+Vocal</source>
+        <translation type="unfinished">Gitara+Vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="846"/>
+        <source>Keyboard+Vocal</source>
+        <translation type="unfinished">Klávesnica+Vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="847"/>
+        <source>Bodhran</source>
+        <translation type="unfinished">Bodhran</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="848"/>
+        <source>Bassoon</source>
+        <translation type="unfinished">Fagot</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="849"/>
+        <source>Oboe</source>
+        <translation type="unfinished">Hoboj</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="850"/>
+        <source>Harp</source>
+        <translation type="unfinished">Harfa</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="851"/>
+        <source>Viola</source>
+        <translation type="unfinished">Viola</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="852"/>
+        <source>Congas</source>
+        <translation type="unfinished">Kongy</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="853"/>
+        <source>Bongo</source>
+        <translation type="unfinished">Bongo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="854"/>
+        <source>Vocal Bass</source>
+        <translation type="unfinished">Basové vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="855"/>
+        <source>Vocal Tenor</source>
+        <translation type="unfinished">Tenorové vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="856"/>
+        <source>Vocal Alto</source>
+        <translation type="unfinished">Altové vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="857"/>
+        <source>Vocal Soprano</source>
+        <translation type="unfinished">Sopránové vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="858"/>
+        <source>Banjo</source>
+        <translation type="unfinished">Bendžo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="859"/>
+        <source>Mandolin</source>
+        <translation type="unfinished">Mandolína</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="860"/>
+        <source>Ukulele</source>
+        <translation type="unfinished">Ukulele</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="861"/>
+        <source>Bass Ukulele</source>
+        <translation type="unfinished">Basové ukulele</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="862"/>
+        <source>Vocal Baritone</source>
+        <translation type="unfinished">Barytónové vokály</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="863"/>
+        <source>Vocal Lead</source>
+        <translation type="unfinished">Hlavný spev</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="864"/>
+        <source>Mountain Dulcimer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="865"/>
+        <source>Scratching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="866"/>
+        <source>Rapping</source>
+        <translation type="unfinished">Repovanie</translation>
+    </message>
 </context>
 <context>
     <name>CClientSettingsDlgBase</name>
@@ -1502,130 +1914,223 @@
         <translation>Nastavenia</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="27"/>
         <source>Soundcard</source>
-        <translation>Zvuková karta</translation>
+        <translation type="vanished">Zvuková karta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="33"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="307"/>
         <source>Device</source>
         <translation>Zariadenie</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="95"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="402"/>
         <source>Input Channel Mapping</source>
         <translation>Mapovanie vstupného kanála</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="115"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="172"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="422"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="479"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="128"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="185"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="435"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="492"/>
         <source>R</source>
         <translation>P</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="152"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="459"/>
         <source>Output Channel Mapping</source>
         <translation>Mapovanie výstupného kanála</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="225"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="820"/>
         <source>Enable Small Network Buffers</source>
         <translation>Povoliť malé sieťové buffre</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="232"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="580"/>
         <source>Buffer Delay</source>
         <translation>Oneskorenie buffera</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="238"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="592"/>
         <source>(preferred)</source>
         <translation>(preferované)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="245"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="605"/>
         <source>(default)</source>
         <translation>(predvolené)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="252"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="618"/>
         <source>(safe)</source>
         <translation>(bezpečné)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="55"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="352"/>
         <source>Driver Setup</source>
         <translation>Konfigurácia ovládača</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="265"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="34"/>
+        <source>My Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="73"/>
+        <source>Musician&apos;s Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="83"/>
+        <source>Alias/Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="90"/>
+        <source>Instrument</source>
+        <translation type="unfinished">Hud. nástroj</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="97"/>
+        <source>Country</source>
+        <translation type="unfinished">Krajina</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="104"/>
+        <source>City</source>
+        <translation type="unfinished">Mesto</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="111"/>
+        <source>Skill</source>
+        <translation type="unfinished">Úroveň hrania</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="198"/>
+        <source>User Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="222"/>
+        <source>Mixer Rows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="297"/>
+        <source>Audio/Network Setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="664"/>
         <source>Jitter Buffer</source>
         <translation>Jitter Buffer</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="271"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="670"/>
         <source>Auto</source>
         <translation>Automaticky</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="280"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="679"/>
         <source>Local</source>
         <translation>Lokálny</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="293"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="692"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="310"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="323"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="709"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="722"/>
         <source>Size</source>
         <translation>Veľkosť</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="403"/>
-        <source>Misc</source>
-        <translation>Rôzne</translation>
+        <location filename="../../clientsettingsdlgbase.ui" line="1108"/>
+        <source>Input Boost</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="413"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1131"/>
+        <source>Feedback Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="1138"/>
+        <source>Enable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="1190"/>
+        <source>Input Balance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="1201"/>
+        <source>Pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="1275"/>
+        <source>Center</source>
+        <translation type="unfinished">Stred</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="vanished">Rôzne</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="539"/>
         <source>Audio Channels</source>
         <translation>Audio kanály</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="420"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="546"/>
         <source>Audio Quality</source>
         <translation>Audio kvalita</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="427"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="827"/>
+        <source>Measurements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="1006"/>
+        <source>Advanced Setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="1047"/>
+        <source>Custom Central Server Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="1074"/>
         <source>New Client Level</source>
         <translation>Úroveň nového klienta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="434"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="208"/>
         <source>Skin</source>
         <translation>Vzhľad</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="441"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="215"/>
         <source>Language</source>
         <translation>Jazyk</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="463"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1086"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="624"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="951"/>
         <source>Local Jitter Buffer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1634,29 +2139,28 @@
         <translation type="vanished">Zobraziť úrovne kanálov</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="482"/>
         <source>Custom Directory Server Address:</source>
-        <translation>Adresa vlastného centrálneho servera:</translation>
+        <translation type="vanished">Adresa vlastného centrálneho servera:</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="511"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="838"/>
         <source>Audio Stream Rate</source>
         <translation>Rýchlosť streamovania zvuku</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="524"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="554"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="589"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="851"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="881"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="916"/>
         <source>val</source>
         <translation>hodn</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="535"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="862"/>
         <source>Ping Time</source>
         <translation>Čas odpovede</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="565"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="892"/>
         <source>Overall Delay</source>
         <translation>Celkové oneskorenie</translation>
     </message>
@@ -1750,8 +2254,12 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="148"/>
+        <source>Filter text, or # for occupied servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Type # for occupied servers</source>
-        <translation>Zadajte # pre obsadené servery</translation>
+        <translation type="vanished">Zadajte # pre obsadené servery</translation>
     </message>
 </context>
 <context>
@@ -1819,28 +2327,28 @@
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../../util.cpp" line="860"/>
+        <location filename="../../util.cpp" line="573"/>
         <source>&amp;Help</source>
         <translation>Po&amp;mocník</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="865"/>
-        <location filename="../../util.cpp" line="870"/>
+        <location filename="../../util.cpp" line="578"/>
+        <location filename="../../util.cpp" line="583"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Začíname...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="866"/>
+        <location filename="../../util.cpp" line="579"/>
         <source>Software &amp;Manual...</source>
         <translation>&amp;Manuál programu...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="873"/>
+        <location filename="../../util.cpp" line="586"/>
         <source>What&apos;s &amp;This</source>
         <translation>Čo j&amp;e toto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="875"/>
+        <location filename="../../util.cpp" line="588"/>
         <source>&amp;About...</source>
         <translation>&amp;O programe...</translation>
     </message>
@@ -1848,12 +2356,12 @@
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../../util.cpp" line="936"/>
+        <location filename="../../util.cpp" line="649"/>
         <source>Restart Required</source>
         <translation>Vyžadovaný reštart</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="937"/>
+        <location filename="../../util.cpp" line="650"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Aby sa zmeny nastavenia jazyku prejavili, musíte reštartovať aplikáciu.</translation>
     </message>
@@ -1865,22 +2373,22 @@
         <translation type="vanished">&amp;Súhlasím s licenčnými podmienkami vyššie</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="535"/>
+        <location filename="../../util.cpp" line="545"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Tento server od vás pred pripojením vyžaduje akceptovanie podmienok. Prosím, prečítajte si ich v okne chatu.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="536"/>
+        <location filename="../../util.cpp" line="546"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Prečítal som si podmienky a &amp;akceptujem ich.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="537"/>
+        <location filename="../../util.cpp" line="547"/>
         <source>Accept</source>
         <translation>Akceptovať</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="538"/>
+        <location filename="../../util.cpp" line="548"/>
         <source>Decline</source>
         <translation>Odmietnuť</translation>
     </message>
@@ -1922,335 +2430,247 @@
 <context>
     <name>CMusProfDlg</name>
     <message>
-        <location filename="../../util.cpp" line="577"/>
-        <location filename="../../util.cpp" line="725"/>
         <source>Musician Profile</source>
-        <translation>Profil hudobníka</translation>
+        <translation type="vanished">Profil hudobníka</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="582"/>
         <source>Alias/Name</source>
-        <translation>Prezývka/Meno</translation>
+        <translation type="vanished">Prezývka/Meno</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="584"/>
         <source>Instrument</source>
-        <translation>Hud. nástroj</translation>
+        <translation type="vanished">Hud. nástroj</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="586"/>
         <source>Country</source>
-        <translation>Krajina</translation>
+        <translation type="vanished">Krajina</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="588"/>
         <source>City</source>
-        <translation>Mesto</translation>
+        <translation type="vanished">Mesto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="590"/>
         <source>Skill</source>
-        <translation>Úroveň hrania</translation>
+        <translation type="vanished">Úroveň hrania</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="592"/>
         <source>&amp;Close</source>
-        <translation>&amp;Zavrieť</translation>
+        <translation type="vanished">&amp;Zavrieť</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="690"/>
-        <location filename="../../util.cpp" line="702"/>
-        <location filename="../../util.cpp" line="1103"/>
         <source>None</source>
-        <translation>Nenastavené</translation>
+        <translation type="vanished">Nenastavené</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="708"/>
         <source>Beginner</source>
-        <translation>Začiatočník</translation>
+        <translation type="vanished">Začiatočník</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="714"/>
         <source>Intermediate</source>
-        <translation>Pokročilý</translation>
+        <translation type="vanished">Pokročilý</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="720"/>
         <source>Expert</source>
-        <translation>Expert</translation>
+        <translation type="vanished">Expert</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="726"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation>Sem napíšte vaše meno alebo prezývku, aby ostatní hudobníci vedeli, s kým majú tú česť. Rovnako môžete pridať obrázok hudobného nástroja, na ktorý hráte a vlajku krajiny, v ktorej sa nachádzate. Je možné pridať aj mesto a úroveň hry na hudobný nástroj.</translation>
+        <translation type="vanished">Sem napíšte vaše meno alebo prezývku, aby ostatní hudobníci vedeli, s kým majú tú česť. Rovnako môžete pridať obrázok hudobného nástroja, na ktorý hráte a vlajku krajiny, v ktorej sa nachádzate. Je možné pridať aj mesto a úroveň hry na hudobný nástroj.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="730"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation>To, čo sem napíšete sa zobrazí pri vašom prelínači na mixéri po tom, ako sa pripojíte k Jamulus serveru. Táto menovka sa rovnako zobrazí každému klientovi, ktorý sa pripojí k tomu istému serveru ako vy.</translation>
+        <translation type="vanished">To, čo sem napíšete sa zobrazí pri vašom prelínači na mixéri po tom, ako sa pripojíte k Jamulus serveru. Táto menovka sa rovnako zobrazí každému klientovi, ktorý sa pripojí k tomu istému serveru ako vy.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="736"/>
-        <source>Alias or name edit box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../util.cpp" line="738"/>
         <source>Instrument picture button</source>
-        <translation>Tlačidlo s obrázkom hud. nástroja</translation>
+        <translation type="vanished">Tlačidlo s obrázkom hud. nástroja</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="740"/>
         <source>Country flag button</source>
-        <translation>Tlačidlo s vlajkou krajiny</translation>
+        <translation type="vanished">Tlačidlo s vlajkou krajiny</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="742"/>
-        <source>City edit box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../util.cpp" line="744"/>
-        <source>Skill level combo box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../util.cpp" line="1104"/>
         <source>Drum Set</source>
-        <translation>Bicie</translation>
+        <translation type="vanished">Bicie</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1105"/>
         <source>Djembe</source>
-        <translation>Djembe</translation>
+        <translation type="vanished">Djembe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1106"/>
         <source>Electric Guitar</source>
-        <translation>Elektrická gitara</translation>
+        <translation type="vanished">Elektrická gitara</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1107"/>
         <source>Acoustic Guitar</source>
-        <translation>Akustická gitara</translation>
+        <translation type="vanished">Akustická gitara</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1108"/>
         <source>Bass Guitar</source>
-        <translation>Basová gitara</translation>
+        <translation type="vanished">Basová gitara</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1109"/>
         <source>Keyboard</source>
-        <translation>Keyboard</translation>
+        <translation type="vanished">Keyboard</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1110"/>
         <source>Synthesizer</source>
-        <translation>Syntetizátor</translation>
+        <translation type="vanished">Syntetizátor</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1111"/>
         <source>Grand Piano</source>
-        <translation>Koncertné krídlo</translation>
+        <translation type="vanished">Koncertné krídlo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1112"/>
         <source>Accordion</source>
-        <translation>Akordeón</translation>
+        <translation type="vanished">Akordeón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1113"/>
         <source>Vocal</source>
-        <translation>Vokály</translation>
+        <translation type="vanished">Vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1114"/>
         <source>Microphone</source>
-        <translation>Mikrofón</translation>
+        <translation type="vanished">Mikrofón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1115"/>
         <source>Harmonica</source>
-        <translation>Ústna harmonika</translation>
+        <translation type="vanished">Ústna harmonika</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1116"/>
         <source>Trumpet</source>
-        <translation>Trúbka</translation>
+        <translation type="vanished">Trúbka</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1117"/>
         <source>Trombone</source>
-        <translation>Trombón</translation>
+        <translation type="vanished">Trombón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1118"/>
         <source>French Horn</source>
-        <translation>Lesný roh</translation>
+        <translation type="vanished">Lesný roh</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1119"/>
         <source>Tuba</source>
-        <translation>Tuba</translation>
+        <translation type="vanished">Tuba</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1120"/>
         <source>Saxophone</source>
-        <translation>Saxofón</translation>
+        <translation type="vanished">Saxofón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1121"/>
         <source>Clarinet</source>
-        <translation>Klarinet</translation>
+        <translation type="vanished">Klarinet</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1122"/>
         <source>Flute</source>
-        <translation>Flauta</translation>
+        <translation type="vanished">Flauta</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1123"/>
         <source>Violin</source>
-        <translation>Husle</translation>
+        <translation type="vanished">Husle</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1124"/>
         <source>Cello</source>
-        <translation>Violončelo</translation>
+        <translation type="vanished">Violončelo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1125"/>
         <source>Double Bass</source>
-        <translation>Kontrabas</translation>
+        <translation type="vanished">Kontrabas</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1126"/>
         <source>Recorder</source>
-        <translation>Zobcová flauta</translation>
+        <translation type="vanished">Zobcová flauta</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1127"/>
         <source>Streamer</source>
-        <translation>Streamovač</translation>
+        <translation type="vanished">Streamovač</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1128"/>
         <source>Listener</source>
-        <translation>Poslucháč</translation>
+        <translation type="vanished">Poslucháč</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1129"/>
         <source>Guitar+Vocal</source>
-        <translation>Gitara+Vokály</translation>
+        <translation type="vanished">Gitara+Vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1130"/>
         <source>Keyboard+Vocal</source>
-        <translation>Klávesnica+Vokály</translation>
+        <translation type="vanished">Klávesnica+Vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1131"/>
         <source>Bodhran</source>
-        <translation>Bodhran</translation>
+        <translation type="vanished">Bodhran</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1132"/>
         <source>Bassoon</source>
-        <translation>Fagot</translation>
+        <translation type="vanished">Fagot</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1133"/>
         <source>Oboe</source>
-        <translation>Hoboj</translation>
+        <translation type="vanished">Hoboj</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1134"/>
         <source>Harp</source>
-        <translation>Harfa</translation>
+        <translation type="vanished">Harfa</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1135"/>
         <source>Viola</source>
-        <translation>Viola</translation>
+        <translation type="vanished">Viola</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1136"/>
         <source>Congas</source>
-        <translation>Kongy</translation>
+        <translation type="vanished">Kongy</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1137"/>
         <source>Bongo</source>
-        <translation>Bongo</translation>
+        <translation type="vanished">Bongo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1138"/>
         <source>Vocal Bass</source>
-        <translation>Basové vokály</translation>
+        <translation type="vanished">Basové vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1139"/>
         <source>Vocal Tenor</source>
-        <translation>Tenorové vokály</translation>
+        <translation type="vanished">Tenorové vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1140"/>
         <source>Vocal Alto</source>
-        <translation>Altové vokály</translation>
+        <translation type="vanished">Altové vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1141"/>
         <source>Vocal Soprano</source>
-        <translation>Sopránové vokály</translation>
+        <translation type="vanished">Sopránové vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1142"/>
         <source>Banjo</source>
-        <translation>Bendžo</translation>
+        <translation type="vanished">Bendžo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1143"/>
         <source>Mandolin</source>
-        <translation>Mandolína</translation>
+        <translation type="vanished">Mandolína</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1144"/>
         <source>Ukulele</source>
-        <translation>Ukulele</translation>
+        <translation type="vanished">Ukulele</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1145"/>
         <source>Bass Ukulele</source>
-        <translation>Basové ukulele</translation>
+        <translation type="vanished">Basové ukulele</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1146"/>
         <source>Vocal Baritone</source>
-        <translation>Barytónové vokály</translation>
+        <translation type="vanished">Barytónové vokály</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1147"/>
         <source>Vocal Lead</source>
-        <translation>Hlavný spev</translation>
+        <translation type="vanished">Hlavný spev</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1148"/>
-        <source>Mountain Dulcimer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../util.cpp" line="1149"/>
-        <source>Scratching</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../util.cpp" line="1150"/>
         <source>Rapping</source>
-        <translation>Repovanie</translation>
+        <translation type="vanished">Repovanie</translation>
     </message>
     <message>
-        <location filename="../../settings.cpp" line="300"/>
+        <location filename="../../settings.cpp" line="312"/>
         <source>No Name</source>
         <translation>Bez názvu</translation>
     </message>
@@ -2467,17 +2887,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="332"/>
+        <location filename="../../serverdlg.cpp" line="343"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Sem napíšte správu. Ak nie je nastavená žiadna správa, uvítacia správa servera bude vypnutá.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="339"/>
+        <location filename="../../serverdlg.cpp" line="350"/>
         <source>software upgrade available</source>
         <translation>dostupná aktualizácia softvéru</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="805"/>
+        <location filename="../../serverdlg.cpp" line="605"/>
+        <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="845"/>
         <source>ERROR</source>
         <translation>CHYBA</translation>
     </message>
@@ -2498,7 +2923,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="352"/>
+        <location filename="../../serverdlg.cpp" line="363"/>
         <source>E&amp;xit</source>
         <translation>U&amp;končiť</translation>
     </message>
@@ -2520,12 +2945,12 @@
         <translation>&amp;Otvoriť </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="587"/>
+        <location filename="../../serverdlg.cpp" line="616"/>
         <source>Select Main Recording Directory</source>
         <translation>Vybrať hlavný adresár na nahrávanie</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="346"/>
+        <location filename="../../serverdlg.cpp" line="357"/>
         <source> Server</source>
         <translation> Server</translation>
     </message>
@@ -2590,57 +3015,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="350"/>
+        <location filename="../../serverdlg.cpp" line="361"/>
         <source>&amp;Window</source>
         <translation>&amp;Okno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="656"/>
+        <location filename="../../util.h" line="627"/>
         <source>Unregistered</source>
         <translation>Neregistrovaný</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="659"/>
+        <location filename="../../util.h" line="630"/>
         <source>Bad address</source>
         <translation>Zlá adresa</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="662"/>
+        <location filename="../../util.h" line="633"/>
         <source>Registration requested</source>
         <translation>Vyžiadaná registrácia</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="665"/>
+        <location filename="../../util.h" line="636"/>
         <source>Registration failed</source>
         <translation>Registrácia zlyhala</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="668"/>
+        <location filename="../../util.h" line="639"/>
         <source>Check server version</source>
         <translation>Skontrolovať verziu servera</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="671"/>
+        <location filename="../../util.h" line="642"/>
         <source>Registered</source>
         <translation>Registrovaný</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="674"/>
+        <location filename="../../util.h" line="645"/>
         <source>Directory Server full</source>
         <translation>Centrálny server je plný</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="677"/>
+        <location filename="../../util.h" line="648"/>
         <source>Your server version is too old</source>
         <translation>Verzia vášho servera je príliš stará</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="680"/>
+        <location filename="../../util.h" line="651"/>
         <source>Requirements not fulfilled</source>
         <translation>Požiadavky nie sú splnené</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="683"/>
+        <location filename="../../util.h" line="654"/>
         <source>Unknown value </source>
         <translation>Neznáma hodnota</translation>
     </message>
@@ -2674,7 +3099,7 @@
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="39"/>
-        <location filename="../../serverdlgbase.ui" line="120"/>
+        <location filename="../../serverdlgbase.ui" line="125"/>
         <source>Name</source>
         <translation>Meno</translation>
     </message>
@@ -2684,83 +3109,93 @@
         <translation>Veľkosť jitter buffera</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="62"/>
+        <location filename="../../serverdlgbase.ui" line="49"/>
+        <source>Channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlgbase.ui" line="67"/>
         <source>Server Setup</source>
         <translation>Nastavenie servera</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="191"/>
+        <location filename="../../serverdlgbase.ui" line="196"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
         <translation>Uvítacia správa chatového okna (podporuje HTML/CSS)</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="209"/>
+        <location filename="../../serverdlgbase.ui" line="214"/>
         <source>Options</source>
         <translation>Voľby</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="264"/>
+        <location filename="../../serverdlgbase.ui" line="269"/>
         <source>Start Minimized on Windows Start</source>
         <translation>Spustiť minimalizované pri štarte Windows</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="288"/>
+        <location filename="../../serverdlgbase.ui" line="276"/>
+        <source>Enable delay panning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlgbase.ui" line="300"/>
         <source>Update check</source>
         <translation>Kontrola aktualizácií</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="68"/>
+        <location filename="../../serverdlgbase.ui" line="73"/>
         <source>Make My Server Public (Register My Server in the Server List)</source>
         <translation>Nastaviť server ako verejný (zaregistrovať v zozname serverov)</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="77"/>
+        <location filename="../../serverdlgbase.ui" line="82"/>
         <source>Genre</source>
         <translation>Žáner</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="87"/>
-        <location filename="../../serverdlgbase.ui" line="175"/>
+        <location filename="../../serverdlgbase.ui" line="92"/>
+        <location filename="../../serverdlgbase.ui" line="180"/>
         <source>STATUS</source>
         <translation>STATUS</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="252"/>
+        <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
         <translation>Adresa vlastného centrálneho servera:</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="112"/>
+        <location filename="../../serverdlgbase.ui" line="117"/>
         <source>My Server Info</source>
         <translation>Informácie o serveri</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="127"/>
+        <location filename="../../serverdlgbase.ui" line="132"/>
         <source>Location: City</source>
         <translation>Lokácia: Mesto</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="134"/>
+        <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Country</source>
         <translation>Lokácia: Krajina</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="231"/>
+        <location filename="../../serverdlgbase.ui" line="236"/>
         <source>Recording Directory</source>
         <translation>Adresár pre nahrávanie</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="161"/>
+        <location filename="../../serverdlgbase.ui" line="166"/>
         <source>Enable Jam Recorder</source>
         <translation>Povoliť nahrávanie džemov</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="182"/>
+        <location filename="../../serverdlgbase.ui" line="187"/>
         <source>New Recording</source>
         <translation>Nová nahrávka</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="217"/>
+        <location filename="../../serverdlgbase.ui" line="222"/>
         <source>Language</source>
         <translation>Jazyk</translation>
     </message>
@@ -2773,43 +3208,43 @@
         <translation>Chyba pri zatváraní streamu: $s</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="40"/>
+        <location filename="../../../linux/sound.cpp" line="47"/>
         <source>The Jack server is not running. This software requires a Jack server to run. Normally if the Jack server is not running this software will automatically start the Jack server. It seems that this auto start has not worked. Try to start the Jack server manually.</source>
         <translation>Server Jack nie je spustený. Tento softvér vyžaduje pre svoj beh server Jack. Za normálnych okolností, ak Jack nebeží, tento program sa ho pokúsi automaticky naštartovať. Vyzerá, že automatické spustenie zlyhalo. Pokúste sa spustiť server Jack ručne.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="60"/>
+        <location filename="../../../linux/sound.cpp" line="67"/>
         <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="62"/>
+        <location filename="../../../linux/sound.cpp" line="69"/>
         <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
         <translation>Pre úpravu vzorkovacej frekvencie môžete použiť nástroj ako napr. &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt;.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="64"/>
+        <location filename="../../../linux/sound.cpp" line="71"/>
         <source>Make sure to set the Frames/Period to a low value like </source>
         <translation>Ubezpečte sa, že nastavenie Snímky/Perióda je nastavené na nízku hodnotu ako </translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="67"/>
+        <location filename="../../../linux/sound.cpp" line="74"/>
         <source> to achieve a low delay.</source>
         <translation>, aby ste dosiahli nízke oneskorenie.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="88"/>
-        <location filename="../../../linux/sound.cpp" line="99"/>
+        <location filename="../../../linux/sound.cpp" line="95"/>
+        <location filename="../../../linux/sound.cpp" line="106"/>
         <source>The Jack port registering failed.</source>
         <translation>Registrácia portu Jack zlyhala.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="110"/>
+        <location filename="../../../linux/sound.cpp" line="117"/>
         <source>Cannot activate the Jack client.</source>
         <translation>Nepodarilo sa aktivovať klienta Jack.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="216"/>
+        <location filename="../../../linux/sound.cpp" line="223"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
         <translation>Server Jack bol vypnutý. Tento program vyžaduje, aby bol server Jack spustený. Pokúste sa reštartovať tento program a vyriešiť tak tento problém.</translation>
     </message>
@@ -2865,54 +3300,49 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="69"/>
+        <location filename="../../../windows/sound.cpp" line="79"/>
         <source>The audio driver could not be initialized.</source>
         <translation>Audio ovládač sa nepodarilo inicializovať.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="127"/>
+        <location filename="../../../windows/sound.cpp" line="149"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
         <translation>Zvukové zariadenie nepodporuje požadovanú vzorkovaciu frekvenciu. Požadovaná vzorkovacia frekvencia je: </translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="140"/>
+        <location filename="../../../windows/sound.cpp" line="162"/>
         <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="144"/>
+        <location filename="../../../windows/sound.cpp" line="166"/>
         <source> Hz on the device and restart the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="145"/>
+        <location filename="../../../windows/sound.cpp" line="167"/>
         <source> software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="155"/>
+        <location filename="../../../windows/sound.cpp" line="177"/>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="191"/>
-        <location filename="../../../windows/sound.cpp" line="221"/>
+        <location filename="../../../windows/sound.cpp" line="213"/>
+        <location filename="../../../windows/sound.cpp" line="243"/>
         <source>Required audio sample format not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="537"/>
-        <source>No ASIO audio device (driver) found.</source>
+        <location filename="../../../windows/sound.cpp" line="563"/>
+        <source>No ASIO audio device driver found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="538"/>
-        <source>The </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../windows/sound.cpp" line="538"/>
-        <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <location filename="../../../windows/sound.cpp" line="564"/>
+        <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2974,17 +3404,17 @@
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1554"/>
+        <location filename="../../util.cpp" line="1270"/>
         <source>, Version </source>
         <translation>, Verzia </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1567"/>
+        <location filename="../../util.cpp" line="1283"/>
         <source>Internet Jam Session Software</source>
         <translation>Softvér na džemovanie cez internet</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1571"/>
+        <location filename="../../util.cpp" line="1287"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation>Vydané pod licenciou GNU General Public License (GPL)</translation>
     </message>
@@ -2992,7 +3422,7 @@
 <context>
     <name>global</name>
     <message>
-        <location filename="../../global.h" line="237"/>
+        <location filename="../../global.h" line="265"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
         <translation>Pre získanie viac informácii, použite &quot;Čo je toto?&quot; (ponuka pomocníka, pravé tlačidlo myši alebo Shift+F1)</translation>
     </message>

@@ -167,31 +167,52 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
 {
+    // if the address has not actually changed, do nothing
+    if ( sNCentServAddr == strCentralServerAddress ) {
+        return;
+    }
+
+    // if we are registered to a custom directory server, unregister before updating the name
+    if ( eCentralServerAddressType == AT_CUSTOM && GetSvrRegStatus() == SRS_REGISTERED ) {
+        SlaveServerUnregister();
+    }
+
     QMutexLocker locker ( &Mutex );
 
+    // now save the new name
     strCentralServerAddress = sNCentServAddr;
 
-    // per definition: If the directory server address is empty, the server list
-    // is disabled.
     // per definition: If we are in server mode and the directory server address
-    // is the localhost address, we are in directory server mode.
-    // For the directory server, the server list is always enabled.
-    if ( !strCentralServerAddress.isEmpty() )
-    {
-        bIsCentralServer =
-            (
-              ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
-                !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-              ( eCentralServerAddressType == AT_CUSTOM )
-            );
+    // is the localhost address, and set to Custom, we are in directory server mode.
+    bIsCentralServer =
+        (
+         ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
+           !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
+         ( eCentralServerAddressType == AT_CUSTOM )
+        );
 
-        bEnabled = true;
+}
+
+void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
+{
+    // if the type is changing, unregister before updating
+    if ( eNCSAT != eCentralServerAddressType && GetSvrRegStatus() == SRS_REGISTERED ) {
+        SlaveServerUnregister();
     }
-    else
-    {
-        bIsCentralServer = false;
-        bEnabled         = false;
-    }
+
+    QMutexLocker locker ( &Mutex );
+
+    // no update the server type
+    eCentralServerAddressType = eNCSAT;
+
+    // per definition: If we are in server mode and the directory server address
+    // is the localhost address, and set to Custom, we are in directory server mode.
+    bIsCentralServer =
+        (
+         ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
+           !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
+         ( eCentralServerAddressType == AT_CUSTOM )
+        );
 }
 
 void CServerListManager::Update()

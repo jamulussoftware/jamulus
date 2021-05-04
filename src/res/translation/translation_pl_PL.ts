@@ -1797,7 +1797,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../util.cpp" line="842"/>
         <source>Recorder</source>
-        <translation>Flet prosty</translation>
+        <translation>Rejestrator</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="843"/>

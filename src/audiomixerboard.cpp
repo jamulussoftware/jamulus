@@ -86,9 +86,10 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pPan->setRange               ( 0, AUD_MIX_PAN_MAX );
     pPan->setValue               ( AUD_MIX_PAN_MAX / 2 );
     pPan->setNotchesVisible      ( true );
-    pInfoLabel->setMinimumHeight ( 15 ); // prevents jitter when muting/unmuting (#811)
-    pPanInfoGrid->addWidget      ( pPanLabel, 0, Qt::AlignLeft );
-    pPanInfoGrid->addWidget      ( pInfoLabel );
+    pInfoLabel->setMinimumHeight ( pPanLabel->height() ); // prevents jitter when muting/unmuting (#811)
+    pInfoLabel->setAlignment     ( Qt::AlignTop );
+    pPanInfoGrid->addWidget      ( pPanLabel, 0, Qt::AlignLeft | Qt::AlignTop );
+    pPanInfoGrid->addWidget      ( pInfoLabel, 0, Qt::AlignHCenter | Qt::AlignTop );
     pPanGrid->addLayout          ( pPanInfoGrid );
     pPanGrid->addWidget          ( pPan, 0, Qt::AlignHCenter );
 

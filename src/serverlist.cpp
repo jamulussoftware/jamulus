@@ -202,7 +202,7 @@ void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
 
     QMutexLocker locker ( &Mutex );
 
-    // no update the server type
+    // now update the server type
     eCentralServerAddressType = eNCSAT;
 
     // per definition: If we are in server mode and the directory server address

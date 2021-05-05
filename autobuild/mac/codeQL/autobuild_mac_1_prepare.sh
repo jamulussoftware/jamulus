@@ -15,3 +15,4 @@ export -p PATH=/usr/local/opt/qt/5.15.2/clang_64/bin:"${PATH}"
 echo "::set-env name=PATH::${PATH}"
 echo "the path is ${PATH}"
 
+xcodebuild -sdk -version

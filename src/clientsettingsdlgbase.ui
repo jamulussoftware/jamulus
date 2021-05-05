@@ -78,7 +78,7 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_8">
                   <item>
-                   <widget class="QLabel" name="pedtAlias_2">
+                   <widget class="QLabel" name="plblAlias">
                     <property name="text">
                      <string>Alias/Name</string>
                     </property>
@@ -203,14 +203,14 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
-                   <widget class="QLabel" name="lblSkin_2">
+                   <widget class="QLabel" name="lblSkin">
                     <property name="text">
                      <string>Skin</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="lblLanguage_2">
+                   <widget class="QLabel" name="lblLanguage">
                     <property name="text">
                      <string>Language</string>
                     </property>

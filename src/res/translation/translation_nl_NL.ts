@@ -2535,7 +2535,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../connectdlg.cpp" line="48"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation>De serverlijst toont een lijst van beschikbare servers. Server beheerders kunnen hun servers optioneel op muziek genre weergeven. Gebruik de lijst optie om een genre te kiezen, klik op de server die je wilt gebruiken en druk op de verbindingsknop om verbinding te maken. U kunt ook dubbelklikken op een servernaam in de lijst om verbinding te maken. Permanente servers (die langer dan 48 uur in de lijst staan) worden vetgedrukt weergegeven.</translation>
+        <translation>De serverlijst toont een lijst van beschikbare servers. Server beheerders kunnen hun servers optioneel op muziek genre weergeven. Gebruik de lijst optie om een genre te kiezen, klik op de server die u wilt gebruiken en druk op de verbindingsknop om verbinding te maken. U kunt ook dubbelklikken op een servernaam in de lijst om verbinding te maken. Permanente servers (die langer dan 48 uur in de lijst staan) worden vetgedrukt weergegeven.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="59"/>
@@ -2877,7 +2877,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living in. The city you live in and the skill level playing your instrument may also be added.</source>
-        <translation type="vanished">Stel hier je naam of een alias in zodat de andere muzikanten met wie je wilt spelen weten wie je bent. Daarnaast kun je een instrumentfoto van het instrument dat je bespeelt en een vlag van het land waar je woont, instellen. De stad waar je woont en het vaardigheidsniveau van het spelen van je instrument kunnen ook worden toegevoegd.</translation>
+        <translation type="vanished">Stel hier uw naam of een alias in zodat de andere muzikanten met wie u wilt spelen weten wie u bent. Daarnaast kunt u een instrumentfoto van het instrument dat u bespeelt en een vlag van het land waar je woont, instellen. De stad waar u woont en het vaardigheidsniveau van het spelen van uw instrument kunnen ook worden toegevoegd.</translation>
     </message>
     <message>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
@@ -3219,7 +3219,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation>Selecteert de serverlijst (i.e. het adresboek serveradres) waaraan je server zal worden toegevoegd.</translation>
+        <translation>Selecteert de serverlijst (i.e. het adresboek serveradres) waaraan uw server zal worden toegevoegd.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="87"/>

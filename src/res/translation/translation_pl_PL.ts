@@ -1481,7 +1481,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="309"/>
         <source>Directory server address combo box</source>
-        <translation>Lista wyboru serwera</translation>
+        <translation>Lista wyboru serwera zbiorczego</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="313"/>

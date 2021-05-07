@@ -74,7 +74,7 @@
     <message>
         <location filename="../../util.cpp" line="495"/>
         <source>Github Contributors list</source>
-        <translation>Github Bijdragerslijst</translation>
+        <translation>Github bijdragerslijst</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="499"/>
@@ -191,7 +191,7 @@
     <message>
         <location filename="../../analyzerconsole.cpp" line="49"/>
         <source>Analyzer Console</source>
-        <translation>Analyzer Console</translation>
+        <translation>Analyzer console</translation>
     </message>
     <message>
         <location filename="../../analyzerconsole.cpp" line="68"/>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="881"/>
         <source>Personal Mix at the Server</source>
-        <translation>Eigen mix op de Server</translation>
+        <translation>Eigen mix op de server</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="881"/>
@@ -287,7 +287,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="145"/>
         <source>Mixer Fader</source>
-        <translation>Mixer Fader</translation>
+        <translation>Mixer fader</translation>
     </message>
     <message>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
@@ -326,7 +326,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="163"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation>Met het selectievakje Demp kan het audiokanaal worden gedempt.</translation>
+        <translation>Met het Demp selectievakje kan het audiokanaal worden gedempt.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="165"/>
@@ -369,12 +369,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation>Stelt de balans in van Links naar Rechts. Werkt alleen in stereo of bij voorkeur voor mono in/stereo uit mode.</translation>
+        <translation>Stelt de balans in van links naar rechts. Werkt alleen in stereo of bij voorkeur voor mono in/stereo uit mode.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="167"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>Met het selectievakje Solo kan het audiokanaal worden ingesteld op solo, zodat alle overige kanalen worden gedempt. Het is mogelijk om meer dan één kanaal op solo in te stellen.</translation>
+        <translation>Met het Solo selectievakje kan het audiokanaal worden ingesteld op solo, zodat alle overige kanalen worden gedempt. Het is mogelijk om meer dan één kanaal op solo in te stellen.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="173"/>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation>Met de Grp checkbox kan een groep van audiokanalen worden gedefinieerd. Alle kanaalfaders in een groep bewegen mee indien een van de faders wordt verschoven.</translation>
+        <translation>Met het Grp selectievakje kan een groep van audiokanalen worden gedefinieerd. Alle kanaalfaders in een groep bewegen mee indien een van de faders wordt verschoven.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="176"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="231"/>
         <source>PAN</source>
-        <translation>BAL.</translation>
+        <translation>BAL</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="232"/>
@@ -449,7 +449,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="776"/>
         <source>Alias/Name</source>
-        <translation>Alias/Naam</translation>
+        <translation>Alias/naam</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="783"/>
@@ -539,12 +539,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="66"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation>&amp;Wis Chatgeschiedenis</translation>
+        <translation>&amp;Wis chatgeschiedenis</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="71"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Sluiten</translation>
+        <translation>&amp;Sluiten</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="140"/>
@@ -627,7 +627,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="89"/>
         <source>Connect/Disconnect Button</source>
-        <translation>Verbinden/Verbreken-knop</translation>
+        <translation>Verbinden/afmelden-knop</translation>
     </message>
     <message>
         <source>Push this button to connect to a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
@@ -718,12 +718,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="140"/>
         <source>Delay status LED indicator</source>
-        <translation>Vertragingsstatus LED-indicator</translation>
+        <translation>Vertraging status LED-indicator</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="143"/>
         <source>Buffers Status LED</source>
-        <translation>Buffers Status LED</translation>
+        <translation>Buffers status LED-indicator</translation>
     </message>
     <message>
         <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
@@ -899,7 +899,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="251"/>
         <source>My &amp;Profile...</source>
-        <translation>Mijn &amp;Profiel...</translation>
+        <translation>Mijn &amp;profiel...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="248"/>
@@ -913,12 +913,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="263"/>
         <source>&amp;Analyzer Console...</source>
-        <translation>&amp;Analyzer Console...</translation>
+        <translation>&amp;Analyzer console...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="271"/>
         <source>N&amp;o User Sorting</source>
-        <translation>Kanalen Niet S&amp;orteren</translation>
+        <translation>Kanalen niet s&amp;orteren</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
@@ -932,12 +932,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="313"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation>&amp;Wis Alle Opgeslagen Solo- en Demp-instellingen</translation>
+        <translation>&amp;Wis alle opgeslagen solo- en demp-instellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="319"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel alle &amp;faders automatisch in</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1161"/>
@@ -951,7 +951,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="316"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation>&amp;Zet Alle Faders op Nieuwe-Client-Niveau</translation>
+        <translation>&amp;Zet alle faders op nieuw client-niveau</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="238"/>
@@ -961,22 +961,22 @@
     <message>
         <location filename="../../clientdlg.cpp" line="230"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation>Mixkanaalinstellingen &amp;Laden...</translation>
+        <translation>Mixer kanaalinstellingen &amp;laden...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="233"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation>Mixkanaalinstellingen &amp;Opslaan...</translation>
+        <translation>Mixer kanaalinstellingen &amp;opslaan...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-/netwerk-&amp;instellingen...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Geavanceer&amp;de instellingen...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="269"/>
@@ -1013,13 +1013,13 @@
     <message>
         <location filename="../../clientdlg.cpp" line="700"/>
         <source>Directory Server</source>
-        <translation>Centrale Server</translation>
+        <translation>Adresboek server</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="746"/>
         <location filename="../../clientdlg.cpp" line="761"/>
         <source>Select Channel Setup File</source>
-        <translation>Selecteer bestand met Kanaalinstellingen</translation>
+        <translation>Selecteer bestand met kanaalinstellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="912"/>
@@ -1034,29 +1034,31 @@
     <message>
         <location filename="../../clientdlg.cpp" line="951"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinden</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="963"/>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="973"/>
         <source>Chat</source>
-        <translation type="unfinished">Chat</translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1050"/>
         <source>Enable feedback detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback detectie inschakelen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1054"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio feedback of zeer luid signaal gedetecteerd.
+
+We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst het probleem met de audio feedback op en schakel daarna &apos;Demp mijzelf&apos; uit.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1140"/>
@@ -1164,7 +1166,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="69"/>
         <source>Jitter Buffer Size</source>
-        <translation>Jitter Buffermaat</translation>
+        <translation>Jitterbuffer grootte</translation>
     </message>
     <message>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of this jitter buffer has therefore influence on the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
@@ -1190,12 +1192,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="103"/>
         <source>Local jitter buffer slider control</source>
-        <translation>Lokale jitter-buffer-schuifregelaar</translation>
+        <translation>Lokale jitterbuffer-schuifregelaar</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
         <source>Server jitter buffer slider control</source>
-        <translation>Server jitter-buffer-schuifregelaar</translation>
+        <translation>Server jitterbuffer-schuifregelaar</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="108"/>
@@ -1205,7 +1207,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="110"/>
         <source>Jitter buffer status LED indicator</source>
-        <translation>Jitter-buffer status LED-indicator</translation>
+        <translation>Jitterbuffer status LED-indicator</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="114"/>
@@ -1260,17 +1262,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="140"/>
         <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
-        <translation> Invoer-/uitvoerkanaal (linker- en rechterkanaal) kan een ander daadwerkelijk kanaal van de geluidskaart worden geselecteerd.</translation>
+        <translation> invoer-/uitvoerkanaal (linker- en rechterkanaal) kan een ander daadwerkelijk kanaal van de geluidskaart worden geselecteerd.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="147"/>
         <source>Left input channel selection combo box</source>
-        <translation>Linker ingangskanaal selectie combobox</translation>
+        <translation>Linkeringangskanaal selectie combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="149"/>
         <source>Right input channel selection combo box</source>
-        <translation>Juiste ingangskanaal selectie combobox</translation>
+        <translation>Rechteringangskanaal selectie combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="151"/>
@@ -1280,7 +1282,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>Right output channel selection combo box</source>
-        <translation>Rechter uitgangskanaal selectie combobox</translation>
+        <translation>Rechteruitgangskanaal selectie combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="156"/>
@@ -1290,7 +1292,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="156"/>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
-        <translation>Indien ingeschakeld wordt de ondersteuning voor erg kleine netwerkaudiopakketten geactiveerd. Deze worden alleen ingezet als de buffervertraging van de geluidskaart kleiner is dan </translation>
+        <translation>Indien ingeschakeld wordt de ondersteuning voor erg kleine netwerkaudiopakketten geactiveerd. Deze worden alleen gebruikt als de buffervertraging van de geluidskaart kleiner is dan </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="159"/>
@@ -1353,17 +1355,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../../clientsettingsdlg.cpp" line="549"/>
         <location filename="../../util.cpp" line="819"/>
         <source>None</source>
-        <translation type="unfinished">Geen</translation>
+        <translation>Geen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1129"/>
         <source>Center</source>
-        <translation type="unfinished">Midden</translation>
+        <translation>Midden</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1142"/>
         <source>R</source>
-        <translation type="unfinished">R</translation>
+        <translation>R</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of the </source>
@@ -1376,7 +1378,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>Three buffer sizes are supported</source>
-        <translation>Drie buffermaten worden ondersteund</translation>
+        <translation>Drie buffergroottes worden ondersteund</translation>
     </message>
     <message>
         <source>64 samples: This is the preferred setting since it provides the lowest latency but does not work with all sound cards.</source>
@@ -1427,17 +1429,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="218"/>
         <source>64 samples setting radio button</source>
-        <translation>64 monsters instellen radioknop</translation>
+        <translation>64 samples instellen radioknop</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="221"/>
         <source>128 samples setting radio button</source>
-        <translation>128 voorbeelden van het instellen van de radioknop</translation>
+        <translation>128 samples instellen radioknop</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="224"/>
         <source>256 samples setting radio button</source>
-        <translation>256 voorbeelden van het instellen van het radioknopje</translation>
+        <translation>256 samples instellen radioknop</translation>
     </message>
     <message>
         <source>ASIO setup push button</source>
@@ -1515,28 +1517,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="282"/>
         <source>New client level edit box</source>
-        <translation>Nieuw bewerkingsvak op clientniveau</translation>
+        <translation>Nieuw client-niveau bewerkingsvak</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="303"/>
         <source>Custom Directory Server Address</source>
-        <translation>Eigen centrale serveradres</translation>
+        <translation>Eigen adresboek serveradres</translation>
     </message>
     <message>
         <source>Directory Server Address</source>
-        <translation type="vanished">Centraal Serveradres</translation>
+        <translation type="vanished">Adresboek serveradres</translation>
     </message>
     <message>
         <source>The directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
-        <translation type="vanished">Het centrale serveradres is het IP-adres of de URL van de centrale server waarop de serverlijst van het verbindingsdialoogvenster wordt beheerd. Met het centraal serveradrestype kan ofwel de lokale regio worden geselecteerd van de standaard centrale servers, ofwel kan een handmatig adres worden opgegeven.</translation>
+        <translation type="vanished">Het adresboek serveradres is het IP-adres of de URL van de adresboek server waarop de serverlijst van het verbindingsdialoogvenster wordt beheerd. Met het adresboek serveradrestype kan ofwel de lokale regio worden geselecteerd van de standaard adresboek servers, ofwel kan een handmatig adres worden opgegeven.</translation>
     </message>
     <message>
         <source>Default directory server type combo box</source>
-        <translation type="vanished">Centraal serveradrestype combo box</translation>
+        <translation type="vanished">Adresboek serveradrestype combobox</translation>
     </message>
     <message>
         <source>Directory server address line edit</source>
-        <translation type="vanished">Centraal serveradres bewerking van de lijn</translation>
+        <translation type="vanished">Adresboek serveradres bewerkingsregel</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="312"/>
@@ -1583,7 +1585,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="386"/>
         <source>Mono-in/Stereo-out</source>
-        <translation>Mono-in/Stereo-uit</translation>
+        <translation>Mono-in/stereo-uit</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="242"/>
@@ -1595,38 +1597,38 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="41"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Sluiten</translation>
+        <translation>&amp;Sluiten</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="51"/>
         <source>Local Audio Input Fader</source>
-        <translation type="unfinished">Lokale audio-ingangsfader</translation>
+        <translation>Lokale audio-ingangsfader</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="52"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="unfinished">Met de audiofader kunnen de relatieve niveaus van de linker en rechter lokale audiokanalen worden gewijzigd. Voor een monosignaal werkt het als een panning tussen de twee kanalen. Als bijvoorbeeld een microfoon is verbonden op het rechter ingangskanaal en een veel luider instrument is verbonden op het linker ingangskanaal, beweeg dan de audiofader in de richting van het label </translation>
+        <translation>Met de audiofader kunnen de relatieve niveaus van de linker en rechter lokale audiokanalen worden gewijzigd. Voor een monosignaal werkt het als een panning tussen de twee kanalen. Als bijvoorbeeld een microfoon is verbonden op het rechter ingangskanaal en een veel luider instrument is verbonden op het linker ingangskanaal, beweeg dan de audiofader in de richting van het label </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="58"/>
         <location filename="../../clientsettingsdlg.cpp" line="1136"/>
         <source>L</source>
-        <translation type="unfinished">L</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="58"/>
         <source>, where</source>
-        <translation type="unfinished">, waar</translation>
+        <translation>, waarbij</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
         <source>is the current attenuation indicator.</source>
-        <translation type="unfinished">is de huidige dempingsindicator.</translation>
+        <translation>de huidige dempingsindicator is.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="65"/>
         <source>Local audio input fader (left/right)</source>
-        <translation type="unfinished">Lokale audio-ingangsfader (links/rechts)</translation>
+        <translation>Lokale audio-ingangsfader (links/rechts)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="69"/>
@@ -1714,7 +1716,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="244"/>
         <source>Mono in/Stereo-out</source>
-        <translation>Mono in/Stereo uit</translation>
+        <translation>Mono in/stereo uit</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="244"/>
@@ -1744,27 +1746,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="285"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingangsversterking</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="286"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Met deze instelling kunt u het niveau van uw ingangssignaal tot en met een factor 10 verhogen (+ 20dB). Als uw geluid te zacht is, probeer dan eerst het niveau te verhogen door dichter bij de microfoon te komen, uw geluidsapparatuur aan te passen of de niveaus in uw besturingssysteem te verhogen. Stel hier alleen een factor in als dit niet lukt. Als uw geluid te luid is, vervormd klinkt en afknapt, zal deze optie niet helpen. Gebruik het daar niet voor, de vervorming zal er nog steeds zijn. Verlaag in plaats daarvan uw ingangssignaal door verder weg te gaan van uw microfoon, uw geluidsapparatuur aan te passen of door de niveaus in uw besturingssysteem te verlagen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="300"/>
         <source>Input Boost combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingangsversterking combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="304"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation>Laat dit leeg tenzij u een centraal serveradres wilt invoeren dat anders is dan de standaard.</translation>
+        <translation>Laat dit leeg tenzij u een adresboek serveradres wilt invoeren dat anders is dan de standaard.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="309"/>
         <source>Directory server address combo box</source>
-        <translation>Centrale serveradres combobox</translation>
+        <translation>Adresboek serveradres combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="313"/>
@@ -1784,32 +1786,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal mengpaneel rijen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="338"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel het aantal rijen in dat gebruikt wordt in het mengpaneel.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="341"/>
         <source>Number of Mixer Panel Rows spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal rijen in het mengpaneel spinbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback bescherming</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schakel feedback bescherming in om de akoetische feedback tussen de microfoon en luidsprekers te detecteren.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="348"/>
         <source>Feedback Protection check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback bescherming selectievakje</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="352"/>
@@ -1910,57 +1912,57 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="453"/>
         <source>Musician Profile</source>
-        <translation type="unfinished">Muzikantenprofiel</translation>
+        <translation>Muzikantenprofiel</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="454"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished">Stel hier uw naam of een alias in zodat de andere muzikanten met wie u wilt spelen weten wie u bent. Daarnaast kunt u een instrumentfoto van het instrument dat u bespeelt en een vlag van het land waar u woont, instellen. De stad waar u woont en uw vaardigheidsniveau kunnen ook worden toegevoegd.</translation>
+        <translation>Stel hier uw naam of een alias in zodat de andere muzikanten met wie u wilt spelen weten wie u bent. Daarnaast kunt u een instrumentfoto van het instrument dat u bespeelt en een vlag van het land waar u woont, instellen. De stad waar u woont en uw vaardigheidsniveau kunnen ook worden toegevoegd.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="458"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished">Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien verbonden met een Jamulus-server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
+        <translation>Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien verbonden met een Jamulus-server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="464"/>
         <source>Alias or name edit box</source>
-        <translation type="unfinished">Alias of naam bewerkingsvak</translation>
+        <translation>Alias of naam bewerkingsvak</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="466"/>
         <source>Instrument picture button</source>
-        <translation type="unfinished">Afbeelding van het instrument</translation>
+        <translation>Afbeelding van het instrument</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="468"/>
         <source>Country flag button</source>
-        <translation type="unfinished">Landvlag knop</translation>
+        <translation>Landvlag knop</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="470"/>
         <source>City edit box</source>
-        <translation type="unfinished">Bewerkingsbox voor de stad</translation>
+        <translation>Stad bewerkingsvak</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="472"/>
         <source>Skill level combo box</source>
-        <translation type="unfinished">Combobox voor vaardigheidsniveau</translation>
+        <translation>Vaardigheidsniveau combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="555"/>
         <source>Beginner</source>
-        <translation type="unfinished">Beginner</translation>
+        <translation>Beginner</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="561"/>
         <source>Intermediate</source>
-        <translation type="unfinished">Gemiddeld</translation>
+        <translation>Gemiddeld</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="567"/>
         <source>Expert</source>
-        <translation type="unfinished">Gevorderd</translation>
+        <translation>Gevorderd</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="707"/>
@@ -1993,237 +1995,237 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.cpp" line="820"/>
         <source>Drum Set</source>
-        <translation type="unfinished">Drumstel</translation>
+        <translation>Drumstel</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="821"/>
         <source>Djembe</source>
-        <translation type="unfinished">Djembe</translation>
+        <translation>Djembe</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="822"/>
         <source>Electric Guitar</source>
-        <translation type="unfinished">Elektrische Gitaar</translation>
+        <translation>Elektrische gitaar</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="823"/>
         <source>Acoustic Guitar</source>
-        <translation type="unfinished">Akoestische Gitaar</translation>
+        <translation>Akoestische gitaar</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="824"/>
         <source>Bass Guitar</source>
-        <translation type="unfinished">Basgitaar</translation>
+        <translation>Basgitaar</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="825"/>
         <source>Keyboard</source>
-        <translation type="unfinished">Toetsenbord</translation>
+        <translation>Toetsenbord</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="826"/>
         <source>Synthesizer</source>
-        <translation type="unfinished">Synthesizer</translation>
+        <translation>Synthesizer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="827"/>
         <source>Grand Piano</source>
-        <translation type="unfinished">Piano</translation>
+        <translation>Piano</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="828"/>
         <source>Accordion</source>
-        <translation type="unfinished">Accordeon</translation>
+        <translation>Accordeon</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="829"/>
         <source>Vocal</source>
-        <translation type="unfinished">Vocaal</translation>
+        <translation>Zang</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="830"/>
         <source>Microphone</source>
-        <translation type="unfinished">Microfoon</translation>
+        <translation>Microfoon</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="831"/>
         <source>Harmonica</source>
-        <translation type="unfinished">Harmonica</translation>
+        <translation>Harmonica</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="832"/>
         <source>Trumpet</source>
-        <translation type="unfinished">Trompet</translation>
+        <translation>Trompet</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="833"/>
         <source>Trombone</source>
-        <translation type="unfinished">Trombone</translation>
+        <translation>Trombone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="834"/>
         <source>French Horn</source>
-        <translation type="unfinished">Hoorn</translation>
+        <translation>Hoorn</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="835"/>
         <source>Tuba</source>
-        <translation type="unfinished">Tuba</translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="836"/>
         <source>Saxophone</source>
-        <translation type="unfinished">Saxofoon</translation>
+        <translation>Saxofoon</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="837"/>
         <source>Clarinet</source>
-        <translation type="unfinished">Klarinet</translation>
+        <translation>Klarinet</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="838"/>
         <source>Flute</source>
-        <translation type="unfinished">Fluit</translation>
+        <translation>Fluit</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="839"/>
         <source>Violin</source>
-        <translation type="unfinished">Viool</translation>
+        <translation>Viool</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="840"/>
         <source>Cello</source>
-        <translation type="unfinished">Cello</translation>
+        <translation>Cello</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="841"/>
         <source>Double Bass</source>
-        <translation type="unfinished">Contrabas</translation>
+        <translation>Contrabas</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="842"/>
         <source>Recorder</source>
-        <translation type="unfinished">Opnemer</translation>
+        <translation>Opnemer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="843"/>
         <source>Streamer</source>
-        <translation type="unfinished">Streamer</translation>
+        <translation>Streamer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="844"/>
         <source>Listener</source>
-        <translation type="unfinished">Luisteraar</translation>
+        <translation>Luisteraar</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="845"/>
         <source>Guitar+Vocal</source>
-        <translation type="unfinished">Gitaar+Vocaal</translation>
+        <translation>Gitaar+zang</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="846"/>
         <source>Keyboard+Vocal</source>
-        <translation type="unfinished">Toetsenbord+Vocaal</translation>
+        <translation>Toetsenbord+zang</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="847"/>
         <source>Bodhran</source>
-        <translation type="unfinished">Bodhran</translation>
+        <translation>Bodhran</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="848"/>
         <source>Bassoon</source>
-        <translation type="unfinished">Fagot</translation>
+        <translation>Fagot</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="849"/>
         <source>Oboe</source>
-        <translation type="unfinished">Hobo</translation>
+        <translation>Hobo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="850"/>
         <source>Harp</source>
-        <translation type="unfinished">Harp</translation>
+        <translation>Harp</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="851"/>
         <source>Viola</source>
-        <translation type="unfinished">Viola</translation>
+        <translation>Viola</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="852"/>
         <source>Congas</source>
-        <translation type="unfinished">Congas</translation>
+        <translation>Congas</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="853"/>
         <source>Bongo</source>
-        <translation type="unfinished">Bongo</translation>
+        <translation>Bongo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="854"/>
         <source>Vocal Bass</source>
-        <translation type="unfinished">Bas (stem)</translation>
+        <translation>Bas (stem)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="855"/>
         <source>Vocal Tenor</source>
-        <translation type="unfinished">Tenor (stem)</translation>
+        <translation>Tenor (stem)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="856"/>
         <source>Vocal Alto</source>
-        <translation type="unfinished">Alt (stem)</translation>
+        <translation>Alt (stem)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="857"/>
         <source>Vocal Soprano</source>
-        <translation type="unfinished">Sopraan (stem)</translation>
+        <translation>Sopraan (stem)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="858"/>
         <source>Banjo</source>
-        <translation type="unfinished">Banjo</translation>
+        <translation>Banjo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="859"/>
         <source>Mandolin</source>
-        <translation type="unfinished">Mandoline</translation>
+        <translation>Mandoline</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>Ukulele</source>
-        <translation type="unfinished">Ukelele</translation>
+        <translation>Ukelele</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="861"/>
         <source>Bass Ukulele</source>
-        <translation type="unfinished">Ukelele-bas</translation>
+        <translation>Ukelele-bas</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="862"/>
         <source>Vocal Baritone</source>
-        <translation type="unfinished">Bariton (stem)</translation>
+        <translation>Bariton (stem)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="863"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished">Leadzanger</translation>
+        <translation>Leadzanger</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="864"/>
         <source>Mountain Dulcimer</source>
-        <translation type="unfinished">Dulcimer</translation>
+        <translation>Dulcimer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="865"/>
         <source>Scratching</source>
-        <translation type="unfinished">Scratchen</translation>
+        <translation>Scratchen</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="866"/>
         <source>Rapping</source>
-        <translation type="unfinished">Rappen</translation>
+        <translation>Rappen</translation>
     </message>
 </context>
 <context>
@@ -2297,52 +2299,52 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="34"/>
         <source>My Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Mijn profiel</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="73"/>
         <source>Musician&apos;s Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Muzikantenprofiel</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="83"/>
         <source>Alias/Name</source>
-        <translation type="unfinished">Alias/Naam</translation>
+        <translation>Alias/naam</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="90"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrument</translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="97"/>
         <source>Country</source>
-        <translation type="unfinished">Land</translation>
+        <translation>Land</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="104"/>
         <source>City</source>
-        <translation type="unfinished">Stad</translation>
+        <translation>Stad</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="111"/>
         <source>Skill</source>
-        <translation type="unfinished">Vaardigheid</translation>
+        <translation>Vaardigheid</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="198"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikersinterface</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="222"/>
         <source>Mixer Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengpaneel rijen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="297"/>
         <source>Audio/Network Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-/netwerk-instellingen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="664"/>
@@ -2373,32 +2375,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1108"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingangsversterking</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1131"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback bescherming</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1138"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Inschakelen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1190"/>
         <source>Input Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingangsbalans</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1201"/>
         <source>Pan</source>
-        <translation type="unfinished">Balans</translation>
+        <translation>Balans</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1275"/>
         <source>Center</source>
-        <translation type="unfinished">Midden</translation>
+        <translation>Midden</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2417,17 +2419,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="827"/>
         <source>Measurements</source>
-        <translation type="unfinished"></translation>
+        <translation>Metingen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1006"/>
         <source>Advanced Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Geavanceerde instellingen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1047"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigen adresboek server adres:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1074"/>
@@ -2464,11 +2466,11 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Custom Directory Server Address:</source>
-        <translation type="vanished">Eigen centrale serveradres:</translation>
+        <translation type="vanished">Eigen adresboek serveradres:</translation>
     </message>
     <message>
         <source>Directory Server Address:</source>
-        <translation type="vanished">Centraal Serveradres:</translation>
+        <translation type="vanished">Adresboek serveradres:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="838"/>
@@ -2490,7 +2492,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="892"/>
         <source>Overall Delay</source>
-        <translation>Algehele vertraging</translation>
+        <translation>Totale vertraging</translation>
     </message>
 </context>
 <context>
@@ -2502,11 +2504,11 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>The server list shows a list of available servers which are registered at the directory server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
-        <translation type="vanished">De serverlijst toont een lijst van beschikbare servers die op de centrale server zijn geregistreerd. Selecteer een server uit de lijst en druk op de verbindingsknop om verbinding te maken met deze server. U kunt ook dubbelklikken op een server uit de lijst om verbinding te maken met deze server. Als een server bezet is, is een lijst van de verbonden muzikanten beschikbaar door het lijstitem uit te breiden. Permanente servers worden vetgedrukt weergegeven.</translation>
+        <translation type="vanished">De serverlijst toont een lijst van beschikbare servers die op de adresboek server zijn geregistreerd. Selecteer een server uit de lijst en druk op de verbindingsknop om verbinding te maken met deze server. U kunt ook dubbelklikken op een server uit de lijst om verbinding te maken met deze server. Als een server bezet is, is een lijst van de verbonden muzikanten beschikbaar door het lijstitem uit te breiden. Permanente servers worden vetgedrukt weergegeven.</translation>
     </message>
     <message>
         <source>Note that it may take some time to retrieve the server list from the directory server. If no valid directory server address is specified in the settings, no server list will be available.</source>
-        <translation type="vanished">Merk op dat het enige tijd kan duren om de serverlijst op te halen van de centrale server. Als er geen geldig centraal serveradres is opgegeven in de instellingen, zal er geen serverlijst beschikbaar zijn.</translation>
+        <translation type="vanished">Merk op dat het enige tijd kan duren om de serverlijst op te halen van de adresboek server. Als er geen geldig adresboek serveradres is opgegeven in de instellingen, zal er geen serverlijst beschikbaar zijn.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="56"/>
@@ -2533,7 +2535,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="48"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation>De serverlijst toont een lijst van beschikbare servers die op de centrale server zijn geregistreerd. Selecteer een server uit de lijst en druk op de verbindingsknop om verbinding te maken met deze server. U kunt ook dubbelklikken op een server uit de lijst om verbinding te maken met deze server. Als een server bezet is, is een lijst van de verbonden muzikanten beschikbaar door het lijstitem uit te breiden. Permanente servers worden vetgedrukt weergegeven.</translation>
+        <translation>De serverlijst toont een lijst van beschikbare servers. Server beheerders kunnen hun servers optioneel op muziek genre weergeven. Gebruik de lijst optie om een genre te kiezen, klik op de server die u wilt gebruiken en druk op de verbindingsknop om verbinding te maken. U kunt ook dubbelklikken op een servernaam in de lijst om verbinding te maken. Permanente servers (die langer dan 48 uur in de lijst staan) worden vetgedrukt weergegeven.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="59"/>
@@ -2568,7 +2570,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>Server list selection combo box</source>
-        <translation>Serverlijstselectie combobox</translation>
+        <translation>Serverlijst selectie combobox</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="90"/>
@@ -2603,7 +2605,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="148"/>
         <source>Filter text, or # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Filter op tekst of gebruik # voor bezette servers</translation>
     </message>
     <message>
         <source>Type # for occupied servers</source>
@@ -2875,7 +2877,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living in. The city you live in and the skill level playing your instrument may also be added.</source>
-        <translation type="vanished">Stel hier je naam of een alias in zodat de andere muzikanten met wie je wilt spelen weten wie je bent. Daarnaast kun je een instrumentfoto van het instrument dat je bespeelt en een vlag van het land waar je woont, instellen. De stad waar je woont en het vaardigheidsniveau van het spelen van je instrument kunnen ook worden toegevoegd.</translation>
+        <translation type="vanished">Stel hier uw naam of een alias in zodat de andere muzikanten met wie u wilt spelen weten wie u bent. Daarnaast kunt u een instrumentfoto van het instrument dat u bespeelt en een vlag van het land waar je woont, instellen. De stad waar u woont en het vaardigheidsniveau van het spelen van uw instrument kunnen ook worden toegevoegd.</translation>
     </message>
     <message>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
@@ -2907,11 +2909,11 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>City edit box</source>
-        <translation type="vanished">Bewerkingsbox voor de stad</translation>
+        <translation type="vanished">Stad bewerkingsvak</translation>
     </message>
     <message>
         <source>Skill level combo box</source>
-        <translation type="vanished">Combobox voor vaardigheidsniveau</translation>
+        <translation type="vanished">Vaardigheidsniveau combobox</translation>
     </message>
     <message>
         <source>Drum Set</source>
@@ -3148,11 +3150,11 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="62"/>
         <source>Make My Server Public</source>
-        <translation>Maak Mijn Server Openbaar</translation>
+        <translation>Maak mijn server openbaar</translation>
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all </source>
-        <translation type="vanished">Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, registreert deze server zichzelf op de centrale server zodat alle </translation>
+        <translation type="vanished">Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, registreert deze server zichzelf op de adresboek server zodat alle </translation>
     </message>
     <message>
         <source> users can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
@@ -3161,28 +3163,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="71"/>
         <source>Register Server Status</source>
-        <translation>Tabblad Serverstatus</translation>
+        <translation>Geregistreerde server status</translation>
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful.</source>
-        <translation type="vanished">Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, zal dit het succes van de registratie bij de centrale server laten zien.</translation>
+        <translation type="vanished">Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, zal dit het succes van de registratie bij de adresboek server laten zien.</translation>
     </message>
     <message>
         <source>Directory Server Address</source>
-        <translation type="vanished">Centrale Serveradres</translation>
+        <translation type="vanished">Adresboek serveradres</translation>
     </message>
     <message>
         <source>The Directory server address is the IP address or URL of the directory server at which this server is registered. With the directory server address type either the local region can be selected of the default directory servers or a manual address can be specified.</source>
-        <translation type="vanished">Het adres van de centrale server is het IP-adres of de URL van de centrale server waarop deze server is geregistreerd. Met het type centraal serveradres kan ofwel de lokale regio worden geselecteerd van de standaard centrale servers of kan een handmatig adres worden opgegeven.</translation>
+        <translation type="vanished">Het adres van de adresboek server is het IP-adres of de URL van de adresboek server waarop deze server is geregistreerd. Met het type adresboek serveradres kan ofwel de lokale regio worden geselecteerd van de standaard adresboek servers of kan een handmatig adres worden opgegeven.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="72"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation>Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, laat dit zien of registratie bij de centrale server is gelukt. Indien registratie mislukt, kies een andere serverlijst.</translation>
+        <translation>Als het selectievakje Maak mijn server openbaar is aangevinkt, laat dit zien of registratie bij de adresboek server is gelukt. Indien registratie mislukt, kies dan een andere serverlijst.</translation>
     </message>
     <message>
         <source>Default directory server type combo box</source>
-        <translation type="vanished">Standaard centrale server type combo box</translation>
+        <translation type="vanished">Standaard adresboek server type combobox</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="56"/>
@@ -3192,22 +3194,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="63"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>Indien de Maak mijn server openbaar checkbox is aangevinkt registreert deze server zichzelf bij de centrale server. Hierdoor kunnen alle gebruikers deze zien en er verbinding mee leggen. De registratie wordt periodiek vernieuwd om ervoor te zorgen dat alle servers in de serverlijst ook daadwerkelijk beschikbaar zijn.</translation>
+        <translation>Als het selectievakje Maak mijn server openbaar is aangevinkt registreert deze server zichzelf bij de adresboek server. Hierdoor kunnen alle gebruikers deze zien en er verbinding mee leggen. De registratie wordt periodiek vernieuwd om ervoor te zorgen dat alle servers in de serverlijst ook daadwerkelijk beschikbaar zijn.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="77"/>
         <source>Custom Directory Server Address</source>
-        <translation>Eigen centrale serveradres</translation>
+        <translation>Eigen adresboek serveradres</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="78"/>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation>Het eigen centrale serveradres is het IP-adres of de URL van de centrale server die de serverlijst laat zien in de Verbindingsinstellingen.</translation>
+        <translation>Het eigen adresboek serveradres is het IP-adres of de URL van de adresboek server die de serverlijst laat zien in de verbindingsinstellingen.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
         <source>Directory server address line edit</source>
-        <translation>Centrale server adresbewerking van de lijn</translation>
+        <translation>Adresboek server bewerkingsregel</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
@@ -3217,12 +3219,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation>Selecteert de serverlijst (i.e. het centrale serveradres) waarin je server zal worden toegevoegd.</translation>
+        <translation>Selecteert de serverlijst (i.e. het adresboek serveradres) waaraan uw server zal worden toegevoegd.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="87"/>
         <source>Server list selection combo box</source>
-        <translation>Serverlijstselectie combobox</translation>
+        <translation>Serverlijst selectie combobox</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
@@ -3241,7 +3243,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="96"/>
         <source>Server name line edit</source>
-        <translation>Servernaam bewerking</translation>
+        <translation>Servernaam bewerkingsregel</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="99"/>
@@ -3256,7 +3258,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="106"/>
         <source>City where the server is located line edit</source>
-        <translation>Stad waar de server zich bevindt lijnbewerking</translation>
+        <translation>Stad waar de server zich bevindt bewerkingsregel</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
@@ -3292,7 +3294,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation>Hoofddirectory voor geluidsopnames tekstvak (read-only)</translation>
+        <translation>Hoofddirectory voor geluidsopnames tekstvak (alleen lezen)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
@@ -3317,7 +3319,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation>Checkbox om geluidsopname op de server in of uit te schakelen</translation>
+        <translation>Selectievakje om geluidsopname op de server in of uit te schakelen</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
@@ -3332,7 +3334,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="146"/>
         <source>Current session directory text box (read-only)</source>
-        <translation>Huidige sessie directory text box (read-only)</translation>
+        <translation>Huidige sessie directory tekstvak (alleen lezen)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="147"/>
@@ -3392,7 +3394,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="171"/>
         <source>NOTE</source>
-        <translation>NOOT</translation>
+        <translation>OPMERKING</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="172"/>
@@ -3427,7 +3429,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="605"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation type="unfinished"></translation>
+        <translation>Opname starten mislukt. Controleer beschikbare schijfruimte en toegangsrechtern en probeer opnieuw. Fout: </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="845"/>
@@ -3539,12 +3541,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.h" line="630"/>
         <source>Bad address</source>
-        <translation>Slecht adres</translation>
+        <translation>Foutief adres</translation>
     </message>
     <message>
         <location filename="../../util.h" line="633"/>
         <source>Registration requested</source>
-        <translation>Aanmelding gevraagd</translation>
+        <translation>Registratie aangevraagd</translation>
     </message>
     <message>
         <location filename="../../util.h" line="636"/>
@@ -3564,12 +3566,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.h" line="645"/>
         <source>Directory Server full</source>
-        <translation>Centrale server vol</translation>
+        <translation>Adresboek server vol</translation>
     </message>
     <message>
         <location filename="../../util.h" line="648"/>
         <source>Your server version is too old</source>
-        <translation>Je serverversie is te oud</translation>
+        <translation>Uw serverversie is te oud</translation>
     </message>
     <message>
         <location filename="../../util.h" line="651"/>
@@ -3587,7 +3589,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="34"/>
         <source>Client IP:Port</source>
-        <translation>Client IP:Poort</translation>
+        <translation>Client IP:poort</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="39"/>
@@ -3598,22 +3600,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="44"/>
         <source>Jitter Buffer Size</source>
-        <translation>Jitter Buffergrootte</translation>
+        <translation>Jitterbuffergrootte</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="49"/>
         <source>Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanalen</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="67"/>
         <source>Server Setup</source>
-        <translation>Server Setup</translation>
+        <translation>Server instellingen</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation>Welkomstbericht Chatvenster (HTML/CSS mogelijk)</translation>
+        <translation>Welkomstbericht chatvenster (HTML/CSS mogelijk)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="214"/>
@@ -3628,7 +3630,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="276"/>
         <source>Enable delay panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Delay panning inschakelen</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -3642,7 +3644,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="73"/>
         <source>Make My Server Public (Register My Server in the Server List)</source>
-        <translation>Maak mijn server openbaar (Registreer deze in de lijst met servers)</translation>
+        <translation>Maak mijn server openbaar (registreer deze in de lijst met servers)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
@@ -3658,7 +3660,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
-        <translation>Eigen centrale serveradres:</translation>
+        <translation>Eigen adresboek serveradres:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="236"/>
@@ -3682,7 +3684,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Directory Server Address:</source>
-        <translation type="vanished">Adres Centrale Server:</translation>
+        <translation type="vanished">Adresboek serveradres:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="117"/>
@@ -3854,12 +3856,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../windows/sound.cpp" line="563"/>
         <source>No ASIO audio device driver found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen ASIO geluidskaart stuurprogramma gevonden.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="564"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Installeer een ASIO stuurprogramma voor het starten van %1. Indien u een apparaat heeft met ASIO ondersteuning, installeer dan de officiële ASIO driver. Indien u dit niet heeft, dan kunt u een universele driver zoals ASIO4ALL gebruiken.</translation>
     </message>
     <message>
         <source>No ASIO audio device (driver) found.</source>

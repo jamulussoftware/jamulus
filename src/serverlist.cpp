@@ -168,12 +168,14 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
 {
     // if the address has not actually changed, do nothing
-    if ( sNCentServAddr == strCentralServerAddress ) {
+    if ( sNCentServAddr == strCentralServerAddress )
+    {
         return;
     }
 
     // if we are registered to a custom directory server, unregister before updating the name
-    if ( eCentralServerAddressType == AT_CUSTOM && GetSvrRegStatus() == SRS_REGISTERED ) {
+    if ( eCentralServerAddressType == AT_CUSTOM && GetSvrRegStatus() == SRS_REGISTERED )
+    {
         SlaveServerUnregister();
     }
 
@@ -196,7 +198,8 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
 void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
 {
     // if the type is changing, unregister before updating
-    if ( eNCSAT != eCentralServerAddressType && GetSvrRegStatus() == SRS_REGISTERED ) {
+    if ( eNCSAT != eCentralServerAddressType && GetSvrRegStatus() == SRS_REGISTERED )
+    {
         SlaveServerUnregister();
     }
 

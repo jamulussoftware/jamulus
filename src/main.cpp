@@ -856,6 +856,9 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable( GetVersionAndNameStr ( false ) );
 
+                // enable server list if a directory server is defined
+                Server.SetServerListEnabled ( !strCentralServer.isEmpty() );
+
                 // update serverlist
                 Server.UpdateServerList();
 

@@ -841,8 +841,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Enable Small 
-Network Buffers</string>
+              <string>Enable Small Network Buffers</string>
              </property>
             </widget>
            </item>

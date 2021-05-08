@@ -118,7 +118,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Autorské práva (C) 2005-2021 The Jamulus Development Team</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -308,12 +308,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavuje posun z ľavého do pravého kanála. Funguje iba v režime stereo, prípadne (lepšie) v režie mono dnu/stereo von.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="167"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomocou zaškrtávacieho políčka Sólo môžete zvukový kanál nastaviť ako sólo, čo znamená, že zvyšné kanály (okrem sólo kanálov) budú stíšené. Je možné takto označiť viac kanálov.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="173"/>
@@ -323,7 +323,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomocou zaškrtávacieho políčka Skp môžete definovať skupinu zvukových kanálov. Pri zmene hlasitosti kanála sú príslušným spôsobom menené hlasitosti ostatných kanálov v tej istej skupine.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="176"/>
@@ -488,7 +488,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="71"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Zavrieť</translation>
+        <translation>&amp;Zavrieť</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="140"/>
@@ -519,22 +519,22 @@
     <message>
         <location filename="../../clientdlg.cpp" line="53"/>
         <source>Input Level Meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Indikátor úrovne vstupu</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="56"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zabezpečte, aby nedochádzalo k orezávaniu (clipping) vstupného signálu, aby ste zabránili jeho skresleniu.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
         <source>Input level meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Indikátor úrovne vstupu</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="72"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Simuluje analógový LED indikátor úrovne vstupu.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="89"/>
@@ -584,12 +584,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="148"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Network jitter buffer nepostačuje pre aktuálny jitter siete/zvukového rozhrania.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="53"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu sa zobrazuje úroveň dvoch stereo kanálov vášho zvukového vstupu.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="59"/>
@@ -644,7 +644,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="124"/>
         <source>Shows the current audio delay status:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazuje aktuálny stav oneskorenia zvuku:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="126"/>
@@ -684,7 +684,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="144"/>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation>Dióda stavu bufferov ukazuje aktuálny stav audio/streamovania. Ak je jej farba červená, audio stream je prerušený. Príčinou môže byť jeden z nasledujúcich problémov:</translation>
+        <translation>Dióda stavu bufferov ukazuje aktuálny stav audio/streamovania. Ak je jej farba červená, zvukový stream je prerušený. Príčinou môže byť jeden z nasledujúcich problémov:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="150"/>
@@ -704,7 +704,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="160"/>
         <source>Buffers status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>LED indikátor stavu bufferov</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="176"/>
@@ -754,32 +754,32 @@
     <message>
         <location filename="../../clientdlg.cpp" line="271"/>
         <source>N&amp;o User Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Netriediť používateľov</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
         <source>Sort Users by &amp;City</source>
-        <translation type="unfinished"></translation>
+        <translation>Triediť používateľov podľa mes&amp;ta</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="313"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vypnúť všetky nastavenia sólo a stíšení</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="316"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastaviť všetky prelínače na ú&amp;roveň nového klienta</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="319"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Automaticky prispôsobiť všetky prelínače</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1161"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="238"/>
@@ -799,12 +799,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavenia zvuku/&amp;siete...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pokročilé nastavenia...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="269"/>
@@ -841,7 +841,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="700"/>
         <source>Directory Server</source>
-        <translation>Centrálny server</translation>
+        <translation>Adresárový server</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="746"/>
@@ -862,34 +862,36 @@
     <message>
         <location filename="../../clientdlg.cpp" line="951"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Pripojiť sa</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="963"/>
         <source>Settings</source>
-        <translation type="unfinished">Nastavenia</translation>
+        <translation>Nastavenia</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="973"/>
         <source>Chat</source>
-        <translation type="unfinished">Chat</translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1050"/>
         <source>Enable feedback detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapnúť detekciu spätnej väzby</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1054"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bola zistená prítomnosť spätnej väzby alebo silného signálu.
+
+Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Prosím, vyriešte problém so spätnou väzbou a následne vypnite stíšenie.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1140"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaša zvuková karta nefunguje správne. Prosím, otvorte okno s nastaveniami a skontrolujte výber zariadenia a nastavenia ovládača.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
@@ -975,7 +977,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientdlgbase.ui" line="522"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavte zvuk, pripojte sa na server a začnite jamovať!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="544"/>
@@ -993,7 +995,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="78"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>Nastavenia jitter bufferu je preto kompromisom medzi kvalitou zvuku a celkového oneskorenia.</translation>
+        <translation>Nastavenie jitter buffera je preto kompromisom medzi kvalitou zvuku a celkového oneskorenia.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="103"/>
@@ -1083,7 +1085,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="156"/>
         <source>Enable Small Network Buffers</source>
-        <translation type="unfinished">Povoliť malé sieťové buffre</translation>
+        <translation>Povoliť malé sieťové buffre</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="156"/>
@@ -1098,12 +1100,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="166"/>
         <source>Sound Card Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Oneskorenia buffera zvukovej karty</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="169"/>
         <source>Three buffer sizes are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Sú podporované 3 veľkosti buffera</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
@@ -1133,7 +1135,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="211"/>
         <source>Opens the driver settings. Note: </source>
-        <translation type="unfinished"></translation>
+        <translation>Otvorí nastavenia ovládača. Poznámka: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
@@ -1158,7 +1160,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="285"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Zosilnenie vstupu</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="286"/>
@@ -1221,17 +1223,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../../clientsettingsdlg.cpp" line="549"/>
         <location filename="../../util.cpp" line="819"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nenastavené</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1129"/>
         <source>Center</source>
-        <translation type="unfinished">Stred</translation>
+        <translation>Stred</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1142"/>
         <source>R</source>
-        <translation type="unfinished">P</translation>
+        <translation>P</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
@@ -1301,7 +1303,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../../clientsettingsdlg.cpp" line="58"/>
         <location filename="../../clientsettingsdlg.cpp" line="1136"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="58"/>
@@ -1346,7 +1348,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="303"/>
         <source>Custom Directory Server Address</source>
-        <translation>Adresa vlastného centrálneho servera</translation>
+        <translation>Adresa vlastného adresárového servera</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="320"/>
@@ -1356,12 +1358,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="333"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished"></translation>
+        <translation>Ak sa dióda zmení na červenú, veľa zábavy si s touto aplikáciou </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation> neužijete.</translation>
     </message>
     <message>
         <source>ASIO Setup</source>
@@ -1408,22 +1410,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavenie oneskorenia buffera je základným nastavením tohto programu. Toto nastavenie ovplyvňuje mnoho vlastností spojenia.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 vzoriek. Odporúčané nastavenie. Poskytuje najnižšiu latenciu, ale nefunguje pri všetkých zvukových kartách.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="174"/>
         <source>128 samples: Should work for most available sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>128 vzoriek. Malo by fungovať pre väčšinu dostupných zvukových kariet.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="176"/>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 vzoriek: Toto nastavenie by ste mali použiť iba na veľmi pomalých počítačoch alebo pri pomalom internetovom pripojení.</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
@@ -1442,7 +1444,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="231"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyberte vzhľad, ktorý sa aplikuje na hlavné okno programu.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="234"/>
@@ -1467,7 +1469,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="244"/>
         <source>Mono in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono dnu/Stereo von</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="244"/>
@@ -1477,7 +1479,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="251"/>
         <source>Enabling </source>
-        <translation type="unfinished"></translation>
+        <translation>Zapnutím </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="254"/>
@@ -1542,12 +1544,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.h" line="585"/>
         <source>Any Genre 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľubovoľný žáner 2</translation>
     </message>
     <message>
         <location filename="../../util.h" line="588"/>
         <source>Any Genre 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľubovoľný žáner 3</translation>
     </message>
     <message>
         <location filename="../../util.h" line="591"/>
@@ -1562,17 +1564,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.h" line="597"/>
         <source>Genre Classical/Folk</source>
-        <translation type="unfinished"></translation>
+        <translation>Žáner Klasika/Folk</translation>
     </message>
     <message>
         <location filename="../../util.h" line="600"/>
         <source>Genre Choral/Barbershop</source>
-        <translation type="unfinished"></translation>
+        <translation>Žáner Zbor/Barbershop</translation>
     </message>
     <message>
         <location filename="../../util.h" line="603"/>
         <source>Any Genre 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľubovoľný žáner 1</translation>
     </message>
     <message>
         <source>Genre Classical/Folk/Choral</source>
@@ -1590,17 +1592,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="453"/>
         <source>Musician Profile</source>
-        <translation type="unfinished">Profil hudobníka</translation>
+        <translation>Profil hudobníka</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="454"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished">Sem napíšte vaše meno alebo prezývku, aby ostatní hudobníci vedeli, s kým majú tú česť. Rovnako môžete pridať obrázok hudobného nástroja, na ktorý hráte a vlajku krajiny, v ktorej sa nachádzate. Je možné pridať aj mesto a úroveň hry na hudobný nástroj.</translation>
+        <translation>Sem napíšte vaše meno alebo prezývku, aby ostatní hudobníci vedeli, s kým majú tú česť. Rovnako môžete pridať obrázok hudobného nástroja, na ktorý hráte a vlajku krajiny, v ktorej sa nachádzate. Je možné pridať aj mesto a úroveň vašej hry na hudobný nástroj.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="458"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished">To, čo sem napíšete sa zobrazí pri vašom prelínači na mixéri po tom, ako sa pripojíte k Jamulus serveru. Táto menovka sa rovnako zobrazí každému klientovi, ktorý sa pripojí k tomu istému serveru ako vy.</translation>
+        <translation>To, čo sem napíšete sa zobrazí pri vašom prelínači na mixéri po tom, ako sa pripojíte k Jamulus serveru. Táto menovka sa rovnako zobrazí každému klientovi, ktorý sa pripojí k tomu istému serveru ako vy.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="464"/>
@@ -1610,12 +1612,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="466"/>
         <source>Instrument picture button</source>
-        <translation type="unfinished">Tlačidlo s obrázkom hud. nástroja</translation>
+        <translation>Tlačidlo s obrázkom hud. nástroja</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="468"/>
         <source>Country flag button</source>
-        <translation type="unfinished">Tlačidlo s vlajkou krajiny</translation>
+        <translation>Tlačidlo s vlajkou krajiny</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="470"/>
@@ -1630,17 +1632,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="555"/>
         <source>Beginner</source>
-        <translation type="unfinished">Začiatočník</translation>
+        <translation>Začiatočník</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="561"/>
         <source>Intermediate</source>
-        <translation type="unfinished">Pokročilý</translation>
+        <translation>Pokročilý</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="567"/>
         <source>Expert</source>
-        <translation type="unfinished">Expert</translation>
+        <translation>Expert</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="707"/>
@@ -1673,222 +1675,222 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.cpp" line="820"/>
         <source>Drum Set</source>
-        <translation type="unfinished">Bicie</translation>
+        <translation>Bicie</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="821"/>
         <source>Djembe</source>
-        <translation type="unfinished">Djembe</translation>
+        <translation>Djembe</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="822"/>
         <source>Electric Guitar</source>
-        <translation type="unfinished">Elektrická gitara</translation>
+        <translation>Elektrická gitara</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="823"/>
         <source>Acoustic Guitar</source>
-        <translation type="unfinished">Akustická gitara</translation>
+        <translation>Akustická gitara</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="824"/>
         <source>Bass Guitar</source>
-        <translation type="unfinished">Basová gitara</translation>
+        <translation>Basová gitara</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="825"/>
         <source>Keyboard</source>
-        <translation type="unfinished">Keyboard</translation>
+        <translation>Keyboard</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="826"/>
         <source>Synthesizer</source>
-        <translation type="unfinished">Syntetizátor</translation>
+        <translation>Syntetizátor</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="827"/>
         <source>Grand Piano</source>
-        <translation type="unfinished">Koncertné krídlo</translation>
+        <translation>Koncertné krídlo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="828"/>
         <source>Accordion</source>
-        <translation type="unfinished">Akordeón</translation>
+        <translation>Akordeón</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="829"/>
         <source>Vocal</source>
-        <translation type="unfinished">Vokály</translation>
+        <translation>Vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="830"/>
         <source>Microphone</source>
-        <translation type="unfinished">Mikrofón</translation>
+        <translation>Mikrofón</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="831"/>
         <source>Harmonica</source>
-        <translation type="unfinished">Ústna harmonika</translation>
+        <translation>Ústna harmonika</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="832"/>
         <source>Trumpet</source>
-        <translation type="unfinished">Trúbka</translation>
+        <translation>Trúbka</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="833"/>
         <source>Trombone</source>
-        <translation type="unfinished">Trombón</translation>
+        <translation>Trombón</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="834"/>
         <source>French Horn</source>
-        <translation type="unfinished">Lesný roh</translation>
+        <translation>Lesný roh</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="835"/>
         <source>Tuba</source>
-        <translation type="unfinished">Tuba</translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="836"/>
         <source>Saxophone</source>
-        <translation type="unfinished">Saxofón</translation>
+        <translation>Saxofón</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="837"/>
         <source>Clarinet</source>
-        <translation type="unfinished">Klarinet</translation>
+        <translation>Klarinet</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="838"/>
         <source>Flute</source>
-        <translation type="unfinished">Flauta</translation>
+        <translation>Flauta</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="839"/>
         <source>Violin</source>
-        <translation type="unfinished">Husle</translation>
+        <translation>Husle</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="840"/>
         <source>Cello</source>
-        <translation type="unfinished">Violončelo</translation>
+        <translation>Violončelo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="841"/>
         <source>Double Bass</source>
-        <translation type="unfinished">Kontrabas</translation>
+        <translation>Kontrabas</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="842"/>
         <source>Recorder</source>
-        <translation type="unfinished">Zobcová flauta</translation>
+        <translation>Rekordér</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="843"/>
         <source>Streamer</source>
-        <translation type="unfinished">Streamovač</translation>
+        <translation>Streamovač</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="844"/>
         <source>Listener</source>
-        <translation type="unfinished">Poslucháč</translation>
+        <translation>Poslucháč</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="845"/>
         <source>Guitar+Vocal</source>
-        <translation type="unfinished">Gitara+Vokály</translation>
+        <translation>Gitara+Vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="846"/>
         <source>Keyboard+Vocal</source>
-        <translation type="unfinished">Klávesnica+Vokály</translation>
+        <translation>Klávesnica+Vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="847"/>
         <source>Bodhran</source>
-        <translation type="unfinished">Bodhran</translation>
+        <translation>Bodhran</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="848"/>
         <source>Bassoon</source>
-        <translation type="unfinished">Fagot</translation>
+        <translation>Fagot</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="849"/>
         <source>Oboe</source>
-        <translation type="unfinished">Hoboj</translation>
+        <translation>Hoboj</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="850"/>
         <source>Harp</source>
-        <translation type="unfinished">Harfa</translation>
+        <translation>Harfa</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="851"/>
         <source>Viola</source>
-        <translation type="unfinished">Viola</translation>
+        <translation>Viola</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="852"/>
         <source>Congas</source>
-        <translation type="unfinished">Kongy</translation>
+        <translation>Kongy</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="853"/>
         <source>Bongo</source>
-        <translation type="unfinished">Bongo</translation>
+        <translation>Bongo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="854"/>
         <source>Vocal Bass</source>
-        <translation type="unfinished">Basové vokály</translation>
+        <translation>Basové vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="855"/>
         <source>Vocal Tenor</source>
-        <translation type="unfinished">Tenorové vokály</translation>
+        <translation>Tenorové vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="856"/>
         <source>Vocal Alto</source>
-        <translation type="unfinished">Altové vokály</translation>
+        <translation>Altové vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="857"/>
         <source>Vocal Soprano</source>
-        <translation type="unfinished">Sopránové vokály</translation>
+        <translation>Sopránové vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="858"/>
         <source>Banjo</source>
-        <translation type="unfinished">Bendžo</translation>
+        <translation>Bendžo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="859"/>
         <source>Mandolin</source>
-        <translation type="unfinished">Mandolína</translation>
+        <translation>Mandolína</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>Ukulele</source>
-        <translation type="unfinished">Ukulele</translation>
+        <translation>Ukulele</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="861"/>
         <source>Bass Ukulele</source>
-        <translation type="unfinished">Basové ukulele</translation>
+        <translation>Basové ukulele</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="862"/>
         <source>Vocal Baritone</source>
-        <translation type="unfinished">Barytónové vokály</translation>
+        <translation>Barytónové vokály</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="863"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished">Hlavný spev</translation>
+        <translation>Hlavný spev</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="864"/>
@@ -1903,7 +1905,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.cpp" line="866"/>
         <source>Rapping</source>
-        <translation type="unfinished">Repovanie</translation>
+        <translation>Repovanie</translation>
     </message>
 </context>
 <context>
@@ -1977,52 +1979,52 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="34"/>
         <source>My Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Môj profil</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="73"/>
         <source>Musician&apos;s Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil hudobníka</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="83"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Prezývka/Meno</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="90"/>
         <source>Instrument</source>
-        <translation type="unfinished">Hud. nástroj</translation>
+        <translation>Hud. nástroj</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="97"/>
         <source>Country</source>
-        <translation type="unfinished">Krajina</translation>
+        <translation>Krajina</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="104"/>
         <source>City</source>
-        <translation type="unfinished">Mesto</translation>
+        <translation>Mesto</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="111"/>
         <source>Skill</source>
-        <translation type="unfinished">Úroveň hrania</translation>
+        <translation>Úroveň hrania</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="198"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Používateľské rozhranie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="222"/>
         <source>Mixer Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Riadky mix. pultu</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="297"/>
         <source>Audio/Network Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavenie zvuku/siete</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="664"/>
@@ -2053,32 +2055,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1108"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Zosilnenie vstupu</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1131"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Ochrana pred spätnou väzbou</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1138"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapnúť</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1190"/>
         <source>Input Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyváženie vstupu</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1201"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>Posun</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1275"/>
         <source>Center</source>
-        <translation type="unfinished">Stred</translation>
+        <translation>Stred</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2087,27 +2089,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="539"/>
         <source>Audio Channels</source>
-        <translation>Audio kanály</translation>
+        <translation>Zvukové kanály</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="546"/>
         <source>Audio Quality</source>
-        <translation>Audio kvalita</translation>
+        <translation>Kvalita zvuku</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="827"/>
         <source>Measurements</source>
-        <translation type="unfinished"></translation>
+        <translation>Štatistiky</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1006"/>
         <source>Advanced Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokročilé nastavenia</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1047"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresa vlastného adresárového servera:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1074"/>
@@ -2132,7 +2134,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="951"/>
         <source>Local Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Miestny jitter buffer</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
@@ -2230,7 +2232,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="90"/>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoznam serverov bude filtrovaný na základe zadaného textu. Všimnite si, že filter neberie ohľad na veľkosť písmen.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="92"/>
@@ -2245,7 +2247,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="95"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ak zaškrtnete toto políčko, budú zobrazení hudobníci na všetkých serverov. Ak ho necháte nezaškrtnuté, žiadne položky zoznamu nebudú rozbalené.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="98"/>
@@ -2255,7 +2257,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="148"/>
         <source>Filter text, or # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Filter textu alebo # pre zobrazenie obsadených serverov</translation>
     </message>
     <message>
         <source>Type # for occupied servers</source>
@@ -2763,7 +2765,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="99"/>
         <source>Location City</source>
-        <translation>Lokácia/mesto</translation>
+        <translation>Umiestnenie/mesto</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="99"/>
@@ -2778,7 +2780,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
         <source>Location country</source>
-        <translation>Lokácia/krajina</translation>
+        <translation>Umiestnenie/krajina</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
@@ -3052,7 +3054,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.h" line="645"/>
         <source>Directory Server full</source>
-        <translation>Centrálny server je plný</translation>
+        <translation>Adresárový server je plný</translation>
     </message>
     <message>
         <location filename="../../util.h" line="648"/>
@@ -3067,7 +3069,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.h" line="654"/>
         <source>Unknown value </source>
-        <translation>Neznáma hodnota</translation>
+        <translation>Neznáma hodnota </translation>
     </message>
     <message>
         <location filename="../../serverdlg.h" line="54"/>
@@ -3111,7 +3113,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="49"/>
         <source>Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanály</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="67"/>
@@ -3126,7 +3128,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="214"/>
         <source>Options</source>
-        <translation>Voľby</translation>
+        <translation>Nastavenia</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="269"/>
@@ -3136,7 +3138,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="276"/>
         <source>Enable delay panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapnúť posun oneskorenia</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="300"/>
@@ -3162,7 +3164,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
-        <translation>Adresa vlastného centrálneho servera:</translation>
+        <translation>Adresa vlastného adresárového servera:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="117"/>
@@ -3172,12 +3174,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="132"/>
         <source>Location: City</source>
-        <translation>Lokácia: Mesto</translation>
+        <translation>Umiestnenie: Mesto</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Country</source>
-        <translation>Lokácia: Krajina</translation>
+        <translation>Umiestnenie: Krajina</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="236"/>
@@ -3215,7 +3217,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>
         <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorkovacia frekvencia servera Jack sa líši od vyžadovanej. Vyžadovaná frekvencia vzorkovania je:</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="69"/>
@@ -3272,12 +3274,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../mac/sound.cpp" line="481"/>
         <source>The audio input device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vstupné zvukové zariadenie už nie je dostupné.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="511"/>
         <source>The audio output device is no longer available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Výstupné zvukové zariadenie už nie je dostupné.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="524"/>
@@ -3363,27 +3365,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../soundbase.cpp" line="121"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished">Vybrané audio zariadenie nie je možné použiť kvôli nasledujúcej chybe: </translation>
+        <translation>Vybrané audio zariadenie nie je možné použiť kvôli nasledujúcej chybe: </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="123"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"> Bude vybraný predchádzajúci ovládač.</translation>
+        <translation> Bude vybraný predchádzajúci ovládač.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="161"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>V minulosti vybrané zvukové zariadenia už nie je dostupné alebo sa zmenili vlastnosti ovládača zvuku tak, že už naďalej nie sú kompatibilné s týmto programom. Teraz sa pokúsim nájsť platné zvukové zariadenie. Pred pripojením sa k serveru preto skontrolujte nastavenia zvukového zariadenia.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="174"/>
         <source>No usable </source>
-        <translation>Nebolo nájdené </translation>
+        <translation>Nebolo nájdené žiadne </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="175"/>
         <source> audio device (driver) found.</source>
-        <translation> žiadne zvukové zariadenie (ovládač).</translation>
+        <translation> použiteľné zvukové zariadenie (ovládač).</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="176"/>
@@ -3398,7 +3400,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../soundbase.cpp" line="197"/>
         <source> could not be started because of audio interface issues.</source>
-        <translation type="unfinished"></translation>
+        <translation> sa nepodarilo spustiť kvôli problému s rozhraním zvuku.</translation>
     </message>
 </context>
 <context>

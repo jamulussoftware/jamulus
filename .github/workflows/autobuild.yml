@@ -134,6 +134,12 @@ jobs:
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
+      - name:                       Select Xcode version for Mac
+        if:                         ${{ matrix.config.target_os == 'macos' }}
+        uses:                       maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '11.7'
+
       # Checkout code
       - name:                       Checkout code
         uses:                       actions/checkout@v2

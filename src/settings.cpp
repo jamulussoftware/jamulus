@@ -331,9 +331,15 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // sound card selection
-    const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
-
-    strLoadErrors = strError;
+    const QString strDevName = FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) );
+    if ( strDevName.isEmpty() )
+    {
+        strLoadErrors = pClient->TryLoadAnyDev();
+    }
+    else
+    {
+        strLoadErrors = pClient->SetSndCrdDev ( strDevName );
+    }
 
     // sound card channel mapping settings: make sure these settings are
     // set AFTER the sound card device is set, otherwise the settings are

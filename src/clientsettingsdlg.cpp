@@ -695,6 +695,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
 #endif
     QObject::connect ( butTryLoadAnyDriver, &QPushButton::clicked, this, &CClientSettingsDlg::OnTryLoadAnyDriverClicked );
+    QObject::connect ( butDriverReset, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverResetClicked );
 
     // misc
     // sliders
@@ -910,6 +911,8 @@ void CClientSettingsDlg::SetEnableFeedbackDetection ( bool enable )
 #if defined( _WIN32 ) && !defined( WITH_JACK )
 void CClientSettingsDlg::OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
 #endif
+
+void CClientSettingsDlg::OnDriverResetClicked() { pClient->SetSndCrdDev ( pClient->GetSndCrdDev() ); }
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {

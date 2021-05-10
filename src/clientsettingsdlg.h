@@ -98,6 +98,7 @@ public slots:
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnMeterStyleActivated ( int iMeterStyleIdx );
     void OnDriverSetupClicked();
+    void OnDriverResetClicked();
     void OnTryLoadAnyDriverClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnAliasTextChanged ( const QString& strNewName );

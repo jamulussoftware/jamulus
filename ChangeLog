@@ -1,5 +1,5 @@
 
-### 3.8.0beta1dev <- NOTE: the release version number will be 3.8.0 ###
+### 3.8.0beta2 <- NOTE: the release version number will be 3.8.0 ###
 
 - The term "Central server" has been replaced with "Directory server" (#1407).
   (contributed by @pljones)

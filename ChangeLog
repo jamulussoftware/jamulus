@@ -1,5 +1,19 @@
 
-### 3.8.0beta2dev <- NOTE: the release version number will be 3.8.0 ###
+### 3.8.0beta2 <- NOTE: the release version number will be 3.8.0 ###
+
+- Github autobuild for Mac now uses Xcode 11.7 and SDK 10.15 for compatibility
+  with Qt5 (#1655).
+  (contributed by @softins)
+
+- GUI: Alignment of delay measurements display improved (#1606, #1617).
+  (contributed by @pljones)
+
+- GUI: Corrected handling of custom directory server in the server, to prevent
+  unintended registration with a directory server (#1624, #1627).
+  (contributed by @softins)
+
+- GUI: Corrected alignment of Mute icon above fader (#811, #1312, #1640).
+  (contributed by @vimpostor)
 
 - The term "Central server" has been replaced with "Directory server" (#1407).
   (contributed by @pljones)

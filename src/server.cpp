@@ -23,7 +23,6 @@
 \******************************************************************************/
 
 #include "server.h"  
-#include "ThreadPool.h"
 
 
 // CHighPrecisionTimer implementation ******************************************

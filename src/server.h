@@ -47,7 +47,7 @@
 #include "serverlist.h"
 #include "recorder/jamcontroller.h"
 
-#include "ThreadPool.h"
+#include "threadpool.h"
 
 /* Definitions ****************************************************************/
 // no valid channel number

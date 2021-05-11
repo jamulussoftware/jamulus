@@ -30,7 +30,6 @@
 #include <QHostAddress>
 #include <QFileInfo>
 #include <QtConcurrent>
-#include <QFutureSynchronizer>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
@@ -337,7 +336,6 @@ protected:
     // variables needed for multithreading support
     bool                       bUseMultithreading;
     int                        iMaxNumThreads;
-    // QFutureSynchronizer<void>  FutureSynchronizer;
     CVector<std::future<void>> Futures;
 
     bool CreateLevelsForAllConChannels  ( const int                        iNumClients,

@@ -435,7 +435,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
             // set maximum thread count to available -1 to keep one core for the gui, timer and receive threads
             iMaxNumThreads = iAvailableCores - 1;
             qDebug() << "multithreading enabled, setting thread count to" << iMaxNumThreads;
-            // QThreadPool::globalInstance()->setMaxThreadCount ( iMaxNumThreads );
 
             tpThreadPool = std::unique_ptr<ThreadPool>( new ThreadPool{static_cast<size_t>(iMaxNumThreads)} );
             Futures.reserve( iMaxNumThreads );
@@ -864,12 +863,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
                 Futures.push_back ( tpThreadPool->enqueue ( CServer::DecodeReceiveDataBlocks,
                                                     this, iStartChanCnt, iStopChanCnt, iNumClients ) );
-
-                // FutureSynchronizer.addFuture ( QtConcurrent::run ( &CServer::DecodeReceiveDataBlocks,
-                //                                                    this,
-                //                                                    iStartChanCnt,
-                //                                                    iStopChanCnt,
-                //                                                    iNumClients ) );
             }
 
             // make sure all concurrent run threads have finished when we leave this function
@@ -877,8 +870,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 future.wait();
             }
             Futures.clear();
-            // FutureSynchronizer.waitForFinished();
-            // FutureSynchronizer.clearFutures();
         }
 
         // a channel is now disconnected, take action on it
@@ -951,12 +942,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 
                 Futures.push_back ( tpThreadPool->enqueue ( CServer::MixEncodeTransmitDataBlocks,
                                                     this, iStartChanCnt, iStopChanCnt, iNumClients ) );
-
-                // FutureSynchronizer.addFuture ( QtConcurrent::run ( &CServer::MixEncodeTransmitDataBlocks,
-                //                                                    this,
-                //                                                    iStartChanCnt,
-                //                                                    iStopChanCnt,
-                //                                                    iNumClients ) );
             }
 
             // make sure all concurrent run threads have finished when we leave this function
@@ -964,8 +949,6 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 fFuture.wait();
             }
             Futures.clear();
-            // FutureSynchronizer.waitForFinished();
-            // FutureSynchronizer.clearFutures();
         }
         if ( bDelayPan )
         {

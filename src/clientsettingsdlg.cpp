@@ -365,9 +365,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     ledOverallDelay->Reset();
     ledNetw->SetType              ( CMultiColorLED::MT_INDICATOR );
     ledOverallDelay->SetType      ( CMultiColorLED::MT_INDICATOR );
-    lblPingTimeValue->setText     ( "---" );
-    lblOverallDelayValue->setText ( "---" );
     lblUpstreamValue->setText     ( "---" );
+    lblUpstreamUnit->setText      ( "" );
+    lblPingTimeValue->setText     ( "---" );
+    lblPingTimeUnit->setText      ( "" );
+    lblOverallDelayValue->setText ( "---" );
+    lblOverallDelayUnit->setText  ( "" );
     edtNewClientLevel->setValidator ( new QIntValidator ( 0, 100, this ) ); // % range from 0-100
 
 
@@ -988,14 +991,17 @@ void CClientSettingsDlg::SetPingTimeResult ( const int                         i
     }
     else
     {
-        lblPingTimeValue->setText     ( QString().setNum ( iPingTime ) + " ms" );
-        lblOverallDelayValue->setText ( QString().setNum ( iOverallDelayMs ) + " ms" );
+        lblPingTimeValue->setText     ( QString().setNum ( iPingTime ) );
+        lblPingTimeUnit->setText      ( "ms" );
+        lblOverallDelayValue->setText ( QString().setNum ( iOverallDelayMs ) );
+        lblOverallDelayUnit->setText  ( "ms" );
     }
 
     // update upstream rate information label (note that we update this together
     // with the ping time since the network packet sequence number feature might
     // be enabled at any time which has influence on the upstream rate)
-    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
+    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
+    lblUpstreamUnit->setText  ( "kbps" );
 
     // set current LED status
     ledOverallDelay->SetLight ( eOverallDelayLEDColor );
@@ -1011,8 +1017,11 @@ void CClientSettingsDlg::UpdateDisplay()
     {
         // clear text labels with client parameters
         lblPingTimeValue->setText     ( "---" );
+        lblPingTimeUnit->setText      ( ""    );
         lblOverallDelayValue->setText ( "---" );
+        lblOverallDelayUnit->setText  ( ""    );
         lblUpstreamValue->setText     ( "---" );
+        lblUpstreamUnit->setText      ( ""    );
     }
 }
 

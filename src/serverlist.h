@@ -146,7 +146,7 @@ public:
     void SetCentralServerAddress ( const QString sNCentServAddr );
     QString GetCentralServerAddress() { return strCentralServerAddress; }
 
-    void SetCentralServerAddressType ( const ECSAddType eNCSAT ) { eCentralServerAddressType = eNCSAT; }
+    void SetCentralServerAddressType ( const ECSAddType eNCSAT );
     ECSAddType GetCentralServerAddressType() { return eCentralServerAddressType; }
 
     bool GetIsCentralServer() const { return bIsCentralServer; }

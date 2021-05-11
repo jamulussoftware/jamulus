@@ -134,6 +134,15 @@ jobs:
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
+
+      # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x
+      # This is done by selecting Xcode 11.7 instead of the latest default of 12.x
+      - name:                       Select Xcode version for Mac
+        if:                         ${{ matrix.config.target_os == 'macos' }}
+        uses:                       maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '11.7'
+
       # Checkout code
       - name:                       Checkout code
         uses:                       actions/checkout@v2

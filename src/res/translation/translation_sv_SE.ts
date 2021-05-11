@@ -859,12 +859,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation>Ljud och nätverks&amp;inställningar</translation>
+        <translation>Ljud och nätverks&amp;inställningar...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation>&amp;Avancerade inställningar</translation>
+        <translation>&amp;Avancerade inställningar...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="269"/>

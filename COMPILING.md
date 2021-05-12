@@ -18,7 +18,7 @@ For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/mast
 
 #### Install dependencies
 
-On Ubuntu-based distributions 18.04+, Debian 9+ or 10 and Raspberry Pi Raspbian Buster release or later:
+On Ubuntu-based distributions 18.04+, Debian 9+, and Raspberry Pi OS:
 
 * build-essential
 * qt5-qmake

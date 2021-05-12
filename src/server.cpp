@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#include "server.h"  
+#include "server.h"
 
 
 // CHighPrecisionTimer implementation ******************************************
@@ -424,12 +424,12 @@ CServer::CServer ( const int          iNewMaxNumChan,
     int iAvailableCores = QThread::idealThreadCount();
 
     // setup QThreadPool if multithreading is active and possible
-    if(bUseMultithreading) {
-        if (iAvailableCores == 1 )
+    if ( bUseMultithreading ) {
+        if ( iAvailableCores == 1 )
         {
             qDebug() << "found only one core, disable multithreading";
             bUseMultithreading = false;
-        } 
+        }
         else
         {
             // set maximum thread count to available -1 to keep one core for the gui, timer and receive threads
@@ -438,7 +438,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
             // QThreadPool::globalInstance()->setMaxThreadCount ( iMaxNumThreads );
 
             tpThreadPool = std::unique_ptr<ThreadPool>( new ThreadPool{static_cast<size_t>(iMaxNumThreads)} );
-            Futures.reserve(iMaxNumThreads);
+            Futures.reserve( iMaxNumThreads );
         }
     }
 
@@ -575,12 +575,12 @@ inline void CServer::connectChannelSignalsToServerSlots()
 template<>
 inline void CServer::connectChannelSignalsToServerSlots<0>() {}
 
-void CServer::CreateAndSendJitBufMessage ( const int iCurChanID, 
+void CServer::CreateAndSendJitBufMessage ( const int iCurChanID,
                                            const int iNNumFra )
 {
     vecChannels[iCurChanID].CreateJitBufMes ( iNNumFra );
 }
- 
+
 CServer::~CServer()
 {
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -823,7 +823,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     bChannelIsNowDisconnected = false; // note that the flag must be a member function since QtConcurrent::run can only take 5 params
 
     {
-        // Make put and get calls thread safe. 
+        // Make put and get calls thread safe.
         QMutexLocker locker ( &Mutex );
 
         // first, get number and IDs of connected channels
@@ -862,7 +862,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 const int iStartChanCnt = iBlockCnt * iMTBlockSize;
                 const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
-                Futures.push_back ( tpThreadPool->enqueue ( CServer::DecodeReceiveDataBlocks, 
+                Futures.push_back ( tpThreadPool->enqueue ( CServer::DecodeReceiveDataBlocks,
                                                     this, iStartChanCnt, iStopChanCnt, iNumClients ) );
 
                 // FutureSynchronizer.addFuture ( QtConcurrent::run ( &CServer::DecodeReceiveDataBlocks,
@@ -949,7 +949,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 const int iStartChanCnt = iBlockCnt * iMTBlockSize;
                 const int iStopChanCnt  = std::min ( ( iBlockCnt + 1 ) * iMTBlockSize - 1, iNumClients - 1 );
 
-                Futures.push_back ( tpThreadPool->enqueue ( CServer::MixEncodeTransmitDataBlocks, 
+                Futures.push_back ( tpThreadPool->enqueue ( CServer::MixEncodeTransmitDataBlocks,
                                                     this, iStartChanCnt, iStopChanCnt, iNumClients ) );
 
                 // FutureSynchronizer.addFuture ( QtConcurrent::run ( &CServer::MixEncodeTransmitDataBlocks,
@@ -986,7 +986,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     }
 }
 
-void CServer::DecodeReceiveDataBlocks ( CServer*  sServer, 
+void CServer::DecodeReceiveDataBlocks ( CServer*  sServer,
                                         const int iStartChanCnt,
                                         const int iStopChanCnt,
                                         const int iNumClients )
@@ -998,7 +998,7 @@ void CServer::DecodeReceiveDataBlocks ( CServer*  sServer,
     }
 }
 
-void CServer::MixEncodeTransmitDataBlocks ( CServer*  sServer, 
+void CServer::MixEncodeTransmitDataBlocks ( CServer*  sServer,
                                             const int iStartChanCnt,
                                             const int iStopChanCnt,
                                             const int iNumClients )

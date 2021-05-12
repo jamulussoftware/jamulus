@@ -280,7 +280,7 @@ public:
 
     int GetClientNumAudioChannels ( const int iChanNum )
         { return vecChannels[iChanNum].GetNumAudioChannels(); }
-	
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }

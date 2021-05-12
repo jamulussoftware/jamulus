@@ -701,7 +701,10 @@ DISTFILES += ChangeLog \
     CONTRIBUTING.md \
     README.md \
     distributions/jamulus.desktop.in \
+    distributions/jamulus-server.desktop.in \
     distributions/jamulus.png \
+    distributions/jamulus.svg \
+    distributions/jamulus-server.svg \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \

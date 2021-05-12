@@ -432,8 +432,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         }
         else
         {
-            // set maximum thread count to available -1 to keep one core for the gui, timer and receive threads
-            iMaxNumThreads = iAvailableCores - 1;
+            // set maximum thread count to available cores; other threads will share at random
+            iMaxNumThreads = iAvailableCores;
             qDebug() << "multithreading enabled, setting thread count to" << iMaxNumThreads;
 
             tpThreadPool = std::unique_ptr<ThreadPool>( new ThreadPool{static_cast<size_t>(iMaxNumThreads)} );
@@ -839,7 +839,9 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             }
         }
 
-        bUseMT = bUseMultithreading && iNumClients >= 10;
+        // use multithreading for any non-zero number of clients
+        // (was previously 10 clients or over, but is worth doing for all numbers)
+        bUseMT = bUseMultithreading && iNumClients > 0;
 
         // prepare and decode connected channels
         if ( !bUseMT )

@@ -373,16 +373,16 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
-        desktop.files = distributions/jamulus.desktop
+        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in distributions/jamulus-server.desktop.in
+        desktop.files = distributions/jamulus.desktop distributions/jamulus-server.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/jamulus.png
-
+        icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
+ 
         INSTALLS += target desktop icons
     }
 }

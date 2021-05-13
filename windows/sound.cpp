@@ -328,7 +328,9 @@ QMessageBox::information ( 0, "APP_NAME", QString("lMinSize: %1, lMaxSize: %2, l
 _exit(1);
 */
 
+// clang-format off
 // TODO see https://github.com/EddieRingle/portaudio/blob/master/src/hostapi/asio/pa_asio.cpp#L1654 (SelectHostBufferSizeForUnspecifiedUserFramesPerBuffer)
+// clang-format on
 
     // calculate "nearest" buffer size and set internal parameter accordingly
     // first check minimum and maximum values

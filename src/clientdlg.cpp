@@ -1271,9 +1271,11 @@ void CClientDlg::Disconnect()
     bDetectFeedback = false;
 
 
+// clang-format off
 // TODO is this still required???
 // immediately update status bar
 OnTimerStatus();
+// clang-format on
 
 
     // reset LEDs

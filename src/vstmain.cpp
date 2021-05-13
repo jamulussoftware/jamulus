@@ -57,8 +57,10 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
     connect ( &TimerOnOff, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerOnOff() ) );
 
+// clang-format off
 // TODO settings
 Client.SetServerAddr ( DEFAULT_SERVER_ADDRESS );
+// clang-format on
 }
 
 bool CLlconVST::GetName ( char* cName )

@@ -189,9 +189,11 @@ void CHighPrecisionTimer::run()
     {
         // call processing routine by fireing signal
 
+// clang-format off
 // TODO by emit a signal we leave the high priority thread -> maybe use some
 //      other connection type to have something like a true callback, e.g.
 //      "Qt::DirectConnection" -> Can this work?
+// clang-format on
 
         emit timeout();
 
@@ -837,7 +839,9 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         else
         {
             // processing with multithreading
+// clang-format off
 // TODO optimization of the MTBlockSize value
+// clang-format on
             const int iMTBlockSize = 10; // every 10 users a new thread is created
             const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
 
@@ -921,7 +925,9 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         if ( bUseMultithreading )
         {
             // introduced by kraney (#653): each thread must complete within the 1 or 2ms time budget for the timer
+// clang-format off
 // TODO determine at startup by running a small benchmark
+// clang-format on
             const int iMaximumMixOpsInTimeBudget = 500; // approximate limit as observed on GCP e2-standard instance
             const int iMTBlockSize = iMaximumMixOpsInTimeBudget / iNumClients; // number of ops = block size * total number of clients
             const int iNumBlocks   = ( iNumClients - 1 ) / iMTBlockSize + 1;
@@ -1395,9 +1401,11 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
             // OPUS encoding
             if ( pCurOpusEncoder != nullptr )
             {
+// clang-format off
 // TODO find a better place than this: the setting does not change all the time so for speed
 //      optimization it would be better to set it only if the network frame size is changed
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+// clang-format on
 
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
                                                &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],

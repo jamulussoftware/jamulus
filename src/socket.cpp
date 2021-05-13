@@ -32,7 +32,9 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
 
+// clang-format off
 // TODO check for error and exit application on error
+// clang-format on
 
     WSADATA wsa;
     WSAStartup ( MAKEWORD(1, 0), &wsa );
@@ -271,14 +273,18 @@ void CSocket::OnDataReceived()
         if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
         {
 
+// clang-format off
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
+// clang-format on
 
             emit ProtcolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
         }
         else
         {
 
+// clang-format off
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
+// clang-format on
 
             emit ProtcolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
         }

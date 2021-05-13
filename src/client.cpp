@@ -304,8 +304,10 @@ void CClient::OnNewConnection()
     Channel.CreateReqConnClientsList();
     CreateServerJitterBufferMessage();
 
+// clang-format off
 // TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
 Channel.CreateReqChannelLevelListMes();
+// clang-format on
 }
 
 void CClient::CreateServerJitterBufferMessage()

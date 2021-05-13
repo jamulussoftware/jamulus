@@ -466,9 +466,11 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
+// clang-format off
 // TODO compatibility to old version (< 3.6.1)
 // NOTE that the strCurAddr and "check for empty" can be removed if compatibility mode is removed
 vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralservaddr" );
+// clang-format on
 
     // directory server addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
@@ -494,6 +496,7 @@ vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "central
         eCentralServerAddressType = AT_DEFAULT;
     }
 
+// clang-format off
 // TODO compatibility to old version (<3.4.7)
 if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
 {
@@ -503,6 +506,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
         eCentralServerAddressType = AT_CUSTOM;
     }
 }
+// clang-format on
 
     // window position of the main window
     vecWindowPosMain = FromBase64ToByteArray (
@@ -835,7 +839,9 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
         pServer->SetCentralServerAddressType ( AT_DEFAULT );
     }
 
+// clang-format off
 // TODO compatibility to old version
+// clang-format on
 if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
 {
     // only the case that manual was set in old ini must be considered

@@ -1400,7 +1400,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>Aktiviere den Feedback-Schutz um ein akustisches Feedback zwischen Mikrofon und Lautsprechern zu erkennen.</translation>
+        <translation>Aktiviere den Feedback-Schutz, um ein akustisches Feedback zwischen Mikrofon und Lautsprechern zu erkennen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="348"/>

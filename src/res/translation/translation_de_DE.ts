@@ -3859,7 +3859,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../windows/sound.cpp" line="563"/>
         <source>No ASIO audio device driver found.</source>
-        <translation>Kein ASIO Audio Treiber gefunden.</translation>
+        <translation>Kein ASIO-Audio-Treiber gefunden.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="564"/>

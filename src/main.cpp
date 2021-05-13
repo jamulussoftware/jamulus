@@ -741,8 +741,10 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE(resources);
 
 
+// clang-format off
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
+// clang-format on
 
 
     try

@@ -668,6 +668,7 @@ void CNetBufWithStats::UpdateAutoSetting()
                              dWeightUp,
                              dWeightDown );
 
+// clang-format off
 /*
 // TEST store important detection parameters in file for debugging
 static FILE* pFile = fopen ( "test.dat", "w" );
@@ -683,6 +684,7 @@ else
     icnt++;
 }
 */
+// clang-format on
 
     // apply a hysteresis
     iCurAutoBufferSizeSetting =

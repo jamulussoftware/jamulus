@@ -129,8 +129,10 @@ public:
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
 
+// clang-format off
 // TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
 void CreateReqChannelLevelListMes();
+// clang-format on
 
     void CreateVersionAndOSMes();
     void CreateRecorderStateMes ( const ERecorderState eRecorderState );

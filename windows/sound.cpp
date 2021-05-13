@@ -320,6 +320,7 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
                         &HWBufferInfo.lPreferredSize,
                         &HWBufferInfo.lGranularity );
 
+// clang-format off
 /*
 // TEST
 #include <QMessageBox>
@@ -327,8 +328,11 @@ QMessageBox::information ( 0, "APP_NAME", QString("lMinSize: %1, lMaxSize: %2, l
                            arg(HWBufferInfo.lMinSize).arg(HWBufferInfo.lMaxSize).arg(HWBufferInfo.lPreferredSize).arg(HWBufferInfo.lGranularity) );
 _exit(1);
 */
+// clang-format on
 
+// clang-format off
 // TODO see https://github.com/EddieRingle/portaudio/blob/master/src/hostapi/asio/pa_asio.cpp#L1654 (SelectHostBufferSizeForUnspecifiedUserFramesPerBuffer)
+// clang-format on
 
     // calculate "nearest" buffer size and set internal parameter accordingly
     // first check minimum and maximum values
@@ -738,7 +742,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
             }
 
             case ASIOSTFloat32LSB: // IEEE 754 32 bit float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -748,7 +754,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTFloat64LSB: // IEEE 754 64 bit double float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -758,7 +766,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB16: // 32 bit data with 16 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -768,7 +778,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB18: // 32 bit data with 18 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -778,7 +790,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB20: // 32 bit data with 20 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -788,7 +802,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB24: // 32 bit data with 24 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -798,7 +814,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt16MSB:
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 // flip bits
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
@@ -809,7 +827,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt24MSB:
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // because the bits are flipped, we do not have to perform the
@@ -823,7 +843,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB:
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // flip bits and convert to 16 bit
@@ -834,7 +856,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTFloat32MSB: // IEEE 754 32 bit float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -845,7 +869,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTFloat64MSB: // IEEE 754 64 bit double float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -856,7 +882,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB16: // 32 bit data with 16 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -866,7 +894,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB18: // 32 bit data with 18 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -876,7 +906,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB20: // 32 bit data with 20 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -886,7 +918,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB24: // 32 bit data with 24 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     vecsMultChanAudioSndCrd[2 * iCurSample + i] =
@@ -923,7 +957,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
             }
 
             case ASIOSTInt24LSB:
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert current sample in 24 bit format
@@ -952,7 +988,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
             }
 
             case ASIOSTFloat32LSB: // IEEE 754 32 bit float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const float fCurSam = static_cast<float> (
@@ -964,7 +1002,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTFloat64LSB: // IEEE 754 64 bit double float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const double fCurSam = static_cast<double> (
@@ -976,7 +1016,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB16: // 32 bit data with 16 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
@@ -989,7 +1031,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB18: // 32 bit data with 18 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
@@ -1002,7 +1046,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB20: // 32 bit data with 20 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
@@ -1015,7 +1061,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
 	        case ASIOSTInt32LSB24: // 32 bit data with 24 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
@@ -1028,7 +1076,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt16MSB:
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 // flip bits
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
@@ -1038,7 +1088,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt24MSB:
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // because the bits are flipped, we do not have to perform the
@@ -1051,7 +1103,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB:
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit and flip bits
@@ -1064,7 +1118,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTFloat32MSB: // IEEE 754 32 bit float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const float fCurSam = static_cast<float> (
@@ -1077,7 +1133,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTFloat64MSB: // IEEE 754 64 bit double float, as found on Intel x86 architecture
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const double fCurSam = static_cast<double> (
@@ -1090,7 +1148,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB16: // 32 bit data with 16 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
@@ -1103,7 +1163,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB18: // 32 bit data with 18 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
@@ -1116,7 +1178,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB20: // 32 bit data with 20 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
@@ -1129,7 +1193,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 break;
 
             case ASIOSTInt32MSB24: // 32 bit data with 24 bit alignment
+// clang-format off
 // NOT YET TESTED
+// clang-format on
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit

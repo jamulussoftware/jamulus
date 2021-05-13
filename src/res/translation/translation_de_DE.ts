@@ -2359,7 +2359,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="222"/>
         <source>Mixer Rows</source>
-        <translation>Mischpult Reihen</translation>
+        <translation>Mischpult-Reihen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="297"/>

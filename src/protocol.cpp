@@ -640,10 +640,12 @@ void CProtocol::ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                    const int               iRecCounter,
                                    const int               iRecID )
 {
+// clang-format off
 /*
 // TEST channel implementation: randomly delete protocol messages (50 % loss)
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
 */
+// clang-format on
 
     // In case we received a message and returned an answer but our answer
     // did not make it to the receiver, he will resend his message. We check
@@ -865,10 +867,12 @@ void CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMe
                                                  const int               iRecID,
                                                  const CHostAddress&     InetAddr )
 {
+// clang-format off
 /*
 // TEST channel implementation: randomly delete protocol messages (50 % loss)
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
 */
+// clang-format on
 
     // check which type of message we received and do action
     switch ( iRecID )
@@ -2884,8 +2888,10 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
 
     // Extract actual data -----------------------------------------------------
 
+// clang-format off
 // TODO this memory allocation is done in the real time thread but should be
 //      done in the low priority protocol management thread
+// clang-format on
 
     vecbyMesBodyData.Init ( iLenBy );
 

@@ -304,8 +304,10 @@ void CClient::OnNewConnection()
     Channel.CreateReqConnClientsList();
     CreateServerJitterBufferMessage();
 
+// clang-format off
 // TODO needed for compatibility to old servers >= 3.4.6 and <= 3.5.12
 Channel.CreateReqChannelLevelListMes();
+// clang-format on
 }
 
 void CClient::CreateServerJitterBufferMessage()
@@ -1010,11 +1012,13 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
     // process audio data
     pMyClientObj->ProcessSndCrdAudioData ( psData );
 
+// clang-format off
 /*
 // TEST do a soundcard jitter measurement
 static CTimingMeas JitterMeas ( 1000, "test2.dat" );
 JitterMeas.Measure();
 */
+// clang-format on
 }
 
 void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )

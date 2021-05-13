@@ -108,6 +108,7 @@ void CJamClient::Disconnect()
 QString CJamClient::TranslateChars (const QString& input) const
 {
     // Allow letters and numbers
+    // clang-format off
     static const char charmap[256] = {
         '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
         '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
@@ -126,6 +127,7 @@ QString CJamClient::TranslateChars (const QString& input) const
         'a', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i',
         'd', 'n', 'o', 'o', 'o', 'o', 'o', '_', 'o', 'u', 'u', 'u', 'u', 'y', 'p', 'y'
     };
+    // clang-format on
 
     QByteArray r = input.toLatin1();
 

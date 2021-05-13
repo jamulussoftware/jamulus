@@ -189,9 +189,11 @@ void CHighPrecisionTimer::run()
     {
         // call processing routine by fireing signal
 
+// clang-format off
 // TODO by emit a signal we leave the high priority thread -> maybe use some
 //      other connection type to have something like a true callback, e.g.
 //      "Qt::DirectConnection" -> Can this work?
+// clang-format on
 
         emit timeout();
 
@@ -810,9 +812,11 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
+// clang-format off
 /*
 static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TEST do a timer jitter measurement
 */
+// clang-format on
     // Get data from all connected clients -------------------------------------
     // some inits
     int  iNumClients          = 0; // init connected client counter
@@ -1411,9 +1415,11 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
         // OPUS encoding
         if ( pCurOpusEncoder != nullptr )
         {
+// clang-format off
 // TODO find a better place than this: the setting does not change all the time so for speed
 //      optimization it would be better to set it only if the network frame size is changed
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
+// clang-format on
 
             for ( size_t iB = 0; iB < (size_t)vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {

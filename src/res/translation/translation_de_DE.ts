@@ -1006,7 +1006,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation>Audio/Netzwerk &amp;Einstellungen</translation>
+        <translation>Audio/Netzwerk-&amp;Einstellungen...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>

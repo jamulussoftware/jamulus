@@ -1050,7 +1050,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientdlg.cpp" line="319"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation>Selbst-Justage aller &amp;Fader</translation>
+        <translation type="unfinished">Automatisches Einpegeln (aller &amp;Fader)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="700"/>

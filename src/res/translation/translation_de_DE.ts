@@ -3864,7 +3864,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../windows/sound.cpp" line="564"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
-        <translation>Bitte installiere einen ASIO Treiber bevor Du %1 betreibst. Wenn Du ein Gerät mit ASIO Unterstützung hast, installiere dessen offiziellen ASIO Treiber. Wenn nicht, mußt Du Dir einen universellen Treiber wie z.B. ASIO4ALL herunterladen und installieren.</translation>
+        <translation>Bitte installiere einen ASIO-Treiber bevor Du %1 startest. Wenn Du ein Gerät mit ASIO-Unterstützung hast, installiere dessen offiziellen ASIO-Treiber. Wenn nicht, mußt Du Dir einen universellen Treiber wie z.B. ASIO4ALL herunterladen und installieren.</translation>
     </message>
     <message>
         <source>No ASIO audio device (driver) found.</source>

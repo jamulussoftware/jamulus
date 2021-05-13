@@ -889,7 +889,7 @@
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation>Audio Feedback oder lautes Signal erkannt.
+        <translation>Audio-Feedback oder lautes Signal erkannt.
 
 Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos; aktiviert. Bitte behebe zunächst die Ursache des Feedback-Problems, bevor Du die Stummschaltung wieder rückgängig machst.</translation>
     </message>

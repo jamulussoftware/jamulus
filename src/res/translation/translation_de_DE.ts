@@ -1380,7 +1380,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation>Anzahl Mischpult Reihen</translation>
+        <translation>Anzahl der Mischpult-Reihen</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="338"/>

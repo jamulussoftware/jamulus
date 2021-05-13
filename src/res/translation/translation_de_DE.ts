@@ -882,7 +882,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1050"/>
         <source>Enable feedback detection</source>
-        <translation>Aktiviere Feedback Erkennung</translation>
+        <translation>Aktiviere Feedback-Erkennung</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1054"/>

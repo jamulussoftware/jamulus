@@ -382,7 +382,7 @@ win32 {
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
         icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
- 
+
         INSTALLS += target desktop icons
     }
 }

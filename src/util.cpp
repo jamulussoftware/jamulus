@@ -573,6 +573,8 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : CBaseDlg ( parent )
 // Help menu -------------------------------------------------------------------
 CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )
 {
+    QAction* pAction;
+
     // standard help menu consists of about and what's this help
     if ( bIsClient )
     {
@@ -586,8 +588,10 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
-    addAction ( tr ( "&About Jamulus..." ), this, SLOT ( OnHelpAbout() ) );
-    addAction ( tr ( "About &Qt..." ), this, SLOT ( OnHelpAboutQt() ) );
+    pAction = addAction ( tr ( "&About Jamulus..." ), this, SLOT ( OnHelpAbout() ) );
+    pAction->setMenuRole(QAction::AboutRole);
+    pAction = addAction ( tr ( "About &Qt..." ), this, SLOT ( OnHelpAboutQt() ) );
+    pAction->setMenuRole(QAction::AboutQtRole);
 }
 
 

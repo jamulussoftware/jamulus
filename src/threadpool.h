@@ -35,14 +35,15 @@
 #include <functional>
 #include <stdexcept>
 
-class ThreadPool {
+class CThreadPool
+{
 public:
-    ThreadPool() = default;
-    ThreadPool(size_t);
+    CThreadPool() = default;
+    CThreadPool(size_t);
     template<class F, class... Args>
     auto enqueue(F&& f, Args&&... args)
         -> std::future<typename std::result_of<F(Args...)>::type>;
-    ~ThreadPool();
+    ~CThreadPool();
 private:
     // need to keep track of threads so we can join them
     std::vector< std::thread > workers;
@@ -56,7 +57,7 @@ private:
 };
 
 // the constructor just launches some amount of workers
-inline ThreadPool::ThreadPool(size_t threads)
+inline CThreadPool::CThreadPool(size_t threads)
     :   stop(false)
 {
     for(size_t i = 0;i<threads;++i)
@@ -85,7 +86,7 @@ inline ThreadPool::ThreadPool(size_t threads)
 
 // add new work item to the pool
 template<class F, class... Args>
-auto ThreadPool::enqueue(F&& f, Args&&... args)
+auto CThreadPool::enqueue(F&& f, Args&&... args)
     -> std::future<typename std::result_of<F(Args...)>::type>
 {
     using return_type = typename std::result_of<F(Args...)>::type;
@@ -100,7 +101,7 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
 
         // don't allow enqueueing after stopping the pool
         if(stop)
-            throw std::runtime_error("enqueue on stopped ThreadPool");
+            throw std::runtime_error("enqueue on stopped CThreadPool");
 
         tasks.emplace([task](){ (*task)(); });
     }
@@ -109,7 +110,7 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
 }
 
 // the destructor joins all threads
-inline ThreadPool::~ThreadPool()
+inline CThreadPool::~CThreadPool()
 {
     {
         std::unique_lock<std::mutex> lock(queue_mutex);

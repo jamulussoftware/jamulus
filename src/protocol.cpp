@@ -2881,8 +2881,8 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
 
 // clang-format off
 // TODO this memory allocation is done in the real time thread but should be
-// clang-format on
 //      done in the low priority protocol management thread
+// clang-format on
 
     vecbyMesBodyData.Init ( iLenBy );
 

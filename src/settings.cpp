@@ -841,7 +841,6 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument&   IniXMLDocument
 
 // clang-format off
 // TODO compatibility to old version
-// clang-format on
 if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
 {
     // only the case that manual was set in old ini must be considered
@@ -850,6 +849,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         pServer->SetCentralServerAddressType ( AT_CUSTOM );
     }
 }
+// clang-format on
 
     if ( !CommandLineOptions.contains ( "--centralserver" ) &&
          !CommandLineOptions.contains ( "--directoryserver" ) )

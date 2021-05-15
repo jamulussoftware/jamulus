@@ -1,6 +1,9 @@
 
 ### 3.8.0beta2dev <- NOTE: the release version number will be 3.8.0 ###
 
+- Server: Improvements to multi-threading performance (#960)
+  (contributed by @menzels, @softins)
+
 - Github autobuild for Mac now uses Xcode 11.7 and SDK 10.15 for compatibility
   with Qt5 (#1655).
   (contributed by @softins)

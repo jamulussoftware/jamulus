@@ -1166,11 +1166,13 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInf
 
         // size of current list entry
         const int iCurListEntrLen =
-            1 /* chan ID */ + 2 /* country */ +
-            4 /* instrument */ + 1 /* skill level */ +
-            4 /* IP address */ +
-            2 /* utf-8 str. size */ + strUTF8Name.size() +
-            2 /* utf-8 str. size */ + strUTF8City.size();
+            1 + // chan ID
+            2 + // country
+            4 + // instrument
+            1 + // skill level
+            4 + // IP address
+            2 + strUTF8Name.size() + // utf-8 str. size / str.
+            2 + strUTF8City.size(); // utf-8 str. size / str.
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );
@@ -1301,10 +1303,11 @@ void CProtocol::CreateChanInfoMes ( const CChannelCoreInfo ChanInfo )
 
     // size of current list entry
     const int iEntrLen =
-        2 /* country */ +
-        4 /* instrument */ + 1 /* skill level */ +
-        2 /* utf-8 str. size */ + strUTF8Name.size() +
-        2 /* utf-8 str. size */ + strUTF8City.size();
+        2 + // country
+        4 + // instrument
+        1 + // skill level
+        2 + strUTF8Name.size() + // utf-8 str. size / str.
+        2 + strUTF8City.size(); // utf-8 str. size / str.
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -1398,10 +1401,10 @@ void CProtocol::CreateChatTextMes ( const QString strChatText )
     // convert chat text string to utf-8
     const QByteArray strUTF8ChatText = strChatText.toUtf8();
 
-    const int iStrUTF8Len = strUTF8ChatText.size(); // get utf-8 string size
+    const int iStrUTF8Len = strUTF8ChatText.size(); // get utf-8 str. size / string
 
     // size of message body
-    const int iEntrLen = 2 /* utf-8 string size */ + iStrUTF8Len;
+    const int iEntrLen = 2 + iStrUTF8Len; // utf-8 str. size / string
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -1444,13 +1447,13 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
 
     // size of current message body
     const int iEntrLen =
-        4 /* netw size */ +
-        2 /* block size fact */ +
-        1 /* num chan */ +
-        4 /* sam rate */ +
-        2 /* audiocod type */ +
-        2 /* version */ +
-        4 /* audiocod arg */;
+        4 + // netw size
+        2 + // block size fact
+        1 + // num chan
+        4 + // sam rate
+        2 + // audiocod type
+        2 + // version
+        4; // audiocod arg
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -1486,13 +1489,13 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
 
     // size of current message body
     const int iEntrLen =
-        4 /* netw size */ +
-        2 /* block size fact */ +
-        1 /* num chan */ +
-        4 /* sam rate */ +
-        2 /* audiocod type */ +
-        2 /* flags */ +
-        4 /* audiocod arg */;
+        4 + // netw size
+        2 + // block size fact
+        1 + // num chan
+        4 + // sam rate
+        2 + // audiocod type
+        2 + // flags
+        4; // audiocod arg
 
     // check size
     if ( vecData.Size() != iEntrLen )
@@ -1674,8 +1677,8 @@ void CProtocol::CreateVersionAndOSMes()
 
     // size of current message body
     const int iEntrLen =
-        1 /* operating system */ +
-        2 /* version utf-8 string size */ + strUTF8Version.size();
+        1 + // operating system
+        2 + strUTF8Version.size(); // version utf-8 str. size / string
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -1873,13 +1876,13 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
 
     // size of current message body
     const int iEntrLen =
-        2 /* server internal port number */ +
-        2 /* country */ +
-        1 /* maximum number of connected clients */ +
-        1 /* is permanent flag */ +
-        2 /* name utf-8 string size */ + strUTF8Name.size() +
-        2 /* server internal address utf-8 string size */ + strUTF8LInetAddr.size() +
-        2 /* city utf-8 string size */ + strUTF8City.size();
+        2 + // server internal port number
+        2 + // country
+        1 + // maximum number of connected clients
+        1 + // is permanent flag
+        2 + strUTF8Name.size() + // name utf-8 str. size / str.
+        2 + strUTF8LInetAddr.size() + // server internal address utf-8 str. size / str.
+        2 + strUTF8City.size(); // city utf-8 str. size / str.
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -2000,15 +2003,15 @@ void CProtocol::CreateCLRegisterServerExMes ( const CHostAddress&    InetAddr,
 
     // size of current message body
     const int iEntrLen =
-        2 /* server internal port number */ +
-        2 /* country */ +
-        1 /* maximum number of connected clients */ +
-        1 /* is permanent flag */ +
-        2 /* name utf-8 string size */ + strUTF8Name.size() +
-        2 /* server internal address utf-8 string size */ + strUTF8LInetAddr.size() +
-        2 /* city utf-8 string size */ + strUTF8City.size() +
-        1 /* operating system */ +
-        2 /* version utf-8 string size */ + strUTF8Version.size();
+        2 + // server internal port number
+        2 + // country
+        1 + // maximum number of connected clients
+        1 + // is permanent flag
+        2 + strUTF8Name.size() + // name utf-8 str. size / str.
+        2 + strUTF8LInetAddr.size() + // server internal address utf-8 str. size / str.
+        2 + strUTF8City.size() + // city utf-8 str. size / str.
+        1 + // operating system
+        2 + strUTF8Version.size(); // version utf-8 str. size / str.
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -2175,14 +2178,14 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
 
         // size of current list entry
         const int iCurListEntrLen =
-            4 /* IP address */ +
-            2 /* port number */ +
-            2 /* country */ +
-            1 /* maximum number of connected clients */ +
-            1 /* is permanent flag */ +
-            2 /* name utf-8 string size */ + strUTF8Name.size() +
-            2 /* empty string */ +
-            2 /* city utf-8 string size */ + strUTF8City.size();
+            4 + // IP address
+            2 + // port number
+            2 + // country
+            1 + // maximum number of connected clients
+            1 + // is permanent flag
+            2 + strUTF8Name.size() + // name utf-8 str. size / str.
+            2 + // empty string
+            2 + strUTF8City.size(); // city utf-8 str. size / str.
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );
@@ -2323,9 +2326,9 @@ void CProtocol::CreateCLRedServerListMes ( const CHostAddress&        InetAddr,
 
         // size of current list entry
         const int iCurListEntrLen =
-            4 /* IP address */ +
-            2 /* port number */ +
-            1 /* name utf-8 string size */ + strUTF8Name.size();
+            4 + // IP address
+            2 + // port number
+            1 + strUTF8Name.size(); // name utf-8 str. size / str.
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );
@@ -2498,8 +2501,8 @@ void CProtocol::CreateCLVersionAndOSMes ( const CHostAddress& InetAddr )
 
     // size of current message body
     const int iEntrLen =
-        1 /* operating system */ +
-        2 /* version utf-8 string size */ + strUTF8Version.size();
+        1 + // operating system
+        2 + strUTF8Version.size(); // version utf-8 str. size / str.
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -2586,11 +2589,13 @@ void CProtocol::CreateCLConnClientsListMes ( const CHostAddress&          InetAd
 
         // size of current list entry
         const int iCurListEntrLen =
-            1 /* chan ID */ + 2 /* country */ +
-            4 /* instrument */ + 1 /* skill level */ +
-            4 /* IP address */ +
-            2 /* utf-8 str. size */ + strUTF8Name.size() +
-            2 /* utf-8 str. size */ + strUTF8City.size();
+            1 + // chan ID
+            2 + // country
+            4 + // instrument
+            1 + // skill level
+            4 + // IP address
+            2 + strUTF8Name.size() + // utf-8 str. size / str.
+            2 + strUTF8City.size(); // utf-8 str. size / str.
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );

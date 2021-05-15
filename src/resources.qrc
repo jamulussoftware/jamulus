@@ -38,6 +38,7 @@
         <file>res/CLEDGreySmall.png</file>
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellowSmall.png</file>
+        <file>res/CLEDBlackSmall.png</file>
         <file>res/IndicatorGreen.png</file>
         <file>res/IndicatorYellow.png</file>
         <file>res/IndicatorRed.png</file>
@@ -47,6 +48,10 @@
         <file>res/HLEDYellowSmall.png</file>
         <file>res/IndicatorRedFancy.png</file>
         <file>res/IndicatorYellowFancy.png</file>
+        <file>res/LEDGreenSmall.png</file>
+        <file>res/LEDBlackSmall.png</file>
+        <file>res/LEDRedSmall.png</file>
+        <file>res/LEDYellowSmall.png</file>
     </qresource>
     <qresource prefix="/png/fader">
         <file>res/faderbackground.png</file>

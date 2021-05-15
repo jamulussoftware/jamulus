@@ -499,6 +499,17 @@ enum EGUIDesign
     GD_SLIMFADER = 2
 };
 
+// MeterStyle enum -------------------------------------------------------------
+enum EMeterStyle
+{
+    // used for settings -> enum values should be fixed
+    MT_LED       = 0,
+    MT_BAR       = 1,
+    MT_SLIM_BAR  = 2,
+    MT_SLIM_LED  = 3,
+    MT_SMALL_LED = 4
+};
+
 // Server licence type enum ----------------------------------------------------
 enum ELicenceType
 {

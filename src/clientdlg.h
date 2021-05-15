@@ -85,6 +85,7 @@ public:
 
 protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
+    void SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void SetMyWindowTitle ( const int iNumClients );
     void ShowConnectionSetupDialog();
     void ShowGeneralSettings ( int iTab );
@@ -224,6 +225,7 @@ public slots:
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
+    void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );
     void OnAudioChannelsChanged() { UpdateRevSelection(); }

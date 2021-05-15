@@ -729,6 +729,10 @@ DISTFILES += ChangeLog \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/LEDBlackSmall.png \
+    src/res/LEDGreenSmall.png \
+    src/res/LEDRedSmall.png \
+    src/res/LEDYellowSmall.png \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \

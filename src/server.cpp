@@ -846,6 +846,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // prepare and decode connected channels
         if ( !bUseMT )
         {
+            // run the OPUS decoder for all data blocks
             DecodeReceiveDataBlocks ( this, 0, iNumClients - 1, iNumClients );
         }
         else
@@ -977,6 +978,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
     }
 }
 
+// This is a static method used as a callback, and does not inherit a "this" pointer,
+// so it is necessary for the server instance to be passed as a parameter.
 void CServer::DecodeReceiveDataBlocks ( CServer*  pServer,
                                         const int iStartChanCnt,
                                         const int iStopChanCnt,
@@ -989,6 +992,8 @@ void CServer::DecodeReceiveDataBlocks ( CServer*  pServer,
     }
 }
 
+// This is a static method used as a callback, and does not inherit a "this" pointer,
+// so it is necessary for the server instance to be passed as a parameter.
 void CServer::MixEncodeTransmitDataBlocks ( CServer*  pServer,
                                             const int iStartChanCnt,
                                             const int iStopChanCnt,
@@ -1101,7 +1106,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt,
         // get current number of OPUS coded bytes
         const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetCeltNumCodedBytes();
 
-        for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+        for ( size_t iB = 0; iB < (size_t)vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
         {
             // get data
             const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
@@ -1410,10 +1415,10 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
 //      optimization it would be better to set it only if the network frame size is changed
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-            for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+            for ( size_t iB = 0; iB < (size_t)vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[(long)iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
                                                iClientFrameSizeSamples,
                                                &vecvecbyCodedData[iChanCnt][0],
                                                iCeltNumCodedBytes );

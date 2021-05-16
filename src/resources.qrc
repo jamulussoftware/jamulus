@@ -54,6 +54,7 @@
         <file>res/ledbuttonpressed.png</file>
         <file>res/mixerboardbackground.png</file>
         <file>res/transparent1x1.png</file>
+        <file>res/mutediconorange.png</file>
     </qresource>
     <qresource prefix="/png/instr">
         <file>res/instruments/none.png</file>

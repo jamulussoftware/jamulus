@@ -1037,7 +1037,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="700"/>
         <source>Directory Server</source>
-        <translation type="unfinished">Servidor Central</translation>
+        <translation type="unfinished">Servidor de Diretório</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="746"/>
@@ -1557,7 +1557,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="309"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Endereço do Servidor Central Personalizado</translation>
+        <translation type="unfinished">Endereço do Servidor de Diretório Personalizado</translation>
     </message>
     <message>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
@@ -1805,12 +1805,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="310"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="unfinished">Deixe este campo em branco excepto se necessitar de introduzir um endereço alternativo de um servidor central.</translation>
+        <translation type="unfinished">Deixe este campo em branco excepto se necessitar de introduzir um endereço alternativo de um servidor de diretório.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="315"/>
         <source>Directory server address combo box</source>
-        <translation type="unfinished">Caixa de Selecção do Servidor Central</translation>
+        <translation type="unfinished">Caixa de Selecção do Servidor de Diretório</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="319"/>
@@ -2520,7 +2520,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1073"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Endereço do Servidor Central Personalizado:</translation>
+        <translation type="unfinished">Endereço do Servidor de Diretório Personalizado:</translation>
     </message>
     <message>
         <source>Directory Server Address:</source>
@@ -3244,7 +3244,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../serverdlg.cpp" line="72"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished">Se a caixa de seleção Tornar Meu Servidor Público fôr seleccionada, isto apresentará se o registro no servidor central foi bem-sucedido. Se o registo falhar, escolha outra lista de servidores.</translation>
+        <translation type="unfinished">Se a caixa de seleção Tornar Meu Servidor Público fôr seleccionada, isto apresentará se o registro no servidor de diretório foi bem-sucedido. Se o registo falhar, escolha outra lista de servidores.</translation>
     </message>
     <message>
         <source>Default directory server type combo box</source>
@@ -3258,22 +3258,22 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../serverdlg.cpp" line="63"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished">Se a caixa de seleção Tornar Servidor Público estiver marcada, este servidor irá registar-se no servidor central para que todos os utilizadores da aplicação o possam ver na lista de servidores e ligar-se a ele. O registo dos servidores é renovado periodicamente para garantir que todos os servidores na lista estão realmente disponíveis.</translation>
+        <translation type="unfinished">Se a caixa de seleção Tornar Servidor Público estiver marcada, este servidor irá registar-se no servidor de diretório para que todos os utilizadores da aplicação o possam ver na lista de servidores e ligar-se a ele. O registo dos servidores é renovado periodicamente para garantir que todos os servidores na lista estão realmente disponíveis.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="77"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Endereço do Servidor Central Personalizado</translation>
+        <translation type="unfinished">Endereço do Servidor de Diretório Personalizado</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="78"/>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished">O endereço do servidor central personalizado é o endereço IP ou URL do servidor central no qual a lista de servidores da Configuração da Ligação é gerida.</translation>
+        <translation type="unfinished">O endereço do servidor de diretório personalizado é o endereço IP ou URL do servidor de diretório no qual a lista de servidores da Configuração da Ligação é gerida.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
         <source>Directory server address line edit</source>
-        <translation type="unfinished">Caixa de edição do endereço do servidor central</translation>
+        <translation type="unfinished">Caixa de edição do endereço do servidor de diretório</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
@@ -3283,7 +3283,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="unfinished">Seleciona a lista de servidores (ou seja, endereço do servidor central) à qual seu servidor será adicionado.</translation>
+        <translation type="unfinished">Seleciona a lista de servidores (ou seja, endereço do servidor de diretório) à qual seu servidor será adicionado.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="87"/>
@@ -3630,7 +3630,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../util.h" line="647"/>
         <source>Directory Server full</source>
-        <translation type="unfinished">Servidor Central Cheio</translation>
+        <translation type="unfinished">Servidor de Diretório Cheio</translation>
     </message>
     <message>
         <location filename="../../util.h" line="650"/>
@@ -3728,7 +3728,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Endereço do Servidor Central Personalizado:</translation>
+        <translation type="unfinished">Endereço do Servidor de Diretório Personalizado:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="236"/>

@@ -859,12 +859,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation>Ljud och nätverks&amp;inställningar</translation>
+        <translation>Ljud och nätverks&amp;inställningar...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation>&amp;Avancerade inställningar</translation>
+        <translation>&amp;Avancerade inställningar...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="269"/>
@@ -874,17 +874,17 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlg.cpp" line="274"/>
         <source>Sort Users by &amp;Name</source>
-        <translation>Sortera kanalanvändare efter &amp;Namn</translation>
+        <translation>Sortera användarna efter &amp;Namn</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="277"/>
         <source>Sort Users by &amp;Instrument</source>
-        <translation>Sortera kanalanvändare efter &amp;Instrument</translation>
+        <translation>Sortera användarna efter &amp;Instrument</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>Sort Users by &amp;Group</source>
-        <translation>Sortera kanalanvändare efter &amp;Grupp</translation>
+        <translation>Sortera användarna efter &amp;Grupp</translation>
     </message>
     <message>
         <source>None</source>
@@ -1007,7 +1007,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlgbase.ui" line="522"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation>Ställ in ditt ljud, anslut till en server och börja jamma!</translation>
+        <translation>Ställ in ditt ljud och anslut till en server. Sedan är det bara att börja jamma!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="544"/>
@@ -1276,7 +1276,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="285"/>
         <source>Input Boost</source>
-        <translation>Ingångshöjning</translation>
+        <translation>ingångsförstärkning</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="286"/>
@@ -1286,7 +1286,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="300"/>
         <source>Input Boost combo box</source>
-        <translation>Ingångshöjnings knapp</translation>
+        <translation>ingångsförstärknings knapp</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
@@ -2110,7 +2110,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1108"/>
         <source>Input Boost</source>
-        <translation>Ingångshöjning</translation>
+        <translation>ingångsförstärkning</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1131"/>
@@ -2402,7 +2402,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../util.cpp" line="586"/>
         <source>What&apos;s &amp;This</source>
-        <translation>&amp;Var är detta</translation>
+        <translation>&amp;Vad är detta</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="588"/>

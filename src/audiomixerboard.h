@@ -127,6 +127,7 @@ protected:
     int          iRunningNewClientCnt;
     int          iInstrPicMaxWidth;
     EGUIDesign   eDesign;
+    QPixmap      BitmapMutedIcon;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, QGuiApplication::keyboardModifiers() == Qt::ShiftModifier ); /* isolate a channel from the group temporarily with shift-click-drag (#695) */ }

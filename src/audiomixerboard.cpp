@@ -29,7 +29,8 @@
 * CChanneFader                                                                 *
 \******************************************************************************/
 CChannelFader::CChannelFader ( QWidget* pNW ) :
-    eDesign ( GD_STANDARD )
+    eDesign ( GD_STANDARD ),
+    BitmapMutedIcon( QString::fromUtf8 ( ":/png/fader/res/mutediconorange.png" ) )
 {
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
@@ -86,7 +87,7 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     pPan->setRange               ( 0, AUD_MIX_PAN_MAX );
     pPan->setValue               ( AUD_MIX_PAN_MAX / 2 );
     pPan->setNotchesVisible      ( true );
-    pInfoLabel->setMinimumHeight ( pPanLabel->height() ); // prevents jitter when muting/unmuting (#811)
+    pInfoLabel->setMinimumHeight ( 14 ); // prevents jitter when muting/unmuting (#811)
     pInfoLabel->setAlignment     ( Qt::AlignTop );
     pPanInfoGrid->addWidget      ( pPanLabel, 0, Qt::AlignLeft | Qt::AlignTop );
     pPanInfoGrid->addWidget      ( pInfoLabel, 0, Qt::AlignHCenter | Qt::AlignTop );
@@ -490,12 +491,12 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
 {
     if ( bIsMute )
     {
-        // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
-        pInfoLabel->setText ( "<font color=\"orange\">&#128263;</font>" );
+        // show muted icon orange
+        pInfoLabel->setPixmap( BitmapMutedIcon );
     }
     else
     {
-        pInfoLabel->setText ( "" );
+        pInfoLabel->setPixmap( QPixmap() );
     }
 }
 

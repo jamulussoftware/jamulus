@@ -749,6 +749,7 @@ DISTFILES += ChangeLog \
     src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
     src/res/transparent1x1.png \
+    src/res/mutediconorange.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \

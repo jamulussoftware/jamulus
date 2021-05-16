@@ -2726,12 +2726,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Over Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Over &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2740,7 +2740,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../util.h" line="441"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Over Qt</translation>
     </message>
 </context>
 <context>

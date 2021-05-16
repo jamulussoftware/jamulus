@@ -2735,12 +2735,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">I&amp;nformazioni su Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informazioni su &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2749,7 +2749,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../util.h" line="441"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Informazioni su Qt</translation>
     </message>
 </context>
 <context>

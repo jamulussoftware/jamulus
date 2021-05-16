@@ -2760,12 +2760,12 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Sobre o Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sobre o &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2774,7 +2774,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../util.h" line="441"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sobre o Qt</translation>
     </message>
 </context>
 <context>

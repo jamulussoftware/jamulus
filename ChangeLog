@@ -1,6 +1,25 @@
 
 ### 3.8.0beta2dev <- NOTE: the release version number will be 3.8.0 ###
 
+- Mac: Updated to use Qt 5.12.10 for better compatibility with Big Sur (#1687).
+  This drops support for Yosemite and El Capitan in the distributed version.
+  (contributed by @softins)
+
+- Code: Added automatic code formatting with clang-format (#901, #1127).
+  (contributed by @passing)
+
+- GUI: Added "About Qt" to the help menu to display version of Qt (#1685, #1692).
+  (contributed by @softins)
+
+- GUI: Corrected the operation of What's This in the settings dialog (#1622, #1635).
+  (contributed by @dcorson-ticino-com)
+
+- GUI: Improved the muted speaker icon display (#1691).
+  (contributed by @henkdegroot)
+
+- Added new icons for Linux desktop use (#1672).
+  (contributed by @jujudusud)
+
 - Server: Improvements to multi-threading performance (#960)
   (contributed by @menzels, @softins)
 

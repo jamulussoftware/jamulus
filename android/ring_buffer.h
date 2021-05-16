@@ -30,35 +30,42 @@
  * Data is contained in a vector dynamically allocated.
  */
 template<typename T>
-class RingBuffer {
+class RingBuffer
+{
 public:
     /**
      * @brief RingBuffer
      * @param max maximum number of elements that can be contained in the ring buffer
      */
-    RingBuffer(std::size_t max = 0):mData(max),mRead(0),mWrite(0),mFull(false) { }
+    RingBuffer ( std::size_t max = 0 ) : mData ( max ), mRead ( 0 ), mWrite ( 0 ), mFull ( false ) {}
 
     /**
      * @brief Resets the ring_buffer
      * @param max maximum number of elements that can be contained in the ring buffer.
      */
-    void reset(std::size_t max = 0) {
-        mData = std::vector<T>(max);
-        mRead = 0;
+    void reset ( std::size_t max = 0 )
+    {
+        mData  = std::vector<T> ( max );
+        mRead  = 0;
         mWrite = 0;
-        mFull = false;
+        mFull  = false;
     }
 
     /**
      * @brief Current number of elements contained in the ring buffer
      * @return
      */
-    std::size_t size() const {
+    std::size_t size() const
+    {
         std::size_t size = capacity();
-        if(!mFull) {
-            if(mWrite >= mRead) {
+        if ( !mFull )
+        {
+            if ( mWrite >= mRead )
+            {
                 size = mWrite - mRead;
-            } else {
+            }
+            else
+            {
                 size = capacity() + mWrite - mRead;
             }
         }
@@ -75,7 +82,7 @@ public:
      * @brief whether the ring buffer is empty.
      * @return
      */
-    bool isEmpty() const { return !isFull() && (mRead == mWrite); }
+    bool isEmpty() const { return !isFull() && ( mRead == mWrite ); }
 
     /**
      * @brief Maximum number of elements in the ring buffer
@@ -87,7 +94,8 @@ public:
      * @brief Adds a single value
      * @param v the value to add
      */
-    void put(const T &v) {
+    void put ( const T& v )
+    {
         mData[mWrite] = v;
         forward();
     }
@@ -97,12 +105,16 @@ public:
      * @param v the value read
      * @return true if the value was read
      */
-    bool get(T&v) {
-        if(!isEmpty()) {
+    bool get ( T& v )
+    {
+        if ( !isEmpty() )
+        {
             v = mData[mRead];
             backward();
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
@@ -112,13 +124,15 @@ public:
      * @param v pointer to the consecutive values
      * @param count number of consecutive values.
      */
-    void put(const T *v, std::size_t count) {
-        std::size_t avail = mWrite - capacity();
-        std::size_t to_copy = std::min(count,avail);
-        memcpy(mData.data() + mWrite,v, to_copy*sizeof(T));
-        forward(to_copy);
-        if(to_copy < count) {
-            put(v+to_copy,count - to_copy);
+    void put ( const T* v, std::size_t count )
+    {
+        std::size_t avail   = mWrite - capacity();
+        std::size_t to_copy = std::min ( count, avail );
+        memcpy ( mData.data() + mWrite, v, to_copy * sizeof ( T ) );
+        forward ( to_copy );
+        if ( to_copy < count )
+        {
+            put ( v + to_copy, count - to_copy );
         }
     }
 
@@ -128,45 +142,57 @@ public:
      * @param count Maximum available size in the memory area
      * @return actual number of elements read.
      */
-    std::size_t get(T *v, std::size_t count) {
+    std::size_t get ( T* v, std::size_t count )
+    {
         std::size_t avail = 0;
-        if(mRead < mWrite) {
+        if ( mRead < mWrite )
+        {
             avail = mWrite - mRead;
-        } else {
+        }
+        else
+        {
             avail = mRead - capacity();
         }
-        std::size_t to_copy = std::min(count, avail);
-        memcpy(v, mData.data() + mRead, to_copy * sizeof(T));
-        backward(to_copy);
-        if((size()>0)&&(count > to_copy)) {
-            return to_copy + get(v + to_copy, count - to_copy);
-        } else {
+        std::size_t to_copy = std::min ( count, avail );
+        memcpy ( v, mData.data() + mRead, to_copy * sizeof ( T ) );
+        backward ( to_copy );
+        if ( ( size() > 0 ) && ( count > to_copy ) )
+        {
+            return to_copy + get ( v + to_copy, count - to_copy );
+        }
+        else
+        {
             return to_copy;
         }
     }
+
 private:
-    void forward() {
-        if(isFull()) {
-            mRead = (mRead + 1) % capacity();
+    void forward()
+    {
+        if ( isFull() )
+        {
+            mRead = ( mRead + 1 ) % capacity();
         }
-        mWrite = (mWrite + 1) % capacity();
-        mFull = (mRead == mWrite);
+        mWrite = ( mWrite + 1 ) % capacity();
+        mFull  = ( mRead == mWrite );
     }
 
-    void forward(std::size_t count) {
-        for(std::size_t i=0; i<count;i++) {
+    void forward ( std::size_t count )
+    {
+        for ( std::size_t i = 0; i < count; i++ )
+        {
             forward();
         }
     }
 
-    void backward(std::size_t count) {
+    void backward ( std::size_t count )
+    {
         mFull = false;
-        mRead = (mRead + count) % capacity();
+        mRead = ( mRead + count ) % capacity();
     }
 
     std::vector<T> mData;
-    std::size_t mRead;  /** offset to reading point */
-    std::size_t mWrite; /** offset to writing point */
-    bool mFull;
+    std::size_t    mRead;  /** offset to reading point */
+    std::size_t    mWrite; /** offset to writing point */
+    bool           mFull;
 };
-

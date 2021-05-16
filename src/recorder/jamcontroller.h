@@ -28,32 +28,33 @@
 
 #include "jamrecorder.h"
 
-namespace recorder {
+namespace recorder
+{
 
 class CJamController : public QObject
 {
     Q_OBJECT
 public:
-    explicit CJamController( CServer* pNServer );
+    explicit CJamController ( CServer* pNServer );
 
-    bool GetRecorderInitialised() { return bRecorderInitialised; }
-    QString GetRecorderErrMsg() { return strRecorderErrMsg; }
-    bool GetRecordingEnabled() { return bEnableRecording; }
-    void RequestNewRecording();
-    void SetEnableRecording ( bool bNewEnableRecording, bool isRunning );
-    QString GetRecordingDir() { return strRecordingDir; }
-    void SetRecordingDir ( QString newRecordingDir, int iServerFrameSizeSamples, bool bDisableRecording );
+    bool           GetRecorderInitialised() { return bRecorderInitialised; }
+    QString        GetRecorderErrMsg() { return strRecorderErrMsg; }
+    bool           GetRecordingEnabled() { return bEnableRecording; }
+    void           RequestNewRecording();
+    void           SetEnableRecording ( bool bNewEnableRecording, bool isRunning );
+    QString        GetRecordingDir() { return strRecordingDir; }
+    void           SetRecordingDir ( QString newRecordingDir, int iServerFrameSizeSamples, bool bDisableRecording );
     ERecorderState GetRecorderState();
 
 private:
     void OnRecordingFailed ( QString error );
 
-    CServer*      pServer;
+    CServer* pServer;
 
-    bool          bRecorderInitialised;
-    bool          bEnableRecording;
-    QString       strRecordingDir;
-    QThread*      pthJamRecorder;
+    bool     bRecorderInitialised;
+    bool     bEnableRecording;
+    QString  strRecordingDir;
+    QThread* pthJamRecorder;
 
     CJamRecorder* pJamRecorder;
     QString       strRecorderErrMsg;
@@ -70,14 +71,13 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
-
 };
 
-}
+} // namespace recorder
 
 // This must be included AFTER the above definition of class CJamController,
 // because server.h defines CServer, which contains an instance of CJamController,
 // and therefore needs to know the its size.
 #include "../server.h"
 
-Q_DECLARE_METATYPE(int16_t)
+Q_DECLARE_METATYPE ( int16_t )

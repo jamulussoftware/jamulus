@@ -39,10 +39,10 @@ class CSound : public CSoundBase, public oboe::AudioStreamCallback
 
 public:
     static const uint8_t RING_FACTOR;
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
              void*          arg,
              const QString& strMIDISetup,
-             const bool     ,
+             const bool,
              const QString& );
     virtual ~CSound() {}
 
@@ -52,14 +52,14 @@ public:
 
     // Call backs for Oboe
     virtual oboe::DataCallbackResult onAudioReady ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );
-    virtual void onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result );
-    virtual void onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result );
+    virtual void                     onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result );
+    virtual void                     onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result );
 
-    struct Stats 
+    struct Stats
     {
         Stats() { reset(); }
-        void reset();
-        void log() const;
+        void        reset();
+        void        log() const;
         std::size_t frames_in;
         std::size_t frames_out;
         std::size_t frames_filled_out;
@@ -85,14 +85,14 @@ private:
     oboe::DataCallbackResult onAudioInput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );
     oboe::DataCallbackResult onAudioOutput ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );
 
-    void addOutputData(int channel_count);
+    void addOutputData ( int channel_count );
 
-    oboe::ManagedStream  mRecordingStream;
-    oboe::ManagedStream  mPlayStream;
+    oboe::ManagedStream mRecordingStream;
+    oboe::ManagedStream mPlayStream;
 
     // used to reach a state where the input buffer is
     // empty and the garbage in the first 500ms or so is discarded
-    static constexpr int32_t kNumCallbacksToDrain = 10;
-    int32_t mCountCallbacksToDrain = kNumCallbacksToDrain;
-    Stats   mStats;
+    static constexpr int32_t kNumCallbacksToDrain   = 10;
+    int32_t                  mCountCallbacksToDrain = kNumCallbacksToDrain;
+    Stats                    mStats;
 };

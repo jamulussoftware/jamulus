@@ -27,57 +27,56 @@
 #include "util.h"
 #include "global.h"
 
-
 /* Definitions ****************************************************************/
 // number of simulation network jitter buffers for evaluating the statistic
 // NOTE If you want to change this number, the code has to modified, too!
-#define NUM_STAT_SIMULATION_BUFFERS                 10
+#define NUM_STAT_SIMULATION_BUFFERS 10
 
 // hysteresis for buffer size decision to avoid fast changes if close to the bound
-#define FILTER_DECISION_HYSTERESIS                  0.1
+#define FILTER_DECISION_HYSTERESIS 0.1
 
 // definition of the upper error bound of the jitter buffers
-#define ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE          0.0005
-#define ERROR_RATE_BOUND                            ( ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE / 2 )
+#define ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE 0.0005
+#define ERROR_RATE_BOUND                   ( ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE / 2 )
 
 // definition of the upper jitter buffer error bound, if that one is reached we
 // have to speed up the filtering to quickly get out of a incorrect buffer
 // size state
-#define UP_MAX_ERROR_BOUND_DOUBLE_FRAME_SIZE        0.01
-#define UP_MAX_ERROR_BOUND                          ( UP_MAX_ERROR_BOUND_DOUBLE_FRAME_SIZE / 2 )
+#define UP_MAX_ERROR_BOUND_DOUBLE_FRAME_SIZE 0.01
+#define UP_MAX_ERROR_BOUND                   ( UP_MAX_ERROR_BOUND_DOUBLE_FRAME_SIZE / 2 )
 
 // each regular buffer access lead to a count for put and get, assuming 2.66 ms
 // blocks we have 15 s / 2.66 ms * 2 = approx. 11000
-#define MAX_STATISTIC_COUNT_DOUBLE_FRAME_SIZE       11000
+#define MAX_STATISTIC_COUNT_DOUBLE_FRAME_SIZE 11000
 
 // each regular buffer access lead to a count for put and get, assuming 1.33 ms
 // blocks we have 15 s / 1.33 ms * 2 = approx. 22500
-#define MAX_STATISTIC_COUNT                         22500
+#define MAX_STATISTIC_COUNT 22500
 
 // Note that the following definitions of the weigh constants assume a block
 // size of 128 samples at a sampling rate of 48 kHz.
-#define IIR_WEIGTH_UP_NORMAL_DOUBLE_FRAME_SIZE      0.999995
-#define IIR_WEIGTH_DOWN_NORMAL_DOUBLE_FRAME_SIZE    0.9999
-#define IIR_WEIGTH_UP_FAST_DOUBLE_FRAME_SIZE        0.9995
-#define IIR_WEIGTH_DOWN_FAST_DOUBLE_FRAME_SIZE      0.999
+#define IIR_WEIGTH_UP_NORMAL_DOUBLE_FRAME_SIZE   0.999995
+#define IIR_WEIGTH_DOWN_NORMAL_DOUBLE_FRAME_SIZE 0.9999
+#define IIR_WEIGTH_UP_FAST_DOUBLE_FRAME_SIZE     0.9995
+#define IIR_WEIGTH_DOWN_FAST_DOUBLE_FRAME_SIZE   0.999
 
 // convert numbers from 128 samples case using http://www.tsdconseil.fr/tutos/tuto-iir1-en.pdf
 // and https://octave-online.net:
 // gamma = exp(-Ts/tau), after some calculations we get: x=0.999995;exp(64/128*log(x))
-#define IIR_WEIGTH_UP_NORMAL                        0.9999975
-#define IIR_WEIGTH_DOWN_NORMAL                      0.99994999875
-#define IIR_WEIGTH_UP_FAST                          0.9997499687422
-#define IIR_WEIGTH_DOWN_FAST                        0.999499875
-
+#define IIR_WEIGTH_UP_NORMAL   0.9999975
+#define IIR_WEIGTH_DOWN_NORMAL 0.99994999875
+#define IIR_WEIGTH_UP_FAST     0.9997499687422
+#define IIR_WEIGTH_DOWN_FAST   0.999499875
 
 /* Classes ********************************************************************/
 // Buffer base class -----------------------------------------------------------
-template<class TData> class CBuffer
+template<class TData>
+class CBuffer
 {
 public:
     CBuffer() {}
 
-    void Init ( const int  iNewMemSize )
+    void Init ( const int iNewMemSize )
     {
         // allocate memory for actual data buffer
         vecMemory.Init ( iNewMemSize );
@@ -91,8 +90,7 @@ public:
         iMemSize = iNewMemSize;
     }
 
-    virtual bool Put ( const CVector<TData>& vecData,
-                       const int             iInSize )
+    virtual bool Put ( const CVector<TData>& vecData, const int iInSize )
     {
         // copy new data in internal buffer
         int iCurPos = 0;
@@ -116,9 +114,7 @@ public:
         else
         {
             // data can be written in one step
-            std::copy ( vecData.begin(),
-                        vecData.begin() + iInSize,
-                        vecMemory.begin() + iPutPos );
+            std::copy ( vecData.begin(), vecData.begin() + iInSize, vecMemory.begin() + iPutPos );
 
             // set the put position one block further (no wrap around needs
             // to be considered here)
@@ -144,8 +140,7 @@ public:
         return true; // no error check in base class, always return ok
     }
 
-    virtual bool Get ( CVector<TData>& vecData,
-                       const int       iOutSize )
+    virtual bool Get ( CVector<TData>& vecData, const int iOutSize )
     {
         // copy data from internal buffer in output buffer
         int iCurPos = 0;
@@ -169,9 +164,7 @@ public:
         else
         {
             // data can be read in one step
-            std::copy ( vecMemory.begin() + iGetPos,
-                        vecMemory.begin() + iGetPos + iOutSize,
-                        vecData.begin() );
+            std::copy ( vecMemory.begin() + iGetPos, vecMemory.begin() + iGetPos + iOutSize, vecData.begin() );
 
             // set the get position one block further (no wrap around needs
             // to be considered here)
@@ -219,7 +212,12 @@ public:
     }
 
 protected:
-    enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
+    enum EBufState
+    {
+        BS_OK,
+        BS_FULL,
+        BS_EMPTY
+    };
 
     CVector<TData> vecMemory;
     int            iMemSize;
@@ -228,18 +226,13 @@ protected:
     EBufState      eBufState;
 };
 
-
 // Network buffer (jitter buffer) ----------------------------------------------
 class CNetBuf
 {
 public:
-    CNetBuf ( const bool bNIsSim = false ) :
-        iSequenceNumberAtGetPos ( 0 ), bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
+    CNetBuf ( const bool bNIsSim = false ) : iSequenceNumberAtGetPos ( 0 ), bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
 
-    void Init ( const int  iNewBlockSize,
-                const int  iNewNumBlocks,
-                const bool bNUseSequenceNumber,
-                const bool bPreserve = false );
+    void Init ( const int iNewBlockSize, const int iNewNumBlocks, const bool bNUseSequenceNumber, const bool bPreserve = false );
 
     void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
 
@@ -247,27 +240,31 @@ public:
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
 protected:
-    enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
+    enum EBufState
+    {
+        BS_OK,
+        BS_FULL,
+        BS_EMPTY
+    };
 
-    int GetAvailSpace() const;
-    int GetAvailData() const;
+    int  GetAvailSpace() const;
+    int  GetAvailData() const;
     void Resize ( const int iNewNumBlocks, const int iNewBlockSize );
 
-    CVector<CVector<uint8_t> > vecvecMemory;
-    CVector<int>               veciBlockValid;
-    int                        iNumBlocksMemory;
-    int                        iBlockGetPos;
-    int                        iBlockPutPos;
-    int                        iBlockSize;
-    uint8_t                    iSequenceNumberAtGetPos; // uint8_t so that it wraps automatically
-    EBufState                  eBufState;
-    bool                       bUseSequenceNumber;
-    bool                       bIsSimulation;
-    bool                       bIsInitialized;
+    CVector<CVector<uint8_t>> vecvecMemory;
+    CVector<int>              veciBlockValid;
+    int                       iNumBlocksMemory;
+    int                       iBlockGetPos;
+    int                       iBlockPutPos;
+    int                       iBlockSize;
+    uint8_t                   iSequenceNumberAtGetPos; // uint8_t so that it wraps automatically
+    EBufState                 eBufState;
+    bool                      bUseSequenceNumber;
+    bool                      bIsSimulation;
+    bool                      bIsInitialized;
 
     static constexpr int iNumBytesSeqNum = 1; // per definition 1 byte sequence counter
 };
-
 
 // Network buffer (jitter buffer) with statistic calculations ------------------
 class CNetBufWithStats : public CNetBuf
@@ -275,20 +272,15 @@ class CNetBufWithStats : public CNetBuf
 public:
     CNetBufWithStats();
 
-    void Init ( const int  iNewBlockSize,
-                const int  iNewNumBlocks,
-                const bool bNUseSequenceNumber,
-                const bool bPreserve = false );
+    void Init ( const int iNewBlockSize, const int iNewNumBlocks, const bool bNUseSequenceNumber, const bool bPreserve = false );
 
     void SetUseDoubleSystemFrameSize ( const bool bNDSFSize ) { bUseDoubleSystemFrameSize = bNDSFSize; }
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
-    int GetAutoSetting() { return iCurAutoBufferSizeSetting; }
-    void GetErrorRates ( CVector<double>& vecErrRates,
-                         double&          dLimit,
-                         double&          dMaxUpLimit );
+    int  GetAutoSetting() { return iCurAutoBufferSizeSetting; }
+    void GetErrorRates ( CVector<double>& vecErrRates, double& dLimit, double& dMaxUpLimit );
 
 protected:
     void UpdateAutoSetting();
@@ -300,33 +292,32 @@ protected:
     CNetBuf    SimulationBuffer[NUM_STAT_SIMULATION_BUFFERS];
     int        viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS];
 
-    double     dCurIIRFilterResult;
-    int        iCurDecidedResult;
-    int        iInitCounter;
-    int        iCurAutoBufferSizeSetting;
-    int        iMaxStatisticCount;
+    double dCurIIRFilterResult;
+    int    iCurDecidedResult;
+    int    iInitCounter;
+    int    iCurAutoBufferSizeSetting;
+    int    iMaxStatisticCount;
 
-    bool       bUseDoubleSystemFrameSize;
-    double     dAutoFilt_WightUpNormal;
-    double     dAutoFilt_WightDownNormal;
-    double     dAutoFilt_WightUpFast;
-    double     dAutoFilt_WightDownFast;
-    double     dErrorRateBound;
-    double     dUpMaxErrorBound;
+    bool   bUseDoubleSystemFrameSize;
+    double dAutoFilt_WightUpNormal;
+    double dAutoFilt_WightDownNormal;
+    double dAutoFilt_WightUpFast;
+    double dAutoFilt_WightDownFast;
+    double dErrorRateBound;
+    double dUpMaxErrorBound;
 };
-
 
 // Conversion buffer (very simple buffer) --------------------------------------
 // For this very simple buffer no wrap around mechanism is implemented. We
 // assume here, that the applied buffers are an integer fraction of the total
 // buffer size.
-template<class TData> class CConvBuf
+template<class TData>
+class CConvBuf
 {
 public:
     CConvBuf() { Init ( 0 ); }
 
-    void Init ( const int  iNewMemSize,
-                const bool bNUseSequenceNumber = false )
+    void Init ( const int iNewMemSize, const bool bNUseSequenceNumber = false )
     {
         // allocate internal memory and reset read/write positions
         vecMemory.Init ( iNewMemSize );
@@ -361,9 +352,7 @@ public:
                     vecMemory.begin() );
     }
 
-    bool Put ( const CVector<TData>& vecData,
-               const int             iVecSize,
-               const TData           SequenceNumber = 0 )
+    bool Put ( const CVector<TData>& vecData, const int iVecSize, const TData SequenceNumber = 0 )
     {
         // calculate the end position after copying
         int iEnd = iPutPos + iVecSize;
@@ -378,9 +367,7 @@ public:
         if ( iEnd <= iBufferSize )
         {
             // copy new data in internal buffer
-            std::copy ( vecData.begin(),
-                        vecData.begin() + iVecSize,
-                        vecMemory.begin() + iPutPos );
+            std::copy ( vecData.begin(), vecData.begin() + iVecSize, vecMemory.begin() + iPutPos );
 
             // add optional sequence number (NOTE that we currently
             // only support a single sequence number per packet)
@@ -407,19 +394,15 @@ public:
         return vecMemory;
     }
 
-    void GetAll ( CVector<TData>& vecsData,
-                  const int       iVecSize )
+    void GetAll ( CVector<TData>& vecsData, const int iVecSize )
     {
         iPutPos = 0;
 
         // copy data from internal buffer in given buffer
-        std::copy ( vecMemory.begin(),
-                    vecMemory.begin() + iVecSize,
-                    vecsData.begin() );
+        std::copy ( vecMemory.begin(), vecMemory.begin() + iVecSize, vecsData.begin() );
     }
 
-    bool Get ( CVector<TData>& vecsData,
-               const int       iVecSize )
+    bool Get ( CVector<TData>& vecsData, const int iVecSize )
     {
         // calculate the input size and the end position after copying
         const int iEnd = iGetPos + iVecSize;
@@ -428,9 +411,7 @@ public:
         if ( iEnd <= iBufferSize )
         {
             // copy new data from internal buffer
-            std::copy ( vecMemory.begin() + iGetPos,
-                        vecMemory.begin() + iGetPos + iVecSize,
-                        vecsData.begin() );
+            std::copy ( vecMemory.begin() + iGetPos, vecMemory.begin() + iGetPos + iVecSize, vecsData.begin() );
 
             // set buffer pointer one block further
             iGetPos = iEnd;

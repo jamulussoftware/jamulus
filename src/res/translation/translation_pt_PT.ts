@@ -568,7 +568,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="71"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Fechar</translation>
+        <translation>&amp;Fechar</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="140"/>
@@ -992,12 +992,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="254"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Definições de Audio/&amp;Rede...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Definições Avançadas...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="271"/>
@@ -1032,7 +1032,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="319"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajustar Auto. todos os &amp;Faders</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="700"/>
@@ -1058,29 +1058,31 @@
     <message>
         <location filename="../../clientdlg.cpp" line="951"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligar</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="963"/>
         <source>Settings</source>
-        <translation type="unfinished">Definições</translation>
+        <translation>Definições</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="973"/>
         <source>Chat</source>
-        <translation type="unfinished">Mensagens</translation>
+        <translation>Mensagens</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1050"/>
         <source>Enable feedback detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar detecção de feedback</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1054"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation type="unfinished"></translation>
+        <translation>Foi detectado feedback de audio ou sinal alto.
+
+O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. Por favor resolva o problema de feedback antes de continuar.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1140"/>
@@ -1373,17 +1375,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../../clientsettingsdlg.cpp" line="549"/>
         <location filename="../../util.cpp" line="819"/>
         <source>None</source>
-        <translation type="unfinished">Nenhum</translation>
+        <translation>Nenhum</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1129"/>
         <source>Center</source>
-        <translation type="unfinished">Centro</translation>
+        <translation>Centro</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1142"/>
         <source>R</source>
-        <translation type="unfinished">R</translation>
+        <translation>R</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of the </source>
@@ -1624,38 +1626,38 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="41"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Fechar</translation>
+        <translation>&amp;Fechar</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="51"/>
         <source>Local Audio Input Fader</source>
-        <translation type="unfinished">Fader da Entrada Local de Áudio</translation>
+        <translation>Fader da Entrada Local de Áudio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="52"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="unfinished">Controla os níveis relativos dos canais esquerdo e direito. Para um sinal mono, actua como uma panorâmica entre os dois canais. Por exemplo, se um microfone estiver ligado no canal direito e um instrumento estiver ligado no canal esquerdo, mais alto que o microfone, mova o fader de áudio numa direção em que a etiqueta acima do fader mostre </translation>
+        <translation>Controla os níveis relativos dos canais esquerdo e direito. Para um sinal mono, actua como uma panorâmica entre os dois canais. Por exemplo, se um microfone estiver ligado no canal direito e um instrumento estiver ligado no canal esquerdo, mais alto que o microfone, mova o fader de áudio numa direção em que a etiqueta acima do fader mostre </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="58"/>
         <location filename="../../clientsettingsdlg.cpp" line="1136"/>
         <source>L</source>
-        <translation type="unfinished">L</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="58"/>
         <source>, where</source>
-        <translation type="unfinished">, onde</translation>
+        <translation>, onde</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
         <source>is the current attenuation indicator.</source>
-        <translation type="unfinished">é o indicador de atenuação atual.</translation>
+        <translation>é o indicador de atenuação atual.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="65"/>
         <source>Local audio input fader (left/right)</source>
-        <translation type="unfinished">Fader de entrada local de áudio (esquerdo/direito)</translation>
+        <translation>Fader de entrada local de áudio (esquerdo/direito)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="69"/>
@@ -1773,17 +1775,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="285"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliação de Sinal de Entrada</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="286"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta definição permite aumentar o nível de sinal de entrada até um factor de 10 (+20dB). Se o seu som está muito baixo, tente primeiro aumentar o nível posicionando-se mais perto do microfone, ajustando o seu equipamento de áudio ou aumentando o volume nas definições do seu sistema operativo. Apenas se tudo isto falhar deverá tentar esta opção. Se o seu som estiver demasiado alto, distorcido ou a clipar, esta opção não irá ajudar. A distorção irá permanecer. Em vez disso, diminua o volume do sinal de entrada afastando-se do microfone, ajustando o seu equipamento de som ou baixando o volume nas definições do seu sistema operativo.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="300"/>
         <source>Input Boost combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caixa de selecção da Ampliação de Sinal de Entrada</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="304"/>
@@ -1808,32 +1810,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de Linhas do Painel de Mistura</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="338"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajusta o número de linhas utilizadas para organizar o painel de mistura.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="341"/>
         <source>Number of Mixer Panel Rows spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caixa de Selecção do Número de Linhas do Painel de Mistura</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Protecção Contra Feedback</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Active a protecção contra feedback para detectar feedback acústico entre o microfone e as colunas.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="348"/>
         <source>Feedback Protection check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caixa de Activação da Protecção Contra Feedback</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="352"/>
@@ -1938,57 +1940,57 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="453"/>
         <source>Musician Profile</source>
-        <translation type="unfinished">Perfil do músico</translation>
+        <translation>Perfil do músico</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="454"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished">Escreva o seu nome ou um pseudónimo aqui para que os outros músicos com quem quer tocar saibam quem você é. Além disso, pode também definir uma imagem do instrumento que toca e uma bandeira do país onde vive. A cidade onde vive e o nível de habilidade com o seu instrumento também podem ser adicionados.</translation>
+        <translation>Escreva o seu nome ou um pseudónimo aqui para que os outros músicos com quem quer tocar saibam quem você é. Além disso, pode também definir uma imagem do instrumento que toca e uma bandeira do país onde vive. A cidade onde vive e o nível de habilidade com o seu instrumento também podem ser adicionados.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="458"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished">O que definir aqui aparecerá por baixo do seu fader na secção de mistura quando estiver ligado a um servidor Esta etiqueta também será exibida em cada cliente que estiver ligado ao mesmo servidor.</translation>
+        <translation>O que definir aqui aparecerá por baixo do seu fader na secção de mistura quando estiver ligado a um servidor Esta etiqueta também será exibida em cada cliente que estiver ligado ao mesmo servidor.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="464"/>
         <source>Alias or name edit box</source>
-        <translation type="unfinished">Caixa de edição do nome ou pseudônimo</translation>
+        <translation>Caixa de edição do nome ou pseudônimo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="466"/>
         <source>Instrument picture button</source>
-        <translation type="unfinished">Botão da imagem do instrumento</translation>
+        <translation>Botão da imagem do instrumento</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="468"/>
         <source>Country flag button</source>
-        <translation type="unfinished">Botão da bandeira do país</translation>
+        <translation>Botão da bandeira do país</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="470"/>
         <source>City edit box</source>
-        <translation type="unfinished">Caixa de edição da cidade</translation>
+        <translation>Caixa de edição da cidade</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="472"/>
         <source>Skill level combo box</source>
-        <translation type="unfinished">Caixa do nível de habilidade</translation>
+        <translation>Caixa do nível de habilidade</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="555"/>
         <source>Beginner</source>
-        <translation type="unfinished">Principiante</translation>
+        <translation>Principiante</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="561"/>
         <source>Intermediate</source>
-        <translation type="unfinished">Intermediário</translation>
+        <translation>Intermediário</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="567"/>
         <source>Expert</source>
-        <translation type="unfinished">Avançado</translation>
+        <translation>Avançado</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="707"/>
@@ -2021,237 +2023,237 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.cpp" line="820"/>
         <source>Drum Set</source>
-        <translation type="unfinished">Bateria</translation>
+        <translation>Bateria</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="821"/>
         <source>Djembe</source>
-        <translation type="unfinished">Djembe</translation>
+        <translation>Djembe</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="822"/>
         <source>Electric Guitar</source>
-        <translation type="unfinished">Guitarra Elétrica</translation>
+        <translation>Guitarra Elétrica</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="823"/>
         <source>Acoustic Guitar</source>
-        <translation type="unfinished">Guitarra Acústica</translation>
+        <translation>Guitarra Acústica</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="824"/>
         <source>Bass Guitar</source>
-        <translation type="unfinished">Baixo</translation>
+        <translation>Baixo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="825"/>
         <source>Keyboard</source>
-        <translation type="unfinished">Teclado</translation>
+        <translation>Teclado</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="826"/>
         <source>Synthesizer</source>
-        <translation type="unfinished">Sintetizador</translation>
+        <translation>Sintetizador</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="827"/>
         <source>Grand Piano</source>
-        <translation type="unfinished">Piano de Cauda</translation>
+        <translation>Piano de Cauda</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="828"/>
         <source>Accordion</source>
-        <translation type="unfinished">Acordeão</translation>
+        <translation>Acordeão</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="829"/>
         <source>Vocal</source>
-        <translation type="unfinished">Voz</translation>
+        <translation>Voz</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="830"/>
         <source>Microphone</source>
-        <translation type="unfinished">Microfone</translation>
+        <translation>Microfone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="831"/>
         <source>Harmonica</source>
-        <translation type="unfinished">Harmónica</translation>
+        <translation>Harmónica</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="832"/>
         <source>Trumpet</source>
-        <translation type="unfinished">Trompete</translation>
+        <translation>Trompete</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="833"/>
         <source>Trombone</source>
-        <translation type="unfinished">Trombone</translation>
+        <translation>Trombone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="834"/>
         <source>French Horn</source>
-        <translation type="unfinished">Trompa Francesa</translation>
+        <translation>Trompa Francesa</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="835"/>
         <source>Tuba</source>
-        <translation type="unfinished">Tuba</translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="836"/>
         <source>Saxophone</source>
-        <translation type="unfinished">Saxofone</translation>
+        <translation>Saxofone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="837"/>
         <source>Clarinet</source>
-        <translation type="unfinished">Clarinete</translation>
+        <translation>Clarinete</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="838"/>
         <source>Flute</source>
-        <translation type="unfinished">Flauta</translation>
+        <translation>Flauta</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="839"/>
         <source>Violin</source>
-        <translation type="unfinished">Violino</translation>
+        <translation>Violino</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="840"/>
         <source>Cello</source>
-        <translation type="unfinished">Violoncelo</translation>
+        <translation>Violoncelo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="841"/>
         <source>Double Bass</source>
-        <translation type="unfinished">Contrabaixo</translation>
+        <translation>Contrabaixo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="842"/>
         <source>Recorder</source>
-        <translation type="unfinished">Gravador</translation>
+        <translation>Gravador</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="843"/>
         <source>Streamer</source>
-        <translation type="unfinished">Streamer</translation>
+        <translation>Streamer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="844"/>
         <source>Listener</source>
-        <translation type="unfinished">Ouvinte</translation>
+        <translation>Ouvinte</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="845"/>
         <source>Guitar+Vocal</source>
-        <translation type="unfinished">Guitarra+Voz</translation>
+        <translation>Guitarra+Voz</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="846"/>
         <source>Keyboard+Vocal</source>
-        <translation type="unfinished">Teclado+Voz</translation>
+        <translation>Teclado+Voz</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="847"/>
         <source>Bodhran</source>
-        <translation type="unfinished">Bodhrán</translation>
+        <translation>Bodhrán</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="848"/>
         <source>Bassoon</source>
-        <translation type="unfinished">Fagote</translation>
+        <translation>Fagote</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="849"/>
         <source>Oboe</source>
-        <translation type="unfinished">Oboé</translation>
+        <translation>Oboé</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="850"/>
         <source>Harp</source>
-        <translation type="unfinished">Harpa</translation>
+        <translation>Harpa</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="851"/>
         <source>Viola</source>
-        <translation type="unfinished">Viola de Arco</translation>
+        <translation>Viola de Arco</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="852"/>
         <source>Congas</source>
-        <translation type="unfinished">Congas</translation>
+        <translation>Congas</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="853"/>
         <source>Bongo</source>
-        <translation type="unfinished">Bongo</translation>
+        <translation>Bongo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="854"/>
         <source>Vocal Bass</source>
-        <translation type="unfinished">Voz Baixo</translation>
+        <translation>Voz Baixo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="855"/>
         <source>Vocal Tenor</source>
-        <translation type="unfinished">Voz Tenor</translation>
+        <translation>Voz Tenor</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="856"/>
         <source>Vocal Alto</source>
-        <translation type="unfinished">Voz Alto</translation>
+        <translation>Voz Alto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="857"/>
         <source>Vocal Soprano</source>
-        <translation type="unfinished">Voz Soprano</translation>
+        <translation>Voz Soprano</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="858"/>
         <source>Banjo</source>
-        <translation type="unfinished">Banjo</translation>
+        <translation>Banjo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="859"/>
         <source>Mandolin</source>
-        <translation type="unfinished">Bandolim</translation>
+        <translation>Bandolim</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="860"/>
         <source>Ukulele</source>
-        <translation type="unfinished">Ukulele</translation>
+        <translation>Ukulele</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="861"/>
         <source>Bass Ukulele</source>
-        <translation type="unfinished">Ukulele Baixo</translation>
+        <translation>Ukulele Baixo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="862"/>
         <source>Vocal Baritone</source>
-        <translation type="unfinished">Voz Barítono</translation>
+        <translation>Voz Barítono</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="863"/>
         <source>Vocal Lead</source>
-        <translation type="unfinished">Voz Principal</translation>
+        <translation>Voz Principal</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="864"/>
         <source>Mountain Dulcimer</source>
-        <translation type="unfinished">Saltério dos Apalaches</translation>
+        <translation>Saltério dos Apalaches</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="865"/>
         <source>Scratching</source>
-        <translation type="unfinished">Scratching</translation>
+        <translation>Scratching</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="866"/>
         <source>Rapping</source>
-        <translation type="unfinished">Rapping</translation>
+        <translation>Rapping</translation>
     </message>
 </context>
 <context>
@@ -2325,52 +2327,52 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="34"/>
         <source>My Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Meu Perfil</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="73"/>
         <source>Musician&apos;s Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Perfil do Músico</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="83"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome/Alcunha</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="90"/>
         <source>Instrument</source>
-        <translation type="unfinished">Instrumento</translation>
+        <translation>Instrumento</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="97"/>
         <source>Country</source>
-        <translation type="unfinished">País</translation>
+        <translation>País</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="104"/>
         <source>City</source>
-        <translation type="unfinished">Cidade</translation>
+        <translation>Cidade</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="111"/>
         <source>Skill</source>
-        <translation type="unfinished">Habilidade</translation>
+        <translation>Habilidade</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="198"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface de Utilizador</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="222"/>
         <source>Mixer Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Linhas de Mistura</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="297"/>
         <source>Audio/Network Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuração Audio/Rede</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="664"/>
@@ -2401,32 +2403,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1108"/>
         <source>Input Boost</source>
-        <translation type="unfinished"></translation>
+        <translation>Ampliação de Sinal de Entrada</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1131"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Protecção Contra Feedback</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1138"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1190"/>
         <source>Input Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Panorâmica da Entrada</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1201"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1275"/>
         <source>Center</source>
-        <translation type="unfinished">Centro</translation>
+        <translation>Centro</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2445,17 +2447,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="827"/>
         <source>Measurements</source>
-        <translation type="unfinished"></translation>
+        <translation>Medições</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1006"/>
         <source>Advanced Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurações Avançadas</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1047"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Central Personalizado:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1074"/>
@@ -2631,7 +2633,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="148"/>
         <source>Filter text, or # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrar texto, ou # para servidores ocupados</translation>
     </message>
     <message>
         <source>Type # for occupied servers</source>
@@ -3451,7 +3453,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="605"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation type="unfinished"></translation>
+        <translation>O Gravador falhou a inicialização. Por favor verifique se tem espaço em disco e permições e tente de novo. Erro: </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="845"/>
@@ -3627,7 +3629,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="49"/>
         <source>Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Canais</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="67"/>
@@ -3652,7 +3654,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="276"/>
         <source>Enable delay panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar Panorâmica do Delay</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
@@ -3873,12 +3875,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../windows/sound.cpp" line="563"/>
         <source>No ASIO audio device driver found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi encontrado um driver ASIO do dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="564"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor instale um driver ASIO driver antes de correr o %1. Se detém um dispositivo com suporte ASIO, instale o driver ASIO oficial. Se não, precisa de utilizar um driver ASIO universal como o ASIO4ALL.</translation>
     </message>
     <message>
         <source>No ASIO audio device (driver) found.</source>

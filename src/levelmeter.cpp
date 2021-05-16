@@ -27,18 +27,15 @@
 
 #include "levelmeter.h"
 
-
 /* Implementation *************************************************************/
-CLevelMeter::CLevelMeter ( QWidget* parent ) :
-    QWidget ( parent ),
-    eLevelMeterType ( MT_BAR )
+CLevelMeter::CLevelMeter ( QWidget* parent ) : QWidget ( parent ), eLevelMeterType ( MT_BAR )
 {
     // initialize LED meter
     QWidget*     pLEDMeter  = new QWidget();
     QVBoxLayout* pLEDLayout = new QVBoxLayout ( pLEDMeter );
     pLEDLayout->setAlignment ( Qt::AlignHCenter );
-    pLEDLayout->setMargin    ( 0 );
-    pLEDLayout->setSpacing   ( 0 );
+    pLEDLayout->setMargin ( 0 );
+    pLEDLayout->setSpacing ( 0 );
 
     // create LEDs plus the clip LED
     vecpLEDs.Init ( NUM_LEDS_INCL_CLIP_LED );
@@ -61,7 +58,7 @@ CLevelMeter::CLevelMeter ( QWidget* parent ) :
     pBarMeter = new QProgressBar();
     pBarMeter->setOrientation ( Qt::Vertical );
     pBarMeter->setRange ( 0, 100 * NUM_STEPS_LED_BAR ); // use factor 100 to reduce quantization (bar is continuous)
-    pBarMeter->setFormat ( "" ); // suppress percent numbers
+    pBarMeter->setFormat ( "" );                        // suppress percent numbers
 
     // setup stacked layout for meter type switching mechanism
     pStackedLayout = new QStackedLayout ( this );
@@ -81,10 +78,8 @@ CLevelMeter::CLevelMeter ( QWidget* parent ) :
     TimerClip.setSingleShot ( true );
     TimerClip.setInterval ( CLIP_IND_TIME_OUT_MS );
 
-
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerClip, &QTimer::timeout,
-        this, &CLevelMeter::ClipReset );
+    QObject::connect ( &TimerClip, &QTimer::timeout, this, &CLevelMeter::ClipReset );
 }
 
 CLevelMeter::~CLevelMeter()
@@ -130,51 +125,46 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
     SetBarMeterStyleAndClipStatus ( eNType, false );
 }
 
-void CLevelMeter::SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType,
-                                                  const bool            bIsClip )
+void CLevelMeter::SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType, const bool bIsClip )
 {
     switch ( eNType )
     {
     case MT_SLIM_BAR:
         if ( bIsClip )
         {
-            pBarMeter->setStyleSheet (
-                "QProgressBar        { border:     0px solid red;"
-                "                      margin:     0px;"
-                "                      padding:    0px;"
-                "                      width:      4px;"
-                "                      background: red; }"
-                "QProgressBar::chunk { background: green; }" );
+            pBarMeter->setStyleSheet ( "QProgressBar        { border:     0px solid red;"
+                                       "                      margin:     0px;"
+                                       "                      padding:    0px;"
+                                       "                      width:      4px;"
+                                       "                      background: red; }"
+                                       "QProgressBar::chunk { background: green; }" );
         }
         else
         {
-            pBarMeter->setStyleSheet (
-                "QProgressBar        { border:     0px;"
-                "                      margin:     0px;"
-                "                      padding:    0px;"
-                "                      width:      4px; }"
-                "QProgressBar::chunk { background: green; }" );
+            pBarMeter->setStyleSheet ( "QProgressBar        { border:     0px;"
+                                       "                      margin:     0px;"
+                                       "                      padding:    0px;"
+                                       "                      width:      4px; }"
+                                       "QProgressBar::chunk { background: green; }" );
         }
         break;
 
     default: /* MT_BAR */
         if ( bIsClip )
         {
-            pBarMeter->setStyleSheet (
-                "QProgressBar        { border:     2px solid red;"
-                "                      margin:     1px;"
-                "                      padding:    1px;"
-                "                      width:      15px;"
-                "                      background: transparent; }"
-                "QProgressBar::chunk { background: green; }" );
+            pBarMeter->setStyleSheet ( "QProgressBar        { border:     2px solid red;"
+                                       "                      margin:     1px;"
+                                       "                      padding:    1px;"
+                                       "                      width:      15px;"
+                                       "                      background: transparent; }"
+                                       "QProgressBar::chunk { background: green; }" );
         }
         else
         {
-            pBarMeter->setStyleSheet (
-                "QProgressBar        { margin:     1px;"
-                "                      padding:    1px;"
-                "                      width:      15px; }"
-                "QProgressBar::chunk { background: green; }" );
+            pBarMeter->setStyleSheet ( "QProgressBar        { margin:     1px;"
+                                       "                      padding:    1px;"
+                                       "                      width:      15px; }"
+                                       "QProgressBar::chunk { background: green; }" );
         }
         break;
     }
@@ -267,12 +257,11 @@ void CLevelMeter::ClipReset()
     }
 }
 
-
 CLevelMeter::cLED::cLED ( QWidget* parent ) :
-    BitmCubeRoundBlack  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
-    BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
+    BitmCubeRoundBlack ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
+    BitmCubeRoundGreen ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
     BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
-    BitmCubeRoundRed    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRedSmall.png" ) )
+    BitmCubeRoundRed ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRedSmall.png" ) )
 {
     // create LED label
     pLEDLabel = new QLabel ( "", parent );

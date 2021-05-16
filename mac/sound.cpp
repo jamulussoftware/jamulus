@@ -24,12 +24,11 @@
 
 #include "sound.h"
 
-
 /* Implementation *************************************************************/
-CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
                  void*          arg,
                  const QString& strMIDISetup,
-                 const bool     ,
+                 const bool,
                  const QString& ) :
     CSoundBase ( "CoreAudio", fpNewProcessCallback, arg, strMIDISetup ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
@@ -43,16 +42,9 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     // following lines of code:
     // tell the HAL to use the current thread as it's run loop
     CFRunLoopRef               theRunLoop = CFRunLoopGetCurrent();
-    AudioObjectPropertyAddress property   = { kAudioHardwarePropertyRunLoop,
-                                              kAudioObjectPropertyScopeGlobal,
-                                              kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property   = { kAudioHardwarePropertyRunLoop, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
 
-    AudioObjectSetPropertyData ( kAudioObjectSystemObject,
-                                 &property,
-                                 0,
-                                 NULL,
-                                 sizeof ( CFRunLoopRef ),
-                                 &theRunLoop );
+    AudioObjectSetPropertyData ( kAudioObjectSystemObject, &property, 0, NULL, sizeof ( CFRunLoopRef ), &theRunLoop );
 
     // initial query for available input/output sound devices in the system
     GetAvailableInOutDevices();
@@ -69,7 +61,6 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     iSelOutputLeftChannel      = 0;
     iSelOutputRightChannel     = 0;
 
-
     // Optional MIDI initialization --------------------------------------------
     if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
     {
@@ -84,7 +75,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
         for ( int i = 0; i < iNMIDISources; i++ )
         {
             MIDIEndpointRef src = MIDIGetSource ( i );
-            MIDIPortConnectSource ( midiInPortRef, src, NULL ) ;
+            MIDIPortConnectSource ( midiInPortRef, src, NULL );
         }
     }
 }
@@ -100,21 +91,12 @@ void CSound::GetAvailableInOutDevices()
     // first get property size of devices array and allocate memory
     stPropertyAddress.mSelector = kAudioHardwarePropertyDevices;
 
-    AudioObjectGetPropertyDataSize ( kAudioObjectSystemObject,
-                                     &stPropertyAddress,
-                                     0,
-                                     NULL,
-                                     &iPropertySize );
+    AudioObjectGetPropertyDataSize ( kAudioObjectSystemObject, &stPropertyAddress, 0, NULL, &iPropertySize );
 
     CVector<AudioDeviceID> vAudioDevices ( iPropertySize );
 
     // now actually query all devices present in the system
-    AudioObjectGetPropertyData ( kAudioObjectSystemObject,
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &vAudioDevices[0] );
+    AudioObjectGetPropertyData ( kAudioObjectSystemObject, &stPropertyAddress, 0, NULL, &iPropertySize, &vAudioDevices[0] );
 
     // calculate device count based on size of returned data array
     const UInt32 iDeviceCount = iPropertySize / sizeof ( AudioDeviceID );
@@ -126,12 +108,7 @@ void CSound::GetAvailableInOutDevices()
     iPropertySize               = sizeof ( AudioDeviceID );
     stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
 
-    if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
-                                      &stPropertyAddress,
-                                      0,
-                                      NULL,
-                                      &iPropertySize,
-                                      &audioInputDevice[lNumDevs] ) )
+    if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject, &stPropertyAddress, 0, NULL, &iPropertySize, &audioInputDevice[lNumDevs] ) )
     {
         throw CGenErr ( tr ( "CoreAudio input AudioHardwareGetProperty call failed. "
                              "It seems that no sound card is available in the system." ) );
@@ -140,12 +117,7 @@ void CSound::GetAvailableInOutDevices()
     iPropertySize               = sizeof ( AudioDeviceID );
     stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
-    if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
-                                      &stPropertyAddress,
-                                      0,
-                                      NULL,
-                                      &iPropertySize,
-                                      &audioOutputDevice[lNumDevs] ) )
+    if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject, &stPropertyAddress, 0, NULL, &iPropertySize, &audioOutputDevice[lNumDevs] ) )
     {
         throw CGenErr ( tr ( "CoreAudio output AudioHardwareGetProperty call failed. "
                              "It seems that no sound card is available in the system." ) );
@@ -170,23 +142,15 @@ void CSound::GetAvailableInOutDevices()
             bool    bIsOutput_i;
             bool    bIsOutput_j;
 
-            GetAudioDeviceInfos ( vAudioDevices[i],
-                                  strDeviceName_i,
-                                  bIsInput_i,
-                                  bIsOutput_i );
+            GetAudioDeviceInfos ( vAudioDevices[i], strDeviceName_i, bIsInput_i, bIsOutput_i );
 
-            GetAudioDeviceInfos ( vAudioDevices[j],
-                                  strDeviceName_j,
-                                  bIsInput_j,
-                                  bIsOutput_j );
+            GetAudioDeviceInfos ( vAudioDevices[j], strDeviceName_j, bIsInput_j, bIsOutput_j );
 
             // check if i device is input and j device is output and that we are
             // in range
             if ( bIsInput_i && bIsOutput_j && ( lNumDevs < MAX_NUMBER_SOUND_CARDS ) )
             {
-                strDriverNames[lNumDevs] = "in: " +
-                    strDeviceName_i + "/out: " +
-                    strDeviceName_j;
+                strDriverNames[lNumDevs] = "in: " + strDeviceName_i + "/out: " + strDeviceName_j;
 
                 // store audio device IDs
                 audioInputDevice[lNumDevs]  = vAudioDevices[i];
@@ -198,10 +162,7 @@ void CSound::GetAvailableInOutDevices()
     }
 }
 
-void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
-                                   QString&            strDeviceName,
-                                   bool&               bIsInput,
-                                   bool&               bIsOutput )
+void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID, QString& strDeviceName, bool& bIsInput, bool& bIsOutput )
 {
     UInt32                     iPropertySize;
     AudioObjectPropertyAddress stPropertyAddress;
@@ -218,11 +179,7 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
     iPropertySize            = 0;
     stPropertyAddress.mScope = kAudioDevicePropertyScopeInput;
 
-    AudioObjectGetPropertyDataSize ( DeviceID,
-                                     &stPropertyAddress,
-                                     0,
-                                     NULL,
-                                     &iPropertySize );
+    AudioObjectGetPropertyDataSize ( DeviceID, &stPropertyAddress, 0, NULL, &iPropertySize );
 
     bIsInput = ( iPropertySize > 0 ); // check if any input streams are available
 
@@ -230,11 +187,7 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
     iPropertySize            = 0;
     stPropertyAddress.mScope = kAudioDevicePropertyScopeOutput;
 
-    AudioObjectGetPropertyDataSize ( DeviceID,
-                                     &stPropertyAddress,
-                                     0,
-                                     NULL,
-                                     &iPropertySize );
+    AudioObjectGetPropertyDataSize ( DeviceID, &stPropertyAddress, 0, NULL, &iPropertySize );
 
     bIsOutput = ( iPropertySize > 0 ); // check if any output streams are available
 
@@ -245,12 +198,7 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
     iPropertySize               = sizeof ( CFStringRef );
 
-    AudioObjectGetPropertyData ( DeviceID,
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &sPropertyStringValue );
+    AudioObjectGetPropertyData ( DeviceID, &stPropertyAddress, 0, NULL, &iPropertySize, &sPropertyStringValue );
 
     // convert string
     if ( !ConvertCFStringToQString ( sPropertyStringValue, strDeviceName ) )
@@ -260,8 +208,7 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
     }
 }
 
-int CSound::CountChannels ( AudioDeviceID devID,
-                            bool          isInput )
+int CSound::CountChannels ( AudioDeviceID devID, bool isInput )
 {
     OSStatus err;
     UInt32   propSize;
@@ -280,13 +227,11 @@ int CSound::CountChannels ( AudioDeviceID devID,
     // in that case we assume that each input channel has its own buffer
     AudioObjectPropertyScope theScope = isInput ? kAudioDevicePropertyScopeInput : kAudioDevicePropertyScopeOutput;
 
-    AudioObjectPropertyAddress theAddress = { kAudioDevicePropertyStreamConfiguration,
-                                              theScope,
-                                              0 };
+    AudioObjectPropertyAddress theAddress = { kAudioDevicePropertyStreamConfiguration, theScope, 0 };
 
     AudioObjectGetPropertyDataSize ( devID, &theAddress, 0, NULL, &propSize );
 
-    AudioBufferList *buflist = (AudioBufferList*) malloc ( propSize );
+    AudioBufferList* buflist = (AudioBufferList*) malloc ( propSize );
 
     err = AudioObjectGetPropertyData ( devID, &theAddress, 0, NULL, &propSize, buflist );
 
@@ -356,41 +301,23 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
             // unregister callback functions for device property changes
             stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
-            AudioObjectRemovePropertyListener ( kAudioObjectSystemObject,
-                                                &stPropertyAddress,
-                                                deviceNotification,
-                                                this );
+            AudioObjectRemovePropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
 
             stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
 
-            AudioObjectRemovePropertyListener ( kAudioObjectSystemObject,
-                                                &stPropertyAddress,
-                                                deviceNotification,
-                                                this );
+            AudioObjectRemovePropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
 
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
-            AudioObjectRemovePropertyListener ( audioOutputDevice[lCurDev],
-                                                &stPropertyAddress,
-                                                deviceNotification,
-                                                this );
+            AudioObjectRemovePropertyListener ( audioOutputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
 
-            AudioObjectRemovePropertyListener ( audioInputDevice[lCurDev],
-                                                &stPropertyAddress,
-                                                deviceNotification,
-                                                this );
+            AudioObjectRemovePropertyListener ( audioInputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
 
             stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
 
-            AudioObjectRemovePropertyListener ( audioOutputDevice[lCurDev],
-                                                &stPropertyAddress,
-                                                deviceNotification,
-                                                this );
+            AudioObjectRemovePropertyListener ( audioOutputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
 
-            AudioObjectRemovePropertyListener ( audioInputDevice[lCurDev],
-                                                &stPropertyAddress,
-                                                deviceNotification,
-                                                this );
+            AudioObjectRemovePropertyListener ( audioInputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
         }
 
         // store ID of selected driver if initialization was successful
@@ -405,47 +332,29 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
         // setup callbacks for device property changes
         stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
-        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
-                                         &stPropertyAddress,
-                                         deviceNotification,
-                                         this );
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
 
-        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
-                                         &stPropertyAddress,
-                                         deviceNotification,
-                                         this );
+        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
 
         stPropertyAddress.mSelector = kAudioDevicePropertyDeviceIsAlive;
 
-        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
-                                         &stPropertyAddress,
-                                         deviceNotification,
-                                         this );
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
 
-        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
-                                         &stPropertyAddress,
-                                         deviceNotification,
-                                         this );
+        AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev], &stPropertyAddress, deviceNotification, this );
 
         stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
-        AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
-                                         &stPropertyAddress,
-                                         deviceNotification,
-                                         this );
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
 
         stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
 
-        AudioObjectAddPropertyListener ( kAudioObjectSystemObject,
-                                         &stPropertyAddress,
-                                         deviceNotification,
-                                         this );
+        AudioObjectAddPropertyListener ( kAudioObjectSystemObject, &stPropertyAddress, deviceNotification, this );
 
         // the device has changed, per definition we reset the channel
         // mapping to the defaults (first two available channels)
-        SetLeftInputChannel   ( 0 );
-        SetRightInputChannel  ( 1 );
-        SetLeftOutputChannel  ( 0 );
+        SetLeftInputChannel ( 0 );
+        SetRightInputChannel ( 1 );
+        SetLeftOutputChannel ( 0 );
         SetRightOutputChannel ( 1 );
 
         // store the current name of the driver
@@ -458,25 +367,20 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
 QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 {
     UInt32                      iPropertySize;
-    AudioStreamBasicDescription	CurDevStreamFormat;
+    AudioStreamBasicDescription CurDevStreamFormat;
     Float64                     inputSampleRate   = 0;
     Float64                     outputSampleRate  = 0;
     const Float64               fSystemSampleRate = static_cast<Float64> ( SYSTEM_SAMPLE_RATE_HZ );
     AudioObjectPropertyAddress  stPropertyAddress;
 
-    stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
-    stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
+    stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
+    stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
 
     // check input device sample rate
     stPropertyAddress.mSelector = kAudioDevicePropertyNominalSampleRate;
     iPropertySize               = sizeof ( Float64 );
 
-    if ( AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx],
-                                      &stPropertyAddress,
-                                      0,
-                                      NULL,
-                                      &iPropertySize,
-                                      &inputSampleRate ) )
+    if ( AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &inputSampleRate ) )
     {
         return QString ( tr ( "The audio input device is no longer available." ) );
     }
@@ -484,29 +388,21 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     if ( inputSampleRate != fSystemSampleRate )
     {
         // try to change the sample rate
-        if ( AudioObjectSetPropertyData ( audioInputDevice[iDriverIdx],
-                                          &stPropertyAddress,
-                                          0,
-                                          NULL,
-                                          sizeof ( Float64 ),
-                                          &fSystemSampleRate ) != noErr )
+        if ( AudioObjectSetPropertyData ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, sizeof ( Float64 ), &fSystemSampleRate ) !=
+             noErr )
         {
             return QString ( tr ( "Current system audio input device sample "
-                "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
-                "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
-                static_cast<int> ( inputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ );
+                                  "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
+                                  "Applications->Utilities and try to set a sample rate of %2 Hz." ) )
+                .arg ( static_cast<int> ( inputSampleRate ) )
+                .arg ( SYSTEM_SAMPLE_RATE_HZ );
         }
     }
 
     // check output device sample rate
     iPropertySize = sizeof ( Float64 );
 
-    if ( AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx],
-                                      &stPropertyAddress,
-                                      0,
-                                      NULL,
-                                      &iPropertySize,
-                                      &outputSampleRate ) )
+    if ( AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &outputSampleRate ) )
     {
         return QString ( tr ( "The audio output device is no longer available." ) );
     }
@@ -514,17 +410,14 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     if ( outputSampleRate != fSystemSampleRate )
     {
         // try to change the sample rate
-        if ( AudioObjectSetPropertyData ( audioOutputDevice[iDriverIdx],
-                                          &stPropertyAddress,
-                                          0,
-                                          NULL,
-                                          sizeof ( Float64 ),
-                                          &fSystemSampleRate ) != noErr )
+        if ( AudioObjectSetPropertyData ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, sizeof ( Float64 ), &fSystemSampleRate ) !=
+             noErr )
         {
             return QString ( tr ( "Current system audio output device sample "
-                "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
-                "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
-                static_cast<int> ( outputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ );
+                                  "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
+                                  "Applications->Utilities and try to set a sample rate of %2 Hz." ) )
+                .arg ( static_cast<int> ( outputSampleRate ) )
+                .arg ( SYSTEM_SAMPLE_RATE_HZ );
         }
     }
 
@@ -533,20 +426,11 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     stPropertyAddress.mSelector = kAudioDevicePropertyStreams;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeInput;
 
-    AudioObjectGetPropertyDataSize ( audioInputDevice[iDriverIdx],
-                                     &stPropertyAddress,
-                                     0,
-                                     NULL,
-                                     &iPropertySize );
+    AudioObjectGetPropertyDataSize ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize );
 
     CVector<AudioStreamID> vInputStreamIDList ( iPropertySize );
 
-    AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx],
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &vInputStreamIDList[0] );
+    AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &vInputStreamIDList[0] );
 
     const AudioStreamID inputStreamID = vInputStreamIDList[0];
 
@@ -555,20 +439,11 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     stPropertyAddress.mSelector = kAudioDevicePropertyStreams;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeOutput;
 
-    AudioObjectGetPropertyDataSize ( audioOutputDevice[iDriverIdx],
-                                     &stPropertyAddress,
-                                     0,
-                                     NULL,
-                                     &iPropertySize );
+    AudioObjectGetPropertyDataSize ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize );
 
     CVector<AudioStreamID> vOutputStreamIDList ( iPropertySize );
 
-    AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx],
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &vOutputStreamIDList[0] );
+    AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &vOutputStreamIDList[0] );
 
     const AudioStreamID outputStreamID = vOutputStreamIDList[0];
 
@@ -581,17 +456,10 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     stPropertyAddress.mSelector = kAudioStreamPropertyVirtualFormat;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
 
-    AudioObjectGetPropertyData ( inputStreamID,
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &CurDevStreamFormat );
+    AudioObjectGetPropertyData ( inputStreamID, &stPropertyAddress, 0, NULL, &iPropertySize, &CurDevStreamFormat );
 
-    if ( ( CurDevStreamFormat.mFormatID        != kAudioFormatLinearPCM ) ||
-         ( CurDevStreamFormat.mFramesPerPacket != 1 ) ||
-         ( CurDevStreamFormat.mBitsPerChannel  != 32 ) ||
-         ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
+    if ( ( CurDevStreamFormat.mFormatID != kAudioFormatLinearPCM ) || ( CurDevStreamFormat.mFramesPerPacket != 1 ) ||
+         ( CurDevStreamFormat.mBitsPerChannel != 32 ) || ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
         return tr ( "The audio input stream format for this audio device is "
@@ -599,17 +467,10 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     }
 
     // check the output
-    AudioObjectGetPropertyData ( outputStreamID,
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &CurDevStreamFormat );
+    AudioObjectGetPropertyData ( outputStreamID, &stPropertyAddress, 0, NULL, &iPropertySize, &CurDevStreamFormat );
 
-    if ( ( CurDevStreamFormat.mFormatID        != kAudioFormatLinearPCM ) ||
-         ( CurDevStreamFormat.mFramesPerPacket != 1 ) ||
-         ( CurDevStreamFormat.mBitsPerChannel  != 32 ) ||
-         ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
+    if ( ( CurDevStreamFormat.mFormatID != kAudioFormatLinearPCM ) || ( CurDevStreamFormat.mFramesPerPacket != 1 ) ||
+         ( CurDevStreamFormat.mBitsPerChannel != 32 ) || ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
         return tr ( "The audio output stream format for this audio device is "
@@ -640,23 +501,16 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         stPropertyAddress.mScope    = kAudioObjectPropertyScopeInput;
         iPropertySize               = sizeof ( CFStringRef );
 
-        AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx],
-                                     &stPropertyAddress,
-                                     0,
-                                     NULL,
-                                     &iPropertySize,
-                                     &sPropertyStringValue );
+        AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &sPropertyStringValue );
 
         // convert string
-        const bool bConvOK = ConvertCFStringToQString ( sPropertyStringValue,
-                                                        sChannelNamesInput[iCurInCH] );
+        const bool bConvOK = ConvertCFStringToQString ( sPropertyStringValue, sChannelNamesInput[iCurInCH] );
 
         // add the "[n]:" at the beginning as is in the Audio-Midi-Setup
         if ( !bConvOK || ( iPropertySize == 0 ) )
         {
             // use a default name in case there was an error or the name is empty
-            sChannelNamesInput[iCurInCH] =
-                QString ( "%1: Channel %1" ).arg ( iCurInCH + 1 );
+            sChannelNamesInput[iCurInCH] = QString ( "%1: Channel %1" ).arg ( iCurInCH + 1 );
         }
         else
         {
@@ -674,23 +528,16 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         stPropertyAddress.mScope    = kAudioObjectPropertyScopeOutput;
         iPropertySize               = sizeof ( CFStringRef );
 
-        AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx],
-                                     &stPropertyAddress,
-                                     0,
-                                     NULL,
-                                     &iPropertySize,
-                                     &sPropertyStringValue );
+        AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &sPropertyStringValue );
 
         // convert string
-        const bool bConvOK = ConvertCFStringToQString ( sPropertyStringValue,
-                                                        sChannelNamesOutput[iCurOutCH] );
+        const bool bConvOK = ConvertCFStringToQString ( sPropertyStringValue, sChannelNamesOutput[iCurOutCH] );
 
         // add the "[n]:" at the beginning as is in the Audio-Midi-Setup
         if ( !bConvOK || ( iPropertySize == 0 ) )
         {
             // use a default name in case there was an error or the name is empty
-            sChannelNamesOutput[iCurOutCH] =
-                QString ( "%1: Channel %1" ).arg ( iCurOutCH + 1 );
+            sChannelNamesOutput[iCurOutCH] = QString ( "%1: Channel %1" ).arg ( iCurOutCH + 1 );
         }
         else
         {
@@ -713,8 +560,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
             if ( iSelAddCH >= 0 )
             {
                 // for mixed channels, show both audio channel names to be mixed
-                sChannelNamesInput[iCh] =
-                    sChannelNamesInput[iSelCH] + " + " + sChannelNamesInput[iSelAddCH];
+                sChannelNamesInput[iCh] = sChannelNamesInput[iSelCH] + " + " + sChannelNamesInput[iSelAddCH];
             }
         }
     }
@@ -734,7 +580,7 @@ void CSound::UpdateChSelection()
     // channel index in the buffer, note that each buffer can have a different
     // number of interleaved channels
     int iChCnt;
-    int iSelCHLeft,  iSelAddCHLeft;
+    int iSelCHLeft, iSelAddCHLeft;
     int iSelCHRight, iSelAddCHRight;
 
     // initialize all buffer indexes with an invalid value
@@ -746,7 +592,7 @@ void CSound::UpdateChSelection()
     iSelOutBufferRight   = INVALID_INDEX;
 
     // input
-    GetSelCHAndAddCH ( iSelInputLeftChannel,  iNumInChan, iSelCHLeft,  iSelAddCHLeft );
+    GetSelCHAndAddCH ( iSelInputLeftChannel, iNumInChan, iSelCHLeft, iSelAddCHLeft );
     GetSelCHAndAddCH ( iSelInputRightChannel, iNumInChan, iSelCHRight, iSelAddCHRight );
 
     iChCnt = 0;
@@ -781,7 +627,7 @@ void CSound::UpdateChSelection()
     }
 
     // output
-    GetSelCHAndAddCH ( iSelOutputLeftChannel,  iNumOutChan, iSelCHLeft,  iSelAddCHLeft );
+    GetSelCHAndAddCH ( iSelOutputLeftChannel, iNumOutChan, iSelCHLeft, iSelAddCHLeft );
     GetSelCHAndAddCH ( iSelOutputRightChannel, iNumOutChan, iSelCHRight, iSelAddCHRight );
 
     iChCnt = 0;
@@ -804,7 +650,7 @@ void CSound::UpdateChSelection()
     }
 }
 
-void CSound::SetLeftInputChannel  ( const int iNewChan )
+void CSound::SetLeftInputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
     if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChanPlusAddChan ) )
@@ -824,7 +670,7 @@ void CSound::SetRightInputChannel ( const int iNewChan )
     }
 }
 
-void CSound::SetLeftOutputChannel  ( const int iNewChan )
+void CSound::SetLeftOutputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
     if ( ( iNewChan >= 0 ) && ( iNewChan < iNumOutChan ) )
@@ -847,15 +693,9 @@ void CSound::SetRightOutputChannel ( const int iNewChan )
 void CSound::Start()
 {
     // register the callback function for input and output
-    AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
-                                callbackIO,
-                                this,
-                                &audioInputProcID );
+    AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev], callbackIO, this, &audioInputProcID );
 
-    AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
-                                callbackIO,
-                                this,
-                                &audioOutputProcID );
+    AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev], callbackIO, this, &audioOutputProcID );
 
     // start the audio stream
     AudioDeviceStart ( audioInputDevice[lCurDev], audioInputProcID );
@@ -886,19 +726,17 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     // Error message string: in case buffer sizes on input and output cannot be
     // set to the same value
     const QString strErrBufSize = tr ( "The buffer sizes of the current "
-        "input and output audio device cannot be set to a common value. Please "
-        "choose other input/output audio devices in your system settings." );
+                                       "input and output audio device cannot be set to a common value. Please "
+                                       "choose other input/output audio devices in your system settings." );
 
     // try to set input buffer size
-    iActualMonoBufferSize =
-        SetBufferSize ( audioInputDevice[lCurDev], true, iNewPrefMonoBufferSize );
+    iActualMonoBufferSize = SetBufferSize ( audioInputDevice[lCurDev], true, iNewPrefMonoBufferSize );
 
     if ( iActualMonoBufferSize != static_cast<UInt32> ( iNewPrefMonoBufferSize ) )
     {
         // try to set the input buffer size to the output so that we
         // have a matching pair
-        if ( SetBufferSize ( audioOutputDevice[lCurDev], false, iActualMonoBufferSize ) !=
-             iActualMonoBufferSize )
+        if ( SetBufferSize ( audioOutputDevice[lCurDev], false, iActualMonoBufferSize ) != iActualMonoBufferSize )
         {
             throw CGenErr ( strErrBufSize );
         }
@@ -906,8 +744,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     else
     {
         // try to set output buffer size
-        if ( SetBufferSize ( audioOutputDevice[lCurDev], false, iNewPrefMonoBufferSize ) !=
-             static_cast<UInt32> ( iNewPrefMonoBufferSize ) )
+        if ( SetBufferSize ( audioOutputDevice[lCurDev], false, iNewPrefMonoBufferSize ) != static_cast<UInt32> ( iNewPrefMonoBufferSize ) )
         {
             throw CGenErr ( strErrBufSize );
         }
@@ -928,9 +765,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     return iCoreAudioBufferSizeMono;
 }
 
-UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
-                               const bool     bIsInput,
-                               UInt32         iPrefBufferSize )
+UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID, const bool bIsInput, UInt32 iPrefBufferSize )
 {
     AudioObjectPropertyAddress stPropertyAddress;
     stPropertyAddress.mSelector = kAudioDevicePropertyBufferFrameSize;
@@ -949,40 +784,25 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
     // first set the value
     UInt32 iSizeBufValue = sizeof ( UInt32 );
 
-    AudioObjectSetPropertyData ( audioDeviceID,
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 iSizeBufValue,
-                                 &iPrefBufferSize );
+    AudioObjectSetPropertyData ( audioDeviceID, &stPropertyAddress, 0, NULL, iSizeBufValue, &iPrefBufferSize );
 
     // read back which value is actually used
     UInt32 iActualMonoBufferSize = 0;
 
-    AudioObjectGetPropertyData ( audioDeviceID,
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iSizeBufValue,
-                                 &iActualMonoBufferSize );
+    AudioObjectGetPropertyData ( audioDeviceID, &stPropertyAddress, 0, NULL, &iSizeBufValue, &iActualMonoBufferSize );
 
     return iActualMonoBufferSize;
 }
 
-OSStatus CSound::deviceNotification ( AudioDeviceID,
-                                      UInt32,
-                                      const AudioObjectPropertyAddress* inAddresses,
-                                      void*                             inRefCon )
+OSStatus CSound::deviceNotification ( AudioDeviceID, UInt32, const AudioObjectPropertyAddress* inAddresses, void* inRefCon )
 {
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
-    if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) ||
-         ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) ||
+    if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) || ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) ||
          ( inAddresses->mSelector == kAudioHardwarePropertyDefaultOutputDevice ) ||
          ( inAddresses->mSelector == kAudioHardwarePropertyDefaultInputDevice ) )
     {
-        if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) ||
-             ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) )
+        if ( ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged ) || ( inAddresses->mSelector == kAudioDevicePropertyDeviceIsAlive ) )
         {
             // if any property of the device has changed, do a full reload
             pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
@@ -998,13 +818,13 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
     return noErr;
 }
 
-OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
+OSStatus CSound::callbackIO ( AudioDeviceID inDevice,
                               const AudioTimeStamp*,
                               const AudioBufferList* inInputData,
                               const AudioTimeStamp*,
-                              AudioBufferList*       outOutputData,
+                              AudioBufferList* outOutputData,
                               const AudioTimeStamp*,
-                              void*                  inRefCon )
+                              void* inRefCon )
 {
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
@@ -1030,14 +850,14 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     if ( ( inDevice == pSound->CurrentAudioInputDeviceID ) && inInputData && pSound->bRun )
     {
         // check sizes (note that float32 has four bytes)
-        if ( ( iSelInBufferLeft >= 0 ) &&
-             ( iSelInBufferLeft < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
-             ( iSelInBufferRight >= 0 ) &&
+        if ( ( iSelInBufferLeft >= 0 ) && ( iSelInBufferLeft < static_cast<int> ( inInputData->mNumberBuffers ) ) && ( iSelInBufferRight >= 0 ) &&
              ( iSelInBufferRight < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
              ( iSelAddInBufferLeft < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
              ( iSelAddInBufferRight < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
-             ( inInputData->mBuffers[iSelInBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) ) &&
-             ( inInputData->mBuffers[iSelInBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferRight] * iCoreAudioBufferSizeMono * 4 ) ) )
+             ( inInputData->mBuffers[iSelInBufferLeft].mDataByteSize ==
+               static_cast<UInt32> ( vecNumInBufChan[iSelInBufferLeft] * iCoreAudioBufferSizeMono * 4 ) ) &&
+             ( inInputData->mBuffers[iSelInBufferRight].mDataByteSize ==
+               static_cast<UInt32> ( vecNumInBufChan[iSelInBufferRight] * iCoreAudioBufferSizeMono * 4 ) ) )
         {
             Float32* pLeftData             = static_cast<Float32*> ( inInputData->mBuffers[iSelInBufferLeft].mData );
             Float32* pRightData            = static_cast<Float32*> ( inInputData->mBuffers[iSelInBufferRight].mData );
@@ -1060,8 +880,8 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Float2Short (
-                        pSound->vecsTmpAudioSndCrdStereo[2 * i] + pLeftData[iNumChanPerFrameLeft * i + iSelAddInInterlChLeft] * _MAXSHORT );
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Float2Short ( pSound->vecsTmpAudioSndCrdStereo[2 * i] +
+                                                                            pLeftData[iNumChanPerFrameLeft * i + iSelAddInInterlChLeft] * _MAXSHORT );
                 }
             }
 
@@ -1089,35 +909,33 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
     if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData && pSound->bRun )
     {
-       // check sizes (note that float32 has four bytes)
-       if ( ( iSelOutBufferLeft >= 0 ) &&
-            ( iSelOutBufferLeft < static_cast<int> ( outOutputData->mNumberBuffers ) ) &&
-            ( iSelOutBufferRight >= 0 ) &&
-            ( iSelOutBufferRight < static_cast<int> ( outOutputData->mNumberBuffers ) ) &&
-            ( outOutputData->mBuffers[iSelOutBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) ) &&
-            ( outOutputData->mBuffers[iSelOutBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferRight] * iCoreAudioBufferSizeMono * 4 ) ) )
-       {
-           Float32* pLeftData             = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferLeft].mData );
-           Float32* pRightData            = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferRight].mData );
-           int      iNumChanPerFrameLeft  = vecNumOutBufChan[iSelOutBufferLeft];
-           int      iNumChanPerFrameRight = vecNumOutBufChan[iSelOutBufferRight];
+        // check sizes (note that float32 has four bytes)
+        if ( ( iSelOutBufferLeft >= 0 ) && ( iSelOutBufferLeft < static_cast<int> ( outOutputData->mNumberBuffers ) ) &&
+             ( iSelOutBufferRight >= 0 ) && ( iSelOutBufferRight < static_cast<int> ( outOutputData->mNumberBuffers ) ) &&
+             ( outOutputData->mBuffers[iSelOutBufferLeft].mDataByteSize ==
+               static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferLeft] * iCoreAudioBufferSizeMono * 4 ) ) &&
+             ( outOutputData->mBuffers[iSelOutBufferRight].mDataByteSize ==
+               static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferRight] * iCoreAudioBufferSizeMono * 4 ) ) )
+        {
+            Float32* pLeftData             = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferLeft].mData );
+            Float32* pRightData            = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferRight].mData );
+            int      iNumChanPerFrameLeft  = vecNumOutBufChan[iSelOutBufferLeft];
+            int      iNumChanPerFrameRight = vecNumOutBufChan[iSelOutBufferRight];
 
-           // copy output data
-           for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
-           {
-               // copy left and right channels separately
-               pLeftData[iNumChanPerFrameLeft * i + iSelOutInterlChLeft]    = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
-               pRightData[iNumChanPerFrameRight * i + iSelOutInterlChRight] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
-           }
+            // copy output data
+            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+            {
+                // copy left and right channels separately
+                pLeftData[iNumChanPerFrameLeft * i + iSelOutInterlChLeft]    = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+                pRightData[iNumChanPerFrameRight * i + iSelOutInterlChRight] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+            }
         }
     }
 
     return kAudioHardwareNoError;
 }
 
-void CSound::callbackMIDI ( const MIDIPacketList* pktlist,
-                            void*                 refCon,
-                            void* )
+void CSound::callbackMIDI ( const MIDIPacketList* pktlist, void* refCon, void* )
 {
     CSound* pSound = static_cast<CSound*> ( refCon );
 
@@ -1140,8 +958,7 @@ void CSound::callbackMIDI ( const MIDIPacketList* pktlist,
     }
 }
 
-bool CSound::ConvertCFStringToQString ( const CFStringRef stringRef,
-                                        QString&          sOut )
+bool CSound::ConvertCFStringToQString ( const CFStringRef stringRef, QString& sOut )
 {
     // check if the string reference is a valid pointer
     if ( stringRef != NULL )
@@ -1150,13 +967,9 @@ bool CSound::ConvertCFStringToQString ( const CFStringRef stringRef,
         if ( CFStringGetLength ( stringRef ) > 0 )
         {
             // convert CFString in c-string (quick hack!) and then in QString
-            char* sC_strPropValue =
-                (char*) malloc ( CFStringGetLength ( stringRef ) * 3 + 1 );
+            char* sC_strPropValue = (char*) malloc ( CFStringGetLength ( stringRef ) * 3 + 1 );
 
-            if ( CFStringGetCString ( stringRef,
-                                      sC_strPropValue,
-                                      CFStringGetLength ( stringRef ) * 3 + 1,
-                                      kCFStringEncodingUTF8 ) )
+            if ( CFStringGetCString ( stringRef, sC_strPropValue, CFStringGetLength ( stringRef ) * 3 + 1, kCFStringEncodingUTF8 ) )
             {
                 sOut = sC_strPropValue;
                 free ( sC_strPropValue );

@@ -69,19 +69,19 @@
 #include <QGlobalStatic>
 
 #ifdef _WIN32
-#include <qt_windows.h>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QSemaphore>
-#include <QtCore/QThread>
-#include <QtCore/QDebug>
+#    include <qt_windows.h>
+#    include <QtCore/QCoreApplication>
+#    include <QtCore/QSemaphore>
+#    include <QtCore/QThread>
+#    include <QtCore/QDebug>
 #else
-#include <QSocketNotifier>
-#include <QObject>
-#include <QCoreApplication>
-#include <csignal>
-#include <signal.h>
-#include <unistd.h>
-#include <sys/socket.h>
+#    include <QSocketNotifier>
+#    include <QObject>
+#    include <QCoreApplication>
+#    include <csignal>
+#    include <signal.h>
+#    include <unistd.h>
+#    include <sys/socket.h>
 #endif
 
 class CSignalBase;
@@ -132,12 +132,11 @@ protected:
 
     CSignalHandler* pSignalHandler;
 
-    template <typename T>
-    static T *getSelf()
+    template<typename T>
+    static T* getSelf()
     {
-        return static_cast<T*>( CSignalHandler::getSingletonP()->pSignalBase.data() );
+        return static_cast<T*> ( CSignalHandler::getSingletonP()->pSignalBase.data() );
     }
-
 };
 
 #ifdef _WIN32
@@ -168,9 +167,9 @@ public:
 
 private:
     QSocketNotifier* socketNotifier = nullptr;
-    bool setSignalHandled ( int sigNum, bool state );
+    bool             setSignalHandled ( int sigNum, bool state );
 
-    static int socketPair[2];
+    static int  socketPair[2];
     static void signalHandler ( int sigNum );
 };
 

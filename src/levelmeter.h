@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -33,11 +33,9 @@
 #include "util.h"
 #include "global.h"
 
-
 /* Definitions ****************************************************************/
-#define NUM_LEDS_INCL_CLIP_LED           ( NUM_STEPS_LED_BAR + 1 )
-#define CLIP_IND_TIME_OUT_MS             20000
-
+#define NUM_LEDS_INCL_CLIP_LED ( NUM_STEPS_LED_BAR + 1 )
+#define CLIP_IND_TIME_OUT_MS   20000
 
 /* Classes ********************************************************************/
 class CLevelMeter : public QWidget
@@ -78,10 +76,10 @@ protected:
         QLabel*     GetLabelPointer() { return pLEDLabel; }
 
     protected:
-        QPixmap     BitmCubeRoundBlack;
-        QPixmap     BitmCubeRoundGreen;
-        QPixmap     BitmCubeRoundYellow;
-        QPixmap     BitmCubeRoundRed;
+        QPixmap BitmCubeRoundBlack;
+        QPixmap BitmCubeRoundGreen;
+        QPixmap BitmCubeRoundYellow;
+        QPixmap BitmCubeRoundRed;
 
         ELightColor eCurLightColor;
         QLabel*     pLEDLabel;
@@ -89,15 +87,14 @@ protected:
 
     virtual void mousePressEvent ( QMouseEvent* ) override { ClipReset(); }
 
-    void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType,
-                                         const bool            bIsClip );
+    void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType, const bool bIsClip );
 
     QStackedLayout* pStackedLayout;
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;
     QProgressBar*   pBarMeter;
 
-    QTimer          TimerClip;
+    QTimer TimerClip;
 
 public slots:
     void ClipReset();

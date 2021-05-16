@@ -29,17 +29,16 @@
 #include "soundbase.h"
 #include "global.h"
 
-
 /* Classes ********************************************************************/
 class CSound : public CSoundBase
 {
     Q_OBJECT
 
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
              void*          arg,
              const QString& strMIDISetup,
-             const bool     ,
+             const bool,
              const QString& );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
@@ -49,16 +48,16 @@ public:
     // channel selection
     virtual int     GetNumInputChannels() { return iNumInChanPlusAddChan; }
     virtual QString GetInputChannelName ( const int iDiD ) { return sChannelNamesInput[iDiD]; }
-    virtual void    SetLeftInputChannel  ( const int iNewChan );
+    virtual void    SetLeftInputChannel ( const int iNewChan );
     virtual void    SetRightInputChannel ( const int iNewChan );
-    virtual int     GetLeftInputChannel()  { return iSelInputLeftChannel; }
+    virtual int     GetLeftInputChannel() { return iSelInputLeftChannel; }
     virtual int     GetRightInputChannel() { return iSelInputRightChannel; }
 
     virtual int     GetNumOutputChannels() { return iNumOutChan; }
     virtual QString GetOutputChannelName ( const int iDiD ) { return sChannelNamesOutput[iDiD]; }
-    virtual void    SetLeftOutputChannel  ( const int iNewChan );
+    virtual void    SetLeftOutputChannel ( const int iNewChan );
     virtual void    SetRightOutputChannel ( const int iNewChan );
-    virtual int     GetLeftOutputChannel()  { return iSelOutputLeftChannel; }
+    virtual int     GetLeftOutputChannel() { return iSelOutputLeftChannel; }
     virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
 
     // these variables/functions should be protected but cannot since we want
@@ -95,16 +94,14 @@ protected:
     QString CheckDeviceCapabilities ( const int iDriverIdx );
     void    GetAvailableInOutDevices();
 
-    static void callbackMIDI ( const MIDIPacketList* pktlist,
-                               void*                 refCon,
-                               void* );
+    static void callbackMIDI ( const MIDIPacketList* pktlist, void* refCon, void* );
 
-    //AVAudioSession      audioSession;
+    // AVAudioSession      audioSession;
 
-    MIDIPortRef         midiInPortRef;
+    MIDIPortRef midiInPortRef;
 
-    QString             sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
-    QString             sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];
+    QString sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
+    QString sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];
 
-    QMutex              Mutex;
+    QMutex Mutex;
 };

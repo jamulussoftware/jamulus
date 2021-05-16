@@ -22,21 +22,19 @@
  *
 \******************************************************************************/
 
-#if !defined ( LLCONVST_HOIHGE76G34528_3_434DFGUHF1912__INCLUDED_ )
-#define LLCONVST_HOIHGE76G34528_3_434DFGUHF1912__INCLUDED_
+#if !defined( LLCONVST_HOIHGE76G34528_3_434DFGUHF1912__INCLUDED_ )
+#    define LLCONVST_HOIHGE76G34528_3_434DFGUHF1912__INCLUDED_
 
 // copy the VST SDK in the llcon/windows directory: "llcon/windows/vstsdk2.4" to
 // get it work
-#include "audioeffectx.h"
-#include <qtimer.h>
-#include "global.h"
-#include "client.h"
-
+#    include "audioeffectx.h"
+#    include <qtimer.h>
+#    include "global.h"
+#    include "client.h"
 
 /* Definitions ****************************************************************/
 // timeout after which the llcon client is stopped
-#define VST_STOP_TIMER_INTERVAL     1000
-
+#    define VST_STOP_TIMER_INTERVAL 1000
 
 /* Classes ********************************************************************/
 class CLlconVST : public QObject, public AudioEffectX
@@ -46,15 +44,15 @@ class CLlconVST : public QObject, public AudioEffectX
 public:
     CLlconVST ( audioMasterCallback AudioMaster );
 
-    virtual void processReplacing ( float**  pvIn, float**  pvOut, VstInt32 iNumSamples );
+    virtual void processReplacing ( float** pvIn, float** pvOut, VstInt32 iNumSamples );
 
     virtual void setProgramName ( char* cName ) { vst_strncpy ( strProgName, cName, kVstMaxProgNameLen ); }
     virtual void getProgramName ( char* cName ) { vst_strncpy ( cName, strProgName, kVstMaxProgNameLen ); }
 
-    virtual bool getEffectName    ( char* cString ) { return GetName ( cString ); }
-    virtual bool getVendorString  ( char* cString ) { return GetName ( cString ); }
-    virtual bool getProductString ( char* cString ) { return GetName ( cString ); }
-    virtual VstInt32 getVendorVersion () { return 1000; }
+    virtual bool     getEffectName ( char* cString ) { return GetName ( cString ); }
+    virtual bool     getVendorString ( char* cString ) { return GetName ( cString ); }
+    virtual bool     getProductString ( char* cString ) { return GetName ( cString ); }
+    virtual VstInt32 getVendorVersion() { return 1000; }
 
 protected:
     bool GetName ( char* cName );

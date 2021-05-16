@@ -2342,12 +2342,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">À &amp;propos Jamulus...</translation>
+        <translation type="unfinished">À &amp;propos de Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">À propos &amp;Qt...</translation>
+        <translation type="unfinished">À propos de &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2356,7 +2356,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../util.h" line="441"/>
         <source>About Qt</source>
-        <translation type="unfinished">À propos Qt</translation>
+        <translation type="unfinished">À propos de Qt</translation>
     </message>
 </context>
 <context>

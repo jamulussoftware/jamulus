@@ -111,7 +111,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     ledNetw->setToolTip                ( strJitterBufferSizeTT );
 
     // sound card device
-    cbxSoundcard->setWhatsThis ( "<b>" + tr ( "Sound Card Device" ) + ":</b> " +
+    lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Sound Card Device" ) + ":</b> " +
         tr ( "The ASIO driver (sound card) can be selected using " ) + APP_NAME +
         tr ( " under the Windows operating system. Under MacOS/Linux, no sound "
         "card selection is possible. If the selected ASIO driver is not valid "
@@ -228,10 +228,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
 
     // fancy skin
-    cbxSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr (
+    lblSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr (
         "Select the skin to be used for the main window." ) );
 
     cbxSkin->setAccessibleName ( tr ( "Skin combo box" ) );
+
+    // Interface Language
+    lblLanguage->setWhatsThis ( "<b>" + tr ( "Language" ) + ":</b> " + tr (
+        "Select the language to be used for the user interface." ) );
+
+    cbxLanguage->setAccessibleName ( tr ( "Language combo box" ) );
 
     // audio channels
     QString strAudioChannels = "<b>" + tr ( "Audio Channels" ) + ":</b> " + tr (
@@ -463,15 +469,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient*         pNCliP,
         "also be shown at each client which is connected to the same server as "
         "you." );
 
-    pedtAlias->setWhatsThis ( strFaderTag );
+    plblAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
-    pcbxInstrument->setWhatsThis ( strFaderTag );
+    plblInstrument->setWhatsThis ( strFaderTag );
     pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
-    pcbxCountry->setWhatsThis ( strFaderTag );
+    plblCountry->setWhatsThis ( strFaderTag );
     pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
-    pedtCity->setWhatsThis ( strFaderTag );
+    plblCity->setWhatsThis ( strFaderTag );
     pedtCity->setAccessibleName ( tr ( "City edit box" ) );
-    pcbxSkill->setWhatsThis ( strFaderTag );
+    plblSkill->setWhatsThis ( strFaderTag );
     pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
 
     // Instrument pictures combo box -------------------------------------------

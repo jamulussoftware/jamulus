@@ -754,7 +754,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="271"/>
         <source>N&amp;o User Sorting</source>
-        <translation>&amp;Netriediť používateľov</translation>
+        <translation>Netriediť &amp;používateľov</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>

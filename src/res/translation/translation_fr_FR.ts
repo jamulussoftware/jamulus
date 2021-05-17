@@ -721,7 +721,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="263"/>
         <source>&amp;Analyzer Console...</source>
-        <translation>Console d&apos;&amp;analyse...</translation>
+        <translation>Console d&apos;a&amp;nalyse...</translation>
     </message>
     <message>
         <source>Use &amp;Two Rows Mixer Panel</source>
@@ -730,7 +730,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="313"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation>Effa&amp;cer tous les paramètres Solo et Muet enregistrés</translation>
+        <translation>&amp;Effacer tous les paramètres Solo et Muet enregistrés</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1161"/>

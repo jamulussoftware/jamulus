@@ -864,7 +864,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation>&amp;Avancerade inställningar...</translation>
+        <translation>A&amp;vancerade inställningar...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="269"/>

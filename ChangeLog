@@ -53,9 +53,16 @@
   (contributed by @dcorson-ticino-com)
 
 - GUI: Translations have been updated
-  * Dutch, by @henkdegroot (#1562, #1556)
-  * French, by @trebmuh (#1299)
-  (further updates to follow until the final release)
+  * Dutch, by @henkdegroot (#1562, #1623)
+  * French, by @jujudusud (#1648)
+  * German, by @rolamos (#1677)
+  * Italian, by @dzpex (#1620)
+  * Polish, by @SeeLook (#1619)
+  * Portuguese Brazilian, by @melcon (#1671)
+  * Portuguese European, by @Snayler (#1689)
+  * Slovak, by @jose1711 (#1647)
+  * Spanish, by @ignotus666 (#1621)
+  * Swedish, by @genesisproject2020 (#1664, #1696)
 
 - Client: Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
   (contributed by @JohannesBrx)

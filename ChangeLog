@@ -1,5 +1,5 @@
 
-### 3.8.0rc1 <- NOTE: the release version number will be 3.8.0 ###
+### 3.8.0rc1dev <- NOTE: the release version number will be 3.8.0 ###
 
 - Mac: Updated to use Qt 5.12.10 for better compatibility with Big Sur (#1687).
   This drops support for Yosemite and El Capitan in the distributed version.

@@ -239,7 +239,7 @@
         <location filename="../../audiomixerboard.cpp" line="248"/>
         <location filename="../../audiomixerboard.cpp" line="264"/>
         <source>Pan</source>
-        <translation>Balans</translation>
+        <translation>Bal.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="48"/>
@@ -414,7 +414,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="233"/>
         <source>PAN</source>
-        <translation>BAL</translation>
+        <translation>BAL.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="234"/>
@@ -1352,17 +1352,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="237"/>
         <source>Language</source>
-        <translation type="unfinished">Taal</translation>
+        <translation>Taal</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="237"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer de te gebruiken taal voor de gebruikersinterface.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="240"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Taal combobox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="425"/>
@@ -2390,13 +2390,13 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="885"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="915"/>
         <location filename="../../clientsettingsdlgbase.ui" line="945"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1134"/>
@@ -2726,7 +2726,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">&amp;Over Jamulus...</translation>
+        <translation>&amp;Over Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
@@ -3655,7 +3655,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Lijst</translation>
+        <translation>Lijst</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>

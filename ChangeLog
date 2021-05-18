@@ -38,6 +38,8 @@
   (contributed by @vimpostor)
 
 - The term "Central server" has been replaced with "Directory server" (#1407).
+  Note that the program will still accept the --centralserver option for backward
+  compatibility with existing system startup scripts.
   (contributed by @pljones)
 
 - GUI: Settings window has been reorganized into tabs (#1415, #1554, #1542):

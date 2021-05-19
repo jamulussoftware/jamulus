@@ -768,10 +768,16 @@ void CClient::Init()
     const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT;
     const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE;
 
+#   if defined ( Q_OS_IOS )
+    bFraSiFactPrefSupported = TRUE; //to reduce sound init time, because we know it's supported in iOS
+    bFraSiFactDefSupported  = TRUE;
+    bFraSiFactSafeSupported = TRUE;
+#   else
     bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
     bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault ) == iFraSizeDefault );
     bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe ) == iFraSizeSafe );
-
+#   endif
+    
     // translate block size index in actual block size
     const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 

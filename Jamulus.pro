@@ -400,6 +400,7 @@ FORMS_GUI = src/clientdlgbase.ui \
 HEADERS += src/buffer.h \
     src/channel.h \
     src/client.h \
+    src/connectionlistdlg.h \
     src/global.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
@@ -502,6 +503,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
     src/client.cpp \
+    src/connectionlistdlg.cpp \
     src/main.cpp \
     src/protocol.cpp \
     src/recorder/jamcontroller.cpp \
@@ -1130,3 +1132,6 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+
+FORMS += \
+    src/connectionlistdlg.ui

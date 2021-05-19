@@ -49,6 +49,7 @@
 #include "clientsettingsdlg.h"
 #include "chatdlg.h"
 #include "connectdlg.h"
+#include "connectionlistdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
 #if defined( __APPLE__ ) || defined( __MACOSX )
@@ -121,6 +122,7 @@ protected:
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
+    ConnectionListDlg         CtrlDlg;
 
 public slots:
     void OnConnectDisconBut();
@@ -147,6 +149,7 @@ public slots:
 
     void OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion );
 
+    void OnConnectionList();
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
@@ -222,6 +225,7 @@ public slots:
 
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
+    void OnCtrlDlgUpdated();
     void OnGUIDesignChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );

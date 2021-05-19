@@ -43,7 +43,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
     ChatDlg ( parent ),
     ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
-    AnalyzerConsole ( pNCliP, parent )
+    AnalyzerConsole ( pNCliP, parent ),
+    CtrlDlg( parent )
 {
     setupUi ( this );
 
@@ -245,6 +246,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
+
+    pFileMenu->addAction ( tr ( "Load &Connection list..." ), this,
+    +         SLOT ( OnConnectionList() ) );
 
     pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this, SLOT ( OnLoadChannelSetup() ) );
 
@@ -498,6 +502,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+    QObject::connect ( &CtrlDlg, &ConnectionListDlg::CtrlDlgUpdated, this, &CClientDlg::OnCtrlDlgUpdated );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -551,6 +556,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     ClientSettingsDlg.close();
     ChatDlg.close();
     ConnectDlg.close();
+    CtrlDlg.close();
     AnalyzerConsole.close();
 
     // if connected, terminate connection
@@ -626,6 +632,26 @@ void CClientDlg::UpdateRevSelection()
 
     // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
+}
+
+void CClientDlg::OnCtrlDlgUpdated()
+{
+        // get the address from the CtrlDlg dialog
+        QString strSelectedAddress = CtrlDlg.getSelectedAddress();
+
+        // get name to be set in audio mixer group box title
+        QString strMixerBoardLabel = CtrlDlg.getSelectedName();
+
+        // first check if we are already connected, if this is the case we have to
+        // disconnect the old server first
+        if ( pClient->IsRunning() )
+        {
+            Disconnect();
+        }
+
+        // initiate connection
+        Connect ( strSelectedAddress, strMixerBoardLabel );
+
 }
 
 void CClientDlg::OnConnectDlgAccepted()
@@ -712,6 +738,22 @@ void CClientDlg::OnClearAllStoredSoloMuteSettings()
     pSettings->vecStoredFaderIsSolo.Reset ( false );
     pSettings->vecStoredFaderIsMute.Reset ( false );
     MainMixerBoard->LoadAllFaderSettings();
+}
+void CClientDlg::OnConnectionList()
+{
+     QString strFileName = QFileDialog::getOpenFileName ( this,
+                                                          tr ( "Favourites file" ),
+                                                          "",
+                                                          QString ( "*.jcl" ));
+
+     if ( !strFileName.isEmpty() )
+     {
+         // first update the settings struct and then update the mixer panel
+         CtrlDlg.LoadConnectionList(strFileName);
+         CtrlDlg.show();
+         CtrlDlg.raise();
+         CtrlDlg.activateWindow();
+     }
 }
 
 void CClientDlg::OnLoadChannelSetup()

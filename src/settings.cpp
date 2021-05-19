@@ -243,6 +243,20 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         bFavoriteWasShownConnect = bValue;
     }
 
+    // Favorites Sort type
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "favsort",
+         0, 1, iValue ) )
+    {
+        iFavSort = static_cast<EFavSort>(iValue);
+    }
+
+    // Favorites Sort type
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "favlastselected",
+         0, MAX_NUM_FAVORITE_ADDR_ITEMS, iValue ) )
+    {
+        iFavDirLastSelected = iValue;
+    }
+
     // FAVORITE addresses
     QString strT;
     QStringList listT;
@@ -583,6 +597,14 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // visibility state of favorites tab
     SetFlagIniSet ( IniXMLDocument, "client", "favshown",
         bFavoriteWasShownConnect );
+
+    // Favorites Sort type
+    SetNumericIniSet ( IniXMLDocument, "client", "favsort",
+        static_cast<int>(iFavSort) );
+
+    // Favorites Last Selected for Dir Sort
+    SetNumericIniSet ( IniXMLDocument, "client", "favlastselected",
+        iFavDirLastSelected );
 
     // Favorite info
     QString strT;

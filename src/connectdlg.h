@@ -91,6 +91,7 @@ protected:
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& CurServerAddress );
+    void             SortFavorites();
 
     CClientSettings* pSettings;
 
@@ -121,6 +122,8 @@ public slots:
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void OnSortLastUsed();
+    void OnSortDirectory();
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );

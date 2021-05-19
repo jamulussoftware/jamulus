@@ -149,12 +149,14 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
     // 3: location
     // 4: minimum ping time (invisible)
     // 5: maximum number of clients (invisible)
+    // 6: order for sorting
     lvwServers->setColumnCount ( 6 );
     lvwServers->hideColumn ( 4 );
     lvwServers->hideColumn ( 5 );
-    lvwFavorites->setColumnCount ( 6 );
+    lvwFavorites->setColumnCount ( 7 );
     lvwFavorites->hideColumn ( 4 );
     lvwFavorites->hideColumn ( 5 );
+    lvwFavorites->hideColumn ( 6 );
 
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
@@ -212,6 +214,13 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP,
     QObject::connect ( chbExpandAllFAV, &QCheckBox::stateChanged,
         this, &CConnectDlg::OnExpandAllStateChanged );
 
+    // radio buttons
+    QObject::connect ( rbFavSort1, &QRadioButton::clicked,
+        this, &CConnectDlg::OnSortLastUsed );
+
+    QObject::connect ( rbFavSort2, &QRadioButton::clicked,
+        this, &CConnectDlg::OnSortDirectory );
+
     // buttons
     QObject::connect ( butCancel, &QPushButton::clicked, this, &CConnectDlg::close );
 
@@ -240,10 +249,20 @@ void CConnectDlg::showEvent ( QShowEvent* )
 
     tabConnect->setCurrentIndex( pSettings->bFavoriteWasShownConnect );
 
-    if( pSettings->bFavoriteWasShownConnect == CONTAB_FAVORITES )
+    if ( pSettings->iFavSort == FAVSORT_LASTUSED )
+    {
+        rbFavSort1->setChecked( true );
+    }
+    else
+    {
+        rbFavSort2->setChecked( true );
+    }
+
+    if ( pSettings->bFavoriteWasShownConnect == CONTAB_FAVORITES )
     {
         // open the connect dialog, load stored favorites
         FillFavoritesTab();
+        SortFavorites();
     }
     else
     {
@@ -313,14 +332,14 @@ void CConnectDlg::OnTimerReRequestServList()
 
 void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList )
 {
-    if( pSettings->bFavoriteWasShownConnect == CONTAB_SERVERS )
+    if ( pSettings->bFavoriteWasShownConnect == CONTAB_SERVERS )
     {
         // Use Directories
-        FillServerTab( InetAddr, vecServerInfo, bIsReducedServerList );
+        FillServerTab ( InetAddr, vecServerInfo, bIsReducedServerList );
     }
     else
     {
-        UpdateFAVIPs( InetAddr, vecServerInfo, bIsReducedServerList );
+        UpdateFAVIPs ( InetAddr, vecServerInfo, bIsReducedServerList );
     }
 }
 
@@ -356,14 +375,14 @@ void CConnectDlg::UpdateFAVIPs( const CHostAddress&         InetAddr,
             {
                 qtyThisDirectory--;
                 // if IP addresses are not the same, update in Favorites using value from server
-                if( lvwFavorites->topLevelItem ( iJdx )->data ( 0, Qt::UserRole ).toString() != vecServerInfo[iIdx].HostAddr.toString() &&
+                if ( lvwFavorites->topLevelItem ( iJdx )->data ( 0, Qt::UserRole ).toString() != vecServerInfo[iIdx].HostAddr.toString() &&
                     vecServerInfo[iIdx].HostAddr.toString() != "0.0.0.0:0" )  // special case, don't update directory servers
                 {
                     lvwFavorites->topLevelItem ( iJdx )->setData ( 0, Qt::UserRole, vecServerInfo[iIdx].HostAddr.toString() );
                     pSettings->vstrFAVAddress[iJdx] = vecServerInfo[iIdx].HostAddr.toString();
                 }
                 // if max num clients not the same, update in Favorites using value from server
-                if( lvwFavorites->topLevelItem ( iJdx )->text ( 5 ) != QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) )
+                if ( lvwFavorites->topLevelItem ( iJdx )->text ( 5 ) != QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) )
                 {
                     lvwFavorites->topLevelItem ( iJdx )->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
                     pSettings->vstrFAVAddress[iJdx] = QString().setNum ( vecServerInfo[iIdx].iMaxNumClients );
@@ -804,13 +823,29 @@ void CConnectDlg::OnConnectClicked()
         // FAV List, get Directory from list
         strSelectedDirectory = pCurSelTopListItem->text ( 3 );
 
+        if( pSettings->iFavSort == FAVSORT_DIRECTORY )
+        {
+            pSettings->iFavDirLastSelected = pList->indexOfTopLevelItem ( pCurSelTopListItem );
+        }
+
         // move selected server to top line
-        ThisFAVtoTop();
+        if ( pSettings->iFavSort == FAVSORT_LASTUSED )
+        {
+            ThisFAVtoTop();
+        }
     }
     else
     {
         // Server list, Directory is in combobox
-        strSelectedDirectory = csCentServAddrTypeToString ( pSettings->eCentralServerAddressType );
+        if( pSettings->eCentralServerAddressType == AT_CUSTOM )
+        {
+            // if Custom, get server name from Settings
+            strSelectedDirectory = "Custom: " + pSettings->vstrCentralServerAddress[0];
+        }
+        else
+        {
+            strSelectedDirectory = csCentServAddrTypeToString ( pSettings->eCentralServerAddressType );
+        }
         ecsSelectedDirectECS = pSettings->eCentralServerAddressType;
     }
 
@@ -1128,6 +1163,8 @@ void CConnectDlg::FillFavoritesTab()
     // first clear list
     lvwFavorites->clear();
 
+    QString strTmp;
+
     // add list item for each server in the Favorite list
     for ( int iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
     {
@@ -1136,7 +1173,6 @@ void CConnectDlg::FillFavoritesTab()
         {
             break;
         }
-//        CHostAddress CurHostAddress;
 
         QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwFavorites );
         pNewListViewItem->setHidden ( false );
@@ -1150,6 +1186,7 @@ void CConnectDlg::FillFavoritesTab()
         // 3: Directory Server, text->name, data->ECS (as int)
         // 4: minimum ping time (invisible)
         // 5: maximum number of clients (invisible)
+        // 6: order
 
         pNewListViewItem->setText ( 0, pSettings->vstrFAVName[iIdx] );
         pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
@@ -1176,11 +1213,14 @@ void CConnectDlg::FillFavoritesTab()
         pNewListViewItem->setText ( 4, "99999999" );
 
         pNewListViewItem->setText ( 5, pSettings->vstrFAVMaxUsers[iIdx] );
+        strTmp = QChar ( 'a'+iIdx );
+        pNewListViewItem->setText ( 6, strTmp );
         if ( bShowAllMusicians )
         {
             lvwFavorites->expandItem ( pNewListViewItem );
         }
     }
+
     // list finished, now select top row
     lvwFavorites->setCurrentItem ( lvwFavorites->topLevelItem( 0 ) );
 
@@ -1285,10 +1325,41 @@ void CConnectDlg::OnTabChange()
     {
         // load stored favorites
         FillFavoritesTab();
+        SortFavorites();
     }
     else
     {
         // open the connect dialg, update server list
         RequestServerList();
+    }
+}
+
+void CConnectDlg::OnSortLastUsed()
+{
+    lvwFavorites->sortItems ( 6, Qt::AscendingOrder );
+    pSettings->iFavSort = FAVSORT_LASTUSED;
+    // select top row
+    lvwFavorites->setCurrentItem ( lvwFavorites->topLevelItem( 0 ) );
+}
+
+void CConnectDlg::OnSortDirectory()
+{
+    lvwFavorites->sortItems ( 3, Qt::AscendingOrder );
+    pSettings->iFavSort = FAVSORT_DIRECTORY;
+    // select last used row
+    lvwFavorites->setCurrentItem ( lvwFavorites->topLevelItem ( pSettings->iFavDirLastSelected ) );
+}
+
+void CConnectDlg::SortFavorites()
+{
+    if ( pSettings->iFavSort == FAVSORT_LASTUSED )
+    {
+        // sort last used
+        OnSortLastUsed();
+    }
+    else
+    {
+        // sort by Directory Server
+       OnSortDirectory();
     }
 }

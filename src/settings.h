@@ -127,6 +127,8 @@ public:
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType            ( ST_NO_SORT ),
         iNumMixerPanelRows          ( 1 ),
+        iFavSort                    ( FAVSORT_LASTUSED ),
+        iFavDirLastSelected         ( 0 ),
         vstrCentralServerAddress    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         eCentralServerAddressType   ( AT_DEFAULT ),
         vecWindowPosSettings        ( ), // empty array
@@ -161,6 +163,8 @@ public:
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
     int              iNumMixerPanelRows;
+    EFavSort         iFavSort;
+    int              iFavDirLastSelected;
     CVector<QString> vstrCentralServerAddress;
     ECSAddType       eCentralServerAddressType;
     bool             bEnableFeedbackDetection;

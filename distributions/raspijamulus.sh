@@ -108,7 +108,7 @@ fi
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
 distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
-./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &
+./Jamulus -n -i ${JAMULUSINIFILE} -c anygenre3.jamulus.io &
 
 echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"
 read -n 1 -s -r -p ""

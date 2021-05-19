@@ -33,13 +33,13 @@ class CActivityId;
 class CActivity
 {
 private:
-    CActivityId *pActivity;
-    
+    CActivityId* pActivity;
+
 public:
     CActivity();
-    
+
     ~CActivity();
-    
+
     void BeginActivity();
 
     void EndActivity();

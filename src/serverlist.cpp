@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -31,14 +31,14 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& strServerListFilter,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
-                                         CProtocol*     pNConLProt )
-    : eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
-      strMinServerVersion       ( "" ), // disable version check with empty version
-      pConnLessProtocol         ( pNConLProt ),
-      eSvrRegStatus             ( SRS_UNREGISTERED ),
-      iSvrRegRetries            ( 0 )
+                                         CProtocol*     pNConLProt ) :
+    eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
+    strMinServerVersion ( "" ),              // disable version check with empty version
+    pConnLessProtocol ( pNConLProt ),
+    eSvrRegStatus ( SRS_UNREGISTERED ),
+    iSvrRegRetries ( 0 )
 {
-    // set the central server address
+    // set the directory server address
     SetCentralServerAddress ( sNCentServAddr );
 
     // set the server internal address, including internal port number
@@ -74,16 +74,11 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     ServerList.clear();
 
     // Init server list entry (server info for this server) with defaults. Per
-    // definition the client substitutes the IP address of the central server
-    // itself for his server list. If we are the central server, we assume that
+    // definition the client substitutes the IP address of the directory server
+    // itself for his server list. If we are the directory server, we assume that
     // we have a permanent server.
-    CServerListEntry ThisServerListEntry ( CHostAddress(),
-                                           SlaveCurLocalHostAddress,
-                                           "",
-                                           QLocale::system().country(),
-                                           "",
-                                           iNumChannels,
-                                           GetIsCentralServer() );
+    CServerListEntry
+        ThisServerListEntry ( CHostAddress(), SlaveCurLocalHostAddress, "", QLocale::system().country(), "", iNumChannels, GetIsCentralServer() );
 
     // parse the server info string according to definition:
     // [this server name];[this server city]; ...
@@ -119,8 +114,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         for ( int iIdx = 0; iIdx < slWhitelistAddresses.size(); iIdx++ )
         {
             // check for special case: [version]
-            if ( ( slWhitelistAddresses.at ( iIdx ).length() > 2 ) &&
-                 ( slWhitelistAddresses.at ( iIdx ).left ( 1 ) == "[" ) &&
+            if ( ( slWhitelistAddresses.at ( iIdx ).length() > 2 ) && ( slWhitelistAddresses.at ( iIdx ).left ( 1 ) == "[" ) &&
                  ( slWhitelistAddresses.at ( iIdx ).right ( 1 ) == "]" ) )
             {
                 strMinServerVersion = slWhitelistAddresses.at ( iIdx ).mid ( 1, slWhitelistAddresses.at ( iIdx ).length() - 2 );
@@ -128,8 +122,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
             {
                 vWhiteList << CurWhiteListAddress;
-                qInfo() << qUtf8Printable( QString( "Whitelist entry added: %1" )
-                    .arg( CurWhiteListAddress.toString() ) );
+                qInfo() << qUtf8Printable ( QString ( "Whitelist entry added: %1" ).arg ( CurWhiteListAddress.toString() ) );
             }
         }
     }
@@ -139,59 +132,67 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     if ( !GetIsCentralServer() )
     {
         // 1 minute = 60 * 1000 ms
-        QTimer::singleShot ( SERVLIST_TIME_PERMSERV_MINUTES * 60000,
-            this, SLOT ( OnTimerIsPermanent() ) );
+        QTimer::singleShot ( SERVLIST_TIME_PERMSERV_MINUTES * 60000, this, SLOT ( OnTimerIsPermanent() ) );
     }
 
     // prepare the register server response timer (single shot timer)
     TimerCLRegisterServerResp.setSingleShot ( true );
     TimerCLRegisterServerResp.setInterval ( REGISTER_SERVER_TIME_OUT_MS );
 
-
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerPollList, &QTimer::timeout,
-        this, &CServerListManager::OnTimerPollList );
+    QObject::connect ( &TimerPollList, &QTimer::timeout, this, &CServerListManager::OnTimerPollList );
 
-    QObject::connect ( &TimerPingServerInList, &QTimer::timeout,
-        this, &CServerListManager::OnTimerPingServerInList );
+    QObject::connect ( &TimerPingServerInList, &QTimer::timeout, this, &CServerListManager::OnTimerPingServerInList );
 
-    QObject::connect ( &TimerPingCentralServer, &QTimer::timeout,
-        this, &CServerListManager::OnTimerPingCentralServer );
+    QObject::connect ( &TimerPingCentralServer, &QTimer::timeout, this, &CServerListManager::OnTimerPingCentralServer );
 
-    QObject::connect ( &TimerRegistering, &QTimer::timeout,
-        this, &CServerListManager::OnTimerRegistering );
+    QObject::connect ( &TimerRegistering, &QTimer::timeout, this, &CServerListManager::OnTimerRegistering );
 
-    QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout,
-        this, &CServerListManager::OnTimerCLRegisterServerResp );
+    QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout, this, &CServerListManager::OnTimerCLRegisterServerResp );
 }
 
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
 {
+    // if the address has not actually changed, do nothing
+    if ( sNCentServAddr == strCentralServerAddress )
+    {
+        return;
+    }
+
+    // if we are registered to a custom directory server, unregister before updating the name
+    if ( eCentralServerAddressType == AT_CUSTOM && GetSvrRegStatus() == SRS_REGISTERED )
+    {
+        SlaveServerUnregister();
+    }
+
     QMutexLocker locker ( &Mutex );
 
+    // now save the new name
     strCentralServerAddress = sNCentServAddr;
 
-    // per definition: If the central server address is empty, the server list
-    // is disabled.
-    // per definition: If we are in server mode and the central server address
-    // is the localhost address, we are in central server mode. For the central
-    // server, the server list is always enabled.
-    if ( !strCentralServerAddress.isEmpty() )
-    {
-        bIsCentralServer =
-            (
-              ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
-                !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-              ( eCentralServerAddressType == AT_CUSTOM )
-            );
+    // per definition: If we are in server mode and the directory server address
+    // is the localhost address, and set to Custom, we are in directory server mode.
+    bIsCentralServer = ( ( !strCentralServerAddress.toLower().compare ( "localhost" ) || !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
+                         ( eCentralServerAddressType == AT_CUSTOM ) );
+}
 
-        bEnabled = true;
-    }
-    else
+void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
+{
+    // if the type is changing, unregister before updating
+    if ( eNCSAT != eCentralServerAddressType && GetSvrRegStatus() == SRS_REGISTERED )
     {
-        bIsCentralServer = false;
-        bEnabled         = false;
+        SlaveServerUnregister();
     }
+
+    QMutexLocker locker ( &Mutex );
+
+    // now update the server type
+    eCentralServerAddressType = eNCSAT;
+
+    // per definition: If we are in server mode and the directory server address
+    // is the localhost address, and set to Custom, we are in directory server mode.
+    bIsCentralServer = ( ( !strCentralServerAddress.toLower().compare ( "localhost" ) || !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
+                         ( eCentralServerAddressType == AT_CUSTOM ) );
 }
 
 void CServerListManager::Update()
@@ -213,7 +214,7 @@ void CServerListManager::Update()
         {
             // initiate registration right away so that we do not have to wait
             // for the first time out of the timer until the slave server gets
-            // registered at the central server, note that we have to unlock
+            // registered at the directory server, note that we have to unlock
             // the mutex before calling the function since inside this function
             // the mutex is locked, too
             locker.unlock();
@@ -228,15 +229,15 @@ void CServerListManager::Update()
             // start timer for registration timeout
             TimerCLRegisterServerResp.start();
 
-            // start timer for registering this server at the central server
+            // start timer for registering this server at the directory server
             // 1 minute = 60 * 1000 ms
             TimerRegistering.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
 
-            // Start timer for ping the central server in short intervals to
+            // Start timer for ping the directory server in short intervals to
             // keep the port open at the NAT router.
             // If no NAT is used, we send the messages anyway since they do
             // not hurt (very low traffic). We also reuse the same update
-            // time as used in the central server for pinging the slave
+            // time as used in the directory server for pinging the slave
             // servers.
             TimerPingCentralServer.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
         }
@@ -258,15 +259,14 @@ void CServerListManager::Update()
     }
 }
 
-
-/* Central server functionality ***********************************************/
+/* Directory server list functionality ****************************************/
 void CServerListManager::OnTimerPingServerInList()
 {
     QMutexLocker locker ( &Mutex );
 
     const int iCurServerListSize = ServerList.size();
 
-    // send ping to list entries except of the very first one (which is the central
+    // send ping to list entries except of the very first one (which is the directory
     // server entry)
     for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
     {
@@ -281,7 +281,7 @@ void CServerListManager::OnTimerPollList()
 
     QMutexLocker locker ( &Mutex );
 
-    // Check all list entries except of the very first one (which is the central
+    // Check all list entries except of the very first one (which is the directory
     // server entry) if they are still valid.
     // Note that we have to use "ServerList.size()" function in the for loop
     // since we may remove elements from the server list inside the for loop.
@@ -305,8 +305,7 @@ void CServerListManager::OnTimerPollList()
 
     foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
     {
-        qInfo() << qUtf8Printable( QString( "Expired entry for %1" )
-            .arg( HostAddr.toString() ) );
+        qInfo() << qUtf8Printable ( QString ( "Expired entry for %1" ).arg ( HostAddr.toString() ) );
     }
 }
 
@@ -317,13 +316,15 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
 {
     if ( bIsCentralServer && bEnabled )
     {
-        qInfo() << qUtf8Printable( QString( "Requested to register entry for %1 (%2): %3")
-            .arg( InetAddr.toString() ).arg( LInetAddr.toString() ).arg( ServerInfo.strName ) );
+        qInfo() << qUtf8Printable ( QString ( "Requested to register entry for %1 (%2): %3" )
+                                        .arg ( InetAddr.toString() )
+                                        .arg ( LInetAddr.toString() )
+                                        .arg ( ServerInfo.strName ) );
 
         // check for minimum server version
         if ( !strMinServerVersion.isEmpty() )
         {
-#if ( QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) )
+#if ( QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 ) )
             if ( strVersion.isEmpty() ||
                  QVersionNumber::compare ( QVersionNumber::fromString ( strMinServerVersion ), QVersionNumber::fromString ( strVersion ) ) > 0 )
             {
@@ -351,7 +352,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
 
         // Check if server is already registered.
         // The very first list entry must not be checked since
-        // this is per definition the central server (i.e., this server)
+        // this is per definition the directory server (i.e., this server)
         int iSelIdx = INVALID_INDEX; // initialize with an illegal value
 
         for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
@@ -390,9 +391,9 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             ServerList[iSelIdx].UpdateRegistration();
         }
 
-        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == INVALID_INDEX
-                                                            ? ESvrRegResult::SRR_CENTRAL_SVR_FULL
-                                                            : ESvrRegResult::SRR_REGISTERED );
+        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr,
+                                                        iSelIdx == INVALID_INDEX ? ESvrRegResult::SRR_CENTRAL_SVR_FULL
+                                                                                 : ESvrRegResult::SRR_REGISTERED );
     }
 }
 
@@ -400,15 +401,14 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
 {
     if ( bIsCentralServer && bEnabled )
     {
-        qInfo() << qUtf8Printable( QString( "Requested to unregister entry for %1" )
-            .arg( InetAddr.toString() ) );
+        qInfo() << qUtf8Printable ( QString ( "Requested to unregister entry for %1" ).arg ( InetAddr.toString() ) );
 
         QMutexLocker locker ( &Mutex );
 
         const int iCurServerListSize = ServerList.size();
 
         // Find the server to unregister in the list. The very first list entry
-        // must not be checked since this is per definition the central server
+        // must not be checked since this is per definition the directory server
         // (i.e., this server).
         for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
@@ -465,7 +465,7 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                     // but it supplied an additional public address using
                     // --serverpublicip.
                     // In this case, use the latter.
-                    // This is common when running a central server with slave
+                    // This is common when running a directory server with slave
                     // servers behind a NAT and dealing with external, public
                     // clients.
                     vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
@@ -474,12 +474,10 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                 {
                     // create "send empty message" for all registered servers
                     // (except of the very first list entry since this is this
-                    // server (central server) per definition) and also it is
+                    // server (directory server) per definition) and also it is
                     // not required to send this message, if the server is on
                     // the same computer
-                    pConnLessProtocol->CreateCLSendEmptyMesMes ( 
-                        vecServerInfo[iIdx].HostAddr,
-                        InetAddr );
+                    pConnLessProtocol->CreateCLSendEmptyMesMes ( vecServerInfo[iIdx].HostAddr, InetAddr );
                 }
             }
         }
@@ -491,7 +489,6 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
         pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
     }
 }
-
 
 /* Slave server functionality *************************************************/
 void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
@@ -531,11 +528,11 @@ void CServerListManager::OnTimerPingCentralServer()
 {
     QMutexLocker locker ( &Mutex );
 
-    // first check if central server address is valid
+    // first check if directory server address is valid
     if ( !( SlaveCurCentServerHostAddress == CHostAddress() ) )
     {
-        // send empty message to central server to keep NAT port open -> we do
-        // not require any answer from the central server
+        // send empty message to directory server to keep NAT port open -> we do
+        // not require any answer from the directory server
         pConnLessProtocol->CreateCLEmptyMes ( SlaveCurCentServerHostAddress );
     }
 }
@@ -572,10 +569,8 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     // any time
     QMutexLocker locker ( &Mutex );
 
-    // get the correct central server address
-    const QString strCurCentrServAddr =
-            NetworkUtil::GetCentralServerAddress ( eCentralServerAddressType,
-                                                   strCentralServerAddress );
+    // get the correct directory server address
+    const QString strCurCentrServAddr = NetworkUtil::GetCentralServerAddress ( eCentralServerAddressType, strCentralServerAddress );
 
     // For the slave server, the slave server properties are stored in the
     // very first item in the server list (which is actually no server list
@@ -583,17 +578,14 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
-    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr,
-                                             SlaveCurCentServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr, SlaveCurCentServerHostAddress ) )
     {
         if ( bIsRegister )
         {
             // register server
-            SetSvrRegStatus (  SRS_REQUESTED );
+            SetSvrRegStatus ( SRS_REQUESTED );
 
-            pConnLessProtocol->CreateCLRegisterServerExMes ( SlaveCurCentServerHostAddress,
-                                                             SlaveCurLocalHostAddress,
-                                                             ServerList[0] );
+            pConnLessProtocol->CreateCLRegisterServerExMes ( SlaveCurCentServerHostAddress, SlaveCurLocalHostAddress, ServerList[0] );
         }
         else
         {
@@ -612,8 +604,7 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
     // output regirstation result/update on the console
-    qInfo() << qUtf8Printable( QString( "Server Registration Status update: %1" )
-        .arg( svrRegStatusToString ( eNSvrRegStatus ) ) );
+    qInfo() << qUtf8Printable ( QString ( "Server Registration Status update: %1" ).arg ( svrRegStatusToString ( eNSvrRegStatus ) ) );
 
     // store the state and inform the GUI about the new status
     eSvrRegStatus = eNSvrRegStatus;

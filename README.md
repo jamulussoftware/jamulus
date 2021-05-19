@@ -1,10 +1,10 @@
-[![Homepage picture](src/res/homepage/jamulusbannersmall.png)](https://jamulus.io)
+[![Homepage picture](https://github.com/jamulussoftware/jamuluswebsite/blob/release/assets/img/jamulusbannersmall.png)](https://jamulus.io)
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
 Jamulus - Internet Jam Session Software
 =======================================
-<a href="https://jamulus.io/"><img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/></a>
+<a href="https://jamulus.io/"><img align="left" width="102" height="102" src="https://jamulus.io/assets/img/jamulus-icon-2020.svg"/></a>
 
 Jamulus enables musicians to perform in real-time together over the internet.
 A Jamulus server collects the incoming audio data from each Jamulus client, mixes that data and then sends that mix back to each client. Jamulus can support large numbers of clients with minimal latency and modest bandwidth requirements. 
@@ -44,12 +44,11 @@ Contributing
 See the [contributing instructions](CONTRIBUTING.md)
 
 
-Acknowledgments
+Acknowledgements
 ---------------
 
-This code contains open source code from different sources. The developer(s) want
-to thank the developer of this code for making their efforts available under open
-source:
+Jamulus contains code from different sources (see also [COPYING](COPYING)). The developers wish
+to thank the maintainers of these projects for making their efforts available to us under their respective licences:
 
 - Qt cross-platform application framework: http://www.qt.io
 

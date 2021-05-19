@@ -45,24 +45,23 @@ void CServerLogging::Start ( const QString& strLoggingFileName )
     }
 }
 
-void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr,
-                                        const int           iNumberOfConnectedClients )
+void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr, const int iNumberOfConnectedClients )
 {
     // logging of new connected channel
-    const QString strLogStr = CurTimeDatetoLogString() + ", " +
-        ClientInetAddr.toString() + ", connected (" + QString::number ( iNumberOfConnectedClients ) + ")";
+    const QString strLogStr =
+        CurTimeDatetoLogString() + ", " + ClientInetAddr.toString() + ", connected (" + QString::number ( iNumberOfConnectedClients ) + ")";
 
-    qInfo() << qUtf8Printable( strLogStr ); // on console
-    *this << strLogStr; // in log file
+    qInfo() << qUtf8Printable ( strLogStr ); // on console
+    *this << strLogStr;                      // in log file
 }
 
 void CServerLogging::AddServerStopped()
 {
     const QString strLogStr = CurTimeDatetoLogString() + ",, server idling "
-        "-------------------------------------";
+                                                         "-------------------------------------";
 
-    qInfo() << qUtf8Printable( strLogStr ); // on console
-    *this << strLogStr; // in log file
+    qInfo() << qUtf8Printable ( strLogStr ); // on console
+    *this << strLogStr;                      // in log file
 }
 
 void CServerLogging::operator<< ( const QString& sNewStr )
@@ -82,5 +81,5 @@ QString CServerLogging::CurTimeDatetoLogString()
     const QDateTime curDateTime = QDateTime::currentDateTime();
 
     // format date and time output according to "2006-09-30 11:38:08"
-    return curDateTime.toString("yyyy-MM-dd HH:mm:ss");
+    return curDateTime.toString ( "yyyy-MM-dd HH:mm:ss" );
 }

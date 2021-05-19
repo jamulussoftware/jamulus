@@ -505,6 +505,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
+    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted,
+        this, &CClientDlg::OnConnectDlgAccepted );
+
     // disable Add to Favorites button by default
     paFAVAction->setEnabled( false );
 

@@ -1367,17 +1367,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Language</source>
-        <translation type="unfinished">Langue</translation>
+        <translation>Langue</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez la langue à utiliser pour l&apos;interface utilisateur.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="252"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant langue</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="256"/>
@@ -2042,13 +2042,13 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="885"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="915"/>
         <location filename="../../clientsettingsdlgbase.ui" line="945"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1134"/>
@@ -2131,7 +2131,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1073"/>
         <source>Custom Directory Server Address:</source>
-        <translation>Adresse personnalisée du serveur annuaire : </translation>
+        <translation>Adresse personnalisée du serveur annuaire :</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="862"/>
@@ -2342,12 +2342,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">À &amp;propos de Jamulus...</translation>
+        <translation>À &amp;propos de Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">À propos de &amp;Qt...</translation>
+        <translation>À propos de &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2356,7 +2356,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">À propos de Qt</translation>
+        <translation>À propos de Qt</translation>
     </message>
 </context>
 <context>
@@ -3119,7 +3119,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Liste</translation>
+        <translation>Liste</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>

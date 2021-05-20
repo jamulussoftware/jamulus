@@ -56,6 +56,7 @@ public:
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
+    bool isInitialized;
     
 
 protected:

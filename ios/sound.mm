@@ -133,10 +133,12 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
         }
     }];
     [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
+    isInitialized = false;
 }
 
 int CSound::Init ( const int iCoreAudioBufferSizeMono )
 {
+    //printf("Init sound ..."); <= to check the number of Sound inits at launch
     // init base class
     //CSoundBase::Init ( iCoreAudioBufferSizeMono ); this does nothing
     this->iCoreAudioBufferSizeMono = iCoreAudioBufferSizeMono;
@@ -240,6 +242,8 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
     // Initialise
     status = AudioUnitInitialize(audioUnit);
     checkStatus(status);
+    
+    isInitialized = true;
     
   return iCoreAudioBufferSizeMono;
 }

@@ -769,9 +769,9 @@ void CClient::Init()
     const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE;
 
 #   if defined ( Q_OS_IOS )
-    bFraSiFactPrefSupported = TRUE; //to reduce sound init time, because we know it's supported in iOS
-    bFraSiFactDefSupported  = TRUE;
-    bFraSiFactSafeSupported = TRUE;
+    bFraSiFactPrefSupported = true; //to reduce sound init time, because we know it's supported in iOS
+    bFraSiFactDefSupported  = true;
+    bFraSiFactSafeSupported = true;
 #   else
     bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
     bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault ) == iFraSizeDefault );
@@ -782,8 +782,15 @@ void CClient::Init()
     const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
+#   if defined ( Q_OS_IOS ) //iOS needs 1 init only, without this: 9 inits at launch <- slow
+    if ( Sound.isInitialized )
+        iMonoBlockSizeSam = iPrefMonoFrameSize;
+    else
+        iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
+#   else
     iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
-
+#   endif
+    
     // Calculate the current sound card frame size factor. In case
     // the current mono block size is not a multiple of the system
     // frame size, we have to use a sound card conversion buffer.

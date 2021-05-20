@@ -225,7 +225,7 @@ public slots:
 
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
-    void OnCtrlDlgUpdated();
+    void OnConnectionListDlgUpdated();
     void OnGUIDesignChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );
     void SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign );

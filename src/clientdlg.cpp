@@ -502,7 +502,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
-    QObject::connect ( &ConnectionListDlg, &CConnectionListDlg::CtrlDlgUpdated, this, &CClientDlg::OnCtrlDlgUpdated );
+    QObject::connect ( &ConnectionListDlg, &CConnectionListDlg::ConnectionListDlgUpdated, this, &CClientDlg::OnConnectionListDlgUpdated );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -634,9 +634,9 @@ void CClientDlg::UpdateRevSelection()
     MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
 
-void CClientDlg::OnCtrlDlgUpdated()
+void CClientDlg::OnConnectionListDlgUpdated()
 {
-        // get the address from the CtrlDlg dialog
+        // get the address from the ConnectionListDlg dialog
         QString strSelectedAddress = ConnectionListDlg.getSelectedAddress();
 
         // get name to be set in audio mixer group box title

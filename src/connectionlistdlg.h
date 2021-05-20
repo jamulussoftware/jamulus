@@ -27,7 +27,7 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 signals:
-    void CtrlDlgUpdated() ;
+    void ConnectionListDlgUpdated() ;
 
 private:
     Ui::CConnectionListDlg *ui;

@@ -57,7 +57,7 @@ void CConnectionListDlg::LoadConnectionList(QString filename)
 
 void CConnectionListDlg::on_connectButton_clicked()
 {
-    emit CtrlDlgUpdated();
+    emit ConnectionListDlgUpdated();
 }
 
 void CConnectionListDlg::on_nextButton_clicked()
@@ -70,7 +70,7 @@ void CConnectionListDlg::on_nextButton_clicked()
     ulSelectedServer = newRow;
     ui->listWidget->setCurrentRow(newRow);
     ui->listWidget->repaint();
-    emit CtrlDlgUpdated();
+    emit ConnectionListDlgUpdated();
 }
 
 QString CConnectionListDlg::getSelectedName()
@@ -92,6 +92,6 @@ void CConnectionListDlg::on_listWidget_currentRowChanged(int currentRow)
 
 void CConnectionListDlg::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-    emit CtrlDlgUpdated();
+    emit ConnectionListDlgUpdated();
 }
 

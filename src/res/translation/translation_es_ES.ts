@@ -1045,7 +1045,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="674"/>
         <source>Directory Server</source>
-        <translation type="unfinished">Servidor de Directorio</translation>
+        <translation>Servidor de Directorio</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="719"/>
@@ -1384,17 +1384,17 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Language</source>
-        <translation type="unfinished">Idioma</translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona el idioma a utilizar para el interfaz de usuario.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="252"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Campo Idioma</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="314"/>
@@ -1415,7 +1415,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
         <source>Directory server address combo box</source>
-        <translation type="unfinished">Campo para dirección servidor de directorio</translation>
+        <translation>Campo para dirección servidor de directorio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="371"/>
@@ -1635,7 +1635,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="331"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Dirección Personalizada Servidor de Directorio</translation>
+        <translation>Dirección Personalizada Servidor de Directorio</translation>
     </message>
     <message>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
@@ -1867,7 +1867,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="332"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="unfinished">Deja esto en blanco a menos que necesites escribir la dirección de un servidor distinto a los que hay por defecto.</translation>
+        <translation>Deja esto en blanco a menos que necesites escribir la dirección de un servidor de directorio distinto a los que hay por defecto.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
@@ -2439,13 +2439,13 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="885"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="915"/>
         <location filename="../../clientsettingsdlgbase.ui" line="945"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1134"/>
@@ -2541,7 +2541,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1073"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Dirección Personalizada Servidor de Directorio:</translation>
+        <translation>Dirección Personalizada Servidor de Directorio:</translation>
     </message>
     <message>
         <source>Directory Server Address:</source>
@@ -2779,12 +2779,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">&amp;Acerca de Jamulus...</translation>
+        <translation>&amp;Acerca de Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">Acerca de &amp;Qt...</translation>
+        <translation>Acerca de &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2793,7 +2793,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">Acerca de Qt</translation>
+        <translation>Acerca de Qt</translation>
     </message>
 </context>
 <context>
@@ -3277,7 +3277,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../serverdlg.cpp" line="70"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished">Si se activa Mi Servidor es Público, se mostrará si el registro con el servidor de directorio ha tenido éxito. Si el registro falla, por favor escoge otra lista de servidores.</translation>
+        <translation>Si se activa Mi Servidor es Público, se mostrará si el registro con el servidor de directorio ha tenido éxito. Si el registro falla, por favor escoge otra lista de servidores.</translation>
     </message>
     <message>
         <source>Default directory server type combo box</source>
@@ -3291,22 +3291,22 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../serverdlg.cpp" line="61"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished">Si se activa Mi Servidor es Público, este servidor se registra en el servidor de directorio para que todos los usuarios de la aplicación puedan ver el servidor en la lista de servidores de la ventana de conexión y conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentren realmente disponibles.</translation>
+        <translation>Si se activa Mi Servidor es Público, este servidor se registra en el servidor de directorio para que todos los usuarios de la aplicación puedan ver el servidor en la lista de servidores de la ventana de conexión y conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentren realmente disponibles.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Dirección Personalizada Servidor de Directorio</translation>
+        <translation>Dirección Personalizada Servidor de Directorio</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="76"/>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished">La dirección personalizada del servidor de directorio es la dirección IP o URL del servidor de directorio en el cual se gestiona la lista de servidores de la ventana de conexión.</translation>
+        <translation>La dirección personalizada del servidor de directorio es la dirección IP o URL del servidor de directorio en el cual se gestiona la lista de servidores de la ventana de conexión.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
         <source>Directory server address line edit</source>
-        <translation type="unfinished">Dirección servidor de directorio</translation>
+        <translation>Edición dirección servidor de directorio</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
@@ -3316,7 +3316,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../serverdlg.cpp" line="84"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="unfinished">Selecciona la lista de servidores (por ej. dirección servidor de directorio) al que se añadirá tu servidor.</translation>
+        <translation>Selecciona la lista de servidores (por ej. dirección servidor de directorio) al que se añadirá tu servidor.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
@@ -3663,7 +3663,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../util.h" line="612"/>
         <source>Directory Server full</source>
-        <translation type="unfinished">Servidor de Directorio lleno</translation>
+        <translation>Servidor de Directorio lleno</translation>
     </message>
     <message>
         <location filename="../../util.h" line="615"/>
@@ -3712,7 +3712,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Lista</translation>
+        <translation>Lista</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -3761,7 +3761,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Dirección Personalizada Servidor de Directorio:</translation>
+        <translation>Dirección Personalizada Servidor de Directorio:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="236"/>

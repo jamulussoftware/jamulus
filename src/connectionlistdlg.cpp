@@ -6,20 +6,20 @@
 
 
 
-ConnectionListDlg::ConnectionListDlg(QWidget *parent) :
+CConnectionListDlg::CConnectionListDlg(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ConnectionListDlg),
+    ui(new Ui::CConnectionListDlg),
     vecServerInfo(0),
     ulSelectedServer(0)
 {
     ui->setupUi(this);
 }
 
-ConnectionListDlg::~ConnectionListDlg()
+CConnectionListDlg::~CConnectionListDlg()
 {
     delete ui;
 }
-void ConnectionListDlg::LoadConnectionList(QString filename)
+void CConnectionListDlg::LoadConnectionList(QString filename)
 {
     NetworkUtil networkUtil;
 
@@ -55,12 +55,12 @@ void ConnectionListDlg::LoadConnectionList(QString filename)
     ulSelectedServer = 0;
 }
 
-void ConnectionListDlg::on_connectButton_clicked()
+void CConnectionListDlg::on_connectButton_clicked()
 {
     emit CtrlDlgUpdated();
 }
 
-void ConnectionListDlg::on_nextButton_clicked()
+void CConnectionListDlg::on_nextButton_clicked()
 {
     int newRow = ui->listWidget->currentRow()+1;
     if ( newRow == ui->listWidget->count() )
@@ -73,24 +73,24 @@ void ConnectionListDlg::on_nextButton_clicked()
     emit CtrlDlgUpdated();
 }
 
-QString ConnectionListDlg::getSelectedName()
+QString CConnectionListDlg::getSelectedName()
 {
     CServerInfo ci = vecServerInfo[ulSelectedServer];
     return ci.strName;
 }
 
-QString ConnectionListDlg::getSelectedAddress()
+QString CConnectionListDlg::getSelectedAddress()
 {
     CServerInfo ci = vecServerInfo[ulSelectedServer];
     return ci.HostAddr.toString();
 }
 
-void ConnectionListDlg::on_listWidget_currentRowChanged(int currentRow)
+void CConnectionListDlg::on_listWidget_currentRowChanged(int currentRow)
 {
     ulSelectedServer = currentRow;
 }
 
-void ConnectionListDlg::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+void CConnectionListDlg::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     emit CtrlDlgUpdated();
 }

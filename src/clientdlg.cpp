@@ -44,7 +44,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ChatDlg ( parent ),
     ConnectDlg ( pNSetP, bNewShowComplRegConnList, parent ),
     AnalyzerConsole ( pNCliP, parent ),
-    CtrlDlg( parent )
+    ConnectionListDlg( parent )
 {
     setupUi ( this );
 
@@ -502,7 +502,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
-    QObject::connect ( &CtrlDlg, &ConnectionListDlg::CtrlDlgUpdated, this, &CClientDlg::OnCtrlDlgUpdated );
+    QObject::connect ( &ConnectionListDlg, &CConnectionListDlg::CtrlDlgUpdated, this, &CClientDlg::OnCtrlDlgUpdated );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -556,7 +556,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     ClientSettingsDlg.close();
     ChatDlg.close();
     ConnectDlg.close();
-    CtrlDlg.close();
+    ConnectionListDlg.close();
     AnalyzerConsole.close();
 
     // if connected, terminate connection
@@ -637,10 +637,10 @@ void CClientDlg::UpdateRevSelection()
 void CClientDlg::OnCtrlDlgUpdated()
 {
         // get the address from the CtrlDlg dialog
-        QString strSelectedAddress = CtrlDlg.getSelectedAddress();
+        QString strSelectedAddress = ConnectionListDlg.getSelectedAddress();
 
         // get name to be set in audio mixer group box title
-        QString strMixerBoardLabel = CtrlDlg.getSelectedName();
+        QString strMixerBoardLabel = ConnectionListDlg.getSelectedName();
 
         // first check if we are already connected, if this is the case we have to
         // disconnect the old server first
@@ -749,10 +749,10 @@ void CClientDlg::OnConnectionList()
      if ( !strFileName.isEmpty() )
      {
          // first update the settings struct and then update the mixer panel
-         CtrlDlg.LoadConnectionList(strFileName);
-         CtrlDlg.show();
-         CtrlDlg.raise();
-         CtrlDlg.activateWindow();
+         ConnectionListDlg.LoadConnectionList(strFileName);
+         ConnectionListDlg.show();
+         ConnectionListDlg.raise();
+         ConnectionListDlg.activateWindow();
      }
 }
 

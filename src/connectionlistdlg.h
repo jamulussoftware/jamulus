@@ -1,21 +1,21 @@
-#ifndef CTRLDIALOG_H
-#define CTRLDIALOG_H
+
+#pragma once
 
 #include <QDialog>
 #include <util.h>
 #include <QListWidgetItem>
 
 namespace Ui {
-class ConnectionListDlg;
+class CConnectionListDlg;
 }
 
-class ConnectionListDlg : public QDialog
+class CConnectionListDlg : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ConnectionListDlg(QWidget *parent = nullptr);
-    ~ConnectionListDlg();
+    explicit CConnectionListDlg(QWidget *parent = nullptr);
+    ~CConnectionListDlg();
     QString getSelectedName();
     QString getSelectedAddress();
     void LoadConnectionList(QString filename);
@@ -30,9 +30,7 @@ signals:
     void CtrlDlgUpdated() ;
 
 private:
-    Ui::ConnectionListDlg *ui;
+    Ui::CConnectionListDlg *ui;
     CVector<CServerInfo> vecServerInfo ;
     unsigned long ulSelectedServer;
 };
-
-#endif // CTRLDIALOG_H

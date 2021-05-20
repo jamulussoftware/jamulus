@@ -122,7 +122,7 @@ protected:
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
-    ConnectionListDlg         CtrlDlg;
+    CConnectionListDlg  ConnectionListDlg;
 
 public slots:
     void OnConnectDisconBut();

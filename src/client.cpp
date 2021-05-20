@@ -782,14 +782,15 @@ void CClient::Init()
     const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
-#   if defined ( Q_OS_IOS ) //iOS needs 1 init only, without this: 9 inits at launch <- slow
-    if ( Sound.isInitialized )
-        iMonoBlockSizeSam = iPrefMonoFrameSize;
-    else
-        iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
-#   else
+//TODO - iOS needs 1 init only, now: 9 inits at launch <- slow
+// Initially, I tried to fix this as follows (inside #ifdef ios tag):
+//    if ( Sound.isInitialized )
+//      iMonoBlockSizeSam = iPrefMonoFrameSize;
+//    else
+//      iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
+//Problem is legitimate setting changes (buffer size for example).
+//so the condition should be something like "if ( Sound.isInitialized and APP_IS_INIALIZING)"
     iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
-#   endif
     
     // Calculate the current sound card frame size factor. In case
     // the current mono block size is not a multiple of the system

@@ -53,25 +53,18 @@ public:
     void ThisFAVtoTop();
     void OnTabChange();
     void FillFavoritesTab();
-    void SetFAVPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
-                                          const int           iPingTime,
-                                          const int           iNumClients );
+    void SetFAVPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
 
     void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
     bool GetShowAllMusicians() { return bShowAllMusicians; }
 
     void SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList = false );
 
-    void FillServerTab ( const CHostAddress&         InetAddr,
-                                      const CVector<CServerInfo>& vecServerInfo,
-                                      const bool                  bIsReducedServerList );
+    void FillServerTab ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList );
 
-    void UpdateFAVIPs( const CHostAddress&         InetAddr,
-                                     const CVector<CServerInfo>& vecServerInfo,
-                                     const bool                  bIsReducedServerList );
+    void UpdateFAVIPs ( const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList );
 
-    void SetConnClientsList ( const CHostAddress&          InetAddr,
-                              const CVector<CChannelInfo>& vecChanInfo );
+    void SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
 
     void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
 
@@ -95,21 +88,21 @@ protected:
 
     CClientSettings* pSettings;
 
-    QTimer           TimerPing;
-    QTimer           TimerReRequestServList;
-    QTimer           TimerInitialSort;
-    CHostAddress     CentralServerAddress;
-    QString          strSelectedAddress;
-    QString          strSelectedServerName;
-    QString          strSelectedMaxUsers;
-    QString          strSelectedDirectory;
-    ECSAddType       ecsSelectedDirectECS;
-    bool             bShowCompleteRegList;
-    bool             bServerListReceived;
-    bool             bReducedServerListReceived;
-    bool             bServerListItemWasChosen;
-    bool             bListFilterWasActive;
-    bool             bShowAllMusicians;
+    QTimer       TimerPing;
+    QTimer       TimerReRequestServList;
+    QTimer       TimerInitialSort;
+    CHostAddress CentralServerAddress;
+    QString      strSelectedAddress;
+    QString      strSelectedServerName;
+    QString      strSelectedMaxUsers;
+    QString      strSelectedDirectory;
+    ECSAddType   ecsSelectedDirectECS;
+    bool         bShowCompleteRegList;
+    bool         bServerListReceived;
+    bool         bReducedServerListReceived;
+    bool         bServerListItemWasChosen;
+    bool         bListFilterWasActive;
+    bool         bShowAllMusicians;
 
 public slots:
     void OnAddtoFavorites();

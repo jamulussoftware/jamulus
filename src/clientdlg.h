@@ -84,42 +84,40 @@ public:
                  QWidget*         parent = nullptr );
 
 protected:
-    void               SetGUIDesign ( const EGUIDesign eNewDesign );
-    void               SetMyWindowTitle ( const int iNumClients );
-    void               ShowConnectionSetupDialog();
-    void               ShowMusicianProfileDialog();
-    void               ShowGeneralSettings( int );
-    void               ShowChatWindow ( const bool bForceRaise = true );
-    void               ShowAnalyzerConsole();
-    void               UpdateAudioFaderSlider();
-    void               UpdateRevSelection();
-    void               Connect ( const QString& strSelectedAddress,
-                                 const QString& strMixerBoardLabel );
-    void               Disconnect();
-    void               ManageDragNDrop ( QDropEvent* Event,
-                                         const bool  bCheckAccept );
+    void SetGUIDesign ( const EGUIDesign eNewDesign );
+    void SetMyWindowTitle ( const int iNumClients );
+    void ShowConnectionSetupDialog();
+    void ShowMusicianProfileDialog();
+    void ShowGeneralSettings ( int );
+    void ShowChatWindow ( const bool bForceRaise = true );
+    void ShowAnalyzerConsole();
+    void UpdateAudioFaderSlider();
+    void UpdateRevSelection();
+    void Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel );
+    void Disconnect();
+    void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
 
-    CClient*           pClient;
-    CClientSettings*   pSettings;
-    QAction *          paFAVAction;
+    CClient*         pClient;
+    CClientSettings* pSettings;
+    QAction*         paFAVAction;
 
-    bool               bConnected;
-    bool               bConnectDlgWasShown;
-    bool               bMIDICtrlUsed;
-    bool               bDetectFeedback;
-    ERecorderState     eLastRecorderState;
-    EGUIDesign         eLastDesign;
-    QTimer             TimerSigMet;
-    QTimer             TimerBuffersLED;
-    QTimer             TimerStatus;
-    QTimer             TimerPing;
-    QTimer             TimerCheckAudioDeviceOk;
-    QTimer             TimerDetectFeedback;
+    bool           bConnected;
+    bool           bConnectDlgWasShown;
+    bool           bMIDICtrlUsed;
+    bool           bDetectFeedback;
+    ERecorderState eLastRecorderState;
+    EGUIDesign     eLastDesign;
+    QTimer         TimerSigMet;
+    QTimer         TimerBuffersLED;
+    QTimer         TimerStatus;
+    QTimer         TimerPing;
+    QTimer         TimerCheckAudioDeviceOk;
+    QTimer         TimerDetectFeedback;
 
-    virtual void       closeEvent     ( QCloseEvent*     Event );
-    virtual void       dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
-    virtual void       dropEvent      ( QDropEvent*      Event ) { ManageDragNDrop ( Event, false ); }
-    void               UpdateDisplay();
+    virtual void closeEvent ( QCloseEvent* Event );
+    virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
+    virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
+    void         UpdateDisplay();
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;

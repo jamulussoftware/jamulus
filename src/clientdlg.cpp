@@ -341,7 +341,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // Add to Favorites "button" -----------------------------------------------
     paFAVAction = new QAction ( tr ( "Add to &Favorites" ) );
-    QObject::connect ( paFAVAction, SIGNAL( triggered() ), &ConnectDlg, SLOT( OnAddtoFavorites() ) );
+    QObject::connect ( paFAVAction, SIGNAL ( triggered() ), &ConnectDlg, SLOT ( OnAddtoFavorites() ) );
     paFAVAction->setEnabled ( false );
 
     // Main menu bar -----------------------------------------------------------
@@ -505,11 +505,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        this,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
-    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted,
-        this, &CClientDlg::OnConnectDlgAccepted );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
 
     // disable Add to Favorites button by default
-    paFAVAction->setEnabled( false );
+    paFAVAction->setEnabled ( false );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -708,10 +707,10 @@ void CClientDlg::OnConnectDisconBut()
     if ( pClient->IsRunning() )
     {
         Disconnect();
-        SetMixerBoardDeco( RS_UNDEFINED, pClient->GetGUIDesign() );
+        SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
 
         // disable Add to Favorites button
-        paFAVAction->setEnabled( false );
+        paFAVAction->setEnabled ( false );
     }
     else
     {
@@ -1182,7 +1181,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
         // enable Add to Favorites button
-        paFAVAction->setEnabled( true );
+        paFAVAction->setEnabled ( true );
 
         // start timer for level meter bar and ping time measurement
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );

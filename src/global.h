@@ -181,10 +181,10 @@ LED bar:      lbr
 #define MAX_NUM_IN_OUT_CHANNELS 64
 
 // maximum number of elements in the server address combo box
-#define MAX_NUM_SERVER_ADDR_ITEMS        12
+#define MAX_NUM_SERVER_ADDR_ITEMS 12
 
 // maximum number of elements in the favorite address list
-#define MAX_NUM_FAVORITE_ADDR_ITEMS        16
+#define MAX_NUM_FAVORITE_ADDR_ITEMS 16
 
 // maximum number of fader settings to be stored (together with the fader tags)
 #define MAX_NUM_STORED_FADER_SETTINGS 250

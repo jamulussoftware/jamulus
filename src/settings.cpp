@@ -244,34 +244,31 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // Favorites Sort type
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "favsort",
-         0, 1, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "favsort", 0, 1, iValue ) )
     {
-        iFavSort = static_cast<EFavSort>(iValue);
+        iFavSort = static_cast<EFavSort> ( iValue );
     }
 
     // Favorites Sort type
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "favlastselected",
-         0, MAX_NUM_FAVORITE_ADDR_ITEMS, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "favlastselected", 0, MAX_NUM_FAVORITE_ADDR_ITEMS, iValue ) )
     {
         iFavDirLastSelected = iValue;
     }
 
     // FAVORITE addresses
-    QString strT;
+    QString     strT;
     QStringList listT;
     for ( iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
     {
-        strT =
-            GetIniSetting ( IniXMLDocument, "client",
-                            QString ( "favname%1" ).arg ( iIdx ), "" );
-        listT = strT.split(QLatin1Char(','));
-        if( (!listT[0].isEmpty()) && listT.size() == 5 ) {
+        strT  = GetIniSetting ( IniXMLDocument, "client", QString ( "favname%1" ).arg ( iIdx ), "" );
+        listT = strT.split ( QLatin1Char ( ',' ) );
+        if ( ( !listT[0].isEmpty() ) && listT.size() == 5 )
+        {
             vstrFAVAddress[iIdx]   = listT[0];
             vstrFAVMaxUsers[iIdx]  = listT[1];
             vstrFAVDirectory[iIdx] = listT[2];
             vstrFAVName[iIdx]      = FromBase64ToString ( listT[3] );
-            vecsFAVDirectECS[iIdx] = static_cast<ECSAddType>(listT[4].toInt());
+            vecsFAVDirectECS[iIdx] = static_cast<ECSAddType> ( listT[4].toInt() );
         }
     }
 
@@ -595,31 +592,25 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     }
 
     // visibility state of favorites tab
-    SetFlagIniSet ( IniXMLDocument, "client", "favshown",
-        bFavoriteWasShownConnect );
+    SetFlagIniSet ( IniXMLDocument, "client", "favshown", bFavoriteWasShownConnect );
 
     // Favorites Sort type
-    SetNumericIniSet ( IniXMLDocument, "client", "favsort",
-        static_cast<int>(iFavSort) );
+    SetNumericIniSet ( IniXMLDocument, "client", "favsort", static_cast<int> ( iFavSort ) );
 
     // Favorites Last Selected for Dir Sort
-    SetNumericIniSet ( IniXMLDocument, "client", "favlastselected",
-        iFavDirLastSelected );
+    SetNumericIniSet ( IniXMLDocument, "client", "favlastselected", iFavDirLastSelected );
 
     // Favorite info
     QString strT;
     for ( iIdx = 0; iIdx < MAX_NUM_FAVORITE_ADDR_ITEMS; iIdx++ )
     {
         strT = "";
-        if( !vstrFAVAddress[iIdx].isEmpty() )
+        if ( !vstrFAVAddress[iIdx].isEmpty() )
         {
-            strT = vstrFAVAddress[iIdx] + "," + vstrFAVMaxUsers[iIdx] + "," +
-               vstrFAVDirectory[iIdx] + "," + ToBase64 ( vstrFAVName[iIdx] ) +
-               "," + QString::number( static_cast<int>(vecsFAVDirectECS[iIdx]) );
+            strT = vstrFAVAddress[iIdx] + "," + vstrFAVMaxUsers[iIdx] + "," + vstrFAVDirectory[iIdx] + "," + ToBase64 ( vstrFAVName[iIdx] ) + "," +
+                   QString::number ( static_cast<int> ( vecsFAVDirectECS[iIdx] ) );
         }
-        PutIniSetting ( IniXMLDocument, "client",
-                        QString ( "favname%1" ).arg ( iIdx ),
-                        strT );
+        PutIniSetting ( IniXMLDocument, "client", QString ( "favname%1" ).arg ( iIdx ), strT );
     }
 
     // new client level

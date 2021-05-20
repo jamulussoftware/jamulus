@@ -23,8 +23,14 @@
   <layout class="QHBoxLayout" name="horizontalLayout_7">
    <item>
     <widget class="QTabWidget" name="tabSettings">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -43,7 +49,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
+             <width>0</width>
              <height>20</height>
             </size>
            </property>
@@ -78,7 +84,7 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_8">
                   <item>
-                   <widget class="QLabel" name="pedtAlias_2">
+                   <widget class="QLabel" name="plblAlias">
                     <property name="text">
                      <string>Alias/Name</string>
                     </property>
@@ -118,6 +124,12 @@
                  <layout class="QVBoxLayout" name="verticalLayout_9">
                   <item>
                    <widget class="QLineEdit" name="pedtAlias">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="minimumSize">
                      <size>
                       <width>150</width>
@@ -203,14 +215,14 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
-                   <widget class="QLabel" name="lblSkin_2">
+                   <widget class="QLabel" name="lblSkin">
                     <property name="text">
                      <string>Skin</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLabel" name="lblLanguage_2">
+                   <widget class="QLabel" name="lblLanguage">
                     <property name="text">
                      <string>Language</string>
                     </property>
@@ -242,6 +254,12 @@
                   </item>
                   <item>
                    <widget class="QSpinBox" name="spnMixerRows">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="alignment">
                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
@@ -282,7 +300,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>18</width>
+             <width>0</width>
              <height>20</height>
             </size>
            </property>
@@ -311,14 +329,14 @@
            <item>
             <widget class="QComboBox" name="cbxSoundcard">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
              <property name="minimumSize">
               <size>
-               <width>120</width>
+               <width>0</width>
                <height>0</height>
               </size>
              </property>
@@ -343,7 +361,7 @@
            <item>
             <widget class="QPushButton" name="butDriverSetup">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -413,7 +431,7 @@
                   <item>
                    <widget class="QLabel" name="lblLInChan">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -426,7 +444,7 @@
                   <item>
                    <widget class="QLabel" name="lblRInChan">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -470,7 +488,7 @@
                   <item>
                    <widget class="QLabel" name="lblLOutChan">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -483,7 +501,7 @@
                   <item>
                    <widget class="QLabel" name="lblROutChan">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -583,7 +601,7 @@
               <item>
                <widget class="QRadioButton" name="rbtBufferDelayPreferred">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -596,7 +614,7 @@
               <item>
                <widget class="QRadioButton" name="rbtBufferDelayDefault">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -609,7 +627,7 @@
               <item>
                <widget class="QRadioButton" name="rbtBufferDelaySafe">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -650,7 +668,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>13</width>
+             <width>0</width>
              <height>20</height>
             </size>
            </property>
@@ -666,6 +684,12 @@
              <layout class="QVBoxLayout" name="_15">
               <item>
                <widget class="QCheckBox" name="chbAutoJitBuf">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>Auto</string>
                 </property>
@@ -811,7 +835,7 @@
            <item>
             <widget class="QCheckBox" name="chbEnableOPUS64">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -993,7 +1017,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>13</width>
+             <width>0</width>
              <height>20</height>
             </size>
            </property>
@@ -1019,7 +1043,7 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>40</width>
+               <width>10</width>
                <height>20</height>
               </size>
              </property>
@@ -1046,7 +1070,7 @@
              <item>
               <widget class="QLabel" name="lblCentralServerAddress">
                <property name="text">
-                <string>Custom Central Server Address:</string>
+                <string>Custom Directory Server Address:</string>
                </property>
               </widget>
              </item>
@@ -1136,6 +1160,12 @@
              </item>
              <item>
               <widget class="QCheckBox" name="chbDetectFeedback">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string>Enable</string>
                </property>
@@ -1163,7 +1193,7 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>40</width>
+               <width>10</width>
                <height>20</height>
               </size>
              </property>
@@ -1178,9 +1208,12 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>10</width>
+               <width>20</width>
                <height>20</height>
               </size>
              </property>
@@ -1227,9 +1260,15 @@
                   </item>
                   <item>
                    <widget class="QSlider" name="sldAudioPan">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="minimumSize">
                      <size>
-                      <width>250</width>
+                      <width>0</width>
                       <height>0</height>
                      </size>
                     </property>
@@ -1294,9 +1333,12 @@
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>10</width>
+               <width>20</width>
                <height>20</height>
               </size>
              </property>

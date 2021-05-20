@@ -27,12 +27,8 @@
 
 #include "buffer.h"
 
-
 /* Network buffer implementation **********************************************/
-void CNetBuf::Init ( const int  iNewBlockSize,
-                     const int  iNewNumBlocks,
-                     const bool bNUseSequenceNumber,
-                     const bool bPreserve )
+void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks, const bool bNUseSequenceNumber, const bool bPreserve )
 {
     // store the sequence number activation flag
     bUseSequenceNumber = bNUseSequenceNumber;
@@ -44,7 +40,7 @@ void CNetBuf::Init ( const int  iNewBlockSize,
     if ( bPreserve && ( !bIsSimulation ) && bIsInitialized && ( iBlockSize == iNewBlockSize ) )
     {
         // extract all data from buffer in temporary storage
-        CVector<CVector<uint8_t> > vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
+        CVector<CVector<uint8_t>> vecvecTempMemory = vecvecMemory; // allocate worst case memory by copying
 
         if ( !bNUseSequenceNumber )
         {
@@ -62,8 +58,7 @@ void CNetBuf::Init ( const int  iNewBlockSize,
             // data back as the new buffer size can hold)
             int iDataCnt = 0;
 
-            while ( ( iDataCnt < iPreviousDataCnt ) &&
-                    Put ( vecvecTempMemory[iDataCnt], iBlockSize ) )
+            while ( ( iDataCnt < iPreviousDataCnt ) && Put ( vecvecTempMemory[iDataCnt], iBlockSize ) )
             {
                 iDataCnt++;
             }
@@ -112,11 +107,10 @@ void CNetBuf::Init ( const int  iNewBlockSize,
     bIsInitialized = true;
 }
 
-void CNetBuf::Resize ( const int iNewNumBlocks,
-                       const int iNewBlockSize )
+void CNetBuf::Resize ( const int iNewNumBlocks, const int iNewBlockSize )
 {
     // allocate memory for actual data buffer
-    vecvecMemory.Init   ( iNewNumBlocks );
+    vecvecMemory.Init ( iNewNumBlocks );
     veciBlockValid.Init ( iNewNumBlocks, 0 ); // initialize with zeros = invalid
 
     if ( !bIsSimulation )
@@ -135,8 +129,7 @@ void CNetBuf::Resize ( const int iNewNumBlocks,
     iNumBlocksMemory = iNewNumBlocks;
 }
 
-bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
-                    int                     iInSize )
+bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
 {
     // if the sequence number is used, we need a complete different way of applying
     // the new network packet
@@ -262,8 +255,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
     {
         // check if there is not enough space available and that the input size is a
         // multiple of the block size
-        if ( ( GetAvailSpace() < iInSize ) ||
-             ( ( iInSize % iBlockSize ) != 0 ) )
+        if ( ( GetAvailSpace() < iInSize ) || ( ( iInSize % iBlockSize ) != 0 ) )
         {
             return false;
         }
@@ -306,15 +298,12 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
     return true;
 }
 
-bool CNetBuf::Get ( CVector<uint8_t>& vecbyData,
-                    const int         iOutSize )
+bool CNetBuf::Get ( CVector<uint8_t>& vecbyData, const int iOutSize )
 {
     bool bReturn = true;
 
     // check requested output size and available buffer data
-    if ( ( iOutSize == 0 ) ||
-         ( iOutSize != iBlockSize ) ||
-         ( GetAvailData() < iOutSize ) )
+    if ( ( iOutSize == 0 ) || ( iOutSize != iBlockSize ) || ( GetAvailData() < iOutSize ) )
     {
         return false;
     }
@@ -333,9 +322,7 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData,
     if ( !bIsSimulation && bReturn )
     {
         // copy data from internal buffer in output buffer
-        std::copy ( vecvecMemory[iBlockGetPos].begin(),
-                    vecvecMemory[iBlockGetPos].begin() + iBlockSize,
-                    vecbyData.begin() );
+        std::copy ( vecvecMemory[iBlockGetPos].begin(), vecvecMemory[iBlockGetPos].begin() + iBlockSize, vecbyData.begin() );
     }
 
     // set the get position and sequence number one block further
@@ -410,18 +397,17 @@ int CNetBuf::GetAvailData() const
     return iAvBlocks * iBlockSize;
 }
 
-
 /* Network buffer with statistic calculations implementation ******************/
 CNetBufWithStats::CNetBufWithStats() :
-    CNetBuf                   ( false ), // base class init: no simulation mode
-    iMaxStatisticCount        ( MAX_STATISTIC_COUNT ),
+    CNetBuf ( false ), // base class init: no simulation mode
+    iMaxStatisticCount ( MAX_STATISTIC_COUNT ),
     bUseDoubleSystemFrameSize ( false ),
-    dAutoFilt_WightUpNormal   ( IIR_WEIGTH_UP_NORMAL ),
+    dAutoFilt_WightUpNormal ( IIR_WEIGTH_UP_NORMAL ),
     dAutoFilt_WightDownNormal ( IIR_WEIGTH_DOWN_NORMAL ),
-    dAutoFilt_WightUpFast     ( IIR_WEIGTH_UP_FAST ),
-    dAutoFilt_WightDownFast   ( IIR_WEIGTH_DOWN_FAST ),
-    dErrorRateBound           ( ERROR_RATE_BOUND ),
-    dUpMaxErrorBound          ( UP_MAX_ERROR_BOUND )
+    dAutoFilt_WightUpFast ( IIR_WEIGTH_UP_FAST ),
+    dAutoFilt_WightDownFast ( IIR_WEIGTH_DOWN_FAST ),
+    dErrorRateBound ( ERROR_RATE_BOUND ),
+    dUpMaxErrorBound ( UP_MAX_ERROR_BOUND )
 {
     // Define the sizes of the simulation buffers,
     // must be NUM_STAT_SIMULATION_BUFFERS elements!
@@ -446,9 +432,7 @@ CNetBufWithStats::CNetBufWithStats() :
     }
 }
 
-void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates,
-                                       double&          dLimit,
-                                       double&          dMaxUpLimit )
+void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates, double& dLimit, double& dMaxUpLimit )
 {
     // get all the averages of the error statistic
     vecErrRates.Init ( NUM_STAT_SIMULATION_BUFFERS );
@@ -463,10 +447,7 @@ void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates,
     dMaxUpLimit = dUpMaxErrorBound;
 }
 
-void CNetBufWithStats::Init ( const int  iNewBlockSize,
-                              const int  iNewNumBlocks,
-                              const bool bNUseSequenceNumber,
-                              const bool bPreserve )
+void CNetBufWithStats::Init ( const int iNewBlockSize, const int iNewNumBlocks, const bool bNUseSequenceNumber, const bool bPreserve )
 {
     // call base class Init
     CNetBuf::Init ( iNewBlockSize, iNewNumBlocks, bNUseSequenceNumber, bPreserve );
@@ -526,8 +507,7 @@ void CNetBufWithStats::ResetInitCounter()
     iInitCounter = iMaxStatisticCount / 4;
 }
 
-bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
-                             const int               iInSize )
+bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData, const int iInSize )
 {
     // call base class Put
     const bool bPutOK = CNetBuf::Put ( vecbyData, iInSize );
@@ -535,15 +515,13 @@ bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
     // update statistics calculations
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
     {
-        ErrorRateStatistic[i].Update (
-            !SimulationBuffer[i].Put ( vecbyData, iInSize ) );
+        ErrorRateStatistic[i].Update ( !SimulationBuffer[i].Put ( vecbyData, iInSize ) );
     }
 
     return bPutOK;
 }
 
-bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData,
-                             const int         iOutSize )
+bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData, const int iOutSize )
 {
     // call base class Get
     const bool bGetOK = CNetBuf::Get ( vecbyData, iOutSize );
@@ -551,8 +529,7 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData,
     // update statistics calculations
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
     {
-        ErrorRateStatistic[i].Update (
-            !SimulationBuffer[i].Get ( vecbyData, iOutSize ) );
+        ErrorRateStatistic[i].Update ( !SimulationBuffer[i].Get ( vecbyData, iOutSize ) );
     }
 
     // update auto setting
@@ -567,7 +544,6 @@ void CNetBufWithStats::UpdateAutoSetting()
     int  iCurMaxUpDecision = 0; // dummy initialization
     bool bDecisionFound;
 
-
     // Get regular error rate decision -----------------------------------------
     // Use a specified error bound to identify the best buffer size for the
     // current network situation. Start with the smallest buffer and
@@ -576,8 +552,7 @@ void CNetBufWithStats::UpdateAutoSetting()
 
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
-        if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= dErrorRateBound ) )
+        if ( ( !bDecisionFound ) && ( ErrorRateStatistic[i].GetAverage() <= dErrorRateBound ) )
         {
             iCurDecision   = viBufSizesForSim[i];
             bDecisionFound = true;
@@ -590,7 +565,6 @@ void CNetBufWithStats::UpdateAutoSetting()
         iCurDecision = viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
     }
 
-
     // Get maximum upper error rate decision -----------------------------------
     // Use a specified error bound to identify the maximum upper error rate
     // to identify if we have a too low buffer setting which gives a very
@@ -600,8 +574,7 @@ void CNetBufWithStats::UpdateAutoSetting()
 
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
-        if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= dUpMaxErrorBound ) )
+        if ( ( !bDecisionFound ) && ( ErrorRateStatistic[i].GetAverage() <= dUpMaxErrorBound ) )
         {
             iCurMaxUpDecision = viBufSizesForSim[i];
             bDecisionFound    = true;
@@ -618,7 +591,6 @@ void CNetBufWithStats::UpdateAutoSetting()
         // phase to get quickly back to normal buffer sizes (hopefully).
         ResetInitCounter();
     }
-
 
     // Post calculation (filtering) --------------------------------------------
     // Define different weights for up and down direction. Up direction
@@ -663,11 +635,9 @@ void CNetBufWithStats::UpdateAutoSetting()
     }
 
     // apply non-linear IIR filter
-    MathUtils().UpDownIIR1 ( dCurIIRFilterResult,
-                             static_cast<double> ( iCurDecision ),
-                             dWeightUp,
-                             dWeightDown );
+    MathUtils().UpDownIIR1 ( dCurIIRFilterResult, static_cast<double> ( iCurDecision ), dWeightUp, dWeightDown );
 
+    // clang-format off
 /*
 // TEST store important detection parameters in file for debugging
 static FILE* pFile = fopen ( "test.dat", "w" );
@@ -683,13 +653,10 @@ else
     icnt++;
 }
 */
+    // clang-format on
 
     // apply a hysteresis
-    iCurAutoBufferSizeSetting =
-        MathUtils().DecideWithHysteresis ( dCurIIRFilterResult,
-                                           iCurDecidedResult,
-                                           dHysteresisValue );
-
+    iCurAutoBufferSizeSetting = MathUtils().DecideWithHysteresis ( dCurIIRFilterResult, iCurDecidedResult, dHysteresisValue );
 
     // Initialization phase check and correction -------------------------------
     // sometimes in the very first period after a connection we get a bad error
@@ -697,8 +664,7 @@ else
     if ( iInitCounter == iMaxStatisticCount / 8 )
     {
         // check error rate of the largest buffer as the indicator
-        if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].
-             GetAverage() > dErrorRateBound )
+        if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > dErrorRateBound )
         {
             for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
             {

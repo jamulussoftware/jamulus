@@ -35,27 +35,31 @@
 #include "creaperproject.h"
 #include "cwavestream.h"
 
-namespace recorder {
+namespace recorder
+{
 
 class CJamClientConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    CJamClientConnection(const int _numAudioChannels, const qint64 _startFrame, const qint64 _length, const QString _name, const QString _fileName) :
-        numAudioChannels (_numAudioChannels),
-        startFrame (_startFrame),
-        length (_length),
-        name (_name),
-        fileName (_fileName)
-    {
-    }
+    CJamClientConnection ( const int     _numAudioChannels,
+                           const qint64  _startFrame,
+                           const qint64  _length,
+                           const QString _name,
+                           const QString _fileName ) :
+        numAudioChannels ( _numAudioChannels ),
+        startFrame ( _startFrame ),
+        length ( _length ),
+        name ( _name ),
+        fileName ( _fileName )
+    {}
 
-    int     Format()      { return numAudioChannels; }
-    qint64  StartFrame()  { return startFrame; }
-    qint64  Length()      { return length; }
-    QString Name()        { return name; }
-    QString FileName()    { return fileName; }
+    int     Format() { return numAudioChannels; }
+    qint64  StartFrame() { return startFrame; }
+    qint64  Length() { return length; }
+    QString Name() { return name; }
+    QString FileName() { return fileName; }
 
 private:
     const int     numAudioChannels;
@@ -70,36 +74,38 @@ class CJamClient : public QObject
     Q_OBJECT
 
 public:
-    CJamClient(const qint64 frame, const int numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir);
+    CJamClient ( const qint64 frame, const int numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir );
 
-    void Frame(const QString name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples);
+    void Frame ( const QString name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples );
 
     void Disconnect();
 
-    qint64       StartFrame()       { return startFrame; }
-    qint64       FrameCount()       { return frameCount; }
-    uint16_t     NumAudioChannels() { return numChannels; }
-    QString      ClientName()       { return TranslateChars(name).leftJustified(4, '_', false)
-                                                .append("-")
-                                                .append(TranslateChars(address.toString(CHostAddress::EStringMode::SM_IP_NO_LAST_BYTE_PORT)))
-                                             ;
-                                    }
-    CHostAddress ClientAddress()    { return address; }
+    qint64   StartFrame() { return startFrame; }
+    qint64   FrameCount() { return frameCount; }
+    uint16_t NumAudioChannels() { return numChannels; }
+    QString  ClientName()
+    {
+        return TranslateChars ( name )
+            .leftJustified ( 4, '_', false )
+            .append ( "-" )
+            .append ( TranslateChars ( address.toString ( CHostAddress::EStringMode::SM_IP_NO_LAST_BYTE_PORT ) ) );
+    }
+    CHostAddress ClientAddress() { return address; }
 
-    QString      FileName()         { return filename; }
+    QString FileName() { return filename; }
 
 private:
     QString TranslateChars ( const QString& input ) const;
 
     const qint64       startFrame;
     const uint16_t     numChannels;
-          QString      name;
+    QString            name;
     const CHostAddress address;
 
-          QString      filename;
-          QFile*       wavFile;
-          QDataStream* out;
-          qint64       frameCount = 0;
+    QString      filename;
+    QFile*       wavFile;
+    QDataStream* out;
+    qint64       frameCount = 0;
 };
 
 class CJamSession : public QObject
@@ -107,12 +113,16 @@ class CJamSession : public QObject
     Q_OBJECT
 
 public:
-
-    CJamSession(QDir recordBaseDir);
+    CJamSession ( QDir recordBaseDir );
 
     virtual ~CJamSession();
 
-    void Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples);
+    void Frame ( const int              iChID,
+                 const QString          name,
+                 const CHostAddress     address,
+                 const int              numAudioChannels,
+                 const CVector<int16_t> data,
+                 int                    iServerFrameSizeSamples );
 
     void End();
 
@@ -124,18 +134,18 @@ public:
 
     const QDir SessionDir() { return sessionDir; }
 
-    void DisconnectClient(int iChID);
+    void DisconnectClient ( int iChID );
 
-    static QMap<QString, QList<STrackItem>> TracksFromSessionDir(const QString& name, int iServerFrameSizeSamples);
+    static QMap<QString, QList<STrackItem>> TracksFromSessionDir ( const QString& name, int iServerFrameSizeSamples );
 
 private:
     CJamSession();
 
     const QDir sessionDir;
 
-    qint64 currentFrame;
-    int chIdDisconnected;
-    QVector<CJamClient*> vecptrJamClients;
+    qint64                       currentFrame;
+    int                          chIdDisconnected;
+    QVector<CJamClient*>         vecptrJamClients;
     QList<CJamClientConnection*> jamClientConnections;
 };
 
@@ -144,13 +154,11 @@ class CJamRecorder : public QObject
     Q_OBJECT
 
 public:
-    CJamRecorder ( const QString strRecordingBaseDir,
-                   const int     iServerFrameSizeSamples ) :
-        recordBaseDir           ( strRecordingBaseDir ),
+    CJamRecorder ( const QString strRecordingBaseDir, const int iServerFrameSizeSamples ) :
+        recordBaseDir ( strRecordingBaseDir ),
         iServerFrameSizeSamples ( iServerFrameSizeSamples ),
-        isRecording             ( false )
-    {
-    }
+        isRecording ( false )
+    {}
 
     /**
      * @brief Create recording directory, if necessary, and connect signal handlers
@@ -163,7 +171,7 @@ public:
      * @param strSessionDirName Where the session wave files are
      * @param serverFrameSizeSamples What the server frame size was for the session
      */
-    static void SessionDirToReaper( QString& strSessionDirName, int serverFrameSizeSamples );
+    static void SessionDirToReaper ( QString& strSessionDirName, int serverFrameSizeSamples );
 
 private:
     void Start();
@@ -208,4 +216,4 @@ public slots:
     void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data );
 };
 
-}
+} // namespace recorder

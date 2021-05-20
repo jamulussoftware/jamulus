@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -29,17 +29,18 @@
 #include <QHostAddress>
 #include <QHostInfo>
 #ifndef HEADLESS
-# include <QMenu>
-# include <QWhatsThis>
-# include <QTextBrowser>
-# include <QLabel>
-# include <QCheckBox>
-# include <QComboBox>
-# include <QLineEdit>
-# include <QDateTime>
-# include <QDesktopServices>
-# include <QKeyEvent>
-# include "ui_aboutdlgbase.h"
+#    include <QMessageBox>
+#    include <QMenu>
+#    include <QWhatsThis>
+#    include <QTextBrowser>
+#    include <QLabel>
+#    include <QCheckBox>
+#    include <QComboBox>
+#    include <QLineEdit>
+#    include <QDateTime>
+#    include <QDesktopServices>
+#    include <QKeyEvent>
+#    include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
 #include <QDirIterator>
@@ -52,26 +53,23 @@
 #include <algorithm>
 #include "global.h"
 #ifdef _WIN32
-# include <winsock2.h>
-# include <ws2tcpip.h>
-# include <windows.h>
-# include <mmsystem.h>
-#elif defined ( __APPLE__ ) || defined ( __MACOSX )
-# include <mach/mach.h>
-# include <mach/mach_error.h>
-# include <mach/mach_time.h>
+#    include <winsock2.h>
+#    include <ws2tcpip.h>
+#    include <windows.h>
+#    include <mmsystem.h>
+#elif defined( __APPLE__ ) || defined( __MACOSX )
+#    include <mach/mach.h>
+#    include <mach/mach_error.h>
+#    include <mach/mach_time.h>
 #else
-# include <sys/time.h>
+#    include <sys/time.h>
 #endif
 
-
-class CClient;  // forward declaration of CClient
-
+class CClient; // forward declaration of CClient
 
 /* Definitions ****************************************************************/
-#define METER_FLY_BACK              2
-#define INVALID_MIDI_CH            -1 // invalid MIDI channel definition
-
+#define METER_FLY_BACK  2
+#define INVALID_MIDI_CH -1 // invalid MIDI channel definition
 
 /* Global functions ***********************************************************/
 // converting float to short
@@ -93,8 +91,7 @@ inline short Float2Short ( const float fInput )
 }
 
 // calculate the bit rate in bits per second from the number of coded bytes
-inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
-                                                 const int iFrameSize )
+inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, const int iFrameSize )
 {
     return ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) / iFrameSize;
 }
@@ -102,36 +99,28 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
 QString GetVersionAndNameStr ( const bool bWithHtml = true );
 QString MakeClientNameTitle ( QString win, QString client );
 
-
 /******************************************************************************\
 * CVector Base Class                                                           *
 \******************************************************************************/
-template<class TData> class CVector : public std::vector<TData>
+template<class TData>
+class CVector : public std::vector<TData>
 {
 public:
     CVector() {}
     CVector ( const int iNeSi ) { Init ( iNeSi ); }
-    CVector ( const int   iNeSi,
-              const TData tInVa ) { Init ( iNeSi, tInVa ); }
+    CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
     CVector ( CVector const& ) = default;
 
     void Init ( const int iNewSize );
 
     // use this init to give all elements a defined value
-    void Init ( const int   iNewSize,
-                const TData tIniVal );
+    void Init ( const int iNewSize, const TData tIniVal );
 
     // set all values to the given reset value
-    void Reset ( const TData tResetVal )
-    {
-        std::fill ( this->begin(), this->end(), tResetVal );
-    }
+    void Reset ( const TData tResetVal ) { std::fill ( this->begin(), this->end(), tResetVal ); }
 
-    void Enlarge ( const int iAddedSize )
-    {
-        std::vector<TData>::resize ( std::vector<TData>::size() + iAddedSize );
-    }
+    void Enlarge ( const int iAddedSize ) { std::vector<TData>::resize ( std::vector<TData>::size() + iAddedSize ); }
 
     void Add ( const TData& tI )
     {
@@ -139,24 +128,23 @@ public:
         std::vector<TData>::back() = tI;
     }
 
-    int StringFiFoWithCompare ( const QString strNewValue,
-                                const bool    bDoAdding = true );
+    int StringFiFoWithCompare ( const QString strNewValue, const bool bDoAdding = true );
 
     // this function simply converts the type of size to integer
     inline int Size() const { return static_cast<int> ( std::vector<TData>::size() ); }
 };
 
-
 /* Implementation *************************************************************/
-template<class TData> void CVector<TData>::Init ( const int iNewSize )
+template<class TData>
+void CVector<TData>::Init ( const int iNewSize )
 {
     // clear old buffer and reserve memory for new buffer
     std::vector<TData>::clear();
     std::vector<TData>::resize ( iNewSize );
 }
 
-template<class TData> void CVector<TData>::Init ( const int   iNewSize, 
-                                                  const TData tIniVal )
+template<class TData>
+void CVector<TData>::Init ( const int iNewSize, const TData tIniVal )
 {
     // call actual init routine and reset all values to the given value
     Init ( iNewSize );
@@ -164,8 +152,8 @@ template<class TData> void CVector<TData>::Init ( const int   iNewSize,
 }
 
 // note: this is only supported for string vectors
-template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString strNewValue,
-                                                                  const bool    bDoAdding )
+template<class TData>
+int CVector<TData>::StringFiFoWithCompare ( const QString strNewValue, const bool bDoAdding )
 {
     const int iVectorSize = Size();
 
@@ -212,45 +200,44 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
     return iOldIndex;
 }
 
-
-
 /******************************************************************************\
 * CFIFO Class (First In, First Out)                                            *
 \******************************************************************************/
-template<class TData> class CFIFO : public CVector<TData>
+template<class TData>
+class CFIFO : public CVector<TData>
 {
 public:
     CFIFO() : iCurIdx ( 0 ) {}
     CFIFO ( const int iNeSi ) : CVector<TData> ( iNeSi ), iCurIdx ( 0 ) {}
-    CFIFO ( const int iNeSi, const TData tInVa ) :
-        CVector<TData> ( iNeSi, tInVa ), iCurIdx ( 0 ) {}
+    CFIFO ( const int iNeSi, const TData tInVa ) : CVector<TData> ( iNeSi, tInVa ), iCurIdx ( 0 ) {}
 
-    void Add ( const TData tNewD );
+    void         Add ( const TData tNewD );
     inline TData Get() { return CVector<TData>::operator[] ( iCurIdx ); }
 
     virtual void Init ( const int iNewSize );
 
-    virtual void Init ( const int   iNewSize,
-                        const TData tIniVal );
+    virtual void Init ( const int iNewSize, const TData tIniVal );
 
 protected:
     int iCurIdx;
 };
 
-template<class TData> void CFIFO<TData>::Init ( const int iNewSize )
+template<class TData>
+void CFIFO<TData>::Init ( const int iNewSize )
 {
     iCurIdx = 0;
     CVector<TData>::Init ( iNewSize );
 }
 
-template<class TData> void CFIFO<TData>::Init ( const int   iNewSize,
-                                                const TData tIniVal )
+template<class TData>
+void CFIFO<TData>::Init ( const int iNewSize, const TData tIniVal )
 {
     iCurIdx = 0;
     CVector<TData>::Init ( iNewSize, tIniVal );
 }
 
-template<class TData> void CFIFO<TData>::Add ( const TData tNewD )
+template<class TData>
+void CFIFO<TData>::Add ( const TData tNewD )
 {
     CVector<TData>::operator[] ( iCurIdx ) = tNewD;
 
@@ -263,24 +250,18 @@ template<class TData> void CFIFO<TData>::Add ( const TData tNewD )
     }
 }
 
-
 /******************************************************************************\
 * CMovingAv Class (Moving Average)                                             *
 \******************************************************************************/
-template<class TData> class CMovingAv : public CVector<TData>
+template<class TData>
+class CMovingAv : public CVector<TData>
 {
 public:
-    CMovingAv() :
-        CVector<TData>(),
-        iCurIdx ( 0 ),
-        iNorm ( 0 ),
-        dCurAvResult ( 0 ),
-        dNoDataResult ( 0 ) {}
+    CMovingAv() : CVector<TData>(), iCurIdx ( 0 ), iNorm ( 0 ), dCurAvResult ( 0 ), dNoDataResult ( 0 ) {}
 
     void Add ( const TData tNewD );
-    
-    void Init ( const int    iNewSize,
-                const double dNNoDRes = 0 );
+
+    void Init ( const int iNewSize, const double dNNoDRes = 0 );
 
     void Reset();
 
@@ -308,7 +289,7 @@ public:
         {
             return 0;
         }
-     }
+    }
 
 protected:
     int    iCurIdx;
@@ -317,8 +298,8 @@ protected:
     double dNoDataResult;
 };
 
-template<class TData> void CMovingAv<TData>::Init ( const int    iNewSize,
-                                                    const double dNNoDRes )
+template<class TData>
+void CMovingAv<TData>::Init ( const int iNewSize, const double dNNoDRes )
 {
     iNorm         = 0;
     iCurIdx       = 0;
@@ -327,7 +308,8 @@ template<class TData> void CMovingAv<TData>::Init ( const int    iNewSize,
     CVector<TData>::Init ( iNewSize );
 }
 
-template<class TData> void CMovingAv<TData>::Reset()
+template<class TData>
+void CMovingAv<TData>::Reset()
 {
     iNorm        = 0;
     iCurIdx      = 0;
@@ -335,13 +317,14 @@ template<class TData> void CMovingAv<TData>::Reset()
     CVector<TData>::Reset ( TData ( 0 ) );
 }
 
-template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
+template<class TData>
+void CMovingAv<TData>::Add ( const TData tNewD )
 {
-/*
-    Optimized calculation of the moving average. We only add a new value and
-    subtract the old value from the result. We only need one addition and a
-    history buffer.
-*/
+    /*
+        Optimized calculation of the moving average. We only add a new value and
+        subtract the old value from the result. We only need one addition and a
+        history buffer.
+    */
 
     // subtract oldest value
     dCurAvResult -= CVector<TData>::operator[] ( iCurIdx );
@@ -364,7 +347,6 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
     }
 }
 
-
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
@@ -375,8 +357,7 @@ class CBaseDlg : public QDialog
     Q_OBJECT
 
 public:
-    CBaseDlg ( QWidget*        parent = nullptr,
-               Qt::WindowFlags flags  = Qt::WindowFlags() ) : QDialog ( parent, flags ) {}
+    CBaseDlg ( QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags() ) : QDialog ( parent, flags ) {}
 
 public slots:
     void keyPressEvent ( QKeyEvent* pEvent )
@@ -384,18 +365,17 @@ public slots:
         // block escape key
         if ( pEvent->key() != Qt::Key_Escape )
         {
-#ifdef ANDROID
+#    ifdef ANDROID
             if ( pEvent->key() == Qt::Key_Back )
             {
                 close(); // otherwise, dialog does not show properly again in android (nefarius2001, #832)
                 return;
             }
-#endif
+#    endif
             QDialog::keyPressEvent ( pEvent );
         }
     }
 };
-
 
 // About dialog ----------------------------------------------------------------
 class CAboutDlg : public CBaseDlg, private Ui_CAboutDlgBase
@@ -405,7 +385,6 @@ class CAboutDlg : public CBaseDlg, private Ui_CAboutDlgBase
 public:
     CAboutDlg ( QWidget* parent = nullptr );
 };
-
 
 // Licence dialog --------------------------------------------------------------
 class CLicenceDlg : public CBaseDlg
@@ -422,7 +401,6 @@ public slots:
     void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
 };
 
-
 // Help menu -------------------------------------------------------------------
 class CHelpMenu : public QMenu
 {
@@ -435,13 +413,13 @@ protected:
     CAboutDlg AboutDlg;
 
 public slots:
-    void OnHelpWhatsThis()        { QWhatsThis::enterWhatsThisMode(); }
-    void OnHelpAbout()            { AboutDlg.exec(); }
+    void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
+    void OnHelpAbout() { AboutDlg.exec(); }
+    void OnHelpAboutQt() { QMessageBox::aboutQt ( nullptr, QString ( tr ( "About Qt" ) ) ); }
     void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
     void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
-    void OnHelpSoftwareMan()      { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
+    void OnHelpSoftwareMan() { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
 };
-
 
 // Language combo box ----------------------------------------------------------
 class CLanguageComboBox : public QComboBox
@@ -464,7 +442,6 @@ signals:
 };
 #endif
 
-
 /******************************************************************************\
 * Other Classes/Enums                                                          *
 \******************************************************************************/
@@ -472,41 +449,37 @@ signals:
 enum EAudChanConf
 {
     // used for settings -> enum values should be fixed
-    CC_MONO = 0,
+    CC_MONO               = 0,
     CC_MONO_IN_STEREO_OUT = 1,
-    CC_STEREO = 2
+    CC_STEREO             = 2
 };
-
 
 // Audio compression type enum -------------------------------------------------
 enum EAudComprType
 {
     // used for protocol -> enum values must be fixed!
-    CT_NONE = 0,
-    CT_CELT = 1,
-    CT_OPUS = 2,
+    CT_NONE   = 0,
+    CT_CELT   = 1,
+    CT_OPUS   = 2,
     CT_OPUS64 = 3 // using OPUS with 64 samples frame size
 };
-
 
 // Network transport flags -----------------------------------------------------
 enum ENetwFlags
 {
     // used for protocol -> enum values must be fixed!
-    NF_NONE = 0,
+    NF_NONE         = 0,
     NF_WITH_COUNTER = 1 // using a network counter to correctly order UDP packets in jitter buffer
 };
-
 
 // Audio quality enum ----------------------------------------------------------
 enum EAudioQuality
 {
     // used for settings and the comobo box index -> enum values must be fixed!
-    AQ_LOW = 0,
+    AQ_LOW    = 0,
     AQ_NORMAL = 1,
-    AQ_HIGH = 2
+    AQ_HIGH   = 2
 };
-
 
 // Get data status enum --------------------------------------------------------
 enum EGetDataStat
@@ -517,61 +490,56 @@ enum EGetDataStat
     GS_CHAN_NOT_CONNECTED
 };
 
-
 // GUI design enum -------------------------------------------------------------
 enum EGUIDesign
 {
     // used for settings -> enum values should be fixed
-    GD_STANDARD = 0,
-    GD_ORIGINAL = 1,
+    GD_STANDARD  = 0,
+    GD_ORIGINAL  = 1,
     GD_SLIMFADER = 2
 };
-
 
 // Server licence type enum ----------------------------------------------------
 enum ELicenceType
 {
     // used for protocol -> enum values must be fixed!
-    LT_NO_LICENCE = 0,
+    LT_NO_LICENCE      = 0,
     LT_CREATIVECOMMONS = 1
 };
-
 
 // Server jam recorder state enum ----------------------------------------------
 enum ERecorderState
 {
     // used for protocol -> enum values must be fixed!
-    RS_UNDEFINED = 0,
+    RS_UNDEFINED       = 0,
     RS_NOT_INITIALISED = 1,
-    RS_NOT_ENABLED = 2,
-    RS_RECORDING = 3
+    RS_NOT_ENABLED     = 2,
+    RS_RECORDING       = 3
 };
-
 
 // Channel sort type -----------------------------------------------------------
 enum EChSortType
 {
     // used for settings -> enum values should be fixed
-    ST_NO_SORT = 0,
-    ST_BY_NAME = 1,
+    ST_NO_SORT       = 0,
+    ST_BY_NAME       = 1,
     ST_BY_INSTRUMENT = 2,
-    ST_BY_GROUPID = 3,
-    ST_BY_CITY = 4
+    ST_BY_GROUPID    = 3,
+    ST_BY_CITY       = 4
 };
-
 
 // Directory server address type -----------------------------------------------
 enum ECSAddType
 {
     // used for settings -> enum values should be fixed
-    AT_DEFAULT = 0,
-    AT_ANY_GENRE2 = 1,
-    AT_ANY_GENRE3 = 2,
-    AT_GENRE_ROCK = 3,
-    AT_GENRE_JAZZ = 4,
+    AT_DEFAULT              = 0,
+    AT_ANY_GENRE2           = 1,
+    AT_ANY_GENRE3           = 2,
+    AT_GENRE_ROCK           = 3,
+    AT_GENRE_JAZZ           = 4,
     AT_GENRE_CLASSICAL_FOLK = 5,
-    AT_GENRE_CHORAL = 6,
-    AT_CUSTOM = 7 // Must be the last entry!
+    AT_GENRE_CHORAL         = 6,
+    AT_CUSTOM               = 7 // Must be the last entry!
 };
 
 inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
@@ -603,7 +571,6 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
         return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 1" );
     }
 }
-
 
 // Slave server registration state ---------------------------------------------
 enum ESvrRegStatus
@@ -654,24 +621,22 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
 }
 
-
 // Directory server registration outcome ---------------------------------------
 enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
-    SRR_REGISTERED = 0,
-    SRR_CENTRAL_SVR_FULL = 1,
-    SRR_VERSION_TOO_OLD = 2,
+    SRR_REGISTERED              = 0,
+    SRR_CENTRAL_SVR_FULL        = 1,
+    SRR_VERSION_TOO_OLD         = 2,
     SRR_NOT_FULFILL_REQIREMENTS = 3
 };
-
 
 // Skill level enum ------------------------------------------------------------
 enum ESkillLevel
 {
     // used for protocol -> enum values must be fixed!
-    SL_NOT_SET = 0,
-    SL_BEGINNER = 1,
+    SL_NOT_SET      = 0,
+    SL_BEGINNER     = 1,
     SL_INTERMEDIATE = 2,
     SL_PROFESSIONAL = 3
 };
@@ -690,24 +655,26 @@ enum ESkillLevel
 #define RGBCOL_G_SL_SL_PROFESSIONAL 225
 #define RGBCOL_B_SL_SL_PROFESSIONAL 225
 
-
 // Stereo signal level meter ---------------------------------------------------
 class CStereoSignalLevelMeter
 {
 public:
+    // clang-format off
 // TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
 //      But tests with 128 and 64 samples frame size have shown that the meter fly back
 //      is ok for both numbers of samples frame size with a factor of 0.99.
-    CStereoSignalLevelMeter ( const bool   bNIsStereoOut     = true,
-                              const double dNSmoothingFactor = 0.99 ) :
-        dSmoothingFactor ( dNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
+    // clang-format on
+    CStereoSignalLevelMeter ( const bool bNIsStereoOut = true, const double dNSmoothingFactor = 0.99 ) :
+        dSmoothingFactor ( dNSmoothingFactor ),
+        bIsStereoOut ( bNIsStereoOut )
+    {
+        Reset();
+    }
 
-    void Update ( const CVector<short>& vecsAudio,
-                  const int             iInSize,
-                  const bool            bIsStereoIn );
+    void Update ( const CVector<short>& vecsAudio, const int iInSize, const bool bIsStereoIn );
 
     double        GetLevelForMeterdBLeftOrMono() { return CalcLogResultForMeter ( dCurLevelLOrMono ); }
-    double        GetLevelForMeterdBRight()      { return CalcLogResultForMeter ( dCurLevelR ); }
+    double        GetLevelForMeterdBRight() { return CalcLogResultForMeter ( dCurLevelR ); }
     static double CalcLogResultForMeter ( const double& dLinearLevel );
 
     void Reset()
@@ -717,15 +684,13 @@ public:
     }
 
 protected:
-    double UpdateCurLevel ( double       dCurLevel,
-                            const double dMax );
+    double UpdateCurLevel ( double dCurLevel, const double dMax );
 
     double dCurLevelLOrMono;
     double dCurLevelR;
     double dSmoothingFactor;
     bool   bIsStereoOut;
 };
-
 
 // Host address ----------------------------------------------------------------
 class CHostAddress
@@ -738,18 +703,11 @@ public:
         SM_IP_NO_LAST_BYTE_PORT
     };
 
-    CHostAddress() :
-        InetAddr ( static_cast<quint32> ( 0 ) ),
-        iPort ( 0 ) {}
+    CHostAddress() : InetAddr ( static_cast<quint32> ( 0 ) ), iPort ( 0 ) {}
 
-    CHostAddress ( const QHostAddress NInetAddr,
-                   const quint16      iNPort ) :
-        InetAddr ( NInetAddr ),
-        iPort    ( iNPort ) {}
+    CHostAddress ( const QHostAddress NInetAddr, const quint16 iNPort ) : InetAddr ( NInetAddr ), iPort ( iNPort ) {}
 
-    CHostAddress ( const CHostAddress& NHAddr ) :
-        InetAddr ( NHAddr.InetAddr ),
-        iPort    ( NHAddr.iPort ) {}
+    CHostAddress ( const CHostAddress& NHAddr ) : InetAddr ( NHAddr.InetAddr ), iPort ( NHAddr.iPort ) {}
 
     // copy operator
     CHostAddress& operator= ( const CHostAddress& NHAddr )
@@ -760,27 +718,21 @@ public:
     }
 
     // compare operator
-    bool operator== ( const CHostAddress& CompAddr ) const
-    {
-        return ( ( CompAddr.InetAddr == InetAddr ) &&
-                 ( CompAddr.iPort    == iPort ) );
-    }
+    bool operator== ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
 
     QString toString ( const EStringMode eStringMode = SM_IP_PORT ) const
     {
         QString strReturn = InetAddr.toString();
 
         // special case: for local host address, we do not replace the last byte
-        if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) ||
-               ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) && 
+        if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
              ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) )
         {
             // replace last byte by an "x"
             strReturn = strReturn.section ( ".", 0, 2 ) + ".x";
         }
 
-        if ( ( eStringMode == SM_IP_PORT ) ||
-             ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+        if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
         {
             // add port number after a semicolon
             strReturn += ":" + QString().setNum ( iPort );
@@ -792,7 +744,6 @@ public:
     QHostAddress InetAddr;
     quint16      iPort;
 };
-
 
 // Instrument picture data base ------------------------------------------------
 // this is a pure static class
@@ -820,33 +771,30 @@ public:
     static EInstCategory GetCategory ( const int iInstrument );
     static void          UpdateTableOnLanguageChange() { GetTable ( true ); }
 
+    // clang-format off
 // TODO make use of instrument category (not yet implemented)
+    // clang-format on
 
 protected:
     class CInstPictProps
     {
     public:
-        CInstPictProps() :
-            strName              ( "" ),
-            strResourceReference ( "" ),
-            eInstCategory        ( IC_OTHER_INSTRUMENT ) {}
+        CInstPictProps() : strName ( "" ), strResourceReference ( "" ), eInstCategory ( IC_OTHER_INSTRUMENT ) {}
 
-        CInstPictProps ( const QString       NsName,
-                         const QString       NsResRef,
-                         const EInstCategory NeInstCat ) :
-            strName              ( NsName ),
+        CInstPictProps ( const QString NsName, const QString NsResRef, const EInstCategory NeInstCat ) :
+            strName ( NsName ),
             strResourceReference ( NsResRef ),
-            eInstCategory        ( NeInstCat ) {}
+            eInstCategory ( NeInstCat )
+        {}
 
         QString       strName;
         QString       strResourceReference;
         EInstCategory eInstCategory;
     };
 
-    static bool IsInstIndexInRange ( const int iIdx );
+    static bool                     IsInstIndexInRange ( const int iIdx );
     static CVector<CInstPictProps>& GetTable ( const bool bReGenerateTable = false );
 };
-
 
 // Locale management class -----------------------------------------------------
 class CLocale
@@ -855,78 +803,72 @@ public:
     static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
     static QMap<QString, QString>  GetAvailableTranslations();
     static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
-    static void                    LoadTranslation ( const QString     strLanguage,
-                                                     QCoreApplication* pApp );
+    static void                    LoadTranslation ( const QString strLanguage, QCoreApplication* pApp );
 };
-
 
 // Info of a channel -----------------------------------------------------------
 class CChannelCoreInfo
 {
 public:
     CChannelCoreInfo() :
-        strName     ( "" ),
-        eCountry    ( QLocale::AnyCountry ),
-        strCity     ( "" ),
+        strName ( "" ),
+        eCountry ( QLocale::AnyCountry ),
+        strCity ( "" ),
         iInstrument ( CInstPictures::GetNotUsedInstrument() ),
-        eSkillLevel ( SL_NOT_SET ) {}
+        eSkillLevel ( SL_NOT_SET )
+    {}
 
     CChannelCoreInfo ( const QString           NsName,
                        const QLocale::Country& NeCountry,
                        const QString&          NsCity,
                        const int               NiInstrument,
                        const ESkillLevel       NeSkillLevel ) :
-        strName     ( NsName ),
-        eCountry    ( NeCountry ),
-        strCity     ( NsCity ),
+        strName ( NsName ),
+        eCountry ( NeCountry ),
+        strCity ( NsCity ),
         iInstrument ( NiInstrument ),
-        eSkillLevel ( NeSkillLevel ) {}
+        eSkillLevel ( NeSkillLevel )
+    {}
 
     CChannelCoreInfo ( const CChannelCoreInfo& NCorInf ) :
-        strName     ( NCorInf.strName ),
-        eCountry    ( NCorInf.eCountry ),
-        strCity     ( NCorInf.strCity ),
+        strName ( NCorInf.strName ),
+        eCountry ( NCorInf.eCountry ),
+        strCity ( NCorInf.strCity ),
         iInstrument ( NCorInf.iInstrument ),
-        eSkillLevel ( NCorInf.eSkillLevel ) {}
+        eSkillLevel ( NCorInf.eSkillLevel )
+    {}
 
     // compare operator
     bool operator!= ( const CChannelCoreInfo& CompChanInfo )
     {
-        return ( ( CompChanInfo.strName     != strName ) ||
-                 ( CompChanInfo.eCountry    != eCountry ) ||
-                 ( CompChanInfo.strCity     != strCity ) ||
-                 ( CompChanInfo.iInstrument != iInstrument ) ||
-                 ( CompChanInfo.eSkillLevel != eSkillLevel ) );
+        return ( ( CompChanInfo.strName != strName ) || ( CompChanInfo.eCountry != eCountry ) || ( CompChanInfo.strCity != strCity ) ||
+                 ( CompChanInfo.iInstrument != iInstrument ) || ( CompChanInfo.eSkillLevel != eSkillLevel ) );
     }
 
     CChannelCoreInfo& operator= ( const CChannelCoreInfo& ) = default;
 
     // fader tag text (channel name)
-    QString          strName;
+    QString strName;
 
     // country in which the client is located
     QLocale::Country eCountry;
 
     // city in which the client is located
-    QString          strCity;
+    QString strCity;
 
     // instrument ID of the client (which instrument is he/she playing)
-    int              iInstrument;
+    int iInstrument;
 
     // skill level of the musician
-    ESkillLevel      eSkillLevel;
+    ESkillLevel eSkillLevel;
 };
 
 class CChannelInfo : public CChannelCoreInfo
 {
 public:
-    CChannelInfo() :
-        iChanID ( 0 ) {}
+    CChannelInfo() : iChanID ( 0 ) {}
 
-    CChannelInfo ( const int               NiID,
-                   const CChannelCoreInfo& NCorInf ) :
-        CChannelCoreInfo ( NCorInf ),
-        iChanID ( NiID ) {}
+    CChannelInfo ( const int NiID, const CChannelCoreInfo& NCorInf ) : CChannelCoreInfo ( NCorInf ), iChanID ( NiID ) {}
 
     CChannelInfo ( const int               NiID,
                    const QString           NsName,
@@ -934,81 +876,65 @@ public:
                    const QString&          NsCity,
                    const int               NiInstrument,
                    const ESkillLevel       NeSkillLevel ) :
-        CChannelCoreInfo ( NsName,
-                           NeCountry,
-                           NsCity,
-                           NiInstrument,
-                           NeSkillLevel ),
-        iChanID ( NiID ) {}
+        CChannelCoreInfo ( NsName, NeCountry, NsCity, NiInstrument, NeSkillLevel ),
+        iChanID ( NiID )
+    {}
 
     // ID of the channel
-    int     iChanID;
+    int iChanID;
 };
-
 
 // Server info -----------------------------------------------------------------
 class CServerCoreInfo
 {
 public:
-    CServerCoreInfo() :
-        strName          ( "" ),
-        eCountry         ( QLocale::AnyCountry ),
-        strCity          ( "" ),
-        iMaxNumClients   ( 0 ),
-        bPermanentOnline ( false ) {}
+    CServerCoreInfo() : strName ( "" ), eCountry ( QLocale::AnyCountry ), strCity ( "" ), iMaxNumClients ( 0 ), bPermanentOnline ( false ) {}
 
-    CServerCoreInfo (
-        const QString&          NsName,
-        const QLocale::Country& NeCountry,
-        const QString&          NsCity,
-        const int               NiMaxNumClients,
-        const bool              NbPermOnline) :
-        strName          ( NsName ),
-        eCountry         ( NeCountry ),
-        strCity          ( NsCity ),
-        iMaxNumClients   ( NiMaxNumClients ),
-        bPermanentOnline ( NbPermOnline ) {}
+    CServerCoreInfo ( const QString&          NsName,
+                      const QLocale::Country& NeCountry,
+                      const QString&          NsCity,
+                      const int               NiMaxNumClients,
+                      const bool              NbPermOnline ) :
+        strName ( NsName ),
+        eCountry ( NeCountry ),
+        strCity ( NsCity ),
+        iMaxNumClients ( NiMaxNumClients ),
+        bPermanentOnline ( NbPermOnline )
+    {}
 
     // name of the server
-    QString          strName;
+    QString strName;
 
     // country in which the server is located
     QLocale::Country eCountry;
 
     // city in which the server is located
-    QString          strCity;
+    QString strCity;
 
     // maximum number of clients which can connect to the server at the same
     // time
-    int              iMaxNumClients;
+    int iMaxNumClients;
 
     // is the server permanently online or not (flag)
-    bool             bPermanentOnline;
+    bool bPermanentOnline;
 };
 
 class CServerInfo : public CServerCoreInfo
 {
 public:
-    CServerInfo() :
-        HostAddr  ( CHostAddress() ),
-        LHostAddr ( CHostAddress() )
-    {}
+    CServerInfo() : HostAddr ( CHostAddress() ), LHostAddr ( CHostAddress() ) {}
 
-    CServerInfo (
-        const CHostAddress&     NHAddr,
-        const CHostAddress&     NLAddr,
-        const QString&          NsName,
-        const QLocale::Country& NeCountry,
-        const QString&          NsCity,
-        const int               NiMaxNumClients,
-        const bool              NbPermOnline) :
-            CServerCoreInfo ( NsName,
-                              NeCountry,
-                              NsCity,
-                              NiMaxNumClients,
-                              NbPermOnline ),
-            HostAddr        ( NHAddr ),
-            LHostAddr       ( NLAddr ) {}
+    CServerInfo ( const CHostAddress&     NHAddr,
+                  const CHostAddress&     NLAddr,
+                  const QString&          NsName,
+                  const QLocale::Country& NeCountry,
+                  const QString&          NsCity,
+                  const int               NiMaxNumClients,
+                  const bool              NbPermOnline ) :
+        CServerCoreInfo ( NsName, NeCountry, NsCity, NiMaxNumClients, NbPermOnline ),
+        HostAddr ( NHAddr ),
+        LHostAddr ( NLAddr )
+    {}
 
     // internet address of the server
     CHostAddress HostAddr;
@@ -1017,19 +943,19 @@ public:
     CHostAddress LHostAddr;
 };
 
-
 // Network transport properties ------------------------------------------------
 class CNetworkTransportProps
 {
 public:
     CNetworkTransportProps() :
         iBaseNetworkPacketSize ( 0 ),
-        iBlockSizeFact         ( 0 ),
-        iNumAudioChannels      ( 0 ),
-        iSampleRate            ( 0 ),
-        eAudioCodingType       ( CT_NONE ),
-        eFlags                 ( NF_NONE ),
-        iAudioCodingArg        ( 0 ) {}
+        iBlockSizeFact ( 0 ),
+        iNumAudioChannels ( 0 ),
+        iSampleRate ( 0 ),
+        eAudioCodingType ( CT_NONE ),
+        eFlags ( NF_NONE ),
+        iAudioCodingArg ( 0 )
+    {}
 
     CNetworkTransportProps ( const uint32_t      iNBNPS,
                              const uint16_t      iNBSF,
@@ -1039,12 +965,13 @@ public:
                              const ENetwFlags    eNFlags,
                              const int32_t       iNACA ) :
         iBaseNetworkPacketSize ( iNBNPS ),
-        iBlockSizeFact         ( iNBSF ),
-        iNumAudioChannels      ( iNNACH ),
-        iSampleRate            ( iNSR ),
-        eAudioCodingType       ( eNACT ),
-        eFlags                 ( eNFlags ),
-        iAudioCodingArg        ( iNACA ) {}
+        iBlockSizeFact ( iNBSF ),
+        iNumAudioChannels ( iNNACH ),
+        iSampleRate ( iNSR ),
+        eAudioCodingType ( eNACT ),
+        eFlags ( eNFlags ),
+        iAudioCodingArg ( iNACA )
+    {}
 
     uint32_t      iBaseNetworkPacketSize;
     uint16_t      iBlockSizeFact;
@@ -1055,21 +982,17 @@ public:
     int32_t       iAudioCodingArg;
 };
 
-
 // Network utility functions ---------------------------------------------------
 class NetworkUtil
 {
 public:
-    static bool ParseNetworkAddress ( QString       strAddress,
-                                      CHostAddress& HostAddress );
+    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress );
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
-    static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
-                                                  const QString&   strCentralServerAddress );
+    static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType, const QString& strCentralServerAddress );
     static bool         IsPrivateNetworkIP ( const QHostAddress& qhAddr );
 };
-
 
 // Operating system utility functions ------------------------------------------
 class COSUtil
@@ -1079,57 +1002,58 @@ public:
     {
         // used for protocol -> enum values must be fixed!
         OT_WINDOWS = 0,
-        OT_MAC_OS = 1,
-        OT_LINUX = 2,
+        OT_MAC_OS  = 1,
+        OT_LINUX   = 2,
         OT_ANDROID = 3,
-        OT_I_OS = 4,
-        OT_UNIX = 5
+        OT_I_OS    = 4,
+        OT_UNIX    = 5
     };
 
     static QString GetOperatingSystemString ( const EOpSystemType eOSType )
     {
         switch ( eOSType )
         {
-        case OT_WINDOWS: return "Windows";
-        case OT_MAC_OS:  return "MacOS";
-        case OT_LINUX:   return "Linux";
-        case OT_ANDROID: return "Android";
-        case OT_I_OS:    return "iOS";
-        case OT_UNIX:    return "Unix";
-        default:         return "Unknown";
+        case OT_WINDOWS:
+            return "Windows";
+        case OT_MAC_OS:
+            return "MacOS";
+        case OT_LINUX:
+            return "Linux";
+        case OT_ANDROID:
+            return "Android";
+        case OT_I_OS:
+            return "iOS";
+        case OT_UNIX:
+            return "Unix";
+        default:
+            return "Unknown";
         }
     }
 
     static EOpSystemType GetOperatingSystem()
     {
 #ifdef _WIN32
-    return OT_WINDOWS;
-#elif defined ( __APPLE__ ) || defined ( __MACOSX )
-    return OT_MAC_OS;
-#elif defined ( ANDROID )
-    return OT_ANDROID;
+        return OT_WINDOWS;
+#elif defined( __APPLE__ ) || defined( __MACOSX )
+        return OT_MAC_OS;
+#elif defined( ANDROID )
+        return OT_ANDROID;
 #else
-    return OT_LINUX;
+        return OT_LINUX;
 #endif
     }
 };
-
 
 // Audio reverbration ----------------------------------------------------------
 class CAudioReverb
 {
 public:
     CAudioReverb() {}
-    
-    void Init ( const EAudChanConf eNAudioChannelConf,
-                const int          iNStereoBlockSizeSam,
-                const int          iSampleRate,
-                const float        fT60 = 1.1f );
+
+    void Init ( const EAudChanConf eNAudioChannelConf, const int iNStereoBlockSizeSam, const int iSampleRate, const float fT60 = 1.1f );
 
     void Clear();
-    void Process ( CVector<int16_t>& vecsStereoInOut,
-                   const bool        bReverbOnLeftChan,
-                   const float       fAttenuation );
+    void Process ( CVector<int16_t>& vecsStereoInOut, const bool bReverbOnLeftChan, const float fAttenuation );
 
 protected:
     void setT60 ( const float fT60, const int iSampleRate );
@@ -1160,17 +1084,15 @@ protected:
     float        combCoefficient[4];
 };
 
-
 // CRC -------------------------------------------------------------------------
 class CCRC
 {
 public:
-    CCRC() : iPoly ( ( 1 << 5 ) | ( 1 << 12 ) ), iBitOutMask ( 1 << 16 )
-        { Reset(); }
+    CCRC() : iPoly ( ( 1 << 5 ) | ( 1 << 12 ) ), iBitOutMask ( 1 << 16 ) { Reset(); }
 
-    void Reset();
-    void AddByte ( const uint8_t byNewInput );
-    bool CheckCRC ( const uint32_t iCRC ) { return iCRC == GetCRC(); }
+    void     Reset();
+    void     AddByte ( const uint8_t byNewInput );
+    bool     CheckCRC ( const uint32_t iCRC ) { return iCRC == GetCRC(); }
     uint32_t GetCRC();
 
 protected:
@@ -1178,7 +1100,6 @@ protected:
     uint32_t iBitOutMask;
     uint32_t iStateShiftReg;
 };
-
 
 // Mathematics utilities -------------------------------------------------------
 class MathUtils
@@ -1189,10 +1110,7 @@ public:
         return static_cast<int> ( ( x - floor ( x ) ) >= 0.5 ) ? static_cast<int> ( ceil ( x ) ) : static_cast<int> ( floor ( x ) );
     }
 
-    static void UpDownIIR1 ( double&       dOldValue,
-                             const double& dNewValue,
-                             const double& dWeightUp,
-                             const double& dWeightDown )
+    static void UpDownIIR1 ( double& dOldValue, const double& dNewValue, const double& dWeightUp, const double& dWeightDown )
     {
         // different IIR weights for up and down direction
         if ( dNewValue < dOldValue )
@@ -1205,9 +1123,7 @@ public:
         }
     }
 
-    static int DecideWithHysteresis ( const double dValue,
-                                      const int    iOldValue,
-                                      const double dHysteresis )
+    static int DecideWithHysteresis ( const double dValue, const int iOldValue, const double dHysteresis )
     {
         // apply hysteresis
         if ( dValue > static_cast<double> ( iOldValue ) )
@@ -1222,14 +1138,8 @@ public:
 
     // calculate pan gains: in cross fade mode the pan center is attenuated
     // by 6 dB, otherwise the center equals full gain for both channels
-    static inline float GetLeftPan ( const float fPan, const bool bXFade)
-    {
-        return bXFade ? 1 - fPan : std::min ( 0.5f, 1 - fPan ) * 2;
-    }
-    static inline float GetRightPan ( const float fPan, const bool bXFade)
-    {
-        return bXFade ? fPan : std::min ( 0.5f, fPan ) * 2;
-    }
+    static inline float GetLeftPan ( const float fPan, const bool bXFade ) { return bXFade ? 1 - fPan : std::min ( 0.5f, 1 - fPan ) * 2; }
+    static inline float GetRightPan ( const float fPan, const bool bXFade ) { return bXFade ? fPan : std::min ( 0.5f, fPan ) * 2; }
 
     // calculate linear gain from fader values which are in dB
     static float CalcFaderGain ( const float fValue )
@@ -1245,20 +1155,20 @@ public:
         }
         else
         {
-            return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) *
-                AUD_MIX_FADER_RANGE_DB / 20.0f );
+            return powf ( 10.0f, ( fInValueRange0_1 - 1.0f ) * AUD_MIX_FADER_RANGE_DB / 20.0f );
         }
     }
 };
-
 
 // Timing measurement ----------------------------------------------------------
 // intended for debugging the timing jitter of the sound card or server timer
 class CTimingMeas
 {
 public:
-    CTimingMeas ( const int iNNMeas, const QString strNFName = "" ) :
-        iNumMeas ( iNNMeas ), vElapsedTimes ( iNNMeas ), strFileName ( strNFName ) { Reset(); }
+    CTimingMeas ( const int iNNMeas, const QString strNFName = "" ) : iNumMeas ( iNNMeas ), vElapsedTimes ( iNNMeas ), strFileName ( strNFName )
+    {
+        Reset();
+    }
 
     void Reset() { iCnt = INVALID_INDEX; }
     void Measure()
@@ -1306,7 +1216,6 @@ protected:
     int           iCnt;
 };
 
-
 /******************************************************************************\
 * Statistics                                                                   *
 \******************************************************************************/
@@ -1316,8 +1225,7 @@ class CErrorRate
 public:
     CErrorRate() {}
 
-    void Init ( const int  iHistoryLength,
-                const bool bNBlockOnDoubleErr = false )
+    void Init ( const int iHistoryLength, const bool bNBlockOnDoubleErr = false )
     {
         // initialize buffer (use "no data result" of 1.0 which stands for the
         // worst error rate possible)
@@ -1351,7 +1259,6 @@ public:
         else
         {
             ErrorsMovAvBuf.Add ( 0 );
-
         }
 
         // store state
@@ -1359,7 +1266,7 @@ public:
     }
 
     double GetAverage() { return ErrorsMovAvBuf.GetAverage(); }
-    double InitializationState() { return ErrorsMovAvBuf.InitializationState(); } 
+    double InitializationState() { return ErrorsMovAvBuf.InitializationState(); }
 
 protected:
     CMovingAv<char> ErrorsMovAvBuf;

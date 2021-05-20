@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -25,24 +25,25 @@
 #include "socket.h"
 #include "server.h"
 
-
 /* Implementation *************************************************************/
 void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
 {
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
 
+    // clang-format off
 // TODO check for error and exit application on error
+    // clang-format on
 
     WSADATA wsa;
-    WSAStartup ( MAKEWORD(1, 0), &wsa );
+    WSAStartup ( MAKEWORD ( 1, 0 ), &wsa );
 #endif
 
     // create the UDP socket
     UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
     //
-    const char tos = (char) iQosNumber;  // Quality of Service
-    setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof(tos) );
+    const char tos = (char) iQosNumber; // Quality of Service
+    setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof ( tos ) );
 
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
@@ -50,11 +51,13 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
     // preinitialize socket in address (only the port number is missing)
     sockaddr_in UdpSocketInAddr;
     UdpSocketInAddr.sin_family = AF_INET;
-    if (strServerBindIP.isEmpty()) {
-      UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
+    if ( strServerBindIP.isEmpty() )
+    {
+        UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
     }
-    else {
-      UdpSocketInAddr.sin_addr.s_addr = htonl ( QHostAddress( strServerBindIP ).toIPv4Address() );
+    else
+    {
+        UdpSocketInAddr.sin_addr.s_addr = htonl ( QHostAddress ( strServerBindIP ).toIPv4Address() );
     }
 
     // initialize the listening socket
@@ -67,9 +70,7 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
             // if port number is 0, bind the client to a random available port
             UdpSocketInAddr.sin_port = htons ( 0 );
 
-            bSuccess = ( ::bind ( UdpSocket ,
-                                (sockaddr*) &UdpSocketInAddr,
-                                sizeof ( sockaddr_in ) ) == 0 );
+            bSuccess = ( ::bind ( UdpSocket, (sockaddr*) &UdpSocketInAddr, sizeof ( sockaddr_in ) ) == 0 );
         }
         else
         {
@@ -87,9 +88,7 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
             {
                 UdpSocketInAddr.sin_port = htons ( startingPortNumber + iClientPortIncrement );
 
-                bSuccess = ( ::bind ( UdpSocket ,
-                                      (sockaddr*) &UdpSocketInAddr,
-                                      sizeof ( sockaddr_in ) ) == 0 );
+                bSuccess = ( ::bind ( UdpSocket, (sockaddr*) &UdpSocketInAddr, sizeof ( sockaddr_in ) ) == 0 );
 
                 iClientPortIncrement++;
             }
@@ -102,18 +101,16 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
         // gets the desired port number
         UdpSocketInAddr.sin_port = htons ( iPortNumber );
 
-        bSuccess = ( ::bind ( UdpSocket ,
-                              (sockaddr*) &UdpSocketInAddr,
-                              sizeof ( sockaddr_in ) ) == 0 );
+        bSuccess = ( ::bind ( UdpSocket, (sockaddr*) &UdpSocketInAddr, sizeof ( sockaddr_in ) ) == 0 );
     }
 
     if ( !bSuccess )
     {
         // we cannot bind socket, throw error
         throw CGenErr ( "Cannot bind the socket (maybe "
-            "the software is already running).", "Network Error" );
+                        "the software is already running).",
+                        "Network Error" );
     }
-
 
     // Connections -------------------------------------------------------------
     // it is important to do the following connections in this class since we
@@ -124,30 +121,26 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
     {
         // client connections:
 
-        QObject::connect ( this, &CSocket::ProtcolMessageReceived,
-            pChannel, &CChannel::OnProtcolMessageReceived );
+        QObject::connect ( this, &CSocket::ProtcolMessageReceived, pChannel, &CChannel::OnProtcolMessageReceived );
 
-        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
-            pChannel, &CChannel::OnProtcolCLMessageReceived );
+        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pChannel, &CChannel::OnProtcolCLMessageReceived );
 
-        QObject::connect ( this, static_cast<void (CSocket::*)()> ( &CSocket::NewConnection ),
-            pChannel, &CChannel::OnNewConnection );
+        QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
     }
     else
     {
         // server connections:
 
-        QObject::connect ( this, &CSocket::ProtcolMessageReceived,
-            pServer, &CServer::OnProtcolMessageReceived );
+        QObject::connect ( this, &CSocket::ProtcolMessageReceived, pServer, &CServer::OnProtcolMessageReceived );
 
-        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
-            pServer, &CServer::OnProtcolCLMessageReceived );
+        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pServer, &CServer::OnProtcolCLMessageReceived );
 
-        QObject::connect ( this, static_cast<void (CSocket::*) ( int, CHostAddress )> ( &CSocket::NewConnection ),
-            pServer, &CServer::OnNewConnection );
+        QObject::connect ( this,
+                           static_cast<void ( CSocket::* ) ( int, CHostAddress )> ( &CSocket::NewConnection ),
+                           pServer,
+                           &CServer::OnNewConnection );
 
-        QObject::connect ( this, &CSocket::ServerFull,
-            pServer, &CServer::OnServerFull );
+        QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
     }
 }
 
@@ -157,7 +150,7 @@ void CSocket::Close()
     // closesocket will cause recvfrom to return with an error because the
     // socket is closed -> then the thread can safely be shut down
     closesocket ( UdpSocket );
-#elif defined ( __APPLE__ ) || defined ( __MACOSX )
+#elif defined( __APPLE__ ) || defined( __MACOSX )
     // on Mac the general close has the same effect as closesocket on Windows
     close ( UdpSocket );
 #else
@@ -177,8 +170,7 @@ CSocket::~CSocket()
 #endif
 }
 
-void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
-                           const CHostAddress&     HostAddr )
+void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -222,13 +214,13 @@ bool CSocket::GetAndResetbJitterBufferOKFlag()
 
 void CSocket::OnDataReceived()
 {
-/*
-    The strategy of this function is that only the "put audio" function is
-    called directly (i.e. the high thread priority is used) and all other less
-    important things like protocol parsing and acting on protocol messages is
-    done in the low priority thread. To get a thread transition, we have to
-    use the signal/slot mechanism (i.e. we use messages for that).
-*/
+    /*
+        The strategy of this function is that only the "put audio" function is
+        called directly (i.e. the high thread priority is used) and all other less
+        important things like protocol parsing and acting on protocol messages is
+        done in the low priority thread. To get a thread transition, we have to
+        use the signal/slot mechanism (i.e. we use messages for that).
+    */
 
     // read block from network interface and query address of sender
     sockaddr_in SenderAddr;
@@ -238,12 +230,7 @@ void CSocket::OnDataReceived()
     socklen_t SenderAddrSize = sizeof ( sockaddr_in );
 #endif
 
-    const long iNumBytesRead = recvfrom ( UdpSocket,
-                                          (char*) &vecbyRecBuf[0],
-                                          MAX_SIZE_BYTES_NETW_BUF,
-                                          0,
-                                          (sockaddr*) &SenderAddr,
-                                          &SenderAddrSize );
+    const long iNumBytesRead = recvfrom ( UdpSocket, (char*) &vecbyRecBuf[0], MAX_SIZE_BYTES_NETW_BUF, 0, (sockaddr*) &SenderAddr, &SenderAddrSize );
 
     // check if an error occurred or no data could be read
     if ( iNumBytesRead <= 0 )
@@ -255,30 +242,29 @@ void CSocket::OnDataReceived()
     RecHostAddr.InetAddr.setAddress ( ntohl ( SenderAddr.sin_addr.s_addr ) );
     RecHostAddr.iPort = ntohs ( SenderAddr.sin_port );
 
-
     // check if this is a protocol message
     int              iRecCounter;
     int              iRecID;
     CVector<uint8_t> vecbyMesBodyData;
 
-    if ( !CProtocol::ParseMessageFrame ( vecbyRecBuf,
-                                         iNumBytesRead,
-                                         vecbyMesBodyData,
-                                         iRecCounter,
-                                         iRecID ) )
+    if ( !CProtocol::ParseMessageFrame ( vecbyRecBuf, iNumBytesRead, vecbyMesBodyData, iRecCounter, iRecID ) )
     {
         // this is a protocol message, check the type of the message
         if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
         {
 
+            // clang-format off
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
+            // clang-format on
 
             emit ProtcolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
         }
         else
         {
 
+            // clang-format off
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
+            // clang-format on
 
             emit ProtcolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
         }
@@ -327,8 +313,7 @@ void CSocket::OnDataReceived()
                 if ( !pServer->IsRunning() )
                 {
                     // (note that Qt will delete the event object when done)
-                    QCoreApplication::postEvent ( pServer,
-                        new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+                    QCoreApplication::postEvent ( pServer, new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
                 }
             }
 

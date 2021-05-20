@@ -32,17 +32,16 @@
 #include "soundbase.h"
 #include "global.h"
 
-
 /* Classes ********************************************************************/
 class CSound : public CSoundBase
 {
     Q_OBJECT
 
 public:
-    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
              void*          arg,
              const QString& strMIDISetup,
-             const bool     ,
+             const bool,
              const QString& );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
@@ -52,16 +51,16 @@ public:
     // channel selection
     virtual int     GetNumInputChannels() { return iNumInChanPlusAddChan; }
     virtual QString GetInputChannelName ( const int iDiD ) { return sChannelNamesInput[iDiD]; }
-    virtual void    SetLeftInputChannel  ( const int iNewChan );
+    virtual void    SetLeftInputChannel ( const int iNewChan );
     virtual void    SetRightInputChannel ( const int iNewChan );
-    virtual int     GetLeftInputChannel()  { return iSelInputLeftChannel; }
+    virtual int     GetLeftInputChannel() { return iSelInputLeftChannel; }
     virtual int     GetRightInputChannel() { return iSelInputRightChannel; }
 
     virtual int     GetNumOutputChannels() { return iNumOutChan; }
     virtual QString GetOutputChannelName ( const int iDiD ) { return sChannelNamesOutput[iDiD]; }
-    virtual void    SetLeftOutputChannel  ( const int iNewChan );
+    virtual void    SetLeftOutputChannel ( const int iNewChan );
     virtual void    SetRightOutputChannel ( const int iNewChan );
-    virtual int     GetLeftOutputChannel()  { return iSelOutputLeftChannel; }
+    virtual int     GetLeftOutputChannel() { return iSelOutputLeftChannel; }
     virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
 
     // these variables/functions should be protected but cannot since we want
@@ -101,47 +100,36 @@ protected:
     void    UpdateChSelection();
     void    GetAvailableInOutDevices();
 
-    int CountChannels ( AudioDeviceID devID,
-                        bool          isInput );
+    int CountChannels ( AudioDeviceID devID, bool isInput );
 
-    UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
-                           const bool     bIsInput,
-                           UInt32         iPrefBufferSize );
+    UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID, const bool bIsInput, UInt32 iPrefBufferSize );
 
-    void GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
-                               QString&            strDeviceName,
-                               bool&               bIsInput,
-                               bool&               bIsOutput );
+    void GetAudioDeviceInfos ( const AudioDeviceID DeviceID, QString& strDeviceName, bool& bIsInput, bool& bIsOutput );
 
     bool ConvertCFStringToQString ( const CFStringRef stringRef, QString& sOut );
 
     // callbacks
-    static OSStatus deviceNotification ( AudioDeviceID,
-                                         UInt32,
-                                         const AudioObjectPropertyAddress* inAddresses,
-                                         void*                             inRefCon );
+    static OSStatus deviceNotification ( AudioDeviceID, UInt32, const AudioObjectPropertyAddress* inAddresses, void* inRefCon );
 
-    static OSStatus callbackIO ( AudioDeviceID          inDevice,
+    static OSStatus callbackIO ( AudioDeviceID inDevice,
                                  const AudioTimeStamp*,
                                  const AudioBufferList* inInputData,
                                  const AudioTimeStamp*,
-                                 AudioBufferList*       outOutputData,
+                                 AudioBufferList* outOutputData,
                                  const AudioTimeStamp*,
-                                 void*                  inRefCon );
+                                 void* inRefCon );
 
-    static void callbackMIDI ( const MIDIPacketList* pktlist,
-                               void*                 refCon,
-                               void* );
+    static void callbackMIDI ( const MIDIPacketList* pktlist, void* refCon, void* );
 
     AudioDeviceID       audioInputDevice[MAX_NUMBER_SOUND_CARDS];
     AudioDeviceID       audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
     AudioDeviceIOProcID audioInputProcID;
     AudioDeviceIOProcID audioOutputProcID;
 
-    MIDIPortRef         midiInPortRef;
+    MIDIPortRef midiInPortRef;
 
-    QString             sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
-    QString             sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];
+    QString sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
+    QString sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];
 
-    QMutex              Mutex;
+    QMutex Mutex;
 };

@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -32,10 +32,9 @@
 #include "protocol.h"
 #include "util.h"
 #ifndef _WIN32
-# include <netinet/in.h>
-# include <sys/socket.h>
+#    include <netinet/in.h>
+#    include <sys/socket.h>
 #endif
-
 
 // The header files channel.h and server.h require to include this header file
 // so we get a cyclic dependency. To solve this issue, a prototype of the
@@ -43,11 +42,9 @@
 class CServer;  // forward declaration of CServer
 class CChannel; // forward declaration of CChannel
 
-
 /* Definitions ****************************************************************/
 // number of ports we try to bind until we give up
-#define NUM_SOCKET_PORTS_TO_TRY         100
-
+#define NUM_SOCKET_PORTS_TO_TRY 100
 
 /* Classes ********************************************************************/
 /* Base socket class -------------------------------------------------------- */
@@ -56,22 +53,25 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel*     pNewChannel,
-              const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
-        : pChannel ( pNewChannel ),
-          bIsClient ( true ),
-          bJitterBufferOK ( true ) { Init ( iPortNumber, iQosNumber, strServerBindIP ); }
+    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+        pChannel ( pNewChannel ),
+        bIsClient ( true ),
+        bJitterBufferOK ( true )
+    {
+        Init ( iPortNumber, iQosNumber, strServerBindIP );
+    }
 
-    CSocket ( CServer*      pNServP,
-              const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
-        : pServer ( pNServP ),
-          bIsClient ( false ),
-          bJitterBufferOK ( true ) { Init ( iPortNumber, iQosNumber, strServerBindIP ); }
+    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+        pServer ( pNServP ),
+        bIsClient ( false ),
+        bJitterBufferOK ( true )
+    {
+        Init ( iPortNumber, iQosNumber, strServerBindIP );
+    }
 
     virtual ~CSocket();
 
-    void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
-                      const CHostAddress&     HostAddr );
+    void SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr );
 
     bool GetAndResetbJitterBufferOKFlag();
     void Close();
@@ -80,24 +80,24 @@ protected:
     void Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
 
 #ifdef _WIN32
-    SOCKET           UdpSocket;
+    SOCKET UdpSocket;
 #else
-    int              UdpSocket;
+    int UdpSocket;
 #endif
 
-    QMutex           Mutex;
+    QMutex Mutex;
 
     CVector<uint8_t> vecbyRecBuf;
     CHostAddress     RecHostAddr;
     QHostAddress     SenderAddress;
     quint16          SenderPort;
 
-    CChannel*        pChannel; // for client
-    CServer*         pServer;  // for server
+    CChannel* pChannel; // for client
+    CServer*  pServer;  // for server
 
-    bool             bIsClient;
+    bool bIsClient;
 
-    bool             bJitterBufferOK;
+    bool bJitterBufferOK;
 
 public:
     void OnDataReceived();
@@ -112,16 +112,10 @@ signals:
 
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 
-    void ProtcolMessageReceived ( int              iRecCounter,
-                                  int              iRecID,
-                                  CVector<uint8_t> vecbyMesBodyData,
-                                  CHostAddress     HostAdr );
+    void ProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 
-    void ProtcolCLMessageReceived ( int              iRecID,
-                                    CVector<uint8_t> vecbyMesBodyData,
-                                    CHostAddress     HostAdr );
+    void ProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 };
-
 
 /* Socket which runs in a separate high priority thread --------------------- */
 // The receive socket should be put in a high priority thread to ensure the GUI
@@ -133,22 +127,25 @@ class CHighPrioSocket : public QObject
     Q_OBJECT
 
 public:
-    CHighPrioSocket ( CChannel*     pNewChannel,
-                      const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
-        : Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP ) { Init(); }
-
-    CHighPrioSocket ( CChannel*     pNewChannel,
-                      const quint16 iPortNumber, const quint16 iQosNumber )
-        : Socket ( pNewChannel, iPortNumber, iQosNumber, "" ) { Init(); }
-
-    CHighPrioSocket ( CServer*      pNewServer,
-                      const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
-        : Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP ) { Init(); }
-
-    virtual ~CHighPrioSocket()
+    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP )
     {
-        NetworkWorkerThread.Stop();
+        Init();
     }
+
+    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber ) :
+        Socket ( pNewChannel, iPortNumber, iQosNumber, "" )
+    {
+        Init();
+    }
+
+    CHighPrioSocket ( CServer* pNewServer, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP )
+    {
+        Init();
+    }
+
+    virtual ~CHighPrioSocket() { NetworkWorkerThread.Stop(); }
 
     void Start()
     {
@@ -157,23 +154,18 @@ public:
         NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
     }
 
-    void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
-                      const CHostAddress&     HostAddr )
-    {
-        Socket.SendPacket ( vecbySendBuf, HostAddr );
-    }
+    void SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr ) { Socket.SendPacket ( vecbySendBuf, HostAddr ); }
 
-    bool GetAndResetbJitterBufferOKFlag()
-    {
-        return Socket.GetAndResetbJitterBufferOKFlag();
-    }
+    bool GetAndResetbJitterBufferOKFlag() { return Socket.GetAndResetbJitterBufferOKFlag(); }
 
 protected:
     class CSocketThread : public QThread
     {
     public:
-        CSocketThread ( CSocket* pNewSocket = nullptr, QObject* parent = nullptr ) :
-          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) { setObjectName ( "CSocketThread" ); }
+        CSocketThread ( CSocket* pNewSocket = nullptr, QObject* parent = nullptr ) : QThread ( parent ), pSocket ( pNewSocket ), bRun ( true )
+        {
+            setObjectName ( "CSocketThread" );
+        }
 
         void Stop()
         {
@@ -190,7 +182,8 @@ protected:
         void SetSocket ( CSocket* pNewSocket ) { pSocket = pNewSocket; }
 
     protected:
-        void run() {
+        void run()
+        {
             // make sure the socket pointer is initialized (should be always the
             // case)
             if ( pSocket != nullptr )
@@ -220,8 +213,7 @@ protected:
         NetworkWorkerThread.SetSocket ( &Socket );
 
         // connect the "InvalidPacketReceived" signal
-        QObject::connect ( &Socket, &CSocket::InvalidPacketReceived,
-            this, &CHighPrioSocket::InvalidPacketReceived );
+        QObject::connect ( &Socket, &CSocket::InvalidPacketReceived, this, &CHighPrioSocket::InvalidPacketReceived );
     }
 
     CSocketThread NetworkWorkerThread;

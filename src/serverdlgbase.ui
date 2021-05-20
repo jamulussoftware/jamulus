@@ -79,7 +79,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Genre</string>
+            <string>List</string>
            </property>
           </widget>
          </item>

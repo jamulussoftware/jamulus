@@ -41,28 +41,28 @@ using namespace recorder;
  * Creates a file for the raw PCM data and sets up a QDataStream to which to write received frames.
  * The data is stored Little Endian.
  */
-CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir) :
-    startFrame (frame),
-    numChannels (static_cast<uint16_t>(_numChannels)),
-    name (name),
-    address (address),
-    out (nullptr)
+CJamClient::CJamClient ( const qint64 frame, const int _numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir ) :
+    startFrame ( frame ),
+    numChannels ( static_cast<uint16_t> ( _numChannels ) ),
+    name ( name ),
+    address ( address ),
+    out ( nullptr )
 {
     // At this point we may not have much of a name
-    QString fileName = ClientName() + "-" + QString::number(frame) + "-" + QString::number(_numChannels);
-    QString affix = "";
-    while (recordBaseDir.exists(fileName + affix + ".wav"))
+    QString fileName = ClientName() + "-" + QString::number ( frame ) + "-" + QString::number ( _numChannels );
+    QString affix    = "";
+    while ( recordBaseDir.exists ( fileName + affix + ".wav" ) )
     {
-        affix = affix.length() == 0 ? "_1" : "_" + QString::number(affix.remove(0, 1).toInt() + 1);
+        affix = affix.length() == 0 ? "_1" : "_" + QString::number ( affix.remove ( 0, 1 ).toInt() + 1 );
     }
     fileName = fileName + affix + ".wav";
 
-    wavFile = new QFile(recordBaseDir.absoluteFilePath(fileName));
-    if (!wavFile->open(QFile::OpenMode(QIODevice::OpenModeFlag::ReadWrite))) // need to allow rewriting headers
+    wavFile = new QFile ( recordBaseDir.absoluteFilePath ( fileName ) );
+    if ( !wavFile->open ( QFile::OpenMode ( QIODevice::OpenModeFlag::ReadWrite ) ) ) // need to allow rewriting headers
     {
-        throw CGenErr ( "Could not write to WAV file "  + wavFile->fileName() );
+        throw CGenErr ( "Could not write to WAV file " + wavFile->fileName() );
     }
-    out = new CWaveStream(wavFile, numChannels);
+    out = new CWaveStream ( wavFile, numChannels );
 
     filename = wavFile->fileName();
 }
@@ -72,11 +72,11 @@ CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString
  * @param _name The client's current name
  * @param pcm The PCM data
  */
-void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples)
+void CJamClient::Frame ( const QString _name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples )
 {
     name = _name;
 
-    for(int i = 0; i < numChannels * iServerFrameSizeSamples; i++)
+    for ( int i = 0; i < numChannels * iServerFrameSizeSamples; i++ )
     {
         *out << pcm[i];
     }
@@ -89,9 +89,9 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iSe
  */
 void CJamClient::Disconnect()
 {
-    if (out)
+    if ( out )
     {
-        static_cast<CWaveStream*>(out)->finalise();
+        static_cast<CWaveStream*> ( out )->finalise();
         delete out;
         out = nullptr;
     }
@@ -105,9 +105,10 @@ void CJamClient::Disconnect()
 /**
  * @brief CJamClient::TranslateChars Replace non-ASCII chars with nearest equivalent, if any, and change all punctuation to _
  */
-QString CJamClient::TranslateChars (const QString& input) const
+QString CJamClient::TranslateChars ( const QString& input ) const
 {
     // Allow letters and numbers
+    // clang-format off
     static const char charmap[256] = {
         '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
         '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_',
@@ -126,16 +127,17 @@ QString CJamClient::TranslateChars (const QString& input) const
         'a', 'a', 'a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i',
         'd', 'n', 'o', 'o', 'o', 'o', 'o', '_', 'o', 'u', 'u', 'u', 'u', 'y', 'p', 'y'
     };
+    // clang-format on
 
     QByteArray r = input.toLatin1();
 
-    for (auto &c : r)
+    for ( auto& c : r )
     {
         unsigned char uc = c;
-        c = charmap[uc];
+        c                = charmap[uc];
     }
 
-    return QString::fromLatin1(r);
+    return QString::fromLatin1 ( r );
 }
 
 /* ********************************************************************************************************
@@ -148,31 +150,31 @@ QString CJamClient::TranslateChars (const QString& input) const
  *
  * Each session is stored into its own subdirectory of the recording base directory.
  */
-CJamSession::CJamSession(QDir recordBaseDir) :
-    sessionDir (QDir(recordBaseDir.absoluteFilePath("Jam-" + QDateTime().currentDateTimeUtc().toString("yyyyMMdd-HHmmsszzz")))),
-    currentFrame (0),
-    chIdDisconnected (-1),
-    vecptrJamClients (MAX_NUM_CHANNELS),
+CJamSession::CJamSession ( QDir recordBaseDir ) :
+    sessionDir ( QDir ( recordBaseDir.absoluteFilePath ( "Jam-" + QDateTime().currentDateTimeUtc().toString ( "yyyyMMdd-HHmmsszzz" ) ) ) ),
+    currentFrame ( 0 ),
+    chIdDisconnected ( -1 ),
+    vecptrJamClients ( MAX_NUM_CHANNELS ),
     jamClientConnections()
 {
-    QFileInfo fi(sessionDir.absolutePath());
-    fi.setCaching(false);
+    QFileInfo fi ( sessionDir.absolutePath() );
+    fi.setCaching ( false );
 
-    if (!fi.exists() && !QDir().mkpath(sessionDir.absolutePath()))
+    if ( !fi.exists() && !QDir().mkpath ( sessionDir.absolutePath() ) )
     {
         throw CGenErr ( sessionDir.absolutePath() + " does not exist and could not be created" );
     }
-    if (!fi.isDir())
+    if ( !fi.isDir() )
     {
         throw CGenErr ( sessionDir.absolutePath() + " exists but is not a directory" );
     }
-    if (!fi.isWritable())
+    if ( !fi.isWritable() )
     {
         throw CGenErr ( sessionDir.absolutePath() + " is a directory but cannot be written to" );
     }
 
     // Explicitly set all the pointers to "empty"
-    vecptrJamClients.fill(nullptr);
+    vecptrJamClients.fill ( nullptr );
 }
 
 /**
@@ -181,7 +183,7 @@ CJamSession::CJamSession(QDir recordBaseDir) :
 CJamSession::~CJamSession()
 {
     // free up any active jamClientConnections
-    for (int i = 0; i < jamClientConnections.count(); i++ )
+    for ( int i = 0; i < jamClientConnections.count(); i++ )
     {
         if ( jamClientConnections[i] )
         {
@@ -195,19 +197,19 @@ CJamSession::~CJamSession()
  * @brief CJamSession::DisconnectClient Capture details of the departing client's connection
  * @param iChID the channel id of the client that disconnected
  */
-void CJamSession::DisconnectClient(int iChID)
+void CJamSession::DisconnectClient ( int iChID )
 {
     vecptrJamClients[iChID]->Disconnect();
 
-    jamClientConnections.append(new CJamClientConnection(vecptrJamClients[iChID]->NumAudioChannels(),
-                                                         vecptrJamClients[iChID]->StartFrame(),
-                                                         vecptrJamClients[iChID]->FrameCount(),
-                                                         vecptrJamClients[iChID]->ClientName(),
-                                                         vecptrJamClients[iChID]->FileName()));
+    jamClientConnections.append ( new CJamClientConnection ( vecptrJamClients[iChID]->NumAudioChannels(),
+                                                             vecptrJamClients[iChID]->StartFrame(),
+                                                             vecptrJamClients[iChID]->FrameCount(),
+                                                             vecptrJamClients[iChID]->ClientName(),
+                                                             vecptrJamClients[iChID]->FileName() ) );
 
     delete vecptrJamClients[iChID];
     vecptrJamClients[iChID] = nullptr;
-    chIdDisconnected = iChID;
+    chIdDisconnected        = iChID;
 }
 
 /**
@@ -223,7 +225,12 @@ void CJamSession::DisconnectClient(int iChID)
  *
  * Also manages the overall current frame counter for the session.
  */
-void CJamSession::Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples)
+void CJamSession::Frame ( const int              iChID,
+                          const QString          name,
+                          const CHostAddress     address,
+                          const int              numAudioChannels,
+                          const CVector<int16_t> data,
+                          int                    iServerFrameSizeSamples )
 {
     if ( iChID == chIdDisconnected )
     {
@@ -232,36 +239,36 @@ void CJamSession::Frame(const int iChID, const QString name, const CHostAddress 
         return;
     }
 
-    if (vecptrJamClients[iChID] == nullptr)
+    if ( vecptrJamClients[iChID] == nullptr )
     {
         // then we have not seen this client this session
-        vecptrJamClients[iChID] = new CJamClient(currentFrame, numAudioChannels, name, address, sessionDir);
+        vecptrJamClients[iChID] = new CJamClient ( currentFrame, numAudioChannels, name, address, sessionDir );
     }
-    else if (numAudioChannels != vecptrJamClients[iChID]->NumAudioChannels()
-             || address.InetAddr != vecptrJamClients[iChID]->ClientAddress().InetAddr
-             || address.iPort != vecptrJamClients[iChID]->ClientAddress().iPort)
+    else if ( numAudioChannels != vecptrJamClients[iChID]->NumAudioChannels() ||
+              address.InetAddr != vecptrJamClients[iChID]->ClientAddress().InetAddr ||
+              address.iPort != vecptrJamClients[iChID]->ClientAddress().iPort )
     {
-        DisconnectClient(iChID);
-        if (numAudioChannels == 0)
+        DisconnectClient ( iChID );
+        if ( numAudioChannels == 0 )
         {
             vecptrJamClients[iChID] = nullptr;
         }
         else
         {
-            vecptrJamClients[iChID] = new CJamClient(currentFrame, numAudioChannels, name, address, sessionDir);
+            vecptrJamClients[iChID] = new CJamClient ( currentFrame, numAudioChannels, name, address, sessionDir );
         }
     }
 
-    if (vecptrJamClients[iChID] == nullptr)
+    if ( vecptrJamClients[iChID] == nullptr )
     {
         // Frame allegedly from iChID but unable to establish client details
         return;
     }
 
-    vecptrJamClients[iChID]->Frame(name, data, iServerFrameSizeSamples);
+    vecptrJamClients[iChID]->Frame ( name, data, iServerFrameSizeSamples );
 
     // If _any_ connected client frame steps past currentFrame, increase currentFrame
-    if (vecptrJamClients[iChID]->StartFrame() + vecptrJamClients[iChID]->FrameCount() > currentFrame)
+    if ( vecptrJamClients[iChID]->StartFrame() + vecptrJamClients[iChID]->FrameCount() > currentFrame )
     {
         currentFrame++;
     }
@@ -272,11 +279,11 @@ void CJamSession::Frame(const int iChID, const QString name, const CHostAddress 
  */
 void CJamSession::End()
 {
-    for (int iChID = 0; iChID < vecptrJamClients.size(); iChID++)
+    for ( int iChID = 0; iChID < vecptrJamClients.size(); iChID++ )
     {
-        if (vecptrJamClients[iChID] != nullptr)
+        if ( vecptrJamClients[iChID] != nullptr )
         {
-            DisconnectClient(iChID);
+            DisconnectClient ( iChID );
             vecptrJamClients[iChID] = nullptr;
         }
     }
@@ -290,21 +297,19 @@ QMap<QString, QList<STrackItem>> CJamSession::Tracks()
 {
     QMap<QString, QList<STrackItem>> tracks;
 
-    for (int i = 0; i < jamClientConnections.count(); i++ )
+    for ( int i = 0; i < jamClientConnections.count(); i++ )
     {
-        STrackItem track (
-            jamClientConnections[i]->Format(),
-            jamClientConnections[i]->StartFrame(),
-            jamClientConnections[i]->Length(),
-            jamClientConnections[i]->FileName()
-        );
+        STrackItem track ( jamClientConnections[i]->Format(),
+                           jamClientConnections[i]->StartFrame(),
+                           jamClientConnections[i]->Length(),
+                           jamClientConnections[i]->FileName() );
 
-        if (!tracks.contains(jamClientConnections[i]->Name()))
+        if ( !tracks.contains ( jamClientConnections[i]->Name() ) )
         {
-            tracks.insert(jamClientConnections[i]->Name(), { });
+            tracks.insert ( jamClientConnections[i]->Name(), {} );
         }
 
-        tracks[jamClientConnections[i]->Name()].append(track);
+        tracks[jamClientConnections[i]->Name()].append ( track );
     }
 
     return tracks;
@@ -315,38 +320,33 @@ QMap<QString, QList<STrackItem>> CJamSession::Tracks()
  * @param sessionDirName the directory name to scan
  * @return a map of (latest) client name to connection items
  */
-QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString& sessionDirName, int iServerFrameSizeSamples)
+QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir ( const QString& sessionDirName, int iServerFrameSizeSamples )
 {
     QMap<QString, QList<STrackItem>> tracks;
 
-    const QDir sessionDir(sessionDirName);
-    foreach(auto entry, sessionDir.entryList({ "*.pcm" }))
+    const QDir sessionDir ( sessionDirName );
+    foreach ( auto entry, sessionDir.entryList ( { "*.pcm" } ) )
     {
 
-        auto split = entry.split(".")[0].split("-");
-        QString name = split[0];
-        QString hostPort = split[1];
-        QString frame = split[2];
-        QString tail = split[3]; //numChannels may have _nnn
-        QString numChannels = tail.count("_") > 0 ? tail.split("_")[0] : tail;
+        auto    split       = entry.split ( "." )[0].split ( "-" );
+        QString name        = split[0];
+        QString hostPort    = split[1];
+        QString frame       = split[2];
+        QString tail        = split[3]; // numChannels may have _nnn
+        QString numChannels = tail.count ( "_" ) > 0 ? tail.split ( "_" )[0] : tail;
 
         QString trackName = name + "-" + hostPort;
-        if (!tracks.contains(trackName))
+        if ( !tracks.contains ( trackName ) )
         {
-            tracks.insert(trackName, { });
+            tracks.insert ( trackName, {} );
         }
 
-        QFileInfo fiEntry(sessionDir.absoluteFilePath(entry));
-        qint64 length = fiEntry.size() / numChannels.toInt() / iServerFrameSizeSamples;
+        QFileInfo fiEntry ( sessionDir.absoluteFilePath ( entry ) );
+        qint64    length = fiEntry.size() / numChannels.toInt() / iServerFrameSizeSamples;
 
-        STrackItem track (
-                    numChannels.toInt(),
-                    frame.toLongLong(),
-                    length,
-                    sessionDir.absoluteFilePath(entry)
-                    );
+        STrackItem track ( numChannels.toInt(), frame.toLongLong(), length, sessionDir.absoluteFilePath ( entry ) );
 
-        tracks[trackName].append(track);
+        tracks[trackName].append ( track );
     }
 
     return tracks;
@@ -363,26 +363,26 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
  */
 QString CJamRecorder::Init()
 {
-    QString errmsg = QString::null;
+    QString   errmsg = QString::null;
     QFileInfo fi ( recordBaseDir.absolutePath() );
     fi.setCaching ( false );
 
     if ( !fi.exists() && !QDir().mkpath ( recordBaseDir.absolutePath() ) )
     {
-        errmsg = QString( "'%1' does not exist but could not be created." ).arg( recordBaseDir.absolutePath() );
-        qCritical() << qUtf8Printable( errmsg );
+        errmsg = QString ( "'%1' does not exist but could not be created." ).arg ( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable ( errmsg );
         return errmsg;
     }
-    if (!fi.isDir())
+    if ( !fi.isDir() )
     {
-        errmsg = QString( "'%1' exists but is not a directory" ).arg( recordBaseDir.absolutePath() );
-        qCritical() << qUtf8Printable( errmsg );
+        errmsg = QString ( "'%1' exists but is not a directory" ).arg ( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable ( errmsg );
         return errmsg;
     }
-    if (!fi.isWritable())
+    if ( !fi.isWritable() )
     {
-        errmsg = QString( "'%1' is a directory but cannot be written to" ).arg( recordBaseDir.absolutePath() );
-        qCritical() << qUtf8Printable( errmsg );
+        errmsg = QString ( "'%1' is a directory but cannot be written to" ).arg ( recordBaseDir.absolutePath() );
+        qCritical() << qUtf8Printable ( errmsg );
         return errmsg;
     }
 
@@ -392,7 +392,8 @@ QString CJamRecorder::Init()
 /**
  * @brief CJamRecorder::Start Start up tasks for a new session
  */
-void CJamRecorder::Start() {
+void CJamRecorder::Start()
+{
     // Ensure any previous cleaning up has been done.
     OnEnd();
 
@@ -403,13 +404,13 @@ void CJamRecorder::Start() {
     {
         try
         {
-            currentSession = new CJamSession( recordBaseDir );
-            isRecording = true;
+            currentSession = new CJamSession ( recordBaseDir );
+            isRecording    = true;
         }
         catch ( const CGenErr& err )
         {
             currentSession = nullptr;
-            error = err.GetErrorText();
+            error          = err.GetErrorText();
         }
     }
     ChIdMutex.unlock();
@@ -422,7 +423,6 @@ void CJamRecorder::Start() {
 
     emit RecordingSessionStarted ( currentSession->SessionDir().path() );
 }
-
 
 /**
  * @brief CJamRecorder::OnEnd Finalise the recording and write the Reaper RPP file
@@ -445,7 +445,6 @@ void CJamRecorder::OnEnd()
     }
     ChIdMutex.unlock();
 }
-
 
 /**
  * @brief CJamRecorder::OnTriggerSession End one session and start a new one
@@ -471,20 +470,20 @@ void CJamRecorder::OnAboutToQuit()
 
 void CJamRecorder::ReaperProjectFromCurrentSession()
 {
-    QString reaperProjectFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".rpp"));
-    const QFileInfo fi(reaperProjectFileName);
+    QString         reaperProjectFileName = currentSession->SessionDir().filePath ( currentSession->Name().append ( ".rpp" ) );
+    const QFileInfo fi ( reaperProjectFileName );
 
-    if (fi.exists())
+    if ( fi.exists() )
     {
         qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
     }
     else
     {
-        QFile outf (reaperProjectFileName);
-        if ( outf.open(QFile::WriteOnly) )
+        QFile outf ( reaperProjectFileName );
+        if ( outf.open ( QFile::WriteOnly ) )
         {
-            QTextStream out(&outf);
-            out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
+            QTextStream out ( &outf );
+            out << CReaperProject ( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
             qDebug() << "Session RPP:" << reaperProjectFileName;
         }
         else
@@ -496,26 +495,27 @@ void CJamRecorder::ReaperProjectFromCurrentSession()
 
 void CJamRecorder::AudacityLofFromCurrentSession()
 {
-    QString audacityLofFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".lof"));
-    const QFileInfo fi(audacityLofFileName);
+    QString         audacityLofFileName = currentSession->SessionDir().filePath ( currentSession->Name().append ( ".lof" ) );
+    const QFileInfo fi ( audacityLofFileName );
 
-    if (fi.exists())
+    if ( fi.exists() )
     {
         qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
     }
     else
     {
-        QFile outf (audacityLofFileName);
-        if ( outf.open(QFile::WriteOnly) )
+        QFile outf ( audacityLofFileName );
+        if ( outf.open ( QFile::WriteOnly ) )
         {
-            QTextStream sOut(&outf);
+            QTextStream sOut ( &outf );
 
             foreach ( auto trackName, currentSession->Tracks().keys() )
             {
-                foreach ( auto item, currentSession->Tracks()[trackName] ) {
+                foreach ( auto item, currentSession->Tracks()[trackName] )
+                {
                     QFileInfo fi ( item.fileName );
                     sOut << "file " << '"' << fi.fileName() << '"';
-                    sOut << " offset " << secondsAt48K( item.startFrame, iServerFrameSizeSamples ) << endl;
+                    sOut << " offset " << secondsAt48K ( item.startFrame, iServerFrameSizeSamples ) << endl;
                 }
             }
 
@@ -535,30 +535,32 @@ void CJamRecorder::AudacityLofFromCurrentSession()
  *
  * This is used for testing and is not called from the regular Jamulus code.
  */
-void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFrameSizeSamples)
+void CJamRecorder::SessionDirToReaper ( QString& strSessionDirName, int serverFrameSizeSamples )
 {
-    const QFileInfo fiSessionDir(QDir::cleanPath(strSessionDirName));
-    if (!fiSessionDir.exists() || !fiSessionDir.isDir())
+    const QFileInfo fiSessionDir ( QDir::cleanPath ( strSessionDirName ) );
+    if ( !fiSessionDir.exists() || !fiSessionDir.isDir() )
     {
         throw CGenErr ( fiSessionDir.absoluteFilePath() + " does not exist or is not a directory.  Aborting." );
     }
 
-    const QDir dSessionDir(fiSessionDir.absoluteFilePath());
-    const QString reaperProjectFileName = dSessionDir.absoluteFilePath(fiSessionDir.baseName().append(".rpp"));
-    const QFileInfo fiRPP(reaperProjectFileName);
-    if (fiRPP.exists())
+    const QDir      dSessionDir ( fiSessionDir.absoluteFilePath() );
+    const QString   reaperProjectFileName = dSessionDir.absoluteFilePath ( fiSessionDir.baseName().append ( ".rpp" ) );
+    const QFileInfo fiRPP ( reaperProjectFileName );
+    if ( fiRPP.exists() )
     {
         throw CGenErr ( fiRPP.absoluteFilePath() + " exists and will not be overwritten.  Aborting." );
     }
 
-    QFile outf (fiRPP.absoluteFilePath());
+    QFile outf ( fiRPP.absoluteFilePath() );
     if ( !outf.open ( QFile::WriteOnly ) )
     {
         throw CGenErr ( fiRPP.absoluteFilePath() + " could not be written.  Aborting." );
     }
-    QTextStream out(&outf);
+    QTextStream out ( &outf );
 
-    out << CReaperProject( CJamSession::TracksFromSessionDir( fiSessionDir.absoluteFilePath(), serverFrameSizeSamples ), serverFrameSizeSamples ).toString() << endl;
+    out << CReaperProject ( CJamSession::TracksFromSessionDir ( fiSessionDir.absoluteFilePath(), serverFrameSizeSamples ), serverFrameSizeSamples )
+               .toString()
+        << endl;
 
     qDebug() << "Session RPP:" << reaperProjectFileName;
 }
@@ -567,7 +569,7 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFram
  * @brief CJamRecorder::OnDisconnected Handle disconnection of a client
  * @param iChID the client channel id
  */
-void CJamRecorder::OnDisconnected(int iChID)
+void CJamRecorder::OnDisconnected ( int iChID )
 {
     ChIdMutex.lock();
     {
@@ -596,7 +598,11 @@ void CJamRecorder::OnDisconnected(int iChID)
  *
  * Ensures recording has started.
  */
-void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data)
+void CJamRecorder::OnFrame ( const int              iChID,
+                             const QString          name,
+                             const CHostAddress     address,
+                             const int              numAudioChannels,
+                             const CVector<int16_t> data )
 {
     // Make sure we are ready
     if ( !isRecording )

@@ -2,100 +2,98 @@
  * Copyright (c) 2004-2020
  *
  * Author(s):
- *  Volker Fischer 
+ *  Volker Fischer
  *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
 
 #include "audiomixerboard.h"
 
-
 /******************************************************************************\
 * CChanneFader                                                                 *
 \******************************************************************************/
 CChannelFader::CChannelFader ( QWidget* pNW ) :
-    eDesign ( GD_STANDARD )
+    eDesign ( GD_STANDARD ),
+    BitmapMutedIcon ( QString::fromUtf8 ( ":/png/fader/res/mutediconorange.png" ) )
 {
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
     // to be created locally in this constructor)
-    pFrame                      = new QFrame      ( pNW );
+    pFrame = new QFrame ( pNW );
 
-    pLevelsBox                  = new QWidget     ( pFrame );
-    plbrChannelLevel            = new CLevelMeter ( pLevelsBox );
-    pFader                      = new QSlider     ( Qt::Vertical, pLevelsBox );
-    pPan                        = new QDial       ( pLevelsBox );
-    pPanLabel                   = new QLabel      ( tr ( "Pan" ), pLevelsBox );
-    pInfoLabel                  = new QLabel      ( "", pLevelsBox );
+    pLevelsBox       = new QWidget ( pFrame );
+    plbrChannelLevel = new CLevelMeter ( pLevelsBox );
+    pFader           = new QSlider ( Qt::Vertical, pLevelsBox );
+    pPan             = new QDial ( pLevelsBox );
+    pPanLabel        = new QLabel ( tr ( "Pan" ), pLevelsBox );
+    pInfoLabel       = new QLabel ( "", pLevelsBox );
 
-    pMuteSoloBox                = new QWidget     ( pFrame );
-    pcbMute                     = new QCheckBox   ( tr ( "Mute" ), pMuteSoloBox );
-    pcbSolo                     = new QCheckBox   ( tr ( "Solo" ), pMuteSoloBox );
-    pcbGroup                    = new QCheckBox   ( "", pMuteSoloBox );
+    pMuteSoloBox = new QWidget ( pFrame );
+    pcbMute      = new QCheckBox ( tr ( "Mute" ), pMuteSoloBox );
+    pcbSolo      = new QCheckBox ( tr ( "Solo" ), pMuteSoloBox );
+    pcbGroup     = new QCheckBox ( "", pMuteSoloBox );
 
-    pLabelInstBox               = new QGroupBox   ( pFrame );
-    plblLabel                   = new QLabel      ( "", pFrame );
-    plblInstrument              = new QLabel      ( pFrame );
-    plblCountryFlag             = new QLabel      ( pFrame );
+    pLabelInstBox   = new QGroupBox ( pFrame );
+    plblLabel       = new QLabel ( "", pFrame );
+    plblInstrument  = new QLabel ( pFrame );
+    plblCountryFlag = new QLabel ( pFrame );
 
-    QVBoxLayout* pMainGrid      = new QVBoxLayout ( pFrame );
-    QHBoxLayout* pLevelsGrid    = new QHBoxLayout ( pLevelsBox );
-    QVBoxLayout* pMuteSoloGrid  = new QVBoxLayout ( pMuteSoloBox );
-    pLabelGrid                  = new QHBoxLayout ( pLabelInstBox );
-    pLabelPictGrid              = new QVBoxLayout ( );
-    QVBoxLayout* pPanGrid       = new QVBoxLayout ( );
-    QHBoxLayout* pPanInfoGrid   = new QHBoxLayout ( );
+    QVBoxLayout* pMainGrid     = new QVBoxLayout ( pFrame );
+    QHBoxLayout* pLevelsGrid   = new QHBoxLayout ( pLevelsBox );
+    QVBoxLayout* pMuteSoloGrid = new QVBoxLayout ( pMuteSoloBox );
+    pLabelGrid                 = new QHBoxLayout ( pLabelInstBox );
+    pLabelPictGrid             = new QVBoxLayout();
+    QVBoxLayout* pPanGrid      = new QVBoxLayout();
+    QHBoxLayout* pPanInfoGrid  = new QHBoxLayout();
 
     // define the popup menu for the group checkbox
     pGroupPopupMenu = new QMenu ( "", pcbGroup );
-    pGroupPopupMenu->addAction ( tr ( "&No grouping" ),
-        this, [=] { OnGroupMenuGrp ( INVALID_INDEX ); } );
-    for ( int iGrp = 0 ; iGrp < MAX_NUM_FADER_GROUPS ; iGrp++ )
+    pGroupPopupMenu->addAction ( tr ( "&No grouping" ), this, [=] { OnGroupMenuGrp ( INVALID_INDEX ); } );
+    for ( int iGrp = 0; iGrp < MAX_NUM_FADER_GROUPS; iGrp++ )
     {
-        pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + ( QString ( " &%1" ) .arg( iGrp + 1 ) ),
-            this, [=] { OnGroupMenuGrp ( iGrp ); } );
+        pGroupPopupMenu->addAction ( tr ( "Assign to group" ) + ( QString ( " &%1" ).arg ( iGrp + 1 ) ), this, [=] { OnGroupMenuGrp ( iGrp ); } );
     }
 #if ( MAX_NUM_FADER_GROUPS != 8 )
-# error "MAX_NUM_FADER_GROUPS must be set to 8, see implementation in CChannelFader()"
+#    error "MAX_NUM_FADER_GROUPS must be set to 8, see implementation in CChannelFader()"
 #endif
 
     // setup channel level
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
 
     // setup slider
-    pFader->setPageStep     ( 1 );
-    pFader->setRange        ( 0, AUD_MIX_FADER_MAX );
+    pFader->setPageStep ( 1 );
+    pFader->setRange ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup panning control and info label
-    pPan->setRange               ( 0, AUD_MIX_PAN_MAX );
-    pPan->setValue               ( AUD_MIX_PAN_MAX / 2 );
-    pPan->setNotchesVisible      ( true );
-    pInfoLabel->setMinimumHeight ( pPanLabel->height() ); // prevents jitter when muting/unmuting (#811)
-    pInfoLabel->setAlignment     ( Qt::AlignTop );
-    pPanInfoGrid->addWidget      ( pPanLabel, 0, Qt::AlignLeft | Qt::AlignTop );
-    pPanInfoGrid->addWidget      ( pInfoLabel, 0, Qt::AlignHCenter | Qt::AlignTop );
-    pPanGrid->addLayout          ( pPanInfoGrid );
-    pPanGrid->addWidget          ( pPan, 0, Qt::AlignHCenter );
+    pPan->setRange ( 0, AUD_MIX_PAN_MAX );
+    pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
+    pPan->setNotchesVisible ( true );
+    pInfoLabel->setMinimumHeight ( 14 ); // prevents jitter when muting/unmuting (#811)
+    pInfoLabel->setAlignment ( Qt::AlignTop );
+    pPanInfoGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft | Qt::AlignTop );
+    pPanInfoGrid->addWidget ( pInfoLabel, 0, Qt::AlignHCenter | Qt::AlignTop );
+    pPanGrid->addLayout ( pPanInfoGrid );
+    pPanGrid->addWidget ( pPan, 0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat ( Qt::PlainText );
-    plblLabel->setAlignment  ( Qt::AlignHCenter | Qt::AlignVCenter );
+    plblLabel->setAlignment ( Qt::AlignHCenter | Qt::AlignVCenter );
 
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
@@ -114,20 +112,20 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
 
     // add user controls to the grids
     pLabelPictGrid->addWidget ( plblCountryFlag, 0, Qt::AlignHCenter );
-    pLabelPictGrid->addWidget ( plblInstrument,  0, Qt::AlignHCenter );
+    pLabelPictGrid->addWidget ( plblInstrument, 0, Qt::AlignHCenter );
 
     pLabelGrid->addLayout ( pLabelPictGrid );
     pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // note: just initial add, may be changed later
 
     pLevelsGrid->addWidget ( plbrChannelLevel, 0, Qt::AlignRight );
-    pLevelsGrid->addWidget ( pFader,           0, Qt::AlignLeft );
+    pLevelsGrid->addWidget ( pFader, 0, Qt::AlignLeft );
 
     pMuteSoloGrid->addWidget ( pcbGroup, 0, Qt::AlignLeft );
-    pMuteSoloGrid->addWidget ( pcbMute,  0, Qt::AlignLeft );
-    pMuteSoloGrid->addWidget ( pcbSolo,  0, Qt::AlignLeft );
+    pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
+    pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
     pMainGrid->addLayout ( pPanGrid );
-    pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
+    pMainGrid->addWidget ( pLevelsBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLabelInstBox );
 
@@ -138,47 +136,48 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
 
     // add help text to controls
     plbrChannelLevel->setWhatsThis ( "<b>" + tr ( "Channel Level" ) + ":</b> " +
-        tr ( "Displays the pre-fader audio level of this channel.  All clients connected to the "
-        "server will be assigned an audio level, the same value for every client." ) );
+                                     tr ( "Displays the pre-fader audio level of this channel.  All clients connected to the "
+                                          "server will be assigned an audio level, the same value for every client." ) );
     plbrChannelLevel->setAccessibleName ( tr ( "Input level of the current audio "
-        "channel at the server" ) );
+                                               "channel at the server" ) );
 
-    pFader->setWhatsThis ( "<b>" + tr ( "Mixer Fader" ) + ":</b> " + tr (
-        "Adjusts the audio level of this channel. All clients connected to the server "
-        "will be assigned an audio fader, displayed at each client, to adjust the local mix." ) );
+    pFader->setWhatsThis ( "<b>" + tr ( "Mixer Fader" ) + ":</b> " +
+                           tr ( "Adjusts the audio level of this channel. All clients connected to the server "
+                                "will be assigned an audio fader, displayed at each client, to adjust the local mix." ) );
     pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
-        "channel at the server" ) );
+                                     "channel at the server" ) );
 
-    pInfoLabel->setWhatsThis ( "<b>" +  tr ( "Status Indicator" ) + ":</b> " + tr (
-        "Shows a status indication about the client which is assigned to this channel. "
-        "Supported indicators are:" ) + "<ul><li>" + tr (
-        "Speaker with cancellation stroke: Indicates that another client has muted you." ) +
-        "</li></ul>" );
+    pInfoLabel->setWhatsThis ( "<b>" + tr ( "Status Indicator" ) + ":</b> " +
+                               tr ( "Shows a status indication about the client which is assigned to this channel. "
+                                    "Supported indicators are:" ) +
+                               "<ul><li>" + tr ( "Speaker with cancellation stroke: Indicates that another client has muted you." ) + "</li></ul>" );
     pInfoLabel->setAccessibleName ( tr ( "Status indicator label" ) );
 
-    pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b> " + tr (
-        "Sets the pan from Left to Right of the channel. "
-        "Works only in stereo or preferably mono in/stereo out mode." ) );
+    pPan->setWhatsThis ( "<b>" + tr ( "Panning" ) + ":</b> " +
+                         tr ( "Sets the pan from Left to Right of the channel. "
+                              "Works only in stereo or preferably mono in/stereo out mode." ) );
     pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
 
-    pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr (
-        "With the Mute checkbox, the audio channel can be muted." ) );
+    pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr ( "With the Mute checkbox, the audio channel can be muted." ) );
     pcbMute->setAccessibleName ( tr ( "Mute button" ) );
 
-    pcbSolo->setWhatsThis ( "<b>" + tr ( "Solo" ) + ":</b> " + tr ( "With the Solo checkbox, the "
-        "audio channel can be set to solo which means that all other channels "
-        "except the soloed channel are muted. It is possible to set more than "
-        "one channel to solo." ) );
+    pcbSolo->setWhatsThis ( "<b>" + tr ( "Solo" ) + ":</b> " +
+                            tr ( "With the Solo checkbox, the "
+                                 "audio channel can be set to solo which means that all other channels "
+                                 "except the soloed channel are muted. It is possible to set more than "
+                                 "one channel to solo." ) );
     pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
-    pcbGroup->setWhatsThis ( "<b>" + tr ( "Group" ) + ":</b> " + tr ( "With the Grp checkbox, a "
-        "group of audio channels can be defined. All channel faders in a group are moved "
-        "in proportional synchronization if any one of the group faders are moved." ) );
+    pcbGroup->setWhatsThis ( "<b>" + tr ( "Group" ) + ":</b> " +
+                             tr ( "With the Grp checkbox, a "
+                                  "group of audio channels can be defined. All channel faders in a group are moved "
+                                  "in proportional synchronization if any one of the group faders are moved." ) );
     pcbGroup->setAccessibleName ( tr ( "Group button" ) );
 
-    QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " + tr ( "The fader tag "
-        "identifies the connected client. The tag name, a picture of your "
-        "instrument and the flag of your country can be set in the main window." );
+    QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " +
+                           tr ( "The fader tag "
+                                "identifies the connected client. The tag name, a picture of your "
+                                "instrument and the flag of your country can be set in the main window." );
 
     plblInstrument->setWhatsThis ( strFaderText );
     plblInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );
@@ -187,22 +186,16 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     plblCountryFlag->setWhatsThis ( strFaderText );
     plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country flag" ) );
 
-
     // Connections -------------------------------------------------------------
-    QObject::connect ( pFader, &QSlider::valueChanged,
-        this, &CChannelFader::OnLevelValueChanged );
+    QObject::connect ( pFader, &QSlider::valueChanged, this, &CChannelFader::OnLevelValueChanged );
 
-    QObject::connect ( pPan, &QDial::valueChanged,
-        this, &CChannelFader::OnPanValueChanged );
+    QObject::connect ( pPan, &QDial::valueChanged, this, &CChannelFader::OnPanValueChanged );
 
-    QObject::connect ( pcbMute, &QCheckBox::stateChanged,
-        this, &CChannelFader::OnMuteStateChanged );
+    QObject::connect ( pcbMute, &QCheckBox::stateChanged, this, &CChannelFader::OnMuteStateChanged );
 
-    QObject::connect ( pcbSolo, &QCheckBox::stateChanged,
-        this, &CChannelFader::soloStateChanged );
+    QObject::connect ( pcbSolo, &QCheckBox::stateChanged, this, &CChannelFader::soloStateChanged );
 
-    QObject::connect ( pcbGroup, &QCheckBox::stateChanged,
-        this, &CChannelFader::OnGroupStateChanged );
+    QObject::connect ( pcbGroup, &QCheckBox::stateChanged, this, &CChannelFader::OnGroupStateChanged );
 }
 
 void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -212,58 +205,57 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     switch ( eNewDesign )
     {
     case GD_ORIGINAL:
-        pFader->setStyleSheet (
-            "QSlider { width:         45px;"
-            "          border-image:  url(:/png/fader/res/faderbackground.png) repeat;"
-            "          border-top:    10px transparent;"
-            "          border-bottom: 10px transparent;"
-            "          border-left:   20px transparent;"
-            "          border-right:  -25px transparent; }"
-            "QSlider::groove { image:          url(:/png/fader/res/transparent1x1.png);"
-            "                  padding-left:   -34px;"
-            "                  padding-top:    -10px;"
-            "                  padding-bottom: -15px; }"
-            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
+        pFader->setStyleSheet ( "QSlider { width:         45px;"
+                                "          border-image:  url(:/png/fader/res/faderbackground.png) repeat;"
+                                "          border-top:    10px transparent;"
+                                "          border-bottom: 10px transparent;"
+                                "          border-left:   20px transparent;"
+                                "          border-right:  -25px transparent; }"
+                                "QSlider::groove { image:          url(:/png/fader/res/transparent1x1.png);"
+                                "                  padding-left:   -34px;"
+                                "                  padding-top:    -10px;"
+                                "                  padding-bottom: -15px; }"
+                                "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
-        pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum height of the instrument+flag pictures
-        pFader->setMinimumHeight            ( 120 ); // if this value is too small, the fader might not be movable with the mouse for fancy skin (#292)
-        pPan->setFixedSize                  ( 50, 50 );
-        pPanLabel->setText                  ( tr ( "PAN" ) );
-        pcbMute->setText                    ( tr ( "MUTE" ) );
-        pcbSolo->setText                    ( tr ( "SOLO" ) );
-        strGroupBaseText =                    tr ( "GRP" );
+        pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
+        pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
+        pFader->setMinimumHeight ( 120 ); // if this value is too small, the fader might not be movable with the mouse for fancy skin (#292)
+        pPan->setFixedSize ( 50, 50 );
+        pPanLabel->setText ( tr ( "PAN" ) );
+        pcbMute->setText ( tr ( "MUTE" ) );
+        pcbSolo->setText ( tr ( "SOLO" ) );
+        strGroupBaseText = tr ( "GRP" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
         break;
 
     case GD_SLIMFADER:
-        pLabelPictGrid->addWidget           ( plblLabel,  0, Qt::AlignHCenter ); // label below icons
-        pLabelInstBox->setMinimumHeight     ( 130 ); // maximum height of the instrument+flag+label
-        pFader->setMinimumHeight            ( 85 );
-        pPan->setFixedSize                  ( 28, 28 );
-        pFader->setTickPosition             ( QSlider::NoTicks );
-        pFader->setStyleSheet               ( "" );
-        pPanLabel->setText                  ( tr ( "Pan" ) );
-        pcbMute->setText                    ( tr ( "M" ) );
-        pcbSolo->setText                    ( tr ( "S" ) );
-        strGroupBaseText =                    tr ( "G" );
+        pLabelPictGrid->addWidget ( plblLabel, 0, Qt::AlignHCenter ); // label below icons
+        pLabelInstBox->setMinimumHeight ( 130 );                      // maximum height of the instrument+flag+label
+        pFader->setMinimumHeight ( 85 );
+        pPan->setFixedSize ( 28, 28 );
+        pFader->setTickPosition ( QSlider::NoTicks );
+        pFader->setStyleSheet ( "" );
+        pPanLabel->setText ( tr ( "Pan" ) );
+        pcbMute->setText ( tr ( "M" ) );
+        pcbSolo->setText ( tr ( "S" ) );
+        strGroupBaseText = tr ( "G" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_BAR );
         iInstrPicMaxWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
         break;
 
     default:
         // reset style sheet and set original parameters
-        pFader->setTickPosition             ( QSlider::TicksBothSides );
-        pFader->setStyleSheet               ( "" );
-        pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
-        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum height of the instrument+flag pictures
-        pFader->setMinimumHeight            ( 85 );
-        pPan->setFixedSize                  ( 50, 50 );
-        pPanLabel->setText                  ( tr ( "Pan" ) );
-        pcbMute->setText                    ( tr ( "Mute" ) );
-        pcbSolo->setText                    ( tr ( "Solo" ) );
-        strGroupBaseText =                    tr ( "Grp" );
+        pFader->setTickPosition ( QSlider::TicksBothSides );
+        pFader->setStyleSheet ( "" );
+        pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
+        pLabelInstBox->setMinimumHeight ( 52 );                   // maximum height of the instrument+flag pictures
+        pFader->setMinimumHeight ( 85 );
+        pPan->setFixedSize ( 50, 50 );
+        pPanLabel->setText ( tr ( "Pan" ) );
+        pcbMute->setText ( tr ( "Mute" ) );
+        pcbSolo->setText ( tr ( "Solo" ) );
+        strGroupBaseText = tr ( "Grp" );
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
         break;
@@ -276,20 +268,14 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     SetChannelInfos ( cReceivedChanInfo );
 }
 
-void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
-{
-    plbrChannelLevel->setHidden ( !eNDCL );
-}
+void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL ) { plbrChannelLevel->setHidden ( !eNDCL ); }
 
-bool CChannelFader::GetDisplayChannelLevel()
-{
-    return !plbrChannelLevel->isHidden();
-}
+bool CChannelFader::GetDisplayChannelLevel() { return !plbrChannelLevel->isHidden(); }
 
 void CChannelFader::SetDisplayPans ( const bool eNDP )
 {
-    pPanLabel->setHidden  ( !eNDP );
-    pPan->setHidden       ( !eNDP );
+    pPanLabel->setHidden ( !eNDP );
+    pPan->setHidden ( !eNDP );
 }
 
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
@@ -353,40 +339,36 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 
     // setup group box for label/instrument picture: set a thick black border
     // with nice round edges
-    QString strStile =
-        "QGroupBox { border:        2px " + strBorderStyle + " " + strBorderColor + ";"
-        "            border-radius: 4px;"
-        "            padding:       3px;";
+    QString strStile = "QGroupBox { border:        2px " + strBorderStyle + " " + strBorderColor +
+                       ";"
+                       "            border-radius: 4px;"
+                       "            padding:       3px;";
 
     // the background color depends on the skill level
     switch ( eSkillLevel )
     {
     case SL_BEGINNER:
-        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
-            arg ( RGBCOL_R_SL_BEGINNER ).
-            arg ( RGBCOL_G_SL_BEGINNER ).
-            arg ( RGBCOL_B_SL_BEGINNER );
+        strStile +=
+            QString ( "background-color: rgb(%1, %2, %3); }" ).arg ( RGBCOL_R_SL_BEGINNER ).arg ( RGBCOL_G_SL_BEGINNER ).arg ( RGBCOL_B_SL_BEGINNER );
         break;
 
     case SL_INTERMEDIATE:
-        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
-            arg ( RGBCOL_R_SL_INTERMEDIATE ).
-            arg ( RGBCOL_G_SL_INTERMEDIATE ).
-            arg ( RGBCOL_B_SL_INTERMEDIATE );
+        strStile += QString ( "background-color: rgb(%1, %2, %3); }" )
+                        .arg ( RGBCOL_R_SL_INTERMEDIATE )
+                        .arg ( RGBCOL_G_SL_INTERMEDIATE )
+                        .arg ( RGBCOL_B_SL_INTERMEDIATE );
         break;
 
     case SL_PROFESSIONAL:
-        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
-            arg ( RGBCOL_R_SL_SL_PROFESSIONAL ).
-            arg ( RGBCOL_G_SL_SL_PROFESSIONAL ).
-            arg ( RGBCOL_B_SL_SL_PROFESSIONAL );
+        strStile += QString ( "background-color: rgb(%1, %2, %3); }" )
+                        .arg ( RGBCOL_R_SL_SL_PROFESSIONAL )
+                        .arg ( RGBCOL_G_SL_SL_PROFESSIONAL )
+                        .arg ( RGBCOL_B_SL_SL_PROFESSIONAL );
         break;
 
     default:
-        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
-            arg ( RGBCOL_R_SL_NOT_SET ).
-            arg ( RGBCOL_G_SL_NOT_SET ).
-            arg ( RGBCOL_B_SL_NOT_SET );
+        strStile +=
+            QString ( "background-color: rgb(%1, %2, %3); }" ).arg ( RGBCOL_R_SL_NOT_SET ).arg ( RGBCOL_G_SL_NOT_SET ).arg ( RGBCOL_B_SL_NOT_SET );
         break;
     }
 
@@ -413,10 +395,10 @@ void CChannelFader::Reset()
     plbrChannelLevel->ClipReset();
 
     // clear instrument picture, country flag, tool tips and label text
-    plblLabel->setText          ( "" );
-    plblLabel->setToolTip       ( "" );
-    plblInstrument->setVisible  ( false );
-    plblInstrument->setToolTip  ( "" );
+    plblLabel->setText ( "" );
+    plblLabel->setToolTip ( "" );
+    plblInstrument->setVisible ( false );
+    plblInstrument->setToolTip ( "" );
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
     cReceivedChanInfo = CChannelInfo();
@@ -424,8 +406,8 @@ void CChannelFader::Reset()
 
     // set a defined tool tip time out
     const int iToolTipDurMs = 30000;
-    plblLabel->setToolTipDuration       ( iToolTipDurMs );
-    plblInstrument->setToolTipDuration  ( iToolTipDurMs );
+    plblLabel->setToolTipDuration ( iToolTipDurMs );
+    plblInstrument->setToolTipDuration ( iToolTipDurMs );
     plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
 
     bOtherChannelIsSolo  = false;
@@ -436,8 +418,7 @@ void CChannelFader::Reset()
     UpdateGroupIDDependencies();
 }
 
-void CChannelFader::SetFaderLevel ( const double dLevel,
-                                    const bool   bIsGroupUpdate )
+void CChannelFader::SetFaderLevel ( const double dLevel, const bool bIsGroupUpdate )
 {
     // first make a range check
     if ( dLevel >= 0 )
@@ -446,7 +427,7 @@ void CChannelFader::SetFaderLevel ( const double dLevel,
         // server about the change (block the signal of the fader since we want to
         // call SendFaderLevelToServer with a special additional parameter)
         pFader->blockSignals ( true );
-        pFader->setValue     ( std::min ( AUD_MIX_FADER_MAX, MathUtils::round ( dLevel ) ) );
+        pFader->setValue ( std::min ( AUD_MIX_FADER_MAX, MathUtils::round ( dLevel ) ) );
         pFader->blockSignals ( false );
 
         SendFaderLevelToServer ( std::min ( static_cast<double> ( AUD_MIX_FADER_MAX ), dLevel ), bIsGroupUpdate );
@@ -490,23 +471,21 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
 {
     if ( bIsMute )
     {
-        // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
-        pInfoLabel->setText ( "<font color=\"orange\">&#128263;</font>" );
+        // show muted icon orange
+        pInfoLabel->setPixmap ( BitmapMutedIcon );
     }
     else
     {
-        pInfoLabel->setText ( "" );
+        pInfoLabel->setPixmap ( QPixmap() );
     }
 }
 
-void CChannelFader::SendFaderLevelToServer ( const double dLevel,
-                                             const bool   bIsGroupUpdate )
+void CChannelFader::SendFaderLevelToServer ( const double dLevel, const bool bIsGroupUpdate )
 {
     // if mute flag is set or other channel is on solo, do not apply the new
     // fader value to the server (exception: we are on solo, in that case we
     // ignore the "other channel is on solo" flag)
-    const bool bSuppressServerUpdate = !( ( pcbMute->checkState() == Qt::Unchecked ) &&
-                                          ( !bOtherChannelIsSolo || IsSolo() ) );
+    const bool bSuppressServerUpdate = !( ( pcbMute->checkState() == Qt::Unchecked ) && ( !bOtherChannelIsSolo || IsSolo() ) );
 
     // emit signal for new fader gain value
     emit gainValueChanged ( MathUtils::CalcFaderGain ( static_cast<float> ( dLevel ) ),
@@ -524,10 +503,7 @@ void CChannelFader::SendFaderLevelToServer ( const double dLevel,
     }
 }
 
-void CChannelFader::SendPanValueToServer ( const int iPan )
-{
-    emit panValueChanged ( static_cast<float> ( iPan ) / AUD_MIX_PAN_MAX );
-}
+void CChannelFader::SendPanValueToServer ( const int iPan ) { emit panValueChanged ( static_cast<float> ( iPan ) / AUD_MIX_PAN_MAX ); }
 
 void CChannelFader::OnPanValueChanged ( int value )
 {
@@ -540,7 +516,7 @@ void CChannelFader::OnPanValueChanged ( int value )
         // set the GUI control in the center position while deactivating
         // the signals to avoid an infinite loop
         pPan->blockSignals ( true );
-        pPan->setValue     ( value );
+        pPan->setValue ( value );
         pPan->blockSignals ( false );
     }
 
@@ -577,7 +553,7 @@ void CChannelFader::UpdateGroupIDDependencies()
     // update group checkbox text
     if ( iGroupID != INVALID_INDEX )
     {
-        pcbGroup->setText ( strGroupBaseText + QString::number ( iGroupID + 1  ) );
+        pcbGroup->setText ( strGroupBaseText + QString::number ( iGroupID + 1 ) );
     }
     else
     {
@@ -631,7 +607,11 @@ void CChannelFader::SetMute ( const bool bState )
         if ( ( !bOtherChannelIsSolo || IsSolo() ) && bIsMutedAtServer )
         {
             // mute was unchecked, get current fader value and apply
-            emit gainValueChanged ( MathUtils::CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, false, false, -1 ); // set level ratio to in invalid value
+            emit gainValueChanged ( MathUtils::CalcFaderGain ( GetFaderLevel() ),
+                                    bIsMyOwnFader,
+                                    false,
+                                    false,
+                                    -1 ); // set level ratio to in invalid value
             bIsMutedAtServer = false;
         }
     }
@@ -650,10 +630,7 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
     }
 }
 
-void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
-{
-    plbrChannelLevel->SetValue ( iLevel );
-}
+void CChannelFader::SetChannelLevel ( const uint16_t iLevel ) { plbrChannelLevel->SetValue ( iLevel ); }
 
 void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 {
@@ -663,7 +640,6 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // init properties for the tool tip
     int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
     QLocale::Country eTTCountry    = QLocale::AnyCountry;
-
 
     // Label text --------------------------------------------------------------
 
@@ -697,15 +673,12 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
     plblLabel->setText ( strModText );
 
-
     // Instrument picture ------------------------------------------------------
     // get the resource reference string for this instrument
-    const QString strCurResourceRef =
-        CInstPictures::GetResourceReference ( cChanInfo.iInstrument );
+    const QString strCurResourceRef = CInstPictures::GetResourceReference ( cChanInfo.iInstrument );
 
     // first check if instrument picture is used or not and if it is valid
-    if ( CInstPictures::IsNotUsedInstrument ( cChanInfo.iInstrument ) ||
-         strCurResourceRef.isEmpty() )
+    if ( CInstPictures::IsNotUsedInstrument ( cChanInfo.iInstrument ) || strCurResourceRef.isEmpty() )
     {
         // disable instrument picture
         plblInstrument->setVisible ( false );
@@ -729,7 +702,6 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         // enable instrument picture
         plblInstrument->setVisible ( true );
     }
-
 
     // Country flag icon -------------------------------------------------------
     if ( cChanInfo.eCountry != QLocale::AnyCountry )
@@ -759,10 +731,8 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         plblCountryFlag->setVisible ( false );
     }
 
-
     // Skill level background color --------------------------------------------
     SetupFaderTag ( cChanInfo.eSkillLevel );
-
 
     // Tool tip ----------------------------------------------------------------
     // complete musician profile in the tool tip
@@ -774,40 +744,38 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // alias/name
     if ( !cChanInfo.strName.isEmpty() )
     {
-        strToolTip         += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
+        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
         strAliasAccessible += cChanInfo.strName;
     }
 
     // instrument
     if ( !CInstPictures::IsNotUsedInstrument ( iTTInstrument ) )
     {
-        strToolTip += "<h4>" + tr ( "Instrument" ) + "</h4>" +
-            CInstPictures::GetName ( iTTInstrument );
+        strToolTip += "<h4>" + tr ( "Instrument" ) + "</h4>" + CInstPictures::GetName ( iTTInstrument );
 
         strInstrumentAccessible += CInstPictures::GetName ( iTTInstrument );
     }
 
     // location
-    if ( ( eTTCountry != QLocale::AnyCountry ) ||
-         ( !cChanInfo.strCity.isEmpty() ) )
+    if ( ( eTTCountry != QLocale::AnyCountry ) || ( !cChanInfo.strCity.isEmpty() ) )
     {
         strToolTip += "<h4>" + tr ( "Location" ) + "</h4>";
 
         if ( !cChanInfo.strCity.isEmpty() )
         {
-            strToolTip            += cChanInfo.strCity;
+            strToolTip += cChanInfo.strCity;
             strLocationAccessible += cChanInfo.strCity;
 
             if ( eTTCountry != QLocale::AnyCountry )
             {
-                strToolTip            += ", ";
+                strToolTip += ", ";
                 strLocationAccessible += ", ";
             }
         }
 
         if ( eTTCountry != QLocale::AnyCountry )
         {
-            strToolTip            += QLocale::countryToString ( eTTCountry );
+            strToolTip += QLocale::countryToString ( eTTCountry );
             strLocationAccessible += QLocale::countryToString ( eTTCountry );
         }
     }
@@ -818,20 +786,20 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     switch ( cChanInfo.eSkillLevel )
     {
     case SL_BEGINNER:
-        strSkillLevel            = tr ( "Beginner" );
-        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strSkillLevel = tr ( "Beginner" );
+        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
         strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_INTERMEDIATE:
-        strSkillLevel            = tr ( "Intermediate" );
-        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strSkillLevel = tr ( "Intermediate" );
+        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
         strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
     case SL_PROFESSIONAL:
-        strSkillLevel            = tr ( "Expert" );
-        strToolTip              += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
+        strSkillLevel = tr ( "Expert" );
+        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + strSkillLevel;
         strInstrumentAccessible += ", " + strSkillLevel;
         break;
 
@@ -846,31 +814,30 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         strToolTip.prepend ( "<h3>" + tr ( "Musician Profile" ) + "</h3>" );
     }
 
-    plblCountryFlag->setToolTip               ( strToolTip );
+    plblCountryFlag->setToolTip ( strToolTip );
     plblCountryFlag->setAccessibleDescription ( strLocationAccessible );
-    plblInstrument->setToolTip                ( strToolTip );
-    plblInstrument->setAccessibleDescription  ( strInstrumentAccessible );
-    plblLabel->setToolTip                     ( strToolTip );
-    plblLabel->setAccessibleName              ( strAliasAccessible );
-    plblLabel->setAccessibleDescription       ( tr ( "Alias" ) );
+    plblInstrument->setToolTip ( strToolTip );
+    plblInstrument->setAccessibleDescription ( strInstrumentAccessible );
+    plblLabel->setToolTip ( strToolTip );
+    plblLabel->setAccessibleName ( strAliasAccessible );
+    plblLabel->setAccessibleDescription ( tr ( "Alias" ) );
 }
-
 
 /******************************************************************************\
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
-    QGroupBox            ( parent ),
-    pSettings            ( nullptr ),
-    bDisplayPans         ( false ),
-    bIsPanSupported      ( false ),
-    bNoFaderVisible      ( true ),
-    iMyChannelID         ( INVALID_INDEX ),
+    QGroupBox ( parent ),
+    pSettings ( nullptr ),
+    bDisplayPans ( false ),
+    bIsPanSupported ( false ),
+    bNoFaderVisible ( true ),
+    iMyChannelID ( INVALID_INDEX ),
     iRunningNewClientCnt ( 0 ),
-    iNumMixerPanelRows   ( 1 ), // pSettings->iNumMixerPanelRows is not yet available
-    strServerName        ( "" ),
-    eRecorderState       ( RS_UNDEFINED ),
-    eChSortType          ( ST_NO_SORT )
+    iNumMixerPanelRows ( 1 ), // pSettings->iNumMixerPanelRows is not yet available
+    strServerName ( "" ),
+    eRecorderState ( RS_UNDEFINED ),
+    eChSortType ( ST_NO_SORT )
 {
     // add group box and hboxlayout
     QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
@@ -879,10 +846,10 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     pMainLayout                  = new QGridLayout ( pMixerWidget );
 
     setAccessibleName ( "Personal Mix at the Server groupbox" );
-    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + ":</b> " + tr (
-        "When connected to a server, the controls here allow you to set your "
-        "local mix without affecting what others hear from you. The title shows "
-        "the server name and, when known, whether it is actively recording." ) );
+    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + ":</b> " +
+                   tr ( "When connected to a server, the controls here allow you to set your "
+                        "local mix without affecting what others hear from you. The title shows "
+                        "the server name and, when known, whether it is actively recording." ) );
 
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -905,12 +872,11 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     pGroupBoxLayout->setContentsMargins ( 0, 0, 0, 1 ); // note: to avoid problems at the bottom, use a small margin for that
 
     // add the group box to the scroll area
-    pScrollArea->setMinimumWidth    ( 200 ); // at least two faders shall be visible
-    pScrollArea->setWidget          ( pMixerWidget );
+    pScrollArea->setMinimumWidth ( 200 ); // at least two faders shall be visible
+    pScrollArea->setWidget ( pMixerWidget );
     pScrollArea->setWidgetResizable ( true ); // make sure it fills the entire scroll area
-    pScrollArea->setFrameShape      ( QFrame::NoFrame );
-    pGroupBoxLayout->addWidget      ( pScrollArea );
-
+    pScrollArea->setFrameShape ( QFrame::NoFrame );
+    pGroupBoxLayout->addWidget ( pScrollArea );
 
     // Connections -------------------------------------------------------------
     connectFaderSignalsToMixerBoardSlots<MAX_NUM_CHANNELS>();
@@ -929,26 +895,22 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 {
     int iCurChanID = slotId - 1;
 
-    void ( CAudioMixerBoard::* pGainValueChanged )( float, bool, bool, bool, double ) =
-        &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
+    void ( CAudioMixerBoard::*pGainValueChanged ) ( float, bool, bool, bool, double ) = &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
 
-    void ( CAudioMixerBoard::* pPanValueChanged )( float ) =
-        &CAudioMixerBoardSlots<slotId>::OnChPanValueChanged;
+    void ( CAudioMixerBoard::*pPanValueChanged ) ( float ) = &CAudioMixerBoardSlots<slotId>::OnChPanValueChanged;
 
-    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
-        this, &CAudioMixerBoard::UpdateSoloStates );
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged, this, &CAudioMixerBoard::UpdateSoloStates );
 
-    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::gainValueChanged,
-        this, pGainValueChanged );
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::gainValueChanged, this, pGainValueChanged );
 
-    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::panValueChanged,
-        this, pPanValueChanged );
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::panValueChanged, this, pPanValueChanged );
 
     connectFaderSignalsToMixerBoardSlots<slotId - 1>();
 }
 
 template<>
-inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {}
+inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>()
+{}
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 {
@@ -1031,7 +993,7 @@ void CAudioMixerBoard::HideAll()
     ChangeFaderOrder ( ST_NO_SORT );
 
     // Reset recording indication styleSheet
-    setStyleSheet( "" );
+    setStyleSheet ( "" );
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
@@ -1056,8 +1018,8 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     QMutexLocker locker ( &Mutex );
 
     // create a pair list of lower strings and fader ID for each channel
-    QList<QPair<QString, int> > PairList;
-    int                         iNumVisibleFaders = 0;
+    QList<QPair<QString, int>> PairList;
+    int                        iNumVisibleFaders = 0;
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1073,7 +1035,8 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
         {
             // sort first "by instrument" and second "by name" by adding the name after the instrument
             PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ) +
-                                              vecpChanFader[i]->GetReceivedName().toLower(), i );
+                                                  vecpChanFader[i]->GetReceivedName().toLower(),
+                                              i );
         }
         else if ( eChSortType == ST_BY_GROUPID )
         {
@@ -1091,8 +1054,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
         {
             // per definition for no sort: faders are sorted in the order they appeared (note that we
             // pad to a total of 11 characters with zeros to make sure the sorting is done correctly)
-            PairList << QPair<QString, int> ( QString ( "%1" ).arg (
-                vecpChanFader[i]->GetRunningNewClientCnt(), 11, 10, QLatin1Char ( '0' ) ), i );
+            PairList << QPair<QString, int> ( QString ( "%1" ).arg ( vecpChanFader[i]->GetRunningNewClientCnt(), 11, 10, QLatin1Char ( '0' ) ), i );
         }
 
         // count the number of visible faders
@@ -1123,8 +1085,8 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
             // channels are added row-first, up to iNumFadersFirstRow, then onto
             // the next row.
             pMainLayout->addWidget ( vecpChanFader[iCurFaderID]->GetMainWidget(),
-                    iVisibleFaderCnt / iNumFadersFirstRow,
-                    iVisibleFaderCnt % iNumFadersFirstRow );
+                                     iVisibleFaderCnt / iNumFadersFirstRow,
+                                     iVisibleFaderCnt % iNumFadersFirstRow );
 
             iVisibleFaderCnt++;
         }
@@ -1204,13 +1166,11 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                         // we can adjust the level even if no fader was visible.
                         // The fader level of 100 % is the default in the
                         // server, in that case we do not have to do anything here.
-                        if ( ( !bNoFaderVisible ||
-                               ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != i ) ) ) &&
+                        if ( ( !bNoFaderVisible || ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != i ) ) ) &&
                              ( pSettings->iNewClientFaderLevel != 100 ) )
                         {
                             // the value is in percent -> convert range
-                            vecpChanFader[i]->SetFaderLevel (
-                                pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
+                            vecpChanFader[i]->SetFaderLevel ( pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
                         }
                     }
 
@@ -1232,11 +1192,11 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                                                       bStoredFaderIsMute,
                                                       iGroupID ) )
                         {
-                            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel, true ); // suppress group update
-                            vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
+                            vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel, true ); // suppress group update
+                            vecpChanFader[i]->SetPanValue ( iStoredPanValue );
                             vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                             vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
-                            vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
+                            vecpChanFader[i]->SetGroupID ( iGroupID ); // Must be the last to be set in the fader!
                         }
                     }
 
@@ -1273,8 +1233,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     emit NumClientsChanged ( iNumConnectedClients );
 }
 
-void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
-                                       const int iValue )
+void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx, const int iValue )
 {
     // only apply new fader level if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
@@ -1286,12 +1245,10 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
     }
 }
 
-void CAudioMixerBoard::SetPanValue ( const int iChannelIdx,
-                                     const int iValue )
+void CAudioMixerBoard::SetPanValue ( const int iChannelIdx, const int iValue )
 {
     // only apply new pan value if channel index is valid and the panner is visible
-    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS )
-           && bDisplayPans )
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) && bDisplayPans )
     {
         if ( vecpChanFader[iChannelIdx]->IsVisible() )
         {
@@ -1300,8 +1257,7 @@ void CAudioMixerBoard::SetPanValue ( const int iChannelIdx,
     }
 }
 
-void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx,
-                                        const bool bIsSolo )
+void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx, const bool bIsSolo )
 {
     // only apply solo if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
@@ -1314,8 +1270,7 @@ void CAudioMixerBoard::SetFaderIsSolo ( const int iChannelIdx,
     }
 }
 
-void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx,
-                                        const bool bIsMute )
+void CAudioMixerBoard::SetFaderIsMute ( const int iChannelIdx, const bool bIsMute )
 {
     // only apply mute if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
@@ -1339,8 +1294,7 @@ void CAudioMixerBoard::SetAllFaderLevelsToNewClientLevel()
             // the value is in percent -> convert range, also use the group
             // update flag to make sure the group values are all set to the
             // same fader level now
-            vecpChanFader[i]->SetFaderLevel (
-                pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX, true );
+            vecpChanFader[i]->SetFaderLevel ( pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX, true );
         }
     }
 }
@@ -1354,7 +1308,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     int   vecChannelsPerGroup[MAX_NUM_FADER_GROUPS + 1];
     for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
     {
-        vecMaxLevel[i] = LOW_BOUND_SIG_METER;
+        vecMaxLevel[i]         = LOW_BOUND_SIG_METER;
         vecChannelsPerGroup[i] = 0;
     }
     CVector<CVector<float>> levels;
@@ -1368,9 +1322,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
         {
             // map averaged meter output level to decibels
             // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
-            float leveldB = vecAvgLevels[i] *
-                ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) /
-                NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
+            float leveldB = vecAvgLevels[i] * ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) / NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
 
             int group = vecpChanFader[i]->GetGroupID();
             if ( group == INVALID_INDEX )
@@ -1401,29 +1353,25 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
     }
 
     // only my channel is active, nothing to do
-    if ( cntActiveGroups == 0 &&
-        vecChannelsPerGroup[MAX_NUM_FADER_GROUPS] == 0 )
+    if ( cntActiveGroups == 0 && vecChannelsPerGroup[MAX_NUM_FADER_GROUPS] == 0 )
     {
         return;
     }
 
     // compute target level for each group
     // (prevent clipping when each group contributes at maximum level)
-    float targetLevelPerGroup = -20.0f * log10 (
-        std::max ( cntActiveGroups, 1 ) );
+    float targetLevelPerGroup = -20.0f * log10 ( std::max ( cntActiveGroups, 1 ) );
 
     // compute target levels for the channels of each group individually
     float vecTargetChannelLevel[MAX_NUM_FADER_GROUPS + 1];
     float levelOffset = 0.0f;
-    float minFader = 0.0f;
+    float minFader    = 0.0f;
     for ( int i = 0; i < MAX_NUM_FADER_GROUPS + 1; ++i )
     {
         // compute the target level for each channel in the current group
         // (prevent clipping when each channel in this group contributes at
         // the maximum level)
-        vecTargetChannelLevel[i] = vecChannelsPerGroup[i] > 0 ?
-            targetLevelPerGroup - 20.0f * log10 ( vecChannelsPerGroup[i] ) :
-            0.0f;
+        vecTargetChannelLevel[i] = vecChannelsPerGroup[i] > 0 ? targetLevelPerGroup - 20.0f * log10 ( vecChannelsPerGroup[i] ) : 0.0f;
 
         // get median level
         int cntChannels = levels[i].Size();
@@ -1440,12 +1388,10 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
         {
             // otherwise, we adjust the level offset in such a way that
             // the level can be reached
-            levelOffset = fmin ( levelOffset,
-                refLevel - vecTargetChannelLevel[i] );
+            levelOffset = fmin ( levelOffset, refLevel - vecTargetChannelLevel[i] );
 
             // compute the minimum necessary fader setting
-            minFader = fmin ( minFader, -vecMaxLevel[i] +
-                vecTargetChannelLevel[i] + levelOffset );
+            minFader = fmin ( minFader, -vecMaxLevel[i] + vecTargetChannelLevel[i] + levelOffset );
         }
     }
 
@@ -1466,9 +1412,7 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
         {
             // map averaged meter output level to decibels
             // (invert CStereoSignalLevelMeter::CalcLogResultForMeter)
-            float leveldB = vecAvgLevels[i] *
-                ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) /
-                NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
+            float leveldB = vecAvgLevels[i] * ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER ) / NUM_STEPS_LED_BAR + LOW_BOUND_SIG_METER;
 
             int group = vecpChanFader[i]->GetGroupID();
             if ( group == INVALID_INDEX )
@@ -1489,17 +1433,14 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
             if ( leveldB >= AUTO_FADER_NOISE_THRESHOLD_DB )
             {
                 // compute new level
-                float newdBLevel = -leveldB + vecTargetChannelLevel[group] +
-                    levelOffset;
+                float newdBLevel = -leveldB + vecTargetChannelLevel[group] + levelOffset;
 
                 // map range from decibels to fader level
                 // (this inverts MathUtils::CalcFaderGain)
-                float newFaderLevel = ( newdBLevel / AUD_MIX_FADER_RANGE_DB +
-                    1.0f ) * AUD_MIX_FADER_MAX;
+                float newFaderLevel = ( newdBLevel / AUD_MIX_FADER_RANGE_DB + 1.0f ) * AUD_MIX_FADER_MAX;
 
                 // limit fader
-                newFaderLevel = fmin ( fmax ( newFaderLevel, 0.0f),
-                    float ( AUD_MIX_FADER_MAX ) );
+                newFaderLevel = fmin ( fmax ( newFaderLevel, 0.0f ), float ( AUD_MIX_FADER_MAX ) );
 
                 // set fader level
                 vecpChanFader[i]->SetFaderLevel ( newFaderLevel, true );
@@ -1537,17 +1478,16 @@ void CAudioMixerBoard::LoadAllFaderSettings()
                                       bStoredFaderIsMute,
                                       iGroupID ) )
         {
-            vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel, true ); // suppress group update
-            vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
+            vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel, true ); // suppress group update
+            vecpChanFader[i]->SetPanValue ( iStoredPanValue );
             vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
             vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
-            vecpChanFader[i]->SetGroupID     ( iGroupID ); // Must be the last to be set in the fader!
+            vecpChanFader[i]->SetGroupID ( iGroupID ); // Must be the last to be set in the fader!
         }
     }
 }
 
-void CAudioMixerBoard::SetRemoteFaderIsMute ( const int  iChannelIdx,
-                                              const bool bIsMute )
+void CAudioMixerBoard::SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute )
 {
     // only apply remote mute state if channel index is valid and the fader is visible
     if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
@@ -1605,10 +1545,8 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
         for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
             // update rest of faders selected
-            if ( vecpChanFader[i]->IsVisible() &&
-                 ( vecpChanFader[i]->GetGroupID() == vecpChanFader[iChannelIdx]->GetGroupID() ) &&
-                 ( i != iChannelIdx ) &&
-                 ( dLevelRatio >= 0 ) )
+            if ( vecpChanFader[i]->IsVisible() && ( vecpChanFader[i]->GetGroupID() == vecpChanFader[iChannelIdx]->GetGroupID() ) &&
+                 ( i != iChannelIdx ) && ( dLevelRatio >= 0 ) )
             {
                 // synchronize faders with moving fader level (it is important
                 // to set the group flag to avoid infinite looping)
@@ -1618,22 +1556,17 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
     }
 }
 
-void CAudioMixerBoard::UpdatePanValue ( const int   iChannelIdx,
-                                        const float fValue )
-{
-    emit ChangeChanPan ( iChannelIdx, fValue );
-}
+void CAudioMixerBoard::UpdatePanValue ( const int iChannelIdx, const float fValue ) { emit ChangeChanPan ( iChannelIdx, fValue ); }
 
 void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
 {
     // if the fader was visible and the name is not empty, we store the old gain
-    if ( pChanFader->IsVisible() &&
-         !pChanFader->GetReceivedName().isEmpty() )
+    if ( pChanFader->IsVisible() && !pChanFader->GetReceivedName().isEmpty() )
     {
-        CVector<int> viOldStoredFaderLevels  ( pSettings->vecStoredFaderLevels );
-        CVector<int> viOldStoredPanValues    ( pSettings->vecStoredPanValues );
-        CVector<int> vbOldStoredFaderIsSolo  ( pSettings->vecStoredFaderIsSolo );
-        CVector<int> vbOldStoredFaderIsMute  ( pSettings->vecStoredFaderIsMute );
+        CVector<int> viOldStoredFaderLevels ( pSettings->vecStoredFaderLevels );
+        CVector<int> viOldStoredPanValues ( pSettings->vecStoredPanValues );
+        CVector<int> vbOldStoredFaderIsSolo ( pSettings->vecStoredFaderIsSolo );
+        CVector<int> vbOldStoredFaderIsMute ( pSettings->vecStoredFaderIsMute );
         CVector<int> vbOldStoredFaderGroupID ( pSettings->vecStoredFaderGroupID );
 
         // put new value on the top of the list
@@ -1712,9 +1645,7 @@ void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLev
         if ( vecpChanFader[iChId]->IsVisible() && ( i < iNumChannelLevels ) )
         {
             // compute exponential moving average
-            vecAvgLevels[iChId] =
-                (1.0f - AUTO_FADER_ADJUST_ALPHA) * vecAvgLevels[iChId] +
-                AUTO_FADER_ADJUST_ALPHA * vecChannelLevel[i];
+            vecAvgLevels[iChId] = ( 1.0f - AUTO_FADER_ADJUST_ALPHA ) * vecAvgLevels[iChId] + AUTO_FADER_ADJUST_ALPHA * vecChannelLevel[i];
 
             vecpChanFader[iChId]->SetChannelLevel ( vecChannelLevel[i++] );
 
@@ -1728,7 +1659,4 @@ void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLev
     }
 }
 
-void CAudioMixerBoard::MuteMyChannel()
-{
-    SetFaderIsMute ( iMyChannelID, true );
-}
+void CAudioMixerBoard::MuteMyChannel() { SetFaderIsMute ( iMyChannelID, true ); }

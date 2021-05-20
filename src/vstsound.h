@@ -22,33 +22,31 @@
  *
 \******************************************************************************/
 
-#if !defined ( _VSTSOUND_H__9518A346345768_11D3_8C0D_EEBF182CF549__INCLUDED_ )
-#define _VSTSOUND_H__9518A346345768_11D3_8C0D_EEBF182CF549__INCLUDED_
+#if !defined( _VSTSOUND_H__9518A346345768_11D3_8C0D_EEBF182CF549__INCLUDED_ )
+#    define _VSTSOUND_H__9518A346345768_11D3_8C0D_EEBF182CF549__INCLUDED_
 
-#include "../src/util.h"
-#include "../src/global.h"
-#include "../src/soundbase.h"
-
+#    include "../src/util.h"
+#    include "../src/global.h"
+#    include "../src/soundbase.h"
 
 /* Classes ********************************************************************/
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
-        CSoundBase ( true, fpNewCallback, arg ), iVSTMonoBufferSize ( 0 ) {}
+    CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
+        CSoundBase ( true, fpNewCallback, arg ),
+        iVSTMonoBufferSize ( 0 )
+    {}
 
     // special VST functions
     void SetMonoBufferSize ( const int iNVBS ) { iVSTMonoBufferSize = iNVBS; }
-    void VSTProcessCallback()
-    {
-        CSoundBase::ProcessCallback ( vecsTmpAudioSndCrdStereo );
-    }
+    void VSTProcessCallback() { CSoundBase::ProcessCallback ( vecsTmpAudioSndCrdStereo ); }
 
     virtual int Init ( const int )
     {
         // init base class
         CSoundBase::Init ( iVSTMonoBufferSize );
-        vecsTmpAudioSndCrdStereo.Init ( 2 * iVSTMonoBufferSize /* stereo */);
+        vecsTmpAudioSndCrdStereo.Init ( 2 * iVSTMonoBufferSize /* stereo */ );
         return iVSTMonoBufferSize;
     }
 

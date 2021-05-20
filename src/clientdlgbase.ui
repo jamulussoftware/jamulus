@@ -583,7 +583,10 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>butConnect</tabstop>
   <tabstop>chbLocalMute</tabstop>
+  <tabstop>chbSettings</tabstop>
+  <tabstop>chbChat</tabstop>
   <tabstop>sldAudioReverb</tabstop>
   <tabstop>rbtReverbSelL</tabstop>
   <tabstop>rbtReverbSelR</tabstop>

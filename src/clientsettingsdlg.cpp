@@ -37,6 +37,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QMenuBar* pMenu  = new QMenuBar ( this );
     QAction*  action = pMenu->addAction ( tr ( "&Close" ) );
     connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
+
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 #endif

@@ -123,7 +123,9 @@ public:
         vstrFAVMaxUsers ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
         vstrFAVDirectory ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
         vecsFAVDirectECS ( MAX_NUM_FAVORITE_ADDR_ITEMS, AT_DEFAULT ),
+        iNewClientFaderLevel ( 100 ),
         iInputBoost ( 1 ),
+        iSettingsTab ( SETTING_TAB_AUDIONET ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType ( ST_NO_SORT ),
         iNumMixerPanelRows ( 1 ),
@@ -131,6 +133,7 @@ public:
         iFavDirLastSelected ( 0 ),
         vstrCentralServerAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         eCentralServerAddressType ( AT_DEFAULT ),
+        bEnableFeedbackDetection ( true ),
         vecWindowPosSettings(), // empty array
         vecWindowPosChat(),     // empty array
         vecWindowPosConnect(),  // empty array

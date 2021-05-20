@@ -87,8 +87,7 @@ protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetMyWindowTitle ( const int iNumClients );
     void ShowConnectionSetupDialog();
-    void ShowMusicianProfileDialog();
-    void ShowGeneralSettings ( int );
+    void ShowGeneralSettings ( int iTab );
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();

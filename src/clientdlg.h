@@ -87,6 +87,7 @@ protected:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetMyWindowTitle ( const int iNumClients );
     void ShowConnectionSetupDialog();
+    void ShowFavoritesConnectionDialog();
     void ShowGeneralSettings ( int iTab );
     void ShowChatWindow ( const bool bForceRaise = true );
     void ShowAnalyzerConsole();
@@ -151,6 +152,7 @@ public slots:
     void OnLoadChannelSetup();
     void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
+    void OnOpenFavoritesConnectionDialog() { ShowFavoritesConnectionDialog(); }
     void OnOpenUserProfileSettings();
     void OnOpenAudioNetSettings();
     void OnOpenAdvancedSettings();

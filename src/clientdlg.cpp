@@ -339,10 +339,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
 
-    // Add to Favorites "button" -----------------------------------------------
-    paFAVAction = new QAction ( tr ( "Add to &Favorites" ) );
+    // Favorites menu  --------------------------------------------------------------
+    paFAVAction = new QAction ( tr ( "&Add to Favorites" ) );
     QObject::connect ( paFAVAction, SIGNAL ( triggered() ), &ConnectDlg, SLOT ( OnAddtoFavorites() ) );
     paFAVAction->setEnabled ( false );
+    paFAVAction->setShortcut ( Qt::CTRL + Qt::Key_A );
+
+    QMenu* pFavoritesMenu = new QMenu ( tr ( "Fav&orites" ), this );
+
+    pFavoritesMenu->addAction ( paFAVAction );
+
+    pFavoritesMenu->addAction ( tr ( "Sho&w Favorites..." ), this, SLOT ( OnOpenFavoritesConnectionDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
@@ -350,9 +357,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pMenu->addMenu ( pFileMenu );
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
-    pMenu->addMenu ( "|" );
-    pMenu->addAction ( paFAVAction );
-    pMenu->addMenu ( "|" );
+    pMenu->addMenu ( pFavoritesMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
@@ -911,6 +916,14 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     }
 #    endif
 #endif
+}
+
+void CClientDlg::ShowFavoritesConnectionDialog()
+{
+    // set to Favorites Tab
+    pSettings->bFavoriteWasShownConnect = true;
+    // show connect dialog
+    ShowConnectionSetupDialog();
 }
 
 void CClientDlg::ShowConnectionSetupDialog()

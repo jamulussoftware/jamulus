@@ -349,7 +349,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pFavoritesMenu->addAction ( paFAVAction );
 
-    pFavoritesMenu->addAction ( tr ( "Sho&w Favorites..." ), this, SLOT ( OnOpenFavoritesConnectionDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
+    pFavoritesMenu->addAction ( tr ( "Sho&w Favorites..." ),
+                                this,
+                                SLOT ( OnOpenFavoritesConnectionDialog() ),
+                                QKeySequence ( Qt::CTRL + Qt::Key_W ) );
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );

@@ -3,8 +3,8 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QDebug>
-
-
+#include <QFileDialog>
+#include <QMenu>
 
 CConnectionListDlg::CConnectionListDlg(QWidget *parent) :
     QDialog(parent),
@@ -19,7 +19,18 @@ CConnectionListDlg::~CConnectionListDlg()
 {
     delete ui;
 }
-void CConnectionListDlg::LoadConnectionList(QString filename)
+QMenu* CConnectionListDlg::setupMenu(QWidget* pMain)
+{
+    QMenu* pBookmarkMenu = new QMenu ( tr ( "&Bookmarks" ), pMain );
+    pBookmarkMenu->addAction ( tr ( "&Add Bookmark..." ), this,
+    +         SLOT ( OnAddBookmark() ) );
+    pBookmarkMenu->addAction ( tr ( "&Load Bookmarks..." ), this,
+    +         SLOT ( OnLoadBookmarks() ) );
+    pBookmarkMenu->addAction ( tr ( "&Save Bookmarks..." ), this,
+    +         SLOT ( OnSaveBookmarks() ) );
+    return pBookmarkMenu;
+}
+void CConnectionListDlg::LoadConnectionList(const QString& filename)
 {
     NetworkUtil networkUtil;
 
@@ -54,7 +65,62 @@ void CConnectionListDlg::LoadConnectionList(QString filename)
     ui->listWidget->setCurrentRow(0);
     ulSelectedServer = 0;
 }
+void CConnectionListDlg::SaveConnectionList(const QString& filename)
+{
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadWrite)) {
+        QMessageBox::warning(this,"Error!",file.errorString());
+        return ;
+    }
+    QTextStream stream( &file );
+    for (int var = 0; var < vecServerInfo.size() ; ++var) {
+        stream << vecServerInfo[var].strName << ","
+        << vecServerInfo[var].HostAddr.toString() << endl;
+    }
+    file.close();
+}
+void CConnectionListDlg::OnAddBookmark()
+{
+    NetworkUtil networkUtil;
+    CHostAddress address;
+    networkUtil.ParseNetworkAddress(strCurrentServerAddress,address);
+    // add server information to vector
+    vecServerInfo.Add (
+        CServerInfo ( address,
+                      address,
+                      strCurrentServerName,
+                      QLocale::AnyCountry,
+                      "AnyCity",
+                      0,
+                      false ) );
+    ui->listWidget->addItem(strCurrentServerName);
+}
+void CConnectionListDlg::OnLoadBookmarks()
+{
+     QString strFileName = QFileDialog::getOpenFileName ( this,
+                                                          tr ( "Favourites file" ),
+                                                          "",
+                                                          QString ( "*.jcl" ));
 
+     if ( !strFileName.isEmpty() )
+     {
+         // first update the settings struct and then update the mixer panel
+         LoadConnectionList(strFileName);
+         show();
+         raise();
+         activateWindow();
+     }
+}
+void CConnectionListDlg::OnSaveBookmarks()
+{
+     QString strFileName = QFileDialog::getSaveFileName ( this, tr ( "Bookmarks file" ), "", QString ( "*.jcl" ));
+
+     if ( !strFileName.isEmpty() )
+     {
+         // first update the settings struct and then update the mixer panel
+         SaveConnectionList(strFileName);
+     }
+}
 void CConnectionListDlg::on_connectButton_clicked()
 {
     emit ConnectionListDlgUpdated();

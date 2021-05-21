@@ -247,9 +247,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
 
-    pFileMenu->addAction ( tr ( "Load &Connection list..." ), this,
-    +         SLOT ( OnConnectionList() ) );
-
     pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this, SLOT ( OnLoadChannelSetup() ) );
 
     pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this, SLOT ( OnSaveChannelSetup() ) );
@@ -349,6 +346,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pMenu->addMenu ( pFileMenu );
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
+    pMenu->addMenu ( ConnectionListDlg.setupMenu(this) );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
@@ -738,22 +736,6 @@ void CClientDlg::OnClearAllStoredSoloMuteSettings()
     pSettings->vecStoredFaderIsSolo.Reset ( false );
     pSettings->vecStoredFaderIsMute.Reset ( false );
     MainMixerBoard->LoadAllFaderSettings();
-}
-void CClientDlg::OnConnectionList()
-{
-     QString strFileName = QFileDialog::getOpenFileName ( this,
-                                                          tr ( "Favourites file" ),
-                                                          "",
-                                                          QString ( "*.jcl" ));
-
-     if ( !strFileName.isEmpty() )
-     {
-         // first update the settings struct and then update the mixer panel
-         ConnectionListDlg.LoadConnectionList(strFileName);
-         ConnectionListDlg.show();
-         ConnectionListDlg.raise();
-         ConnectionListDlg.activateWindow();
-     }
 }
 
 void CClientDlg::OnLoadChannelSetup()
@@ -1204,10 +1186,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
         // change connect button text to "disconnect"
         butConnect->setText ( tr ( "D&isconnect" ) );
-
+        butConnect->repaint();
         // set server name in audio mixer group box title
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
-
+        ConnectionListDlg.setCurrentServer(strMixerBoardLabel, strSelectedAddress);
         // start timer for level meter bar and ping time measurement
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
         TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );

@@ -22,8 +22,9 @@ CConnectionListDlg::~CConnectionListDlg()
 QMenu* CConnectionListDlg::setupMenu(QWidget* pMain)
 {
     QMenu* pBookmarkMenu = new QMenu ( tr ( "&Bookmarks" ), pMain );
-    pBookmarkMenu->addAction ( tr ( "&Add Bookmark..." ), this,
+    pBookmarkMenu->addAction ( tr ( "&Add Bookmark" ), this,
     +         SLOT ( OnAddBookmark() ) );
+    pBookmarkMenu->addSeparator();
     pBookmarkMenu->addAction ( tr ( "&Load Bookmarks..." ), this,
     +         SLOT ( OnLoadBookmarks() ) );
     pBookmarkMenu->addAction ( tr ( "&Save Bookmarks..." ), this,
@@ -94,6 +95,7 @@ void CConnectionListDlg::OnAddBookmark()
                       0,
                       false ) );
     ui->listWidget->addItem(strCurrentServerName);
+    show();
 }
 void CConnectionListDlg::OnLoadBookmarks()
 {

@@ -93,28 +93,19 @@ win32 {
 
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
-        message(Using Jack instead of ASIO.)
-
-        contains(QT_ARCH, "x86") {
-		    !exists("C:/Program Files (x86)/JACK2/includes/jack/jack.h") {
-                message(Warning: jack.h was not found at the usual place, maybe jack2 32-bit is not installed)
-            }
-
-            HEADERS -= windows/sound.h
-            SOURCES -= windows/sound.cpp
-            HEADERS += linux/sound.h
-            SOURCES += linux/sound.cpp
-            DEFINES += WITH_JACK
-            DEFINES += JACK_REPLACES_ASIO
-            DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-            INCLUDEPATH += "C:/Program Files (x86)/JACK2/include"
-            LIBS += "C:/Program Files (x86)/JACK2/lib/libjack.lib"
-        }
-
-        contains(QT_ARCH, "x86_64") {
-		    !exists("C:/Program Files/JACK2/include/jack/jack.h") {
-                message(Warning: jack.h was not found at the usual place, maybe jack2 64-bit is not installed)
-            }
+        contains(QT_ARCH, "i386") {
+        	message("Native i386 build")
+        	libjack-name = libjack.lib
+        } else {
+        	message("Native x86_64 build")
+		    libjack-name = libjack64.lib
+		    !exists("C:/Program Files (86)/JACK2/include/jack/jack.h") {
+            	message("Warning: jack.h was not found at the usual place, install JACK2 32 bits to cross compile.")
+         	}	
+          }
+          !exists("C:/Program Files/JACK2/include/jack/jack.h") {
+            message("Warning: jack.h was not found at the usual place, maybe JACK2 64 bits to compile")
+          }
 
             HEADERS -= windows/sound.h
             SOURCES -= windows/sound.cpp
@@ -124,9 +115,8 @@ win32 {
             DEFINES += JACK_REPLACES_ASIO
             DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
             INCLUDEPATH += "C:/Program Files/JACK2/include"
-            LIBS += "C:/Program Files/JACK2/lib/libjack64.lib"
-        }
-    }
+            LIBS += "C:/Program Files/JACK2/lib/$${libjack-name}"
+	}
 
 } else:macx {
     contains(CONFIG, "server_bundle") {
@@ -170,7 +160,7 @@ win32 {
 
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+                 message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
 

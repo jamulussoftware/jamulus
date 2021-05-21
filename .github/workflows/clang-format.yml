@@ -1,0 +1,20 @@
+name: Style Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  clang-format:
+    name: Clang-Format
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: DoozyX/clang-format-lint-action@v0.12
+      with:
+        source: '.'
+        exclude: './libs'
+        extensions: 'cpp,h'
+        clangFormatVersion: 10

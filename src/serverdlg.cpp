@@ -598,6 +598,14 @@ void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReaso
     {
         ShowWindowInForeground();
     }
+
+    // on single click on the icon, show window in fore ground for windows only
+#ifdef _WIN32
+    if ( ActReason == QSystemTrayIcon::Trigger )
+    {
+        ShowWindowInForeground();
+    }
+#endif
 }
 
 void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion )

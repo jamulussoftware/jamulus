@@ -94,19 +94,19 @@ win32 {
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
         contains(QT_ARCH, "i386") {
-        	message("Native i386 build")
-        	libjackname = libjack.lib
+            message("Native i386 build")
+            libjackname = libjack.lib
         } else {
-        	message("Native x86_64 build")
-		    libjackname = libjack64.lib
-		    !exists("C:/Program Files (86)/JACK2/include/jack/jack.h") {
-            	message("Warning: jack.h was not found at the usual place, install JACK2 32 bits to cross compile.")
-         	}	
+            message("Native x86_64 build")
+            libjackname = libjack64.lib
+            !exists("C:/Program Files (86)/JACK2/include/jack/jack.h") {
+                message("Warning: jack.h was not found at the usual place, install JACK2 32 bits to cross compile.")
+            }
         }
           !exists("C:/Program Files/JACK2/include/jack/jack.h") {
-         	 message("Warning: jack.h was not found at the usual place, maybe JACK2 64 bits to compile")
+            message("Warning: jack.h was not found at the usual place, maybe JACK2 64 bits to compile")
           }
-    
+
             HEADERS -= windows/sound.h
             SOURCES -= windows/sound.cpp
             HEADERS += linux/sound.h
@@ -116,7 +116,7 @@ win32 {
             DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
             INCLUDEPATH += "C:/Program Files/JACK2/include"
             LIBS += "C:/Program Files/JACK2/lib/$${libjackname}"
-	}
+    }
 
 } else:macx {
     contains(CONFIG, "server_bundle") {

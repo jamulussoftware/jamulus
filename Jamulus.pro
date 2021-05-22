@@ -94,28 +94,39 @@ win32 {
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
         contains(QT_ARCH, "i386") {
-            message("Native i386 build")
-            libjackname = libjack.lib
+            !exist("C:/Program Files (x86)") {
+                message ("Cross compilation build")
+                programfilesdir = "C:/Program Files (x86)"
+                !exists("$${"programfilesdir"}/JACK2/include/jack/jack.h") {
+                    message("Warning: jack.h was not found at the usual place, maybe JACK2 32 bits is not installed to cross compile.")
+                }
+            }
+            !exist("C:/Program Files") {
+                message("Native i386 build")
+                programfilesdir = "C:/Program Files"
+                !exists("$${"programfilesdir"}/JACK2/include/jack/jack.h") {
+                    message("Warning: jack.h was not found at the usual place, maybe JACK2 is not installed.")
+                }
+            }
+            libjackname = "libjack.lib"
         } else {
             message("Native x86_64 build")
-            libjackname = libjack64.lib
-            !exists("C:/Program Files (x86)/JACK2/include/jack/jack.h") {
-                message("Warning: jack.h was not found at the usual place, install JACK2 32 bits to cross compile.")
+            programfilesdir = "C:/Program Files"
+            libjackname = "libjack64.lib"
+            !exists("$${"programfilesdir"}/JACK2/include/jack/jack.h") {
+                message("Warning: jack.h was not found at the usual place, maybe JACK2 is not installed.")
             }
         }
-          !exists("C:/Program Files/JACK2/include/jack/jack.h") {
-            message("Warning: jack.h was not found at the usual place, maybe JACK2 is not installed")
-          }
 
-            HEADERS -= windows/sound.h
-            SOURCES -= windows/sound.cpp
-            HEADERS += linux/sound.h
-            SOURCES += linux/sound.cpp
-            DEFINES += WITH_JACK
-            DEFINES += JACK_REPLACES_ASIO
-            DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-            INCLUDEPATH += "C:/Program Files/JACK2/include"
-            LIBS += "C:/Program Files/JACK2/lib/$${libjackname}"
+        HEADERS -= windows/sound.h
+        SOURCES -= windows/sound.cpp
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+        DEFINES += WITH_JACK
+        DEFINES += JACK_REPLACES_ASIO
+        DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
+        INCLUDEPATH += "$${"programfilesdir"}/JACK2/include"
+        LIBS += "$${"programfilesdir"}/JACK2/lib/$${libjackname}"
     }
 
 } else:macx {

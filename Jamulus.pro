@@ -99,12 +99,12 @@ win32 {
         } else {
             message("Native x86_64 build")
             libjackname = libjack64.lib
-            !exists("C:/Program Files (86)/JACK2/include/jack/jack.h") {
+            !exists("C:/Program Files (x86)/JACK2/include/jack/jack.h") {
                 message("Warning: jack.h was not found at the usual place, install JACK2 32 bits to cross compile.")
             }
         }
           !exists("C:/Program Files/JACK2/include/jack/jack.h") {
-            message("Warning: jack.h was not found at the usual place, maybe JACK2 64 bits to compile")
+            message("Warning: jack.h was not found at the usual place, maybe JACK2 is not installed")
           }
 
             HEADERS -= windows/sound.h

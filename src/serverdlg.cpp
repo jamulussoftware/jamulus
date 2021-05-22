@@ -593,19 +593,16 @@ void CServerDlg::OnClearRecordingDirClicked()
 
 void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
 {
-    // on double click on the icon, show window in fore ground
+    #ifdef _WIN32
+    // on single or double click on the icon, show window in foreground for windows only
+    if ( ActReason == QSystemTrayIcon::Trigger || ActReason == QSystemTrayIcon::DoubleClick )
+    #else
+    // on double click on the icon, show window in foreground for all
     if ( ActReason == QSystemTrayIcon::DoubleClick )
+    #endif
     {
         ShowWindowInForeground();
     }
-
-    // on single click on the icon, show window in fore ground for windows only
-#ifdef _WIN32
-    if ( ActReason == QSystemTrayIcon::Trigger )
-    {
-        ShowWindowInForeground();
-    }
-#endif
 }
 
 void CServerDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion )

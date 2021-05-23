@@ -97,25 +97,18 @@ win32 {
             !exists("C:/Program Files (x86)") {
                 message("Cross compilation build")
                 programfilesdir = "C:/Program Files (x86)"
-                !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                    message("Warning: jack.h was not found at the usual place, maybe JACK2 32 bits is not installed to cross compile.")
-                }
-            }
-            !exists("C:/Program Files") {
+            } else {
                 message("Native i386 build")
                 programfilesdir = "C:/Program Files"
-                !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                    message("Warning: jack.h was not found at the usual place, maybe JACK2 is not installed.")
-                }
             }
             libjackname = "libjack.lib"
         } else {
             message("Native x86_64 build")
             programfilesdir = "C:/Program Files"
             libjackname = "libjack64.lib"
-            !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-                message("Warning: jack.h was not found at the usual place, maybe JACK2 is not installed.")
-            }
+        }
+        !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
+            message("Warning: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
         }
 
         HEADERS -= windows/sound.h

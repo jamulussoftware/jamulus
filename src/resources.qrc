@@ -41,6 +41,8 @@
         <file>res/IndicatorGreen.png</file>
         <file>res/IndicatorYellow.png</file>
         <file>res/IndicatorRed.png</file>
+        <file>res/IndicatorYellowFancy.png</file>
+        <file>res/IndicatorRedFancy.png</file>
         <file>res/HLEDGreenSmall.png</file>
         <file>res/HLEDBlackSmall.png</file>
         <file>res/HLEDRedSmall.png</file>

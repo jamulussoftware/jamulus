@@ -94,7 +94,7 @@ win32 {
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
         contains(QT_ARCH, "i386") {
-            !exists("C:/Program Files (x86)") {
+            exists("C:/Program Files (x86)") {
                 message("Cross compilation build")
                 programfilesdir = "C:/Program Files (x86)"
             } else {

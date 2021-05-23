@@ -134,10 +134,10 @@
 - Bug fix: The Windows installer now correctly compiles in a path with spaces (#864, #1319).
   (contributed by @henkdegroot)
 
-- Performance: Opus encoding/decoding now uses machine-specific optimizations again (#1105).
+- Performance: Opus encoding/decoding now uses machine-specific optimizations (#1105).
   (contributed by @npostavs)
 
-- Performance: Timer configuration for Windows has been improved (#1536).
+- Performance: Timer configuration for Windows servers has been improved (#1536).
   (contributed by @npostavs)
 
 - iOS support is being worked on (#1450)

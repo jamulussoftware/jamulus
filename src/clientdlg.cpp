@@ -1212,7 +1212,25 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         catch ( const CGenErr& generr )
         {
             // show error message and return the function
-            QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
+            QMessageBox msgBox ( QMessageBox::Critical, APP_NAME, generr.GetErrorText(),
+                                 QMessageBox::NoButton, this );
+            QPushButton* openSettingsButton = msgBox.addButton ( tr ( "Open Settings" ), QMessageBox::ActionRole );
+            QPushButton* autoSelectButton = msgBox.addButton ( tr ( "Auto Select Device" ), QMessageBox::ActionRole );
+            QPushButton* closeButton = msgBox.addButton ( tr ( "Close" ), QMessageBox::AcceptRole );
+
+            msgBox.setTextFormat ( Qt::RichText ); // Some error messages are HTML formatted
+            msgBox.setDefaultButton ( openSettingsButton );
+            msgBox.setEscapeButton ( closeButton );
+
+            msgBox.exec();
+            if ( msgBox.clickedButton() == openSettingsButton )
+            {
+                ShowGeneralSettings ( SETTING_TAB_AUDIONET );
+            }
+            else if ( msgBox.clickedButton() == autoSelectButton )
+            {
+                ClientSettingsDlg.OnTryLoadAnyDriverClicked();
+            }
             return;
         }
 

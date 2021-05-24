@@ -8,7 +8,7 @@ on:
 
 jobs:
   clang-format:
-    name: Clang-Format
+    name: Verify Clang-Format compliance
     permissions:
       contents: read
     runs-on: ubuntu-latest

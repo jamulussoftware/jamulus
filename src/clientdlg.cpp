@@ -1212,10 +1212,11 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         catch ( const CGenErr& generr )
         {
             // show error message and return the function
-            QMessageBox msgBox ( QMessageBox::Critical, APP_NAME, generr.GetErrorText(),
-                                 QMessageBox::NoButton, this );
+            QMessageBox  msgBox ( QMessageBox::Critical, APP_NAME, generr.GetErrorText(), QMessageBox::NoButton, this );
             QPushButton* openSettingsButton = msgBox.addButton ( tr ( "Open Settings" ), QMessageBox::ActionRole );
-            QPushButton* autoSelectButton = msgBox.addButton ( tr ( "Auto Select Device" ), QMessageBox::ActionRole );
+            // See also CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
+            QPushButton* autoSelectButton =
+                ( pClient->GetSndCrdDevNames().count() > 1 ) ? msgBox.addButton ( tr ( "Auto Select Device" ), QMessageBox::ActionRole ) : nullptr;
             QPushButton* closeButton = msgBox.addButton ( tr ( "Close" ), QMessageBox::AcceptRole );
 
             msgBox.setTextFormat ( Qt::RichText ); // Some error messages are HTML formatted

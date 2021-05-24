@@ -264,6 +264,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
 #endif
 
+    butDriverReset->setIcon ( butDriverReset->style()->standardIcon ( QStyle::SP_BrowserReload ) );
+
     // fancy skin
     lblSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr ( "Select the skin to be used for the main window." ) );
 

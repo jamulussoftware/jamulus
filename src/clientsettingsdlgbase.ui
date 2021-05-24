@@ -337,20 +337,31 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="cbxSoundcard">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_Soundcard">
+               <item>
+                 <widget class="QComboBox" name="cbxSoundcard">
+                   <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                     </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                     <size>
+                       <width>0</width>
+                       <height>0</height>
+                     </size>
+                   </property>
+                 </widget>
+               </item>
+               <item>
+                 <widget class="QToolButton" name="butDriverReset">
+                   <property name="toolTip">
+                     <string>Reset Driver</string>
+                   </property>
+                 </widget>
+               </item>
+             </layout>
            </item>
            <item>
             <spacer name="verticalSpacer_3">
@@ -392,13 +403,6 @@
              </property>
              <property name="autoDefault">
               <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="butDriverReset">
-             <property name="text">
-              <string>Reset Driver</string>
              </property>
             </widget>
            </item>

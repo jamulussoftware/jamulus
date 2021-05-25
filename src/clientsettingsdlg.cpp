@@ -1029,6 +1029,15 @@ void CClientSettingsDlg::SetPingTimeResult ( const int iPingTime, const int iOve
 
     // set current LED status
     ledOverallDelay->SetLight ( eOverallDelayLEDColor );
+
+#if defined ( Q_OS_MACX )
+    // Temporary workaround for Mac
+    // This seems to make an improvement to issue #1643
+    QApplication::processEvents(QEventLoop::AllEvents);
+    QApplication::sendPostedEvents(nullptr,  QEvent::DeferredDelete);
+    QApplication::processEvents(QEventLoop::AllEvents);
+#endif
+
 }
 
 void CClientSettingsDlg::UpdateDisplay()

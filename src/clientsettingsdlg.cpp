@@ -104,8 +104,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     sldNetBufServer->setToolTip ( strJitterBufferSizeTT );
     chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer switch" ) );
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
-    ledNetw->setAccessibleName ( tr ( "Jitter buffer status LED indicator" ) );
-    ledNetw->setToolTip ( strJitterBufferSizeTT );
 
     // sound card device
     lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Sound Card Device" ) + ":</b> " + tr ( "The ASIO driver (sound card) can be selected using " ) +
@@ -338,34 +336,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // current connection status parameter
     QString strConnStats = "<b>" +
-                           tr ( "Current Connection Status "
-                                "Parameter" ) +
+                           tr ( "Audio Upstream Rate" ) +
                            ":</b> " +
-                           tr ( "The Ping Time is the time required for the audio "
-                                "stream to travel from the client to the server and back again. This "
-                                "delay is introduced by the network and should be about "
-                                "20-30 ms. If this delay is higher than about 50 ms, your distance to "
-                                "the server is too large or your internet connection is not "
-                                "sufficient." ) +
-                           "<br>" +
-                           tr ( "Overall Delay is calculated from the current Ping Time and the "
-                                "delay introduced by the current buffer settings." ) +
-                           "<br>" +
-                           tr ( "Audio Upstream Rate depends on the current audio packet size and "
+                            tr ( " depends on the current audio packet size and "
                                 "compression setting. Make sure that the upstream rate is not "
                                 "higher than your available internet upload speed (check this with a "
                                 "service such as speedtest.net)." );
 
-    lblPingTime->setWhatsThis ( strConnStats );
-    lblPingTimeValue->setWhatsThis ( strConnStats );
-    lblOverallDelay->setWhatsThis ( strConnStats );
-    lblOverallDelayValue->setWhatsThis ( strConnStats );
-    lblUpstream->setWhatsThis ( strConnStats );
     lblUpstreamValue->setWhatsThis ( strConnStats );
-    ledOverallDelay->setWhatsThis ( strConnStats );
-    ledOverallDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                       "you will not have much fun using the " ) +
-                                  APP_NAME + tr ( " software." ) + TOOLTIP_COM_END_TEXT );
 
     QString strNumMixerPanelRows =
         "<b>" + tr ( "Number of Mixer Panel Rows" ) + ":</b> " + tr ( "Adjust the number of rows used to arrange the mixer panel." );
@@ -394,16 +372,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     UpdateAudioFaderSlider();
 
     // init delay and other information controls
-    ledNetw->Reset();
-    ledOverallDelay->Reset();
-    ledNetw->SetType ( CMultiColorLED::MT_INDICATOR );
-    ledOverallDelay->SetType ( CMultiColorLED::MT_INDICATOR );
     lblUpstreamValue->setText ( "---" );
     lblUpstreamUnit->setText ( "" );
-    lblPingTimeValue->setText ( "---" );
-    lblPingTimeUnit->setText ( "" );
-    lblOverallDelayValue->setText ( "---" );
-    lblOverallDelayUnit->setText ( "" );
     edtNewClientLevel->setValidator ( new QIntValidator ( 0, 100, this ) ); // % range from 0-100
 
     // init slider controls ---
@@ -1003,34 +973,15 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::SetPingTimeResult ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor )
+void CClientSettingsDlg::SetPingTimeResult ()
 {
-    return;
-
-    // apply values to GUI labels, take special care if ping time exceeds
-    // a certain value
-    if ( iPingTime > 500 )
-    {
-        const QString sErrorText = "<font color=\"red\"><b>&#62;500 ms</b></font>";
-        lblPingTimeValue->setText ( sErrorText );
-        lblOverallDelayValue->setText ( sErrorText );
-    }
-    else
-    {
-        lblPingTimeValue->setText ( QString().setNum ( iPingTime ) );
-        lblPingTimeUnit->setText ( "ms" );
-        lblOverallDelayValue->setText ( QString().setNum ( iOverallDelayMs ) );
-        lblOverallDelayUnit->setText ( "ms" );
-    }
+    // ping and delay times now in clientdlg
 
     // update upstream rate information label (note that we update this together
     // with the ping time since the network packet sequence number feature might
     // be enabled at any time which has influence on the upstream rate)
     lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
     lblUpstreamUnit->setText ( "kbps" );
-
-    // set current LED status
-    ledOverallDelay->SetLight ( eOverallDelayLEDColor );
 }
 
 void CClientSettingsDlg::UpdateDisplay()
@@ -1038,18 +989,13 @@ void CClientSettingsDlg::UpdateDisplay()
     // update slider controls (settings might have been changed)
     UpdateJitterBufferFrame();
     UpdateSoundCardFrame();
-/***
+
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters
-        lblPingTimeValue->setText ( "---" );
-        lblPingTimeUnit->setText ( "" );
-        lblOverallDelayValue->setText ( "---" );
-        lblOverallDelayUnit->setText ( "" );
         lblUpstreamValue->setText ( "---" );
         lblUpstreamUnit->setText ( "" );
     }
-***/
 }
 
 void CClientSettingsDlg::UpdateCustomCentralServerComboBox()

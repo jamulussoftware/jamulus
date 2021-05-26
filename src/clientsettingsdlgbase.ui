@@ -640,22 +640,6 @@
              </layout>
             </widget>
            </item>
-           <item>
-            <spacer name="verticalSpacer_12">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>17</width>
-               <height>10</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
           </layout>
          </item>
          <item>
@@ -848,7 +832,7 @@
            <item>
             <widget class="QGroupBox" name="grbMeasureResults">
              <property name="title">
-              <string>Measurements</string>
+              <string>Audio Stream Rate</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_14">
               <property name="spacing">
@@ -856,10 +840,23 @@
               </property>
               <item>
                <layout class="QGridLayout" name="_10">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="lblUpstream">
+                <item row="0" column="4">
+                 <spacer name="horizontalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>1</width>
+                    <height>5</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QLabel" name="lblUpstreamUnit">
                   <property name="text">
-                   <string>Audio Stream Rate</string>
+                   <string>kbps</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -879,126 +876,18 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2" colspan="2">
-                 <widget class="QLabel" name="lblUpstreamUnit">
-                  <property name="text">
-                   <string>kbps</string>
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
                   </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="lblPingTime">
-                  <property name="text">
-                   <string>Ping Time</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLabel" name="lblPingTimeValue">
-                  <property name="text">
-                   <string>val</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="margin">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QLabel" name="lblPingTimeUnit">
-                  <property name="text">
-                   <string>ms</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="lblOverallDelay">
-                  <property name="text">
-                   <string>Overall Delay</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QLabel" name="lblOverallDelayValue">
-                  <property name="text">
-                   <string>val</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                  <property name="margin">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QLabel" name="lblOverallDelayUnit">
-                  <property name="text">
-                   <string>ms</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="CMultiColorLED" name="ledOverallDelay" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
+                  <property name="sizeHint" stdset="0">
                    <size>
-                    <width>20</width>
-                    <height>20</height>
+                    <width>1</width>
+                    <height>5</height>
                    </size>
                   </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0" colspan="3">
-                 <widget class="QLabel" name="lblNetLEDLabel">
-                  <property name="text">
-                   <string>Local Jitter Buffer</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="3">
-                 <widget class="CMultiColorLED" name="ledNetw" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </widget>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -1368,11 +1257,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>CMultiColorLED</class>
-   <extends>QWidget</extends>
-   <header>multicolorled.h</header>
-  </customwidget>
   <customwidget>
    <class>CLanguageComboBox</class>
    <extends>QComboBox</extends>

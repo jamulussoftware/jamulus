@@ -1005,6 +1005,8 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
 
 void CClientSettingsDlg::SetPingTimeResult ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor )
 {
+    return;
+
     // apply values to GUI labels, take special care if ping time exceeds
     // a certain value
     if ( iPingTime > 500 )
@@ -1036,7 +1038,7 @@ void CClientSettingsDlg::UpdateDisplay()
     // update slider controls (settings might have been changed)
     UpdateJitterBufferFrame();
     UpdateSoundCardFrame();
-
+/***
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters
@@ -1047,6 +1049,7 @@ void CClientSettingsDlg::UpdateDisplay()
         lblUpstreamValue->setText ( "---" );
         lblUpstreamUnit->setText ( "" );
     }
+***/
 }
 
 void CClientSettingsDlg::UpdateCustomCentralServerComboBox()

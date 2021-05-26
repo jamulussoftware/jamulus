@@ -1035,7 +1035,7 @@ void CClientDlg::OnTimerBuffersLED()
 
     // update the buffer LED and the general settings dialog, too
     ledBuffers->SetLight ( eCurStatus );
-    ClientSettingsDlg.SetStatus ( eCurStatus );
+//    ClientSettingsDlg.SetStatus ( eCurStatus );
 }
 
 void CClientDlg::OnTimerPing()
@@ -1068,13 +1068,7 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
         }
     }
 
-    // only update delay information on settings dialog if it is visible to
-    // avoid CPU load on working thread if not necessary
-    if ( ClientSettingsDlg.isVisible() )
-    {
-        // set ping time result to general settings dialog
-        ClientSettingsDlg.SetPingTimeResult ( iPingTime, iOverallDelayMs, eOverallDelayLEDColor );
-    }
+    SetPingTime ( iPingTime, iOverallDelayMs, eOverallDelayLEDColor );
 
     // update delay LED on the main window
     ledDelay->SetLight ( eOverallDelayLEDColor );
@@ -1258,6 +1252,16 @@ void CClientDlg::UpdateDisplay()
         chbChat->setChecked ( true );
         chbChat->blockSignals ( false );
     }
+    if ( !pClient->IsRunning() )
+    {
+        // clear text labels with client parameters
+        lblPingVal->setText ( "---" );
+        lblPingUnit->setText ( "" );
+        lblDelayVal->setText ( "---" );
+        lblDelayUnit->setText ( "" );
+//        lblUpstreamValue->setText ( "---" );
+//        lblUpstreamUnit->setText ( "" );
+    }
 }
 
 void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -1377,4 +1381,26 @@ void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, cons
                                             "                   color: rgb(0,0,0); }" );
         }
     }
+}
+
+void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor )
+{
+    // apply values to GUI labels, take special care if ping time exceeds
+    // a certain value
+    if ( iPingTime > 500 )
+    {
+        const QString sErrorText = "<font color=\"red\"><b>&#62;500 ms</b></font>";
+        lblPingVal->setText ( sErrorText );
+        lblDelayVal->setText ( sErrorText );
+    }
+    else
+    {
+        lblPingVal->setText ( QString().setNum ( iPingTime ) );
+        lblPingUnit->setText ( "ms" );
+        lblDelayVal->setText ( QString().setNum ( iOverallDelayMs ) );
+        lblDelayUnit->setText ( "ms" );
+    }
+
+    // set current LED status
+    ledDelay->SetLight ( eOverallDelayLEDColor );
 }

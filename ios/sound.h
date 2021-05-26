@@ -24,7 +24,6 @@
 
 #pragma once
 #include <QMutex>
-#include <QMessageBox>
 #include "soundbase.h"
 #include "global.h"
 

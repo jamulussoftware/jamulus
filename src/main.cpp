@@ -731,7 +731,7 @@ int main ( int argc, char** argv )
 \******************************************************************************/
 QString UsageArguments ( char** argv )
 {
-    return "Usage: " + QString ( argv[0] ) +
+    return "\nUsage: " + QString ( argv[0] ) +
            " [option] [optional argument]\n"
            "\nGeneral options:\n"
            "  -h, -?, --help        display this help text and exit\n"
@@ -776,7 +776,9 @@ QString UsageArguments ( char** argv )
            "      --ctrlmidich      MIDI controller channel to listen\n"
            "      --clientname      client name (window title and jack client name)\n"
            "\nExample: " +
-           QString ( argv[0] ) + " -s --inifile myinifile.ini\n";
+           QString ( argv[0] ) + " -s --inifile myinifile.ini\n"
+           "\nFor more information and localized help see:\n"
+           "\nhttps://jamulus.io/wiki/Command-Line-Options\n";
 }
 
 bool GetFlagArgument ( char** argv, int& i, QString strShortOpt, QString strLongOpt )

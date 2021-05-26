@@ -23,13 +23,11 @@
 \******************************************************************************/
 
 #pragma once
-#include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
 #include <QMessageBox>
 #include "soundbase.h"
 #include "global.h"
 
-//#import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
 class CSound : public CSoundBase

@@ -173,12 +173,8 @@ win32 {
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
-    LIBS += -framework CoreFoundation \
-        -framework CoreServices \
-        -framework AVFoundation \
-        -framework CoreMIDI \
-        -framework AudioToolbox \
-        -framework Foundation
+    LIBS += -framework AVFoundation \
+        -framework AudioToolbox
 } else:android {
     # we want to compile with C++14
     CONFIG += c++14

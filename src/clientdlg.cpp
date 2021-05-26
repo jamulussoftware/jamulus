@@ -1420,17 +1420,17 @@ void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, c
     // a certain value
     if ( iPingTime > 500 )
     {
-        const QString sErrorText = "<font color=\"red\"><b>&#62;500 ms</b></font>";
+        const QString sErrorText = "<font color=\"red\"><b>&#62;500</b></font>";
         lblPingVal->setText ( sErrorText );
         lblDelayVal->setText ( sErrorText );
     }
     else
     {
         lblPingVal->setText ( QString().setNum ( iPingTime ) );
-        lblPingUnit->setText ( "ms" );
         lblDelayVal->setText ( QString().setNum ( iOverallDelayMs ) );
-        lblDelayUnit->setText ( "ms" );
     }
+    lblPingUnit->setText ( "ms" );
+    lblDelayUnit->setText ( "ms" );
 
     // set current LED status
     ledDelay->SetLight ( eOverallDelayLEDColor );

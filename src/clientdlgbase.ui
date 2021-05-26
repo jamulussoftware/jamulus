@@ -17,7 +17,7 @@
    <string/>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../jamulus3_8_0rc1/src/resources.qrc">
+   <iconset resource="resources.qrc">
     <normaloff>:/png/main/res/fronticon.png</normaloff>:/png/main/res/fronticon.png</iconset>
   </property>
   <property name="styleSheet">
@@ -58,8 +58,14 @@
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="spacing">
+             <number>3</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
@@ -73,7 +79,7 @@
                    </sizepolicy>
                   </property>
                   <property name="pixmap">
-                   <pixmap resource="../../jamulus3_8_0rc1/src/resources.qrc">:/png/main/res/fronticon.png</pixmap>
+                   <pixmap resource="resources.qrc">:/png/main/res/fronticon.png</pixmap>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -88,10 +94,13 @@
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Expanding</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>13</width>
-                    <height>13</height>
+                    <height>10</height>
                    </size>
                   </property>
                  </spacer>
@@ -134,7 +143,7 @@
                       <item>
                        <widget class="QSlider" name="sldAudioReverb">
                         <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
@@ -142,7 +151,7 @@
                         <property name="minimumSize">
                          <size>
                           <width>0</width>
-                          <height>100</height>
+                          <height>125</height>
                          </size>
                         </property>
                         <property name="maximumSize">
@@ -210,10 +219,13 @@
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
                   </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Expanding</enum>
+                  </property>
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>13</width>
-                    <height>13</height>
+                    <height>10</height>
                    </size>
                   </property>
                  </spacer>
@@ -353,11 +365,17 @@
               </item>
               <item row="0" column="1">
                <widget class="QLabel" name="lblPingVal">
+                <property name="minimumSize">
+                 <size>
+                  <width>34</width>
+                  <height>0</height>
+                 </size>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::LeftToRight</enum>
                 </property>
                 <property name="text">
-                 <string>---</string>
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -366,6 +384,18 @@
               </item>
               <item row="0" column="2">
                <widget class="QLabel" name="lblPingUnit">
+                <property name="minimumSize">
+                 <size>
+                  <width>22</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>22</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>ms</string>
                 </property>
@@ -373,11 +403,17 @@
               </item>
               <item row="1" column="1">
                <widget class="QLabel" name="lblDelayVal">
+                <property name="minimumSize">
+                 <size>
+                  <width>34</width>
+                  <height>0</height>
+                 </size>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::LeftToRight</enum>
                 </property>
                 <property name="text">
-                 <string>---</string>
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -386,6 +422,18 @@
               </item>
               <item row="1" column="2">
                <widget class="QLabel" name="lblDelayUnit">
+                <property name="minimumSize">
+                 <size>
+                  <width>22</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>22</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>ms</string>
                 </property>
@@ -467,9 +515,15 @@
             </item>
             <item>
              <widget class="QPushButton" name="butConnect">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>0</width>
+                <width>120</width>
                 <height>45</height>
                </size>
               </property>
@@ -593,7 +647,7 @@
   <tabstop>rbtReverbSelR</tabstop>
  </tabstops>
  <resources>
-  <include location="../../jamulus3_8_0rc1/src/resources.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -391,7 +391,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         if ( AudioObjectSetPropertyData ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, sizeof ( Float64 ), &fSystemSampleRate ) !=
              noErr )
         {
-            return QString ( tr ( "The sample rate on the current input device isn't %1 Hz and therefore incompatible. "
+            return QString ( tr ( "The sample rate on the current input device isn't %1 Hz and is therefore incompatible. "
                                   "Please select another device or try setting the sample rate to %1 Hz "
                                   "manually via Audio-MIDI-Setup (in Applications->Utilities)." ) )
                                   .arg ( SYSTEM_SAMPLE_RATE_HZ );
@@ -412,7 +412,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         if ( AudioObjectSetPropertyData ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, sizeof ( Float64 ), &fSystemSampleRate ) !=
              noErr )
         {
-            return QString ( tr ( "The sample rate on the current output device isn't %1 Hz and therefore incompatible. "
+            return QString ( tr ( "The sample rate on the current output device isn't %1 Hz and is therefore incompatible. "
                                 "Please select another device or try setting the sample rate to %1 Hz "
                                 "manually via Audio-MIDI-Setup (in Applications->Utilities)." ) )
                                 .arg ( SYSTEM_SAMPLE_RATE_HZ );

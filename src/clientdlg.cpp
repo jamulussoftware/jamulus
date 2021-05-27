@@ -194,7 +194,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                                 "sufficient." ) +
                            "<br>" +
                            tr ( "Overall Delay is calculated from the current Ping Time and the "
-                                "delay introduced by the current buffer settings." ) ;
+                                "delay introduced by the current buffer settings." );
 
     lblPing->setWhatsThis ( strConnStats );
     lblPingVal->setWhatsThis ( strConnStats );
@@ -202,8 +202,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblDelayVal->setWhatsThis ( strConnStats );
     ledDelay->setWhatsThis ( strConnStats );
     ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                       "you will not have much fun using the " ) +
-                                  APP_NAME + tr ( " software." ) + TOOLTIP_COM_END_TEXT );
+                                "you will not have much fun using the " ) +
+                           APP_NAME + tr ( " software." ) + TOOLTIP_COM_END_TEXT );
     lblPingVal->setText ( "---" );
     lblPingUnit->setText ( "" );
     lblDelayVal->setText ( "---" );
@@ -1100,7 +1100,7 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     if ( ClientSettingsDlg.isVisible() )
     {
         // set ping time result to general settings dialog
-        ClientSettingsDlg.SetPingTimeResult ();
+        ClientSettingsDlg.SetPingTimeResult();
     }
     SetPingTime ( iPingTime, iOverallDelayMs, eOverallDelayLEDColor );
 

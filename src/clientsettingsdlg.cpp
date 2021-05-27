@@ -335,10 +335,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxCentralServerAddress->setAccessibleName ( tr ( "Directory server address combo box" ) );
 
     // current connection status parameter
-    QString strConnStats = "<b>" +
-                           tr ( "Audio Upstream Rate" ) +
-                           ":</b> " +
-                            tr ( " depends on the current audio packet size and "
+    QString strConnStats = "<b>" + tr ( "Audio Upstream Rate" ) + ":</b> " +
+                           tr ( " depends on the current audio packet size and "
                                 "compression setting. Make sure that the upstream rate is not "
                                 "higher than your available internet upload speed (check this with a "
                                 "service such as speedtest.net)." );
@@ -973,7 +971,7 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::SetPingTimeResult ()
+void CClientSettingsDlg::SetPingTimeResult()
 {
     // ping and delay times now in clientdlg
 

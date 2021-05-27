@@ -56,7 +56,7 @@ class CClientSettingsDlg : public CBaseDlg, private Ui_CClientSettingsDlgBase
 public:
     CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSetP, QWidget* parent = nullptr );
 
-    void SetPingTimeResult ();
+    void SetPingTimeResult();
     void UpdateDisplay();
     void UpdateSoundDeviceChannelSelectionFrame();
 

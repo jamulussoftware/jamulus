@@ -2,30 +2,18 @@
 
 # Create deb files
 
-# set armhf
-#sudo dpkg --add-architecture armhf
-
 cp -r debian ..
 cd ..
 
 # get the jamulus version from pro file
 VERSION=$(cat Jamulus.pro | grep -oP 'VERSION = \K\w[^\s\\]*')
 
-# patch changelog (with hack)
+# Generate Changelog
 
-DATE=$(date "+%a, %d %b %Y %T" )
-echo "jamulus (${VERSION}-0) UNRELEASED; urgency=medium" > debian/changelog
-echo "" >> debian/changelog
-perl .github/actions_scripts/getChangelog.pl ChangeLog ${VERSION} >> debian/changelog
-echo "" >> debian/changelog
-echo " -- GitHubActions <noemail@example.com> ${DATE} +0001" >> debian/changelog
-echo "" >> debian/changelog
-cat distributions/debian/changelog >> debian/changelog
+CHANGELOGCONTENT="$(perl .github/actions_scripts/getChangelog.pl ChangeLog ${VERSION})"
 
-# patch the control file
-# cp the modified control file here
-
-cp distributions/autobuilddeb/control debian/control
+# might be improved by looping through CHANGELOGCONTENT
+dch "${CHANGELOGCONTENT}" -v "${VERSION}"
 
 echo "${VERSION} building..."
 

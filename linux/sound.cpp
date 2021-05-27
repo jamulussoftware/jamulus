@@ -206,7 +206,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     // without a Jack server, Jamulus makes no sense to run, throw an error message
     if ( bJackWasShutDown )
     {
-        throw CGenErr ( QString ( tr ( "The JACK server was shut down but %1 "
+        throw CGenErr ( QString ( tr ( "The JACK server was shut down. %1 "
                              "requires a JACK to run. Please restart %1 to "
                              "start JACK again. If the error persists, please review "
                              "the JACK output." ) ) .arg ( APP_NAME ) );

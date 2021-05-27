@@ -139,3 +139,9 @@ Schemes:
 `xcodebuild build`
 
 Will build the file and make it available in `./Release/Jamulus.app`
+
+## iOS
+* Make sure to install qt5 with the Qt Installer (not homebrew), and explicitly select iOS when choosing the Qt version
+* Run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro`
+* Open the generated .xcodeproject in XCode, check the Signing & Capabilities and configure a team
+* To run on a iOS device, build and run on the device, you'll have first trust your developer profile in device's Settings.

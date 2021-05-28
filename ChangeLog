@@ -1,8 +1,9 @@
 
 ### 3.8.0rc1dev <- NOTE: the release version number will be 3.8.0 ###
 
-- Mac: Updated to use Qt 5.12.10 for better compatibility with Big Sur (#1687).
-  This drops support for Yosemite and El Capitan in the distributed version.
+- Mac: Generate build with Qt 5.15.2 for better compatibility with Big Sur (#1687, #1768).
+  We still build Jamulus (legacy) with Qt 5.9.9 to support older versions of macOS; However
+  Big Sur users should use the standard build.
   (contributed by @softins)
 
 - Code: Added automatic code formatting with clang-format (#901, #1127).
@@ -87,12 +88,12 @@
 - Client: A hint regarding non-default Jack support has been added (#1397, #1438).
   (contributed by @djfun)
 
-- Server: Support for Delay Panning has been added (#332, #567, #1151, #1417):
+- Server: Support for Delay Panning has been added (#332, #567, #1151, #1417, #1744):
   This feature can be enabled on servers using the new --delaypan option.
   Enabling this feature will slightly increase server CPU usage.
   It can create a much more realistic spatial sound impression for clients
   that are set to Stereo or Mono-in/Stereo-out mode.
-  (contributed by @DetlefHennings, @Hk1020, @softins)
+  (contributed by @DetlefHennings, @Hk1020, @softins, @henkdegroot)
 
 - Server: Half-connected clients will no longer receive audio (#1243, #1589):
   Note: This breaks compatibility with client versions before 3.3.0 (Feb 2013).
@@ -152,6 +153,8 @@
 - Internal legacy IP address variables have been cleaned up (#1400).
   (contributed by @wferi)
 
+- Internal: New pull requests will now be checked for coding style automatically (#1735).
+  (contributed by @passing)
 
 ### 3.7.0 (2021-03-17) ###
 
@@ -809,7 +812,7 @@
 
 - removed unnecessary settings and LED indicators
 
-- bug fix: the fader level could not be changed if the fader was on solo  
+- bug fix: the fader level could not be changed if the fader was on solo
 
 
 ### 3.3.3 (2013-12-30) ###
@@ -844,7 +847,7 @@
 - improved server performance under Linux
 
 - changed the network buffer for improved OPUS PLC performance
-  
+
 - added protocol overhead for DSL line for upload rate calculation
 
 - fixed outstanding renaming from llcon to Jamulus

@@ -1,0 +1,3 @@
+# exclude third party code from clang-format checks
+./libs
+./windows/nsProcess

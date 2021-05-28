@@ -445,6 +445,20 @@ signals:
 /******************************************************************************\
 * Other Classes/Enums                                                          *
 \******************************************************************************/
+// Connect Dialog Tabs -------------------------------------------------
+enum EConnectTab
+{
+    // used for settings -> enum values should be fixed
+    CONTAB_SERVERS   = 0,
+    CONTAB_FAVORITES = 1
+};
+enum EFavSort
+{
+    // used for settings -> enum values should be fixed
+    FAVSORT_LASTUSED  = 0,
+    FAVSORT_DIRECTORY = 1
+};
+
 // Audio channel configuration -------------------------------------------------
 enum EAudChanConf
 {

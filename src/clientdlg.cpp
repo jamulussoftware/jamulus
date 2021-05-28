@@ -339,12 +339,28 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
 
+    // Favorites menu  --------------------------------------------------------------
+    paFAVAction = new QAction ( tr ( "&Add to Favorites" ) );
+    QObject::connect ( paFAVAction, SIGNAL ( triggered() ), &ConnectDlg, SLOT ( OnAddtoFavorites() ) );
+    paFAVAction->setEnabled ( false );
+    paFAVAction->setShortcut ( Qt::CTRL + Qt::Key_A );
+
+    QMenu* pFavoritesMenu = new QMenu ( tr ( "Fav&orites" ), this );
+
+    pFavoritesMenu->addAction ( paFAVAction );
+
+    pFavoritesMenu->addAction ( tr ( "Sho&w Favorites..." ),
+                                this,
+                                SLOT ( OnOpenFavoritesConnectionDialog() ),
+                                QKeySequence ( Qt::CTRL + Qt::Key_W ) );
+
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pFileMenu );
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
+    pMenu->addMenu ( pFavoritesMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
@@ -498,6 +514,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                        &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
     QObject::connect ( &ConnectDlg, &CConnectDlg::accepted, this, &CClientDlg::OnConnectDlgAccepted );
+
+    // disable Add to Favorites button by default
+    paFAVAction->setEnabled ( false );
 
     // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
@@ -697,6 +716,9 @@ void CClientDlg::OnConnectDisconBut()
     {
         Disconnect();
         SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
+
+        // disable Add to Favorites button
+        paFAVAction->setEnabled ( false );
     }
     else
     {
@@ -897,6 +919,14 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     }
 #    endif
 #endif
+}
+
+void CClientDlg::ShowFavoritesConnectionDialog()
+{
+    // set to Favorites Tab
+    pSettings->bFavoriteWasShownConnect = true;
+    // show connect dialog
+    ShowConnectionSetupDialog();
 }
 
 void CClientDlg::ShowConnectionSetupDialog()
@@ -1165,6 +1195,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
         // set server name in audio mixer group box title
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
+
+        // enable Add to Favorites button
+        paFAVAction->setEnabled ( true );
 
         // start timer for level meter bar and ping time measurement
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );

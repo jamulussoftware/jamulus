@@ -50,10 +50,19 @@ class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
 public:
     CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent = nullptr );
 
+    void ThisFAVtoTop();
+    void OnTabChange();
+    void FillFavoritesTab();
+    void SetFAVPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
+
     void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
     bool GetShowAllMusicians() { return bShowAllMusicians; }
 
     void SetServerList ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList = false );
+
+    void FillServerTab ( const CHostAddress& InetAddr, const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList );
+
+    void UpdateFAVIPs ( const CVector<CServerInfo>& vecServerInfo, const bool bIsReducedServerList );
 
     void SetConnClientsList ( const CHostAddress& InetAddr, const CVector<CChannelInfo>& vecChanInfo );
 
@@ -67,6 +76,7 @@ protected:
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
+    QTreeWidgetItem* FindFAVListViewItem ( const CHostAddress& InetAddr );
     QTreeWidgetItem* FindListViewItem ( const CHostAddress& InetAddr );
     QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
@@ -74,6 +84,7 @@ protected:
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& CurServerAddress );
+    void             SortFavorites();
 
     CClientSettings* pSettings;
 
@@ -83,6 +94,9 @@ protected:
     CHostAddress CentralServerAddress;
     QString      strSelectedAddress;
     QString      strSelectedServerName;
+    QString      strSelectedMaxUsers;
+    QString      strSelectedDirectory;
+    ECSAddType   ecsSelectedDirectECS;
     bool         bShowCompleteRegList;
     bool         bServerListReceived;
     bool         bReducedServerListReceived;
@@ -91,6 +105,7 @@ protected:
     bool         bShowAllMusicians;
 
 public slots:
+    void OnAddtoFavorites();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
     void OnCentServAddrTypeChanged ( int iTypeIdx );
@@ -100,10 +115,13 @@ public slots:
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void OnSortLastUsed();
+    void OnSortDirectory();
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );
     void CreateCLServerListPingMes ( CHostAddress InetAddr );
+    void CreateCLServerFAVListPingMes ( CHostAddress InetAddr );
     void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
     void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
 };

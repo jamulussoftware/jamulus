@@ -118,12 +118,19 @@ public:
         vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
         vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
         vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+        vstrFAVName ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        vstrFAVAddress ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        vstrFAVMaxUsers ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        vstrFAVDirectory ( MAX_NUM_FAVORITE_ADDR_ITEMS, "" ),
+        vecsFAVDirectECS ( MAX_NUM_FAVORITE_ADDR_ITEMS, AT_DEFAULT ),
         iNewClientFaderLevel ( 100 ),
         iInputBoost ( 1 ),
         iSettingsTab ( SETTING_TAB_AUDIONET ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType ( ST_NO_SORT ),
         iNumMixerPanelRows ( 1 ),
+        iFavSort ( FAVSORT_LASTUSED ),
+        iFavDirLastSelected ( 0 ),
         vstrCentralServerAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         eCentralServerAddressType ( AT_DEFAULT ),
         bEnableFeedbackDetection ( true ),
@@ -133,6 +140,7 @@ public:
         bWindowWasShownSettings ( false ),
         bWindowWasShownChat ( false ),
         bWindowWasShownConnect ( false ),
+        bFavoriteWasShownConnect ( false ),
         pClient ( pNCliP )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
@@ -142,22 +150,29 @@ public:
     void SaveFaderSettings ( const QString& strCurFileName );
 
     // general settings
-    CVector<QString> vecStoredFaderTags;
-    CVector<int>     vecStoredFaderLevels;
-    CVector<int>     vecStoredPanValues;
-    CVector<int>     vecStoredFaderIsSolo;
-    CVector<int>     vecStoredFaderIsMute;
-    CVector<int>     vecStoredFaderGroupID;
-    CVector<QString> vstrIPAddress;
-    int              iNewClientFaderLevel;
-    int              iInputBoost;
-    int              iSettingsTab;
-    bool             bConnectDlgShowAllMusicians;
-    EChSortType      eChannelSortType;
-    int              iNumMixerPanelRows;
-    CVector<QString> vstrCentralServerAddress;
-    ECSAddType       eCentralServerAddressType;
-    bool             bEnableFeedbackDetection;
+    CVector<QString>    vecStoredFaderTags;
+    CVector<int>        vecStoredFaderLevels;
+    CVector<int>        vecStoredPanValues;
+    CVector<int>        vecStoredFaderIsSolo;
+    CVector<int>        vecStoredFaderIsMute;
+    CVector<int>        vecStoredFaderGroupID;
+    CVector<QString>    vstrIPAddress;
+    CVector<QString>    vstrFAVName;
+    CVector<QString>    vstrFAVAddress;
+    CVector<QString>    vstrFAVMaxUsers;
+    CVector<QString>    vstrFAVDirectory;
+    CVector<ECSAddType> vecsFAVDirectECS;
+    int                 iNewClientFaderLevel;
+    int                 iInputBoost;
+    int                 iSettingsTab;
+    bool                bConnectDlgShowAllMusicians;
+    EChSortType         eChannelSortType;
+    int                 iNumMixerPanelRows;
+    EFavSort            iFavSort;
+    int                 iFavDirLastSelected;
+    CVector<QString>    vstrCentralServerAddress;
+    ECSAddType          eCentralServerAddressType;
+    bool                bEnableFeedbackDetection;
 
     // window position/state settings
     QByteArray vecWindowPosSettings;
@@ -166,6 +181,7 @@ public:
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
+    bool       bFavoriteWasShownConnect;
 
 protected:
     // No CommandLineOptions used when reading Client inifile

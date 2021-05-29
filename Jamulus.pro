@@ -732,6 +732,8 @@ DISTFILES += ChangeLog \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
+    src/res/IndicatorYellowFancy.png \
+    src/res/IndicatorRedFancy.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
@@ -1130,3 +1132,4 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+

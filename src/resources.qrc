@@ -45,6 +45,8 @@
         <file>res/HLEDBlackSmall.png</file>
         <file>res/HLEDRedSmall.png</file>
         <file>res/HLEDYellowSmall.png</file>
+        <file>res/IndicatorRedFancy.png</file>
+        <file>res/IndicatorYellowFancy.png</file>
     </qresource>
     <qresource prefix="/png/fader">
         <file>res/faderbackground.png</file>

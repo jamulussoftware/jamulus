@@ -181,6 +181,34 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     ledBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
 
+    // current connection status parameter
+    QString strConnStats = "<b>" +
+                           tr ( "Current Connection Status "
+                                "Parameter" ) +
+                           ":</b> " +
+                           tr ( "The Ping Time is the time required for the audio "
+                                "stream to travel from the client to the server and back again. This "
+                                "delay is introduced by the network and should be about "
+                                "20-30 ms. If this delay is higher than about 50 ms, your distance to "
+                                "the server is too large or your internet connection is not "
+                                "sufficient." ) +
+                           "<br>" +
+                           tr ( "Overall Delay is calculated from the current Ping Time and the "
+                                "delay introduced by the current buffer settings." );
+
+    lblPing->setWhatsThis ( strConnStats );
+    lblPingVal->setWhatsThis ( strConnStats );
+    lblDelay->setWhatsThis ( strConnStats );
+    lblDelayVal->setWhatsThis ( strConnStats );
+    ledDelay->setWhatsThis ( strConnStats );
+    ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
+                                "you will not have much fun using the " ) +
+                           APP_NAME + tr ( " software." ) + TOOLTIP_COM_END_TEXT );
+    lblPingVal->setText ( "---" );
+    lblPingUnit->setText ( "" );
+    lblDelayVal->setText ( "---" );
+    lblDelayUnit->setText ( "" );
+
     // init GUI design
     SetGUIDesign ( pClient->GetGUIDesign() );
 
@@ -1035,7 +1063,6 @@ void CClientDlg::OnTimerBuffersLED()
 
     // update the buffer LED and the general settings dialog, too
     ledBuffers->SetLight ( eCurStatus );
-    ClientSettingsDlg.SetStatus ( eCurStatus );
 }
 
 void CClientDlg::OnTimerPing()
@@ -1073,8 +1100,9 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     if ( ClientSettingsDlg.isVisible() )
     {
         // set ping time result to general settings dialog
-        ClientSettingsDlg.SetPingTimeResult ( iPingTime, iOverallDelayMs, eOverallDelayLEDColor );
+        ClientSettingsDlg.UpdateUploadRate();
     }
+    SetPingTime ( iPingTime, iOverallDelayMs, eOverallDelayLEDColor );
 
     // update delay LED on the main window
     ledDelay->SetLight ( eOverallDelayLEDColor );
@@ -1224,7 +1252,12 @@ OnTimerStatus();
     // reset LEDs
     ledBuffers->Reset();
     ledDelay->Reset();
-    ClientSettingsDlg.ResetStatusAndPingLED();
+
+    // clear text labels with client parameters
+    lblPingVal->setText ( "---" );
+    lblPingUnit->setText ( "" );
+    lblDelayVal->setText ( "---" );
+    lblDelayUnit->setText ( "" );
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
@@ -1377,4 +1410,26 @@ void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, cons
                                             "                   color: rgb(0,0,0); }" );
         }
     }
+}
+
+void CClientDlg::SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor )
+{
+    // apply values to GUI labels, take special care if ping time exceeds
+    // a certain value
+    if ( iPingTime > 500 )
+    {
+        const QString sErrorText = "<font color=\"red\"><b>&#62;500</b></font>";
+        lblPingVal->setText ( sErrorText );
+        lblDelayVal->setText ( sErrorText );
+    }
+    else
+    {
+        lblPingVal->setText ( QString().setNum ( iPingTime ) );
+        lblDelayVal->setText ( QString().setNum ( iOverallDelayMs ) );
+    }
+    lblPingUnit->setText ( "ms" );
+    lblDelayUnit->setText ( "ms" );
+
+    // set current LED status
+    ledDelay->SetLight ( eOverallDelayLEDColor );
 }

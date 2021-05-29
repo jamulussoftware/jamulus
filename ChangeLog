@@ -1,5 +1,5 @@
 
-### 3.8.0rc1dev <- NOTE: the release version number will be 3.8.0 ###
+### 3.8.0rc2 <- NOTE: the release version number will be 3.8.0 ###
 
 - Mac: Generate build with Qt 5.15.2 for better compatibility with Big Sur (#1687, #1768).
   We still build a legacy version with Qt 5.9.9 to support older versions of macOS:

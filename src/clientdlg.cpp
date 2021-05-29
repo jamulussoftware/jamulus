@@ -1253,6 +1253,12 @@ OnTimerStatus();
     ledBuffers->Reset();
     ledDelay->Reset();
 
+    // clear text labels with client parameters
+    lblPingVal->setText ( "---" );
+    lblPingUnit->setText ( "" );
+    lblDelayVal->setText ( "---" );
+    lblDelayUnit->setText ( "" );
+
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
 }
@@ -1284,14 +1290,6 @@ void CClientDlg::UpdateDisplay()
         chbChat->blockSignals ( true );
         chbChat->setChecked ( true );
         chbChat->blockSignals ( false );
-    }
-    if ( !pClient->IsRunning() )
-    {
-        // clear text labels with client parameters
-        lblPingVal->setText ( "---" );
-        lblPingUnit->setText ( "" );
-        lblDelayVal->setText ( "---" );
-        lblDelayUnit->setText ( "" );
     }
 }
 

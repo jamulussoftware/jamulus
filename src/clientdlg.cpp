@@ -1100,7 +1100,7 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     if ( ClientSettingsDlg.isVisible() )
     {
         // set ping time result to general settings dialog
-        ClientSettingsDlg.SetPingTimeResult();
+        ClientSettingsDlg.UpdateUploadRate();
     }
     SetPingTime ( iPingTime, iOverallDelayMs, eOverallDelayLEDColor );
 

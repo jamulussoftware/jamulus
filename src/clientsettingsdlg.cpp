@@ -336,12 +336,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr ( "Audio Upstream Rate" ) + ":</b> " +
-                           tr ( " depends on the current audio packet size and "
+                           tr ( "Depends on the current audio packet size and "
                                 "compression setting. Make sure that the upstream rate is not "
                                 "higher than your available internet upload speed (check this with a "
                                 "service such as speedtest.net)." );
 
     lblUpstreamValue->setWhatsThis ( strConnStats );
+    grbUpstreamValue->setWhatsThis ( strConnStats );
 
     QString strNumMixerPanelRows =
         "<b>" + tr ( "Number of Mixer Panel Rows" ) + ":</b> " + tr ( "Adjust the number of rows used to arrange the mixer panel." );
@@ -971,13 +972,9 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::SetPingTimeResult()
+void CClientSettingsDlg::UpdateUploadRate()
 {
-    // ping and delay times now in clientdlg
-
-    // update upstream rate information label (note that we update this together
-    // with the ping time since the network packet sequence number feature might
-    // be enabled at any time which has influence on the upstream rate)
+    // update upstream rate information label
     lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
     lblUpstreamUnit->setText ( "kbps" );
 }

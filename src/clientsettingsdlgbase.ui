@@ -830,7 +830,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="grbMeasureResults">
+            <widget class="QGroupBox" name="grbUpstreamValue">
              <property name="title">
               <string>Audio Stream Rate</string>
              </property>

@@ -34,6 +34,8 @@ on:
 name:                               Auto-Build
 jobs:
   create_release:
+     permissions: # We need write permissions to create a release
+      contents: write
      name:                          Prepare Auto-Build/Release
      runs-on:                       ubuntu-20.04
      outputs:
@@ -86,6 +88,8 @@ jobs:
 
 
   release_assets:
+    permissions: # we need write permissions to upload assets
+        contents: write
     name:                           Build assets for ${{ matrix.config.config_name }}
     needs:                          create_release
     strategy:

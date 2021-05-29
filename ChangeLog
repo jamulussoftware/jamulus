@@ -1,12 +1,19 @@
 
 ### 3.8.0rc1dev <- NOTE: the release version number will be 3.8.0 ###
 
-- Mac: Updated to use Qt 5.12.10 for better compatibility with Big Sur (#1687).
-  This drops support for Yosemite and El Capitan in the distributed version.
+- Mac: Generate build with Qt 5.15.2 for better compatibility with Big Sur (#1687, #1768).
+  We still build a legacy version with Qt 5.9.9 to support older versions of macOS:
+  * Users of 10.13 (High sierra) or newer should use the standard build with Qt 5.15.2
+  * Users of Yosemite, El Capitan or Sierra should use the legacy build with Qt 5.9.9
   (contributed by @softins)
 
 - Code: Added automatic code formatting with clang-format (#901, #1127).
   (contributed by @passing)
+
+- GUI: Moved the Ping and Delay stats from the Settings window to the main window (#1762)
+  This was partly to work around a Mac issue with updates to the settings window (#1643)
+  and is actually an improvement anyway, as the settings window does not need to remain open.
+  (contributed by @dcorson-ticino-com and @softins)
 
 - GUI: Added "About Qt" to the help menu to display version of Qt (#1685, #1692).
   (contributed by @softins)
@@ -27,9 +34,6 @@
   with Qt5 (#1655).
   (contributed by @softins)
 
-- GUI: Alignment of delay measurements display improved (#1606, #1617).
-  (contributed by @pljones)
-
 - GUI: Corrected handling of custom directory server in the server, to prevent
   unintended registration with a directory server (#1624, #1627).
   (contributed by @softins)
@@ -45,7 +49,6 @@
 - GUI: Settings window has been reorganized into tabs (#1415, #1554, #1542):
     * User Profile window has been integrated into the settings window.
     * Input Pan has been moved to the newly created Advanced tab and removed from main window.
-    * Network and stats have been moved to the right in the Settings window.
   (contributed by @dcorson-ticino-com, @pljones)
 
 - GUI: Support for more than two mixer rows has been added (#1549, #1560).
@@ -87,12 +90,12 @@
 - Client: A hint regarding non-default Jack support has been added (#1397, #1438).
   (contributed by @djfun)
 
-- Server: Support for Delay Panning has been added (#332, #567, #1151, #1417):
+- Server: Support for Delay Panning has been added (#332, #567, #1151, #1417, #1744):
   This feature can be enabled on servers using the new --delaypan option.
   Enabling this feature will slightly increase server CPU usage.
   It can create a much more realistic spatial sound impression for clients
   that are set to Stereo or Mono-in/Stereo-out mode.
-  (contributed by @DetlefHennings, @Hk1020, @softins)
+  (contributed by @DetlefHennings, @Hk1020, @softins, @henkdegroot)
 
 - Server: Half-connected clients will no longer receive audio (#1243, #1589):
   Note: This breaks compatibility with client versions before 3.3.0 (Feb 2013).
@@ -152,6 +155,8 @@
 - Internal legacy IP address variables have been cleaned up (#1400).
   (contributed by @wferi)
 
+- Internal: New pull requests will now be checked for coding style automatically (#1735).
+  (contributed by @passing)
 
 ### 3.7.0 (2021-03-17) ###
 
@@ -809,7 +814,7 @@
 
 - removed unnecessary settings and LED indicators
 
-- bug fix: the fader level could not be changed if the fader was on solo  
+- bug fix: the fader level could not be changed if the fader was on solo
 
 
 ### 3.3.3 (2013-12-30) ###
@@ -844,7 +849,7 @@
 - improved server performance under Linux
 
 - changed the network buffer for improved OPUS PLC performance
-  
+
 - added protocol overhead for DSL line for upload rate calculation
 
 - fixed outstanding renaming from llcon to Jamulus

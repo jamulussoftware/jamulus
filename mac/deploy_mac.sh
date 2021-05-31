@@ -44,7 +44,7 @@ build_installer_image()
 {
     # Install dmgbuild (for the current user), this is required to build the installer image
     python -m ensurepip --user --default-pip
-    python -m pip install --user dmgbuild
+    python -m pip install --user dmgbuild==1.4.2
     local dmgbuild_bin="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
 
     # Get Jamulus version

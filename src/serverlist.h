@@ -107,9 +107,24 @@ public:
 
     void UpdateRegistration() { RegisterTime.start(); }
 
-public:
+    static CServerListEntry parse ( QString strHAddr,
+                                    QString strLHAddr,
+                                    QString sName,
+                                    QString sCity,
+                                    QString strCountry,
+                                    QString strNumClients,
+                                    bool    isPermanent );
+    QString                 toCSV();
+
     // time on which the entry was registered
     QElapsedTimer RegisterTime;
+
+protected:
+    // Taken from src/settings.h - the same comment applies
+    static QString    ToBase64 ( const QByteArray strIn ) { return QString::fromLatin1 ( strIn.toBase64() ); }
+    static QString    ToBase64 ( const QString strIn ) { return ToBase64 ( strIn.toUtf8() ); }
+    static QByteArray FromBase64ToByteArray ( const QString strIn ) { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
+    static QString    FromBase64ToString ( const QString strIn ) { return QString::fromUtf8 ( FromBase64ToByteArray ( strIn ) ); }
 };
 
 class CServerListManager : public QObject
@@ -174,6 +189,11 @@ protected:
     void SlaveServerRegisterServer ( const bool bIsRegister );
     void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );
 
+    int IndexOf ( CHostAddress haSearchTerm );
+
+    void CentralServerLoadServerList ( const QString strServerList );
+    void CentralServerSaveServerList();
+
     QTimer TimerPollList;
     QTimer TimerRegistering;
     QTimer TimerPingServerInList;
@@ -192,6 +212,7 @@ protected:
     CHostAddress SlaveCurCentServerHostAddress;
     CHostAddress SlaveCurLocalHostAddress;
 
+    QString             ServerListFileName;
     QList<QHostAddress> vWhiteList;
     QString             strMinServerVersion;
 
@@ -210,6 +231,7 @@ public slots:
     void OnTimerCLRegisterServerResp();
     void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
+    void OnAboutToQuit() { CentralServerSaveServerList(); }
 
 signals:
     void SvrRegStatusChanged();

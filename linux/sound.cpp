@@ -29,9 +29,9 @@
 #ifdef WITH_JACK
 void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientName )
 {
-    jack_status_t JackStatus;
+    jack_status_t  JackStatus;
     jack_options_t options = JackServerName;
-    const char*   serverName;
+    const char*    serverName;
 
     if ( ( serverName = getenv ( "JACK_DEFAULT_SERVER" ) ) == NULL )
     {

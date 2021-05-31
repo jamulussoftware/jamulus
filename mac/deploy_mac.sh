@@ -22,7 +22,7 @@ cleanup()
 build_app()
 {
     # Build Jamulus
-    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2}
+    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2} ${EXTRA_QMAKE_ARGS:-}
     local target_name="$(cat "${build_path}/Makefile" | sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p')"
     local job_count="$(sysctl -n hw.ncpu)"
 

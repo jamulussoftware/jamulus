@@ -16,4 +16,5 @@ source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh
 cd "${THIS_JAMULUS_PROJECT_PATH}"
 
 echo "Run deploy script..."
+export EXTRA_QMAKE_ARGS
 sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh

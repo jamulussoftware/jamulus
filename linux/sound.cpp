@@ -30,6 +30,7 @@
 void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientName )
 {
     jack_status_t JackStatus;
+    jack_options_t options = JackServerName;
     const char*   serverName;
 
     if ( ( serverName = getenv ( "JACK_DEFAULT_SERVER" ) ) == NULL )
@@ -40,7 +41,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
         QString ( "Connecting to jack \"%1\" instance (use the JACK_DEFAULT_SERVER environment variable to change this)." ).arg ( serverName ) );
 
     // try to become a client of the JACK server
-    pJackClient = jack_client_open ( jackClientName, JackNullOption, &JackStatus );
+    pJackClient = jack_client_open ( jackClientName, options, &JackStatus, serverName );
 
     if ( pJackClient == nullptr )
     {

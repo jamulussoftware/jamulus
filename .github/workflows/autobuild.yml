@@ -120,7 +120,9 @@ jobs:
              target_os:             macos
              building_on_os:        macos-10.15
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
+             # QMAKE_MAC_SDK limits the auto-used to the specified maximum version to ensure compatibility with Qt 5.15.2,
+             # QMAKE_MACOSX_DEPLOYMENT_TARGET describes the minimum version which we support with this build:
+             cmd2_build:            "env EXTRA_QMAKE_ARGS='QMAKE_MAC_SDK=macosx10.15 QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13' ./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
 
@@ -143,13 +145,13 @@ jobs:
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
 
-      # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x
-      # This is done by selecting Xcode 11.7 instead of the latest default of 12.x
+      # For Qt5 on Mac, we need to ensure SDK 10.15 is used.
+      # Xcode 12.0 is the last version which ships SDK 10.15, therefore pin it:
       - name:                       Select Xcode version for Mac
         if:                         ${{ matrix.config.target_os == 'macos' }}
         uses:                       maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '11.7'
+          xcode-version: '12.1.1'
 
       # Checkout code
       - name:                       Checkout code

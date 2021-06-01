@@ -30,7 +30,8 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     pServer ( pNServP ),
     pSettings ( pNSetP ),
     BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),
-    BitmapSystemTrayActive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
+    BitmapSystemTrayActive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) ),
+    reSvrInfoRemove ( QRegExp ( "[;\n]" ) )
 {
     // check if system tray icon can be used
     bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
@@ -491,33 +492,39 @@ void CServerDlg::OnCentralServerAddressEditingFinished()
 
 void CServerDlg::OnServerNameTextChanged ( const QString& strNewName )
 {
-    // check length
-    if ( strNewName.length() <= MAX_LEN_SERVER_NAME )
+    // check content
+    if ( QString ( strNewName ).remove ( reSvrInfoRemove ) == strNewName && strNewName.length() <= MAX_LEN_SERVER_NAME )
     {
-        // apply new setting to the server and update it
-        pServer->SetServerName ( strNewName );
-        pServer->UpdateServerList();
+        if ( strNewName != pServer->GetServerName() )
+        {
+            // apply new setting to the server and update it
+            pServer->SetServerName ( QString ( strNewName ).remove ( reSvrInfoRemove ) );
+            pServer->UpdateServerList();
+        }
     }
     else
     {
-        // text is too long, update control with shortened text
-        edtServerName->setText ( strNewName.left ( MAX_LEN_SERVER_NAME ) );
+        // text is invalid: update control with shortened, cleaned text
+        edtServerName->setText ( QString ( strNewName ).remove ( reSvrInfoRemove ).left ( MAX_LEN_SERVER_NAME ) );
     }
 }
 
 void CServerDlg::OnLocationCityTextChanged ( const QString& strNewCity )
 {
-    // check length
-    if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
+    // check content
+    if ( QString ( strNewCity ).remove ( reSvrInfoRemove ) == strNewCity && strNewCity.length() <= MAX_LEN_SERVER_CITY )
     {
-        // apply new setting to the server and update it
-        pServer->SetServerCity ( strNewCity );
-        pServer->UpdateServerList();
+        if ( strNewCity != pServer->GetServerCity() )
+        {
+            // apply new setting to the server and update it
+            pServer->SetServerCity ( QString ( strNewCity ).remove ( reSvrInfoRemove ) );
+            pServer->UpdateServerList();
+        }
     }
     else
     {
-        // text is too long, update control with shortened text
-        edtLocationCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
+        // text is invalid: update control with shortened, cleaned text
+        edtLocationCity->setText ( QString ( strNewCity ).remove ( reSvrInfoRemove ).left ( MAX_LEN_SERVER_CITY ) );
     }
 }
 

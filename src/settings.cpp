@@ -754,10 +754,10 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     if ( !CommandLineOptions.contains ( "--serverinfo" ) )
     {
         // name
-        pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
+        pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ).remove ( reSvrInfoRemove ) );
 
         // city
-        pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ) );
+        pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ).remove ( reSvrInfoRemove ) );
 
         // country
         if ( GetNumericIniSet ( IniXMLDocument, "server", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
@@ -824,10 +824,10 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     PutIniSetting ( IniXMLDocument, "server", "language", strLanguage );
 
     // name
-    PutIniSetting ( IniXMLDocument, "server", "name", pServer->GetServerName() );
+    PutIniSetting ( IniXMLDocument, "server", "name", pServer->GetServerName().remove ( reSvrInfoRemove ) );
 
     // city
-    PutIniSetting ( IniXMLDocument, "server", "city", pServer->GetServerCity() );
+    PutIniSetting ( IniXMLDocument, "server", "city", pServer->GetServerCity().remove ( reSvrInfoRemove ) );
 
     // country
     SetNumericIniSet ( IniXMLDocument, "server", "country", static_cast<int> ( pServer->GetServerCountry() ) );

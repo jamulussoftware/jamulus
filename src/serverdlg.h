@@ -93,6 +93,8 @@ protected:
     QPixmap         BitmapSystemTrayActive;
     QMenu*          pSystemTrayIconMenu;
 
+    const QRegExp reSvrInfoRemove;
+
 public slots:
     void OnRegisterServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );

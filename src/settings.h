@@ -181,7 +181,7 @@ protected:
 class CServerSettings : public CSettings
 {
 public:
-    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) : CSettings(), pServer ( pNSerP )
+    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) : CSettings(), pServer ( pNSerP ), reSvrInfoRemove ( QRegExp ( "[;\n]" ) )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER );
     }
@@ -191,4 +191,6 @@ protected:
     virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
 
     CServer* pServer;
+
+    const QRegExp reSvrInfoRemove;
 };

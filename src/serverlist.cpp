@@ -36,7 +36,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     strMinServerVersion ( "" ),              // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
     eSvrRegStatus ( SRS_UNREGISTERED ),
-    iSvrRegRetries ( 0 )
+    iSvrRegRetries ( 0 ),
+    reIllegal ( "\n" )
 {
     // set the directory server address
     SetCentralServerAddress ( sNCentServAddr );
@@ -87,10 +88,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     if ( iServInfoNumSplitItems >= 3 )
     {
         // [this server name]
-        ThisServerListEntry.strName = slServInfoSeparateParams[0].left ( MAX_LEN_SERVER_NAME );
+        ThisServerListEntry.strName = slServInfoSeparateParams[0].remove ( reIllegal ).left ( MAX_LEN_SERVER_NAME );
 
         // [this server city]
-        ThisServerListEntry.strCity = slServInfoSeparateParams[1].left ( MAX_LEN_SERVER_CITY );
+        ThisServerListEntry.strCity = slServInfoSeparateParams[1].remove ( reIllegal ).left ( MAX_LEN_SERVER_CITY );
 
         // [this server country as QLocale ID]
         const int iCountry = slServInfoSeparateParams[2].toInt();

@@ -203,6 +203,9 @@ protected:
     // count of registration retries
     int iSvrRegRetries;
 
+    // Strip illegal characters
+    const QRegExp reIllegal;
+
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();

@@ -148,8 +148,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 
 ## Android
 * Install Qt, including the Android support from the Qt installer.
-* Configure the Android settings in the Qt Creator (Tools -> Options -> Devices -> Android). Solve all warnings/errors in that dialog (set up paths to SDKs and NDKs and select the target for android, etc.). Tick on the "Automatically create kits for Android Toolchains").
-* Make sure the Android Kit is detected on Tools -> Options -> Kits -> Kits (example: Android Qt 5.15.2 Clang Multi-Abi). It should also show in the Qt Versions tab (example: Qt 5.15.2 for Android).
+* Configure the Android settings in Qt Creator (set up paths to SDKs and NDKs and select the target for android, etc.). For more details: https://doc.qt.io/qt-5/android-getting-started.html
 * Make sure submodules are present, notably oboe:
 `git submodule update --init`
 * Open Jamulus.pro in Qt Creator

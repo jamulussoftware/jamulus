@@ -1,16 +1,23 @@
 
 ### 3.8.0rc2dev <- NOTE: the release version number will be 3.8.0 ###
 
+- The term "Central server" has been replaced with "Directory server" (#1407, #1715, #1629).
+  Note that the program will still accept the --centralserver option for backward
+  compatibility with existing system startup scripts, but its usage is deprecated.
+  (contributed by @pljones, @softins)
+
 - Mac: Generate build with Qt 5.15.2 for better compatibility with Big Sur (#1687, #1768).
   We still build a legacy version with Qt 5.9.9 to support older versions of macOS:
   * Users of 10.13 (High sierra) or newer should use the standard build with Qt 5.15.2
   * Users of Yosemite, El Capitan or Sierra should use the legacy build with Qt 5.9.9
   (contributed by @softins)
 
-- Code: Added automatic code formatting with clang-format (#901, #1127).
-  (contributed by @passing)
+- GUI: Settings window has been reorganized into tabs (#1415, #1554, #1542, #1588):
+    * User Profile window has been integrated into the settings window.
+    * Input Pan has been moved to the newly created Advanced tab and removed from main window.
+  (contributed by @dcorson-ticino-com, @pljones)
 
-- GUI: Moved the Ping and Delay stats from the Settings window to the main window (#1762)
+- GUI: Moved the Ping and Delay stats from the Settings window to the main window (#1762):
   This was partly to work around a Mac issue with updates to the settings window (#1643)
   and is actually an improvement anyway, as the settings window does not need to remain open.
   (contributed by @dcorson-ticino-com and @softins)
@@ -27,29 +34,12 @@
 - Added new icons for Linux desktop use (#1672).
   (contributed by @jujudusud)
 
-- Server: Improvements to multi-threading performance (#960)
-  (contributed by @menzels, @softins)
-
-- Github autobuild for Mac now uses Xcode 11.7 and SDK 10.15 for compatibility
-  with Qt5 (#1655).
-  (contributed by @softins)
-
 - GUI: Corrected handling of custom directory server in the server, to prevent
   unintended registration with a directory server (#1624, #1627).
   (contributed by @softins)
 
 - GUI: Corrected alignment of Mute icon above fader (#811, #1312, #1640).
   (contributed by @vimpostor)
-
-- The term "Central server" has been replaced with "Directory server" (#1407).
-  Note that the program will still accept the --centralserver option for backward
-  compatibility with existing system startup scripts.
-  (contributed by @pljones)
-
-- GUI: Settings window has been reorganized into tabs (#1415, #1554, #1542):
-    * User Profile window has been integrated into the settings window.
-    * Input Pan has been moved to the newly created Advanced tab and removed from main window.
-  (contributed by @dcorson-ticino-com, @pljones)
 
 - GUI: Support for more than two mixer rows has been added (#1549, #1560).
   (contributed by @pljones)
@@ -58,28 +48,29 @@
   (contributed by @dcorson-ticino-com)
 
 - GUI: Translations have been updated
-  * Dutch, by @henkdegroot (#1562, #1623)
-  * French, by @jujudusud (#1648)
+  * Dutch, by @henkdegroot (#1562, #1623, #1714, #1557)
+  * French, by @jujudusud (#1648, #1708)
   * German, by @rolamos (#1677)
   * Italian, by @dzpex (#1620)
   * Polish, by @SeeLook (#1619)
-  * Portuguese Brazilian, by @melcon (#1671)
+  * Portuguese Brazilian, by @melcon (#1671, #1807)
   * Portuguese European, by @Snayler (#1689)
   * Slovak, by @jose1711 (#1647)
-  * Spanish, by @ignotus666 (#1621)
+  * Spanish, by @ignotus666 (#1621, #1730)
   * Swedish, by @genesisproject2020 (#1664, #1696)
+
+- Network: Support for DSCP Quality of Service flags has been added (#1310).
+  This is supposed to lead to improved network performance.
+  It is enabled by default.
+  On Windows, this requires additional configuration in order to work.
+  Please see the Tips & Tricks page on the website for a setup guide for Windows.
+  (contributed by @DavidSavinkoff)
 
 - Client: Automatic channel fader adjustment simplifies mixer setup by using the channel level meters (#1071).
   (contributed by @JohannesBrx)
 
 - Client: Basic audio feedback detection has been added (#1179).
   (contributed by @JohannesBrx)
-
-- Network: Support for DSCP Quality of Service flags has been added (#1310).
-  This is supposed to lead to improved network performance.
-  It is enabled by default.
-  On Windows, this requires additional configuration in order to work.
-  (contributed by @DavidSavinkoff)
 
 - Client: Support for input gain boost has been added (#1222, #1030)
   (contributed by @hoffie)
@@ -97,12 +88,15 @@
   that are set to Stereo or Mono-in/Stereo-out mode.
   (contributed by @DetlefHennings, @Hk1020, @softins, @henkdegroot)
 
+- Server: Multi-threading performance has been improved (#960).
+  (contributed by @menzels, @softins)
+
 - Server: Half-connected clients will no longer receive audio (#1243, #1589):
   Note: This breaks compatibility with client versions before 3.3.0 (Feb 2013).
   If you update your server, ensure that all clients use 3.3.0 or later as well.
   (contributed by @softins)
 
-- Server: HTML status file is now emptied on exit (#1423, #1427)
+- Server: HTML status file is now emptied on exit (#1423, #1427).
   (contributed by @hoffie, @drummer1154)
 
 - Server: An explicit bind address can now be specified (#141, #1561).
@@ -113,7 +107,7 @@
   Non-ASCII characters are now stripped out when creating filenames.
   (contributed by @softins, @gilgongo, @reinhardwh)
 
-- Recorder: Failures to start recording no longer result in crashes (#1163, #1289, #1463)
+- Recorder: Failures to start recording no longer result in crashes (#1163, #1289, #1463).
   (contributed by @hoffie, @softins, @pljones)
 
 - Recorder: Logging has been improved (#1284, #1463).
@@ -143,20 +137,29 @@
 - Performance: Timer configuration for Windows servers has been improved (#1536).
   (contributed by @npostavs)
 
-- iOS support is being worked on (#1450)
+- iOS support is being worked on (#1450).
   (contributed by @jeroenvv)
+
+- Github autobuild for Mac now uses Xcode 11.7 and SDK 10.15 for compatibility with Qt5 (#1655).
+  (contributed by @softins)
 
 - Build: Creation of debug builds has been simplified (#1516).
   (contributed by @hoffie)
 
-- Internal constants for Jack usage have been renamed (#1429).
+- Internal: Constants for JACK usage have been renamed (#1429).
   (contributed by @djfun)
 
-- Internal legacy IP address variables have been cleaned up (#1400).
+- Internal: Legacy IP address variables have been cleaned up (#1400).
   (contributed by @wferi)
+
+- Internal: Added automatic code formatting with clang-format (#901, #1127, #1751).
+  (contributed by @passing)
 
 - Internal: New pull requests will now be checked for coding style automatically (#1735).
   (contributed by @passing)
+
+- Internal: Windows deploy script has been aligned to autobuilds (#1720).
+  (contributed by @henkdegroot)
 
 ### 3.7.0 (2021-03-17) ###
 

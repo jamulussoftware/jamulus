@@ -308,6 +308,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
 
+    // own fader first option: works from server version 3.5.5 which supports sending client ID back to client
+    QAction* OwnFaderFirstAction =
+        pViewMenu->addAction ( tr ( "O&wn Fader First" ), this, SLOT ( OnOwnFaderFirst() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
+
+    pViewMenu->addSeparator();
+
     QAction* NoSortAction =
         pViewMenu->addAction ( tr ( "N&o User Sorting" ), this, SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
 
@@ -324,6 +330,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QAction* ByCityAction =
         pViewMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
+
+    OwnFaderFirstAction->setCheckable ( true );
+    OwnFaderFirstAction->setChecked ( pSettings->bOwnFaderFirst );
 
     // the sorting menu entries shall be checkable and exclusive
     QActionGroup* SortActionGroup = new QActionGroup ( this );

@@ -1070,9 +1070,15 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     // create a pair list of lower strings and fader ID for each channel
     QList<QPair<QString, int>> PairList;
     int                        iNumVisibleFaders = 0;
+    int                        iMyFader          = -1;
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
+        if ( vecpChanFader[i]->GetIsMyOwnFader() )
+        {
+            iMyFader = i;
+        }
+
         if ( eChSortType == ST_BY_NAME )
         {
             PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
@@ -1116,6 +1122,19 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 
     // sort the channels according to the first of the pair
     std::stable_sort ( PairList.begin(), PairList.end() );
+
+    // move my fader to first position
+    if ( pSettings->bOwnFaderFirst )
+    {
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            if ( iMyFader == PairList[i].second )
+            {
+                PairList.move ( i, 0 );
+                break;
+            }
+        }
+    }
 
     // we want to distribute iNumVisibleFaders across the first row, then the next, etc
     // up to iNumMixerPanelRows.  So row wants to start at 0 until we get to some number,

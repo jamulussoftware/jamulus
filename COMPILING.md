@@ -147,9 +147,9 @@ Will build the file and make it available in `./Release/Jamulus.app`
 * To run on a iOS device, build and run on the device, you'll have first trust your developer profile in device's Settings.
 
 ## Android
-* Install Qt, including the Android support from the Qt installer.
-* Configure the Android settings in Qt Creator (set up paths to SDKs and NDKs and select the target for android, etc.). For more details: https://doc.qt.io/qt-5/android-getting-started.html
+* Install Qt, including the Android support from the Qt installer
+* Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions 
 * Make sure submodules are present, notably oboe:
 `git submodule update --init`
 * Open Jamulus.pro in Qt Creator
-* In the Projects tab -> Build & Run It should appear the Android Qt, might be disabled. Enable it if it is not enabled.
+* Now you should be able to Build & Run for Android.

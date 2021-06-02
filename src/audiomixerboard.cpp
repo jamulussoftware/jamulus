@@ -1079,6 +1079,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
         if ( iMyFader == PairList[i].second )
         {
             PairList.move ( i, 0 );
+            break;
         }
     }
 

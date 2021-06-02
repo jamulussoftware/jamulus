@@ -149,7 +149,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 ## Android
 * Install Qt, including the Android support from the Qt installer
 * Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions 
-* Make sure submodules are present, notably oboe:
+* Make sure Jamulus submodules are present, notably oboe:
 `git submodule update --init`
 * Open Jamulus.pro in Qt Creator
 * Now you should be able to Build & Run for Android.

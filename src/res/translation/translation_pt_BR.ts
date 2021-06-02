@@ -419,7 +419,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="224"/>
         <source>PAN</source>
-        <translation>PAN</translation>
+        <translation>BAL</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="225"/>
@@ -510,7 +510,7 @@
         <location filename="../../audiomixerboard.cpp" line="239"/>
         <location filename="../../audiomixerboard.cpp" line="255"/>
         <source>Pan</source>
-        <translation>Pan</translation>
+        <translation>Bal</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="48"/>
@@ -830,17 +830,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="186"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Parâmetros do Estado da Conexão</translation>
+        <translation>Parâmetros do Estado da Conexão</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="189"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">A latência da conexão é o tempo necessário para o fluxo de áudio viajar do cliente para o servidor e vice-versa. Esta latência é introduzida pela rede e deve ser cerca de 20-30 ms. Se esta latência for maior que 50 ms, a distância até ao servidor é muito grande ou sua conexão à Internet não é suficiente.</translation>
+        <translation>A latência da conexão é o tempo necessário para o fluxo de áudio viajar do cliente para o servidor e vice-versa. Esta latência é introduzida pela rede e deve ser cerca de 20-30 ms. Se esta latência for maior que 50 ms, a distância até ao servidor é muito grande ou sua conexão à Internet não é suficiente.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="196"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">A latência geral é calculada a partir da latência da conexão atual e do atraso introduzido pelas configurações de buffer.</translation>
+        <translation>A latência geral é calculada a partir da latência da conexão atual e do atraso introduzido pelas configurações de buffer.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="226"/>
@@ -1149,18 +1149,18 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
@@ -1411,17 +1411,17 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="248"/>
         <source>Language</source>
-        <translation type="unfinished">Idioma</translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="248"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione o idiomara para ser utilizado na interface do usuário.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Seletor de idioma</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="419"/>
@@ -1771,7 +1771,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="243"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation>Selecione a aparência para utilizada na janela principal.</translation>
+        <translation>Selecione a aparência para ser utilizada na janela principal.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="245"/>
@@ -2454,7 +2454,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="859"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1023"/>
@@ -2479,7 +2479,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1125"/>
         <source>Pan</source>
-        <translation>Pan</translation>
+        <translation>Bal</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1205"/>
@@ -2774,12 +2774,12 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">&amp;Sobre o Jamulus...</translation>
+        <translation>&amp;Sobre o Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">Sobre o &amp;Qt...</translation>
+        <translation>Sobre o &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2788,7 +2788,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">Sobre o Qt</translation>
+        <translation>Sobre o Qt</translation>
     </message>
 </context>
 <context>
@@ -3703,7 +3703,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Lista</translation>
+        <translation>Lista</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>

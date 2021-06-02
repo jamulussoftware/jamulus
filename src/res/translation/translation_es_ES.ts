@@ -835,17 +835,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="186"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Parámetro Estado Conexión Actual</translation>
+        <translation>Parámetro Estado Conexión Actual</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="189"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">El Ping es el tiempo que requiere el flujo de audio para viajar desde el cliente al servidor y volver. Este retardo lo determina la red y debería ser de unos 20-30 ms. Si este retardo es de unos 50 ms, la distancia al servidor es demasiado grande o tu conexión a internet no es óptima.</translation>
+        <translation>El Tiempo Ping es el tiempo que requiere el flujo de audio para viajar desde el cliente al servidor y volver. Este retardo lo determina la red y debería ser de unos 20-30 ms. Si este retardo es de unos 50 ms, la distancia al servidor es demasiado grande o tu conexión a internet no es óptima.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="196"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">El Retardo Total se calcula con el Ping actual y el retardo ocasionado por la configuración de buffers.</translation>
+        <translation>El Retardo Total se calcula con el Tiempo Ping actual y el retardo ocasionado por la configuración de buffers.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="226"/>
@@ -1149,18 +1149,18 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished">ms</translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>

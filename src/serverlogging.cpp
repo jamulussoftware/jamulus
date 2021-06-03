@@ -70,7 +70,7 @@ void CServerLogging::operator<< ( const QString& sNewStr )
     {
         // append new line in logging file
         QTextStream out ( &File );
-        out << sNewStr << endl;
+        out << sNewStr << Qt::endl;
         File.flush();
     }
 }

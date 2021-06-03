@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "clientdlg.h"
+#include <QActionGroup>
 
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,

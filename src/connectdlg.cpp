@@ -690,7 +690,7 @@ void CConnectDlg::OnTimerPing()
         if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(), CurServerAddress ) )
         {
             // if address is valid, send ping message using a new thread
-            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, CurServerAddress );
+            QtConcurrent::run ( &CConnectDlg::EmitCLServerListPingMes, this, CurServerAddress );
         }
     }
 }

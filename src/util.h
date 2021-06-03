@@ -573,7 +573,7 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
 }
 
 // Slave server registration state ---------------------------------------------
-enum ESvrRegStatus
+enum class ESvrRegStatus
 {
     SRS_UNREGISTERED,
     SRS_BAD_ADDRESS,
@@ -590,35 +590,36 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 {
     switch ( eSvrRegStatus )
     {
-    case SRS_UNREGISTERED:
+    case ESvrRegStatus::SRS_UNREGISTERED:
         return QCoreApplication::translate ( "CServerDlg", "Unregistered" );
 
-    case SRS_BAD_ADDRESS:
+    case ESvrRegStatus::SRS_BAD_ADDRESS:
         return QCoreApplication::translate ( "CServerDlg", "Bad address" );
 
-    case SRS_REQUESTED:
+    case ESvrRegStatus::SRS_REQUESTED:
         return QCoreApplication::translate ( "CServerDlg", "Registration requested" );
 
-    case SRS_TIME_OUT:
+    case ESvrRegStatus::SRS_TIME_OUT:
         return QCoreApplication::translate ( "CServerDlg", "Registration failed" );
 
-    case SRS_UNKNOWN_RESP:
+    case ESvrRegStatus::SRS_UNKNOWN_RESP:
         return QCoreApplication::translate ( "CServerDlg", "Check server version" );
 
-    case SRS_REGISTERED:
+    case ESvrRegStatus::SRS_REGISTERED:
         return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
-    case SRS_CENTRAL_SVR_FULL:
+    case ESvrRegStatus::SRS_CENTRAL_SVR_FULL:
         return QCoreApplication::translate ( "CServerDlg", "Directory Server full" );
 
-    case SRS_VERSION_TOO_OLD:
+    case ESvrRegStatus::SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
 
-    case SRS_NOT_FULFILL_REQUIREMENTS:
+    case ESvrRegStatus::SRS_NOT_FULFILL_REQUIREMENTS:
         return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
-    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
+    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) );
+//    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
 }
 
 // Directory server registration outcome ---------------------------------------
@@ -1199,7 +1200,7 @@ public:
                         for ( int i = 0; i < iNumMeas; i++ )
                         {
                             // convert ns in ms and store the value
-                            streamFile << i << " " << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << endl;
+                            streamFile << i << " " << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << Qt::endl;
                         }
                     }
                 }

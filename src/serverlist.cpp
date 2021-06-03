@@ -35,7 +35,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
     strMinServerVersion ( "" ),              // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
-    eSvrRegStatus ( SRS_UNREGISTERED ),
+    eSvrRegStatus ( ESvrRegStatus::SRS_UNREGISTERED ),
     iSvrRegRetries ( 0 )
 {
     // set the directory server address
@@ -160,7 +160,7 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
     }
 
     // if we are registered to a custom directory server, unregister before updating the name
-    if ( eCentralServerAddressType == AT_CUSTOM && GetSvrRegStatus() == SRS_REGISTERED )
+    if ( eCentralServerAddressType == AT_CUSTOM && GetSvrRegStatus() == ESvrRegStatus::SRS_REGISTERED )
     {
         SlaveServerUnregister();
     }
@@ -179,7 +179,7 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
 void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
 {
     // if the type is changing, unregister before updating
-    if ( eNCSAT != eCentralServerAddressType && GetSvrRegStatus() == SRS_REGISTERED )
+    if ( eNCSAT != eCentralServerAddressType && GetSvrRegStatus() == ESvrRegStatus::SRS_REGISTERED )
     {
         SlaveServerUnregister();
     }
@@ -541,13 +541,13 @@ void CServerListManager::OnTimerCLRegisterServerResp()
 {
     QMutexLocker locker ( &Mutex );
 
-    if ( eSvrRegStatus == SRS_REQUESTED )
+    if ( eSvrRegStatus == ESvrRegStatus::SRS_REQUESTED )
     {
         iSvrRegRetries++;
 
         if ( iSvrRegRetries >= REGISTER_SERVER_RETRY_LIMIT )
         {
-            SetSvrRegStatus ( SRS_TIME_OUT );
+            SetSvrRegStatus ( ESvrRegStatus::SRS_TIME_OUT );
         }
         else
         {
@@ -583,21 +583,21 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
         if ( bIsRegister )
         {
             // register server
-            SetSvrRegStatus ( SRS_REQUESTED );
+            SetSvrRegStatus ( ESvrRegStatus::SRS_REQUESTED );
 
             pConnLessProtocol->CreateCLRegisterServerExMes ( SlaveCurCentServerHostAddress, SlaveCurLocalHostAddress, ServerList[0] );
         }
         else
         {
             // unregister server
-            SetSvrRegStatus ( SRS_UNREGISTERED );
+            SetSvrRegStatus ( ESvrRegStatus::SRS_UNREGISTERED );
 
             pConnLessProtocol->CreateCLUnregisterServerMes ( SlaveCurCentServerHostAddress );
         }
     }
     else
     {
-        SetSvrRegStatus ( SRS_BAD_ADDRESS );
+        SetSvrRegStatus ( ESvrRegStatus::SRS_BAD_ADDRESS );
     }
 }
 

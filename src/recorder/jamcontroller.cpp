@@ -91,7 +91,7 @@ void CJamController::SetRecordingDir ( QString newRecordingDir, int iServerFrame
     {
         pJamRecorder         = new recorder::CJamRecorder ( newRecordingDir, iServerFrameSizeSamples );
         strRecorderErrMsg    = pJamRecorder->Init();
-        bRecorderInitialised = ( strRecorderErrMsg == QString::null );
+        bRecorderInitialised = ( strRecorderErrMsg == QString() );
         bEnableRecording     = bRecorderInitialised && !bDisableRecording;
 
         qInfo() << qUtf8Printable ( QString ( "Recording state: %1" ).arg ( bEnableRecording ? "enabled" : "disabled" ) );
@@ -99,7 +99,7 @@ void CJamController::SetRecordingDir ( QString newRecordingDir, int iServerFrame
     else
     {
         // This is the only time this is ever true - UI needs to handle it
-        strRecorderErrMsg    = QString::null;
+        strRecorderErrMsg    = QString();
         bRecorderInitialised = false;
         bEnableRecording     = false;
 

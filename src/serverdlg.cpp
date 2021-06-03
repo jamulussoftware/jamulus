@@ -320,7 +320,7 @@ lvwClients->setMinimumHeight ( 140 );
     edtRecordingDir->setText ( pServer->GetRecordingDir() );
     tbtClearRecordingDir->setText ( u8"\u232B" );
 
-    UpdateRecorderStatus ( QString::null );
+    UpdateRecorderStatus ( QString() );
 
     // language combo box (corrects the setting if language not found)
     cbxLanguage->Init ( pSettings->strLanguage );
@@ -543,19 +543,19 @@ void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
 void CServerDlg::OnServerStarted()
 {
     UpdateSystemTrayIcon ( true );
-    UpdateRecorderStatus ( QString::null );
+    UpdateRecorderStatus ( QString() );
 }
 
 void CServerDlg::OnServerStopped()
 {
     UpdateSystemTrayIcon ( false );
-    UpdateRecorderStatus ( QString::null );
+    UpdateRecorderStatus ( QString() );
 }
 
 void CServerDlg::OnStopRecorder()
 {
-    UpdateRecorderStatus ( QString::null );
-    if ( pServer->GetRecorderErrMsg() != QString::null )
+    UpdateRecorderStatus ( QString() );
+    if ( pServer->GetRecorderErrMsg() != QString() )
     {
         QMessageBox::warning ( this,
                                APP_NAME,
@@ -578,16 +578,16 @@ void CServerDlg::OnRecordingDirClicked()
     if ( newRecordingDir != currentValue )
     {
         pServer->SetRecordingDir ( newRecordingDir );
-        UpdateRecorderStatus ( QString::null );
+        UpdateRecorderStatus ( QString() );
     }
 }
 
 void CServerDlg::OnClearRecordingDirClicked()
 {
-    if ( pServer->GetRecorderErrMsg() != QString::null || pServer->GetRecordingDir() != "" )
+    if ( pServer->GetRecorderErrMsg() != QString() || pServer->GetRecordingDir() != "" )
     {
         pServer->SetRecordingDir ( "" );
-        UpdateRecorderStatus ( QString::null );
+        UpdateRecorderStatus ( QString() );
     }
 }
 
@@ -676,15 +676,15 @@ void CServerDlg::UpdateGUIDependencies()
 
     switch ( eSvrRegStatus )
     {
-    case SRS_BAD_ADDRESS:
-    case SRS_TIME_OUT:
-    case SRS_CENTRAL_SVR_FULL:
-    case SRS_VERSION_TOO_OLD:
-    case SRS_NOT_FULFILL_REQUIREMENTS:
+    case ESvrRegStatus::SRS_BAD_ADDRESS:
+    case ESvrRegStatus::SRS_TIME_OUT:
+    case ESvrRegStatus::SRS_CENTRAL_SVR_FULL:
+    case ESvrRegStatus::SRS_VERSION_TOO_OLD:
+    case ESvrRegStatus::SRS_NOT_FULFILL_REQUIREMENTS:
         strStatus = "<font color=\"red\"><b>" + strStatus + "</b></font>";
         break;
 
-    case SRS_REGISTERED:
+    case ESvrRegStatus::SRS_REGISTERED:
         strStatus = "<font color=\"darkGreen\"><b>" + strStatus + "</b></font>";
         break;
 
@@ -764,7 +764,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
         {
             if ( pServer->IsRunning() )
             {
-                edtCurrentSessionDir->setText ( sessionDir != QString::null ? sessionDir : "" );
+                edtCurrentSessionDir->setText ( sessionDir != QString() ? sessionDir : "" );
 
                 strRecorderStatus = SREC_RECORDING;
                 bIsRecording      = true;
@@ -783,7 +783,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
     {
         strRecordingDir = pServer->GetRecorderErrMsg();
 
-        if ( strRecordingDir == QString::null )
+        if ( strRecordingDir == QString() )
         {
             strRecordingDir = pServer->GetRecordingDir();
         }

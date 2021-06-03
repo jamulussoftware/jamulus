@@ -99,7 +99,6 @@ protected:
         QPixmap BitmCubeSmallLedYellow;
         QPixmap BitmCubeSmallLedRed;
 
-
         ELightColor eCurLightColor;
         QLabel*     pLEDLabel;
     };

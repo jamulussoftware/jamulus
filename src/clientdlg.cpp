@@ -1395,15 +1395,13 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
         lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
         lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
         break;
-
     }
 
     // also apply MeterStyle to child GUI controls
     MainMixerBoard->SetMeterStyle ( eNewMeterStyle );
-
 }
 
-void CClientDlg::OnRecorderStateReceived (  const ERecorderState newRecorderState )
+void CClientDlg::OnRecorderStateReceived ( const ERecorderState newRecorderState )
 {
     MainMixerBoard->SetRecorderState ( newRecorderState );
     SetMixerBoardDeco ( newRecorderState, pClient->GetGUIDesign() );
@@ -1415,12 +1413,9 @@ void CClientDlg::OnGUIDesignChanged()
     SetMixerBoardDeco ( MainMixerBoard->GetRecorderState(), pClient->GetGUIDesign() );
 }
 
-void CClientDlg::OnMeterStyleChanged()
-{
-    SetMeterStyle ( pClient->GetMeterStyle() );
-}
+void CClientDlg::OnMeterStyleChanged() { SetMeterStyle ( pClient->GetMeterStyle() ); }
 
-void CClientDlg::SetMixerBoardDeco(  const ERecorderState newRecorderState, const EGUIDesign eNewDesign  )
+void CClientDlg::SetMixerBoardDeco ( const ERecorderState newRecorderState, const EGUIDesign eNewDesign )
 {
     // return if no change
     if ( ( newRecorderState == eLastRecorderState ) && ( eNewDesign == eLastDesign ) )

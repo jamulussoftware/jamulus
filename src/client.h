@@ -134,7 +134,7 @@ public:
     void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
     EMeterStyle GetMeterStyle() const { return eMeterStyle; }
-    void SetMeterStyle ( const EMeterStyle eNMT ) { eMeterStyle = eNMT; }
+    void        SetMeterStyle ( const EMeterStyle eNMT ) { eMeterStyle = eNMT; }
 
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void          SetAudioQuality ( const EAudioQuality eNAudioQuality );

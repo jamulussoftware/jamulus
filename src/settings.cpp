@@ -406,18 +406,16 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // MeterStyle
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle",
-         0, 4 /* MT_SMALL_LED */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_SMALL_LED */, iValue ) )
     {
         pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
     }
     else
     {
         // if MeterStyle is not found in the ini, set it based on the GUI design
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign",
-             0, 2 /* GD_SLIMFADER */, iValue ) )
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
         {
-            switch( iValue )
+            switch ( iValue )
             {
             case GD_STANDARD:
                 pClient->SetMeterStyle ( MT_BAR );

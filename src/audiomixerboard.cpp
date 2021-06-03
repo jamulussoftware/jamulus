@@ -223,7 +223,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText ( tr ( "PAN" ) );
         pcbMute->setText ( tr ( "MUTE" ) );
         pcbSolo->setText ( tr ( "SOLO" ) );
-        strGroupBaseText = tr ( "GRP" );
+        strGroupBaseText  = tr ( "GRP" );
         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
         break;
 
@@ -236,7 +236,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText ( tr ( "Pan" ) );
         pcbMute->setText ( tr ( "M" ) );
         pcbSolo->setText ( tr ( "S" ) );
-        strGroupBaseText = tr ( "G" );
+        strGroupBaseText  = tr ( "G" );
         iInstrPicMaxWidth = 18; // scale instrument picture to avoid enlarging the width by the picture
         break;
 
@@ -250,7 +250,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText ( tr ( "Pan" ) );
         pcbMute->setText ( tr ( "Mute" ) );
         pcbSolo->setText ( tr ( "Solo" ) );
-        strGroupBaseText = tr ( "Grp" );
+        strGroupBaseText  = tr ( "Grp" );
         iInstrPicMaxWidth = INVALID_INDEX; // no instrument picture scaling
         break;
     }
@@ -270,42 +270,38 @@ void CChannelFader::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
     {
     case MT_BAR:
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
-        //Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight( 120 );
+        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+        pFader->setMinimumHeight ( 120 );
         break;
 
     case MT_SLIM_BAR:
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_BAR );
-        //Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight( 85 );
+        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+        pFader->setMinimumHeight ( 85 );
         break;
 
     case MT_SLIM_LED:
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
-        //Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight( 162 );
+        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+        pFader->setMinimumHeight ( 162 );
         break;
 
     case MT_SMALL_LED:
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SMALL_LED );
-        //Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight( 85 );
+        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+        pFader->setMinimumHeight ( 85 );
         break;
 
     default:
         // reset style sheet and set original parameters
         plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
-        //Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight( 120 );
+        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+        pFader->setMinimumHeight ( 120 );
         break;
     }
-
 }
 
-void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
-{
-    plbrChannelLevel->setHidden ( !eNDCL );
-}
+void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL ) { plbrChannelLevel->setHidden ( !eNDCL ); }
 
 bool CChannelFader::GetDisplayChannelLevel() { return !plbrChannelLevel->isHidden(); }
 
@@ -989,7 +985,7 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
     }
 }
 
-void CAudioMixerBoard::SetMeterStyle( const EMeterStyle eNewMeterStyle )
+void CAudioMixerBoard::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
 {
     // apply GUI design to child GUI controls
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )

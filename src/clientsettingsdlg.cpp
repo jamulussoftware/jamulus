@@ -644,7 +644,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        &CClientSettingsDlg::OnGUIDesignActivated );
 
     QObject::connect ( cbxMeterStyle,
-                       static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
                        &CClientSettingsDlg::OnMeterStyleActivated );
 

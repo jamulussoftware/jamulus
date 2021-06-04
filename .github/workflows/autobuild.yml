@@ -140,6 +140,14 @@ jobs:
              cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
              uses_codeql:           true
 
+           - config_name:           Windows JACK (artifact+codeQL)
+             target_os:             windows
+             building_on_os:        windows-latest
+             cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_jack_1_prepare.ps1
+             cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_jack_2_build.ps1
+             cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_jack_3_copy_files.ps1
+             uses_codeql:           true
+
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
 

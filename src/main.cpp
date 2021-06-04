@@ -731,19 +731,22 @@ int main ( int argc, char** argv )
 \******************************************************************************/
 QString UsageArguments ( char** argv )
 {
-    return "Usage: " + QString ( argv[0] ) +
-           " [option] [optional argument]\n"
-           "\nGeneral options:\n"
+    // clang-format off
+    return "\n"
+           "Usage: " + QString ( argv[0] ) + " [option] [optional argument]\n"
+           "\n"
+           "General options:\n"
            "  -h, -?, --help        display this help text and exit\n"
-           "  -i, --inifile         initialization file name (not\n"
-           "                        supported for headless server mode)\n"
+           "  -i, --inifile         initialization file name\n"
+           "                        (not supported for headless server mode)\n"
            "  -n, --nogui           disable GUI\n"
            "  -p, --port            set the local port number\n"
            "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
            "                        (see the Jamulus website to enable QoS on Windows)\n"
            "  -t, --notranslation   disable translation (use English language)\n"
            "  -v, --version         output version information and exit\n"
-           "\nServer only:\n"
+           "\n"
+           "Server only:\n"
            "  -d, --discononquit    disconnect all clients on quit\n"
            "  -e, --directoryserver address of the directory server with which to register\n"
            "                        (or 'localhost' to host a server list on this server)\n"
@@ -768,15 +771,21 @@ QString UsageArguments ( char** argv )
            "                        running a slave and your own directory server\n"
            "                        behind the same NAT\n"
            "      --serverbindip    specify the IP address the server will bind to\n"
-           "\nClient only:\n"
+           "\n"
+           "Client only:\n"
            "  -M, --mutestream      starts the application in muted state\n"
            "      --mutemyown       mute me in my personal mix (headless only)\n"
            "  -c, --connect         connect to given server address on startup\n"
-           "  -j, --nojackconnect   disable auto Jack connections\n"
+           "  -j, --nojackconnect   disable auto JACK connections\n"
            "      --ctrlmidich      MIDI controller channel to listen\n"
-           "      --clientname      client name (window title and jack client name)\n"
-           "\nExample: " +
-           QString ( argv[0] ) + " -s --inifile myinifile.ini\n";
+           "      --clientname      client name (window title and JACK client name)\n"
+           "\n"
+           "Example: " + QString ( argv[0] ) + " -s --inifile myinifile.ini\n"
+           "\n"
+           "For more information and localized help see:\n"
+           "\n"
+           "https://jamulus.io/wiki/Command-Line-Options\n";
+    // clang-format on
 }
 
 bool GetFlagArgument ( char** argv, int& i, QString strShortOpt, QString strLongOpt )

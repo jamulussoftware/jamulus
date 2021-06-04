@@ -12,7 +12,7 @@
 
 For .tar.gz [use this link](https://github.com/jamulussoftware/jamulus/archive/latest.tar.gz) to download the latest release
 
-For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/master.zip)
+For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/latest.zip)
 
 ## Linux
 
@@ -66,7 +66,7 @@ make
 sudo make install # optional
 ```
 
-To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](/wiki/Command-Line-Options), and [this information](/wiki/Tips-Tricks-More#controlling-recording-on-linux-headless-servers) on controlling recordings on headless servers.
+To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](https://jamulus.io/wiki/Command-Line-Options), and [this information](https://jamulus.io/wiki/Tips-Tricks-More#controlling-recordings-on-linux-headless-servers) on controlling recordings on headless servers.
 
 ---
 

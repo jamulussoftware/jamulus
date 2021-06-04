@@ -394,7 +394,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
             return QString ( tr ( "The sample rate on the current input device isn't %1 Hz and is therefore incompatible. "
                                   "Please select another device or try setting the sample rate to %1 Hz "
                                   "manually via Audio-MIDI-Setup (in Applications->Utilities)." ) )
-                                  .arg ( SYSTEM_SAMPLE_RATE_HZ );
+                .arg ( SYSTEM_SAMPLE_RATE_HZ );
         }
     }
 
@@ -413,9 +413,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
              noErr )
         {
             return QString ( tr ( "The sample rate on the current output device isn't %1 Hz and is therefore incompatible. "
-                                "Please select another device or try setting the sample rate to %1 Hz "
-                                "manually via Audio-MIDI-Setup (in Applications->Utilities)." ) )
-                                .arg ( SYSTEM_SAMPLE_RATE_HZ );
+                                  "Please select another device or try setting the sample rate to %1 Hz "
+                                  "manually via Audio-MIDI-Setup (in Applications->Utilities)." ) )
+                .arg ( SYSTEM_SAMPLE_RATE_HZ );
         }
     }
 
@@ -461,7 +461,8 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
         return QString ( tr ( "The stream format on the current input device isn't "
-                    "compatible with this software. Please select another device." ) ) .arg ( APP_NAME );
+                              "compatible with this software. Please select another device." ) )
+            .arg ( APP_NAME );
     }
 
     // check the output
@@ -472,7 +473,8 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
         return QString ( tr ( "The stream format on the current output device isn't "
-                    "compatible with %1. Please select another device." ) ) .arg ( APP_NAME );
+                              "compatible with %1. Please select another device." ) )
+            .arg ( APP_NAME );
     }
 
     // store the input and out number of channels for this device

@@ -37,7 +37,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
         serverName = "default";
     }
     qInfo() << qUtf8Printable (
-        QString ( "Connecting to JACK \"%1\" instance (use the JACK_DEFAULT_SERVER environment variable to change this)." ) .arg ( serverName ) );
+        QString ( "Connecting to JACK \"%1\" instance (use the JACK_DEFAULT_SERVER environment variable to change this)." ).arg ( serverName ) );
 
     // try to become a client of the JACK server
     pJackClient = jack_client_open ( jackClientName, JackNullOption, &JackStatus );
@@ -62,8 +62,9 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     {
         throw CGenErr ( QString ( tr ( "The JACK server isn't running at a sample rate of <b>%1 Hz</b>. Please use "
-                        "a tool like <i><a href=\"https://qjackctl.sourceforge.io\">QJackCtl</a></i> to set the "
-                        "the JACK server sample rate to %1 Hz." ) ) .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
+                                       "a tool like <i><a href=\"https://qjackctl.sourceforge.io\">QJackCtl</a></i> to set the "
+                                       "the JACK server sample rate to %1 Hz." ) )
+                            .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
     // create four ports (two for input, two for output -> stereo)
@@ -78,9 +79,9 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     if ( ( input_port_left == nullptr ) || ( input_port_right == nullptr ) || ( output_port_left == nullptr ) || ( output_port_right == nullptr ) )
     {
         throw CGenErr ( QString ( tr ( "The JACK port registering failed. This is a probably an error with JACK. Please stop %1 and JACK. "
-                        "Afterwards check if another program at a sample rate of %2 Hz can connect to JACK." ) )
-                        .arg ( APP_NAME )
-                        .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
+                                       "Afterwards check if another program at a sample rate of %2 Hz can connect to JACK." ) )
+                            .arg ( APP_NAME )
+                            .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
     // optional MIDI initialization
@@ -91,8 +92,8 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
         if ( input_port_midi == nullptr )
         {
             throw CGenErr ( QString ( tr ( "The JACK port registering failed. This is a probably an error with JACK. Please stop %1 and JACK. "
-                            "Afterwards check if another MIDI program can connect to JACK." ) )
-                            .arg ( APP_NAME ) );
+                                           "Afterwards check if another MIDI program can connect to JACK." ) )
+                                .arg ( APP_NAME ) );
         }
     }
     else
@@ -104,7 +105,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     if ( jack_activate ( pJackClient ) )
     {
         throw CGenErr ( QString ( tr ( "Can't activate the JACK client. This is a probably an error with JACK. Please check the JACK output." ) )
-                        .arg ( APP_NAME ) );
+                            .arg ( APP_NAME ) );
     }
 
     if ( !bNoAutoJackConnect )
@@ -207,9 +208,10 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     if ( bJackWasShutDown )
     {
         throw CGenErr ( QString ( tr ( "The JACK server was shut down. %1 "
-                             "requires a JACK to run. Please restart %1 to "
-                             "start JACK again. If the error persists, please review "
-                             "the JACK output." ) ) .arg ( APP_NAME ) );
+                                       "requires a JACK to run. Please restart %1 to "
+                                       "start JACK again. If the error persists, please review "
+                                       "the JACK output." ) )
+                            .arg ( APP_NAME ) );
     }
 
     // get actual buffer size

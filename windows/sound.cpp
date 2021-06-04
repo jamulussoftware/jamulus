@@ -74,7 +74,6 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         // clean up and return error string
         asioDrivers->removeCurrentDriver();
         return tr ( "The audio driver couldn't be initialised. Check if the audio device is plugged in and verify your driver settings." );
-
     }
 
     // check device capabilities if it fulfills our requirements
@@ -145,8 +144,9 @@ QString CSound::CheckDeviceCapabilities()
     {
         // return error string
         return QString ( tr ( "The selected audio device is incompatible "
-        "since it doesn't support a sample rate of %1 Hz. Please select another "
-        "device." ) ) .arg ( SYSTEM_SAMPLE_RATE_HZ );
+                              "since it doesn't support a sample rate of %1 Hz. Please select another "
+                              "device." ) )
+            .arg ( SYSTEM_SAMPLE_RATE_HZ );
     }
 
     // check if sample rate can be set
@@ -156,8 +156,9 @@ QString CSound::CheckDeviceCapabilities()
     {
         // return error string
         return QString ( tr ( "The current audio device configuration is incompatible "
-        "because the sample rate couldn't be set to %1 Hz. Please check for a hardware switch or "
-        "driver setting to set the sample rate manually and restart the app." ) ) .arg ( SYSTEM_SAMPLE_RATE_HZ );
+                              "because the sample rate couldn't be set to %1 Hz. Please check for a hardware switch or "
+                              "driver setting to set the sample rate manually and restart the app." ) )
+            .arg ( SYSTEM_SAMPLE_RATE_HZ );
     }
 
     // check the number of available channels
@@ -167,7 +168,8 @@ QString CSound::CheckDeviceCapabilities()
     {
         // return error string
         return QString ( tr ( "The selected audio device is incompatible since it doesn't support "
-                    "%1 in/out channels. Please select another device or configuration." ) ) .arg ( NUM_IN_OUT_CHANNELS );
+                              "%1 in/out channels. Please select another device or configuration." ) )
+            .arg ( NUM_IN_OUT_CHANNELS );
     }
 
     // clip number of input/output channels to our maximum
@@ -201,7 +203,7 @@ QString CSound::CheckDeviceCapabilities()
         {
             // return error string
             return tr ( "The selected audio device is incompatible since "
-            "the required audio sample format isn't available. Please use another device." );
+                        "the required audio sample format isn't available. Please use another device." );
         }
 
         // store the name of the channel and check if channel mixing is supported
@@ -232,7 +234,7 @@ QString CSound::CheckDeviceCapabilities()
         {
             // return error string
             return tr ( "The selected audio device is incompatible since "
-            "the required audio sample format isn't available. Please use another device." );
+                        "the required audio sample format isn't available. Please use another device." );
         }
     }
 

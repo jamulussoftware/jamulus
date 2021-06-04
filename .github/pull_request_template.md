@@ -1,6 +1,6 @@
 <!-- Thank you for working on Jamulus and opening a Pull Request! Please fill the following to make maintenance and development process visible -->
 
-# Short descriptions of changes
+# Short description of changes
 
 <!-- A short description of your changes which might go into the change log -->
 

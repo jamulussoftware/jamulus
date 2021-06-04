@@ -8,6 +8,10 @@
 
 <!-- If this fixes an issue, please write Fixes: <issue number here>; if not, please give your PR a context. -->
 
+# Does this change need documentation? What needs to be documented and how?
+
+<!-- Most new features should be documented on the website: https://github.com/jamulussoftware/jamuluswebsite/ If you have a proposal what to document, feel free to open a draft PR on the website repo -->
+
 # Status of this pull request
 <!-- This might be edited by maintainers. -->
 <!-- Proof of concept (not to be merged soon); Working implementation; ... -->

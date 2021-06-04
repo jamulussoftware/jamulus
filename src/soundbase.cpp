@@ -165,10 +165,8 @@ QString CSoundBase::SetDev ( const QString strDevName )
         if ( !vsErrorList.isEmpty() )
         {
             // create error message with all details
-            QString sErrorMessage = "<b>" + QString ( tr ( "No usable %1 audio device found." ) ) .arg ( strSystemDriverTechniqueName ) +
-                                    "</b><br><br>" +
-                                    tr ( "These are all the available drivers with error messages:" ) +
-                                    "<ul>";
+            QString sErrorMessage = "<b>" + QString ( tr ( "No usable %1 audio device found." ) ).arg ( strSystemDriverTechniqueName ) +
+                                    "</b><br><br>" + tr ( "These are all the available drivers with error messages:" ) + "<ul>";
 
             for ( int i = 0; i < lNumDevs; i++ )
             {
@@ -187,7 +185,7 @@ QString CSoundBase::SetDev ( const QString strDevName )
                 LoadAndInitializeFirstValidDriver ( true );
             }
 
-            sErrorMessage = QString ( tr ( "Can't start %1. Please restart %1 and check/reconfigure your audio settings." ) ) .arg ( APP_NAME );
+            sErrorMessage = QString ( tr ( "Can't start %1. Please restart %1 and check/reconfigure your audio settings." ) ).arg ( APP_NAME );
 #endif
 
             throw CGenErr ( sErrorMessage );

@@ -109,7 +109,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         }
 
         // driver cannot be used, clean up
-        asioDrivers->removeCurrentDriver(); // comment by ann0see: why do we clean up the driver even if we changed the driver settings?
+        asioDrivers->removeCurrentDriver();
     }
 
     return strStat;

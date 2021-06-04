@@ -460,8 +460,8 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( CurDevStreamFormat.mBitsPerChannel != 32 ) || ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
-        return tr ( "The stream format on the current input device isn't "
-                    "compatible with this software. Please select another device." );
+        return QString ( tr ( "The stream format on the current input device isn't "
+                    "compatible with this software. Please select another device." ) ) .arg ( APP_NAME );
     }
 
     // check the output
@@ -471,8 +471,8 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( CurDevStreamFormat.mBitsPerChannel != 32 ) || ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
-        return tr ( "The stream format on the current output device isn't "
-                    "compatible with this software. Please select another device." );
+        return QString ( tr ( "The stream format on the current output device isn't "
+                    "compatible with %1. Please select another device." ) ) .arg ( APP_NAME );
     }
 
     // store the input and out number of channels for this device

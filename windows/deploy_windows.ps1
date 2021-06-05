@@ -6,7 +6,8 @@ param(
     [string] $AsioSDKName = "ASIOSDK2.3.2",
     [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
     [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
+    [string] $BuildOption = ""
 )
 
 # change directory to the directory above (if needed)
@@ -222,7 +223,7 @@ Function Build-App
     )
 
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
-        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
+        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch $BuildOption", `
         "-o", "$BuildPath\Makefile")
 
     Set-Location -Path $BuildPath
@@ -256,6 +257,19 @@ function Build-App-Variants
 # Build Windows installer
 Function Build-Installer
 {
+    param(
+        [string] $BuildOption
+    )
+
+    if ($BuildOption -Eq "jackonwindows")
+    {
+        $InstallerNSI = "installer_jack.nsi"
+    }
+    else
+    {
+        $InstallerNSI = "installer.nsi"
+    }
+
     foreach ($_ in Get-Content -Path "$RootPath\$AppName.pro")
     {
         if ($_ -Match "^VERSION *= *(.*)$")
@@ -268,7 +282,7 @@ Function Build-Installer
     Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
         -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
         "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
-        "$WindowsPath\installer.nsi")
+        "$WindowsPath\$InstallerNSI")
 }
 
 # Build and copy NS-Process dll

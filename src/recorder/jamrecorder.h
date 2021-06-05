@@ -158,7 +158,7 @@ public:
         recordBaseDir ( strRecordingBaseDir ),
         iServerFrameSizeSamples ( iServerFrameSizeSamples ),
         isRecording ( false ),
-        currentSession( nullptr )
+        currentSession ( nullptr )
     {}
 
     /**

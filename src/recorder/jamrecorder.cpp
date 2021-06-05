@@ -401,7 +401,7 @@ void CJamRecorder::Start()
 
     {
         // needs to be after OnEnd() as that also locks
-        QMutexLocker mutexLocker(&ChIdMutex);
+        QMutexLocker mutexLocker ( &ChIdMutex );
         try
         {
             currentSession = new CJamSession ( recordBaseDir );
@@ -428,7 +428,7 @@ void CJamRecorder::Start()
  */
 void CJamRecorder::OnEnd()
 {
-    QMutexLocker mutexLocker(&ChIdMutex);
+    QMutexLocker mutexLocker ( &ChIdMutex );
     if ( isRecording )
     {
         isRecording = false;
@@ -567,7 +567,7 @@ void CJamRecorder::SessionDirToReaper ( QString& strSessionDirName, int serverFr
  */
 void CJamRecorder::OnDisconnected ( int iChID )
 {
-    QMutexLocker mutexLocker(&ChIdMutex);
+    QMutexLocker mutexLocker ( &ChIdMutex );
     if ( !isRecording )
     {
         qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
@@ -611,7 +611,7 @@ void CJamRecorder::OnFrame ( const int              iChID,
 
     // needs to be after Start() as that also locks
     {
-        QMutexLocker mutexLocker(&ChIdMutex);
+        QMutexLocker mutexLocker ( &ChIdMutex );
         currentSession->Frame ( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );
     }
 }

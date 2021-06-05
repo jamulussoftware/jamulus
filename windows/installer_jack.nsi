@@ -55,6 +55,8 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 !define MUI_PAGE_CUSTOMFUNCTION_PRE AbortOnRunningApp
 !insertmacro MUI_PAGE_WELCOME
 
+Page Custom JACKCheckInstalled ExitJACKInstalled
+
 !insertmacro MUI_PAGE_LICENSE "${ROOT_PATH}\COPYING"
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateDestinationFolder
 !insertmacro MUI_PAGE_DIRECTORY
@@ -93,6 +95,11 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
     ${EndIf}
 
 !macroend
+
+; Define Dialog variables
+
+Var Dialog
+Var Label
 
 ; Define user choices
 
@@ -325,6 +332,39 @@ FunctionEnd
 Function createdesktopshortcut
    WriteRegStr HKLM "${APP_INSTALL_KEY}" "${APP_INSTALL_ICON}" "1" ; remember that icon should be installed next time
    CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+FunctionEnd
+
+Function JACKCheckInstalled
+
+    ; insert JACK install page if no JACK driver was found
+    ClearErrors
+    EnumRegKey $0 HKLM "SOFTWARE\JACK" 0
+
+    IfErrors 0 JACKExists
+        !insertmacro MUI_HEADER_TEXT "$(JACK_DRIVER_HEADER)" "$(JACK_DRIVER_SUB)"
+        nsDialogs::Create 1018
+        Pop $Dialog
+        ${If} $Dialog == error
+            Abort
+        ${Endif}
+
+        ${NSD_CreateLabel} 0 0 100% 40u "$(JACK_DRIVER_EXPLAIN)"
+        Pop $Label
+
+        nsDialogs::Show
+
+    JACKExists:
+
+FunctionEnd
+
+Function ExitJACKInstalled
+    ClearErrors
+    EnumRegKey $0 HKLM "SOFTWARE\JACK" 0
+    IfErrors 0 SkipMessage
+        MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(JACK_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
+            Abort
+   SkipMessage:
+
 FunctionEnd
 
 ; Uninstaller

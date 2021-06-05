@@ -313,4 +313,4 @@ Clean-Build-Environment
 Install-Dependencies
 Build-App-Variants -QtInstallPath $QtInstallPath
 Build-NSProcess -QtInstallPath $QtInstallPath
-Build-Installer
+Build-Installer -BuildOption $BuildOption

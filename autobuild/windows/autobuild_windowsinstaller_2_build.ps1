@@ -28,4 +28,11 @@ if (("$jamulus_project_path" -eq $null) -or ("$jamulus_project_path" -eq "")) {
 
 echo "Build installer..."
 # Build the installer
-powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2" -BuildOption $BuildOption
+if ($BuildOption -Eq "jackonwindows")
+{
+    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2" -BuildOption $BuildOption
+}
+else
+{
+    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2"
+}

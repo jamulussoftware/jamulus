@@ -382,8 +382,11 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
 
         if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
         {
+#if QT_VERSION >= 0x060000
+            QString strCountryToString = QLocale::countryToString ( CLocale::LocaleQt5toQt6( vecServerInfo[iIdx].eCountry ) );
+#else
             QString strCountryToString = QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
-
+#endif
             // Qt countryToString does not use spaces in between country name
             // parts but they use upper case letters which we can detect and
             // insert spaces as a post processing
@@ -458,8 +461,11 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
             if ( vecChanInfo[i].eCountry != QLocale::AnyCountry )
             {
                 // try to load the country flag icon
+#if QT_VERSION >= 0x060000
+                QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( CLocale::LocaleQt5toQt6( vecChanInfo[i].eCountry ) ) );
+#else
                 QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
-
+#endif
                 // first check if resource reference was valid
                 if ( !CountryFlagPixmap.isNull() )
                 {

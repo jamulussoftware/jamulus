@@ -706,8 +706,13 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // Country flag icon -------------------------------------------------------
     if ( cChanInfo.eCountry != QLocale::AnyCountry )
     {
+#if QT_VERSION >= 0x060000
+        QLocale::Country eC = CLocale::LocaleQt5toQt6( cChanInfo.eCountry );
+#else
+        QLocale::Country eC = cChanInfo.eCountry;
+#endif
         // try to load the country flag icon
-        QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( cChanInfo.eCountry ) );
+        QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( eC ) );
 
         // first check if resource reference was valid
         if ( CountryFlagPixmap.isNull() )
@@ -719,7 +724,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         {
             // set correct picture
             plblCountryFlag->setPixmap ( CountryFlagPixmap );
-            eTTCountry = cChanInfo.eCountry;
+            eTTCountry = eC;
 
             // enable country flag
             plblCountryFlag->setVisible ( true );

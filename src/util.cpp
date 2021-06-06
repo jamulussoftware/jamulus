@@ -24,6 +24,7 @@
 
 #include "util.h"
 #include "client.h"
+#include <QDebug>
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
@@ -1028,6 +1029,16 @@ CInstPictures::EInstCategory CInstPictures::GetCategory ( const int iInstrument 
 }
 
 // Locale management class -----------------------------------------------------
+#if QT_VERSION >= 0x060000
+QLocale::Country CLocale::LocaleQt5toQt6( const QLocale::Country eCountry )
+{
+    return ( (QLocale::Country)slocaletab[(int)eCountry].Qt5toQt6 );
+};
+QLocale::Country CLocale::LocaleQt6toQt5( const QLocale::Country eCountry )
+{
+    return ( (QLocale::Country)slocaletab[(int)eCountry].Qt6toQt5 );
+};
+#endif
 QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry )
 {
     QString strReturn = "";
@@ -1046,6 +1057,9 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
         //       the new code.
         // COMPATIBLE FOR OLD QT VERSIONS -> use a table:
         QString strISO3166 = "";
+#if QT_VERSION >= 0x060000
+        strISO3166 = QString(slocaletab[(int)eCountry].flagQt6 );
+#else
         switch ( static_cast<int> ( eCountry ) )
         {
         case 1:
@@ -1595,6 +1609,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
             strISO3166 = "ax";
             break;
         }
+#endif
         strReturn = ":/png/flags/res/flags/" + strISO3166 + ".png";
 
         // check if file actually exists, if not then invalidate reference

@@ -138,114 +138,121 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
 
 int CSound::Init ( const int iCoreAudioBufferSizeMono )
 {
-    //printf("Init sound ..."); <= to check the number of Sound inits at launch
-    // init base class
-    //CSoundBase::Init ( iCoreAudioBufferSizeMono ); this does nothing
-    this->iCoreAudioBufferSizeMono = iCoreAudioBufferSizeMono;
+    try
+    {
+        //printf("Init sound ..."); <= to check the number of Sound inits at launch
+        // init base class
+        //CSoundBase::Init ( iCoreAudioBufferSizeMono ); this does nothing
+        this->iCoreAudioBufferSizeMono = iCoreAudioBufferSizeMono;
 
-    // set internal buffer size value and calculate stereo buffer size
-    iCoreAudioBufferSizeStereo = 2 * iCoreAudioBufferSizeMono;
+        // set internal buffer size value and calculate stereo buffer size
+        iCoreAudioBufferSizeStereo = 2 * iCoreAudioBufferSizeMono;
 
-    //create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStereo );
+        //create memory for intermediate audio buffer
+        vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStereo );
+        
+        AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
+        
+        // we are going to play and record so we pick that category
+        NSError *error = nil;
+        [sessionInstance setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP | AVAudioSessionCategoryOptionAllowAirPlay error:&error];
+        
+        // NGOCDH - using values from jamulus settings 64 = 2.67ms/2
+        NSTimeInterval bufferDuration = iCoreAudioBufferSizeMono / 48000.0; //yeah it's math
+        [sessionInstance setPreferredIOBufferDuration:bufferDuration error:&error];
+        
+        // set the session's sample rate 48000 - the only supported by Jamulus ?
+        [sessionInstance setPreferredSampleRate:48000 error:&error];
+        [[AVAudioSession sharedInstance] setActive:YES error:&error];
+        
+        OSStatus status;
+        
+        // Describe audio component
+        AudioComponentDescription desc;
+        desc.componentType = kAudioUnitType_Output;
+        desc.componentSubType = kAudioUnitSubType_RemoteIO;
+        desc.componentFlags = 0;
+        desc.componentFlagsMask = 0;
+        desc.componentManufacturer = kAudioUnitManufacturer_Apple;
+        
+        // Get component
+        AudioComponent inputComponent = AudioComponentFindNext(NULL, &desc);
+        
+        // Get audio units
+        status = AudioComponentInstanceNew(inputComponent, &audioUnit);
+        checkStatus(status);
+        
+        // Enable IO for recording
+        UInt32 flag = 1;
+        status = AudioUnitSetProperty(audioUnit,
+                                      kAudioOutputUnitProperty_EnableIO,
+                                      kAudioUnitScope_Input,
+                                      kInputBus,
+                                      &flag,
+                                      sizeof(flag));
+        checkStatus(status);
+        
+        // Enable IO for playback
+        status = AudioUnitSetProperty(audioUnit,
+                                      kAudioOutputUnitProperty_EnableIO,
+                                      kAudioUnitScope_Output,
+                                      kOutputBus,
+                                      &flag,
+                                      sizeof(flag));
+        checkStatus(status);
+        
+        // Describe format
+        AudioStreamBasicDescription audioFormat;
+        audioFormat.mSampleRate            = 48000.00;
+        audioFormat.mFormatID            = kAudioFormatLinearPCM;
+        audioFormat.mFormatFlags        = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
+        audioFormat.mFramesPerPacket    = 1;
+        audioFormat.mChannelsPerFrame    = 2; //steoreo, so 2 interleaved channels
+        audioFormat.mBitsPerChannel        = 32;//sizeof float32
+        audioFormat.mBytesPerPacket        = 8;// (sizeof float32) * 2 channels
+        audioFormat.mBytesPerFrame        = 8;//(sizeof float32) * 2 channels
+        
+        // Apply format
+        status = AudioUnitSetProperty(audioUnit,
+                                      kAudioUnitProperty_StreamFormat,
+                                      kAudioUnitScope_Output,
+                                      kInputBus,
+                                      &audioFormat,
+                                      sizeof(audioFormat));
+        checkStatus(status);
+        status = AudioUnitSetProperty(audioUnit,
+                                      kAudioUnitProperty_StreamFormat,
+                                      kAudioUnitScope_Input,
+                                      kOutputBus,
+                                      &audioFormat,
+                                      sizeof(audioFormat));
+        checkStatus(status);
+        
+        
+        // Set callback
+        AURenderCallbackStruct callbackStruct;
+        callbackStruct.inputProc = recordingCallback;//this is actually the playback callback
+        callbackStruct.inputProcRefCon = this;
+        status = AudioUnitSetProperty(audioUnit,
+                                      kAudioUnitProperty_SetRenderCallback,
+                                      kAudioUnitScope_Global,
+                                      kOutputBus,
+                                      &callbackStruct,
+                                      sizeof(callbackStruct));
+        checkStatus(status);
+        
+        // Initialise
+        status = AudioUnitInitialize(audioUnit);
+        checkStatus(status);
+        
+        isInitialized = true;
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound Init exception ...." ); //This try-catch seems to fix Connect button crash
+    }
     
-    AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
-    
-    // we are going to play and record so we pick that category
-    NSError *error = nil;
-    [sessionInstance setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker | AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP | AVAudioSessionCategoryOptionAllowAirPlay error:&error];
-    
-    // NGOCDH - using values from jamulus settings 64 = 2.67ms/2
-    NSTimeInterval bufferDuration = iCoreAudioBufferSizeMono / 48000.0; //yeah it's math
-    [sessionInstance setPreferredIOBufferDuration:bufferDuration error:&error];
-    
-    // set the session's sample rate 48000 - the only supported by Jamulus ?
-    [sessionInstance setPreferredSampleRate:48000 error:&error];
-    [[AVAudioSession sharedInstance] setActive:YES error:&error];
-    
-    OSStatus status;
-    
-    // Describe audio component
-    AudioComponentDescription desc;
-    desc.componentType = kAudioUnitType_Output;
-    desc.componentSubType = kAudioUnitSubType_RemoteIO;
-    desc.componentFlags = 0;
-    desc.componentFlagsMask = 0;
-    desc.componentManufacturer = kAudioUnitManufacturer_Apple;
-    
-    // Get component
-    AudioComponent inputComponent = AudioComponentFindNext(NULL, &desc);
-    
-    // Get audio units
-    status = AudioComponentInstanceNew(inputComponent, &audioUnit);
-    checkStatus(status);
-    
-    // Enable IO for recording
-    UInt32 flag = 1;
-    status = AudioUnitSetProperty(audioUnit,
-                                  kAudioOutputUnitProperty_EnableIO,
-                                  kAudioUnitScope_Input,
-                                  kInputBus,
-                                  &flag,
-                                  sizeof(flag));
-    checkStatus(status);
-    
-    // Enable IO for playback
-    status = AudioUnitSetProperty(audioUnit,
-                                  kAudioOutputUnitProperty_EnableIO,
-                                  kAudioUnitScope_Output,
-                                  kOutputBus,
-                                  &flag,
-                                  sizeof(flag));
-    checkStatus(status);
-    
-    // Describe format
-    AudioStreamBasicDescription audioFormat;
-    audioFormat.mSampleRate            = 48000.00;
-    audioFormat.mFormatID            = kAudioFormatLinearPCM;
-    audioFormat.mFormatFlags        = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
-    audioFormat.mFramesPerPacket    = 1;
-    audioFormat.mChannelsPerFrame    = 2; //steoreo, so 2 interleaved channels
-    audioFormat.mBitsPerChannel        = 32;//sizeof float32
-    audioFormat.mBytesPerPacket        = 8;// (sizeof float32) * 2 channels
-    audioFormat.mBytesPerFrame        = 8;//(sizeof float32) * 2 channels
-    
-    // Apply format
-    status = AudioUnitSetProperty(audioUnit,
-                                  kAudioUnitProperty_StreamFormat,
-                                  kAudioUnitScope_Output,
-                                  kInputBus,
-                                  &audioFormat,
-                                  sizeof(audioFormat));
-    checkStatus(status);
-    status = AudioUnitSetProperty(audioUnit,
-                                  kAudioUnitProperty_StreamFormat,
-                                  kAudioUnitScope_Input,
-                                  kOutputBus,
-                                  &audioFormat,
-                                  sizeof(audioFormat));
-    checkStatus(status);
-    
-    
-    // Set callback
-    AURenderCallbackStruct callbackStruct;
-    callbackStruct.inputProc = recordingCallback;//this is actually the playback callback
-    callbackStruct.inputProcRefCon = this;
-    status = AudioUnitSetProperty(audioUnit,
-                                  kAudioUnitProperty_SetRenderCallback,
-                                  kAudioUnitScope_Global,
-                                  kOutputBus,
-                                  &callbackStruct,
-                                  sizeof(callbackStruct));
-    checkStatus(status);
-    
-    // Initialise
-    status = AudioUnitInitialize(audioUnit);
-    checkStatus(status);
-    
-    isInitialized = true;
-    
-  return iCoreAudioBufferSizeMono;
+    return iCoreAudioBufferSizeMono;
 }
 
 void CSound::Start()

@@ -26,7 +26,7 @@ $ErrorActionPreference = "Stop"
 
 # Execute native command with errorlevel handling
 Function Invoke-Native-Command {
-    Param(
+    param(
         [string] $Command,
         [string[]] $Arguments
     )
@@ -52,7 +52,7 @@ Function Clean-Build-Environment
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
 
-    Param (
+    param(
         [Parameter(Mandatory=$true)]
         [String]$URL
     )
@@ -261,6 +261,9 @@ Function Build-Installer
         [string] $BuildOption
     )
 
+    # Building the installer with JACK support on Windows is using a separate nsi script which creates a separate installer.
+    # The installer with JACK on Windows is made available for more users who know JACK, ASIO will be kept as the mainstream version.
+    # When not building with JACK support, the installer is created with ASIO support.
     if ($BuildOption -Eq "jackonwindows")
     {
         $InstallerNSI = "installer_jack.nsi"

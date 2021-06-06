@@ -46,4 +46,4 @@ LangString JACK_DRIVER_EXPLAIN ${LANG_DUTCH} \
      "Deze versie van ${APP_NAME} maakt gebruik van de JACK Audio Connection Kit. Zorg ervoor dat deze geïnstalleerd is of download de standaard versie van ${APP_NAME} op jamulus.io die gebruikt maakt van ASIO."
 
 LangString JACK_EXIT_NO_DRIVER ${LANG_DUTCH} \
-     "Deze ${APP_NAME} versie heeft de JACK Audio Connection Kit nodig om te functioneren, en we hebben deze niet op uw PC gevonden. U dient deze te zelf te installeren. Wilt u nog steeds verder gaan met de installatie van ${APP_NAME}?"
+     "Deze ${APP_NAME} versie heeft de JACK Audio Connection Kit nodig om te functioneren, en we hebben deze niet op uw PC gevonden. U dient deze eerst zelf te installeren. Wilt u nog steeds verder gaan met de installatie van ${APP_NAME} zonder eerst JACK te installeren?"

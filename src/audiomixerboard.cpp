@@ -707,7 +707,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     if ( cChanInfo.eCountry != QLocale::AnyCountry )
     {
 #if QT_VERSION >= 0x060000
-        QLocale::Country eC = CLocale::LocaleQt5toQt6( cChanInfo.eCountry );
+        QLocale::Country eC = CLocale::LocaleQt5toQt6 ( cChanInfo.eCountry );
 #else
         QLocale::Country eC = cChanInfo.eCountry;
 #endif

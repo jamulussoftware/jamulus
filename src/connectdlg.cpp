@@ -383,7 +383,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
         {
 #if QT_VERSION >= 0x060000
-            QString strCountryToString = QLocale::countryToString ( CLocale::LocaleQt5toQt6( vecServerInfo[iIdx].eCountry ) );
+            QString strCountryToString = QLocale::countryToString ( CLocale::LocaleQt5toQt6 ( vecServerInfo[iIdx].eCountry ) );
 #else
             QString strCountryToString = QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
 #endif
@@ -462,7 +462,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress& InetAddr, const CVect
             {
                 // try to load the country flag icon
 #if QT_VERSION >= 0x060000
-                QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( CLocale::LocaleQt5toQt6( vecChanInfo[i].eCountry ) ) );
+                QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( CLocale::LocaleQt5toQt6 ( vecChanInfo[i].eCountry ) ) );
 #else
                 QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
 #endif

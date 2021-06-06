@@ -111,7 +111,7 @@ jobs:
            - config_name:           MacOS (codeQL)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 6.1.0"
+             cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 5.15.4"
              cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
              cmd3_postbuild:        false
              uses_codeql:           true
@@ -119,7 +119,7 @@ jobs:
            - config_name:           MacOS (artifacts)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 6.1.0"
+             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.4"
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
@@ -145,11 +145,11 @@ jobs:
 
       # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x
       # This is done by selecting Xcode 11.7 instead of the latest default of 12.x
-#      - name:                       Select Xcode version for Mac
-#        if:                         ${{ matrix.config.target_os == 'macos' }}
-#        uses:                       maxim-lobanov/setup-xcode@v1
-#        with:
-#          xcode-version: '11.7'
+      - name:                       Select Xcode version for Mac
+        if:                         ${{ matrix.config.target_os == 'macos' }}
+        uses:                       maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '11.7'
 
       # Checkout code
       - name:                       Checkout code

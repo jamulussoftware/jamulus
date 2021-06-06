@@ -927,7 +927,7 @@ void CClient::Init()
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
-    fMuteOutStreamGain = 1.0f;
+    //fMuteOutStreamGain = 1.0f;
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iOPUSFrameSizeSamples ) ) );

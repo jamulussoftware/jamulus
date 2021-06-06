@@ -102,7 +102,7 @@ jobs:
 
            - config_name:           Linux (artifacts+codeQL)
              target_os:             linux
-             building_on_os:        ubuntu-18.04
+             building_on_os:        ubuntu-20.04
              cmd1_prebuild:         "sh ./autobuild/linux/autobuild_deb_1_prepare.sh" # this step needs sh instead of bash for permissions
              cmd2_build:            "./autobuild/linux/autobuild_deb_2_build.sh"
              cmd3_postbuild:        "./autobuild/linux/autobuild_deb_3_copy_files.sh"
@@ -111,7 +111,7 @@ jobs:
            - config_name:           MacOS (codeQL)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 5.15.2"
+             cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 6.1.0"
              cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
              cmd3_postbuild:        false
              uses_codeql:           true
@@ -119,7 +119,7 @@ jobs:
            - config_name:           MacOS (artifacts)
              target_os:             macos
              building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
+             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 6.1.0"
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false

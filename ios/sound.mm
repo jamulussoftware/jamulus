@@ -249,7 +249,7 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Init exception ...." ); //This try-catch seems to fix Connect button crash
+        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
     }
     
     return iCoreAudioBufferSizeMono;
@@ -259,35 +259,54 @@ void CSound::Start()
 {
     // call base class
     CSoundBase::Start();
-    OSStatus err = AudioOutputUnitStart(audioUnit);
-    checkStatus(err);
+    try
+    {
+        OSStatus err = AudioOutputUnitStart(audioUnit);
+        checkStatus(err);
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
+    }
 }
 
 void CSound::Stop()
 {
-    OSStatus err = AudioOutputUnitStop(audioUnit);
-    checkStatus(err);
+    try{
+        OSStatus err = AudioOutputUnitStop(audioUnit);
+        checkStatus(err);
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
+    }
     // call base class
     CSoundBase::Stop();
 }
 
 void CSound::SetInputDeviceId( int deviceid )
 {
-    NSError *error = nil;
-    bool builtinmic = true;
-    
-    if (deviceid==0) builtinmic = false; //try external device
+    try
+    {
+        NSError *error = nil;
+        bool builtinmic = true;
+        
+        if (deviceid==0) builtinmic = false; //try external device
 
-    AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
-    //assumming iOS only has max 2 inputs: 0 for builtin mic and 1 for external device
-    if ( builtinmic )
-    {
-        [sessionInstance setPreferredInput:sessionInstance.availableInputs[0] error:&error];
+        AVAudioSession *sessionInstance = [AVAudioSession sharedInstance];
+        //assumming iOS only has max 2 inputs: 0 for builtin mic and 1 for external device
+        if ( builtinmic )
+        {
+            [sessionInstance setPreferredInput:sessionInstance.availableInputs[0] error:&error];
+        }
+        else
+        {
+            unsigned long lastInput = sessionInstance.availableInputs.count - 1;
+            [sessionInstance setPreferredInput:sessionInstance.availableInputs[lastInput] error:&error];
+        }
     }
-    else
+    catch ( const CGenErr& generr )
     {
-        unsigned long lastInput = sessionInstance.availableInputs.count - 1;
-        [sessionInstance setPreferredInput:sessionInstance.availableInputs[lastInput] error:&error];
+        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
     }
-    //TODO - error checking
 }

@@ -109,6 +109,51 @@ win32 {
         INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
         LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
     }
+} else:win64 {
+    DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
+    DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
+    HEADERS += windows/sound.h
+    SOURCES += windows/sound.cpp \
+        windows/ASIOSDK2/common/asio.cpp \
+        windows/ASIOSDK2/host/asiodrivers.cpp \
+        windows/ASIOSDK2/host/pc/asiolist.cpp
+    RC_FILE = windows/mainicon.rc
+    INCLUDEPATH += windows/ASIOSDK2/common \
+        windows/ASIOSDK2/host \
+        windows/ASIOSDK2/host/pc
+    mingw* {
+        LIBS += -lole64 \
+            -luser64 \
+            -ladvapi64 \
+            -lwinmm \
+            -lws2_64
+    } else {
+        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/jamulussoftware/jamulus/issues/93
+        LIBS += ole64.lib \
+            user64.lib \
+            advapi64.lib \
+            winmm.lib \
+            ws2_64.lib
+    }
+
+    # replace ASIO with jack if requested
+    contains(CONFIG, "jackonwindows") {
+        message(Using Jack instead of ASIO.)
+
+        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
+            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+        }
+
+        HEADERS -= windows/sound.h
+        SOURCES -= windows/sound.cpp
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+        DEFINES += WITH_JACK
+        DEFINES += JACK_REPLACES_ASIO
+        DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
+        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
+        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
+    }
 } else:macx {
     contains(CONFIG, "server_bundle") {
         message(The generated application bundle will run a server instance.)

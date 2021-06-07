@@ -78,6 +78,10 @@ public:
 
 protected:
     void Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
+    quint16 iPortNumber_;
+    quint16 iQosNumber_;
+    QString strServerBindIP_;
+    bool bIsInitRan;
 
 #ifdef _WIN32
     SOCKET UdpSocket;

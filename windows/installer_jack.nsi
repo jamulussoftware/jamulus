@@ -1,5 +1,5 @@
 ; Jamulus NSIS Installer with Modern User Interface
-; Installer is build with support for JACK on Windows
+; Installer for Jamulus with support for JACK on Windows
 
 ; Includes
 !include "x64.nsh"                             ; 64bit architecture support

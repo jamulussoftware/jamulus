@@ -45,6 +45,12 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
     const char tos = (char) iQosNumber; // Quality of Service
     setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof ( tos ) );
 
+#ifdef Q_OS_IOS
+    //ignore the broken pipe signal to avoid crash (iOS)
+    int valueone = 1;
+    setsockopt(UdpSocket, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof(valueone));
+#endif
+    
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 

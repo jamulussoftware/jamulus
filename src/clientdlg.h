@@ -53,7 +53,9 @@
 #include "ui_clientdlgbase.h"
 #if defined( __APPLE__ ) || defined( __MACOSX )
 #    if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
-#        include <QtMac>
+#       if QT_VERSION < QT_VERSION_CHECK( 6, 0, 0 )
+#          include <QtMac>
+#       endif
 #    endif
 #endif
 

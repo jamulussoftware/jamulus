@@ -13,4 +13,4 @@ echo "Update system..."
 sudo apt-get -qq update
 
 echo "Install dependencies..."
-sudo apt-get -qq -y install devscripts build-essential debhelper libjack-jackd2-dev qt6-qtbase-dev qt6-qttools-dev-tools
+sudo apt-get -qq -y install devscripts build-essential debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools

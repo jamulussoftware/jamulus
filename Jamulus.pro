@@ -122,7 +122,7 @@ win32 {
         RC_FILE = mac/mainicon.icns
     }
 
-    QT += macextras
+    #QT += macextras
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
     HEADERS += mac/activity.h

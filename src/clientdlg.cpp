@@ -917,12 +917,12 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     if ( iNumClients > 1 )
     {
         // show the number of connected clients
-        QtMac::setBadgeLabelText ( QString ( "%1" ).arg ( iNumClients ) );
+        NSApp.dockTile.badgeLabel ( QString ( "%1" ).arg ( iNumClients ) );
     }
     else
     {
         // clear the text (apply an empty string)
-        QtMac::setBadgeLabelText ( "" );
+        NSApp.dockTile.badgeLabel ( "" );
     }
 #    endif
 #endif

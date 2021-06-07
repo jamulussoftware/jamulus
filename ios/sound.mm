@@ -124,15 +124,22 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     CSoundBase ( "CoreAudio iOS", fpNewProcessCallback, arg, strMIDISetup ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
-    NSError *audioSessionError = nil;
-  
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
-    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        if (granted) {
-            // ok
-        }
-    }];
-    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
+    try
+    {
+        NSError *audioSessionError = nil;
+      
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+            if (granted) {
+                // ok
+            }
+        }];
+        [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound exception ...." ); // This try-catch seems to fix Connect button crash
+    }
     isInitialized = false;
 }
 
@@ -266,7 +273,7 @@ void CSound::Start()
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
+        qDebug ( "Sound Start exception ...." ); // This try-catch seems to fix Connect button crash
     }
 }
 
@@ -278,7 +285,7 @@ void CSound::Stop()
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
+        qDebug ( "Sound Stop exception ...." ); // This try-catch seems to fix Connect button crash
     }
     // call base class
     CSoundBase::Stop();
@@ -307,6 +314,6 @@ void CSound::SetInputDeviceId( int deviceid )
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
+        qDebug ( "Sound dev change exception ...." ); // This try-catch seems to fix Connect button crash
     }
 }

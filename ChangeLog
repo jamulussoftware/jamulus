@@ -1,7 +1,15 @@
 
 ### 3.8.0dev <- NOTE: the release version number will be 3.8.1 ###
 
+- CLI: Jamulus now shows a link to the Website for translated content (#1759).
+  (contributed by @henkdegroot)
+  
+- Client: JACK support on Windows has been improved (#1718).
+  (contributed by @jujudusud, @henkdegroot)
 
+- Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722).
+  (contrbuted by @henkdegroot)
+  
 ### 3.8.0 (2021-06-02) ###
 
 - The term "Central server" has been replaced with "Directory server" (#1407, #1715, #1629).

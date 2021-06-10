@@ -14,17 +14,16 @@
         <string>@FULL_VERSION@</string>
         <key>CFBundleShortVersionString</key>
 	    <string>@SHORT_VERSION@</string>
-        <key>CFBundleExecutable</key>
         <key>LSApplicationCategoryType</key>
 	    <string>public.app-category.music</string>
+        <key>CFBundleExecutable</key>
         <string>@EXECUTABLE@</string>
         <key>CFBundleDevelopmentRegion</key>
         <string>en</string>
         <key>CFBundleIconFile</key>
         <string>@ICON@</string>
         <key>CFBundleGetInfoString</key>
-        <string>Created by Qt/QMake</string>
-
+        <string>Jamulus</string>
         <key>NSPrincipalClass</key>
         <string>NSApplication</string>
         <key>NSMicrophoneUsageDescription</key>

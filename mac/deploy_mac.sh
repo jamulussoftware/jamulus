@@ -29,7 +29,7 @@ build_app()
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
     # Add Qt deployment dependencies
-    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="Developer ID Application: Bolton Technology Consulting Ltd. (ENJ2T4A3FZ)"
     mv "${build_path}/${target_name}.app" "${deploy_path}"
 
     # Cleanup

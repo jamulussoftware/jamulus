@@ -12,6 +12,8 @@
         <string>APPL</string>
         <key>CFBundleVersion</key>
         <string>@FULL_VERSION@</string>
+        <key>CFBundleShortVersionString</key>
+	    <string>@SHORT_VERSION@</string>
         <key>CFBundleExecutable</key>
         <string>@EXECUTABLE@</string>
         <key>CFBundleDevelopmentRegion</key>

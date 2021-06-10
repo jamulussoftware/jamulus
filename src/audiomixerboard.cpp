@@ -1028,7 +1028,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
         {
             iMyFader = i;
         }
-        
+
         if ( eChSortType == ST_BY_NAME )
         {
             PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );

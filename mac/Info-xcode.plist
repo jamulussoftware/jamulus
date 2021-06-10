@@ -21,7 +21,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>${QMAKE_SHORT_VERSION}</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>${QMAKE_FULL_VERSION}</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Jamulus needs access to the microphone to record and stream your music to other musicians</string>
 	<key>NSPrincipalClass</key>

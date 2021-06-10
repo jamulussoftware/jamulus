@@ -130,9 +130,11 @@ win32 {
         TARGET = $${TARGET}Server
         MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
         RC_FILE = mac/jamulus-server-icon-2020.icns
+        OSX_ENTITLEMENTS.files = JamulusServer.entitlements
     } else {
         MACOSX_BUNDLE_ICON_FILE = mainicon.icns
         RC_FILE = mac/mainicon.icns
+        OSX_ENTITLEMENTS.files = Jamulus.entitlements
     }
 
     QT += macextras
@@ -156,6 +158,7 @@ win32 {
         XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
         XCODE_ENTITLEMENTS.value = Jamulus.entitlements
         QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
+        ICON = mac/mainicon.icns
     } else {
         QMAKE_INFO_PLIST = mac/Info-make.plist
     }

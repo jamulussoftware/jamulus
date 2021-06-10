@@ -22,6 +22,8 @@
 	<string>${QMAKE_SHORT_VERSION}</string>
 	<key>CFBundleVersion</key>
 	<string>${QMAKE_FULL_VERSION}</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.music</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Jamulus needs access to the microphone to record and stream your music to other musicians</string>
 	<key>NSPrincipalClass</key>

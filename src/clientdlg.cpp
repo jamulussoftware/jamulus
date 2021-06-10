@@ -304,6 +304,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
+    QAction* OwnFaderFirstAction =
+        pEditMenu->addAction ( tr ( "O&wn Fader First" ), this, SLOT ( OnOwnFaderFirst() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
+
+    pEditMenu->addSeparator();
+
     QAction* NoSortAction =
         pEditMenu->addAction ( tr ( "N&o User Sorting" ), this, SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
 
@@ -320,6 +325,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QAction* ByCityAction =
         pEditMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
+
+    OwnFaderFirstAction->setCheckable( true );
+    OwnFaderFirstAction->setChecked( pSettings->bOwnFaderFirst );
 
     // the sorting menu entries shall be checkable and exclusive
     QActionGroup* SortActionGroup = new QActionGroup ( this );

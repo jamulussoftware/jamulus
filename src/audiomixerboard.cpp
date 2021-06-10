@@ -1020,7 +1020,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     // create a pair list of lower strings and fader ID for each channel
     QList<QPair<QString, int>> PairList;
     int                        iNumVisibleFaders = 0;
-    int                        iMyFader = -1;
+    int                        iMyFader          = -1;
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -1074,12 +1074,15 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
     std::stable_sort ( PairList.begin(), PairList.end() );
 
     // move my fader to first position
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    if ( pSettings->bOwnFaderFirst )
     {
-        if ( iMyFader == PairList[i].second )
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
-            PairList.move ( i, 0 );
-            break;
+            if ( iMyFader == PairList[i].second )
+            {
+                PairList.move ( i, 0 );
+                break;
+            }
         }
     }
 

@@ -104,6 +104,7 @@ protected:
     bool           bConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
+    bool           bOwnFaderFirst;
     ERecorderState eLastRecorderState;
     EGUIDesign     eLastDesign;
     QTimer         TimerSigMet;
@@ -156,6 +157,7 @@ public slots:
     void OnOpenAdvancedSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
+    void OnOwnFaderFirst() { pSettings->bOwnFaderFirst = ! pSettings->bOwnFaderFirst; MainMixerBoard->SetFaderSorting( pSettings->eChannelSortType ); }
     void OnNoSortChannels() { MainMixerBoard->SetFaderSorting ( ST_NO_SORT ); }
     void OnSortChannelsByName() { MainMixerBoard->SetFaderSorting ( ST_BY_NAME ); }
     void OnSortChannelsByInstrument() { MainMixerBoard->SetFaderSorting ( ST_BY_INSTRUMENT ); }

@@ -133,6 +133,7 @@ public:
         bWindowWasShownSettings ( false ),
         bWindowWasShownChat ( false ),
         bWindowWasShownConnect ( false ),
+        bOwnFaderFirst ( false ),
         pClient ( pNCliP )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
@@ -166,6 +167,7 @@ public:
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
+    bool       bOwnFaderFirst;
 
 protected:
     // No CommandLineOptions used when reading Client inifile

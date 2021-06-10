@@ -304,7 +304,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
-    // own fader first option: works from server version 3.5.5 which support OnClientIDReceived
+    // own fader first option: works from server version 3.5.5 which supports sending client ID back to client
     QAction* OwnFaderFirstAction =
         pEditMenu->addAction ( tr ( "O&wn Fader First" ), this, SLOT ( OnOwnFaderFirst() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
 

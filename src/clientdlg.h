@@ -159,8 +159,8 @@ public slots:
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnOwnFaderFirst()
     {
-        pSettings->bOwnFaderFirst = ! pSettings->bOwnFaderFirst;
-        MainMixerBoard->SetFaderSorting( pSettings->eChannelSortType );
+        pSettings->bOwnFaderFirst = !pSettings->bOwnFaderFirst;
+        MainMixerBoard->SetFaderSorting ( pSettings->eChannelSortType );
     }
     void OnNoSortChannels() { MainMixerBoard->SetFaderSorting ( ST_NO_SORT ); }
     void OnSortChannelsByName() { MainMixerBoard->SetFaderSorting ( ST_BY_NAME ); }

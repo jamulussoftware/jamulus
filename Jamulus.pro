@@ -141,11 +141,21 @@ win32 {
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
+    #QMAKE_PROVISIONING_PROFILE = 
+    #QMAKE_DEVELOPMENT_TEAM = 
+
+    OSX_ENTITLEMENTS.files = Jamulus.entitlements
+    OSX_ENTITLEMENTS.path = Contents/Resources 
+    QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
+    
     macx-xcode {
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
+        XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+        XCODE_ENTITLEMENTS.value = Jamulus.entitlements
+        QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
     } else {
         QMAKE_INFO_PLIST = mac/Info-make.plist
     }
@@ -184,7 +194,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework CoreFoundation \
         -framework CoreServices \

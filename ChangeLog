@@ -8,8 +8,11 @@
   (contributed by @jujudusud, @henkdegroot)
 
 - Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722).
-  (contrbuted by @henkdegroot)
-  
+  (contributed by @henkdegroot)
+
+- Bug Fix: Mute myself has been made more consistent (#1838).
+  (contributed by @ngocdh)
+
 ### 3.8.0 (2021-06-02) ###
 
 - The term "Central server" has been replaced with "Directory server" (#1407, #1715, #1629).

@@ -922,6 +922,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
     case PROTMESSID_CLM_REGISTER_SERVER_RESP:
         EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
         break;
+
+    case PROTMESSID_CLM_REQ_SERVER_STATUS:
+        EvaluateCLReqServerStatus( InetAddr );
+        break;
     }
 }
 
@@ -1716,6 +1720,32 @@ void CProtocol::CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr, co
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS, vecData, InetAddr );
 }
 
+/**
+* Send json encoded server status
+*/
+
+void CProtocol::CreateCLServerStatusMes ( const CHostAddress& InetAddr, const QString strServerStatus )
+{
+    int iPos = 0; // init position pointer
+
+    // convert server info to utf-8
+    const QByteArray strUTF8ServerStatus = strServerStatus.toUtf8();
+
+    const int iEntrLen = 2 + strUTF8ServerStatus.size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // Server status
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8ServerStatus );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_STATUS, vecData, InetAddr );
+
+}
+
+
+
+
 bool CProtocol::EvaluateCLPingWithNumClientsMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData )
 {
     int iPos = 0; // init position pointer
@@ -2491,6 +2521,13 @@ bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
 
     return false; // no error
 }
+
+bool CProtocol::EvaluateCLReqServerStatus( const CHostAddress& InetAddr )
+{
+    emit CLReqServerStatus( InetAddr );
+    return false;
+}
+
 
 void CProtocol::CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients )
 {

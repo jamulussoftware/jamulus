@@ -84,6 +84,9 @@
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 #define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
 
+#define PROTMESSID_CLM_REQ_SERVER_STATUS      1020 // request server status
+#define PROTMESSID_CLM_SERVER_STATUS          1021 // server status response
+
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages
 
@@ -153,6 +156,8 @@ void CreateReqChannelLevelListMes();
     void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
+    void CreateCLServerStatusMes ( const CHostAddress& InetAddr, const QString strServerStatus );
+
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -265,6 +270,7 @@ protected:
     bool EvaluateCLReqVersionAndOSMes ( const CHostAddress& InetAddr );
     bool EvaluateCLConnClientsListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
+    bool EvaluateCLReqServerStatus ( const CHostAddress& InetAddr );
     bool EvaluateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData );
 
@@ -331,6 +337,7 @@ signals:
     void CLReqVersionAndOS ( CHostAddress InetAddr );
     void CLConnClientsListMesReceived ( CHostAddress InetAddr, CVector<CChannelInfo> vecChanInfo );
     void CLReqConnClientsList ( CHostAddress InetAddr );
+    void CLReqServerStatus ( CHostAddress InetAddr );
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
     void CLRegisterServerResp ( CHostAddress InetAddr, ESvrRegResult eStatus );
 };

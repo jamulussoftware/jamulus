@@ -89,6 +89,7 @@ int main ( int argc, char** argv )
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
+    QString      strNotifyServer             = "";
 
 #if !defined( HEADLESS ) && defined( _WIN32 )
     if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
@@ -437,6 +438,18 @@ int main ( int argc, char** argv )
             continue;
         }
 
+
+        // Notification Server  xxx.xxx.xxx.xxx:ppp-----------------------------
+        if ( GetStringArgument ( argc, argv, i, "--notifyserver", "--notifyserver", strArgument ) )
+        {
+
+            strNotifyServer = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- notify server: %1" ).arg ( strNotifyServer ) );
+            CommandLineOptions << "--notifyserver";
+            continue;
+        }
+
+
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) || ( !strcmp ( argv[i], "-v" ) ) )
         {
@@ -645,6 +658,7 @@ int main ( int argc, char** argv )
                              iPortNumber,
                              iQosNumber,
                              strHTMLStatusFileName,
+                             strNotifyServer,
                              strCentralServer,
                              strServerInfo,
                              strServerPublicIP,
@@ -771,6 +785,7 @@ QString UsageArguments ( char** argv )
            "                        running a slave and your own directory server\n"
            "                        behind the same NAT\n"
            "      --serverbindip    specify the IP address the server will bind to\n"
+           "      --notifyserver    specify server to receive UDP notifications IP:PORT\n"
            "\n"
            "Client only:\n"
            "  -M, --mutestream      starts the application in muted state\n"

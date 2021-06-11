@@ -51,6 +51,8 @@ public:
 public slots:
     void OnSendText();
     void OnLocalInputTextTextChanged ( const QString& strNewText );
+    void OnLocalInputTextMultilineTextChanged();
+    void OnInputModeAction();
     void OnClearChatHistory();
     void OnAnchorClicked ( const QUrl& Url );
 

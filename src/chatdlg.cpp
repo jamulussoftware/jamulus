@@ -35,7 +35,7 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
 
     txvChatWindow->setAccessibleName ( tr ( "Chat history" ) );
 
-    // input message text
+    // single-line input message text
     edtLocalInputText->setWhatsThis ( "<b>" + tr ( "Input Message Text" ) + ":</b> " +
                                       tr ( "Enter the chat message text in the edit box and press enter to send the "
                                            "message to the server which distributes the message to all connected "
@@ -43,22 +43,48 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
 
     edtLocalInputText->setAccessibleName ( tr ( "New chat text edit box" ) );
 
-    // clear chat window and edit line
+    // multiline input message text
+    edtLocalInputTextMultiline->setWhatsThis ( "<b>" + tr ( "Multiline Input Message Text" ) + ":</b> " +
+                                               tr ( "Enter the chat message text in the edit box and press ctrl+enter to send the "
+                                                    "message to the server which distributes the message to all connected "
+                                                    "clients. Your message will then show up in the chat window." ) );
+
+    edtLocalInputTextMultiline->setAccessibleName ( tr ( "New multiline chat text edit box" ) );
+
+    // clear chat window and edit line / multiline edit line
     txvChatWindow->clear();
     edtLocalInputText->clear();
+    edtLocalInputTextMultiline->clear();
 
     // we do not want to show a cursor in the chat history
     txvChatWindow->setCursorWidth ( 0 );
 
     // set a placeholder text to make sure where to type the message in (#384)
     edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+    edtLocalInputTextMultiline->setPlaceholderText ( tr ( "Type a message here" ) );
+
+    // hide the multiline input
+    edtLocalInputTextMultiline->hide();
 
     // Menu  -------------------------------------------------------------------
     QMenuBar* pMenu     = new QMenuBar ( this );
+    QMenu*    pViewMenu = new QMenu ( tr ( "&View" ), this );
     QMenu*    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
+
+    QAction* InputModeAction =
+        pViewMenu->addAction ( tr ( "&Multiline Input Mode" ), this, SLOT ( OnInputModeAction() ), QKeySequence ( Qt::CTRL + Qt::Key_M ) );
+    InputModeAction->setCheckable ( true );
 
     pEditMenu->addAction ( tr ( "Cl&ear Chat History" ), this, SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
 
+    // create action so Ctrl+Return sends a message
+    QAction* SendAction = new QAction ( this );
+    SendAction->setAutoRepeat ( false );
+    SendAction->setShortcut ( tr ( "Ctrl+Return" ) );
+    connect ( SendAction, SIGNAL ( triggered() ), this, SLOT ( OnSendText() ) );
+    this->addAction ( SendAction );
+
+    pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
 #if defined( Q_OS_IOS )
     QAction* action = pMenu->addAction ( tr ( "&Close" ) );
@@ -70,6 +96,8 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
 
     // Connections -------------------------------------------------------------
     QObject::connect ( edtLocalInputText, &QLineEdit::textChanged, this, &CChatDlg::OnLocalInputTextTextChanged );
+
+    QObject::connect ( edtLocalInputTextMultiline, &QPlainTextEdit::textChanged, this, &CChatDlg::OnLocalInputTextMultilineTextChanged );
 
     QObject::connect ( butSend, &QPushButton::clicked, this, &CChatDlg::OnSendText );
 
@@ -86,13 +114,67 @@ void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
     }
 }
 
+void CChatDlg::OnLocalInputTextMultilineTextChanged()
+{
+    // check and correct length
+    if ( edtLocalInputTextMultiline->toPlainText().length() > MAX_LEN_CHAT_TEXT )
+    {
+        // text is too long, update control with shortened text
+        edtLocalInputTextMultiline->setPlainText ( edtLocalInputTextMultiline->toPlainText().left ( MAX_LEN_CHAT_TEXT ) );
+
+        // move cursor to the end
+        QTextCursor cursor ( edtLocalInputTextMultiline->textCursor() );
+        cursor.movePosition ( QTextCursor::End, QTextCursor::MoveAnchor );
+        edtLocalInputTextMultiline->setTextCursor ( cursor );
+    }
+}
+
 void CChatDlg::OnSendText()
 {
-    // send new text and clear line afterwards, do not send an empty message
-    if ( !edtLocalInputText->text().isEmpty() )
+    // send new text from whichever input is visible
+    if ( edtLocalInputText->isVisible() )
     {
-        emit NewLocalInputText ( edtLocalInputText->text() );
+        // do not send an empty message
+        if ( !edtLocalInputText->text().isEmpty() )
+        {
+            // send text and clear line afterwards
+            emit NewLocalInputText ( edtLocalInputText->text() );
+            edtLocalInputText->clear();
+            edtLocalInputText->setFocus();
+        }
+    }
+    else
+    {
+        // do not send an empty message
+        if ( !edtLocalInputTextMultiline->toPlainText().isEmpty() )
+        {
+            // send text and clear multiline input afterwards
+            emit NewLocalInputText ( edtLocalInputTextMultiline->toPlainText() );
+            edtLocalInputTextMultiline->clear();
+            edtLocalInputTextMultiline->setFocus();
+        }
+    }
+}
+
+void CChatDlg::OnInputModeAction()
+{
+    // switch between single-line and multiline input
+    if ( edtLocalInputText->isVisible() )
+    {
+        // show multiline input only
+        edtLocalInputText->hide();
+        edtLocalInputTextMultiline->setPlainText ( edtLocalInputText->text() );
+        edtLocalInputTextMultiline->show();
+        edtLocalInputTextMultiline->setFocus();
         edtLocalInputText->clear();
+    }
+    else
+    {
+        // show single-line input only
+        edtLocalInputTextMultiline->hide();
+        edtLocalInputText->show();
+        edtLocalInputText->setFocus();
+        edtLocalInputTextMultiline->clear();
     }
 }
 

@@ -14,6 +14,10 @@
         <string>@FULL_VERSION@</string>
         <key>CFBundleShortVersionString</key>
 	    <string>@SHORT_VERSION@</string>
+        <key>CFBundleSupportedPlatforms</key>
+	    <array>
+		    <string>MacOSX</string>
+        </array>
         <key>LSApplicationCategoryType</key>
 	    <string>public.app-category.music</string>
         <key>CFBundleExecutable</key>
@@ -23,7 +27,7 @@
         <key>CFBundleIconFile</key>
         <string>@ICON@</string>
         <key>CFBundleGetInfoString</key>
-        <string>Jamulus</string>
+        <string>Jamulus - Created with QT</string>
         <key>NSPrincipalClass</key>
         <string>NSApplication</string>
         <key>NSMicrophoneUsageDescription</key>

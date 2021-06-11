@@ -2,32 +2,36 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleExecutable</key>
-	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Jamulus</string>
-	<key>CFBundleIconFile</key>
-	<string>mainicon.icns</string>
-	<key>CFBundleIdentifier</key>
-	<string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
 	<key>CFBundleName</key>
 	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleDisplayName</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleIdentifier</key>
+	<string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>${QMAKE_SHORT_VERSION}</string>
 	<key>CFBundleVersion</key>
 	<string>${QMAKE_FULL_VERSION}</string>
+	<key>CFBundleShortVersionString</key>
+	<string>${QMAKE_SHORT_VERSION}</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Jamulus needs access to the microphone to record and stream your music to other musicians</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleIconFile</key>
+	<string>mainicon.icns</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Jamulus - Created with QT</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Jamulus needs access to the microphone to record and stream your music to other musicians</string>
 	<key>NSRequiresAquaSystemAppearance</key>
 	<string>true</string>
 </dict>

@@ -104,7 +104,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
     {
-        throw CGenErr ( QString ( tr ( "Can't activate the JACK client. This is a probably an error with JACK. Please check the JACK output." ) )
+        throw CGenErr ( QString ( tr ( "Can't activate the JACK client. This is probably an error with JACK. Please check the JACK output." ) )
                             .arg ( APP_NAME ) );
     }
 

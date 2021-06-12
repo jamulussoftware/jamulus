@@ -53,7 +53,7 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
 #ifdef Q_OS_IOS
     //ignore the broken pipe signal to avoid crash (iOS)
     int valueone = 1;
-    setsockopt(UdpSocket, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof(valueone));
+    setsockopt ( UdpSocket, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof ( valueone ) );
 #endif
     
     // allocate memory for network receive and send buffer in samples
@@ -202,23 +202,11 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
         UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
         UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
-        if (
-            sendto ( UdpSocket,
-                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                     iVecSizeOut,
-                     0,
-                     (sockaddr*) &UdpSocketOutAddr,
-                     sizeof ( sockaddr_in ) )
-            < 0 )
+        if ( sendto ( UdpSocket, ( const char* ) &( ( CVector<uint8_t> ) vecbySendBuf )[0], iVecSizeOut, 0, ( sockaddr* ) &UdpSocketOutAddr, sizeof ( sockaddr_in ) ) < 0 )
         {
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
             Init( iPortNumber_, iQosNumber_, strServerBindIP_ ); // reinit
-            sendto ( UdpSocket,
-                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                     iVecSizeOut,
-                     0,
-                     (sockaddr*) &UdpSocketOutAddr,
-                    sizeof ( sockaddr_in ) );
+            sendto ( UdpSocket, ( const char* ) &( ( CVector<uint8_t> ) vecbySendBuf )[0], iVecSizeOut, 0, (sockaddr*) &UdpSocketOutAddr, sizeof ( sockaddr_in ) );
         }
     }
 }

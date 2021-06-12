@@ -1,0 +1,20 @@
+name: Coding Style Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  clang-format:
+    name: Verify Clang-Format compliance
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: DoozyX/clang-format-lint-action@2a28e3a8d9553f244243f7e1ff94f6685dff87be
+      with:
+        clangFormatVersion: 10
+        extensions: 'cpp,h'

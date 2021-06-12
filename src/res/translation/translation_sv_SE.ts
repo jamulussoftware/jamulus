@@ -724,38 +724,63 @@
         <translation>LED-indikator för buffertstatus</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="198"/>
-        <location filename="../../clientdlg.cpp" line="1196"/>
+        <location filename="../../clientdlg.cpp" line="186"/>
+        <source>Current Connection Status Parameter</source>
+        <translation type="unfinished">Parameter för aktuell anslutningsstatus</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="189"/>
+        <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
+        <translation type="unfinished">Ping-tiden är den tid som krävs för ljudströmmen att resa från klienten till servern och tillbaka igen. Denna fördröjning införs av nätverket och bör vara cirka 20-30 ms. Om denna fördröjning är högre än cirka 50 ms är ditt avstånd till servern för stort eller din internetanslutning är inte tillräcklig.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="196"/>
+        <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
+        <translation type="unfinished">Övergripande fördröjning beräknas utifrån den aktuella Ping-tiden och den fördröjning som införts av de aktuella buffertinställningarna.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="204"/>
+        <source>If this LED indicator turns red, you will not have much fun using the </source>
+        <translation type="unfinished">Om den här LED-indikatorn blir röd kommer du inte ha så kul med att använda </translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="206"/>
+        <source> software.</source>
+        <translation type="unfinished"> applikationen.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="226"/>
+        <location filename="../../clientdlg.cpp" line="1224"/>
         <source>C&amp;onnect</source>
         <translation>A&amp;nslut</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="231"/>
+        <location filename="../../clientdlg.cpp" line="259"/>
         <source>software upgrade available</source>
         <translation>mjukvaruuppdatering tillgänglig</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="247"/>
+        <location filename="../../clientdlg.cpp" line="275"/>
         <source>&amp;File</source>
         <translation>&amp;Arkiv</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="258"/>
+        <location filename="../../clientdlg.cpp" line="286"/>
         <source>&amp;View</source>
         <translation>&amp;Visa</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="260"/>
+        <location filename="../../clientdlg.cpp" line="288"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Anslutningsinställningar...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="264"/>
+        <location filename="../../clientdlg.cpp" line="292"/>
         <source>My &amp;Profile...</source>
         <translation>Min &amp;profil...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="262"/>
+        <location filename="../../clientdlg.cpp" line="290"/>
         <source>C&amp;hat...</source>
         <translation>&amp;Chatt...</translation>
     </message>
@@ -764,17 +789,17 @@
         <translation type="vanished">&amp;Inställningar...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="273"/>
+        <location filename="../../clientdlg.cpp" line="301"/>
         <source>&amp;Analyzer Console...</source>
         <translation>Analys&amp;konsol...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="280"/>
+        <location filename="../../clientdlg.cpp" line="308"/>
         <source>N&amp;o User Sorting</source>
         <translation>Ingen kanals&amp;ortering</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="294"/>
+        <location filename="../../clientdlg.cpp" line="322"/>
         <source>Sort Users by &amp;City</source>
         <translation>Sortera användarna efter S&amp;tad</translation>
     </message>
@@ -783,38 +808,38 @@
         <translation type="vanished">Dela upp &amp;mixerpanelen i två rader</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="333"/>
+        <location filename="../../clientdlg.cpp" line="361"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>&amp;Rensa alla lagrade solo och tystade inställningar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="340"/>
+        <location filename="../../clientdlg.cpp" line="368"/>
         <source>Auto-Adjust all &amp;Faders</source>
         <translatorcomment>Möjligtvis annat ordval skulle vara bättre.</translatorcomment>
         <translation>Justera alla &amp;mixers automatiskt</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="907"/>
+        <location filename="../../clientdlg.cpp" line="935"/>
         <source>Connect</source>
         <translation>Anslut</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="919"/>
+        <location filename="../../clientdlg.cpp" line="947"/>
         <source>Settings</source>
         <translation>Inställningar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="929"/>
+        <location filename="../../clientdlg.cpp" line="957"/>
         <source>Chat</source>
         <translation>Chatt</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1005"/>
+        <location filename="../../clientdlg.cpp" line="1033"/>
         <source>Enable feedback detection</source>
         <translation>Aktivera återkopplingsdetektering</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1008"/>
+        <location filename="../../clientdlg.cpp" line="1036"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
@@ -823,12 +848,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen lös problemet med ljudåterkopplingen först och slå sedan på dittt ljud igen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1093"/>
+        <location filename="../../clientdlg.cpp" line="1121"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation>Ditt ljudkort fungerar inte korrekt. Öppna inställningar och kontrollera enhetsvalet och drivrutinsinställningarna.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1111"/>
+        <location filename="../../clientdlg.cpp" line="1139"/>
         <source>Ok</source>
         <translation>Okej</translation>
     </message>
@@ -837,52 +862,52 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">&amp;Rensa alla lagrade soloinställningar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="335"/>
+        <location filename="../../clientdlg.cpp" line="363"/>
         <source>Set All Faders to New Client &amp;Level</source>
         <translation>&amp;Ställ in alla mixers till ny klientnivå</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="255"/>
+        <location filename="../../clientdlg.cpp" line="283"/>
         <source>E&amp;xit</source>
         <translation>&amp;Avsluta</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="249"/>
+        <location filename="../../clientdlg.cpp" line="277"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>&amp;Ladda in mixerkanalinställningarna...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="251"/>
+        <location filename="../../clientdlg.cpp" line="279"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>&amp;Spara mixerkanalinställningarna...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="266"/>
+        <location filename="../../clientdlg.cpp" line="294"/>
         <source>Audio/Network &amp;Settings...</source>
         <translation>Ljud och nätverks&amp;inställningar...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="268"/>
+        <location filename="../../clientdlg.cpp" line="296"/>
         <source>A&amp;dvanced Settings...</source>
         <translation>A&amp;vancerade inställningar...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="277"/>
+        <location filename="../../clientdlg.cpp" line="305"/>
         <source>&amp;Edit</source>
         <translation>&amp;Redigera</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="283"/>
+        <location filename="../../clientdlg.cpp" line="311"/>
         <source>Sort Users by &amp;Name</source>
         <translation>Sortera användarna efter &amp;Namn</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="285"/>
+        <location filename="../../clientdlg.cpp" line="313"/>
         <source>Sort Users by &amp;Instrument</source>
         <translation>Sortera användarna efter &amp;Instrument</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="291"/>
+        <location filename="../../clientdlg.cpp" line="319"/>
         <source>Sort Users by &amp;Group</source>
         <translation>Sortera användarna efter &amp;Grupp</translation>
     </message>
@@ -899,23 +924,23 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">H</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="674"/>
+        <location filename="../../clientdlg.cpp" line="702"/>
         <source>Directory Server</source>
         <translation>Katalogserver</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="719"/>
-        <location filename="../../clientdlg.cpp" line="731"/>
+        <location filename="../../clientdlg.cpp" line="747"/>
+        <location filename="../../clientdlg.cpp" line="759"/>
         <source>Select Channel Setup File</source>
         <translation>Välj kanalinställningsfil</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="868"/>
+        <location filename="../../clientdlg.cpp" line="896"/>
         <source>user</source>
         <translation>användare</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="872"/>
+        <location filename="../../clientdlg.cpp" line="900"/>
         <source>users</source>
         <translation>användare</translation>
     </message>
@@ -924,7 +949,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Ljudkortet fungerar inte som det ska. Kontrollera enhetsvalet och drivrutinsinställningarna.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1164"/>
+        <location filename="../../clientdlg.cpp" line="1192"/>
         <source>D&amp;isconnect</source>
         <translation>Koppla &amp;ner</translation>
     </message>
@@ -932,47 +957,62 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
 <context>
     <name>CClientDlgBase</name>
     <message>
-        <location filename="../../clientdlgbase.ui" line="228"/>
+        <location filename="../../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
         <translation>Fördröjning</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="283"/>
         <source>Buffers</source>
-        <translation>Buffert</translation>
+        <translation type="vanished">Buffert</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="344"/>
+        <location filename="../../clientdlgbase.ui" line="247"/>
         <source>Input</source>
         <translation>Ingång</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="392"/>
+        <location filename="../../clientdlgbase.ui" line="295"/>
         <source>L</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="402"/>
+        <location filename="../../clientdlgbase.ui" line="305"/>
         <source>R</source>
         <translation>H</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="441"/>
+        <location filename="../../clientdlgbase.ui" line="330"/>
+        <source>Jitter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlgbase.ui" line="356"/>
+        <source>Ping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlgbase.ui" line="400"/>
+        <location filename="../../clientdlgbase.ui" line="438"/>
+        <source>ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
         <translation>Tysta &amp;mig själv</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="448"/>
+        <location filename="../../clientdlgbase.ui" line="505"/>
         <source>&amp;Settings</source>
         <translation>&amp;Inställningar</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="455"/>
+        <location filename="../../clientdlgbase.ui" line="512"/>
         <source>&amp;Chat</source>
         <translation>&amp;Chatt</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="468"/>
+        <location filename="../../clientdlgbase.ui" line="531"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Koppla upp</translation>
     </message>
@@ -985,32 +1025,32 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Mitten</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="123"/>
+        <location filename="../../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
         <translation>Reverb</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="195"/>
+        <location filename="../../clientdlgbase.ui" line="202"/>
         <source>Left</source>
         <translation>Vänster</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="202"/>
+        <location filename="../../clientdlgbase.ui" line="209"/>
         <source>Right</source>
         <translation>Höger</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="492"/>
+        <location filename="../../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
         <translation>Du är tystad! (andra hör inte dig)</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="522"/>
+        <location filename="../../clientdlgbase.ui" line="587"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
         <translation>Ställ in ditt ljud och anslut till en server. Sedan är det bara att börja jamma!</translation>
     </message>
     <message>
-        <location filename="../../clientdlgbase.ui" line="544"/>
+        <location filename="../../clientdlgbase.ui" line="609"/>
         <source>Update check</source>
         <translation>Uppdateringskontroll</translation>
     </message>
@@ -1038,7 +1078,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="54"/>
-        <location filename="../../clientsettingsdlg.cpp" line="1163"/>
+        <location filename="../../clientsettingsdlg.cpp" line="1106"/>
         <source>L</source>
         <translation>V</translation>
     </message>
@@ -1103,248 +1143,247 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Auto-jitterbuffert reglage</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="107"/>
         <source>Jitter buffer status LED indicator</source>
-        <translation>LED-indikator för jitterbufferstatus</translation>
+        <translation type="vanished">LED-indikator för jitterbufferstatus</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="111"/>
+        <location filename="../../clientsettingsdlg.cpp" line="109"/>
         <source>Sound Card Device</source>
         <translation>Ljudkortsenhet</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="111"/>
+        <location filename="../../clientsettingsdlg.cpp" line="109"/>
         <source>The ASIO driver (sound card) can be selected using </source>
         <translation>ASIO-drivrutinen (ljudkort) kan väljas med </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="113"/>
+        <location filename="../../clientsettingsdlg.cpp" line="111"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
         <translation> under Windows. Under MacOS/Linux är inget ljudkortsval möjligt. Om den valda ASIO-drivrutinen inte är giltig visas ett felmeddelande och den tidigare giltiga drivrutinen väljs.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="117"/>
+        <location filename="../../clientsettingsdlg.cpp" line="115"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
         <translation>Om drivrutinen väljs under en aktiv anslutning stoppas anslutningen, drivrutinen ändras och anslutningen startas automatiskt igen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="121"/>
+        <location filename="../../clientsettingsdlg.cpp" line="119"/>
         <source>Sound card device selector combo box</source>
         <translation>Ljudkortsenhetens kombinationsruta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="125"/>
+        <location filename="../../clientsettingsdlg.cpp" line="123"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
         <translation>Om ASIO4ALL-drivrutinen används, observera att den här drivrutinen vanligtvis introducerar ca. 10-30 ms extra ljudfördröjning. Det rekommenderas därför att använda ett ljudkort med en inbyggd ASIO-drivrutin.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="130"/>
+        <location filename="../../clientsettingsdlg.cpp" line="128"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
         <translation>Om du använder kX ASIO-drivrutinen, se till att ansluta ASIO-ingångarna på kX DSP-inställningspanelen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="137"/>
+        <location filename="../../clientsettingsdlg.cpp" line="135"/>
         <source>Sound Card Channel Mapping</source>
         <translation>Ljudkortets kanalval</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="138"/>
+        <location filename="../../clientsettingsdlg.cpp" line="136"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation>Om den valda ljudkortsenheten erbjuder mer än en ingångs- eller utgångskanal är inställningarna för inmatningskanalens mappning och utmatningskanal synliga.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="141"/>
+        <location filename="../../clientsettingsdlg.cpp" line="139"/>
         <source>For each </source>
         <translation>För varje </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="142"/>
+        <location filename="../../clientsettingsdlg.cpp" line="140"/>
         <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
         <translation> ingångs-/utgångskanal (vänster- och högerkanal) kan en annan faktisk ljudkortkanal väljas.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="149"/>
+        <location filename="../../clientsettingsdlg.cpp" line="147"/>
         <source>Left input channel selection combo box</source>
         <translation>Vänster ingångskanalvalskombinationsruta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="151"/>
+        <location filename="../../clientsettingsdlg.cpp" line="149"/>
         <source>Right input channel selection combo box</source>
         <translation>Höger ingångskanalvalskombinationsruta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="153"/>
+        <location filename="../../clientsettingsdlg.cpp" line="151"/>
         <source>Left output channel selection combo box</source>
         <translation>Vänster utgångskanalvalskombinationsruta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="155"/>
+        <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>Right output channel selection combo box</source>
         <translation>Höger utgångskanalvalskombinationsruta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="158"/>
+        <location filename="../../clientsettingsdlg.cpp" line="156"/>
         <source>Enable Small Network Buffers</source>
         <translation>Aktivera liten nätverksbuffert</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="159"/>
+        <location filename="../../clientsettingsdlg.cpp" line="157"/>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
         <translation>Om det är aktiverat aktiveras stödet för mycket små nätverksljudpaket. Mycket små nätverkspaket används faktiskt bara om ljudkortsbuffertfördröjningen är mindre än </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="162"/>
+        <location filename="../../clientsettingsdlg.cpp" line="160"/>
         <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
         <translation> bitars buffert. Ju mindre nätbuffertarna är, desto lägre är ljudet. Men samtidigt ökar nätverksbelastningen och sannolikheten för ljudavbrott ökar också.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="166"/>
+        <location filename="../../clientsettingsdlg.cpp" line="164"/>
         <source>Enable small network buffers check box</source>
         <translation>Aktivera kryssrutan för små nätverksbuffertar</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="169"/>
+        <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>Sound Card Buffer Delay</source>
         <translation>Ljudkortets buffertfördröjning</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="170"/>
+        <location filename="../../clientsettingsdlg.cpp" line="168"/>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
         <translation>Inställningen för buffertfördröjning är en grundläggande inställning för denna applikation. Denna inställning påverkar många anslutningsegenskaper.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="173"/>
+        <location filename="../../clientsettingsdlg.cpp" line="171"/>
         <source>Three buffer sizes are supported</source>
         <translation>Tre buffertstorlekar stöds</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="176"/>
+        <location filename="../../clientsettingsdlg.cpp" line="174"/>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
         <translation>64 bitars buffert: Den rekommenderade inställningen. Den ger den lägsta latensen men fungerar inte med alla ljudkort.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="180"/>
+        <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>128 samples: Should work for most available sound cards.</source>
         <translation>128 bitars buffert: Bör fungera för alla ljudkort.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="183"/>
+        <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
         <translation>265 bitars buffert: Ska endast användas med långsamma datorer eller med långsam internetkoppling.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="187"/>
+        <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
         <translation>Vissa ljudkortdrivrutiner tillåter inte att buffertfördröjningen ändras inifrån programmet. I detta fall är inställningen för buffertfördröjning inaktiverad och måste ändras med hjälp av ljudkortdrivrutinen. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="208"/>
+        <location filename="../../clientsettingsdlg.cpp" line="206"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
         <translatorcomment>ASIO enhetsinställningar</translatorcomment>
         <translation>Om buffertfördröjningsinställningarna är inaktiverade är det förbjudet för ljuddrivrutinen att ändra denna inställning inifrån programvaran. På Windows trycker du på knappen ASIO enhetsinställningar för att öppna panelen för drivrutinsinställningar. På Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="217"/>
+        <location filename="../../clientsettingsdlg.cpp" line="215"/>
         <source>Sound card driver settings</source>
         <translation>Ljudkortsinställningar</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="218"/>
+        <location filename="../../clientsettingsdlg.cpp" line="216"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
         <translation>Detta öppnar drivrutinsinställningarna för ditt ljudkort. Vissa drivrutiner låter dig ändra buffertinställningar, andra som ASIO4ALL låter dig välja in- eller utgångar från din enhet (er). Mer information finns på jamulus.io.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="223"/>
+        <location filename="../../clientsettingsdlg.cpp" line="221"/>
         <source>Opens the driver settings. Note: </source>
         <translation>Öppnardrivrutinsinställningarna. Notera: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="224"/>
+        <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source> currently only supports devices supporting a sample rate of </source>
         <translation> stöder för närvarande endast enheter som stöder en samplingsfrekvens på </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="226"/>
+        <location filename="../../clientsettingsdlg.cpp" line="224"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
         <translation>Hz. Du kommer inte att kunna välja en drivrutin/enhet som inte gör det. För mer hjälp se jamulus.io.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="241"/>
+        <location filename="../../clientsettingsdlg.cpp" line="239"/>
         <source>ASIO Device Settings push button</source>
         <translation>ASIO enhetsinställningsknapp</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="250"/>
+        <location filename="../../clientsettingsdlg.cpp" line="248"/>
         <source>Language</source>
         <translation type="unfinished">Språk</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="250"/>
+        <location filename="../../clientsettingsdlg.cpp" line="248"/>
         <source>Select the language to be used for the user interface.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="252"/>
+        <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Language combo box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="314"/>
+        <location filename="../../clientsettingsdlg.cpp" line="312"/>
         <source>Input Boost</source>
         <translation>Ingångsförstärkning</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="315"/>
+        <location filename="../../clientsettingsdlg.cpp" line="313"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>Denna inställning låter dig öka din insignalnivå med faktor upp till 10 (+ 20dB). Om ditt ljud är för tyst, försök först att höja nivån genom att komma närmare mikrofonen, justera din ljudutrustning eller öka nivåerna i din drift systemets ingångsinställningar. Endast om detta misslyckas, ställ in en faktor här. Om ditt ljud är för högt, låter förvrängt och klipper, hjälper det här alternativet inte. Använd då inte det då förvrängningen kommer fortfarande att finnas där. Sänk istället din ingångsnivå genom att komma längre bort från din mikrofon, justera din ljudutrustning eller genom att minska operativsystemets ingångsinställningar.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="328"/>
+        <location filename="../../clientsettingsdlg.cpp" line="326"/>
         <source>Input Boost combo box</source>
         <translation>Ingångsförstärknings knapp</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="371"/>
+        <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>Number of Mixer Panel Rows</source>
         <translation>Antal mixerpanelrader</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="371"/>
+        <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
         <translation>Justera antalet rader som används för att ordna mixerpanelen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="374"/>
+        <location filename="../../clientsettingsdlg.cpp" line="350"/>
         <source>Number of Mixer Panel Rows spin box</source>
         <translation>Antal mixerpanelrader i rutan</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="376"/>
+        <location filename="../../clientsettingsdlg.cpp" line="352"/>
         <source>Feedback Protection</source>
         <translation>Rundgångsskydd</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="377"/>
+        <location filename="../../clientsettingsdlg.cpp" line="353"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
         <translation>Aktivera rundgångsskydd för att upptäcka rundgång mellan mikrofon och högtalare.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="381"/>
+        <location filename="../../clientsettingsdlg.cpp" line="357"/>
         <source>Feedback Protection check box</source>
         <translation>Rundgångsskyddsruta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="385"/>
+        <location filename="../../clientsettingsdlg.cpp" line="361"/>
         <source>ASIO Device Settings</source>
         <translation>ASIO enhetsinställningar</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="1156"/>
+        <location filename="../../clientsettingsdlg.cpp" line="1099"/>
         <source>Center</source>
         <translation>Mitten</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="1168"/>
+        <location filename="../../clientsettingsdlg.cpp" line="1111"/>
         <source>R</source>
         <translation>H</translation>
     </message>
@@ -1353,17 +1392,17 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Vissa ljudkortdrivrutiner tillåter inte buffertfördröjningen att ändras från applikationen. I detta fall avbryts inställningen för buffertfördröjning och måste ändras med ljudkortsdrivrutinen. I Windows trycker du på ASIO-inställningsknappen för att öppna drivrutinsinställningspanelen. I Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="194"/>
+        <location filename="../../clientsettingsdlg.cpp" line="192"/>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The application will still work with this setting but with restricted performance.</source>
         <translation>Om ingen buffertstorlek är vald och alla inställningar är inaktiverade, används en icke-stödd buffertstorlek av drivrutinen. Applikationen fungerar fortfarande med den här inställningen men med begränsad prestanda.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="199"/>
+        <location filename="../../clientsettingsdlg.cpp" line="197"/>
         <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation>Den faktiska buffertfördröjningen har påverkan på anslutningsstatusen, den aktuella uppladdningshastigheten och den totala förseningen. Ju lägre buffertstorlek, desto högre är sannolikheten för rött ljus i statusindikatorn (drop outs) och desto högre uppladdningshastighet och desto lägre blir den totala fördröjningen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="205"/>
+        <location filename="../../clientsettingsdlg.cpp" line="203"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation>Buffertinställningen är därför en avvägning mellan ljudkvalitet och total fördröjning.</translation>
     </message>
@@ -1372,17 +1411,17 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Om buffertfördröjningsinställningarna är inaktiverade är det ljuddrivrutinen som begränsar och det är inte möjligt att ändra denna inställning från applikationen. I Windows trycker du på ASIO-inställningsknappen för att öppna drivrutinsinställningspanelen. I Linux använder du Jack-konfigurationsverktyget för att ändra buffertstorleken.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="232"/>
+        <location filename="../../clientsettingsdlg.cpp" line="230"/>
         <source>64 samples setting radio button</source>
         <translation>64 bitars buffertknapp</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="235"/>
+        <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>128 samples setting radio button</source>
         <translation>128 bitars buffertknapp</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="238"/>
+        <location filename="../../clientsettingsdlg.cpp" line="236"/>
         <source>256 samples setting radio button</source>
         <translation>256 bitars buffertknapp</translation>
     </message>
@@ -1391,22 +1430,22 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">ASIO-inställningsknapp</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="245"/>
+        <location filename="../../clientsettingsdlg.cpp" line="243"/>
         <source>Skin</source>
         <translation>Skal</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="245"/>
+        <location filename="../../clientsettingsdlg.cpp" line="243"/>
         <source>Select the skin to be used for the main window.</source>
         <translation>Välj skal som ska användas för huvudfönstret.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="247"/>
+        <location filename="../../clientsettingsdlg.cpp" line="245"/>
         <source>Skin combo box</source>
         <translation>Kombineringsknapp för skal</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="337"/>
+        <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source>Directory server address combo box</source>
         <translation>Kombinationsruta för katalogserveradress</translation>
     </message>
@@ -1423,105 +1462,105 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Visa kryssrutan för visa kanalnivåer</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="255"/>
+        <location filename="../../clientsettingsdlg.cpp" line="253"/>
         <source>Audio Channels</source>
         <translation>Ljudkanaler</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="256"/>
+        <location filename="../../clientsettingsdlg.cpp" line="254"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
         <translation>Väljer antalet ljudkanaler som ska användas för kommunikation mellan klient och server. Det finns tre lägen tillgängliga:</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="261"/>
-        <location filename="../../clientsettingsdlg.cpp" line="420"/>
+        <location filename="../../clientsettingsdlg.cpp" line="259"/>
+        <location filename="../../clientsettingsdlg.cpp" line="388"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="261"/>
+        <location filename="../../clientsettingsdlg.cpp" line="259"/>
         <source>and </source>
         <translation>och </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="261"/>
-        <location filename="../../clientsettingsdlg.cpp" line="276"/>
-        <location filename="../../clientsettingsdlg.cpp" line="422"/>
+        <location filename="../../clientsettingsdlg.cpp" line="259"/>
+        <location filename="../../clientsettingsdlg.cpp" line="274"/>
+        <location filename="../../clientsettingsdlg.cpp" line="390"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="262"/>
+        <location filename="../../clientsettingsdlg.cpp" line="260"/>
         <source>These modes use one and two audio channels respectively.</source>
         <translation>Dessa lägen använder respektive en och två ljudkanaler.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="267"/>
+        <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Mono in/Stereo-out</source>
         <translation>Mono in/Stereo-ut</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="268"/>
+        <location filename="../../clientsettingsdlg.cpp" line="266"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
         <translation>Ljudsignalen som skickas till servern är mono men retursignalen är stereo. Detta är användbart om ljudkortet har instrumentet på en ingångskanal och mikrofonen på den andra. I så fall kan de två insignalerna blandas till en monokanal men servermixen hörs i stereo.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="276"/>
+        <location filename="../../clientsettingsdlg.cpp" line="274"/>
         <source>Enabling </source>
         <translation>Möjliggör </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="277"/>
+        <location filename="../../clientsettingsdlg.cpp" line="275"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
         <translation> kommer att öka dataströmmen. Se till att din uppladdningshastighet inte överstiger den tillgängliga uppladdningshastigheten för din internetanslutning.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="283"/>
+        <location filename="../../clientsettingsdlg.cpp" line="281"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
         <translation>I stereo-strömningsläge kommer inget val av ljudkanal för reverb-effekten att finnas tillgängligt i huvudfönstret eftersom effekten tillämpas på båda kanalerna i detta fall.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="289"/>
+        <location filename="../../clientsettingsdlg.cpp" line="287"/>
         <source>Audio channels combo box</source>
         <translation>Kombineringsknapp för ljudkanalerna</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="292"/>
+        <location filename="../../clientsettingsdlg.cpp" line="290"/>
         <source>Audio Quality</source>
         <translation>Ljudkvalitet</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="293"/>
+        <location filename="../../clientsettingsdlg.cpp" line="291"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
         <translation>Ju högre ljudkvalitet, desto högre datahastighet krävs. Se till att din uppladdningshastighet inte överstiger den tillgängliga bandbredden för din internetanslutning.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="299"/>
+        <location filename="../../clientsettingsdlg.cpp" line="297"/>
         <source>Audio quality combo box</source>
         <translation>Kombineringsknapp för ljudkvalitet</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="302"/>
+        <location filename="../../clientsettingsdlg.cpp" line="300"/>
         <source>New Client Level</source>
         <translation>Ny klientnivå</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="303"/>
+        <location filename="../../clientsettingsdlg.cpp" line="301"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
         <translation>Denna inställning definierar fadernivån för en nyansluten klient i procent. Om en ny klient ansluter till den aktuella servern, kommer de att få den angivna initiala fader-nivån om ingen annan fader-nivå från en tidigare anslutning av den klienten redan lagrats.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="311"/>
+        <location filename="../../clientsettingsdlg.cpp" line="309"/>
         <source>New client level edit box</source>
         <translation>Redigeringsruta för en ny klient</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../../clientsettingsdlg.cpp" line="329"/>
         <source>Custom Directory Server Address</source>
         <translation>Anpassad katalogserveradress</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="332"/>
+        <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation>Lämna detta tomt om du inte behöver ange adressen till en annan katalogserver än standard.</translation>
     </message>
@@ -1530,151 +1569,146 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Ändra centralserveradress</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="341"/>
         <source>Current Connection Status Parameter</source>
-        <translation>Parameter för aktuell anslutningsstatus</translation>
+        <translation type="vanished">Parameter för aktuell anslutningsstatus</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="344"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation>Ping-tiden är den tid som krävs för ljudströmmen att resa från klienten till servern och tillbaka igen. Denna fördröjning införs av nätverket och bör vara cirka 20-30 ms. Om denna fördröjning är högre än cirka 50 ms är ditt avstånd till servern för stort eller din internetanslutning är inte tillräcklig.</translation>
+        <translation type="vanished">Ping-tiden är den tid som krävs för ljudströmmen att resa från klienten till servern och tillbaka igen. Denna fördröjning införs av nätverket och bör vara cirka 20-30 ms. Om denna fördröjning är högre än cirka 50 ms är ditt avstånd till servern för stort eller din internetanslutning är inte tillräcklig.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="351"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation>Övergripande fördröjning beräknas utifrån den aktuella Ping-tiden och den fördröjning som införts av de aktuella buffertinställningarna.</translation>
+        <translation type="vanished">Övergripande fördröjning beräknas utifrån den aktuella Ping-tiden och den fördröjning som införts av de aktuella buffertinställningarna.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="354"/>
+        <location filename="../../clientsettingsdlg.cpp" line="338"/>
         <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
         <translation>Uppströmsfrekvensen för ljudet beror på den aktuella ljudpaketstorleken och komprimeringsinställningen. Se till att uppströmshastigheten inte är högre än din tillgängliga internetuppladdningshastighet (kolla detta med en tjänst som exempelvis speedtest.net).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="366"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation>Om den här LED-indikatorn blir röd kommer du inte ha så kul med att använda </translation>
+        <translation type="vanished">Om den här LED-indikatorn blir röd kommer du inte ha så kul med att använda </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="368"/>
         <source> software.</source>
-        <translation> applikationen.</translation>
+        <translation type="vanished"> applikationen.</translation>
     </message>
     <message>
         <source>ASIO Setup</source>
         <translation type="vanished">Inställningar för ASIO</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="421"/>
+        <location filename="../../clientsettingsdlg.cpp" line="389"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-in/Stereo-ut</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="427"/>
+        <location filename="../../clientsettingsdlg.cpp" line="395"/>
         <source>Low</source>
         <translation>Låg</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="428"/>
-        <location filename="../../clientsettingsdlg.cpp" line="434"/>
+        <location filename="../../clientsettingsdlg.cpp" line="396"/>
+        <location filename="../../clientsettingsdlg.cpp" line="402"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="429"/>
+        <location filename="../../clientsettingsdlg.cpp" line="397"/>
         <source>High</source>
         <translation>Hög</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="435"/>
+        <location filename="../../clientsettingsdlg.cpp" line="403"/>
         <source>Fancy</source>
         <translation>Fancy</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="436"/>
+        <location filename="../../clientsettingsdlg.cpp" line="404"/>
         <source>Compact</source>
         <translation>Kompakt</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="451"/>
-        <location filename="../../clientsettingsdlg.cpp" line="577"/>
-        <location filename="../../clientsettingsdlg.cpp" line="585"/>
+        <location filename="../../clientsettingsdlg.cpp" line="419"/>
+        <location filename="../../clientsettingsdlg.cpp" line="545"/>
+        <location filename="../../clientsettingsdlg.cpp" line="553"/>
         <location filename="../../util.cpp" line="830"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="472"/>
+        <location filename="../../clientsettingsdlg.cpp" line="440"/>
         <source>preferred</source>
         <translation>föredraget</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="485"/>
+        <location filename="../../clientsettingsdlg.cpp" line="453"/>
         <source>Musician Profile</source>
         <translation>Musikprofil</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="486"/>
+        <location filename="../../clientsettingsdlg.cpp" line="454"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
         <translation>Skriv ditt namn eller ett alias här så att de andra musikerna du vill spela med vet vem du är. Du kan också lägga till en bild av instrumentet du spelar och en flagga för det land du befinner dig i. Din stad och din färdighetsnivå som spelar ditt instrument kan också läggas till.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="491"/>
+        <location filename="../../clientsettingsdlg.cpp" line="459"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
         <translation>Det du ställer in här visas på din fader på mixerkortet när du är ansluten till en Jamulus-server. Den här taggen kommer också att visas vid varje klient som är ansluten till samma server som du.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="497"/>
+        <location filename="../../clientsettingsdlg.cpp" line="465"/>
         <source>Alias or name edit box</source>
         <translation>Redigeringsruta för alias eller namn</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="499"/>
+        <location filename="../../clientsettingsdlg.cpp" line="467"/>
         <source>Instrument picture button</source>
         <translation>Knapp för instrumentbild</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="501"/>
+        <location filename="../../clientsettingsdlg.cpp" line="469"/>
         <source>Country flag button</source>
         <translation>Knapp för landsflagga</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="503"/>
+        <location filename="../../clientsettingsdlg.cpp" line="471"/>
         <source>City edit box</source>
         <translation>Redigeringsruta för stad</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="505"/>
+        <location filename="../../clientsettingsdlg.cpp" line="473"/>
         <source>Skill level combo box</source>
         <translation>Kombinationsruta för färdighetsnivå</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="589"/>
+        <location filename="../../clientsettingsdlg.cpp" line="557"/>
         <source>Beginner</source>
         <translation>Nybörjare</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="593"/>
+        <location filename="../../clientsettingsdlg.cpp" line="561"/>
         <source>Intermediate</source>
         <translation>Mellannivå</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="597"/>
+        <location filename="../../clientsettingsdlg.cpp" line="565"/>
         <source>Expert</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="746"/>
-        <location filename="../../clientsettingsdlg.cpp" line="750"/>
+        <location filename="../../clientsettingsdlg.cpp" line="714"/>
+        <location filename="../../clientsettingsdlg.cpp" line="718"/>
         <source>Size: </source>
         <translation>Storlek: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="805"/>
+        <location filename="../../clientsettingsdlg.cpp" line="773"/>
         <source>Buffer Delay</source>
         <translation>Buffertfördröjning</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="810"/>
+        <location filename="../../clientsettingsdlg.cpp" line="778"/>
         <source>Buffer Delay: </source>
         <translation>Buffertfördröjning: </translation>
     </message>
@@ -2017,7 +2051,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Kanalval för utgång</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="844"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="828"/>
         <source>Enable Small Network Buffers</source>
         <translation>Aktivera små nätverksbuffertar</translation>
     </message>
@@ -2097,69 +2131,63 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Ljud och nätverksinställningar</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="682"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="666"/>
         <source>Jitter Buffer</source>
         <translation>Jitterbuffert</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="694"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="678"/>
         <source>Auto</source>
         <translation>Automatiskt</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="703"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="687"/>
         <source>Local</source>
         <translation>Lokalt</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="716"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="700"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="733"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="746"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="717"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="730"/>
         <source>Size</source>
         <translation>Nivå</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="885"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="859"/>
         <source>kbps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="915"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="945"/>
-        <source>ms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1134"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1023"/>
         <source>Input Boost</source>
         <translation>Ingångsförstärkning</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1157"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1046"/>
         <source>Feedback Protection</source>
         <translation>Rundgångsskydd</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1170"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1059"/>
         <source>Enable</source>
         <translation>Aktivera</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1225"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1114"/>
         <source>Input Balance</source>
         <translation>Ingångsbalans</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1236"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1125"/>
         <source>Pan</source>
         <translation>Panorera</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1316"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1205"/>
         <source>Center</source>
         <translation>Mitten</translation>
     </message>
@@ -2178,12 +2206,11 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Ljudkvalitet</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="851"/>
         <source>Measurements</source>
-        <translation>Mätningar</translation>
+        <translation type="vanished">Mätningar</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1032"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="921"/>
         <source>Advanced Setup</source>
         <translation>Avancerade inställningar</translation>
     </message>
@@ -2192,7 +2219,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Anpassad katalogserveradress:</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1100"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="989"/>
         <source>New Client Level</source>
         <translation>Ny klientnivå</translation>
     </message>
@@ -2207,45 +2234,40 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Språk</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1112"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="1001"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="977"/>
         <source>Local Jitter Buffer</source>
-        <translation>Lokal jitterbuffert</translation>
+        <translation type="vanished">Lokal jitterbuffert</translation>
     </message>
     <message>
         <source>Display Channel Levels</source>
         <translation type="vanished">Visa kanalnivåer</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="1073"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directory Server Address:</source>
         <translation>Egen katalogserveradress:</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="862"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="835"/>
         <source>Audio Stream Rate</source>
         <translation>Ljudströmshastighet</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="872"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="902"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="932"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="869"/>
         <source>val</source>
         <translation>val</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="895"/>
         <source>Ping Time</source>
-        <translation>Pingtid</translation>
+        <translation type="vanished">Pingtid</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="925"/>
         <source>Overall Delay</source>
-        <translation>Total fördröjning</translation>
+        <translation type="vanished">Total fördröjning</translation>
     </message>
 </context>
 <context>

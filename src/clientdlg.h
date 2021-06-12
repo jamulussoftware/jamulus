@@ -95,6 +95,7 @@ protected:
     void Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel );
     void Disconnect();
     void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
+    void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
     CClient*         pClient;
     CClientSettings* pSettings;

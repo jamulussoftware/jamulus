@@ -56,16 +56,7 @@ class CClientSettingsDlg : public CBaseDlg, private Ui_CClientSettingsDlgBase
 public:
     CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSetP, QWidget* parent = nullptr );
 
-    void SetStatus ( const CMultiColorLED::ELightColor eStatus ) { ledNetw->SetLight ( eStatus ); }
-
-    void ResetStatusAndPingLED()
-    {
-        ledNetw->Reset();
-        ledOverallDelay->Reset();
-    }
-
-    void SetPingTimeResult ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
-
+    void UpdateUploadRate();
     void UpdateDisplay();
     void UpdateSoundDeviceChannelSelectionFrame();
 

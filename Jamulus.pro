@@ -1,4 +1,4 @@
-VERSION = 3.8.0rc1dev
+VERSION = 3.8.0dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -93,10 +93,22 @@ win32 {
 
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
-        message(Using Jack instead of ASIO.)
-
-        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
-            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+        contains(QT_ARCH, "i386") {
+            exists("C:/Program Files (x86)") {
+                message("Cross compilation build")
+                programfilesdir = "C:/Program Files (x86)"
+            } else {
+                message("Native i386 build")
+                programfilesdir = "C:/Program Files"
+            }
+            libjackname = "libjack.lib"
+        } else {
+            message("Native x86_64 build")
+            programfilesdir = "C:/Program Files"
+            libjackname = "libjack64.lib"
+        }
+        !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
+            message("Warning: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
         }
 
         HEADERS -= windows/sound.h
@@ -106,9 +118,10 @@ win32 {
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_ASIO
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
-        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
+        INCLUDEPATH += "$${programfilesdir}/JACK2/include"
+        LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
     }
+
 } else:macx {
     contains(CONFIG, "server_bundle") {
         message(The generated application bundle will run a server instance.)
@@ -151,7 +164,7 @@ win32 {
 
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+                 message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
 
@@ -728,6 +741,8 @@ DISTFILES += ChangeLog \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
+    src/res/IndicatorYellowFancy.png \
+    src/res/IndicatorRedFancy.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
@@ -1126,3 +1141,4 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+

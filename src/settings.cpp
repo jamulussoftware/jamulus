@@ -798,6 +798,15 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
             pServer->SetEnableRecording ( !bValue );
         }
     }
+
+    // delay panning
+    if ( !CommandLineOptions.contains ( "--delaypan" ) )
+    {
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "delaypan", bValue ) )
+        {
+            pServer->SetEnableDelayPanning ( bValue );
+        }
+    }
 }
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
@@ -837,4 +846,7 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // norecord flag
     SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
+
+    // delay panning
+    SetFlagIniSet ( IniXMLDocument, "server", "delaypan", pServer->IsDelayPanningEnabled() );
 }

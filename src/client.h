@@ -239,6 +239,9 @@ public:
     void SetRemoteChanPan ( const int iId, const float fPan ) { Channel.SetRemoteChanPan ( iId, fPan ); }
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
+    
+    void SetBuiltInMicId ( const int iNewMicId ) { iBuiltInMicId = iNewMicId; }
+    int GetBuiltInMicId () { return iBuiltInMicId; }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
@@ -264,6 +267,8 @@ public:
         Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit );
     }
 
+    void SetInputDeviceId ( const int deviceid ); //for mobile devices - 0 for external devices
+    
     // settings
     CChannelCoreInfo ChannelInfo;
     QString          strClientName;
@@ -314,7 +319,7 @@ protected:
     CVector<unsigned char> vecCeltData;
 
     CHighPrioSocket         Socket;
-    CSound                  Sound;
+    CSound                  Sound; 
     CStereoSignalLevelMeter SignalLevelMeter;
 
     CVector<uint8_t> vecbyNetwData;
@@ -324,6 +329,7 @@ protected:
     int          iReverbLevel;
     CAudioReverb AudioReverb;
     int          iInputBoost;
+    int          iBuiltInMicId;
 
     int iSndCrdPrefFrameSizeFactor;
     int iSndCrdFrameSizeFactor;

@@ -28,6 +28,11 @@
 /* Implementation *************************************************************/
 void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
 {
+    // first store parameters, in case reinit is required (mostly for iOS)
+    iPortNumber_ = iPortNumber;
+    iQosNumber_ = iQosNumber;
+    strServerBindIP_ = strServerBindIP;
+    
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
 
@@ -45,6 +50,12 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
     const char tos = (char) iQosNumber; // Quality of Service
     setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof ( tos ) );
 
+#ifdef Q_OS_IOS
+    //ignore the broken pipe signal to avoid crash (iOS)
+    int valueone = 1;
+    setsockopt(UdpSocket, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof(valueone));
+#endif
+    
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
@@ -115,6 +126,7 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
     // Connections -------------------------------------------------------------
     // it is important to do the following connections in this class since we
     // have a thread transition
+    if ( bIsInitRan ) return;
 
     // we have different connections for client and server
     if ( bIsClient )
@@ -142,6 +154,8 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
 
         QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
     }
+    
+    bIsInitRan = true; // QObject::connect once only
 }
 
 void CSocket::Close()
@@ -188,12 +202,24 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
         UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
         UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
-        sendto ( UdpSocket,
-                 (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                 iVecSizeOut,
-                 0,
-                 (sockaddr*) &UdpSocketOutAddr,
-                 sizeof ( sockaddr_in ) );
+        if (
+            sendto ( UdpSocket,
+                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                     iVecSizeOut,
+                     0,
+                     (sockaddr*) &UdpSocketOutAddr,
+                     sizeof ( sockaddr_in ) )
+            < 0 )
+        {
+            // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
+            Init( iPortNumber_, iQosNumber_, strServerBindIP_ ); // reinit
+            sendto ( UdpSocket,
+                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                     iVecSizeOut,
+                     0,
+                     (sockaddr*) &UdpSocketOutAddr,
+                    sizeof ( sockaddr_in ) );
+        }
     }
 }
 

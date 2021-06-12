@@ -1028,6 +1028,20 @@
               <widget class="QComboBox" name="cbxInputBoost"/>
              </item>
              <item>
+              <widget class="QLabel" name="lblBuiltInMicId">
+               <property name="text">
+                <string>Built-in Mic DeviceId (Android only)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <widget class="QLineEdit" name="edtBuiltInMicId"/>
+               </item>
+              </layout>
+             </item>
+             <item>
               <spacer name="verticalSpacer_13">
                <property name="orientation">
                 <enum>Qt::Vertical</enum>

@@ -49,6 +49,7 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
+    virtual void SetInputDeviceId ( int deviceid );
 
     // Call backs for Oboe
     virtual oboe::DataCallbackResult onAudioReady ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );

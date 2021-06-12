@@ -105,6 +105,7 @@ public slots:
     void OnTabChanged();
     void OnMakeTabChange ( int iTabIdx );
     void OnAudioPanValueChanged ( int value );
+    void OnBuiltInMicIdChanged();
 
 signals:
     void GUIDesignChanged();

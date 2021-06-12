@@ -375,6 +375,19 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pMenu->addMenu ( pEditMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
+#if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
+    // Mobile input  --------------------------------------------------------------
+    QMenu* pMobileMenu = new QMenu ( tr ( "&Mobile input" ), this );
+
+    pMobileMenu->addAction ( tr ( "Builtin Mic" ), this,
+        SLOT ( setBuiltinMic() ) );
+
+    pMobileMenu->addAction ( tr ( "Auto" ), this,
+        SLOT ( unsetBuiltinMic() ) );
+      
+    pMenu->addMenu ( pMobileMenu );
+#endif
+      
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 
@@ -1121,6 +1134,12 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
                                tr ( "Your sound card is not working correctly. "
                                     "Please open the settings dialog and check the device selection and the driver settings." ) );
     }
+    /*else
+    {
+      #if defined ( ANDROID ) || defined ( Q_OS_ANDROID )
+        QMessageBox::warning ( this, APP_NAME, pClient->Sound.getAvailableDevices() ); //DEBUG NGOCDH
+      #endif
+    }*/
 }
 
 void CClientDlg::OnTimerDetectFeedback() { bDetectFeedback = false; }

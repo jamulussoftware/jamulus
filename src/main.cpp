@@ -537,8 +537,9 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
-#    if defined( Q_OS_IOS )
-    bUseGUI        = true;
+#   if defined ( Q_OS_IOS )
+    bIsClient = true;//Ngocdh - client only now - TODO - maybe a switch in interface to change to Server?
+    bUseGUI = true;
 
     // bUseMultithreading = true;
     QApplication* pApp = new QApplication ( argc, argv );

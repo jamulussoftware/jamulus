@@ -360,7 +360,8 @@ void CSound::SetInputDeviceId ( int deviceid ) // 0 for external device (auto to
     inBuilder.setCallback ( this );
     setupCommonStreamParams ( &inBuilder );
 
-    if ( inBuilder.isAAudioSupported() ) inBuilder.setAudioApi ( oboe::AudioApi::AAudio );
+    if ( inBuilder.isAAudioSupported() )
+        inBuilder.setAudioApi ( oboe::AudioApi::AAudio );
 
     inBuilder.setDeviceId ( deviceid );
     oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );

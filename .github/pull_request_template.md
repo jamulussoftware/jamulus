@@ -20,6 +20,7 @@
 <!-- Does it still need more testing; ... -->
 
 ## Checklist
+<!-- Please tick the check boxes when done by replacing the space by an x, e.g. [x]. -->
 - [ ] I verified that this Pull Request follows the [general code principles](https://github.com/jamulussoftware/jamulus/blob/master/CONTRIBUTING.md#jamulus-projectsource-code-general-principles)
 - [ ] I tested my code and it does what I want
 - [ ] My code follows the [style guide](https://github.com/jamulussoftware/jamulus/blob/master/CONTRIBUTING.md#source-code-consistency) <!-- You can also check if your code passes clang-format -->

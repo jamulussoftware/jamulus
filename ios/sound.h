@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2021
  *
  * Author(s):
  *  ann0see and ngocdh based on code from Volker Fischer

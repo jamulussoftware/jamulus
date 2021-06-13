@@ -346,10 +346,10 @@ void CSound::Stats::log() const
              << ",in_callback_calls: " << in_callback_calls << ",out_callback_calls: " << out_callback_calls << ",ring_overrun: " << ring_overrun;
 }
 
-void CSound::SetInputDeviceId ( int deviceid ) //0 for external device (auto to be exact)
+void CSound::SetInputDeviceId ( int deviceid ) // 0 for external device (auto to be exact)
 {
     closeStream ( mRecordingStream );
-  
+
     oboe::AudioStreamBuilder inBuilder;
 
     // Setup input stream
@@ -357,19 +357,19 @@ void CSound::SetInputDeviceId ( int deviceid ) //0 for external device (auto to 
 
     // Only set callback for the input direction
     // the output will be handled writing directly on the stream
-    inBuilder.setCallback(this);
+    inBuilder.setCallback ( this );
     setupCommonStreamParams ( &inBuilder );
 
-    if ( inBuilder.isAAudioSupported() ) inBuilder.setAudioApi( oboe::AudioApi::AAudio );
-   
-    inBuilder.setDeviceId(deviceid);
+    if ( inBuilder.isAAudioSupported() )
+        inBuilder.setAudioApi ( oboe::AudioApi::AAudio );
+
+    inBuilder.setDeviceId ( deviceid );
     oboe::Result result = inBuilder.openManagedStream ( mRecordingStream );
     if ( result != oboe::Result::OK )
     {
-        inBuilder.setDeviceId( oboe::kUnspecified );
+        inBuilder.setDeviceId ( oboe::kUnspecified );
         result = inBuilder.openManagedStream ( mRecordingStream );
     }
-
 
     mRecordingStream->setBufferSizeInFrames ( iOboeBufferSizeStereo );
 

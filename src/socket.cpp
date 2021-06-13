@@ -204,11 +204,11 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
         UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
         if ( sendto ( UdpSocket,
-                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                     iVecSizeOut,
-                     0,
-                     (sockaddr*) &UdpSocketOutAddr,
-                     sizeof ( sockaddr_in ) ) < 0 )
+                      (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                      iVecSizeOut,
+                      0,
+                      (sockaddr*) &UdpSocketOutAddr,
+                      sizeof ( sockaddr_in ) ) < 0 )
         {
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
             Init ( iPortNumber_, iQosNumber_, strServerBindIP_ ); // reinit

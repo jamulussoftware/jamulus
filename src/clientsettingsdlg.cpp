@@ -398,7 +398,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     lblUpstreamValue->setText ( "---" );
     lblUpstreamUnit->setText ( "" );
     edtNewClientLevel->setValidator ( new QIntValidator ( 0, 100, this ) ); // % range from 0-100
-    edtBuiltInMicId->setValidator ( new QIntValidator ( 0, 1000, this ) ); // input device - from 0 to 1000
+    edtBuiltInMicId->setValidator ( new QIntValidator ( 0, 1000, this ) );  // input device - from 0 to 1000
 
     // init slider controls ---
     // network buffer sliders
@@ -611,7 +611,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // line edits
     QObject::connect ( edtBuiltInMicId, &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnBuiltInMicIdChanged );
-      
+
     // combo boxes
     QObject::connect ( cbxSoundcard,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),

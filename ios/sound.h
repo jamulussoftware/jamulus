@@ -54,7 +54,7 @@ public:
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
     bool           isInitialized;
-    
+
 
 protected:
     MIDIPortRef midiInPortRef;

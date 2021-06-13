@@ -375,19 +375,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pMenu->addMenu ( pEditMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
-#if defined ( Q_OS_IOS ) or defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
+#if defined( Q_OS_IOS ) or defined( Q_OS_ANDROID ) or defined( ANDROID )
     // Mobile input  --------------------------------------------------------------
     QMenu* pMobileMenu = new QMenu ( tr ( "&Mobile input" ), this );
 
-    pMobileMenu->addAction ( tr ( "Builtin Mic" ), this,
-        SLOT ( setBuiltinMic() ) );
+    pMobileMenu->addAction ( tr ( "Builtin Mic" ), this, SLOT ( setBuiltinMic() ) );
 
-    pMobileMenu->addAction ( tr ( "Auto" ), this,
-        SLOT ( unsetBuiltinMic() ) );
-      
+    pMobileMenu->addAction ( tr ( "Auto" ), this, SLOT ( unsetBuiltinMic() ) );
+
     pMenu->addMenu ( pMobileMenu );
 #endif
-      
+
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 

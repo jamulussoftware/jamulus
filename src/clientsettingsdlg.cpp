@@ -42,15 +42,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     layout()->setMenuBar ( pMenu );
 #endif
 
-#if defined ( Q_OS_ANDROID ) or defined ( ANDROID ) 
+#if defined( Q_OS_ANDROID ) or defined( ANDROID )
     // Android too
-    QMenuBar* pMenu = new QMenuBar ( this );
-    QMenu* pCloseMenu = new QMenu ( tr ( "Close" ), this );
+    QMenuBar* pMenu      = new QMenuBar ( this );
+    QMenu*    pCloseMenu = new QMenu ( tr ( "Close" ), this );
     pCloseMenu->addAction ( tr ( "Close" ), this, SLOT ( close() ) );
     pMenu->addMenu ( pCloseMenu );
 
     // Now tell the layout about the menu
-    layout()->setMenuBar ( pMenu );    
+    layout()->setMenuBar ( pMenu );
 #endif
     // Add help text to controls -----------------------------------------------
     // local audio input fader
@@ -335,17 +335,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
-#if defined ( Q_OS_ANDROID ) or defined ( ANDROID ) //Built-Mic for Android - experimental feature - requires User inputting correct deviceId
+#if defined( Q_OS_ANDROID ) or defined( ANDROID ) // Built-Mic for Android - experimental feature - requires User inputting correct deviceId
     // Built-in Mic
-    QString strBuiltInMic = "<b>" + tr ( "Built-in Mic Device Id" ) + ":</b> " +
-        tr ( "Choose Input device Id. Use LiveEffect for references." );
+    QString strBuiltInMic = "<b>" + tr ( "Built-in Mic Device Id" ) + ":</b> " + tr ( "Choose Input device Id. Use LiveEffect for references." );
     lblBuiltInMicId->setWhatsThis ( strBuiltInMic );
     edtBuiltInMicId->setWhatsThis ( strBuiltInMic );
     edtBuiltInMicId->setAccessibleName ( tr ( "Built-in Mic Device Id edit box" ) );
 #else
-    if ( horizontalLayout_14 ) horizontalLayout_14->deleteLater();
-    if ( lblBuiltInMicId ) lblBuiltInMicId->deleteLater();
-    if ( edtBuiltInMicId ) edtBuiltInMicId->deleteLater();
+    if ( horizontalLayout_14 )
+        horizontalLayout_14->deleteLater();
+    if ( lblBuiltInMicId )
+        lblBuiltInMicId->deleteLater();
+    if ( edtBuiltInMicId )
+        edtBuiltInMicId->deleteLater();
 #endif
 
     // custom directory server address
@@ -396,7 +398,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     lblUpstreamValue->setText ( "---" );
     lblUpstreamUnit->setText ( "" );
     edtNewClientLevel->setValidator ( new QIntValidator ( 0, 100, this ) ); // % range from 0-100
-    edtBuiltInMicId->setValidator ( new QIntValidator ( 0, 1000, this ) ); //input device - from 0 to 1000
+    edtBuiltInMicId->setValidator ( new QIntValidator ( 0, 1000, this ) ); // input device - from 0 to 1000
 
     // init slider controls ---
     // network buffer sliders
@@ -608,8 +610,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
     // line edits
-    QObject::connect ( edtBuiltInMicId, &QLineEdit::editingFinished,
-        this, &CClientSettingsDlg::OnBuiltInMicIdChanged );
+    QObject::connect ( edtBuiltInMicId, &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnBuiltInMicIdChanged );
       
     // combo boxes
     QObject::connect ( cbxSoundcard,
@@ -1150,5 +1151,5 @@ void CClientSettingsDlg::OnAudioPanValueChanged ( int value )
 void CClientSettingsDlg::OnBuiltInMicIdChanged()
 {
     pSettings->iBuiltInMicId = edtBuiltInMicId->text().toInt();
-    pClient->SetBuiltInMicId ( pSettings->iBuiltInMicId ); //change value in variable only, not yet effective
+    pClient->SetBuiltInMicId ( pSettings->iBuiltInMicId ); // change value in variable only, not yet effective
 }

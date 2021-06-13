@@ -43,21 +43,21 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
-    virtual void processBufferList( AudioBufferList*, CSound* );
-    virtual void SetInputDeviceId( int deviceid );
+    virtual void processBufferList ( AudioBufferList*, CSound* );
+    virtual void SetInputDeviceId ( int deviceid );
 
-    AudioUnit      audioUnit;
+    AudioUnit audioUnit;
 
     // these variables/functions should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
-    bool isInitialized;
+    bool           isInitialized;
     
 
 protected:
-    MIDIPortRef    midiInPortRef;
+    MIDIPortRef midiInPortRef;
 
-    QMutex         Mutex;
+    QMutex Mutex;
 };

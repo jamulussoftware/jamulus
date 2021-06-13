@@ -153,7 +153,7 @@ public:
     int              iNewClientFaderLevel;
     int              iInputBoost;
     int              iSettingsTab;
-    int              iBuiltInMicId; //0 for external
+    int              iBuiltInMicId; // 0 for external
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
     int              iNumMixerPanelRows;

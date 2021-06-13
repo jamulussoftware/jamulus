@@ -537,15 +537,15 @@ int main ( int argc, char** argv )
 #ifdef HEADLESS
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
-#   if defined ( Q_OS_IOS )
-    bIsClient = true;//Ngocdh - client only now - TODO - maybe a switch in interface to change to Server?
-    bUseGUI = true;
+#if defined( Q_OS_IOS )
+    bIsClient      = true; // Ngocdh - client only now - TODO - maybe a switch in interface to change to Server?
+    bUseGUI        = true;
 
     // bUseMultithreading = true;
     QApplication* pApp = new QApplication ( argc, argv );
-#    else
+#else
     QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
-#    endif
+#endif
 #endif
 
 #ifdef ANDROID

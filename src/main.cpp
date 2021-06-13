@@ -39,12 +39,19 @@
 #endif
 #if defined( Q_OS_MACX )
 #    include "mac/activity.h"
+extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
+
+#if defined( Q_OS_MACX )
+    // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
+    // Qt will not show these with underline characters in the GUI on MacOS.
+    qt_set_sequence_auto_mnemonic ( true );
+#endif
 
     QString        strArgument;
     double         rDbleArgument;

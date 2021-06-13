@@ -12,7 +12,7 @@
 
 <!-- Most new features should be documented on the website: https://github.com/jamulussoftware/jamuluswebsite/ If you have a proposal what to document, feel free to open a draft PR on the website repo -->
 
-**Status of this pull request**
+**Status of this Pull Request**
 <!-- This might be edited by maintainers. -->
 <!-- Proof of concept (not to be merged soon); Working implementation; ... -->
 

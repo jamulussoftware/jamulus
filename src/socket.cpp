@@ -26,12 +26,51 @@
 #include "server.h"
 
 /* Implementation *************************************************************/
-void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
+
+// Connections -------------------------------------------------------------
+// it is important to do the following connections in this class since we
+// have a thread transition
+
+// we have different connections for client and server, created after Init in corresponding constructor
+
+CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+    pChannel ( pNewChannel ),
+    bIsClient ( true ),
+    bJitterBufferOK ( true )
+{
+    Init ( iPortNumber, iQosNumber, strServerBindIP );
+
+    // client connections:
+    QObject::connect ( this, &CSocket::ProtcolMessageReceived, pChannel, &CChannel::OnProtcolMessageReceived );
+
+    QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pChannel, &CChannel::OnProtcolCLMessageReceived );
+
+    QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
+}
+
+CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+    pServer ( pNServP ),
+    bIsClient ( false ),
+    bJitterBufferOK ( true )
+{
+    Init ( iPortNumber, iQosNumber, strServerBindIP );
+
+    // server connections:
+    QObject::connect ( this, &CSocket::ProtcolMessageReceived, pServer, &CServer::OnProtcolMessageReceived );
+
+    QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pServer, &CServer::OnProtcolCLMessageReceived );
+
+    QObject::connect ( this, static_cast<void ( CSocket::* ) ( int, CHostAddress )> ( &CSocket::NewConnection ), pServer, &CServer::OnNewConnection );
+
+    QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
+}
+
+void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, const QString& strNewServerBindIP )
 {
     // first store parameters, in case reinit is required (mostly for iOS)
-    iPortNumber_     = iPortNumber;
-    iQosNumber_      = iQosNumber;
-    strServerBindIP_ = strServerBindIP;
+    iPortNumber     = iNewPortNumber;
+    iQosNumber      = iNewQosNumber;
+    strServerBindIP = strNewServerBindIP;
 
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
@@ -122,41 +161,6 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
                         "the software is already running).",
                         "Network Error" );
     }
-
-    // Connections -------------------------------------------------------------
-    // it is important to do the following connections in this class since we
-    // have a thread transition
-    if ( bIsInitRan )
-        return;
-
-    // we have different connections for client and server
-    if ( bIsClient )
-    {
-        // client connections:
-
-        QObject::connect ( this, &CSocket::ProtcolMessageReceived, pChannel, &CChannel::OnProtcolMessageReceived );
-
-        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pChannel, &CChannel::OnProtcolCLMessageReceived );
-
-        QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
-    }
-    else
-    {
-        // server connections:
-
-        QObject::connect ( this, &CSocket::ProtcolMessageReceived, pServer, &CServer::OnProtcolMessageReceived );
-
-        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pServer, &CServer::OnProtcolCLMessageReceived );
-
-        QObject::connect ( this,
-                           static_cast<void ( CSocket::* ) ( int, CHostAddress )> ( &CSocket::NewConnection ),
-                           pServer,
-                           &CServer::OnNewConnection );
-
-        QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
-    }
-
-    bIsInitRan = true; // QObject::connect once only
 }
 
 void CSocket::Close()
@@ -211,7 +215,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
                       sizeof ( sockaddr_in ) ) < 0 )
         {
             // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
-            Init ( iPortNumber_, iQosNumber_, strServerBindIP_ ); // reinit
+            Init ( iPortNumber, iQosNumber, strServerBindIP ); // reinit
             sendto ( UdpSocket,
                      (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
                      iVecSizeOut,

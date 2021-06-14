@@ -104,7 +104,6 @@ protected:
     bool           bConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
-    bool           bOwnFaderFirst;
     ERecorderState eLastRecorderState;
     EGUIDesign     eLastDesign;
     QTimer         TimerSigMet;

@@ -1,8 +1,8 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2021
  *
  * Author(s):
- *  ann0see based on code from Volker Fischer
+ *  ann0see and ngocdh based on code from Volker Fischer
  *
  ******************************************************************************
  *
@@ -24,209 +24,289 @@
 #include "sound.h"
 #include <AVFoundation/AVFoundation.h>
 
+#define kOutputBus 0
+#define kInputBus  1
+
+void checkStatus ( int status )
+{
+    if ( status )
+    {
+        printf ( "Status not 0! %d\n", status );
+    }
+}
+
+void checkStatus ( int status, char* s )
+{
+    if ( status )
+    {
+        printf ( "Status not 0! %d - %s \n", status, s );
+    }
+}
+
+/**
+ This callback is called when sound card needs output data to play. And because Jamulus use the same buffer to store input and output data (input is
+ sent to server, then output is fetched from server), we actually use the output callback to read inputdata first, process it, and then copy the
+ output fetched from server to ioData, which will then be played.
+ */
+static OSStatus recordingCallback ( void*                       inRefCon,
+                                    AudioUnitRenderActionFlags* ioActionFlags,
+                                    const AudioTimeStamp*       inTimeStamp,
+                                    UInt32                      inBusNumber,
+                                    UInt32                      inNumberFrames,
+                                    AudioBufferList*            ioData )
+{
+
+    CSound* pSound = static_cast<CSound*> ( inRefCon );
+
+    AudioBuffer buffer;
+
+    buffer.mNumberChannels = 2;
+    buffer.mDataByteSize   = pSound->iCoreAudioBufferSizeMono * sizeof ( Float32 ) * buffer.mNumberChannels;
+    buffer.mData           = malloc ( buffer.mDataByteSize );
+
+    // Put buffer in a AudioBufferList
+    AudioBufferList bufferList;
+    bufferList.mNumberBuffers = 1;
+    bufferList.mBuffers[0]    = buffer;
+
+    // Then:
+    // Obtain recorded samples
+
+    OSStatus status;
+
+    // Calling Unit Render to store input data to bufferList
+    status = AudioUnitRender ( pSound->audioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, &bufferList );
+    // checkStatus(status, (char *)" Just called AudioUnitRender ");
+
+    // Now, we have the samples we just read sitting in buffers in bufferList
+    // Process the new data
+    pSound->processBufferList ( &bufferList, pSound ); // THIS IS WHERE vecsStereo is filled with data from bufferList
+
+    // release the malloc'ed data in the buffer we created earlier
+    free ( bufferList.mBuffers[0].mData );
+
+    Float32* pData = (Float32*) ( ioData->mBuffers[0].mData );
+
+    // copy output data
+    for ( int i = 0; i < pSound->iCoreAudioBufferSizeMono; i++ )
+    {
+        pData[2 * i]     = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;     // left
+        pData[2 * i + 1] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT; // right
+    }
+
+    return noErr;
+}
+
+void CSound::processBufferList ( AudioBufferList* inInputData, CSound* pSound ) // got stereo input data
+{
+    QMutexLocker locker ( &pSound->MutexAudioProcessCallback );
+    Float32*     pData = static_cast<Float32*> ( inInputData->mBuffers[0].mData );
+
+    // copy input data
+    for ( int i = 0; i < pSound->iCoreAudioBufferSizeMono; i++ )
+    {
+        // copy left and right channels separately
+        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( pData[2 * i] * _MAXSHORT );     // left
+        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pData[2 * i + 1] * _MAXSHORT ); // right
+    }
+    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+}
 
 /* Implementation *************************************************************/
-CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
                  void*          arg,
                  const QString& strMIDISetup,
-                 const bool     ,
+                 const bool,
                  const QString& ) :
     CSoundBase ( "CoreAudio iOS", fpNewProcessCallback, arg, strMIDISetup ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
-    NSError *audioSessionError = nil;
-  
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
-    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-        if (granted) {
-            // ok
-        }
-    }];
-    [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
+    try
+    {
+        NSError* audioSessionError = nil;
 
-  //GetAvailableInOutDevices();
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
+        [[AVAudioSession sharedInstance] requestRecordPermission:^( BOOL granted ) {
+          if ( granted )
+          {
+              // ok
+          }
+        }];
+        [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound exception ...." ); // This try-catch seems to fix Connect button crash
+    }
+    isInitialized = false;
 }
 
-int CSound::Init ( const int /*iNewPrefMonoBufferSize*/ )
+int CSound::Init ( const int iCoreAudioBufferSizeMono )
 {
+    try
+    {
+        // printf("Init sound ..."); <= to check the number of Sound inits at launch
+        // init base class
+        // CSoundBase::Init ( iCoreAudioBufferSizeMono ); this does nothing
+        this->iCoreAudioBufferSizeMono = iCoreAudioBufferSizeMono;
 
-  // store buffer size
-  //iCoreAudioBufferSizeMono = audioSession.IOBufferDuration;
+        // set internal buffer size value and calculate stereo buffer size
+        iCoreAudioBufferSizeStereo = 2 * iCoreAudioBufferSizeMono;
 
-  // init base class
-  //CSoundBase::Init ( iCoreAudioBufferSizeMono );
+        // create memory for intermediate audio buffer
+        vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStereo );
 
-  // set internal buffer size value and calculate stereo buffer size
-  //iCoreAudioBufferSizeStereo = 2 * iCoreAudioBufferSizeMono;
+        AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
 
-  // create memory for intermediate audio buffer
-  //vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStereo );
+        // we are going to play and record so we pick that category
+        NSError* error = nil;
+        [sessionInstance setCategory:AVAudioSessionCategoryPlayAndRecord
+                         withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDefaultToSpeaker |
+                                     AVAudioSessionCategoryOptionAllowBluetooth | AVAudioSessionCategoryOptionAllowBluetoothA2DP |
+                                     AVAudioSessionCategoryOptionAllowAirPlay
+                               error:&error];
 
-  return iCoreAudioBufferSizeMono;
+        // NGOCDH - using values from jamulus settings 64 = 2.67ms/2
+        NSTimeInterval bufferDuration = iCoreAudioBufferSizeMono / 48000.0; // yeah it's math
+        [sessionInstance setPreferredIOBufferDuration:bufferDuration error:&error];
+
+        // set the session's sample rate 48000 - the only supported by Jamulus ?
+        [sessionInstance setPreferredSampleRate:48000 error:&error];
+        [[AVAudioSession sharedInstance] setActive:YES error:&error];
+
+        OSStatus status;
+
+        // Describe audio component
+        AudioComponentDescription desc;
+        desc.componentType         = kAudioUnitType_Output;
+        desc.componentSubType      = kAudioUnitSubType_RemoteIO;
+        desc.componentFlags        = 0;
+        desc.componentFlagsMask    = 0;
+        desc.componentManufacturer = kAudioUnitManufacturer_Apple;
+
+        // Get component
+        AudioComponent inputComponent = AudioComponentFindNext ( NULL, &desc );
+
+        // Get audio units
+        status = AudioComponentInstanceNew ( inputComponent, &audioUnit );
+        checkStatus ( status );
+
+        // Enable IO for recording
+        UInt32 flag = 1;
+        status      = AudioUnitSetProperty ( audioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, kInputBus, &flag, sizeof ( flag ) );
+        checkStatus ( status );
+
+        // Enable IO for playback
+        status = AudioUnitSetProperty ( audioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, kOutputBus, &flag, sizeof ( flag ) );
+        checkStatus ( status );
+
+        // Describe format
+        AudioStreamBasicDescription audioFormat;
+        audioFormat.mSampleRate       = 48000.00;
+        audioFormat.mFormatID         = kAudioFormatLinearPCM;
+        audioFormat.mFormatFlags      = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
+        audioFormat.mFramesPerPacket  = 1;
+        audioFormat.mChannelsPerFrame = 2;  // steoreo, so 2 interleaved channels
+        audioFormat.mBitsPerChannel   = 32; // sizeof float32
+        audioFormat.mBytesPerPacket   = 8;  // (sizeof float32) * 2 channels
+        audioFormat.mBytesPerFrame    = 8;  //(sizeof float32) * 2 channels
+
+        // Apply format
+        status = AudioUnitSetProperty ( audioUnit,
+                                        kAudioUnitProperty_StreamFormat,
+                                        kAudioUnitScope_Output,
+                                        kInputBus,
+                                        &audioFormat,
+                                        sizeof ( audioFormat ) );
+        checkStatus ( status );
+        status = AudioUnitSetProperty ( audioUnit,
+                                        kAudioUnitProperty_StreamFormat,
+                                        kAudioUnitScope_Input,
+                                        kOutputBus,
+                                        &audioFormat,
+                                        sizeof ( audioFormat ) );
+        checkStatus ( status );
+
+        // Set callback
+        AURenderCallbackStruct callbackStruct;
+        callbackStruct.inputProc       = recordingCallback; // this is actually the playback callback
+        callbackStruct.inputProcRefCon = this;
+        status                         = AudioUnitSetProperty ( audioUnit,
+                                        kAudioUnitProperty_SetRenderCallback,
+                                        kAudioUnitScope_Global,
+                                        kOutputBus,
+                                        &callbackStruct,
+                                        sizeof ( callbackStruct ) );
+        checkStatus ( status );
+
+        // Initialise
+        status = AudioUnitInitialize ( audioUnit );
+        checkStatus ( status );
+
+        isInitialized = true;
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
+    }
+
+    return iCoreAudioBufferSizeMono;
 }
 
 void CSound::Start()
 {
-    // ??
-
     // call base class
-    //CSoundBase::Start();
+    CSoundBase::Start();
+    try
+    {
+        OSStatus err = AudioOutputUnitStart ( audioUnit );
+        checkStatus ( err );
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound Start exception ...." ); // This try-catch seems to fix Connect button crash
+    }
 }
 
 void CSound::Stop()
 {
-    // ??
+    try
+    {
+        OSStatus err = AudioOutputUnitStop ( audioUnit );
+        checkStatus ( err );
+    }
+    catch ( const CGenErr& generr )
+    {
+        qDebug ( "Sound Stop exception ...." ); // This try-catch seems to fix Connect button crash
+    }
     // call base class
-    //CSoundBase::Stop();
+    CSoundBase::Stop();
 }
 
-void CSound::GetAvailableInOutDevices()
+void CSound::SetInputDeviceId ( int deviceid )
 {
-  // https://developer.apple.com/documentation/avfoundation/avaudiosession/1616557-availableinputs?language=objc?
-
-}
-
-QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
-{
-  // get the driver: check if devices are capable
-  // reload the driver list of available sound devices
-  //GetAvailableInOutDevices();
-
-  // find driver index from given driver name
-  //int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
-
-  /*for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
-  {
-      if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
-      {
-          iDriverIdx = i;
-      }
-  }
-
-  // if the selected driver was not found, return an error message
-  if ( iDriverIdx == INVALID_INDEX )
-  {
-      return tr ( "The current selected audio device is no longer present in the system." );
-  }
-
-  // check device capabilities if it fulfills our requirements
-  const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
-
-  // check if device is capable and if not the same device is used
-  if ( strStat.isEmpty() && ( strCurDevName.compare ( strDriverNames[iDriverIdx] ) != 0 ) )
-  {
-  }
-  // set the left/right in/output channels
-   
-  return strStat;
-   */
-    return "";
-}
-
-QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
-{
-  /*// This function checks if our required input/output channel
-  // properties are supported by the selected device. If the return
-  // string is empty, the device can be used, otherwise the error
-  // message is returned.
-
-  // check sample rate of input
-  audioSession.setPreferredSampleRate( SYSTEM_SAMPLE_RATE_HZ );
-  // if false, try to set it
-  if ( audioSession.sampleRate != SYSTEM_SAMPLE_RATE_HZ )
-  {
-    throw CGenErr ( tr ("Could not set sample rate. Please close other applications playing audio.") );
-  }
-
-  // special case with 4 input channels: support adding channels
-    if ( ( lNumInChan == 4 ) && bInputChMixingSupported )
+    try
     {
-        // add four mixed channels (i.e. 4 normal, 4 mixed channels)
-        lNumInChanPlusAddChan = 8;
+        NSError* error      = nil;
+        bool     builtinmic = true;
 
-        for ( int iCh = 0; iCh < lNumInChanPlusAddChan; iCh++ )
+        if ( deviceid == 0 )
+            builtinmic = false; // try external device
+
+        AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
+        // assumming iOS only has max 2 inputs: 0 for builtin mic and 1 for external device
+        if ( builtinmic )
         {
-            int iSelCH, iSelAddCH;
-
-            GetSelCHAndAddCH ( iCh, lNumInChan, iSelCH, iSelAddCH );
-
-            if ( iSelAddCH >= 0 )
-            {
-                // for mixed channels, show both audio channel names to be mixed
-                channelInputName[iCh] =
-                    channelInputName[iSelCH] + " + " + channelInputName[iSelAddCH];
-            }
+            [sessionInstance setPreferredInput:sessionInstance.availableInputs[0] error:&error];
+        }
+        else
+        {
+            unsigned long lastInput = sessionInstance.availableInputs.count - 1;
+            [sessionInstance setPreferredInput:sessionInstance.availableInputs[lastInput] error:&error];
         }
     }
-    else
+    catch ( const CGenErr& generr )
     {
-        // regular case: no mixing input channels used
-        lNumInChanPlusAddChan = lNumInChan;
+        qDebug ( "Sound dev change exception ...." ); // This try-catch seems to fix Connect button crash
     }
-*/
-    // everything is ok, return empty string for "no error" case
-    return "";
-}
-
-void CSound::SetLeftInputChannel  ( const int iNewChan )
-{
-    /*// apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChanPlusAddChan ) )
-    {
-        iSelInputLeftChannel = iNewChan;
-    }
-     */
-}
-
-void CSound::SetRightInputChannel ( const int iNewChan )
-{
- /* // apply parameter after input parameter check
-  if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
-  {
-      vSelectedInputChannels[1] = iNewChan;
-  }*/
-}
-
-void CSound::SetLeftOutputChannel  ( const int iNewChan )
-{
-  /*// apply parameter after input parameter check
-  if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
-  {
-      vSelectedOutputChannels[0] = iNewChan;
-  }*/
-}
-
-void CSound::SetRightOutputChannel ( const int iNewChan )
-{
-  /*// apply parameter after input parameter check
-  if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
-  {
-      vSelectedOutputChannels[1] = iNewChan;
-  }*/
-}
-
-
-void CSound::callbackMIDI ( const MIDIPacketList* pktlist,
-                            void*                 refCon,
-                            void* )
-{
-   /* CSound* pSound = static_cast<CSound*> ( refCon );
-
-    if ( pSound->midiInPortRef != static_cast<MIDIPortRef> ( NULL ) )
-    {
-        MIDIPacket* midiPacket = const_cast<MIDIPacket*> ( pktlist->packet );
-
-        for ( unsigned int j = 0; j < pktlist->numPackets; j++ )
-        {
-            // copy packet and send it to the MIDI parser
-            CVector<uint8_t> vMIDIPaketBytes ( midiPacket->length );
-            for ( int i = 0; i < midiPacket->length; i++ )
-            {
-                vMIDIPaketBytes[i] = static_cast<uint8_t> ( midiPacket->data[i] );
-            }
-            pSound->ParseMIDIMessage ( vMIDIPaketBytes );
-
-            midiPacket = MIDIPacketNext ( midiPacket );
-        }
-    }*/
 }

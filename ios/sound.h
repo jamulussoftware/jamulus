@@ -23,7 +23,6 @@
 \******************************************************************************/
 
 #pragma once
-#include <QMutex>
 #include "soundbase.h"
 #include "global.h"
 
@@ -56,7 +55,11 @@ public:
     bool           isInitialized;
 
 protected:
-    MIDIPortRef midiInPortRef;
-
-    QMutex Mutex;
+    void            checkStatus ( int status );
+    static OSStatus recordingCallback ( void*                       inRefCon,
+                                        AudioUnitRenderActionFlags* ioActionFlags,
+                                        const AudioTimeStamp*       inTimeStamp,
+                                        UInt32                      inBusNumber,
+                                        UInt32                      inNumberFrames,
+                                        AudioBufferList*            ioData );
 };

@@ -27,28 +27,39 @@
 #define kOutputBus 0
 #define kInputBus  1
 
-void checkStatus ( int status )
+/* Implementation *************************************************************/
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
+                 void*          arg,
+                 const QString& strMIDISetup,
+                 const bool,
+                 const QString& ) :
+    CSoundBase ( "CoreAudio iOS", fpNewProcessCallback, arg, strMIDISetup ),
+    isInitialized ( false )
 {
-    if ( status )
+    try
     {
-        printf ( "Status not 0! %d\n", status );
-    }
-}
+        NSError* audioSessionError = nil;
 
-void checkStatus ( int status, char* s )
-{
-    if ( status )
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
+        [[AVAudioSession sharedInstance] requestRecordPermission:^( BOOL granted ) {
+            if ( granted )
+            {
+                // ok
+            }
+        }];
+        [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
+    }
+    catch ( const CGenErr& generr )
     {
-        printf ( "Status not 0! %d - %s \n", status, s );
+        qDebug ( "Sound exception ...." );
     }
 }
 
 /**
- This callback is called when sound card needs output data to play. And because Jamulus use the same buffer to store input and output data (input is
- sent to server, then output is fetched from server), we actually use the output callback to read inputdata first, process it, and then copy the
- output fetched from server to ioData, which will then be played.
+ This callback is called when sound card needs output data to play.
+ And because Jamulus uses the same buffer to store input and output data (input is sent to server, then output is fetched from server), we actually use the output callback to read inputdata first, process it, and then copy the output fetched from server to ioData, which will then be played.
  */
-static OSStatus recordingCallback ( void*                       inRefCon,
+OSStatus CSound::recordingCallback ( void*                       inRefCon,
                                     AudioUnitRenderActionFlags* ioActionFlags,
                                     const AudioTimeStamp*       inTimeStamp,
                                     UInt32                      inBusNumber,
@@ -69,14 +80,10 @@ static OSStatus recordingCallback ( void*                       inRefCon,
     bufferList.mNumberBuffers = 1;
     bufferList.mBuffers[0]    = buffer;
 
-    // Then:
     // Obtain recorded samples
 
-    OSStatus status;
-
     // Calling Unit Render to store input data to bufferList
-    status = AudioUnitRender ( pSound->audioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, &bufferList );
-    // checkStatus(status, (char *)" Just called AudioUnitRender ");
+    AudioUnitRender ( pSound->audioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, &bufferList );
 
     // Now, we have the samples we just read sitting in buffers in bufferList
     // Process the new data
@@ -112,42 +119,12 @@ void CSound::processBufferList ( AudioBufferList* inInputData, CSound* pSound ) 
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 }
 
-/* Implementation *************************************************************/
-CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-                 void*          arg,
-                 const QString& strMIDISetup,
-                 const bool,
-                 const QString& ) :
-    CSoundBase ( "CoreAudio iOS", fpNewProcessCallback, arg, strMIDISetup ),
-    midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
-{
-    try
-    {
-        NSError* audioSessionError = nil;
-
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
-        [[AVAudioSession sharedInstance] requestRecordPermission:^( BOOL granted ) {
-          if ( granted )
-          {
-              // ok
-          }
-        }];
-        [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
-    }
-    catch ( const CGenErr& generr )
-    {
-        qDebug ( "Sound exception ...." ); // This try-catch seems to fix Connect button crash
-    }
-    isInitialized = false;
-}
-
+// TODO - CSound::Init is called multiple times at launch to verify device capabilities.
+// For iOS though, Init takes long, so should better reduce those inits for iOS (Now: 9 times/launch).
 int CSound::Init ( const int iCoreAudioBufferSizeMono )
 {
     try
     {
-        // printf("Init sound ..."); <= to check the number of Sound inits at launch
-        // init base class
-        // CSoundBase::Init ( iCoreAudioBufferSizeMono ); this does nothing
         this->iCoreAudioBufferSizeMono = iCoreAudioBufferSizeMono;
 
         // set internal buffer size value and calculate stereo buffer size
@@ -166,11 +143,11 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
                                      AVAudioSessionCategoryOptionAllowAirPlay
                                error:&error];
 
-        // NGOCDH - using values from jamulus settings 64 = 2.67ms/2
+        // using values from jamulus settings 64 = 2.67ms/2
         NSTimeInterval bufferDuration = iCoreAudioBufferSizeMono / 48000.0; // yeah it's math
         [sessionInstance setPreferredIOBufferDuration:bufferDuration error:&error];
 
-        // set the session's sample rate 48000 - the only supported by Jamulus ?
+        // set the session's sample rate 48000 - the only supported by Jamulus
         [sessionInstance setPreferredSampleRate:48000 error:&error];
         [[AVAudioSession sharedInstance] setActive:YES error:&error];
 
@@ -247,7 +224,7 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Init exception ...." ); // This try-catch seems to fix Connect button crash
+        qDebug ( "Sound Init exception ...." );
     }
 
     return iCoreAudioBufferSizeMono;
@@ -264,7 +241,7 @@ void CSound::Start()
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Start exception ...." ); // This try-catch seems to fix Connect button crash
+        qDebug ( "Sound Start exception ...." );
     }
 }
 
@@ -277,7 +254,7 @@ void CSound::Stop()
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Stop exception ...." ); // This try-catch seems to fix Connect button crash
+        qDebug ( "Sound Stop exception ...." );
     }
     // call base class
     CSoundBase::Stop();
@@ -294,6 +271,7 @@ void CSound::SetInputDeviceId ( int deviceid )
             builtinmic = false; // try external device
 
         AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
+
         // assumming iOS only has max 2 inputs: 0 for builtin mic and 1 for external device
         if ( builtinmic )
         {
@@ -307,6 +285,14 @@ void CSound::SetInputDeviceId ( int deviceid )
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound dev change exception ...." ); // This try-catch seems to fix Connect button crash
+        qDebug ( "Sound dev change exception ...." );
+    }
+}
+
+void CSound::checkStatus ( int status )
+{
+    if ( status )
+    {
+        printf ( "Status not 0! %d\n", status );
     }
 }

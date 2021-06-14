@@ -40,6 +40,11 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
     int       UdpSocketAddrLen;
     uint16_t* UdpPort;
 
+    // first store parameters, in case reinit is required (mostly for iOS)
+    iPortNumber_     = iPortNumber;
+    iQosNumber_      = iQosNumber;
+    strServerBindIP_ = strServerBindIP;
+
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
 
@@ -114,6 +119,12 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
         }
     }
 
+#ifdef Q_OS_IOS
+    // ignore the broken pipe signal to avoid crash (iOS)
+    int valueone = 1;
+    setsockopt ( UdpSocket, SOL_SOCKET, SO_NOSIGPIPE, &valueone, sizeof ( valueone ) );
+#endif
+
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
@@ -170,6 +181,8 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
     // Connections -------------------------------------------------------------
     // it is important to do the following connections in this class since we
     // have a thread transition
+    if ( bIsInitRan )
+        return;
 
     // we have different connections for client and server
     if ( bIsClient )
@@ -197,6 +210,8 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const 
 
         QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
     }
+
+    bIsInitRan = true; // QObject::connect once only
 }
 
 void CSocket::Close()
@@ -227,6 +242,8 @@ CSocket::~CSocket()
 
 void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr )
 {
+    int status;
+
     uSockAddr UdpSocketAddr;
 
     memset ( &UdpSocketAddr, 0, sizeof ( UdpSocketAddr ) );
@@ -241,57 +258,73 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddr
         // char vector in "const char*", for this we first convert the const
         // uint8_t vector in a read/write uint8_t vector and then do the cast to
         // const char *)
-        if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
-        {
-            if ( bEnableIPv6 )
-            {
-                // Linux and Mac allow to pass an AF_INET address to a dual-stack socket,
-                // but Windows does not. So use a V4MAPPED address in an AF_INET6 sockaddr,
-                // which works on all platforms.
 
+        for ( int tries = 0 ; tries < 2 ; tries++ )    // retry loop in case send fails on iOS
+        {
+            if ( HostAddr.InetAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            {
+                if ( bEnableIPv6 )
+                {
+                    // Linux and Mac allow to pass an AF_INET address to a dual-stack socket,
+                    // but Windows does not. So use a V4MAPPED address in an AF_INET6 sockaddr,
+                    // which works on all platforms.
+
+                    UdpSocketAddr.sa6.sin6_family = AF_INET6;
+                    UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
+
+                    uint32_t* addr = (uint32_t*) &UdpSocketAddr.sa6.sin6_addr;
+
+                    addr[0] = 0;
+                    addr[1] = 0;
+                    addr[2] = htonl ( 0xFFFF );
+                    addr[3] = htonl ( HostAddr.InetAddr.toIPv4Address() );
+
+                    status = sendto ( UdpSocket,
+                            (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                            iVecSizeOut,
+                            0,
+                            &UdpSocketAddr.sa,
+                            sizeof ( UdpSocketAddr.sa6 ) );
+                }
+                else
+                {
+                    UdpSocketAddr.sa4.sin_family      = AF_INET;
+                    UdpSocketAddr.sa4.sin_port        = htons ( HostAddr.iPort );
+                    UdpSocketAddr.sa4.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
+
+                    status = sendto ( UdpSocket,
+                            (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                            iVecSizeOut,
+                            0,
+                            &UdpSocketAddr.sa,
+                            sizeof ( UdpSocketAddr.sa4 ) );
+                }
+            }
+            else if ( bEnableIPv6 )
+            {
                 UdpSocketAddr.sa6.sin6_family = AF_INET6;
                 UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
+                inet_pton ( AF_INET6, HostAddr.InetAddr.toString().toLocal8Bit().constData(), &UdpSocketAddr.sa6.sin6_addr );
 
-                uint32_t* addr = (uint32_t*) &UdpSocketAddr.sa6.sin6_addr;
-
-                addr[0] = 0;
-                addr[1] = 0;
-                addr[2] = htonl ( 0xFFFF );
-                addr[3] = htonl ( HostAddr.InetAddr.toIPv4Address() );
-
-                sendto ( UdpSocket,
-                         (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                         iVecSizeOut,
-                         0,
-                         &UdpSocketAddr.sa,
-                         sizeof ( UdpSocketAddr.sa6 ) );
+                status = sendto ( UdpSocket,
+                        (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                        iVecSizeOut,
+                        0,
+                        &UdpSocketAddr.sa,
+                        sizeof ( UdpSocketAddr.sa6 ) );
             }
-            else
+
+            if ( status >= 0 )
             {
-                UdpSocketAddr.sa4.sin_family      = AF_INET;
-                UdpSocketAddr.sa4.sin_port        = htons ( HostAddr.iPort );
-                UdpSocketAddr.sa4.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
-
-                sendto ( UdpSocket,
-                         (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                         iVecSizeOut,
-                         0,
-                         &UdpSocketAddr.sa,
-                         sizeof ( UdpSocketAddr.sa4 ) );
+                break;      // do not retry if success
             }
-        }
-        else if ( bEnableIPv6 )
-        {
-            UdpSocketAddr.sa6.sin6_family = AF_INET6;
-            UdpSocketAddr.sa6.sin6_port   = htons ( HostAddr.iPort );
-            inet_pton ( AF_INET6, HostAddr.InetAddr.toString().toLocal8Bit().constData(), &UdpSocketAddr.sa6.sin6_addr );
 
-            sendto ( UdpSocket,
-                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                     iVecSizeOut,
-                     0,
-                     &UdpSocketAddr.sa,
-                     sizeof ( UdpSocketAddr.sa6 ) );
+#ifdef Q_OS_IOS
+            // qDebug("Socket send exception - mostly happens in iOS when returning from idle");
+            Init ( iPortNumber_, iQosNumber_, strServerBindIP_ ); // reinit
+
+            // loop back to retry
+#endif
         }
     }
 }

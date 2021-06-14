@@ -233,6 +233,20 @@ public slots:
 
     void accept() { close(); } // introduced by pljones
 
+    void setBuiltinMic()
+    {
+#if defined( Q_OS_IOS )
+        pClient->SetInputDeviceId ( 1 );
+#endif
+    }
+
+    void unsetBuiltinMic()
+    {
+#if defined( Q_OS_IOS )
+        pClient->SetInputDeviceId ( 0 );
+#endif
+    }
+
 signals:
     void SendTabChange ( int iTabIdx );
 };

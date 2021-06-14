@@ -86,6 +86,7 @@ public:
         QMutexLocker locker ( &MutexDevProperties );
         return strCurDevName;
     }
+    QString     LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
@@ -115,7 +116,6 @@ public:
 protected:
     virtual QString  LoadAndInitializeDriver ( QString, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
-    QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
     void             ParseCommandLineArgument ( const QString& strMIDISetup );
     QString          GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
 

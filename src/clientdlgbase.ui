@@ -565,6 +565,19 @@
            </widget>
           </item>
           <item>
+            <widget class="QLabel" name="lblGlobalErrorMessage">
+              <property name="wordWrap">
+                <bool>true</bool>
+              </property>
+              <property name="visible">
+                <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+                <string>.QLabel { background: red; }</string>
+              </property>
+            </widget>
+          </item>
+          <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <property name="sizeConstraint">
              <enum>QLayout::SetMinimumSize</enum>

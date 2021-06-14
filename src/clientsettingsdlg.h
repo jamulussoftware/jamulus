@@ -58,6 +58,7 @@ public:
 
     void UpdateUploadRate();
     void UpdateDisplay();
+    void SetDeviceErrors ( const QString& strError );
     void UpdateSoundDeviceChannelSelectionFrame();
 
     void SetEnableFeedbackDetection ( bool enable );
@@ -96,6 +97,8 @@ public slots:
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
+    void OnDriverResetClicked();
+    void OnTryLoadAnyDriverClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnAliasTextChanged ( const QString& strNewName );
     void OnInstrumentActivated ( int iCntryListItem );

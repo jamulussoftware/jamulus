@@ -255,6 +255,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblGlobalInfoLabel->setStyleSheet ( ".QLabel { background: red; }" );
     lblGlobalInfoLabel->hide();
 
+    SetErrorMessage ( pNSetP->strLoadErrors );
+
     // prepare update check info label (invisible by default)
     lblUpdateCheck->setText ( "<font color=\"red\"><b>" + QString ( APP_NAME ) + " " + tr ( "software upgrade available" ) + "</b></font>" );
     lblUpdateCheck->hide();
@@ -1016,6 +1018,12 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
     }
 }
 
+void CClientDlg::SetErrorMessage ( const QString& message )
+{
+    lblGlobalErrorMessage->setText ( message );
+    lblGlobalErrorMessage->setVisible ( !message.isEmpty() );
+}
+
 void CClientDlg::OnTimerSigMet()
 {
     // show current level
@@ -1130,10 +1138,7 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
     if ( !strError.isEmpty() )
     {
         // the sound device setup has a problem, disconnect any active connection
-        if ( pClient->IsRunning() )
-        {
-            Disconnect();
-        }
+        Disconnect();
 
         // show the error message of the device setup
         QMessageBox::critical ( this, APP_NAME, strError, tr ( "Ok" ), nullptr );
@@ -1151,7 +1156,10 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
         bDetectFeedback = true;
     }
 
+    SetErrorMessage ( strError );
+
     // update the settings dialog
+    ClientSettingsDlg.SetDeviceErrors ( strError );
     ClientSettingsDlg.UpdateSoundDeviceChannelSelectionFrame();
 }
 
@@ -1179,7 +1187,27 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         catch ( const CGenErr& generr )
         {
             // show error message and return the function
-            QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
+            QMessageBox msgBox ( QMessageBox::Critical, APP_NAME, generr.GetErrorText(),
+                                 QMessageBox::NoButton, this );
+            QPushButton* openSettingsButton = msgBox.addButton ( tr ( "Open Settings" ), QMessageBox::ActionRole );
+            // See also CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
+            QPushButton* autoSelectButton = ( pClient->GetSndCrdDevNames().count() > 1 )?
+                msgBox.addButton ( tr ( "Auto Select Device" ), QMessageBox::ActionRole ) : nullptr;
+            QPushButton* closeButton = msgBox.addButton ( tr ( "Close" ), QMessageBox::AcceptRole );
+
+            msgBox.setTextFormat ( Qt::RichText ); // Some error messages are HTML formatted
+            msgBox.setDefaultButton ( openSettingsButton );
+            msgBox.setEscapeButton ( closeButton );
+
+            msgBox.exec();
+            if ( msgBox.clickedButton() == openSettingsButton )
+            {
+                ShowGeneralSettings ( SETTING_TAB_AUDIONET );
+            }
+            else if ( msgBox.clickedButton() == autoSelectButton )
+            {
+                ClientSettingsDlg.OnTryLoadAnyDriverClicked();
+            }
             return;
         }
 

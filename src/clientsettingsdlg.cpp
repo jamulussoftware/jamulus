@@ -131,6 +131,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                TOOLTIP_COM_END_TEXT );
 #endif
 
+    lblErrors->setText ( pSettings->strLoadErrors );
+    lblErrors->setWordWrap ( true );
+
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = "<b>" + tr ( "Sound Card Channel Mapping" ) + ":</b> " +
                                 tr ( "If the selected sound card device offers more than one "
@@ -238,6 +241,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
     butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
+
+    butDriverReset->setIcon ( butDriverReset->style()->standardIcon ( QStyle::SP_BrowserReload ) );
 
     // fancy skin
     lblSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr ( "Select the skin to be used for the main window." ) );
@@ -643,6 +648,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // buttons
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
+    QObject::connect ( butTryLoadAnyDriver, &QPushButton::clicked, this, &CClientSettingsDlg::OnTryLoadAnyDriverClicked );
+    QObject::connect ( butDriverReset, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverResetClicked );
 
     // misc
     // sliders
@@ -737,6 +744,11 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize, c
            QString().setNum ( iFrameSize ) + strAddText + ")";
 }
 
+void CClientSettingsDlg::SetDeviceErrors ( const QString& strError )
+{
+    lblErrors->setText ( strError );
+}
+
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // get current actual buffer size value
@@ -789,8 +801,14 @@ void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
     {
         cbxSoundcard->addItem ( strDevName );
     }
+    // Selecting devices automatically only makes sense if there is more than
+    // one to choose from.
+    butTryLoadAnyDriver->setVisible ( slSndCrdDevNames.count() > 1 );
 
-    cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
+
+    const QString& sSndCrdName = pClient->GetSndCrdDev();
+    cbxSoundcard->setCurrentText ( sSndCrdName );
+    butDriverSetup->setEnabled ( !sSndCrdName.isEmpty() );
 
     // update input/output channel selection
 #if defined( _WIN32 ) || defined( __APPLE__ ) || defined( __MACOSX )
@@ -853,6 +871,11 @@ void CClientSettingsDlg::SetEnableFeedbackDetection ( bool enable )
 
 void CClientSettingsDlg::OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
 
+void CClientSettingsDlg::OnDriverResetClicked()
+{
+    pClient->SetSndCrdDev ( pClient->GetSndCrdDev() );
+}
+
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {
     pClient->SetSockBufNumFrames ( value, true );
@@ -863,6 +886,14 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
 {
     pClient->SetServerSockBufNumFrames ( value );
     UpdateJitterBufferFrame();
+}
+
+void CClientSettingsDlg::OnTryLoadAnyDriverClicked()
+{
+    pClient->TryLoadAnyDev();
+
+    UpdateSoundDeviceChannelSelectionFrame();
+    UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )

@@ -167,6 +167,7 @@ public:
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
 
+    QString strLoadErrors;
 protected:
     // No CommandLineOptions used when reading Client inifile
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;

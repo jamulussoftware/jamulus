@@ -107,8 +107,8 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
                                     QMessageBox::Yes );
         }
 
-        // driver cannot be used, clean up
-        asioDrivers->removeCurrentDriver();
+        // We used to unload the driver here, but then the user won't be able
+        // open the ASIO driver settings to fix the problem.
     }
 
     return strStat;

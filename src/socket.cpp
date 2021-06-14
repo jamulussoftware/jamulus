@@ -214,7 +214,9 @@ void CSocket::Init ( const quint16 iNewPortNumber, const quint16 iNewQosNumber, 
     if ( !bSuccess )
     {
         // we cannot bind socket, throw error
-        throw CGenErr ( "Cannot bind the socket (maybe the software is already running).", "Network Error" );
+        throw CGenErr ( "Cannot bind the socket (maybe "
+                        "the software is already running).",
+                        "Network Error" );
     }
 }
 

@@ -129,7 +129,7 @@ win32 {
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
         MACOSX_BUNDLE_ICON.files = mac/jamulus-server-icon-2020.icns
-        RC_FILE = mac/jamulus-server-icon-2020.icns    
+        RC_FILE = mac/jamulus-server-icon-2020.icns
     } else {
         MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
         RC_FILE = mac/mainicon.icns
@@ -143,9 +143,6 @@ win32 {
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
-
-    QMAKE_PROVISIONING_PROFILE = 25e71953-9b1b-457a-a171-d63458583e7e
-    QMAKE_DEVELOPMENT_TEAM = ENJ2T4A3FZ
 
     OSX_ENTITLEMENTS.files = Jamulus.entitlements
     OSX_ENTITLEMENTS.path = Contents/Resources 

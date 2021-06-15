@@ -42,6 +42,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     layout()->setMenuBar ( pMenu );
 #endif
 
+#if defined( Q_OS_ANDROID ) || defined( ANDROID )
+    // Android too
+    QMenuBar* pMenu      = new QMenuBar ( this );
+    QMenu*    pCloseMenu = new QMenu ( tr ( "&Close" ), this );
+    pCloseMenu->addAction ( tr ( "&Close" ), this, SLOT ( close() ) );
+    pMenu->addMenu ( pCloseMenu );
+
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );
+#endif
+
     // Add help text to controls -----------------------------------------------
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +

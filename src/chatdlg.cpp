@@ -65,6 +65,10 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
     connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
 #endif
 
+#if defined( ANDROID ) || defined( Q_OS_ANDROID )
+    pEditMenu->addAction ( tr ( "&Close" ), this, SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
+#endif
+
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 

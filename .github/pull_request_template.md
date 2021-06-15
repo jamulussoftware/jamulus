@@ -1,4 +1,4 @@
-<!-- Thank you for working on Jamulus and opening a Pull Request! Please fill the following to make maintenance and development process visible -->
+<!-- Thank you for working on Jamulus and opening a Pull Request! Please fill the following to make the review process straight foward -->
 
 **Short description of changes**
 

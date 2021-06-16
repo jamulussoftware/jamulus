@@ -46,13 +46,27 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
             {
                 // ok
             }
+            else
+            {
+                // TODO - alert user
+            }
         }];
         [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound exception ...." );
+        QMessageBox::warning( nullptr, "Sound exception", generr.GetErrorText() );
     }
+
+    buffer.mNumberChannels    = 2;
+    buffer.mData              = malloc ( 256 * sizeof ( Float32 ) * 2 ); // max size
+    bufferList.mNumberBuffers = 1;
+    bufferList.mBuffers[0]    = buffer;
+}
+
+CSound::~CSound ()
+{
+    free ( buffer.mData );
 }
 
 /**
@@ -69,28 +83,18 @@ OSStatus CSound::recordingCallback ( void*                       inRefCon,
 
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
-    AudioBuffer buffer;
-
-    buffer.mNumberChannels = 2;
-    buffer.mDataByteSize   = pSound->iCoreAudioBufferSizeMono * sizeof ( Float32 ) * buffer.mNumberChannels;
-    buffer.mData           = malloc ( buffer.mDataByteSize );
-
-    // Put buffer in a AudioBufferList
-    AudioBufferList bufferList;
-    bufferList.mNumberBuffers = 1;
-    bufferList.mBuffers[0]    = buffer;
+    // setting up temp buffer
+    pSound->buffer.mDataByteSize   = pSound->iCoreAudioBufferSizeMono * sizeof ( Float32 ) * pSound->buffer.mNumberChannels;
+    pSound->bufferList.mBuffers[0]    = pSound->buffer;
 
     // Obtain recorded samples
 
     // Calling Unit Render to store input data to bufferList
-    AudioUnitRender ( pSound->audioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, &bufferList );
+    AudioUnitRender ( pSound->audioUnit, ioActionFlags, inTimeStamp, 1, inNumberFrames, &pSound->bufferList );
 
     // Now, we have the samples we just read sitting in buffers in bufferList
     // Process the new data
-    pSound->processBufferList ( &bufferList, pSound ); // THIS IS WHERE vecsStereo is filled with data from bufferList
-
-    // release the malloc'ed data in the buffer we created earlier
-    free ( bufferList.mBuffers[0].mData );
+    pSound->processBufferList ( &pSound->bufferList, pSound ); // THIS IS WHERE vecsStereo is filled with data from bufferList
 
     Float32* pData = (Float32*) ( ioData->mBuffers[0].mData );
 
@@ -144,11 +148,11 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
                                error:&error];
 
         // using values from jamulus settings 64 = 2.67ms/2
-        NSTimeInterval bufferDuration = iCoreAudioBufferSizeMono / 48000.0; // yeah it's math
+        NSTimeInterval bufferDuration = iCoreAudioBufferSizeMono / Float32 ( SYSTEM_SAMPLE_RATE_HZ ); // yeah it's math
         [sessionInstance setPreferredIOBufferDuration:bufferDuration error:&error];
 
         // set the session's sample rate 48000 - the only supported by Jamulus
-        [sessionInstance setPreferredSampleRate:48000 error:&error];
+        [sessionInstance setPreferredSampleRate:SYSTEM_SAMPLE_RATE_HZ error:&error];
         [[AVAudioSession sharedInstance] setActive:YES error:&error];
 
         OSStatus status;
@@ -179,7 +183,7 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
 
         // Describe format
         AudioStreamBasicDescription audioFormat;
-        audioFormat.mSampleRate       = 48000.00;
+        audioFormat.mSampleRate       = SYSTEM_SAMPLE_RATE_HZ;
         audioFormat.mFormatID         = kAudioFormatLinearPCM;
         audioFormat.mFormatFlags      = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
         audioFormat.mFramesPerPacket  = 1;
@@ -224,7 +228,7 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Init exception ...." );
+        QMessageBox::warning( nullptr, "Sound init exception", generr.GetErrorText() );
     }
 
     return iCoreAudioBufferSizeMono;
@@ -241,7 +245,7 @@ void CSound::Start()
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Start exception ...." );
+        QMessageBox::warning( nullptr, "Sound start exception", generr.GetErrorText() );
     }
 }
 
@@ -254,7 +258,7 @@ void CSound::Stop()
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound Stop exception ...." );
+        QMessageBox::warning( nullptr, "Sound stop exception", generr.GetErrorText() );
     }
     // call base class
     CSoundBase::Stop();
@@ -285,7 +289,7 @@ void CSound::SetInputDeviceId ( int deviceid )
     }
     catch ( const CGenErr& generr )
     {
-        qDebug ( "Sound dev change exception ...." );
+        QMessageBox::warning( nullptr, "Sound device change exception", generr.GetErrorText() );
     }
 }
 

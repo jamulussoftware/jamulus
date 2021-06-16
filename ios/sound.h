@@ -38,6 +38,7 @@ public:
              const QString& strMIDISetup,
              const bool,
              const QString& );
+    ~CSound();
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -55,6 +56,8 @@ public:
     bool           isInitialized;
 
 protected:
+    AudioBuffer     buffer;
+    AudioBufferList bufferList;
     void            checkStatus ( int status );
     static OSStatus recordingCallback ( void*                       inRefCon,
                                         AudioUnitRenderActionFlags* ioActionFlags,

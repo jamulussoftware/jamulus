@@ -26,31 +26,59 @@
 \******************************************************************************/
 
 #include "portaudiosound.h"
+#include <QRegularExpression>
+
 #ifdef _WIN32
 #    include <pa_asio.h>
 #    include <pa_win_wasapi.h>
 #endif // WIN32
 
+#ifdef Q_OS_MACX
+#    include <pa_mac_core.h>
+#endif // Q_OS_MACX
+
+#if defined( _WIN32 )
+#    define DEFAULT_API "ASIO"
+#elif defined( Q_OS_MACX )
+#    define DEFAULT_API "CoreAudio"
+#else
+#    define DEFAULT_API "Jack"
+#endif
+
+#ifdef _WIN32
 // Needed for reset request callback
 static CSound* pThisSound;
 
 static void resetRequestCallback() { pThisSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT ); }
+#endif // _WIN32
 
+static QString NormalizeApiName ( const char* paName )
+{
+    // "Windows <apiname>" -> <apiname>
+    // "JACK Audio Connection Kit" -> "JACK"
+    QString name = paName;
+    return name.replace ( QRegularExpression ( "^Windows | .*$" ), "" );
+}
 
 CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
                  void*          arg,
                  const QString& strMIDISetup,
                  const bool,
+                 const QString& strJackClientName,
                  const QString& strApiName ) :
     CSoundBase ( "portaudio", fpNewProcessCallback, arg, strMIDISetup ),
-    strSelectApiName ( strApiName.isEmpty() ? "ASIO" : strApiName ),
+    strSelectApiName ( strApiName.isEmpty() ? DEFAULT_API : strApiName ),
     inDeviceIndex ( -1 ),
     outDeviceIndex ( -1 ),
     deviceStream ( NULL ),
     vSelectedInputChannels ( NUM_IN_OUT_CHANNELS ),
     vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS )
 {
+#ifdef _WIN32
     pThisSound = this;
+#endif // _WIN32
+
+    (void) strJackClientName; // TODO: perhaps use this if strApiName == "Jack"...
 
     int numPortAudioDevices = std::min ( InitPa(), MAX_NUMBER_SOUND_CARDS );
     lNumDevs                = 0;
@@ -65,7 +93,7 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
             paOutputDeviceIndices[lNumDevs] = devIndex;
             strDriverNames[lNumDevs++]      = devInfo->name;
         }
-        else if ( devInfo->maxInputChannels > 0)
+        else if ( devInfo->maxInputChannels > 0 )
         {
             // For each input device, construct virtual duplex devices by
             // combining it with every output device (i.e., Cartesian product of
@@ -113,8 +141,7 @@ QString CSound::GetPaApiNames()
     for ( PaHostApiIndex i = 0; i < apiCount; i++ )
     {
         const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( i );
-        QString name                 = apiInfo->name;
-        name                         = name.section ( ' ', -1 ); // Drop "Windows " from "Windows <apiname>" names.
+        QString              name    = NormalizeApiName ( apiInfo->name );
         apiNames << name;
     }
 
@@ -140,8 +167,7 @@ int CSound::InitPa()
     for ( PaHostApiIndex i = 0; i < apiCount; i++ )
     {
         apiInfo      = Pa_GetHostApiInfo ( i );
-        QString name = apiInfo->name;
-        name         = name.section ( ' ', -1 ); // Drop "Windows " from "Windows <apiname>" names.
+        QString name = NormalizeApiName ( apiInfo->name );
         if ( strSelectApiName.compare ( name, Qt::CaseInsensitive ) == 0 )
         {
 #ifdef _WIN32
@@ -167,10 +193,20 @@ int CSound::InitPa()
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
     const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( selectedApiIndex );
-    if ( inDeviceIndex >= 0 && apiInfo->type == paASIO )
+    if ( inDeviceIndex >= 0 && ( apiInfo->type == paASIO || apiInfo->type == paCoreAudio ) )
     {
         long minBufferSize, maxBufferSize, prefBufferSize, granularity;
+#ifdef WIN32
         PaAsio_GetAvailableBufferSizes ( inDeviceIndex, &minBufferSize, &maxBufferSize, &prefBufferSize, &granularity );
+#elif defined( Q_OS_MACX )
+        PaMacCore_GetBufferSizeRange ( inDeviceIndex, &minBufferSize, &maxBufferSize );
+        granularity = 1;
+#else
+        granularity    = 0;
+        prefBufferSize = iNewPrefMonoBufferSize;
+        minBufferSize  = iNewPrefMonoBufferSize;
+        maxBufferSize  = iNewPrefMonoBufferSize;
+#endif
         if ( granularity == 0 ) // no options, just take the preferred one.
         {
             iPrefMonoBufferSize = prefBufferSize;
@@ -266,14 +302,20 @@ int CSound::GetNumOutputChannels()
     return CSoundBase::GetNumOutputChannels();
 }
 
+#if defined( Q_OS_MACX ) || defined( _WIN32 )
 QString CSound::GetInputChannelName ( const int channel )
 {
     const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( selectedApiIndex );
-    if ( inDeviceIndex >= 0 && apiInfo->type == paASIO )
+    if ( inDeviceIndex >= 0 && ( apiInfo->type == paASIO || apiInfo->type == paCoreAudio ) )
     {
         const char* channelName;
+#    if defined( Q_OS_MACX )
+        channelName = PaMacCore_GetChannelName ( inDeviceIndex, channel, true );
+        if ( channelName )
+#    elif defined( _WIN32 )
         PaError err = PaAsio_GetInputChannelName ( inDeviceIndex, channel, &channelName );
         if ( err == paNoError )
+#    endif
         {
             return QString ( channelName );
         }
@@ -286,14 +328,20 @@ QString CSound::GetOutputChannelName ( const int channel )
     if ( outDeviceIndex >= 0 && apiInfo->type == paASIO )
     {
         const char* channelName;
+#    if defined( Q_OS_MACX )
+        channelName = PaMacCore_GetChannelName ( inDeviceIndex, channel, false );
+        if ( channelName )
+#    elif defined( _WIN32 )
         PaError err = PaAsio_GetOutputChannelName ( outDeviceIndex, channel, &channelName );
         if ( err == paNoError )
+#    endif
         {
             return QString ( channelName );
         }
     }
     return CSoundBase::GetOutputChannelName ( channel );
 }
+#endif // defined( Q_OS_MACX ) || defined( _WIN32 )
 
 void CSound::SetLeftInputChannel ( const int channel )
 {
@@ -343,6 +391,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     return err;
 }
 
+#ifdef _WIN32
 void CSound::SetWasapiMode ( PaWasapiMode mode )
 {
     switch ( mode )
@@ -373,6 +422,7 @@ void CSound::SetWasapiMode ( PaWasapiMode mode )
         }
     }
 }
+#endif // _WIN32
 
 QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outIndex )
 {
@@ -387,11 +437,13 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
         outDeviceIndex = -1;
     }
 
+#ifdef _WIN32
     const PaHostApiInfo* apiInfo = Pa_GetHostApiInfo ( selectedApiIndex );
+    PaAsioStreamInfo     asioInputInfo, asioOutputInfo;
+    PaWasapiStreamInfo   wasapiInputInfo, wasapiOutputInfo;
+#endif // _WIN32
 
     PaStreamParameters paInputParams;
-    PaAsioStreamInfo   asioInputInfo;
-    PaWasapiStreamInfo wasapiInputInfo;
     paInputParams.device       = inIndex;
     paInputParams.channelCount = std::min ( NUM_IN_OUT_CHANNELS, inDeviceInfo->maxInputChannels );
     bMonoInput                 = ( paInputParams.channelCount == 1 );
@@ -402,6 +454,7 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
     // WDM-KS devices.  Put a latency value that corresponds to our intended.
     // buffer size.
     paInputParams.suggestedLatency = (PaTime) iPrefMonoBufferSize / SYSTEM_SAMPLE_RATE_HZ;
+#ifdef _WIN32
     if ( apiInfo->type == paASIO )
     {
         paInputParams.hostApiSpecificStreamInfo = &asioInputInfo;
@@ -421,18 +474,18 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
         wasapiInputInfo.flags       = wasapiFlag;
     }
     else
+#endif // _WIN32
     {
         paInputParams.hostApiSpecificStreamInfo = NULL;
     }
 
     PaStreamParameters paOutputParams;
-    PaAsioStreamInfo   asioOutputInfo;
-    PaWasapiStreamInfo wasapiOutputInfo;
     paOutputParams.device           = outIndex;
     paOutputParams.channelCount     = std::min ( NUM_IN_OUT_CHANNELS, outDeviceInfo->maxOutputChannels );
     bMonoOutput                     = ( paOutputParams.channelCount == 1 );
     paOutputParams.sampleFormat     = paInt16;
     paOutputParams.suggestedLatency = paInputParams.suggestedLatency;
+#ifdef _WIN32
     if ( apiInfo->type == paASIO )
     {
         paOutputParams.hostApiSpecificStreamInfo = &asioOutputInfo;
@@ -452,6 +505,7 @@ QString CSound::ReinitializeDriver ( PaDeviceIndex inIndex, PaDeviceIndex outInd
         wasapiOutputInfo.flags       = wasapiFlag;
     }
     else
+#endif // _WIN32
     {
         paOutputParams.hostApiSpecificStreamInfo = NULL;
     }

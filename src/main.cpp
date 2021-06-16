@@ -618,10 +618,11 @@ int main ( int argc, char** argv )
                              strConnOnStartupAddress,
                              strMIDISetup,
                              bNoAutoJackConnect,
-#if defined (_WIN32) && defined (USE_PORTAUDIO)
-                             strApiName, // TODO: don't abuse Jack client name for this.
-#else
                              strClientName,
+#ifdef USE_PORTAUDIO
+                             strApiName,
+#else
+                             "",
 #endif
                              bMuteMeInPersonalMix );
 

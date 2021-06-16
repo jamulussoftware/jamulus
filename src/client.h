@@ -42,34 +42,23 @@
 #include "signalhandler.h"
 #ifdef LLCON_VST_PLUGIN
 #    include "vstsound.h"
+#elif defined( USE_PORTAUDIO )
+#    include "portaudiosound.h"
+#elif defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
+#    include "../windows/sound.h"
+#elif defined( Q_OS_MACX ) && !defined( JACK_REPLACES_COREAUDIO )
+#    include "../mac/sound.h"
+#elif defined( Q_OS_IOS )
+#    include "../ios/sound.h"
+#elif defined( ANDROID )
+#    include "../android/sound.h"
 #else
-#    if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
-#        ifdef USE_PORTAUDIO
-// FIXME: this shouldn't be windows specific
-#            include "portaudiosound.h"
-#        else
-#            include "../windows/sound.h"
-#        endif
-#    else
-#        if ( defined( Q_OS_MACX ) ) && !defined( JACK_REPLACES_COREAUDIO )
-#            include "../mac/sound.h"
-#        else
-#            if defined( Q_OS_IOS )
-#                include "../ios/sound.h"
-#            else
-#                ifdef ANDROID
-#                    include "../android/sound.h"
-#                else
-#                    include "../linux/sound.h"
-#                    ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
-#                        include <sched.h>
-#                        include <netdb.h>
-#                    endif
-#                    include <socket.h>
-#                endif
-#            endif
-#        endif
+#    include "../linux/sound.h"
+#    ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
+#        include <sched.h>
+#        include <netdb.h>
 #    endif
+#    include <socket.h>
 #endif
 
 /* Definitions ****************************************************************/
@@ -118,6 +107,7 @@ public:
               const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
+              const QString& strApiName,
               const bool     bNMuteMeInPersonalMix );
 
     virtual ~CClient();

@@ -25,9 +25,7 @@ CONFIG += qt \
     lrelease
 
 CONFIG (portaudio) {
-    message("driver WINDOWS portaudio")
-} else {
-    message("driver WINDOWS standard")
+    message("driver portaudio")
 }
 
 QT += network \
@@ -156,8 +154,10 @@ win32 {
     }
 
     QT += macextras
-    HEADERS += mac/sound.h
-    SOURCES += mac/sound.cpp
+    !CONFIG(portaudio) {
+        HEADERS += mac/sound.h
+        SOURCES += mac/sound.cpp
+    }
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
@@ -199,6 +199,7 @@ win32 {
     }
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist
+    CONFIG(portaudio) { error( "Portaudio not supported on iOS" ) }
     QT += macextras
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
@@ -224,6 +225,7 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
+    CONFIG(portaudio) { error( "Portaudio not supported on Android" ) }
     HEADERS += android/sound.h \
         android/ring_buffer.h
 
@@ -360,8 +362,10 @@ win32 {
     # unnecessarily without this workaround (#741):
     QMAKE_LFLAGS += -Wl,--as-needed
 
-    HEADERS += linux/sound.h
-    SOURCES += linux/sound.cpp
+    !CONFIG(portaudio) {
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+    }
 
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though
@@ -374,7 +378,7 @@ win32 {
     contains(CONFIG, "nosound") {
         message(Restricting build to server-only due to CONFIG+=nosound.)
         DEFINES += SERVER_ONLY
-    } else {
+    } else:!CONFIG(portaudio) {
         message(Jack Audio Interface Enabled.)
 
         contains(CONFIG, "raspijamulus") {
@@ -540,6 +544,9 @@ win32 {
         $$files(libs/portaudio/src/hostapi/wdmks/*.h) \
         $$files(libs/portaudio/src/hostapi/wmme/*.h) \
         $$files(libs/portaudio/src/hostapi/wasapi/*.h)
+} else {
+    # Mac OS X uses the portaudio unix header files too.
+    HEADERS_PORTAUDIO += $$files(libs/portaudio/src/os/unix/*.h)
 }
 
 SOURCES += src/buffer.cpp \
@@ -755,8 +762,13 @@ win32 {
         SOURCES_CXX_PORTAUDIO -= libs/portaudio/src/hostapi/asio/iasiothiscallresolver.cpp
     }
 } else:unix {
-    # FIXME: also some hostapi files, probably.
     SOURCES_PORTAUDIO += $$files(libs/portaudio/src/os/unix/*.c)
+    SOURCES_PORTAUDIO += $$files(libs/portaudio/src/os/hostapi/alsa/*.c) \
+        $$files(libs/portaudio/src/os/hostapi/jack/*.c) \
+        $$files(libs/portaudio/src/os/hostapi/oss/*.c)
+} else:macx {
+    SOURCES_PORTAUDIO += $$files(libs/portaudio/src/os/unix/*.c)
+    SOURCES_PORTAUDIO += $$files(libs/portaudio/src/os/hostapi/coreaudio/*.c)
 }
 
 # I can't figure out how to make the custom compiler stuff work for
@@ -1217,25 +1229,23 @@ CONFIG(portaudio) {
     DEFINES += USE_PORTAUDIO
     HEADERS += src/portaudiosound.h
     SOURCES += src/portaudiosound.cpp
-    win32 {
-        CONFIG(portaudio_shared_lib) {
-            LIBS += $$libnames(portaudio)
+    CONFIG(portaudio_shared_lib) {
+        LIBS += $$libnames(portaudio)
+    } else:win32 {
+        DEFINES += PA_USE_ASIO=1 PA_USE_WASAPI=1 PA_USE_WDMKS=1
+        INCLUDEPATH += $$INCLUDEPATH_PORTAUDIO
+        HEADERS += $$HEADERS_PORTAUDIO
+        mingw {
+            portaudiocxx.variable_out = OBJECTS
+            portaudiocc.variable_out = OBJECTS
+            QMAKE_EXTRA_COMPILERS += portaudiocc portaudiocxx
         } else {
-            DEFINES += PA_USE_ASIO=1 PA_USE_WASAPI=1 PA_USE_WDMKS=1
-            INCLUDEPATH += $$INCLUDEPATH_PORTAUDIO
-            HEADERS += $$HEADERS_PORTAUDIO
-            mingw {
-                portaudiocxx.variable_out = OBJECTS
-                portaudiocc.variable_out = OBJECTS
-                QMAKE_EXTRA_COMPILERS += portaudiocc portaudiocxx
-            } else {
-                SOURCES += $$SOURCES_PORTAUDIO $$SOURCES_CXX_PORTAUDIO
-            }
-            DISTFILES += $$DISTFILES_PORTAUDIO
+            SOURCES += $$SOURCES_PORTAUDIO $$SOURCES_CXX_PORTAUDIO
         }
+        DISTFILES += $$DISTFILES_PORTAUDIO
         LIBS += $$libnames(winmm ole32 uuid setupapi)
     } else {
-        error( "portaudio only tested on win32 for now" )
+        error ( "non-shared portaudio only implemented for win32" )
     }
 }
 

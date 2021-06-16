@@ -51,6 +51,7 @@ public:
              void*          arg,
              const QString& strMIDISetup,
              const bool,
+             const QString& strJackClientName,
              const QString& apiName );
     virtual ~CSound();
 
@@ -58,27 +59,30 @@ public:
     virtual void Start();
     virtual void Stop();
 
-    virtual int     GetNumInputChannels();
+    virtual int GetNumInputChannels();
+#if defined( Q_OS_MACX ) || defined( _WIN32 )
     virtual QString GetInputChannelName ( const int );
-    virtual void    SetLeftInputChannel ( const int );
-    virtual void    SetRightInputChannel ( const int );
-    virtual int     GetLeftInputChannel() { return vSelectedInputChannels[0]; }
-    virtual int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
+#endif
+    virtual void SetLeftInputChannel ( const int );
+    virtual void SetRightInputChannel ( const int );
+    virtual int  GetLeftInputChannel() { return vSelectedInputChannels[0]; }
+    virtual int  GetRightInputChannel() { return vSelectedInputChannels[1]; }
 
-    virtual int     GetNumOutputChannels();
+    virtual int GetNumOutputChannels();
+#if defined( Q_OS_MACX ) || defined( _WIN32 )
     virtual QString GetOutputChannelName ( const int );
-    virtual void    SetLeftOutputChannel ( const int );
-    virtual void    SetRightOutputChannel ( const int );
-    virtual int     GetLeftOutputChannel() { return vSelectedOutputChannels[0]; }
-    virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
+#endif
+    virtual void SetLeftOutputChannel ( const int );
+    virtual void SetRightOutputChannel ( const int );
+    virtual int  GetLeftOutputChannel() { return vSelectedOutputChannels[0]; }
+    virtual int  GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
     static QString GetPaApiNames();
 
     virtual EPaApiSettings GetExtraSettings();
+#ifdef WIN32
     virtual void SetWasapiMode ( PaWasapiMode mode );
 
-
-#ifdef WIN32
     virtual void OpenDriverSetup();
 #endif // WIN32
 

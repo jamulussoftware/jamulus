@@ -31,6 +31,7 @@ CClient::CClient ( const quint16  iPortNumber,
                    const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
+                   const QString& strApiName,
                    const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
@@ -47,7 +48,16 @@ CClient::CClient ( const quint16  iPortNumber,
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
     Socket ( &Channel, iPortNumber, iQosNumber ),
-    Sound ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
+    Sound ( AudioCallback,
+            this,
+            strMIDISetup,
+            bNoAutoJackConnect,
+            strNClientName
+#ifdef USE_PORTAUDIO
+            ,
+            strApiName
+#endif
+            ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
     iReverbLevel ( 0 ),

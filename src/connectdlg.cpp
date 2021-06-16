@@ -96,8 +96,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // custom directory server address
     QString strDirServAddr = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
-                               tr ( "Leave this blank unless you need to enter the address of a directory "
-                                    "server other than the default." );
+                             tr ( "Leave this blank unless you need to enter the address of a directory "
+                                  "server other than the default." );
 
     lblCustomDirectoryAddress->setWhatsThis ( strDirServAddr );
     cbxCustomDirectoryAddress->setWhatsThis ( strDirServAddr );
@@ -159,8 +159,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     UpdateCustomDirectoryServerComboBox();
 
     // install event handler to catch return keys in the combobox edit line
-    cbxCustomDirectoryAddress->installEventFilter(this);
-
+    cbxCustomDirectoryAddress->installEventFilter ( this );
 
     // setup timers
     TimerInitialSort.setSingleShot ( true ); // only once after list request
@@ -188,20 +187,14 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
                        this,
                        &CConnectDlg::OnCentServAddrTypeChanged );
 
-    QObject::connect ( cbxCustomDirectoryAddress,
-                       &QComboBox::textActivated,
-                       this,
-                       &CConnectDlg::OnCustomDirectoryTypeChanged );
+    QObject::connect ( cbxCustomDirectoryAddress, &QComboBox::textActivated, this, &CConnectDlg::OnCustomDirectoryTypeChanged );
 
     QObject::connect ( cbxCustomDirectoryAddress->lineEdit(),
                        &QLineEdit::editingFinished,
                        this,
                        &CConnectDlg::OnDirectoryServerAddressEditingFinished );
 
-    QObject::connect ( cbxCustomDirectoryAddress->lineEdit(),
-                       &QLineEdit::returnPressed,
-                       this,
-                       &CConnectDlg::NoReturnKeypress );
+    QObject::connect ( cbxCustomDirectoryAddress->lineEdit(), &QLineEdit::returnPressed, this, &CConnectDlg::NoReturnKeypress );
 
     // check boxes
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
@@ -217,16 +210,19 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QObject::connect ( &TimerReRequestServList, &QTimer::timeout, this, &CConnectDlg::OnTimerReRequestServList );
 }
 
-bool CConnectDlg::eventFilter(QObject *object, QEvent *event)
+bool CConnectDlg::eventFilter ( QObject* object, QEvent* event )
 {
     // event handler to catch return keys in the combobox and call EditingFinished
     //   otherwise the connect button would also be be called
-    if (object == cbxCustomDirectoryAddress && event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if ( (keyEvent->key()==Qt::Key_Enter) || (keyEvent->key()==Qt::Key_Return) )  {
+    if ( object == cbxCustomDirectoryAddress && event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*> ( event );
+        if ( ( keyEvent->key() == Qt::Key_Enter ) || ( keyEvent->key() == Qt::Key_Return ) )
+        {
             OnDirectoryServerAddressEditingFinished();
             return true;
-        } else
+        }
+        else
             return false;
     }
     return false;
@@ -935,9 +931,9 @@ void CConnectDlg::OnDirectoryServerAddressEditingFinished()
     // we delete the corresponding entry in the directory server address vector
     if ( cbxCustomDirectoryAddress->currentText().isEmpty() && cbxCustomDirectoryAddress->currentData().isValid() )
     {
-          pSettings->vstrCentralServerAddress[0] = "";
-          cbxCustomDirectoryAddress->removeItem ( 0 );
-          pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( pSettings->vstrCentralServerAddress[1] ) );
+        pSettings->vstrCentralServerAddress[0] = "";
+        cbxCustomDirectoryAddress->removeItem ( 0 );
+        pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( pSettings->vstrCentralServerAddress[1] ) );
     }
     else
     {
@@ -945,7 +941,7 @@ void CConnectDlg::OnDirectoryServerAddressEditingFinished()
         // full, the last element is thrown out
         pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCustomDirectoryAddress->currentText() ) );
     }
-   OnCustomDirectoryTypeChanged( pSettings->vstrCentralServerAddress[0] );
+    OnCustomDirectoryTypeChanged ( pSettings->vstrCentralServerAddress[0] );
 }
 
 void CConnectDlg::UpdateCustomDirectoryServerComboBox()
@@ -969,11 +965,10 @@ void CConnectDlg::OnCentServAddrTypeChanged ( int iTypeIdx )
     RequestServerList();
 }
 
-void CConnectDlg::OnCustomDirectoryTypeChanged( QString sServer )
+void CConnectDlg::OnCustomDirectoryTypeChanged ( QString sServer )
 {
     pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( sServer ) );
     pSettings->eCentralServerAddressType = AT_CUSTOM;
     UpdateCustomDirectoryServerComboBox();
     RequestServerList();
 }
-

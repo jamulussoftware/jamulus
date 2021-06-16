@@ -664,7 +664,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 void CClientSettingsDlg::showEvent ( QShowEvent* )
 {
     UpdateDisplay();
-//    UpdateCustomCentralServerComboBox();
+    //    UpdateCustomCentralServerComboBox();
 
     // set the name
     pedtAlias->setText ( pClient->ChannelInfo.strName );

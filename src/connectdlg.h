@@ -59,10 +59,10 @@ public:
 
     void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
 
-    bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
+    bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
-    bool eventFilter(QObject *object, QEvent *event);
+    bool    eventFilter ( QObject* object, QEvent* event );
 
 protected:
     virtual void showEvent ( QShowEvent* );
@@ -103,7 +103,7 @@ public slots:
     void OnTimerPing();
     void OnTimerReRequestServList();
     void OnDirectoryServerAddressEditingFinished();
-    void OnCustomDirectoryTypeChanged( QString sServer );
+    void OnCustomDirectoryTypeChanged ( QString sServer );
     void NoReturnKeypress() {}
 
 signals:
@@ -112,4 +112,3 @@ signals:
     void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
     void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
 };
-

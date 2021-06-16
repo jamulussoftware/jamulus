@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>493</height>
+    <width>462</width>
+    <height>471</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,123 +23,154 @@
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="lblList">
-       <property name="text">
-        <string>List</string>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="bottomMargin">
+        <number>0</number>
        </property>
-      </widget>
+       <item>
+        <widget class="QLabel" name="lblList">
+         <property name="text">
+          <string>List</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbxCentServAddrType"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblFilter">
+         <property name="text">
+          <string>Filter</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="edtFilter"/>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chbExpandAll">
+         <property name="text">
+          <string>Show All Musicians</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QComboBox" name="cbxCentServAddrType"/>
+      <layout class="QHBoxLayout" name="_2">
+       <item>
+        <widget class="QLabel" name="lblCustomDirectoryAddress">
+         <property name="text">
+          <string>Custom Directory Server Address:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbxCustomDirectoryAddress">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QLabel" name="lblFilter">
-       <property name="text">
-        <string>Filter</string>
+      <widget class="QTreeWidget" name="lvwServers">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="edtFilter"/>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="chbExpandAll">
-       <property name="text">
-        <string>Show All Musicians</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QTreeWidget" name="lvwServers">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="tabKeyNavigation">
-      <bool>true</bool>
-     </property>
-     <column>
-      <property name="text">
-       <string>Server Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Ping Time</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Musicians</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Location</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QLabel" name="lblServerAddr">
-       <property name="text">
-        <string>Server Address</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cbxServerAddr">
-       <property name="editable">
+       <property name="tabKeyNavigation">
         <bool>true</bool>
        </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>351</width>
-         <height>25</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="butCancel">
-       <property name="text">
-        <string>C&amp;ancel</string>
-       </property>
+       <column>
+        <property name="text">
+         <string>Server Name</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Ping Time</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Musicians</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Location</string>
+        </property>
+       </column>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="butConnect">
-       <property name="text">
-        <string>&amp;Connect</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout">
+       <item>
+        <widget class="QLabel" name="lblServerAddr">
+         <property name="text">
+          <string>Server Address</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cbxServerAddr">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout">
+       <item>
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>351</width>
+           <height>25</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="butCancel">
+         <property name="text">
+          <string>C&amp;ancel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="butConnect">
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>45</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>&amp;Connect</string>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

@@ -83,7 +83,6 @@ public slots:
     void OnAutoJitBufStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnFeedbackDetectionChanged ( int value );
-    void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
@@ -109,6 +108,5 @@ public slots:
 signals:
     void GUIDesignChanged();
     void AudioChannelsChanged();
-    void CustomCentralServerAddrChanged();
     void NumMixerPanelRowsChanged ( int value );
 };

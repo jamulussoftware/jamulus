@@ -59,9 +59,10 @@ public:
 
     void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients );
 
-    bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
+    bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
+    bool eventFilter(QObject *object, QEvent *event);
 
 protected:
     virtual void showEvent ( QShowEvent* );
@@ -74,6 +75,7 @@ protected:
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& CurServerAddress );
+    void             UpdateCustomDirectoryServerComboBox();
 
     CClientSettings* pSettings;
 
@@ -96,10 +98,13 @@ public slots:
     void OnCentServAddrTypeChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
-    void OnCustomCentralServerAddrChanged();
+    void OnCustomDirectoryServerAddrChanged();
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
+    void OnDirectoryServerAddressEditingFinished();
+    void OnCustomDirectoryTypeChanged( QString sServer );
+    void NoReturnKeypress() {}
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );
@@ -107,3 +112,4 @@ signals:
     void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
     void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
 };
+

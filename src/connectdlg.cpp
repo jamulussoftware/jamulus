@@ -187,7 +187,10 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
                        this,
                        &CConnectDlg::OnCentServAddrTypeChanged );
 
-    QObject::connect ( cbxCustomDirectoryAddress, &QComboBox::textActivated, this, &CConnectDlg::OnCustomDirectoryTypeChanged );
+    QObject::connect ( cbxCustomDirectoryAddress,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated),
+                       this,
+                       &CConnectDlg::OnCustomDirectoryTypeChanged );
 
     QObject::connect ( cbxCustomDirectoryAddress->lineEdit(),
                        &QLineEdit::editingFinished,
@@ -941,7 +944,7 @@ void CConnectDlg::OnDirectoryServerAddressEditingFinished()
         // full, the last element is thrown out
         pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCustomDirectoryAddress->currentText() ) );
     }
-    OnCustomDirectoryTypeChanged ( pSettings->vstrCentralServerAddress[0] );
+    OnCustomDirectoryTypeChanged ();
 }
 
 void CConnectDlg::UpdateCustomDirectoryServerComboBox()
@@ -965,9 +968,9 @@ void CConnectDlg::OnCentServAddrTypeChanged ( int iTypeIdx )
     RequestServerList();
 }
 
-void CConnectDlg::OnCustomDirectoryTypeChanged ( QString sServer )
+void CConnectDlg::OnCustomDirectoryTypeChanged ()
 {
-    pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( sServer ) );
+    pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCustomDirectoryAddress->currentText() ) );
     pSettings->eCentralServerAddressType = AT_CUSTOM;
     UpdateCustomDirectoryServerComboBox();
     RequestServerList();

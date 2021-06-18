@@ -103,7 +103,7 @@ public slots:
     void OnTimerPing();
     void OnTimerReRequestServList();
     void OnDirectoryServerAddressEditingFinished();
-    void OnCustomDirectoryTypeChanged ( QString sServer );
+    void OnCustomDirectoryTypeChanged ();
     void NoReturnKeypress() {}
 
 signals:

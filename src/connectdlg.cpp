@@ -160,8 +160,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // install event handler to catch return keys in the combobox edit line
     cbxCustomDirectoryAddress->installEventFilter ( this );
-    cbxCustomDirectoryAddress->setEnabled ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
-    lblCustomDirectoryAddress->setEnabled ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
+    cbxCustomDirectoryAddress->setVisible ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
+    lblCustomDirectoryAddress->setVisible ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
 
     // setup timers
     TimerInitialSort.setSingleShot ( true ); // only once after list request
@@ -966,9 +966,8 @@ void CConnectDlg::OnCentServAddrTypeChanged ( int iTypeIdx )
 {
     pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( iTypeIdx );
 
-    cbxCustomDirectoryAddress->setEnabled ( false );
-    cbxCustomDirectoryAddress->setEnabled ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
-    lblCustomDirectoryAddress->setEnabled ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
+    cbxCustomDirectoryAddress->setVisible ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
+    lblCustomDirectoryAddress->setVisible ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
     RequestServerList();
 }
 

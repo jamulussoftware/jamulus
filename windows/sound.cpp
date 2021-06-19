@@ -157,8 +157,9 @@ QString CSound::CheckDeviceCapabilities()
     {
         // return error string
         return QString ( tr ( "The current audio device configuration is incompatible "
-                              "because the sample rate couldn't be set to %1 Hz. Please check for a hardware switch or "
-                              "driver setting to set the sample rate manually and restart the app." ) )
+                              "because the sample rate couldn't be set to %2 Hz. Please check for a hardware switch or "
+                              "driver setting to set the sample rate manually and restart %1." ) )
+            .arg ( APP_NAME )
             .arg ( SYSTEM_SAMPLE_RATE_HZ );
     }
 

@@ -61,9 +61,9 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     // check sample rate, if not correct, just fire error
     if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     {
-        throw CGenErr ( QString ( tr ( "The JACK server isn't running at a sample rate of <b>%1 Hz</b>. Please use "
+        throw CGenErr ( QString ( tr ( "JACK isn't running at a sample rate of <b>%1 Hz</b>. Please use "
                                        "a tool like <i><a href=\"https://qjackctl.sourceforge.io\">QjackCtl</a></i> to set the "
-                                       "the JACK server sample rate to %1 Hz." ) )
+                                       "the JACK sample rate to %1 Hz." ) )
                             .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
@@ -207,8 +207,8 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     // without a Jack server, Jamulus makes no sense to run, throw an error message
     if ( bJackWasShutDown )
     {
-        throw CGenErr ( QString ( tr ( "The JACK server was shut down. %1 "
-                                       "requires a JACK server to run. Please restart %1 to "
+        throw CGenErr ( QString ( tr ( "JACK was shut down. %1 "
+                                       "requires JACK to run. Please restart %1 to "
                                        "start JACK again. "
                                        "the JACK output." ) )
                             .arg ( APP_NAME ) );

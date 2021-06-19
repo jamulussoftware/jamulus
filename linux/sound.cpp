@@ -44,7 +44,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
 
     if ( pJackClient == nullptr )
     {
-        throw CGenErr ( tr ( "The JACK server couldn't be started automatically. "
+        throw CGenErr ( tr ( "JACK couldn't be started automatically. "
                              "Please start JACK manually and check for error messages." ) );
     }
 

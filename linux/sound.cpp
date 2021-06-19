@@ -78,7 +78,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
 
     if ( ( input_port_left == nullptr ) || ( input_port_right == nullptr ) || ( output_port_left == nullptr ) || ( output_port_right == nullptr ) )
     {
-        throw CGenErr ( QString ( tr ( "The JACK port registering failed. This is a probably an error with JACK. Please stop %1 and JACK. "
+        throw CGenErr ( QString ( tr ( "The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. "
                                        "Afterwards check if another program at a sample rate of %2 Hz can connect to JACK." ) )
                             .arg ( APP_NAME )
                             .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
@@ -91,8 +91,8 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
 
         if ( input_port_midi == nullptr )
         {
-            throw CGenErr ( QString ( tr ( "The JACK port registering failed. This is a probably an error with JACK. Please stop %1 and JACK. "
-                                           "Afterwards check if another MIDI program can connect to JACK." ) )
+            throw CGenErr ( QString ( tr ( "The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. "
+                                           "Afterwards, check if another MIDI program can connect to JACK." ) )
                                 .arg ( APP_NAME ) );
         }
     }
@@ -209,7 +209,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     {
         throw CGenErr ( QString ( tr ( "The JACK server was shut down. %1 "
                                        "requires a JACK server to run. Please restart %1 to "
-                                       "start JACK again. If the error persists, please review "
+                                       "start JACK again. "
                                        "the JACK output." ) )
                             .arg ( APP_NAME ) );
     }

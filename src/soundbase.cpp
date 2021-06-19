@@ -113,7 +113,7 @@ QString CSoundBase::SetDev ( const QString strDevName )
                 LoadAndInitializeDriver ( strCurDevName, false );
 
                 // store error return message
-                strReturn = QString ( tr ( "The selected audio device can't be used "
+                strReturn = QString ( tr ( "Can't use the selected audio device "
                                            "because of the following error: " ) ) +
                             strErrorMessage + QString ( tr ( " The previous driver will be selected." ) );
             }

@@ -73,7 +73,8 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     {
         // clean up and return error string
         asioDrivers->removeCurrentDriver();
-        return tr ( "The audio driver couldn't be initialised. Check if the audio device is plugged in and verify your driver settings." );
+        return tr ( "Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings." );
+
     }
 
     // check device capabilities if it fulfills our requirements

@@ -241,9 +241,6 @@ public:
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
 
-    void SetBuiltInMicId ( const int iNewMicId ) { iBuiltInMicId = iNewMicId; }
-    int  GetBuiltInMicId() { return iBuiltInMicId; }
-
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
     void CreateChatTextMes ( const QString& strChatText ) { Channel.CreateChatTextMes ( strChatText ); }
@@ -267,8 +264,6 @@ public:
     {
         Channel.GetBufErrorRates ( vecErrRates, dLimit, dMaxUpLimit );
     }
-
-    void SetInputDeviceId ( const int deviceid ); // for mobile devices - 0 for external devices
 
     // settings
     CChannelCoreInfo ChannelInfo;
@@ -330,7 +325,6 @@ protected:
     int          iReverbLevel;
     CAudioReverb AudioReverb;
     int          iInputBoost;
-    int          iBuiltInMicId;
 
     int iSndCrdPrefFrameSizeFactor;
     int iSndCrdFrameSizeFactor;

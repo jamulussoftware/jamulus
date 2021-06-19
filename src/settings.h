@@ -120,7 +120,6 @@ public:
         vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
         iNewClientFaderLevel ( 100 ),
         iInputBoost ( 1 ),
-        iBuiltInMicId ( 0 ),
         iSettingsTab ( SETTING_TAB_AUDIONET ),
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType ( ST_NO_SORT ),
@@ -153,7 +152,6 @@ public:
     int              iNewClientFaderLevel;
     int              iInputBoost;
     int              iSettingsTab;
-    int              iBuiltInMicId; // 0 for external
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
     int              iNumMixerPanelRows;

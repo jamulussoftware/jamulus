@@ -53,7 +53,6 @@ CClient::CClient ( const quint16  iPortNumber,
     bReverbOnLeftChan ( false ),
     iReverbLevel ( 0 ),
     iInputBoost ( 1 ),
-    iBuiltInMicId ( 0 ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     bSndCrdConversionBufferRequired ( false ),
@@ -1252,12 +1251,4 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
         fDelayToFillNetworkPacketsMs + fTotalJitterBufferDelayMs + fTotalSoundCardDelayMs + fAdditionalAudioCodecDelayMs;
 
     return MathUtils::round ( fTotalBufferDelayMs + iPingTimeMs );
-}
-
-void CClient::SetInputDeviceId ( const int deviceid )
-{
-#if defined( Q_OS_IOS )
-    // iOS only
-    Sound.SetInputDeviceId ( deviceid );
-#endif
 }

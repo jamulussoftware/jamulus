@@ -264,35 +264,6 @@ void CSound::Stop()
     CSoundBase::Stop();
 }
 
-void CSound::SetInputDeviceId ( int deviceid )
-{
-    try
-    {
-        NSError* error      = nil;
-        bool     builtinmic = true;
-
-        if ( deviceid == 0 )
-            builtinmic = false; // try external device
-
-        AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
-
-        // assumming iOS only has max 2 inputs: 0 for builtin mic and 1 for external device
-        if ( builtinmic )
-        {
-            [sessionInstance setPreferredInput:sessionInstance.availableInputs[0] error:&error];
-        }
-        else
-        {
-            unsigned long lastInput = sessionInstance.availableInputs.count - 1;
-            [sessionInstance setPreferredInput:sessionInstance.availableInputs[lastInput] error:&error];
-        }
-    }
-    catch ( const CGenErr& generr )
-    {
-        QMessageBox::warning( nullptr, "Sound device change exception", generr.GetErrorText() );
-    }
-}
-
 void CSound::checkStatus ( int status )
 {
     if ( status )

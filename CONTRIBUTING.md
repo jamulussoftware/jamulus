@@ -45,7 +45,10 @@ Please try to avoid breaking any of them by introducing platform-specific code. 
 Keep all code compatible to C++11.
 ### Dependencies
 If your code requires new dependencies, be sure that those are available on all supported platforms and that the introduction of those dependencies has been discussed and accepted.
-
+### User experience
+Jamulus is used by people all over the world with different backgrounds and knowledge. Features and language should be user focused.
+Language wise, the Jamulus project has a [style and tone guide](https://jamulus.io/contribute/Style-and-Tone) which you should follow to remain consistent.
+Feature wise, think what your least tech-savvy friend would think about your change: Would it result in confusion or ambiguity?
 ### Ownership
 The submitter of an Issue or a PR is responsible for its care and feeding, answering all questions directed at them, and making agreed amends if needed. 
 

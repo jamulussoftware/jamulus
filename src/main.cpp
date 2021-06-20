@@ -92,6 +92,7 @@ int main ( int argc, char** argv )
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
     QString      strCentralServer            = "";
+    QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
     QString      strServerBindIP             = "";
@@ -212,6 +213,21 @@ int main ( int argc, char** argv )
             qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strCentralServer ) );
             CommandLineOptions << "--directoryserver";
             ServerOnlyOptions << "--directoryserver";
+            continue;
+        }
+
+        // Directory file ------------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--directoryfile", // no short form
+                                 "--directoryfile",
+                                 strArgument ) )
+        {
+            strServerListFileName = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- directory server persistence file: %1" ).arg ( strServerListFileName ) );
+            CommandLineOptions << "--directoryfile";
+            ServerOnlyOptions << "--directoryfile";
             continue;
         }
 
@@ -587,6 +603,12 @@ int main ( int argc, char** argv )
         {
             // per definition, we must be a headless server and ignoring inifile, so we have all the information
 
+            if ( !strServerListFileName.isEmpty() )
+            {
+                qWarning() << "Server list persistence file will only take effect when running as a directory server.";
+                strServerListFileName = "";
+            }
+
             if ( !strServerListFilter.isEmpty() )
             {
                 qWarning() << "Server list filter will only take effect when running as a directory server.";
@@ -606,14 +628,48 @@ int main ( int argc, char** argv )
             // if we are not headless, certain checks cannot be made, as the inifile state is not yet known
             if ( !bUseGUI && strCentralServer.compare ( "localhost", Qt::CaseInsensitive ) != 0 && strCentralServer.compare ( "127.0.0.1" ) != 0 )
             {
+                if ( !strServerListFileName.isEmpty() )
+                {
+                    qWarning() << "Server list persistence file will only take effect when running as a directory server.";
+                    strServerListFileName = "";
+                }
+
                 if ( !strServerListFilter.isEmpty() )
                 {
                     qWarning() << "Server list filter will only take effect when running as a directory server.";
-                    strServerListFilter = "";
+                    strServerListFileName = "";
                 }
             }
             else
             {
+                if ( !strServerListFileName.isEmpty() )
+                {
+                    QFileInfo serverListFileInfo ( strServerListFileName );
+                    if ( !serverListFileInfo.exists() )
+                    {
+                        QFile strServerListFile ( strServerListFileName );
+                        if ( !strServerListFile.open ( QFile::OpenModeFlag::ReadWrite ) )
+                        {
+                            qWarning() << qUtf8Printable (
+                                QString ( "Cannot create %1 for reading and writing.  Please check permissions." ).arg ( strServerListFileName ) );
+                            strServerListFileName = "";
+                        }
+                    }
+                    else if ( !serverListFileInfo.isFile() )
+                    {
+                        qWarning() << qUtf8Printable (
+                            QString ( "Server list file %1 must be a plain file.  Please check the name." ).arg ( strServerListFileName ) );
+                        strServerListFileName = "";
+                    }
+                    else if ( !serverListFileInfo.isReadable() || !serverListFileInfo.isWritable() )
+                    {
+                        qWarning() << qUtf8Printable (
+                            QString ( "Server list file %1 must be readable and writeable.  Please check the permissions." )
+                                .arg ( strServerListFileName ) );
+                        strServerListFileName = "";
+                    }
+                }
+
                 if ( !strServerListFilter.isEmpty() )
                 {
                     QStringList slWhitelistAddresses = strServerListFilter.split ( ";" );
@@ -779,6 +835,7 @@ int main ( int argc, char** argv )
                              iQosNumber,
                              strHTMLStatusFileName,
                              strCentralServer,
+                             strServerListFileName,
                              strServerInfo,
                              strServerPublicIP,
                              strServerListFilter,
@@ -885,6 +942,7 @@ QString UsageArguments ( char** argv )
            "  -d, --discononquit    disconnect all clients on quit\n"
            "  -e, --directoryserver address of the directory server with which to register\n"
            "                        (or 'localhost' to host a server list on this server)\n"
+           "      --directoryfile   enable server list persistence, set file name\n"
            "  -f, --listfilter      server list whitelist filter.  Format:\n"
            "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
            "  -F, --fastupdate      use 64 samples frame size mode\n"

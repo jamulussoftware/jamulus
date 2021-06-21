@@ -198,7 +198,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                      "In this case the buffer delay setting is disabled and has to be "
                                      "changed using the sound card driver. On Windows, press the "
                                      "ASIO Device Settings button to open the driver settings panel. On Linux, "
-                                     "use the Jack configuration tool to change the buffer size." ) +
+                                     "use the JACK configuration tool to change the buffer size." ) +
                                 "<br>" +
                                 tr ( "If no buffer size is selected and all settings are disabled, an "
                                      "unsupported buffer size is used by the driver. The application "
@@ -218,7 +218,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                        "disabled, it is prohibited by the audio driver to modify this "
                                        "setting from within the software. "
                                        "On Windows, press the ASIO Device Settings button to open the "
-                                       "driver settings panel. On Linux, use the Jack configuration tool to "
+                                       "driver settings panel. On Linux, use the JACK configuration tool to "
                                        "change the buffer size." ) +
                                   TOOLTIP_COM_END_TEXT;
 

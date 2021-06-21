@@ -76,6 +76,9 @@ LED bar:      lbr
 #define VERSION  APP_VERSION
 #define APP_NAME "Jamulus"
 
+// Name of JACK server
+#define JACK_NAME "JACK"
+
 // Windows registry key name of auto run entry for the server
 #define AUTORUN_SERVER_REG_NAME "Jamulus server"
 

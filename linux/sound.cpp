@@ -44,8 +44,9 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
 
     if ( pJackClient == nullptr )
     {
-        throw CGenErr ( tr ( "JACK couldn't be started automatically. "
-                             "Please start JACK manually and check for error messages." ) );
+        throw CGenErr ( tr ( "%1 couldn't be started automatically. "
+                             "Please start %1 manually and check for error messages." )
+                             .arg ( JACK_NAME ) );
     }
 
     // tell the JACK server to call "process()" whenever
@@ -61,9 +62,10 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     // check sample rate, if not correct, just fire error
     if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     {
-        throw CGenErr ( QString ( tr ( "JACK isn't running at a sample rate of <b>%1 Hz</b>. Please use "
+        throw CGenErr ( QString ( tr ( "%! isn't running at a sample rate of <b>%2 Hz</b>. Please use "
                                        "a tool like <i><a href=\"https://qjackctl.sourceforge.io\">QjackCtl</a></i> to set the "
-                                       "the JACK sample rate to %1 Hz." ) )
+                                       "the %1 sample rate to %2 Hz." ) )
+                            .arg ( JACK_NAME )
                             .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
@@ -78,10 +80,11 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
 
     if ( ( input_port_left == nullptr ) || ( input_port_right == nullptr ) || ( output_port_left == nullptr ) || ( output_port_right == nullptr ) )
     {
-        throw CGenErr ( QString ( tr ( "The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. "
-                                       "Afterwards check if another program at a sample rate of %2 Hz can connect to JACK." ) )
+        throw CGenErr ( QString ( tr ( "The %3 port registration failed. This is probably an error with %3. Please stop %1 and %3. "
+                                       "Afterwards check if another program at a sample rate of %2 Hz can connect to %3." ) )
                             .arg ( APP_NAME )
-                            .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
+                            .arg ( SYSTEM_SAMPLE_RATE_HZ )
+                            .arg ( JACK_NAME ));
     }
 
     // optional MIDI initialization
@@ -207,11 +210,11 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     // without a Jack server, Jamulus makes no sense to run, throw an error message
     if ( bJackWasShutDown )
     {
-        throw CGenErr ( QString ( tr ( "JACK was shut down. %1 "
-                                       "requires JACK to run. Please restart %1 to "
-                                       "start JACK again. "
-                                       "the JACK output." ) )
-                            .arg ( APP_NAME ) );
+        throw CGenErr ( QString ( tr ( "%1 was shut down. %2 "
+                                       "requires %1 to run. Please restart %2 to "
+                                       "start %1 again." ) )
+                            .arg ( JACK_NAME )
+                            .arg ( APP_NAME ));
     }
 
     // get actual buffer size

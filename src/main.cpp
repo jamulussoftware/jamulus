@@ -189,7 +189,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argv, i, "-j", "--nojackconnect" ) )
         {
             bNoAutoJackConnect = true;
-            qInfo() << "- disable auto Jack connections";
+            qInfo() << "- disable auto JACK connections";
             CommandLineOptions << "--nojackconnect";
             continue;
         }

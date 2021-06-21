@@ -27,6 +27,12 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
     $jamulus_buildversionstring = "NoVersion"
 }
 
+# Amend BuildOption when needed, only needed when the name build option in the artifact needs to be different
+if ($BuildOption -Eq "jackonwindows")
+{
+    $BuildOption = "jack"
+}
+
 
 ###################
 ###  PROCEDURE  ###
@@ -34,9 +40,9 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
 
 # Rename the file
 echo "rename"
-if ($BuildOption -Eq "jackonwindows")
+if ($BuildOption -ne "")
 {
-    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_jack_win.exe"
+    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_${BuildOption}_win.exe"
 }
 else
 {
@@ -44,14 +50,7 @@ else
 }
 
 echo "rename deploy file to $artifact_deploy_filename"
-if ($BuildOption -Eq "jackonwindows")
-{
-    cp "$jamulus_project_path\deploy\Jamulus*installer-jack-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
-}
-else
-{
-    cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
-}
+cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
 
 
 Function github_output_value

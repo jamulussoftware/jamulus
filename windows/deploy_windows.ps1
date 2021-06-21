@@ -261,18 +261,6 @@ Function Build-Installer
         [string] $BuildOption
     )
 
-    # Building the installer with JACK support on Windows is using a separate nsi script which creates a separate installer.
-    # The installer with JACK on Windows is made available for more users who know JACK, ASIO will be kept as the mainstream version.
-    # When not building with JACK support, the installer is created with ASIO support.
-    if ($BuildOption -Eq "jackonwindows")
-    {
-        $InstallerNSI = "installer_jack.nsi"
-    }
-    else
-    {
-        $InstallerNSI = "installer.nsi"
-    }
-
     foreach ($_ in Get-Content -Path "$RootPath\$AppName.pro")
     {
         if ($_ -Match "^VERSION *= *(.*)$")
@@ -282,10 +270,21 @@ Function Build-Installer
         }
     }
 
-    Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
-        -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
-        "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
-        "$WindowsPath\$InstallerNSI")
+    if ($BuildOption -ne "")
+    {
+        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+            -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+            "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
+            "/DBUILD_OPTION=$BuildOption", `
+            "$WindowsPath\installer.nsi")
+    }
+    else
+    {
+        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+            -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+            "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
+            "$WindowsPath\installer.nsi")
+    }
 }
 
 # Build and copy NS-Process dll

@@ -43,7 +43,7 @@
 #define SERV_LIST_REQ_UPDATE_TIME_MS 2000 // ms
 
 /* Classes ********************************************************************/
-class CConnectDlg : public CBaseDlg, private Ui_CConnectDlgBase
+class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
 {
     Q_OBJECT
 
@@ -100,12 +100,22 @@ public slots:
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
     void OnCustomDirectoryServerAddrChanged();
     void OnConnectClicked();
+    void OnServerAddressClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
     void OnDirectoryServerAddressEditingFinished();
     void OnCustomDirectoryTypeChanged();
     void NoReturnKeypress() {}
-
+    /***
+        void keyPressEvent ( QKeyEvent* pEvent )
+        {
+            // block escape key
+            if ( pEvent->key() != Qt::Key_Return )
+            {
+                QDialog::keyPressEvent ( pEvent );
+            }
+        }
+    ***/
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );
     void CreateCLServerListPingMes ( CHostAddress InetAddr );

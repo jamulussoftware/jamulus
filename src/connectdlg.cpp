@@ -26,7 +26,7 @@
 
 /* Implementation *************************************************************/
 CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent ) :
-    CBaseDlg ( parent, Qt::Dialog ),
+    QDialog ( parent, Qt::Dialog ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
     strSelectedServerName ( "" ),
@@ -158,8 +158,10 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     cbxCustomDirectoryAddress->setInsertPolicy ( QComboBox::NoInsert );
     UpdateCustomDirectoryServerComboBox();
 
-    // install event handler to catch return keys in the combobox edit line
+    // install event handler to catch return keys
     cbxCustomDirectoryAddress->installEventFilter ( this );
+    lvwServers->installEventFilter ( this );
+    cbxServerAddr->installEventFilter ( this );
     cbxCustomDirectoryAddress->setVisible ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
     lblCustomDirectoryAddress->setVisible ( ( pSettings->eCentralServerAddressType == AT_CUSTOM ) ? true : false );
 
@@ -205,6 +207,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
 
     // buttons
+    QObject::connect ( butCancel, &QPushButton::clicked, this, &CConnectDlg::close );
+
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CConnectDlg::OnConnectClicked );
 
     // timers
@@ -215,18 +219,35 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
 bool CConnectDlg::eventFilter ( QObject* object, QEvent* event )
 {
-    // event handler to catch return keys in the combobox and call EditingFinished
-    //   otherwise the connect button would also be be called
-    if ( object == cbxCustomDirectoryAddress && event->type() == QEvent::KeyPress )
+    // event handler to catch return keys
+    //   treatment depends on which object the return comes from
+    // return true -> do not handle further
+    // return false -> continue with standard handling
+    if ( event->type() == QEvent::KeyPress )
     {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*> ( event );
         if ( ( keyEvent->key() == Qt::Key_Enter ) || ( keyEvent->key() == Qt::Key_Return ) )
         {
-            OnDirectoryServerAddressEditingFinished();
-            return true;
+            if ( object == cbxCustomDirectoryAddress )
+            {
+                OnDirectoryServerAddressEditingFinished();
+                return true;
+            }
+            else if ( object == cbxServerAddr )
+            {
+                OnServerAddressClicked();
+                return true;
+            }
+            else if ( object == lvwServers )
+            {
+                OnConnectClicked();
+                return true;
+            }
+            else
+            {
+                return true;
+            }
         }
-        else
-            return false;
     }
     return false;
 }
@@ -675,6 +696,16 @@ void CConnectDlg::UpdateListFilter()
             bListFilterWasActive = false;
         }
     }
+}
+
+void CConnectDlg::OnServerAddressClicked()
+{
+    // get the IP address to be used
+    // - use the current combo box text
+    strSelectedAddress = NetworkUtil::FixAddress ( cbxServerAddr->currentText() );
+
+    // tell the parent window that the connection shall be initiated
+    done ( QDialog::Accepted );
 }
 
 void CConnectDlg::OnConnectClicked()

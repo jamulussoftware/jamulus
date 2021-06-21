@@ -37,10 +37,10 @@ if ($BuildOption -Eq "jackonwindows")
 {
     echo "Install JACK2 64-bit..."
     # Install JACK2 64-bit
-    choco install jack -y
+    choco install --no-progress -y jack
 
     echo "Install JACK2 32-bit..."
     # Install JACK2 32-bit (need to force choco install as it detects 64 bits as installed)
-    choco install jack -y -f -forcex86
+    choco install --no-progress -y -f -forcex86 jack
 }
 

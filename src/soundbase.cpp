@@ -113,7 +113,7 @@ QString CSoundBase::SetDev ( const QString strDevName )
                 LoadAndInitializeDriver ( strCurDevName, false );
 
                 // store error return message
-                strReturn = QString ( tr ( "The selected audio device could not be used "
+                strReturn = QString ( tr ( "Can't use the selected audio device "
                                            "because of the following error: " ) ) +
                             strErrorMessage + QString ( tr ( " The previous driver will be selected." ) );
             }
@@ -154,10 +154,9 @@ QString CSoundBase::SetDev ( const QString strDevName )
         if ( !strDevName.isEmpty() )
         {
             strReturn = tr ( "The previously selected audio device "
-                             "is no longer available or the audio driver properties have changed to a state which "
-                             "is incompatible with this software. We now try to find a valid audio device. This new "
-                             "audio device might cause audio feedback. So, before connecting to a server, please "
-                             "check the audio device setting." );
+                             "is no longer available or the driver has changed to an incompatible state."
+                             "We'll attempt to find a valid audio device, but this new audio device may cause feedback."
+                             "Before connecting to a server, please check your audio device settings." );
         }
 
         // try to load and initialize any valid driver
@@ -166,13 +165,8 @@ QString CSoundBase::SetDev ( const QString strDevName )
         if ( !vsErrorList.isEmpty() )
         {
             // create error message with all details
-            QString sErrorMessage = "<b>" + tr ( "No usable " ) + strSystemDriverTechniqueName +
-                                    tr ( " audio device "
-                                         "(driver) found." ) +
-                                    "</b><br><br>" +
-                                    tr ( "In the following there is a list of all available drivers "
-                                         "with the associated error message:" ) +
-                                    "<ul>";
+            QString sErrorMessage = "<b>" + QString ( tr ( "No usable %1 audio device found." ) ).arg ( strSystemDriverTechniqueName ) +
+                                    "</b><br><br>" + tr ( "These are all the available drivers with error messages:" ) + "<ul>";
 
             for ( int i = 0; i < lNumDevs; i++ )
             {
@@ -184,14 +178,14 @@ QString CSoundBase::SetDev ( const QString strDevName )
             // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
             // offer the user under Windows that we open the driver setups of all registered
             // ASIO drivers
-            sErrorMessage = sErrorMessage + "<br/>" + tr ( "Do you want to open the ASIO driver setups?" );
+            sErrorMessage += "<br/>" + tr ( "Do you want to open the ASIO driver setup to try changing your configuration to a working state?" );
 
             if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes | QMessageBox::No ) )
             {
                 LoadAndInitializeFirstValidDriver ( true );
             }
 
-            sErrorMessage = APP_NAME + tr ( " could not be started because of audio interface issues." );
+            sErrorMessage = QString ( tr ( "Can't start %1. Please restart %1 and check/reconfigure your audio settings." ) ).arg ( APP_NAME );
 #endif
 
             throw CGenErr ( sErrorMessage );

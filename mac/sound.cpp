@@ -110,8 +110,8 @@ void CSound::GetAvailableInOutDevices()
 
     if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject, &stPropertyAddress, 0, NULL, &iPropertySize, &audioInputDevice[lNumDevs] ) )
     {
-        throw CGenErr ( tr ( "CoreAudio input AudioHardwareGetProperty call failed. "
-                             "It seems that no sound card is available in the system." ) );
+        throw CGenErr ( tr ( "No sound card is available in your system. "
+                             "CoreAudio input AudioHardwareGetProperty call failed." ) );
     }
 
     iPropertySize               = sizeof ( AudioDeviceID );
@@ -119,8 +119,8 @@ void CSound::GetAvailableInOutDevices()
 
     if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject, &stPropertyAddress, 0, NULL, &iPropertySize, &audioOutputDevice[lNumDevs] ) )
     {
-        throw CGenErr ( tr ( "CoreAudio output AudioHardwareGetProperty call failed. "
-                             "It seems that no sound card is available in the system." ) );
+        throw CGenErr ( tr ( "No sound card is available in the system. "
+                             "CoreAudio output AudioHardwareGetProperty call failed." ) );
     }
 
     lNumDevs++; // next device
@@ -281,7 +281,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
     // if the selected driver was not found, return an error message
     if ( iDriverIdx == INVALID_INDEX )
     {
-        return tr ( "The current selected audio device is no longer present in the system." );
+        return tr ( "The currently selected audio device is no longer present. Please check your audio device." );
     }
 
     // check device capabilities if it fulfills our requirements
@@ -382,7 +382,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 
     if ( AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &inputSampleRate ) )
     {
-        return QString ( tr ( "The audio input device is no longer available." ) );
+        return QString ( tr ( "The audio input device is no longer available. Please check if your input device is connected correctly." ) );
     }
 
     if ( inputSampleRate != fSystemSampleRate )
@@ -391,10 +391,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         if ( AudioObjectSetPropertyData ( audioInputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, sizeof ( Float64 ), &fSystemSampleRate ) !=
              noErr )
         {
-            return QString ( tr ( "Current system audio input device sample "
-                                  "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
-                                  "Applications->Utilities and try to set a sample rate of %2 Hz." ) )
-                .arg ( static_cast<int> ( inputSampleRate ) )
+            return QString ( tr ( "The sample rate on the current input device isn't %1 Hz and is therefore incompatible. "
+                                  "Please select another device or try setting the sample rate to %1 Hz "
+                                  "manually via Audio-MIDI-Setup (in Applications->Utilities)." ) )
                 .arg ( SYSTEM_SAMPLE_RATE_HZ );
         }
     }
@@ -404,7 +403,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 
     if ( AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, &iPropertySize, &outputSampleRate ) )
     {
-        return QString ( tr ( "The audio output device is no longer available." ) );
+        return QString ( tr ( "The audio output device is no longer available. Please check if your output device is connected correctly." ) );
     }
 
     if ( outputSampleRate != fSystemSampleRate )
@@ -413,10 +412,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         if ( AudioObjectSetPropertyData ( audioOutputDevice[iDriverIdx], &stPropertyAddress, 0, NULL, sizeof ( Float64 ), &fSystemSampleRate ) !=
              noErr )
         {
-            return QString ( tr ( "Current system audio output device sample "
-                                  "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
-                                  "Applications->Utilities and try to set a sample rate of %2 Hz." ) )
-                .arg ( static_cast<int> ( outputSampleRate ) )
+            return QString ( tr ( "The sample rate on the current output device isn't %1 Hz and is therefore incompatible. "
+                                  "Please select another device or try setting the sample rate to %1 Hz "
+                                  "manually via Audio-MIDI-Setup (in Applications->Utilities)." ) )
                 .arg ( SYSTEM_SAMPLE_RATE_HZ );
         }
     }
@@ -462,8 +460,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( CurDevStreamFormat.mBitsPerChannel != 32 ) || ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
-        return tr ( "The audio input stream format for this audio device is "
-                    "not compatible with this software." );
+        return QString ( tr ( "The stream format on the current input device isn't "
+                              "compatible with this software. Please select another device." ) )
+            .arg ( APP_NAME );
     }
 
     // check the output
@@ -473,8 +472,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( CurDevStreamFormat.mBitsPerChannel != 32 ) || ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
-        return tr ( "The audio output stream format for this audio device is "
-                    "not compatible with this software." );
+        return QString ( tr ( "The stream format on the current output device isn't "
+                              "compatible with %1. Please select another device." ) )
+            .arg ( APP_NAME );
     }
 
     // store the input and out number of channels for this device
@@ -726,8 +726,8 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     // Error message string: in case buffer sizes on input and output cannot be
     // set to the same value
     const QString strErrBufSize = tr ( "The buffer sizes of the current "
-                                       "input and output audio device cannot be set to a common value. Please "
-                                       "choose other input/output audio devices in your system settings." );
+                                       "input and output audio device can't be set to a common value. Please "
+                                       "select different input/output devices in your system settings." );
 
     // try to set input buffer size
     iActualMonoBufferSize = SetBufferSize ( audioInputDevice[lCurDev], true, iNewPrefMonoBufferSize );

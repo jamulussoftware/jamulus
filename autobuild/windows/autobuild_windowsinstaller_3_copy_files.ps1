@@ -28,9 +28,9 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
 }
 
 # Amend BuildOption when needed, only needed when the name build option in the artifact needs to be different
-if ($BuildOption -Eq "jackonwindows")
+switch ($BuildOption)
 {
-    $BuildOption = "jack"
+    "jackonwindows"   {$BuildOption = "jack"; break}
 }
 
 

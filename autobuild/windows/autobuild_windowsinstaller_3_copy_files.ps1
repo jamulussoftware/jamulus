@@ -42,7 +42,7 @@ switch ($BuildOption)
 echo "rename"
 if ($BuildOption -ne "")
 {
-    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_${BuildOption}_win.exe"
+    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win_${BuildOption}.exe"
 }
 else
 {

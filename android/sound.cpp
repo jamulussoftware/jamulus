@@ -46,12 +46,12 @@ void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
     // We request EXCLUSIVE mode since this will give us the lowest possible
     // latency. If EXCLUSIVE mode isn't available the builder will fall back to SHARED mode
     builder->setFormat ( oboe::AudioFormat::Float )
-            ->setSharingMode(oboe::SharingMode::Exclusive)
-            ->setChannelCount(oboe::ChannelCount::Stereo)
-            ->setSampleRate(SYSTEM_SAMPLE_RATE_HZ)
-            ->setFramesPerCallback(iOboeBufferSizeMono)
-            ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Medium)
-            ->setPerformanceMode(oboe::PerformanceMode::LowLatency);
+        ->setSharingMode ( oboe::SharingMode::Exclusive )
+        ->setChannelCount ( oboe::ChannelCount::Stereo )
+        ->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ )
+        ->setFramesPerCallback ( iOboeBufferSizeMono )
+        ->setSampleRateConversionQuality ( oboe::SampleRateConversionQuality::Medium )
+        ->setPerformanceMode ( oboe::PerformanceMode::LowLatency );
 
     return;
 }
@@ -283,7 +283,7 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
 
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    std::size_t to_write = numFrames*oboeStream->getChannelCount();
+    std::size_t      to_write = numFrames * oboeStream->getChannelCount();
     std::size_t      count    = std::min ( (std::size_t) mOutBuffer.GetAvailData(), to_write );
     CVector<int16_t> outBuffer ( count );
 

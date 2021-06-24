@@ -45,7 +45,9 @@ void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
 {
     // We request EXCLUSIVE mode since this will give us the lowest possible
     // latency. If EXCLUSIVE mode isn't available the builder will fall back to SHARED mode
-    builder->setFormat ( oboe::AudioFormat::Float )
+
+    // Setting format to be PCM 16 bits (int16_t)
+    builder->setFormat ( oboe::AudioFormat::I16 )
         ->setSharingMode ( oboe::SharingMode::Exclusive )
         ->setChannelCount ( oboe::ChannelCount::Stereo )
         ->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ )
@@ -60,10 +62,15 @@ void CSound::closeStream ( oboe::ManagedStream& stream )
 {
     if ( stream )
     {
-        oboe::Result requestStopRes = stream->requestStop();
-        oboe::Result result         = stream->close();
+        oboe::Result result;
+        result = stream->requestStop();
+        if ( oboe::Result::OK != result )
+        {
+            throw CGenErr ( tr ( "Error requesting stream stop: $s", oboe::convertToText ( result ) ) );
+        }
 
-        if ( result != oboe::Result::OK || requestStopRes != oboe::Result::OK )
+        result = stream->close();
+        if ( oboe::Result::OK != result )
         {
             throw CGenErr ( tr ( "Error closing stream: $s", oboe::convertToText ( result ) ) );
         }
@@ -236,6 +243,10 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
     // We're good to start recording now
     // Take the data from the recording device output buffer and move
     // it to the vector ready to send up to the server
+    //
+    // According to the format that we've set on initialization, audioData
+    // is an array of int16_t
+    //
     int16_t* floatData = static_cast<int16_t*> ( audioData );
 
     // Copy recording data to internal vector
@@ -288,6 +299,11 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
     CVector<int16_t> outBuffer ( count );
 
     mOutBuffer.Get ( outBuffer, count );
+
+    //
+    // According to the format that we've set on initialization, audioData
+    // is an array of int16_t
+    //
 
     memcpy ( audioData, outBuffer.data(), count * sizeof ( int16_t ) );
 

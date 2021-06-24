@@ -1,0 +1,18 @@
+Jamulus contributors and maintainers are aware that the GPL and Apple App Store terms of service might
+conflict. Specific rights the GPL guarantees might not be possible to be granted by Apple AppStore
+distribution. Copyright holders of the source code do not want this legal conflict to prevent the
+distribution of Jamulus on the Apple App Store.
+
+Every contributor to the Jamulus source code and copyright holder shall not sue license
+violations solely based on conflicts between the GPL and the App Store guidelines which prevent
+AppStore releases. Every contributor or copyright holder who doesn't wish his code to be published
+via the AppStore must ensure that his code is not published via the AppStore if he chooses to contribute.
+This can be achieved for example - but not exclusively - by removing his or her code from the Jamulus
+source code or by using technical measures (like e.g. #ifdef) to ensure that the code in question
+doesn't get compiled and included for AppStore releases.
+
+In other words this means: As long as you comply with the GPL in all other respects, follow all requirements like providing
+the source code and the text of the license, we will not object your distribution of Jamulus via the
+Apple AppStore.
+
+Note: This text is based on COPYING.iOS from the Nextcloud iOS App: https://github.com/nextcloud/ios/blob/master/COPYING.iOS

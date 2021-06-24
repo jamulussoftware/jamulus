@@ -24,20 +24,16 @@
 
 #include "vstmain.h"
 
-
 /* Implementation *************************************************************/
 // this function is required for host to get plugin
-AudioEffect* createEffectInstance ( audioMasterCallback AudioMaster )
-{
-    return new CLlconVST ( AudioMaster );
-}
+AudioEffect* createEffectInstance ( audioMasterCallback AudioMaster ) { return new CLlconVST ( AudioMaster ); }
 
 CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
     AudioEffectX ( AudioMaster, 1, 0 ), // 1 program with no parameters (=0)
     Client ( LLCON_DEFAULT_PORT_NUMBER )
 {
     // stereo input/output
-    setNumInputs  ( 2 );
+    setNumInputs ( 2 );
     setNumOutputs ( 2 );
 
     setUniqueID ( 'Llco' );
@@ -51,14 +47,15 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
     // we want a single shot timer to shut down the connection if no
     // processing is done anymore (VST host has stopped the stream)
     TimerOnOff.setSingleShot ( true );
-    TimerOnOff.setInterval   ( VST_STOP_TIMER_INTERVAL );
+    TimerOnOff.setInterval ( VST_STOP_TIMER_INTERVAL );
 
     // connect timer event
-    connect ( &TimerOnOff, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerOnOff() ) );
+    connect ( &TimerOnOff, SIGNAL ( timeout() ), this, SLOT ( OnTimerOnOff() ) );
 
+    // clang-format off
 // TODO settings
 Client.SetServerAddr ( DEFAULT_SERVER_ADDRESS );
+    // clang-format on
 }
 
 bool CLlconVST::GetName ( char* cName )
@@ -75,9 +72,7 @@ void CLlconVST::OnTimerOnOff()
     Client.Stop();
 }
 
-void CLlconVST::processReplacing ( float**  pvIn,
-                                   float**  pvOut,
-                                   VstInt32 iNumSamples )
+void CLlconVST::processReplacing ( float** pvIn, float** pvOut, VstInt32 iNumSamples )
 {
     int i, j;
 

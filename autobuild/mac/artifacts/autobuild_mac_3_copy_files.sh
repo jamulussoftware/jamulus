@@ -2,6 +2,10 @@
 
 # autobuild_3_copy_files: copy the built files to deploy folder
 
+if [ "$#" -gt 1 ]; then
+    BUILD_SUFFIX=_$1
+    shift
+fi
 
 ####################
 ###  PARAMETERS  ###
@@ -23,7 +27,7 @@ echo ""
 
 echo ""
 echo ""
-artifact_deploy_filename=jamulus_${jamulus_buildversionstring}_mac.dmg
+artifact_deploy_filename=jamulus_${jamulus_buildversionstring}_mac${BUILD_SUFFIX}.dmg
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename}"
 mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Jamulus-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
 

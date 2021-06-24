@@ -29,7 +29,11 @@
 
 const uint8_t CSound::RING_FACTOR = 20;
 
-CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ), void* arg, const QString& strMIDISetup, const bool, const QString& ) :
+CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
+                 void*          arg,
+                 const QString& strMIDISetup,
+                 const bool,
+                 const QString& ) :
     CSoundBase ( "Oboe", fpNewProcessCallback, arg, strMIDISetup )
 {
 #ifdef ANDROIDDEBUG
@@ -41,13 +45,13 @@ void CSound::setupCommonStreamParams ( oboe::AudioStreamBuilder* builder )
 {
     // We request EXCLUSIVE mode since this will give us the lowest possible
     // latency. If EXCLUSIVE mode isn't available the builder will fall back to SHARED mode
-    builder->setFormat ( oboe::AudioFormat::I16 )
-        ->setSharingMode ( oboe::SharingMode::Exclusive )
-        ->setChannelCount ( oboe::ChannelCount::Stereo )
-        ->setSampleRate ( SYSTEM_SAMPLE_RATE_HZ )
-        ->setFramesPerCallback ( iOboeBufferSizeMono )
-        ->setSampleRateConversionQuality ( oboe::SampleRateConversionQuality::Medium )
-        ->setPerformanceMode ( oboe::PerformanceMode::LowLatency );
+    builder->setFormat ( oboe::AudioFormat::Float )
+            ->setSharingMode(oboe::SharingMode::Exclusive)
+            ->setChannelCount(oboe::ChannelCount::Stereo)
+            ->setSampleRate(SYSTEM_SAMPLE_RATE_HZ)
+            ->setFramesPerCallback(iOboeBufferSizeMono)
+            ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Medium)
+            ->setPerformanceMode(oboe::PerformanceMode::LowLatency);
 
     return;
 }
@@ -125,9 +129,10 @@ void CSound::printStreamDetails ( oboe::ManagedStream& stream )
     QString sSampleRate             = QString::number ( stream->getSampleRate() );
     QString sAudioFormat            = ( stream->getFormat() == oboe::AudioFormat::I16 ? "I16" : "Float" );
     QString sFramesPerCallback      = QString::number ( stream->getFramesPerCallback() );
-    qInfo() << "Stream details: [sDirection: " << sDirection << ", FramesPerBurst: " << sFramesPerBurst << ", BufferSizeInFrames: " << sBufferSizeInFrames
-            << ", BytesPerFrame: " << sBytesPerFrame << ", BytesPerSample: " << sBytesPerSample << ", BufferCapacityInFrames: " << sBufferCapacityInFrames
-            << ", PerformanceMode: " << sPerformanceMode << ", SharingMode: " << sSharingMode << ", DeviceID: " << sDeviceID << ", SampleRate: " << sSampleRate
+    qInfo() << "Stream details: [sDirection: " << sDirection << ", FramesPerBurst: " << sFramesPerBurst
+            << ", BufferSizeInFrames: " << sBufferSizeInFrames << ", BytesPerFrame: " << sBytesPerFrame << ", BytesPerSample: " << sBytesPerSample
+            << ", BufferCapacityInFrames: " << sBufferCapacityInFrames << ", PerformanceMode: " << sPerformanceMode
+            << ", SharingMode: " << sSharingMode << ", DeviceID: " << sDeviceID << ", SampleRate: " << sSampleRate
             << ", AudioFormat: " << sAudioFormat << ", FramesPerCallback: " << sFramesPerCallback << "]";
 }
 
@@ -278,7 +283,7 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
 
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    std::size_t      to_write = numFrames * oboeStream->getChannelCount();
+    std::size_t to_write = numFrames*oboeStream->getChannelCount();
     std::size_t      count    = std::min ( (std::size_t) mOutBuffer.GetAvailData(), to_write );
     CVector<int16_t> outBuffer ( count );
 
@@ -296,16 +301,10 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
 }
 
 // TODO better handling of stream closing errors
-void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result )
-{
-    qDebug() << "CSound::onErrorAfterClose: " << oboe::convertToText ( result );
-}
+void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result ) { qDebug() << "CSound::onErrorAfterClose"; }
 
 // TODO better handling of stream closing errors
-void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result )
-{
-    qDebug() << "CSound::onErrorBeforeClose: " << oboe::convertToText ( result );
-}
+void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result ) { qDebug() << "CSound::onErrorBeforeClose"; }
 
 void CSound::Stats::reset()
 {

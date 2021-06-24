@@ -1,4 +1,4 @@
-VERSION = 3.7.0dev
+VERSION = 3.8.0dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -8,11 +8,11 @@ contains(CONFIG, "noupcasename") {
 
 # allow detailed version info for intermediate builds (#475)
 contains(VERSION, .*dev.*) {
-    exists(".git/config"){
+    exists(".git/config") {
         GIT_DESCRIPTION=$$system(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty) # the match should never match
         VERSION = "$$VERSION"-$$GIT_DESCRIPTION
         message("building version \"$$VERSION\" (intermediate in git repository)")
-    }else{
+    } else {
         VERSION = "$$VERSION"-nogit
         message("building version \"$$VERSION\" (intermediate without git repository)")
     }
@@ -22,8 +22,7 @@ contains(VERSION, .*dev.*) {
 
 CONFIG += qt \
     thread \
-    lrelease \
-    release
+    lrelease
 
 QT += network \
     xml \
@@ -94,10 +93,22 @@ win32 {
 
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
-        message(Using Jack instead of ASIO.)
-
-        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
-            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+        contains(QT_ARCH, "i386") {
+            exists("C:/Program Files (x86)") {
+                message("Cross compilation build")
+                programfilesdir = "C:/Program Files (x86)"
+            } else {
+                message("Native i386 build")
+                programfilesdir = "C:/Program Files"
+            }
+            libjackname = "libjack.lib"
+        } else {
+            message("Native x86_64 build")
+            programfilesdir = "C:/Program Files"
+            libjackname = "libjack64.lib"
+        }
+        !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
+            message("Warning: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
         }
 
         HEADERS -= windows/sound.h
@@ -107,9 +118,10 @@ win32 {
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_ASIO
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
-        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
+        INCLUDEPATH += "$${programfilesdir}/JACK2/include"
+        LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
     }
+
 } else:macx {
     contains(CONFIG, "server_bundle") {
         message(The generated application bundle will run a server instance.)
@@ -152,7 +164,7 @@ win32 {
 
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+                 message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
 
@@ -374,15 +386,15 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
-        desktop.files = distributions/jamulus.desktop
+        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in distributions/jamulus-server.desktop.in
+        desktop.files = distributions/jamulus.desktop distributions/jamulus-server.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/jamulus.png
+        icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
 
         INSTALLS += target desktop icons
     }
@@ -404,6 +416,7 @@ HEADERS += src/buffer.h \
     src/global.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
+    src/threadpool.h \
     src/server.h \
     src/serverlist.h \
     src/serverlogging.h \
@@ -702,7 +715,10 @@ DISTFILES += ChangeLog \
     CONTRIBUTING.md \
     README.md \
     distributions/jamulus.desktop.in \
+    distributions/jamulus-server.desktop.in \
     distributions/jamulus.png \
+    distributions/jamulus.svg \
+    distributions/jamulus-server.svg \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \
@@ -729,6 +745,8 @@ DISTFILES += ChangeLog \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
+    src/res/IndicatorYellowFancy.png \
+    src/res/IndicatorRedFancy.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
@@ -745,6 +763,8 @@ DISTFILES += ChangeLog \
     src/res/fronticon.png \
     src/res/fronticonserver.png \
     src/res/mixerboardbackground.png \
+    src/res/transparent1x1.png \
+    src/res/mutediconorange.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \
@@ -1125,3 +1145,4 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+

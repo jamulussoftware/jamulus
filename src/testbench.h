@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
 \******************************************************************************/
@@ -34,16 +34,13 @@
 #include "protocol.h"
 #include "util.h"
 
-
 /* Classes ********************************************************************/
 class CTestbench : public QObject
 {
     Q_OBJECT
 
 public:
-    CTestbench ( QString sNewAddress, quint16 iNewPort ) :
-        sAddress ( sNewAddress ),
-        iPort    ( iNewPort )
+    CTestbench ( QString sNewAddress, quint16 iNewPort ) : sAddress ( sNewAddress ), iPort ( iNewPort )
     {
         sLAddress = GenRandomIPv4Address().toString();
         iLPort    = static_cast<quint16> ( GenRandomIntInRange ( -2, 10000 ) );
@@ -54,22 +51,18 @@ public:
 
         while ( !bSuccess && ( iPortIncrement <= 100 ) )
         {
-            bSuccess = UdpSocket.bind ( QHostAddress( QHostAddress::Any ),
-                                        22222 + iPortIncrement );
+            bSuccess = UdpSocket.bind ( QHostAddress ( QHostAddress::Any ), 22222 + iPortIncrement );
 
             iPortIncrement++;
         }
 
         // connect protocol signals
-        QObject::connect ( &Protocol, &CProtocol::MessReadyForSending,
-            this, &CTestbench::OnSendProtMessage );
+        QObject::connect ( &Protocol, &CProtocol::MessReadyForSending, this, &CTestbench::OnSendProtMessage );
 
-        QObject::connect ( &Protocol, &CProtocol::CLMessReadyForSending,
-            this, &CTestbench::OnSendCLMessage );
+        QObject::connect ( &Protocol, &CProtocol::CLMessReadyForSending, this, &CTestbench::OnSendCLMessage );
 
         // connect and start the timer (testbench heartbeat)
-        QObject::connect ( &Timer, &QTimer::timeout,
-            this, &CTestbench::OnTimer );
+        QObject::connect ( &Timer, &QTimer::timeout, this, &CTestbench::OnTimer );
 
         Timer.start ( 1 ); // 1 ms
     }
@@ -77,8 +70,7 @@ public:
 protected:
     int GenRandomIntInRange ( const int iStart, const int iEnd ) const
     {
-        return static_cast<int> ( iStart +
-            ( ( static_cast<double> ( iEnd - iStart + 1 ) * rand() ) / RAND_MAX ) );
+        return static_cast<int> ( iStart + ( ( static_cast<double> ( iEnd - iStart + 1 ) * rand() ) / RAND_MAX ) );
     }
 
     QString GenRandomString() const
@@ -100,7 +92,7 @@ protected:
         quint32 b = static_cast<quint32> ( 168 );
         quint32 c = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
         quint32 d = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
-        return QHostAddress( a << 24 | b << 16 | c << 8 | d );
+        return QHostAddress ( a << 24 | b << 16 | c << 8 | d );
     }
 
     QString    sAddress;
@@ -137,8 +129,7 @@ public slots:
             break;
 
         case 2: // PROTMESSID_CHANNEL_GAIN
-            Protocol.CreateChanGainMes ( GenRandomIntInRange ( 0, 20 ),
-                                         GenRandomIntInRange ( -100, 100 ) );
+            Protocol.CreateChanGainMes ( GenRandomIntInRange ( 0, 20 ), GenRandomIntInRange ( -100, 100 ) );
             break;
 
         case 4: // PROTMESSID_CONN_CLIENTS_LIST
@@ -171,8 +162,7 @@ public slots:
             break;
 
         case 10: // PROTMESSID_LICENCE_REQUIRED
-            eLicenceType =
-                static_cast<ELicenceType> ( GenRandomIntInRange ( 0, 1 ) );
+            eLicenceType = static_cast<ELicenceType> ( GenRandomIntInRange ( 0, 1 ) );
 
             Protocol.CreateLicenceRequiredMes ( eLicenceType );
             break;
@@ -194,14 +184,11 @@ public slots:
             break;
 
         case 14: // PROTMESSID_CLM_PING_MS
-            Protocol.CreateCLPingMes ( CurHostAddress,
-                                       GenRandomIntInRange ( -2, 1000 ) );
+            Protocol.CreateCLPingMes ( CurHostAddress, GenRandomIntInRange ( -2, 1000 ) );
             break;
 
         case 15: // PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS
-            Protocol.CreateCLPingWithNumClientsMes ( CurHostAddress,
-                                                     GenRandomIntInRange ( -2, 1000 ),
-                                                     GenRandomIntInRange ( -2, 1000 ) );
+            Protocol.CreateCLPingWithNumClientsMes ( CurHostAddress, GenRandomIntInRange ( -2, 1000 ), GenRandomIntInRange ( -2, 1000 ) );
             break;
 
         case 16: // PROTMESSID_CLM_SERVER_FULL
@@ -215,9 +202,7 @@ public slots:
             ServerInfo.strCity          = GenRandomString();
             ServerInfo.strName          = GenRandomString();
 
-            Protocol.CreateCLRegisterServerMes ( CurHostAddress,
-                                                 CurLocalAddress,
-                                                 ServerInfo );
+            Protocol.CreateCLRegisterServerMes ( CurHostAddress, CurLocalAddress, ServerInfo );
             break;
 
         case 18: // PROTMESSID_CLM_UNREGISTER_SERVER
@@ -233,8 +218,7 @@ public slots:
             vecServerInfo[0].strCity          = GenRandomString();
             vecServerInfo[0].strName          = GenRandomString();
 
-            Protocol.CreateCLServerListMes ( CurHostAddress,
-                                             vecServerInfo );
+            Protocol.CreateCLServerListMes ( CurHostAddress, vecServerInfo );
             break;
 
         case 20: // PROTMESSID_CLM_REQ_SERVER_LIST
@@ -242,8 +226,7 @@ public slots:
             break;
 
         case 21: // PROTMESSID_CLM_SEND_EMPTY_MESSAGE
-            Protocol.CreateCLSendEmptyMesMes ( CurHostAddress,
-                                               CurHostAddress );
+            Protocol.CreateCLSendEmptyMesMes ( CurHostAddress, CurHostAddress );
             break;
 
         case 22: // PROTMESSID_CLM_EMPTY_MESSAGE
@@ -263,8 +246,7 @@ public slots:
             break;
 
         case 26: // PROTMESSID_ACKN
-            Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
-                                                GenRandomIntInRange ( -100, 100 ) );
+            Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ), GenRandomIntInRange ( -100, 100 ) );
             break;
 
         case 27:
@@ -289,27 +271,21 @@ public slots:
         case 30: // PROTMESSID_CLM_CHANNEL_LEVEL_LIST
             vecLevelList[0] = GenRandomIntInRange ( 0, 0xF );
 
-            Protocol.CreateCLChannelLevelListMes ( CurHostAddress,
-                                                   vecLevelList,
-                                                   1 );
+            Protocol.CreateCLChannelLevelListMes ( CurHostAddress, vecLevelList, 1 );
             break;
 
         case 31: // PROTMESSID_CLM_REGISTER_SERVER_RESP
-            eSvrRegResult =
-                static_cast<ESvrRegResult> ( GenRandomIntInRange ( 0, 1 ) );
+            eSvrRegResult = static_cast<ESvrRegResult> ( GenRandomIntInRange ( 0, 1 ) );
 
-            Protocol.CreateCLRegisterServerResp ( CurHostAddress,
-                                                  eSvrRegResult );
+            Protocol.CreateCLRegisterServerResp ( CurHostAddress, eSvrRegResult );
             break;
 
         case 32: // PROTMESSID_CHANNEL_PAN
-            Protocol.CreateChanPanMes ( GenRandomIntInRange ( -2, 20 ),
-                                        GenRandomIntInRange ( 0, 32767 ) );
+            Protocol.CreateChanPanMes ( GenRandomIntInRange ( -2, 20 ), GenRandomIntInRange ( 0, 32767 ) );
             break;
 
         case 33: // PROTMESSID_MUTE_STATE_CHANGED
-            Protocol.CreateMuteStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ),
-                                                    GenRandomIntInRange ( 0, 1 ) );
+            Protocol.CreateMuteStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ), GenRandomIntInRange ( 0, 1 ) );
             break;
 
         case 34: // PROTMESSID_CLIENT_ID
@@ -320,17 +296,12 @@ public slots:
 
     void OnSendProtMessage ( CVector<uint8_t> vecMessage )
     {
-        UdpSocket.writeDatagram (
-            (const char*) &( (CVector<uint8_t>) vecMessage )[0],
-            vecMessage.Size(), QHostAddress ( sAddress ), iPort );
+        UdpSocket.writeDatagram ( (const char*) &( (CVector<uint8_t>) vecMessage )[0], vecMessage.Size(), QHostAddress ( sAddress ), iPort );
 
         // reset protocol so that we do not have to wait for an acknowledge to
         // send the next message
         Protocol.Reset();
     }
 
-    void OnSendCLMessage ( CHostAddress, CVector<uint8_t> vecMessage )
-    {
-        OnSendProtMessage ( vecMessage );
-    }
+    void OnSendCLMessage ( CHostAddress, CVector<uint8_t> vecMessage ) { OnSendProtMessage ( vecMessage ); }
 };

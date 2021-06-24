@@ -10,6 +10,7 @@ Makefile
 .settings
 .idea
 .vscode
+.cache
 *.user
 *.user.*
 *.o
@@ -39,6 +40,7 @@ distributions/jack2
 distributions/claudio_piano.sf2
 distributions/fluidsynth*
 distributions/jamulus.desktop
+distributions/jamulus-server.desktop
 .xcode
 Debug-iphoneos/
 Jamulus.xcodeproj

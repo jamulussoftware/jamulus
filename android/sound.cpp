@@ -247,10 +247,10 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
     // According to the format that we've set on initialization, audioData
     // is an array of int16_t
     //
-    int16_t* floatData = static_cast<int16_t*> ( audioData );
+    int16_t* intData = static_cast<int16_t*> ( audioData );
 
     // Copy recording data to internal vector
-    memcpy ( vecsTmpInputAudioSndCrdStereo.data(), floatData, sizeof ( int16_t ) * numFrames * oboeStream->getChannelCount() );
+    memcpy ( vecsTmpInputAudioSndCrdStereo.data(), intData, sizeof ( int16_t ) * numFrames * oboeStream->getChannelCount() );
 
     if ( numFrames != iOboeBufferSizeMono )
     {

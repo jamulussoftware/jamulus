@@ -172,7 +172,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
         QString ( tr ( "If enabled, the support for very small network audio packets is activated. Very small "
                        "network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The "
                        "smaller the network buffers, the lower the audio latency. But at the same time "
-                       "the network load increases and the probability of audio dropouts also increases." ) )
+                       "the network load and the probability of audio dropouts or sound artifacts increases." ) )
             .arg ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );

@@ -74,6 +74,7 @@ protected:
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& CurServerAddress );
+    void             UpdateDirectoryServerComboBox();
 
     CClientSettings* pSettings;
 
@@ -93,7 +94,7 @@ protected:
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
-    void OnCentServAddrTypeChanged ( int iTypeIdx );
+    void OnDirectoryServerChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
     void OnCustomCentralServerAddrChanged();

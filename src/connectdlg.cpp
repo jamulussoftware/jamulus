@@ -70,8 +70,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     UpdateDirectoryServerComboBox();
 
-    cbxCentServAddrType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " + tr ( "Selects the server list to be shown." ) );
-    cbxCentServAddrType->setAccessibleName ( tr ( "Server list selection combo box" ) );
+    cbxDirectoryServer->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " + tr ( "Selects the server list to be shown." ) );
+    cbxDirectoryServer->setAccessibleName ( tr ( "Server list selection combo box" ) );
 
     // filter
     edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " +
@@ -156,10 +156,10 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     // combo boxes
     QObject::connect ( cbxServerAddr, &QComboBox::editTextChanged, this, &CConnectDlg::OnServerAddrEditTextChanged );
 
-    QObject::connect ( cbxCentServAddrType,
+    QObject::connect ( cbxDirectoryServer,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
-                       &CConnectDlg::OnCentServAddrTypeChanged );
+                       &CConnectDlg::OnDirectoryServerChanged );
 
     // check boxes
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged, this, &CConnectDlg::OnExpandAllStateChanged );
@@ -210,11 +210,11 @@ void CConnectDlg::RequestServerList()
     lvwServers->clear();
 
     // update list combo box (disable events to avoid a signal)
-    cbxCentServAddrType->blockSignals ( true );
+    cbxDirectoryServer->blockSignals ( true );
     // iCustomDirectoryIndex is non-zero only if eCentralServerAddressType == AT_CUSTOM, and represents
-    // the offset into cbxCentServAddrType after the last non-custom directory server
-    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) + pSettings->iCustomDirectoryIndex );
-    cbxCentServAddrType->blockSignals ( false );
+    // the offset into cbxDirectoryServer after the last non-custom directory server
+    cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) + pSettings->iCustomDirectoryIndex );
+    cbxDirectoryServer->blockSignals ( false );
 
     // Get the IP address of the directory server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
@@ -242,7 +242,7 @@ void CConnectDlg::hideEvent ( QHideEvent* )
     TimerReRequestServList.stop();
 }
 
-void CConnectDlg::OnCentServAddrTypeChanged ( int iTypeIdx )
+void CConnectDlg::OnDirectoryServerChanged ( int iTypeIdx )
 {
     // store the new directory server address type and request new list
     // if iTypeIdx == AT_CUSTOM, then iCustomDirectoryIndex is the index into the vector holding the user's custom central servers
@@ -907,21 +907,21 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
 void CConnectDlg::UpdateDirectoryServerComboBox()
 {
     // directory server address type combo box
-    cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE3 ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
+    cbxDirectoryServer->clear();
+    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
+    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
+    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE3 ) );
+    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
+    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
+    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
+    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
 
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
         if ( pSettings->vstrCentralServerAddress[iLEIdx] != "" )
         {
             // store the index as user data to the combo box item, too
-            cbxCentServAddrType->addItem ( pSettings->vstrCentralServerAddress[iLEIdx], iLEIdx );
+            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[iLEIdx], iLEIdx );
         }
     }
 }

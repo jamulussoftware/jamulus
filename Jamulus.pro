@@ -128,10 +128,10 @@ win32 {
 
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
-        MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+        MACOSX_BUNDLE_ICON.files = mac/jamulus-server-icon-2020.icns
         RC_FILE = mac/jamulus-server-icon-2020.icns
     } else {
-        MACOSX_BUNDLE_ICON_FILE = mainicon.icns
+        MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
         RC_FILE = mac/mainicon.icns
     }
 
@@ -141,11 +141,20 @@ win32 {
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
+    OSX_ENTITLEMENTS.files = Jamulus.entitlements
+    OSX_ENTITLEMENTS.path = Contents/Resources 
+    QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
+    
     macx-xcode {
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
+        XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+        XCODE_ENTITLEMENTS.value = Jamulus.entitlements
+        QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
+        MACOSX_BUNDLE_ICON.path = Contents/Resources
+        QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
     } else {
         QMAKE_INFO_PLIST = mac/Info-make.plist
     }
@@ -184,7 +193,7 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework CoreFoundation \
         -framework CoreServices \

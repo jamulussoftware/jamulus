@@ -1,6 +1,9 @@
 
 ### 3.8.0dev <- NOTE: the release version number will be 3.8.1 ###
 
+- Internal: mac/deploy_mac.sh now takes an optional parameter to a certificate name to sign the build with.
+  (contributed by @emlynmac)
+
 - CLI: Jamulus now shows a link to the Website for translated content (#1759).
   (contributed by @henkdegroot)
   

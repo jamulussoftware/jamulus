@@ -74,6 +74,7 @@ protected:
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
     void             EmitCLServerListPingMes ( const CHostAddress& CurServerAddress );
+    void             UpdateDirectoryServerComboBox();
 
     CClientSettings* pSettings;
 

@@ -920,8 +920,7 @@ void CConnectDlg::UpdateDirectoryServerComboBox()
     {
         if ( pSettings->vstrCentralServerAddress[i] != "" )
         {
-            // store the index as user data to the combo box item, too
-            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[i], i );
+            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[i] );
         }
     }
 }

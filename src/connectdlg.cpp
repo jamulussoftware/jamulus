@@ -916,12 +916,12 @@ void CConnectDlg::UpdateDirectoryServerComboBox()
     cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
     cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
 
-    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
+    for ( int i = 0; i < MAX_NUM_SERVER_ADDR_ITEMS; i++ )
     {
-        if ( pSettings->vstrCentralServerAddress[iLEIdx] != "" )
+        if ( pSettings->vstrCentralServerAddress[i] != "" )
         {
             // store the index as user data to the combo box item, too
-            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[iLEIdx], iLEIdx );
+            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[i], i );
         }
     }
 }

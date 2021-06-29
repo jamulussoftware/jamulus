@@ -55,6 +55,10 @@ public:
     bool           isInitialized;
 
 protected:
+    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool );
+    void            GetAvailableInOutDevices();
+    void            SwitchDevice ( QString strDriverName );
+
     AudioBuffer     buffer;
     AudioBufferList bufferList;
     void            checkStatus ( int status );
@@ -64,4 +68,6 @@ protected:
                                         UInt32                      inBusNumber,
                                         UInt32                      inNumberFrames,
                                         AudioBufferList*            ioData );
+
+    QMutex Mutex;
 };

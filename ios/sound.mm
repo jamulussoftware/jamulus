@@ -42,50 +42,48 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
 
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
         [[AVAudioSession sharedInstance] requestRecordPermission:^( BOOL granted ) {
-            if ( granted )
-            {
-                // ok
-            }
-            else
-            {
-                // TODO - alert user
-            }
+          if ( granted )
+          {
+              // ok
+          }
+          else
+          {
+              // TODO - alert user
+          }
         }];
         [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
     }
     catch ( const CGenErr& generr )
     {
-        QMessageBox::warning( nullptr, "Sound exception", generr.GetErrorText() );
+        QMessageBox::warning ( nullptr, "Sound exception", generr.GetErrorText() );
     }
 
     buffer.mNumberChannels    = 2;
-    buffer.mData              = malloc ( 256 * sizeof ( Float32 ) * 2 ); // max size
+    buffer.mData              = malloc ( 256 * sizeof ( Float32 ) * buffer.mNumberChannels ); // max size
     bufferList.mNumberBuffers = 1;
     bufferList.mBuffers[0]    = buffer;
 }
 
-CSound::~CSound ()
-{
-    free ( buffer.mData );
-}
+CSound::~CSound() { free ( buffer.mData ); }
 
 /**
  This callback is called when sound card needs output data to play.
- And because Jamulus uses the same buffer to store input and output data (input is sent to server, then output is fetched from server), we actually use the output callback to read inputdata first, process it, and then copy the output fetched from server to ioData, which will then be played.
+ And because Jamulus uses the same buffer to store input and output data (input is sent to server, then output is fetched from server), we actually
+ use the output callback to read inputdata first, process it, and then copy the output fetched from server to ioData, which will then be played.
  */
 OSStatus CSound::recordingCallback ( void*                       inRefCon,
-                                    AudioUnitRenderActionFlags* ioActionFlags,
-                                    const AudioTimeStamp*       inTimeStamp,
-                                    UInt32                      inBusNumber,
-                                    UInt32                      inNumberFrames,
-                                    AudioBufferList*            ioData )
+                                     AudioUnitRenderActionFlags* ioActionFlags,
+                                     const AudioTimeStamp*       inTimeStamp,
+                                     UInt32                      inBusNumber,
+                                     UInt32                      inNumberFrames,
+                                     AudioBufferList*            ioData )
 {
 
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
     // setting up temp buffer
     pSound->buffer.mDataByteSize   = pSound->iCoreAudioBufferSizeMono * sizeof ( Float32 ) * pSound->buffer.mNumberChannels;
-    pSound->bufferList.mBuffers[0]    = pSound->buffer;
+    pSound->bufferList.mBuffers[0] = pSound->buffer;
 
     // Obtain recorded samples
 
@@ -224,11 +222,29 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
         status = AudioUnitInitialize ( audioUnit );
         checkStatus ( status );
 
+        SwitchDevice ( strCurDevName );
+
+        if ( !isInitialized )
+        {
+            [[NSNotificationCenter defaultCenter] addObserverForName:AVAudioSessionRouteChangeNotification
+                                                              object:nil
+                                                               queue:nil
+                                                          usingBlock:^( NSNotification* notification ) {
+                                                            UInt8 reason =
+                                                                [[notification.userInfo valueForKey:AVAudioSessionRouteChangeReasonKey] intValue];
+                                                            if ( reason == AVAudioSessionRouteChangeReasonNewDeviceAvailable or
+                                                                 reason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable )
+                                                            {
+                                                                emit ReinitRequest ( RS_RELOAD_RESTART_AND_INIT ); // reload the available devices frame
+                                                            }
+                                                          }];
+        }
+
         isInitialized = true;
     }
     catch ( const CGenErr& generr )
     {
-        QMessageBox::warning( nullptr, "Sound init exception", generr.GetErrorText() );
+        QMessageBox::warning ( nullptr, "Sound init exception", generr.GetErrorText() );
     }
 
     return iCoreAudioBufferSizeMono;
@@ -245,7 +261,7 @@ void CSound::Start()
     }
     catch ( const CGenErr& generr )
     {
-        QMessageBox::warning( nullptr, "Sound start exception", generr.GetErrorText() );
+        QMessageBox::warning ( nullptr, "Sound start exception", generr.GetErrorText() );
     }
 }
 
@@ -258,7 +274,7 @@ void CSound::Stop()
     }
     catch ( const CGenErr& generr )
     {
-        QMessageBox::warning( nullptr, "Sound stop exception", generr.GetErrorText() );
+        QMessageBox::warning ( nullptr, "Sound stop exception", generr.GetErrorText() );
     }
     // call base class
     CSoundBase::Stop();
@@ -269,5 +285,62 @@ void CSound::checkStatus ( int status )
     if ( status )
     {
         printf ( "Status not 0! %d\n", status );
+    }
+}
+
+QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool )
+{
+    // secure lNumDevs/strDriverNames access
+    QMutexLocker locker ( &Mutex );
+
+    // reload the driver list of available sound devices
+    GetAvailableInOutDevices();
+
+    // store the current name of the driver
+    strCurDevName = strDriverName;
+
+    return "";
+}
+
+void CSound::GetAvailableInOutDevices()
+{
+    // always add system default devices for input and output as first entry
+    lNumDevs          = 1;
+    strDriverNames[0] = "System Default In/Out Devices";
+
+    AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
+
+    if ( sessionInstance.availableInputs.count > 1 )
+    {
+        lNumDevs          = 2;
+        strDriverNames[1] = "in: Built-in Mic/out: System Default";
+    }
+}
+
+void CSound::SwitchDevice ( QString strDriverName )
+{
+    // find driver index from given driver name
+    int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
+
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    {
+        if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
+        {
+            iDriverIdx = i;
+        }
+    }
+
+    NSError* error = nil;
+
+    AVAudioSession* sessionInstance = [AVAudioSession sharedInstance];
+
+    if ( iDriverIdx == 0 ) // system default device
+    {
+        unsigned long lastInput = sessionInstance.availableInputs.count - 1;
+        [sessionInstance setPreferredInput:sessionInstance.availableInputs[lastInput] error:&error];
+    }
+    else // built-in mic
+    {
+        [sessionInstance setPreferredInput:sessionInstance.availableInputs[0] error:&error];
     }
 }

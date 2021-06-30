@@ -533,16 +533,10 @@ void CConnectDlg::OnCustomCentralServerAddrChanged()
     // only update list if a custom server list is selected
     if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
     {
-        // if ( pSettings->vstrCentralServerAddress[0] == "" ) // ALL custom central servers were removed
-        // {
+        // TODO: detect if the currently select custom directory still exists in the now potentially re-ordered vector,
+        //       if so, then change to its new index
         pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_DEFAULT );
         pSettings->iCustomDirectoryIndex     = 0;
-        // }
-        // else
-        // {
-        //     pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_CUSTOM );
-        //     pSettings->iCustomDirectoryIndex     = 0;
-        // }
         RequestServerList();
     }
 }

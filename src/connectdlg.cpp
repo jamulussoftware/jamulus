@@ -534,7 +534,7 @@ void CConnectDlg::OnCustomCentralServerAddrChanged()
     if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
     {
         // TODO: detect if the currently select custom directory still exists in the now potentially re-ordered vector,
-        //       if so, then change to its new index
+        //       if so, then change to its new index.  Issue #1899
         pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_DEFAULT );
         pSettings->iCustomDirectoryIndex     = 0;
         RequestServerList();

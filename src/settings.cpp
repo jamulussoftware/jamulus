@@ -446,13 +446,14 @@ vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "central
     }
 
     // custom directory server index
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", 0, MAX_NUM_SERVER_ADDR_ITEMS, iValue ) )
+    if ( ( eCentralServerAddressType == AT_CUSTOM ) &&
+         GetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", 0, MAX_NUM_SERVER_ADDR_ITEMS, iValue ) )
     {
         iCustomDirectoryIndex = iValue;
     }
     else
     {
-        // if no custom directory index is found in the settings .ini file, then initialize to zero
+        // if directory is not set to custom, or if no custom directory index is found in the settings .ini file, then initialize to zero
         iCustomDirectoryIndex = 0;
     }
 

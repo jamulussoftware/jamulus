@@ -405,6 +405,37 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
     }
 
+    // MeterStyle
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_SMALL_LED */, iValue ) )
+    {
+        pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
+    }
+    else
+    {
+        // if MeterStyle is not found in the ini, set it based on the GUI design
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign", 0, 2 /* GD_SLIMFADER */, iValue ) )
+        {
+            switch ( iValue )
+            {
+            case GD_STANDARD:
+                pClient->SetMeterStyle ( MT_BAR );
+                break;
+
+            case GD_ORIGINAL:
+                pClient->SetMeterStyle ( MT_LED );
+                break;
+
+            case GD_SLIMFADER:
+                pClient->SetMeterStyle ( MT_SLIM_BAR );
+                break;
+
+            default:
+                pClient->SetMeterStyle ( MT_LED );
+                break;
+            }
+        }
+    }
+
     // audio channels
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iValue ) )
     {
@@ -633,6 +664,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // GUI design
     SetNumericIniSet ( IniXMLDocument, "client", "guidesign", static_cast<int> ( pClient->GetGUIDesign() ) );
+
+    // MeterStyle
+    SetNumericIniSet ( IniXMLDocument, "client", "meterstyle", static_cast<int> ( pClient->GetMeterStyle() ) );
 
     // audio channels
     SetNumericIniSet ( IniXMLDocument, "client", "audiochannels", static_cast<int> ( pClient->GetAudioChannels() ) );

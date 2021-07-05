@@ -47,7 +47,9 @@ public:
     {
         MT_LED,
         MT_BAR,
-        MT_SLIM_BAR
+        MT_SLIM_BAR,
+        MT_SLIM_LED,
+        MT_SMALL_LED
     };
 
     CLevelMeter ( QWidget* parent = nullptr );
@@ -66,7 +68,15 @@ protected:
             RL_BLACK,
             RL_GREEN,
             RL_YELLOW,
-            RL_RED
+            RL_RED,
+            RL_SLIM_BLACK,
+            RL_SLIM_GREEN,
+            RL_SLIM_YELLOW,
+            RL_SLIM_RED,
+            RL_SMALL_BLACK,
+            RL_SMALL_GREEN,
+            RL_SMALL_YELLOW,
+            RL_SMALL_RED
         };
 
         cLED ( QWidget* parent );
@@ -76,10 +86,18 @@ protected:
         QLabel*     GetLabelPointer() { return pLEDLabel; }
 
     protected:
-        QPixmap BitmCubeRoundBlack;
-        QPixmap BitmCubeRoundGreen;
-        QPixmap BitmCubeRoundYellow;
-        QPixmap BitmCubeRoundRed;
+        QPixmap BitmCubeLedBlack;
+        QPixmap BitmCubeLedGreen;
+        QPixmap BitmCubeLedYellow;
+        QPixmap BitmCubeLedRed;
+        QPixmap BitmCubeSlimLedBlack;
+        QPixmap BitmCubeSlimLedGreen;
+        QPixmap BitmCubeSlimLedYellow;
+        QPixmap BitmCubeSlimLedRed;
+        QPixmap BitmCubeSmallLedBlack;
+        QPixmap BitmCubeSmallLedGreen;
+        QPixmap BitmCubeSmallLedYellow;
+        QPixmap BitmCubeSmallLedRed;
 
         ELightColor eCurLightColor;
         QLabel*     pLEDLabel;

@@ -13,6 +13,7 @@ import requests
 import argparse
 import logging
 import os
+import re
 import subprocess
 import yaml
 
@@ -27,7 +28,9 @@ class UnexpectedGithubStatus(RuntimeError):
 
 
 # List of user names which should be ignored (such as bots):
-ignore_list = ['github-actions[bot]']
+ignore_list = ['github-actions[bot]', 'imgbot[bot]']
+
+CHARSET = 'utf-8'
 
 
 class Authors:
@@ -61,8 +64,11 @@ class Authors:
         Once looked up, the results are cached in a local file.
         """
         if key not in self.keys_to_user:
-            self.keys_to_user[key] = self.get_user_by_commit(commit_hash)
-            self.save()
+            if commit_hash:
+                self.keys_to_user[key] = self.get_user_by_commit(commit_hash)
+                self.save()
+            else:
+                return None
         return self.keys_to_user[key]
 
     def get_user_by_commit(self, hash):
@@ -79,7 +85,7 @@ class Authors:
         if 200 <= r.status_code < 300:
             try:
                 return r.json()['author']['login']
-            except TypeError:
+            except (TypeError, KeyError):
                 logger.warning('%s has not github author, saving as empty', hash)
                 return ''
         if r.status_code == 422:
@@ -150,11 +156,32 @@ def find_contributors(git_log_selector, from_, to):
     `from_` and `to` can be any committish such as a commit hash or a tag.
     """
     contributors = set()
-    commits = subprocess.check_output(['git', 'log', '--format=format:%H %an <%ae>', '%s..%s' % (from_, to), '--'] + git_log_selector)
-    commits = commits.decode('utf-8')
-    for commit in commits.split('\n'):
-        hash, author_key = commit.split(' ', 1)
+    co_author_keys = set()
+    commits = subprocess.check_output(['git', 'log', '-z', '--format=format:%H %an <%ae>%n%b', '%s..%s' % (from_, to), '--'] + git_log_selector)
+    commits = commits.decode(CHARSET)
+    for commit in commits.split('\0'):
+        if not commit:
+            continue
+        hash, author_key = commit.split('\n', 1)[0].split(' ', 1)
         login = authors.get_login(author_key, hash)
+        contributors.add(login)
+        co_authors = re.findall('Co-authored-by:\s*(\S.*(<[^ >]+>))\s*\n', commit, re.I)
+        for co_author_full, co_author_email in co_authors:
+            login = authors.get_login(co_author_full, None)
+            if not login:
+                # try to find a previous commit by this mail address
+                # and pass this commit id to get_login() to retrieve the
+                # associated handle from the github API.
+                commit = subprocess.check_output(['git', 'log', '--format=%H', '--max-count=1', '--author=%s' % re.escape(co_author_email)]).strip().decode(CHARSET)
+                if commit:
+                    login = authors.get_login(co_author_full, commit)
+            if login:
+                contributors.add(login)
+
+    # Resolve co-authors last because we have to rely on having seen the
+    # email-to-login mapping via some other commit.
+    for co_author in co_author_keys:
+        login = authors.get_login(co_author, None)
         contributors.add(login)
     return sorted(contributors, key=str.casefold)
 

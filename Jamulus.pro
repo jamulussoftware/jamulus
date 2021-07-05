@@ -1091,6 +1091,15 @@ contains(CONFIG, "headless") {
     FORMS += $$FORMS_GUI
 }
 
+contains(VERSION, .*dev.*) {
+    # Format all code via clang-format on non-release builds.
+    # If clang-format isn't available, we fail silently, but we check on PR submission.
+    # This must come before addition of opus sources:
+    clang_format.commands = 'clang-format -i $$SOURCES $$HEADERS || echo "clang-format-based source code formatting failed. Please ensure that clang-format is installed and available in your PATH variable."'
+    QMAKE_EXTRA_TARGETS += clang_format
+    PRE_TARGETDEPS += clang_format
+}
+
 # use external OPUS library if requested
 contains(CONFIG, "opus_shared_lib") {
     message(OPUS codec is used from a shared library.)

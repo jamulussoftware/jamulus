@@ -53,21 +53,9 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
-        pChannel ( pNewChannel ),
-        bIsClient ( true ),
-        bJitterBufferOK ( true )
-    {
-        Init ( iPortNumber, iQosNumber, strServerBindIP );
-    }
+    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
 
-    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
-        pServer ( pNServP ),
-        bIsClient ( false ),
-        bJitterBufferOK ( true )
-    {
-        Init ( iPortNumber, iQosNumber, strServerBindIP );
-    }
+    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
 
     virtual ~CSocket();
 
@@ -77,7 +65,10 @@ public:
     void Close();
 
 protected:
-    void Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
+    void    Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP );
+    quint16 iPortNumber;
+    quint16 iQosNumber;
+    QString strServerBindIP;
 
 #ifdef _WIN32
     SOCKET UdpSocket;

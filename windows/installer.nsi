@@ -41,7 +41,9 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 ; Add support for copying registry keys
 
 !if ${BUILD_OPTION} != "jackonwindows"
-    ;Only insert macro when not building for JACK
+    ; This macro is only needed when using ASIO4ALL.
+    ; Technically, we cannot detect this easily.
+    ; Therefore, we only insert the macro when not building for JACK.
     !insertmacro COPY_REGISTRY_KEY
 !endif
 

@@ -40,7 +40,12 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
 ; Add support for copying registry keys
 
-!insertmacro COPY_REGISTRY_KEY
+!if ${BUILD_OPTION} != "jackonwindows"
+    ; This macro is only needed when using ASIO4ALL.
+    ; Technically, we cannot detect this easily.
+    ; Therefore, we only insert the macro when not building for JACK.
+    !insertmacro COPY_REGISTRY_KEY
+!endif
 
 ; Installer graphical element configuration
 !define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
@@ -60,7 +65,12 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 !define MUI_PAGE_CUSTOMFUNCTION_PRE AbortOnRunningApp
 !insertmacro MUI_PAGE_WELCOME
 
-Page Custom ASIOCheckInstalled ExitASIOInstalled
+; Display dialog based on BuildOption set
+!if ${BUILD_OPTION} == "jackonwindows"
+    Page Custom JACKCheckInstalled ExitJACKInstalled
+!else
+    Page Custom ASIOCheckInstalled ExitASIOInstalled
+!endif
 
 !insertmacro MUI_PAGE_LICENSE "${ROOT_PATH}\COPYING"
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE ValidateDestinationFolder
@@ -105,7 +115,11 @@ Page Custom ASIOCheckInstalled ExitASIOInstalled
 
 Var Dialog
 Var Label
-Var Button
+
+!if ${BUILD_OPTION} != "jackonwindows"
+    ;Only Define Button when not using jack dialogs
+    Var Button
+!endif
 
 ; Define user choices
 
@@ -219,30 +233,32 @@ Section "Install_64Bit" INST_64
                 goto quit
             ${EndIf}
 
-            ; Copy old ASIO4ALL registry configuration
+            !if ${BUILD_OPTION} != "jackonwindows"
+                ; Copy old ASIO4ALL registry configuration
 
-            IntOp $0 0 + 0
-            EnumStart:
-                EnumRegKey $R1 HKEY_USERS "" $0 ; foreach user
-                IntOp $0 $0 + 1
-                StrCmp $R1 ".DEFAULT" EnumStart
-                StrCmp $R1 "" EnumEnd
+                IntOp $0 0 + 0
+                EnumStart:
+                    EnumRegKey $R1 HKEY_USERS "" $0 ; foreach user
+                    IntOp $0 $0 + 1
+                    StrCmp $R1 ".DEFAULT" EnumStart
+                    StrCmp $R1 "" EnumEnd
 
-                ; check if new key already exists. If this is the case, we'll not continue
-                ClearErrors
-                EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9" 0
-                IfErrors 0 EnumStart ; if the above line gives an error, it cannot find the key --> We'll continue
+                    ; check if new key already exists. If this is the case, we'll not continue
+                    ClearErrors
+                    EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9" 0
+                    IfErrors 0 EnumStart ; if the above line gives an error, it cannot find the key --> We'll continue
 
-                ; check if old key exists. If this is true, we'll continue and move the content of the old one to the new one.
-                ClearErrors
-                EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" 0
-                IfErrors EnumStart 0 ; if the above line gives an error, it cannot find the key --> skip this user
+                    ; check if old key exists. If this is true, we'll continue and move the content of the old one to the new one.
+                    ClearErrors
+                    EnumRegKey $1 HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" 0
+                    IfErrors EnumStart 0 ; if the above line gives an error, it cannot find the key --> skip this user
 
-                ; copy the registry key
-                ${COPY_REGISTRY_KEY} HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9"
+                    ; copy the registry key
+                    ${COPY_REGISTRY_KEY} HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\8A9E7A56" HKU "$R1\SOFTWARE\ASIO4ALL v2 by Wuschel\7A49ECC9"
 
-                goto EnumStart
-            EnumEnd:
+                    goto EnumStart
+                EnumEnd:
+            !endif
 
             goto continueinstall
 
@@ -365,45 +381,81 @@ Function createdesktopshortcut
    CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
 FunctionEnd
 
-Function ASIOCheckInstalled
+; Define functions for JACK when using the jackonwindows buildoption, else use default ASIO functions
+!if ${BUILD_OPTION} == "jackonwindows"
+    Function JACKCheckInstalled
 
-    ; insert ASIO install page if no ASIO driver was found
-    ClearErrors
-    EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+        ; insert JACK install page if no JACK driver was found
+        ClearErrors
+        EnumRegKey $0 HKLM "SOFTWARE\JACK" 0
 
-    IfErrors 0 ASIOExists
-        !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
-        nsDialogs::Create 1018
-        Pop $Dialog
-        ${If} $Dialog == error
-            Abort
-        ${Endif}
+        IfErrors 0 JACKExists
+            !insertmacro MUI_HEADER_TEXT "$(JACK_DRIVER_HEADER)" "$(JACK_DRIVER_SUB)"
+            nsDialogs::Create 1018
+            Pop $Dialog
+            ${If} $Dialog == error
+                Abort
+            ${Endif}
 
-        ${NSD_CreateLabel} 0 0 100% 20u "$(ASIO_DRIVER_EXPLAIN)"
-        Pop $Label
-        ${NSD_CreateButton} 0 21u 100% 15u "$(ASIO_DRIVER_MORE_INFO)"
-        Pop $Button
-        ${NSD_OnClick} $Button OpenASIOHelpPage
+            ${NSD_CreateLabel} 0 0 100% 40u "$(JACK_DRIVER_EXPLAIN)"
+            Pop $Label
 
-        nsDialogs::Show
+            nsDialogs::Show
 
-    ASIOExists:
+        JACKExists:
 
-FunctionEnd
+    FunctionEnd
 
-Function OpenASIOHelpPage
-    ExecShell "open" "$(ASIO_DRIVER_MORE_INFO_URL)"
-FunctionEnd
+    Function ExitJACKInstalled
+        ClearErrors
+        EnumRegKey $0 HKLM "SOFTWARE\JACK" 0
+        IfErrors 0 SkipMessage
+            MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(JACK_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
+                Abort
+       SkipMessage:
 
-Function ExitASIOInstalled
-    ClearErrors
-    EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
-    IfErrors 0 SkipMessage
-        MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
-            Abort
-   SkipMessage:
+    FunctionEnd
+!else
+    Function ASIOCheckInstalled
 
-FunctionEnd
+        ; insert ASIO install page if no ASIO driver was found
+        ClearErrors
+        EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+
+        IfErrors 0 ASIOExists
+            !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
+            nsDialogs::Create 1018
+            Pop $Dialog
+            ${If} $Dialog == error
+                Abort
+            ${Endif}
+
+            ${NSD_CreateLabel} 0 0 100% 20u "$(ASIO_DRIVER_EXPLAIN)"
+            Pop $Label
+            ${NSD_CreateButton} 0 21u 100% 15u "$(ASIO_DRIVER_MORE_INFO)"
+            Pop $Button
+            ${NSD_OnClick} $Button OpenASIOHelpPage
+
+            nsDialogs::Show
+
+        ASIOExists:
+
+    FunctionEnd
+
+    Function OpenASIOHelpPage
+        ExecShell "open" "$(ASIO_DRIVER_MORE_INFO_URL)"
+    FunctionEnd
+
+    Function ExitASIOInstalled
+        ClearErrors
+        EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
+        IfErrors 0 SkipMessage
+            MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
+                Abort
+       SkipMessage:
+
+    FunctionEnd
+!endif
 
 ; Uninstaller
 !macro un.InstallFiles buildArch

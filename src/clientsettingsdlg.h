@@ -75,6 +75,7 @@ protected:
     CClientSettings* pSettings;
     QTimer           TimerStatus;
     QButtonGroup     SndCrdBufferDelayButtonGroup;
+    QButtonGroup     WasapiModeButtonGroup;
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }
@@ -87,6 +88,7 @@ public slots:
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
+    void OnWasapiModeButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
     void OnRInChanActivated ( int iChanIdx );

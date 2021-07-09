@@ -22,3 +22,6 @@
 [submodule "tools/jamulus-server-remote"]
 	path = tools/jamulus-server-remote
 	url = ../../vdellamea/jamulus-server-remote
+[submodule "libs/portaudio"]
+	path = libs/portaudio
+	url = ../../npostavs/portaudio.git

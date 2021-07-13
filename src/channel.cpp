@@ -288,6 +288,7 @@ void CChannel::SetGain ( const int iChanID, const float fNewGain )
         }
 
         vecfGains[iChanID] = fNewGain;
+//qDebug() << "setgain" << fNewGain << iChanID;
     }
 }
 
@@ -480,6 +481,10 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             MutexConvBuf.unlock();
         }
         Mutex.unlock();
+
+        // if iNumAudioChannels changed phantom channels may have changed
+        //   request a new list for all connected clients to update them
+        emit ChanInfoHasChanged();
     }
 }
 
@@ -696,12 +701,19 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket* pSocket, const CVector<uint8
     }
 }
 
-double CChannel::UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio, const int iInSize, const bool bIsStereoIn )
+double CChannel::UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio, const int iInSize, const bool bIsStereoIn, double& dLeft, double& dRight )
 {
     // update the signal level meter and immediately return the current value
-    SignalLevelMeter.Update ( vecsAudio, iInSize, bIsStereoIn );
-
+    SignalLevelMeter.UpdateDBAndSave ( vecsAudio, iInSize, bIsStereoIn, dLeft, dRight );
+//qDebug() << "chanL" << dLeft << "chanR" << dRight;
     return SignalLevelMeter.GetLevelForMeterdBLeftOrMono();
+}
+
+double CChannel::GetLevelForMeterdBRight ()
+{
+    // return the current value, call after UpdateAndGetLevelForMeterdB which return left
+//qDebug() << "chanR" << SignalLevelMeter.GetLevelForMeterdBRight();
+    return SignalLevelMeter.GetLevelForMeterdBRight();
 }
 
 int CChannel::GetUploadRateKbps()

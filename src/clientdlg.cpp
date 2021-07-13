@@ -38,6 +38,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
+    bEnableMultiChannel ( false ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
@@ -51,7 +52,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // input level meter
     QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " +
                          tr ( "This shows "
-                              "the level of the two stereo channels "
+                              "the level of the two stereGetUploadRateKbpsGetUploadRateKbpso channels "
                               "for your audio input." ) +
                          "<br>" +
                          tr ( "Make sure not to clip the input signal to avoid distortions of the "
@@ -502,6 +503,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     QObject::connect ( this, &CClientDlg::SendTabChange, &ClientSettingsDlg, &CClientSettingsDlg::OnMakeTabChange );
 
+    QObject::connect ( this, &CClientDlg::SendMultiChannelChanged, &ClientSettingsDlg, &CClientSettingsDlg::OnMultiChannelChanged );
+
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanGain, this, &CClientDlg::OnChangeChanGain );
 
     QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanPan, this, &CClientDlg::OnChangeChanPan );
@@ -725,6 +728,8 @@ void CClientDlg::OnConnectDisconBut()
     {
         Disconnect();
         SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
+        bEnableMultiChannel = false;
+        emit SendMultiChannelChanged( bEnableMultiChannel );
     }
     else
     {
@@ -774,6 +779,11 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
     if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 5, 4 ) ) >= 0 )
     {
         MainMixerBoard->SetPanIsSupported();
+    }
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 9, 9 ) ) >= 0 )
+    {
+        bEnableMultiChannel = true;
+        emit SendMultiChannelChanged( bEnableMultiChannel );
     }
 #endif
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>524</height>
+    <width>438</width>
+    <height>522</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_7">
+  <layout class="QVBoxLayout" name="verticalLayout_18">
    <item>
     <widget class="QTabWidget" name="tabSettings">
      <property name="sizePolicy">
@@ -314,11 +314,11 @@
       <attribute name="title">
        <string>Audio/Network Setup</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <layout class="QVBoxLayout" name="verticalLayout_19">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <layout class="QVBoxLayout" name="verticalLayout_17">
            <item>
             <widget class="QLabel" name="lblSoundcardDevice">
              <property name="text">
@@ -352,8 +352,8 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>10</height>
+               <width>128</width>
+               <height>13</height>
               </size>
              </property>
             </spacer>
@@ -381,8 +381,8 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>10</height>
+               <width>128</width>
+               <height>13</height>
               </size>
              </property>
             </spacer>
@@ -401,7 +401,7 @@
              <property name="frameShadow">
               <enum>QFrame::Plain</enum>
              </property>
-             <layout class="QVBoxLayout" name="_2">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
               <property name="leftMargin">
                <number>0</number>
               </property>
@@ -415,114 +415,118 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="QLabel" name="lblInChannelMapping">
-                <property name="text">
-                 <string>Input Channel Mapping</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="_3">
-                <property name="spacing">
-                 <number>3</number>
-                </property>
+               <layout class="QVBoxLayout" name="verticalLayout_3">
                 <item>
-                 <layout class="QVBoxLayout" name="_4">
-                  <item>
-                   <widget class="QLabel" name="lblLInChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>L</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblRInChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>R</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                 <widget class="QLabel" name="lblInChannelMapping">
+                  <property name="text">
+                   <string>Input Channel Mapping</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <layout class="QVBoxLayout" name="_5">
+                 <layout class="QHBoxLayout" name="_3">
                   <property name="spacing">
                    <number>3</number>
                   </property>
                   <item>
-                   <widget class="QComboBox" name="cbxLInChan"/>
+                   <layout class="QVBoxLayout" name="_4">
+                    <item>
+                     <widget class="QLabel" name="lblLInChan">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>L</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lblRInChan">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>R</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="cbxRInChan"/>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QLabel" name="lblOutChannelMapping">
-                <property name="text">
-                 <string>Output Channel Mapping</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="_6">
-                <property name="spacing">
-                 <number>3</number>
-                </property>
-                <item>
-                 <layout class="QVBoxLayout" name="_7">
-                  <item>
-                   <widget class="QLabel" name="lblLOutChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
+                   <layout class="QVBoxLayout" name="_5">
+                    <property name="spacing">
+                     <number>3</number>
                     </property>
-                    <property name="text">
-                     <string>L</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="lblROutChan">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>R</string>
-                    </property>
-                   </widget>
+                    <item>
+                     <widget class="QComboBox" name="cbxLInChan"/>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="cbxRInChan"/>
+                    </item>
+                   </layout>
                   </item>
                  </layout>
                 </item>
                 <item>
-                 <layout class="QVBoxLayout" name="_8">
+                 <widget class="QLabel" name="lblOutChannelMapping">
+                  <property name="text">
+                   <string>Output Channel Mapping</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="_6">
                   <property name="spacing">
                    <number>3</number>
                   </property>
                   <item>
-                   <widget class="QComboBox" name="cbxLOutChan"/>
+                   <layout class="QVBoxLayout" name="_7">
+                    <item>
+                     <widget class="QLabel" name="lblLOutChan">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>L</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lblROutChan">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>R</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </item>
                   <item>
-                   <widget class="QComboBox" name="cbxROutChan"/>
+                   <layout class="QVBoxLayout" name="_8">
+                    <property name="spacing">
+                     <number>3</number>
+                    </property>
+                    <item>
+                     <widget class="QComboBox" name="cbxLOutChan"/>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="cbxROutChan"/>
+                    </item>
+                   </layout>
                   </item>
                  </layout>
                 </item>
@@ -541,8 +545,8 @@
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>10</height>
+               <width>152</width>
+               <height>13</height>
               </size>
              </property>
             </spacer>
@@ -580,14 +584,47 @@
             </layout>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QLabel" name="lblDualMonoStereo">
+               <property name="text">
+                <string>Dual Mono-in/Stereo-out Enabled</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="CMultiColorLED" name="ledDualMonoStereo" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>14</width>
+                 <height>14</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>14</width>
+                 <height>14</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <spacer name="verticalSpacer_10">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>10</height>
+               <width>98</width>
+               <height>13</height>
               </size>
              </property>
             </spacer>
@@ -652,8 +689,8 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>0</width>
-             <height>20</height>
+             <width>17</width>
+             <height>457</height>
             </size>
            </property>
           </spacer>
@@ -906,7 +943,7 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>0</width>
+             <width>13</width>
              <height>20</height>
             </size>
            </property>
@@ -1261,6 +1298,11 @@
    <class>CLanguageComboBox</class>
    <extends>QComboBox</extends>
    <header>util.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CMultiColorLED</class>
+   <extends>QWidget</extends>
+   <header>multicolorled.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

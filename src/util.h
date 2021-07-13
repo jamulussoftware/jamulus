@@ -449,9 +449,9 @@ signals:
 enum EAudChanConf
 {
     // used for settings -> enum values should be fixed
-    CC_MONO               = 0,
-    CC_MONO_IN_STEREO_OUT = 1,
-    CC_STEREO             = 2,
+    CC_MONO                    = 0,
+    CC_MONO_IN_STEREO_OUT      = 1,
+    CC_STEREO                  = 2,
     CC_DUAL_MONO_IN_STEREO_OUT = 3
 };
 

@@ -308,11 +308,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // Dual Mono-in/Stereo-out Enabled
     QString strDualMono = "<b>" + tr ( "Dual Mono-in/Stereo-out Enabled" ) + ":</b> " +
-                              tr ( "This indicator is green if the server you are connected to supports "
-                                   "Dual Mono-in/Stereo-out mode.  Dual Mono-in/Stereo-out is only available "
-                                   "using servers above version 3.9.9. "
-                                   "Note that if you select Dual Mono-in/Stereo-out "
-                                   "but the server does not support it Stereo mode will be used instead." );
+                          tr ( "This indicator is green if the server you are connected to supports "
+                               "Dual Mono-in/Stereo-out mode.  Dual Mono-in/Stereo-out is only available "
+                               "using servers above version 3.9.9. "
+                               "Note that if you select Dual Mono-in/Stereo-out "
+                               "but the server does not support it Stereo mode will be used instead." );
 
     ledDualMonoStereo->setWhatsThis ( strDualMono );
     lblDualMonoStereo->setWhatsThis ( strDualMono );
@@ -416,9 +416,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // Audio Channels combo box
     cbxAudioChannels->clear();
-    cbxAudioChannels->addItem ( tr ( "Mono" ) );               // CC_MONO
-    cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) ); // CC_MONO_IN_STEREO_OUT
-    cbxAudioChannels->addItem ( tr ( "Stereo" ) );             // CC_STEREO
+    cbxAudioChannels->addItem ( tr ( "Mono" ) );                    // CC_MONO
+    cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) );      // CC_MONO_IN_STEREO_OUT
+    cbxAudioChannels->addItem ( tr ( "Stereo" ) );                  // CC_STEREO
     cbxAudioChannels->addItem ( tr ( "Dual Mono-in/Stereo-out" ) ); // CC_DUAL_MONO_IN_STEREO_OUT
     cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
 
@@ -1050,7 +1050,7 @@ void CClientSettingsDlg::OnInputBoostChanged()
     pClient->SetInputBoost ( pSettings->iInputBoost );
 }
 
-void CClientSettingsDlg::OnMultiChannelChanged( bool b )
+void CClientSettingsDlg::OnMultiChannelChanged ( bool b )
 {
     // Update MultiChannel Enabled display
     CMultiColorLED::ELightColor eCurStatus;

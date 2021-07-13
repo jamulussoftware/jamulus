@@ -41,7 +41,7 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio, const in
     // should give good results.
     short sMinLOrMono = 0;
     short sMinR       = 0;
-     bIsStereoOut = true;
+    bIsStereoOut      = true;
 
     if ( bIsStereoIn )
     {
@@ -75,15 +75,19 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio, const in
     {
         dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMinR );
     }
-//qDebug() << "Update" << dCurLevelLOrMono << dCurLevelR << bIsStereoOut;
+    // qDebug() << "Update" << dCurLevelLOrMono << dCurLevelR << bIsStereoOut;
 }
 
-void CStereoSignalLevelMeter::UpdateDBAndSave ( const CVector<short>& vecsAudio, const int iMonoBlockSizeSam, const bool bIsStereoIn, double& dLeft, double& dRight )
+void CStereoSignalLevelMeter::UpdateDBAndSave ( const CVector<short>& vecsAudio,
+                                                const int             iMonoBlockSizeSam,
+                                                const bool            bIsStereoIn,
+                                                double&               dLeft,
+                                                double&               dRight )
 {
     Update ( vecsAudio, iMonoBlockSizeSam, bIsStereoIn );
-    dLeft = CalcLogResultForMeter ( dCurLevelLOrMono );
-    dRight = CalcLogResultForMeter (dCurLevelR );
-//qDebug() << "UpdateAndSave" << dCurLevelLOrMono << dCurLevelR << bIsStereoOut;
+    dLeft  = CalcLogResultForMeter ( dCurLevelLOrMono );
+    dRight = CalcLogResultForMeter ( dCurLevelR );
+    // qDebug() << "UpdateAndSave" << dCurLevelLOrMono << dCurLevelR << bIsStereoOut;
 }
 
 double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel, const double dMax )

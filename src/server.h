@@ -103,7 +103,7 @@ public:
 protected:
     virtual void run();
 
-    bool     bRun;
+    bool bRun;
 
 #    if defined( __APPLE__ ) || defined( __MACOSX )
     uint64_t Delay;
@@ -250,9 +250,9 @@ public:
 
 protected:
     // access functions for actual channels
-    bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
-    bool IsPhantomChannel( int i );
-    bool HasAttachedPhantomChannel( int i );
+    bool                  IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
+    bool                  IsPhantomChannel ( int i );
+    bool                  HasAttachedPhantomChannel ( int i );
     int                   GetFreeChan();
     int                   FindChannel ( const CHostAddress& CheckAddr );
     int                   GetNumberOfConnectedClients();
@@ -325,7 +325,7 @@ protected:
     CVector<QString> vstrChatColors;
     CVector<int>     vecChanIDsCurConChan;
     CVector<int>     vecChanIDsPhantomChan;
-    CVector<int>    vecChanIDsIsPhantomChan;
+    CVector<int>     vecChanIDsIsPhantomChan;
 
     CVector<CVector<float>>   vecvecfGains;
     CVector<CVector<float>>   vecvecfPannings;

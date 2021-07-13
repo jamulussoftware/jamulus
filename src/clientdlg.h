@@ -234,5 +234,5 @@ public slots:
 
 signals:
     void SendTabChange ( int iTabIdx );
-    void SendMultiChannelChanged( bool b );
+    void SendMultiChannelChanged ( bool b );
 };

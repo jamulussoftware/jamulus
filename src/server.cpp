@@ -1230,12 +1230,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                 fPan2 = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][vecChanIDsPhantomChan[j]];
                 fGainL2 = MathUtils::GetLeftPan ( fPan2, false ) * fGain2;
                 fGainR2 = MathUtils::GetRightPan ( fPan2, false ) * fGain2;
-
-//qDebug() << "fGain2" << fGain2 << "fPan2" << fPan2 << vecChanIDsPhantomChan[j] << iNumClients;
-//qDebug() << vecvecfGains;
             }
-//if( test2++ > 1000 ) { test2 = 0; qDebug() << vecvecfGains;}
-
 
             if ( bDelayPan )
             {
@@ -1372,7 +1367,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                             // if odd  : right channel
                             vecfIntermProcBuf[i] += ((vecsData[i] * fGainR2) + (vecsData[i-1] * fGainR)/2);
                         }
-//if( test2++ > 10000 ) { test2 = 0; qDebug() << "odd" << fGainL << fGainR2 << "even" << fGainR << fGainL2;}
                     }
                 }
             }
@@ -1475,30 +1469,22 @@ CVector<CChannelInfo> CServer::CreateChannelList()
             {
                 strBaseName = ChanCoreInfo.strName;
                 ChanCoreInfo.strName = strBaseName + "-L";
-//qDebug() << "ChanCoreInfo";
             }
-//qDebug() << "ChanCoreInfo2" << ChanCoreInfo.strName;
 
             vecChanInfo.Add ( CChannelInfo ( i, // ID
                                              ChanCoreInfo ) );
 
             // create phantom channels for dual mono-in/stereo-out
-//qDebug() << "ID" << vecChanIDsPhantomChan;
-//qDebug() << "I2" << vecChanIDsIsPhantomChan;
 
             if ( vecChannels[i].GetNumAudioChannels() == CC_DUAL_MONO_IN_STEREO_OUT &&
                  vecChanIDsPhantomChan[i] == INVALID_CHANNEL_ID )
             {
                  int iCurChanID = GetFreeChan();
-//qDebug() << "AudioChannels1" << iCurChanID << vecChannels[i].GetNumAudioChannels();
 
                  if ( iCurChanID != INVALID_CHANNEL_ID )
                  {
                      vecChanIDsPhantomChan[i] = iCurChanID;
                      vecChanIDsIsPhantomChan[iCurChanID] = i;
-
-//qDebug() << "ID2" << vecChanIDsPhantomChan;
-//qDebug() << "I22" << vecChanIDsIsPhantomChan;
 
                      // reset channel info
                      ChanCoreInfo.strName = strBaseName + "-R";
@@ -1542,7 +1528,6 @@ CVector<CChannelInfo> CServer::CreateChannelList()
                 ChanCoreInfo = vecChannels[vecChanIDsIsPhantomChan[i]].GetChanInfo();
                 strBaseName = ChanCoreInfo.strName;
                 ChanCoreInfo.strName = strBaseName + "-R";
-//qDebug() << "Not connected" << ChanCoreInfo.strName;
                 vecChanInfo.Add ( CChannelInfo ( i, // ID
                                          ChanCoreInfo ) );
             }
@@ -1561,7 +1546,6 @@ void CServer::CreateAndSendChanListForAllConChannels()
     {
           if ( (vecChannels[i].IsConnected()) || IsPhantomChannel ( i ) )
         {
-//qDebug() << "sendmessage" << i;
             // send message
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
@@ -1930,7 +1914,6 @@ bool CServer::CreateLevelsForAllConChannels ( const int                       iN
             }
             // map value to integer for transmission via the protocol (4 bit available)
             vecLevelsOut[j] = static_cast<uint16_t> ( std::ceil ( dCurSigLevelForMeterdB ) );
-//qDebug() << "server" << dCurSigLevelForMeterdB << dCurSigLevelForMeterdBRight;
         }
     }
 
@@ -1942,6 +1925,5 @@ bool CServer::CreateLevelsForAllConChannels ( const int                       iN
         // additional increment needed for double frame size to get to the same time interval
         iFrameCount++;
     }
-//qDebug() << "Chan" << vecChanIDsPhantomChan << "Level" << vecLevelsOut;
     return bLevelsWereUpdated;
 }

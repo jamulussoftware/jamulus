@@ -729,7 +729,7 @@ void CClientDlg::OnConnectDisconBut()
         Disconnect();
         SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
         bEnableMultiChannel = false;
-        emit SendMultiChannelChanged( bEnableMultiChannel );
+        emit SendMultiChannelChanged ( bEnableMultiChannel );
     }
     else
     {
@@ -783,7 +783,7 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
     if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 9, 9 ) ) >= 0 )
     {
         bEnableMultiChannel = true;
-        emit SendMultiChannelChanged( bEnableMultiChannel );
+        emit SendMultiChannelChanged ( bEnableMultiChannel );
     }
 #endif
 }

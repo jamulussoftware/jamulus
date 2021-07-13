@@ -170,7 +170,7 @@ void CreateReqChannelLevelListMes() { Protocol.CreateReqChannelLevelListMes(); }
 
     double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio, const int iInSize, const bool bIsStereoIn, double& fLeft, double& fRight );
     double GetLevelForMeterdBRight();
-    int           iNumAudioChannels;
+    int    iNumAudioChannels;
 
 protected:
     bool ProtocolIsEnabled();

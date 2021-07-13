@@ -251,7 +251,8 @@ public:
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
-
+    bool IsPhantomChannel( int i );
+    bool HasAttachedPhantomChannel( int i );
     int                   GetFreeChan();
     int                   FindChannel ( const CHostAddress& CheckAddr );
     int                   GetNumberOfConnectedClients();
@@ -323,6 +324,8 @@ protected:
 
     CVector<QString> vstrChatColors;
     CVector<int>     vecChanIDsCurConChan;
+    CVector<int>     vecChanIDsPhantomChan;
+    CVector<int>    vecChanIDsIsPhantomChan;
 
     CVector<CVector<float>>   vecvecfGains;
     CVector<CVector<float>>   vecvecfPannings;

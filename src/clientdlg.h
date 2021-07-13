@@ -104,6 +104,7 @@ protected:
     bool           bConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
+    bool           bEnableMultiChannel;
     ERecorderState eLastRecorderState;
     EGUIDesign     eLastDesign;
     QTimer         TimerSigMet;
@@ -233,4 +234,5 @@ public slots:
 
 signals:
     void SendTabChange ( int iTabIdx );
+    void SendMultiChannelChanged( bool b );
 };

@@ -933,6 +933,11 @@ void CClient::Init()
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
+    if ( eAudioChannelConf == CC_DUAL_MONO_IN_STEREO_OUT )
+    {
+        iNumAudioChannels = 3;
+    }
+
     // set the channel network properties
     Channel.SetAudioStreamProperties ( eAudioCompressionType, iCeltNumCodedBytes, iSndCrdFrameSizeFactor, iNumAudioChannels );
 
@@ -1038,12 +1043,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
 
     // apply pan (audio fader) and mix mono signals
-    if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf == CC_STEREO ) ) )
+    if ( !( ( iAudioInFader == AUD_FADER_IN_MIDDLE ) && ( eAudioChannelConf >= CC_STEREO ) ) )
     {
         // calculate pan gain in the range 0 to 1, where 0.5 is the middle position
         const float fPan = static_cast<float> ( iAudioInFader ) / AUD_FADER_IN_MAX;
 
-        if ( eAudioChannelConf == CC_STEREO )
+        if ( eAudioChannelConf >= CC_STEREO )
         {
             // for stereo only apply pan attenuation on one channel (same as pan in the server)
             const float fGainL = MathUtils::GetLeftPan ( fPan, false );

@@ -168,7 +168,9 @@ void CreateReqChannelLevelListMes() { Protocol.CreateReqChannelLevelListMes(); }
 
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
-    double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio, const int iInSize, const bool bIsStereoIn );
+    double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio, const int iInSize, const bool bIsStereoIn, double& fLeft, double& fRight );
+    double GetLevelForMeterdBRight();
+    int           iNumAudioChannels;
 
 protected:
     bool ProtocolIsEnabled();
@@ -224,7 +226,6 @@ protected:
     int iAudioFrameSizeSamples;
 
     EAudComprType eAudioCompressionType;
-    int           iNumAudioChannels;
 
     QMutex Mutex;
     QMutex MutexSocketBuf;

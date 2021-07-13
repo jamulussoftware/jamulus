@@ -287,6 +287,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                     "will increase your stream's data rate. Make sure your upload rate does not "
                                     "exceed the available upload speed of your internet connection." ) +
                                "</li>"
+                               "<li>"
+                               "<b>" +
+                               tr ( "Dual Mono-in/Stereo-out" ) + "</b> " +
+                               tr ( "The two channels of your audio interface are treated as two separate mono "
+                                    "input channels. They will each have their own fader and pan control. "
+                                    "This is to support the use of a microphone and an instrument on a "
+                                    "client.  On the mixerboard the channels are identified with the user name with "
+                                    "an appended '-L' or '-R' for the left and right inputs." ) +
+                               "</li>"
                                "</ul>" +
                                "<br>" +
                                tr ( "In stereo streaming mode, no audio channel selection "
@@ -296,6 +305,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     lblAudioChannels->setWhatsThis ( strAudioChannels );
     cbxAudioChannels->setWhatsThis ( strAudioChannels );
     cbxAudioChannels->setAccessibleName ( tr ( "Audio channels combo box" ) );
+
+    // Dual Mono-in/Stereo-out Enabled
+    QString strDualMono = "<b>" + tr ( "Dual Mono-in/Stereo-out Enabled" ) + ":</b> " +
+                              tr ( "This indicator is green if the server you are connected to supports "
+                                   "Dual Mono-in/Stereo-out mode.  Dual Mono-in/Stereo-out is only available "
+                                   "using servers above version 3.9.9. "
+                                   "Note that if you select Dual Mono-in/Stereo-out "
+                                   "but the server does not support it Stereo mode will be used instead." );
+
+    ledDualMonoStereo->setWhatsThis ( strDualMono );
+    lblDualMonoStereo->setWhatsThis ( strDualMono );
 
     // audio quality
     QString strAudioQuality = "<b>" + tr ( "Audio Quality" ) + ":</b> " +
@@ -399,6 +419,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxAudioChannels->addItem ( tr ( "Mono" ) );               // CC_MONO
     cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) ); // CC_MONO_IN_STEREO_OUT
     cbxAudioChannels->addItem ( tr ( "Stereo" ) );             // CC_STEREO
+    cbxAudioChannels->addItem ( tr ( "Dual Mono-in/Stereo-out" ) ); // CC_DUAL_MONO_IN_STEREO_OUT
     cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
 
     // Audio Quality combo box
@@ -442,7 +463,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
 
     // update enable small network buffers check box
-    chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
+    chbEnableOPUS64->setChecked ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
+
+    // update bEnableMultiChannel
+    ledDualMonoStereo->SetType ( CMultiColorLED::MT_LED );
+    ledDualMonoStereo->Reset();
 
     // set text for sound card buffer delay radio buttons
     rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString ( FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES ) );
@@ -1023,6 +1048,21 @@ void CClientSettingsDlg::OnInputBoostChanged()
     // index is zero-based while boost factor must be 1-based:
     pSettings->iInputBoost = cbxInputBoost->currentIndex() + 1;
     pClient->SetInputBoost ( pSettings->iInputBoost );
+}
+
+void CClientSettingsDlg::OnMultiChannelChanged( bool b )
+{
+    // Update MultiChannel Enabled display
+    CMultiColorLED::ELightColor eCurStatus;
+    if ( b )
+    {
+        eCurStatus = CMultiColorLED::RL_GREEN;
+    }
+    else
+    {
+        eCurStatus = CMultiColorLED::RL_GREY;
+    }
+    ledDualMonoStereo->SetLight ( eCurStatus );
 }
 
 void CClientSettingsDlg::OnAliasTextChanged ( const QString& strNewName )

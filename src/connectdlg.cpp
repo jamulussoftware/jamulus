@@ -211,9 +211,17 @@ void CConnectDlg::RequestServerList()
 
     // update list combo box (disable events to avoid a signal)
     cbxDirectoryServer->blockSignals ( true );
-    // iCustomDirectoryIndex is non-zero only if eCentralServerAddressType == AT_CUSTOM, and represents
-    // the offset into cbxDirectoryServer after the last non-custom directory server
-    cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) + pSettings->iCustomDirectoryIndex );
+    if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
+    {
+        // iCustomDirectoryIndex is non-zero only if eCentralServerAddressType == AT_CUSTOM
+        // find the combobox item that corresponds to vstrCentralServerAddress[iCustomDirectoryIndex]
+        // (the current selected custom directory)
+        cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
+    }
+    else
+    {
+        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
+    }
     cbxDirectoryServer->blockSignals ( false );
 
     // Get the IP address of the directory server (using the ParseNetworAddress
@@ -249,7 +257,8 @@ void CConnectDlg::OnDirectoryServerChanged ( int iTypeIdx )
     // if iTypeIdx != AT_CUSTOM, then iCustomDirectoryIndex MUST be 0;
     if ( iTypeIdx >= AT_CUSTOM )
     {
-        pSettings->iCustomDirectoryIndex = iTypeIdx - AT_CUSTOM;
+        // the value for the index into the vector vstrCentralServerAddress is in the user data of the combobox item
+        pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iTypeIdx ).toInt();
         iTypeIdx                         = AT_CUSTOM;
     }
     else
@@ -529,15 +538,39 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
 
 void CConnectDlg::OnCustomCentralServerAddrChanged()
 {
+
+    QString strPreviousSelection = cbxDirectoryServer->currentText();
     UpdateDirectoryServerComboBox();
-    // only update list if a custom server list is selected
+    // after updating the combobox, we must re-select the previous directory selection
+
     if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
     {
-        // TODO: detect if the currently select custom directory still exists in the now potentially re-ordered vector,
-        //       if so, then change to its new index.  Issue #1899
-        pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_DEFAULT );
-        pSettings->iCustomDirectoryIndex     = 0;
-        RequestServerList();
+        // check if the currently select custom directory still exists in the now potentially re-ordered vector,
+        // if so, then change to its new index.  (addresses Issue #1899)
+        int iNewIndex = cbxDirectoryServer->findText ( strPreviousSelection );
+        if ( iNewIndex == -1 )
+        {
+            // previously selected custom directory has been deleted.  change to default directory
+            pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_DEFAULT );
+            pSettings->iCustomDirectoryIndex     = 0;
+            RequestServerList();
+        }
+        else
+        {
+            // find previously selected custom directory in the now potentially re-ordered vector
+            pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_CUSTOM );
+            pSettings->iCustomDirectoryIndex     = cbxDirectoryServer->itemData ( iNewIndex ).toInt();
+            cbxDirectoryServer->blockSignals ( true );
+            cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
+            cbxDirectoryServer->blockSignals ( false );
+        }
+    }
+    else
+    {
+        // selected directory was not a custom directory
+        cbxDirectoryServer->blockSignals ( true );
+        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
+        cbxDirectoryServer->blockSignals ( false );
     }
 }
 
@@ -910,11 +943,13 @@ void CConnectDlg::UpdateDirectoryServerComboBox()
     cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
     cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
 
-    for ( int i = 0; i < MAX_NUM_SERVER_ADDR_ITEMS; i++ )
+    // because custom directories are always added to the top of the vector, add the vector
+    // contents to the combobox in reverse order
+    for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
     {
         if ( pSettings->vstrCentralServerAddress[i] != "" )
         {
-            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[i] );
+            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[i], i );
         }
     }
 }

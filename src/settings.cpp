@@ -406,7 +406,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // audio channels
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 2 /* CC_STEREO */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels", 0, 3 /* CC_DUAL_MONO_IN_STEREO_OUT */, iValue ) )
     {
         pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iValue ) );
     }

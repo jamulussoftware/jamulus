@@ -1,4 +1,4 @@
-VERSION = 3.8.0dev
+VERSION = 3.9.9dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -75,7 +75,7 @@ win32 {
     RC_FILE = windows/mainicon.rc
     INCLUDEPATH += windows/ASIOSDK2/common \
         windows/ASIOSDK2/host \
-        windows/ASIOSDK2/host/pc
+         windows/ASIOSDK2/host/pc
     mingw* {
         LIBS += -lole32 \
             -luser32 \

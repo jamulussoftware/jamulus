@@ -548,7 +548,7 @@ void CConnectDlg::OnCustomCentralServerAddrChanged()
         // check if the currently select custom directory still exists in the now potentially re-ordered vector,
         // if so, then change to its new index.  (addresses Issue #1899)
         int iNewIndex = cbxDirectoryServer->findText ( strPreviousSelection );
-        if ( iNewIndex == -1 )
+        if ( iNewIndex == INVALID_INDEX )
         {
             // previously selected custom directory has been deleted.  change to default directory
             pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_DEFAULT );
@@ -949,6 +949,7 @@ void CConnectDlg::UpdateDirectoryServerComboBox()
     {
         if ( pSettings->vstrCentralServerAddress[i] != "" )
         {
+            // add vector index (i) to the combobox as user data
             cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[i], i );
         }
     }

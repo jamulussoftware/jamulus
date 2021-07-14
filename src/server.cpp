@@ -247,8 +247,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     eLicenceType ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler ( CSignalHandler::getSingletonP() ),
-    test1( 0 ),
-    test2( 0 )
+    test1 ( 0 ),
+    test2 ( 0 )
 {
     int iOpusError;
     int i;
@@ -661,7 +661,7 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
         vecChannels[iCurChanID].Disconnect();
 
         // disconnect associated phantom channel
-        if( vecChanIDsPhantomChan[iCurChanID] != INVALID_CHANNEL_ID )
+        if ( vecChanIDsPhantomChan[iCurChanID] != INVALID_CHANNEL_ID )
         {
             vecChanIDsIsPhantomChan[vecChanIDsPhantomChan[iCurChanID]] = INVALID_CHANNEL_ID;
             vecChannels[vecChanIDsPhantomChan[iCurChanID]].Disconnect();
@@ -785,7 +785,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
         // first, get number and IDs of connected channels
         for ( int i = 0; i < iMaxNumChannels; i++ )
         {
-            if ( vecChannels[i].IsConnected() || ( vecChanIDsIsPhantomChan[i] != INVALID_CHANNEL_ID) )
+            if ( vecChannels[i].IsConnected() || ( vecChanIDsIsPhantomChan[i] != INVALID_CHANNEL_ID ) )
             {
                 // add ID and increment counter (note that the vector length is
                 // according to the worst case scenario, if the number of
@@ -1012,33 +1012,33 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     // get gains of all connected channels
     for ( int j = 0; j < iNumClients; j++ )
     {
-      if ( !IsPhantomChannel( j ) )
-      {
-        // The second index of "vecvecdGains" does not represent
-        // the channel ID! Therefore we have to use
-        // "vecChanIDsCurConChan" to query the IDs of the currently
-        // connected channels
-        vecvecfGains[iChanCnt][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
+        if ( !IsPhantomChannel ( j ) )
+        {
+            // The second index of "vecvecdGains" does not represent
+            // the channel ID! Therefore we have to use
+            // "vecChanIDsCurConChan" to query the IDs of the currently
+            // connected channels
+            vecvecfGains[iChanCnt][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
 
-        // consider audio fade-in
-        float fadeInGain = vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
-        vecvecfGains[iChanCnt][j] *= fadeInGain;
-        if ( HasAttachedPhantomChannel( j ) )
-        {
-            vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[vecChanIDsPhantomChan[j]] );
-            vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]] *= fadeInGain;
-        }
-        // use the fade in of the current channel for all other connected clients
-        // as well to avoid the client volumes are at 100% when joining a server (#628)
-        if ( j != iChanCnt )
-        {
-            vecvecfGains[iChanCnt][j] *= vecChannels[iCurChanID].GetFadeInGain();
-            if ( HasAttachedPhantomChannel( j ) )
+            // consider audio fade-in
+            float fadeInGain = vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+            vecvecfGains[iChanCnt][j] *= fadeInGain;
+            if ( HasAttachedPhantomChannel ( j ) )
             {
-                vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsPhantomChan[j]].GetFadeInGain();
+                vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[vecChanIDsPhantomChan[j]] );
+                vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]] *= fadeInGain;
+            }
+            // use the fade in of the current channel for all other connected clients
+            // as well to avoid the client volumes are at 100% when joining a server (#628)
+            if ( j != iChanCnt )
+            {
+                vecvecfGains[iChanCnt][j] *= vecChannels[iCurChanID].GetFadeInGain();
+                if ( HasAttachedPhantomChannel ( j ) )
+                {
+                    vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsPhantomChan[j]].GetFadeInGain();
+                }
             }
         }
-      }
         // panning
         vecvecfPannings[iChanCnt][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
     }
@@ -1129,8 +1129,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
-//            // skip if phantom channel, has no sound
-//            if( IsPhantomChannel( j ) ) continue;
+            //            // skip if phantom channel, has no sound
+            //            if( IsPhantomChannel( j ) ) continue;
 
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
@@ -1151,7 +1151,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                         vecfIntermProcBuf[i] += vecsData[i];
                     }
                 }
-                else if ( vecChanIDsPhantomChan[j] == INVALID_CHANNEL_ID )  // is not channel with associated phantom
+                else if ( vecChanIDsPhantomChan[j] == INVALID_CHANNEL_ID ) // is not channel with associated phantom
                 {
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
@@ -1159,13 +1159,12 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                         vecfIntermProcBuf[i] += ( static_cast<float> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
                     }
                 }
-                else   // is channel with associated phantom
+                else // is channel with associated phantom
                 {
                     // dual mono-in/stereo-out: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecfIntermProcBuf[i] += (( static_cast<float> ( vecsData[k] )) +
-                                                 ( static_cast<float> ( vecsData[k + 1] ))) / 2;
+                        vecfIntermProcBuf[i] += ( ( static_cast<float> ( vecsData[k] ) ) + ( static_cast<float> ( vecsData[k + 1] ) ) ) / 2;
                     }
                 }
             }
@@ -1179,7 +1178,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                         vecfIntermProcBuf[i] += vecsData[i] * fGain;
                     }
                 }
-                else if ( vecChanIDsPhantomChan[j] == INVALID_CHANNEL_ID )  // is not channel with associated phantom
+                else if ( vecChanIDsPhantomChan[j] == INVALID_CHANNEL_ID ) // is not channel with associated phantom
                 {
                     // stereo: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
@@ -1187,14 +1186,14 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                         vecfIntermProcBuf[i] += fGain * ( static_cast<float> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
                     }
                 }
-                else       // is channel with associated phantom
+                else // is channel with associated phantom
                 {
                     // dual mono-in/stereo-out: apply stereo-to-mono attenuation
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        vecfIntermProcBuf[i] += (( fGain * static_cast<float> ( vecsData[k] )) +
-                                                 ( fGain2 * static_cast<float> ( vecsData[k + 1] ))) / 2;
-//qDebug() << "Mono" << fGain << fGain2;
+                        vecfIntermProcBuf[i] +=
+                            ( ( fGain * static_cast<float> ( vecsData[k] ) ) + ( fGain2 * static_cast<float> ( vecsData[k + 1] ) ) ) / 2;
+                        // qDebug() << "Mono" << fGain << fGain2;
                     }
                 }
             }
@@ -1217,29 +1216,29 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
 
         for ( j = 0; j < iNumClients; j++ )
         {
-//            // skip if phantom channel, has no sound
-//            if( IsPhantomChannel( j ) ) continue;
+            //            // skip if phantom channel, has no sound
+            //            if( IsPhantomChannel( j ) ) continue;
 
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData  = vecvecsData[j];
             const CVector<int16_t>& vecsData2 = vecvecsData2[j];
 
-            const float fGain = vecvecfGains[iChanCnt][j];
-            float fGain2   = fGain;
-            const float fPan  = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
-            float fPan2 = fPan;
+            const float fGain  = vecvecfGains[iChanCnt][j];
+            float       fGain2 = fGain;
+            const float fPan   = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
+            float       fPan2  = fPan;
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
-            const float fGainL = MathUtils::GetLeftPan ( fPan, false ) * fGain;
-            const float fGainR = MathUtils::GetRightPan ( fPan, false ) * fGain;
-            float fGainL2 = fGainL;
-            float fGainR2 = fGainR;
+            const float fGainL  = MathUtils::GetLeftPan ( fPan, false ) * fGain;
+            const float fGainR  = MathUtils::GetRightPan ( fPan, false ) * fGain;
+            float       fGainL2 = fGainL;
+            float       fGainR2 = fGainR;
 
             if ( vecChanIDsPhantomChan[j] != INVALID_CHANNEL_ID )
             {
-                fGain2 = vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]];
-                fPan2 = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][vecChanIDsPhantomChan[j]];
+                fGain2  = vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]];
+                fPan2   = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][vecChanIDsPhantomChan[j]];
                 fGainL2 = MathUtils::GetLeftPan ( fPan2, false ) * fGain2;
                 fGainR2 = MathUtils::GetRightPan ( fPan2, false ) * fGain2;
             }
@@ -1294,7 +1293,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                     }
                 }
             }
-            else  if ( vecChanIDsPhantomChan[j] == INVALID_CHANNEL_ID )  // is not channel with associated phantom
+            else if ( vecChanIDsPhantomChan[j] == INVALID_CHANNEL_ID ) // is not channel with associated phantom
             {
                 // stereo
                 for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
@@ -1338,7 +1337,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                     }
                 }
             }
-            else      // is channel with associated phantom
+            else // is channel with associated phantom
             {
                 // dual mono-in/stereo-out
                 for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
@@ -1372,15 +1371,14 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                         if ( ( i & 1 ) == 0 )
                         {
                             // if even : left channel
-                            vecfIntermProcBuf[i] += ((vecsData[i] * fGainL) + (vecsData[i+1] * fGainL2)/2);
+                            vecfIntermProcBuf[i] += ( ( vecsData[i] * fGainL ) + ( vecsData[i + 1] * fGainL2 ) / 2 );
                         }
                         else
                         {
                             // if odd  : right channel
-                            vecfIntermProcBuf[i] += ((vecsData[i] * fGainR2) + (vecsData[i-1] * fGainR)/2);
+                            vecfIntermProcBuf[i] += ( ( vecsData[i] * fGainR2 ) + ( vecsData[i - 1] * fGainR ) / 2 );
                         }
-//qDebug() << "Stereo" << fGainL << fGainL2 << fGainR << fGainR2;
-
+                        // qDebug() << "Stereo" << fGainL << fGainL2 << fGainR << fGainR2;
                     }
                 }
             }
@@ -1470,8 +1468,8 @@ opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPer
 CVector<CChannelInfo> CServer::CreateChannelList()
 {
     CVector<CChannelInfo> vecChanInfo ( 0 );
-    CChannelCoreInfo ChanCoreInfo;
-    QString strBaseName;
+    CChannelCoreInfo      ChanCoreInfo;
+    QString               strBaseName;
 
     // look for free channels
     for ( int i = 0; i < iMaxNumChannels; i++ )
@@ -1481,7 +1479,7 @@ CVector<CChannelInfo> CServer::CreateChannelList()
             ChanCoreInfo = vecChannels[i].GetChanInfo();
             if ( vecChannels[i].GetNumAudioChannels() == CC_DUAL_MONO_IN_STEREO_OUT )
             {
-                strBaseName = ChanCoreInfo.strName;
+                strBaseName          = ChanCoreInfo.strName;
                 ChanCoreInfo.strName = strBaseName + "-L";
             }
 
@@ -1490,43 +1488,42 @@ CVector<CChannelInfo> CServer::CreateChannelList()
 
             // create phantom channels for dual mono-in/stereo-out
 
-            if ( vecChannels[i].GetNumAudioChannels() == CC_DUAL_MONO_IN_STEREO_OUT &&
-                 vecChanIDsPhantomChan[i] == INVALID_CHANNEL_ID )
+            if ( vecChannels[i].GetNumAudioChannels() == CC_DUAL_MONO_IN_STEREO_OUT && vecChanIDsPhantomChan[i] == INVALID_CHANNEL_ID )
             {
-                 int iCurChanID = GetFreeChan();
+                int iCurChanID = GetFreeChan();
 
-                 if ( iCurChanID != INVALID_CHANNEL_ID )
-                 {
-                     vecChanIDsPhantomChan[i] = iCurChanID;
-                     vecChanIDsIsPhantomChan[iCurChanID] = i;
+                if ( iCurChanID != INVALID_CHANNEL_ID )
+                {
+                    vecChanIDsPhantomChan[i]            = iCurChanID;
+                    vecChanIDsIsPhantomChan[iCurChanID] = i;
 
-                     // reset channel info
-                     ChanCoreInfo.strName = strBaseName + "-R";
-                     vecChannels[iCurChanID].iNumAudioChannels = CC_DUAL_MONO_IN_STEREO_OUT;
+                    // reset channel info
+                    ChanCoreInfo.strName                      = strBaseName + "-R";
+                    vecChannels[iCurChanID].iNumAudioChannels = CC_DUAL_MONO_IN_STEREO_OUT;
 
-                     // reset the channel gains/pans of current channel, at the same
-                     // time reset gains/pans of this channel ID for all other channels
-                     for ( int i = 0; i < iMaxNumChannels; i++ )
-                     {
-                         vecChannels[iCurChanID].SetGain ( i, 1.0 );
-                         vecChannels[iCurChanID].SetPan ( i, 0.5 );
+                    // reset the channel gains/pans of current channel, at the same
+                    // time reset gains/pans of this channel ID for all other channels
+                    for ( int i = 0; i < iMaxNumChannels; i++ )
+                    {
+                        vecChannels[iCurChanID].SetGain ( i, 1.0 );
+                        vecChannels[iCurChanID].SetPan ( i, 0.5 );
 
-                         // other channels (we do not distinguish the case if
-                         // i == iCurChanID for simplicity)
-                         vecChannels[i].SetGain ( iCurChanID, 1.0 );
-                         vecChannels[i].SetPan ( iCurChanID, 0.5 );
-                     }
-                     ChanCoreInfo = vecChannels[i].GetChanInfo();
-                     strBaseName = ChanCoreInfo.strName;
-                     ChanCoreInfo.strName = strBaseName + "-R";
-                     vecChanInfo.Add ( CChannelInfo ( iCurChanID, // ID
-                                                      ChanCoreInfo ) );
-                 }
+                        // other channels (we do not distinguish the case if
+                        // i == iCurChanID for simplicity)
+                        vecChannels[i].SetGain ( iCurChanID, 1.0 );
+                        vecChannels[i].SetPan ( iCurChanID, 0.5 );
+                    }
+                    ChanCoreInfo         = vecChannels[i].GetChanInfo();
+                    strBaseName          = ChanCoreInfo.strName;
+                    ChanCoreInfo.strName = strBaseName + "-R";
+                    vecChanInfo.Add ( CChannelInfo ( iCurChanID, // ID
+                                                     ChanCoreInfo ) );
+                }
             }
             else
             {
                 // Was phantom, now no longer Dual-Mono so turn off phantom
-                if( vecChannels[i].GetNumAudioChannels() != CC_DUAL_MONO_IN_STEREO_OUT && HasAttachedPhantomChannel( i ) )
+                if ( vecChannels[i].GetNumAudioChannels() != CC_DUAL_MONO_IN_STEREO_OUT && HasAttachedPhantomChannel ( i ) )
                 {
                     vecChanIDsIsPhantomChan[vecChanIDsPhantomChan[i]] = INVALID_CHANNEL_ID;
                     vecChannels[vecChanIDsPhantomChan[i]].Disconnect();
@@ -1534,16 +1531,16 @@ CVector<CChannelInfo> CServer::CreateChannelList()
                 }
             }
         }
-          else if ( IsPhantomChannel( i ) )
+        else if ( IsPhantomChannel ( i ) )
         {
             // Channel not connected
             if ( vecChannels[i].GetNumAudioChannels() == CC_DUAL_MONO_IN_STEREO_OUT )
             {
-                ChanCoreInfo = vecChannels[vecChanIDsIsPhantomChan[i]].GetChanInfo();
-                strBaseName = ChanCoreInfo.strName;
+                ChanCoreInfo         = vecChannels[vecChanIDsIsPhantomChan[i]].GetChanInfo();
+                strBaseName          = ChanCoreInfo.strName;
                 ChanCoreInfo.strName = strBaseName + "-R";
                 vecChanInfo.Add ( CChannelInfo ( i, // ID
-                                         ChanCoreInfo ) );
+                                                 ChanCoreInfo ) );
             }
         }
     }
@@ -1558,7 +1555,7 @@ void CServer::CreateAndSendChanListForAllConChannels()
     // now send connected channels list to all connected clients
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-          if ( (vecChannels[i].IsConnected()) || IsPhantomChannel ( i ) )
+        if ( ( vecChannels[i].IsConnected() ) || IsPhantomChannel ( i ) )
         {
             // send message
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
@@ -1605,15 +1602,9 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID, con
     }
 }
 
-bool CServer::IsPhantomChannel( int i )
-{
-    return vecChanIDsIsPhantomChan[i] != INVALID_CHANNEL_ID;
-}
+bool CServer::IsPhantomChannel ( int i ) { return vecChanIDsIsPhantomChan[i] != INVALID_CHANNEL_ID; }
 
-bool CServer::HasAttachedPhantomChannel( int i )
-{
-    return vecChanIDsPhantomChan[i] != INVALID_CHANNEL_ID;
-}
+bool CServer::HasAttachedPhantomChannel ( int i ) { return vecChanIDsPhantomChan[i] != INVALID_CHANNEL_ID; }
 
 void CServer::CreateAndSendRecorderStateForAllConChannels()
 {
@@ -1623,7 +1614,7 @@ void CServer::CreateAndSendRecorderStateForAllConChannels()
     // now send recorder state to all connected clients
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        if ( ( vecChannels[i].IsConnected() ) && ( !IsPhantomChannel( i ) ) )
+        if ( ( vecChannels[i].IsConnected() ) && ( !IsPhantomChannel ( i ) ) )
         {
             // is connected and not a phantom client
             // send message
@@ -1647,7 +1638,7 @@ int CServer::GetFreeChan()
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         // is connected and not a phantom client
-        if ( ( !vecChannels[i].IsConnected() ) && ( !IsPhantomChannel( i ) ) )
+        if ( ( !vecChannels[i].IsConnected() ) && ( !IsPhantomChannel ( i ) ) )
         {
             return i;
         }
@@ -1665,7 +1656,7 @@ int CServer::GetNumberOfConnectedClients()
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         // is connected ir is a phantom client
-        if ( ( vecChannels[i].IsConnected() ) || ( IsPhantomChannel( i ) ) )
+        if ( ( vecChannels[i].IsConnected() ) || ( IsPhantomChannel ( i ) ) )
         {
             // this channel is connected, increment counter
             iNumConnClients++;
@@ -1685,7 +1676,7 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr )
         // the "GetAddress" gives a valid address and returns true if the
         // channel is connected
         // is connected and not a phantom client
-        if ( ( vecChannels[i].GetAddress ( InetAddr ) ) || ( IsPhantomChannel( i ) ) )
+        if ( ( vecChannels[i].GetAddress ( InetAddr ) ) || ( IsPhantomChannel ( i ) ) )
         {
             // IP found, return channel number
             if ( InetAddr == CheckAddr )
@@ -1913,14 +1904,15 @@ bool CServer::CreateLevelsForAllConChannels ( const int                       iN
 
         for ( int j = 0; j < iNumClients; j++ )
         {
-            if ( IsPhantomChannel( j ) ) continue;
+            if ( IsPhantomChannel ( j ) )
+                continue;
             // update and get signal level for meter in dB for each channel
             vecChannels[vecChanIDsCurConChan[j]].UpdateAndGetLevelForMeterdB ( vecvecsData[j],
                                                                                iServerFrameSizeSamples,
                                                                                vecNumAudioChannels[j] > 1,
                                                                                dCurSigLevelForMeterdB,
-                                                                               dCurSigLevelForMeterdBRight);
-            if ( vecChanIDsPhantomChan[j] != INVALID_CHANNEL_ID  )
+                                                                               dCurSigLevelForMeterdBRight );
+            if ( vecChanIDsPhantomChan[j] != INVALID_CHANNEL_ID )
             {
                 // Phantom Channel too
                 // map value to integer for transmission via the protocol (4 bit available)

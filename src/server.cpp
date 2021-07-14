@@ -246,7 +246,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bDelayPan ( bNDelayPan ),
     eLicenceType ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
-    pSignalHandler ( CSignalHandler::getSingletonP() )
+    pSignalHandler ( CSignalHandler::getSingletonP() ),
+    test1( 0 ),
+    test2( 0 )
 {
     int iOpusError;
     int i;
@@ -1007,10 +1009,11 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
     {
         CurOpusDecoder = nullptr;
     }
-
     // get gains of all connected channels
     for ( int j = 0; j < iNumClients; j++ )
     {
+      if ( !IsPhantomChannel( j ) )
+      {
         // The second index of "vecvecdGains" does not represent
         // the channel ID! Therefore we have to use
         // "vecChanIDsCurConChan" to query the IDs of the currently
@@ -1018,15 +1021,24 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
         vecvecfGains[iChanCnt][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
 
         // consider audio fade-in
-        vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
-
+        float fadeInGain = vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+        vecvecfGains[iChanCnt][j] *= fadeInGain;
+        if ( HasAttachedPhantomChannel( j ) )
+        {
+            vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[vecChanIDsPhantomChan[j]] );
+            vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]] *= fadeInGain;
+        }
         // use the fade in of the current channel for all other connected clients
         // as well to avoid the client volumes are at 100% when joining a server (#628)
         if ( j != iChanCnt )
         {
             vecvecfGains[iChanCnt][j] *= vecChannels[iCurChanID].GetFadeInGain();
+            if ( HasAttachedPhantomChannel( j ) )
+            {
+                vecvecfGains[iChanCnt][j] *= vecChannels[vecChanIDsPhantomChan[j]].GetFadeInGain();
+            }
         }
-
+      }
         // panning
         vecvecfPannings[iChanCnt][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
     }
@@ -1117,8 +1129,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
-            // skip if phantom channel, has no sound
-            if( IsPhantomChannel( j ) ) continue;
+//            // skip if phantom channel, has no sound
+//            if( IsPhantomChannel( j ) ) continue;
 
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
@@ -1128,7 +1140,6 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
             {
                 fGain2 = vecvecfGains[iChanCnt][vecChanIDsPhantomChan[j]];
             }
-
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( fGain == 1.0f )
             {
@@ -1183,6 +1194,7 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                     {
                         vecfIntermProcBuf[i] += (( fGain * static_cast<float> ( vecsData[k] )) +
                                                  ( fGain2 * static_cast<float> ( vecsData[k + 1] ))) / 2;
+//qDebug() << "Mono" << fGain << fGain2;
                     }
                 }
             }
@@ -1205,8 +1217,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
 
         for ( j = 0; j < iNumClients; j++ )
         {
-            // skip if phantom channel, has no sound
-            if( IsPhantomChannel( j ) ) continue;
+//            // skip if phantom channel, has no sound
+//            if( IsPhantomChannel( j ) ) continue;
 
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData  = vecvecsData[j];
@@ -1367,6 +1379,8 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
                             // if odd  : right channel
                             vecfIntermProcBuf[i] += ((vecsData[i] * fGainR2) + (vecsData[i-1] * fGainR)/2);
                         }
+//qDebug() << "Stereo" << fGainL << fGainL2 << fGainR << fGainR2;
+
                     }
                 }
             }
@@ -1901,11 +1915,11 @@ bool CServer::CreateLevelsForAllConChannels ( const int                       iN
         {
             if ( IsPhantomChannel( j ) ) continue;
             // update and get signal level for meter in dB for each channel
-            const double ddt1 = vecChannels[vecChanIDsCurConChan[j]].UpdateAndGetLevelForMeterdB ( vecvecsData[j],
-                                                                                                   iServerFrameSizeSamples,
-                                                                                                   vecNumAudioChannels[j] > 1,
-                                                                                                   dCurSigLevelForMeterdB,
-                                                                                                   dCurSigLevelForMeterdBRight);
+            vecChannels[vecChanIDsCurConChan[j]].UpdateAndGetLevelForMeterdB ( vecvecsData[j],
+                                                                               iServerFrameSizeSamples,
+                                                                               vecNumAudioChannels[j] > 1,
+                                                                               dCurSigLevelForMeterdB,
+                                                                               dCurSigLevelForMeterdBRight);
             if ( vecChanIDsPhantomChan[j] != INVALID_CHANNEL_ID  )
             {
                 // Phantom Channel too

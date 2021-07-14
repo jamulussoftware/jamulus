@@ -69,13 +69,13 @@ win32 {
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     HEADERS += windows/sound.h
     SOURCES += windows/sound.cpp \
-        windows/ASIOSDK2.3.3/common/asio.cpp \
-        windows/ASIOSDK2.3.3/host/asiodrivers.cpp \
-        windows/ASIOSDK2.3.3/host/pc/asiolist.cpp
+        windows/ASIOSDK2/common/asio.cpp \
+        windows/ASIOSDK2/host/asiodrivers.cpp \
+        windows/ASIOSDK2/host/pc/asiolist.cpp
     RC_FILE = windows/mainicon.rc
-    INCLUDEPATH += windows/ASIOSDK2.3.3/common \
-        windows/ASIOSDK2.3.3/host \
-        windows/ASIOSDK2.3.3/host/pc
+    INCLUDEPATH += windows/ASIOSDK2/common \
+        windows/ASIOSDK2/host \
+         windows/ASIOSDK2/host/pc
     mingw* {
         LIBS += -lole32 \
             -luser32 \

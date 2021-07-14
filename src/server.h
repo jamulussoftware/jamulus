@@ -379,6 +379,9 @@ protected:
 
     std::unique_ptr<CThreadPool> pThreadPool;
 
+    int test1;
+    int test2;
+
 signals:
     void Started();
     void Stopped();

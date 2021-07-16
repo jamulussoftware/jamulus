@@ -159,6 +159,7 @@ public:
               const quint16      iQosNumber,
               const QString&     strHTMLStatusFileName,
               const QString&     strCentralServer,
+              const QString&     strServerListFileName,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
               const QString&     strServerPublicIP,

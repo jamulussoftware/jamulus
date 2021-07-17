@@ -28,6 +28,10 @@
 - Server: Jam Recorder's internal locking and initiatlization code has been made more robust (#1826).
   (contributed by @cdmahoney)
 
+- Server: The list of servers registered on a directory can now be saved during directory restart. Use the new
+  --directoryfile CLI option to use this feature. (#1867)
+  (contributed by @pljones)
+
 - Android: Add close button on Android to enhance UX (#1763, #1876).
   (contributed by @ngocdh)
 

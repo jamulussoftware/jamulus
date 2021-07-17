@@ -20,6 +20,8 @@
 on:
   workflow_dispatch:
   push:
+    paths-ignore:
+      - "**.md"
     tags:
       - "r*"
     branches:
@@ -28,6 +30,8 @@ on:
       - "master"
     #  - "*"
   pull_request: # The branches below must be a subset of the branches in "push"
+    paths-ignore:
+     - "**.md"
     branches:
       - master
 

@@ -113,7 +113,8 @@ public:
                                     QString sCity,
                                     QString strCountry,
                                     QString strNumClients,
-                                    bool    isPermanent );
+                                    bool    isPermanent,
+                                    bool    bEnableIPv6 );
     QString                 toCSV();
 
     // time on which the entry was registered
@@ -139,6 +140,7 @@ public:
                          const QString& strServerListFilter,
                          const QString& strServerPublicIP,
                          const int      iNumChannels,
+                         const bool     bNEnableIPv6,
                          CProtocol*     pNConLProt );
 
     void SetEnabled ( const bool bState ) { bEnabled = bState; }
@@ -198,12 +200,14 @@ protected:
     QString    strCentralServerAddress;
     ECSAddType eCentralServerAddressType;
     bool       bIsCentralServer;
+    bool       bEnableIPv6;
 
     // server registration status
     ESvrRegStatus eSvrRegStatus;
 
     CHostAddress SlaveCurCentServerHostAddress;
     CHostAddress SlaveCurLocalHostAddress;
+    CHostAddress SlaveCurLocalHostAddress6;
 
     QString ServerListFileName;
 

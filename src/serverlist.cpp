@@ -33,10 +33,11 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
                                            QString sCity,
                                            QString strCountry,
                                            QString strNumClients,
-                                           bool    isPermanent )
+                                           bool    isPermanent,
+                                           bool    bEnableIPv6 )
 {
     CHostAddress haServerHostAddr;
-    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr );
+    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr, bEnableIPv6 );
     if ( CHostAddress() == haServerHostAddr )
     {
         // do not proceed without server host address!
@@ -44,7 +45,7 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
     }
 
     CHostAddress haServerLocalAddr;
-    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr );
+    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr, bEnableIPv6 );
     if ( haServerLocalAddr.iPort == 0 )
     {
         haServerLocalAddr.iPort = haServerHostAddr.iPort;
@@ -98,8 +99,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& strServerListFilter,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
+                                         const bool     bNEnableIPv6,
                                          CProtocol*     pNConLProt ) :
     eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
+    bEnableIPv6 ( bNEnableIPv6 ),
     eSvrRegStatus ( SRS_UNREGISTERED ),
     strMinServerVersion ( "" ), // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
@@ -110,6 +113,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
     // set the server internal address, including internal port number
     QHostAddress qhaServerPublicIP;
+
     if ( strServerPublicIP == "" )
     {
         // No user-supplied override via --serverpublicip -> use auto-detection
@@ -122,6 +126,16 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     }
     qDebug() << "Using" << qhaServerPublicIP.toString() << "as external IP.";
     SlaveCurLocalHostAddress = CHostAddress ( qhaServerPublicIP, iNPortNum );
+
+    if ( bEnableIPv6 )
+    {
+        // set the server internal address, including internal port number
+        QHostAddress qhaServerPublicIP6;
+
+        qhaServerPublicIP6 = NetworkUtil::GetLocalAddress6().InetAddr;
+        qDebug() << "Using" << qhaServerPublicIP6.toString() << "as external IPv6.";
+        SlaveCurLocalHostAddress6 = CHostAddress ( qhaServerPublicIP6, iNPortNum );
+    }
 
     // prepare the server info information
     QStringList slServInfoSeparateParams;
@@ -592,7 +606,7 @@ void CServerListManager::CentralServerLoadServerList ( const QString strServerLi
             continue;
         }
 
-        NetworkUtil::ParseNetworkAddress ( slLine[0], haServerHostAddr );
+        NetworkUtil::ParseNetworkAddress ( slLine[0], haServerHostAddr, bEnableIPv6 );
         int iIdx = IndexOf ( haServerHostAddr );
         if ( iIdx != INVALID_INDEX )
         {
@@ -601,7 +615,7 @@ void CServerListManager::CentralServerLoadServerList ( const QString strServerLi
         }
 
         CServerListEntry serverListEntry =
-            CServerListEntry::parse ( slLine[0], slLine[1], slLine[2], slLine[3], slLine[4], slLine[5], slLine[6].toInt() != 0 );
+            CServerListEntry::parse ( slLine[0], slLine[1], slLine[2], slLine[3], slLine[4], slLine[5], slLine[6].toInt() != 0, bEnableIPv6 );
 
         // We expect servers to have addresses...
         if ( ( CHostAddress() == serverListEntry.HostAddr ) )
@@ -737,7 +751,9 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
-    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr, SlaveCurCentServerHostAddress ) )
+
+    // Allow IPv4 only for communicating with Directory Servers
+    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr, SlaveCurCentServerHostAddress, false ) )
     {
         if ( bIsRegister )
         {

@@ -32,12 +32,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
+                         const bool       bNEnableIPv6,
                          QWidget*         parent ) :
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
+    bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
@@ -560,12 +562,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Send the request to two servers for redundancy if either or both of them
     // has a higher release version number, the reply will trigger the notification.
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }

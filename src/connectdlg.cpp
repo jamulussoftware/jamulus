@@ -547,7 +547,7 @@ void CConnectDlg::OnCustomCentralServerAddrChanged()
     {
         // check if the currently select custom directory still exists in the now potentially re-ordered vector,
         // if so, then change to its new index.  (addresses Issue #1899)
-        int iNewIndex = cbxDirectoryServer->findText ( strPreviousSelection );
+        int iNewIndex = cbxDirectoryServer->findText ( strPreviousSelection, Qt::MatchExactly );
         if ( iNewIndex == INVALID_INDEX )
         {
             // previously selected custom directory has been deleted.  change to default directory

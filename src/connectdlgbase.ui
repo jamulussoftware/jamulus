@@ -32,7 +32,7 @@
      <item>
       <widget class="QLabel" name="lblList">
        <property name="text">
-        <string>List</string>
+        <string>Directory</string>
        </property>
       </widget>
      </item>

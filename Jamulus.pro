@@ -45,7 +45,8 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_pl_PL.ts \
     src/res/translation/translation_sk_SK.ts \
     src/res/translation/translation_it_IT.ts \
-    src/res/translation/translation_sv_SE.ts
+    src/res/translation/translation_sv_SE.ts \
+    src/res/translation/translation_zh_CN.ts
 
 INCLUDEPATH += src
 
@@ -738,6 +739,7 @@ DISTFILES += ChangeLog \
     src/res/translation/translation_it_IT.qm \
     src/res/translation/translation_sv_SE.qm \
     src/res/translation/translation_sk_SK.qm \
+    src/res/translation/translation_zh_CN.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

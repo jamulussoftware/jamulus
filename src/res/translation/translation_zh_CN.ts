@@ -1436,17 +1436,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="363"/>
         <source>Feedback Protection</source>
-        <translation>防止声音正反馈循环（啸叫）</translation>
+        <translation>自激保护</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="364"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>启用声音正反馈保护以检测话筒和麦克风产生正反馈循环导致啸叫。</translation>
+        <translation>启用自激保护以检测话筒和麦克风产生正反馈循环（自激）导致的啸叫。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="368"/>
         <source>Feedback Protection check box</source>
-        <translation type="unfinished"></translation>
+        <translation>自激保护勾选框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="372"/>
@@ -2007,7 +2007,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1046"/>
         <source>Feedback Protection</source>
-        <translation>防止声音正反馈循环（啸叫）</translation>
+        <translation type="unfinished">自激保护</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1059"/>
@@ -2626,7 +2626,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../serverdlg.cpp" line="169"/>
         <source>New Recording</source>
-        <translation type="unfinished">创建新录制</translation>
+        <translation>创建新录制</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="170"/>
@@ -2654,17 +2654,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
         <source>&amp;Open </source>
-        <translation type="unfinished"></translation>
+        <translation>打开(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="341"/>
         <source> Server</source>
-        <translation>打开(&amp;O)</translation>
+        <translation> 服务器</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="344"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>窗口(&amp;W)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="574"/>

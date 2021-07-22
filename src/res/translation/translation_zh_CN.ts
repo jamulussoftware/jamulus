@@ -185,7 +185,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="1112"/>
         <source>Personal Mix at: </source>
-        <translation type="unfinished"></translation>
+        <translation>个人混音室: </translation>
     </message>
 </context>
 <context>
@@ -871,14 +871,14 @@
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation>Feedback audio o segnale forte rilevato.
+        <translation>检测到自激或过大的音频信号。
 
-E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disattiva Inputt&quot;. Si prega di risolvere prima il problema dei larsen e dei ritorni e successivamente riattivare l&apos;audio.</translation>
+静音已启用并已为您打开了“静音自己”选项。请解决自激问题然后手动取消静音。</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1121"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>您的声卡未正常工作。请打开设置对话框并检查设备选项和驱动设置。</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1192"/>
@@ -1331,7 +1331,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="259"/>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation>语言(Lang)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="259"/>
@@ -2007,7 +2007,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1046"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished">自激保护</translation>
+        <translation>自激保护</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1059"/>
@@ -2057,7 +2057,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="227"/>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation>语言(Lang)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1001"/>
@@ -2245,7 +2245,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../../util.cpp" line="590"/>
         <location filename="../../util.cpp" line="595"/>
         <source>Getting &amp;Started...</source>
-        <translation>入门(&amp;G)</translation>
+        <translation>入门(&amp;S)...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="591"/>

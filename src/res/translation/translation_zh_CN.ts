@@ -712,7 +712,7 @@
         <location filename="../../clientdlg.cpp" line="226"/>
         <location filename="../../clientdlg.cpp" line="1224"/>
         <source>C&amp;onnect</source>
-        <translation>连接(&amp;C)</translation>
+        <translation>连接(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="259"/>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>
         <source>C&amp;hat...</source>
-        <translation>聊天(&amp;C)...</translation>
+        <translation>聊天(&amp;H)...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="301"/>
@@ -752,7 +752,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="308"/>
         <source>N&amp;o User Sorting</source>
-        <translation>不对用户进行排序(&amp;N)</translation>
+        <translation>不对用户进行排序(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="322"/>
@@ -942,7 +942,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientdlgbase.ui" line="531"/>
         <source>C&amp;onnect</source>
-        <translation>连接(&amp;C)</translation>
+        <translation>连接(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="118"/>
@@ -2226,7 +2226,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlgbase.ui" line="130"/>
         <source>C&amp;ancel</source>
-        <translation>取消(&amp;C)</translation>
+        <translation>取消(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="137"/>

@@ -2834,7 +2834,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlgbase.ui" line="222"/>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation>语言(Lang)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="117"/>

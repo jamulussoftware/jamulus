@@ -298,7 +298,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
 
-
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
 
@@ -374,7 +373,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pSettingsMenu->addAction ( tr ( "Audio/Network &Settings..." ), this, SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
 
     pSettingsMenu->addAction ( tr ( "A&dvanced Settings..." ), this, SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
-
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );

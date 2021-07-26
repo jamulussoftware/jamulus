@@ -199,12 +199,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                 tr ( "Some sound card drivers do not allow the buffer delay to be changed "
                                      "from within the application. "
                                      "In this case the buffer delay setting is disabled and has to be "
-                                     "changed using the sound card driver. On Windows, press the "
+                                     "changed using the sound card driver. On Windows, use the "
                                      "ASIO Device Settings button to open the driver settings panel. On Linux, "
                                      "use the JACK configuration tool to change the buffer size." ) +
                                 "<br>" +
-                                tr ( "If no buffer size is selected and all settings are disabled, an "
-                                     "unsupported buffer size is used by the driver. The application "
+                                tr ( "If no buffer size is selected and all settings are disabled, this means an "
+                                     "unsupported buffer size is in use by driver. The application "
                                      "will still work with this setting but with restricted "
                                      "performance." ) +
                                 "<br>" +
@@ -229,11 +229,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b> " +
                                     tr ( "This opens the driver settings of your sound card. Some drivers "
                                          "allow you to change buffer settings, others like ASIO4ALL "
-                                         "let you choose input or outputs of your device(s). "
+                                         "lets you choose input or outputs of your device(s). "
                                          "More information can be found on jamulus.io." );
 
     QString strSndCardDriverSetupTT = QString ( tr ( "Opens the driver settings. Note: %1 currently only supports devices "
-                                                     "supporting a sample rate of %2 Hz. "
+                                                     "with a sample rate of %2 Hz. "
                                                      "You will not be able to select a driver/device which doesn't. "
                                                      "For more help see jamulus.io." ) )
                                           .arg ( APP_NAME )

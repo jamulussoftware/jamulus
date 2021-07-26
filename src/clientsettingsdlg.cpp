@@ -179,9 +179,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // sound card buffer delay
     QString strSndCrdBufDelay = "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
-                                tr ( "The buffer delay setting is a fundamental setting of this "
-                                     "software. This setting has an influence on many "
-                                     "connection properties." ) +
+                                QString ( tr ( "The buffer delay setting is a fundamental setting of %1. "
+                                               "This setting has an influence on many conncetion properties." ) )
+                                    .arg ( APP_NAME ) +
                                 "<br>" + tr ( "Three buffer sizes are supported" ) +
                                 ":<ul>"
                                 "<li>" +
@@ -196,17 +196,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                      "computers or with a slow internet connection." ) +
                                 "</li>"
                                 "</ul>" +
-                                tr ( "Some sound card drivers do not allow the buffer delay to be changed "
-                                     "from within the application. "
-                                     "In this case the buffer delay setting is disabled and has to be "
-                                     "changed using the sound card driver. On Windows, use the "
-                                     "ASIO Device Settings button to open the driver settings panel. On Linux, "
-                                     "use the JACK configuration tool to change the buffer size." ) +
+                                QString ( tr ( "Some sound card drivers do not allow the buffer delay to be changed "
+                                               "from within %1. "
+                                               "In this case the buffer delay setting is disabled and has to be "
+                                               "changed using the sound card driver. On Windows, use the "
+                                               "ASIO Device Settings button to open the driver settings panel. On Linux, "
+                                               "use the JACK configuration tool to change the buffer size." ) )
+                                    .arg ( APP_NAME ) +
                                 "<br>" +
-                                tr ( "If no buffer size is selected and all settings are disabled, this means an "
-                                     "unsupported buffer size is in use by driver. The application "
-                                     "will still work with this setting but with restricted "
-                                     "performance." ) +
+                                QString ( tr ( "If no buffer size is selected and all settings are disabled, this means an "
+                                               "unsupported buffer size is in use by the driver. %1 "
+                                               "will still work with this setting but may have restricted "
+                                               "performance." ) )
+                                    .arg ( APP_NAME ) +
                                 "<br>" +
                                 tr ( "The actual buffer delay has influence on the connection status, the "
                                      "current upload rate and the overall delay. The lower the buffer size, "
@@ -217,12 +219,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                 tr ( "The buffer setting is therefore a trade-off between audio "
                                      "quality and overall delay." );
 
-    QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
-                                       "disabled, it is prohibited by the audio driver to modify this "
-                                       "setting from within the software. "
-                                       "On Windows, press the ASIO Device Settings button to open the "
-                                       "driver settings panel. On Linux, use the Jack configuration tool to "
-                                       "change the buffer size." ) +
+    QString strSndCrdBufDelayTT = QString ( tr ( "If the buffer delay settings are "
+                                                 "disabled, it is prohibited by the audio driver to modify this "
+                                                 "setting from within %1. "
+                                                 "On Windows, press the ASIO Device Settings button to open the "
+                                                 "driver settings panel. On Linux, use the JACK configuration tool to "
+                                                 "change the buffer size." ) )
+                                      .arg ( APP_NAME ) +
                                   TOOLTIP_COM_END_TEXT;
 
     // Driver setup button
@@ -470,10 +473,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "you play and a flag of the country you are located in. "
                                "Your city and skill level playing your instrument may also be added." ) +
                           "<br>" +
-                          tr ( "What you set here will appear at your fader on the mixer "
-                               "board when you are connected to a Jamulus server. This tag will "
-                               "also be shown at each client which is connected to the same server as "
-                               "you." );
+                          QString ( tr ( "What you set here will appear at your fader on the mixer "
+                                         "board when you are connected to a %1 server. This tag will "
+                                         "also be shown at each client which is connected to the same server as "
+                                         "you." ) )
+                              .arg ( APP_NAME );
 
     plblAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );

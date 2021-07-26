@@ -117,11 +117,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
 
     // sound card device
-    lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Sound Card Device" ) + ":</b> " + tr ( "The ASIO driver (sound card) can be selected using " ) +
-                                       APP_NAME +
-                                       tr ( " under the Windows operating system. Under MacOS/Linux, no sound "
-                                            "card selection is possible. If the selected ASIO driver is not valid "
-                                            "an error message is shown and the previous valid driver is selected." ) +
+    lblSoundcardDevice->setWhatsThis ( "<b>" +
+                                       QString ( tr ( "Sound Card Device" ) + ":</b> " +
+                                                 tr ( "The ASIO driver (sound card) can be selected using "
+                                                      "%1 under the Windows operating system. Under macOS/Linux, no sound "
+                                                      "card selection is possible. If the selected ASIO driver is not valid "
+                                                      "an error message is shown and the previous valid driver is selected." ) )
+                                           .arg ( APP_NAME ) +
                                        "<br>" +
                                        tr ( "If the driver is selected during an active connection, the connection "
                                             "is stopped, the driver is changed and the connection is started again "
@@ -147,10 +149,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                 tr ( "If the selected sound card device offers more than one "
                                      "input or output channel, the Input Channel Mapping and Output "
                                      "Channel Mapping settings are visible." ) +
-                                "<br>" + tr ( "For each " ) + APP_NAME +
-                                tr ( " input/output channel (Left and "
-                                     "Right channel) a different actual sound card channel can be "
-                                     "selected." );
+                                "<br>" +
+                                QString ( tr ( "For each %1 input/output channel (left and "
+                                               "right channel) a different actual sound card channel can be "
+                                               "selected." ) )
+                                    .arg ( APP_NAME );
 
     lblInChannelMapping->setWhatsThis ( strSndCrdChanMapp );
     lblOutChannelMapping->setWhatsThis ( strSndCrdChanMapp );
@@ -164,13 +167,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
 
     // enable OPUS64
-    chbEnableOPUS64->setWhatsThis ( "<b>" + tr ( "Enable Small Network Buffers" ) + ":</b> " +
-                                    tr ( "If enabled, the support for very small network audio packets is activated. Very small "
-                                         "network packets are only actually used if the sound card buffer delay is smaller than " ) +
-                                    QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) +
-                                    tr ( " samples. The "
-                                         "smaller the network buffers, the lower the audio latency. But at the same time "
-                                         "the network load increases and the probability of audio dropouts also increases." ) );
+    chbEnableOPUS64->setWhatsThis (
+        "<b>" + tr ( "Enable Small Network Buffers" ) + ":</b> " +
+        QString ( tr ( "Enables support for very small network audio packets. These "
+                       "network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The "
+                       "smaller the network buffers, the lower the audio latency. But at the same time "
+                       "the network load and the probability of audio dropouts or sound artifacts increases." ) )
+            .arg ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );
 
@@ -198,7 +201,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                      "In this case the buffer delay setting is disabled and has to be "
                                      "changed using the sound card driver. On Windows, press the "
                                      "ASIO Device Settings button to open the driver settings panel. On Linux, "
-                                     "use the Jack configuration tool to change the buffer size." ) +
+                                     "use the JACK configuration tool to change the buffer size." ) +
                                 "<br>" +
                                 tr ( "If no buffer size is selected and all settings are disabled, an "
                                      "unsupported buffer size is used by the driver. The application "
@@ -229,12 +232,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                          "let you choose input or outputs of your device(s). "
                                          "More information can be found on jamulus.io." );
 
-    QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: " ) + APP_NAME +
-                                      tr ( " currently only supports devices supporting a sample rate of " ) +
-                                      QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) +
-                                      tr ( "Hz. "
-                                           "You will not be able to select a driver/device which doesn't. "
-                                           "For more help see jamulus.io." ) +
+    QString strSndCardDriverSetupTT = QString ( tr ( "Opens the driver settings. Note: %1 currently only supports devices "
+                                                     "supporting a sample rate of %2 Hz. "
+                                                     "You will not be able to select a driver/device which doesn't. "
+                                                     "For more help see jamulus.io." ) )
+                                          .arg ( APP_NAME )
+                                          .arg ( SYSTEM_SAMPLE_RATE_HZ ) +
                                       TOOLTIP_COM_END_TEXT;
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );

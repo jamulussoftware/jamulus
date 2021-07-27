@@ -119,10 +119,6 @@ jobs:
            - config_name:           MacOS (artifacts)
              target_os:             macos
              building_on_os:        macos-10.15
-             env: 
-               MACOS_CERTIFICATE:     ${{ secrets.MACOS_CERT}}
-               MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERT_PWD }}
-               MACOS_CERTIFICATE_ID:  ${{ secrets.MACOS_CERT_ID }}
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
@@ -187,6 +183,9 @@ jobs:
         env:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+          MACOS_CERTIFICATE:          ${{ secrets.MACOS_CERT}}
+          MACOS_CERTIFICATE_PWD:      ${{ secrets.MACOS_CERT_PWD }}
+          MACOS_CERTIFICATE_ID:       ${{ secrets.MACOS_CERT_ID }}
 
       - name:                       "Post-Build for ${{ matrix.config.config_name }}"
         id:                         step_cmd3_postbuild

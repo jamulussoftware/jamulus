@@ -308,7 +308,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxAudioQuality->setAccessibleName ( tr ( "Audio quality combo box" ) );
 
     // new client fader level
-    QString strNewClientLevel = "<b>" + tr ( "New Client Level" ) + ":</b> " +
+    QString strNewClientLevel = "<b>" + tr ( "Default Level" ) + ":</b> " +
                                 tr ( "This setting defines the fader level of a newly "
                                      "connected client in percent. If a new client connects "
                                      "to the current server, they will get the specified initial "
@@ -317,7 +317,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     lblNewClientLevel->setWhatsThis ( strNewClientLevel );
     edtNewClientLevel->setWhatsThis ( strNewClientLevel );
-    edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
+    edtNewClientLevel->setAccessibleName ( tr ( "Default level edit box" ) );
 
     // input boost
     QString strInputBoost = "<b>" + tr ( "Input Boost" ) + ":</b> " +

@@ -54,23 +54,29 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
     edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
 
     // Menu  -------------------------------------------------------------------
+#if defined( Q_OS_IOS )
     QMenuBar* pMenu     = new QMenuBar ( this );
     QMenu*    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
-    pEditMenu->addAction ( tr ( "Cl&ear Chat History" ), this, SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
+    // pEditMenu->addAction ( tr ( "Cl&ear Chat History" ), this, SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
 
     pMenu->addMenu ( pEditMenu );
-#if defined( Q_OS_IOS )
     QAction* action = pMenu->addAction ( tr ( "&Close" ) );
     connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
 #endif
 
 #if defined( ANDROID ) || defined( Q_OS_ANDROID )
+    QMenuBar* pMenu     = new QMenuBar ( this );
+    QMenu*    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
+
+    // pEditMenu->addAction ( tr ( "Cl&ear Chat History" ), this, SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
+
+    pMenu->addMenu ( pEditMenu );
     pEditMenu->addAction ( tr ( "&Close" ), this, SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
 #endif
 
     // Now tell the layout about the menu
-    layout()->setMenuBar ( pMenu );
+    // layout()->setMenuBar ( pMenu );
 
     // Connections -------------------------------------------------------------
     QObject::connect ( edtLocalInputText, &QLineEdit::textChanged, this, &CChatDlg::OnLocalInputTextTextChanged );

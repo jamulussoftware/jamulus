@@ -118,7 +118,7 @@ public:
         vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
         vecStoredFaderGroupID ( MAX_NUM_STORED_FADER_SETTINGS, INVALID_INDEX ),
         vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-        iNewClientFaderLevel ( 100 ),
+        iNewClientFaderLevel ( 80 ),
         iInputBoost ( 1 ),
         iSettingsTab ( SETTING_TAB_AUDIONET ),
         bConnectDlgShowAllMusicians ( true ),

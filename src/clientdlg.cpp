@@ -274,13 +274,13 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
 
-    pFileMenu->addAction ( tr ( "&Connection Setup..." ), this, SLOT ( OnOpenConnectionSetupDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
+    pFileMenu->addAction ( tr ( "C&onnect..." ), this, SLOT ( OnOpenConnectionSetupDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
 
     pFileMenu->addSeparator();
 
-    pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this, SLOT ( OnLoadChannelSetup() ) );
+    pFileMenu->addAction ( tr ( "&Load Mix..." ), this, SLOT ( OnLoadChannelSetup() ) );
 
-    pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this, SLOT ( OnSaveChannelSetup() ) );
+    pFileMenu->addAction ( tr ( "&Save Mix..." ), this, SLOT ( OnSaveChannelSetup() ) );
 
     pFileMenu->addSeparator();
 
@@ -289,40 +289,45 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
-    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this, SLOT ( OnClearAllStoredSoloMuteSettings() ) );
+    pEditMenu->addAction ( tr ( "Cle&ar Solo and Mute" ), this, SLOT ( OnClearAllStoredSoloMuteSettings() ) );
 
-    pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ),
+    pEditMenu->addAction ( tr ( "Set to Default &Level" ),
                            this,
                            SLOT ( OnSetAllFadersToNewClientLevel() ),
                            QKeySequence ( Qt::CTRL + Qt::Key_L ) );
 
-    pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
+    pEditMenu->addAction ( tr ( "Sample and Adjust &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
+
+    pEditMenu->addSeparator();
+
+    QAction* ClearChatAction = pEditMenu->addAction ( tr ( "Cl&ear Chat History" ), this, SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
+    ClearChatAction->setEnabled( false );
 
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
 
-    QAction* NoSortAction =
-        pViewMenu->addAction ( tr ( "N&o User Sorting" ), this, SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
+    // QAction* NoSortAction =
+    //     pViewMenu->addAction ( tr ( "N&o User Sorting" ), this, SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
 
     QAction* ByNameAction =
-        pViewMenu->addAction ( tr ( "Sort Users by &Name" ), this, SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
+        pViewMenu->addAction ( tr ( "Sort by &Name" ), this, SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
 
-    QAction* ByInstrAction = pViewMenu->addAction ( tr ( "Sort Users by &Instrument" ),
+    QAction* ByInstrAction = pViewMenu->addAction ( tr ( "Sort by &Instrument" ),
                                                     this,
                                                     SLOT ( OnSortChannelsByInstrument() ),
                                                     QKeySequence ( Qt::CTRL + Qt::Key_I ) );
 
     QAction* ByGroupAction =
-        pViewMenu->addAction ( tr ( "Sort Users by &Group" ), this, SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
+        pViewMenu->addAction ( tr ( "Sort by &Group" ), this, SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
 
     QAction* ByCityAction =
-        pViewMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
+        pViewMenu->addAction ( tr ( "Sort by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
 
     // the sorting menu entries shall be checkable and exclusive
     QActionGroup* SortActionGroup = new QActionGroup ( this );
     SortActionGroup->setExclusive ( true );
-    NoSortAction->setCheckable ( true );
-    SortActionGroup->addAction ( NoSortAction );
+    // NoSortAction->setCheckable ( true );
+    // SortActionGroup->addAction ( NoSortAction );
     ByNameAction->setCheckable ( true );
     SortActionGroup->addAction ( ByNameAction );
     ByInstrAction->setCheckable ( true );
@@ -336,7 +341,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     switch ( pSettings->eChannelSortType )
     {
     case ST_NO_SORT:
-        NoSortAction->setChecked ( true );
+        // NoSortAction->setChecked ( true );
         break;
     case ST_BY_NAME:
         ByNameAction->setChecked ( true );
@@ -355,13 +360,17 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pViewMenu->addSeparator();
 
-    pViewMenu->addAction ( tr ( "C&hat..." ), this, SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
+    QAction* ChatAction = pViewMenu->addAction ( tr ( "C&hat" ), this, SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
+    ChatAction->setCheckable( true );
 
     // optionally show analyzer console entry
     if ( bShowAnalyzerConsole )
     {
-        pViewMenu->addAction ( tr ( "&Analyzer Console..." ), this, SLOT ( OnOpenAnalyzerConsole() ) );
+        QAction* AnalyzerAction = pViewMenu->addAction ( tr ( "&Analyzer Console" ), this, SLOT ( OnOpenAnalyzerConsole() ) );
+        AnalyzerAction->setCheckable( true );
     }
+
+
 
     pViewMenu->addSeparator();
 

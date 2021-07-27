@@ -986,7 +986,7 @@
              <item>
               <widget class="QLabel" name="lblNewClientLevel">
                <property name="text">
-                <string>New Client Level</string>
+                <string>Default Level</string>
                </property>
               </widget>
              </item>

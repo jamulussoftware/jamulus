@@ -8,6 +8,8 @@
 ####################
 
 source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
+# Setting this to 'allow_signing_true' is needed so we don't try to sign on the legacy build
+SIGNING_ENABLED=$1
 
 ###################
 ###  PROCEDURE  ###
@@ -18,7 +20,10 @@ cd "${THIS_JAMULUS_PROJECT_PATH}"
 echo "Run deploy script..."
 
 # If we have certificate details, then prepare the signing
-if [ -z "${MACOS_CERTIFICATE_PWD}" ]; then
+if [ -z "${MACOS_CERTIFICATE_PWD}" ||
+     -z "${MACOS_CERTIFICATE}" ||
+     -z "${MACOS_CERTIFICATE_ID}" ||
+     "${SIGNING_ENABLED}" != "allow_signing_true" ]; then
     sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh
 else
     echo "Setting up signing, as credentials found"

@@ -7,9 +7,10 @@
 ###  PARAMETERS  ###
 ####################
 
-source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
 # Setting this to 'allow_signing_true' is needed so we don't try to sign on the legacy build
 SIGNING_ENABLED=$1
+
+source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
 
 ###################
 ###  PROCEDURE  ###

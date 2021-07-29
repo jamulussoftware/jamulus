@@ -86,13 +86,17 @@ jobs:
 
 
   release_assets:
+    env:
+      MACOS_CERTIFICATE:            ${{ secrets.MACOS_CERT}}
+      MACOS_CERTIFICATE_PWD:        ${{ secrets.MACOS_CERT_PWD }}
+      MACOS_CERTIFICATE_ID:         ${{ secrets.MACOS_CERT_ID }}
     name:                           Build assets for ${{ matrix.config.config_name }}
     needs:                          create_release
     strategy:
       fail-fast:                    false
       matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
         shouldSign:
-          - ${{ secrets.MACOS_CERT_PWD != "" }}
+          - ${{ MACOS_CERTIFICATE_PWD != "" }}
         exclude:
           - shouldSign: true
             flavor: MacOS Legacy (artifacts)

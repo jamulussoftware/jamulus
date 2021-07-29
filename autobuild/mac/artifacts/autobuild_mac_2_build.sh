@@ -7,6 +7,11 @@
 ###  PARAMETERS  ###
 ####################
 
+SIGN = $1
+if [ ${SIGN} ]; then
+    shift
+fi
+
 source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
 
 ###################
@@ -20,7 +25,8 @@ echo "Run deploy script..."
 # If we have certificate details, then prepare the signing
 if [ -z "${MACOS_CERTIFICATE_PWD}" ||
      -z "${MACOS_CERTIFICATE}" ||
-     -z "${MACOS_CERTIFICATE_ID}"]; then
+     -z "${MACOS_CERTIFICATE_ID}" ||
+     "${SIGN}" != "sign_if_possible" ]; then
     sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh
 else
     echo "Setting up signing, as credentials found"

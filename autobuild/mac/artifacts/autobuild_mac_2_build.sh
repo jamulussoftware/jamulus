@@ -8,6 +8,7 @@
 ####################
 
 SIGN=$1
+echo "${SIGN}"
 if [ -n "${SIGN}" ]; then
     shift
 fi
@@ -23,10 +24,10 @@ cd "${THIS_JAMULUS_PROJECT_PATH}"
 echo "Run deploy script..."
 
 # If we have certificate details, then prepare the signing
-if [ -z "${MACOS_CERTIFICATE_PWD}" ||
+if [[ -z "${MACOS_CERTIFICATE_PWD}" ||
      -z "${MACOS_CERTIFICATE}" ||
      -z "${MACOS_CERTIFICATE_ID}" ||
-     "${SIGN}" != "sign_if_possible" ]; then
+     "${SIGN}" != "sign_if_possible" ]]; then
     sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh
 else
     echo "Setting up signing, as credentials found"

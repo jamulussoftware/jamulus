@@ -7,8 +7,8 @@
 ###  PARAMETERS  ###
 ####################
 
-SIGN = $1
-if [ ${SIGN} ]; then
+SIGN=$1
+if [ -n "${SIGN}" ]; then
     shift
 fi
 

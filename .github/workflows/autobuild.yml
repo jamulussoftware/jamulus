@@ -224,6 +224,7 @@ jobs:
         uses: devbotsxyz/xcode-notarize@v1
         with:
           product-path: deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          primary-bundle-id: io.jamulus.Jamulus
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
       # Apply successful notarization

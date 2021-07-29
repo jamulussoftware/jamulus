@@ -91,6 +91,11 @@ jobs:
     strategy:
       fail-fast:                    false
       matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+        shouldSign:
+          - ${{ secrets.MACOS_CERT_PWD != "" }}
+        exclude:
+          - shouldSign: true
+            flavor: MacOS Legacy (artifacts)
         config:
            - config_name:           AndroidAPK (artifact+codeQL)
              target_os:             android
@@ -120,7 +125,7 @@ jobs:
              target_os:             macos
              building_on_os:        macos-10.15
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh allow_signing_true"
+             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
 

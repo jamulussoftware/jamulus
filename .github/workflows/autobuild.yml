@@ -219,7 +219,7 @@ jobs:
 
       # Notarize macOS build, if needed
       - name: "Notarize macOS Release Build"
-        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') }} #&& contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id: notarize-macOS-app
         uses: devbotsxyz/xcode-notarize@v1
         with:
@@ -229,7 +229,7 @@ jobs:
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
       # Apply successful notarization
       - name: "Staple macOS Release Build"
-        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') }} #&& contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id: staple-macOS-app
         uses: devbotsxyz/xcode-staple@v1
         with:

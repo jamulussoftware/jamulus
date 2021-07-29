@@ -187,6 +187,7 @@ jobs:
           MACOS_CERTIFICATE:          ${{ secrets.MACOS_CERT}}
           MACOS_CERTIFICATE_PWD:      ${{ secrets.MACOS_CERT_PWD }}
           MACOS_CERTIFICATE_ID:       ${{ secrets.MACOS_CERT_ID }}
+          NOTARIZATION_PASSWORD:      ${{ secrets.NOTARIZATION_PASSWORD }}
 
       - name:                       "Post-Build for ${{ matrix.config.config_name }}"
         id:                         step_cmd3_postbuild
@@ -218,7 +219,7 @@ jobs:
 
       # Notarize macOS build, if needed
       - name: "Notarize macOS Release Build"
-        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') && secrets.NOTARIZATION_PASS != '' }}
+        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id: notarize-macOS-app
         uses: devbotsxyz/xcode-notarize@v1
         with:
@@ -227,7 +228,7 @@ jobs:
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
       # Apply successful notarization
       - name: "Staple macOS Release Build"
-        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') && secrets.NOTARIZATION_PASS != '' }}
+        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id: staple-macOS-app
         uses: devbotsxyz/xcode-staple@v1
         with:

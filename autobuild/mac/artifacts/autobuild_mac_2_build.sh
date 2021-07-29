@@ -27,6 +27,7 @@ echo "Run deploy script..."
 if [[ -z "${MACOS_CERTIFICATE_PWD}" ||
      -z "${MACOS_CERTIFICATE}" ||
      -z "${MACOS_CERTIFICATE_ID}" ||
+     -z "${NOTARIZATION_PASSWORD}" ||
      "${SIGN}" != "sign_if_possible" ]]; then
     sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh
 else

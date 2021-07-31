@@ -22,6 +22,9 @@
 - Client: Add custom directory servers to Connect Dialog (#1869, #1894).
   (contributed by @jp8)
 
+- Client: Re-arrange existing UI menubar items (#1915, #1926)
+  (constributed by @jp8)
+
 - Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722, #1731).
   (contributed by @henkdegroot)
 

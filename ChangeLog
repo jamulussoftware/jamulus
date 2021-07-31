@@ -45,7 +45,7 @@
   (contributed by @ngocdh)
 
 - Bug Fix: Fix ampersand not being shown correctly on mixer (#1886, #1893).
-  (contributed by @ann0see)
+  (contributed by @HughePaul, @ann0see)
 
 ### 3.8.0 (2021-06-02) ###
 

@@ -8,7 +8,6 @@
 ####################
 
 SIGN=$1
-echo "${SIGN}"
 if [ -n "${SIGN}" ]; then
     shift
 fi
@@ -47,5 +46,4 @@ else
     # Set up the notarization and staple parts
     echo "::set-output name=macos_signed::true"
 fi
-
 

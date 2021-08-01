@@ -30,7 +30,7 @@ if [[ -z "${MACOS_CERTIFICATE_PWD}" ||
      "${SIGN}" != "sign_if_possible" ]]; then
     sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh
 else
-    echo "Setting up signing, as credentials found"
+    echo "Setting up signing, as all credentials found"
 
     # Get the cert to a file
     echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
@@ -46,4 +46,3 @@ else
     # Set up the notarization and staple parts
     echo "::set-output name=macos_signed::true"
 fi
-

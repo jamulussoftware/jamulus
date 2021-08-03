@@ -42,7 +42,7 @@ else
     security import certificate.p12 -k build.keychain -P "${MACOS_CERTIFICATE_PWD}" -T /usr/bin/codesign
     security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k T3mpP4ssword build.keychain
 
-    sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh -s "$MACOS_CERTIFICATE_ID"
+    sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh -s "${MACOS_CERTIFICATE_ID}"
     # Set up the notarization and staple parts
     echo "::set-output name=macos_signed::true"
 fi

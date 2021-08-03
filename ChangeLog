@@ -1,7 +1,7 @@
 
 ### 3.8.0dev <- NOTE: the release version number will be 3.8.1 ###
 
-- Internal: Enable signing of macOS binaries via build script (#1856).
+- Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937).
   (contributed by @emlynmac)
 
 - Documentation: Update typo on links in compiling.md file (#1824).

@@ -33,7 +33,7 @@ else
     echo "Setting up signing, as all credentials found"
 
     # Get the cert to a file
-    echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+    echo ${MACOS_CERTIFICATE} | base64 --decode > certificate.p12
 
     # Set up a keychain for the build
     security create-keychain -p T3mpP4ssword build.keychain

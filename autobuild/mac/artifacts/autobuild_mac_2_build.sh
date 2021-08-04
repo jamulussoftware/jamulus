@@ -23,12 +23,13 @@ cd "${THIS_JAMULUS_PROJECT_PATH}"
 echo "Run deploy script..."
 
 # If we have certificate details, then prepare the signing
-if [[ -z "${MACOS_CERTIFICATE_PWD}" ||
-     -z "${MACOS_CERTIFICATE}" ||
-     -z "${MACOS_CERTIFICATE_ID}" ||
-     -z "${NOTARIZATION_PASSWORD}" ||
-     -z "${KEYCHAIN_PASSWORD}" || 
-     "${SIGN}" != "sign_if_possible" ]]; then
+if [[ "${SIGN}" != "sign_if_possible" ||
+        -z "${MACOS_CERTIFICATE_PWD}" ||
+        -z "${MACOS_CERTIFICATE}" ||
+        -z "${MACOS_CERTIFICATE_ID}" ||
+        -z "${NOTARIZATION_PASSWORD}" ||
+        -z "${KEYCHAIN_PASSWORD}" ]]
+then
     sh "${THIS_JAMULUS_PROJECT_PATH}"/mac/deploy_mac.sh
 else
     echo "Setting up signing, as all credentials found"

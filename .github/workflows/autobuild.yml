@@ -248,7 +248,7 @@ jobs:
           asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_content_type:       application/octet-stream
-      
+
       # Upload Artifact to Release
       - name:                       Upload Artifact 2 to Release
         if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_2 != '') &&  contains(needs.create_release.outputs.publish_to_release, 'true') }}

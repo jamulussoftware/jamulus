@@ -784,6 +784,8 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVer
         MainMixerBoard->SetPanIsSupported();
     }
 #endif
+
+    MainMixerBoard->SetServerVersion ( strVersion );
 }
 
 void CClientDlg::OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion )
@@ -1233,6 +1235,7 @@ void CClientDlg::Disconnect()
 
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );
+    MainMixerBoard->SetServerVersion ( "" );
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();

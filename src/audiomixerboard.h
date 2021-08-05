@@ -187,6 +187,7 @@ public:
     void    ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void    SetServerName ( const QString& strNewServerName );
     QString GetServerName() { return strServerName; }
+    void    SetServerVersion ( const QString& strNewServerVersion );
     void    SetGUIDesign ( const EGUIDesign eNewDesign );
     void    SetDisplayPans ( const bool eNDP );
     void    SetPanIsSupported();
@@ -260,6 +261,7 @@ protected:
     int                     iRunningNewClientCnt; // integer type is sufficient, will never overrun for its purpose
     int                     iNumMixerPanelRows;
     QString                 strServerName;
+    QString                 strServerVersion;
     ERecorderState          eRecorderState;
     QMutex                  Mutex;
     EChSortType             eChSortType;

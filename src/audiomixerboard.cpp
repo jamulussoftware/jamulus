@@ -836,6 +836,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent ) :
     iRunningNewClientCnt ( 0 ),
     iNumMixerPanelRows ( 1 ), // pSettings->iNumMixerPanelRows is not yet available
     strServerName ( "" ),
+    strServerVersion ( "" ),
     eRecorderState ( RS_UNDEFINED ),
     eChSortType ( ST_NO_SORT )
 {
@@ -931,6 +932,12 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
         // which is most striking (we use filled blocks and upper case letters).
         setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
     }
+}
+
+void CAudioMixerBoard::SetServerVersion ( const QString& strNewServerVersion )
+{
+    // store the current server name
+    strServerVersion = strNewServerVersion;
 }
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -1096,10 +1103,16 @@ void CAudioMixerBoard::ChangeFaderOrder ( const EChSortType eChSortType )
 void CAudioMixerBoard::UpdateTitle()
 {
     QString strTitlePrefix = "";
+    QString strTitleSuffix = " (<3.5.5)";
 
     if ( eRecorderState == RS_RECORDING )
     {
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+    }
+
+    if ( !strServerVersion.isEmpty() )
+    {
+        strTitleSuffix = " (" + strServerVersion + ")";
     }
 
     // replace & signs with && (See Qt documentation for QLabel)
@@ -1109,7 +1122,7 @@ void CAudioMixerBoard::UpdateTitle()
     QString strEscServerName = strServerName;
     strEscServerName.replace ( "&", "&&" );
 
-    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strEscServerName );
+    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strEscServerName + strTitleSuffix );
     setAccessibleName ( title() );
 }
 

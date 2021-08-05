@@ -936,7 +936,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 
 void CAudioMixerBoard::SetServerVersion ( const QString& strNewServerVersion )
 {
-    // store the current server name
+    // store the current server version
     strServerVersion = strNewServerVersion;
 }
 

@@ -25,7 +25,7 @@
 #include "connectdlg.h"
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, QWidget* parent ) :
+CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteRegList, const bool bNEnableIPv6, QWidget* parent ) :
     CBaseDlg ( parent, Qt::Dialog ),
     pSettings ( pNSetP ),
     strSelectedAddress ( "" ),
@@ -35,7 +35,8 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     bReducedServerListReceived ( false ),
     bServerListItemWasChosen ( false ),
     bListFilterWasActive ( false ),
-    bShowAllMusicians ( true )
+    bShowAllMusicians ( true ),
+    bEnableIPv6 ( bNEnableIPv6 )
 {
     setupUi ( this );
 
@@ -228,10 +229,13 @@ void CConnectDlg::RequestServerList()
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it. Note that in case of custom directory server address we
     // use iCustomDirectoryIndex as an index into the vector.
+
+    // Allow IPv4 only for communicating with Directory Servers
     if ( NetworkUtil().ParseNetworkAddress (
              NetworkUtil::GetCentralServerAddress ( pSettings->eCentralServerAddressType,
                                                     pSettings->vstrCentralServerAddress[pSettings->iCustomDirectoryIndex] ),
-             CentralServerAddress ) )
+             CentralServerAddress,
+             false ) )
     {
         // send the request for the server list
         emit ReqServerListQuery ( CentralServerAddress );
@@ -730,7 +734,9 @@ void CConnectDlg::OnTimerPing()
 
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
-        if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(), CurServerAddress ) )
+        if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(),
+                                                 CurServerAddress,
+                                                 bEnableIPv6 ) )
         {
             // if address is valid, send ping message using a new thread
             QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, CurServerAddress );

@@ -119,7 +119,8 @@ LED bar:      lbr
 // We just need a valid, public Internet IP here. We will not send any
 // traffic there as we will only set up an UDP socket without sending any
 // data.
-#define WELL_KNOWN_HOST   "1.1.1.1" // CloudFlare
+#define WELL_KNOWN_HOST   "1.1.1.1"              // CloudFlare
+#define WELL_KNOWN_HOST6  "2606:4700:4700::1111" // CloudFlare
 #define WELL_KNOWN_PORT   DEFAULT_PORT_NUMBER
 #define IP_LOOKUP_TIMEOUT 500 // ms
 

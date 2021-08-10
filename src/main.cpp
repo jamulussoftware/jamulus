@@ -81,6 +81,7 @@ int main ( int argc, char** argv )
     bool         bNoAutoJackConnect          = false;
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
+    bool         bEnableIPv6                 = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
@@ -176,6 +177,15 @@ int main ( int argc, char** argv )
             bUseTranslation = false;
             qInfo() << "- translations disabled";
             CommandLineOptions << "--notranslation";
+            continue;
+        }
+
+        // Enable IPv6 ---------------------------------------------------------
+        if ( GetFlagArgument ( argv, i, "-6", "--enableipv6" ) )
+        {
+            bEnableIPv6 = true;
+            qInfo() << "- IPv6 enabled";
+            CommandLineOptions << "--enableipv6";
             continue;
         }
 
@@ -784,8 +794,14 @@ int main ( int argc, char** argv )
         {
             // Client:
             // actual client object
-            CClient
-                Client ( iPortNumber, iQosNumber, strConnOnStartupAddress, strMIDISetup, bNoAutoJackConnect, strClientName, bMuteMeInPersonalMix );
+            CClient Client ( iPortNumber,
+                             iQosNumber,
+                             strConnOnStartupAddress,
+                             strMIDISetup,
+                             bNoAutoJackConnect,
+                             strClientName,
+                             bEnableIPv6,
+                             bMuteMeInPersonalMix );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -809,6 +825,7 @@ int main ( int argc, char** argv )
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
                                        bMuteStream,
+                                       bEnableIPv6,
                                        nullptr );
 
                 // show dialog
@@ -846,6 +863,7 @@ int main ( int argc, char** argv )
                              bUseMultithreading,
                              bDisableRecording,
                              bDelayPan,
+                             bEnableIPv6,
                              eLicenceType );
 
 #ifndef HEADLESS
@@ -937,6 +955,7 @@ QString UsageArguments ( char** argv )
            "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
            "                        (see the Jamulus website to enable QoS on Windows)\n"
            "  -t, --notranslation   disable translation (use English language)\n"
+           "  -6, --enableipv6      enable IPv6 addressing (IPv4 is always enabled)\n"
            "\n"
            "Server only:\n"
            "  -d, --discononquit    disconnect all clients on quit\n"

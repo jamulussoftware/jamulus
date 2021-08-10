@@ -170,6 +170,7 @@ public:
               const bool         bNUseMultithreading,
               const bool         bDisableRecording,
               const bool         bNDelayPan,
+              const bool         bNEnableIPv6,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -208,6 +209,9 @@ public:
     // delay panning
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
     bool IsDelayPanningEnabled() { return bDelayPan; }
+
+    // IPv6 Enabled
+    bool IsIPv6Enabled() { return bEnableIPv6; }
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
@@ -367,6 +371,9 @@ protected:
 
     // for delay panning
     bool bDelayPan;
+
+    // enable IPv6
+    bool bEnableIPv6;
 
     // messaging
     QString      strWelcomeMessage;

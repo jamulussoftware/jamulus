@@ -1,6 +1,9 @@
 
 ### 3.8.0dev <- NOTE: the release version number will be 3.8.1 ###
 
+- Add IPv6 support for direct connections (#1017, #1938).
+  (contributed by @jardous, @softins)
+
 - Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937).
   (contributed by @emlynmac)
 

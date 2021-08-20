@@ -257,8 +257,8 @@ protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
 
-    int                   GetFreeChan();
-    int                   FindChannel ( const CHostAddress& CheckAddr );
+    int                   FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew = false );
+    void                  InitChannel ( const int iNewChanID, const CHostAddress& InetAddr );
     int                   GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();
 

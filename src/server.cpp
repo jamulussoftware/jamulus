@@ -1461,21 +1461,6 @@ void CServer::CreateOtherMuteStateChanged ( const int iCurChanID, const int iOth
     }
 }
 
-int CServer::GetFreeChan()
-{
-    // look for a free channel
-    for ( int i = 0; i < iMaxNumChannels; i++ )
-    {
-        if ( !vecChannels[i].IsConnected() )
-        {
-            return i;
-        }
-    }
-
-    // no free channel found, return invalid ID
-    return INVALID_CHANNEL_ID;
-}
-
 int CServer::GetNumberOfConnectedClients()
 {
     int iNumConnClients = 0;
@@ -1493,27 +1478,57 @@ int CServer::GetNumberOfConnectedClients()
     return iNumConnClients;
 }
 
-int CServer::FindChannel ( const CHostAddress& CheckAddr )
+int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
 {
-    CHostAddress InetAddr;
+    int iNewChanID = INVALID_CHANNEL_ID;
 
     // check for all possible channels if IP is already in use
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        // the "GetAddress" gives a valid address and returns true if the
-        // channel is connected
-        if ( vecChannels[i].GetAddress ( InetAddr ) )
+        if ( vecChannels[i].IsConnected() )
         {
             // IP found, return channel number
-            if ( InetAddr == CheckAddr )
+            if ( vecChannels[i].GetAddress() == CheckAddr )
             {
                 return i;
             }
         }
+        else if ( bAllowNew && iNewChanID == INVALID_CHANNEL_ID )
+        {
+            iNewChanID = i;
+        }
     }
 
-    // IP not found, return invalid ID
-    return INVALID_CHANNEL_ID;
+    // Initialise if it's a new channel
+    if ( iNewChanID != INVALID_CHANNEL_ID )
+    {
+        InitChannel ( iNewChanID, CheckAddr );
+    }
+
+    // IP not found, return new channel or invalid ID
+    return iNewChanID;
+}
+
+void CServer::InitChannel ( const int iNewChanID, const CHostAddress& InetAddr )
+{
+    // initialize new channel by storing the calling host address
+    vecChannels[iNewChanID].SetAddress ( InetAddr );
+
+    // reset channel info
+    vecChannels[iNewChanID].ResetInfo();
+
+    // reset the channel gains/pans of current channel, at the same
+    // time reset gains/pans of this channel ID for all other channels
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        vecChannels[iNewChanID].SetGain ( i, 1.0 );
+        vecChannels[iNewChanID].SetPan ( i, 0.5 );
+
+        // other channels (we do not distinguish the case if
+        // i == iCurChanID for simplicity)
+        vecChannels[i].SetGain ( iNewChanID, 1.0 );
+        vecChannels[i].SetPan ( iNewChanID, 0.5 );
+    }
 }
 
 void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
@@ -1543,48 +1558,13 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf, const int iNum
     QMutexLocker locker ( &Mutex );
 
     bool bNewConnection = false; // init return value
-    bool bChanOK        = true;  // init with ok, might be overwritten
 
     // Get channel ID ------------------------------------------------------
     // check address
-    iCurChanID = FindChannel ( HostAdr );
+    iCurChanID = FindChannel ( HostAdr, true );
 
-    if ( iCurChanID == INVALID_CHANNEL_ID )
-    {
-        // a new client is calling, look for free channel
-        iCurChanID = GetFreeChan();
-
-        if ( iCurChanID != INVALID_CHANNEL_ID )
-        {
-            // initialize current channel by storing the calling host
-            // address
-            vecChannels[iCurChanID].SetAddress ( HostAdr );
-
-            // reset channel info
-            vecChannels[iCurChanID].ResetInfo();
-
-            // reset the channel gains/pans of current channel, at the same
-            // time reset gains/pans of this channel ID for all other channels
-            for ( int i = 0; i < iMaxNumChannels; i++ )
-            {
-                vecChannels[iCurChanID].SetGain ( i, 1.0 );
-                vecChannels[iCurChanID].SetPan ( i, 0.5 );
-
-                // other channels (we do not distinguish the case if
-                // i == iCurChanID for simplicity)
-                vecChannels[i].SetGain ( iCurChanID, 1.0 );
-                vecChannels[i].SetPan ( iCurChanID, 0.5 );
-            }
-        }
-        else
-        {
-            // no free channel available
-            bChanOK = false;
-        }
-    }
-
-    // Put received audio data in jitter buffer ----------------------------
-    if ( bChanOK )
+    // If channel is valid or new, put received audio data in jitter buffer ----------------------------
+    if ( iCurChanID != INVALID_CHANNEL_ID )
     {
         // put packet in socket buffer
         if ( vecChannels[iCurChanID].PutAudioData ( vecbyRecBuf, iNumBytesRead, HostAdr ) == PS_NEW_CONNECTION )
@@ -1603,8 +1583,6 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                                CVector<int>&          veciJitBufNumFrames,
                                CVector<int>&          veciNetwFrameSizeFact )
 {
-    CHostAddress InetAddr;
-
     // init return values
     vecHostAddresses.Init ( iMaxNumChannels );
     vecsName.Init ( iMaxNumChannels );
@@ -1614,10 +1592,10 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     // check all possible channels
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        if ( vecChannels[i].GetAddress ( InetAddr ) )
+        if ( vecChannels[i].IsConnected() )
         {
             // get requested data
-            vecHostAddresses[i]      = InetAddr;
+            vecHostAddresses[i]      = vecChannels[i].GetAddress();
             vecsName[i]              = vecChannels[i].GetName();
             veciJitBufNumFrames[i]   = vecChannels[i].GetSockBufNumFrames();
             veciNetwFrameSizeFact[i] = vecChannels[i].GetNetwFrameSizeFact();

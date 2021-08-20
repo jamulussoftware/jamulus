@@ -1054,10 +1054,15 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
                     emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
                 }
 
+                FreeChannel ( iCurChanID ); // note that the channel is now not in use
+
                 // note that no mutex is needed for this shared resource since it is not a
                 // read-modify-write operation but an atomic write and also each thread can
                 // only set it to true and never to false
                 bChannelIsNowDisconnected = true;
+
+                // since the channel is no longer in use, we should return
+                return;
             }
 
             // get pointer to coded data
@@ -1529,6 +1534,12 @@ void CServer::InitChannel ( const int iNewChanID, const CHostAddress& InetAddr )
         vecChannels[i].SetGain ( iNewChanID, 1.0 );
         vecChannels[i].SetPan ( iNewChanID, 0.5 );
     }
+}
+
+void CServer::FreeChannel ( const int iCurChanID )
+{
+    // for future use with improved channel search
+    Q_UNUSED ( iCurChanID );
 }
 
 void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )

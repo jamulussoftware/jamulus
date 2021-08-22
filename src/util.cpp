@@ -877,6 +877,50 @@ bool NetworkUtil::IsPrivateNetworkIP ( const QHostAddress& qhAddr )
     return false;
 }
 
+// CHostAddress methods
+// Compare() - compare two CHostAddress objects, and return an ordering between them:
+// 0 - they are equal
+// <0 - this comes before other
+// >0 - this comes after other
+// The order is not important, so long as it is consistent, for use in a binary search.
+
+int CHostAddress::Compare ( const CHostAddress& other ) const
+{
+    // compare port first, as it is cheap, and clients will often use random ports
+
+    if ( iPort != other.iPort )
+    {
+        return (int) iPort - (int) other.iPort;
+    }
+
+    // compare protocols before addresses
+
+    QAbstractSocket::NetworkLayerProtocol thisProto  = InetAddr.protocol();
+    QAbstractSocket::NetworkLayerProtocol otherProto = other.InetAddr.protocol();
+
+    if ( thisProto != otherProto )
+    {
+        return (int) thisProto - (int) otherProto;
+    }
+
+    // now we know both addresses are the same protocol
+
+    if ( thisProto == QAbstractSocket::IPv6Protocol )
+    {
+        // compare IPv6 addresses
+        Q_IPV6ADDR thisAddr  = InetAddr.toIPv6Address();
+        Q_IPV6ADDR otherAddr = other.InetAddr.toIPv6Address();
+
+        return memcmp ( &thisAddr, &otherAddr, sizeof ( Q_IPV6ADDR ) );
+    }
+
+    // compare IPv4 addresses
+    quint32 thisAddr  = InetAddr.toIPv4Address();
+    quint32 otherAddr = other.InetAddr.toIPv4Address();
+
+    return (int) thisAddr - (int) otherAddr;
+}
+
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
 {

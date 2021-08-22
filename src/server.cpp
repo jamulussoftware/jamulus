@@ -235,6 +235,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bUseDoubleSystemFrameSize ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading ( bNUseMultithreading ),
     iMaxNumChannels ( iNewMaxNumChan ),
+    iCurNumChannels ( 0 ),
     Socket ( this, iPortNumber, iQosNumber, strServerBindIP, bNEnableIPv6 ),
     Logging(),
     iFrameCount ( 0 ),
@@ -410,6 +411,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         vecChannels[i].SetEnable ( true );
+        vecChannelOrder[i] = i;
     }
 
     int iAvailableCores = QThread::idealThreadCount();
@@ -1468,49 +1470,69 @@ void CServer::CreateOtherMuteStateChanged ( const int iCurChanID, const int iOth
 
 int CServer::GetNumberOfConnectedClients()
 {
-    int iNumConnClients = 0;
+    QMutexLocker locker ( &MutexChanOrder );
 
-    // check all possible channels for connection status
-    for ( int i = 0; i < iMaxNumChannels; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            // this channel is connected, increment counter
-            iNumConnClients++;
-        }
-    }
-
-    return iNumConnClients;
+    return iCurNumChannels;
 }
+
+// CServer::FindChannel() is called for every received audio packet or connected protocol
+// packet, to find the channel ID associated with the source IP address and port.
+// In order to search as efficiently as possible, a list of active channel IDs is stored
+// in vecChannelOrder[], sorted by IP and port (according to CHostAddress::Compare()),
+// and a binary search is used to find either the existing channel, or the position at
+// which a new channel should be inserted.
 
 int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
 {
     int iNewChanID = INVALID_CHANNEL_ID;
 
-    // check for all possible channels if IP is already in use
-    for ( int i = 0; i < iMaxNumChannels; i++ )
+    QMutexLocker locker ( &MutexChanOrder );
+
+    int l = 0, r = iCurNumChannels, i;
+
+    // use binary search to find the channel
+    while ( r > l )
     {
-        if ( vecChannels[i].IsConnected() )
+        int t   = ( r + l ) / 2;
+        int cmp = CheckAddr.Compare ( vecChannels[vecChannelOrder[t]].GetAddress() );
+
+        if ( cmp == 0 )
         {
-            // IP found, return channel number
-            if ( vecChannels[i].GetAddress() == CheckAddr )
-            {
-                return i;
-            }
+            // address and port match
+            return vecChannelOrder[t];
         }
-        else if ( bAllowNew && iNewChanID == INVALID_CHANNEL_ID )
+
+        if ( cmp < 0 )
         {
-            iNewChanID = i;
+            l = t + 1;
+        }
+        else
+        {
+            r = t;
         }
     }
 
-    // Initialise if it's a new channel
-    if ( iNewChanID != INVALID_CHANNEL_ID )
+    // existing channel not found - return if we cannot create a new channel
+    if ( !bAllowNew || iCurNumChannels >= iMaxNumChannels )
     {
-        InitChannel ( iNewChanID, CheckAddr );
+        return INVALID_CHANNEL_ID;
     }
 
-    // IP not found, return new channel or invalid ID
+    // allocate a new channel
+    i          = iCurNumChannels++; // save index of free channel and increment count
+    iNewChanID = vecChannelOrder[i];
+    InitChannel ( iNewChanID, CheckAddr );
+
+    // now l == r == position in vecChannelOrder to insert iNewChanID
+    // move channel IDs up by one starting at the top and working down
+    while ( i > r )
+    {
+        int j              = i--;
+        vecChannelOrder[j] = vecChannelOrder[i];
+    }
+    // insert the new channel ID in the correct place
+    vecChannelOrder[i] = iNewChanID;
+
     return iNewChanID;
 }
 
@@ -1536,10 +1558,33 @@ void CServer::InitChannel ( const int iNewChanID, const CHostAddress& InetAddr )
     }
 }
 
+// CServer::FreeChannel() is called to remove a channel from the list of active channels.
+// The remaining ordered IDs are moved down by one space, and the freed ID is moved to the
+// end, ready to be reused by the next new connection.
+
 void CServer::FreeChannel ( const int iCurChanID )
 {
-    // for future use with improved channel search
-    Q_UNUSED ( iCurChanID );
+    QMutexLocker locker ( &MutexChanOrder );
+
+    for ( int i = 0; i < iCurNumChannels; i++ )
+    {
+        if ( vecChannelOrder[i] == iCurChanID )
+        {
+            --iCurNumChannels;
+
+            // move channel IDs down by one starting at the bottom and working up
+            while ( i < iCurNumChannels )
+            {
+                int j              = i++;
+                vecChannelOrder[j] = vecChannelOrder[i];
+            }
+            // put deleted channel at the end ready for re-use
+            vecChannelOrder[i] = iCurChanID;
+            return;
+        }
+    }
+
+    qWarning() << "FreeChannel() called with invalid channel ID";
 }
 
 void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
@@ -1572,7 +1617,7 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf, const int iNum
 
     // Get channel ID ------------------------------------------------------
     // check address
-    iCurChanID = FindChannel ( HostAdr, true );
+    iCurChanID = FindChannel ( HostAdr, true /* allow new */ );
 
     // If channel is valid or new, put received audio data in jitter buffer ----------------------------
     if ( iCurChanID != INVALID_CHANNEL_ID )

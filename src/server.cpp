@@ -1533,6 +1533,8 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
     // insert the new channel ID in the correct place
     vecChannelOrder[i] = iNewChanID;
 
+    DumpChannels ( __FUNCTION__ );
+
     return iNewChanID;
 }
 
@@ -1580,11 +1582,31 @@ void CServer::FreeChannel ( const int iCurChanID )
             }
             // put deleted channel at the end ready for re-use
             vecChannelOrder[i] = iCurChanID;
+
+            DumpChannels ( __FUNCTION__ );
+
             return;
         }
     }
 
     qWarning() << "FreeChannel() called with invalid channel ID";
+}
+
+void CServer::DumpChannels ( const QString& title )
+{
+    qDebug() << qUtf8Printable ( title );
+
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        int iChanID = vecChannelOrder[i];
+
+        if ( i == iCurNumChannels )
+        {
+            qDebug() << "----------";
+        }
+
+        qDebug() << qUtf8Printable ( QString ( "%1: [%2] %3" ).arg ( i, 3 ).arg ( iChanID ).arg ( vecChannels[iChanID].GetAddress().toString() ) );
+    }
 }
 
 void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )

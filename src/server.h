@@ -260,6 +260,7 @@ protected:
     int                   FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew = false );
     void                  InitChannel ( const int iNewChanID, const CHostAddress& InetAddr );
     void                  FreeChannel ( const int iCurChanID );
+    void                  DumpChannels ( const QString& title );
     int                   GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();
 

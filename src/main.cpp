@@ -1044,7 +1044,7 @@ bool GetNumericArgument ( int     argc,
 {
     if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
-        QString errmsg = "%1: '%2' needs a numeric argument between '%3' and '%4'.";
+        QString errmsg = "%1: '%2' needs a numeric argument from '%3' to '%4'.";
         if ( ++i >= argc )
         {
             qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );

@@ -1533,7 +1533,7 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
     // insert the new channel ID in the correct place
     vecChannelOrder[i] = iNewChanID;
 
-    DumpChannels ( __FUNCTION__ );
+    // DumpChannels ( __FUNCTION__ );
 
     return iNewChanID;
 }
@@ -1583,7 +1583,7 @@ void CServer::FreeChannel ( const int iCurChanID )
             // put deleted channel at the end ready for re-use
             vecChannelOrder[i] = iCurChanID;
 
-            DumpChannels ( __FUNCTION__ );
+            // DumpChannels ( __FUNCTION__ );
 
             return;
         }

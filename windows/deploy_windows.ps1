@@ -3,8 +3,8 @@ param(
     [string] $QtInstallPath = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
-    [string] $AsioSDKName = "ASIOSDK2.3.2",
-    [string] $AsioSDKUrl = "https://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip",
+    [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
+    [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
     [string] $NsisName = "nsis-3.06.1",
     [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
 )
@@ -284,11 +284,11 @@ Function Build-NSProcess
 
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch "x86"
-    
+
         Invoke-Native-Command -Command "msbuild" `
             -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
             "/p:Platform=Win32")
-   
+
         Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
         Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }

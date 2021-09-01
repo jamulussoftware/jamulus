@@ -400,22 +400,6 @@ void CChannel::OnChangeChanPan ( int iChanID, float fNewPan ) { SetPan ( iChanID
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo ) { SetChanInfo ( ChanInfo ); }
 
-bool CChannel::GetAddress ( CHostAddress& RetAddr )
-{
-    QMutexLocker locker ( &Mutex );
-
-    if ( IsConnected() )
-    {
-        RetAddr = InetAddr;
-        return true;
-    }
-    else
-    {
-        RetAddr = CHostAddress();
-        return false;
-    }
-}
-
 void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps )
 {
     // only the server shall act on network transport properties message

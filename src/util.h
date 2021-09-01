@@ -720,6 +720,8 @@ public:
     // compare operator
     bool operator== ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
 
+    int Compare ( const CHostAddress& other ) const;
+
     QString toString ( const EStringMode eStringMode = SM_IP_PORT ) const
     {
         QString strReturn = InetAddr.toString();

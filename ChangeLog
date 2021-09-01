@@ -10,6 +10,9 @@
 - Documentation: Update typo on links in compiling.md file (#1824).
   (contributed by @jujudusud)
 
+- Documentation: Number range command line error messages reworded accurately (#1978).
+  (contributed by @DavidSavinkoff)
+
 - CLI: Re-order and refactor help for client/server validation (#1896).
   (contributed by @pljones)
 

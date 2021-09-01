@@ -156,8 +156,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
     // buffers LED
-    QString strLEDBuffers = "<b>" + tr ( "Buffers Status LED" ) + ":</b> " +
-                            tr ( "The buffers status LED shows the current audio/streaming "
+    QString strLEDBuffers = "<b>" + tr ( "Local Jitter Buffer Status LED" ) + ":</b> " +
+                            tr ( "The local jitter buffer status LED shows the current audio/streaming "
                                  "status. If the light is red, the audio stream is interrupted. "
                                  "This is caused by one of the following problems:" ) +
                             "<ul>"
@@ -181,7 +181,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblBuffers->setWhatsThis ( strLEDBuffers );
     ledBuffers->setWhatsThis ( strLEDBuffers );
 
-    ledBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
+    ledBuffers->setAccessibleName ( tr ( "Local Jitter Buffer status LED indicator" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" +

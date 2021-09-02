@@ -261,7 +261,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
     lblUpdateCheck->setText (
         "<font color=\"#c94a55\"><b>" +
-        tr ( "A %1 upgrade is available: <a style='color:#c94a55;' href='https://jamulus.io/upgrade?progversion=%2'>go to details and downloads</a>" )
+            APP_UPGRADE_AVAILABLE_MSG_TEXT
             .arg ( APP_NAME )
             .arg ( VERSION ) +
         "</b></font>" );

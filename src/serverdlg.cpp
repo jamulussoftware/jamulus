@@ -332,7 +332,7 @@ lvwClients->setMinimumHeight ( 140 );
 
     // prepare update check info label (invisible by default)
     lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
-    lblUpdateCheck->setText ( "<font color=\"#c94a55\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
+    lblUpdateCheck->setText ( "<font color=\"#ab202c\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
     lblUpdateCheck->hide();
 
     // update GUI dependencies

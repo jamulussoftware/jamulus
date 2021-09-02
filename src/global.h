@@ -117,7 +117,9 @@ LED bar:      lbr
 
 // app update message
 #define APP_UPGRADE_AVAILABLE_MSG_TEXT \
-       QCoreApplication::translate ( "global", "A %1 upgrade is available: <a style='color:#c94a55;' href='https://jamulus.io/upgrade?progversion=%2'>go to details and downloads</a>" )
+    QCoreApplication::translate ( \
+        "global", \
+        "A %1 upgrade is available: <a style='color:#c94a55;' href='https://jamulus.io/upgrade?progversion=%2'>go to details and downloads</a>" )
 
 // determining server internal address uses well-known host and port
 // We just need a valid, public Internet IP here. We will not send any

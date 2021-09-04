@@ -209,8 +209,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     {
         throw CGenErr ( QString ( tr ( "JACK was shut down. %1 "
                                        "requires JACK to run. Please restart %1 to "
-                                       "start JACK again. "
-                                       "the JACK output." ) )
+                                       "start JACK again. " ) )
                             .arg ( APP_NAME ) );
     }
 

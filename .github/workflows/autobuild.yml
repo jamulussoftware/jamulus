@@ -151,7 +151,7 @@ jobs:
         if:                         ${{ matrix.config.target_os == 'macos' }}
         uses:                       maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '12.1.1'
+          xcode-version: '12.4.0'
 
       # Checkout code
       - name:                       Checkout code

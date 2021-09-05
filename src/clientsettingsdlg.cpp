@@ -235,10 +235,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                          "lets you choose input or outputs of your device(s). "
                                          "More information can be found on jamulus.io." );
 
-    QString strSndCardDriverSetupTT = QString ( tr ( "Opens the driver settings. Note: %1 currently only supports devices "
-                                                     "with a sample rate of %2 Hz. "
-                                                     "You will not be able to select a driver/device which doesn't. "
-                                                     "For more help see jamulus.io." ) )
+    QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: %1 currently only supports devices "
+                                           "with a sample rate of %2 Hz. "
+                                           "You will not be able to select a driver/device which doesn't. "
+                                           "For more help see jamulus.io." )
                                           .arg ( APP_NAME )
                                           .arg ( SYSTEM_SAMPLE_RATE_HZ ) +
                                       TOOLTIP_COM_END_TEXT;

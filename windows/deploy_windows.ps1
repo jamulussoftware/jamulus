@@ -6,7 +6,8 @@ param(
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
     [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip"
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
+    [string] $BuildOption = ""
 )
 
 # change directory to the directory above (if needed)
@@ -25,7 +26,7 @@ $ErrorActionPreference = "Stop"
 
 # Execute native command with errorlevel handling
 Function Invoke-Native-Command {
-    Param(
+    param(
         [string] $Command,
         [string[]] $Arguments
     )
@@ -51,7 +52,7 @@ Function Clean-Build-Environment
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
 
-    Param (
+    param(
         [Parameter(Mandatory=$true)]
         [String]$URL
     )
@@ -222,7 +223,7 @@ Function Build-App
     )
 
     Invoke-Native-Command -Command "$Env:QtQmakePath" `
-        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch", `
+        -Arguments ("$RootPath\$AppName.pro", "CONFIG+=$BuildConfig $BuildArch $BuildOption", `
         "-o", "$BuildPath\Makefile")
 
     Set-Location -Path $BuildPath
@@ -256,6 +257,10 @@ function Build-App-Variants
 # Build Windows installer
 Function Build-Installer
 {
+    param(
+        [string] $BuildOption
+    )
+
     foreach ($_ in Get-Content -Path "$RootPath\$AppName.pro")
     {
         if ($_ -Match "^VERSION *= *(.*)$")
@@ -265,10 +270,21 @@ Function Build-Installer
         }
     }
 
-    Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
-        -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
-        "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
-        "$WindowsPath\installer.nsi")
+    if ($BuildOption -ne "")
+    {
+        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+            -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+            "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
+            "/DBUILD_OPTION=$BuildOption", `
+            "$WindowsPath\installer.nsi")
+    }
+    else
+    {
+        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+            -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
+            "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
+            "$WindowsPath\installer.nsi")
+    }
 }
 
 # Build and copy NS-Process dll
@@ -299,4 +315,4 @@ Clean-Build-Environment
 Install-Dependencies
 Build-App-Variants -QtInstallPath $QtInstallPath
 Build-NSProcess -QtInstallPath $QtInstallPath
-Build-Installer
+Build-Installer -BuildOption $BuildOption

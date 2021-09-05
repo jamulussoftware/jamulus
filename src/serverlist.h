@@ -107,9 +107,25 @@ public:
 
     void UpdateRegistration() { RegisterTime.start(); }
 
-public:
+    static CServerListEntry parse ( QString strHAddr,
+                                    QString strLHAddr,
+                                    QString sName,
+                                    QString sCity,
+                                    QString strCountry,
+                                    QString strNumClients,
+                                    bool    isPermanent,
+                                    bool    bEnableIPv6 );
+    QString                 toCSV();
+
     // time on which the entry was registered
     QElapsedTimer RegisterTime;
+
+protected:
+    // Taken from src/settings.h - the same comment applies
+    static QString    ToBase64 ( const QByteArray strIn ) { return QString::fromLatin1 ( strIn.toBase64() ); }
+    static QString    ToBase64 ( const QString strIn ) { return ToBase64 ( strIn.toUtf8() ); }
+    static QByteArray FromBase64ToByteArray ( const QString strIn ) { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
+    static QString    FromBase64ToString ( const QString strIn ) { return QString::fromUtf8 ( FromBase64ToByteArray ( strIn ) ); }
 };
 
 class CServerListManager : public QObject
@@ -119,18 +135,30 @@ class CServerListManager : public QObject
 public:
     CServerListManager ( const quint16  iNPortNum,
                          const QString& sNCentServAddr,
+                         const QString& strServerListFileName,
                          const QString& strServerInfo,
                          const QString& strServerListFilter,
                          const QString& strServerPublicIP,
                          const int      iNumChannels,
+                         const bool     bNEnableIPv6,
                          CProtocol*     pNConLProt );
-
-    // the update has to be called if any change to the server list
-    // properties was done
-    void Update();
 
     void SetEnabled ( const bool bState ) { bEnabled = bState; }
     bool GetEnabled() const { return bEnabled; }
+
+    void SlaveServerUnregister() { SlaveServerRegisterServer ( false ); }
+
+    // set server infos -> per definition the server info of this server is
+    // stored in the first entry of the list, we assume here that the first
+    // entry is correctly created in the constructor of the class
+    void    SetServerName ( const QString& strNewName ) { ServerList[0].strName = strNewName; }
+    QString GetServerName() { return ServerList[0].strName; }
+
+    void    SetServerCity ( const QString& strNewCity ) { ServerList[0].strCity = strNewCity; }
+    QString GetServerCity() { return ServerList[0].strCity; }
+
+    void             SetServerCountry ( const QLocale::Country eNewCountry ) { ServerList[0].eCountry = eNewCountry; }
+    QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
 
     void    SetCentralServerAddress ( const QString sNCentServAddr );
     QString GetCentralServerAddress() { return strCentralServerAddress; }
@@ -140,76 +168,72 @@ public:
 
     bool GetIsCentralServer() const { return bIsCentralServer; }
 
+    ESvrRegStatus GetSvrRegStatus() { return eSvrRegStatus; }
+
+    // the update has to be called if any change to the server list
+    // properties was done
+    void Update();
+
     void CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                        const CHostAddress&    LInetAddr,
                                        const CServerCoreInfo& ServerInfo,
                                        const QString          strVersion = "" );
-
     void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
-
     void CentralServerQueryServerList ( const CHostAddress& InetAddr );
-
-    void SlaveServerUnregister() { SlaveServerRegisterServer ( false ); }
-
-    // set server infos -> per definition the server info of this server is
-    // stored in the first entry of the list, we assume here that the first
-    // entry is correctly created in the constructor of the class
-    void SetServerName ( const QString& strNewName ) { ServerList[0].strName = strNewName; }
-
-    QString GetServerName() { return ServerList[0].strName; }
-
-    void SetServerCity ( const QString& strNewCity ) { ServerList[0].strCity = strNewCity; }
-
-    QString GetServerCity() { return ServerList[0].strCity; }
-
-    void SetServerCountry ( const QLocale::Country eNewCountry ) { ServerList[0].eCountry = eNewCountry; }
-
-    QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
-
-    ESvrRegStatus GetSvrRegStatus() { return eSvrRegStatus; }
 
     void StoreRegistrationResult ( ESvrRegResult eStatus );
 
 protected:
+    void SetCentralServerState();
+    int  IndexOf ( CHostAddress haSearchTerm );
+    void CentralServerLoadServerList ( const QString strServerList );
+    void CentralServerSaveServerList();
     void SlaveServerRegisterServer ( const bool bIsRegister );
     void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );
 
-    QTimer TimerPollList;
-    QTimer TimerRegistering;
-    QTimer TimerPingServerInList;
-    QTimer TimerPingCentralServer;
-    QTimer TimerCLRegisterServerResp;
-
     QMutex Mutex;
+
+    bool bEnabled;
 
     QList<CServerListEntry> ServerList;
 
     QString    strCentralServerAddress;
-    bool       bEnabled;
-    bool       bIsCentralServer;
     ECSAddType eCentralServerAddressType;
+    bool       bIsCentralServer;
+    bool       bEnableIPv6;
+
+    // server registration status
+    ESvrRegStatus eSvrRegStatus;
 
     CHostAddress SlaveCurCentServerHostAddress;
     CHostAddress SlaveCurLocalHostAddress;
+    CHostAddress SlaveCurLocalHostAddress6;
+
+    QString ServerListFileName;
 
     QList<QHostAddress> vWhiteList;
     QString             strMinServerVersion;
 
     CProtocol* pConnLessProtocol;
 
-    // server registration status
-    ESvrRegStatus eSvrRegStatus;
-
     // count of registration retries
     int iSvrRegRetries;
+
+    QTimer TimerPollList;
+    QTimer TimerPingServerInList;
+    QTimer TimerPingCentralServer;
+    QTimer TimerRegistering;
+    QTimer TimerCLRegisterServerResp;
 
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();
     void OnTimerPingCentralServer();
-    void OnTimerCLRegisterServerResp();
     void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
+    void OnTimerCLRegisterServerResp();
+
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
+    void OnAboutToQuit() { CentralServerSaveServerList(); }
 
 signals:
     void SvrRegStatusChanged();

@@ -720,6 +720,8 @@ public:
     // compare operator
     bool operator== ( const CHostAddress& CompAddr ) const { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
 
+    int Compare ( const CHostAddress& other ) const;
+
     QString toString ( const EStringMode eStringMode = SM_IP_PORT ) const
     {
         QString strReturn = InetAddr.toString();
@@ -986,10 +988,11 @@ public:
 class NetworkUtil
 {
 public:
-    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress );
+    static bool ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 );
 
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
+    static CHostAddress GetLocalAddress6();
     static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType, const QString& strCentralServerAddress );
     static bool         IsPrivateNetworkIP ( const QHostAddress& qhAddr );
 };

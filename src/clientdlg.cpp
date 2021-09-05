@@ -32,12 +32,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
+                         const bool       bNEnableIPv6,
                          QWidget*         parent ) :
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
+    bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "
     ClientSettingsDlg ( pNCliP, pNSetP, parent ),
@@ -154,8 +156,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
     // buffers LED
-    QString strLEDBuffers = "<b>" + tr ( "Buffers Status LED" ) + ":</b> " +
-                            tr ( "The buffers status LED shows the current audio/streaming "
+    QString strLEDBuffers = "<b>" + tr ( "Local Jitter Buffer Status LED" ) + ":</b> " +
+                            tr ( "The local jitter buffer status LED shows the current audio/streaming "
                                  "status. If the light is red, the audio stream is interrupted. "
                                  "This is caused by one of the following problems:" ) +
                             "<ul>"
@@ -179,7 +181,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblBuffers->setWhatsThis ( strLEDBuffers );
     ledBuffers->setWhatsThis ( strLEDBuffers );
 
-    ledBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
+    ledBuffers->setAccessibleName ( tr ( "Local Jitter Buffer status LED indicator" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" +
@@ -256,7 +258,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblGlobalInfoLabel->hide();
 
     // prepare update check info label (invisible by default)
-    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + QString ( APP_NAME ) + " " + tr ( "software upgrade available" ) + "</b></font>" );
+    lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
+    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
     lblUpdateCheck->hide();
 
     // setup timers
@@ -274,6 +277,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
 
+    pFileMenu->addAction ( tr ( "&Connection Setup..." ), this, SLOT ( OnOpenConnectionSetupDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
+
+    pFileMenu->addSeparator();
+
     pFileMenu->addAction ( tr ( "&Load Mixer Channels Setup..." ), this, SLOT ( OnLoadChannelSetup() ) );
 
     pFileMenu->addAction ( tr ( "&Save Mixer Channels Setup..." ), this, SLOT ( OnSaveChannelSetup() ) );
@@ -282,44 +289,37 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     pFileMenu->addAction ( tr ( "E&xit" ), this, SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
 
-    // View menu  --------------------------------------------------------------
-    QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
-
-    pViewMenu->addAction ( tr ( "&Connection Setup..." ), this, SLOT ( OnOpenConnectionSetupDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_C ) );
-
-    pViewMenu->addAction ( tr ( "C&hat..." ), this, SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
-
-    pViewMenu->addAction ( tr ( "My &Profile..." ), this, SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
-
-    pViewMenu->addAction ( tr ( "Audio/Network &Settings..." ), this, SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
-
-    pViewMenu->addAction ( tr ( "A&dvanced Settings..." ), this, SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
-
-    // optionally show analyzer console entry
-    if ( bShowAnalyzerConsole )
-    {
-        pViewMenu->addAction ( tr ( "&Analyzer Console..." ), this, SLOT ( OnOpenAnalyzerConsole() ) );
-    }
-
     // Edit menu  --------------------------------------------------------------
     QMenu* pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
+    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this, SLOT ( OnClearAllStoredSoloMuteSettings() ) );
+
+    pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ),
+                           this,
+                           SLOT ( OnSetAllFadersToNewClientLevel() ),
+                           QKeySequence ( Qt::CTRL + Qt::Key_L ) );
+
+    pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
+
+    // View menu  --------------------------------------------------------------
+    QMenu* pViewMenu = new QMenu ( tr ( "&View" ), this );
+
     QAction* NoSortAction =
-        pEditMenu->addAction ( tr ( "N&o User Sorting" ), this, SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
+        pViewMenu->addAction ( tr ( "N&o User Sorting" ), this, SLOT ( OnNoSortChannels() ), QKeySequence ( Qt::CTRL + Qt::Key_O ) );
 
     QAction* ByNameAction =
-        pEditMenu->addAction ( tr ( "Sort Users by &Name" ), this, SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
+        pViewMenu->addAction ( tr ( "Sort Users by &Name" ), this, SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
 
-    QAction* ByInstrAction = pEditMenu->addAction ( tr ( "Sort Users by &Instrument" ),
+    QAction* ByInstrAction = pViewMenu->addAction ( tr ( "Sort Users by &Instrument" ),
                                                     this,
                                                     SLOT ( OnSortChannelsByInstrument() ),
                                                     QKeySequence ( Qt::CTRL + Qt::Key_I ) );
 
     QAction* ByGroupAction =
-        pEditMenu->addAction ( tr ( "Sort Users by &Group" ), this, SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
+        pViewMenu->addAction ( tr ( "Sort Users by &Group" ), this, SLOT ( OnSortChannelsByGroupID() ), QKeySequence ( Qt::CTRL + Qt::Key_G ) );
 
     QAction* ByCityAction =
-        pEditMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
+        pViewMenu->addAction ( tr ( "Sort Users by &City" ), this, SLOT ( OnSortChannelsByCity() ), QKeySequence ( Qt::CTRL + Qt::Key_T ) );
 
     // the sorting menu entries shall be checkable and exclusive
     QActionGroup* SortActionGroup = new QActionGroup ( this );
@@ -356,23 +356,34 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     }
     MainMixerBoard->SetFaderSorting ( pSettings->eChannelSortType );
 
-    pEditMenu->addSeparator();
+    pViewMenu->addSeparator();
 
-    pEditMenu->addAction ( tr ( "Clear &All Stored Solo and Mute Settings" ), this, SLOT ( OnClearAllStoredSoloMuteSettings() ) );
+    pViewMenu->addAction ( tr ( "C&hat..." ), this, SLOT ( OnOpenChatDialog() ), QKeySequence ( Qt::CTRL + Qt::Key_H ) );
 
-    pEditMenu->addAction ( tr ( "Set All Faders to New Client &Level" ),
-                           this,
-                           SLOT ( OnSetAllFadersToNewClientLevel() ),
-                           QKeySequence ( Qt::CTRL + Qt::Key_L ) );
+    // optionally show analyzer console entry
+    if ( bShowAnalyzerConsole )
+    {
+        pViewMenu->addAction ( tr ( "&Analyzer Console..." ), this, SLOT ( OnOpenAnalyzerConsole() ) );
+    }
 
-    pEditMenu->addAction ( tr ( "Auto-Adjust all &Faders" ), this, SLOT ( OnAutoAdjustAllFaderLevels() ), QKeySequence ( Qt::CTRL + Qt::Key_F ) );
+    pViewMenu->addSeparator();
+
+    // Settings menu  --------------------------------------------------------------
+    QMenu* pSettingsMenu = new QMenu ( tr ( "&Settings" ), this );
+
+    pSettingsMenu->addAction ( tr ( "My &Profile..." ), this, SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
+
+    pSettingsMenu->addAction ( tr ( "Audio/Network &Settings..." ), this, SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
+
+    pSettingsMenu->addAction ( tr ( "A&dvanced Settings..." ), this, SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pFileMenu );
-    pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( pEditMenu );
+    pMenu->addMenu ( pViewMenu );
+    pMenu->addMenu ( pSettingsMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
@@ -552,12 +563,12 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Send the request to two servers for redundancy if either or both of them
     // has a higher release version number, the reply will trigger the notification.
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK1_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }
 
-    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( UPDATECHECK2_ADDRESS, UpdateServerHostAddress, bEnableIPv6 ) )
     {
         pClient->CreateCLServerListReqVerAndOSMes ( UpdateServerHostAddress );
     }

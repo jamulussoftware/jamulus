@@ -219,6 +219,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const quint16      iQosNumber,
                    const QString&     strHTMLStatusFileName,
                    const QString&     strCentralServer,
+                   const QString&     strServerListFileName,
                    const QString&     strServerInfo,
                    const QString&     strServerListFilter,
                    const QString&     strServerPublicIP,
@@ -229,21 +230,32 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNUseMultithreading,
                    const bool         bDisableRecording,
                    const bool         bNDelayPan,
+                   const bool         bNEnableIPv6,
                    const ELicenceType eNLicenceType ) :
     bUseDoubleSystemFrameSize ( bNUseDoubleSystemFrameSize ),
     bUseMultithreading ( bNUseMultithreading ),
     iMaxNumChannels ( iNewMaxNumChan ),
-    Socket ( this, iPortNumber, iQosNumber, strServerBindIP ),
+    iCurNumChannels ( 0 ),
+    Socket ( this, iPortNumber, iQosNumber, strServerBindIP, bNEnableIPv6 ),
     Logging(),
     iFrameCount ( 0 ),
     bWriteStatusHTMLFile ( false ),
     strServerHTMLFileListName ( strHTMLStatusFileName ),
     HighPrecisionTimer ( bNUseDoubleSystemFrameSize ),
-    ServerListManager ( iPortNumber, strCentralServer, strServerInfo, strServerPublicIP, strServerListFilter, iNewMaxNumChan, &ConnLessProtocol ),
+    ServerListManager ( iPortNumber,
+                        strCentralServer,
+                        strServerListFileName,
+                        strServerInfo,
+                        strServerPublicIP,
+                        strServerListFilter,
+                        iNewMaxNumChan,
+                        bNEnableIPv6,
+                        &ConnLessProtocol ),
     JamController ( this ),
     bDisableRecording ( bDisableRecording ),
     bAutoRunMinimized ( false ),
     bDelayPan ( bNDelayPan ),
+    bEnableIPv6 ( bNEnableIPv6 ),
     eLicenceType ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler ( CSignalHandler::getSingletonP() )
@@ -399,6 +411,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         vecChannels[i].SetEnable ( true );
+        vecChannelOrder[i] = i;
     }
 
     int iAvailableCores = QThread::idealThreadCount();
@@ -1043,10 +1056,15 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
                     emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
                 }
 
+                FreeChannel ( iCurChanID ); // note that the channel is now not in use
+
                 // note that no mutex is needed for this shared resource since it is not a
                 // read-modify-write operation but an atomic write and also each thread can
                 // only set it to true and never to false
                 bChannelIsNowDisconnected = true;
+
+                // since the channel is no longer in use, we should return
+                return;
             }
 
             // get pointer to coded data
@@ -1450,59 +1468,145 @@ void CServer::CreateOtherMuteStateChanged ( const int iCurChanID, const int iOth
     }
 }
 
-int CServer::GetFreeChan()
-{
-    // look for a free channel
-    for ( int i = 0; i < iMaxNumChannels; i++ )
-    {
-        if ( !vecChannels[i].IsConnected() )
-        {
-            return i;
-        }
-    }
-
-    // no free channel found, return invalid ID
-    return INVALID_CHANNEL_ID;
-}
-
 int CServer::GetNumberOfConnectedClients()
 {
-    int iNumConnClients = 0;
+    QMutexLocker locker ( &MutexChanOrder );
 
-    // check all possible channels for connection status
-    for ( int i = 0; i < iMaxNumChannels; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            // this channel is connected, increment counter
-            iNumConnClients++;
-        }
-    }
-
-    return iNumConnClients;
+    return iCurNumChannels;
 }
 
-int CServer::FindChannel ( const CHostAddress& CheckAddr )
-{
-    CHostAddress InetAddr;
+// CServer::FindChannel() is called for every received audio packet or connected protocol
+// packet, to find the channel ID associated with the source IP address and port.
+// In order to search as efficiently as possible, a list of active channel IDs is stored
+// in vecChannelOrder[], sorted by IP and port (according to CHostAddress::Compare()),
+// and a binary search is used to find either the existing channel, or the position at
+// which a new channel should be inserted.
 
-    // check for all possible channels if IP is already in use
-    for ( int i = 0; i < iMaxNumChannels; i++ )
+int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
+{
+    int iNewChanID = INVALID_CHANNEL_ID;
+
+    QMutexLocker locker ( &MutexChanOrder );
+
+    int l = 0, r = iCurNumChannels, i;
+
+    // use binary search to find the channel
+    while ( r > l )
     {
-        // the "GetAddress" gives a valid address and returns true if the
-        // channel is connected
-        if ( vecChannels[i].GetAddress ( InetAddr ) )
+        int t   = ( r + l ) / 2;
+        int cmp = CheckAddr.Compare ( vecChannels[vecChannelOrder[t]].GetAddress() );
+
+        if ( cmp == 0 )
         {
-            // IP found, return channel number
-            if ( InetAddr == CheckAddr )
-            {
-                return i;
-            }
+            // address and port match
+            return vecChannelOrder[t];
+        }
+
+        if ( cmp < 0 )
+        {
+            l = t + 1;
+        }
+        else
+        {
+            r = t;
         }
     }
 
-    // IP not found, return invalid ID
-    return INVALID_CHANNEL_ID;
+    // existing channel not found - return if we cannot create a new channel
+    if ( !bAllowNew || iCurNumChannels >= iMaxNumChannels )
+    {
+        return INVALID_CHANNEL_ID;
+    }
+
+    // allocate a new channel
+    i          = iCurNumChannels++; // save index of free channel and increment count
+    iNewChanID = vecChannelOrder[i];
+    InitChannel ( iNewChanID, CheckAddr );
+
+    // now l == r == position in vecChannelOrder to insert iNewChanID
+    // move channel IDs up by one starting at the top and working down
+    while ( i > r )
+    {
+        int j              = i--;
+        vecChannelOrder[j] = vecChannelOrder[i];
+    }
+    // insert the new channel ID in the correct place
+    vecChannelOrder[i] = iNewChanID;
+
+    // DumpChannels ( __FUNCTION__ );
+
+    return iNewChanID;
+}
+
+void CServer::InitChannel ( const int iNewChanID, const CHostAddress& InetAddr )
+{
+    // initialize new channel by storing the calling host address
+    vecChannels[iNewChanID].SetAddress ( InetAddr );
+
+    // reset channel info
+    vecChannels[iNewChanID].ResetInfo();
+
+    // reset the channel gains/pans of current channel, at the same
+    // time reset gains/pans of this channel ID for all other channels
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        vecChannels[iNewChanID].SetGain ( i, 1.0 );
+        vecChannels[iNewChanID].SetPan ( i, 0.5 );
+
+        // other channels (we do not distinguish the case if
+        // i == iCurChanID for simplicity)
+        vecChannels[i].SetGain ( iNewChanID, 1.0 );
+        vecChannels[i].SetPan ( iNewChanID, 0.5 );
+    }
+}
+
+// CServer::FreeChannel() is called to remove a channel from the list of active channels.
+// The remaining ordered IDs are moved down by one space, and the freed ID is moved to the
+// end, ready to be reused by the next new connection.
+
+void CServer::FreeChannel ( const int iCurChanID )
+{
+    QMutexLocker locker ( &MutexChanOrder );
+
+    for ( int i = 0; i < iCurNumChannels; i++ )
+    {
+        if ( vecChannelOrder[i] == iCurChanID )
+        {
+            --iCurNumChannels;
+
+            // move channel IDs down by one starting at the bottom and working up
+            while ( i < iCurNumChannels )
+            {
+                int j              = i++;
+                vecChannelOrder[j] = vecChannelOrder[i];
+            }
+            // put deleted channel at the end ready for re-use
+            vecChannelOrder[i] = iCurChanID;
+
+            // DumpChannels ( __FUNCTION__ );
+
+            return;
+        }
+    }
+
+    qWarning() << "FreeChannel() called with invalid channel ID";
+}
+
+void CServer::DumpChannels ( const QString& title )
+{
+    qDebug() << qUtf8Printable ( title );
+
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        int iChanID = vecChannelOrder[i];
+
+        if ( i == iCurNumChannels )
+        {
+            qDebug() << "----------";
+        }
+
+        qDebug() << qUtf8Printable ( QString ( "%1: [%2] %3" ).arg ( i, 3 ).arg ( iChanID ).arg ( vecChannels[iChanID].GetAddress().toString() ) );
+    }
 }
 
 void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
@@ -1532,48 +1636,13 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf, const int iNum
     QMutexLocker locker ( &Mutex );
 
     bool bNewConnection = false; // init return value
-    bool bChanOK        = true;  // init with ok, might be overwritten
 
     // Get channel ID ------------------------------------------------------
     // check address
-    iCurChanID = FindChannel ( HostAdr );
+    iCurChanID = FindChannel ( HostAdr, true /* allow new */ );
 
-    if ( iCurChanID == INVALID_CHANNEL_ID )
-    {
-        // a new client is calling, look for free channel
-        iCurChanID = GetFreeChan();
-
-        if ( iCurChanID != INVALID_CHANNEL_ID )
-        {
-            // initialize current channel by storing the calling host
-            // address
-            vecChannels[iCurChanID].SetAddress ( HostAdr );
-
-            // reset channel info
-            vecChannels[iCurChanID].ResetInfo();
-
-            // reset the channel gains/pans of current channel, at the same
-            // time reset gains/pans of this channel ID for all other channels
-            for ( int i = 0; i < iMaxNumChannels; i++ )
-            {
-                vecChannels[iCurChanID].SetGain ( i, 1.0 );
-                vecChannels[iCurChanID].SetPan ( i, 0.5 );
-
-                // other channels (we do not distinguish the case if
-                // i == iCurChanID for simplicity)
-                vecChannels[i].SetGain ( iCurChanID, 1.0 );
-                vecChannels[i].SetPan ( iCurChanID, 0.5 );
-            }
-        }
-        else
-        {
-            // no free channel available
-            bChanOK = false;
-        }
-    }
-
-    // Put received audio data in jitter buffer ----------------------------
-    if ( bChanOK )
+    // If channel is valid or new, put received audio data in jitter buffer ----------------------------
+    if ( iCurChanID != INVALID_CHANNEL_ID )
     {
         // put packet in socket buffer
         if ( vecChannels[iCurChanID].PutAudioData ( vecbyRecBuf, iNumBytesRead, HostAdr ) == PS_NEW_CONNECTION )
@@ -1592,8 +1661,6 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                                CVector<int>&          veciJitBufNumFrames,
                                CVector<int>&          veciNetwFrameSizeFact )
 {
-    CHostAddress InetAddr;
-
     // init return values
     vecHostAddresses.Init ( iMaxNumChannels );
     vecsName.Init ( iMaxNumChannels );
@@ -1603,10 +1670,10 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     // check all possible channels
     for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        if ( vecChannels[i].GetAddress ( InetAddr ) )
+        if ( vecChannels[i].IsConnected() )
         {
             // get requested data
-            vecHostAddresses[i]      = InetAddr;
+            vecHostAddresses[i]      = vecChannels[i].GetAddress();
             vecsName[i]              = vecChannels[i].GetName();
             veciJitBufNumFrames[i]   = vecChannels[i].GetSockBufNumFrames();
             veciNetwFrameSizeFact[i] = vecChannels[i].GetNetwFrameSizeFact();

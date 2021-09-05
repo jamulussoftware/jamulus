@@ -53,18 +53,20 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
         pChannel ( pNewChannel ),
         bIsClient ( true ),
-        bJitterBufferOK ( true )
+        bJitterBufferOK ( true ),
+        bEnableIPv6 ( bEnableIPv6 )
     {
         Init ( iPortNumber, iQosNumber, strServerBindIP );
     }
 
-    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
         pServer ( pNServP ),
         bIsClient ( false ),
-        bJitterBufferOK ( true )
+        bJitterBufferOK ( true ),
+        bEnableIPv6 ( bEnableIPv6 )
     {
         Init ( iPortNumber, iQosNumber, strServerBindIP );
     }
@@ -99,6 +101,8 @@ protected:
 
     bool bJitterBufferOK;
 
+    bool bEnableIPv6;
+
 public:
     void OnDataReceived();
 
@@ -127,20 +131,20 @@ class CHighPrioSocket : public QObject
     Q_OBJECT
 
 public:
-    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP )
+    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
+        Socket ( pNewChannel, iPortNumber, iQosNumber, strServerBindIP, bEnableIPv6 )
     {
         Init();
     }
 
-    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber ) :
-        Socket ( pNewChannel, iPortNumber, iQosNumber, "" )
+    CHighPrioSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, bool bEnableIPv6 ) :
+        Socket ( pNewChannel, iPortNumber, iQosNumber, "", bEnableIPv6 )
     {
         Init();
     }
 
-    CHighPrioSocket ( CServer* pNewServer, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
-        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP )
+    CHighPrioSocket ( CServer* pNewServer, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
+        Socket ( pNewServer, iPortNumber, iQosNumber, strServerBindIP, bEnableIPv6 )
     {
         Init();
     }
@@ -222,3 +226,11 @@ protected:
 signals:
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
+
+// overlay generic, IPv4 and IPv6 sockaddr structures
+typedef union
+{
+    struct sockaddr     sa;
+    struct sockaddr_in  sa4;
+    struct sockaddr_in6 sa6;
+} uSockAddr;

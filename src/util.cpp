@@ -533,7 +533,10 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               "<p><b>" +
                               tr ( "Slovak" ) +
                               "</b></p>"
-                              "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" );
+                              "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" +
+                              "<p><b>" + tr ( "Simplified Chinese" ) +
+                              "</b></p>"
+                              "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );

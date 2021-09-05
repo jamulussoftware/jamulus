@@ -273,7 +273,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "<ul>"
                                "<li>"
                                "<b>" +
-                               tr ( "Mono" ) + "</b> " + tr ( "and " ) + "<b>" + tr ( "Stereo" ) + ":</b> " +
+                               tr ( "%1 and %2:" ).arg ( "<b>" + tr ( "Mono" ) + "</b>", "<b>" + tr ( "Stereo" ) + "</b>" ) +
                                tr ( "These modes use "
                                     "one and two audio channels respectively." ) +
                                "</li>"
@@ -730,11 +730,11 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     // update slider value and text
     const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
     sldNetBuf->setValue ( iCurNumNetBuf );
-    lblNetBuf->setText ( tr ( "Size: " ) + QString().setNum ( iCurNumNetBuf ) );
+    lblNetBuf->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBuf ) );
 
     const int iCurNumNetBufServer = pClient->GetServerSockBufNumFrames();
     sldNetBufServer->setValue ( iCurNumNetBufServer );
-    lblNetBufServer->setText ( tr ( "Size: " ) + QString().setNum ( iCurNumNetBufServer ) );
+    lblNetBufServer->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBufServer ) );
 
     // if auto setting is enabled, disable slider control
     const bool bIsAutoSockBufSize = pClient->GetDoAutoSockBufSize();

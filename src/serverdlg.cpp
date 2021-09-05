@@ -107,10 +107,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     // location country
     QString strLocCountry = "<b>" + tr ( "Country/Region" ) + ":</b> " +
-                            tr ( "The country or region in "
-                                 "which this server is located can be set here. If a location is "
-                                 "entered, it will be shown in the connect dialog server list at the "
-                                 "clients." );
+                            tr ( "Set the country or region where the server is running. "
+                                 "Clients will show this location in their connect dialog's server "
+                                 "list." );
 
     lblLocationCountry->setWhatsThis ( strLocCountry );
     cbxLocationCountry->setWhatsThis ( strLocCountry );

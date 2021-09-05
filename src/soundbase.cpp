@@ -114,8 +114,9 @@ QString CSoundBase::SetDev ( const QString strDevName )
 
                 // store error return message
                 strReturn = QString ( tr ( "Can't use the selected audio device "
-                                           "because of the following error: " ) ) +
-                            strErrorMessage + QString ( tr ( " The previous driver will be selected." ) );
+                                           "because of the following error: %1 "
+                                           "The previous driver will be selected." )
+                                          .arg ( strErrorMessage ) );
             }
             else
             {

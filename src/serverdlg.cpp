@@ -106,16 +106,15 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     edtLocationCity->setAccessibleName ( tr ( "City where the server is located line edit" ) );
 
     // location country
-    QString strLocCountry = "<b>" + tr ( "Location country" ) + ":</b> " +
-                            tr ( "The country in "
-                                 "which this server is located can be set here. If a country is "
-                                 "entered, it will be shown in the connect dialog server list at the "
-                                 "clients." );
+    QString strLocCountry = "<b>" + tr ( "Country/Region" ) + ":</b> " +
+                            tr ( "Set the country or region where the server is running. "
+                                 "Clients will show this location in their connect dialog's server "
+                                 "list." );
 
     lblLocationCountry->setWhatsThis ( strLocCountry );
     cbxLocationCountry->setWhatsThis ( strLocCountry );
 
-    cbxLocationCountry->setAccessibleName ( tr ( "Country where the server is located combo box" ) );
+    cbxLocationCountry->setAccessibleName ( tr ( "Combo box for location of this server" ) );
 
     // recording directory
     pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
@@ -193,7 +192,7 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
         SystemTrayIcon.setContextMenu ( pSystemTrayIconMenu );
 
         // set tool text
-        SystemTrayIcon.setToolTip ( QString ( APP_NAME ) + tr ( " server" ) );
+        SystemTrayIcon.setToolTip ( tr ( "%1 server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
 
         // show icon of state "inactive"
         SystemTrayIcon.setIcon ( QIcon ( BitmapSystemTrayInactive ) );
@@ -339,7 +338,7 @@ lvwClients->setMinimumHeight ( 140 );
     UpdateGUIDependencies();
 
     // set window title
-    setWindowTitle ( APP_NAME + tr ( " Server" ) );
+    setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
 
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( tr ( "&Window" ), this );

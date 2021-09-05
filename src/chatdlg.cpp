@@ -132,7 +132,7 @@ void CChatDlg::OnAnchorClicked ( const QUrl& Url )
     {
         if ( QMessageBox::question ( this,
                                      APP_NAME,
-                                     tr ( "Do you want to open the link" ) + " <b>" + Url.toString() + "</b> " + tr ( "in an external browser?" ),
+                                     tr ( "Do you want to open the link '%1' in your browser?" ).arg ( "<b>" + Url.toString() + "</b>" ),
                                      QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
         {
             QDesktopServices::openUrl ( Url );

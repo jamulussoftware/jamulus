@@ -883,17 +883,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="186"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Parametri attuali di connessione</translation>
+        <translation>Parametri attuali di connessione</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="189"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">Il ping è il tempo necessario affinché il flusso audio passi dal client al server e viceversa. Questo ritardo è introdotto dalla rete e dovrebbe essere di circa 20-30 ms. Se questo ritardo è superiore a circa 50 ms, la distanza dal server è eccessiva o la connessione a Internet non è sufficiente.</translation>
+        <translation>Il ping è il tempo necessario affinché il flusso audio passi dal client al server e viceversa. Questo ritardo è introdotto dalla rete e dovrebbe essere di circa 20-30 ms. Se questo ritardo è superiore a circa 50 ms, la distanza dal server è eccessiva o la connessione a Internet non è sufficiente.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="196"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">Il ritardo complessivo viene calcolato dal tempo di ping corrente e dal ritardo introdotto dalle impostazioni del buffer correnti.</translation>
+        <translation>Il ritardo complessivo viene calcolato dal tempo di ping corrente e dal ritardo introdotto dalle impostazioni del buffer correnti.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="226"/>
@@ -1043,7 +1043,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="702"/>
         <source>Directory Server</source>
-        <translation type="unfinished">Server di Directory</translation>
+        <translation>Server Principale</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="747"/>
@@ -1130,18 +1130,18 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
@@ -1504,7 +1504,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="329"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Indirizzo personalizzato del Server di Directory</translation>
+        <translation>Indirizzo personalizzato del Server principale</translation>
     </message>
     <message>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
@@ -1724,17 +1724,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="248"/>
         <source>Language</source>
-        <translation type="unfinished">Lingua</translation>
+        <translation>Lingua</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="248"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selezionare la lingua da utilizzare per l&apos;interfaccia utente.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box di selezione Lingua</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="254"/>
@@ -1799,12 +1799,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="unfinished">Lasciare vuoto questo campo a meno che non sia necessario immettere l&apos;indirizzo di un server di directory diverso da quello predefinito.</translation>
+        <translation>Lasciare vuoto questo campo a meno che non sia necessario immettere l&apos;indirizzo di un server principale diverso da quello predefinito.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source>Directory server address combo box</source>
-        <translation type="unfinished">Casella dell&apos;indirizzo del server di directory</translation>
+        <translation>Casella dell&apos;indirizzo del server principale</translation>
     </message>
     <message>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
@@ -2425,7 +2425,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="859"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1023"/>
@@ -2519,7 +2519,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Indirizzo Server di Directory alternativo:</translation>
+        <translation>Indirizzo Server Principale &quot;alternativo&quot;:</translation>
     </message>
     <message>
         <source>Directory Server Address:</source>
@@ -2749,12 +2749,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../util.cpp" line="599"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">I&amp;nformazioni su Jamulus...</translation>
+        <translation>I&amp;nformazioni su Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="601"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">Informazioni su &amp;Qt...</translation>
+        <translation>Informazioni su &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2763,7 +2763,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">Informazioni su Qt</translation>
+        <translation>Informazioni su Qt</translation>
     </message>
 </context>
 <context>
@@ -3252,27 +3252,27 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../serverdlg.cpp" line="61"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished">Se la casella di controllo &quot;Rendi pubblico il mio server&quot; è selezionata, questo server si registra sul server di directory in modo che tutti gli utenti possano vedere il server nell&apos;elenco dei server. La registrazione del server viene rinnovata periodicamente per assicurarsi che tutti i server nell&apos;elenco siano effettivamente disponibili.</translation>
+        <translation>Se la casella di controllo &quot;Rendi pubblico il mio server&quot; è selezionata, questo server si registra sul server di directory in modo che tutti gli utenti possano vedere il server nell&apos;elenco dei server. La registrazione del server viene rinnovata periodicamente per assicurarsi che tutti i server nell&apos;elenco siano effettivamente disponibili.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="70"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished">Se la casella di controllo Rendi il mio server pubblico è selezionata, mostrerà se la registrazione con il server di directory è andata a buon fine. Se la registrazione non è riuscita, selezionare un altro elenco di server.</translation>
+        <translation>Se la casella di controllo Rendi il mio server pubblico è selezionata, mostrerà se la registrazione con il server di directory è andata a buon fine. Se la registrazione non è riuscita, selezionare un altro elenco di server.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Indirizzo Server di Directory alternativo</translation>
+        <translation>Indirizzo Server Principale alternativo</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="76"/>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished">L&apos;indirizzo del server di directory alternativo è l&apos;indirizzo IP o l&apos;URL del server di directory in cui viene gestito l&apos;elenco dei server della finestra di dialogo della connessione.</translation>
+        <translation>L&apos;indirizzo del server principale &quot;alternativo&quot; è l&apos;indirizzo IP o l&apos;URL del server in cui viene gestito l&apos;elenco dei server Jamulus della finestra di dialogo della connessione.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
         <source>Directory server address line edit</source>
-        <translation type="unfinished">Modifica Server di Directory</translation>
+        <translation>Modifica Server Principale</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
@@ -3282,7 +3282,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../serverdlg.cpp" line="84"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="unfinished">Seleziona la lista dei server(es. indirizzo central server) nel quale il tuo server sarà aggiunto.</translation>
+        <translation>Seleziona la lista dei server(es. indirizzo central server) nel quale il tuo server sarà aggiunto.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
@@ -3617,7 +3617,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../util.h" line="612"/>
         <source>Directory Server full</source>
-        <translation type="unfinished">Server di Directory pieno</translation>
+        <translation>Server Principale pieno</translation>
     </message>
     <message>
         <location filename="../../util.h" line="615"/>
@@ -3666,7 +3666,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Lista</translation>
+        <translation>Lista</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -3715,7 +3715,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Indirizzo server di directory alternativo:</translation>
+        <translation>Indirizzo server Principale alternativo:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="236"/>

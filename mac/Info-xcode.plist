@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-        <key>CFBundleName</key>
-        <string>${EXECUTABLE_NAME}</string>
-        <key>CFBundleDisplayName</key>
-        <string>${EXECUTABLE_NAME}</string>
-        <key>CFBundleIdentifier</key>
-        <string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
-        <key>CFBundlePackageType</key>
-        <string>APPL</string>
-        <key>CFBundleVersion</key>
-        <string>${QMAKE_FULL_VERSION}</string>
-        <key>CFBundleExecutable</key>
-        <string>${EXECUTABLE_NAME}</string>
-        <key>CFBundleDevelopmentRegion</key>
-        <string>en</string>
-        <key>CFBundleIconFile</key>
-        <string>${ASSETCATALOG_COMPILER_APPICON_NAME}</string>
-        <key>CFBundleGetInfoString</key>
-        <string>Created by Qt/QMake</string>
-
-        <key>NSPrincipalClass</key>
-        <string>NSApplication</string>
-        <key>NSMicrophoneUsageDescription</key>
-        <string>Jamulus needs access to the microphone to record and stream your music to other musicians</string>
-        <!-- Temporarily opt out of Dark Mode as Qt 5.9 does not support it well, see https://bugreports.qt.io/browse/QTBUG-68891 -->
-        <key>NSRequiresAquaSystemAppearance</key>
-        <string>true</string>
-    </dict>
+<dict>
+	<key>CFBundleName</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleDisplayName</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleIdentifier</key>
+	<string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleVersion</key>
+	<string>${QMAKE_FULL_VERSION}</string>
+	<key>CFBundleShortVersionString</key>
+	<string>${QMAKE_SHORT_VERSION}</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.music</string>
+	<key>LSMinimumSystemVersion</key>
+    <string>10.13.0</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleIconFile</key>
+	<string>mainicon.icns</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Jamulus - Created with QT</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Jamulus needs access to the microphone to record and stream your music to other musicians</string>
+	<key>NSRequiresAquaSystemAppearance</key>
+	<string>true</string>
+</dict>
 </plist>

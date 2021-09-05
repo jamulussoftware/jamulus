@@ -790,27 +790,27 @@
     <message>
         <location filename="../../clientdlg.cpp" line="186"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Paramètre de l&apos;état de la connexion actuelle</translation>
+        <translation>Paramètre de l&apos;état de la connexion actuelle</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="189"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">Le temps de ping est le temps nécessaire au flux audio pour aller du client au serveur et revenir. Ce délai est introduit par le réseau et doit être d&apos;environ 20 à 30 ms. Si ce délai est supérieur à environ 50 ms, la distance qui vous sépare du serveur est trop importante ou votre connexion internet n&apos;est pas suffisante.</translation>
+        <translation>Le temps de ping est le temps nécessaire au flux audio pour aller du client au serveur et revenir. Ce délai est introduit par le réseau et doit être d&apos;environ 20 à 30 ms. Si ce délai est supérieur à environ 50 ms, la distance qui vous sépare du serveur est trop importante ou votre connexion internet n&apos;est pas suffisante.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="196"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">Le délai global est calculé à partir du temps de ping actuel et du délai introduit par les paramètres actuels de la mémoire tampon.</translation>
+        <translation>Le délai global est calculé à partir du temps de ping actuel et du délai introduit par les paramètres actuels de la mémoire tampon.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="204"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le </translation>
+        <translation>Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="206"/>
         <source> software.</source>
-        <translation type="unfinished"> logiciel.</translation>
+        <translation> logiciel.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="277"/>
@@ -957,18 +957,18 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Gigue</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished">ms</translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>

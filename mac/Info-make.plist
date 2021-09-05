@@ -12,6 +12,16 @@
         <string>APPL</string>
         <key>CFBundleVersion</key>
         <string>@FULL_VERSION@</string>
+        <key>CFBundleShortVersionString</key>
+	    <string>@SHORT_VERSION@</string>
+        <key>CFBundleSupportedPlatforms</key>
+	    <array>
+		    <string>MacOSX</string>
+        </array>
+        <key>LSApplicationCategoryType</key>
+	    <string>public.app-category.music</string>
+        <key>LSMinimumSystemVersion</key>
+        <string>10.13.0</string>
         <key>CFBundleExecutable</key>
         <string>@EXECUTABLE@</string>
         <key>CFBundleDevelopmentRegion</key>
@@ -19,8 +29,7 @@
         <key>CFBundleIconFile</key>
         <string>@ICON@</string>
         <key>CFBundleGetInfoString</key>
-        <string>Created by Qt/QMake</string>
-
+        <string>Jamulus - Created with QT</string>
         <key>NSPrincipalClass</key>
         <string>NSApplication</string>
         <key>NSMicrophoneUsageDescription</key>

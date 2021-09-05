@@ -445,6 +445,18 @@ vstrCentralServerAddress[0] = GetIniSetting ( IniXMLDocument, "client", "central
         eCentralServerAddressType = AT_DEFAULT;
     }
 
+    // custom directory server index
+    if ( ( eCentralServerAddressType == AT_CUSTOM ) &&
+         GetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", 0, MAX_NUM_SERVER_ADDR_ITEMS, iValue ) )
+    {
+        iCustomDirectoryIndex = iValue;
+    }
+    else
+    {
+        // if directory is not set to custom, or if no custom directory index is found in the settings .ini file, then initialize to zero
+        iCustomDirectoryIndex = 0;
+    }
+
     // clang-format off
 // TODO compatibility to old version (<3.4.7)
 if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
@@ -648,6 +660,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // directory server address type
     SetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", static_cast<int> ( eCentralServerAddressType ) );
+
+    // custom directory server index
+    SetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", iCustomDirectoryIndex );
 
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "client", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );

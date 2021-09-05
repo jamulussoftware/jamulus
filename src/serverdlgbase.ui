@@ -136,7 +136,7 @@
             <item>
              <widget class="QLabel" name="lblLocationCountry">
               <property name="text">
-               <string>Location: Country</string>
+               <string>Location: Region</string>
               </property>
              </widget>
             </item>
@@ -219,7 +219,7 @@
          <item>
           <widget class="QLabel" name="lblLanguage">
            <property name="text">
-            <string>Language</string>
+            <string extracomment="Consider add &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct button">Language</string>
            </property>
           </widget>
          </item>

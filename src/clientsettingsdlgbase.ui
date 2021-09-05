@@ -959,7 +959,7 @@
              <item>
               <widget class="QLabel" name="lblCentralServerAddress">
                <property name="text">
-                <string>Custom Directory Server Address:</string>
+                <string>Custom Directories:</string>
                </property>
               </widget>
              </item>

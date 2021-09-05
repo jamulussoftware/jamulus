@@ -12,7 +12,7 @@
 
 For .tar.gz [use this link](https://github.com/jamulussoftware/jamulus/archive/latest.tar.gz) to download the latest release
 
-For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/master.zip)
+For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/latest.zip)
 
 ## Linux
 
@@ -66,7 +66,7 @@ make
 sudo make install # optional
 ```
 
-To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](/wiki/Command-Line-Options), and [this information](/wiki/Tips-Tricks-More#controlling-recording-on-linux-headless-servers) on controlling recordings on headless servers.
+To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](https://jamulus.io/wiki/Command-Line-Options), and [this information](https://jamulus.io/wiki/Tips-Tricks-More#controlling-recordings-on-linux-headless-servers) on controlling recordings on headless servers.
 
 ---
 
@@ -145,3 +145,11 @@ Will build the file and make it available in `./Release/Jamulus.app`
 * Run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro`
 * Open the generated .xcodeproject in XCode, check the Signing & Capabilities and configure a team
 * To run on a iOS device, build and run on the device, you'll have first trust your developer profile in device's Settings.
+
+## Android
+* Install Qt, including the Android support from the Qt installer
+* Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions 
+* Make sure Jamulus submodules are present, notably oboe:
+`git submodule update --init`
+* Open Jamulus.pro in Qt Creator
+* Now you should be able to Build & Run for Android.

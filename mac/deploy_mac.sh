@@ -7,7 +7,28 @@ macdeploy_path="${root_path}/mac"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
+cert_name=""
 
+
+while getopts 'hs:' flag; do
+    case "${flag}" in
+    s) 
+    cert_name=$OPTARG 
+    if [[ -z "$cert_name" ]]; then
+        echo "Please add the name of the certificate to use: -s \"<name>\""
+    fi
+    # shift 2
+    ;;
+    h) 
+    echo "Usage: -s <cert name> for signing mac build" 
+    exit 0 
+    ;;
+    *)
+    exit 1
+    ;;
+   
+    esac
+done
 
 cleanup()
 {
@@ -29,7 +50,11 @@ build_app()
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
     # Add Qt deployment dependencies
-    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    if [[ -z "$cert_name" ]]; then
+        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    else
+        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
+    fi
     mv "${build_path}/${target_name}.app" "${deploy_path}"
 
     # Cleanup

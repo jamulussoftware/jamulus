@@ -73,6 +73,7 @@ protected:
     {
         showNormal();
         raise();
+        activateWindow();
     }
     void ModifyAutoStartEntry ( const bool bDoAutoStart );
     void UpdateRecorderStatus ( QString sessionDir );

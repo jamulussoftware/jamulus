@@ -53,23 +53,8 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
-        pChannel ( pNewChannel ),
-        bIsClient ( true ),
-        bJitterBufferOK ( true ),
-        bEnableIPv6 ( bEnableIPv6 )
-    {
-        Init ( iPortNumber, iQosNumber, strServerBindIP );
-    }
-
-    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
-        pServer ( pNServP ),
-        bIsClient ( false ),
-        bJitterBufferOK ( true ),
-        bEnableIPv6 ( bEnableIPv6 )
-    {
-        Init ( iPortNumber, iQosNumber, strServerBindIP );
-    }
+    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 );
+    CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 );
 
     virtual ~CSocket();
 

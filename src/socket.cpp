@@ -40,10 +40,11 @@
 
 // we have different connections for client and server, created after Init in corresponding constructor
 
-CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
     pChannel ( pNewChannel ),
     bIsClient ( true ),
-    bJitterBufferOK ( true )
+    bJitterBufferOK ( true ),
+    bEnableIPv6 ( bEnableIPv6 )
 {
     Init ( iPortNumber, iQosNumber, strServerBindIP );
 
@@ -55,10 +56,11 @@ CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint
     QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
 }
 
-CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP ) :
+CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP, bool bEnableIPv6 ) :
     pServer ( pNServP ),
     bIsClient ( false ),
-    bJitterBufferOK ( true )
+    bJitterBufferOK ( true ),
+    bEnableIPv6 ( bEnableIPv6 )
 {
     Init ( iPortNumber, iQosNumber, strServerBindIP );
 

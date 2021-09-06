@@ -42,6 +42,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     layout()->setMenuBar ( pMenu );
 #endif
 
+#if defined( Q_OS_ANDROID ) || defined( ANDROID )
+    // Android too
+    QMenuBar* pMenu      = new QMenuBar ( this );
+    QMenu*    pCloseMenu = new QMenu ( tr ( "&Close" ), this );
+    pCloseMenu->addAction ( tr ( "&Close" ), this, SLOT ( close() ) );
+    pMenu->addMenu ( pCloseMenu );
+
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );
+#endif
+
     // Add help text to controls -----------------------------------------------
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
@@ -106,11 +117,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
 
     // sound card device
-    lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Sound Card Device" ) + ":</b> " + tr ( "The ASIO driver (sound card) can be selected using " ) +
-                                       APP_NAME +
-                                       tr ( " under the Windows operating system. Under MacOS/Linux, no sound "
-                                            "card selection is possible. If the selected ASIO driver is not valid "
-                                            "an error message is shown and the previous valid driver is selected." ) +
+    lblSoundcardDevice->setWhatsThis ( "<b>" +
+                                       QString ( tr ( "Sound Card Device" ) + ":</b> " +
+                                                 tr ( "The ASIO driver (sound card) can be selected using "
+                                                      "%1 under the Windows operating system. Under macOS/Linux, no sound "
+                                                      "card selection is possible. If the selected ASIO driver is not valid "
+                                                      "an error message is shown and the previous valid driver is selected." ) )
+                                           .arg ( APP_NAME ) +
                                        "<br>" +
                                        tr ( "If the driver is selected during an active connection, the connection "
                                             "is stopped, the driver is changed and the connection is started again "
@@ -136,10 +149,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                 tr ( "If the selected sound card device offers more than one "
                                      "input or output channel, the Input Channel Mapping and Output "
                                      "Channel Mapping settings are visible." ) +
-                                "<br>" + tr ( "For each " ) + APP_NAME +
-                                tr ( " input/output channel (Left and "
-                                     "Right channel) a different actual sound card channel can be "
-                                     "selected." );
+                                "<br>" +
+                                QString ( tr ( "For each %1 input/output channel (left and "
+                                               "right channel) a different actual sound card channel can be "
+                                               "selected." ) )
+                                    .arg ( APP_NAME );
 
     lblInChannelMapping->setWhatsThis ( strSndCrdChanMapp );
     lblOutChannelMapping->setWhatsThis ( strSndCrdChanMapp );
@@ -153,21 +167,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
 
     // enable OPUS64
-    chbEnableOPUS64->setWhatsThis ( "<b>" + tr ( "Enable Small Network Buffers" ) + ":</b> " +
-                                    tr ( "If enabled, the support for very small network audio packets is activated. Very small "
-                                         "network packets are only actually used if the sound card buffer delay is smaller than " ) +
-                                    QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) +
-                                    tr ( " samples. The "
-                                         "smaller the network buffers, the lower the audio latency. But at the same time "
-                                         "the network load increases and the probability of audio dropouts also increases." ) );
+    chbEnableOPUS64->setWhatsThis (
+        "<b>" + tr ( "Enable Small Network Buffers" ) + ":</b> " +
+        QString ( tr ( "Enables support for very small network audio packets. These "
+                       "network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The "
+                       "smaller the network buffers, the lower the audio latency. But at the same time "
+                       "the network load and the probability of audio dropouts or sound artifacts increases." ) )
+            .arg ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );
 
     // sound card buffer delay
     QString strSndCrdBufDelay = "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
-                                tr ( "The buffer delay setting is a fundamental setting of this "
-                                     "software. This setting has an influence on many "
-                                     "connection properties." ) +
+                                QString ( tr ( "The buffer delay setting is a fundamental setting of %1. "
+                                               "This setting has an influence on many conncetion properties." ) )
+                                    .arg ( APP_NAME ) +
                                 "<br>" + tr ( "Three buffer sizes are supported" ) +
                                 ":<ul>"
                                 "<li>" +
@@ -182,17 +196,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                      "computers or with a slow internet connection." ) +
                                 "</li>"
                                 "</ul>" +
-                                tr ( "Some sound card drivers do not allow the buffer delay to be changed "
-                                     "from within the application. "
-                                     "In this case the buffer delay setting is disabled and has to be "
-                                     "changed using the sound card driver. On Windows, press the "
-                                     "ASIO Device Settings button to open the driver settings panel. On Linux, "
-                                     "use the Jack configuration tool to change the buffer size." ) +
+                                QString ( tr ( "Some sound card drivers do not allow the buffer delay to be changed "
+                                               "from within %1. "
+                                               "In this case the buffer delay setting is disabled and has to be "
+                                               "changed using the sound card driver. On Windows, use the "
+                                               "ASIO Device Settings button to open the driver settings panel. On Linux, "
+                                               "use the JACK configuration tool to change the buffer size." ) )
+                                    .arg ( APP_NAME ) +
                                 "<br>" +
-                                tr ( "If no buffer size is selected and all settings are disabled, an "
-                                     "unsupported buffer size is used by the driver. The application "
-                                     "will still work with this setting but with restricted "
-                                     "performance." ) +
+                                QString ( tr ( "If no buffer size is selected and all settings are disabled, this means an "
+                                               "unsupported buffer size is in use by the driver. %1 "
+                                               "will still work with this setting but may have restricted "
+                                               "performance." ) )
+                                    .arg ( APP_NAME ) +
                                 "<br>" +
                                 tr ( "The actual buffer delay has influence on the connection status, the "
                                      "current upload rate and the overall delay. The lower the buffer size, "
@@ -203,27 +219,28 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                 tr ( "The buffer setting is therefore a trade-off between audio "
                                      "quality and overall delay." );
 
-    QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
-                                       "disabled, it is prohibited by the audio driver to modify this "
-                                       "setting from within the software. "
-                                       "On Windows, press the ASIO Device Settings button to open the "
-                                       "driver settings panel. On Linux, use the Jack configuration tool to "
-                                       "change the buffer size." ) +
+    QString strSndCrdBufDelayTT = QString ( tr ( "If the buffer delay settings are "
+                                                 "disabled, it is prohibited by the audio driver to modify this "
+                                                 "setting from within %1. "
+                                                 "On Windows, press the ASIO Device Settings button to open the "
+                                                 "driver settings panel. On Linux, use the JACK configuration tool to "
+                                                 "change the buffer size." ) )
+                                      .arg ( APP_NAME ) +
                                   TOOLTIP_COM_END_TEXT;
 
     // Driver setup button
     QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b> " +
                                     tr ( "This opens the driver settings of your sound card. Some drivers "
                                          "allow you to change buffer settings, others like ASIO4ALL "
-                                         "let you choose input or outputs of your device(s). "
+                                         "lets you choose input or outputs of your device(s). "
                                          "More information can be found on jamulus.io." );
 
-    QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: " ) + APP_NAME +
-                                      tr ( " currently only supports devices supporting a sample rate of " ) +
-                                      QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) +
-                                      tr ( "Hz. "
+    QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: %1 currently only supports devices "
+                                           "with a sample rate of %2 Hz. "
                                            "You will not be able to select a driver/device which doesn't. "
-                                           "For more help see jamulus.io." ) +
+                                           "For more help see jamulus.io." )
+                                          .arg ( APP_NAME )
+                                          .arg ( SYSTEM_SAMPLE_RATE_HZ ) +
                                       TOOLTIP_COM_END_TEXT;
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
@@ -256,7 +273,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "<ul>"
                                "<li>"
                                "<b>" +
-                               tr ( "Mono" ) + "</b> " + tr ( "and " ) + "<b>" + tr ( "Stereo" ) + ":</b> " +
+                               tr ( "%1 and %2:" ).arg ( "<b>" + tr ( "Mono" ) + "</b>", "<b>" + tr ( "Stereo" ) + "</b>" ) +
                                tr ( "These modes use "
                                     "one and two audio channels respectively." ) +
                                "</li>"
@@ -335,7 +352,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxCentralServerAddress->setAccessibleName ( tr ( "Directory server address combo box" ) );
 
     // current connection status parameter
-    QString strConnStats = tr ( "Audio Upstream Rate depends on the current audio packet size and "
+    QString strConnStats = "<b>" + tr ( "Audio Upstream Rate" ) + ":</b> " +
+                           tr ( "Depends on the current audio packet size and "
                                 "compression setting. Make sure that the upstream rate is not "
                                 "higher than your available internet upload speed (check this with a "
                                 "service such as speedtest.net)." );
@@ -456,10 +474,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "you play and a flag of the country you are located in. "
                                "Your city and skill level playing your instrument may also be added." ) +
                           "<br>" +
-                          tr ( "What you set here will appear at your fader on the mixer "
-                               "board when you are connected to a Jamulus server. This tag will "
-                               "also be shown at each client which is connected to the same server as "
-                               "you." );
+                          QString ( tr ( "What you set here will appear at your fader on the mixer "
+                                         "board when you are connected to a %1 server. This tag will "
+                                         "also be shown at each client which is connected to the same server as "
+                                         "you." ) )
+                              .arg ( APP_NAME );
 
     plblAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
@@ -711,11 +730,11 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     // update slider value and text
     const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
     sldNetBuf->setValue ( iCurNumNetBuf );
-    lblNetBuf->setText ( tr ( "Size: " ) + QString().setNum ( iCurNumNetBuf ) );
+    lblNetBuf->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBuf ) );
 
     const int iCurNumNetBufServer = pClient->GetServerSockBufNumFrames();
     sldNetBufServer->setValue ( iCurNumNetBufServer );
-    lblNetBufServer->setText ( tr ( "Size: " ) + QString().setNum ( iCurNumNetBufServer ) );
+    lblNetBufServer->setText ( tr ( "Size: " ) + QString::number ( iCurNumNetBufServer ) );
 
     // if auto setting is enabled, disable slider control
     const bool bIsAutoSockBufSize = pClient->GetDoAutoSockBufSize();

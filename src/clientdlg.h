@@ -81,6 +81,7 @@ public:
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
                  const bool       bMuteStream,
+                 const bool       bNEnableIPv6,
                  QWidget*         parent = nullptr );
 
 protected:
@@ -104,6 +105,7 @@ protected:
     bool           bConnectDlgWasShown;
     bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
+    bool           bEnableIPv6;
     ERecorderState eLastRecorderState;
     EGUIDesign     eLastDesign;
     QTimer         TimerSigMet;

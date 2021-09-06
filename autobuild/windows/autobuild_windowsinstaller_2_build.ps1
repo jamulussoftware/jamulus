@@ -7,9 +7,10 @@
 ###  PARAMETERS  ###
 ####################
 
-# Get the source path via parameter
+# Get the source path via parameter and BuildOption to empty when not provided
 param (
-    [string] $jamulus_project_path = $Env:jamulus_project_path
+    [string] $jamulus_project_path = $Env:jamulus_project_path,
+    [string] $BuildOption = ""
 )
 # Sanity check of parameters
 if (("$jamulus_project_path" -eq $null) -or ("$jamulus_project_path" -eq "")) {
@@ -27,4 +28,11 @@ if (("$jamulus_project_path" -eq $null) -or ("$jamulus_project_path" -eq "")) {
 
 echo "Build installer..."
 # Build the installer
-powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2"
+if ($BuildOption -ne "")
+{
+    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2" -BuildOption $BuildOption
+}
+else
+{
+    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2"
+}

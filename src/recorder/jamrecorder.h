@@ -157,7 +157,8 @@ public:
     CJamRecorder ( const QString strRecordingBaseDir, const int iServerFrameSizeSamples ) :
         recordBaseDir ( strRecordingBaseDir ),
         iServerFrameSizeSamples ( iServerFrameSizeSamples ),
-        isRecording ( false )
+        isRecording ( false ),
+        currentSession ( nullptr )
     {}
 
     /**

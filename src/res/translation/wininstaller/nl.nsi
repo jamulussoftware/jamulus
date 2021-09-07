@@ -22,10 +22,10 @@ LangString ASIO_DRIVER_HEADER ${LANG_DUTCH} \
      "ASIO stuurprogramma"
 
 LangString ASIO_DRIVER_SUB ${LANG_DUTCH} \
-     "Om Jamulus te kunnen gebruiken heeft u een ASIO stuurprogramma nodig"
+     "Om ${APP_NAME} te kunnen gebruiken heeft u een ASIO stuurprogramma nodig"
 
 LangString ASIO_DRIVER_EXPLAIN ${LANG_DUTCH} \
-     "Jamulus heeft een ASIO stuurprogramma nodig voor low latency audio. Meer informatie:"
+     "${APP_NAME} heeft een ASIO stuurprogramma nodig voor low latency audio. Meer informatie:"
 
 LangString ASIO_DRIVER_MORE_INFO ${LANG_DUTCH} \
      "Meer informatie over ASIO op jamulus.io"
@@ -35,3 +35,15 @@ LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_DUTCH} \
 
 LangString ASIO_EXIT_NO_DRIVER ${LANG_DUTCH} \
      "${APP_NAME} heeft een ASIO audio-stuurprogramma nodig om te functioneren, en we hebben er geen op uw PC gevonden. U dient een stuurprogramma als ASIO4ALL te installeren (Meer informatie op jamulus.io onder Installation for Windows). Wilt u nog steeds verder gaan met de installatie van ${APP_NAME}?"
+
+LangString JACK_DRIVER_HEADER ${LANG_DUTCH} \
+     "JACK Audio Connection Kit"
+
+LangString JACK_DRIVER_SUB ${LANG_DUTCH} \
+     "Om deze versie van ${APP_NAME} te kunnen gebruiken heeft u de JACK Audio Connection Kit nodig"
+
+LangString JACK_DRIVER_EXPLAIN ${LANG_DUTCH} \
+     "Deze versie van ${APP_NAME} maakt gebruik van de JACK Audio Connection Kit. Zorg ervoor dat deze geïnstalleerd is of download de standaard versie van ${APP_NAME} op jamulus.io die gebruikt maakt van ASIO."
+
+LangString JACK_EXIT_NO_DRIVER ${LANG_DUTCH} \
+     "Deze ${APP_NAME} versie heeft de JACK Audio Connection Kit nodig om te functioneren, en we hebben deze niet op uw PC gevonden. U dient deze eerst zelf te installeren. Wilt u nog steeds verder gaan met de installatie van ${APP_NAME} zonder eerst JACK te installeren?"

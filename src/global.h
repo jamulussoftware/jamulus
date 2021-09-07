@@ -115,11 +115,18 @@ LED bar:      lbr
 #define SERVER_GETTING_STARTED_URL "https://jamulus.io/wiki/Running-a-Server"
 #define SOFTWARE_MANUAL_URL        "https://jamulus.io/wiki/Software-Manual"
 
+// app update message
+#define APP_UPGRADE_AVAILABLE_MSG_TEXT \
+    QCoreApplication::translate ( \
+        "global", \
+        "A %1 upgrade is available: <a style='color:red;' href='https://jamulus.io/upgrade?progversion=%2'>go to details and downloads</a>" )
+
 // determining server internal address uses well-known host and port
 // We just need a valid, public Internet IP here. We will not send any
 // traffic there as we will only set up an UDP socket without sending any
 // data.
-#define WELL_KNOWN_HOST   "1.1.1.1" // CloudFlare
+#define WELL_KNOWN_HOST   "1.1.1.1"              // CloudFlare
+#define WELL_KNOWN_HOST6  "2606:4700:4700::1111" // CloudFlare
 #define WELL_KNOWN_PORT   DEFAULT_PORT_NUMBER
 #define IP_LOOKUP_TIMEOUT 500 // ms
 

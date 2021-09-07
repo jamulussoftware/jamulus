@@ -31,6 +31,7 @@ CClient::CClient ( const quint16  iPortNumber,
                    const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
+                   const bool     bNEnableIPv6,
                    const bool     bNMuteMeInPersonalMix ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
@@ -46,7 +47,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bIsInitializationPhase ( true ),
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
-    Socket ( &Channel, iPortNumber, iQosNumber ),
+    Socket ( &Channel, iPortNumber, iQosNumber, "", bNEnableIPv6 ),
     Sound ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
@@ -62,7 +63,8 @@ CClient::CClient ( const quint16  iPortNumber,
     eGUIDesign ( GD_ORIGINAL ),
     bEnableOPUS64 ( false ),
     bJitterBufferOK ( true ),
-    bNuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
+    bEnableIPv6 ( bNEnableIPv6 ),
+    bMuteMeInPersonalMix ( bNMuteMeInPersonalMix ),
     iServerSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL ),
     pSignalHandler ( CSignalHandler::getSingletonP() )
 {
@@ -344,7 +346,7 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     CHostAddress HostAddress;
-    if ( NetworkUtil().ParseNetworkAddress ( strNAddr, HostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( strNAddr, HostAddress, bEnableIPv6 ) )
     {
         // apply address to the channel
         Channel.SetAddress ( HostAddress );
@@ -706,7 +708,7 @@ void CClient::OnClientIDReceived ( int iChanID )
     // for headless mode we support to mute our own signal in the personal mix
     // (note that the check for headless is done in the main.cpp and must not
     // be checked here)
-    if ( bNuteMeInPersonalMix )
+    if ( bMuteMeInPersonalMix )
     {
         SetRemoteChanGain ( iChanID, 0, false );
     }
@@ -926,8 +928,6 @@ void CClient::Init()
     vecCeltData.Init ( iCeltNumCodedBytes );
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
-
-    fMuteOutStreamGain = 1.0f;
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iOPUSFrameSizeSamples ) ) );

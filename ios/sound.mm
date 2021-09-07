@@ -185,7 +185,7 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
         audioFormat.mFormatID         = kAudioFormatLinearPCM;
         audioFormat.mFormatFlags      = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked;
         audioFormat.mFramesPerPacket  = 1;
-        audioFormat.mChannelsPerFrame = 2;  // steoreo, so 2 interleaved channels
+        audioFormat.mChannelsPerFrame = 2;  // stereo, so 2 interleaved channels
         audioFormat.mBitsPerChannel   = 32; // sizeof float32
         audioFormat.mBytesPerPacket   = 8;  // (sizeof float32) * 2 channels
         audioFormat.mBytesPerFrame    = 8;  //(sizeof float32) * 2 channels
@@ -327,6 +327,7 @@ void CSound::SwitchDevice ( QString strDriverName )
         if ( strDriverName.compare ( strDriverNames[i] ) == 0 )
         {
             iDriverIdx = i;
+            break;
         }
     }
 

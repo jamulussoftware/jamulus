@@ -908,25 +908,25 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     }
 
     setWindowTitle ( strWinTitle );
-/***
-#if defined( Q_OS_MACX )
-    // for MacOS only we show the number of connected clients as a
-    // badge label text if more than one user is connected
-    // (only available in Qt5.2)
-#    if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
-    if ( iNumClients > 1 )
-    {
-        // show the number of connected clients
-        NSApp.dockTile.badgeLabel ( QString ( "%1" ).arg ( iNumClients ) );
-    }
-    else
-    {
-        // clear the text (apply an empty string)
-        NSApp.dockTile.badgeLabel ( "" );
-    }
-#    endif
-#endif
-***/
+    /***
+    #if defined( Q_OS_MACX )
+        // for MacOS only we show the number of connected clients as a
+        // badge label text if more than one user is connected
+        // (only available in Qt5.2)
+    #    if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
+        if ( iNumClients > 1 )
+        {
+            // show the number of connected clients
+            NSApp.dockTile.badgeLabel ( QString ( "%1" ).arg ( iNumClients ) );
+        }
+        else
+        {
+            // clear the text (apply an empty string)
+            NSApp.dockTile.badgeLabel ( "" );
+        }
+    #    endif
+    #endif
+    ***/
 }
 
 void CClientDlg::ShowConnectionSetupDialog()

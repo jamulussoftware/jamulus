@@ -33,7 +33,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const int      iNumChannels,
                                          CProtocol*     pNConLProt ) :
     eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
-    strMinServerVersion ( "" ),              // disable version check with empty version
+    strMinServerVersion ( "" ), // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
     eSvrRegStatus ( ESvrRegStatus::SRS_UNREGISTERED ),
     iSvrRegRetries ( 0 )

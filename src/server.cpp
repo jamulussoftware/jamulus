@@ -1711,6 +1711,9 @@ void CServer::BuildServerStatusJson( QString& strServerStatus )
     jobject["cc"] = ccount;
     jobject["rs"] = eRecorderState;
     jobject["ts"] = QDateTime::currentSecsSinceEpoch();
+    jobject["svnm"] = ServerListManager.GetServerName();
+    jobject["svct"] = ServerListManager.GetServerCity();
+    jobject["svcn"] = ServerListManager.GetServerCountry();
 
     if ( ccount > 0 )
     {

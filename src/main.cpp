@@ -473,7 +473,6 @@ int main ( int argc, char** argv )
             continue;
         }
 
-
         // Client Name ---------------------------------------------------------
         if ( GetStringArgument ( argc,
                                  argv,

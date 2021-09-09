@@ -924,7 +924,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
         break;
 
     case PROTMESSID_CLM_REQ_SERVER_STATUS:
-        EvaluateCLReqServerStatus( InetAddr );
+        EvaluateCLReqServerStatus ( InetAddr );
         break;
     }
 }
@@ -1721,8 +1721,8 @@ void CProtocol::CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr, co
 }
 
 /**
-* Send json encoded server status
-*/
+ * Send json encoded server status
+ */
 
 void CProtocol::CreateCLServerStatusMes ( const CHostAddress& InetAddr, const QString strServerStatus )
 {
@@ -1740,11 +1740,7 @@ void CProtocol::CreateCLServerStatusMes ( const CHostAddress& InetAddr, const QS
     PutStringUTF8OnStream ( vecData, iPos, strUTF8ServerStatus );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_STATUS, vecData, InetAddr );
-
 }
-
-
-
 
 bool CProtocol::EvaluateCLPingWithNumClientsMes ( const CHostAddress& InetAddr, const CVector<uint8_t>& vecData )
 {
@@ -2522,12 +2518,11 @@ bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
     return false; // no error
 }
 
-bool CProtocol::EvaluateCLReqServerStatus( const CHostAddress& InetAddr )
+bool CProtocol::EvaluateCLReqServerStatus ( const CHostAddress& InetAddr )
 {
-    emit CLReqServerStatus( InetAddr );
+    emit CLReqServerStatus ( InetAddr );
     return false;
 }
-
 
 void CProtocol::CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients )
 {

@@ -84,8 +84,8 @@
 #define PROTMESSID_CLM_REGISTER_SERVER_EX     1017 // register server with extended information
 #define PROTMESSID_CLM_RED_SERVER_LIST        1018 // reduced server list
 
-#define PROTMESSID_CLM_REQ_SERVER_STATUS      1020 // request server status
-#define PROTMESSID_CLM_SERVER_STATUS          1021 // server status response
+#define PROTMESSID_CLM_REQ_SERVER_STATUS 1020 // request server status
+#define PROTMESSID_CLM_SERVER_STATUS     1021 // server status response
 
 // special IDs
 #define PROTMESSID_SPECIAL_SPLIT_MESSAGE 2001 // a container for split messages
@@ -157,7 +157,6 @@ void CreateReqChannelLevelListMes();
     void CreateCLChannelLevelListMes ( const CHostAddress& InetAddr, const CVector<uint16_t>& vecLevelList, const int iNumClients );
     void CreateCLRegisterServerResp ( const CHostAddress& InetAddr, const ESvrRegResult eResult );
     void CreateCLServerStatusMes ( const CHostAddress& InetAddr, const QString strServerStatus );
-
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,

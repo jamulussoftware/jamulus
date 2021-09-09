@@ -1,4 +1,3 @@
-
 #import "ios_app_delegate.h"
 
 @interface QIOSApplicationDelegate ()
@@ -7,10 +6,8 @@
 
 @implementation QIOSApplicationDelegate
 
-
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+{
     return YES;
 }
 @end

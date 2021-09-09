@@ -65,6 +65,10 @@ CChatDlg::CChatDlg ( QWidget* parent ) : CBaseDlg ( parent, Qt::Window ) // use 
     connect ( action, SIGNAL ( triggered() ), this, SLOT ( close() ) );
 #endif
 
+#if defined( ANDROID ) || defined( Q_OS_ANDROID )
+    pEditMenu->addAction ( tr ( "&Close" ), this, SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_W ) );
+#endif
+
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 
@@ -128,7 +132,7 @@ void CChatDlg::OnAnchorClicked ( const QUrl& Url )
     {
         if ( QMessageBox::question ( this,
                                      APP_NAME,
-                                     tr ( "Do you want to open the link" ) + " <b>" + Url.toString() + "</b> " + tr ( "in an external browser?" ),
+                                     tr ( "Do you want to open the link '%1' in your browser?" ).arg ( "<b>" + Url.toString() + "</b>" ),
                                      QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
         {
             QDesktopServices::openUrl ( Url );

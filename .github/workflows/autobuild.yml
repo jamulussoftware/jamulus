@@ -120,7 +120,7 @@ jobs:
              target_os:             macos
              building_on_os:        macos-10.15
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
+             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
 
@@ -128,7 +128,7 @@ jobs:
              target_os:             macos
              building_on_os:        macos-10.15
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.9.9"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh"
+             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh do_not_sign"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
              uses_codeql:           false
 
@@ -139,6 +139,14 @@ jobs:
              cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
              cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
              uses_codeql:           true
+
+           - config_name:           Windows JACK (artifact)
+             target_os:             windows
+             building_on_os:        windows-latest
+             cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1 -BuildOption jackonwindows
+             cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1 -BuildOption jackonwindows
+             cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1 -BuildOption jackonwindows
+             uses_codeql:           false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
@@ -178,11 +186,17 @@ jobs:
 
       # Build
       - name:                       "Build for ${{ matrix.config.config_name }}"
+        id:                         step_macos_build
         if:                         ${{ matrix.config.cmd2_build }}
         run:                        ${{ matrix.config.cmd2_build }} ${{ github.workspace }}
         env:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+          MACOS_CERTIFICATE:          ${{ secrets.MACOS_CERT}}
+          MACOS_CERTIFICATE_PWD:      ${{ secrets.MACOS_CERT_PWD }}
+          MACOS_CERTIFICATE_ID:       ${{ secrets.MACOS_CERT_ID }}
+          NOTARIZATION_PASSWORD:      ${{ secrets.NOTARIZATION_PASSWORD }}
+          KEYCHAIN_PASSWORD:          ${{ secrets.KEYCHAIN_PASSWORD }}
 
       - name:                       "Post-Build for ${{ matrix.config.config_name }}"
         id:                         step_cmd3_postbuild
@@ -212,9 +226,27 @@ jobs:
           retention-days:           31
           if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
 
+      # Notarize macOS build, if needed
+      - name: "Notarize macOS Release Build"
+        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        id: notarize-macOS-app
+        uses: devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
+        with:
+          product-path: deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          primary-bundle-id: io.jamulus.Jamulus
+          appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
+          appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
+      # Apply successful notarization
+      - name: "Staple macOS Release Build"
+        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        id: staple-macOS-app
+        uses: devbotsxyz/xcode-staple@v1
+        with:
+          product-path: deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+
       # Upload Artifact to Release
       - name:                       Upload Artifact 1 to Release
-        if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') &&  contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id:                         upload-release-asset1
         uses:                       actions/upload-release-asset@v1
         env:
@@ -224,6 +256,7 @@ jobs:
           asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_content_type:       application/octet-stream
+
       # Upload Artifact to Release
       - name:                       Upload Artifact 2 to Release
         if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_2 != '') &&  contains(needs.create_release.outputs.publish_to_release, 'true') }}

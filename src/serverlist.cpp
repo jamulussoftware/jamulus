@@ -25,24 +25,95 @@
 #include "serverlist.h"
 
 /* Implementation *************************************************************/
+
+// --- CServerListEntry ---
+CServerListEntry CServerListEntry::parse ( QString strHAddr,
+                                           QString strLHAddr,
+                                           QString sName,
+                                           QString sCity,
+                                           QString strCountry,
+                                           QString strNumClients,
+                                           bool    isPermanent,
+                                           bool    bEnableIPv6 )
+{
+    CHostAddress haServerHostAddr;
+    NetworkUtil::ParseNetworkAddress ( strHAddr, haServerHostAddr, bEnableIPv6 );
+    if ( CHostAddress() == haServerHostAddr )
+    {
+        // do not proceed without server host address!
+        return CServerListEntry();
+    }
+
+    CHostAddress haServerLocalAddr;
+    NetworkUtil::ParseNetworkAddress ( strLHAddr, haServerLocalAddr, bEnableIPv6 );
+    if ( haServerLocalAddr.iPort == 0 )
+    {
+        haServerLocalAddr.iPort = haServerHostAddr.iPort;
+    }
+
+    // Capture parsing success of integers
+    bool ok;
+
+    QLocale::Country lcCountry = QLocale::AnyCountry;
+    int              iCountry  = strCountry.trimmed().toInt ( &ok );
+    if ( ok && iCountry >= 0 && iCountry <= QLocale::LastCountry )
+    {
+        lcCountry = static_cast<QLocale::Country> ( iCountry );
+    }
+
+    int iNumClients = strNumClients.trimmed().toInt ( &ok );
+    if ( !ok )
+    {
+        iNumClients = 10;
+    }
+
+    return CServerListEntry ( haServerHostAddr,
+                              haServerLocalAddr,
+                              CServerCoreInfo ( FromBase64ToString ( sName.trimmed().left ( MAX_LEN_SERVER_NAME ) ),
+                                                lcCountry,
+                                                FromBase64ToString ( sCity.trimmed().left ( MAX_LEN_SERVER_CITY ) ),
+                                                iNumClients,
+                                                isPermanent ) );
+}
+
+QString CServerListEntry::toCSV()
+{
+    QStringList sl;
+
+    sl.append ( this->HostAddr.toString() );
+    sl.append ( this->LHostAddr.toString() );
+    sl.append ( ToBase64 ( this->strName ) );
+    sl.append ( ToBase64 ( this->strCity ) );
+    sl.append ( QString::number ( this->eCountry ) );
+    sl.append ( QString::number ( this->iMaxNumClients ) );
+    sl.append ( QString::number ( this->bPermanentOnline ) );
+
+    return sl.join ( ";" );
+}
+
+// --- CServerListManager ---
 CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
+                                         const QString& strServerListFileName,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
                                          const QString& strServerPublicIP,
                                          const int      iNumChannels,
+                                         const bool     bNEnableIPv6,
                                          CProtocol*     pNConLProt ) :
     eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
-    strMinServerVersion ( "" ),              // disable version check with empty version
-    pConnLessProtocol ( pNConLProt ),
+    bEnableIPv6 ( bNEnableIPv6 ),
     eSvrRegStatus ( SRS_UNREGISTERED ),
+    strMinServerVersion ( "" ), // disable version check with empty version
+    pConnLessProtocol ( pNConLProt ),
     iSvrRegRetries ( 0 )
 {
-    // set the directory server address
+    // set the directory server address (also bIsCentralServer)
     SetCentralServerAddress ( sNCentServAddr );
 
     // set the server internal address, including internal port number
     QHostAddress qhaServerPublicIP;
+
     if ( strServerPublicIP == "" )
     {
         // No user-supplied override via --serverpublicip -> use auto-detection
@@ -55,6 +126,16 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     }
     qDebug() << "Using" << qhaServerPublicIP.toString() << "as external IP.";
     SlaveCurLocalHostAddress = CHostAddress ( qhaServerPublicIP, iNPortNum );
+
+    if ( bEnableIPv6 )
+    {
+        // set the server internal address, including internal port number
+        QHostAddress qhaServerPublicIP6;
+
+        qhaServerPublicIP6 = NetworkUtil::GetLocalAddress6().InetAddr;
+        qDebug() << "Using" << qhaServerPublicIP6.toString() << "as external IPv6.";
+        SlaveCurLocalHostAddress6 = CHostAddress ( qhaServerPublicIP6, iNPortNum );
+    }
 
     // prepare the server info information
     QStringList slServInfoSeparateParams;
@@ -69,20 +150,15 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         iServInfoNumSplitItems = slServInfoSeparateParams.count();
     }
 
-    // per definition, the very first entry is this server and this entry will
-    // never be deleted
-    ServerList.clear();
-
     // Init server list entry (server info for this server) with defaults. Per
     // definition the client substitutes the IP address of the directory server
-    // itself for his server list. If we are the directory server, we assume that
-    // we have a permanent server.
+    // itself for his server list. If we are a directory server, we assume that
+    // we are a permanent server.
     CServerListEntry
-        ThisServerListEntry ( CHostAddress(), SlaveCurLocalHostAddress, "", QLocale::system().country(), "", iNumChannels, GetIsCentralServer() );
+        ThisServerListEntry ( CHostAddress(), SlaveCurLocalHostAddress, "", QLocale::system().country(), "", iNumChannels, bIsCentralServer );
 
     // parse the server info string according to definition:
-    // [this server name];[this server city]; ...
-    //    [this server country as QLocale ID]; ...
+    // [this server name];[this server city];[this server country as QLocale ID] (; ... ignored)
     // per definition, we expect at least three parameters
     if ( iServInfoNumSplitItems >= 3 )
     {
@@ -93,43 +169,59 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         ThisServerListEntry.strCity = slServInfoSeparateParams[1].left ( MAX_LEN_SERVER_CITY );
 
         // [this server country as QLocale ID]
-        const int iCountry = slServInfoSeparateParams[2].toInt();
-
-        if ( !slServInfoSeparateParams[2].isEmpty() && ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
+        bool      ok;
+        const int iCountry = slServInfoSeparateParams[2].toInt ( &ok );
+        if ( ok && iCountry >= 0 && iCountry <= QLocale::LastCountry )
         {
             ThisServerListEntry.eCountry = static_cast<QLocale::Country> ( iCountry );
         }
     }
 
+    // per definition, the very first entry is this server and this entry will
+    // never be deleted
+    ServerList.clear();
+
     // per definition, the first entry in the server list is the own server
     ServerList.append ( ThisServerListEntry );
 
-    // whitelist parsing
-    if ( !strServerListFilter.isEmpty() )
-    {
-        // split the different parameter strings
-        QStringList  slWhitelistAddresses = strServerListFilter.split ( ";" );
-        QHostAddress CurWhiteListAddress;
+    // Clear the persistent serverlist file name
+    ServerListFileName.clear();
 
-        for ( int iIdx = 0; iIdx < slWhitelistAddresses.size(); iIdx++ )
+    if ( bIsCentralServer )
+    {
+        // Load any persistent server list (create it if it is not there)
+        if ( !strServerListFileName.isEmpty() && ServerListFileName.isEmpty() )
         {
-            // check for special case: [version]
-            if ( ( slWhitelistAddresses.at ( iIdx ).length() > 2 ) && ( slWhitelistAddresses.at ( iIdx ).left ( 1 ) == "[" ) &&
-                 ( slWhitelistAddresses.at ( iIdx ).right ( 1 ) == "]" ) )
+            CentralServerLoadServerList ( strServerListFileName );
+        }
+
+        // whitelist parsing
+        if ( !strServerListFilter.isEmpty() )
+        {
+            // split the different parameter strings
+            QStringList  slWhitelistAddresses = strServerListFilter.split ( ";" );
+            QHostAddress CurWhiteListAddress;
+
+            for ( int iIdx = 0; iIdx < slWhitelistAddresses.size(); iIdx++ )
             {
-                strMinServerVersion = slWhitelistAddresses.at ( iIdx ).mid ( 1, slWhitelistAddresses.at ( iIdx ).length() - 2 );
-            }
-            else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
-            {
-                vWhiteList << CurWhiteListAddress;
-                qInfo() << qUtf8Printable ( QString ( "Whitelist entry added: %1" ).arg ( CurWhiteListAddress.toString() ) );
+                // check for special case: [version]
+                if ( ( slWhitelistAddresses.at ( iIdx ).length() > 2 ) && ( slWhitelistAddresses.at ( iIdx ).left ( 1 ) == "[" ) &&
+                     ( slWhitelistAddresses.at ( iIdx ).right ( 1 ) == "]" ) )
+                {
+                    strMinServerVersion = slWhitelistAddresses.at ( iIdx ).mid ( 1, slWhitelistAddresses.at ( iIdx ).length() - 2 );
+                }
+                else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
+                {
+                    vWhiteList << CurWhiteListAddress;
+                    qInfo() << qUtf8Printable ( QString ( "Whitelist entry added: %1" ).arg ( CurWhiteListAddress.toString() ) );
+                }
             }
         }
     }
 
     // for slave servers start the one shot timer for determining if it is a
     // permanent server
-    if ( !GetIsCentralServer() )
+    if ( !bIsCentralServer )
     {
         // 1 minute = 60 * 1000 ms
         QTimer::singleShot ( SERVLIST_TIME_PERMSERV_MINUTES * 60000, this, SLOT ( OnTimerIsPermanent() ) );
@@ -149,6 +241,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     QObject::connect ( &TimerRegistering, &QTimer::timeout, this, &CServerListManager::OnTimerRegistering );
 
     QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout, this, &CServerListManager::OnTimerCLRegisterServerResp );
+
+    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CServerListManager::OnAboutToQuit );
 }
 
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
@@ -170,10 +264,7 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
     // now save the new name
     strCentralServerAddress = sNCentServAddr;
 
-    // per definition: If we are in server mode and the directory server address
-    // is the localhost address, and set to Custom, we are in directory server mode.
-    bIsCentralServer = ( ( !strCentralServerAddress.toLower().compare ( "localhost" ) || !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-                         ( eCentralServerAddressType == AT_CUSTOM ) );
+    SetCentralServerState();
 }
 
 void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
@@ -189,10 +280,21 @@ void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
     // now update the server type
     eCentralServerAddressType = eNCSAT;
 
+    SetCentralServerState();
+}
+
+void CServerListManager::SetCentralServerState()
+{
     // per definition: If we are in server mode and the directory server address
     // is the localhost address, and set to Custom, we are in directory server mode.
-    bIsCentralServer = ( ( !strCentralServerAddress.toLower().compare ( "localhost" ) || !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-                         ( eCentralServerAddressType == AT_CUSTOM ) );
+    bool bNCentralServer =
+        ( ( !strCentralServerAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
+          ( eCentralServerAddressType == AT_CUSTOM ) );
+    if ( bIsCentralServer != bNCentralServer )
+    {
+        bIsCentralServer = bNCentralServer;
+        qInfo() << ( bIsCentralServer ? "Now a directory server" : "No longer a directory server" );
+    }
 }
 
 void CServerListManager::Update()
@@ -281,11 +383,8 @@ void CServerListManager::OnTimerPollList()
 
     QMutexLocker locker ( &Mutex );
 
-    // Check all list entries except of the very first one (which is the directory
-    // server entry) if they are still valid.
-    // Note that we have to use "ServerList.size()" function in the for loop
-    // since we may remove elements from the server list inside the for loop.
-    for ( int iIdx = 1; iIdx < ServerList.size(); )
+    // Check all list entries are still valid (omitting the directory server itself)
+    for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
         // 1 minute = 60 * 1000 ms
         if ( ServerList[iIdx].RegisterTime.elapsed() > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
@@ -293,11 +392,6 @@ void CServerListManager::OnTimerPollList()
             // remove this list entry
             vecRemovedHostAddr.Add ( ServerList[iIdx].HostAddr );
             ServerList.removeAt ( iIdx );
-        }
-        else
-        {
-            // move to the next entry (only on else)
-            iIdx++;
         }
     }
 
@@ -353,19 +447,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
         // Check if server is already registered.
         // The very first list entry must not be checked since
         // this is per definition the directory server (i.e., this server)
-        int iSelIdx = INVALID_INDEX; // initialize with an illegal value
-
-        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
-        {
-            if ( ServerList[iIdx].HostAddr == InetAddr )
-            {
-                // store entry index
-                iSelIdx = iIdx;
-
-                // entry found, leave for-loop
-                continue;
-            }
-        }
+        int iSelIdx = IndexOf ( InetAddr );
 
         // if server is not yet registered, we have to create a new entry
         if ( iSelIdx == INVALID_INDEX )
@@ -405,24 +487,13 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
 
         QMutexLocker locker ( &Mutex );
 
-        const int iCurServerListSize = ServerList.size();
-
         // Find the server to unregister in the list. The very first list entry
-        // must not be checked since this is per definition the directory server
+        // must not be removed since this is per definition the directory server
         // (i.e., this server).
-        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
+        int iIdx = IndexOf ( InetAddr );
+        if ( iIdx > 0 )
         {
-            if ( ServerList[iIdx].HostAddr == InetAddr )
-            {
-                // remove this list entry
-                ServerList.removeAt ( iIdx );
-
-                // entry found, leave for-loop (it is important to exit the
-                // for loop since when we remove an item from the server list,
-                // "iCurServerListSize" is not correct anymore and we could get
-                // a segmentation fault)
-                break;
-            }
+            ServerList.removeAt ( iIdx );
         }
     }
 }
@@ -469,6 +540,7 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                     // servers behind a NAT and dealing with external, public
                     // clients.
                     vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
+                    // ?? Shouldn't this send the ping, as below ??
                 }
                 else
                 {
@@ -487,6 +559,107 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
         // normal list after each other
         pConnLessProtocol->CreateCLRedServerListMes ( InetAddr, vecServerInfo );
         pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
+    }
+}
+
+int CServerListManager::IndexOf ( CHostAddress haSearchTerm )
+{
+    // Find the server in the list. The very first list entry
+    // per definition is the directory server
+    // (i.e., this server).
+    for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
+    {
+        if ( ServerList[iIdx].HostAddr == haSearchTerm )
+        {
+            return iIdx;
+        }
+    }
+    return INVALID_INDEX;
+}
+
+void CServerListManager::CentralServerLoadServerList ( const QString strServerList )
+{
+    QFile file ( strServerList );
+
+    if ( !file.open ( QIODevice::ReadWrite | QIODevice::Text ) )
+    {
+        qWarning() << qUtf8Printable (
+            QString ( "Could not open '%1' for read/write.  Please check that Jamulus has permission (and that there is free space)." )
+                .arg ( ServerListFileName ) );
+        return;
+    }
+
+    // use entire file content for the persistent server list
+    // and remember it for later writing
+    qInfo() << "Setting persistent server list file:" << strServerList;
+    ServerListFileName = strServerList;
+    CHostAddress haServerHostAddr;
+
+    QTextStream in ( &file );
+    while ( !in.atEnd() )
+    {
+        QString     line   = in.readLine();
+        QStringList slLine = line.split ( ";" );
+        if ( slLine.count() != 7 )
+        {
+            qWarning() << qUtf8Printable ( QString ( "Could not parse '%1' successfully - bad line" ).arg ( line ) );
+            continue;
+        }
+
+        NetworkUtil::ParseNetworkAddress ( slLine[0], haServerHostAddr, bEnableIPv6 );
+        int iIdx = IndexOf ( haServerHostAddr );
+        if ( iIdx != INVALID_INDEX )
+        {
+            qWarning() << qUtf8Printable ( QString ( "Skipping '%1' - duplicate host %2" ).arg ( line ).arg ( haServerHostAddr.toString() ) );
+            continue;
+        }
+
+        CServerListEntry serverListEntry =
+            CServerListEntry::parse ( slLine[0], slLine[1], slLine[2], slLine[3], slLine[4], slLine[5], slLine[6].toInt() != 0, bEnableIPv6 );
+
+        // We expect servers to have addresses...
+        if ( ( CHostAddress() == serverListEntry.HostAddr ) )
+        {
+            qWarning() << qUtf8Printable ( QString ( "Could not parse '%1' successfully - invalid host" ).arg ( line ) );
+            continue;
+        }
+
+        qInfo() << qUtf8Printable ( QString ( "Loading registration for %1 (%2): %3" )
+                                        .arg ( serverListEntry.HostAddr.toString() )
+                                        .arg ( serverListEntry.LHostAddr.toString() )
+                                        .arg ( serverListEntry.strName ) );
+        ServerList.append ( serverListEntry );
+    }
+}
+
+void CServerListManager::CentralServerSaveServerList()
+{
+    if ( ServerListFileName.isEmpty() )
+    {
+        return;
+    }
+
+    QFile file ( ServerListFileName );
+
+    if ( !file.open ( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
+    {
+        // Not a useable file
+        qWarning() << QString ( tr ( "Could not write to '%1'" ) ).arg ( ServerListFileName );
+        ServerListFileName.clear();
+
+        return;
+    }
+
+    QTextStream out ( &file );
+    // This loop *deliberately* omits the first element in the list
+    // (that's this server, which is added automatically on start up, not read)
+    for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
+    {
+        qInfo() << qUtf8Printable ( QString ( "Saving registration for %1 (%2): %3" )
+                                        .arg ( ServerList[iIdx].HostAddr.toString() )
+                                        .arg ( ServerList[iIdx].LHostAddr.toString() )
+                                        .arg ( ServerList[iIdx].strName ) );
+        out << ServerList[iIdx].toCSV() << "\n";
     }
 }
 
@@ -578,7 +751,9 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
-    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr, SlaveCurCentServerHostAddress ) )
+
+    // Allow IPv4 only for communicating with Directory Servers
+    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr, SlaveCurCentServerHostAddress, false ) )
     {
         if ( bIsRegister )
         {

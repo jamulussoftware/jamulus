@@ -84,7 +84,6 @@ public:
     bool IsEnabled() { return bIsEnabled; }
 
     void                SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
-    bool                GetAddress ( CHostAddress& RetAddr );
     const CHostAddress& GetAddress() const { return InetAddr; }
 
     void ResetInfo()

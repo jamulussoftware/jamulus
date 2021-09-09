@@ -165,6 +165,7 @@ public:
               const QString&     strHTMLStatusFileName,
               const QString&     strNotifyServer,
               const QString&     strCentralServer,
+              const QString&     strServerListFileName,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
               const QString&     strServerPublicIP,
@@ -175,6 +176,7 @@ public:
               const bool         bNUseMultithreading,
               const bool         bDisableRecording,
               const bool         bNDelayPan,
+              const bool         bNEnableIPv6,
               const ELicenceType eNLicenceType );
 
     virtual ~CServer();
@@ -213,6 +215,9 @@ public:
     // delay panning
     void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
     bool IsDelayPanningEnabled() { return bDelayPan; }
+
+    // IPv6 Enabled
+    bool IsIPv6Enabled() { return bEnableIPv6; }
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
@@ -258,8 +263,10 @@ protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum ) { return vecChannels[iChanNum].IsConnected(); }
 
-    int                   GetFreeChan();
-    int                   FindChannel ( const CHostAddress& CheckAddr );
+    int                   FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew = false );
+    void                  InitChannel ( const int iNewChanID, const CHostAddress& InetAddr );
+    void                  FreeChannel ( const int iCurChanID );
+    void                  DumpChannels ( const QString& title );
     int                   GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();
 
@@ -309,8 +316,13 @@ protected:
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
-    CChannel  vecChannels[MAX_NUM_CHANNELS];
-    int       iMaxNumChannels;
+    CChannel vecChannels[MAX_NUM_CHANNELS];
+    int      iMaxNumChannels;
+
+    int    iCurNumChannels;
+    int    vecChannelOrder[MAX_NUM_CHANNELS];
+    QMutex MutexChanOrder;
+
     CProtocol ConnLessProtocol;
     QMutex    Mutex;
     QMutex    MutexWelcomeMessage;
@@ -380,6 +392,9 @@ protected:
 
     // for delay panning
     bool bDelayPan;
+
+    // enable IPv6
+    bool bEnableIPv6;
 
     // messaging
     QString      strWelcomeMessage;

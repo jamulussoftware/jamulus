@@ -1102,7 +1102,14 @@ void CAudioMixerBoard::UpdateTitle()
         strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
     }
 
-    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
+    // replace & signs with && (See Qt documentation for QLabel)
+    // if strServerName includes an "&" sign, this is interpreted as keyboard shortcut (#1886)
+    // it might be possible to find a more elegant solution here?
+
+    QString strEscServerName = strServerName;
+    strEscServerName.replace ( "&", "&&" );
+
+    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strEscServerName );
     setAccessibleName ( title() );
 }
 

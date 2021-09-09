@@ -32,12 +32,12 @@
      <item>
       <widget class="QLabel" name="lblList">
        <property name="text">
-        <string>List</string>
+        <string>Directory</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cbxCentServAddrType"/>
+      <widget class="QComboBox" name="cbxDirectoryServer"/>
      </item>
      <item>
       <widget class="QLabel" name="lblFilter">

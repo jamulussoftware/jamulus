@@ -7,10 +7,11 @@
 ###  PARAMETERS  ###
 ####################
 
-# Get the source path via parameter
+# Get the source path via parameter and set BuildOption to empty when not provided
 param (
     [string] $jamulus_project_path = $Env:jamulus_project_path,
-    [string] $jamulus_buildversionstring = $Env:jamulus_buildversionstring
+    [string] $jamulus_buildversionstring = $Env:jamulus_buildversionstring,
+    [string] $BuildOption = ""
 )
 # Sanity check of parameters
 if (("$jamulus_project_path" -eq $null) -or ("$jamulus_project_path" -eq "")) {
@@ -26,6 +27,12 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
     $jamulus_buildversionstring = "NoVersion"
 }
 
+# Amend BuildOption when needed, only needed when the name build option in the artifact needs to be different
+switch ($BuildOption)
+{
+    "jackonwindows"   {$BuildOption = "jack"; break}
+}
+
 
 ###################
 ###  PROCEDURE  ###
@@ -33,11 +40,17 @@ if (($jamulus_buildversionstring -eq $null) -or ($jamulus_buildversionstring -eq
 
 # Rename the file
 echo "rename"
-$artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win.exe"
+if ($BuildOption -ne "")
+{
+    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win_${BuildOption}.exe"
+}
+else
+{
+    $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win.exe"
+}
+
 echo "rename deploy file to $artifact_deploy_filename"
 cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
-
-
 
 
 Function github_output_value

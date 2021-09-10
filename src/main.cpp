@@ -749,6 +749,7 @@ int main ( int argc, char** argv )
 #else
 #    if defined( Q_OS_IOS )
     bUseGUI        = true;
+    bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
 
     // bUseMultithreading = true;
     QApplication* pApp = new QApplication ( argc, argv );

@@ -1,4 +1,4 @@
-VERSION = 3.8.0
+VERSION = 3.8.0dev
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -45,7 +45,8 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_pl_PL.ts \
     src/res/translation/translation_sk_SK.ts \
     src/res/translation/translation_it_IT.ts \
-    src/res/translation/translation_sv_SE.ts
+    src/res/translation/translation_sv_SE.ts \
+    src/res/translation/translation_zh_CN.ts
 
 INCLUDEPATH += src
 
@@ -93,10 +94,22 @@ win32 {
 
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
-        message(Using Jack instead of ASIO.)
-
-        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
-            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+        contains(QT_ARCH, "i386") {
+            exists("C:/Program Files (x86)") {
+                message("Cross compilation build")
+                programfilesdir = "C:/Program Files (x86)"
+            } else {
+                message("Native i386 build")
+                programfilesdir = "C:/Program Files"
+            }
+            libjackname = "libjack.lib"
+        } else {
+            message("Native x86_64 build")
+            programfilesdir = "C:/Program Files"
+            libjackname = "libjack64.lib"
+        }
+        !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
+            message("Warning: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
         }
 
         HEADERS -= windows/sound.h
@@ -106,19 +119,20 @@ win32 {
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_ASIO
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
-        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
+        INCLUDEPATH += "$${programfilesdir}/JACK2/include"
+        LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
     }
+
 } else:macx {
     contains(CONFIG, "server_bundle") {
         message(The generated application bundle will run a server instance.)
 
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
-        MACOSX_BUNDLE_ICON_FILE = jamulus-server-icon-2020.icns
+        MACOSX_BUNDLE_ICON.files = mac/jamulus-server-icon-2020.icns
         RC_FILE = mac/jamulus-server-icon-2020.icns
     } else {
-        MACOSX_BUNDLE_ICON_FILE = mainicon.icns
+        MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
         RC_FILE = mac/mainicon.icns
     }
 
@@ -128,11 +142,20 @@ win32 {
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
-    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
+    OSX_ENTITLEMENTS.files = Jamulus.entitlements
+    OSX_ENTITLEMENTS.path = Contents/Resources 
+    QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
+    
     macx-xcode {
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
+        XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
+        XCODE_ENTITLEMENTS.value = Jamulus.entitlements
+        QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
+        MACOSX_BUNDLE_ICON.path = Contents/Resources
+        QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
     } else {
         QMAKE_INFO_PLIST = mac/Info-make.plist
     }
@@ -151,7 +174,7 @@ win32 {
 
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+                 message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
 
@@ -171,14 +194,10 @@ win32 {
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
-    QMAKE_TARGET_BUNDLE_PREFIX = com.jamulussoftware.jamulus
+    QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
-    LIBS += -framework CoreFoundation \
-        -framework CoreServices \
-        -framework AVFoundation \
-        -framework CoreMIDI \
-        -framework AudioToolbox \
-        -framework Foundation
+    LIBS += -framework AVFoundation \
+        -framework AudioToolbox
 } else:android {
     # we want to compile with C++14
     CONFIG += c++14
@@ -716,6 +735,7 @@ DISTFILES += ChangeLog \
     src/res/translation/translation_it_IT.qm \
     src/res/translation/translation_sv_SE.qm \
     src/res/translation/translation_sk_SK.qm \
+    src/res/translation/translation_zh_CN.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

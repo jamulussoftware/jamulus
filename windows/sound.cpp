@@ -54,7 +54,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     // if the selected driver was not found, return an error message
     if ( iDriverIdx == INVALID_INDEX )
     {
-        return tr ( "The current selected audio device is no longer present in the system." );
+        return tr ( "The selected audio device is no longer present in the system. Please check your audio device." );
     }
 
     // Save number of channels from last driver
@@ -73,7 +73,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     {
         // clean up and return error string
         asioDrivers->removeCurrentDriver();
-        return tr ( "The audio driver could not be initialized." );
+        return tr ( "Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings." );
     }
 
     // check device capabilities if it fulfills our requirements
@@ -103,7 +103,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
             OpenDriverSetup();
             QMessageBox::question ( nullptr,
                                     APP_NAME,
-                                    "Are you done with your ASIO driver settings of device " + GetDeviceName ( iDriverIdx ) + "?",
+                                    "Are you done with your ASIO driver settings of " + GetDeviceName ( iDriverIdx ) + "?",
                                     QMessageBox::Yes );
         }
 
@@ -143,9 +143,10 @@ QString CSound::CheckDeviceCapabilities()
     if ( ( CanSaRateReturn == ASE_NoClock ) || ( CanSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
-        return tr ( "The audio device does not support the "
-                    "required sample rate. The required sample rate is: " ) +
-               QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz";
+        return QString ( tr ( "The selected audio device is incompatible "
+                              "since it doesn't support a sample rate of %1 Hz. Please select another "
+                              "device." ) )
+            .arg ( SYSTEM_SAMPLE_RATE_HZ );
     }
 
     // check if sample rate can be set
@@ -154,15 +155,11 @@ QString CSound::CheckDeviceCapabilities()
     if ( ( SetSaRateReturn == ASE_NoClock ) || ( SetSaRateReturn == ASE_InvalidMode ) || ( SetSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
-        return tr ( "The audio device does not support setting the required sampling "
-                    "rate. This error can happen if you have an audio interface like the "
-                    "Roland UA-25EX where you set the sample rate with a hardware switch "
-                    "on the audio device. If this is the case, please change the sample rate "
-                    "to " ) +
-               QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) +
-               tr ( " Hz on the "
-                    "device and restart the " ) +
-               APP_NAME + tr ( " software." );
+        return QString ( tr ( "The current audio device configuration is incompatible "
+                              "because the sample rate couldn't be set to %2 Hz. Please check for a hardware switch or "
+                              "driver setting to set the sample rate manually and restart %1." ) )
+            .arg ( APP_NAME )
+            .arg ( SYSTEM_SAMPLE_RATE_HZ );
     }
 
     // check the number of available channels
@@ -171,10 +168,9 @@ QString CSound::CheckDeviceCapabilities()
     if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) || ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
     {
         // return error string
-        return tr ( "The audio device does not support the "
-                    "required number of channels. The required number of channels "
-                    "for input and output is: " ) +
-               QString().setNum ( NUM_IN_OUT_CHANNELS );
+        return QString ( tr ( "The selected audio device is incompatible since it doesn't support "
+                              "%1 in/out channels. Please select another device or configuration." ) )
+            .arg ( NUM_IN_OUT_CHANNELS );
     }
 
     // clip number of input/output channels to our maximum
@@ -207,7 +203,8 @@ QString CSound::CheckDeviceCapabilities()
         if ( !CheckSampleTypeSupported ( channelInfosInput[i].type ) )
         {
             // return error string
-            return tr ( "Required audio sample format not available." );
+            return tr ( "The selected audio device is incompatible since "
+                        "the required audio sample format isn't available. Please use another device." );
         }
 
         // store the name of the channel and check if channel mixing is supported
@@ -237,7 +234,8 @@ QString CSound::CheckDeviceCapabilities()
         if ( !CheckSampleTypeSupported ( channelInfosOutput[i].type ) )
         {
             // return error string
-            return tr ( "Required audio sample format not available." );
+            return tr ( "The selected audio device is incompatible since "
+                        "the required audio sample format isn't available. Please use another device." );
         }
     }
 
@@ -555,7 +553,7 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
         throw CGenErr ( "<b>" + tr ( "No ASIO audio device driver found." ) + "</b><br><br>" +
                         QString ( tr ( "Please install an ASIO driver before running %1. "
                                        "If you own a device with ASIO support, install its official ASIO driver. "
-                                       "If not, you'll need to download and install a universal driver like ASIO4ALL." ) )
+                                       "If not, you'll need to install a universal driver like ASIO4ALL." ) )
                             .arg ( APP_NAME ) );
     }
     asioDrivers->removeCurrentDriver();

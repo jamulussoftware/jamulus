@@ -1,4 +1,58 @@
 
+### 3.8.0dev <- NOTE: the release version number will be 3.8.1 ###
+
+- Add IPv6 support for direct connections (#1017, #1938).
+  (contributed by @jardous, @softins)
+
+- Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937).
+  (contributed by @emlynmac)
+
+- Documentation: Update typo on links in compiling.md file (#1824).
+  (contributed by @jujudusud)
+
+- Documentation: Number range command line error messages reworded accurately (#1978).
+  (contributed by @DavidSavinkoff)
+
+- CLI: Re-order and refactor help for client/server validation (#1896).
+  (contributed by @pljones)
+
+- CLI: Jamulus now shows a link to the Website for translated content (#1759).
+  (contributed by @henkdegroot)
+  
+- Client: JACK support on Windows has been improved (#1718).
+  (contributed by @jujudusud, @henkdegroot)
+
+- Client: Rewrote multiple error messages to improve UX (#1568, #1732).
+  (contributed by @ann0see)
+
+- Client: Add custom directory servers to Connect Dialog (#1869, #1894).
+  (contributed by @jp8)
+
+- Client: Re-arrange existing UI menubar items (#1915, #1926)
+  (constributed by @jp8)
+
+- Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722, #1731).
+  (contributed by @henkdegroot)
+
+- Server: Jam Recorder's internal locking and initiatlization code has been made more robust (#1826).
+  (contributed by @cdmahoney)
+
+- Server: The list of servers registered on a directory can now be saved during directory restart. Use the new
+  --directoryfile CLI option to use this feature. (#1867)
+  (contributed by @pljones)
+
+- Android: Add close button on Android to enhance UX (#1763, #1876).
+  (contributed by @ngocdh)
+
+- MacOS: Keyboard shortcuts now also work on macOS (#1726, #1873).
+  (contributed by @henkdegroot)
+
+- Bug Fix: Mute myself has been made more consistent (#1838).
+  (contributed by @ngocdh)
+
+- Bug Fix: Fix ampersand not being shown correctly on mixer (#1886, #1893).
+  (contributed by @HughePaul, @ann0see)
+
 ### 3.8.0 (2021-06-02) ###
 
 - The term "Central server" has been replaced with "Directory server" (#1407, #1715, #1629).

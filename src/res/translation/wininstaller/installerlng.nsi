@@ -31,3 +31,6 @@
 
 !insertmacro MUI_LANGUAGE "Portuguese"
 !include "${ROOT_PATH}\src\res\translation\wininstaller\pt.nsi"
+
+!insertmacro MUI_LANGUAGE "SimpChinese"
+!include "${ROOT_PATH}\src\res\translation\wininstaller\zh_cn.nsi"

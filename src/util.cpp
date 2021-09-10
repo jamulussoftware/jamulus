@@ -486,6 +486,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                                "<p>Jeroen van Veldhuizen (<a href=\"https://github.com/jeroenvv\">jeroenvv</a>)</p>"
                                "<p>Reinhard (<a href=\"https://github.com/reinhardwh\">reinhardwh</a>)</p>"
                                "<p>Stefan Menzel (<a href=\"https://github.com/menzels\">menzels</a>)</p>"
+                               "<p>Dau Huy Ngoc (<a href=\"https://github.com/ngocdh\">ngocdh</a>)</p>"
+                               "<p>Jiri Popek (<a href=\"https://github.com/jardous\">jardous</a>)</p>"
+                               "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
                                "<br>" +
                                tr ( "For details on the contributions check out the " ) +
                                "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) +
@@ -531,7 +534,10 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               "<p><b>" +
                               tr ( "Slovak" ) +
                               "</b></p>"
-                              "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" );
+                              "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" +
+                              "<p><b>" + tr ( "Simplified Chinese" ) +
+                              "</b></p>"
+                              "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -666,75 +672,117 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
 * Other Classes                                                                *
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
-bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress )
+bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAddress, bool bEnableIPv6 )
 {
     QHostAddress InetAddr;
-    quint16      iNetPort = DEFAULT_PORT_NUMBER;
+    unsigned int iNetPort = DEFAULT_PORT_NUMBER;
+
+    // qInfo() << qUtf8Printable ( QString ( "Parsing network address %1" ).arg ( strAddress ) );
 
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
 
-    // parse input address for the type "IP4 address:port number" or
-    // "[IP6 address]:port number" assuming the syntax is correctly given
-    QStringList slAddress = strAddress.split ( ":" );
-    QString     strSep    = ":";
-    bool        bIsIP6    = false;
+    // Allow the following address formats:
+    // [addr4or6]
+    // [addr4or6]:port
+    // addr4
+    // addr4:port
+    // hostname
+    // hostname:port
+    // (where addr4or6 is a literal IPv4 or IPv6 address, and addr4 is a literal IPv4 address
 
-    if ( slAddress.count() > 2 )
+    bool    bLiteralAddr = false;
+    QRegExp rx1 ( "^\\[([^]]*)\\](?::(\\d+))?$" ); // [addr4or6] or [addr4or6]:port
+    QRegExp rx2 ( "^([^:]*)(?::(\\d+))?$" );       // addr4 or addr4:port or host or host:port
+
+    QString strPort;
+
+    // parse input address with rx1 and rx2 in turn, capturing address/host and port
+    if ( rx1.indexIn ( strAddress ) == 0 )
     {
-        // IP6 address
-        bIsIP6 = true;
-        strSep = "]:";
+        // literal address within []
+        strAddress   = rx1.cap ( 1 );
+        strPort      = rx1.cap ( 2 );
+        bLiteralAddr = true; // don't allow hostname within []
     }
-
-    QString strPort = strAddress.section ( strSep, 1, 1 );
+    else if ( rx2.indexIn ( strAddress ) == 0 )
+    {
+        // hostname or IPv4 address
+        strAddress = rx2.cap ( 1 );
+        strPort    = rx2.cap ( 2 );
+    }
+    else
+    {
+        // invalid format
+        // qInfo() << qUtf8Printable ( QString ( "Invalid address format" ) );
+        return false;
+    }
 
     if ( !strPort.isEmpty() )
     {
-        // a colon is present in the address string, try to extract port number
+        // a port number was given: extract port number
         iNetPort = strPort.toInt();
 
-        // extract address port before separator (should be actual internet address)
-        strAddress = strAddress.section ( strSep, 0, 0 );
-
-        if ( bIsIP6 )
+        if ( iNetPort >= 65536 )
         {
-            // remove "[" at the beginning
-            strAddress.remove ( 0, 1 );
+            // invalid port number
+            // qInfo() << qUtf8Printable ( QString ( "Invalid port number specified" ) );
+            return false;
         }
     }
 
     // first try if this is an IP number an can directly applied to QHostAddress
-    if ( !InetAddr.setAddress ( strAddress ) )
+    if ( InetAddr.setAddress ( strAddress ) )
     {
-        // it was no valid IP address, try to get host by name, assuming
+        if ( !bEnableIPv6 && InetAddr.protocol() == QAbstractSocket::IPv6Protocol )
+        {
+            // do not allow IPv6 addresses if not enabled
+            // qInfo() << qUtf8Printable ( QString ( "IPv6 addresses disabled" ) );
+            return false;
+        }
+    }
+    else
+    {
+        // it was no valid IP address. If literal required, return as invalid
+        if ( bLiteralAddr )
+        {
+            // qInfo() << qUtf8Printable ( QString ( "Invalid literal IP address" ) );
+            return false; // invalid address
+        }
+
+        // try to get host by name, assuming
         // that the string contains a valid host name string
         const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
 
         if ( HostInfo.error() != QHostInfo::NoError )
         {
+            // qInfo() << qUtf8Printable ( QString ( "Invalid hostname" ) );
             return false; // invalid address
         }
 
-        // use the first IPv4 address, if any
-        bool bFoundIPv4 = false;
+        bool bFoundAddr = false;
 
         foreach ( const QHostAddress HostAddr, HostInfo.addresses() )
         {
-            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol )
+            // qInfo() << qUtf8Printable ( QString ( "Resolved network address to %1 for proto %2" ) .arg ( HostAddr.toString() ) .arg (
+            // HostAddr.protocol() ) );
+            if ( HostAddr.protocol() == QAbstractSocket::IPv4Protocol || ( bEnableIPv6 && HostAddr.protocol() == QAbstractSocket::IPv6Protocol ) )
             {
                 InetAddr   = HostAddr;
-                bFoundIPv4 = true;
+                bFoundAddr = true;
                 break;
             }
         }
 
-        if ( !bFoundIPv4 )
+        if ( !bFoundAddr )
         {
-            // only found IPv6 addresses
+            // no valid address found
+            // qInfo() << qUtf8Printable ( QString ( "No IP address found for hostname" ) );
             return false;
         }
     }
+
+    // qInfo() << qUtf8Printable ( QString ( "Parsed network address %1" ).arg ( InetAddr.toString() ) );
 
     HostAddress = CHostAddress ( InetAddr, iNetPort );
 
@@ -758,6 +806,26 @@ CHostAddress NetworkUtil::GetLocalAddress()
         qWarning() << "could not determine local IPv4 address:" << socket.errorString() << "- using localhost";
 
         return CHostAddress ( QHostAddress::LocalHost, 0 );
+    }
+}
+
+CHostAddress NetworkUtil::GetLocalAddress6()
+{
+    QUdpSocket socket;
+    // As we are using UDP, the connectToHost() does not generate any traffic at all.
+    // We just require a socket which is pointed towards the Internet in
+    // order to find out the IP of our own external interface:
+    socket.connectToHost ( WELL_KNOWN_HOST6, WELL_KNOWN_PORT );
+
+    if ( socket.waitForConnected ( IP_LOOKUP_TIMEOUT ) )
+    {
+        return CHostAddress ( socket.localAddress(), 0 );
+    }
+    else
+    {
+        qWarning() << "could not determine local IPv6 address:" << socket.errorString() << "- using localhost";
+
+        return CHostAddress ( QHostAddress::LocalHostIPv6, 0 );
     }
 }
 
@@ -811,6 +879,50 @@ bool NetworkUtil::IsPrivateNetworkIP ( const QHostAddress& qhAddr )
         }
     }
     return false;
+}
+
+// CHostAddress methods
+// Compare() - compare two CHostAddress objects, and return an ordering between them:
+// 0 - they are equal
+// <0 - this comes before other
+// >0 - this comes after other
+// The order is not important, so long as it is consistent, for use in a binary search.
+
+int CHostAddress::Compare ( const CHostAddress& other ) const
+{
+    // compare port first, as it is cheap, and clients will often use random ports
+
+    if ( iPort != other.iPort )
+    {
+        return (int) iPort - (int) other.iPort;
+    }
+
+    // compare protocols before addresses
+
+    QAbstractSocket::NetworkLayerProtocol thisProto  = InetAddr.protocol();
+    QAbstractSocket::NetworkLayerProtocol otherProto = other.InetAddr.protocol();
+
+    if ( thisProto != otherProto )
+    {
+        return (int) thisProto - (int) otherProto;
+    }
+
+    // now we know both addresses are the same protocol
+
+    if ( thisProto == QAbstractSocket::IPv6Protocol )
+    {
+        // compare IPv6 addresses
+        Q_IPV6ADDR thisAddr  = InetAddr.toIPv6Address();
+        Q_IPV6ADDR otherAddr = other.InetAddr.toIPv6Address();
+
+        return memcmp ( &thisAddr, &otherAddr, sizeof ( Q_IPV6ADDR ) );
+    }
+
+    // compare IPv4 addresses
+    quint32 thisAddr  = InetAddr.toIPv4Address();
+    quint32 otherAddr = other.InetAddr.toIPv4Address();
+
+    return (int) thisAddr - (int) otherAddr;
 }
 
 // Instrument picture data base ------------------------------------------------

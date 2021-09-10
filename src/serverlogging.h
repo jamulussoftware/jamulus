@@ -33,7 +33,6 @@
 #include "util.h"
 #include "channel.h"
 
-
 /* Classes ********************************************************************/
 class CServerLogging
 {

@@ -31,6 +31,8 @@
 #include <QTimer>
 #include "global.h"
 #include "util.h"
+#include "channel.h"
+
 
 /* Classes ********************************************************************/
 class CServerLogging
@@ -41,8 +43,8 @@ class CServerLogging
 public:
     static CServerLogging& getInstance()
     {
-        static CServerLogging theInstance;
-        return theInstance;
+        static CServerLogging slStaticInstance;
+        return slStaticInstance;
     }
 
     virtual ~CServerLogging();

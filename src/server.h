@@ -354,9 +354,6 @@ protected:
     // actual working objects
     CHighPrioSocket Socket;
 
-    // logging
-    // CServerLogging Logging;
-
     // channel level update frame interval counter
     int iFrameCount;
 

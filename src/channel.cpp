@@ -341,6 +341,8 @@ void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
     {
         ChannelInfo = NChanInf;
 
+        CServerLogging::getInstance().AddChannelInfoChanged(this);
+
         // fire message that the channel info has changed
         emit ChanInfoHasChanged();
     }

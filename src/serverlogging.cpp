@@ -22,9 +22,15 @@
  *
 \******************************************************************************/
 
+#include "channel.h"
 #include "serverlogging.h"
 
 // Server logging --------------------------------------------------------------
+
+
+CServerLogging::CServerLogging() : bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME ) { }
+
+
 CServerLogging::~CServerLogging()
 {
     // close logging file of open
@@ -47,9 +53,10 @@ void CServerLogging::Start ( const QString& strLoggingFileName )
 
 void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr, const int iNumberOfConnectedClients )
 {
+
     // logging of new connected channel
     const QString strLogStr =
-        CurTimeDatetoLogString() + ", " + ClientInetAddr.toString() + ", connected (" + QString::number ( iNumberOfConnectedClients ) + ")";
+        CurTimeDatetoLogString() + "\tCONNECT\t" + ClientInetAddr.toString() + "\tconnected (" + QString::number ( iNumberOfConnectedClients ) + ")";
 
     qInfo() << qUtf8Printable ( strLogStr ); // on console
     *this << strLogStr;                      // in log file
@@ -57,12 +64,52 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr, cons
 
 void CServerLogging::AddServerStopped()
 {
-    const QString strLogStr = CurTimeDatetoLogString() + ",, server idling "
-                                                         "-------------------------------------";
+
+    const QString strLogStr = CurTimeDatetoLogString() + "\tIDLE";
 
     qInfo() << qUtf8Printable ( strLogStr ); // on console
     *this << strLogStr;                      // in log file
 }
+
+
+void CServerLogging::AddChannelInfoChanged( CChannel *channel )
+{
+    // We're not going to print these to the console unless logging is enabled, so we can short-circuit this
+    // method here to save some cycles if logging is not enabled.
+
+    if ( ! bDoLogging ) 
+    {
+        return;
+    }
+
+    //
+    // At a channel object level, the host address is both the IP and the PORT, so split it on
+    // a ':' to get just the IP
+    //
+
+    auto address_parts = channel->GetAddress().toString().split(':');
+
+    // 
+    // Sanitize the channel name to remove tab characters, newlines, etc. for TSV processing
+    //
+
+    QString cName = channel->GetName();
+
+    cName.replace(QString("\n"),QString(" "));
+    cName.replace(QString("\r"),QString(" "));
+    cName.replace(QString("\t"),QString(" "));
+    cName.replace(QString("\\"),QString("\\\\"));
+    cName.replace(QString("\""),QString("\\\""));
+
+    //qDebug() << "Channel input changed " << channel->GetName() << " - " << channel->GetAddress().toString();
+        
+    const QString strLogStr = CurTimeDatetoLogString() + "\tCHANNEL\t" + address_parts.at(0) + "\t" + cName;
+    qInfo() << qUtf8Printable ( strLogStr ); // on console
+    *this << strLogStr;                      // in log file
+
+}
+
+
 
 void CServerLogging::operator<< ( const QString& sNewStr )
 {

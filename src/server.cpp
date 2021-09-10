@@ -234,7 +234,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bUseMultithreading ( bNUseMultithreading ),
     iMaxNumChannels ( iNewMaxNumChan ),
     Socket ( this, iPortNumber, iQosNumber, strServerBindIP ),
- //   Logging(),
+    //   Logging(),
     iFrameCount ( 0 ),
     bWriteStatusHTMLFile ( false ),
     strServerHTMLFileListName ( strHTMLStatusFileName ),
@@ -363,7 +363,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // enable logging (if requested)
     if ( !strLoggingFileName.isEmpty() )
     {
-        CServerLogging::getInstance().Start( strLoggingFileName );
+        CServerLogging::getInstance().Start ( strLoggingFileName );
     }
 
     // HTML status file writing

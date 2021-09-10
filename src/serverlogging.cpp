@@ -27,9 +27,7 @@
 
 // Server logging --------------------------------------------------------------
 
-
-CServerLogging::CServerLogging() : bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME ) { }
-
+CServerLogging::CServerLogging() : bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME ) {}
 
 CServerLogging::~CServerLogging()
 {
@@ -71,13 +69,12 @@ void CServerLogging::AddServerStopped()
     *this << strLogStr;                      // in log file
 }
 
-
-void CServerLogging::AddChannelInfoChanged( CChannel *channel )
+void CServerLogging::AddChannelInfoChanged ( CChannel* channel )
 {
     // We're not going to print these to the console unless logging is enabled, so we can short-circuit this
     // method here to save some cycles if logging is not enabled.
 
-    if ( ! bDoLogging ) 
+    if ( !bDoLogging )
     {
         return;
     }
@@ -87,29 +84,26 @@ void CServerLogging::AddChannelInfoChanged( CChannel *channel )
     // a ':' to get just the IP
     //
 
-    auto address_parts = channel->GetAddress().toString().split(':');
+    auto address_parts = channel->GetAddress().toString().split ( ':' );
 
-    // 
+    //
     // Sanitize the channel name to remove tab characters, newlines, etc. for TSV processing
     //
 
     QString cName = channel->GetName();
 
-    cName.replace(QString("\n"),QString(" "));
-    cName.replace(QString("\r"),QString(" "));
-    cName.replace(QString("\t"),QString(" "));
-    cName.replace(QString("\\"),QString("\\\\"));
-    cName.replace(QString("\""),QString("\\\""));
+    cName.replace ( QString ( "\n" ), QString ( " " ) );
+    cName.replace ( QString ( "\r" ), QString ( " " ) );
+    cName.replace ( QString ( "\t" ), QString ( " " ) );
+    cName.replace ( QString ( "\\" ), QString ( "\\\\" ) );
+    cName.replace ( QString ( "\"" ), QString ( "\\\"" ) );
 
-    //qDebug() << "Channel input changed " << channel->GetName() << " - " << channel->GetAddress().toString();
-        
-    const QString strLogStr = CurTimeDatetoLogString() + "\tCHANNEL\t" + address_parts.at(0) + "\t" + cName;
+    // qDebug() << "Channel input changed " << channel->GetName() << " - " << channel->GetAddress().toString();
+
+    const QString strLogStr = CurTimeDatetoLogString() + "\tCHANNEL\t" + address_parts.at ( 0 ) + "\t" + cName;
     qInfo() << qUtf8Printable ( strLogStr ); // on console
     *this << strLogStr;                      // in log file
-
 }
-
-
 
 void CServerLogging::operator<< ( const QString& sNewStr )
 {

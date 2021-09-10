@@ -36,25 +36,22 @@
 class CServerLogging
 {
 
-    CServerLogging() ;
+    CServerLogging();
 
 public:
-	
-	static CServerLogging& getInstance() 
+    static CServerLogging& getInstance()
     {
         static CServerLogging theInstance;
         return theInstance;
-    
     }
-    
+
     virtual ~CServerLogging();
 
     void Start ( const QString& strLoggingFileName );
     void AddServerStopped();
 
     void AddNewConnection ( const QHostAddress& ClientInetAddr, const int iNumberOfConnectedClients );
-    void AddChannelInfoChanged( CChannel* channel ); 
-
+    void AddChannelInfoChanged ( CChannel* channel );
 
 protected:
     void    operator<< ( const QString& sNewStr );

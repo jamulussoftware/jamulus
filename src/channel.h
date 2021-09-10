@@ -38,7 +38,6 @@
 
 #include "serverlogging.h"
 
-
 /* Definitions ****************************************************************/
 // set the time-out for the input buffer until the state changes from
 // connected to not connected (the actual time depends on the way the error

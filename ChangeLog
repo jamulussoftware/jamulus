@@ -65,7 +65,7 @@
 - Server: Add link to website if a new version is available (#1980).
   (contributed by: @an0see)
 
-- Android: Add close button on Android to enhance UX (#1763, #1876.
+- Android: Add close button on Android to enhance UX (#1763, #1876).
   (contributed by @ngocdh)
   
 - iOS: Sound support, feature to allow switch between external device and the internal mic (#1875).
@@ -85,9 +85,6 @@
 
 - Bug Fix: Remove incorrect version of headless .service file (#2009).
   (contributed by @an0see)
-
-- Bug fix: Unicode in mixer should wrap on character boundaries (#1993).
-  (contributed by @djfun, @pljones)
 
 ### 3.8.0 (2021-06-02) ###
 

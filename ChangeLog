@@ -6,6 +6,24 @@
 
 - Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937).
   (contributed by @emlynmac)
+  
+- Internal: Add autobuild for Windows with JACK (#1829).
+  (contributed by @henkdegroot)
+
+- Internal: Document release process on contribute page (#1594, #592).
+  (contributed by: @hoffie, an0see)
+  
+- Documentation: Move Demos, description of inputs options to Knowledge Base (#603, #551).
+  (contributed by: @pcar75, @gilgongo)
+
+- Documentation: Add user experience section to CONTRIBUTING.md (#1885).
+  (contributed by: @an0see)
+
+- Documentation: Create Server Admin Manual (#527).
+  (contributed by: @gilgongo)
+
+- Website: Removed edit button from wiki layout file (#576).
+  (contributed by: @DevRish)
 
 - Documentation: Update typo on links in compiling.md file (#1824).
   (contributed by @jujudusud)
@@ -28,8 +46,11 @@
 - Client: Add custom directory servers to Connect Dialog (#1869, #1894).
   (contributed by @jp8)
 
-- Client: Re-arrange existing UI menubar items (#1915, #1926)
+- Client: Re-arrange existing UI menubar items (#1915, #1926).
   (constributed by @jp8)
+  
+- Client/Server: Add zh_CN translation + for nsis win installer (#1922, #1954).
+  (contributed by @BLumia)
 
 - Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722, #1731).
   (contributed by @henkdegroot)
@@ -38,10 +59,16 @@
   (contributed by @cdmahoney)
 
 - Server: The list of servers registered on a directory can now be saved during directory restart. Use the new
-  --directoryfile CLI option to use this feature. (#1867)
+  --directoryfile CLI option to use this feature (#1867).
   (contributed by @pljones)
+  
+- Server: Add link to website if a new version is available (#1980).
+  (contributed by: @an0see)
 
-- Android: Add close button on Android to enhance UX (#1763, #1876).
+- Android: Add close button on Android to enhance UX (#1763, #1876.
+  (contributed by @ngocdh)
+  
+- iOS: Sound support, feature to allow switch between external device and the internal mic (#1875).
   (contributed by @ngocdh)
 
 - MacOS: Keyboard shortcuts now also work on macOS (#1726, #1873).
@@ -52,6 +79,15 @@
 
 - Bug Fix: Fix ampersand not being shown correctly on mixer (#1886, #1893).
   (contributed by @HughePaul, @ann0see)
+  
+- Bug Fix: A crash fix related to the way iOS handles sockets in idle mode (#1875). 
+  (contributed by @ngocdh)
+
+- Bug Fix: Remove incorrect version of headless .service file (#2009).
+  (contributed by @an0see)
+
+- Bug fix: Unicode in mixer should wrap on character boundaries (#1993).
+  (contributed by @djfun, @pljones)
 
 ### 3.8.0 (2021-06-02) ###
 

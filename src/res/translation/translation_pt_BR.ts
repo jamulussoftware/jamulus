@@ -1438,7 +1438,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="276"/>
-        <source>%1 and %2:</source>
+        <source>and</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1781,7 +1781,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="182"/>
-        <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many conncetion properties.</source>
+        <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

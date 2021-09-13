@@ -180,7 +180,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // sound card buffer delay
     QString strSndCrdBufDelay = "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
                                 QString ( tr ( "The buffer delay setting is a fundamental setting of %1. "
-                                               "This setting has an influence on many conncetion properties." ) )
+                                               "This setting has an influence on many connection properties." ) )
                                     .arg ( APP_NAME ) +
                                 "<br>" + tr ( "Three buffer sizes are supported" ) +
                                 ":<ul>"
@@ -273,7 +273,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "<ul>"
                                "<li>"
                                "<b>" +
-                               tr ( "%1 and %2:" ).arg ( "<b>" + tr ( "Mono" ) + "</b>", "<b>" + tr ( "Stereo" ) + "</b>" ) +
+                               tr ( "Mono" ) + "</b> " + tr ( "and" ) + " <b>" + tr ( "Stereo" ) + ":</b> " +
                                tr ( "These modes use "
                                     "one and two audio channels respectively." ) +
                                "</li>"

@@ -53,6 +53,7 @@ declare -A TRANSLATORS_BY_LANG=(
     [app_pt_PT]="Snayler"
     [app_sk_SK]="jose1711"
     [app_sv_SE]="genesisproject2020"
+    [app_zh_CN]="BLumia"
 
     # Web translators:
     [web_de]="Helondeth,ewarning"

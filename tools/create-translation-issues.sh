@@ -60,7 +60,7 @@ declare -A TRANSLATORS_BY_LANG=(
     [web_es]="ignotus666"
     [web_fr]="jujudusud,trebmuh"
     [web_it]="dzpex"
-    [web_pt]="Snayler,melcon"
+    [web_pt]="Snayler,melcon,ewarning"
 )
 
 BODY_TEMPLATE_APP='Hi ${SPLIT_TRANSLATORS},
@@ -91,14 +91,6 @@ Thanks for contributing to Jamulus!'
 BODY_TEMPLATE_WEB='Hi ${SPLIT_TRANSLATORS},
 
 We are getting ready for the ${RELEASE} release and have created the [${TRANSLATE_BRANCH}](https://github.com/jamulussoftware/jamuluswebsite/tree/${TRANSLATE_BRANCH}) branch ([full diff](https://github.com/jamulussoftware/jamuluswebsite/compare/release..${TRANSLATE_BRANCH})).
-
-Because the English is still going through large changes, we are not expecting translations of anything other than the following pages:
-
-- [Home page](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/1-index.html)
-- [Setup](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Setup.md) (renamed from Getting-Started)
-- Installation pages for each supported platform ([Windows](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Installation-for-Windows.md), [Mac](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Installation-for-Macintosh.md), [Linux](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Installation-for-Linux.md))
-
-While you are of course welcome to translate more than this, please be aware that you may have to re-translate for the next release.
 
 We would be happy if you updated the translations for **${LANG}** until **${DEADLINE}**.
 

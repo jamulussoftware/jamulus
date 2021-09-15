@@ -11,13 +11,13 @@
   (contributed by @henkdegroot)
 
 - Internal: Document release process on contribute page (#1594, #592).
-  (contributed by: @hoffie, an0see)
+  (contributed by: @hoffie, @ann0see)
   
 - Documentation: Move Demos, description of inputs options to Knowledge Base (#603, #551).
   (contributed by: @pcar75, @gilgongo)
 
 - Documentation: Add user experience section to CONTRIBUTING.md (#1885).
-  (contributed by: @an0see)
+  (contributed by: @ann0see)
 
 - Documentation: Create Server Admin Manual (#527).
   (contributed by: @gilgongo)
@@ -63,7 +63,7 @@
   (contributed by @pljones)
   
 - Server: Add link to website if a new version is available (#1980).
-  (contributed by: @an0see)
+  (contributed by: @ann0see)
 
 - Android: Add close button on Android to enhance UX (#1763, #1876).
   (contributed by @ngocdh)
@@ -84,7 +84,7 @@
   (contributed by @ngocdh)
 
 - Bug Fix: Remove incorrect version of headless .service file (#2009).
-  (contributed by @an0see)
+  (contributed by @ann0see)
 
 ### 3.8.0 (2021-06-02) ###
 

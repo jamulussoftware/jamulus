@@ -16,7 +16,7 @@
 # Example usage for web translations:
 #  ../jamulus/tools/create-translation-issues.sh 3.8.0 2021-05-15 web 'Note: The term "Central server" has been replaced with "Directory server"'
 
-set -eu
+set -eux
 
 if [[ -z ${1:-} ]] || [[ -z ${2:-} ]] || [[ -z ${3:-} ]] ; then
     echo "Syntax: $0 RELEASE DEADLINE app|web [EXTRA_TEXT]"
@@ -141,8 +141,9 @@ get_languages() {
             echo "Error: Please ensure that you are at the root of a jamuluswebsite checkout" >/dev/stderr
             exit 1
         fi
-        for LANG in $(cd wiki/ && ls -d *); do
-            [[ -d wiki/$LANG ]] || continue
+	for LANG in $(cd _translator-files/po/ && ls -d *) ;do
+#     [[ -d wiki/$LANG ]] || continue
+	[[ -d _translator-files/po/$LANG ]] || continue	
             [[ $LANG == en ]] && continue # does not have to be translated
             echo "$LANG"
         done

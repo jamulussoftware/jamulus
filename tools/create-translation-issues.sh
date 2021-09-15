@@ -180,7 +180,7 @@ create_translation_issue_for_lang() {
         RELEASE="$RELEASE" \
         SPLIT_TRANSLATORS=$(sed -re 's/^/@/; s/,/, @/g' <<<"$translators") \
         TITLE="$title" \
-        TRANSLATE_BRANCH=translate${RELEASE//./_} \
+        TRANSLATE_BRANCH=next-release \
         envsubst <<<"$body_template"
     )
 

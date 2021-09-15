@@ -66,7 +66,7 @@ declare -A TRANSLATORS_BY_LANG=(
 BODY_TEMPLATE_APP='Hi ${SPLIT_TRANSLATORS},
 We are getting ready for the ${RELEASE} release. No further changes to translatable strings are currently planned for this release.
 
-We would be happy if you updated the Jamulus software translations for **${LANG}** until **${DEADLINE}**.
+We would be happy if you updated the Jamulus software translations for **${LANG}** by **${DEADLINE}**.
 
 Please
 - Update your fork from `jamulussoftware/jamulus` `master` and create a working branch
@@ -92,7 +92,7 @@ BODY_TEMPLATE_WEB='Hi ${SPLIT_TRANSLATORS},
 
 We are getting ready for the ${RELEASE} release and have created the [${TRANSLATE_BRANCH}](https://github.com/jamulussoftware/jamuluswebsite/tree/${TRANSLATE_BRANCH}) branch ([full diff](https://github.com/jamulussoftware/jamuluswebsite/compare/release..${TRANSLATE_BRANCH})).
 
-We would be happy if you updated the translations for **${LANG}** until **${DEADLINE}**.
+We would be happy if you updated the translations for **${LANG}** by **${DEADLINE}**.
 
 Please
 

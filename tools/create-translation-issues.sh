@@ -60,6 +60,7 @@ declare -A TRANSLATORS_BY_LANG=(
     [web_es]="ignotus666"
     [web_fr]="jujudusud,trebmuh"
     [web_it]="dzpex"
+    [web_pt]="Snayler,melcon"
 )
 
 BODY_TEMPLATE_APP='Hi ${SPLIT_TRANSLATORS},

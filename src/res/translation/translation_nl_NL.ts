@@ -124,7 +124,7 @@
     <message>
         <location filename="../../util.cpp" line="538"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinees (vereenvoudigd)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="546"/>
@@ -555,7 +555,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="135"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilt u de link &apos;%1&apos; in uw browser openen?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -881,17 +881,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="188"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Huidige verbindingsstatus-parameter</translation>
+        <translation>Huidige verbindingsstatus-parameter</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="191"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">De ping-tijd is de tijd die nodig is voor de audiostream om van de client naar de server en terug te reizen. Deze vertraging wordt veroorzaakt door het netwerk en bedraagt ongeveer 20-30 ms. Als deze vertraging hoger is dan circa  50 ms, dan is uw afstand tot de server te groot of is uw internetverbinding niet toereikend.</translation>
+        <translation>De ping-tijd is de tijd die nodig is voor de audiostream om van de client naar de server en terug te reizen. Deze vertraging wordt veroorzaakt door het netwerk en bedraagt ongeveer 20-30 ms. Als deze vertraging hoger is dan circa  50 ms, dan is uw afstand tot de server te groot of is uw internetverbinding niet toereikend.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="198"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">De totale vertraging wordt berekend op basis van de huidige ping-tijd en de vertraging door de huidige bufferinstellingen.</translation>
+        <translation>De totale vertraging wordt berekend op basis van de huidige ping-tijd en de vertraging door de huidige bufferinstellingen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="228"/>
@@ -911,7 +911,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="305"/>
         <source>&amp;View</source>
-        <translation>Be&amp;kijken</translation>
+        <translation>&amp;Weergave</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
@@ -983,17 +983,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="159"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale jitterbuffer status LED</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="160"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>De lokale jitterbuffer status LED geeft de huidige audio/streaming status weer. Indien deze rood is dan is wordt de audio onderbroken. Dit komt door één van de volgende problemen:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="184"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale jitterbuffer LED status indicator</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="284"/>
@@ -1008,7 +1008,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="372"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished">&amp;Instellingen</translation>
+        <translation>&amp;Instellingen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="376"/>
@@ -1023,7 +1023,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="293"/>
         <source>&amp;Edit</source>
-        <translation>Be&amp;werken</translation>
+        <translation>B&amp;ewerken</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="311"/>
@@ -1142,18 +1142,18 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished">ms</translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
@@ -1411,17 +1411,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="276"/>
         <source>and</source>
-        <translation type="unfinished"></translation>
+        <translation>en</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="355"/>
         <source>Audio Upstream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio upstream snelheid</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>Deze is afhankelijk van de huidige audio pakket grootte en compressie instelling. Zorg ervoor dat de upstream snelheid niet groter is dan uw beschikbare internet upload snelheid (controleer dit met een service zoals speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="437"/>
@@ -1434,7 +1434,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="477"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien u verbonden met een %1 server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1118"/>
@@ -1731,47 +1731,47 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het ASIO-stuurprogramma (geluidskaart) kan worden geselecteerd met behulp van %1 in het Windows besturingssysteem. Voor MacOS/Linux is geen geluidskaartkeuze mogelijk. Als het geselecteerde ASIO-stuurprogramma niet geldig is, wordt een foutmelding weergegeven en wordt het vorige geldige stuurprogramma geselecteerd.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voor elk %1 invoer-/uitvoerkanaal (linker- en rechterkanaal) kan een ander daadwerkelijk kanaal van de geluidskaart worden geselecteerd.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schakelt het gebruik van zeer kleine netwerkaudiopakketten in. Deze netwerkpakketten worden alleen gebruikt indien de geluidskaart buffer kleiner is dan %1 samples. Hoe kleiner de netwerkbuffers, des te kleiner de audio-vertraging. Maar tegelijkertijd neemt de netwerkbelasting toe en neemt ook de kans op audio-uitval toe.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="182"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>De buffervertragingsinstelling is een fundamentele instelling van %1. Deze instelling is van invloed op veel verbindingseigenschappen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommige stuurprogramma&apos;s van geluidskaarten staan niet toe dat de buffervertraging vanuit %1 kan worden gewijzigd. In dat geval is de buffervertragingsinstelling uitgeschakeld en moet deze worden gewijzigd via het stuurprogramma van de geluidskaart. In Windows drukt u op de knop ASIO Apparaatinstellingen om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Als er geen buffergrootte is geselecteerd en de buffervertragingsinstellingen zijn uitgeschakeld, dan betekent dit dat er een niet ondersteunde buffergrootte wordt gebruikt door de driver. %1 zal nog steeds werken met deze instelling maar de werking is wellicht niet optimaal.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Als de buffervertragingsinstellingen zijn uitgeschakeld, dan staat het stuurprogramma van de geluidskaart het niet toe deze vanuit %1 te wijzigen. In Windows drukt u op de knop ASIO Apparaatinstellingen om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit opent de stuurprogramma-instellingen van uw geluidskaart. Sommige stuurprogramma&apos;s laten u toe bufferinstellingen te veranderen, andere zoals ASIO4ALL laten u invoer- of uitvoerkanalen kiezen van uw apparaat. Meer informatie is te vinden op jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opent de stuurprogramma-instellingen. Let op: %1 ondersteunt momenteel alleen apparaten met een sample rate van %2 Hz. U kunt geen stuurprogramma/apparaat selecteren die dit niet ondersteunt. Voor meer informatie zie jamulus.io.</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
@@ -2572,7 +2572,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directories:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigen adresboek:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1001"/>
@@ -2749,7 +2749,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresboek</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -2832,7 +2832,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../util.cpp" line="607"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">Over &amp;Qt...</translation>
+        <translation>Over &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2841,7 +2841,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">Over Qt</translation>
+        <translation>Over Qt</translation>
     </message>
 </context>
 <context>
@@ -3416,17 +3416,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Land/regio</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het land of regio waarin deze server zich bevindt kan hier worden ingesteld. Dit wordt getoond in de lijst van de verbindingsservers bij de clients.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="117"/>
         <source>Combo box for location of this server</source>
-        <translation type="unfinished"></translation>
+        <translation>Combobox voor de locatie van deze server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="120"/>
@@ -3573,7 +3573,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../../serverdlg.cpp" line="195"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="328"/>
@@ -3584,7 +3584,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../../serverdlg.cpp" line="341"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 server</translation>
     </message>
     <message>
         <source>software upgrade available</source>
@@ -3777,12 +3777,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation>Lijst</translation>
+        <translation>Adresboek</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Locatie: Regio</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -3894,7 +3894,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../serverlist.cpp" line="647"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Fout bij het schrijven naar &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -4007,33 +4007,33 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het geselecteerde audio apparaat is niet langer aanwezig in het system. Controleer uw audio apparaat.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan het audiostuurprogramma niet initialiseren. Controleer of uw audiohardware is aangesloten en controleer uw stuurprogramma-instellingen.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het geselecteerde audioapparaat is niet compatibel omdat het geen samplefrequentie van %1 Hz ondersteunt. Selecteer een ander apparaat.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>De huidige configuratie van het audioapparaat is niet compatibel omdat de samplefrequentie niet kan worden ingesteld op %2 Hz. Controleer of er een hardware-switch of driver-instelling is om de samplefrequentie handmatig in te stellen en start %1 opnieuw.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het geselecteerde audioapparaat is niet compatibel omdat het geen %1 in-/uitvoerkanalen ondersteunt. Selecteer een ander apparaat of een andere configuratie.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="206"/>
         <location filename="../../../windows/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het geselecteerde audioapparaat is niet compatibel omdat het vereiste audiosampleformaat niet beschikbaar is. Gebruik een ander apparaat.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
@@ -4043,7 +4043,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../../windows/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Installeer een ASIO stuurprogramma voor het starten van %1. Indien u een apparaat heeft met ASIO ondersteuning, installeer dan de officiële ASIO driver voor dit apparaat. Indien u dit niet heeft, dan kunt u een universele driver zoals ASIO4ALL gebruiken.</translation>
     </message>
     <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
@@ -4064,82 +4064,82 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../../linux/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK kon niet automatisch worden gestart. Start JACK handmatig en controleer op foutmeldingen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK werkt niet met een samplefrequentie van &lt;b&gt;%1 Hz&lt;/b&gt;. Gebruik een tool als &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; om de JACK-samplefrequentie in te stellen op %1 Hz.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>De JACK-poortregistratie is mislukt. Dit is waarschijnlijk een fout met JACK. Stop a.u.b. %1 en JACK. Controleer daarna of een ander programma met een samplefrequentie van %2 Hz verbinding kan maken met JACK.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>De JACK-poortregistratie is mislukt. Dit is waarschijnlijk een fout met JACK. Stop a.u.b. %1 en JACK. Controleer daarna of een ander MIDI-programma verbinding kan maken met JACK.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan de JACK-client niet activeren. Dit is waarschijnlijk een fout met JACK. Controleer de JACK-uitgang.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation type="unfinished"></translation>
+        <translation>JACK werd afgesloten. %1 vereist dat JACK wordt uitgevoerd. Herstart %1 om JACK opnieuw te starten.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen geluidskaart beschikbaar in uw systeem. CoreAudio-invoer AudioHardwareGetProperty-aanroep mislukt.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen geluidskaart beschikbaar in het systeem. CoreAudio-uitvoer AudioHardwareGetProperty-aanroep mislukt.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het momenteel geselecteerde audioapparaat is niet meer aanwezig. Controleer uw audioapparaat.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het audio-invoerapparaat is niet langer beschikbaar. Controleer of uw invoerapparaat correct is aangesloten.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>De samplefrequentie van het huidige invoerapparaat is geen %1 Hz en is daarom niet compatibel. Selecteer een ander apparaat of probeer de samplefrequentie handmatig in te stellen op %1 Hz via Audio-MIDI-Setup (in Applications-&gt;Utilities).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het audio-uitvoerapparaat is niet langer beschikbaar. Controleer of uw uitvoerapparaat correct is aangesloten.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>De samplefrequentie van het huidige uitvoerapparaat is geen %1 Hz en is daarom niet compatibel. Selecteer een ander apparaat of probeer de samplefrequentie handmatig in te stellen op %1 Hz via Audio-MIDI-Setup (in Applications-&gt;Utilities).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het streamformaat van het huidige invoerapparaat is niet compatibel met deze software. Selecteer een ander apparaat.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="475"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het streamformaat van het huidige uitvoerapparaat is niet compatibel met %1. Selecteer een ander apparaat.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="728"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>De buffergroottes van het huidige invoer- en uitvoeraudioapparaat kunnen niet op een gemeenschappelijke waarde worden ingesteld. Selecteer verschillende invoer-/uitvoerapparaten in uw systeeminstellingen.</translation>
     </message>
 </context>
 <context>
@@ -4195,32 +4195,32 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../soundbase.cpp" line="116"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan het geselecteerde audioapparaat niet gebruiken vanwege de volgende fout: %1 Het vorige stuurprogramma wordt geselecteerd.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="157"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het eerder geselecteerde audioapparaat is niet langer beschikbaar of het stuurprogramma is gewijzigd in een niet compatibele status. We zullen proberen een geldig audioapparaat te vinden, maar dit nieuwe audioapparaat kan feedback veroorzaken. Controleer uw audioapparaat instellingen voordat u verbinding maakt met een server.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="169"/>
         <source>No usable %1 audio device found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen bruikbaar %1 audioapparaat gevonden.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="170"/>
         <source>These are all the available drivers with error messages:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit zijn de beschikbare stuurprogramma's met foutmeldingen:</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="182"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilt u de instellingen van het ASIO-stuurprogramma openen om te proberen uw configuratie in een werkende staat te veranderen?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan %1 niet starten. Herstart %1 en controleer/configureer uw audio-instellingen opnieuw.</translation>
     </message>
 </context>
 <context>
@@ -4246,7 +4246,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../global.h" line="120"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is een %1 upgrade beschikbaar: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;klik hier voor details en downloads&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../global.h" line="270"/>

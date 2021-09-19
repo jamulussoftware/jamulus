@@ -1,18 +1,64 @@
 
 ### 3.8.1beta1dev <- NOTE: the release version number will be 3.8.1 ###
 
-- Add IPv6 support for direct connections (#1017, #1938).
-  (contributed by @jardous, @softins)
+- Client: JACK support on Windows has been improved (#1718).
+  (contributed by @jujudusud, @henkdegroot)
 
-- Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937).
-  (contributed by @emlynmac)
+- Client: Rewrote multiple error messages to improve UX (#1568, #1732).
+  (contributed by @ann0see)
+
+- Client: Add custom directory servers to Connect Dialog (#1869, #1894).
+  (contributed by @jp8)
+
+- Client: Rearrange existing UI menu bar items (#1915, #1926).
+  (contributed by @jp8)
+
+- Bug Fix: Mute myself has been made more consistent (#1838).
+  (contributed by @ngocdh)
+
+- Bug Fix: Fix ampersand not being shown correctly on mixer (#1886, #1893).
+  (contributed by @HughePaul, @ann0see)
   
-- Internal: Add autobuild for Windows with JACK (#1829).
+- Bug Fix: A crash fix related to the way iOS handles sockets in idle mode (#1875). 
+  (contributed by @ngocdh)
+
+- Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722, #1731).
   (contributed by @henkdegroot)
 
-- Internal: Document release process on contribute page (#1594, #592).
-  (contributed by: @hoffie, @ann0see)
+- Server: Jam Recorder's internal locking and initialization code has been made more robust (#1826).
+  (contributed by @cdmahoney)
+
+- Server: The list of servers registered on a directory can now be saved during directory restart. Use the new
+  --directoryfile CLI option to use this feature (#1867).
+  (contributed by @pljones)
   
+- Server: Add link to website if a new version is available (#1980).
+  (contributed by: @ann0see)
+
+- Bug Fix: Remove incorrect version of headless .service file (#2009).
+  (contributed by @ann0see)
+
+- Client/Server: Add IPv6 support for direct connections (#1017, #1938).
+  (contributed by @jardous, @softins)
+
+- CLI: Re-order and refactor help for client/server validation (#1896).
+  (contributed by @pljones)
+
+- CLI: Jamulus now shows a link to the Website for translated content (#1759).
+  (contributed by @henkdegroot)
+
+- Android: Add close button on Android to enhance UX (#1763, #1876).
+  (contributed by @ngocdh)
+  
+- iOS: Sound support, feature to allow switch between external device and the internal mic (#1875).
+  (contributed by @ngocdh)
+
+- MacOS: Keyboard shortcuts now also work on macOS (#1726, #1873).
+  (contributed by @henkdegroot)
+
+- Installer: Add zh_CN translation + for nsis win installer (#1922, #1954).
+  (contributed by @BLumia)
+
 - Documentation: Move Demos, description of inputs options to Knowledge Base (#603, #551).
   (contributed by: @pcar75, @gilgongo)
 
@@ -31,61 +77,18 @@
 - Documentation: Number range command line error messages reworded accurately (#1978).
   (contributed by @DavidSavinkoff)
 
-- CLI: Re-order and refactor help for client/server validation (#1896).
-  (contributed by @pljones)
+- Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937). 
+  (contributed by @emlynmac)
 
-- CLI: Jamulus now shows a link to the Website for translated content (#1759).
-  (contributed by @henkdegroot)
-  
-- Client: JACK support on Windows has been improved (#1718).
-  (contributed by @jujudusud, @henkdegroot)
+- Internal: Added Apple Appstore licence waiver (#1874)
+  (contributed by @ann0see, @pljones, @gilgongo)
 
-- Client: Rewrote multiple error messages to improve UX (#1568, #1732).
-  (contributed by @ann0see)
-
-- Client: Add custom directory servers to Connect Dialog (#1869, #1894).
-  (contributed by @jp8)
-
-- Client: Re-arrange existing UI menubar items (#1915, #1926).
-  (constributed by @jp8)
-  
-- Client/Server: Add zh_CN translation + for nsis win installer (#1922, #1954).
-  (contributed by @BLumia)
-
-- Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722, #1731).
+- Internal: Add autobuild for Windows with JACK (#1829).
   (contributed by @henkdegroot)
 
-- Server: Jam Recorder's internal locking and initiatlization code has been made more robust (#1826).
-  (contributed by @cdmahoney)
-
-- Server: The list of servers registered on a directory can now be saved during directory restart. Use the new
-  --directoryfile CLI option to use this feature (#1867).
-  (contributed by @pljones)
+- Internal: Document release process on contribute page (#1594, #592).
+  (contributed by: @hoffie, @ann0see)
   
-- Server: Add link to website if a new version is available (#1980).
-  (contributed by: @ann0see)
-
-- Android: Add close button on Android to enhance UX (#1763, #1876).
-  (contributed by @ngocdh)
-  
-- iOS: Sound support, feature to allow switch between external device and the internal mic (#1875).
-  (contributed by @ngocdh)
-
-- MacOS: Keyboard shortcuts now also work on macOS (#1726, #1873).
-  (contributed by @henkdegroot)
-
-- Bug Fix: Mute myself has been made more consistent (#1838).
-  (contributed by @ngocdh)
-
-- Bug Fix: Fix ampersand not being shown correctly on mixer (#1886, #1893).
-  (contributed by @HughePaul, @ann0see)
-  
-- Bug Fix: A crash fix related to the way iOS handles sockets in idle mode (#1875). 
-  (contributed by @ngocdh)
-
-- Bug Fix: Remove incorrect version of headless .service file (#2009).
-  (contributed by @ann0see)
-
 ### 3.8.0 (2021-06-02) ###
 
 - The term "Central server" has been replaced with "Directory server" (#1407, #1715, #1629).

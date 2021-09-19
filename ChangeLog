@@ -68,14 +68,17 @@
 - Documentation: Create Server Admin Manual (#527).
   (contributed by: @gilgongo)
 
-- Website: Removed edit button from wiki layout file (#576).
-  (contributed by: @DevRish)
-
 - Documentation: Update typo on links in compiling.md file (#1824).
   (contributed by @jujudusud)
 
 - Documentation: Number range command line error messages reworded accurately (#1978).
   (contributed by @DavidSavinkoff)
+  
+- Website: switch to .po file format to make updating translations easier (various PRs)
+  (contributed by: @ignotus666)
+
+- Website: Removed edit button from wiki layout file (#576).
+  (contributed by: @DevRish)
 
 - Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937). 
   (contributed by @emlynmac)

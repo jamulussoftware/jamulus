@@ -997,22 +997,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="86"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>抖动缓冲选项是音频质量和总延迟之间的一种权衡。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="111"/>
         <source>Local jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>本地抖动缓冲滑条</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="114"/>
         <source>Server jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器抖动缓冲滑条</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="116"/>
         <source>Auto jitter buffer switch</source>
-        <translation type="unfinished"></translation>
+        <translation>自动抖动缓冲开关</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="121"/>
@@ -1022,27 +1022,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>若在一个已建立的连接过程中选择驱动，则连接会被断开，驱动也将被改变，随后将会自动重新建立连接。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="132"/>
         <source>Sound card device selector combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>声卡设备选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="136"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果使用 ASIO4ALL 驱动，则请注意其会引入大约 10 至 30 毫秒的额外音频延迟。建议使用具有原生 ASIO 驱动支持的声卡及其官方配套驱动。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="141"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果您在使用 kX ASIO 驱动，请确保在 kX DSP 设定面板中正确配置 ASIO 的输入连接。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="148"/>
         <source>Sound Card Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>声卡声道映射</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="149"/>
@@ -1213,7 +1213,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="355"/>
         <source>Audio Upstream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>音频流上行速度</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
@@ -1242,7 +1242,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="58"/>
         <source>Local Audio Input Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>本地音频输入推子</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
@@ -2063,7 +2063,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="835"/>
         <source>Audio Stream Rate</source>
-        <translation>音频流速率</translation>
+        <translation>音频流速度</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="869"/>
@@ -2091,17 +2091,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="46"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation type="unfinished"></translation>
+        <translation>连接配置窗口展示了所有可用服务器的列表。服务器管理员可以选择其服务器对应的流派分类。使用下拉列表选择流派，点击想要加入的服务器并点击连接按钮以连接到对应的服务器。您也可以双击服务器名称来进行连接。永久（已在列表中存在超过 48 小时的）服务器将以粗体展示。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="57"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
-        <translation type="unfinished"></translation>
+        <translation>如果您知道某个服务器的 IP 地址或 URL，您可以使用“服务器名称/地址”栏来连接到对应的服务器。在 IP 或 URL 后端可以可选的填写端口号，使用半角冒号进行隔开。例如：example.org:</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
         <source>. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>。此栏也会展示最近连接过的服务器地址的列表。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="68"/>
@@ -2111,7 +2111,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="69"/>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>存储了当前服务器的 IP 或 URL。他也在下拉列表中存储了旧的 URL 列表。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="74"/>

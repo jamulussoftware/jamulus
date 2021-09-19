@@ -6,7 +6,7 @@ BASE_LANG=en
 INSTALLERLNG=installerlng.nsi
 BASE_LANGSTRINGS=$(grep LangString "${BASE_DIR}/${BASE_LANG}.nsi" | cut -d' ' -f2)
 EXIT=0
-LANGUAGE_FILES="$(ls -1 src/res/translation/wininstaller/??.nsi | grep -vF "${BASE_LANG}.nsi")"
+LANGUAGE_FILES="$(ls -1 src/res/translation/wininstaller/{??.nsi,??_??.nsi} | grep -vF "${BASE_LANG}.nsi")"
 for LANGUAGE_FILE in ${LANGUAGE_FILES}; do
     echo
     echo "* ${LANGUAGE_FILE}"

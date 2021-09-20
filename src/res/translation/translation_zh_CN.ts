@@ -1047,27 +1047,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="149"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation type="unfinished"></translation>
+        <translation>若所选的声卡设备提供了超过一个输入或输出声道，则输入声道映射和输出声道映射设置项将可见。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="161"/>
         <source>Left input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>左输入声道选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="163"/>
         <source>Right input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>右输入声道选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="165"/>
         <source>Left output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>左输出声道选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>Right output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>右输出声道选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="171"/>
@@ -1122,7 +1122,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>打开驱动选项。注意：%1 目前仅支持采样率为 %2 的设备。您无法选择非此采样率的设备。更多帮助请见 jamulus.io。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
@@ -1152,7 +1152,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="304"/>
         <source>Audio channels combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>声道选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="307"/>
@@ -1162,17 +1162,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="314"/>
         <source>Audio quality combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>音频质量选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="317"/>
         <source>New Client Level</source>
-        <translation type="unfinished"></translation>
+        <translation>新客户端音量</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="326"/>
         <source>New client level edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>新客户端音量编辑框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="346"/>
@@ -1182,7 +1182,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="477"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>当你连接到一个 %1 服务器时，你填写到这里的内容会显示在代表你的那个推子上。此标签也会呈现在其它连接到相同服务器的客户端上。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="276"/>
@@ -1328,7 +1328,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="260"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择用于主窗口的皮肤。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="262"/>
@@ -1403,7 +1403,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
         <source>Input Boost combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>输入增强选择框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="347"/>
@@ -1502,12 +1502,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="484"/>
         <source>Alias or name edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>名称或别名编辑框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="486"/>
         <source>Instrument picture button</source>
-        <translation type="unfinished"></translation>
+        <translation>乐器图片按钮</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="488"/>
@@ -2453,7 +2453,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="126"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>主录制路径文本框（只读）</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="128"/>
@@ -2463,7 +2463,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="133"/>
         <source>Clear the recording directory button</source>
-        <translation type="unfinished"></translation>
+        <translation>清除录制目录按钮</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="134"/>
@@ -2473,7 +2473,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="135"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>点击按钮以清除当前所选择的录制路径。在设置新的位置之前将不再可以开始新的录制。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="139"/>
@@ -2493,12 +2493,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="145"/>
         <source>Current session directory text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>当前会话目录文本框（只读）</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="146"/>
         <source>Current Session Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>当前会话目录</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="147"/>
@@ -2523,7 +2523,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="154"/>
         <source>No recording directory has been set or the value is not useable</source>
-        <translation type="unfinished"></translation>
+        <translation>没有设置录制目录或填写的路径不可用</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -2558,12 +2558,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="164"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>若录制路径不可用，则问题原因将显示在这里。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="172"/>
         <source>Server welcome message edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器欢迎信息编辑框</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="173"/>
@@ -2573,7 +2573,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="174"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>当新的乐手加入服务器时，欢迎信息将会显示在聊天窗口中。若未设置欢迎信息，则服务器欢迎功能将为关闭状态。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="195"/>
@@ -2584,7 +2584,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="328"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>在此输入消息文字。若未设定消息文字，服务器欢迎信息将为关闭状态。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="341"/>
@@ -2599,7 +2599,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="562"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation type="unfinished"></translation>
+        <translation>录音功能启动失败。请检查可用的磁盘空间和权限然后再试一次。错误信息：</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="797"/>
@@ -2609,7 +2609,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="167"/>
         <source>Request new recording button</source>
-        <translation type="unfinished"></translation>
+        <translation>用于创建新的录制的按钮</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
@@ -2619,12 +2619,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>设置当前服务器所位于的国家或地区。客户端将在服务器列表对话框中展示此位置信息。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="117"/>
         <source>Combo box for location of this server</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器位置的选择框</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="168"/>
@@ -2880,33 +2880,33 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>所选的音频设备已不存在于您的系统中。请检查您的音频设备。</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法初始化音频驱动。请检查您的音频硬件设备是否已经插入并检查您的驱动设定。</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>由于所选的音频设备不支持于采样率 %1 Hz 下工作，故其处于不兼容状态。请选择其它设备。</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>由于采样率无法被设置到 %2 Hz，故当前音频设备选项不兼容。请检查硬件上的开关或驱动设定，手动设置其采样率并重启 %1。</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>由于所选的音频设备不支持 %1 声道输入/输出，故其处于不兼容状态。请选择其它设备或配置。</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="206"/>
         <location filename="../../../windows/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>由于所需的采样格式不可用，故当前所选的音频设备处于不兼容状态。请使用其它设备。</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
@@ -2965,12 +2965,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>当前所选的音频设备已不存在。请检查您的音频设备。</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>音频输入设备已不再可用。请检查您的音频输入设备是否已正确连接。</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
@@ -3008,32 +3008,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../soundbase.cpp" line="116"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>由于以下原因，无法使用所选的音频设备：%1 将会使用之前的设备。</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="157"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>之前所选的音频设备已不再可用或现处于不兼容的状态。我们将尝试寻找一个有效的音频设备，但新的设备可能会产生自激。在连接刀服务器前，请考虑检查您的音频设备设置项。</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="169"/>
         <source>No usable %1 audio device found.</source>
-        <translation type="unfinished"></translation>
+        <translation>未发现可用的 %1 音频设备。</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="170"/>
         <source>These are all the available drivers with error messages:</source>
-        <translation type="unfinished"></translation>
+        <translation>以下为所有可用的驱动和错误信息：</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="182"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation type="unfinished"></translation>
+        <translation>您想要打开 ASIO 驱动向导并尝试修改您的配置以达到可用状态吗？</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法启动 %1。请重启 %1 并检查/重新配置您的音频设置选项。</translation>
     </message>
     <message>
         <source> audio device (driver) found.</source>

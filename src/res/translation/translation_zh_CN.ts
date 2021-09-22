@@ -1072,12 +1072,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="171"/>
         <source>Enable Small Network Buffers</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Small Network Buffers 的作用不确定，暂定译法</translatorcomment>
+        <translation>启用小网络缓冲区</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>Enable small network buffers check box</source>
-        <translation type="unfinished"></translation>
+        <translation>启用小网络缓冲区勾选框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="181"/>
@@ -1087,37 +1088,37 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Three buffer sizes are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>当前支持三种缓冲区大小</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>一些声卡驱动不允许让 %1 来调整其缓冲区延迟。因此，缓冲区设定选项已被禁用且您应当通过其声卡驱动来调整其设置。在 Windows 中，使用 ASIO 驱动设置按钮来打开驱动设置面板。在 Linux，使用 JACK 配置工具来调整缓冲区大小。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>若没有选择缓冲区大小且所有设置项均被禁用，则表示驱动使用了不受支持的缓冲区大小。在此设置下 %1 将仍然可用，但性能可能受到限制。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>实际缓冲区延迟将影响连接状况、当前上传速率和总体延迟情况。缓冲区大小越小则状态指示亮红灯（断线）的概率将更高，上行带宽速率将更高，总体延迟则将更低。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="219"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>缓冲区设置则是在音质和总体延迟之间的权衡。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>若缓冲区延迟设置被禁用，则是因为音频驱动禁止 %1 修改此选项。在 Windows 中，按下 ASIO 驱动设置按钮来打开设置面板。在 Linux 中，使用 JACK 配置工具来调整缓冲区大小。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>这将打开您声卡的驱动选项。一些驱动允许您调整缓冲区选项，其它类如 ASIO4ALL 则允许您选择音频的输入输出设备。更多信息可从 jamulus.io 了解。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
@@ -1127,17 +1128,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>64 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>64 采样设置单选按钮</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>128 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>128 采样设置单选按钮</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="253"/>
         <source>256 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>256 采样设置单选按钮</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="270"/>
@@ -1193,22 +1194,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>可在 Windows 操作系统上使用 %1 选择 ASIO 驱动（声卡），在 macOS/Linux 则无声卡选择选项。若所选的 ASIO 驱动无效，则会显示一条错误信息并恢复选择到之前有效的驱动。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>对于所有 %1 输入/输出声道（左右声道）均可选择对应到不同的声卡的声道。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation type="unfinished"></translation>
+        <translation>启用超小网络音频数据包的支持。这些网络包仅会在声卡缓冲区延迟小于 %1 采样率时才启用。网络缓冲区越小，则音频延迟越低。但于此同时网络负载和产生音频中断或声音伪影的可能性将会增加。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="292"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation> 模式将增加您的媒体流数据频率。请确保您的上传速率未超过您实际可用的网络上传速率。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="355"/>
@@ -1218,7 +1219,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>取决于当前音频数据包大小和压缩设定。请确保当前上行流量频率未超过您网络的可用上传速度（可通过类如 speedtest.net 的服务进行检测）。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="407"/>
@@ -1418,17 +1419,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="365"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>混音面板行数</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="365"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>调整用于呈现混音面板的行数。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="368"/>
         <source>Number of Mixer Panel Rows spin box</source>
-        <translation type="unfinished"></translation>
+        <translation>混音面板行数数字框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="370"/>
@@ -1497,7 +1498,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="472"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>在此填写您的名字或别名以便合奏的其他乐手知道您是谁。您也可以添加乐器的图片以及您所在地的旗帜。您还可以添加您的城市和水平程度的相关信息。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="484"/>
@@ -2448,7 +2449,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation type="unfinished"></translation>
+        <translation>点击按钮以打开供选择主要录制目录路径的对话框。所选值必须存在且可写（允许运行 Jamulus 所使用的用户创建子目录）。 </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="126"/>
@@ -2458,7 +2459,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="128"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>当前录制目录路径的值。所选的值必须存在且可被写入（允许运行 Jamulus 的用户创建子目录）。点击按钮以打开供选择主录制目录路径的对话框。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="133"/>
@@ -2478,7 +2479,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="139"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation type="unfinished"></translation>
+        <translation>开启或关闭录制的勾选框</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
@@ -2488,7 +2489,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>录音功能启用时将为勾选状态，否则为未勾选状态。若已配置并开启选项，则录音功能将在会话进行中开启录制。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="145"/>
@@ -2599,7 +2600,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="562"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation>录音功能启动失败。请检查可用的磁盘空间和权限然后再试一次。错误信息：</translation>
+        <translation>录音功能启动失败。请检查可用的磁盘空间和权限然后再试一次。错误信息: </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="797"/>
@@ -2975,32 +2976,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>当前输入设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项（位于 应用程序&gt;辅助功能）手动设定其采样率到 %1 Hz。</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>音频输出设备不再可用。请检查您的输出设备是否已正确连接。</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>当前输出设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项（位于 应用程序&gt;辅助功能）手动设定其采样率到 %1 Hz。</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>当前输入设备的媒体流格式与此软件不兼容。请选择其它设备。</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="475"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>当前输出设备的媒体流格式与 %1 不兼容。请选择其它设备。</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="728"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>当前音频输入输出设备的缓冲区大小无法被设定到一个常见的值。请在您的系统设置中选择其它的输入/输出设备。</translation>
     </message>
 </context>
 <context>

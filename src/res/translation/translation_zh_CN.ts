@@ -1269,7 +1269,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="71"/>
         <source>Local audio input fader (left/right)</source>
-        <translation type="unfinished"></translation>
+        <translation>本地音频输入推子（左/右）</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="75"/>
@@ -1294,22 +1294,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="182"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>缓冲区延迟设定是 %1 的一个基础设置项。此选项会对很多连接相关的属性有影响。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 采样：建议的设置。提供最低的延迟但并非支持所有声卡。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="192"/>
         <source>128 samples: Should work for most available sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>128 采样：应该适用于大多数可用的声卡。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 采样：仅当在过慢的电脑或过慢的网络连接下使用。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="232"/>
@@ -1354,12 +1354,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
-        <translation type="unfinished"></translation>
+        <translation>设置用于连接客户端与服务器所要使用的声道数量。有三个模式可用：</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="277"/>
         <source>These modes use one and two audio channels respectively.</source>
-        <translation type="unfinished"></translation>
+        <translation>这些模式分别使用一个和两个声道。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="282"/>
@@ -1369,7 +1369,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="283"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
-        <translation type="unfinished"></translation>
+        <translation>发送到服务器的音频信号是单声道但接收到的是立体声。当您的声卡其中一个输入声道用于乐器而另一个用于麦克风的场景下很实用。在此情况下，两个输入信号可以合并为单声道但服务器混音仍可听到立体声。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="291"/>
@@ -1379,17 +1379,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="298"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
-        <translation type="unfinished"></translation>
+        <translation>在立体声媒体流模式时，由于混响效果将被应用到所有的两个声道，故主窗口将不提供选择混响效果所应用到的声道的功能。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="308"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>音质越高，音频流带宽使用率也会越高。请确保您的上传速率未超过实际网络连接可用的带宽。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="318"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
-        <translation type="unfinished"></translation>
+        <translation>此选项决定了新加入服务器的客户端的推子电平（音量）。若新的客户端连接到了当前服务器，若其未曾连接到此服务器并存储了其推子音量值，则其推子初始值将为此项所设置的值。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="329"/>
@@ -1399,7 +1399,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>此选项允许你增加输入信号的强度最多十倍（+20dB）。若你的声卡音量过低，首先尝试通过将麦克风离近的方式提高音量，调整您的声音设备或者增加您的系统输入音量设定。若这些方法仍不奏效，则在此设置增加的强度。如果您的声卡音量过高，音频有失真或削波，则请不要使用此选项，此项无助于解决这些问题，相反，您应当考虑通过离远麦克风、降低声音设备的音量或降低系统输入音量设定的方式解决此问题。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
@@ -1409,12 +1409,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="unfinished"></translation>
+        <translation>若您不需要使用默认之外的目录服务器，则将此项置空。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="352"/>
         <source>Directory server address combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>目录服务器地址下拉框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="365"/>
@@ -2504,7 +2504,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="147"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>这句话原文可能有问题</translatorcomment>
+        <translation>用于存储录制时当前会话所录制到的位置，录制未进行时且未开启录制功能时此项将不可用。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="151"/>
@@ -2519,7 +2520,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="153"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation type="unfinished"></translation>
+        <translation>显示当前录音功能的状态。  可能为下述值：</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="154"/>
@@ -2529,7 +2530,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
         <source>Recording has been switched off</source>
-        <translation type="unfinished"></translation>
+        <translation>录制已被关闭</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="157"/>
@@ -2544,12 +2545,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="161"/>
         <source>There is no one connected to the server to record</source>
-        <translation type="unfinished"></translation>
+        <translation>没有人连接到服务器以供录制</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="162"/>
         <source>The performers are being recorded to the specified session directory</source>
-        <translation type="unfinished"></translation>
+        <translation>演奏已被录制到会话所对应的目录中</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="163"/>

@@ -97,7 +97,7 @@ public:
 signals:
     void NewConnection(); // for the client
 
-    void NewConnection ( int          iChID,
+    void NewConnection ( int iChID, int iTotChans,
                          CHostAddress RecHostAddr ); // for the server
 
     void ServerFull ( CHostAddress RecHostAddr );

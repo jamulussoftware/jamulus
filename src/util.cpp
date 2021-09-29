@@ -922,7 +922,7 @@ int CHostAddress::Compare ( const CHostAddress& other ) const
     quint32 thisAddr  = InetAddr.toIPv4Address();
     quint32 otherAddr = other.InetAddr.toIPv4Address();
 
-    return (int) thisAddr - (int) otherAddr;
+    return thisAddr < otherAddr ? -1 : thisAddr > otherAddr ? 1 : 0;
 }
 
 // Instrument picture data base ------------------------------------------------

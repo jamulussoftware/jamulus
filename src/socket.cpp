@@ -69,7 +69,10 @@ CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQ
 
     QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pServer, &CServer::OnProtcolCLMessageReceived );
 
-    QObject::connect ( this, static_cast<void ( CSocket::* ) ( int, CHostAddress )> ( &CSocket::NewConnection ), pServer, &CServer::OnNewConnection );
+    QObject::connect ( this,
+                       static_cast<void ( CSocket::* ) ( int, int, CHostAddress )> ( &CSocket::NewConnection ),
+                       pServer,
+                       &CServer::OnNewConnection );
 
     QObject::connect ( this, &CSocket::ServerFull, pServer, &CServer::OnServerFull );
 }
@@ -463,7 +466,7 @@ void CSocket::OnDataReceived()
             if ( pServer->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr, iCurChanID ) )
             {
                 // we have a new connection, emit a signal
-                emit NewConnection ( iCurChanID, RecHostAddr );
+                emit NewConnection ( iCurChanID, pServer->GetNumberOfConnectedClients(), RecHostAddr );
 
                 // this was an audio packet, start server if it is in sleep mode
                 if ( !pServer->IsRunning() )

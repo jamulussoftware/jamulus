@@ -60,8 +60,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     // check sample rate, if not correct, just fire error
     if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     {
-        throw CGenErr ( QString ( JACK_SAMPLE_RATE_ERR_MSG )
-                            .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
+        throw CGenErr ( QString ( JACK_SAMPLE_RATE_ERR_MSG ).arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
     // create four ports (two for input, two for output -> stereo)
@@ -75,9 +74,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
 
     if ( ( input_port_left == nullptr ) || ( input_port_right == nullptr ) || ( output_port_left == nullptr ) || ( output_port_right == nullptr ) )
     {
-        throw CGenErr ( QString ( JACK_PORT_REG_SAMPLE_RATE_ERR_MSG )
-                            .arg ( APP_NAME )
-                            .arg ( SYSTEM_SAMPLE_RATE_HZ ) );
+        throw CGenErr ( QString ( JACK_PORT_REG_SAMPLE_RATE_ERR_MSG ).arg ( APP_NAME ).arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
     // optional MIDI initialization
@@ -87,8 +84,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
 
         if ( input_port_midi == nullptr )
         {
-            throw CGenErr ( QString ( JACK_PORT_REG_MIDI_ERR_MSG )
-                                .arg ( APP_NAME ) );
+            throw CGenErr ( QString ( JACK_PORT_REG_MIDI_ERR_MSG ).arg ( APP_NAME ) );
         }
     }
     else
@@ -99,8 +95,7 @@ void CSound::OpenJack ( const bool bNoAutoJackConnect, const char* jackClientNam
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
     {
-        throw CGenErr ( QString ( JACK_ACTIVATE_CLIENT_ERR_MSG )
-                            .arg ( APP_NAME ) );
+        throw CGenErr ( QString ( JACK_ACTIVATE_CLIENT_ERR_MSG ).arg ( APP_NAME ) );
     }
 
     if ( !bNoAutoJackConnect )
@@ -202,8 +197,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     // without a Jack server, Jamulus makes no sense to run, throw an error message
     if ( bJackWasShutDown )
     {
-        throw CGenErr ( QString ( JACK_SHUT_DOWN_ERR_MSG )
-                            .arg ( APP_NAME ) );
+        throw CGenErr ( QString ( JACK_SHUT_DOWN_ERR_MSG ).arg ( APP_NAME ) );
     }
 
     // get actual buffer size

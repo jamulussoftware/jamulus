@@ -65,7 +65,7 @@ void CSound::closeStream ( oboe::ManagedStream& stream )
 
         if ( result != oboe::Result::OK )
         {
-            throw CGenErr ( tr ( "Error closing stream: $s", oboe::convertToText ( result ) ) );
+            throw CGenErr ( QCoreApplication::translate ( "global", "Error closing stream: $s", oboe::convertToText ( result ) ) );
         }
 
         stream.reset();

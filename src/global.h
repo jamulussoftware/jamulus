@@ -282,6 +282,14 @@ LED bar:      lbr
 #define _MINSHORT     ( -32768 )
 #define INVALID_INDEX -1 // define invalid index as a negative value (a valid index must always be >= 0)
 
+// JACK error messages
+#define JACK_AUTO_START_ERR_MSG           QCoreApplication::translate ( "global", "JACK couldn't be started automatically. Please start JACK manually and check for error messages." )
+#define JACK_SAMPLE_RATE_ERR_MSG          QCoreApplication::translate ( "global", "JACK isn't running at a sample rate of <b>%1 Hz</b>. Please use a tool like <i><a href=\"https://qjackctl.sourceforge.io\">QjackCtl</a></i> to set the the JACK sample rate to %1 Hz." )
+#define JACK_PORT_REG_SAMPLE_RATE_ERR_MSG QCoreApplication::translate ( "global", "The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK." )
+#define JACK_PORT_REG_MIDI_ERR_MSG        QCoreApplication::translate ( "global", "The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK." )
+#define JACK_ACTIVATE_CLIENT_ERR_MSG      QCoreApplication::translate ( "global", "Can't activate the JACK client. This is probably an error with JACK. Please check the JACK output." )
+#define JACK_SHUT_DOWN_ERR_MSG            QCoreApplication::translate ( "global", "JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again." )
+
 #if HAVE_STDINT_H
 #    include <stdint.h>
 #elif HAVE_INTTYPES_H

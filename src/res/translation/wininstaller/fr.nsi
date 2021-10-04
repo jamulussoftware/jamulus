@@ -37,13 +37,13 @@ LangString ASIO_EXIT_NO_DRIVER ${LANG_FRENCH} \
      "${APP_NAME} a besoin d'un pilote audio ASIO pour fonctionner, mais nous n'avons pas pu en trouver sur votre PC. Vous devriez en installer un comme ASIO4ALL (Plus d'informations sur jamulus.io sous Installation sous Windows). Voulez-vous tout de même continuer l'installation de ${APP_NAME} en premier ? "
 
 LangString JACK_DRIVER_HEADER ${LANG_FRENCH} \
-     "JACK Audio Connection Kit"
+     "Kit de connexion audio JACK"
 
 LangString JACK_DRIVER_SUB ${LANG_FRENCH} \
-     "To use this version of ${APP_NAME}, you need use the JACK Audio Connection Kit"
+     "Pour utiliser cette version de ${APP_NAME}, vous devez utiliser le kit de connexion audio JACK."
 
 LangString JACK_DRIVER_EXPLAIN ${LANG_FRENCH} \
-     "This version of ${APP_NAME} is making use of the JACK Audio Connection Kit. Please make sure this has been installed or download the standard version of ${APP_NAME} on jamulus.io which is using ASIO."
+     "Cette version de ${APP_NAME} utilise le kit de connexion audio JACK. Veuillez vous assurer que ce kit a été installé ou téléchargez la version standard de ${APP_NAME} sur jamulus.io qui utilise ASIO."
 
 LangString JACK_EXIT_NO_DRIVER ${LANG_FRENCH} \
-     "This ${APP_NAME} version needs the JACK Audio Connection Kit to work, but it doesn't seem to be installed on your PC. You should install JACK for Windows first. Do you still want to continue with the installation of ${APP_NAME} without installing JACK first?"
+     "Cette version de ${APP_NAME} a besoin du kit de connexion audio JACK pour fonctionner, mais celui-ci ne semble pas être installé sur votre PC. Vous devez d'abord installer JACK pour Windows. Voulez-vous toujours continuer l'installation de ${APP_NAME} sans installer JACK d'abord ?"

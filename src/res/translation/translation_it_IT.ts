@@ -924,7 +924,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>&amp;Connection Setup...</source>
-        <translation>Setup &amp;Connessione...</translation>
+        <translation>Setup C&amp;onnessione...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="374"/>

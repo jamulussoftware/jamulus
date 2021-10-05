@@ -835,7 +835,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="372"/>
         <source>&amp;Settings</source>
-        <translation>设置(&amp;S)</translation>
+        <translation>设置(&amp;Z)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="713"/>

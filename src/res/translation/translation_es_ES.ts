@@ -2874,7 +2874,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../util.cpp" line="603"/>
         <source>What&apos;s &amp;This</source>
-        <translation>&amp;Qué es Esto</translation>
+        <translation>Qué es &amp;Esto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="605"/>

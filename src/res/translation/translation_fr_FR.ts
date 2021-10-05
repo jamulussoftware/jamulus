@@ -708,7 +708,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>&amp;Connection Setup...</source>
-        <translation>Paramètres de &amp;connexion...</translation>
+        <translation>&amp;Paramètres de connexion...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="374"/>

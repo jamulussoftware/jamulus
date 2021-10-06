@@ -96,7 +96,7 @@
     <message>
         <location filename="../../util.cpp" line="538"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>zjednodušená čínština</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="546"/>
@@ -303,7 +303,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="145"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
-        <translation>Upraví úroveň zvuku pre tento kanál. Všetkým klientom pripojeným k serveru bude priradený zvukový prelínač a umožní im lokálne mixovanie.</translation>
+        <translation>Upravuje úroveň zvuku pre tento kanál. Všetkým klientom pripojeným k serveru bude priradený zvukový prelínač a umožní im lokálne mixovanie.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="153"/>
@@ -483,7 +483,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="58"/>
         <source>&amp;Edit</source>
-        <translation>Úp&amp;ravy</translation>
+        <translation>&amp;Upraviť</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="60"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="135"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>Chcete otvoriť prepojenie &apos;%1&apos; vo vašom prehliadači?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -602,7 +602,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="62"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ak je aplikácia pripojená k serveru a vy zahráte na hudobný nástroj alebo zaspievate do mikrofónu, ukazovateľ vstupného signálu by sa mal aktivovať. Ak sa tak nedeje, pravdepodobne ste vybrali nesprávny vstupný kanál (napr. &apos;line in&apos; miesto mikrofónneho vstupu) alebo ste nastavili zosilnenie signálu (gain) na príliš nízku hodnotu v zmiešavači zvuku (Windows).</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="70"/>
@@ -612,7 +612,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="96"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Otvorí dialógové okno s výberom serveru, ku ktorému sa chcete pripojiť. Ak ste pripojený, stlačením tohto tlačidla ukončíte sedenie.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
@@ -706,7 +706,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="177"/>
         <source>The CPU of the client or server is at 100%.</source>
-        <translation>Procesor na klientovi alebo serveri je vytažený na 100%.</translation>
+        <translation>Procesor na klientovi alebo serveri je vytažený na 100 %.</translation>
     </message>
     <message>
         <source>Buffers status LED indicator</source>
@@ -983,13 +983,13 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
@@ -1037,7 +1037,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>STÍŠENÉ (Nebude vás počuť)</translation>
+        <translation>STÍŠENÉ (ľudia vás nepočujú)</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="587"/>
@@ -1104,7 +1104,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="148"/>
         <source>Sound Card Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapovanie kanálov zvukovej karty</translation>
     </message>
     <message>
         <source>For each </source>
@@ -1216,7 +1216,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Language</source>
-        <translation type="unfinished">Jazyk</translation>
+        <translation>Jazyk</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="265"/>
@@ -2124,7 +2124,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directories:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vlastné adresáre:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1023"/>
@@ -2254,7 +2254,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../connectdlg.cpp" line="46"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okno Nastavenie pripojenia zobrazuje zoznam dostupných serverov. Prevádzkovatelia serverov môžu voliteľne zadať hudobný žáner. V rozbaľovacej ponuke vyberte žáner, kliknite na server, ku ktorému sa chcete pripojiť a kliknutím na tlačidlo Pripojiť sa pripojíte k serveru. Prípadne stačí dvakrát kliknúť na meno servera. Trvalé servery (také, ktoré sú v zozname viac ako 48 hodín) sú zobrazené tučným písmom.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="57"/>
@@ -2324,7 +2324,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../connectdlg.cpp" line="137"/>
         <source>Filter text, or # for occupied servers</source>
-        <translation>Filter textu alebo # pre zobrazenie obsadených serverov</translation>
+        <translation>Filter textu alebo # pre obsadené servery</translation>
     </message>
     <message>
         <source>Type # for occupied servers</source>
@@ -2345,7 +2345,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresár</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -2423,12 +2423,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../util.cpp" line="605"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">&amp;O programe Jamulus...</translation>
+        <translation>&amp;O programe Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="607"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">O programe &amp;Qt...</translation>
+        <translation>O &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2437,7 +2437,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">O programe Qt</translation>
+        <translation>O Qt</translation>
     </message>
 </context>
 <context>
@@ -2805,17 +2805,17 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../serverdlg.cpp" line="70"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished">Ak je zapnutá voľba Nastaviť server ako verejný, tu sa zobrazí, či bola registrácia na centrálnom serveri úspešná. Ak registrácia zlyhala, prosím, vyberte iný zoznam serverov.</translation>
+        <translation>Ak je zapnutá voľba Nastaviť server ako verejný, tu sa zobrazí, či bola registrácia na adresárovom serveri úspešná. Ak registrácia zlyhala, prosím, vyberte iný zoznam serverov.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Adresa vlastného centrálneho servera</translation>
+        <translation>Adresa vlastného adresárového servera</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="76"/>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished">Adresa vlastného centrálneho servera je IP adresa alebo URL centrálneho servera, kde je spravovaný zoznam serverov pre dialógové okno, ktoré je zobrazené klientom.</translation>
+        <translation>Adresa vlastného adresárového servera je IP adresa alebo URL adresárového servera, kde je spravovaný zoznam serverov pre dialógové okno, ktoré je zobrazené klientom.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
@@ -2830,7 +2830,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../serverdlg.cpp" line="84"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="unfinished">Vyberá zoznam serverov (t. j. adresu centrálneho servera), do ktorého bude pridaný váš server.</translation>
+        <translation>Vyberá zoznam serverov (t. j. adresu adresárového servera), do ktorého bude pridaný váš server.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
@@ -3221,12 +3221,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Zoznam</translation>
+        <translation>Zoznam</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Umiestnenie: Oblasť</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -3314,7 +3314,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../serverlist.cpp" line="647"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa zapísať do &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -3379,7 +3379,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrané zvukové zariadenie už nie je v systéme dostupné. Prosím, skontrolujte ho.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
@@ -3410,7 +3410,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
         <source>No ASIO audio device driver found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebol nájdený zvukový ovládač ASIO.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="554"/>
@@ -3590,7 +3590,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../global.h" line="120"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Je dostupná aktualizácia %1: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;prejsť na podrobnosti a preberania&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../global.h" line="270"/>

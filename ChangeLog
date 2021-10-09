@@ -1,5 +1,5 @@
 
-### 3.8.1rc1 <- NOTE: the release version number will be 3.8.1 ###
+### 3.8.1rc1dev <- NOTE: the release version number will be 3.8.1 ###
 
 - Client: JACK support on Windows has been improved (#1718).
   (contributed by @jujudusud, @henkdegroot)

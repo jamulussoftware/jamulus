@@ -128,7 +128,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation>&amp;O programe</translation>
+        <translation>O pro&amp;grame</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
@@ -760,7 +760,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>&amp;Connection Setup...</source>
-        <translation>&amp;Nastavenie pripojenia...</translation>
+        <translation>Nasta&amp;venie pripojenia...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="374"/>
@@ -854,7 +854,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="378"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation>&amp;Pokročilé nastavenia...</translation>
+        <translation>Pokročilé &amp;nastavenia...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="293"/>
@@ -994,12 +994,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation>&amp;Stíšiť ma</translation>
+        <translation>S&amp;tíšiť ma</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="505"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Nastavenia</translation>
+        <translation>Nasta&amp;venia</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="512"/>

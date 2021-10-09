@@ -872,7 +872,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>&amp;Connection Setup...</source>
-        <translation>&amp;Conectar a Servidor...</translation>
+        <translation>C&amp;onectar a Servidor...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="374"/>
@@ -1027,7 +1027,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="308"/>
         <source>N&amp;o User Sorting</source>
-        <translation>S&amp;em Ordenação de Canais</translation>
+        <translation>Sem &amp;Ordenação de Canais</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="159"/>
@@ -1081,7 +1081,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="372"/>
         <source>&amp;Settings</source>
-        <translation>Definiçõe&amp;s</translation>
+        <translation>&amp;Definições</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="713"/>

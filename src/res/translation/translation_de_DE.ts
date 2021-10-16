@@ -827,12 +827,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="191"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation>Als Ping wird die Zeit bezeichnet, die der Audiodatenstrom benötigt, um vom Client zum Server und wieder zurück zu kommen. Diese Verzögerung wird durch das Netzwerk hervorgerufen und sollte um 20-30 ms betragen. Wenn dieser Wert grösser ist als 50ms, ist emtweder der Abstand zum Server zu groß oder die Internetverbindung nicht ausreichend.</translation>
+        <translation>Als Ping wird die Zeit bezeichnet, die der Audiodatenstrom benötigt, um vom Client zum Server und wieder zurück zu kommen. Diese Verzögerung wird durch das Netzwerk hervorgerufen und sollte um 20-30 ms betragen. Wenn dieser Wert größer ist als 50ms, ist entweder der Abstand zum Server zu groß oder die Internetverbindung nicht ausreichend.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="198"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation>Die Gesamtverzögerung setzt sich zusammen aus der Ping-Zeit sowie der Verzögerung, die durch die aktuellen Puffereinstellungen verursacht wird.</translation>
+        <translation>Die Gesamtverzögerung setzt sich aus der Ping-Zeit und der Verzögerung, die durch die aktuellen Puffereinstellungen verursacht wird zusammen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="228"/>
@@ -1053,7 +1053,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientdlg.cpp" line="160"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation>Die Lokale Jitter Buffer Status LED zeigt den aktuellen Audio/Streaming Status. Rotes Licht bedeutet, der Audio-Datenstrom ist unterbrochen. Das wird durch folgende Problemen verursacht:</translation>
+        <translation>Die Lokale Jitter Buffer Status LED zeigt den aktuellen Audio/Streaming Status. Rotes Licht bedeutet, dass der Audio-Datenstrom unterbrochen ist. Das wird durch folgende Problemen verursacht:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="184"/>
@@ -1399,7 +1399,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation>Der ASIO Treiber (Audio Interface) kann ausgewählt werden über %1 beim Windows Betriebsystem. Unter MacOS/Linux ist keine Auswahl der Soundkarte möglich. Wenn der ausgewählte ASIO Treiber falsch ist wird eine Fehlermeldung angezeigt und der vorher ausgewählte passende Treiber eingestellt.</translation>
+        <translation>Der ASIO Treiber (Soundkarte) kann %1 unter Windows ausgewählt werden. Unter macOS/Linux ist keine Auswahl der Soundkarte möglich. Wenn der ausgewählte ASIO Treiber nicht kompatibel ist, wird eine Fehlermeldung angezeigt und der vorher ausgewählte passende Treiber eingestellt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="153"/>
@@ -1409,27 +1409,27 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation>Aktiviert die Unterstützung für sehr kleine Netzwerk-Audio-Pakete. Diese Netzwerk Pakete werden nur benutzt wenn die Soundkarten Pufferverzögerung kleiner als %1 Samples ist. Je kleiner die Netzwerk Puffer, desto kleiner die Audio-Latenz. Aber gleichzeitig steigt die Netzwerk-Belastung und die Wahrscheinlichkeit von Audio-Aussetzerm oder Sound-Artefakten.</translation>
+        <translation>Aktiviert die Unterstützung für sehr kleine Netzwerk-Audio-Pakete. Diese Netzwerk Pakete werden nur benutzt wenn die Soundkarten Pufferverzögerung kleiner als %1 Samples ist. Je kleiner die Netzwerk Puffer, desto geringer die Audio-Latenz. Gleichzeitig steigt aber die Netzwerk-Belastung und die Wahrscheinlichkeit von Audio-Aussetzern oder Sound-Artefakten.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation>Einige Soundkarten Treiber erlauben keine Änderung der Pufferverzögerung aus %1 heraus. In diesem Falle ist die Pufferverzögerungseinstellung deaktiviert und muß im Soundkarten Treiber eingestellt werden. Benutze unter Windows den ASIO Geräteeinstellungsknopf um die Treibereinstellungsoberfläche anzuzeigen. Benutze unter Linux das JACK-Konfigurationstool um die Puffergrösse zu ändern.</translation>
+        <translation>Einige Soundkarten Treiber erlauben keine Änderung der Puffergröße aus %1 heraus. In diesem Fall ist die Puffergrößeneinstellung deaktiviert und die Puffergröße muss im Soundkarten Treiber eingestellt werden. Benutze unter Windows den ASIO Geräteeinstellungsknopf um die Treibereinstellungen anzuzeigen. Benutze unter Linux das JACK-Konfigurationstool um die Puffergröße zu ändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
-        <translation>Wenn keine Puffergrösse ausgewählt ist und alle Einstellungen deaktiviert sind bedeutet das, daß eine nicht unterstützte Puffergrösse vom Treiber gerade verwedet wird. %1 wird noch funktionieren, hat aber eine eingeschränkte Funktionalität.</translation>
+        <translation>Wenn keine Puffergröße ausgewählt ist und alle Einstellungen deaktiviert sind bedeutet das, dass eine nicht unterstützte Puffergröße vom Treiber verwendet wird. %1 wird nun eventuell nur eingeschränkt funktionieren.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation>Wenn die Puffer Verzögerungseinstellungen deaktivert sind, verbietet der Audio-Treiber eine Veränderung aus %1 heraus. Unter Windows, betätige den Button für die ASIO-Geräte-Einstellungen, um das Treibereinstellungspanel anzuzeigen. UnterLinux benutze das JACK-Konfigurationstool um die Puffergrösse zu ändern.</translation>
+        <translation>Wenn die Puffer Verzögerungseinstellungen deaktiviert sind, verbietet der Audio-Treiber eine Veränderung aus %1 heraus. Unter Windows, klicke auf den Button für die ASIO-Geräte-Einstellungen, um das Treibereinstellungspanel anzuzeigen. Unter Linux benutze das JACK-Konfigurationstool um die Puffergröße zu ändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation>Dies öffnet die Treibereinstellungen Deiner Soundkarte. Einige Treiber erlauben Dir die Puffer-Einstellungen zu ändern, andere wie ASIO4ALL lassen Dich einen Eingang oder Ausgang auf Deinen Geräten auswählen Weitere Infos sind zu finden unter jamulus.io.</translation>
+        <translation>Öffnet die Treibereinstellungen Deiner Soundkarte. Einige Treiber erlauben Dir die Puffer-Einstellungen zu ändern, andere wie ASIO4ALL lassen Dich die Ein- oder Ausgänge deiner Geräte auswählen. Weitere Infos findest du auf jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
@@ -1459,7 +1459,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="182"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation>Die Puffer Verzögerungseinstellung ist eine fundamentale Einstellung von %1. Diese Einstellung hat einen Einfluß auf viele Verbindungseingeschaften.</translation>
+        <translation>Die Puffer Verzögerungs-/Größeneinstellung ist eine fundamentale Einstellung von %1. Diese Einstellung hat Einfluss auf viele Verbindungsparameter.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="329"/>
@@ -1489,7 +1489,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation>Hängt von der aktuellen Audio-Paketgrösse und den Kompressionseinstellungen ab. Stelle sicher, daß die Upstream-Rate nicht höher ist als Deine verfügbare Internet Upload Geschwindigkeit (Überprüfe dies mit einem speziellen Service wie z.B. speedtest.net).</translation>
+        <translation>Hängt von der aktuellen Audio-Paketgröße und den Kompressionseinstellungen ab. Stelle sicher, dass die Upstream-Rate nicht höher ist als Deine verfügbare Internet Upload Geschwindigkeit (Überprüfe dies mit einem speziellen Service wie z.B. speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="365"/>

@@ -1332,7 +1332,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="163"/>
         <source>Right input channel selection combo box</source>
-        <translation>Rechter  Eingang Kanalauswahlbox</translation>
+        <translation>Rechter Eingang Kanalauswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="165"/>
@@ -1409,7 +1409,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation>Aktiviert die Unterstützung für sehr kleine Netzwerk-Audio-Pakete. Diese Netzwerk Pakete werden nur benutzt wenn die Soundkarten Pufferverzögerung kleiner als %1 Samples ist. Je kleiner die Netzwerk Puffer , desto kleiner die Audio-Latenz. Aber gleichzeitig steigt die Netzwerk-Belastung und die Wahrscheinlichkeit von Audio-Aussetzerm oder Sound-Artefakten.</translation>
+        <translation>Aktiviert die Unterstützung für sehr kleine Netzwerk-Audio-Pakete. Diese Netzwerk Pakete werden nur benutzt wenn die Soundkarten Pufferverzögerung kleiner als %1 Samples ist. Je kleiner die Netzwerk Puffer, desto kleiner die Audio-Latenz. Aber gleichzeitig steigt die Netzwerk-Belastung und die Wahrscheinlichkeit von Audio-Aussetzerm oder Sound-Artefakten.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
@@ -1424,12 +1424,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation>Wenn die Puffer Verzögerungseinstellungen deaktivert sind, verbietet der Audio-Treiber eine Veränderung aus %1 heraus. Unter Windows , betätige den Button für die ASIO-Geräte-Einstellungen, um das Treibereinstellungspanel anzuzeigen. UnterLinux benutze das JACK-Konfigurationstool um die Puffergrösse zu ändern.</translation>
+        <translation>Wenn die Puffer Verzögerungseinstellungen deaktivert sind, verbietet der Audio-Treiber eine Veränderung aus %1 heraus. Unter Windows, betätige den Button für die ASIO-Geräte-Einstellungen, um das Treibereinstellungspanel anzuzeigen. UnterLinux benutze das JACK-Konfigurationstool um die Puffergrösse zu ändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation>Dies öffnet die Treibereinstellungen DEiner Soundkarte. Einige Treiber erlauben Dir die Puffer-Einstellungen zu ändern, andere wie ASIO4ALL lassen Dich einen Eingang oder Ausgang auf Deinen  Geräten auswählen  Weitere Infos sind zu finden unter jamulus.io.</translation>
+        <translation>Dies öffnet die Treibereinstellungen Deiner Soundkarte. Einige Treiber erlauben Dir die Puffer-Einstellungen zu ändern, andere wie ASIO4ALL lassen Dich einen Eingang oder Ausgang auf Deinen Geräten auswählen Weitere Infos sind zu finden unter jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
@@ -1469,7 +1469,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation>Diese Einstellung erlaubt es Dir, Dein Eingangs-Signal um bis zu Faktor 10 (+20dB) zu verstärken.Wenn Dein Sound zu leise ist, versuche zunächst das Signal zu verbessern, indem Du entweder näher an das Mikrofon gehst, Dein Audioequipment lauter stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems erhöhst. Nur wenn dies nicht gelingt, setze hier einen Verstärkungsfaktor. Falls der Sound zu laut ist und verzerrt oder übersteuert, wird diese Option nicht helfen. Bitte in diesem Falle nicht verwenden. Verringere stattdessen Deinen Eingnagspegel, indem Du entweder weiter weg vom Mikrofon gehst, Dein Audioequipment leiser stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems verringerst.</translation>
+        <translation>Diese Einstellung erlaubt es Dir, Dein Eingangs-Signal um bis zu Faktor 10 (+20dB) zu verstärken. Wenn Dein Sound zu leise ist, versuche zunächst das Signal zu verbessern, indem Du entweder näher an das Mikrofon gehst, Dein Audioequipment lauter stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems erhöhst. Nur wenn dies nicht gelingt, setze hier einen Verstärkungsfaktor. Falls der Sound zu laut ist und verzerrt oder übersteuert, wird diese Option nicht helfen. Bitte in diesem Falle nicht verwenden. Verringere stattdessen Deinen Eingnagspegel, indem Du entweder weiter weg vom Mikrofon gehst, Dein Audioequipment leiser stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems verringerst.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
@@ -1489,7 +1489,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation>Hängt von der aktuellen Audio-Paketgrösse und den Kompressionseinstellungen ab.Stelle sicher, daß die Upstream-Rate nicht höher ist als Deine verfügbare INternet Upload Geschwindigkeit (Überprüfe dies mit einem speziellen Service wie z.B. speedtest.net).</translation>
+        <translation>Hängt von der aktuellen Audio-Paketgrösse und den Kompressionseinstellungen ab. Stelle sicher, daß die Upstream-Rate nicht höher ist als Deine verfügbare Internet Upload Geschwindigkeit (Überprüfe dies mit einem speziellen Service wie z.B. speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="365"/>
@@ -1947,7 +1947,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation>Lass dies leer , es sei denn Du musst eine vom Standard abweichende Verzeichnisserver Adresse eingeben.</translation>
+        <translation>Lass dies leer, es sei denn Du musst eine vom Standard abweichende Verzeichnisserver Adresse eingeben.</translation>
     </message>
     <message>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
@@ -3313,7 +3313,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlg.cpp" line="70"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation>Wenn die Checkbox &quot;Make My Server Public&quot; angewählt ist, wird angrzeiget ob die Registration am Verzeichnis erfolgreich ist.</translation>
+        <translation>Wenn die Checkbox &quot;Veröffentliche meinen Server&quot; angewählt ist, wird angrzeiget ob die Registration am Verzeichnis erfolgreich ist.</translation>
     </message>
     <message>
         <source>The Directory server address is the IP address or URL of the directory server at which this server is registered. Pre-defined server addresses are available</source>
@@ -3774,7 +3774,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Region</source>
-        <translation>Location:Region</translation>
+        <translation>Location: Region</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -4002,12 +4002,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation>Das gewählte Audio Gerät ist nicht länger verfügbar im System. Bitte überprüfe Dein Audio  Gerät.</translation>
+        <translation>Das gewählte Audio Gerät ist nicht länger verfügbar im System. Bitte überprüfe Dein Audio Gerät.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation>Konnte den Audio-Treiber nicht initialisieren . Überprüfe , ob Deine Audio Hardware angeschlossen ist und überprüfe die Treiber Einstellungen.</translation>
+        <translation>Konnte den Audio-Treiber nicht initialisieren. Überprüfe, ob Deine Audio Hardware angeschlossen ist und überprüfe die Treiber Einstellungen.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
@@ -4038,7 +4038,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../windows/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation>Bitte installiere einen ASIO Treiber bevor %1 läuft.Wenn Du ein Gerät mit ASIO Support besitzt, installiere seinen offziellen ASIO Treiber. Falls nicht, musst Du einen Universaltreiber ei ASIO4ALL instalieren.</translation>
+        <translation>Bitte installiere einen ASIO Treiber bevor %1 läuft. Wenn Du ein Gerät mit ASIO Support besitzt, installiere seinen offziellen ASIO Treiber. Falls nicht, musst Du einen Universaltreiber ei ASIO4ALL instalieren.</translation>
     </message>
     <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
@@ -4069,17 +4069,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>JACK läuft nicht mit der Samplerate von &lt;b&gt;%1 Hz&lt;/b&gt;. Bitte benutze ein Tool wie  &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt;, um die JACK Smaple Rate auf %1 Hz zu setzen.</translation>
+        <translation>JACK läuft nicht mit der Samplerate von &lt;b&gt;%1 Hz&lt;/b&gt;. Bitte benutze ein Tool wie &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt;, um die JACK Sample Rate auf %1 Hz zu setzen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation>Die JACK Portregistrierung  ist fehlgeschlagen. Es handelt sich wahrscheinlich um einen Fehler mit JACK. Bitte stoppe %1 sowie JACK. Danach prüfe , ob ein anderes Programm mit einer Samplerate von %2 Hz sich mit JACK verbinden lässt.</translation>
+        <translation>Die JACK Portregistrierung ist fehlgeschlagen. Es handelt sich wahrscheinlich um einen Fehler mit JACK. Bitte stoppe %1 sowie JACK. Danach prüfe, ob ein anderes Programm mit einer Samplerate von %2 Hz sich mit JACK verbinden lässt.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation>Die JACK Portregistrierung  ist fehlgeschlagen. Es handelt sich wahrscheinlich um einen Fehler mit JACK. Bitte stoppe %1 sowie JACK. Danach prüfe , ob ein anderes MIDI Programm sich mit JACK verbinden lässt.</translation>
+        <translation>Die JACK Portregistrierung ist fehlgeschlagen. Es handelt sich wahrscheinlich um einen Fehler mit JACK. Bitte stoppe %1 sowie JACK. Danach prüfe, ob ein anderes MIDI Programm sich mit JACK verbinden lässt.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="107"/>
@@ -4089,7 +4089,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../linux/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation>JACK wurde heruntergefahren. %1 verlangt , daß JACK läuft. Bitte starte %1 neu , um JACK wieder zu starten.</translation>
+        <translation>JACK wurde heruntergefahren. %1 verlangt, daß JACK läuft. Bitte starte %1 neu, um JACK wieder zu starten.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
@@ -4109,22 +4109,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation>Das Audio Eingangs Gerät ist nicht länger verfügbar . Bitte überprüfe , ob Deine Eingangsgeräte korrekt angeschlossen sind.</translation>
+        <translation>Das Audio Eingangs Gerät ist nicht länger verfügbar. Bitte überprüfe, ob Deine Eingangsgeräte korrekt angeschlossen sind.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>Die Sample Rate auf dem aktuellen Eingangsgerät beträgt nicht %1Hz und ist somit nicht kompatibel. Bitte wähle ein anderes Gerät oder versuche manuell die Sample Rate  auf %1 Hz zu setzen über das Audio-MIDI Setup (Im Applkations-Modus). </translation>
+        <translation>Die Sample Rate auf dem aktuellen Eingangsgerät beträgt nicht %1Hz und ist somit nicht kompatibel. Bitte wähle ein anderes Gerät oder versuche manuell die Sample Rate auf %1 Hz zu setzen über das Audio-MIDI Setup (Im Applkations-Modus). </translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation>Das Audio Ausgangs Gerät ist nicht länger verfügbar . Bitte überprüfe , ob Dein Ausgangsgerät korrekt angeschlossen ist.</translation>
+        <translation>Das Audio Ausgangs Gerät ist nicht länger verfügbar. Bitte überprüfe, ob Dein Ausgangsgerät korrekt angeschlossen ist.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>Die Sample Rate auf dem aktuellen Ausgangsgerät beträgt nicht %1Hz und ist somit nicht kompatibel. Bitte wähle ein anderes Gerät oder versuche manuell die Sample Rate  auf %1 Hz zu setzen über das Audio-MIDI Setup (Im Applkations-Modus). </translation>
+        <translation>Die Sample Rate auf dem aktuellen Ausgangsgerät beträgt nicht %1Hz und ist somit nicht kompatibel. Bitte wähle ein anderes Gerät oder versuche manuell die Sample Rate auf %1 Hz zu setzen über das Audio-MIDI Setup (Im Applkations-Modus). </translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
@@ -4196,7 +4196,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../soundbase.cpp" line="157"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
-        <translation>Der vorher ausgewählte Audio Gerätetreiber ist nicht länger verfügbar oder der Treiber hat sich in einen Inkompatiblen Status verändert. Wir werden versuchen , ein passendes Audio Gerät zu finden, aber diese neue Audio Gerät könnte Feedback verursachen. Überprüfe Deine Audiodevices vorm Verbinden mit einem Server.</translation>
+        <translation>Der vorher ausgewählte Audio Gerätetreiber ist nicht länger verfügbar oder der Treiber hat sich in einen Inkompatiblen Status verändert. Wir werden versuchen, ein passendes Audio Gerät zu finden, aber diese neue Audio Gerät könnte Feedback verursachen. Überprüfe Deine Audiodevices vorm Verbinden mit einem Server.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="169"/>
@@ -4211,7 +4211,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../soundbase.cpp" line="182"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation>Möchtest Du den das ASIO Treiber Setup öffnen um Deine Konfiguration in einen funktionsfähigen Zustand zu versetzen ?</translation>
+        <translation>Möchtest Du den das ASIO Treiber Setup öffnen um Deine Konfiguration in einen funktionsfähigen Zustand zu versetzen?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>

@@ -124,7 +124,7 @@
     <message>
         <location filename="../../util.cpp" line="538"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Vereinfachtes Chinesisch</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="546"/>
@@ -559,7 +559,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="135"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>Willst Du den Link &apos;%1&apos; in Deinem Browser öffnen?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -822,17 +822,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="188"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Verbindungsstatus Parameter</translation>
+        <translation>Aktueller Verbindungsstatus Parameter</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="191"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">Die Ping-Zeit ist die Zeit, die der Audiodatenstrom benötigt, um von der Applikation zum Server und zurück zu kommen. Diese Verzögerung wird vom Netzwerk hervorgerufen. Diese Verzögerung sollte so um die 20-30 ms sein. Falls die Verzögerung größer ist (z.B. 50-60 ms), der Abstand zum Server ist zu groß oder die Internetverbindung ist nicht ausreichend.</translation>
+        <translation>Als Ping wird die Zeit bezeichnet, die der Audiodatenstrom benötigt, um vom Client zum Server und wieder zurück zu kommen. Diese Verzögerung wird durch das Netzwerk hervorgerufen und sollte um 20-30 ms betragen. Wenn dieser Wert größer ist als 50ms, ist entweder der Abstand zum Server zu groß oder die Internetverbindung nicht ausreichend.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="198"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">Die Gesamtverzögerung setzt sich zusammen aus der Ping-Zeit und die Verzögerung, die durch die Puffergrößen verursacht wird.</translation>
+        <translation>Die Gesamtverzögerung setzt sich aus der Ping-Zeit und der Verzögerung, die durch die aktuellen Puffereinstellungen verursacht wird zusammen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="228"/>
@@ -890,7 +890,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="372"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished">Ein&amp;stellungen</translation>
+        <translation>Ein&amp;stellungen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="946"/>
@@ -1048,17 +1048,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientdlg.cpp" line="159"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Jitter Buffer Status LED</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="160"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Lokale Jitter Buffer Status LED zeigt den aktuellen Audio/Streaming Status. Rotes Licht bedeutet, dass der Audio-Datenstrom unterbrochen ist. Das wird durch folgende Problemen verursacht:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="184"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Jitter Buffer Status LED Indikator</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="311"/>
@@ -1097,7 +1097,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientdlg.cpp" line="713"/>
         <source>Directory Server</source>
-        <translation type="unfinished">Verzeichnisserver</translation>
+        <translation>Verzeichnisserver</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="758"/>
@@ -1154,18 +1154,18 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
@@ -1332,7 +1332,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="163"/>
         <source>Right input channel selection combo box</source>
-        <translation>Rechter  Eingang Kanalauswahlbox</translation>
+        <translation>Rechter Eingang Kanalauswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="165"/>
@@ -1399,42 +1399,42 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der ASIO Treiber (Soundkarte) kann %1 unter Windows ausgewählt werden. Unter macOS/Linux ist keine Auswahl der Soundkarte möglich. Wenn der ausgewählte ASIO Treiber nicht kompatibel ist, wird eine Fehlermeldung angezeigt und der vorher ausgewählte passende Treiber eingestellt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Für jeden %1 Eingabe/Ausgabekanal (Linker und Rechter Kanal) können unterschiedliche Soundkarten-Kanäle ausgewählt werden.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviert die Unterstützung für sehr kleine Netzwerk-Audio-Pakete. Diese Netzwerk Pakete werden nur benutzt wenn die Soundkarten Pufferverzögerung kleiner als %1 Samples ist. Je kleiner die Netzwerk Puffer, desto geringer die Audio-Latenz. Gleichzeitig steigt aber die Netzwerk-Belastung und die Wahrscheinlichkeit von Audio-Aussetzern oder Sound-Artefakten.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Einige Soundkarten Treiber erlauben keine Änderung der Puffergröße aus %1 heraus. In diesem Fall ist die Puffergrößeneinstellung deaktiviert und die Puffergröße muss im Soundkarten Treiber eingestellt werden. Benutze unter Windows den ASIO Geräteeinstellungsknopf um die Treibereinstellungen anzuzeigen. Benutze unter Linux das JACK-Konfigurationstool um die Puffergröße zu ändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn keine Puffergröße ausgewählt ist und alle Einstellungen deaktiviert sind bedeutet das, dass eine nicht unterstützte Puffergröße vom Treiber verwendet wird. %1 wird nun eventuell nur eingeschränkt funktionieren.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn die Puffer Verzögerungseinstellungen deaktiviert sind, verbietet der Audio-Treiber eine Veränderung aus %1 heraus. Unter Windows, klicke auf den Button für die ASIO-Geräte-Einstellungen, um das Treibereinstellungspanel anzuzeigen. Unter Linux benutze das JACK-Konfigurationstool um die Puffergröße zu ändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet die Treibereinstellungen Deiner Soundkarte. Einige Treiber erlauben Dir die Puffer-Einstellungen zu ändern, andere wie ASIO4ALL lassen Dich die Ein- oder Ausgänge deiner Geräte auswählen. Weitere Infos findest du auf jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet die Treiber Einstellungen. Achtung: %1 unterstützt aktuell nur Geräte mit einer Samplerate von %2 Hz. Andere Geräte lassen sich nicht auswählen. Weitere Infos findest du auf jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="256"/>
@@ -1444,22 +1444,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Language</source>
-        <translation type="unfinished">Sprache</translation>
+        <translation>Sprache</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished">Wähle die Sprache für die Benutzeroberfläche aus.</translation>
+        <translation>Wähle die Sprache der Benutzeroberfläche aus.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="267"/>
         <source>Language combo box</source>
-        <translation type="unfinished">Sprache Combo-Box</translation>
+        <translation>Sprache Combo-Box</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="182"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Puffer Verzögerungs-/Größeneinstellung ist eine fundamentale Einstellung von %1. Diese Einstellung hat Einfluss auf viele Verbindungsparameter.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="329"/>
@@ -1469,7 +1469,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation>Diese Einstellung erlaubt es Dir, Dein Eingangs-Signal um bis zu Faktor 10 (+20dB) zu verstärken.Wenn Dein Sound zu leise ist, versuche zunächst das Signal zu verbessern, indem Du entweder näher an das Mikrofon gehst, Dein Audioequipment lauter stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems erhöhst. Nur wenn dies nicht gelingt, setze hier einen Verstärkungsfaktor. Falls der Sound zu laut ist und verzerrt oder übersteuert, wird diese Option nicht helfen. Bitte in diesem Falle nicht verwenden. Verringere stattdessen Deinen Eingnagspegel, indem Du entweder weiter weg vom Mikrofon gehst, Dein Audioequipment leiser stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems verringerst.</translation>
+        <translation>Diese Einstellung erlaubt es Dir, Dein Eingangs-Signal um bis zu Faktor 10 (+20dB) zu verstärken. Wenn Dein Sound zu leise ist, versuche zunächst das Signal zu verbessern, indem Du entweder näher an das Mikrofon gehst, Dein Audioequipment lauter stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems erhöhst. Nur wenn das nicht klappt, setze hier einen Verstärkungsfaktor. Falls der Sound zu laut ist und verzerrt oder übersteuert, wird dir diese Option nicht helfen. Bitte nutze sie dann auch nicht. Verringere stattdessen Deinen Eingnagspegel, indem Du entweder weiter weg vom Mikrofon gehst, Dein Audioequipment leiser stellst oder die Pegel in den Eingangs-Einstellungen Deines Betriebssystems verringerst.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
@@ -1479,17 +1479,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="352"/>
         <source>Directory server address combo box</source>
-        <translation type="unfinished">Verzeichnisserveradresse Combo-Box</translation>
+        <translation>Verzeichnisserveradresse Combo-Box</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="355"/>
         <source>Audio Upstream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Upstream Rate</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>Hängt von der aktuellen Audio-Paketgröße und den Kompressionseinstellungen ab. Stelle sicher, dass die Upstream-Rate nicht höher ist als Deine verfügbare Internet Upload Geschwindigkeit ist (das kann z.B. mit einem Service wie speedtest.net überprüft werden).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="365"/>
@@ -1547,7 +1547,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="477"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Was Du hier einträgst erscheint in Deinem Schieberegler auf dem Mischpult, sobald Du mit einem %1 Server verbunden bist. Diese Kennung wird auch in jedem Client angezeigt, der mit dem selben Server wie Du verbunden ist.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1118"/>
@@ -1714,7 +1714,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="346"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Benutzerdefinierte Verzeichnisserveradresse</translation>
+        <translation>Benutzerdefinierte Verzeichnisserveradresse</translation>
     </message>
     <message>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
@@ -1773,7 +1773,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="276"/>
         <source>and</source>
-        <translation type="unfinished"></translation>
+        <translation>und</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="292"/>
@@ -1947,7 +1947,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="unfinished">Die Verzeichnisserveradresse ist die IP-Adresse oder URL des Verzeichnisservers, der die Serverliste organisiert und bereitstellt. Diese Adresse wird nur benutzt, wenn die benutzerdefinierte Serverliste im Verbindungsdialog ausgewählt wird.</translation>
+        <translation>Lass diese Box leer, außer Du nutzt eine vom Standard abweichende Verzeichnisserver Adresse.</translation>
     </message>
     <message>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
@@ -2511,12 +2511,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="859"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directories:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierte Verzeichnisse:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1023"/>
@@ -2765,7 +2765,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -2839,12 +2839,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../util.cpp" line="605"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">Ü&amp;ber Jamulus...</translation>
+        <translation>Ü&amp;ber Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="607"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">Über &amp;Qt...</translation>
+        <translation>Über &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2853,7 +2853,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">Über Qt</translation>
+        <translation>Über Qt</translation>
     </message>
 </context>
 <context>
@@ -3313,7 +3313,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlg.cpp" line="70"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished">Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht. Wenn die Registrierung fehlgeschlagen ist, dann wähle eine andere Serverliste aus.</translation>
+        <translation>Wenn die Checkbox &quot;Veröffentliche meinen Server&quot; angewählt ist, wird angezeigt ob die Registrierung am Verzeichnis erfolgreich ist.</translation>
     </message>
     <message>
         <source>The Directory server address is the IP address or URL of the directory server at which this server is registered. Pre-defined server addresses are available</source>
@@ -3331,22 +3331,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlg.cpp" line="61"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished">Mit dieser Funktion wird der eigene Server in der Serverliste des Verzeichnisservers registriert so dass alle anderen Applikationsnutzer den Server in der Liste sehen können und sich mit ihm verbinden können. Die Registrierung mit dem Verzeichnisserver wird periodisch erneuert um sicherzugehen, dass alle registrierten Server auch wirklich erreichbar sind.</translation>
+        <translation>Mit dieser Funktion wird der eigene Server in der Serverliste des Verzeichnisservers registriert so dass alle anderen Applikationsnutzer den Server in der Liste sehen können und sich mit ihm verbinden können. Die Registrierung mit dem Verzeichnisserver wird periodisch erneuert um sicherzugehen, dass alle registrierten Server auch wirklich erreichbar sind.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Benutzerdefinierte Verzeichnisserveradresse</translation>
+        <translation>Benutzerdefinierte Verzeichnisserveradresse</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="76"/>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished">Die benutzerdefinierte Verzeichnisserveradresse ist die IP-Adresse oder URL des Verzeichnisservers, der die Serverliste für den Verbindungsdialog bereitstellt.</translation>
+        <translation>Die benutzerdefinierte Verzeichnisserveradresse ist die IP-Adresse oder URL des Verzeichnisservers, der die Serverliste für den Verbindungsdialog bereitstellt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
         <source>Directory server address line edit</source>
-        <translation type="unfinished">Verzeichnisserveradresse Eingabefeld</translation>
+        <translation>Verzeichnisserveradresse Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
@@ -3356,7 +3356,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlg.cpp" line="84"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="unfinished">Wählt die Serverliste (d.h. die Verzeichnisserveradresse) aus, in welche dein Server registriert werden soll.</translation>
+        <translation>Wählt die Serverliste (d.h. die Verzeichnisserveradresse) aus, in der dein Server registriert werden soll.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
@@ -3412,17 +3412,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Land/Region</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Setze das Land oder die Region wo der Server läuft. Clients werden diese Location in der Liste im Verbindungsdialog anzeigen.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="117"/>
         <source>Combo box for location of this server</source>
-        <translation type="unfinished"></translation>
+        <translation>Combobox für die Location dieses Servers</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="120"/>
@@ -3569,7 +3569,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../../serverdlg.cpp" line="195"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 ist der Name der Hauptanwendung</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="328"/>
@@ -3580,7 +3580,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../../serverdlg.cpp" line="341"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 ist der Name der Hauptanwendung</translation>
     </message>
     <message>
         <source>software upgrade available</source>
@@ -3720,7 +3720,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../util.h" line="612"/>
         <source>Directory Server full</source>
-        <translation type="unfinished">Verzeichnisserver voll</translation>
+        <translation>Verzeichnisserver voll</translation>
     </message>
     <message>
         <location filename="../../util.h" line="615"/>
@@ -3769,12 +3769,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Liste</translation>
+        <translation>Liste</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Location: Region</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -3823,7 +3823,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Benutzerdefinierte Verzeichnisserveradresse:</translation>
+        <translation>Benutzerdefinierte Verzeichnisserveradresse:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="236"/>
@@ -3882,7 +3882,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../serverlist.cpp" line="647"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte nicht nach &apos;%1&apos; schreiben.</translation>
     </message>
 </context>
 <context>
@@ -4002,33 +4002,33 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das gewählte Audio Gerät ist nicht mehr im System verfügbar. Bitte überprüfe Dein Audio Gerät.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Audio-Treiber konnte nicht initialisiert werden. Überprüfe, ob Deine Audio Hardware angeschlossen ist und überprüfe die Treiber Einstellungen.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das gewählte Audio Gerät ist nicht kompatibel, da es eine Samplerate von %1 Hz nicht unterstützt. Bitte wähle ein anderes Gerät.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die aktuelle Audio-Geräte-Konfiguration ist inkompatibel, weil die Samplerate nicht auf %2 Hz gesetzt werden konnte. Bitte suche nach einem Hardwareknopf oder einer Treibereinstellung, mit der du die Sample Rate manuell setzen kannst. Starte %1 dann neu.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das gewählte Audio Gerät ist nicht kompatibel, da es %1 Ein/Ausgangskanäle nicht unterstützt. Bitte wähle ein anderes Gerät oder eine andere Konfiguration.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="206"/>
         <location filename="../../../windows/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das gewählte Audio Gerät ist nicht kompatibel, da das benötigte Audio Sample Format nicht verfügbar ist. Bitte wähle ein anderes Gerät.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
@@ -4038,7 +4038,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../windows/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte installiere einen ASIO Treiber bevor du %1 startest. Wenn Du ein Gerät mit ASIO Support besitzt, installiere seinen offziellen ASIO Treiber. Falls nicht, musst Du einen Universaltreiber wie ASIO4ALL instalieren.</translation>
     </message>
     <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
@@ -4064,82 +4064,82 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../../linux/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK konnte nicht automatisch gestartet werden. Bitte starte JACK manuell und suche nach Fehlermeldungen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK läuft nicht mit einer Samplerate von &lt;b&gt;%1 Hz&lt;/b&gt;. Bitte benutze ein Tool wie &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt;, um die JACK Sample Rate auf %1 Hz zu setzen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die JACK Portregistrierung ist fehlgeschlagen. Das ist wahrscheinlich ein JACK Fehler. Bitte stoppe %1 und JACK. Danach prüfe, ob ein anderes Programm mit einer Samplerate von %2 Hz sich mit JACK verbinden lässt.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die JACK Portregistrierung ist fehlgeschlagen. Das ist wahrscheinlich ein JACK Fehler. Bitte stoppe %1 und JACK. Danach prüfe, ob ein anderes MIDI Programm sich mit JACK verbinden lässt.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann den JACK Client nicht aktivieren. Dies ist wahrscheinlich ein Fehler mit JACK. Bitte überprüfe den JACK-Ausgang.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation type="unfinished"></translation>
+        <translation>JACK wurde beendet. Um %1 zu nutzen, muss JACK laufen. Bitte starte %1 neu, um JACK wieder zu starten.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde keine Soundkarte ist im System gefunden. Der CoreAudio input AudioHardwareGetProperty call ist fehlgeschlagen.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde keine Soundkarte ist im System gefunden. Der CoreAudio output AudioHardwareGetProperty call ist fehlgeschlagen.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das momentan ausgewählte Audio Gerät ist nicht mehr verfügbar. Bitte überprüfe dein Audiogerät.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das momentan ausgewählte Audio Eingangsgerät ist nicht mehr verfügbar. Bitte überprüfe, ob Dein Eingangsgerät korrekt angeschlossen ist.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sample Rate des aktuellen Eingangsgerät beträgt nicht %1Hz und ist somit nicht kompatibel. Bitte wähle ein anderes Gerät oder versuche manuell die Sample Rate auf %1 Hz zu setzen. Probiere das über das Audio-MIDI Setup (In Programme>Dienstprogramme). </translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das momentan ausgewählte Audio Ausgangsgerät ist nicht mehr verfügbar. Bitte überprüfe, ob Dein Ausgangsgerät korrekt angeschlossen ist.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Sample Rate des aktuellen Ausgangsgeräts beträgt nicht %1Hz und ist somit nicht kompatibel. Bitte wähle ein anderes Gerät oder versuche manuell die Sample Rate über das Audio-MIDI Setup (In Programme>Dienstprogramme) auf %1 Hz zu setzen. </translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Stream Format des aktuellen Eingangsgeräts ist nicht kompatibel mit dieser Software. Bitte wähle ein anderes Gerät.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="475"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Stream Format des aktuellen Ausgangsgeräts ist nicht kompatibel mit %1. Bitte wähle ein anderes Gerät.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="728"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Puffergrösse der aktuellen Ein- und Ausgangs Geräte können nicht auf den gleichen Wert gesetzt werden. Bitte wähle andere Input/-Output Geräte in Deinen System Einstellungen aus.</translation>
     </message>
 </context>
 <context>
@@ -4191,32 +4191,32 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../soundbase.cpp" line="116"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das gewählte Audiogerät kann aufgrund des folgenden Fehlers nicht genutzt werden: %1. Der vorherige Treiber wird gewählt.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="157"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der vorher ausgewählte Audio Gerätetreiber ist nicht mehr verfügbar oder der Treiber ist in einen inkompatiblen Status gewechselt. Wir werden versuchen, ein passendes Audio Gerät zu finden, aber das neue Audio Gerät könnte Rückkoppelung verursachen. Überprüfe die Audiogeräte vor dem Verbinden mit einem Server.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="169"/>
         <source>No usable %1 audio device found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein nutzbares %1 Audiogerät gefunden.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="170"/>
         <source>These are all the available drivers with error messages:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies sind alle verfügbaren Treiber mit Fehlermeldungen.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="182"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchtest Du den das ASIO Treiber Setup öffnen und versuchen eine funktionsfähige Konfiguration wiederherzustellen?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kann nicht gestartet werden. Bitte starte %1 neu und prüfe Deine Audio Einstellungen.</translation>
     </message>
 </context>
 <context>
@@ -4242,7 +4242,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../global.h" line="120"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein %1 Upgrade ist verfügbar: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/de/upgrade?progversion=%2&apos;&gt;öffne Details und Downloads&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../global.h" line="270"/>

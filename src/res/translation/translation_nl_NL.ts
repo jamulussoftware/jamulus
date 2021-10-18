@@ -4210,7 +4210,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../soundbase.cpp" line="170"/>
         <source>These are all the available drivers with error messages:</source>
-        <translation>Dit zijn de beschikbare stuurprogramma's met foutmeldingen:</translation>
+        <translation>Dit zijn de beschikbare stuurprogramma&apos;s met foutmeldingen:</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="182"/>

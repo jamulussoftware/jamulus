@@ -253,7 +253,7 @@ CSocket::~CSocket()
 
 void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf, const CHostAddress& HostAddr )
 {
-    int status;
+    int status = 0;
 
     uSockAddr UdpSocketAddr;
 

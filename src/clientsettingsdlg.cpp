@@ -980,11 +980,20 @@ void CClientSettingsDlg::OnFeedbackDetectionChanged ( int value ) { pSettings->b
 
 void CClientSettingsDlg::OnDirectoryAddressEditingFinished()
 {
-    // if the user has selected and deleted an entry in the combo box list,
-    // we delete the corresponding entry in the directory server address vector
     if ( cbxDirectoryAddress->currentText().isEmpty() && cbxDirectoryAddress->currentData().isValid() )
     {
+        // if the user has selected an entry in the combo box list and deleted the text in the input field,
+        // and then focus moves off the control without selecting a new entry,
+        // we delete the corresponding entry in the directory server address vector
         pSettings->vstrDirectoryAddress[cbxDirectoryAddress->currentData().toInt()] = "";
+    }
+    else if ( cbxDirectoryAddress->currentData().isValid() &&
+              pSettings->vstrDirectoryAddress[cbxDirectoryAddress->currentData().toInt()].compare (
+                  NetworkUtil::FixAddress ( cbxDirectoryAddress->currentText() ) ) == 0 )
+    {
+        // if the user has selected another entry in the combo box list without changing anything,
+        // there is no need to update any list
+        return;
     }
     else
     {

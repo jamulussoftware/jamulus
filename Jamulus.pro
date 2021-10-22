@@ -799,6 +799,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/trombone.png \
     src/res/instruments/trumpet.png \
     src/res/instruments/tuba.png \
+    src/res/instruments/vibraphone.png \
     src/res/instruments/violin.png \
     src/res/instruments/vocal.png \
     src/res/instruments/guitarvocal.png \

@@ -1,4 +1,7 @@
 
+### 3.8.1dev <- NOTE: the release version number will be 3.9.0 ###
+
+
 ### 3.8.1 (2021-10-23) ###
 
 - Client: JACK support on Windows has been improved (#1718).

@@ -2573,7 +2573,7 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
     // server registration result (1 byte)
     const int iSvrRegResult = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
-    if ( ( iSvrRegResult != SRR_REGISTERED ) && ( iSvrRegResult != SRR_CENTRAL_SVR_FULL ) && ( iSvrRegResult != SRR_VERSION_TOO_OLD ) &&
+    if ( ( iSvrRegResult != SRR_REGISTERED ) && ( iSvrRegResult != SRR_SERVER_LIST_FULL ) && ( iSvrRegResult != SRR_VERSION_TOO_OLD ) &&
          ( iSvrRegResult != SRR_NOT_FULFILL_REQIREMENTS ) )
     {
         return true;

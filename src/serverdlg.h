@@ -98,11 +98,11 @@ public slots:
     void OnStartOnOSStartStateChanged ( int value );
     void OnEnableRecorderStateChanged ( int value ) { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
 
-    void OnCentralServerAddressEditingFinished();
+    void OnDirectoryAddressEditingFinished();
     void OnServerNameTextChanged ( const QString& strNewName );
     void OnLocationCityTextChanged ( const QString& strNewCity );
     void OnLocationCountryActivated ( int iCntryListItem );
-    void OnCentServAddrTypeActivated ( int iTypeIdx );
+    void OnDirectoryTypeActivated ( int iTypeIdx );
     void OnTimer();
     void OnServerStarted();
     void OnServerStopped();

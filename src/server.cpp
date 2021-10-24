@@ -218,7 +218,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const quint16      iPortNumber,
                    const quint16      iQosNumber,
                    const QString&     strHTMLStatusFileName,
-                   const QString&     strCentralServer,
+                   const QString&     strDirectoryServer,
                    const QString&     strServerListFileName,
                    const QString&     strServerInfo,
                    const QString&     strServerListFilter,
@@ -243,7 +243,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     strServerHTMLFileListName ( strHTMLStatusFileName ),
     HighPrecisionTimer ( bNUseDoubleSystemFrameSize ),
     ServerListManager ( iPortNumber,
-                        strCentralServer,
+                        strDirectoryServer,
                         strServerListFileName,
                         strServerInfo,
                         strServerPublicIP,
@@ -685,7 +685,7 @@ void CServer::OnAboutToQuit()
     Stop();
 
     // if server was registered at the directory server, unregister on shutdown
-    if ( GetServerListEnabled() )
+    if ( GetServerRegistered() )
     {
         UnregisterSlaveServer();
     }

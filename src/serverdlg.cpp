@@ -72,17 +72,17 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                          "registration failed, please choose another server list." ) );
 
     // custom directory server address
-    QString strCentrServAddr = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
-                               tr ( "The custom directory server address is the IP address or URL of the directory "
-                                    "server at which the server list of the connection dialog is managed." );
+    QString strCustomDirectoryAddress = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
+                                        tr ( "The custom directory server address is the IP address or URL of the directory "
+                                             "server at which the server list of the connection dialog is managed." );
 
-    lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    edtCentralServerAddress->setAccessibleName ( tr ( "Directory server address line edit" ) );
+    lblDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
+    edtDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
+    edtDirectoryAddress->setAccessibleName ( tr ( "Directory server address line edit" ) );
 
-    cbxCentServAddrType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " +
-                                        tr ( "Selects the server list (i.e. directory server address) in which your server will be added." ) );
-    cbxCentServAddrType->setAccessibleName ( tr ( "Server list selection combo box" ) );
+    cbxDirectoryType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " +
+                                     tr ( "Selects the server list (i.e. directory server address) in which your server will be added." ) );
+    cbxDirectoryType->setAccessibleName ( tr ( "Server list selection combo box" ) );
 
     // server name
     QString strServName = "<b>" + tr ( "Server Name" ) + ":</b> " +
@@ -229,20 +229,20 @@ lvwClients->setMinimumHeight ( 140 );
         vecpListViewItems[i]->setHidden ( true );
     }
 
-    // directory server address type combo box
-    cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE3 ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
-    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
+    // directory type combo box
+    cbxDirectoryType->clear();
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_GENRE_CHORAL ) );
+    cbxDirectoryType->addItem ( DirectoryTypeToString ( AT_CUSTOM ) );
+    cbxDirectoryType->setCurrentIndex ( static_cast<int> ( pServer->GetDirectoryType() ) );
 
     // custom directory server address
-    edtCentralServerAddress->setText ( pServer->GetServerListCentralServerAddress() );
+    edtDirectoryAddress->setText ( pServer->GetDirectoryAddress() );
 
     // update server name line edit
     edtServerName->setText ( pServer->GetServerName() );
@@ -272,7 +272,7 @@ lvwClients->setMinimumHeight ( 140 );
     cbxLocationCountry->setCurrentIndex ( cbxLocationCountry->findData ( static_cast<int> ( pServer->GetServerCountry() ) ) );
 
     // update register server check box
-    if ( pServer->GetServerListEnabled() )
+    if ( pServer->GetServerRegistered() )
     {
         chbRegisterServer->setCheckState ( Qt::Checked );
     }
@@ -373,7 +373,7 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
 
     // line edits
-    QObject::connect ( edtCentralServerAddress, &QLineEdit::editingFinished, this, &CServerDlg::OnCentralServerAddressEditingFinished );
+    QObject::connect ( edtDirectoryAddress, &QLineEdit::editingFinished, this, &CServerDlg::OnDirectoryAddressEditingFinished );
 
     QObject::connect ( edtServerName, &QLineEdit::textChanged, this, &CServerDlg::OnServerNameTextChanged );
 
@@ -385,10 +385,10 @@ lvwClients->setMinimumHeight ( 140 );
                        this,
                        &CServerDlg::OnLocationCountryActivated );
 
-    QObject::connect ( cbxCentServAddrType,
+    QObject::connect ( cbxDirectoryType,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
-                       &CServerDlg::OnCentServAddrTypeActivated );
+                       &CServerDlg::OnDirectoryTypeActivated );
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CServerDlg::OnLanguageChanged );
 
@@ -467,7 +467,7 @@ void CServerDlg::OnRegisterServerStateChanged ( int value )
     const bool bRegState = ( value == Qt::Checked );
 
     // apply new setting to the server and update it
-    pServer->SetServerListEnabled ( bRegState );
+    pServer->SetServerRegistered ( bRegState );
 
     // if registering is disabled, unregister slave server
     if ( !bRegState )
@@ -481,10 +481,10 @@ void CServerDlg::OnRegisterServerStateChanged ( int value )
     UpdateGUIDependencies();
 }
 
-void CServerDlg::OnCentralServerAddressEditingFinished()
+void CServerDlg::OnDirectoryAddressEditingFinished()
 {
     // apply new setting to the server and update it
-    pServer->SetServerListCentralServerAddress ( edtCentralServerAddress->text() );
+    pServer->SetDirectoryAddress ( edtDirectoryAddress->text() );
 
     pServer->UpdateServerList();
 }
@@ -529,11 +529,11 @@ void CServerDlg::OnLocationCountryActivated ( int iCntryListItem )
     pServer->UpdateServerList();
 }
 
-void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
+void CServerDlg::OnDirectoryTypeActivated ( int iTypeIdx )
 {
 
     // apply new setting to the server and update it
-    pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) );
+    pServer->SetDirectoryType ( static_cast<EDirectoryType> ( iTypeIdx ) );
     pServer->UpdateServerList();
 
     // update GUI dependencies
@@ -669,13 +669,13 @@ void CServerDlg::OnTimer()
 void CServerDlg::UpdateGUIDependencies()
 {
     // get the states which define the GUI dependencies from the server
-    const bool          bCurSerListEnabled = pServer->GetServerListEnabled();
-    const ESvrRegStatus eSvrRegStatus      = pServer->GetSvrRegStatus();
+    const bool          bIsRegistered = pServer->GetServerRegistered();
+    const ESvrRegStatus eSvrRegStatus = pServer->GetSvrRegStatus();
 
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
-    cbxCentServAddrType->setEnabled ( bCurSerListEnabled );
-    grbServerInfo->setEnabled ( bCurSerListEnabled );
+    cbxDirectoryType->setEnabled ( bIsRegistered );
+    grbServerInfo->setEnabled ( bIsRegistered );
 
     QString strStatus = svrRegStatusToString ( eSvrRegStatus );
 
@@ -683,7 +683,7 @@ void CServerDlg::UpdateGUIDependencies()
     {
     case SRS_BAD_ADDRESS:
     case SRS_TIME_OUT:
-    case SRS_CENTRAL_SVR_FULL:
+    case SRS_SERVER_LIST_FULL:
     case SRS_VERSION_TOO_OLD:
     case SRS_NOT_FULFILL_REQUIREMENTS:
         strStatus = "<font color=\"red\"><b>" + strStatus + "</b></font>";

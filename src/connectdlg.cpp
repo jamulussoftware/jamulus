@@ -212,16 +212,16 @@ void CConnectDlg::RequestServerList()
 
     // update list combo box (disable events to avoid a signal)
     cbxDirectoryServer->blockSignals ( true );
-    if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
+    if ( pSettings->eDirectoryType == AT_CUSTOM )
     {
-        // iCustomDirectoryIndex is non-zero only if eCentralServerAddressType == AT_CUSTOM
-        // find the combobox item that corresponds to vstrCentralServerAddress[iCustomDirectoryIndex]
+        // iCustomDirectoryIndex is non-zero only if eDirectoryType == AT_CUSTOM
+        // find the combobox item that corresponds to vstrDirectoryAddress[iCustomDirectoryIndex]
         // (the current selected custom directory)
         cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
     }
     else
     {
-        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
+        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
     }
     cbxDirectoryServer->blockSignals ( false );
 
@@ -232,13 +232,12 @@ void CConnectDlg::RequestServerList()
 
     // Allow IPv4 only for communicating with Directory Servers
     if ( NetworkUtil().ParseNetworkAddress (
-             NetworkUtil::GetCentralServerAddress ( pSettings->eCentralServerAddressType,
-                                                    pSettings->vstrCentralServerAddress[pSettings->iCustomDirectoryIndex] ),
-             CentralServerAddress,
+             NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
+             haDirectoryAddress,
              false ) )
     {
         // send the request for the server list
-        emit ReqServerListQuery ( CentralServerAddress );
+        emit ReqServerListQuery ( haDirectoryAddress );
 
         // start timer, if this message did not get any respond to retransmit
         // the server list request message
@@ -257,11 +256,11 @@ void CConnectDlg::hideEvent ( QHideEvent* )
 void CConnectDlg::OnDirectoryServerChanged ( int iTypeIdx )
 {
     // store the new directory server address type and request new list
-    // if iTypeIdx == AT_CUSTOM, then iCustomDirectoryIndex is the index into the vector holding the user's custom central servers
+    // if iTypeIdx == AT_CUSTOM, then iCustomDirectoryIndex is the index into the vector holding the user's custom directory servers
     // if iTypeIdx != AT_CUSTOM, then iCustomDirectoryIndex MUST be 0;
     if ( iTypeIdx >= AT_CUSTOM )
     {
-        // the value for the index into the vector vstrCentralServerAddress is in the user data of the combobox item
+        // the value for the index into the vector vstrDirectoryAddress is in the user data of the combobox item
         pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iTypeIdx ).toInt();
         iTypeIdx                         = AT_CUSTOM;
     }
@@ -269,7 +268,7 @@ void CConnectDlg::OnDirectoryServerChanged ( int iTypeIdx )
     {
         pSettings->iCustomDirectoryIndex = 0;
     }
-    pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( iTypeIdx );
+    pSettings->eDirectoryType = static_cast<EDirectoryType> ( iTypeIdx );
     RequestServerList();
 }
 
@@ -281,7 +280,7 @@ void CConnectDlg::OnTimerReRequestServList()
     {
         // note that this is a connection less message which may get lost
         // and therefore it makes sense to re-transmit it
-        emit ReqServerListQuery ( CentralServerAddress );
+        emit ReqServerListQuery ( haDirectoryAddress );
     }
 }
 
@@ -292,7 +291,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     // we only accept a server list from the server address we have sent the
     // request for this to (note that we cannot use the port number since the
     // receive port and send port might be different at the directory server).
-    if ( bServerListReceived || ( InetAddr.InetAddr != CentralServerAddress.InetAddr ) )
+    if ( bServerListReceived || ( InetAddr.InetAddr != haDirectoryAddress.InetAddr ) )
     {
         return;
     }
@@ -540,14 +539,14 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     lvwServers->clearSelection();
 }
 
-void CConnectDlg::OnCustomCentralServerAddrChanged()
+void CConnectDlg::OnCustomDirectoryAddressChanged()
 {
 
     QString strPreviousSelection = cbxDirectoryServer->currentText();
     UpdateDirectoryServerComboBox();
     // after updating the combobox, we must re-select the previous directory selection
 
-    if ( pSettings->eCentralServerAddressType == AT_CUSTOM )
+    if ( pSettings->eDirectoryType == AT_CUSTOM )
     {
         // check if the currently select custom directory still exists in the now potentially re-ordered vector,
         // if so, then change to its new index.  (addresses Issue #1899)
@@ -555,15 +554,15 @@ void CConnectDlg::OnCustomCentralServerAddrChanged()
         if ( iNewIndex == INVALID_INDEX )
         {
             // previously selected custom directory has been deleted.  change to default directory
-            pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_DEFAULT );
-            pSettings->iCustomDirectoryIndex     = 0;
+            pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_DEFAULT );
+            pSettings->iCustomDirectoryIndex = 0;
             RequestServerList();
         }
         else
         {
             // find previously selected custom directory in the now potentially re-ordered vector
-            pSettings->eCentralServerAddressType = static_cast<ECSAddType> ( AT_CUSTOM );
-            pSettings->iCustomDirectoryIndex     = cbxDirectoryServer->itemData ( iNewIndex ).toInt();
+            pSettings->eDirectoryType        = static_cast<EDirectoryType> ( AT_CUSTOM );
+            pSettings->iCustomDirectoryIndex = cbxDirectoryServer->itemData ( iNewIndex ).toInt();
             cbxDirectoryServer->blockSignals ( true );
             cbxDirectoryServer->setCurrentIndex ( cbxDirectoryServer->findData ( QVariant ( pSettings->iCustomDirectoryIndex ) ) );
             cbxDirectoryServer->blockSignals ( false );
@@ -573,7 +572,7 @@ void CConnectDlg::OnCustomCentralServerAddrChanged()
     {
         // selected directory was not a custom directory
         cbxDirectoryServer->blockSignals ( true );
-        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eCentralServerAddressType ) );
+        cbxDirectoryServer->setCurrentIndex ( static_cast<int> ( pSettings->eDirectoryType ) );
         cbxDirectoryServer->blockSignals ( false );
     }
 }
@@ -730,21 +729,21 @@ void CConnectDlg::OnTimerPing()
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
-        CHostAddress CurServerAddress;
+        CHostAddress haServerAddress;
 
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
         if ( NetworkUtil().ParseNetworkAddress ( lvwServers->topLevelItem ( iIdx )->data ( 0, Qt::UserRole ).toString(),
-                                                 CurServerAddress,
+                                                 haServerAddress,
                                                  bEnableIPv6 ) )
         {
             // if address is valid, send ping message using a new thread
-            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, CurServerAddress );
+            QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress );
         }
     }
 }
 
-void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& CurServerAddress )
+void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& haServerAddress )
 {
     // The ping time messages for all servers should not be sent all in a very
     // short time since it showed that this leads to errors in the ping time
@@ -753,7 +752,7 @@ void CConnectDlg::EmitCLServerListPingMes ( const CHostAddress& CurServerAddress
     // block the GUI).
     QThread::msleep ( 11 );
 
-    emit CreateCLServerListPingMes ( CurServerAddress );
+    emit CreateCLServerListPingMes ( haServerAddress );
 }
 
 void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr, const int iPingTime, const int iNumClients )
@@ -941,22 +940,22 @@ void CConnectDlg::UpdateDirectoryServerComboBox()
 {
     // directory server address type combo box
     cbxDirectoryServer->clear();
-    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
-    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE2 ) );
-    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_ANY_GENRE3 ) );
-    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
-    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
-    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
-    cbxDirectoryServer->addItem ( csCentServAddrTypeToString ( AT_GENRE_CHORAL ) );
+    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
+    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );
+    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE3 ) );
+    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_ROCK ) );
+    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_JAZZ ) );
+    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CLASSICAL_FOLK ) );
+    cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_GENRE_CHORAL ) );
 
     // because custom directories are always added to the top of the vector, add the vector
     // contents to the combobox in reverse order
     for ( int i = MAX_NUM_SERVER_ADDR_ITEMS - 1; i >= 0; i-- )
     {
-        if ( pSettings->vstrCentralServerAddress[i] != "" )
+        if ( pSettings->vstrDirectoryAddress[i] != "" )
         {
             // add vector index (i) to the combobox as user data
-            cbxDirectoryServer->addItem ( pSettings->vstrCentralServerAddress[i], i );
+            cbxDirectoryServer->addItem ( pSettings->vstrDirectoryAddress[i], i );
         }
     }
 }

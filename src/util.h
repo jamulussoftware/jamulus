@@ -540,7 +540,7 @@ enum EChSortType
 };
 
 // Directory server address type -----------------------------------------------
-enum ECSAddType
+enum EDirectoryType
 {
     // used for settings -> enum values should be fixed
     AT_DEFAULT              = 0,
@@ -553,7 +553,7 @@ enum ECSAddType
     AT_CUSTOM               = 7 // Must be the last entry!
 };
 
-inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
+inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
 {
     switch ( eAddrType )
     {
@@ -592,7 +592,7 @@ enum ESvrRegStatus
     SRS_TIME_OUT,
     SRS_UNKNOWN_RESP,
     SRS_REGISTERED,
-    SRS_CENTRAL_SVR_FULL,
+    SRS_SERVER_LIST_FULL,
     SRS_VERSION_TOO_OLD,
     SRS_NOT_FULFILL_REQUIREMENTS
 };
@@ -619,7 +619,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     case SRS_REGISTERED:
         return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
-    case SRS_CENTRAL_SVR_FULL:
+    case SRS_SERVER_LIST_FULL:
         return QCoreApplication::translate ( "CServerDlg", "Directory Server full" );
 
     case SRS_VERSION_TOO_OLD:
@@ -637,7 +637,7 @@ enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
     SRR_REGISTERED              = 0,
-    SRR_CENTRAL_SVR_FULL        = 1,
+    SRR_SERVER_LIST_FULL        = 1,
     SRR_VERSION_TOO_OLD         = 2,
     SRR_NOT_FULFILL_REQIREMENTS = 3
 };
@@ -1004,7 +1004,7 @@ public:
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static CHostAddress GetLocalAddress6();
-    static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType, const QString& strCentralServerAddress );
+    static QString      GetDirectoryAddress ( const EDirectoryType eDirectoryType, const QString& strDirectoryAddress );
     static bool         IsPrivateNetworkIP ( const QHostAddress& qhAddr );
 };
 

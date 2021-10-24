@@ -134,7 +134,7 @@ class CServerListManager : public QObject
 
 public:
     CServerListManager ( const quint16  iNPortNum,
-                         const QString& sNCentServAddr,
+                         const QString& sNDirectoryAddress,
                          const QString& strServerListFileName,
                          const QString& strServerInfo,
                          const QString& strServerListFilter,
@@ -160,13 +160,13 @@ public:
     void             SetServerCountry ( const QLocale::Country eNewCountry ) { ServerList[0].eCountry = eNewCountry; }
     QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
 
-    void    SetCentralServerAddress ( const QString sNCentServAddr );
-    QString GetCentralServerAddress() { return strCentralServerAddress; }
+    void    SetDirectoryAddress ( const QString sNDirectoryAddress );
+    QString GetDirectoryAddress() { return strDirectoryAddress; }
 
-    void       SetCentralServerAddressType ( const ECSAddType eNCSAT );
-    ECSAddType GetCentralServerAddressType() { return eCentralServerAddressType; }
+    void           SetDirectoryType ( const EDirectoryType eNCSAT );
+    EDirectoryType GetDirectoryType() { return eDirectoryType; }
 
-    bool GetIsCentralServer() const { return bIsCentralServer; }
+    bool IsDirectoryServer() const { return bIsDirectoryServer; }
 
     ESvrRegStatus GetSvrRegStatus() { return eSvrRegStatus; }
 
@@ -174,20 +174,17 @@ public:
     // properties was done
     void Update();
 
-    void CentralServerRegisterServer ( const CHostAddress&    InetAddr,
-                                       const CHostAddress&    LInetAddr,
-                                       const CServerCoreInfo& ServerInfo,
-                                       const QString          strVersion = "" );
-    void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
-    void CentralServerQueryServerList ( const CHostAddress& InetAddr );
+    void Append ( const CHostAddress& InetAddr, const CHostAddress& LInetAddr, const CServerCoreInfo& ServerInfo, const QString strVersion = "" );
+    void Remove ( const CHostAddress& InetAddr );
+    void RetrieveAll ( const CHostAddress& InetAddr );
 
     void StoreRegistrationResult ( ESvrRegResult eStatus );
 
 protected:
-    void SetCentralServerState();
+    void SetIsDirectoryServer();
     int  IndexOf ( CHostAddress haSearchTerm );
-    void CentralServerLoadServerList ( const QString strServerList );
-    void CentralServerSaveServerList();
+    void Load ( const QString strServerList );
+    void Save();
     void SlaveServerRegisterServer ( const bool bIsRegister );
     void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );
 
@@ -197,10 +194,10 @@ protected:
 
     QList<CServerListEntry> ServerList;
 
-    QString    strCentralServerAddress;
-    ECSAddType eCentralServerAddressType;
-    bool       bIsCentralServer;
-    bool       bEnableIPv6;
+    QString        strDirectoryAddress;
+    EDirectoryType eDirectoryType;
+    bool           bIsDirectoryServer;
+    bool           bEnableIPv6;
 
     // server registration status
     ESvrRegStatus eSvrRegStatus;
@@ -221,19 +218,19 @@ protected:
 
     QTimer TimerPollList;
     QTimer TimerPingServerInList;
-    QTimer TimerPingCentralServer;
+    QTimer TimerPingServers;
     QTimer TimerRegistering;
     QTimer TimerCLRegisterServerResp;
 
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();
-    void OnTimerPingCentralServer();
-    void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
+    void OnTimerPingServers();
+    void OnTimerRefreshRegistration() { SlaveServerRegisterServer ( true ); }
     void OnTimerCLRegisterServerResp();
 
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
-    void OnAboutToQuit() { CentralServerSaveServerList(); }
+    void OnAboutToQuit() { Save(); }
 
 signals:
     void SvrRegStatusChanged();

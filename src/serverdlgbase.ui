@@ -84,7 +84,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cbxCentServAddrType"/>
+          <widget class="QComboBox" name="cbxDirectoryType"/>
          </item>
          <item>
           <widget class="QLabel" name="lblRegSvrStatus">
@@ -252,14 +252,14 @@
        <item>
         <layout class="QHBoxLayout">
          <item>
-          <widget class="QLabel" name="lblCentralServerAddress">
+          <widget class="QLabel" name="lblDirectoryAddress">
            <property name="text">
             <string>Custom Directory Server Address:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edtCentralServerAddress"/>
+          <widget class="QLineEdit" name="edtDirectoryAddress"/>
          </item>
         </layout>
        </item>
@@ -314,7 +314,7 @@
   <tabstop>lvwClients</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>chbRegisterServer</tabstop>
-  <tabstop>cbxCentServAddrType</tabstop>
+  <tabstop>cbxDirectoryType</tabstop>
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>
@@ -326,7 +326,7 @@
   <tabstop>pbtRecordingDir</tabstop>
   <tabstop>edtRecordingDir</tabstop>
   <tabstop>tbtClearRecordingDir</tabstop>
-  <tabstop>edtCentralServerAddress</tabstop>
+  <tabstop>edtDirectoryAddress</tabstop>
   <tabstop>chbStartOnOSStart</tabstop>
  </tabstops>
  <resources>

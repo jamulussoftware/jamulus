@@ -842,12 +842,12 @@ CHostAddress NetworkUtil::GetLocalAddress6()
     }
 }
 
-QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAddressType, const QString& strCentralServerAddress )
+QString NetworkUtil::GetDirectoryAddress ( const EDirectoryType eDirectoryType, const QString& strDirectoryAddress )
 {
-    switch ( eCentralServerAddressType )
+    switch ( eDirectoryType )
     {
     case AT_CUSTOM:
-        return strCentralServerAddress;
+        return strDirectoryAddress;
     case AT_ANY_GENRE2:
         return CENTSERV_ANY_GENRE2;
     case AT_ANY_GENRE3:

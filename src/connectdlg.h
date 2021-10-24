@@ -73,7 +73,7 @@ protected:
     void             UpdateListFilter();
     void             ShowAllMusicians ( const bool bState );
     void             RequestServerList();
-    void             EmitCLServerListPingMes ( const CHostAddress& CurServerAddress );
+    void             EmitCLServerListPingMes ( const CHostAddress& haServerAddress );
     void             UpdateDirectoryServerComboBox();
 
     CClientSettings* pSettings;
@@ -81,7 +81,7 @@ protected:
     QTimer       TimerPing;
     QTimer       TimerReRequestServList;
     QTimer       TimerInitialSort;
-    CHostAddress CentralServerAddress;
+    CHostAddress haDirectoryAddress;
     QString      strSelectedAddress;
     QString      strSelectedServerName;
     bool         bShowCompleteRegList;
@@ -98,7 +98,7 @@ public slots:
     void OnDirectoryServerChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
-    void OnCustomCentralServerAddrChanged();
+    void OnCustomDirectoryAddressChanged();
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

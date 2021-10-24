@@ -422,7 +422,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         " Open Clip Art Library (OCAL), "
         "<i><a href=\"http://openclipart.org\">http://openclipart.org</a></i></p>"
         "<p>" +
-        tr ( "Country flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" );
+        tr ( "Flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" );
 
     // contributors list
     txvContributors->setText ( "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
@@ -490,9 +490,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                                "<p>Jiri Popek (<a href=\"https://github.com/jardous\">jardous</a>)</p>"
                                "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
                                "<br>" +
-                               tr ( "For details on the contributions check out the " ) +
-                               "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) +
-                               "</a>." );
+                               tr ( "For details on the contributions check out the %1" )
+                                   .arg ( "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" +
+                                          tr ( "Github Contributors list" ) + "</a>.") );
 
     // translators
     txvTranslation->setText ( "<p><b>" + tr ( "Spanish" ) +
@@ -543,7 +543,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
     lblVersion->setText ( GetVersionAndNameStr() );
 
     // set window title
-    setWindowTitle ( tr ( "About " ) + APP_NAME );
+    setWindowTitle ( tr ( "About %1" ).arg ( APP_NAME ) );
 }
 
 // Licence dialog --------------------------------------------------------------

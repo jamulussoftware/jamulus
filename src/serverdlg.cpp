@@ -152,11 +152,11 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     lblRecorderStatus->setWhatsThis (
         "<b>" + tr ( "Recorder Status" ) + ":</b> " + tr ( "Displays the current status of the recorder.  The following values are possible:" ) +
         "<dl>" + "<dt>" + SREC_NOT_INITIALISED + "</dt>" + "<dd>" + tr ( "No recording directory has been set or the value is not useable" ) +
-        "</dd>" + "<dt>" + SREC_NOT_ENABLED + "</dt>" + "<dd>" + tr ( "Recording has been switched off" )
+        "</dd>" + "<dt>" + SREC_NOT_ENABLED + "</dt>" + "<dd>"
 #ifdef _WIN32
-        + tr ( " by the UI checkbox" )
+        + tr ( "Recording has been switched off by the UI checkbox" )
 #else
-        + tr ( ", either by the UI checkbox or SIGUSR2 being received" )
+        + tr ( "Recording has been switched off, either by the UI checkbox or SIGUSR2 being received" )
 #endif
         + "</dd>" + "<dt>" + SREC_NOT_RECORDING + "</dt>" + "<dd>" + tr ( "There is no one connected to the server to record" ) + "</dd>" + "<dt>" +
         SREC_RECORDING + "</dt>" + "<dd>" + tr ( "The performers are being recorded to the specified session directory" ) + "</dd>" + "</dl>" +
@@ -184,10 +184,10 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
         pSystemTrayIconMenu->addSeparator();
 
-        pSystemTrayIconMenu->addAction ( tr ( "&Hide " ) + APP_NAME + tr ( " server" ), this, SLOT ( OnSysTrayMenuHide() ) );
+        pSystemTrayIconMenu->addAction ( tr ( "&Hide %1 server" ).arg ( APP_NAME ), this, SLOT ( OnSysTrayMenuHide() ) );
 
         pSystemTrayIconMenu->setDefaultAction (
-            pSystemTrayIconMenu->addAction ( tr ( "&Open " ) + APP_NAME + tr ( " server" ), this, SLOT ( OnSysTrayMenuOpen() ) ) );
+            pSystemTrayIconMenu->addAction ( tr ( "&Open %1 server" ).arg ( APP_NAME ), this, SLOT ( OnSysTrayMenuOpen() ) ) );
 
         SystemTrayIcon.setContextMenu ( pSystemTrayIconMenu );
 

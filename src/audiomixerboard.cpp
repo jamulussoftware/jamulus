@@ -177,14 +177,14 @@ CChannelFader::CChannelFader ( QWidget* pNW ) :
     QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " +
                            tr ( "The fader tag "
                                 "identifies the connected client. The tag name, a picture of your "
-                                "instrument and the flag of your country can be set in the main window." );
+                                "instrument and the flag of your location can be set in the main window." );
 
     plblInstrument->setWhatsThis ( strFaderText );
     plblInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );
     plblLabel->setWhatsThis ( strFaderText );
     plblLabel->setAccessibleName ( tr ( "Mixer channel label (fader tag)" ) );
     plblCountryFlag->setWhatsThis ( strFaderText );
-    plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country flag" ) );
+    plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country/region flag" ) );
 
     // Connections -------------------------------------------------------------
     QObject::connect ( pFader, &QSlider::valueChanged, this, &CChannelFader::OnLevelValueChanged );

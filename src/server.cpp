@@ -687,7 +687,7 @@ void CServer::OnAboutToQuit()
     // if server was registered at the directory server, unregister on shutdown
     if ( GetServerRegistered() )
     {
-        UnregisterSlaveServer();
+        Unregister();
     }
 
     if ( bWriteStatusHTMLFile )

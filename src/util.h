@@ -584,7 +584,7 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
     }
 }
 
-// Slave server registration state ---------------------------------------------
+// Server registration state ---------------------------------------------
 enum ESvrRegStatus
 {
     SRS_UNREGISTERED,

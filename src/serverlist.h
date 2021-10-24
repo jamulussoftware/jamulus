@@ -146,7 +146,7 @@ public:
     void SetEnabled ( const bool bState ) { bEnabled = bState; }
     bool GetEnabled() const { return bEnabled; }
 
-    void SlaveServerUnregister() { SlaveServerRegisterServer ( false ); }
+    void Unregister() { SetRegistered ( false ); }
 
     // set server infos -> per definition the server info of this server is
     // stored in the first entry of the list, we assume here that the first
@@ -185,7 +185,7 @@ protected:
     int  IndexOf ( CHostAddress haSearchTerm );
     void Load ( const QString strServerList );
     void Save();
-    void SlaveServerRegisterServer ( const bool bIsRegister );
+    void SetRegistered ( const bool bIsRegister );
     void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );
 
     QMutex Mutex;
@@ -202,9 +202,9 @@ protected:
     // server registration status
     ESvrRegStatus eSvrRegStatus;
 
-    CHostAddress SlaveCurCentServerHostAddress;
-    CHostAddress SlaveCurLocalHostAddress;
-    CHostAddress SlaveCurLocalHostAddress6;
+    CHostAddress DirectoryAddress;
+    CHostAddress ServerPublicIP;
+    CHostAddress ServerPublicIP6;
 
     QString ServerListFileName;
 
@@ -226,7 +226,7 @@ public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();
     void OnTimerPingServers();
-    void OnTimerRefreshRegistration() { SlaveServerRegisterServer ( true ); }
+    void OnTimerRefreshRegistration() { SetRegistered ( true ); }
     void OnTimerCLRegisterServerResp();
 
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }

@@ -62,7 +62,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "the right input channel and an instrument is connected to the left "
                                "input channel which is much louder than the microphone, move the "
                                "audio fader in a direction where the label above the fader shows "
-                               "%1, where %2 is the current attenuation indicator.")
+                               "%1, where %2 is the current attenuation indicator." )
                               .arg ( "<i>" + tr ( "L" ) + " -x</i>", "<i>x</i>" );
 
     lblAudioPan->setWhatsThis ( strAudFader );

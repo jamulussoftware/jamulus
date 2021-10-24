@@ -218,7 +218,7 @@ public:
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
 
-    void UnregisterSlaveServer() { ServerListManager.SlaveServerUnregister(); }
+    void Unregister() { ServerListManager.Unregister(); }
 
     void SetServerRegistered ( const bool bState ) { ServerListManager.SetEnabled ( bState ); }
 

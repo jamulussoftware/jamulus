@@ -469,10 +469,10 @@ void CServerDlg::OnRegisterServerStateChanged ( int value )
     // apply new setting to the server and update it
     pServer->SetServerRegistered ( bRegState );
 
-    // if registering is disabled, unregister slave server
+    // if registering is disabled, unregister server
     if ( !bRegState )
     {
-        pServer->UnregisterSlaveServer();
+        pServer->Unregister();
     }
 
     pServer->UpdateServerList();

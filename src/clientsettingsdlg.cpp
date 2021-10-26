@@ -353,13 +353,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
     // custom directory server address
-    QString strCustomDirectoryAddress = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
-                                        tr ( "Leave this blank unless you need to enter the address of a directory "
-                                             "server other than the default." );
+    QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
+                                   tr ( "If you need to add additional directories to the Connect dialog Directory drop down, "
+                                        "you can enter the addresses here.<br>"
+                                        "To remove a value, select it, delete the text in the input box, "
+                                        "then move focus out of the control." );
 
-    lblDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
-    cbxDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
-    cbxDirectoryAddress->setAccessibleName ( tr ( "Directory server address combo box" ) );
+    lblCustomDirectories->setWhatsThis ( strCustomDirectories );
+    cbxCustomDirectories->setWhatsThis ( strCustomDirectories );
+    cbxCustomDirectories->setAccessibleName ( tr ( "Custom Directories combo box" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr ( "Audio Upstream Rate" ) + ":</b> " +
@@ -445,8 +447,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxLanguage->Init ( pSettings->strLanguage );
 
     // init custom directory server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
-    cbxDirectoryAddress->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
-    cbxDirectoryAddress->setInsertPolicy ( QComboBox::NoInsert );
+    cbxCustomDirectories->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
+    cbxCustomDirectories->setInsertPolicy ( QComboBox::NoInsert );
 
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
@@ -667,12 +669,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        this,
                        &CClientSettingsDlg::OnMeterStyleActivated );
 
-    QObject::connect ( cbxDirectoryAddress->lineEdit(), &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnDirectoryAddressEditingFinished );
+    QObject::connect ( cbxCustomDirectories->lineEdit(), &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnCustomDirectoriesEditingFinished );
 
-    QObject::connect ( cbxDirectoryAddress,
+    QObject::connect ( cbxCustomDirectories,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
-                       &CClientSettingsDlg::OnDirectoryAddressEditingFinished );
+                       &CClientSettingsDlg::OnCustomDirectoriesEditingFinished );
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientSettingsDlg::OnLanguageChanged );
 
@@ -978,18 +980,17 @@ void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
 
 void CClientSettingsDlg::OnFeedbackDetectionChanged ( int value ) { pSettings->bEnableFeedbackDetection = value == Qt::Checked; }
 
-void CClientSettingsDlg::OnDirectoryAddressEditingFinished()
+void CClientSettingsDlg::OnCustomDirectoriesEditingFinished()
 {
-    if ( cbxDirectoryAddress->currentText().isEmpty() && cbxDirectoryAddress->currentData().isValid() )
+    if ( cbxCustomDirectories->currentText().isEmpty() && cbxCustomDirectories->currentData().isValid() )
     {
         // if the user has selected an entry in the combo box list and deleted the text in the input field,
         // and then focus moves off the control without selecting a new entry,
         // we delete the corresponding entry in the directory server address vector
-        pSettings->vstrDirectoryAddress[cbxDirectoryAddress->currentData().toInt()] = "";
+        pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()] = "";
     }
-    else if ( cbxDirectoryAddress->currentData().isValid() &&
-              pSettings->vstrDirectoryAddress[cbxDirectoryAddress->currentData().toInt()].compare (
-                  NetworkUtil::FixAddress ( cbxDirectoryAddress->currentText() ) ) == 0 )
+    else if ( cbxCustomDirectories->currentData().isValid() && pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()].compare (
+                                                                   NetworkUtil::FixAddress ( cbxCustomDirectories->currentText() ) ) == 0 )
     {
         // if the user has selected another entry in the combo box list without changing anything,
         // there is no need to update any list
@@ -999,12 +1000,12 @@ void CClientSettingsDlg::OnDirectoryAddressEditingFinished()
     {
         // store new address at the top of the list, if the list was already
         // full, the last element is thrown out
-        pSettings->vstrDirectoryAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxDirectoryAddress->currentText() ) );
+        pSettings->vstrDirectoryAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCustomDirectories->currentText() ) );
     }
 
     // update combo box list and inform connect dialog about the new address
     UpdateDirectoryServerComboBox();
-    emit DirectoryAddressChanged();
+    emit CustomDirectoriesChanged();
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
@@ -1050,15 +1051,15 @@ void CClientSettingsDlg::UpdateDisplay()
 
 void CClientSettingsDlg::UpdateDirectoryServerComboBox()
 {
-    cbxDirectoryAddress->clear();
-    cbxDirectoryAddress->clearEditText();
+    cbxCustomDirectories->clear();
+    cbxCustomDirectories->clearEditText();
 
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
         if ( !pSettings->vstrDirectoryAddress[iLEIdx].isEmpty() )
         {
             // store the index as user data to the combo box item, too
-            cbxDirectoryAddress->addItem ( pSettings->vstrDirectoryAddress[iLEIdx], iLEIdx );
+            cbxCustomDirectories->addItem ( pSettings->vstrDirectoryAddress[iLEIdx], iLEIdx );
         }
     }
 }

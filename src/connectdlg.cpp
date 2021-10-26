@@ -551,7 +551,7 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     lvwServers->clearSelection();
 }
 
-void CConnectDlg::OnCustomDirectoryAddressChanged()
+void CConnectDlg::OnCustomDirectoriesChanged()
 {
 
     QString strPreviousSelection = cbxDirectoryServer->currentText();

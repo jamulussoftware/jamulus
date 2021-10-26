@@ -83,7 +83,7 @@ public slots:
     void OnAutoJitBufStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnFeedbackDetectionChanged ( int value );
-    void OnDirectoryAddressEditingFinished();
+    void OnCustomDirectoriesEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
@@ -111,6 +111,6 @@ signals:
     void GUIDesignChanged();
     void MeterStyleChanged();
     void AudioChannelsChanged();
-    void DirectoryAddressChanged();
+    void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );
 };

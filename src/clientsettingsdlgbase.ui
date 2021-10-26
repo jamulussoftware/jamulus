@@ -967,14 +967,14 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="lblDirectoryAddress">
+              <widget class="QLabel" name="lblCustomDirectories">
                <property name="text">
                 <string>Custom Directories:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="cbxDirectoryAddress">
+              <widget class="QComboBox" name="cbxCustomDirectories">
                <property name="editable">
                 <bool>true</bool>
                </property>
@@ -1298,7 +1298,7 @@
   <tabstop>sldNetBuf</tabstop>
   <tabstop>sldNetBufServer</tabstop>
   <tabstop>chbEnableOPUS64</tabstop>
-  <tabstop>cbxDirectoryAddress</tabstop>
+  <tabstop>cbxCustomDirectories</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxInputBoost</tabstop>
   <tabstop>chbDetectFeedback</tabstop>

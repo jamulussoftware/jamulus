@@ -98,7 +98,7 @@ public slots:
     void OnDirectoryServerChanged ( int iTypeIdx );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
-    void OnCustomDirectoryAddressChanged();
+    void OnCustomDirectoriesChanged();
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

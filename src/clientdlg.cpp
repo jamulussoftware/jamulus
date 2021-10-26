@@ -1033,7 +1033,7 @@ void CClientDlg::OnTimerSigMet()
     lbrInputLevelL->SetValue ( pClient->GetLevelForMeterdBLeft() );
     lbrInputLevelR->SetValue ( pClient->GetLevelForMeterdBRight() );
 
-    if ( bDetectFeedback &&
+    if ( bDetectFeedback && pSettings->bEnableFeedbackDetection &&
          ( pClient->GetLevelForMeterdBLeft() > NUM_STEPS_LED_BAR - 0.5 || pClient->GetLevelForMeterdBRight() > NUM_STEPS_LED_BAR - 0.5 ) )
     {
         // mute locally and mute channel

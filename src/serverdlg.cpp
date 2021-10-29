@@ -62,9 +62,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                            "to make sure that all servers in the connect dialog server list are "
                                            "actually available." ) );
 
-    // register server status label
+    // server registration status label
     lblRegSvrStatus->setWhatsThis ( "<b>" + tr ( "Register Server Status" ) + ":</b> " +
-                                    tr ( "If the Make My Server Public check box is checked, this will show "
+                                    tr ( "If the Register Server check box is checked, this will show "
                                          "whether registration with the directory server is successful. If the "
                                          "registration failed, please choose another server list." ) );
 

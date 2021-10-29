@@ -835,6 +835,15 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         }
     }
 
+    // norecord flag
+    if ( !CommandLineOptions.contains ( "--norecord" ) )
+    {
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
+        {
+            pServer->SetEnableRecording ( !bValue );
+        }
+    }
+
     // welcome message
     if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
     {
@@ -849,15 +858,6 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
     if ( !CommandLineOptions.contains ( "--recording" ) )
     {
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
-    }
-
-    // norecord flag
-    if ( !CommandLineOptions.contains ( "--norecord" ) )
-    {
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
-        {
-            pServer->SetEnableRecording ( !bValue );
-        }
     }
 
     // start minimized on OS start
@@ -902,6 +902,9 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // country
     SetNumericIniSet ( IniXMLDocument, "server", "country", static_cast<int> ( pServer->GetServerCountry() ) );
 
+    // norecord flag
+    SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
+
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome", ToBase64 ( pServer->GetWelcomeMessage() ) );
 
@@ -910,9 +913,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64", ToBase64 ( pServer->GetRecordingDir() ) );
-
-    // norecord flag
-    SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
 
     // start minimized on OS start
     SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );

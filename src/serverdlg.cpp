@@ -379,37 +379,36 @@ lvwClients->setMinimumHeight ( 140 );
     // check boxes
     QObject::connect ( chbRegisterServer, &QCheckBox::stateChanged, this, &CServerDlg::OnRegisterServerStateChanged );
 
-    QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged, this, &CServerDlg::OnStartOnOSStartStateChanged );
-
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableRecorderStateChanged );
 
-    // delay panning
+    QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged, this, &CServerDlg::OnStartOnOSStartStateChanged );
+
     QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
 
     // line edits
-    QObject::connect ( edtCustomDirectory, &QLineEdit::editingFinished, this, &CServerDlg::OnCustomDirectoryEditingFinished );
-
     QObject::connect ( edtServerName, &QLineEdit::textChanged, this, &CServerDlg::OnServerNameTextChanged );
 
     QObject::connect ( edtLocationCity, &QLineEdit::textChanged, this, &CServerDlg::OnLocationCityTextChanged );
 
-    // combo boxes
-    QObject::connect ( cbxLocationCountry,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CServerDlg::OnLocationCountryActivated );
+    QObject::connect ( edtCustomDirectory, &QLineEdit::editingFinished, this, &CServerDlg::OnCustomDirectoryEditingFinished );
 
+    // combo boxes
     QObject::connect ( cbxDirectoryType,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
                        &CServerDlg::OnDirectoryTypeActivated );
 
+    QObject::connect ( cbxLocationCountry,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CServerDlg::OnLocationCountryActivated );
+
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CServerDlg::OnLanguageChanged );
 
     // push buttons
-    QObject::connect ( pbtRecordingDir, &QPushButton::released, this, &CServerDlg::OnRecordingDirClicked );
-
     QObject::connect ( pbtNewRecording, &QPushButton::released, this, &CServerDlg::OnNewRecordingClicked );
+
+    QObject::connect ( pbtRecordingDir, &QPushButton::released, this, &CServerDlg::OnRecordingDirClicked );
 
     // tool buttons
     QObject::connect ( tbtClearRecordingDir, &QToolButton::released, this, &CServerDlg::OnClearRecordingDirClicked );

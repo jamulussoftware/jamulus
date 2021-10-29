@@ -154,6 +154,13 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     // Tab: options
 
+    // Interface Language
+    QString strWTLanguage = "<b>" + tr ( "Language" ) + ":</b> " + tr ( "Select the language to be used for the user interface." );
+    lblLanguage->setWhatsThis ( strWTLanguage );
+    cbxLanguage->setWhatsThis ( strWTLanguage );
+
+    cbxLanguage->setAccessibleName ( tr ( "Language combo box" ) );
+
     // recording directory
     pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
     pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +

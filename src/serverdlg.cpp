@@ -297,6 +297,23 @@ lvwClients->setMinimumHeight ( 140 );
         chbRegisterServer->setCheckState ( Qt::Unchecked );
     }
 
+    // Recorder controls
+    chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
+    edtCurrentSessionDir->setText ( "" );
+    pbtNewRecording->setAutoDefault ( false );
+
+    // setup welcome message GUI control
+    tedWelcomeMessage->setPlaceholderText ( tr ( "Type a message here. If no message is set, the server welcome is disabled." ) );
+    tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
+
+    // language combo box (corrects the setting if language not found)
+    cbxLanguage->Init ( pSettings->strLanguage );
+
+    // recorder options
+    pbtRecordingDir->setAutoDefault ( false );
+    edtRecordingDir->setText ( pServer->GetRecordingDir() );
+    tbtClearRecordingDir->setText ( u8"\u232B" );
+
     // update start minimized check box (only available for Windows)
 #ifndef _WIN32
     chbStartOnOSStart->setVisible ( false );
@@ -327,24 +344,6 @@ lvwClients->setMinimumHeight ( 140 );
         chbEnableDelayPanning->setCheckState ( Qt::Unchecked );
     }
 
-    // Recorder controls
-    chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
-    edtCurrentSessionDir->setText ( "" );
-    pbtNewRecording->setAutoDefault ( false );
-    pbtRecordingDir->setAutoDefault ( false );
-    edtRecordingDir->setText ( pServer->GetRecordingDir() );
-    tbtClearRecordingDir->setText ( u8"\u232B" );
-
-    UpdateRecorderStatus ( QString::null );
-
-    // language combo box (corrects the setting if language not found)
-    cbxLanguage->Init ( pSettings->strLanguage );
-
-    // setup welcome message GUI control
-    tedWelcomeMessage->setPlaceholderText ( tr ( "Type a message here. If no message is set, the server welcome is disabled." ) );
-
-    tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
-
     // prepare update check info label (invisible by default)
     lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
     lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
@@ -352,6 +351,8 @@ lvwClients->setMinimumHeight ( 140 );
 
     // update GUI dependencies
     UpdateGUIDependencies();
+
+    UpdateRecorderStatus ( QString::null );
 
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( tr ( "&Window" ), this );

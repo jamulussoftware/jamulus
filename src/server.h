@@ -190,70 +190,50 @@ public:
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr ) { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
 
-    // Jam recorder ------------------------------------------------------------
-    bool    GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
-    QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
-    bool    GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
-    bool    GetDisableRecording() { return bDisableRecording; }
-    void    RequestNewRecording() { JamController.RequestNewRecording(); }
-
-    void SetEnableRecording ( bool bNewEnableRecording );
-
-    QString GetRecordingDir() { return JamController.GetRecordingDir(); }
-
-    void SetRecordingDir ( QString newRecordingDir )
-    {
-        JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording );
-    }
-
-    void CreateAndSendRecorderStateForAllConChannels();
-
-    // delay panning
-    void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
-    bool IsDelayPanningEnabled() { return bDelayPan; }
-
     // IPv6 Enabled
     bool IsIPv6Enabled() { return bEnableIPv6; }
 
-    // Server list management --------------------------------------------------
-    void UpdateServerList() { ServerListManager.Update(); }
+    // GUI settings ------------------------------------------------------------
+    int GetClientNumAudioChannels ( const int iChanNum ) { return vecChannels[iChanNum].GetNumAudioChannels(); }
 
-    void Unregister() { ServerListManager.Unregister(); }
-
-    void SetServerRegistered ( const bool bState ) { ServerListManager.SetEnabled ( bState ); }
-
-    bool GetServerRegistered() { return ServerListManager.GetEnabled(); }
-
-    void SetDirectoryAddress ( const QString& sNDirectoryAddress ) { ServerListManager.SetDirectoryAddress ( sNDirectoryAddress ); }
-
-    QString GetDirectoryAddress() { return ServerListManager.GetDirectoryAddress(); }
-
-    void SetDirectoryType ( const EDirectoryType eNCSAT ) { ServerListManager.SetDirectoryType ( eNCSAT ); }
-
+    void           SetDirectoryType ( const EDirectoryType eNCSAT ) { ServerListManager.SetDirectoryType ( eNCSAT ); }
     EDirectoryType GetDirectoryType() { return ServerListManager.GetDirectoryType(); }
+    bool           IsDirectoryServer() { return ServerListManager.IsDirectoryServer(); }
+    ESvrRegStatus  GetSvrRegStatus() { return ServerListManager.GetSvrRegStatus(); }
 
-    void SetServerName ( const QString& strNewName ) { ServerListManager.SetServerName ( strNewName ); }
-
-    QString GetServerName() { return ServerListManager.GetServerName(); }
-
-    void SetServerCity ( const QString& strNewCity ) { ServerListManager.SetServerCity ( strNewCity ); }
-
-    QString GetServerCity() { return ServerListManager.GetServerCity(); }
-
-    void SetServerCountry ( const QLocale::Country eNewCountry ) { ServerListManager.SetServerCountry ( eNewCountry ); }
-
+    void             SetServerName ( const QString& strNewName ) { ServerListManager.SetServerName ( strNewName ); }
+    QString          GetServerName() { return ServerListManager.GetServerName(); }
+    void             SetServerCity ( const QString& strNewCity ) { ServerListManager.SetServerCity ( strNewCity ); }
+    QString          GetServerCity() { return ServerListManager.GetServerCity(); }
+    void             SetServerCountry ( const QLocale::Country eNewCountry ) { ServerListManager.SetServerCountry ( eNewCountry ); }
     QLocale::Country GetServerCountry() { return ServerListManager.GetServerCountry(); }
+
+    bool    GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
+    void    SetEnableRecording ( bool bNewEnableRecording );
+    bool    GetDisableRecording() { return bDisableRecording; }
+    QString GetRecorderErrMsg() { return JamController.GetRecorderErrMsg(); }
+    bool    GetRecordingEnabled() { return JamController.GetRecordingEnabled(); }
+    void    RequestNewRecording() { JamController.RequestNewRecording(); }
+    void    SetRecordingDir ( QString newRecordingDir )
+    {
+        JamController.SetRecordingDir ( newRecordingDir, iServerFrameSizeSamples, bDisableRecording );
+    }
+    QString GetRecordingDir() { return JamController.GetRecordingDir(); }
 
     void    SetWelcomeMessage ( const QString& strNWelcMess );
     QString GetWelcomeMessage() { return strWelcomeMessage; }
 
-    ESvrRegStatus GetSvrRegStatus() { return ServerListManager.GetSvrRegStatus(); }
+    void    SetDirectoryAddress ( const QString& sNDirectoryAddress ) { ServerListManager.SetDirectoryAddress ( sNDirectoryAddress ); }
+    QString GetDirectoryAddress() { return ServerListManager.GetDirectoryAddress(); }
 
-    // GUI settings ------------------------------------------------------------
+    QString GetServerListFileName() { return ServerListManager.GetServerListFileName(); }
+    bool    SetServerListFileName ( QString strFilename ) { return ServerListManager.SetServerListFileName ( strFilename ); }
+
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
 
-    int GetClientNumAudioChannels ( const int iChanNum ) { return vecChannels[iChanNum].GetNumAudioChannels(); }
+    void SetEnableDelayPanning ( bool bDelayPanningOn ) { bDelayPan = bDelayPanningOn; }
+    bool IsDelayPanningEnabled() { return bDelayPan; }
 
 protected:
     // access functions for actual channels
@@ -291,6 +271,8 @@ protected:
     void MixEncodeTransmitData ( const int iChanCnt, const int iNumClients );
 
     virtual void customEvent ( QEvent* pEvent );
+
+    void CreateAndSendRecorderStateForAllConChannels();
 
     // if server mode is normal or double system frame size
     bool bUseDoubleSystemFrameSize;
@@ -433,9 +415,8 @@ public slots:
 
     void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
     {
-        // only send empty message if server list is enabled and this is not
-        // a directory server
-        if ( ServerListManager.GetEnabled() && !ServerListManager.IsDirectoryServer() )
+        // only send empty message if not a directory server
+        if ( !ServerListManager.IsDirectoryServer() )
         {
             ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr );
         }

@@ -94,31 +94,37 @@ protected:
     QMenu*          pSystemTrayIconMenu;
 
 public slots:
-    void OnRegisterServerStateChanged ( int value );
-    void OnStartOnOSStartStateChanged ( int value );
+    // From the GUI
+    void OnDirectoryTypeCurrentIndexChanged ( int iTypeIdx );
+    void OnServerNameEditingFinished();
+    void OnLocationCityEditingFinished();
+    void OnLocationCountryCurrentIndexChanged ( int iCntryListItem );
     void OnEnableRecorderStateChanged ( int value ) { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
+    void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
+    void OnWelcomeMessageChanged() { pServer->SetWelcomeMessage ( tedWelcomeMessage->toPlainText() ); }
 
+    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnCustomDirectoryEditingFinished();
-    void OnServerNameTextChanged ( const QString& strNewName );
-    void OnLocationCityTextChanged ( const QString& strNewCity );
-    void OnLocationCountryActivated ( int iCntryListItem );
-    void OnDirectoryTypeActivated ( int iTypeIdx );
-    void OnTimer();
-    void OnServerStarted();
-    void OnServerStopped();
-    void OnSvrRegStatusChanged() { UpdateGUIDependencies(); }
-    void OnStopRecorder();
+    void OnRecordingDirClicked();
+    void OnClearRecordingDirClicked();
+    void OnServerListPersistenceClicked();
+    void OnClearServerListPersistenceClicked();
+    void OnStartOnOSStartStateChanged ( int value );
+    void OnEnableDelayPanningStateChanged ( int value ) { pServer->SetEnableDelayPanning ( Qt::CheckState::Checked == value ); }
+
     void OnSysTrayMenuOpen() { ShowWindowInForeground(); }
     void OnSysTrayMenuHide() { hide(); }
     void OnSysTrayMenuExit() { close(); }
     void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
-    void OnWelcomeMessageChanged() { pServer->SetWelcomeMessage ( tedWelcomeMessage->toPlainText() ); }
-    void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
-    void OnEnableDelayPanningStateChanged ( int value ) { pServer->SetEnableDelayPanning ( Qt::CheckState::Checked == value ); }
-    void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
-    void OnRecordingDirClicked();
-    void OnClearRecordingDirClicked();
-    void OnRecordingSessionStarted ( QString sessionDir ) { UpdateRecorderStatus ( sessionDir ); }
 
+    // From the Server
+    void OnServerStarted();
+    void OnServerStopped();
+    void OnSvrRegStatusChanged() { UpdateGUIDependencies(); }
+    void OnRecordingSessionStarted ( QString sessionDir ) { UpdateRecorderStatus ( sessionDir ); }
+    void OnStopRecorder();
     void OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion );
+
+    // Our timer
+    void OnTimer();
 };

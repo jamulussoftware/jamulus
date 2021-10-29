@@ -761,6 +761,7 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
 }
 
 // Server settings -------------------------------------------------------------
+// that this gets called means we are not headless
 void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )
 {
     int  iValue;
@@ -768,55 +769,6 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 
     // window position of the main window
     vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
-
-    // directory type (note that it is important
-    // to set this setting prior to the "directory server address")
-    // clang-format off
-// TODO compatibility to old version
-if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
-{
-    pServer->SetDirectoryType ( static_cast<EDirectoryType> ( iValue ) );
-}
-    // clang-format on
-    else if ( GetNumericIniSet ( IniXMLDocument, "server", "directorytype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
-    {
-        pServer->SetDirectoryType ( static_cast<EDirectoryType> ( iValue ) );
-    }
-    else
-    {
-        // if no address type is given, use the default directory server
-        pServer->SetDirectoryType ( AT_DEFAULT );
-    }
-
-    // clang-format off
-// TODO compatibility to old version
-if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
-{
-    // only the case that manual was set in old ini must be considered
-    if ( !bValue )
-    {
-        pServer->SetDirectoryType ( AT_CUSTOM );
-    }
-}
-    // clang-format on
-
-    if ( !CommandLineOptions.contains ( "--centralserver" ) && !CommandLineOptions.contains ( "--directoryserver" ) )
-    {
-        // directory server address (to be set after the "use default directory
-        // server" address)
-        // clang-format off
-// TODO compatibility to old version
-QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", "" );
-        // clang-format on
-        directoryAddress = GetIniSetting ( IniXMLDocument, "server", "directoryaddress", directoryAddress );
-        pServer->SetDirectoryAddress ( directoryAddress );
-    }
-
-    // server list enabled flag
-    if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) )
-    {
-        pServer->SetServerRegistered ( bValue );
-    }
 
     // name/city/country
     if ( !CommandLineOptions.contains ( "--serverinfo" ) )
@@ -859,6 +811,82 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
     }
 
+    // to avoid multiple registrations, must do this after collecting serverinfo
+    if ( !CommandLineOptions.contains ( "--centralserver" ) && !CommandLineOptions.contains ( "--directoryserver" ) )
+    {
+        // custom directory
+        // CServerListManager defaults to command line argument (or "" if not passed)
+        // Server GUI defaults to ""
+        QString directoryAddress = "";
+        // clang-format off
+// TODO compatibility to old version < 3.8.2
+directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", directoryAddress );
+        // clang-format on
+        directoryAddress = GetIniSetting ( IniXMLDocument, "server", "directoryaddress", directoryAddress );
+
+        pServer->SetDirectoryAddress ( directoryAddress );
+    }
+
+    // directory type
+    // CServerListManager defaults to AT_NONE
+    // Server GUI defaults to AT_DEFAULT
+    // Because type could be AT_CUSTOM, it has to be set after the address to avoid multiple registrations
+    EDirectoryType directoryType = AT_DEFAULT;
+
+    // if command line is set, use it
+    if ( CommandLineOptions.contains ( "--centralserver" ) || CommandLineOptions.contains ( "--directoryserver" ) )
+    {
+        directoryType = AT_CUSTOM;
+    }
+    else
+    {
+        // clang-format off
+// TODO compatibility to old version < 3.8.2
+// if "servlistenabled" exists and is false, set directory type to AT_NONE
+if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
+{
+    directoryType = AT_NONE;
+}
+        // clang-format on
+
+        // clang-format off
+// TODO compatibility to old version < ?????
+// only the case that manual was set in old ini must be considered
+if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) && !bValue )
+{
+    directoryType = AT_CUSTOM;
+}
+else
+            // clang-format on
+
+            // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
+            // clang-format off
+// TODO compatibility to old version < 3.8.2
+if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype", static_cast<int> ( AT_DEFAULT ), static_cast<int> ( AT_CUSTOM ), iValue ) )
+{
+    directoryType = static_cast<EDirectoryType> ( iValue );
+}
+else
+            // clang-format on
+            if ( GetNumericIniSet ( IniXMLDocument,
+                                    "server",
+                                    "directorytype",
+                                    static_cast<int> ( AT_NONE ),
+                                    static_cast<int> ( AT_CUSTOM ),
+                                    iValue ) )
+        {
+            directoryType = static_cast<EDirectoryType> ( iValue );
+        }
+    }
+
+    pServer->SetDirectoryType ( directoryType );
+
+    // server list persistence file name
+    if ( !CommandLineOptions.contains ( "--directoryfile" ) )
+    {
+        pServer->SetServerListFileName ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "directoryfile_base64" ) ) );
+    }
+
     // start minimized on OS start
     if ( !CommandLineOptions.contains ( "--startminimized" ) )
     {
@@ -883,14 +911,8 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // window position of the main window
     PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
 
-    // directory server address
-    PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
-
     // directory type
     SetNumericIniSet ( IniXMLDocument, "server", "directorytype", static_cast<int> ( pServer->GetDirectoryType() ) );
-
-    // server list enabled flag
-    SetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", pServer->GetServerRegistered() );
 
     // name
     PutIniSetting ( IniXMLDocument, "server", "name", pServer->GetServerName() );
@@ -913,9 +935,18 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64", ToBase64 ( pServer->GetRecordingDir() ) );
 
+    // custom directory
+    PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
+
+    // server list persistence file name
+    PutIniSetting ( IniXMLDocument, "server", "directoryfile_base64", ToBase64 ( pServer->GetServerListFileName() ) );
+
     // start minimized on OS start
     SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );
 
     // delay panning
     SetFlagIniSet ( IniXMLDocument, "server", "delaypan", pServer->IsDelayPanningEnabled() );
+
+    // we MUST do this after saving the value and Save() is only called OnAboutToQuit()
+    pServer->SetDirectoryType ( AT_NONE );
 }

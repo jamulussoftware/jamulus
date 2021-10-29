@@ -835,15 +835,6 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         }
     }
 
-    // start minimized on OS start
-    if ( !CommandLineOptions.contains ( "--startminimized" ) )
-    {
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
-        {
-            pServer->SetAutoRunMinimized ( bValue );
-        }
-    }
-
     // welcome message
     if ( !CommandLineOptions.contains ( "--welcomemessage" ) )
     {
@@ -866,6 +857,15 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
         {
             pServer->SetEnableRecording ( !bValue );
+        }
+    }
+
+    // start minimized on OS start
+    if ( !CommandLineOptions.contains ( "--startminimized" ) )
+    {
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
+        {
+            pServer->SetAutoRunMinimized ( bValue );
         }
     }
 
@@ -902,9 +902,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // country
     SetNumericIniSet ( IniXMLDocument, "server", "country", static_cast<int> ( pServer->GetServerCountry() ) );
 
-    // start minimized on OS start
-    SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );
-
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome", ToBase64 ( pServer->GetWelcomeMessage() ) );
 
@@ -916,6 +913,9 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // norecord flag
     SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
+
+    // start minimized on OS start
+    SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );
 
     // delay panning
     SetFlagIniSet ( IniXMLDocument, "server", "delaypan", pServer->IsDelayPanningEnabled() );

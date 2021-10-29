@@ -98,7 +98,7 @@ public slots:
     void OnStartOnOSStartStateChanged ( int value );
     void OnEnableRecorderStateChanged ( int value ) { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
 
-    void OnDirectoryAddressEditingFinished();
+    void OnCustomDirectoryEditingFinished();
     void OnServerNameTextChanged ( const QString& strNewName );
     void OnLocationCityTextChanged ( const QString& strNewCity );
     void OnLocationCountryActivated ( int iCntryListItem );

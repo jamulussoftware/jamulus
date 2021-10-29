@@ -52,7 +52,6 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
 
-
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
                                       tr ( "If the Make My Server Public check box is checked, this server registers "
@@ -67,15 +66,6 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                     tr ( "If the Register Server check box is checked, this will show "
                                          "whether registration with the directory server is successful. If the "
                                          "registration failed, please choose another server list." ) );
-
-    // custom directory server address
-    QString strCustomDirectoryAddress = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
-                                        tr ( "The custom directory server address is the IP address or URL of the directory "
-                                             "server at which the server list of the connection dialog is managed." );
-
-    lblDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
-    edtDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
-    edtDirectoryAddress->setAccessibleName ( tr ( "Directory server address line edit" ) );
 
     cbxDirectoryType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " +
                                      tr ( "Selects the server list (i.e. directory server address) in which your server will be added." ) );
@@ -180,6 +170,15 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                          tr ( "Click the button to clear the currently selected recording directory. "
                                               "This will prevent recording until a new value is selected." ) );
 
+    // custom directory
+    QString strCustomDirectory = "<b>" + tr ( "Custom Directory" ) + ":</b> " +
+                                 tr ( "The custom directory is the IP address or URL of the directory "
+                                      "server at which the server list of the connection dialog is managed." );
+
+    lblCustomDirectory->setWhatsThis ( strCustomDirectory );
+    edtCustomDirectory->setWhatsThis ( strCustomDirectory );
+    edtCustomDirectory->setAccessibleName ( tr ( "Custom Directory line edit" ) );
+
     // start minimized on operating system start
     chbStartOnOSStart->setWhatsThis ( "<b>" + tr ( "Start Minimized on Operating System Start" ) + ":</b> " +
                                       tr ( "If the start minimized on operating system start "
@@ -259,7 +258,7 @@ lvwClients->setMinimumHeight ( 140 );
     cbxDirectoryType->setCurrentIndex ( static_cast<int> ( pServer->GetDirectoryType() ) );
 
     // custom directory server address
-    edtDirectoryAddress->setText ( pServer->GetDirectoryAddress() );
+    edtCustomDirectory->setText ( pServer->GetDirectoryAddress() );
 
     // update server name line edit
     edtServerName->setText ( pServer->GetServerName() );
@@ -387,7 +386,7 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
 
     // line edits
-    QObject::connect ( edtDirectoryAddress, &QLineEdit::editingFinished, this, &CServerDlg::OnDirectoryAddressEditingFinished );
+    QObject::connect ( edtCustomDirectory, &QLineEdit::editingFinished, this, &CServerDlg::OnCustomDirectoryEditingFinished );
 
     QObject::connect ( edtServerName, &QLineEdit::textChanged, this, &CServerDlg::OnServerNameTextChanged );
 
@@ -495,10 +494,10 @@ void CServerDlg::OnRegisterServerStateChanged ( int value )
     UpdateGUIDependencies();
 }
 
-void CServerDlg::OnDirectoryAddressEditingFinished()
+void CServerDlg::OnCustomDirectoryEditingFinished()
 {
     // apply new setting to the server and update it
-    pServer->SetDirectoryAddress ( edtDirectoryAddress->text() );
+    pServer->SetDirectoryAddress ( edtCustomDirectory->text() );
 
     pServer->UpdateServerList();
 }

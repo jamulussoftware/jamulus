@@ -818,9 +818,6 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         pServer->SetServerRegistered ( bValue );
     }
 
-    // language
-    strLanguage =
-        GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
     // name/city/country
     if ( !CommandLineOptions.contains ( "--serverinfo" ) )
@@ -853,6 +850,9 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
     }
 
+    // language
+    strLanguage =
+        GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
     // base recording directory
     if ( !CommandLineOptions.contains ( "--recording" ) )
@@ -893,9 +893,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // server list enabled flag
     SetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", pServer->GetServerRegistered() );
 
-    // language
-    PutIniSetting ( IniXMLDocument, "server", "language", strLanguage );
-
     // name
     PutIniSetting ( IniXMLDocument, "server", "name", pServer->GetServerName() );
 
@@ -910,6 +907,9 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome", ToBase64 ( pServer->GetWelcomeMessage() ) );
+
+    // language
+    PutIniSetting ( IniXMLDocument, "server", "language", strLanguage );
 
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64", ToBase64 ( pServer->GetRecordingDir() ) );

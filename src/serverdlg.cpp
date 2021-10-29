@@ -52,15 +52,6 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
 
-    // start minimized on operating system start
-    chbStartOnOSStart->setWhatsThis ( "<b>" +
-                                      tr ( "Start Minimized on Operating "
-                                           "System Start" ) +
-                                      ":</b> " +
-                                      tr ( "If the start minimized on operating system start "
-                                           "check box is checked, the server will be "
-                                           "started when the operating system starts up and is automatically "
-                                           "minimized to a system task bar icon." ) );
 
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
@@ -181,6 +172,13 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                            "musician enters the server. If no message is set, the server welcome is disabled." ) );
 
     // Tab: options
+
+    // start minimized on operating system start
+    chbStartOnOSStart->setWhatsThis ( "<b>" + tr ( "Start Minimized on Operating System Start" ) + ":</b> " +
+                                      tr ( "If the start minimized on operating system start "
+                                           "check box is checked, the server will be "
+                                           "started when the operating system starts up and is automatically "
+                                           "minimized to a system task bar icon." ) );
 
     // Application initialisation
 

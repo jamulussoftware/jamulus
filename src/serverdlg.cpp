@@ -113,25 +113,6 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     cbxLocationCountry->setAccessibleName ( tr ( "Combo box for location of this server" ) );
 
-    // recording directory
-    pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
-    pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
-                                    tr ( "Click the button to open the dialog that allows the main recording directory to be selected."
-                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
-                                         "by the user Jamulus is running as). " ) );
-
-    edtRecordingDir->setAccessibleName ( tr ( "Main recording directory text box (read-only)" ) );
-    edtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
-                                    tr ( "The current value of the main recording directory. "
-                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
-                                         "by the user Jamulus is running as). "
-                                         "Click the button to open the dialog that allows the main recording directory to be selected." ) );
-
-    tbtClearRecordingDir->setAccessibleName ( tr ( "Clear the recording directory button" ) );
-    tbtClearRecordingDir->setWhatsThis ( "<b>" + tr ( "Clear Recording Directory" ) + ":</b> " +
-                                         tr ( "Click the button to clear the currently selected recording directory. "
-                                              "This will prevent recording until a new value is selected." ) );
-
     // enable recorder
     chbEnableRecorder->setAccessibleName ( tr ( "Checkbox to turn on or off server recording" ) );
     chbEnableRecorder->setWhatsThis ( "<b>" + tr ( "Enable Recorder" ) + ":</b> " +
@@ -172,6 +153,25 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                            "musician enters the server. If no message is set, the server welcome is disabled." ) );
 
     // Tab: options
+
+    // recording directory
+    pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
+    pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
+                                    tr ( "Click the button to open the dialog that allows the main recording directory to be selected.  "
+                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
+                                         "by the user Jamulus is running as)." ) );
+
+    edtRecordingDir->setAccessibleName ( tr ( "Main recording directory text box (read-only)" ) );
+    edtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
+                                    tr ( "The current value of the main recording directory. "
+                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
+                                         "by the user Jamulus is running as). "
+                                         "Click the button to open the dialog that allows the main recording directory to be selected." ) );
+
+    tbtClearRecordingDir->setAccessibleName ( tr ( "Clear the recording directory button" ) );
+    tbtClearRecordingDir->setWhatsThis ( "<b>" + tr ( "Clear Recording Directory" ) + ":</b> " +
+                                         tr ( "Click the button to clear the currently selected recording directory. "
+                                              "This will prevent recording until a new value is selected." ) );
 
     // start minimized on operating system start
     chbStartOnOSStart->setWhatsThis ( "<b>" + tr ( "Start Minimized on Operating System Start" ) + ":</b> " +

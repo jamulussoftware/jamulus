@@ -41,6 +41,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
 
     // Add help text to controls -----------------------------------------------
+
+    // Tab: Server setup
+
     // client list
     lvwClients->setWhatsThis ( "<b>" + tr ( "Client List" ) + ":</b> " +
                                tr ( "The client list shows all clients which are currently connected to this "
@@ -176,6 +179,10 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     tedWelcomeMessage->setWhatsThis ( "<b>" + tr ( "Server Welcome Message" ) + ":</b> " +
                                       tr ( "A server welcome message text is displayed in the chat window if a "
                                            "musician enters the server. If no message is set, the server welcome is disabled." ) );
+
+    // Tab: options
+
+    // Application initialisation
 
     // init system tray icon
     if ( bSystemTrayIconAvailable )

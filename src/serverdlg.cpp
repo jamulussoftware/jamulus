@@ -37,6 +37,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     setupUi ( this );
 
+    // set window title
+    setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
+
     // Add help text to controls -----------------------------------------------
     // client list
     lvwClients->setWhatsThis ( "<b>" + tr ( "Client List" ) + ":</b> " +
@@ -336,9 +339,6 @@ lvwClients->setMinimumHeight ( 140 );
 
     // update GUI dependencies
     UpdateGUIDependencies();
-
-    // set window title
-    setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
 
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( tr ( "&Window" ), this );

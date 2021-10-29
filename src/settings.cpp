@@ -456,8 +456,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 
     // clang-format off
 // TODO compatibility to old version (< 3.6.1)
-// NOTE that the strCurAddr and "check for empty" can be removed if compatibility mode is removed
-vstrDirectoryAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
+QString strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
     // clang-format on
 
     // directory server addresses
@@ -465,14 +464,10 @@ vstrDirectoryAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralserv
     {
         // clang-format off
 // TODO compatibility to old version (< 3.8.2)
-QString strCurAddr = GetIniSetting ( IniXMLDocument, "client", QString ( "centralservaddr%1" ).arg ( iIdx ), "" );
+strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", QString ( "centralservaddr%1" ).arg ( iIdx ), strDirectoryAddress );
         // clang-format on
-        strCurAddr = GetIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), strCurAddr );
-
-        if ( !strCurAddr.isEmpty() )
-        {
-            vstrDirectoryAddress[iIdx] = strCurAddr;
-        }
+        vstrDirectoryAddress[iIdx] = GetIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), strDirectoryAddress );
+        strDirectoryAddress        = "";
     }
 
     // directory server address type
@@ -483,13 +478,11 @@ if ( !vstrDirectoryAddress[0].isEmpty() && GetFlagIniSet ( IniXMLDocument, "clie
 {
     eDirectoryType = AT_CUSTOM;
 }
-    // clang-format on
-    // clang-format off
 // TODO compatibility to old version (< 3.8.2)
-    else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
-    {
-        eDirectoryType = static_cast<EDirectoryType> ( iValue );
-    }
+else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
+{
+    eDirectoryType = static_cast<EDirectoryType> ( iValue );
+}
     // clang-format on
     else if ( GetNumericIniSet ( IniXMLDocument, "client", "directorytype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {

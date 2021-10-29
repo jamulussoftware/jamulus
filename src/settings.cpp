@@ -766,6 +766,9 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     int  iValue;
     bool bValue;
 
+    // window position of the main window
+    vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
+
     // directory server address type (note that it is important
     // to set this setting prior to the "directory server address")
     // clang-format off
@@ -850,8 +853,6 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
     }
 
-    // window position of the main window
-    vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
 
     // base recording directory
     if ( !CommandLineOptions.contains ( "--recording" ) )
@@ -880,6 +881,9 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 {
+    // window position of the main window
+    PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
+
     // directory server address
     PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
 
@@ -906,9 +910,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome", ToBase64 ( pServer->GetWelcomeMessage() ) );
-
-    // window position of the main window
-    PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
 
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64", ToBase64 ( pServer->GetRecordingDir() ) );

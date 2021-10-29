@@ -33,7 +33,7 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     BitmapSystemTrayActive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
 {
     // check if system tray icon can be used
-    bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
+    bSystemTrayIconAvailable = SystemTrayIcon.isSystemTrayAvailable();
 
     setupUi ( this );
 
@@ -175,7 +175,7 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                            "musician enters the server. If no message is set, the server welcome is disabled." ) );
 
     // init system tray icon
-    if ( bSystemTrayIconAvaialbe )
+    if ( bSystemTrayIconAvailable )
     {
         // prepare context menu to be added to the system tray icon
         pSystemTrayIconMenu = new QMenu ( this );
@@ -702,7 +702,7 @@ void CServerDlg::UpdateGUIDependencies()
 
 void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
 {
-    if ( bSystemTrayIconAvaialbe )
+    if ( bSystemTrayIconAvailable )
     {
         if ( bIsActive )
         {
@@ -818,7 +818,7 @@ void CServerDlg::changeEvent ( QEvent* pEvent )
 {
     // if we have a system tray icon, we make the window invisible if it is
     // minimized
-    if ( bSystemTrayIconAvaialbe && ( pEvent->type() == QEvent::WindowStateChange ) )
+    if ( bSystemTrayIconAvailable && ( pEvent->type() == QEvent::WindowStateChange ) )
     {
         if ( isMinimized() )
         {

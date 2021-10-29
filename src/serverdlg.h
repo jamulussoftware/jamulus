@@ -87,7 +87,7 @@ protected:
 
     QMenuBar* pMenu;
 
-    bool            bSystemTrayIconAvaialbe;
+    bool            bSystemTrayIconAvailable;
     QSystemTrayIcon SystemTrayIcon;
     QPixmap         BitmapSystemTrayInactive;
     QPixmap         BitmapSystemTrayActive;

@@ -454,12 +454,11 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
+    // custom directories
     // clang-format off
 // TODO compatibility to old version (< 3.6.1)
 QString strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
     // clang-format on
-
-    // directory server addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         // clang-format off
@@ -470,7 +469,7 @@ strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", QString ( "centr
         strDirectoryAddress        = "";
     }
 
-    // directory server address type
+    // directory type
     // clang-format off
 // TODO compatibility to old version (<3.4.7)
 // only the case that "centralservaddr" was set in old ini must be considered
@@ -494,7 +493,7 @@ else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, st
         eDirectoryType = AT_DEFAULT;
     }
 
-    // custom directory server index
+    // custom directory index
     if ( ( eDirectoryType == AT_CUSTOM ) &&
          GetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", 0, MAX_NUM_SERVER_ADDR_ITEMS, iValue ) )
     {
@@ -695,16 +694,16 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // audio quality
     SetNumericIniSet ( IniXMLDocument, "client", "audioquality", static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // directory server addresses
+    // custom directories
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         PutIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), vstrDirectoryAddress[iIdx] );
     }
 
-    // directory server address type
+    // directory type
     SetNumericIniSet ( IniXMLDocument, "client", "directorytype", static_cast<int> ( eDirectoryType ) );
 
-    // custom directory server index
+    // custom directory index
     SetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", iCustomDirectoryIndex );
 
     // window position of the main window
@@ -884,7 +883,7 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // directory server address
     PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
 
-    // directory server address type
+    // directory type
     SetNumericIniSet ( IniXMLDocument, "server", "directorytype", static_cast<int> ( pServer->GetDirectoryType() ) );
 
     // server list enabled flag

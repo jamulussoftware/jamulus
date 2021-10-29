@@ -352,7 +352,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
-    // custom directory server address
+    // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
                                    tr ( "If you need to add additional directories to the Connect dialog Directory drop down, "
                                         "you can enter the addresses here.<br>"
@@ -446,7 +446,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // language combo box (corrects the setting if language not found)
     cbxLanguage->Init ( pSettings->strLanguage );
 
-    // init custom directory server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
+    // init custom directories combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
     cbxCustomDirectories->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxCustomDirectories->setInsertPolicy ( QComboBox::NoInsert );
 
@@ -986,7 +986,7 @@ void CClientSettingsDlg::OnCustomDirectoriesEditingFinished()
     {
         // if the user has selected an entry in the combo box list and deleted the text in the input field,
         // and then focus moves off the control without selecting a new entry,
-        // we delete the corresponding entry in the directory server address vector
+        // we delete the corresponding entry in the vector
         pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()] = "";
     }
     else if ( cbxCustomDirectories->currentData().isValid() && pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()].compare (

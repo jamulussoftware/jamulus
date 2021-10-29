@@ -215,11 +215,13 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     }
 
     // act on "start minimized" flag (note, this has to be done after setting
-    // the correct value for the system tray icon availablility)
+    // and acting on the correct value for the system tray icon availablility)
     if ( bStartMinimized )
     {
         showMinimized();
     }
+
+    // UI initialisation
 
     // set up list view for connected clients
     lvwClients->setColumnWidth ( 0, 170 ); // 170 //  IP:port

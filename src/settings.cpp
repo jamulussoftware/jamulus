@@ -769,7 +769,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     // window position of the main window
     vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
 
-    // directory server address type (note that it is important
+    // directory type (note that it is important
     // to set this setting prior to the "directory server address")
     // clang-format off
 // TODO compatibility to old version
@@ -817,7 +817,6 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
     {
         pServer->SetServerRegistered ( bValue );
     }
-
 
     // name/city/country
     if ( !CommandLineOptions.contains ( "--serverinfo" ) )

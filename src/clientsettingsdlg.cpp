@@ -261,6 +261,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     cbxSkin->setAccessibleName ( tr ( "Skin combo box" ) );
 
+    // MeterStyle
+    lblMeterStyle->setWhatsThis ( "<b>" + tr ( "Meter Style" ) + ":</b> " +
+                                  tr ( "Select the meter style to be used for the level meters. The "
+                                       "Narrow Bar and Small LEDs options only apply to the mixerboard. When "
+                                       "Narrow Bar is selected, the input meters are set to Bar. When "
+                                       "Small LEDs is selected, the input meters are set to Round LEDs. "
+                                       "The remaining options apply to the mixerboard and input meters." ) );
+
+    cbxMeterStyle->setAccessibleName ( tr ( "Meter Style combo box" ) );
+
     // Interface Language
     lblLanguage->setWhatsThis ( "<b>" + tr ( "Language" ) + ":</b> " + tr ( "Select the language to be used for the user interface." ) );
 
@@ -421,6 +431,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxSkin->addItem ( tr ( "Fancy" ) );   // GD_ORIGINAL
     cbxSkin->addItem ( tr ( "Compact" ) ); // GD_SLIMFADER
     cbxSkin->setCurrentIndex ( static_cast<int> ( pClient->GetGUIDesign() ) );
+
+    // MeterStyle combo box
+    cbxMeterStyle->clear();
+    cbxMeterStyle->addItem ( tr ( "LEDs" ) );       // MT_LED
+    cbxMeterStyle->addItem ( tr ( "Bar" ) );        // MT_BAR
+    cbxMeterStyle->addItem ( tr ( "Narrow Bar" ) ); // MT_SLIM_BAR
+    cbxMeterStyle->addItem ( tr ( "Round LEDs" ) ); // MT_SLIM_LED
+    cbxMeterStyle->addItem ( tr ( "Small LEDs" ) ); // MT_SMALL_LED
+    cbxMeterStyle->setCurrentIndex ( static_cast<int> ( pClient->GetMeterStyle() ) );
 
     // language combo box (corrects the setting if language not found)
     cbxLanguage->Init ( pSettings->strLanguage );
@@ -642,6 +661,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
                        &CClientSettingsDlg::OnGUIDesignActivated );
+
+    QObject::connect ( cbxMeterStyle,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CClientSettingsDlg::OnMeterStyleActivated );
 
     QObject::connect ( cbxCentralServerAddress->lineEdit(),
                        &QLineEdit::editingFinished,
@@ -933,6 +957,13 @@ void CClientSettingsDlg::OnGUIDesignActivated ( int iDesignIdx )
 {
     pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iDesignIdx ) );
     emit GUIDesignChanged();
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnMeterStyleActivated ( int iMeterStyleIdx )
+{
+    pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iMeterStyleIdx ) );
+    emit MeterStyleChanged();
     UpdateDisplay();
 }
 

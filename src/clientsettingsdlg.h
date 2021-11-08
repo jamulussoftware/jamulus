@@ -95,6 +95,7 @@ public slots:
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnGUIDesignActivated ( int iDesignIdx );
+    void OnMeterStyleActivated ( int iMeterStyleIdx );
     void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnAliasTextChanged ( const QString& strNewName );
@@ -108,6 +109,7 @@ public slots:
 
 signals:
     void GUIDesignChanged();
+    void MeterStyleChanged();
     void AudioChannelsChanged();
     void CustomCentralServerAddrChanged();
     void NumMixerPanelRowsChanged ( int value );

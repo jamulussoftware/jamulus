@@ -41,14 +41,44 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     setupUi ( this );
 
     // Add help text to controls -----------------------------------------------
-    // server list
+    // directory
+    QString strDirectoryWT = "<b>" + tr ( "Directory" ) + ":</b> " +
+                             tr ( "Shows the servers listed by the selected directory. "
+                                  "You can add custom directories in Advanced Settings." );
+    QString strDirectoryAN = tr ( "Directory combo box" );
+
+    lblList->setWhatsThis ( strDirectoryWT );
+    lblList->setAccessibleName ( strDirectoryAN );
+    cbxDirectoryServer->setWhatsThis ( strDirectoryWT );
+    cbxDirectoryServer->setAccessibleName ( strDirectoryAN );
+
+    // filter
+    QString strFilterWT = "<b>" + tr ( "Filter" ) + ":</b> " +
+                          tr ( "Filters the server list by the given text. Note that the filter is case insensitive. "
+                               "A single # character will filter for those servers with at least one person connected." );
+    QString strFilterAN = tr ( "Filter edit box" );
+    lblFilter->setWhatsThis ( strFilterWT );
+    edtFilter->setWhatsThis ( strFilterWT );
+
+    lblFilter->setAccessibleName ( strFilterAN );
+    edtFilter->setAccessibleName ( strFilterAN );
+
+    // show all mucisians
+    chbExpandAll->setWhatsThis ( "<b>" + tr ( "Show All Musicians" ) + ":</b> " +
+                                 tr ( "Uncheck to collapse the server list to show just the server details. "
+                                      "Check to show everyone on the servers." ) );
+
+    chbExpandAll->setAccessibleName ( tr ( "Show all musicians check box" ) );
+
+    // server list view
     lvwServers->setWhatsThis ( "<b>" + tr ( "Server List" ) + ":</b> " +
-                               tr ( "The Connection Setup window shows a list of available servers. "
-                                    "Server operators can optionally list their servers by music genre. "
-                                    "Use the List dropdown to select a genre, click on the server you want "
-                                    "to join and press the Connect button to connect to it. Alternatively, "
-                                    "double click on on the server name. Permanent servers (those that have "
-                                    "been listed for longer than 48 hours) are shown in bold." ) );
+                               tr ( "The Connection Setup window lists the available servers registered with "
+                                    "the selected directory. Use the Directory dropdown to change the directory, "
+                                    "find the server you want to join in the server list, click on it, and "
+                                    "then click the Connect button to connect. Alternatively, double click on "
+                                    "the server name to connect." ) +
+                               "<br>" + tr ( "Permanent servers (those that have been listed for longer than 48 hours) are shown in bold." ) +
+                               "<br>" + tr ( "You can add custom directories in Advanced Settings." ) );
 
     lvwServers->setAccessibleName ( tr ( "Server list view" ) );
 
@@ -56,35 +86,17 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QString strServAddrH = "<b>" + tr ( "Server Address" ) + ":</b> " +
                            tr ( "If you know the IP address or URL of a server, you can connect to it "
                                 "using the Server name/Address field. An optional port number can be added after the IP "
-                                "address or URL using a colon as a separator, e.g, "
-                                "example.org:" ) +
-                           QString().setNum ( DEFAULT_PORT_NUMBER ) +
-                           tr ( ". The field will "
-                                "also show a list of the most recently used server addresses." );
+                                "address or URL using a colon as a separator, e.g, %1. "
+                                "The field will also show a list of the most recently used server addresses." )
+                               .arg ( QString ( "<tt>example.org:%1</tt>" ).arg ( DEFAULT_PORT_NUMBER ) );
 
     lblServerAddr->setWhatsThis ( strServAddrH );
     cbxServerAddr->setWhatsThis ( strServAddrH );
 
     cbxServerAddr->setAccessibleName ( tr ( "Server address edit box" ) );
-    cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
-                                                   "IP address or URL. It also stores old URLs in the combo box list." ) );
+    cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server IP address or URL. It also stores old URLs in the combo box list." ) );
 
     UpdateDirectoryServerComboBox();
-
-    cbxDirectoryServer->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " + tr ( "Selects the server list to be shown." ) );
-    cbxDirectoryServer->setAccessibleName ( tr ( "Server list selection combo box" ) );
-
-    // filter
-    edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " +
-                              tr ( "The server "
-                                   "list is filtered by the given text. Note that the filter is case insensitive." ) );
-    edtFilter->setAccessibleName ( tr ( "Filter edit box" ) );
-
-    // show all mucisians
-    chbExpandAll->setWhatsThis ( "<b>" + tr ( "Show All Musicians" ) + ":</b> " +
-                                 tr ( "If you check this check box, the musicians of all servers are shown. If you "
-                                      "uncheck the check box, all list view items are collapsed." ) );
-    chbExpandAll->setAccessibleName ( tr ( "Show all musicians check box" ) );
 
     // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
     cbxServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );

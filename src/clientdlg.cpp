@@ -39,6 +39,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
     bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
+    bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
     eLastDesign ( GD_ORIGINAL ),         //          "

@@ -666,6 +666,19 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
         emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
     }
 }
+
+static inline QString TruncateString ( QString str, int position )
+{
+    QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
+
+    tbfString.setPosition ( position );
+    if ( !tbfString.isAtBoundary() )
+    {
+        tbfString.toPreviousBoundary();
+        position = tbfString.position();
+    }
+    return str.left ( position );
+}
 #endif
 
 /******************************************************************************\

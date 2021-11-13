@@ -1,6 +1,6 @@
-VERSION = 3.8.0dev
+VERSION = 3.8.1dev
 
-# use target name which does not use a captital letter at the beginning
+# use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)
     TARGET = jamulus
@@ -196,12 +196,8 @@ win32 {
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
-    LIBS += -framework CoreFoundation \
-        -framework CoreServices \
-        -framework AVFoundation \
-        -framework CoreMIDI \
-        -framework AudioToolbox \
-        -framework Foundation
+    LIBS += -framework AVFoundation \
+        -framework AudioToolbox
 } else:android {
     # we want to compile with C++14
     CONFIG += c++14
@@ -753,6 +749,10 @@ DISTFILES += ChangeLog \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/LEDBlackSmall.png \
+    src/res/LEDGreenSmall.png \
+    src/res/LEDRedSmall.png \
+    src/res/LEDYellowSmall.png \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
@@ -803,6 +803,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/trombone.png \
     src/res/instruments/trumpet.png \
     src/res/instruments/tuba.png \
+    src/res/instruments/vibraphone.png \
     src/res/instruments/violin.png \
     src/res/instruments/vocal.png \
     src/res/instruments/guitarvocal.png \

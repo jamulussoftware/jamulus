@@ -66,7 +66,7 @@ make
 sudo make install # optional
 ```
 
-To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/jamulus-server.service). See also runtime [configuration options](https://jamulus.io/wiki/Command-Line-Options), and [this information](https://jamulus.io/wiki/Tips-Tricks-More#controlling-recordings-on-linux-headless-servers) on controlling recordings on headless servers.
+To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/debian/jamulus-headless.service). See also runtime [configuration options](https://jamulus.io/wiki/Running-a-Server.md#command-line-options), and [this manual](https://jamulus.io/wiki/Server-Linux).
 
 ---
 

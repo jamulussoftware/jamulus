@@ -67,62 +67,67 @@
         <translation>Landvlag-iconen van Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="490"/>
+        <location filename="../../util.cpp" line="493"/>
         <source>For details on the contributions check out the </source>
         <translation>Voor details over de bijdragen, zie de </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="491"/>
+        <location filename="../../util.cpp" line="494"/>
         <source>Github Contributors list</source>
         <translation>Github bijdragerslijst</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="495"/>
+        <location filename="../../util.cpp" line="498"/>
         <source>Spanish</source>
         <translation>Spaans</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="499"/>
+        <location filename="../../util.cpp" line="502"/>
         <source>French</source>
         <translation>Frans</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="504"/>
+        <location filename="../../util.cpp" line="507"/>
         <source>Portuguese</source>
         <translation>Portugees</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="509"/>
+        <location filename="../../util.cpp" line="512"/>
         <source>Dutch</source>
         <translation>Nederlands</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="514"/>
+        <location filename="../../util.cpp" line="517"/>
         <source>Italian</source>
         <translation>Italiaans</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="518"/>
+        <location filename="../../util.cpp" line="521"/>
         <source>German</source>
         <translation>Duits</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="523"/>
+        <location filename="../../util.cpp" line="526"/>
         <source>Polish</source>
         <translation>Pools</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="528"/>
+        <location filename="../../util.cpp" line="531"/>
         <source>Swedish</source>
         <translation>Zweeds</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="532"/>
+        <location filename="../../util.cpp" line="535"/>
         <source>Slovak</source>
         <translation>Slowaaks</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="540"/>
+        <location filename="../../util.cpp" line="538"/>
+        <source>Simplified Chinese</source>
+        <translation>Chinees (vereenvoudigd)</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="546"/>
         <source>About </source>
         <translation>Over </translation>
     </message>
@@ -227,7 +232,7 @@
         <translation>GELUIDSOPNAME ACTIEF</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="1105"/>
+        <location filename="../../audiomixerboard.cpp" line="1112"/>
         <source>Personal Mix at: </source>
         <translation>Eigen mix op: </translation>
     </message>
@@ -354,7 +359,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="139"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
-        <translation>Geeft het pre-fader-audioniveau van dit kanaal weer.  Alle clients die verbonden zijn met de server krijgen een audioniveau toegewezen, dezelfde waarde voor elke client.</translation>
+        <translation>Geeft het pre-fader-audioniveau van dit kanaal weer. Alle clients die verbonden zijn met de server krijgen een audioniveau toegewezen, dezelfde waarde voor elke client.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="145"/>
@@ -543,18 +548,22 @@
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="64"/>
+        <location filename="../../chatdlg.cpp" line="69"/>
         <source>&amp;Close</source>
         <translation>&amp;Sluiten</translation>
     </message>
     <message>
-        <location filename="../../chatdlg.cpp" line="131"/>
-        <source>Do you want to open the link</source>
-        <translation>Wilt u de link openen</translation>
+        <location filename="../../chatdlg.cpp" line="135"/>
+        <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
+        <translation>Wilt u de link &apos;%1&apos; in uw browser openen?</translation>
     </message>
     <message>
-        <location filename="../../chatdlg.cpp" line="131"/>
+        <source>Do you want to open the link</source>
+        <translation type="vanished">Wilt u de link openen</translation>
+    </message>
+    <message>
         <source>in an external browser?</source>
-        <translation>in een externe browser?</translation>
+        <translation type="vanished">in een externe browser?</translation>
     </message>
 </context>
 <context>
@@ -581,7 +590,7 @@
 <context>
     <name>CClientDlg</name>
     <message>
-        <location filename="../../clientdlg.cpp" line="52"/>
+        <location filename="../../clientdlg.cpp" line="54"/>
         <source>Input Level Meter</source>
         <translation>Ingangsniveaumeter</translation>
     </message>
@@ -590,7 +599,7 @@
         <translation type="vanished">De indicatoren voor het ingangsniveau geven het ingangsniveau van de twee stereokanalen van de huidige geselecteerde audio-ingang weer.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="57"/>
+        <location filename="../../clientdlg.cpp" line="59"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
         <translation>Zorg ervoor dat u het ingangssignaal niet clipt om vervorming van het audiosignaal te voorkomen.</translation>
     </message>
@@ -615,17 +624,17 @@
         <translation type="vanished"> software niet is verbonden. Dit kan worden bereikt door het geluidskanaal in de afspeelmixer (niet de opnamemixer!) te dempen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="75"/>
+        <location filename="../../clientdlg.cpp" line="77"/>
         <source>Input level meter</source>
         <translation>Ingangsniveaumeter</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="76"/>
+        <location filename="../../clientdlg.cpp" line="78"/>
         <source>Simulates an analog LED level meter.</source>
         <translation>Simuleert een analoge LED-niveaumeter.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="93"/>
+        <location filename="../../clientdlg.cpp" line="95"/>
         <source>Connect/Disconnect Button</source>
         <translation>Verbinden/afmelden-knop</translation>
     </message>
@@ -634,7 +643,7 @@
         <translation type="vanished">Druk op deze knop om verbinding te maken met een server. In het daaropvolgende dialoogvenster kunt u een server kunt selecteren. Als u verbonden bent, wordt de sessie beëindigd door weer op deze knop te drukken.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="97"/>
+        <location filename="../../clientdlg.cpp" line="99"/>
         <source>Connect and disconnect toggle button</source>
         <translation>Knop voor het opzetten en verbreken van de verbinding</translation>
     </message>
@@ -643,7 +652,7 @@
         <translation type="vanished">Door op deze knop te klikken verandert het onderschrift van de knop van Verbinden naar Verbreken, d.w.z. dat het een toggle-functie heeft voor verbinden/verbreken van de </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="206"/>
+        <location filename="../../clientdlg.cpp" line="208"/>
         <source> software.</source>
         <translation> software.</translation>
     </message>
@@ -704,7 +713,7 @@
         <translation type="vanished">Rechter kanaalselectie voor galm</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="126"/>
+        <location filename="../../clientdlg.cpp" line="128"/>
         <source>Delay Status LED</source>
         <translation>Vertragingsstatus LED</translation>
     </message>
@@ -713,26 +722,25 @@
         <translation type="vanished">De vertragingsstatus LED-indicator geeft de huidige geluidsvertragingsstatus aan. Als het lampje groen is, is de vertraging perfect voor een storingssessie. Als het lampje geel is, is een sessie nog steeds mogelijk, maar kan het moeilijker zijn om te spelen. Als het lichtje rood is, is de vertraging te groot voor een storing.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="204"/>
+        <location filename="../../clientdlg.cpp" line="206"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
         <translation>Als deze LED-indicator rood wordt, zult u niet veel plezier beleven aan het gebruik van de </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="154"/>
+        <location filename="../../clientdlg.cpp" line="156"/>
         <source>Delay status LED indicator</source>
         <translation>Vertraging status LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="157"/>
         <source>Buffers Status LED</source>
-        <translation>Buffers status LED-indicator</translation>
+        <translation type="vanished">Buffers status LED-indicator</translation>
     </message>
     <message>
         <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
         <translation type="vanished">De indicator voor de status van de buffers geeft de huidige status van de audio/streaming aan. Als het lampje groen is, zijn er geen bufferoverschrijdingen/onderschrijdingen en wordt de audiostream niet onderbroken. Als het lampje rood is, wordt de audiostream onderbroken door een van de volgende problemen:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="163"/>
+        <location filename="../../clientdlg.cpp" line="165"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
         <translation>De buffer voor de netwerkjitter is niet groot genoeg voor de huidige netwerk-/audio-interfacejitter.</translation>
     </message>
@@ -745,17 +753,17 @@
         <translation type="vanished">De upload- of downloadstroomsnelheid is te hoog voor de huidige beschikbare internetbandbreedte.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="53"/>
+        <location filename="../../clientdlg.cpp" line="55"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
         <translation>Dit toont het niveau van de twee stereokanalen voor de audio-invoer.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="60"/>
+        <location filename="../../clientdlg.cpp" line="62"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
         <translation>Indien de applicatie verbonden is met een server en in de microfoon wordt gespeeld of gezongen, dan zou de LED-niveaumeter moeten flikkeren. Als dit niet het geval is, dan heeft u waarschijnlijk het verkeerde ingangskanaal gekozen (bijv. line in i.p.v. de microfooningang) of heeft u de ingangsversterking te laag ingesteld in de (Windows) audiomixer.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="68"/>
+        <location filename="../../clientdlg.cpp" line="70"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation>Voor goed gebruik van de applicatie moet u de zang of het instrument niet via de luidspreker of koptelefoon horen als de software niet verbonden is. Dit kan worden bereikt door het dempen van het audiokanaal in de afspeelmixer (niet de opnamemixer!).</translation>
     </message>
@@ -768,158 +776,155 @@
         <translation type="vanished">Met de audiofader kunnen de relatieve niveaus van de linker en rechter lokale audiokanalen worden gewijzigd. Voor een monosignaal werkt het als een panning tussen de twee kanalen. Als bijvoorbeeld een microfoon is verbonden op het rechter ingangskanaal en een veel luider instrument is verbonden op het linker ingangskanaal, beweeg dan de audiofader in de richting van het label </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="100"/>
+        <location filename="../../clientdlg.cpp" line="102"/>
         <source>Reverb effect</source>
         <translation>Galm-effect</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="101"/>
+        <location filename="../../clientdlg.cpp" line="103"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
         <translation>Een galmeffect kan worden toegepast op één lokaal mono-audiokanaal of op beide kanalen in de stereomodus. De monokanaalselectie en het galmniveau kunnen worden aangepast. Als bijvoorbeeld het microfoonsignaal in het juiste audiokanaal van de geluidskaart binnenkomt en er een galmeffect wordt toegepast, zet u de kanaalkeuzeschakelaar naar rechts en beweegt u de fader omhoog tot het gewenste galmniveau is bereikt.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="112"/>
+        <location filename="../../clientdlg.cpp" line="114"/>
         <source>Reverb effect level setting</source>
         <translation>Instelling van het niveau van het galmeffect</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="115"/>
+        <location filename="../../clientdlg.cpp" line="117"/>
         <source>Reverb Channel Selection</source>
         <translation>Selectie van het galmkanaal</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="116"/>
+        <location filename="../../clientdlg.cpp" line="118"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
         <translation>Met deze radioknoppen kan het audio-invoerkanaal worden gekozen waarop het galmeffect wordt toegepast. Het linker of rechter ingangskanaal kan worden gekozen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="121"/>
+        <location filename="../../clientdlg.cpp" line="123"/>
         <source>Left channel selection for reverb</source>
         <translation>Linker kanaalselectie voor galm</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="123"/>
+        <location filename="../../clientdlg.cpp" line="125"/>
         <source>Right channel selection for reverb</source>
         <translation>Rechter kanaalselectie voor galm</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="130"/>
+        <location filename="../../clientdlg.cpp" line="132"/>
         <source>Green</source>
         <translation>Groen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="131"/>
+        <location filename="../../clientdlg.cpp" line="133"/>
         <source>The delay is perfect for a jam session.</source>
         <translation>De vertraging is prima voor een jamsessie.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="136"/>
+        <location filename="../../clientdlg.cpp" line="138"/>
         <source>Yellow</source>
         <translation>Geel</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="142"/>
+        <location filename="../../clientdlg.cpp" line="144"/>
         <source>Red</source>
         <translation>Rood</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="94"/>
+        <location filename="../../clientdlg.cpp" line="96"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
         <translation>Laat een dialoog zien waarin u een server kunt selecteren om mee te verbinden. Indien reeds verbonden verbreekt deze knop de verbinding.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="126"/>
+        <location filename="../../clientdlg.cpp" line="128"/>
         <source>Shows the current audio delay status:</source>
         <translation>Toont de huidige geluidsvertragingsstatus:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="137"/>
+        <location filename="../../clientdlg.cpp" line="139"/>
         <source>A session is still possible but it may be harder to play.</source>
         <translation>Een sessie is nog mogelijk maar zal moeilijk gaan.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="143"/>
+        <location filename="../../clientdlg.cpp" line="145"/>
         <source>The delay is too large for jamming.</source>
         <translation>De vertraging is te groot voor een jamsessie.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="150"/>
+        <location filename="../../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
         <translation>Als deze LED-indicator rood wordt, zult u niet veel plezier eraan beleven.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="158"/>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation>De bufferstatus-LED toont de huidige audio/streaming status. Indien rood dan wordt de audio-stream onderbroken. Dit kan veroorzaakt worden door de volgende problemen:</translation>
+        <translation type="vanished">De bufferstatus-LED toont de huidige audio/streaming status. Indien rood dan wordt de audio-stream onderbroken. Dit kan veroorzaakt worden door de volgende problemen:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="167"/>
+        <location filename="../../clientdlg.cpp" line="169"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
         <translation>De buffer vertraging van de geluidskaart (buffergrootte) is op een te kleine waarde ingesteld.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="171"/>
+        <location filename="../../clientdlg.cpp" line="173"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
         <translation>De bitsnelheid van de audio staat te hoog voor de huidige beschikbare internetbandbreedte.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="175"/>
+        <location filename="../../clientdlg.cpp" line="177"/>
         <source>The CPU of the client or server is at 100%.</source>
         <translation>De CPU van de client of server staat op 100%.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="182"/>
         <source>Buffers status LED indicator</source>
-        <translation>Status van de buffers LED-indicator</translation>
+        <translation type="vanished">Status van de buffers LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="186"/>
+        <location filename="../../clientdlg.cpp" line="188"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Huidige verbindingsstatus-parameter</translation>
+        <translation>Huidige verbindingsstatus-parameter</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="189"/>
+        <location filename="../../clientdlg.cpp" line="191"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">De ping-tijd is de tijd die nodig is voor de audiostream om van de client naar de server en terug te reizen. Deze vertraging wordt veroorzaakt door het netwerk en bedraagt ongeveer 20-30 ms. Als deze vertraging hoger is dan circa  50 ms, dan is uw afstand tot de server te groot of is uw internetverbinding niet toereikend.</translation>
+        <translation>De ping-tijd is de tijd die nodig is voor de audiostream om van de client naar de server en terug te reizen. Deze vertraging wordt veroorzaakt door het netwerk en bedraagt ongeveer 20-30 ms. Als deze vertraging hoger is dan circa 50 ms, dan is uw afstand tot de server te groot of is uw internetverbinding niet toereikend.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="196"/>
+        <location filename="../../clientdlg.cpp" line="198"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">De totale vertraging wordt berekend op basis van de huidige ping-tijd en de vertraging door de huidige bufferinstellingen.</translation>
+        <translation>De totale vertraging wordt berekend op basis van de huidige ping-tijd en de vertraging door de huidige bufferinstellingen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="226"/>
-        <location filename="../../clientdlg.cpp" line="1224"/>
+        <location filename="../../clientdlg.cpp" line="228"/>
+        <location filename="../../clientdlg.cpp" line="1235"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Verbinden</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="259"/>
         <source>software upgrade available</source>
-        <translation>software-update beschikbaar</translation>
+        <translation type="vanished">software-update beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="275"/>
+        <location filename="../../clientdlg.cpp" line="278"/>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="286"/>
+        <location filename="../../clientdlg.cpp" line="305"/>
         <source>&amp;View</source>
-        <translation>Be&amp;kijken</translation>
+        <translation>&amp;Weergave</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="288"/>
+        <location filename="../../clientdlg.cpp" line="280"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Verbindingsinstellingen...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="292"/>
+        <location filename="../../clientdlg.cpp" line="374"/>
         <source>My &amp;Profile...</source>
         <translation>Mijn &amp;profiel...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="290"/>
+        <location filename="../../clientdlg.cpp" line="361"/>
         <source>C&amp;hat...</source>
         <translation>&amp;Chat...</translation>
     </message>
@@ -928,7 +933,7 @@
         <translation type="vanished">&amp;Instellingen...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="301"/>
+        <location filename="../../clientdlg.cpp" line="366"/>
         <source>&amp;Analyzer Console...</source>
         <translation>&amp;Analyzer console...</translation>
     </message>
@@ -947,17 +952,17 @@
         <translation type="vanished">Gebruik &amp;Twee-rijen-mengpaneel</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="361"/>
+        <location filename="../../clientdlg.cpp" line="295"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>&amp;Wis alle opgeslagen solo- en demp-instellingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="368"/>
+        <location filename="../../clientdlg.cpp" line="302"/>
         <source>Auto-Adjust all &amp;Faders</source>
         <translation>Stel alle &amp;faders automatisch in</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1139"/>
+        <location filename="../../clientdlg.cpp" line="1150"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -966,39 +971,59 @@
         <translation type="vanished">&amp;Wis Alle Opgeslagen Solo-instellingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="363"/>
+        <location filename="../../clientdlg.cpp" line="297"/>
         <source>Set All Faders to New Client &amp;Level</source>
         <translation>&amp;Zet alle faders op nieuw client-niveau</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="283"/>
+        <location filename="../../clientdlg.cpp" line="290"/>
         <source>E&amp;xit</source>
         <translation>&amp;Afsluiten</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="277"/>
+        <location filename="../../clientdlg.cpp" line="159"/>
+        <source>Local Jitter Buffer Status LED</source>
+        <translation>Lokale jitterbuffer status LED</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="160"/>
+        <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
+        <translation>De lokale jitterbuffer status LED geeft de huidige audio/streaming status weer. Indien deze rood is dan wordt de audio onderbroken. Dit komt door één van de volgende problemen:</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="184"/>
+        <source>Local Jitter Buffer status LED indicator</source>
+        <translation>Lokale jitterbuffer LED status indicator</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="284"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>Mixer kanaalinstellingen &amp;laden...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="279"/>
+        <location filename="../../clientdlg.cpp" line="286"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>Mixer kanaalinstellingen &amp;opslaan...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="294"/>
+        <location filename="../../clientdlg.cpp" line="372"/>
+        <source>&amp;Settings</source>
+        <translation>&amp;Instellingen</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="376"/>
         <source>Audio/Network &amp;Settings...</source>
         <translation>Audio-/netwerk-&amp;instellingen...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="296"/>
+        <location filename="../../clientdlg.cpp" line="378"/>
         <source>A&amp;dvanced Settings...</source>
         <translation>Geavanceer&amp;de instellingen...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="305"/>
+        <location filename="../../clientdlg.cpp" line="293"/>
         <source>&amp;Edit</source>
-        <translation>Be&amp;werken</translation>
+        <translation>B&amp;ewerken</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="311"/>
@@ -1028,48 +1053,48 @@
         <translation type="vanished">R</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="702"/>
+        <location filename="../../clientdlg.cpp" line="713"/>
         <source>Directory Server</source>
         <translation>Adresboek server</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="747"/>
-        <location filename="../../clientdlg.cpp" line="759"/>
+        <location filename="../../clientdlg.cpp" line="758"/>
+        <location filename="../../clientdlg.cpp" line="770"/>
         <source>Select Channel Setup File</source>
         <translation>Selecteer bestand met kanaalinstellingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="896"/>
+        <location filename="../../clientdlg.cpp" line="907"/>
         <source>user</source>
         <translation>gebruiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="900"/>
+        <location filename="../../clientdlg.cpp" line="911"/>
         <source>users</source>
         <translation>gebruikers</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="935"/>
+        <location filename="../../clientdlg.cpp" line="946"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="947"/>
+        <location filename="../../clientdlg.cpp" line="958"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="957"/>
+        <location filename="../../clientdlg.cpp" line="968"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1033"/>
+        <location filename="../../clientdlg.cpp" line="1044"/>
         <source>Enable feedback detection</source>
         <translation>Feedback detectie inschakelen</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1036"/>
+        <location filename="../../clientdlg.cpp" line="1047"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
@@ -1078,12 +1103,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst het probleem met de audio feedback op en schakel daarna &apos;Demp mijzelf&apos; uit.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1121"/>
+        <location filename="../../clientdlg.cpp" line="1132"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation>Uw geluidskaart werkt niet goed. Open het Instellingsvenster en controleer apparaatselectie en bestuurprogramma-instellingen.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1192"/>
+        <location filename="../../clientdlg.cpp" line="1203"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Afmelden</translation>
     </message>
@@ -1117,18 +1142,18 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Jitter</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished">ms</translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
@@ -1196,7 +1221,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
 <context>
     <name>CClientSettingsDlg</name>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="63"/>
+        <location filename="../../clientsettingsdlg.cpp" line="74"/>
         <source>Jitter Buffer Size</source>
         <translation>Jitterbuffer grootte</translation>
     </message>
@@ -1209,7 +1234,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">De jitter-buffergrootte kan handmatig worden gekozen voor de lokale client en de externe server. Voor de lokale jitterbuffer worden drop-outs in de audiostream aangegeven door het lampje op de onderkant van de faders voor de jitterbuffergrootte. Als het lampje op rood springt, heeft er een bufferoverschrijding/onderbenedenrijding plaatsgevonden en wordt de audiostream onderbroken.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="75"/>
+        <location filename="../../clientsettingsdlg.cpp" line="86"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation>De jitterbufferinstelling is dus een afweging tussen geluidskwaliteit en totale vertraging.</translation>
     </message>
@@ -1222,17 +1247,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">In het geval dat de automatische instelling van de jitterbuffer is ingeschakeld, worden de netwerkbuffers van de lokale client en de externe server op een conservatieve waarde gezet om de kans op audio-uitval te minimaliseren. Om de audio delay/latentie te tweaken is het aan te raden om de automatische instelling uit te schakelen en de grootte van de jitterbuffer handmatig te verlagen met behulp van de schuifregelaars totdat de persoonlijke aanvaardbare limiet van het aantal drop-outs is bereikt. De LED-indicator zal de audio dropouts van de lokale jitterbuffer visualiseren met een rood lampje.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="100"/>
+        <location filename="../../clientsettingsdlg.cpp" line="111"/>
         <source>Local jitter buffer slider control</source>
         <translation>Lokale jitterbuffer-schuifregelaar</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="103"/>
+        <location filename="../../clientsettingsdlg.cpp" line="114"/>
         <source>Server jitter buffer slider control</source>
         <translation>Server jitterbuffer-schuifregelaar</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="105"/>
+        <location filename="../../clientsettingsdlg.cpp" line="116"/>
         <source>Auto jitter buffer switch</source>
         <translation>Automatische jitterbufferschakelaar</translation>
     </message>
@@ -1241,175 +1266,183 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Jitterbuffer status LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="109"/>
+        <location filename="../../clientsettingsdlg.cpp" line="121"/>
         <source>Sound Card Device</source>
         <translation>Geluidskaartapparaat</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="109"/>
         <source>The ASIO driver (sound card) can be selected using </source>
-        <translation>Het ASIO-stuurprogramma (geluidskaart) kan worden geselecteerd met behulp van </translation>
+        <translation type="vanished">Het ASIO-stuurprogramma (geluidskaart) kan worden geselecteerd met behulp van </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="111"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation> onder het Windows besturingssysteem. Onder MacOS/Linux is geen geluidskaartkeuze mogelijk. Als het geselecteerde ASIO-stuurprogramma niet geldig is, wordt een foutmelding weergegeven en wordt het vorige geldige stuurprogramma geselecteerd.</translation>
+        <translation type="vanished"> onder het Windows besturingssysteem. Onder MacOS/Linux is geen geluidskaartkeuze mogelijk. Als het geselecteerde ASIO-stuurprogramma niet geldig is, wordt een foutmelding weergegeven en wordt het vorige geldige stuurprogramma geselecteerd.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="115"/>
+        <location filename="../../clientsettingsdlg.cpp" line="128"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
         <translation>Als het stuurprogramma tijdens een actieve verbinding wordt geselecteerd, wordt de verbinding gestopt, wordt het stuurprogramma gewijzigd en wordt de verbinding automatisch opnieuw gestart.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="119"/>
+        <location filename="../../clientsettingsdlg.cpp" line="132"/>
         <source>Sound card device selector combo box</source>
         <translation>Geluidskaart apparaatselectie combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="123"/>
+        <location filename="../../clientsettingsdlg.cpp" line="136"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
         <translation>In het geval dat de ASIO4ALL driver wordt gebruikt, dient u er rekening mee te houden dat deze driver meestal ongeveer 10-30 ms extra geluidsvertraging introduceert. Het gebruik van een geluidskaart met een native ASIO-driver wordt daarom aanbevolen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="128"/>
+        <location filename="../../clientsettingsdlg.cpp" line="141"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
         <translation>Als u het kX ASIO-stuurprogramma gebruikt, zorg er dan voor dat u de ASIO-ingangen in het kX DSP-instellingenpaneel aansluit.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="135"/>
+        <location filename="../../clientsettingsdlg.cpp" line="148"/>
         <source>Sound Card Channel Mapping</source>
         <translation>Geluidskaart kanaaltoewijzing</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="136"/>
+        <location filename="../../clientsettingsdlg.cpp" line="149"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation>In het geval dat het geselecteerde geluidskaartapparaat meer dan één ingangs- of uitgangskanaal biedt, zijn de instellingen voor het ingangs- en uitgangskanaal toewijzing zichtbaar.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="139"/>
         <source>For each </source>
-        <translation>Voor elke </translation>
+        <translation type="vanished">Voor elke </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="140"/>
         <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
-        <translation> invoer-/uitvoerkanaal (linker- en rechterkanaal) kan een ander daadwerkelijk kanaal van de geluidskaart worden geselecteerd.</translation>
+        <translation type="vanished"> invoer-/uitvoerkanaal (linker- en rechterkanaal) kan een ander daadwerkelijk kanaal van de geluidskaart worden geselecteerd.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="147"/>
+        <location filename="../../clientsettingsdlg.cpp" line="161"/>
         <source>Left input channel selection combo box</source>
         <translation>Linkeringangskanaal selectie combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="149"/>
+        <location filename="../../clientsettingsdlg.cpp" line="163"/>
         <source>Right input channel selection combo box</source>
         <translation>Rechteringangskanaal selectie combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="151"/>
+        <location filename="../../clientsettingsdlg.cpp" line="165"/>
         <source>Left output channel selection combo box</source>
         <translation>Linkeruitgangskanaal selectie combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="153"/>
+        <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>Right output channel selection combo box</source>
         <translation>Rechteruitgangskanaal selectie combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="156"/>
+        <location filename="../../clientsettingsdlg.cpp" line="171"/>
         <source>Enable Small Network Buffers</source>
         <translation>Kleine netwerkbuffers inschakelen</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="157"/>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
-        <translation>Indien ingeschakeld wordt de ondersteuning voor erg kleine netwerkaudiopakketten geactiveerd. Deze worden alleen gebruikt als de buffervertraging van de geluidskaart kleiner is dan </translation>
+        <translation type="vanished">Indien ingeschakeld wordt de ondersteuning voor erg kleine netwerkaudiopakketten geactiveerd. Deze worden alleen gebruikt als de buffervertraging van de geluidskaart kleiner is dan </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="160"/>
         <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
-        <translation> samples. Hoe kleiner de netwerkbuffers, des te kleiner de audio-vertraging. Maar tegelijkertijd neemt de netwerkbelasting toe en neemt ook de kans op audio-uitval toe.</translation>
+        <translation type="vanished"> samples. Hoe kleiner de netwerkbuffers, des te kleiner de audio-vertraging. Maar tegelijkertijd neemt de netwerkbelasting toe en neemt ook de kans op audio-uitval toe.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="164"/>
+        <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>Enable small network buffers check box</source>
         <translation>Schakel het selectievakje kleine netwerkbuffers in</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="167"/>
+        <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>Sound Card Buffer Delay</source>
         <translation>Geluidskaart buffervertraging</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation>Sommige stuurprogramma&apos;s van geluidskaarten staan niet toe dat de buffervertraging vanuit een toepassing kan worden gewijzigd. In dat geval is de buffervertragingsinstelling uitgeschakeld en moet deze worden gewijzigd via het stuurprogramma van de geluidskaart. In Windows drukt u op de knop ASIO Apparaatinstellingen om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
+        <translation type="vanished">Sommige stuurprogramma&apos;s van geluidskaarten staan niet toe dat de buffervertraging vanuit een toepassing kan worden gewijzigd. In dat geval is de buffervertragingsinstelling uitgeschakeld en moet deze worden gewijzigd via het stuurprogramma van de geluidskaart. In Windows drukt u op de knop ASIO Apparaatinstellingen om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="206"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation>Als de buffervertragingsinstellingen zijn uitgeschakeld, staat het stuurprogramma van de geluidskaart niet toe dat deze vanuit Jamulus te wijzigen zijn. In Windows drukt u op de knop ASIO Apparaatinstellingen om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
+        <translation type="vanished">Als de buffervertragingsinstellingen zijn uitgeschakeld, staat het stuurprogramma van de geluidskaart niet toe dat deze vanuit Jamulus te wijzigen zijn. In Windows drukt u op de knop ASIO Apparaatinstellingen om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="215"/>
+        <location filename="../../clientsettingsdlg.cpp" line="232"/>
         <source>Sound card driver settings</source>
         <translation>Instellingen geluidskaart-stuurprogramma</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="216"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation>Dit opent de stuurprogramma-instellingen van uw geluidskaart. Sommige stuurprogramma&apos;s laten u toe bufferinstellingen te veranderen, andere zoals ASIO4ALL laten u input of outputs kiezen. Meer informatie is te vinden op jamulus.io.</translation>
+        <translation type="vanished">Dit opent de stuurprogramma-instellingen van uw geluidskaart. Sommige stuurprogramma&apos;s laten u toe bufferinstellingen te veranderen, andere zoals ASIO4ALL laten u input of outputs kiezen. Meer informatie is te vinden op jamulus.io.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="221"/>
         <source>Opens the driver settings. Note: </source>
-        <translation>Opent de stuurprogramma-instellingen. Let op: </translation>
+        <translation type="vanished">Opent de stuurprogramma-instellingen. Let op: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation> ondersteunt momenteel alleen apparaten met een sample rate van </translation>
+        <translation type="vanished"> ondersteunt momenteel alleen apparaten met een sample rate van </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="224"/>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation>Hz. U kunt geen stuurprogramma/apparaat selecteren die dit niet ondersteunt. Voor meer hulp zie jamulus.io.</translation>
+        <translation type="vanished">Hz. U kunt geen stuurprogramma/apparaat selecteren die dit niet ondersteunt. Voor meer hulp zie jamulus.io.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="239"/>
+        <location filename="../../clientsettingsdlg.cpp" line="256"/>
         <source>ASIO Device Settings push button</source>
         <translation>ASIO Apparaatinstellingen drukknop</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="248"/>
+        <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Language</source>
         <translation>Taal</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="248"/>
+        <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Select the language to be used for the user interface.</source>
         <translation>Selecteer de te gebruiken taal voor de gebruikersinterface.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="250"/>
+        <location filename="../../clientsettingsdlg.cpp" line="267"/>
         <source>Language combo box</source>
         <translation>Taal combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="419"/>
-        <location filename="../../clientsettingsdlg.cpp" line="545"/>
-        <location filename="../../clientsettingsdlg.cpp" line="553"/>
-        <location filename="../../util.cpp" line="830"/>
+        <location filename="../../clientsettingsdlg.cpp" line="276"/>
+        <source>and</source>
+        <translation>en</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="355"/>
+        <source>Audio Upstream Rate</source>
+        <translation>Audio upstream snelheid</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="356"/>
+        <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
+        <translation>Deze is afhankelijk van de huidige audio pakket grootte en compressie instelling. Zorg ervoor dat de upstream snelheid niet groter is dan uw beschikbare internet upload snelheid (controleer dit met een service zoals speedtest.net).</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="437"/>
+        <location filename="../../clientsettingsdlg.cpp" line="564"/>
+        <location filename="../../clientsettingsdlg.cpp" line="572"/>
+        <location filename="../../util.cpp" line="942"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="1099"/>
+        <location filename="../../clientsettingsdlg.cpp" line="477"/>
+        <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
+        <translation>Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien u verbonden met een %1 server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="1118"/>
         <source>Center</source>
         <translation>Midden</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="1111"/>
+        <location filename="../../clientsettingsdlg.cpp" line="1130"/>
         <source>R</source>
         <translation>R</translation>
     </message>
@@ -1422,7 +1455,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished"> software. Deze instelling heeft invloed op veel verbindingseigenschappen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="171"/>
+        <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Three buffer sizes are supported</source>
         <translation>Drie buffergroottes worden ondersteund</translation>
     </message>
@@ -1455,12 +1488,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished"> software zal nog steeds werken met deze instelling, maar met beperkte prestaties.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="197"/>
+        <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation>De werkelijke buffervertraging heeft invloed op de verbindingsstatus, de huidige uploadsnelheid en de totale vertraging. Hoe lager de buffergrootte, hoe hoger de kans op rood licht in de statusindicator (drop outs) en hoe hoger de uploadsnelheid en hoe lager de totale vertraging.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="203"/>
+        <location filename="../../clientsettingsdlg.cpp" line="219"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation>De bufferinstelling is dus een afweging tussen de geluidskwaliteit en de totale vertraging.</translation>
     </message>
@@ -1473,17 +1506,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished"> software. Druk in Windows op de knop ASIO Setup om het instellingenpaneel van het stuurprogramma te openen. Op Linux gebruikt u de Jack-configuratietool om de grootte van de buffer te wijzigen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="230"/>
+        <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>64 samples setting radio button</source>
         <translation>64 samples instellen radioknop</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="233"/>
+        <location filename="../../clientsettingsdlg.cpp" line="250"/>
         <source>128 samples setting radio button</source>
         <translation>128 samples instellen radioknop</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="236"/>
+        <location filename="../../clientsettingsdlg.cpp" line="253"/>
         <source>256 samples setting radio button</source>
         <translation>256 samples instellen radioknop</translation>
     </message>
@@ -1516,7 +1549,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Vinkje bij de weergave van de kanaalniveaus</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="253"/>
+        <location filename="../../clientsettingsdlg.cpp" line="270"/>
         <source>Audio Channels</source>
         <translation>Audiokanalen</translation>
     </message>
@@ -1533,12 +1566,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">In het geval van de stereo streaming-mode is er geen audiokanaalselectie voor het galmeffect beschikbaar op het hoofdvenster, aangezien het effect in dit geval op beide kanalen wordt toegepast.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="287"/>
+        <location filename="../../clientsettingsdlg.cpp" line="304"/>
         <source>Audio channels combo box</source>
         <translation>Audiokanalen combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="290"/>
+        <location filename="../../clientsettingsdlg.cpp" line="307"/>
         <source>Audio Quality</source>
         <translation>Audiokwaliteit</translation>
     </message>
@@ -1547,12 +1580,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Selecteer de gewenste audiokwaliteit. Er kan een lage, normale of hoge audiokwaliteit worden geselecteerd. Hoe hoger de audiokwaliteit, hoe meer audiodata moet worden verstuurd. Zorg ervoor dat de vereiste bandbreedte niet hoger is dan de beschikbare bandbreedte van uw internetverbinding.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="297"/>
+        <location filename="../../clientsettingsdlg.cpp" line="314"/>
         <source>Audio quality combo box</source>
         <translation>Audiokwaliteit combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="300"/>
+        <location filename="../../clientsettingsdlg.cpp" line="317"/>
         <source>New Client Level</source>
         <translation>Nieuw clientniveau</translation>
     </message>
@@ -1561,12 +1594,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">De nieuwe instelling van het clientniveau definieert het faderniveau van een nieuwe verbonden client in procenten. D.w.z. als een nieuwe client verbinding maakt met de server, krijgt hij het opgegeven initiële faderniveau als er in de vorige verbinding niets is opgeslagen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="309"/>
+        <location filename="../../clientsettingsdlg.cpp" line="326"/>
         <source>New client level edit box</source>
         <translation>Nieuw client-niveau bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="329"/>
+        <location filename="../../clientsettingsdlg.cpp" line="346"/>
         <source>Custom Directory Server Address</source>
         <translation>Eigen adresboek serveradres</translation>
     </message>
@@ -1615,101 +1648,147 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">ASIO-instelling</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="259"/>
-        <location filename="../../clientsettingsdlg.cpp" line="388"/>
+        <location filename="../../clientsettingsdlg.cpp" line="276"/>
+        <location filename="../../clientsettingsdlg.cpp" line="406"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="275"/>
+        <location filename="../../clientsettingsdlg.cpp" line="292"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
         <translation> modus verhoogt de bandbreedte van de audiostream. Zorg ervoor dat deze niet hoger staat dan de beschikbare bandbreedte van uw internetverbinding.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="389"/>
+        <location filename="../../clientsettingsdlg.cpp" line="407"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-in/stereo-uit</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="259"/>
-        <location filename="../../clientsettingsdlg.cpp" line="274"/>
-        <location filename="../../clientsettingsdlg.cpp" line="390"/>
+        <location filename="../../clientsettingsdlg.cpp" line="276"/>
+        <location filename="../../clientsettingsdlg.cpp" line="291"/>
+        <location filename="../../clientsettingsdlg.cpp" line="408"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="38"/>
+        <location filename="../../clientsettingsdlg.cpp" line="48"/>
+        <location filename="../../clientsettingsdlg.cpp" line="49"/>
         <source>&amp;Close</source>
         <translation>&amp;Sluiten</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="47"/>
+        <location filename="../../clientsettingsdlg.cpp" line="58"/>
         <source>Local Audio Input Fader</source>
         <translation>Lokale audio-ingangsfader</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="48"/>
+        <location filename="../../clientsettingsdlg.cpp" line="59"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation>Met de audiofader kunnen de relatieve niveaus van de linker en rechter lokale audiokanalen worden gewijzigd. Voor een monosignaal werkt het als een panning tussen de twee kanalen. Als bijvoorbeeld een microfoon is verbonden op het rechter ingangskanaal en een veel luider instrument is verbonden op het linker ingangskanaal, beweeg dan de audiofader in de richting van het label </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="54"/>
-        <location filename="../../clientsettingsdlg.cpp" line="1106"/>
+        <location filename="../../clientsettingsdlg.cpp" line="65"/>
+        <location filename="../../clientsettingsdlg.cpp" line="1125"/>
         <source>L</source>
         <translation>L</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="54"/>
+        <location filename="../../clientsettingsdlg.cpp" line="65"/>
         <source>, where</source>
         <translation>, waarbij</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="54"/>
+        <location filename="../../clientsettingsdlg.cpp" line="65"/>
         <source>is the current attenuation indicator.</source>
         <translation>de huidige dempingsindicator is.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="60"/>
+        <location filename="../../clientsettingsdlg.cpp" line="71"/>
         <source>Local audio input fader (left/right)</source>
         <translation>Lokale audio-ingangsfader (links/rechts)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="64"/>
+        <location filename="../../clientsettingsdlg.cpp" line="75"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
         <translation>De jitterbuffer compenseert voor jitters als gevolg van netwerk- en geluidskaart timing. De grootte van de jitterbuffer beïnvloed de kwaliteit van de audiostream (aantal dropouts) en de totale vertraging (hoe groter de buffer, des te groter de vertraging).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="69"/>
+        <location filename="../../clientsettingsdlg.cpp" line="80"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
         <translation>De jitter-buffergrootte kan handmatig worden gekozen voor de client en de server. Voor de lokale jitterbuffer worden drop-outs in de audiostream aangegeven door het lampje op de onderkant van de faders voor de jitterbuffergrootte. Als het lampje op rood springt, heeft er een bufferoverschrijding/onderbenedenrijding plaatsgevonden en wordt de audiostream onderbroken.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="78"/>
+        <location filename="../../clientsettingsdlg.cpp" line="89"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
         <translation>Als de Auto-instelling aanstaat worden de jitterbuffers lokaal en op de server automatisch aangepast op basis van metingen van het netwerk en de geluidskaart. Indien ingeschakeld kunnen de faders van de jitterbuffer niet handmatig worden bewogen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="84"/>
+        <location filename="../../clientsettingsdlg.cpp" line="95"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
         <translation>In het geval dat de automatische instelling van de jitterbuffer is ingeschakeld, worden de netwerkbuffers van de lokale client en de externe server op een conservatieve waarde gezet om de kans op audio-uitval te minimaliseren. Om de audio delay/latentie te tweaken is het aan te raden om de automatische instelling uit te schakelen en de grootte van de jitterbuffer handmatig te verlagen met behulp van de schuifregelaars totdat de persoonlijke aanvaardbare limiet van het aantal drop-outs is bereikt. De LED-indicator zal de audio dropouts van de lokale jitterbuffer visualiseren met een rood lampje.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="168"/>
-        <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
-        <translation>De buffervertraging is een fundamentele instelling van dit programma. Deze instelling beïnvloed vele eigenschappen van de verbinding.</translation>
+        <location filename="../../clientsettingsdlg.cpp" line="122"/>
+        <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
+        <translation>Het ASIO-stuurprogramma (geluidskaart) kan worden geselecteerd met behulp van %1 in het Windows besturingssysteem. Voor MacOS/Linux is geen geluidskaartkeuze mogelijk. Als het geselecteerde ASIO-stuurprogramma niet geldig is, wordt een foutmelding weergegeven en wordt het vorige geldige stuurprogramma geselecteerd.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="174"/>
+        <location filename="../../clientsettingsdlg.cpp" line="153"/>
+        <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
+        <translation>Voor elk %1 invoer-/uitvoerkanaal (linker- en rechterkanaal) kan een ander daadwerkelijk kanaal van de geluidskaart worden geselecteerd.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="172"/>
+        <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
+        <translation>Schakelt het gebruik van zeer kleine netwerkaudiopakketten in. Deze netwerkpakketten worden alleen gebruikt indien de geluidskaart buffer kleiner is dan %1 samples. Hoe kleiner de netwerkbuffers, des te kleiner de audio-vertraging. Maar tegelijkertijd neemt de netwerkbelasting toe en neemt ook de kans op audio-uitval toe.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="182"/>
+        <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
+        <translation>De buffervertragingsinstelling is een fundamentele instelling van %1. Deze instelling is van invloed op veel verbindingseigenschappen.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="199"/>
+        <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
+        <translation>Sommige stuurprogramma&apos;s van geluidskaarten staan niet toe dat de buffervertraging vanuit %1 kan worden gewijzigd. In dat geval is de buffervertragingsinstelling uitgeschakeld en moet deze worden gewijzigd via het stuurprogramma van de geluidskaart. In Windows selecteert u de ASIO Apparaatinstellingen knop om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="207"/>
+        <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
+        <translation>Als er geen buffergrootte is geselecteerd en de buffervertragingsinstellingen zijn uitgeschakeld, dan betekent dit dat er een niet ondersteunde buffergrootte wordt gebruikt door de driver. %1 zal nog steeds werken met deze instelling maar de werking is wellicht niet optimaal.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="222"/>
+        <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
+        <translation>Als de buffervertragingsinstellingen zijn uitgeschakeld, dan staat het stuurprogramma van de geluidskaart het niet toe deze vanuit %1 te wijzigen. In Windows selecteert u de ASIO Apparaatinstellingen knop om het instellingenpaneel van het stuurprogramma te openen. In Linux gebruikt u het configuratieprogramma van JACK om de buffergrootte te wijzigen.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="233"/>
+        <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
+        <translation>Dit opent de stuurprogramma-instellingen van uw geluidskaart. Sommige stuurprogramma&apos;s laten u toe bufferinstellingen te veranderen, andere zoals ASIO4ALL laten u invoer- of uitvoerkanalen kiezen van uw apparaat. Meer informatie is te vinden op jamulus.io.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="238"/>
+        <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
+        <translation>Opent de stuurprogramma-instellingen. Let op: %1 ondersteunt momenteel alleen apparaten met een sample rate van %2 Hz. U kunt geen stuurprogramma/apparaat selecteren die dit niet ondersteunt. Voor meer informatie zie jamulus.io.</translation>
+    </message>
+    <message>
+        <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
+        <translation type="vanished">De buffervertraging is een fundamentele instelling van dit programma. Deze instelling beïnvloed vele eigenschappen van de verbinding.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
         <translation>64 samples: Voorkeursinstelling. Geeft de kleinste vertraging maar werkt niet met alle geluidskaarten.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="178"/>
+        <location filename="../../clientsettingsdlg.cpp" line="192"/>
         <source>128 samples: Should work for most available sound cards.</source>
         <translation>128 samples: Werkt voor de meeste geluidskaarten.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="181"/>
+        <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
         <translation>256 samples: Alleen te gebruiken bij langzame computers of met een langzame internetverbinding.</translation>
     </message>
@@ -1718,170 +1797,167 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Sommige stuurprogramma&apos;s van geluidskaarten laten het niet toe de buffervertraging in het programma aan te passen. In dat geval dient het te worden aangepast bij het stuurprogramma zelf. Bij Windows, selecteer de ASIO Setup knop om dit in te stellen. Op Linux, gebruik de Jack configuration tool om de buffergrootte te veranderen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="192"/>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The application will still work with this setting but with restricted performance.</source>
-        <translation>Indien geen buffergrootte is aangegeven en instellingen zijn uitgeschakeld, dan gebruikt het stuurprogramma een niet-ondersteunde buffergrootte. Het programma zal niet optimaal presteren.</translation>
+        <translation type="vanished">Indien geen buffergrootte is aangegeven en instellingen zijn uitgeschakeld, dan gebruikt het stuurprogramma een niet-ondersteunde buffergrootte. Het programma zal niet optimaal presteren.</translation>
     </message>
     <message>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
         <translation type="vanished">Sommige stuurprogramma&apos;s van geluidskaarten laten het niet toe de buffervertraging in het programma aan te passen. In dat geval dient het te worden aangepast bij het stuurprogramma zelf. Bij Windows, selecteer de ASIO Setup knop om dit in te stellen. Op Linux, gebruik de Jack configuration tool om de buffergrootte te veranderen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="243"/>
+        <location filename="../../clientsettingsdlg.cpp" line="260"/>
         <source>Skin</source>
         <translation>Skin</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="243"/>
+        <location filename="../../clientsettingsdlg.cpp" line="260"/>
         <source>Select the skin to be used for the main window.</source>
         <translation>Selecteer de te gebruiken skin voor het hoofdvenster.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="245"/>
+        <location filename="../../clientsettingsdlg.cpp" line="262"/>
         <source>Skin combo box</source>
         <translation>Skin combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="254"/>
+        <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
         <translation>Selecteer het aantal audiokanalen voor communicatie tussen client en server. Er zijn drie modi beschikbaar:</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="259"/>
         <source>and </source>
-        <translation>en </translation>
+        <translation type="vanished">en </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="260"/>
+        <location filename="../../clientsettingsdlg.cpp" line="277"/>
         <source>These modes use one and two audio channels respectively.</source>
         <translation>Deze modi gebruiken respectievelijk een en twee audiokanalen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="265"/>
+        <location filename="../../clientsettingsdlg.cpp" line="282"/>
         <source>Mono in/Stereo-out</source>
         <translation>Mono in/stereo uit</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="266"/>
+        <location filename="../../clientsettingsdlg.cpp" line="283"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
         <translation>Het audiosignaal naar de server is mono maar wat terugkomt is stereo. Dit is handig als de geluidskaart het instrument op een invoerkanaal heeft en de microfoon op een ander. In dat geval kunnen de twee signalen gemixed worden naar een monokanaal terwijl de server mix in stereo blijft.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="274"/>
+        <location filename="../../clientsettingsdlg.cpp" line="291"/>
         <source>Enabling </source>
         <translation>Aanzetten </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="281"/>
+        <location filename="../../clientsettingsdlg.cpp" line="298"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
         <translation>In het geval van de stereo streaming-mode is er geen audiokanaalselectie voor het galmeffect beschikbaar op het hoofdvenster, aangezien het effect in dit geval op beide kanalen wordt toegepast.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="291"/>
+        <location filename="../../clientsettingsdlg.cpp" line="308"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
         <translation>Hoe hoger de audiokwaliteit, des te hoger de benodigde bandbreedte. Zorg ervoor dat deze niet hoger staat dan de beschikbare bandbreedte van uw internetverbinding.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="301"/>
+        <location filename="../../clientsettingsdlg.cpp" line="318"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
         <translation>Deze instelling stelt het faderniveau in van een nieuwe verbonden client in procenten. Als een nieuwe client verbinding maakt krijgt hij het opgegeven initiële faderniveau als dit in de vorige verbinding niet was opgeslagen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="312"/>
+        <location filename="../../clientsettingsdlg.cpp" line="329"/>
         <source>Input Boost</source>
         <translation>Ingangsversterking</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="313"/>
+        <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>Met deze instelling kunt u het niveau van uw ingangssignaal tot en met een factor 10 verhogen (+ 20dB). Als uw geluid te zacht is, probeer dan eerst het niveau te verhogen door dichter bij de microfoon te komen, uw geluidsapparatuur aan te passen of de niveaus in uw besturingssysteem te verhogen. Stel hier alleen een factor in als dit niet lukt. Als uw geluid te luid is, vervormd klinkt en afknapt, zal deze optie niet helpen. Gebruik het daar niet voor, de vervorming zal er nog steeds zijn. Verlaag in plaats daarvan uw ingangssignaal door verder weg te gaan van uw microfoon, uw geluidsapparatuur aan te passen of door de niveaus in uw besturingssysteem te verlagen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="326"/>
+        <location filename="../../clientsettingsdlg.cpp" line="343"/>
         <source>Input Boost combo box</source>
         <translation>Ingangsversterking combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="330"/>
+        <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
         <translation>Laat dit leeg tenzij u een adresboek serveradres wilt invoeren dat anders is dan de standaard.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="335"/>
+        <location filename="../../clientsettingsdlg.cpp" line="352"/>
         <source>Directory server address combo box</source>
         <translation>Adresboek serveradres combobox</translation>
     </message>
     <message>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="vanished">De ping-tijd is de tijd die nodig is voor de audiostream om van de client naar de server en terug te reizen. Deze vertraging wordt veroorzaakt door het netwerk en bedraagt ongeveer 20-30 ms. Als deze vertraging hoger is dan circa  50 ms, dan is uw afstand tot de server te groot of is uw internetverbinding niet toereikend.</translation>
+        <translation type="vanished">De ping-tijd is de tijd die nodig is voor de audiostream om van de client naar de server en terug te reizen. Deze vertraging wordt veroorzaakt door het netwerk en bedraagt ongeveer 20-30 ms. Als deze vertraging hoger is dan circa 50 ms, dan is uw afstand tot de server te groot of is uw internetverbinding niet toereikend.</translation>
     </message>
     <message>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
         <translation type="vanished">De totale vertraging wordt berekend op basis van de huidige ping-tijd en de vertraging door de huidige bufferinstellingen.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="338"/>
         <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation>De bitsnelheid van de audio is afhankelijk van de huidige grootte van het audiopakket en de instelling van de audiocompressie. Zorg ervoor dat de bitsnelheid niet hoger is dan de beschikbare snelheid (controleer de upstreammogelijkheden van uw internetverbinding door bijvoorbeeld speedtest.net te gebruiken).</translation>
+        <translation type="vanished">De bitsnelheid van de audio is afhankelijk van de huidige grootte van het audiopakket en de instelling van de audiocompressie. Zorg ervoor dat de bitsnelheid niet hoger is dan de beschikbare snelheid (controleer de upstreammogelijkheden van uw internetverbinding door bijvoorbeeld speedtest.net te gebruiken).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="347"/>
+        <location filename="../../clientsettingsdlg.cpp" line="365"/>
         <source>Number of Mixer Panel Rows</source>
         <translation>Aantal mengpaneel rijen</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="347"/>
+        <location filename="../../clientsettingsdlg.cpp" line="365"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
         <translation>Stel het aantal rijen in dat gebruikt wordt in het mengpaneel.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="350"/>
+        <location filename="../../clientsettingsdlg.cpp" line="368"/>
         <source>Number of Mixer Panel Rows spin box</source>
         <translation>Aantal rijen in het mengpaneel spinbox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="352"/>
+        <location filename="../../clientsettingsdlg.cpp" line="370"/>
         <source>Feedback Protection</source>
         <translation>Feedback bescherming</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="353"/>
+        <location filename="../../clientsettingsdlg.cpp" line="371"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
         <translation>Schakel feedback bescherming in om de akoetische feedback tussen de microfoon en luidsprekers te detecteren.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="357"/>
+        <location filename="../../clientsettingsdlg.cpp" line="375"/>
         <source>Feedback Protection check box</source>
         <translation>Feedback bescherming selectievakje</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="361"/>
+        <location filename="../../clientsettingsdlg.cpp" line="379"/>
         <source>ASIO Device Settings</source>
         <translation>ASIO Apparaatinstellingen</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="395"/>
+        <location filename="../../clientsettingsdlg.cpp" line="413"/>
         <source>Low</source>
         <translation>Laag</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="396"/>
-        <location filename="../../clientsettingsdlg.cpp" line="402"/>
+        <location filename="../../clientsettingsdlg.cpp" line="414"/>
+        <location filename="../../clientsettingsdlg.cpp" line="420"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="397"/>
+        <location filename="../../clientsettingsdlg.cpp" line="415"/>
         <source>High</source>
         <translation>Hoog</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="403"/>
+        <location filename="../../clientsettingsdlg.cpp" line="421"/>
         <source>Fancy</source>
         <translation>Fancy</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="404"/>
+        <location filename="../../clientsettingsdlg.cpp" line="422"/>
         <source>Compact</source>
         <translation>Compact</translation>
     </message>
@@ -1946,78 +2022,77 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Standaard (Noord-Amerika)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="440"/>
+        <location filename="../../clientsettingsdlg.cpp" line="458"/>
         <source>preferred</source>
         <translation>voorkeur</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="453"/>
+        <location filename="../../clientsettingsdlg.cpp" line="471"/>
         <source>Musician Profile</source>
         <translation>Muzikantenprofiel</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="454"/>
+        <location filename="../../clientsettingsdlg.cpp" line="472"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
         <translation>Stel hier uw naam of een alias in zodat de andere muzikanten met wie u wilt spelen weten wie u bent. Daarnaast kunt u een instrumentfoto van het instrument dat u bespeelt en een vlag van het land waar u woont, instellen. De stad waar u woont en uw vaardigheidsniveau kunnen ook worden toegevoegd.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="459"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation>Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien verbonden met een Jamulus-server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
+        <translation type="vanished">Wat u hier instelt verschijnt bij uw fader op het mengpaneel indien verbonden met een Jamulus-server. Deze tag zal ook worden getoond aan andere muzikanten die met deze server verbonden zijn.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="465"/>
+        <location filename="../../clientsettingsdlg.cpp" line="484"/>
         <source>Alias or name edit box</source>
         <translation>Alias of naam bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="467"/>
+        <location filename="../../clientsettingsdlg.cpp" line="486"/>
         <source>Instrument picture button</source>
         <translation>Afbeelding van het instrument</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="469"/>
+        <location filename="../../clientsettingsdlg.cpp" line="488"/>
         <source>Country flag button</source>
         <translation>Landvlag knop</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="471"/>
+        <location filename="../../clientsettingsdlg.cpp" line="490"/>
         <source>City edit box</source>
         <translation>Stad bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="473"/>
+        <location filename="../../clientsettingsdlg.cpp" line="492"/>
         <source>Skill level combo box</source>
         <translation>Vaardigheidsniveau combobox</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="557"/>
+        <location filename="../../clientsettingsdlg.cpp" line="576"/>
         <source>Beginner</source>
         <translation>Beginner</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="561"/>
+        <location filename="../../clientsettingsdlg.cpp" line="580"/>
         <source>Intermediate</source>
         <translation>Gemiddeld</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="565"/>
+        <location filename="../../clientsettingsdlg.cpp" line="584"/>
         <source>Expert</source>
         <translation>Gevorderd</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="714"/>
-        <location filename="../../clientsettingsdlg.cpp" line="718"/>
+        <location filename="../../clientsettingsdlg.cpp" line="733"/>
+        <location filename="../../clientsettingsdlg.cpp" line="737"/>
         <source>Size: </source>
         <translation>Grootte: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="773"/>
+        <location filename="../../clientsettingsdlg.cpp" line="792"/>
         <source>Buffer Delay</source>
         <translation>Buffervertraging</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="778"/>
+        <location filename="../../clientsettingsdlg.cpp" line="797"/>
         <source>Buffer Delay: </source>
         <translation>Buffervertraging: </translation>
     </message>
@@ -2034,237 +2109,237 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Ok</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="833"/>
+        <location filename="../../util.cpp" line="945"/>
         <source>Drum Set</source>
         <translation>Drumstel</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="836"/>
+        <location filename="../../util.cpp" line="948"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="839"/>
+        <location filename="../../util.cpp" line="951"/>
         <source>Electric Guitar</source>
         <translation>Elektrische gitaar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="842"/>
+        <location filename="../../util.cpp" line="954"/>
         <source>Acoustic Guitar</source>
         <translation>Akoestische gitaar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="845"/>
+        <location filename="../../util.cpp" line="957"/>
         <source>Bass Guitar</source>
         <translation>Basgitaar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="848"/>
+        <location filename="../../util.cpp" line="960"/>
         <source>Keyboard</source>
         <translation>Toetsenbord</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="851"/>
+        <location filename="../../util.cpp" line="963"/>
         <source>Synthesizer</source>
         <translation>Synthesizer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="854"/>
+        <location filename="../../util.cpp" line="966"/>
         <source>Grand Piano</source>
         <translation>Piano</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="857"/>
+        <location filename="../../util.cpp" line="969"/>
         <source>Accordion</source>
         <translation>Accordeon</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="860"/>
+        <location filename="../../util.cpp" line="972"/>
         <source>Vocal</source>
         <translation>Zang</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="863"/>
+        <location filename="../../util.cpp" line="975"/>
         <source>Microphone</source>
         <translation>Microfoon</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="866"/>
+        <location filename="../../util.cpp" line="978"/>
         <source>Harmonica</source>
         <translation>Harmonica</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="869"/>
+        <location filename="../../util.cpp" line="981"/>
         <source>Trumpet</source>
         <translation>Trompet</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="872"/>
+        <location filename="../../util.cpp" line="984"/>
         <source>Trombone</source>
         <translation>Trombone</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="875"/>
+        <location filename="../../util.cpp" line="987"/>
         <source>French Horn</source>
         <translation>Hoorn</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="878"/>
+        <location filename="../../util.cpp" line="990"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="881"/>
+        <location filename="../../util.cpp" line="993"/>
         <source>Saxophone</source>
         <translation>Saxofoon</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="884"/>
+        <location filename="../../util.cpp" line="996"/>
         <source>Clarinet</source>
         <translation>Klarinet</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="887"/>
+        <location filename="../../util.cpp" line="999"/>
         <source>Flute</source>
         <translation>Fluit</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="890"/>
+        <location filename="../../util.cpp" line="1002"/>
         <source>Violin</source>
         <translation>Viool</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="893"/>
+        <location filename="../../util.cpp" line="1005"/>
         <source>Cello</source>
         <translation>Cello</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="896"/>
+        <location filename="../../util.cpp" line="1008"/>
         <source>Double Bass</source>
         <translation>Contrabas</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="899"/>
+        <location filename="../../util.cpp" line="1011"/>
         <source>Recorder</source>
         <translation>Opnemer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="902"/>
+        <location filename="../../util.cpp" line="1014"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="905"/>
+        <location filename="../../util.cpp" line="1017"/>
         <source>Listener</source>
         <translation>Luisteraar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="908"/>
+        <location filename="../../util.cpp" line="1020"/>
         <source>Guitar+Vocal</source>
         <translation>Gitaar+zang</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="911"/>
+        <location filename="../../util.cpp" line="1023"/>
         <source>Keyboard+Vocal</source>
         <translation>Toetsenbord+zang</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="914"/>
+        <location filename="../../util.cpp" line="1026"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="917"/>
+        <location filename="../../util.cpp" line="1029"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="920"/>
+        <location filename="../../util.cpp" line="1032"/>
         <source>Oboe</source>
         <translation>Hobo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="923"/>
+        <location filename="../../util.cpp" line="1035"/>
         <source>Harp</source>
         <translation>Harp</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="926"/>
+        <location filename="../../util.cpp" line="1038"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="929"/>
+        <location filename="../../util.cpp" line="1041"/>
         <source>Congas</source>
         <translation>Congas</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="932"/>
+        <location filename="../../util.cpp" line="1044"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="935"/>
+        <location filename="../../util.cpp" line="1047"/>
         <source>Vocal Bass</source>
         <translation>Bas (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="938"/>
+        <location filename="../../util.cpp" line="1050"/>
         <source>Vocal Tenor</source>
         <translation>Tenor (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="941"/>
+        <location filename="../../util.cpp" line="1053"/>
         <source>Vocal Alto</source>
         <translation>Alt (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="944"/>
+        <location filename="../../util.cpp" line="1056"/>
         <source>Vocal Soprano</source>
         <translation>Sopraan (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="947"/>
+        <location filename="../../util.cpp" line="1059"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="950"/>
+        <location filename="../../util.cpp" line="1062"/>
         <source>Mandolin</source>
         <translation>Mandoline</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="953"/>
+        <location filename="../../util.cpp" line="1065"/>
         <source>Ukulele</source>
         <translation>Ukelele</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="956"/>
+        <location filename="../../util.cpp" line="1068"/>
         <source>Bass Ukulele</source>
         <translation>Ukelele-bas</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="959"/>
+        <location filename="../../util.cpp" line="1071"/>
         <source>Vocal Baritone</source>
         <translation>Bariton (stem)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="962"/>
+        <location filename="../../util.cpp" line="1074"/>
         <source>Vocal Lead</source>
         <translation>Leadzanger</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="965"/>
+        <location filename="../../util.cpp" line="1077"/>
         <source>Mountain Dulcimer</source>
         <translation>Dulcimer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="968"/>
+        <location filename="../../util.cpp" line="1080"/>
         <source>Scratching</source>
         <translation>Scratchen</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="971"/>
+        <location filename="../../util.cpp" line="1083"/>
         <source>Rapping</source>
         <translation>Rappen</translation>
     </message>
@@ -2495,6 +2570,11 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Taal</translation>
     </message>
     <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="962"/>
+        <source>Custom Directories:</source>
+        <translation>Eigen adresboek:</translation>
+    </message>
+    <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1001"/>
         <source>%</source>
         <translation>%</translation>
@@ -2512,9 +2592,8 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Weergave Kanaalniveaus</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directory Server Address:</source>
-        <translation>Eigen adresboek serveradres:</translation>
+        <translation type="vanished">Eigen adresboek serveradres:</translation>
     </message>
     <message>
         <source>Directory Server Address:</source>
@@ -2542,7 +2621,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
 <context>
     <name>CConnectDlg</name>
     <message>
-        <location filename="../../connectdlg.cpp" line="44"/>
+        <location filename="../../connectdlg.cpp" line="45"/>
         <source>Server List</source>
         <translation>Serverlijst</translation>
     </message>
@@ -2555,12 +2634,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Merk op dat het enige tijd kan duren om de serverlijst op te halen van de adresboek server. Als er geen geldig adresboek serveradres is opgegeven in de instellingen, zal er geen serverlijst beschikbaar zijn.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="52"/>
+        <location filename="../../connectdlg.cpp" line="53"/>
         <source>Server list view</source>
         <translation>Serverlijstweergave</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="55"/>
+        <location filename="../../connectdlg.cpp" line="56"/>
         <source>Server Address</source>
         <translation>Serveradres</translation>
     </message>
@@ -2577,77 +2656,77 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">. Een lijst met de meest recent gebruikte server-IP-adressen of URL&apos;s is beschikbaar voor selectie.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="45"/>
+        <location filename="../../connectdlg.cpp" line="46"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
         <translation>De serverlijst toont een lijst van beschikbare servers. Server beheerders kunnen hun servers optioneel op muziek genre weergeven. Gebruik de lijst optie om een genre te kiezen, klik op de server die u wilt gebruiken en druk op de verbindingsknop om verbinding te maken. U kunt ook dubbelklikken op een servernaam in de lijst om verbinding te maken. Permanente servers (die langer dan 48 uur in de lijst staan) worden vetgedrukt weergegeven.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="56"/>
+        <location filename="../../connectdlg.cpp" line="57"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
         <translation>Het IP-adres of de URL van de server kan bij Servernaam/Adres worden ingevoerd. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, b.v. example.org:</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="61"/>
+        <location filename="../../connectdlg.cpp" line="62"/>
         <source>. The field will also show a list of the most recently used server addresses.</source>
         <translation>. Het veld toont ook een lijst met de laatstgebruikte serveradressen.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="67"/>
+        <location filename="../../connectdlg.cpp" line="68"/>
         <source>Server address edit box</source>
         <translation>Serveradres bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="68"/>
+        <location filename="../../connectdlg.cpp" line="69"/>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
         <translation>Bevat het huidige server-IP-adres of de URL. Het slaat ook oude URL&apos;s op in de comboboxlijst.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="82"/>
+        <location filename="../../connectdlg.cpp" line="74"/>
         <source>Server List Selection</source>
         <translation>Serverlijstselectie</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="82"/>
+        <location filename="../../connectdlg.cpp" line="74"/>
         <source>Selects the server list to be shown.</source>
         <translation>Selecteert de te tonen serverlijst.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="83"/>
+        <location filename="../../connectdlg.cpp" line="75"/>
         <source>Server list selection combo box</source>
         <translation>Serverlijst selectie combobox</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="86"/>
+        <location filename="../../connectdlg.cpp" line="78"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="87"/>
+        <location filename="../../connectdlg.cpp" line="79"/>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
         <translation>De serverlijst wordt gefilterd met de gegeven tekst. Merk op dat het filter ongevoelig is voor hoofdletters.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="89"/>
+        <location filename="../../connectdlg.cpp" line="81"/>
         <source>Filter edit box</source>
         <translation>Filter bewerkingsvak</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="92"/>
+        <location filename="../../connectdlg.cpp" line="84"/>
         <source>Show All Musicians</source>
         <translation>Toon alle muzikanten</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="93"/>
+        <location filename="../../connectdlg.cpp" line="85"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
         <translation>Als u dit selectievakje aanvinkt, worden de muzikanten van alle servers getoond. Als u het selectievakje uitvinkt, worden alle items van de lijstweergave samengevouwen.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="95"/>
+        <location filename="../../connectdlg.cpp" line="87"/>
         <source>Show all musicians check box</source>
         <translation>Toon alle muzikanten checkbox</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="145"/>
+        <location filename="../../connectdlg.cpp" line="137"/>
         <source>Filter text, or # for occupied servers</source>
         <translation>Filter op tekst of gebruik # voor bezette servers</translation>
     </message>
@@ -2664,9 +2743,13 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Verbindingsinstellingen</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="35"/>
         <source>List</source>
-        <translation>Lijst</translation>
+        <translation type="vanished">Lijst</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlgbase.ui" line="35"/>
+        <source>Directory</source>
+        <translation>Adresboek</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -2721,35 +2804,35 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../../util.cpp" line="582"/>
+        <location filename="../../util.cpp" line="588"/>
         <source>&amp;Help</source>
         <translation>&amp;Hulp</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="589"/>
-        <location filename="../../util.cpp" line="594"/>
+        <location filename="../../util.cpp" line="595"/>
+        <location filename="../../util.cpp" line="600"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Aan de slag...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="590"/>
+        <location filename="../../util.cpp" line="596"/>
         <source>Software &amp;Manual...</source>
         <translation>Software&amp;handleiding...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="597"/>
+        <location filename="../../util.cpp" line="603"/>
         <source>What&apos;s &amp;This</source>
         <translation>Wat Is &amp;Dit</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="599"/>
+        <location filename="../../util.cpp" line="605"/>
         <source>&amp;About Jamulus...</source>
         <translation>&amp;Over Jamulus...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="601"/>
+        <location filename="../../util.cpp" line="607"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">Over &amp;Qt...</translation>
+        <translation>Over &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2758,18 +2841,18 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">Over Qt</translation>
+        <translation>Over Qt</translation>
     </message>
 </context>
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../../util.cpp" line="658"/>
+        <location filename="../../util.cpp" line="664"/>
         <source>Restart Required</source>
         <translation>Herstart noodzakelijk</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="658"/>
+        <location filename="../../util.cpp" line="664"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Start de applicatie opnieuw om de taalwijziging door te voeren.</translation>
     </message>
@@ -2781,22 +2864,22 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Ik &amp;stem in met bovenstaande licentievoorwaarden</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="558"/>
+        <location filename="../../util.cpp" line="564"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Deze server vereist dat u voorwaarden accepteert voor het verbinen. Lees deze in het chatvenster.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="559"/>
+        <location filename="../../util.cpp" line="565"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Ik heb de voorwaarden gelezen en &amp;stem in.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="560"/>
+        <location filename="../../util.cpp" line="566"/>
         <source>Accept</source>
         <translation>Accepteer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="561"/>
+        <location filename="../../util.cpp" line="567"/>
         <source>Decline</source>
         <translation>Niet akkoord</translation>
     </message>
@@ -3319,170 +3402,193 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Stad waar de server zich bevindt bewerkingsregel</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="109"/>
         <source>Location country</source>
-        <translation>Land van locatie</translation>
+        <translation type="vanished">Land van locatie</translation>
+    </message>
+    <message>
+        <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
+        <translation type="vanished">Het land waarin deze server zich bevindt kan hier worden ingesteld. Als er een land is ingevoerd, wordt dit getoond in de lijst van de verbindingsserver bij de clients.</translation>
+    </message>
+    <message>
+        <source>Country where the server is located combo box</source>
+        <translation type="vanished">Land waar de server zich bevindt combobox</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="109"/>
+        <source>Country/Region</source>
+        <translation>Land/regio</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
-        <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation>Het land waarin deze server zich bevindt kan hier worden ingesteld. Als er een land is ingevoerd, wordt dit getoond in de lijst van de verbindingsserver bij de clients.</translation>
+        <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
+        <translation>Het land of regio waarin deze server zich bevindt kan hier worden ingesteld. Dit wordt getoond in de lijst van de verbindingsservers bij de clients.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="118"/>
-        <source>Country where the server is located combo box</source>
-        <translation>Land waar de server zich bevindt combobox</translation>
+        <location filename="../../serverdlg.cpp" line="117"/>
+        <source>Combo box for location of this server</source>
+        <translation>Combobox voor de locatie van deze server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="121"/>
+        <location filename="../../serverdlg.cpp" line="120"/>
         <source>Display dialog to select recording directory button</source>
         <translation>Toon venster voor het instellen van de directory voor geluidsopnames</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="122"/>
-        <location filename="../../serverdlg.cpp" line="128"/>
+        <location filename="../../serverdlg.cpp" line="121"/>
+        <location filename="../../serverdlg.cpp" line="127"/>
         <source>Main Recording Directory</source>
         <translation>Hoofddirectory voor geluidsopnames</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="123"/>
+        <location filename="../../serverdlg.cpp" line="122"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
         <translation>Klik op deze knop om het venster te tonen waarin de directory voor geluidsopnames kan worden ingesteld. Deze directory moet reeds bestaan en door de gebruiker die Jamulus draait kunnen worden aangepast. </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="127"/>
+        <location filename="../../serverdlg.cpp" line="126"/>
         <source>Main recording directory text box (read-only)</source>
         <translation>Hoofddirectory voor geluidsopnames tekstvak (alleen lezen)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="129"/>
+        <location filename="../../serverdlg.cpp" line="128"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
         <translation>De huidig ingestelde directory voor geluidsopnames. Deze directory moet reeds bestaan en door de gebruiker die Jamulus draait kunnen worden aangepast.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="134"/>
+        <location filename="../../serverdlg.cpp" line="133"/>
         <source>Clear the recording directory button</source>
         <translation>Wis aangegeven geluidsopnamedirectory</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="135"/>
+        <location filename="../../serverdlg.cpp" line="134"/>
         <source>Clear Recording Directory</source>
         <translation>Wis aangegeven geluidsopnamedirectory</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="136"/>
+        <location filename="../../serverdlg.cpp" line="135"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
         <translation>Klik op deze knop om de aangegeven geluidsopnamedirectory te wissen. Opnames kunnen niet worden gemaakt zonder ingestelde geluidsopnamedirectory.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="140"/>
+        <location filename="../../serverdlg.cpp" line="139"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Selectievakje om geluidsopname op de server in of uit te schakelen</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="141"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
         <source>Enable Recorder</source>
         <translation>Geluidsopname inschakelen</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="142"/>
+        <location filename="../../serverdlg.cpp" line="141"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation>Aangevinkt indien de geluidsrecorder aanstaat. De geluidsrecorder zal dan sessie opnemen.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="146"/>
+        <location filename="../../serverdlg.cpp" line="145"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Huidige sessie directory tekstvak (alleen lezen)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="147"/>
+        <location filename="../../serverdlg.cpp" line="146"/>
         <source>Current Session Directory</source>
         <translation>Huidige sessie directory</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="148"/>
+        <location filename="../../serverdlg.cpp" line="147"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Ingeschakeld tijdens geluidsopname en bevat de sessie-directory. Uitgeschakeld na geluidsopname of wanneer geluidsopname uit staat.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="152"/>
+        <location filename="../../serverdlg.cpp" line="151"/>
         <source>Recorder status label</source>
         <translation>Geluidsopname statuslabel</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="154"/>
+        <location filename="../../serverdlg.cpp" line="153"/>
         <source>Recorder Status</source>
         <translation>Geluidsopname status</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="154"/>
+        <location filename="../../serverdlg.cpp" line="153"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
         <translation>Toon de huidige status van geluidsopname. De volgende keuzes zijn mogelijk:</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="155"/>
+        <location filename="../../serverdlg.cpp" line="154"/>
         <source>No recording directory has been set or the value is not useable</source>
         <translation>Geen geluidsopnamedirectory ingesteld of waarde is niet bruikbaar</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="156"/>
+        <location filename="../../serverdlg.cpp" line="155"/>
         <source>Recording has been switched off</source>
         <translation>Geluidsopname is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="158"/>
+        <location filename="../../serverdlg.cpp" line="157"/>
         <source> by the UI checkbox</source>
         <translation> door het selectievak</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="160"/>
+        <location filename="../../serverdlg.cpp" line="159"/>
         <source>, either by the UI checkbox or SIGUSR2 being received</source>
         <translation>, of door het selectievak of doordat SIGUSR2 wordt ontvangen</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="162"/>
+        <location filename="../../serverdlg.cpp" line="161"/>
         <source>There is no one connected to the server to record</source>
         <translation>Er is niemand verbonden met de server voor geluidsopname</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="163"/>
+        <location filename="../../serverdlg.cpp" line="162"/>
         <source>The performers are being recorded to the specified session directory</source>
         <translation>Het geluid van de muzikanten wordt opgenomen in de aangegeven sessie-directory</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="164"/>
+        <location filename="../../serverdlg.cpp" line="163"/>
         <source>NOTE</source>
         <translation>OPMERKING</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="165"/>
+        <location filename="../../serverdlg.cpp" line="164"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
         <translation>Als de geluidsopnamedirectory niet bruikbaar is wordt het probleem getoond in plaats van de locatie.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="173"/>
+        <location filename="../../serverdlg.cpp" line="172"/>
         <source>Server welcome message edit box</source>
         <translation>Vak voor welkomstbericht server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="174"/>
+        <location filename="../../serverdlg.cpp" line="173"/>
         <source>Server Welcome Message</source>
         <translation>Welkomstbericht server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="175"/>
+        <location filename="../../serverdlg.cpp" line="174"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
         <translation>Een server welkomstbericht wordt getoond in het chatvenster als een muzikant binnenkomt. Indien niets ingesteld wordt geen welkomstbericht getoond.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="329"/>
+        <location filename="../../serverdlg.cpp" line="195"/>
+        <source>%1 server</source>
+        <comment>%1 is the name of the main application</comment>
+        <translation>%1 server</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="328"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
         <translation>Typ hier een bericht. Indien niets ingesteld wordt geen welkomstbericht getoond.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="334"/>
+        <location filename="../../serverdlg.cpp" line="341"/>
+        <source>%1 Server</source>
+        <comment>%1 is the name of the main application</comment>
+        <translation>%1 server</translation>
+    </message>
+    <message>
         <source>software upgrade available</source>
-        <translation>software-update beschikbaar</translation>
+        <translation type="vanished">software-update beschikbaar</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="562"/>
@@ -3490,7 +3596,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Opname starten mislukt. Controleer beschikbare schijfruimte en toegangsrechtern en probeer opnieuw. Fout: </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="792"/>
+        <location filename="../../serverdlg.cpp" line="797"/>
         <source>ERROR</source>
         <translation>FOUT</translation>
     </message>
@@ -3499,40 +3605,39 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Toont de huidige status van de geluidsopname.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="168"/>
+        <location filename="../../serverdlg.cpp" line="167"/>
         <source>Request new recording button</source>
         <translation>Knop om nieuwe geluidsopname aan te vragen</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="169"/>
+        <location filename="../../serverdlg.cpp" line="168"/>
         <source>New Recording</source>
         <translation>Nieuwe geluidsopname</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="170"/>
+        <location filename="../../serverdlg.cpp" line="169"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Tijdens een opnamesessie kan de knop gebruikt worden om een nieuwe opname te starten.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="184"/>
+        <location filename="../../serverdlg.cpp" line="183"/>
         <location filename="../../serverdlg.cpp" line="346"/>
         <source>E&amp;xit</source>
         <translation>&amp;Afsluiten</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="188"/>
+        <location filename="../../serverdlg.cpp" line="187"/>
         <source>&amp;Hide </source>
         <translation>&amp;Verbergen </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="188"/>
-        <location filename="../../serverdlg.cpp" line="191"/>
-        <location filename="../../serverdlg.cpp" line="196"/>
+        <location filename="../../serverdlg.cpp" line="187"/>
+        <location filename="../../serverdlg.cpp" line="190"/>
         <source> server</source>
         <translation> server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="191"/>
+        <location filename="../../serverdlg.cpp" line="190"/>
         <source>&amp;Open </source>
         <translation>&amp;Open </translation>
     </message>
@@ -3582,9 +3687,8 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Standaard (Noord-Amerika)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="341"/>
         <source> Server</source>
-        <translation> Server</translation>
+        <translation type="vanished"> Server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="344"/>
@@ -3673,7 +3777,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation>Lijst</translation>
+        <translation>Adresboek</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlgbase.ui" line="139"/>
+        <source>Location: Region</source>
+        <translation>Locatie: Regio</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -3742,6 +3851,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../serverdlgbase.ui" line="222"/>
         <source>Language</source>
+        <extracomment>Consider add &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct button</extracomment>
         <translation>Taal</translation>
     </message>
     <message>
@@ -3759,9 +3869,8 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Locatie: Stad</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Country</source>
-        <translation>Locatie: Land</translation>
+        <translation type="vanished">Locatie: Land</translation>
     </message>
     <message>
         <source>Enable jam recorder</source>
@@ -3781,6 +3890,14 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
 </context>
 <context>
+    <name>CServerListManager</name>
+    <message>
+        <location filename="../../serverlist.cpp" line="647"/>
+        <source>Could not write to &apos;%1&apos;</source>
+        <translation>Fout bij het schrijven naar &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
     <name>CSound</name>
     <message>
         <location filename="../../../android/sound.cpp" line="68"/>
@@ -3788,142 +3905,149 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Fout tijdens afsluiten: $s</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="47"/>
         <source>The Jack server is not running. This software requires a Jack server to run. Normally if the Jack server is not running this software will automatically start the Jack server. It seems that this auto start has not worked. Try to start the Jack server manually.</source>
-        <translation>De Jack server draait niet. Voor deze software is een Jack-server nodig om te kunnen draaien. Normaal gesproken als de Jack-server niet draait zal deze software automatisch de Jack-server opstarten. Het lijkt erop dat deze automatische start niet heeft gewerkt. Probeer de Jack server handmatig te starten.</translation>
+        <translation type="vanished">De Jack server draait niet. Voor deze software is een Jack-server nodig om te kunnen draaien. Normaal gesproken als de Jack-server niet draait zal deze software automatisch de Jack-server opstarten. Het lijkt erop dat deze automatische start niet heeft gewerkt. Probeer de Jack server handmatig te starten.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="67"/>
         <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
-        <translation>De Jack-server sample rate is anders dan de vereiste. De vereiste sample rate is:</translation>
+        <translation type="vanished">De Jack-server sample rate is anders dan de vereiste. De vereiste sample rate is:</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="70"/>
         <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation>U kunt een tool als &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; gebruiken om de sample rate van de Jack-server aan te passen.</translation>
+        <translation type="vanished">U kunt een tool als &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; gebruiken om de sample rate van de Jack-server aan te passen.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="74"/>
         <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation>Zorg ervoor dat u de Frames/Periode op een lage waarde instelt, zoals </translation>
+        <translation type="vanished">Zorg ervoor dat u de Frames/Periode op een lage waarde instelt, zoals </translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="76"/>
         <source> to achieve a low delay.</source>
-        <translation> om een lage vertraging te bereiken.</translation>
+        <translation type="vanished"> om een lage vertraging te bereiken.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="90"/>
-        <location filename="../../../linux/sound.cpp" line="100"/>
         <source>The Jack port registering failed.</source>
-        <translation>De registratie van de Jack-poort is mislukt.</translation>
+        <translation type="vanished">De registratie van de Jack-poort is mislukt.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="111"/>
         <source>Cannot activate the Jack client.</source>
-        <translation>Kan de Jack-client niet activeren.</translation>
+        <translation type="vanished">Kan de Jack-client niet activeren.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="213"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
-        <translation>De Jack-server werd afgesloten. Voor deze software is een Jack-server nodig om te kunnen draaien. Probeer de software te herstarten om het probleem op te lossen.</translation>
+        <translation type="vanished">De Jack-server werd afgesloten. Voor deze software is een Jack-server nodig om te kunnen draaien. Probeer de software te herstarten om het probleem op te lossen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="113"/>
         <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation>CoreAudio-ingang AudioHardwareGetProperty-oproep mislukt. Het lijkt erop dat er geen geluidskaart beschikbaar is in het systeem.</translation>
+        <translation type="vanished">CoreAudio-ingang AudioHardwareGetProperty-oproep mislukt. Het lijkt erop dat er geen geluidskaart beschikbaar is in het systeem.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="122"/>
         <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation>CoreAudio uitgang AudioHardwareGetProperty call mislukt. Het lijkt erop dat er geen geluidskaart beschikbaar is in het systeem.</translation>
+        <translation type="vanished">CoreAudio uitgang AudioHardwareGetProperty call mislukt. Het lijkt erop dat er geen geluidskaart beschikbaar is in het systeem.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="394"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation>Een sample rate van %1 Hz voor het audio-ingangsapparaat van het huidige systeem wordt niet ondersteund. Open de Audio-MIDI-Setup in Applications-&gt;Utilities en probeer een sample rate van %2 Hz in te stellen.</translation>
+        <translation type="vanished">Een sample rate van %1 Hz voor het audio-ingangsapparaat van het huidige systeem wordt niet ondersteund. Open de Audio-MIDI-Setup in Applications-&gt;Utilities en probeer een sample rate van %2 Hz in te stellen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="284"/>
-        <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation>Het geselecteerde audioapparaat is niet langer in het systeem beschikbaar.</translation>
+        <translation type="vanished">Het geselecteerde audioapparaat is niet langer in het systeem beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available.</source>
-        <translation>Het audio-invoerapparaat is niet langer beschikbaar.</translation>
+        <translation type="vanished">Het audio-invoerapparaat is niet langer beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="407"/>
         <source>The audio output device is no longer available.</source>
-        <translation>Het audio-uitvoerapparaat is niet langer beschikbaar.</translation>
+        <translation type="vanished">Het audio-uitvoerapparaat is niet langer beschikbaar.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="416"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation>De sample rate van %1 Hz van het huidige systeem audiouitgangsapparaat wordt niet ondersteund. Open de Audio-MIDI-Setup in Applications-&gt;Utilities en probeer een sample rate van %2 Hz in te stellen.</translation>
+        <translation type="vanished">De sample rate van %1 Hz van het huidige systeem audiouitgangsapparaat wordt niet ondersteund. Open de Audio-MIDI-Setup in Applications-&gt;Utilities en probeer een sample rate van %2 Hz in te stellen.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="465"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
-        <translation>Het audio input stream-formaat voor dit audioapparaat is niet compatibel met deze software.</translation>
+        <translation type="vanished">Het audio input stream-formaat voor dit audioapparaat is niet compatibel met deze software.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="476"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
-        <translation>Het formaat van de audio-uitgangsstroom voor dit audioapparaat is niet compatibel met deze software.</translation>
+        <translation type="vanished">Het formaat van de audio-uitgangsstroom voor dit audioapparaat is niet compatibel met deze software.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="728"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
-        <translation>De buffergrootte van het huidige in- en uitgaande audioapparaat kan niet op een gemeenschappelijke waarde worden ingesteld. Kies andere in-/uitgangsaudioapparaten in uw systeeminstellingen.</translation>
+        <translation type="vanished">De buffergrootte van het huidige in- en uitgaande audioapparaat kan niet op een gemeenschappelijke waarde worden ingesteld. Kies andere in-/uitgangsaudioapparaten in uw systeeminstellingen.</translation>
+    </message>
+    <message>
+        <source>The audio driver could not be initialized.</source>
+        <translation type="vanished">De audiodriver kon niet worden geïnitialiseerd.</translation>
+    </message>
+    <message>
+        <source>The audio device does not support the required sample rate. The required sample rate is: </source>
+        <translation type="vanished">Het audioapparaat ondersteunt niet de vereiste samplefrequentie. De vereiste samplefrequentie wel: </translation>
+    </message>
+    <message>
+        <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
+        <translation type="vanished">Het audioapparaat biedt geen ondersteuning voor het instellen van de vereiste bemonsteringsfrequentie. Deze fout kan zich voordoen als u een audio-interface heeft zoals de Roland UA-25EX waarbij u de samplefrequentie instelt met een hardwareschakelaar op het audioapparaat. Als dit het geval is, verander dan de samplefrequentie in </translation>
+    </message>
+    <message>
+        <source> Hz on the device and restart the </source>
+        <translation type="vanished"> Hz op het apparaat en start de </translation>
+    </message>
+    <message>
+        <source> software.</source>
+        <translation type="vanished"> software.</translation>
+    </message>
+    <message>
+        <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
+        <translation type="vanished">Het audioapparaat ondersteunt niet het vereiste aantal kanalen. Het vereiste aantal kanalen voor in- en uitvoer is: </translation>
+    </message>
+    <message>
+        <source>Required audio sample format not available.</source>
+        <translation type="vanished">Vereist audiosampleformaat niet beschikbaar.</translation>
+    </message>
+    <message>
+        <location filename="../../../windows/sound.cpp" line="57"/>
+        <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
+        <translation>Het geselecteerde audio apparaat is niet langer aanwezig in het system. Controleer uw audio apparaat.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
-        <source>The audio driver could not be initialized.</source>
-        <translation>De audiodriver kon niet worden geïnitialiseerd.</translation>
+        <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
+        <translation>Kan het audiostuurprogramma niet initialiseren. Controleer of uw audiohardware is aangesloten en controleer uw stuurprogramma-instellingen.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
-        <source>The audio device does not support the required sample rate. The required sample rate is: </source>
-        <translation>Het audioapparaat ondersteunt niet de vereiste samplefrequentie. De vereiste samplefrequentie wel: </translation>
+        <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
+        <translation>Het geselecteerde audioapparaat is niet compatibel omdat het geen samplefrequentie van %1 Hz ondersteunt. Selecteer een ander apparaat.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="157"/>
-        <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
-        <translation>Het audioapparaat biedt geen ondersteuning voor het instellen van de vereiste bemonsteringsfrequentie. Deze fout kan zich voordoen als u een audio-interface heeft zoals de Roland UA-25EX waarbij u de samplefrequentie instelt met een hardwareschakelaar op het audioapparaat. Als dit het geval is, verander dan de samplefrequentie in </translation>
+        <location filename="../../../windows/sound.cpp" line="158"/>
+        <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
+        <translation>De huidige configuratie van het audioapparaat is niet compatibel omdat de samplefrequentie niet kan worden ingesteld op %2 Hz. Controleer of er een hardware-switch of driver-instelling is om de samplefrequentie handmatig in te stellen en start %1 opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="163"/>
-        <source> Hz on the device and restart the </source>
-        <translation> Hz op het apparaat en start de </translation>
+        <location filename="../../../windows/sound.cpp" line="171"/>
+        <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
+        <translation>Het geselecteerde audioapparaat is niet compatibel omdat het geen %1 in-/uitvoerkanalen ondersteunt. Selecteer een ander apparaat of een andere configuratie.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="165"/>
-        <source> software.</source>
-        <translation> software.</translation>
+        <location filename="../../../windows/sound.cpp" line="206"/>
+        <location filename="../../../windows/sound.cpp" line="237"/>
+        <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
+        <translation>Het geselecteerde audioapparaat is niet compatibel omdat het vereiste audiosampleformaat niet beschikbaar is. Gebruik een ander apparaat.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="174"/>
-        <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
-        <translation>Het audioapparaat ondersteunt niet het vereiste aantal kanalen. Het vereiste aantal kanalen voor in- en uitvoer is: </translation>
-    </message>
-    <message>
-        <location filename="../../../windows/sound.cpp" line="210"/>
-        <location filename="../../../windows/sound.cpp" line="240"/>
-        <source>Required audio sample format not available.</source>
-        <translation>Vereist audiosampleformaat niet beschikbaar.</translation>
-    </message>
-    <message>
-        <location filename="../../../windows/sound.cpp" line="555"/>
+        <location filename="../../../windows/sound.cpp" line="553"/>
         <source>No ASIO audio device driver found.</source>
         <translation>Geen ASIO geluidskaart stuurprogramma gevonden.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="556"/>
+        <location filename="../../../windows/sound.cpp" line="554"/>
+        <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
+        <translation>Installeer een ASIO stuurprogramma voor het starten van %1. Indien u een apparaat heeft met ASIO ondersteuning, installeer dan de officiële ASIO driver voor dit apparaat. Indien u dit niet heeft, dan kunt u een universeel stuurprogramma zoals ASIO4ALL gebruiken.</translation>
+    </message>
+    <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
-        <translation>Installeer een ASIO stuurprogramma voor het starten van %1. Indien u een apparaat heeft met ASIO ondersteuning, installeer dan de officiële ASIO driver. Indien u dit niet heeft, dan kunt u een universele driver zoals ASIO4ALL gebruiken.</translation>
+        <translation type="vanished">Installeer een ASIO stuurprogramma voor het starten van %1. Indien u een apparaat heeft met ASIO ondersteuning, installeer dan de officiële ASIO driver. Indien u dit niet heeft, dan kunt u een universele driver zoals ASIO4ALL gebruiken.</translation>
     </message>
     <message>
         <source>No ASIO audio device (driver) found.</source>
@@ -3936,6 +4060,86 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation type="vanished"> software vereist de lage-latency audio-interface ASIO om goed te kunnen werken. Dit is geen standaard Windows audio-interface en daarom is een speciale audio-stuurprogramma vereist. Ofwel heeft uw geluidskaart een native ASIO stuurprogramma (die wordt aanbevolen), ofwel wilt u alternatieve drivers gebruiken zoals het ASIO4All stuurpogramma.</translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="47"/>
+        <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
+        <translation>JACK kon niet automatisch worden gestart. Start JACK handmatig en controleer op foutmeldingen.</translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="64"/>
+        <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
+        <translation>JACK werkt niet met een samplefrequentie van &lt;b&gt;%1 Hz&lt;/b&gt;. Gebruik een tool als &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; om de JACK-samplefrequentie in te stellen op %1 Hz.</translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="81"/>
+        <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
+        <translation>De JACK-poortregistratie is mislukt. Dit is waarschijnlijk een fout met JACK. Stop a.u.b. %1 en JACK. Controleer daarna of een ander programma met een samplefrequentie van %2 Hz verbinding kan maken met JACK.</translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="94"/>
+        <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
+        <translation>De JACK-poortregistratie is mislukt. Dit is waarschijnlijk een fout met JACK. Stop a.u.b. %1 en JACK. Controleer daarna of een ander MIDI-programma verbinding kan maken met JACK.</translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="107"/>
+        <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
+        <translation>Kan de JACK-client niet activeren. Dit is waarschijnlijk een fout met JACK. Controleer de JACK-uitgang.</translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="210"/>
+        <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
+        <translation>JACK werd afgesloten. %1 vereist dat JACK wordt uitgevoerd. Herstart %1 om JACK opnieuw te starten.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="113"/>
+        <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
+        <translation>Er is geen geluidskaart beschikbaar in uw systeem. CoreAudio-invoer AudioHardwareGetProperty-aanroep mislukt.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="122"/>
+        <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
+        <translation>Er is geen geluidskaart beschikbaar in het systeem. CoreAudio-uitvoer AudioHardwareGetProperty-aanroep mislukt.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="284"/>
+        <source>The currently selected audio device is no longer present. Please check your audio device.</source>
+        <translation>Het momenteel geselecteerde audioapparaat is niet meer aanwezig. Controleer uw audioapparaat.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="385"/>
+        <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
+        <translation>Het audio-invoerapparaat is niet langer beschikbaar. Controleer of uw invoerapparaat correct is aangesloten.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="394"/>
+        <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
+        <translation>De samplefrequentie van het huidige invoerapparaat is geen %1 Hz en is daarom niet compatibel. Selecteer een ander apparaat of probeer de samplefrequentie handmatig in te stellen op %1 Hz via Audio-MIDI-Setup (in Applications-&gt;Utilities).</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="406"/>
+        <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
+        <translation>Het audio-uitvoerapparaat is niet langer beschikbaar. Controleer of uw uitvoerapparaat correct is aangesloten.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="415"/>
+        <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
+        <translation>De samplefrequentie van het huidige uitvoerapparaat is geen %1 Hz en is daarom niet compatibel. Selecteer een ander apparaat of probeer de samplefrequentie handmatig in te stellen op %1 Hz via Audio-MIDI-Setup (in Applications-&gt;Utilities).</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="463"/>
+        <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
+        <translation>Het streamformaat van het huidige invoerapparaat is niet compatibel met deze software. Selecteer een ander apparaat.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="475"/>
+        <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
+        <translation>Het streamformaat van het huidige uitvoerapparaat is niet compatibel met %1. Selecteer een ander apparaat.</translation>
+    </message>
+    <message>
+        <location filename="../../../mac/sound.cpp" line="728"/>
+        <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
+        <translation>De buffergroottes van het huidige invoer- en uitvoeraudioapparaat kunnen niet op een gemeenschappelijke waarde worden ingesteld. Selecteer verschillende invoer-/uitvoerapparaten in uw systeeminstellingen.</translation>
     </message>
 </context>
 <context>
@@ -3957,60 +4161,82 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Sluiten</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="116"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation>Het geselecteerde audioapparaat kon niet worden gebruikt vanwege de volgende fout: </translation>
+        <translation type="vanished">Het geselecteerde audioapparaat kon niet worden gebruikt vanwege de volgende fout: </translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="118"/>
         <source> The previous driver will be selected.</source>
-        <translation> Het vorige stuurprogramma zal worden geselecteerd.</translation>
+        <translation type="vanished"> Het vorige stuurprogramma zal worden geselecteerd.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="156"/>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation>Het eerder geselecteerde audioapparaat is niet langer beschikbaar of de stuurprogramma-eigenschappen zijn aangepast en werken niet met deze software. We zoeken nu naar een bruikbaar audioapparaat. Dit nieuwe audioappraat zou audio feedback kunnen veroorzaken. Controleer daarom de audioapparaat-instellingen alvorens op een server in te loggen.</translation>
+        <translation type="vanished">Het eerder geselecteerde audioapparaat is niet langer beschikbaar of de stuurprogramma-eigenschappen zijn aangepast en werken niet met deze software. We zoeken nu naar een bruikbaar audioapparaat. Dit nieuwe audioappraat zou audio feedback kunnen veroorzaken. Controleer daarom de audioapparaat-instellingen alvorens op een server in te loggen.</translation>
+    </message>
+    <message>
+        <source>No usable </source>
+        <translation type="vanished">Niet bruikbaar </translation>
+    </message>
+    <message>
+        <source> audio device (driver) found.</source>
+        <translation type="vanished"> audioapparaat (stuurprogramma) gevonden.</translation>
+    </message>
+    <message>
+        <source>In the following there is a list of all available drivers with the associated error message:</source>
+        <translation type="vanished">Hieronder vindt u een lijst van alle beschikbare drivers met de bijbehorende foutmelding:</translation>
+    </message>
+    <message>
+        <source>Do you want to open the ASIO driver setups?</source>
+        <translation type="vanished">Wilt u de ASIO-stuurprogramma&apos;s openen?</translation>
+    </message>
+    <message>
+        <source> could not be started because of audio interface issues.</source>
+        <translation type="vanished"> kon niet worden gestart vanwege problemen met de audio-interface.</translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="116"/>
+        <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
+        <translation>Kan het geselecteerde audioapparaat niet gebruiken vanwege de volgende fout: %1 Het vorige stuurprogramma wordt geselecteerd.</translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="157"/>
+        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
+        <translation>Het eerder geselecteerde audioapparaat is niet langer beschikbaar of het stuurprogramma is gewijzigd in een niet compatibele status. We zullen proberen een geldig audioapparaat te vinden, maar dit nieuwe audioapparaat kan feedback veroorzaken. Controleer uw audioapparaat instellingen voordat u verbinding maakt met een server.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="169"/>
-        <source>No usable </source>
-        <translation>Niet bruikbaar </translation>
+        <source>No usable %1 audio device found.</source>
+        <translation>Geen bruikbaar %1 audioapparaat gevonden.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="170"/>
-        <source> audio device (driver) found.</source>
-        <translation> audioapparaat (stuurprogramma) gevonden.</translation>
+        <source>These are all the available drivers with error messages:</source>
+        <translation>Dit zijn de beschikbare stuurprogramma&apos;s met foutmeldingen:</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="173"/>
-        <source>In the following there is a list of all available drivers with the associated error message:</source>
-        <translation>Hieronder vindt u een lijst van alle beschikbare drivers met de bijbehorende foutmelding:</translation>
+        <location filename="../../soundbase.cpp" line="182"/>
+        <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
+        <translation>Wilt u de instellingen van het ASIO-stuurprogramma openen om te proberen uw configuratie in een werkende staat te veranderen?</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="187"/>
-        <source>Do you want to open the ASIO driver setups?</source>
-        <translation>Wilt u de ASIO-stuurprogramma&apos;s openen?</translation>
-    </message>
-    <message>
-        <location filename="../../soundbase.cpp" line="194"/>
-        <source> could not be started because of audio interface issues.</source>
-        <translation> kon niet worden gestart vanwege problemen met de audio-interface.</translation>
+        <location filename="../../soundbase.cpp" line="189"/>
+        <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
+        <translation>Kan %1 niet starten. Herstart %1 en controleer/configureer uw audio-instellingen opnieuw.</translation>
     </message>
 </context>
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1738"/>
+        <location filename="../../util.cpp" line="1850"/>
         <source>, Version </source>
         <translation>, Versie </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1751"/>
+        <location filename="../../util.cpp" line="1863"/>
         <source>Internet Jam Session Software</source>
         <translation>Internet Jamsessie Software</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1755"/>
+        <location filename="../../util.cpp" line="1867"/>
         <source>Released under the GNU General Public License (GPL)</source>
         <translation>Gereleased onder de GNU General Public License (GPL)</translation>
     </message>
@@ -4018,7 +4244,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
 <context>
     <name>global</name>
     <message>
-        <location filename="../../global.h" line="263"/>
+        <location filename="../../global.h" line="120"/>
+        <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
+        <translation>Er is een %1 upgrade beschikbaar: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;klik hier voor details en downloads&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../global.h" line="270"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
         <translation>Voor meer informatie gebruik de &quot;Wat Is Dit&quot; hulp (helpmenu, rechtermuisklik of Shift+F1)</translation>
     </message>

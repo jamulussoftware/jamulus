@@ -181,6 +181,8 @@ public:
 
     bool PutAudioData ( const CVector<uint8_t>& vecbyRecBuf, const int iNumBytesRead, const CHostAddress& HostAdr, int& iCurChanID );
 
+    int GetNumberOfConnectedClients();
+
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>&      vecsName,
                           CVector<int>&          veciJitBufNumFrames,
@@ -261,7 +263,6 @@ protected:
     void                  InitChannel ( const int iNewChanID, const CHostAddress& InetAddr );
     void                  FreeChannel ( const int iCurChanID );
     void                  DumpChannels ( const QString& title );
-    int                   GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();
 
     virtual void CreateAndSendChanListForAllConChannels();
@@ -413,7 +414,7 @@ signals:
 public slots:
     void OnTimer();
 
-    void OnNewConnection ( int iChID, CHostAddress RecHostAddr );
+    void OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAddr );
 
     void OnServerFull ( CHostAddress RecHostAddr );
 

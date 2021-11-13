@@ -488,6 +488,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                                "<p>Stefan Menzel (<a href=\"https://github.com/menzels\">menzels</a>)</p>"
                                "<p>Dau Huy Ngoc (<a href=\"https://github.com/ngocdh\">ngocdh</a>)</p>"
                                "<p>Jiri Popek (<a href=\"https://github.com/jardous\">jardous</a>)</p>"
+                               "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
                                "<br>" +
                                tr ( "For details on the contributions check out the " ) +
                                "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) +
@@ -934,7 +935,7 @@ int CHostAddress::Compare ( const CHostAddress& other ) const
     quint32 thisAddr  = InetAddr.toIPv4Address();
     quint32 otherAddr = other.InetAddr.toIPv4Address();
 
-    return (int) thisAddr - (int) otherAddr;
+    return thisAddr < otherAddr ? -1 : thisAddr > otherAddr ? 1 : 0;
 }
 
 // Instrument picture data base ------------------------------------------------
@@ -1095,6 +1096,9 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Rapping" ),
                                            ":/png/instr/res/instruments/rapping.png",
                                            IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vibraphone" ),
+                                           ":/png/instr/res/instruments/vibraphone.png",
+                                           IC_PERCUSSION_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;

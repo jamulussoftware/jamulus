@@ -40,10 +40,10 @@ LangString JACK_DRIVER_HEADER ${LANG_ITALIAN} \
      "JACK Audio Connection Kit"
 
 LangString JACK_DRIVER_SUB ${LANG_ITALIAN} \
-     "To use this version of ${APP_NAME}, you need use the JACK Audio Connection Kit"
+     "Per usare questa versione di ${APP_NAME},hai bisogno di installare il: JACK Audio Connection Kit"
 
 LangString JACK_DRIVER_EXPLAIN ${LANG_ITALIAN} \
-     "This version of ${APP_NAME} is making use of the JACK Audio Connection Kit. Please make sure this has been installed or download the standard version of ${APP_NAME} on jamulus.io which is using ASIO."
+     "Per usare questa versione di ${APP_NAME} è necessario avviare il JACK Audio Connection Kit. Assicurati di averlo installato altrimenti scarica ${APP_NAME} su jamulus.io per usare gli ASIO."
 
 LangString JACK_EXIT_NO_DRIVER ${LANG_ITALIAN} \
-     "This ${APP_NAME} version needs the JACK Audio Connection Kit to work, but it doesn't seem to be installed on your PC. You should install JACK for Windows first. Do you still want to continue with the installation of ${APP_NAME} without installing JACK first?"
+     "Questa versione di ${APP_NAME} necessita di JACK Audio Connection Kit per funzionare, ma sembra non essere installato sul tuo PC. Prima installa JACK per windows. Vuoi continuare l'installazione di ${APP_NAME} senza installare JACK?"

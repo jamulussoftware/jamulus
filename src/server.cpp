@@ -562,7 +562,7 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, vecChannels[iChID].GetAddress() );
 }
 
-void CServer::OnNewConnection ( int iChID, CHostAddress RecHostAddr )
+void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -637,7 +637,7 @@ void CServer::OnNewConnection ( int iChID, CHostAddress RecHostAddr )
     DoubleFrameSizeConvBufOut[iChID].Reset();
 
     // logging of new connected channel
-    Logging.AddNewConnection ( RecHostAddr.InetAddr, GetNumberOfConnectedClients() );
+    Logging.AddNewConnection ( RecHostAddr.InetAddr, iTotChans );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )

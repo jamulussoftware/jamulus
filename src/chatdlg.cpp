@@ -114,11 +114,11 @@ void CChatDlg::AddChatText ( QString strChatText )
     // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
     // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
     // coding hisself and we should not mess with that)
-    if ( !strChatText.contains ( QRegExp ( "href\\s*=|src\\s*=" ) ) )
+    if ( !strChatText.contains ( QRegularExpression ( "href\\s*=|src\\s*=" ) ) )
     {
         // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
         // character and the + means that matches the previous element one or more times.)
-        strChatText.replace ( QRegExp ( "(https?://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
+        strChatText.replace ( QRegularExpression ( "(https?://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
     }
 
     // add new text in chat window

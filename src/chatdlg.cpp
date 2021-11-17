@@ -118,7 +118,9 @@ void CChatDlg::AddChatText ( QString strChatText )
     {
         // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
         // character and the + means that matches the previous element one or more times.)
-        strChatText.replace ( QRegularExpression ( "(https?://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
+        // The (?<! sections exclude certain terminating characters from the match.
+        strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<![!\"'()+,.:;<=>?\\[\\]{}])(?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]))" ),
+                              "<a href=\"\\1\">\\1</a>" );
     }
 
     // add new text in chat window

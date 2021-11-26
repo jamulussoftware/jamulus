@@ -118,7 +118,14 @@ void CChatDlg::AddChatText ( QString strChatText )
     {
         // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
         // character and the + means that matches the previous element one or more times.)
-        // The (?<! sections exclude certain terminating characters from the match.
+        // This regex now contains three parts:
+        // - https?://\\S+ matches as much non-whitespace as possible after the http:// or https://,
+        //   subject to the next two parts, which exclude terminating punctuation
+        // - (?<![!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
+        //   from ending with one of the characters !"'()+,.:;<=>?[]{}
+        // - (?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
+        //   from ending with a ? followed by one of the characters !"'()+,.:;<=>?[]{}
+        // These last two parts must be separate, as a look-behind assertion must be fixed length.
         strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<![!\"'()+,.:;<=>?\\[\\]{}])(?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]))" ),
                               "<a href=\"\\1\">\\1</a>" );
     }

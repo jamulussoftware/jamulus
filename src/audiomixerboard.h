@@ -84,6 +84,7 @@ public:
     int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
     void   SetChannelLevel ( const uint16_t iLevel );
     void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
+    bool   GetIsMyOwnFader() { return bIsMyOwnFader; }
     void   UpdateSoloState ( const bool bNewOtherSoloState );
 
 protected:

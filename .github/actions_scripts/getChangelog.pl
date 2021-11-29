@@ -2,12 +2,12 @@
 
 use strict;
 use warnings;
-# get the file path
-my $ChangeLogFile = $ARGV[0];
-# get the version
-my $Version = $ARGV[1];
+# get arguments
+my ($ChangeLogFile, $Version, $FormatOption) = @ARGV;
 # open the file
 open my $fh, '<', $ChangeLogFile or die;
+
+my $SingleLineEntries = ($FormatOption or '') eq '--line-per-entry';
 
 my $logversion = "";
 my $entry;
@@ -18,13 +18,17 @@ while (my $line = <$fh>) {
        next;
    }
    if ($logversion eq $Version) {
-       if ($line =~ /^- (.*)$/) { # beginning of entry
-           $entry = $1;
-       } elsif ($line =~ /^ ( \S.*)$/) { # continuation of entry
-           $entry .= $1;
-       } else { # otherwise, separator between entries
-           print "${entry}\n" if $entry;
-           $entry = undef;
+       if ($SingleLineEntries) {
+           if ($line =~ /^- (.*)$/) { # beginning of entry
+               $entry = $1;
+           } elsif ($line =~ /^ ( \S.*)$/) { # continuation of entry
+               $entry .= $1;
+           } else { # otherwise, separator between entries
+               print "${entry}\n" if $entry;
+               $entry = undef;
+           }
+       } else {
+           print $line;
        }
    }
 }

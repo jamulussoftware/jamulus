@@ -126,7 +126,8 @@ void CChatDlg::AddChatText ( QString strChatText )
         // - (?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
         //   from ending with a ? followed by one of the characters !"'()+,.:;<=>?[]{}
         // These last two parts must be separate, as a look-behind assertion must be fixed length.
-        strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<![!\"'()+,.:;<=>?\\[\\]{}])(?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]))" ),
+#define PUNCT_NOEND_URL "[!\"'()+,.:;<=>?\\[\\]{}]"
+        strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<!" PUNCT_NOEND_URL ")(?<!\\?" PUNCT_NOEND_URL "))" ),
                               "<a href=\"\\1\">\\1</a>" );
     }
 

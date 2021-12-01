@@ -147,7 +147,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
 4. Open the generated .xcodeproject in Xcode
 5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode might tell you if you need to change anything else like the bundle id.
-6. Connect your device via USB or if you set it up via WiFi
+6. Connect your device via USB (or WiFi if you set it up for that)
 7. Select your device next to the play button
 8. Compile and run Jamulus by clicking on the play button
 9. Before being able to start Jamulus on your device, you'll have trust your developer profile in the device's Settings under General>Profiles & Device Management. For more information [see the guide by osxdaily](https://osxdaily.com/2021/05/07/how-to-trust-an-app-on-iphone-ipad-to-fix-untrusted-developer-message/)

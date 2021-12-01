@@ -144,7 +144,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 
 1. Install [Xcode from the Mac AppStore](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
 2. [Download and install qt5 with the Qt Installer](https://www.qt.io/download) (not homebrew). Explicitly select iOS when choosing the Qt version
-3. Navigate to the folder of the Jamulus source code via terminal and run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
+3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
 4. Open the generated .xcodeproject in Xcode
 5. Navigate to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode might tell you if you need to change anything else like the bundle id.
 6. Connect your device via USB or if you set it up via WiFi

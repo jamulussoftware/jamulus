@@ -151,7 +151,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 7. Select your device next to the play button
 8. Compile and run Jamulus by clicking on the play button
 9. Before being able to start Jamulus on your device, you'll have trust your developer profile in the device's Settings under General>Profiles & Device Management. For more information [see the guide by osxdaily](https://osxdaily.com/2021/05/07/how-to-trust-an-app-on-iphone-ipad-to-fix-untrusted-developer-message/)
-10. After a week you might need to restart from step 6 to be able to run Jamulus on iOS 
+10. After a week you might need to restart from step 6 to continue to run Jamulus on iOS, unless you are paying for the Apple developer programme.
 
 ## Android
 * Install Qt, including the Android support from the Qt installer

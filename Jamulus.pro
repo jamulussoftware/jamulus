@@ -781,6 +781,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/bassguitar.png \
     src/res/instruments/cello.png \
     src/res/instruments/clarinet.png \
+    src/res/instruments/director.png \
     src/res/instruments/djembe.png \
     src/res/instruments/doublebass.png \
     src/res/instruments/drumset.png \

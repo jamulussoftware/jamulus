@@ -125,7 +125,6 @@ Var Label
 
 Var bInstallDtIcon
 Var bRunApp
-Var bShowRunAppOption
 
 ; Installer
 
@@ -329,9 +328,6 @@ Function .onInit
     IfErrors   0 +2
     StrCpy $bInstallDtIcon "1"
 
-    ; Enable to show the run app after install option, can be disabled when no audio driver detected
-    StrCpy $bShowRunAppOption "1"
-
     ; Select installer language
     !insertmacro MUI_LANGDLL_DISPLAY
 
@@ -367,7 +363,7 @@ Function FinishPage.Show ; set the user choices if they were remembered
         SendMessage $mui.FinishPage.Run ${BM_SETCHECK} ${BST_UNCHECKED} 0
     ${EndIf}
 
-    ShowWindow $mui.FinishPage.Run $bShowRunAppOption  ; option will only be displayed if an audio driver was detected during install
+    ShowWindow $mui.FinishPage.Run 1
 
 FunctionEnd
 
@@ -417,8 +413,7 @@ FunctionEnd
             MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(JACK_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
                 Abort
        SkipMessage:
-            StrCpy $bRunApp "0"           ; set the app not to run after install as there is no audio driver
-            StrCpy $bShowRunAppOption "0" ; do not show the run the app option in the finish page
+            StrCpy $bRunApp "0" ; set the run app after install option to unchecked as there is no audio driver
 
     FunctionEnd
 !else
@@ -459,8 +454,7 @@ FunctionEnd
             MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
                 Abort
        SkipMessage:
-            StrCpy $bRunApp "0"           ; set the app not to run after install as there is no audio driver
-            StrCpy $bShowRunAppOption "0" ; do not show the run the app option in the finish page
+            StrCpy $bRunApp "0" ; set the run app after install option to unchecked as there is no audio driver
 
     FunctionEnd
 !endif

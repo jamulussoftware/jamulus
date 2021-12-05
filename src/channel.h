@@ -68,7 +68,7 @@ public:
     // use constructor initialization in the server for a vector of channels
     CChannel ( const bool bNIsServer = true );
 
-    void PutProtcolData ( const int iRecCounter, const int iRecID, const CVector<uint8_t>& vecbyMesBodyData, const CHostAddress& RecHostAddr );
+    void PutProtocolData ( const int iRecCounter, const int iRecID, const CVector<uint8_t>& vecbyMesBodyData, const CHostAddress& RecHostAddr );
 
     EPutDataStat PutAudioData ( const CVector<uint8_t>& vecbyData, const int iNumBytes, CHostAddress RecHostAddr );
 
@@ -250,12 +250,12 @@ public slots:
         Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
     }
 
-    void OnProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
     {
-        PutProtcolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+        PutProtocolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
     }
 
-    void OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
     {
         emit DetectedCLMessage ( vecbyMesBodyData, iRecID, RecHostAddr );
     }

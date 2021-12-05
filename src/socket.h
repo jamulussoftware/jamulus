@@ -104,9 +104,9 @@ signals:
 
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 
-    void ProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
+    void ProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 
-    void ProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
+    void ProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress HostAdr );
 };
 
 /* Socket which runs in a separate high priority thread --------------------- */

@@ -1609,7 +1609,7 @@ void CServer::DumpChannels ( const QString& title )
     }
 }
 
-void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -1617,7 +1617,7 @@ void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMes
     ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
 }
 
-void CServer::OnProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+void CServer::OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -1627,7 +1627,7 @@ void CServer::OnProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<ui
     // if the channel exists, apply the protocol message to the channel
     if ( iCurChanID != INVALID_CHANNEL_ID )
     {
-        vecChannels[iCurChanID].PutProtcolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+        vecChannels[iCurChanID].PutProtocolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
     }
 }
 

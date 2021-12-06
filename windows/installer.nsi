@@ -419,10 +419,10 @@ FunctionEnd
     Function ASIOCheckInstalled
 
         ; insert ASIO install page if no ASIO driver was found
-        ClearErrors
         EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
 
-        IfErrors 0 ASIOExists
+        ; check on errors cannot be used, as the error flag is not set when the string exists does not contain at least 1 subkey for a driver
+        ${If} $0 == "" ; if empty string returned, ASIO key does not exist or does not have at least 1 subkey
             !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
             nsDialogs::Create 1018
             Pop $Dialog
@@ -438,7 +438,7 @@ FunctionEnd
 
             nsDialogs::Show
 
-        ASIOExists:
+        ${EndIf}
 
     FunctionEnd
 
@@ -447,12 +447,16 @@ FunctionEnd
     FunctionEnd
 
     Function ExitASIOInstalled
-        ClearErrors
+
         EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
-        IfErrors 0 SkipMessage
+
+        ; check on errors cannot be used, as the error flag is not set when the string exists does not contain at least 1 subkey for a driver
+        ${If} $0 == "" ; if empty string returned, ASIO key does not exist or does not have at least 1 subkey
             MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
                 Abort
-       SkipMessage:
+        ${EndIf}
+
+        SkipMessage:
 
     FunctionEnd
 !endif

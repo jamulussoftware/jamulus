@@ -49,9 +49,9 @@ CSocket::CSocket ( CChannel* pNewChannel, const quint16 iPortNumber, const quint
     Init ( iPortNumber, iQosNumber, strServerBindIP );
 
     // client connections:
-    QObject::connect ( this, &CSocket::ProtcolMessageReceived, pChannel, &CChannel::OnProtcolMessageReceived );
+    QObject::connect ( this, &CSocket::ProtocolMessageReceived, pChannel, &CChannel::OnProtocolMessageReceived );
 
-    QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pChannel, &CChannel::OnProtcolCLMessageReceived );
+    QObject::connect ( this, &CSocket::ProtocolCLMessageReceived, pChannel, &CChannel::OnProtocolCLMessageReceived );
 
     QObject::connect ( this, static_cast<void ( CSocket::* )()> ( &CSocket::NewConnection ), pChannel, &CChannel::OnNewConnection );
 }
@@ -65,9 +65,9 @@ CSocket::CSocket ( CServer* pNServP, const quint16 iPortNumber, const quint16 iQ
     Init ( iPortNumber, iQosNumber, strServerBindIP );
 
     // server connections:
-    QObject::connect ( this, &CSocket::ProtcolMessageReceived, pServer, &CServer::OnProtcolMessageReceived );
+    QObject::connect ( this, &CSocket::ProtocolMessageReceived, pServer, &CServer::OnProtocolMessageReceived );
 
-    QObject::connect ( this, &CSocket::ProtcolCLMessageReceived, pServer, &CServer::OnProtcolCLMessageReceived );
+    QObject::connect ( this, &CSocket::ProtocolCLMessageReceived, pServer, &CServer::OnProtocolCLMessageReceived );
 
     QObject::connect ( this,
                        static_cast<void ( CSocket::* ) ( int, int, CHostAddress )> ( &CSocket::NewConnection ),
@@ -416,7 +416,7 @@ void CSocket::OnDataReceived()
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
             // clang-format on
 
-            emit ProtcolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
+            emit ProtocolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
         }
         else
         {
@@ -425,7 +425,7 @@ void CSocket::OnDataReceived()
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
             // clang-format on
 
-            emit ProtcolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+            emit ProtocolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
         }
     }
     else

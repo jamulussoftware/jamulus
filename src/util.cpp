@@ -704,25 +704,28 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
     // hostname:port
     // (where addr4or6 is a literal IPv4 or IPv6 address, and addr4 is a literal IPv4 address
 
-    bool    bLiteralAddr = false;
-    QRegExp rx1 ( "^\\[([^]]*)\\](?::(\\d+))?$" ); // [addr4or6] or [addr4or6]:port
-    QRegExp rx2 ( "^([^:]*)(?::(\\d+))?$" );       // addr4 or addr4:port or host or host:port
+    bool               bLiteralAddr = false;
+    QRegularExpression rx1 ( "^\\[([^]]*)\\](?::(\\d+))?$" ); // [addr4or6] or [addr4or6]:port
+    QRegularExpression rx2 ( "^([^:]*)(?::(\\d+))?$" );       // addr4 or addr4:port or host or host:port
 
     QString strPort;
 
+    QRegularExpressionMatch rx1match = rx1.match ( strAddress );
+    QRegularExpressionMatch rx2match = rx2.match ( strAddress );
+
     // parse input address with rx1 and rx2 in turn, capturing address/host and port
-    if ( rx1.indexIn ( strAddress ) == 0 )
+    if ( rx1match.capturedStart() == 0 )
     {
         // literal address within []
-        strAddress   = rx1.cap ( 1 );
-        strPort      = rx1.cap ( 2 );
+        strAddress   = rx1match.captured ( 1 );
+        strPort      = rx1match.captured ( 2 );
         bLiteralAddr = true; // don't allow hostname within []
     }
-    else if ( rx2.indexIn ( strAddress ) == 0 )
+    else if ( rx2match.capturedStart() == 0 )
     {
         // hostname or IPv4 address
-        strAddress = rx2.cap ( 1 );
-        strPort    = rx2.cap ( 2 );
+        strAddress = rx2match.captured ( 1 );
+        strPort    = rx2match.captured ( 2 );
     }
     else
     {

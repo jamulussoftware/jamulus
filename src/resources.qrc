@@ -116,6 +116,7 @@
         <file>res/instruments/ukulele.png</file>
         <file>res/instruments/bassukulele.png</file>
         <file>res/instruments/vibraphone.png</file>
+        <file>res/instruments/conductor.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>

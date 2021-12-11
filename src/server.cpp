@@ -1502,7 +1502,7 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
             return vecChannelOrder[t];
         }
 
-        if ( cmp < 0 )
+        if ( cmp > 0 )
         {
             l = t + 1;
         }
@@ -1574,13 +1574,14 @@ void CServer::FreeChannel ( const int iCurChanID )
         {
             --iCurNumChannels;
 
-            // move channel IDs down by one starting at the bottom and working up
-            while ( i < iCurNumChannels )
+            // move channel IDs down by one starting at the freed channel and working up the active channels
+            // and then the free channels until its position in the free list is reached
+            while ( i < iCurNumChannels || ( i + 1 < iMaxNumChannels && vecChannelOrder[i + 1] < iCurChanID ) )
             {
                 int j              = i++;
                 vecChannelOrder[j] = vecChannelOrder[i];
             }
-            // put deleted channel at the end ready for re-use
+            // put deleted channel in the vacated position ready for re-use
             vecChannelOrder[i] = iCurChanID;
 
             // DumpChannels ( __FUNCTION__ );

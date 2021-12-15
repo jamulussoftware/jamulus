@@ -540,7 +540,7 @@ enum EChSortType
     ST_BY_CITY       = 4
 };
 
-// Directory server address type -----------------------------------------------
+// Directory type --------------------------------------------------------------
 enum EDirectoryType
 {
     // used for settings -> enum values should be fixed

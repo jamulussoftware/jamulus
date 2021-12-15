@@ -239,10 +239,10 @@ void CConnectDlg::RequestServerList()
 
     // Get the IP address of the directory server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
-    // time to do it. Note that in case of custom directory server address we
+    // time to do it. Note that in case of custom directories we
     // use iCustomDirectoryIndex as an index into the vector.
 
-    // Allow IPv4 only for communicating with Directory Servers
+    // Allow IPv4 only for communicating with Directories
     if ( NetworkUtil().ParseNetworkAddress (
              NetworkUtil::GetDirectoryAddress ( pSettings->eDirectoryType, pSettings->vstrDirectoryAddress[pSettings->iCustomDirectoryIndex] ),
              haDirectoryAddress,
@@ -267,7 +267,7 @@ void CConnectDlg::hideEvent ( QHideEvent* )
 
 void CConnectDlg::OnDirectoryServerChanged ( int iTypeIdx )
 {
-    // store the new directory server address type and request new list
+    // store the new directory type and request new list
     // if iTypeIdx == AT_CUSTOM, then iCustomDirectoryIndex is the index into the vector holding the user's custom directory servers
     // if iTypeIdx != AT_CUSTOM, then iCustomDirectoryIndex MUST be 0;
     if ( iTypeIdx >= AT_CUSTOM )
@@ -551,7 +551,7 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     lvwServers->clearSelection();
 }
 
-void CConnectDlg::OnCustomDirectoryAddressChanged()
+void CConnectDlg::OnCustomDirectoriesChanged()
 {
 
     QString strPreviousSelection = cbxDirectoryServer->currentText();
@@ -950,7 +950,7 @@ void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
 
 void CConnectDlg::UpdateDirectoryServerComboBox()
 {
-    // directory server address type combo box
+    // directory type combo box
     cbxDirectoryServer->clear();
     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_DEFAULT ) );
     cbxDirectoryServer->addItem ( DirectoryTypeToString ( AT_ANY_GENRE2 ) );

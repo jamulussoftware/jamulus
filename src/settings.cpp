@@ -454,28 +454,22 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
     }
 
+    // custom directories
     // clang-format off
 // TODO compatibility to old version (< 3.6.1)
-// NOTE that the strCurAddr and "check for empty" can be removed if compatibility mode is removed
-vstrDirectoryAddress[0] = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
+QString strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
     // clang-format on
-
-    // directory server addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         // clang-format off
 // TODO compatibility to old version (< 3.8.2)
-QString strCurAddr = GetIniSetting ( IniXMLDocument, "client", QString ( "centralservaddr%1" ).arg ( iIdx ), "" );
+strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", QString ( "centralservaddr%1" ).arg ( iIdx ), strDirectoryAddress );
         // clang-format on
-        strCurAddr = GetIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), strCurAddr );
-
-        if ( !strCurAddr.isEmpty() )
-        {
-            vstrDirectoryAddress[iIdx] = strCurAddr;
-        }
+        vstrDirectoryAddress[iIdx] = GetIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), strDirectoryAddress );
+        strDirectoryAddress        = "";
     }
 
-    // directory server address type
+    // directory type
     // clang-format off
 // TODO compatibility to old version (<3.4.7)
 // only the case that "centralservaddr" was set in old ini must be considered
@@ -483,13 +477,11 @@ if ( !vstrDirectoryAddress[0].isEmpty() && GetFlagIniSet ( IniXMLDocument, "clie
 {
     eDirectoryType = AT_CUSTOM;
 }
-    // clang-format on
-    // clang-format off
 // TODO compatibility to old version (< 3.8.2)
-    else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
-    {
-        eDirectoryType = static_cast<EDirectoryType> ( iValue );
-    }
+else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
+{
+    eDirectoryType = static_cast<EDirectoryType> ( iValue );
+}
     // clang-format on
     else if ( GetNumericIniSet ( IniXMLDocument, "client", "directorytype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {
@@ -501,7 +493,7 @@ if ( !vstrDirectoryAddress[0].isEmpty() && GetFlagIniSet ( IniXMLDocument, "clie
         eDirectoryType = AT_DEFAULT;
     }
 
-    // custom directory server index
+    // custom directory index
     if ( ( eDirectoryType == AT_CUSTOM ) &&
          GetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", 0, MAX_NUM_SERVER_ADDR_ITEMS, iValue ) )
     {
@@ -702,16 +694,16 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // audio quality
     SetNumericIniSet ( IniXMLDocument, "client", "audioquality", static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // directory server addresses
+    // custom directories
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         PutIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), vstrDirectoryAddress[iIdx] );
     }
 
-    // directory server address type
+    // directory type
     SetNumericIniSet ( IniXMLDocument, "client", "directorytype", static_cast<int> ( eDirectoryType ) );
 
-    // custom directory server index
+    // custom directory index
     SetNumericIniSet ( IniXMLDocument, "client", "customdirectoryindex", iCustomDirectoryIndex );
 
     // window position of the main window
@@ -891,7 +883,7 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // directory server address
     PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
 
-    // directory server address type
+    // directory type
     SetNumericIniSet ( IniXMLDocument, "server", "directorytype", static_cast<int> ( pServer->GetDirectoryType() ) );
 
     // server list enabled flag

@@ -716,13 +716,13 @@ void CClientDlg::OnConnectDlgAccepted()
             strMixerBoardLabel = strSelectedAddress;
 
             // special case: if the address is empty, we substitute the default
-            // directory server address so that a user which just pressed the connect
+            // directory address so that a user who just pressed the connect
             // button without selecting an item in the table or manually entered an
             // address gets a successful connection
             if ( strSelectedAddress.isEmpty() )
             {
                 strSelectedAddress = DEFAULT_SERVER_ADDRESS;
-                strMixerBoardLabel = tr ( "Directory Server" );
+                strMixerBoardLabel = tr ( "%1 Directory" ).arg ( DirectoryTypeToString ( AT_DEFAULT ) );
             }
         }
 

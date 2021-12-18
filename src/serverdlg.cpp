@@ -187,7 +187,7 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
         pSystemTrayIconMenu->addAction ( tr ( "&Hide %1 server" ).arg ( APP_NAME ), this, SLOT ( OnSysTrayMenuHide() ) );
 
         pSystemTrayIconMenu->setDefaultAction (
-            pSystemTrayIconMenu->addAction ( tr ( "&Open %1 server" ).arg ( APP_NAME ), this, SLOT ( OnSysTrayMenuOpen() ) ) );
+            pSystemTrayIconMenu->addAction ( tr ( "&Show %1 server" ).arg ( APP_NAME ), this, SLOT ( OnSysTrayMenuOpen() ) ) );
 
         SystemTrayIcon.setContextMenu ( pSystemTrayIconMenu );
 

@@ -61,8 +61,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "For example, if a microphone is connected to "
                                "the right input channel and an instrument is connected to the left "
                                "input channel which is much louder than the microphone, move the "
-                               "audio fader in a direction where the label above the fader shows " ) +
-                          "<i>" + tr ( "L" ) + " -x</i>" + tr ( ", where" ) + " <i>x</i> " + tr ( "is the current attenuation indicator." );
+                               "audio fader in a direction where the label above the fader shows "
+                               "%1, where %2 is the current attenuation indicator." )
+                              .arg ( "<i>" + tr ( "L" ) + " -x</i>", "<i>x</i>" );
 
     lblAudioPan->setWhatsThis ( strAudFader );
     lblAudioPanValue->setWhatsThis ( strAudFader );
@@ -492,7 +493,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
                           tr ( "Write your name or an alias here so the other musicians you want to "
                                "play with know who you are. You may also add a picture of the instrument "
-                               "you play and a flag of the country you are located in. "
+                               "you play and a flag of the country or region you are located in. "
                                "Your city and skill level playing your instrument may also be added." ) +
                           "<br>" +
                           QString ( tr ( "What you set here will appear at your fader on the mixer "
@@ -506,7 +507,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     plblInstrument->setWhatsThis ( strFaderTag );
     pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
     plblCountry->setWhatsThis ( strFaderTag );
-    pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
+    pcbxCountry->setAccessibleName ( tr ( "Country/region flag button" ) );
     plblCity->setWhatsThis ( strFaderTag );
     pedtCity->setAccessibleName ( tr ( "City edit box" ) );
     plblSkill->setWhatsThis ( strFaderTag );

@@ -100,7 +100,7 @@
                   <item>
                    <widget class="QLabel" name="plblCountry">
                     <property name="text">
-                     <string>Country</string>
+                     <string>Country/Region</string>
                     </property>
                    </widget>
                   </item>

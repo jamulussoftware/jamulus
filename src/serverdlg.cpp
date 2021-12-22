@@ -121,32 +121,39 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                       tr ( "Checked when the recorder is enabled, otherwise unchecked. "
                                            "The recorder will run when a session is in progress, if (set up correctly and) enabled." ) );
 
-    // current session directory
-    edtCurrentSessionDir->setAccessibleName ( tr ( "Current session directory text box (read-only)" ) );
-    edtCurrentSessionDir->setWhatsThis ( "<b>" + tr ( "Current Session Directory" ) + ":</b> " +
-                                         tr ( "Enabled during recording and holds the current recording session directory. "
-                                              "Disabled after recording or when the recorder is not enabled." ) );
+    // new recording
+    pbtNewRecording->setAccessibleName ( tr ( "Request new recording button" ) );
+    pbtNewRecording->setWhatsThis ( "<b>" + tr ( "New Recording" ) + ":</b> " +
+                                    tr ( "During a recording session, the button can be used to start a new recording." ) );
 
     // recorder status
     lblRecorderStatus->setAccessibleName ( tr ( "Recorder status label" ) );
     lblRecorderStatus->setWhatsThis (
         "<b>" + tr ( "Recorder Status" ) + ":</b> " + tr ( "Displays the current status of the recorder.  The following values are possible:" ) +
-        "<dl>" + "<dt>" + SREC_NOT_INITIALISED + "</dt>" + "<dd>" + tr ( "No recording directory has been set or the value is not useable" ) +
+        "<dl>" + "<dt>" + SREC_NOT_INITIALISED + "</dt>" + "<dd>" +
+        tr ( "No recording directory has been set or the value is not useable. "
+             "Check the value in the Options tab." ) +
         "</dd>" + "<dt>" + SREC_NOT_ENABLED + "</dt>" + "<dd>"
 #ifdef _WIN32
-        + tr ( "Recording has been switched off by the UI checkbox" )
+        + tr ( "Recording has been switched off by the UI checkbox." )
 #else
-        + tr ( "Recording has been switched off, either by the UI checkbox or SIGUSR2 being received" )
+        + tr ( "Recording has been switched off, either by the UI checkbox or SIGUSR2 being received." )
 #endif
-        + "</dd>" + "<dt>" + SREC_NOT_RECORDING + "</dt>" + "<dd>" + tr ( "There is no one connected to the server to record" ) + "</dd>" + "<dt>" +
-        SREC_RECORDING + "</dt>" + "<dd>" + tr ( "The performers are being recorded to the specified session directory" ) + "</dd>" + "</dl>" +
+        + "</dd>" + "<dt>" + SREC_NOT_RECORDING + "</dt>" + "<dd>" + tr ( "There is no one connected to the server to record." ) + "</dd>" + "<dt>" +
+        SREC_RECORDING + "</dt>" + "<dd>" + tr ( "The performers are being recorded to the specified session directory." ) + "</dd>" + "</dl>" +
         "<br/><b>" + tr ( "NOTE" ) + ":</b> " +
-        tr ( "If the recording directory is not useable, the problem will be displayed in place of the directory." ) );
+        tr ( "If the recording directory is not useable, the problem will be displayed in place of the session directory." ) );
 
-    // new recording
-    pbtNewRecording->setAccessibleName ( tr ( "Request new recording button" ) );
-    pbtNewRecording->setWhatsThis ( "<b>" + tr ( "New Recording" ) + ":</b> " +
-                                    tr ( "During a recording session, the button can be used to start a new recording." ) );
+    // current session directory
+    QString strCurrentSessionDirAN = tr ( "Current session directory text box (read-only)" );
+    lblCurrentSessionDir->setAccessibleName ( strCurrentSessionDirAN );
+    edtCurrentSessionDir->setAccessibleName ( strCurrentSessionDirAN );
+
+    QString strCurrentSessionDirWT = "<b>" + tr ( "Current Session Directory" ) + ":</b> " +
+                                     tr ( "Enabled during recording and holds the current recording session directory. "
+                                          "Disabled after recording or when the recorder is not enabled." );
+    lblCurrentSessionDir->setWhatsThis ( strCurrentSessionDirWT );
+    edtCurrentSessionDir->setWhatsThis ( strCurrentSessionDirWT );
 
     // welcome message
     tedWelcomeMessage->setAccessibleName ( tr ( "Server welcome message edit box" ) );

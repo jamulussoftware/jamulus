@@ -766,7 +766,10 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     int  iValue;
     bool bValue;
 
-    // directory server address type (note that it is important
+    // window position of the main window
+    vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
+
+    // directory type (note that it is important
     // to set this setting prior to the "directory server address")
     // clang-format off
 // TODO compatibility to old version
@@ -815,10 +818,6 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         pServer->SetServerRegistered ( bValue );
     }
 
-    // language
-    strLanguage =
-        GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
-
     // name/city/country
     if ( !CommandLineOptions.contains ( "--serverinfo" ) )
     {
@@ -835,12 +834,12 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         }
     }
 
-    // start minimized on OS start
-    if ( !CommandLineOptions.contains ( "--startminimized" ) )
+    // norecord flag
+    if ( !CommandLineOptions.contains ( "--norecord" ) )
     {
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
         {
-            pServer->SetAutoRunMinimized ( bValue );
+            pServer->SetEnableRecording ( !bValue );
         }
     }
 
@@ -850,8 +849,9 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
     }
 
-    // window position of the main window
-    vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
+    // language
+    strLanguage =
+        GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
     // base recording directory
     if ( !CommandLineOptions.contains ( "--recording" ) )
@@ -859,12 +859,12 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
         pServer->SetRecordingDir ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "recordingdir_base64" ) ) );
     }
 
-    // norecord flag
-    if ( !CommandLineOptions.contains ( "--norecord" ) )
+    // start minimized on OS start
+    if ( !CommandLineOptions.contains ( "--startminimized" ) )
     {
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "norecord", bValue ) )
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
         {
-            pServer->SetEnableRecording ( !bValue );
+            pServer->SetAutoRunMinimized ( bValue );
         }
     }
 
@@ -880,6 +880,9 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
 
 void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 {
+    // window position of the main window
+    PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
+
     // directory server address
     PutIniSetting ( IniXMLDocument, "server", "directoryaddress", pServer->GetDirectoryAddress() );
 
@@ -888,9 +891,6 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // server list enabled flag
     SetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", pServer->GetServerRegistered() );
-
-    // language
-    PutIniSetting ( IniXMLDocument, "server", "language", strLanguage );
 
     // name
     PutIniSetting ( IniXMLDocument, "server", "name", pServer->GetServerName() );
@@ -901,20 +901,20 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     // country
     SetNumericIniSet ( IniXMLDocument, "server", "country", static_cast<int> ( pServer->GetServerCountry() ) );
 
-    // start minimized on OS start
-    SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );
+    // norecord flag
+    SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
 
     // welcome message
     PutIniSetting ( IniXMLDocument, "server", "welcome", ToBase64 ( pServer->GetWelcomeMessage() ) );
 
-    // window position of the main window
-    PutIniSetting ( IniXMLDocument, "server", "winposmain_base64", ToBase64 ( vecWindowPosMain ) );
+    // language
+    PutIniSetting ( IniXMLDocument, "server", "language", strLanguage );
 
     // base recording directory
     PutIniSetting ( IniXMLDocument, "server", "recordingdir_base64", ToBase64 ( pServer->GetRecordingDir() ) );
 
-    // norecord flag
-    SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );
+    // start minimized on OS start
+    SetFlagIniSet ( IniXMLDocument, "server", "autostartmin", pServer->GetAutoRunMinimized() );
 
     // delay panning
     SetFlagIniSet ( IniXMLDocument, "server", "delaypan", pServer->IsDelayPanningEnabled() );

@@ -402,7 +402,14 @@ win32 {
         icons.path = $$ICONSDIR
         icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
 
-        INSTALLS += target desktop icons
+        isEmpty(MANDIR) {
+            MANDIR = share/man/man1
+        }
+        MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
+        man.path = $$MANDIR
+        man.files = distributions/Jamulus.1
+
+        INSTALLS += target desktop icons man
     }
 }
 

@@ -1866,7 +1866,7 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
     }
     else
     {
-        strVersionText += " *** ";
+        strVersionText += "\n *** ";
     }
 
     strVersionText += APP_NAME + QCoreApplication::tr ( ", Version " ) + VERSION;

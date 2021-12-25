@@ -121,6 +121,7 @@ int main ( int argc, char** argv )
         if ( ( !strcmp ( argv[i], "--help" ) ) || ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
             const QString strHelp = UsageArguments ( argv );
+            qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
             qInfo() << qUtf8Printable ( strHelp );
             exit ( 0 );
         }

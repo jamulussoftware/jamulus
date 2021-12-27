@@ -1866,6 +1866,10 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
     }
     else
     {
+#ifdef _WIN32
+        // start with newline to print nice in windows command prompt
+        strVersionText += "\n";
+#endif
         strVersionText += " *** ";
     }
 
@@ -1886,7 +1890,15 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License (GPL)" );
+    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License version 2 (GPLv2)" );
+
+    if ( !bWithHtml )
+    {
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Using Qt " ) + QT_VERSION_STR;
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2021 The Jamulus Development Team" );
+    }
 
     return strVersionText;
 }

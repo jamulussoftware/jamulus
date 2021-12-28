@@ -1,24 +1,3 @@
 [submodule "libs/oboe"]
 	path = libs/oboe
 	url = ../../google/oboe.git
-[submodule "tools/jamulus-php"]
-	path = tools/jamulus-php
-	url = ../../softins/jamulus-php
-[submodule "tools/jamulus-web"]
-	path = tools/jamulus-web
-	url = ../../softins/jamulus-web
-[submodule "tools/jamulus-wireshark"]
-	path = tools/jamulus-wireshark
-	url = ../../softins/jamulus-wireshark
-[submodule "tools/jamulus-historytool"]
-	path = tools/jamulus-historytool
-	url = ../../pljones/jamulus-historytool
-[submodule "tools/jamulus-jamexporter"]
-	path = tools/jamulus-jamexporter
-	url = ../../pljones/jamulus-jamexporter
-[submodule "tools/jamulus-docker"]
-	path = tools/jamulus-docker
-	url = ../../grundic/jamulus-docker
-[submodule "tools/jamulus-server-remote"]
-	path = tools/jamulus-server-remote
-	url = ../../vdellamea/jamulus-server-remote

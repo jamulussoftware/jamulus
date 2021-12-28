@@ -33,11 +33,17 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     BitmapSystemTrayActive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
 {
     // check if system tray icon can be used
-    bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
+    bSystemTrayIconAvailable = SystemTrayIcon.isSystemTrayAvailable();
 
     setupUi ( this );
 
+    // set window title
+    setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
+
     // Add help text to controls -----------------------------------------------
+
+    // Tab: Server setup
+
     // client list
     lvwClients->setWhatsThis ( "<b>" + tr ( "Client List" ) + ":</b> " +
                                tr ( "The client list shows all clients which are currently connected to this "
@@ -45,16 +51,6 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                     "are given for each connected client." ) );
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
-
-    // start minimized on operating system start
-    chbStartOnOSStart->setWhatsThis ( "<b>" +
-                                      tr ( "Start Minimized on Operating "
-                                           "System Start" ) +
-                                      ":</b> " +
-                                      tr ( "If the start minimized on operating system start "
-                                           "check box is checked, the server will be "
-                                           "started when the operating system starts up and is automatically "
-                                           "minimized to a system task bar icon." ) );
 
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
@@ -65,20 +61,11 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                            "to make sure that all servers in the connect dialog server list are "
                                            "actually available." ) );
 
-    // register server status label
+    // server registration status label
     lblRegSvrStatus->setWhatsThis ( "<b>" + tr ( "Register Server Status" ) + ":</b> " +
-                                    tr ( "If the Make My Server Public check box is checked, this will show "
+                                    tr ( "If the Register Server check box is checked, this will show "
                                          "whether registration with the directory server is successful. If the "
                                          "registration failed, please choose another server list." ) );
-
-    // custom directory server address
-    QString strCustomDirectoryAddress = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
-                                        tr ( "The custom directory server address is the IP address or URL of the directory "
-                                             "server at which the server list of the connection dialog is managed." );
-
-    lblDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
-    edtDirectoryAddress->setWhatsThis ( strCustomDirectoryAddress );
-    edtDirectoryAddress->setAccessibleName ( tr ( "Directory server address line edit" ) );
 
     cbxDirectoryType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " +
                                      tr ( "Selects the server list (i.e. directory server address) in which your server will be added." ) );
@@ -115,25 +102,6 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     cbxLocationCountry->setWhatsThis ( strLocCountry );
 
     cbxLocationCountry->setAccessibleName ( tr ( "Combo box for location of this server" ) );
-
-    // recording directory
-    pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
-    pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
-                                    tr ( "Click the button to open the dialog that allows the main recording directory to be selected."
-                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
-                                         "by the user Jamulus is running as). " ) );
-
-    edtRecordingDir->setAccessibleName ( tr ( "Main recording directory text box (read-only)" ) );
-    edtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
-                                    tr ( "The current value of the main recording directory. "
-                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
-                                         "by the user Jamulus is running as). "
-                                         "Click the button to open the dialog that allows the main recording directory to be selected." ) );
-
-    tbtClearRecordingDir->setAccessibleName ( tr ( "Clear the recording directory button" ) );
-    tbtClearRecordingDir->setWhatsThis ( "<b>" + tr ( "Clear Recording Directory" ) + ":</b> " +
-                                         tr ( "Click the button to clear the currently selected recording directory. "
-                                              "This will prevent recording until a new value is selected." ) );
 
     // enable recorder
     chbEnableRecorder->setAccessibleName ( tr ( "Checkbox to turn on or off server recording" ) );
@@ -174,8 +142,54 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
                                       tr ( "A server welcome message text is displayed in the chat window if a "
                                            "musician enters the server. If no message is set, the server welcome is disabled." ) );
 
+    // Tab: options
+
+    // Interface Language
+    QString strWTLanguage = "<b>" + tr ( "Language" ) + ":</b> " + tr ( "Select the language to be used for the user interface." );
+    lblLanguage->setWhatsThis ( strWTLanguage );
+    cbxLanguage->setWhatsThis ( strWTLanguage );
+
+    cbxLanguage->setAccessibleName ( tr ( "Language combo box" ) );
+
+    // recording directory
+    pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
+    pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
+                                    tr ( "Click the button to open the dialog that allows the main recording directory to be selected.  "
+                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
+                                         "by the user Jamulus is running as)." ) );
+
+    edtRecordingDir->setAccessibleName ( tr ( "Main recording directory text box (read-only)" ) );
+    edtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
+                                    tr ( "The current value of the main recording directory. "
+                                         "The chosen value must exist and be writeable (allow creation of sub-directories "
+                                         "by the user Jamulus is running as). "
+                                         "Click the button to open the dialog that allows the main recording directory to be selected." ) );
+
+    tbtClearRecordingDir->setAccessibleName ( tr ( "Clear the recording directory button" ) );
+    tbtClearRecordingDir->setWhatsThis ( "<b>" + tr ( "Clear Recording Directory" ) + ":</b> " +
+                                         tr ( "Click the button to clear the currently selected recording directory. "
+                                              "This will prevent recording until a new value is selected." ) );
+
+    // custom directory
+    QString strCustomDirectory = "<b>" + tr ( "Custom Directory" ) + ":</b> " +
+                                 tr ( "The custom directory is the IP address or URL of the directory "
+                                      "server at which the server list of the connection dialog is managed." );
+
+    lblCustomDirectory->setWhatsThis ( strCustomDirectory );
+    edtCustomDirectory->setWhatsThis ( strCustomDirectory );
+    edtCustomDirectory->setAccessibleName ( tr ( "Custom Directory line edit" ) );
+
+    // start minimized on operating system start
+    chbStartOnOSStart->setWhatsThis ( "<b>" + tr ( "Start Minimized on Operating System Start" ) + ":</b> " +
+                                      tr ( "If the start minimized on operating system start "
+                                           "check box is checked, the server will be "
+                                           "started when the operating system starts up and is automatically "
+                                           "minimized to a system task bar icon." ) );
+
+    // Application initialisation
+
     // init system tray icon
-    if ( bSystemTrayIconAvaialbe )
+    if ( bSystemTrayIconAvailable )
     {
         // prepare context menu to be added to the system tray icon
         pSystemTrayIconMenu = new QMenu ( this );
@@ -200,11 +214,13 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     }
 
     // act on "start minimized" flag (note, this has to be done after setting
-    // the correct value for the system tray icon availablility)
+    // and acting on the correct value for the system tray icon availablility)
     if ( bStartMinimized )
     {
         showMinimized();
     }
+
+    // UI initialisation
 
     // set up list view for connected clients
     lvwClients->setColumnWidth ( 0, 170 ); // 170 //  IP:port
@@ -242,7 +258,7 @@ lvwClients->setMinimumHeight ( 140 );
     cbxDirectoryType->setCurrentIndex ( static_cast<int> ( pServer->GetDirectoryType() ) );
 
     // custom directory server address
-    edtDirectoryAddress->setText ( pServer->GetDirectoryAddress() );
+    edtCustomDirectory->setText ( pServer->GetDirectoryAddress() );
 
     // update server name line edit
     edtServerName->setText ( pServer->GetServerName() );
@@ -281,6 +297,23 @@ lvwClients->setMinimumHeight ( 140 );
         chbRegisterServer->setCheckState ( Qt::Unchecked );
     }
 
+    // Recorder controls
+    chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
+    edtCurrentSessionDir->setText ( "" );
+    pbtNewRecording->setAutoDefault ( false );
+
+    // setup welcome message GUI control
+    tedWelcomeMessage->setPlaceholderText ( tr ( "Type a message here. If no message is set, the server welcome is disabled." ) );
+    tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
+
+    // language combo box (corrects the setting if language not found)
+    cbxLanguage->Init ( pSettings->strLanguage );
+
+    // recorder options
+    pbtRecordingDir->setAutoDefault ( false );
+    edtRecordingDir->setText ( pServer->GetRecordingDir() );
+    tbtClearRecordingDir->setText ( u8"\u232B" );
+
     // update start minimized check box (only available for Windows)
 #ifndef _WIN32
     chbStartOnOSStart->setVisible ( false );
@@ -311,24 +344,6 @@ lvwClients->setMinimumHeight ( 140 );
         chbEnableDelayPanning->setCheckState ( Qt::Unchecked );
     }
 
-    // Recorder controls
-    chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
-    edtCurrentSessionDir->setText ( "" );
-    pbtNewRecording->setAutoDefault ( false );
-    pbtRecordingDir->setAutoDefault ( false );
-    edtRecordingDir->setText ( pServer->GetRecordingDir() );
-    tbtClearRecordingDir->setText ( u8"\u232B" );
-
-    UpdateRecorderStatus ( QString::null );
-
-    // language combo box (corrects the setting if language not found)
-    cbxLanguage->Init ( pSettings->strLanguage );
-
-    // setup welcome message GUI control
-    tedWelcomeMessage->setPlaceholderText ( tr ( "Type a message here. If no message is set, the server welcome is disabled." ) );
-
-    tedWelcomeMessage->setText ( pServer->GetWelcomeMessage() );
-
     // prepare update check info label (invisible by default)
     lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
     lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
@@ -337,8 +352,7 @@ lvwClients->setMinimumHeight ( 140 );
     // update GUI dependencies
     UpdateGUIDependencies();
 
-    // set window title
-    setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
+    UpdateRecorderStatus ( QString::null );
 
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( tr ( "&Window" ), this );
@@ -365,37 +379,36 @@ lvwClients->setMinimumHeight ( 140 );
     // check boxes
     QObject::connect ( chbRegisterServer, &QCheckBox::stateChanged, this, &CServerDlg::OnRegisterServerStateChanged );
 
-    QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged, this, &CServerDlg::OnStartOnOSStartStateChanged );
-
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableRecorderStateChanged );
 
-    // delay panning
+    QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged, this, &CServerDlg::OnStartOnOSStartStateChanged );
+
     QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
 
     // line edits
-    QObject::connect ( edtDirectoryAddress, &QLineEdit::editingFinished, this, &CServerDlg::OnDirectoryAddressEditingFinished );
-
     QObject::connect ( edtServerName, &QLineEdit::textChanged, this, &CServerDlg::OnServerNameTextChanged );
 
     QObject::connect ( edtLocationCity, &QLineEdit::textChanged, this, &CServerDlg::OnLocationCityTextChanged );
 
-    // combo boxes
-    QObject::connect ( cbxLocationCountry,
-                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
-                       this,
-                       &CServerDlg::OnLocationCountryActivated );
+    QObject::connect ( edtCustomDirectory, &QLineEdit::editingFinished, this, &CServerDlg::OnCustomDirectoryEditingFinished );
 
+    // combo boxes
     QObject::connect ( cbxDirectoryType,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
                        &CServerDlg::OnDirectoryTypeActivated );
 
+    QObject::connect ( cbxLocationCountry,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CServerDlg::OnLocationCountryActivated );
+
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CServerDlg::OnLanguageChanged );
 
     // push buttons
-    QObject::connect ( pbtRecordingDir, &QPushButton::released, this, &CServerDlg::OnRecordingDirClicked );
-
     QObject::connect ( pbtNewRecording, &QPushButton::released, this, &CServerDlg::OnNewRecordingClicked );
+
+    QObject::connect ( pbtRecordingDir, &QPushButton::released, this, &CServerDlg::OnRecordingDirClicked );
 
     // tool buttons
     QObject::connect ( tbtClearRecordingDir, &QToolButton::released, this, &CServerDlg::OnClearRecordingDirClicked );
@@ -481,10 +494,10 @@ void CServerDlg::OnRegisterServerStateChanged ( int value )
     UpdateGUIDependencies();
 }
 
-void CServerDlg::OnDirectoryAddressEditingFinished()
+void CServerDlg::OnCustomDirectoryEditingFinished()
 {
     // apply new setting to the server and update it
-    pServer->SetDirectoryAddress ( edtDirectoryAddress->text() );
+    pServer->SetDirectoryAddress ( edtCustomDirectory->text() );
 
     pServer->UpdateServerList();
 }
@@ -702,7 +715,7 @@ void CServerDlg::UpdateGUIDependencies()
 
 void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
 {
-    if ( bSystemTrayIconAvaialbe )
+    if ( bSystemTrayIconAvailable )
     {
         if ( bIsActive )
         {
@@ -818,7 +831,7 @@ void CServerDlg::changeEvent ( QEvent* pEvent )
 {
     // if we have a system tray icon, we make the window invisible if it is
     // minimized
-    if ( bSystemTrayIconAvaialbe && ( pEvent->type() == QEvent::WindowStateChange ) )
+    if ( bSystemTrayIconAvailable && ( pEvent->type() == QEvent::WindowStateChange ) )
     {
         if ( isMinimized() )
         {

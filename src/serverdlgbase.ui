@@ -252,14 +252,14 @@
        <item>
         <layout class="QHBoxLayout">
          <item>
-          <widget class="QLabel" name="lblDirectoryAddress">
+          <widget class="QLabel" name="lblCustomDirectory">
            <property name="text">
             <string>Custom Directory Server Address:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edtDirectoryAddress"/>
+          <widget class="QLineEdit" name="edtCustomDirectory"/>
          </item>
         </layout>
        </item>
@@ -326,7 +326,7 @@
   <tabstop>pbtRecordingDir</tabstop>
   <tabstop>edtRecordingDir</tabstop>
   <tabstop>tbtClearRecordingDir</tabstop>
-  <tabstop>edtDirectoryAddress</tabstop>
+  <tabstop>edtCustomDirectory</tabstop>
   <tabstop>chbStartOnOSStart</tabstop>
  </tabstops>
  <resources>

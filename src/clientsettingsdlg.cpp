@@ -244,6 +244,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                           .arg ( SYSTEM_SAMPLE_RATE_HZ ) +
                                       TOOLTIP_COM_END_TEXT;
 
+    // Sound settings button
+    QString strSystemSndSetup = "<b>" + tr ( "System Sound Settings" ) + ":</b> " +
+                                    tr ( "This opens the sound settings of your system."
+                                         "You can use this to change the Input (Microphone) level" );
+
+    QString strSystemSndSetupTT = tr ( "Opens the System Sound settings." ) +
+                                      TOOLTIP_COM_END_TEXT;
+
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
     rbtBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
@@ -256,6 +264,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
     butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
+    butSoundSetup->setWhatsThis ( strSystemSndSetup );
+    butSoundSetup->setAccessibleName ( tr ( "System Sound Settings push button" ) );
+    butSoundSetup->setToolTip ( strSystemSndSetupTT );
 
     // fancy skin
     lblSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr ( "Select the skin to be used for the main window." ) );
@@ -393,6 +404,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 #else
     // no use for this button for MacOS/Linux right now -> hide it
     butDriverSetup->hide();
+#endif
+
+    // init sound setup button
+#if defined ( _WIN32 ) || defined ( Q_OS_MACX ) || defined ( __linux__ )
+    butSoundSetup->setText ( tr ( "System Sound Settings" ) );
+#else
+    // no use for this button for iOS/Android right now -> hide it
+    butSoundSetup->hide();
 #endif
 
     // init audio in fader
@@ -687,6 +706,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // buttons
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
 
+    QObject::connect ( butSoundSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnSoundSetupClicked );
+
     // misc
     // sliders
     QObject::connect ( sldAudioPan, &QSlider::valueChanged, this, &CClientSettingsDlg::OnAudioPanValueChanged );
@@ -895,6 +916,13 @@ void CClientSettingsDlg::SetEnableFeedbackDetection ( bool enable )
 }
 
 void CClientSettingsDlg::OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
+
+void CClientSettingsDlg::OnSoundSetupClicked()
+{
+    // open sound settings panel in independent process
+    QProcess *detProcess = new QProcess(this);
+    detProcess->startDetached( OpenSoundSettingsCmd );
+}
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {

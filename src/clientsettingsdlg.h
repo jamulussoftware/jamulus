@@ -37,6 +37,7 @@
 #include <QLayout>
 #include <QButtonGroup>
 #include <QMessageBox>
+#include <QProcess>
 #include "global.h"
 #include "util.h"
 #include "client.h"
@@ -68,6 +69,17 @@ protected:
     void    UpdateDirectoryServerComboBox();
     void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
+
+    //Define strings for launching System Sound Setup
+#ifdef _WIN32
+    QString OpenSoundSettingsCmd = "control mmsys.cpl,,1";
+#elif defined ( Q_OS_MACX )
+    QString OpenSoundSettingsCmd = "open /System/Library/PreferencePanes/Sound.prefPane";
+#elif defined ( __linux__ )
+    QString OpenSoundSettingsCmd = "gnome-control-center sound";
+#else
+    QString OpenSoundSettingsCmd = "";
+#endif
 
     virtual void showEvent ( QShowEvent* );
 
@@ -106,6 +118,7 @@ public slots:
     void OnTabChanged();
     void OnMakeTabChange ( int iTabIdx );
     void OnAudioPanValueChanged ( int value );
+    void OnSoundSetupClicked();
 
 signals:
     void GUIDesignChanged();

@@ -70,12 +70,12 @@ protected:
     void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
-    //Define strings for launching System Sound Setup
+    // Define strings for launching System Sound Setup
 #ifdef _WIN32
     QString OpenSoundSettingsCmd = "control mmsys.cpl,,1";
-#elif defined ( Q_OS_MACX )
+#elif defined( Q_OS_MACX )
     QString OpenSoundSettingsCmd = "open /System/Library/PreferencePanes/Sound.prefPane";
-#elif defined ( __linux__ )
+#elif defined( __linux__ )
     QString OpenSoundSettingsCmd = "gnome-control-center sound";
 #else
     QString OpenSoundSettingsCmd = "";

@@ -246,11 +246,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // Sound settings button
     QString strSystemSndSetup = "<b>" + tr ( "System Sound Settings" ) + ":</b> " +
-                                    tr ( "This opens the sound settings of your system."
-                                         "You can use this to change the Input (Microphone) level" );
+                                tr ( "This opens the sound settings of your system."
+                                     "You can use this to change the Input (Microphone) level" );
 
-    QString strSystemSndSetupTT = tr ( "Opens the System Sound settings." ) +
-                                      TOOLTIP_COM_END_TEXT;
+    QString strSystemSndSetupTT = tr ( "Opens the System Sound settings." ) + TOOLTIP_COM_END_TEXT;
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
@@ -407,7 +406,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 #endif
 
     // init sound setup button
-#if defined ( _WIN32 ) || defined ( Q_OS_MACX ) || defined ( __linux__ )
+#if defined( _WIN32 ) || defined( Q_OS_MACX ) || defined( __linux__ )
     butSoundSetup->setText ( tr ( "System Sound Settings" ) );
 #else
     // no use for this button for iOS/Android right now -> hide it
@@ -920,8 +919,8 @@ void CClientSettingsDlg::OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup
 void CClientSettingsDlg::OnSoundSetupClicked()
 {
     // open sound settings panel in independent process
-    QProcess *detProcess = new QProcess(this);
-    detProcess->startDetached( OpenSoundSettingsCmd );
+    QProcess* detProcess = new QProcess ( this );
+    detProcess->startDetached ( OpenSoundSettingsCmd );
 }
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )

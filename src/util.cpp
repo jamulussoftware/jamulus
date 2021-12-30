@@ -410,17 +410,17 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
     // libraries used by this compilation
     txvLibraries->setText ( tr ( "This app uses the following libraries, resources or code snippets:" ) + "<br><p>" +
                             tr ( "Qt cross-platform application framework" ) +
-                            ", <i><a href=\"http://www.qt.io\">http://www.qt.io</a></i></p>"
+                            ", <i><a href=\"https://www.qt.io\">https://www.qt.io</a></i></p>"
                             "<p>Opus Interactive Audio Codec"
-                            ", <i><a href=\"http://www.opus-codec.org\">http://www.opus-codec.org</a></i></p>"
+                            ", <i><a href=\"https://www.opus-codec.org\">https://www.opus-codec.org</a></i></p>"
                             "<p>" +
                             tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-                            ", 1995 - 2004, <i><a href=\"http://ccrma.stanford.edu/software/stk\">"
+                            ", 1995 - 2021, <i><a href=\"https://ccrma.stanford.edu/software/stk\">"
                             "The Synthesis ToolKit in C++ (STK)</a></i></p>"
                             "<p>" +
                             tr ( "Some pixmaps are from the" ) +
                             " Open Clip Art Library (OCAL), "
-                            "<i><a href=\"http://openclipart.org\">http://openclipart.org</a></i></p>"
+                            "<i><a href=\"https://openclipart.org\">https://openclipart.org</a></i></p>"
                             "<p>" +
                             tr ( "Flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" );
 
@@ -1855,12 +1855,12 @@ void CLocale::LoadTranslation ( const QString strLanguage, QCoreApplication* pAp
 /******************************************************************************\
 * Global Functions Implementation                                              *
 \******************************************************************************/
-QString GetVersionAndNameStr ( const bool bWithHtml )
+QString GetVersionAndNameStr ( const bool bDisplayInGui )
 {
     QString strVersionText = "";
 
     // name, short description and GPL hint
-    if ( bWithHtml )
+    if ( bDisplayInGui )
     {
         strVersionText += "<b>";
     }
@@ -1875,7 +1875,7 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
 
     strVersionText += APP_NAME + QCoreApplication::tr ( ", Version " ) + VERSION;
 
-    if ( bWithHtml )
+    if ( bDisplayInGui )
     {
         strVersionText += "</b><br>";
     }
@@ -1884,18 +1884,47 @@ QString GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n *** ";
     }
 
-    if ( !bWithHtml )
+    if ( !bDisplayInGui )
     {
         strVersionText += QCoreApplication::tr ( "Internet Jam Session Software" );
         strVersionText += "\n *** ";
     }
 
-    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License version 2 (GPLv2)" );
+    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License version 2 or later (GPLv2)" );
 
-    if ( !bWithHtml )
+    if ( !bDisplayInGui )
     {
+        // additional text to show in console output
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Using Qt " ) + QT_VERSION_STR;
+        strVersionText += "<https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "This program is free software; you can redistribute it and/or modify it under" );
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "the terms of the GNU General Public License as published by the Free Software" );
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Foundation; either version 2 of the License, or (at your option) any later version." );
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "There is NO WARRANTY, to the extent permitted by law." );
+        strVersionText += "\n *** ";
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Using the following libraries, resources or code snippets:" );
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Qt framework " ) + QT_VERSION_STR;
+        strVersionText += " <https://doc.qt.io/qt-5/lgpl.html>";
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Opus Interactive Audio Codec" );
+        strVersionText += " <https://www.opus-codec.org>";
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" );
+        strVersionText += " <https://ccrma.stanford.edu/software/stk>";
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Some pixmaps are from the Open Clip Art Library (OCAL)" );
+        strVersionText += " <https://openclipart.org>";
+        strVersionText += "\n *** ";
+        strVersionText += QCoreApplication::tr ( "Flag icons by Mark James" );
+        strVersionText += " <http://www.famfamfam.com>";
+        strVersionText += "\n *** ";
         strVersionText += "\n *** ";
         strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2021 The Jamulus Development Team" );
     }

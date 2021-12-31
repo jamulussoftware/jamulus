@@ -413,6 +413,7 @@ FunctionEnd
             MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(JACK_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
                 Abort
        SkipMessage:
+            StrCpy $bRunApp "0" ; set the run app after install option to unchecked as there is no audio driver
 
     FunctionEnd
 !else
@@ -457,6 +458,7 @@ FunctionEnd
         ${EndIf}
 
         SkipMessage:
+            StrCpy $bRunApp "0" ; set the run app after install option to unchecked as there is no audio driver
 
     FunctionEnd
 !endif

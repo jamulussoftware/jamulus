@@ -124,8 +124,8 @@ public:
         bConnectDlgShowAllMusicians ( true ),
         eChannelSortType ( ST_NO_SORT ),
         iNumMixerPanelRows ( 1 ),
-        vstrCentralServerAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-        eCentralServerAddressType ( AT_DEFAULT ),
+        vstrDirectoryAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+        eDirectoryType ( AT_DEFAULT ),
         bEnableFeedbackDetection ( true ),
         vecWindowPosSettings(), // empty array
         vecWindowPosChat(),     // empty array
@@ -133,6 +133,7 @@ public:
         bWindowWasShownSettings ( false ),
         bWindowWasShownChat ( false ),
         bWindowWasShownConnect ( false ),
+        bOwnFaderFirst ( false ),
         pClient ( pNCliP )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
@@ -155,9 +156,9 @@ public:
     bool             bConnectDlgShowAllMusicians;
     EChSortType      eChannelSortType;
     int              iNumMixerPanelRows;
-    CVector<QString> vstrCentralServerAddress;
-    ECSAddType       eCentralServerAddressType;
-    int              iCustomDirectoryIndex; // index of selected custom central server
+    CVector<QString> vstrDirectoryAddress;
+    EDirectoryType   eDirectoryType;
+    int              iCustomDirectoryIndex; // index of selected custom directory server
     bool             bEnableFeedbackDetection;
 
     // window position/state settings
@@ -167,6 +168,7 @@ public:
     bool       bWindowWasShownSettings;
     bool       bWindowWasShownChat;
     bool       bWindowWasShownConnect;
+    bool       bOwnFaderFirst;
 
 protected:
     // No CommandLineOptions used when reading Client inifile

@@ -100,7 +100,7 @@
                   <item>
                    <widget class="QLabel" name="plblCountry">
                     <property name="text">
-                     <string>Country</string>
+                     <string>Country/Region</string>
                     </property>
                    </widget>
                   </item>
@@ -222,6 +222,13 @@
                    </widget>
                   </item>
                   <item>
+                   <widget class="QLabel" name="lblMeterStyle">
+                    <property name="text">
+                     <string>Meter Style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QLabel" name="lblLanguage">
                     <property name="text">
                      <string>Language</string>
@@ -241,6 +248,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
                    <widget class="QComboBox" name="cbxSkin"/>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="cbxMeterStyle"/>
                   </item>
                   <item>
                    <widget class="CLanguageComboBox" name="cbxLanguage">
@@ -286,7 +296,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>40</height>
+               <height>14</height>
               </size>
              </property>
             </spacer>
@@ -957,14 +967,14 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="lblCentralServerAddress">
+              <widget class="QLabel" name="lblCustomDirectories">
                <property name="text">
                 <string>Custom Directories:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="cbxCentralServerAddress">
+              <widget class="QComboBox" name="cbxCustomDirectories">
                <property name="editable">
                 <bool>true</bool>
                </property>
@@ -1270,6 +1280,7 @@
   <tabstop>pedtCity</tabstop>
   <tabstop>pcbxSkill</tabstop>
   <tabstop>cbxSkin</tabstop>
+  <tabstop>cbxMeterStyle</tabstop>
   <tabstop>cbxLanguage</tabstop>
   <tabstop>spnMixerRows</tabstop>
   <tabstop>cbxSoundcard</tabstop>
@@ -1287,7 +1298,7 @@
   <tabstop>sldNetBuf</tabstop>
   <tabstop>sldNetBufServer</tabstop>
   <tabstop>chbEnableOPUS64</tabstop>
-  <tabstop>cbxCentralServerAddress</tabstop>
+  <tabstop>cbxCustomDirectories</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>cbxInputBoost</tabstop>
   <tabstop>chbDetectFeedback</tabstop>

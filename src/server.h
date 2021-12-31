@@ -158,7 +158,7 @@ public:
               const quint16      iPortNumber,
               const quint16      iQosNumber,
               const QString&     strHTMLStatusFileName,
-              const QString&     strCentralServer,
+              const QString&     strDirectoryServer,
               const QString&     strServerListFileName,
               const QString&     strServerInfo,
               const QString&     strServerListFilter,
@@ -218,19 +218,19 @@ public:
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
 
-    void UnregisterSlaveServer() { ServerListManager.SlaveServerUnregister(); }
+    void Unregister() { ServerListManager.Unregister(); }
 
-    void SetServerListEnabled ( const bool bState ) { ServerListManager.SetEnabled ( bState ); }
+    void SetServerRegistered ( const bool bState ) { ServerListManager.SetEnabled ( bState ); }
 
-    bool GetServerListEnabled() { return ServerListManager.GetEnabled(); }
+    bool GetServerRegistered() { return ServerListManager.GetEnabled(); }
 
-    void SetServerListCentralServerAddress ( const QString& sNCentServAddr ) { ServerListManager.SetCentralServerAddress ( sNCentServAddr ); }
+    void SetDirectoryAddress ( const QString& sNDirectoryAddress ) { ServerListManager.SetDirectoryAddress ( sNDirectoryAddress ); }
 
-    QString GetServerListCentralServerAddress() { return ServerListManager.GetCentralServerAddress(); }
+    QString GetDirectoryAddress() { return ServerListManager.GetDirectoryAddress(); }
 
-    void SetCentralServerAddressType ( const ECSAddType eNCSAT ) { ServerListManager.SetCentralServerAddressType ( eNCSAT ); }
+    void SetDirectoryType ( const EDirectoryType eNCSAT ) { ServerListManager.SetDirectoryType ( eNCSAT ); }
 
-    ECSAddType GetCentralServerAddressType() { return ServerListManager.GetCentralServerAddressType(); }
+    EDirectoryType GetDirectoryType() { return ServerListManager.GetDirectoryType(); }
 
     void SetServerName ( const QString& strNewName ) { ServerListManager.SetServerName ( strNewName ); }
 
@@ -420,9 +420,9 @@ public slots:
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
-    void OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
+    void OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
 
-    void OnProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
+    void OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr );
 
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs ) { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
 
@@ -435,13 +435,13 @@ public slots:
     {
         // only send empty message if server list is enabled and this is not
         // a directory server
-        if ( ServerListManager.GetEnabled() && !ServerListManager.GetIsCentralServer() )
+        if ( ServerListManager.GetEnabled() && !ServerListManager.IsDirectoryServer() )
         {
             ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr );
         }
     }
 
-    void OnCLReqServerList ( CHostAddress InetAddr ) { ServerListManager.CentralServerQueryServerList ( InetAddr ); }
+    void OnCLReqServerList ( CHostAddress InetAddr ) { ServerListManager.RetrieveAll ( InetAddr ); }
 
     void OnCLReqVersionAndOS ( CHostAddress InetAddr ) { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
 
@@ -449,7 +449,7 @@ public slots:
 
     void OnCLRegisterServerReceived ( CHostAddress InetAddr, CHostAddress LInetAddr, CServerCoreInfo ServerInfo )
     {
-        ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
+        ServerListManager.Append ( InetAddr, LInetAddr, ServerInfo );
     }
 
     void OnCLRegisterServerExReceived ( CHostAddress    InetAddr,
@@ -458,12 +458,12 @@ public slots:
                                         COSUtil::EOpSystemType,
                                         QString strVersion )
     {
-        ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo, strVersion );
+        ServerListManager.Append ( InetAddr, LInetAddr, ServerInfo, strVersion );
     }
 
     void OnCLRegisterServerResp ( CHostAddress /* unused */, ESvrRegResult eResult ) { ServerListManager.StoreRegistrationResult ( eResult ); }
 
-    void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) { ServerListManager.CentralServerUnregisterServer ( InetAddr ); }
+    void OnCLUnregisterServerReceived ( CHostAddress InetAddr ) { ServerListManager.Remove ( InetAddr ); }
 
     void OnCLDisconnection ( CHostAddress InetAddr );
 

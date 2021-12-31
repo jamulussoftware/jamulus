@@ -92,7 +92,7 @@ int main ( int argc, char** argv )
     QString      strHTMLStatusFileName       = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
-    QString      strCentralServer            = "";
+    QString      strDirectoryServer          = "";
     QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
@@ -204,8 +204,8 @@ int main ( int argc, char** argv )
         // Directory server ----------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-e", "--directoryserver", strArgument ) )
         {
-            strCentralServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strCentralServer ) );
+            strDirectoryServer = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
             CommandLineOptions << "--directoryserver";
             ServerOnlyOptions << "--directoryserver";
             continue;
@@ -219,8 +219,8 @@ int main ( int argc, char** argv )
                                  "--centralserver",
                                  strArgument ) )
         {
-            strCentralServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strCentralServer ) );
+            strDirectoryServer = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
             CommandLineOptions << "--directoryserver";
             ServerOnlyOptions << "--directoryserver";
             continue;
@@ -592,12 +592,12 @@ int main ( int argc, char** argv )
 
         if ( bUseGUI )
         {
-            if ( strCentralServer.isEmpty() )
+            if ( strDirectoryServer.isEmpty() )
             {
                 // per definition: if we are in "GUI" server mode and no directory server
                 // address is given, we use the default directory server address
-                strCentralServer = DEFAULT_SERVER_ADDRESS;
-                qInfo() << qUtf8Printable ( QString ( "- default directory server set: %1" ).arg ( strCentralServer ) );
+                strDirectoryServer = DEFAULT_SERVER_ADDRESS;
+                qInfo() << qUtf8Printable ( QString ( "- default directory server set: %1" ).arg ( strDirectoryServer ) );
             }
         }
         else
@@ -609,7 +609,7 @@ int main ( int argc, char** argv )
             }
         }
 
-        if ( strCentralServer.isEmpty() )
+        if ( strDirectoryServer.isEmpty() )
         {
             // per definition, we must be a headless server and ignoring inifile, so we have all the information
 
@@ -636,7 +636,7 @@ int main ( int argc, char** argv )
             // either we are not headless and there is an inifile, or a directory server was supplied on the command line
 
             // if we are not headless, certain checks cannot be made, as the inifile state is not yet known
-            if ( !bUseGUI && strCentralServer.compare ( "localhost", Qt::CaseInsensitive ) != 0 && strCentralServer.compare ( "127.0.0.1" ) != 0 )
+            if ( !bUseGUI && strDirectoryServer.compare ( "localhost", Qt::CaseInsensitive ) != 0 && strDirectoryServer.compare ( "127.0.0.1" ) != 0 )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
@@ -852,7 +852,7 @@ int main ( int argc, char** argv )
                              iPortNumber,
                              iQosNumber,
                              strHTMLStatusFileName,
-                             strCentralServer,
+                             strDirectoryServer,
                              strServerListFileName,
                              strServerInfo,
                              strServerPublicIP,
@@ -902,7 +902,7 @@ int main ( int argc, char** argv )
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
                 // enable server list if a directory server is defined
-                Server.SetServerListEnabled ( !strCentralServer.isEmpty() );
+                Server.SetServerRegistered ( !strDirectoryServer.isEmpty() );
 
                 // update serverlist
                 Server.UpdateServerList();

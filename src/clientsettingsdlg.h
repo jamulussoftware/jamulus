@@ -65,7 +65,7 @@ public:
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
-    void    UpdateCustomCentralServerComboBox();
+    void    UpdateDirectoryServerComboBox();
     void    UpdateAudioFaderSlider();
     QString GenSndCrdBufferDelayString ( const int iFrameSize, const QString strAddText = "" );
 
@@ -83,7 +83,7 @@ public slots:
     void OnAutoJitBufStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnFeedbackDetectionChanged ( int value );
-    void OnCentralServerAddressEditingFinished();
+    void OnCustomDirectoriesEditingFinished();
     void OnNewClientLevelEditingFinished() { pSettings->iNewClientFaderLevel = edtNewClientLevel->text().toInt(); }
     void OnInputBoostChanged();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
@@ -95,6 +95,7 @@ public slots:
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnGUIDesignActivated ( int iDesignIdx );
+    void OnMeterStyleActivated ( int iMeterStyleIdx );
     void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnAliasTextChanged ( const QString& strNewName );
@@ -108,7 +109,8 @@ public slots:
 
 signals:
     void GUIDesignChanged();
+    void MeterStyleChanged();
     void AudioChannelsChanged();
-    void CustomCentralServerAddrChanged();
+    void CustomDirectoriesChanged();
     void NumMixerPanelRowsChanged ( int value );
 };

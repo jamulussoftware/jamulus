@@ -408,91 +408,91 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                         "</font></p>" );
 
     // libraries used by this compilation
-    txvLibraries->setText (
-        tr ( "This app uses the following libraries, resources or code snippets:" ) + "<br><p>" + tr ( "Qt cross-platform application framework" ) +
-        ", <i><a href=\"http://www.qt.io\">http://www.qt.io</a></i></p>"
-        "<p>Opus Interactive Audio Codec"
-        ", <i><a href=\"http://www.opus-codec.org\">http://www.opus-codec.org</a></i></p>"
-        "<p>" +
-        tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
-        ", 1995 - 2004, <i><a href=\"http://ccrma.stanford.edu/software/stk\">"
-        "The Synthesis ToolKit in C++ (STK)</a></i></p>"
-        "<p>" +
-        tr ( "Some pixmaps are from the" ) +
-        " Open Clip Art Library (OCAL), "
-        "<i><a href=\"http://openclipart.org\">http://openclipart.org</a></i></p>"
-        "<p>" +
-        tr ( "Country flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" );
+    txvLibraries->setText ( tr ( "This app uses the following libraries, resources or code snippets:" ) + "<br><p>" +
+                            tr ( "Qt cross-platform application framework" ) +
+                            ", <i><a href=\"http://www.qt.io\">http://www.qt.io</a></i></p>"
+                            "<p>Opus Interactive Audio Codec"
+                            ", <i><a href=\"http://www.opus-codec.org\">http://www.opus-codec.org</a></i></p>"
+                            "<p>" +
+                            tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
+                            ", 1995 - 2004, <i><a href=\"http://ccrma.stanford.edu/software/stk\">"
+                            "The Synthesis ToolKit in C++ (STK)</a></i></p>"
+                            "<p>" +
+                            tr ( "Some pixmaps are from the" ) +
+                            " Open Clip Art Library (OCAL), "
+                            "<i><a href=\"http://openclipart.org\">http://openclipart.org</a></i></p>"
+                            "<p>" +
+                            tr ( "Flag icons by Mark James" ) + ", <i><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></i></p>" );
 
     // contributors list
-    txvContributors->setText ( "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
-                               "<p>Peter L. Jones (<a href=\"https://github.com/pljones\">pljones</a>)</p>"
-                               "<p>Jonathan Baker-Bates (<a href=\"https://github.com/gilgongo\">gilgongo</a>)</p>"
-                               "<p>ann0see (<a href=\"https://github.com/ann0see\">ann0see</a>)</p>"
-                               "<p>Daniele Masato (<a href=\"https://github.com/doloopuntil\">doloopuntil</a>)</p>"
-                               "<p>Martin Schilde (<a href=\"https://github.com/geheimerEichkater\">geheimerEichkater</a>)</p>"
-                               "<p>Simon Tomlinson (<a href=\"https://github.com/sthenos\">sthenos</a>)</p>"
-                               "<p>Marc jr. Landolt (<a href=\"https://github.com/braindef\">braindef</a>)</p>"
-                               "<p>Olivier Humbert (<a href=\"https://github.com/trebmuh\">trebmuh</a>)</p>"
-                               "<p>Tarmo Johannes (<a href=\"https://github.com/tarmoj\">tarmoj</a>)</p>"
-                               "<p>mirabilos (<a href=\"https://github.com/mirabilos\">mirabilos</a>)</p>"
-                               "<p>Hector Martin (<a href=\"https://github.com/marcan\">marcan</a>)</p>"
-                               "<p>newlaurent62 (<a href=\"https://github.com/newlaurent62\">newlaurent62</a>)</p>"
-                               "<p>AronVietti (<a href=\"https://github.com/AronVietti\">AronVietti</a>)</p>"
-                               "<p>Emlyn Bolton (<a href=\"https://github.com/emlynmac\">emlynmac</a>)</p>"
-                               "<p>Jos van den Oever (<a href=\"https://github.com/vandenoever\">vandenoever</a>)</p>"
-                               "<p>Tormod Volden (<a href=\"https://github.com/tormodvolden\">tormodvolden</a>)</p>"
-                               "<p>Alberstein8 (<a href=\"https://github.com/Alberstein8\">Alberstein8</a>)</p>"
-                               "<p>Gauthier Fleutot Östervall (<a href=\"https://github.com/fleutot\">fleutot</a>)</p>"
-                               "<p>Tony Mountifield (<a href=\"https://github.com/softins\">softins</a>)</p>"
-                               "<p>HPS (<a href=\"https://github.com/hselasky\">hselasky</a>)</p>"
-                               "<p>Stanislas Michalak (<a href=\"https://github.com/stanislas-m\">stanislas-m</a>)</p>"
-                               "<p>JP Cimalando (<a href=\"https://github.com/jpcima\">jpcima</a>)</p>"
-                               "<p>Adam Sampson (<a href=\"https://github.com/atsampson\">atsampson</a>)</p>"
-                               "<p>Jakob Jarmar (<a href=\"https://github.com/jarmar\">jarmar</a>)</p>"
-                               "<p>Stefan Weil (<a href=\"https://github.com/stweil\">stweil</a>)</p>"
-                               "<p>Nils Brederlow (<a href=\"https://github.com/dingodoppelt\">dingodoppelt</a>)</p>"
-                               "<p>Sebastian Krzyszkowiak (<a href=\"https://github.com/dos1\">dos1</a>)</p>"
-                               "<p>Bryan Flamig (<a href=\"https://github.com/bflamig\">bflamig</a>)</p>"
-                               "<p>Kris Raney (<a href=\"https://github.com/kraney\">kraney</a>)</p>"
-                               "<p>dszgit (<a href=\"https://github.com/dszgit\">dszgit</a>)</p>"
-                               "<p>nefarius2001 (<a href=\"https://github.com/nefarius2001\">nefarius2001</a>)</p>"
-                               "<p>jc-Rosichini (<a href=\"https://github.com/jc-Rosichini\">jc-Rosichini</a>)</p>"
-                               "<p>Julian Santander (<a href=\"https://github.com/j-santander\">j-santander</a>)</p>"
-                               "<p>chigkim (<a href=\"https://github.com/chigkim\">chigkim</a>)</p>"
-                               "<p>Bodo (<a href=\"https://github.com/bomm\">bomm</a>)</p>"
-                               "<p>Christian Hoffmann (<a href=\"https://github.com/hoffie\">hoffie</a>)</p>"
-                               "<p>jp8 (<a href=\"https://github.com/jp8\">jp8</a>)</p>"
-                               "<p>James (<a href=\"https://github.com/jdrage\">jdrage</a>)</p>"
-                               "<p>ranfdev (<a href=\"https://github.com/ranfdev\">ranfdev</a>)</p>"
-                               "<p>bspeer (<a href=\"https://github.com/bspeer\">bspeer</a>)</p>"
-                               "<p>Martin Passing (<a href=\"https://github.com/passing\">passing</a>)</p>"
-                               "<p>DonC (<a href=\"https://github.com/dcorson-ticino-com\">dcorson-ticino-com</a>)</p>"
-                               "<p>David Kastrup (<a href=\"https://github.com/dakhubgit\">dakhubgit</a>)</p>"
-                               "<p>Jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
-                               "<p>Noam Postavsky (<a href=\"https://github.com/npostavs\">npostavs</a>)</p>"
-                               "<p>David Savinkoff (<a href=\"https://github.com/DavidSavinkoff\">DavidSavinkoff</a>)</p>"
-                               "<p>Johannes Brauers (<a href=\"https://github.com/JohannesBrx\">JohannesBrx</a>)</p>"
-                               "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
-                               "<p>Ferenc Wágner (<a href=\"https://github.com/wferi\">wferi</a>)</p>"
-                               "<p>Martin Kaistra (<a href=\"https://github.com/djfun\">djfun</a>)</p>"
-                               "<p>Burkhard Volkemer (<a href=\"https://github.com/buv\">buv</a>)</p>"
-                               "<p>Magnus Groß (<a href=\"https://github.com/vimpostor\">vimpostor</a>)</p>"
-                               "<p>Julien Taverna (<a href=\"https://github.com/jujudusud\">jujudusud</a>)</p>"
-                               "<p>Detlef Hennings (<a href=\"https://github.com/DetlefHennings\">DetlefHennings</a>)</p>"
-                               "<p>drummer1154 (<a href=\"https://github.com/drummer1154\">drummer1154</a>)</p>"
-                               "<p>helgeerbe (<a href=\"https://github.com/helgeerbe\">helgeerbe</a>)</p>"
-                               "<p>Hk1020 (<a href=\"https://github.com/Hk1020\">Hk1020</a>)</p>"
-                               "<p>Jeroen van Veldhuizen (<a href=\"https://github.com/jeroenvv\">jeroenvv</a>)</p>"
-                               "<p>Reinhard (<a href=\"https://github.com/reinhardwh\">reinhardwh</a>)</p>"
-                               "<p>Stefan Menzel (<a href=\"https://github.com/menzels\">menzels</a>)</p>"
-                               "<p>Dau Huy Ngoc (<a href=\"https://github.com/ngocdh\">ngocdh</a>)</p>"
-                               "<p>Jiri Popek (<a href=\"https://github.com/jardous\">jardous</a>)</p>"
-                               "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
-                               "<br>" +
-                               tr ( "For details on the contributions check out the " ) +
-                               "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) +
-                               "</a>." );
+    txvContributors->setText (
+        "<p>Volker Fischer (<a href=\"https://github.com/corrados\">corrados</a>)</p>"
+        "<p>Peter L. Jones (<a href=\"https://github.com/pljones\">pljones</a>)</p>"
+        "<p>Jonathan Baker-Bates (<a href=\"https://github.com/gilgongo\">gilgongo</a>)</p>"
+        "<p>ann0see (<a href=\"https://github.com/ann0see\">ann0see</a>)</p>"
+        "<p>Daniele Masato (<a href=\"https://github.com/doloopuntil\">doloopuntil</a>)</p>"
+        "<p>Martin Schilde (<a href=\"https://github.com/geheimerEichkater\">geheimerEichkater</a>)</p>"
+        "<p>Simon Tomlinson (<a href=\"https://github.com/sthenos\">sthenos</a>)</p>"
+        "<p>Marc jr. Landolt (<a href=\"https://github.com/braindef\">braindef</a>)</p>"
+        "<p>Olivier Humbert (<a href=\"https://github.com/trebmuh\">trebmuh</a>)</p>"
+        "<p>Tarmo Johannes (<a href=\"https://github.com/tarmoj\">tarmoj</a>)</p>"
+        "<p>mirabilos (<a href=\"https://github.com/mirabilos\">mirabilos</a>)</p>"
+        "<p>Hector Martin (<a href=\"https://github.com/marcan\">marcan</a>)</p>"
+        "<p>newlaurent62 (<a href=\"https://github.com/newlaurent62\">newlaurent62</a>)</p>"
+        "<p>AronVietti (<a href=\"https://github.com/AronVietti\">AronVietti</a>)</p>"
+        "<p>Emlyn Bolton (<a href=\"https://github.com/emlynmac\">emlynmac</a>)</p>"
+        "<p>Jos van den Oever (<a href=\"https://github.com/vandenoever\">vandenoever</a>)</p>"
+        "<p>Tormod Volden (<a href=\"https://github.com/tormodvolden\">tormodvolden</a>)</p>"
+        "<p>Alberstein8 (<a href=\"https://github.com/Alberstein8\">Alberstein8</a>)</p>"
+        "<p>Gauthier Fleutot Östervall (<a href=\"https://github.com/fleutot\">fleutot</a>)</p>"
+        "<p>Tony Mountifield (<a href=\"https://github.com/softins\">softins</a>)</p>"
+        "<p>HPS (<a href=\"https://github.com/hselasky\">hselasky</a>)</p>"
+        "<p>Stanislas Michalak (<a href=\"https://github.com/stanislas-m\">stanislas-m</a>)</p>"
+        "<p>JP Cimalando (<a href=\"https://github.com/jpcima\">jpcima</a>)</p>"
+        "<p>Adam Sampson (<a href=\"https://github.com/atsampson\">atsampson</a>)</p>"
+        "<p>Jakob Jarmar (<a href=\"https://github.com/jarmar\">jarmar</a>)</p>"
+        "<p>Stefan Weil (<a href=\"https://github.com/stweil\">stweil</a>)</p>"
+        "<p>Nils Brederlow (<a href=\"https://github.com/dingodoppelt\">dingodoppelt</a>)</p>"
+        "<p>Sebastian Krzyszkowiak (<a href=\"https://github.com/dos1\">dos1</a>)</p>"
+        "<p>Bryan Flamig (<a href=\"https://github.com/bflamig\">bflamig</a>)</p>"
+        "<p>Kris Raney (<a href=\"https://github.com/kraney\">kraney</a>)</p>"
+        "<p>dszgit (<a href=\"https://github.com/dszgit\">dszgit</a>)</p>"
+        "<p>nefarius2001 (<a href=\"https://github.com/nefarius2001\">nefarius2001</a>)</p>"
+        "<p>jc-Rosichini (<a href=\"https://github.com/jc-Rosichini\">jc-Rosichini</a>)</p>"
+        "<p>Julian Santander (<a href=\"https://github.com/j-santander\">j-santander</a>)</p>"
+        "<p>chigkim (<a href=\"https://github.com/chigkim\">chigkim</a>)</p>"
+        "<p>Bodo (<a href=\"https://github.com/bomm\">bomm</a>)</p>"
+        "<p>Christian Hoffmann (<a href=\"https://github.com/hoffie\">hoffie</a>)</p>"
+        "<p>jp8 (<a href=\"https://github.com/jp8\">jp8</a>)</p>"
+        "<p>James (<a href=\"https://github.com/jdrage\">jdrage</a>)</p>"
+        "<p>ranfdev (<a href=\"https://github.com/ranfdev\">ranfdev</a>)</p>"
+        "<p>bspeer (<a href=\"https://github.com/bspeer\">bspeer</a>)</p>"
+        "<p>Martin Passing (<a href=\"https://github.com/passing\">passing</a>)</p>"
+        "<p>DonC (<a href=\"https://github.com/dcorson-ticino-com\">dcorson-ticino-com</a>)</p>"
+        "<p>David Kastrup (<a href=\"https://github.com/dakhubgit\">dakhubgit</a>)</p>"
+        "<p>Jordan Lum (<a href=\"https://github.com/mulyaj\">mulyaj</a>)</p>"
+        "<p>Noam Postavsky (<a href=\"https://github.com/npostavs\">npostavs</a>)</p>"
+        "<p>David Savinkoff (<a href=\"https://github.com/DavidSavinkoff\">DavidSavinkoff</a>)</p>"
+        "<p>Johannes Brauers (<a href=\"https://github.com/JohannesBrx\">JohannesBrx</a>)</p>"
+        "<p>Henk De Groot (<a href=\"https://github.com/henkdegroot\">henkdegroot</a>)</p>"
+        "<p>Ferenc Wágner (<a href=\"https://github.com/wferi\">wferi</a>)</p>"
+        "<p>Martin Kaistra (<a href=\"https://github.com/djfun\">djfun</a>)</p>"
+        "<p>Burkhard Volkemer (<a href=\"https://github.com/buv\">buv</a>)</p>"
+        "<p>Magnus Groß (<a href=\"https://github.com/vimpostor\">vimpostor</a>)</p>"
+        "<p>Julien Taverna (<a href=\"https://github.com/jujudusud\">jujudusud</a>)</p>"
+        "<p>Detlef Hennings (<a href=\"https://github.com/DetlefHennings\">DetlefHennings</a>)</p>"
+        "<p>drummer1154 (<a href=\"https://github.com/drummer1154\">drummer1154</a>)</p>"
+        "<p>helgeerbe (<a href=\"https://github.com/helgeerbe\">helgeerbe</a>)</p>"
+        "<p>Hk1020 (<a href=\"https://github.com/Hk1020\">Hk1020</a>)</p>"
+        "<p>Jeroen van Veldhuizen (<a href=\"https://github.com/jeroenvv\">jeroenvv</a>)</p>"
+        "<p>Reinhard (<a href=\"https://github.com/reinhardwh\">reinhardwh</a>)</p>"
+        "<p>Stefan Menzel (<a href=\"https://github.com/menzels\">menzels</a>)</p>"
+        "<p>Dau Huy Ngoc (<a href=\"https://github.com/ngocdh\">ngocdh</a>)</p>"
+        "<p>Jiri Popek (<a href=\"https://github.com/jardous\">jardous</a>)</p>"
+        "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
+        "<br>" +
+        tr ( "For details on the contributions check out the %1" )
+            .arg ( "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." ) );
 
     // translators
     txvTranslation->setText ( "<p><b>" + tr ( "Spanish" ) +
@@ -543,7 +543,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
     lblVersion->setText ( GetVersionAndNameStr() );
 
     // set window title
-    setWindowTitle ( tr ( "About " ) + APP_NAME );
+    setWindowTitle ( tr ( "About %1" ).arg ( APP_NAME ) );
 }
 
 // Licence dialog --------------------------------------------------------------
@@ -666,6 +666,19 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
         emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
     }
 }
+
+static inline QString TruncateString ( QString str, int position )
+{
+    QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
+
+    tbfString.setPosition ( position );
+    if ( !tbfString.isAtBoundary() )
+    {
+        tbfString.toPreviousBoundary();
+        position = tbfString.position();
+    }
+    return str.left ( position );
+}
 #endif
 
 /******************************************************************************\
@@ -691,25 +704,28 @@ bool NetworkUtil::ParseNetworkAddress ( QString strAddress, CHostAddress& HostAd
     // hostname:port
     // (where addr4or6 is a literal IPv4 or IPv6 address, and addr4 is a literal IPv4 address
 
-    bool    bLiteralAddr = false;
-    QRegExp rx1 ( "^\\[([^]]*)\\](?::(\\d+))?$" ); // [addr4or6] or [addr4or6]:port
-    QRegExp rx2 ( "^([^:]*)(?::(\\d+))?$" );       // addr4 or addr4:port or host or host:port
+    bool               bLiteralAddr = false;
+    QRegularExpression rx1 ( "^\\[([^]]*)\\](?::(\\d+))?$" ); // [addr4or6] or [addr4or6]:port
+    QRegularExpression rx2 ( "^([^:]*)(?::(\\d+))?$" );       // addr4 or addr4:port or host or host:port
 
     QString strPort;
 
+    QRegularExpressionMatch rx1match = rx1.match ( strAddress );
+    QRegularExpressionMatch rx2match = rx2.match ( strAddress );
+
     // parse input address with rx1 and rx2 in turn, capturing address/host and port
-    if ( rx1.indexIn ( strAddress ) == 0 )
+    if ( rx1match.capturedStart() == 0 )
     {
         // literal address within []
-        strAddress   = rx1.cap ( 1 );
-        strPort      = rx1.cap ( 2 );
+        strAddress   = rx1match.captured ( 1 );
+        strPort      = rx1match.captured ( 2 );
         bLiteralAddr = true; // don't allow hostname within []
     }
-    else if ( rx2.indexIn ( strAddress ) == 0 )
+    else if ( rx2match.capturedStart() == 0 )
     {
         // hostname or IPv4 address
-        strAddress = rx2.cap ( 1 );
-        strPort    = rx2.cap ( 2 );
+        strAddress = rx2match.captured ( 1 );
+        strPort    = rx2match.captured ( 2 );
     }
     else
     {
@@ -829,12 +845,12 @@ CHostAddress NetworkUtil::GetLocalAddress6()
     }
 }
 
-QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAddressType, const QString& strCentralServerAddress )
+QString NetworkUtil::GetDirectoryAddress ( const EDirectoryType eDirectoryType, const QString& strDirectoryAddress )
 {
-    switch ( eCentralServerAddressType )
+    switch ( eDirectoryType )
     {
     case AT_CUSTOM:
-        return strCentralServerAddress;
+        return strDirectoryAddress;
     case AT_ANY_GENRE2:
         return CENTSERV_ANY_GENRE2;
     case AT_ANY_GENRE3:
@@ -1086,6 +1102,9 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bRe
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Vibraphone" ),
                                            ":/png/instr/res/instruments/vibraphone.png",
                                            IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CClientSettingsDlg", "Conductor" ),
+                                           ":/png/instr/res/instruments/conductor.png",
+                                           IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;

@@ -3569,7 +3569,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../../serverdlg.cpp" line="195"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation>%1 ist der Name der Hauptanwendung</translation>
+        <translation>%1 Server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="328"/>
@@ -3580,7 +3580,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../../serverdlg.cpp" line="341"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation>%1 ist der Name der Hauptanwendung</translation>
+        <translation>%1 Server</translation>
     </message>
     <message>
         <source>software upgrade available</source>

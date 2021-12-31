@@ -402,7 +402,14 @@ win32 {
         icons.path = $$ICONSDIR
         icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
 
-        INSTALLS += target desktop icons
+        isEmpty(MANDIR) {
+            MANDIR = share/man/man1
+        }
+        MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
+        man.path = $$MANDIR
+        man.files = distributions/Jamulus.1
+
+        INSTALLS += target desktop icons man
     }
 }
 
@@ -749,6 +756,10 @@ DISTFILES += ChangeLog \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/LEDBlackSmall.png \
+    src/res/LEDGreenSmall.png \
+    src/res/LEDRedSmall.png \
+    src/res/LEDYellowSmall.png \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
@@ -777,6 +788,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/bassguitar.png \
     src/res/instruments/cello.png \
     src/res/instruments/clarinet.png \
+    src/res/instruments/conductor.png \
     src/res/instruments/djembe.png \
     src/res/instruments/doublebass.png \
     src/res/instruments/drumset.png \

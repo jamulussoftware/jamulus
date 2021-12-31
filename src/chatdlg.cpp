@@ -114,11 +114,21 @@ void CChatDlg::AddChatText ( QString strChatText )
     // analyze strChatText to check if hyperlink (limit ourselves to http(s)://) but do not
     // replace the hyperlinks if any HTML code for a hyperlink was found (the user has done the HTML
     // coding hisself and we should not mess with that)
-    if ( !strChatText.contains ( QRegExp ( "href\\s*=|src\\s*=" ) ) )
+    if ( !strChatText.contains ( QRegularExpression ( "href\\s*=|src\\s*=" ) ) )
     {
         // searches for all occurrences of http(s) and cuts until a space (\S matches any non-white-space
         // character and the + means that matches the previous element one or more times.)
-        strChatText.replace ( QRegExp ( "(https?://\\S+)" ), "<a href=\"\\1\">\\1</a>" );
+        // This regex now contains three parts:
+        // - https?://\\S+ matches as much non-whitespace as possible after the http:// or https://,
+        //   subject to the next two parts, which exclude terminating punctuation
+        // - (?<![!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
+        //   from ending with one of the characters !"'()+,.:;<=>?[]{}
+        // - (?<!\\?[!\"'()+,.:;<=>?\\[\\]{}]) is a negative look-behind assertion that disallows the match
+        //   from ending with a ? followed by one of the characters !"'()+,.:;<=>?[]{}
+        // These last two parts must be separate, as a look-behind assertion must be fixed length.
+#define PUNCT_NOEND_URL "[!\"'()+,.:;<=>?\\[\\]{}]"
+        strChatText.replace ( QRegularExpression ( "(https?://\\S+(?<!" PUNCT_NOEND_URL ")(?<!\\?" PUNCT_NOEND_URL "))" ),
+                              "<a href=\"\\1\">\\1</a>" );
     }
 
     // add new text in chat window

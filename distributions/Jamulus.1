@@ -1,0 +1,300 @@
+.\" Manual page for Jamulus
+.\" Copyright (c) 2021
+.\"     mirabilos <tg@debian.org>
+.\" Published under the same terms as Jamulus itself.
+.\"-
+.Dd December 23, 2021
+.Dt JAMULUS 1
+.Os
+.Sh NAME
+.Nm Jamulus
+.Nd real-time collaborative music session
+.Sh SYNOPSIS
+.Nm
+.Op Fl 6 | Fl \-enableipv6
+.Op Fl c | Fl \-connect Ar address
+.Op Fl d | Fl \-discononquit
+.Op Fl e | Fl \-directoryserver Ar hostname
+.Op Fl F | Fl \-fastupdate
+.Op Fl f | Fl \-listfilter Ar filter
+.Op Fl h | Fl \&? | Fl \-help
+.Op Fl i | Fl \-inifile Ar file
+.Op Fl j | Fl \-nojackconnect
+.Op Fl L | Fl \-licence
+.Op Fl l | Fl \-log Ar file
+.Op Fl M | Fl \-mutestream
+.Op Fl m | Fl \-htmlstatus Ar file
+.Op Fl n | Fl \-nogui
+.Op Fl o | Fl \-serverinfo Ar info
+.Op Fl P | Fl \-delaypan
+.Op Fl p | Fl \-port Ar number
+.Op Fl Q | Fl \-qos Ar value
+.Op Fl R | Fl \-recording Ar directory
+.Op Fl s | Fl \-server
+.Op Fl T | Fl \-multithreading
+.Op Fl t | Fl \-notranslation
+.Op Fl u | Fl \-numchannels
+.Op Fl v | Fl \-version
+.Op Fl w | Fl \-welcomemessage Ar message
+.Op Fl z | Fl \-startminimized
+.Op Fl \-centralserver Ar hostname
+.Op Fl \-clientname Ar name
+.Op Fl \-ctrlmidich Ar MIDISetup
+.Op Fl \-directoryfile Ar file
+.Op Fl \-mutemyown
+.Op Fl \-norecord
+.Op Fl \-serverbindip Ar ip
+.Op Fl \-serverpublicip Ar ip
+.Op Fl \-showallservers
+.Op Fl \-showanalyzerconsole
+.Sh DESCRIPTION
+.Nm Jamulus ,
+a low-latency audio client and server, enables musicians to perform real-time
+.Dq jam
+sessions over the internet.
+It is available across multiple platforms, so participants of any field
+can communicate without specialist setup requirements.
+This is not restricted to music, of course; other use
+.Pq perhaps conferencing?
+is also possible.
+.Pp
+One participant starts
+.Nm
+in server mode, ideally on a dedicated server (virtual) machine;
+all participants start the (graphical) client which transmits audio
+to the server, receiving back a mixed stream.
+Use of a metronome is recommended.
+Clients should be connected using ethernet, not wireless, and use
+proper headphone and microphone connections, not Bluetooth.
+The server should run on a low-latency system, ideally not a VM.
+.Pp
+Running
+.Nm
+without any extra options launches the full graphical client.
+.Pp
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl 6 | Fl \-enableipv6
+enable IPv6 support
+.It Fl c | Fl \-connect Ar address
+.Pq client mode only
+connect to the given server
+.Ar address
+.Pq Ar hostname Ns Op Ar :port
+at startup
+.It Fl d | Fl \-discononquit
+.Pq server mode only
+disconnect all clients on quit
+.It Fl e | Fl \-directoryserver Ar hostname
+.Pq server mode only
+make the server public and set its genre by setting the address
+of the directory server (formerly central server) to use to
+.Ar hostname ;
+see also
+.Fl o ;
+to be a directory server, use
+.Dq Li localhost
+.It Fl F | Fl \-fastupdate
+.Pq server mode only
+use 64 samples frame size mode, which reduces latency if clients connect with
+.Dq enable small network buffers
+turned on; requires a faster CPU to avoid dropouts and uses more bandwidth to
+connected clients
+.It Fl f | Fl \-listfilter Ar filter
+.Pq directory server mode only
+whitelist which servers are allowed to register on the server list;
+.Ar filter
+must consist of semicolon-separated IP addresses
+.It Fl h | Fl \&? | Fl \-help
+display a short help text and exit immediately
+.It Fl i | Fl \-inifile Ar file
+.Pq client and non-headless server mode only
+override default initialisation file with
+.Ar file
+.It Fl j | Fl \-nojackconnect
+.Pq client mode only
+do not automatically connect to JACK
+.It Fl L | Fl \-licence
+.Pq server mode only
+require clients to accept the agreement shown in the welcome message
+.Pq use Fl w No to set the text
+before they are allowed joining
+.It Fl l | Fl \-log Ar file
+.Pq server mode only
+enable logging to
+.Ar file
+.It Fl M | Fl \-mutestream
+.Pq client mode only
+start in muted state
+.It Fl m | Fl \-htmlstatus Ar file
+.Pq server mode only
+write server status and list of connected clients, in HTML format, to
+.Ar file
+periodically
+.It Fl n | Fl \-nogui
+disable the GUI
+.It Fl o | Fl \-serverinfo Ar info
+.Pq public servers only
+set server location details, formatted as
+.Sm off
+.Xo
+.Ar name Li \&;
+.Ar city Li \&;
+.Ar locale
+.Xc
+.Sm on
+where
+.Ar locale
+is the numeric value of a
+.Li QLocale ;
+see
+.Pa https://doc.qt.io/qt\-5/qlocale.html#Country\-enum
+for a list
+.It Fl P | Fl \-delaypan
+.Pq server mode only
+start with delay panning enabled
+.It Fl p | Fl \-port Ar number
+set the local UDP port to use to
+.Ar number
+.Pq default: 22124
+.It Fl Q | Fl \-qos Ar value
+set QoS
+.Ar value
+.Pq iptos byte
+to use
+.Pq default: 128
+.It Fl R | Fl \-recording Ar directory
+.Pq server mode only
+enable recording
+.Pq but see Fl \-norecord
+storing tracks in
+.Ar directory
+.It Fl s | Fl \-server
+start in server mode
+.It Fl T | Fl \-multithreading
+.Pq server mode only
+use multithreading to make better use of multi-core CPUs and
+support more clients
+.It Fl t | Fl \-notranslation
+disable translations, use built-in English strings
+.It Fl u | Fl \-numchannels
+.Pq server mode only
+set maximum number of channels
+.Pq and , therefore , users ;
+default is 10, maximum is 150
+.It Fl v | Fl \-version
+display version information and exit immediately
+.It Fl w | Fl \-welcomemessage Ar message
+.Pq server mode only
+show
+.Ar message
+.Pq may contain HTML and inline CSS
+to users on connect
+.It Fl z | Fl \-startminimized
+.Pq server mode only
+start with minimised window
+.It Fl \-centralserver Ar hostname
+.Pq server mode only
+deprecated alias for
+.Fl \-directoryserver
+.It Fl \-clientname Ar name
+.Pq client mode only
+set window title and JACK client name
+.It Fl \-ctrlmidich Ar MIDISetup
+.Pq client mode only
+set MIDI controller channel to listen on, control number offset and
+consecutive CC numbers (channels); format:
+.Sm off
+.Xo
+.Ar channel
+.Op Li \&;f Ar off Li \&* Ar nchans
+.Op Li \&;p Ar off Li \&* Ar nchans
+.Op Li \&;s Ar off Li \&* Ar nchans
+.Op Li \&;m Ar off Li \&* Ar nchans
+.Xc
+.Sm on
+.Pp
+The first semicolon-separated element sets the MIDI channel
+.Nm
+listens on for control messages.
+The other elements specify the items to control by their
+first literal letter (f\ =\ volume fader, p\ =\ pan, m\ =\ mute,
+s\ =\ solo) directly followed by the offset (CC number) to start from,
+a literal asterisk, and the amount of consecutive CC numbers to assign.
+Fader strips in the mixer window are controlled in ascending order from
+left to right.
+.Nm
+does not provide feedback as to the current state of the Solo and Mute
+buttons so the controller must track and signal their state locally.
+.It Fl \-directoryfile Ar file
+.Pq directory server mode only
+enable server list persistence, storing to and loading from
+.Ar file
+.It Fl \-mutemyown
+.Pq headless client only
+mute my channel in my personal mix
+.It Fl \-norecord
+.Pq server mode only
+do not automatically start recording even if configured with
+.Fl R
+.It Fl \-serverbindip Ar ip
+.Pq server mode only
+configure Legacy IP address to bind to
+.It Fl \-serverpublicip Ar ip
+.Pq server mode only
+configure public Legacy IP address when both the directory server
+and the actual server are situated behind the same NAT, so that
+clients can connect
+.It Fl \-showallservers
+.Pq client mode only
+show all registered servers in the serverlist regardless whether a ping
+to the server is possible or not
+.Pq debugging command
+.It Fl \-showanalyzerconsole
+.Pq client mode only
+show analyser console to debug network buffer properties
+.Pq debugging command
+.El
+.Pp
+Note that the debugging commands are not intended for general use.
+.Pp
+.Nm Jamulus
+knows four modes of operation: client mode and three kinds of server
+.Pq private , public , directory .
+A private server is unlisted, clients can only connect if given
+the address (IP address and port).
+A public server will contact a directory server (whose address must be
+given at server startup) and show up in that server's list; clients
+can retrieve a list of public servers from the directory server.
+Several public directory servers are operated by the Jamulus project;
+there is a directory server for each genre, which is how public Jamulus
+servers are categorised into genres.
+.Sh SEE ALSO
+.Xr qjackctl 1
+.Bl -tag -width Ds
+.It Pa https://jamulus.io/wiki/Software\-Manual
+online handbook
+.It Pa https://jamulus.io/wiki/FAQ
+frequently asked questions
+.It Pa https://jamulus.io/wiki/Running\-a\-Server
+documentation on server configuration and types
+.It Pa https://jamulus.io/wiki/Server\-Linux#running\-in\-public\-mode
+current list of directory servers operated by the Jamulus project,
+controlling the
+.Dq genre
+.It Pa https://jamulus.io/wiki/Tips\-Tricks\-More
+verbose
+.Fl \-ctrlmidich
+documentation and other more or less useful information
+.El
+.Sh AUTHORS
+.An -nosplit
+.An mirabilos Aq tg@debian.org
+wrote this manual page for the Debian project,
+but it may be used elsewhere as well.
+.Sh BUGS
+This manual page was derived from the source code and summarises
+some of the information from the website, but it could be more helpful.
+.Pp
+Some of the networking code assumes Legacy IP
+.Pq IPv4 .

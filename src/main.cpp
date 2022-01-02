@@ -94,6 +94,7 @@ int main ( int argc, char** argv )
     QString      strRecordingDirName         = "";
     QString      strDirectoryServer          = "";
     QString      strServerListFileName       = "";
+    QString      strStreamDest               = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
     QString      strServerBindIP             = "";
@@ -336,6 +337,23 @@ int main ( int argc, char** argv )
             ServerOnlyOptions << "--recording";
             continue;
         }
+
+
+        // Stream destination ---------------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--streamto", // no short form
+                                 "--streamto",
+                                 strArgument ) )
+        {
+            strStreamDest = strArgument;
+            qInfo() << qUtf8Printable( QString( "- stream destination: %1" )
+                .arg( strStreamDest ) );
+            CommandLineOptions << "--streamto";
+            continue;
+        }
+
 
         // Disable recording on startup ----------------------------------------
         if ( GetFlagArgument ( argv,
@@ -859,6 +877,7 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             strStreamDest,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
@@ -985,6 +1004,8 @@ QString UsageArguments ( char** argv )
            "  -w, --welcomemessage  welcome message to display on connect\n"
            "                        (string or filename)\n"
            "  -z, --startminimized  start minimizied\n"
+           "      --streamto        pass ffmpeg output arguments to stream a stereo mix\n"
+           "                        from the server (see \"ffmpeg -h\" for reference)\n"
            "\n"
            "Client only:\n"
            "  -c, --connect         connect to given server address on startup\n"

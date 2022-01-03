@@ -406,10 +406,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 #endif
 
     // init sound setup button
-#if defined( _WIN32 ) || defined( Q_OS_MACX ) || defined( __linux__ )
+#if defined( _WIN32 ) || defined( Q_OS_MACX )
     butSoundSetup->setText ( tr ( "System Sound Settings" ) );
 #else
-    // no use for this button for iOS/Android right now -> hide it
+    // no use for this button for Linux/iOS/Android right now -> hide it
     butSoundSetup->hide();
 #endif
 

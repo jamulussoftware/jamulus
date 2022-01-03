@@ -75,8 +75,6 @@ protected:
     QString OpenSoundSettingsCmd = "control mmsys.cpl,,1";
 #elif defined( Q_OS_MACX )
     QString OpenSoundSettingsCmd = "open /System/Library/PreferencePanes/Sound.prefPane";
-#elif defined( __linux__ )
-    QString OpenSoundSettingsCmd = "gnome-control-center sound";
 #else
     QString OpenSoundSettingsCmd = "";
 #endif

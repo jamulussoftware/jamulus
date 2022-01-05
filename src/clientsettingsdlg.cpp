@@ -132,7 +132,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     cbxSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
     // set Windows specific tool tip
     cbxSoundcard->setToolTip ( tr ( "If the ASIO4ALL driver is used, "
                                     "please note that this driver usually introduces approx. 10-30 ms of "
@@ -388,10 +388,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
     // init driver button
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
     butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
 #else
-    // no use for this button for MacOS/Linux right now -> hide it
+    // no use for this button for MacOS/Linux right now or when using JACK -> hide it
     butDriverSetup->hide();
 #endif
 

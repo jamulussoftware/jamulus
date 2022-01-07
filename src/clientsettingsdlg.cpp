@@ -117,13 +117,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer switch" ) );
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
 
+#if !defined( WITH_JACK )
     // sound card device
     lblSoundcardDevice->setWhatsThis ( "<b>" +
-                                       QString ( tr ( "Sound Card Device" ) + ":</b> " +
-                                                 tr ( "The ASIO driver (sound card) can be selected using "
-                                                      "%1 under the Windows operating system. Under macOS/Linux, no sound "
-                                                      "card selection is possible. If the selected ASIO driver is not valid "
-                                                      "an error message is shown and the previous valid driver is selected." ) )
+                                       QString ( tr ( "Device" ) + ":</b> " +
+                                                 tr ( "Under the Windows operating system the ASIO driver (sound card) can be "
+                                                      "selected using %1. If the selected ASIO driver is not valid an error "
+                                                      "message is shown and the previous valid driver is selected. "
+                                                      "Under macOS the input and output hardware can be selected." ) )
                                            .arg ( APP_NAME ) +
                                        "<br>" +
                                        tr ( "If the driver is selected during an active connection, the connection "
@@ -132,7 +133,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     cbxSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
 
-#if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
+#    if defined( _WIN32 )
     // set Windows specific tool tip
     cbxSoundcard->setToolTip ( tr ( "If the ASIO4ALL driver is used, "
                                     "please note that this driver usually introduces approx. 10-30 ms of "
@@ -143,7 +144,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                     "driver, make sure to connect the ASIO inputs in the kX DSP settings "
                                     "panel." ) +
                                TOOLTIP_COM_END_TEXT );
-#endif
+#    endif
 
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = "<b>" + tr ( "Sound Card Channel Mapping" ) + ":</b> " +
@@ -166,6 +167,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxLOutChan->setAccessibleName ( tr ( "Left output channel selection combo box" ) );
     cbxROutChan->setWhatsThis ( strSndCrdChanMapp );
     cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
+#endif
 
     // enable OPUS64
     chbEnableOPUS64->setWhatsThis (
@@ -229,6 +231,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                       .arg ( APP_NAME ) +
                                   TOOLTIP_COM_END_TEXT;
 
+#if defined( _WIN32 ) && !defined( WITH_JACK )
     // Driver setup button
     QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b> " +
                                     tr ( "This opens the driver settings of your sound card. Some drivers "
@@ -243,6 +246,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                           .arg ( APP_NAME )
                                           .arg ( SYSTEM_SAMPLE_RATE_HZ ) +
                                       TOOLTIP_COM_END_TEXT;
+#endif
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
@@ -253,9 +257,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
+
+#if defined( _WIN32 ) && !defined( WITH_JACK )
     butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
     butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
+#endif
 
     // fancy skin
     lblSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr ( "Select the skin to be used for the main window." ) );
@@ -388,7 +395,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
     // init driver button
-#if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
+#if defined( _WIN32 ) && !defined( WITH_JACK )
     butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
 #else
     // no use for this button for MacOS/Linux right now or when using JACK -> hide it
@@ -685,7 +692,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        &CClientSettingsDlg::OnInputBoostChanged );
 
     // buttons
+#if defined( _WIN32 ) && !defined( WITH_JACK )
+    // Driver Setup button is only available for Windows when JACK is not used
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
+#endif
 
     // misc
     // sliders
@@ -894,7 +904,9 @@ void CClientSettingsDlg::SetEnableFeedbackDetection ( bool enable )
     chbDetectFeedback->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
 }
 
+#if defined( _WIN32 ) && !defined( WITH_JACK )
 void CClientSettingsDlg::OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
+#endif
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {

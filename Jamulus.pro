@@ -157,7 +157,11 @@ win32 {
         MACOSX_BUNDLE_ICON.path = Contents/Resources
         QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
     } else {
-        QMAKE_INFO_PLIST = mac/Info-make.plist
+        equals(QT_VERSION, "5.9.9") {
+            QMAKE_INFO_PLIST = mac/Info-make-legacy.plist
+        } else {
+            QMAKE_INFO_PLIST = mac/Info-make.plist
+        }
     }
 
     LIBS += -framework CoreFoundation \

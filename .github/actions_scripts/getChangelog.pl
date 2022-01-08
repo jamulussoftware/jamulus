@@ -11,13 +11,20 @@ my $SingleLineEntries = ($FormatOption or '') eq '--line-per-entry';
 
 my $logversion = "";
 my $entry;
+my $matchedLogversion = 0;
 while (my $line = <$fh>) {
    if ($line =~ /^### (\S+)[^#]*###$/m) {
        # The version for this section of the ChangeLog
+       if ($matchedLogversion) {
+           # We've processed the lines corresponding to $Version, and
+           # we're now on the next section.  There's no more to do.
+           last;
+       }
        $logversion = $1;
        next;
    }
    if ($logversion eq $Version) {
+       $matchedLogversion = 1;
        if ($SingleLineEntries) {
            if ($line =~ /^- (.*)$/) { # beginning of entry
                $entry = $1;
@@ -32,4 +39,9 @@ while (my $line = <$fh>) {
        }
    }
 }
+
 close $fh;
+
+if (!$matchedLogversion) {
+    die "Failed to find entry for version '${Version}'";
+}

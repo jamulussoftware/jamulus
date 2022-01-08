@@ -58,13 +58,10 @@ Function Get-RedirectedUrl {
     )
 
     $request = [System.Net.WebRequest]::Create($url)
-    $request.AllowAutoRedirect=$false
+    $request.AllowAutoRedirect=$true
     $response=$request.GetResponse()
-
-    if ($response.StatusCode -eq "Found")
-    {
-        $response.GetResponseHeader("Location")
-    }
+    $response.ResponseUri.AbsoluteUri
+    $response.Close()
 }
 
 function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402

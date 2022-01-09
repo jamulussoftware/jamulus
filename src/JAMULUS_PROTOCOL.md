@@ -45,7 +45,6 @@ Client Session with a Server
 As the protocol is connectionless, the message flow at session start up can happen out of order.  
 When a client starts a session with a server, it sends valid audio packets to the server port, to which the server will respond with the audio mix for that client.
 
-
 The server on a new client connection will:
 * Tell the client connection its ID, with a `CLIENT_ID (0x2000)` message.
 * Reset the connected client list with a `CONN_CLIENTS_LIST (0x1800)` message.
@@ -54,22 +53,24 @@ The server on a new client connection will:
 * Request the number of jitter buffer value to use, with a `REQ_JITT_BUF_SIZE (0x0B00)` message.
 * Request the details of the channel info, with a `REQ_CHANNELS_INFOS (0x1700)` message.
 * Send the version and OS of the server, with a `VERSION_AND_OS (0x1d00)` message.
-This is defined in `CServer::OnNewConnection()`
 
+This is defined in `CServer::OnNewConnection()`
 
 The client on a new connection will:
 * Send its channel info with a `CHANNELS_INFO (0x1900)` message
 * Request the list of connected clients with a `REQ_CONN_CLIENT_LIST (0x1000)` message
 * Set the server-side jitter buffer value with a `JITT_BUF_SIZE (0x0a00)` message
+
 This is defined in `CClient::OnNewConnection()`
 
+At the end of the session, the client calls the `CLM_DISCONNECTION(0xf203)` message, until the server stops streaming audio to it.
 
 A typical flow would be:
 
 ```
  Client                                   Server
-  AUDIO --------------------------------->  |
 
+  AUDIO --------------------------------->  |
     | <------------------------------------ CLIENT_ID (0x2000)           
   ACK(CLIENT_ID) ------------------------>  |
 
@@ -136,9 +137,30 @@ General Streaming Messages
 --
 
 During streaming, the server will periodically send some control messages to the clients.  
-These are:  
-`CLM_CHANNEL_LEVEL_LIST (0xf703)` - to update the VU meters of the channels.  
-`JITT_BUF_SIZE (0x0a00)` - to change the server-side jitter buffer count. This is ACK'd.  
-`CLM_PING_MS (0xe903)` - to ascertain round trip delay.  
-`NETW_TRANSPORT_PROPS (0x1400)` - to change the buffer sizes, channels etc. This is ACK'd.  
-`CHANNEL_GAIN (0x0d00)` - to set the volume level of the chanel on the server for that channel.
+Some typical messages could be:
+
+```
+ Client                                   Server
+
+    | <------------------------------------ CLM_CHANNEL_LEVEL_LIST (0xf703) 
+
+  CHANNEL_GAIN (0x0d00) ----------------->  | 
+
+  CLM_PING_MS (0xe903) ------------------>  | 
+
+    | <------------------------------------ ACK(CHANNEL_GAIN)   
+
+    | <------------------------------------ CLM_PING_MS (0xe903) 
+
+  MUTE_STATE_CHANGED (0x1f00) ----------->  | 
+    | <------------------------------------ ACK(MUTE_STATE_CHANGED) 
+
+  NETW_TRANSPORT_PROPS (0x1400) --------->  | 
+    | <------------------------------------ ACK(NETW_TRANSPORT_PROPS) - Reset audio packet sequencing on change
+
+  CHANNEL_PAN (0x1e00) ------------------>  | 
+    | <------------------------------------ ACK(CHANNEL_PAN)   
+```
+
+Audio Packet Structure
+--

@@ -42,29 +42,93 @@ This forms the data component of the packet above.
 
 Client Session with a Server
 --
-When a client starts a session with a server, it should start sending valid audio packets to the server port.
+As the protocol is connectionless, the message flow at session start up can happen out of order.  
+When a client starts a session with a server, it sends valid audio packets to the server port, to which the server will respond with the audio mix for that client.
 
-The server sends a `CLIENT_ID (0x2000)` message, with the client's server identifier. This is ACK'd.    
-The server sends a `CONN_CLIENTS_LIST (0x1800)` message, to reset the client's interface. This is ACK'd.  
-The server sends a `REQ_SPLIT_MESSAGE_SUPPORT (0x2200)` message. This is ACK'd.    
-The client sends a `SPLIT_MESS_SUPPORTED (0x2300)` message, which is ACK'd by the server.        
 
-The server sends a `REQ_NETW_TRANSPORT_PROPS (0x1500)` message, which is ACK'd.    
-The client sends a `NETW_TRANSPORT_PROPS (0x1400)` message, with details of the sample rate, channels and codec. This is ACK'd.    
+The server on a new client connection will:
+* Tell the client connection its ID, with a `CLIENT_ID (0x2000)` message.
+* Reset the connected client list with a `CONN_CLIENTS_LIST (0x1800)` message.
+* Determine if the client supports split messages, with a `REQ_SPLIT_MESSAGE_SUPPORT (0x2200)` message.
+* Request the details of the audio packets from the client with a `REQ_NETW_TRANSPORT_PROPS (0x1500)` message,
+* Request the number of jitter buffer value to use, with a `REQ_JITT_BUF_SIZE (0x0B00)` message.
+* Request the details of the channel info, with a `REQ_CHANNELS_INFOS (0x1700)` message.
+* Send the version and OS of the server, with a `VERSION_AND_OS (0x1d00)` message.
+This is defined in `CServer::OnNewConnection()`
 
-The server sends a `REQ_JITT_BUF_SIZE (0x0B00)` message, which is ACK'd.    
-The client sends a `JITT_BUF_SIZE (0x0a00)` message, to set the server's jitter buffer size. The server ACKs this.    
-The server sends a `REQ_CHANNELS_INFOS (0x1700)` message, which is ACK'd.    
-The client sends a `CHANNEL_INFOS (0x1900)` message, with details of the channel strip. The server ACKs this.    
 
-The server may send a `CHAT_TEXT (0x1200)` message, with the contents of the welcome message. This is ACK'd.    
+The client on a new connection will:
+* Send its channel info with a `CHANNELS_INFO (0x1900)` message
+* Request the list of connected clients with a `REQ_CONN_CLIENT_LIST (0x1000)` message
+* Set the server-side jitter buffer value with a `JITT_BUF_SIZE (0x0a00)` message
+This is defined in `CClient::OnNewConnection()`
 
-The client sends a `CHANNEL_INFOS (0x1900)` message, with details of the channel strip. The server ACKs this.    
-The server sends a `VERSION_AND_OS (0x1d00)` message, which the client ACK's.    
 
-The client sends a `REQ_CONN_CLIENT_LIST (0x1000)` message, which the server ACK's.  
-The server responds with a `CONN_CLIENTS_LIST (0x1800)` message, which the client ACK's    
-The server sends a `RECORDER_STATE (0x2100)` message, which the client ACK's.  
+A typical flow would be:
+
+```
+ Client                                   Server
+  AUDIO --------------------------------->  |
+
+    | <------------------------------------ CLIENT_ID (0x2000)           
+  ACK(CLIENT_ID) ------------------------>  |
+
+    | <------------------------------------ CONN_CLIENTS_LIST (0x1800) (Reset to zero) 
+  ACK(CONN_CLIENTS_LIST) ---------------->  |
+
+    | <------------------------------------ REQ_SPLIT_MESSAGE_SUPPORT (0x2200)
+  SPLIT_MESS_SUPPORTED (0x2300) --------->  | 
+  ACK(REQ_SPLIT_MESSAGE_SUPPORT) -------->  |
+    | <------------------------------------ ACK(SPLIT_MESS_SUPPORTED)
+
+    | <------------------------------------ REQ_NETW_TRANSPORT_PROPS (0x1500)  
+  NETW_TRANSPORT_PROPS (0x1400) --------->  | 
+  ACK(REQ_NETW_TRANSPORT_PROPS) --------->  |
+    | <------------------------------------ ACK(NETW_TRANSPORT_PROPS)
+
+    | <------------------------------------ REQ_JITT_BUF_SIZE (0x0B00)   
+  JITT_BUF_SIZE (0x0a00) ---------------->  | 
+  ACK(REQ_JITT_BUF_SIZE) ---------------->  |
+    | <------------------------------------ ACK(JITT_BUF_SIZE)
+
+    | <------------------------------------ REQ_CHANNELS_INFOS (0x1700)
+  CHANNEL_INFOS (0x1900) ---------------->  | 
+  ACK(REQ_CHANNELS_INFOS) --------------->  |
+    | <------------------------------------ ACK(CHANNEL_INFOS)
+
+(Optional welcome message)
+    | <------------------------------------ CHAT_TEXT (0x1200)
+  ACK(CHAT_TEXT) ------------------------>  |
+
+    | <------------------------------------ VERSION_AND_OS (0x1d00)
+  ACK(VERSION_AND_OS) ------------------->  |
+
+  CHANNEL_INFOS (0x1900) ---------------->  | 
+    | <------------------------------------ ACK(CHANNEL_INFOS)
+
+    | <------------------------------------ RECORDER_STATE (0x2100)
+  ACK(RECORDER_STATE) ------------------->  |
+
+
+  REQ_CONNECTED_CLIENTS_LIST (0x1000) ----> |  
+    | <------------------------------------ ACK(REQ_CONNECTED_CLIENTS_LIST)
+
+  REQ_CHANNEL_LEVEL_LIST (0x1c00) --------> |  
+
+  JITT_BUF_SIZE (0x0a00) ---------------->  | 
+    | <------------------------------------ JITT_BUF_SIZE (0x0a00)  
+    | <------------------------------------ ACK(JITT_BUF_SIZE)
+  ACK(JITT_BUF_SIZE) -------------------->  |
+
+    | <------------------------------------ CONN_CLIENTS_LIST (0x1800)
+  ACK(CONN_CLIENTS_LIST) ---------------->  |
+  
+  NETW_TRANSPORT_PROPS (0x1400) --------->  | 
+    | <------------------------------------ CONN_CLIENTS_LIST (0x1800)
+    | <------------------------------------ ACK(NETW_TRANSPORT_PROPS)
+  ACK(CONN_CLIENTS_LIST) ---------------->  | 
+
+```
 
 ---
 

@@ -35,9 +35,7 @@
 
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
-        <file>res/CLEDGreenArrow.png</file>
         <file>res/CLEDGreenSmall.png</file>
-        <file>res/CLEDGreyArrow.png</file>
         <file>res/CLEDGreySmall.png</file>
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellowSmall.png</file>
@@ -121,6 +119,8 @@
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>
         <file>res/fronticonserver.png</file>
+        <file>res/servertrayiconactive.png</file>
+        <file>res/servertrayiconinactive.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>

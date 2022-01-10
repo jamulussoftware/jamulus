@@ -97,7 +97,7 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, c
     return ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) / iFrameSize;
 }
 
-QString GetVersionAndNameStr ( const bool bWithHtml = true );
+QString GetVersionAndNameStr ( const bool bDisplayInGui = true );
 QString MakeClientNameTitle ( QString win, QString client );
 
 /******************************************************************************\

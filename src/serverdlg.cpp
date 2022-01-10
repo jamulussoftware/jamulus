@@ -29,8 +29,8 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     CBaseDlg ( parent, Qt::Window ), // use Qt::Window to get min/max window buttons
     pServer ( pNServP ),
     pSettings ( pNSetP ),
-    BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),
-    BitmapSystemTrayActive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
+    BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/main/res/servertrayiconinactive.png" ) ),
+    BitmapSystemTrayActive ( QString::fromUtf8 ( ":/png/main/res/servertrayiconactive.png" ) )
 {
     // check if system tray icon can be used
     bSystemTrayIconAvailable = SystemTrayIcon.isSystemTrayAvailable();

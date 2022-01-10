@@ -96,7 +96,6 @@ public slots:
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnGUIDesignActivated ( int iDesignIdx );
     void OnMeterStyleActivated ( int iMeterStyleIdx );
-    void OnDriverSetupClicked();
     void OnLanguageChanged ( QString strLanguage ) { pSettings->strLanguage = strLanguage; }
     void OnAliasTextChanged ( const QString& strNewName );
     void OnInstrumentActivated ( int iCntryListItem );
@@ -106,6 +105,11 @@ public slots:
     void OnTabChanged();
     void OnMakeTabChange ( int iTabIdx );
     void OnAudioPanValueChanged ( int value );
+
+#if defined( _WIN32 ) && !defined( WITH_JACK )
+    // Only include this slot for Windows when JACK is NOT used
+    void OnDriverSetupClicked();
+#endif
 
 signals:
     void GUIDesignChanged();

@@ -21,6 +21,7 @@
 !define APP_EXE           "${APP_NAME}.exe"
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define APP_UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
+!define APP_URL           "https://jamulus.io"
 
 !define SF_USELECTED  0
 
@@ -183,6 +184,10 @@ Var bRunApp
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "DisplayName"     "${APP_NAME}"
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "DisplayIcon"     "$INSTDIR\${APP_EXE},0"
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "UninstallString" '"$INSTDIR\${UNINSTALL_EXE}"'
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "DisplayVersion"  "${APP_VERSION}"
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "HelpLink"        "${APP_URL}"
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "URLInfoAbout"    "${APP_URL}"
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "Publisher"       "${APP_NAME}"
 
     ; Add the uninstaller
     WriteUninstaller "$INSTDIR\${UNINSTALL_EXE}"

@@ -747,10 +747,8 @@ DISTFILES += ChangeLog \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
     src/res/CLEDGreen.png \
-    src/res/CLEDGreenArrow.png \
     src/res/CLEDGreenSmall.png \
     src/res/CLEDGrey.png \
-    src/res/CLEDGreyArrow.png \
     src/res/CLEDGreySmall.png \
     src/res/CLEDRed.png \
     src/res/CLEDRedSmall.png \
@@ -783,6 +781,8 @@ DISTFILES += ChangeLog \
     src/res/mixerboardbackground.png \
     src/res/transparent1x1.png \
     src/res/mutediconorange.png \
+    src/res/servertrayiconactive.png \
+    src/res/servertrayiconinactive.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \

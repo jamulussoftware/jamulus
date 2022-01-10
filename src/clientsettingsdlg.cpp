@@ -188,7 +188,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                 "<br>" + tr ( "Three buffer sizes are supported" ) +
                                 ":<ul>"
                                 "<li>" +
-                                tr ( "64 samples: The preferred setting. Provides the lowest latency "
+                                tr ( "64 samples: Provides the lowest latency "
                                      "but does not work with all sound cards." ) +
                                 "</li>"
                                 "<li>" +

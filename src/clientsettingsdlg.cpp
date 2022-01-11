@@ -119,7 +119,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
 #if !defined( WITH_JACK )
     // sound card device
-    lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Device" ) + ":</b> " +
+    lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Audio Device" ) + ":</b> " +
                                        tr ( "Under the Windows operating system the ASIO driver (sound card) can be "
                                             "selected using %1. If the selected ASIO driver is not valid an error "
                                             "message is shown and the previous valid driver is selected. "

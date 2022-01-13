@@ -149,6 +149,8 @@ void CSound::warnIfNotLowLatency ( oboe::ManagedStream& stream, QString streamNa
     {
         QString latencyMode = ( stream->getPerformanceMode() == oboe::PerformanceMode::None ? "None" : "Power Saving" );
     }
+
+    Q_UNUSED ( streamName );
 }
 
 void CSound::closeStreams()
@@ -294,7 +296,7 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
 
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    std::size_t      to_write = numFrames * oboeStream->getChannelCount();
+    std::size_t      to_write = (std::size_t) numFrames * oboeStream->getChannelCount();
     std::size_t      count    = std::min ( (std::size_t) mOutBuffer.GetAvailData(), to_write );
     CVector<int16_t> outBuffer ( count );
 
@@ -317,10 +319,22 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
 }
 
 // TODO better handling of stream closing errors
-void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result ) { qDebug() << "CSound::onErrorAfterClose"; }
+void CSound::onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result )
+{
+    qDebug() << "CSound::onErrorAfterClose";
+
+    Q_UNUSED ( oboeStream );
+    Q_UNUSED ( result );
+}
 
 // TODO better handling of stream closing errors
-void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result ) { qDebug() << "CSound::onErrorBeforeClose"; }
+void CSound::onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result )
+{
+    qDebug() << "CSound::onErrorBeforeClose";
+
+    Q_UNUSED ( oboeStream );
+    Q_UNUSED ( result );
+}
 
 void CSound::Stats::reset()
 {

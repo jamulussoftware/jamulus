@@ -332,7 +332,7 @@
            <item>
             <widget class="QLabel" name="lblSoundcardDevice">
              <property name="text">
-              <string>Device</string>
+              <string>Audio Device</string>
              </property>
             </widget>
            </item>

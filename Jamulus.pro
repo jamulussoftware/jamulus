@@ -210,8 +210,7 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
-    HEADERS += android/sound.h \
-        android/ring_buffer.h
+    HEADERS += android/sound.h
 
     SOURCES += android/sound.cpp \
         android/androiddebug.cpp

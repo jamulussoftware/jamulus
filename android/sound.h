@@ -29,7 +29,7 @@
 #include "global.h"
 #include <QDebug>
 #include <android/log.h>
-#include "ring_buffer.h"
+#include "buffer.h"
 #include <mutex>
 
 /* Classes ********************************************************************/
@@ -69,10 +69,10 @@ public:
     };
 
 protected:
-    CVector<int16_t>  vecsTmpInputAudioSndCrdStereo;
-    RingBuffer<float> mOutBuffer;
-    int               iOboeBufferSizeMono;
-    int               iOboeBufferSizeStereo;
+    CVector<int16_t> vecsTmpInputAudioSndCrdStereo;
+    CBuffer<int16_t> mOutBuffer;
+    int              iOboeBufferSizeMono;
+    int              iOboeBufferSizeStereo;
 
 private:
     void setupCommonStreamParams ( oboe::AudioStreamBuilder* builder );

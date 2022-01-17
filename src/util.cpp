@@ -1927,6 +1927,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += "\n *** ";
         strVersionText += "\n *** ";
         strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2021 The Jamulus Development Team" );
+        strVersionText += "\n";
     }
 
     return strVersionText;

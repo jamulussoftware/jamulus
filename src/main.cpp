@@ -24,6 +24,7 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <iostream>
 #include "global.h"
 #ifndef HEADLESS
 #    include <QApplication>
@@ -121,15 +122,15 @@ int main ( int argc, char** argv )
         if ( ( !strcmp ( argv[i], "--help" ) ) || ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
             const QString strHelp = UsageArguments ( argv );
-            qInfo() << qUtf8Printable ( strHelp );
+            std::cout << qUtf8Printable ( strHelp );
             exit ( 0 );
         }
 
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) || ( !strcmp ( argv[i], "-v" ) ) )
         {
-            qCritical() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
-            exit ( 1 );
+            std::cout << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+            exit ( 0 );
         }
 
         // Common options:

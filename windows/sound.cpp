@@ -71,8 +71,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
 
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
     {
-        // clean up and return error string
-        asioDrivers->removeCurrentDriver();
+        // Don't unload the driver here, that would prevent the user from reconfiguring the device.
         return tr ( "Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings." );
     }
 

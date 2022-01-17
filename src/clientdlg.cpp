@@ -384,7 +384,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pViewMenu->addSeparator();
 
     // Settings menu  --------------------------------------------------------------
-    QMenu* pSettingsMenu = new QMenu ( tr ( "&Settings" ), this );
+    QMenu* pSettingsMenu = new QMenu ( tr ( "Sett&ings" ), this );
 
     pSettingsMenu->addAction ( tr ( "My &Profile..." ), this, SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
 

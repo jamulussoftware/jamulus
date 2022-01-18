@@ -42,6 +42,11 @@
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
+#if defined( _WIN32 )
+#    include "windows.h"
+#    include "powrprof.h"
+#    pragma comment( lib, "powrprof.lib" )
+#endif
 
 // Implementation **************************************************************
 
@@ -766,6 +771,9 @@ int main ( int argc, char** argv )
 #ifdef _WIN32
     // set application priority class -> high priority
     SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
+
+    // disable power saving to prevent performance/sound issues when running the server minimized in Windows 11
+    PowerSetActiveScheme ( 0, &GUID_MIN_POWER_SAVINGS );
 
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.

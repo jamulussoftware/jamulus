@@ -50,7 +50,8 @@ public:
         QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CSettings::OnAboutToQuit );
     }
 
-    void Load ( const QList<QString> CommandLineOptions );
+    void LoadEarlySettings ( const QList<QString> CommandLineOptions );
+    void LoadLateSettings ( const QList<QString> CommandLineOptions );
     void Save();
 
     // common settings
@@ -58,8 +59,9 @@ public:
     QString    strLanguage;
 
 protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument )                                                  = 0;
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) = 0;
+    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument )                                                       = 0;
+    virtual void ReadEarlySettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) = 0;
+    virtual void ReadLateSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )  = 0;
 
     void ReadFromFile ( const QString& strCurFileName, QDomDocument& XMLDocument );
 
@@ -109,7 +111,7 @@ public slots:
 class CClientSettings : public CSettings
 {
 public:
-    CClientSettings ( CClient* pNCliP, const QString& sNFiName ) :
+    CClientSettings ( const QString& sNFiName ) :
         CSettings(),
         vecStoredFaderTags ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
         vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
@@ -134,10 +136,12 @@ public:
         bWindowWasShownChat ( false ),
         bWindowWasShownConnect ( false ),
         bOwnFaderFirst ( false ),
-        pClient ( pNCliP )
+        pClient ( nullptr )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME );
     }
+
+    void SetClient ( CClient* pNCliP ) { pClient = pNCliP; };
 
     void LoadFaderSettings ( const QString& strCurFileName );
     void SaveFaderSettings ( const QString& strCurFileName );
@@ -173,7 +177,8 @@ public:
 protected:
     // No CommandLineOptions used when reading Client inifile
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& ) override;
+    virtual void ReadEarlySettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& ) override;
+    virtual void ReadLateSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& ) override;
 
     void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
     void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );
@@ -184,14 +189,13 @@ protected:
 class CServerSettings : public CSettings
 {
 public:
-    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) : CSettings(), pServer ( pNSerP )
-    {
-        SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER );
-    }
+    CServerSettings ( const QString& sNFiName ) : CSettings(), pServer ( nullptr ) { SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER ); }
+    void SetServer ( CServer* pNSerP ) { pServer = pNSerP; };
 
 protected:
     virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
+    virtual void ReadEarlySettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
+    virtual void ReadLateSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
 
     CServer* pServer;
 };

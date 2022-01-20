@@ -795,6 +795,18 @@ int main ( int argc, char** argv )
         if ( bIsClient )
         {
             // Client:
+
+            // load settings from init-file (command line options override)
+            CClientSettings Settings ( strIniFileName );
+            Settings.LoadEarlySettings ( CommandLineOptions );
+
+            // load translation
+            if ( bUseGUI && bUseTranslation )
+            {
+                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                CInstPictures::UpdateTableOnLanguageChange();
+            }
+
             // actual client object
             CClient Client ( iPortNumber,
                              iQosNumber,
@@ -805,17 +817,8 @@ int main ( int argc, char** argv )
                              bEnableIPv6,
                              bMuteMeInPersonalMix );
 
-            // load settings from init-file (command line options override)
-            CClientSettings Settings ( &Client, strIniFileName );
-            Settings.Load ( CommandLineOptions );
-
-            // load translation
-            if ( bUseGUI && bUseTranslation )
-            {
-                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                CInstPictures::UpdateTableOnLanguageChange();
-            }
-
+            Settings.SetClient ( &Client );
+            Settings.LoadLateSettings ( CommandLineOptions );
 #ifndef HEADLESS
             if ( bUseGUI )
             {
@@ -846,6 +849,20 @@ int main ( int argc, char** argv )
         else
         {
             // Server:
+
+            CServerSettings Settings ( strIniFileName );
+            if ( bUseGUI )
+            {
+                // load settings from init-file (command line options override)
+                Settings.LoadEarlySettings ( CommandLineOptions );
+
+                // load translation
+                if ( bUseTranslation )
+                {
+                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                }
+            }
+
             // actual server object
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
@@ -872,14 +889,8 @@ int main ( int argc, char** argv )
             if ( bUseGUI )
             {
                 // load settings from init-file (command line options override)
-                CServerSettings Settings ( &Server, strIniFileName );
-                Settings.Load ( CommandLineOptions );
-
-                // load translation
-                if ( bUseGUI && bUseTranslation )
-                {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                }
+                Settings.SetServer ( &Server );
+                Settings.LoadLateSettings ( CommandLineOptions );
 
                 // update server list AFTER restoring the settings from the
                 // settings file

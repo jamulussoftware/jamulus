@@ -25,7 +25,7 @@
 #include "settings.h"
 
 /* Implementation *************************************************************/
-void CSettings::Load ( const QList<QString> CommandLineOptions )
+void CSettings::LoadEarlySettings ( const QList<QString> CommandLineOptions )
 {
     // prepare file name for loading initialization data from XML file and read
     // data from file if possible
@@ -33,7 +33,18 @@ void CSettings::Load ( const QList<QString> CommandLineOptions )
     ReadFromFile ( strFileName, IniXMLDocument );
 
     // read the settings from the given XML file
-    ReadSettingsFromXML ( IniXMLDocument, CommandLineOptions );
+    ReadEarlySettingsFromXML ( IniXMLDocument, CommandLineOptions );
+}
+
+void CSettings::LoadLateSettings ( const QList<QString> CommandLineOptions )
+{
+    // prepare file name for loading initialization data from XML file and read
+    // data from file if possible
+    QDomDocument IniXMLDocument;
+    ReadFromFile ( strFileName, IniXMLDocument );
+
+    // read the settings from the given XML file
+    ReadLateSettingsFromXML ( IniXMLDocument, CommandLineOptions );
 }
 
 void CSettings::Save()
@@ -225,7 +236,7 @@ void CClientSettings::SaveFaderSettings ( const QString& strCurFileName )
     WriteToFile ( strCurFileName, IniXMLDocument );
 }
 
-void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& )
+void CClientSettings::ReadEarlySettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& )
 {
     int  iIdx;
     int  iValue;
@@ -280,6 +291,19 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     if ( GetNumericIniSet ( IniXMLDocument, "client", "numrowsmixpan", 1, 8, iValue ) )
     {
         iNumMixerPanelRows = iValue;
+    }
+}
+
+void CClientSettings::ReadLateSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& )
+{
+    int  iIdx;
+    int  iValue;
+    bool bValue;
+
+    if ( pClient == nullptr )
+    {
+        qCritical() << "CClientSettings::ReadLateSettingsFromXML called without pClient initialized";
+        return;
     }
 
     // name
@@ -761,13 +785,28 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
 }
 
 // Server settings -------------------------------------------------------------
-void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )
+void CServerSettings::ReadEarlySettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )
+{
+    Q_UNUSED ( CommandLineOptions );
+
+    // window position of the main window
+    vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
+
+    // language
+    strLanguage =
+        GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
+}
+
+void CServerSettings::ReadLateSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )
 {
     int  iValue;
     bool bValue;
 
-    // window position of the main window
-    vecWindowPosMain = FromBase64ToByteArray ( GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
+    if ( pServer == nullptr )
+    {
+        qCritical() << "CServerSettings::ReadLateSettingsFromXML called without pServer initialized";
+        return;
+    }
 
     // directory type (note that it is important
     // to set this setting prior to the "directory server address")
@@ -848,10 +887,6 @@ QString directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralser
     {
         pServer->SetWelcomeMessage ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "server", "welcome" ) ) );
     }
-
-    // language
-    strLanguage =
-        GetIniSetting ( IniXMLDocument, "server", "language", CLocale::FindSysLangTransFileName ( CLocale::GetAvailableTranslations() ).first );
 
     // base recording directory
     if ( !CommandLineOptions.contains ( "--recording" ) )

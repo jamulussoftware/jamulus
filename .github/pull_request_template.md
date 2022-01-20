@@ -1,7 +1,9 @@
 <!-- Thank you for working on Jamulus and opening a Pull Request! Please fill the following to make the review process straight forward -->
 
 **Short description of changes**
-<!-- A short description of your changes which might go into the change log -->
+<!-- Explain what your PR does -->
+
+CHANGELOG: <!-- Insert a short, end-user understandable sentence in past tense right here, e.g.: Client: Fixed crash when clicking the connect button too fast -->
 
 **Context: Fixes an issue?**
 <!-- If this fixes an issue, please write Fixes: <issue number here>; if not, please give your PR a context. -->

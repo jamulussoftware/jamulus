@@ -1,6 +1,106 @@
 
-### 3.8.1dev <- NOTE: the release version number will be 3.9.0 ###
+### 3.8.1dev <- NOTE: the release version number will be 3.8.2 ###
 
+- Client: Added Vibraphone to list of instruments (#2043, #2080, #2158).
+  (contributed by @DavidSavinkoff, @softins, photo by @vibraphon)
+
+- Client: On Windows, if no driver found while installing, the "Run Jamulus"
+  option will not be checked (#2103).
+  (contributed by @henkdegroot)
+
+- Client: Fix wrong display of Unicode characters at line wrap (#1994).
+  (contributed by @djfun, @pljones)
+
+- Client: Added selection option for level meter style (#1688).
+  (contributed by @henkdegroot)
+
+- Client: Fixed incorrect operation of feedback detection on first connect in run (#2120).
+  (contributed by @softins)
+
+- Client: Added option always to show one's own fader first (#1809).
+  (contributed by @ngocdh)
+
+- Client: Improved regex to highlight URLs in the chat window, avoiding terminating punctuation.
+  Also migrated from deprecated QRegExp to QRegularExpression, for future compatibility with Qt6 (#2124).
+  (contributed by @softins)
+
+- Client: Added Conductor to list of instruments (#2140).
+  (contributed by @henkdegroot)
+
+- Client: Improved keyboard control of the list of Custom Directories (#2129).
+  (contributed by @pljones)
+
+- Client: Added the connected server name to the heading in the mixer panel (#2173).
+  (contributed by @pljones)
+
+- Client: Enhanced the ASIO driver detection during installation on Windows (#2149).
+  (contributed by @henkdegroot)
+
+- Client: On Windows, hide the ASIO button in the version that uses JACK instead (#2215).
+  (contributed by @henkdegroot)
+
+- Client: Improved the "What's this?" text displayed for Buffer Delay (#2232)
+  (contributed by @henkdegroot)
+
+- Client: Accelerator key clash between Settings button and Settings menu corrected (#2248).
+  (contributed by @henkdegroot)
+
+- Client/Server: Output from --help and --version is now sent to StdOut instead of StdErr (#2244).
+  (contributed by @henkdegroot)
+
+- Client/Server: Improved the version output on the command line to give more detail and Qt version (#2187).
+  (contributed by @henkdegroot)
+
+- Client/Server: Added version and Jamulus URL to the Windows uninstall information registered when installing (#2201).
+  (contributed by @henkdegroot)
+
+- Client/Server: Some improvements to text related to localisation (#2085).
+  (Contributed by @BLumia)
+
+- Server: Fixed incorrect German translation (#2137).
+  (contributed by @rolamos)
+
+- Server: Improved management and allocation of free channels, so that a new client always gets the
+  lowest available channel number. Improves operation of clients with MIDI faders (#2151).
+  (contributed by @softins)
+
+- Server: Improved the icon that is displayed in the Windows system tray for a server (#2231)
+  (contributed by @henkdegroot)
+
+- Android: Some internal improvements to the experimental Android port buffer handling (#1528, #2237).
+  (contributed by @j-santander, @softins)
+
+- Mac Installer: Corrected minimum OS version number for Legacy installer from 10.13 to 10.10.
+  Legacy installer will now install correctly on macOS Yosemite or newer (#2223).
+  (contributed by @softins)
+
+- Windows Installer: Updated NSIS to v3.08 (#2208).
+  (contributed by @ann0see)
+
+- Documentation: Enhanced the iOS compilation guide (#2139).
+  (contributed by @ann0see)
+
+- Documentation: Added a man page for Jamulus, from the Debian project (#2180).
+  (contributed by @mirabilos)
+
+- Internal: Changed "Central" to "Directory" in names of variables and functions (#2079).
+  (contributed by @pljones)
+
+- Internal: Corrected "Protcol" to "Protocol" in names of variables and functions (#2146).
+  (contributed by @atsampson)
+
+- Internal: Some code reordering, particularly of the settings initialisation (#2174, #2177).
+  (contributed by @pljones)
+
+- Internal: Removed unneeded submodules from tools directory, and replaced with a RELATED-PROJECTS
+  document (#2196).
+  (contributed by @softins)
+
+- Internal: Improved generation of the changelog for the Debian package, using dch (#2138).
+  (contributed by @npostavs)
+
+- Internal: Improved powershell redirect handling when building for Windows in Github (#2225).
+  (contributed by @henkdegroot)
 
 ### 3.8.1 (2021-10-23) ###
 

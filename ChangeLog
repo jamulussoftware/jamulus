@@ -1,18 +1,25 @@
 
 ### 3.8.1dev <- NOTE: the release version number will be 3.8.2 ###
 
-- Client: Added Vibraphone to list of instruments (#2043, #2080, #2158).
-  (contributed by @DavidSavinkoff, @softins, photo by @vibraphon)
+- Client: Added selection option for level meter style (#1688).
+  (contributed by @henkdegroot)
 
 - Client: On Windows, if no driver found while installing, the "Run Jamulus"
   option will not be checked (#2103).
   (contributed by @henkdegroot)
+    
+- Client: on macOS, corrected minimum OS version number for Legacy installer from 10.13 to 10.10.
+  Legacy installer will now install correctly on macOS Yosemite or newer (#2223).
+  (contributed by @softins)
+  
+- Client: Added Vibraphone to list of instruments (#2043, #2080, #2158).
+  (contributed by @DavidSavinkoff, @softins, photo by @vibraphon)
+  
+- Client: Added Conductor to list of instruments (#2140).
+  (contributed by @henkdegroot)
 
 - Client: Fix wrong display of Unicode characters at line wrap (#1994).
   (contributed by @djfun, @pljones)
-
-- Client: Added selection option for level meter style (#1688).
-  (contributed by @henkdegroot)
 
 - Client: Fixed incorrect operation of feedback detection on first connect in run (#2120).
   (contributed by @softins)
@@ -23,9 +30,6 @@
 - Client: Improved regex to highlight URLs in the chat window, avoiding terminating punctuation.
   Also migrated from deprecated QRegExp to QRegularExpression, for future compatibility with Qt6 (#2124).
   (contributed by @softins)
-
-- Client: Added Conductor to list of instruments (#2140).
-  (contributed by @henkdegroot)
 
 - Client: Improved keyboard control of the list of Custom Directories (#2129).
   (contributed by @pljones)
@@ -69,10 +73,6 @@
 
 - Android: Some internal improvements to the experimental Android port buffer handling (#1528, #2237).
   (contributed by @j-santander, @softins)
-
-- Mac Installer: Corrected minimum OS version number for Legacy installer from 10.13 to 10.10.
-  Legacy installer will now install correctly on macOS Yosemite or newer (#2223).
-  (contributed by @softins)
 
 - Windows Installer: Updated NSIS to v3.08 (#2208).
   (contributed by @ann0see)

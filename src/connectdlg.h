@@ -31,6 +31,7 @@
 #include <QTimer>
 #include <QLocale>
 #include <QtConcurrent>
+#include <QRegularExpression>
 #include "global.h"
 #include "util.h"
 #include "settings.h"

@@ -28,8 +28,9 @@
   (contributed by @ngocdh)
 
 - Client: Improved regex to highlight URLs in the chat window, avoiding terminating punctuation.
-  Also migrated from deprecated QRegExp to QRegularExpression, for future compatibility with Qt6 (#2124).
-  (contributed by @softins)
+  Also migrated from deprecated QRegExp to QRegularExpression, for future compatibility with
+  Qt6 (#2124, #2272, #2273).
+  (contributed by @softins, @corrados, @hoffie)
 
 - Client: Improved keyboard control of the list of Custom Directories (#2129).
   (contributed by @pljones)

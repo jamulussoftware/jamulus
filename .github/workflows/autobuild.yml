@@ -115,7 +115,7 @@ jobs:
              cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
              cmd3_postbuild:        false
              uses_codeql:           true
-             xcode_version:         11.7
+             xcode_version:         12.1.1
 
            - config_name:           MacOS (artifacts)
              target_os:             macos
@@ -125,7 +125,7 @@ jobs:
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
-             xcode_version:         11.7
+             xcode_version:         12.1.1
 
            - config_name:           MacOS Legacy (artifacts)
              target_os:             macos
@@ -134,9 +134,12 @@ jobs:
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh do_not_sign"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
              uses_codeql:           false
-             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x
-             # This is done by selecting Xcode 11.7 instead of the latest default of 12.x
-             xcode_version:         11.7
+             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
+             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
+             # https://developer.apple.com/support/xcode/
+             # Xcode 12.1.1 is the most-recent 12.1.x release:
+             # https://xcodereleases.com/
+             xcode_version:         12.1.1
 
            - config_name:           Windows (artifact+codeQL)
              target_os:             windows

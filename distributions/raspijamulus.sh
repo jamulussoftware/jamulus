@@ -59,7 +59,7 @@ if [ -d "jack2" ]; then
 else
   git clone https://github.com/jackaudio/jack2.git
   cd jack2
-  git checkout v1.9.12
+  git checkout v1.9.20
   ./waf configure --alsa --prefix=/usr/local --libdir=$(pwd)/build
   ./waf -j${NCORES}
   mkdir build/jack

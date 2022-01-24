@@ -5,7 +5,7 @@ OPUS="opus-1.3.1"
 NCORES=$(nproc)
 
 # install required packages
-pkgs='alsamixergui build-essential qt5-qmake qtdeclarative5-dev qttools5-dev-tools libjack-jackd2-dev libasound2-dev cmake libglib2.0-dev'
+pkgs='alsamixergui build-essential qt5-qmake qtdeclarative5-dev qttools5-dev-tools libasound2-dev cmake libglib2.0-dev'
 if ! dpkg -s $pkgs >/dev/null 2>&1; then
   read -p "Do you want to install missing packages? " -n 1 -r
   echo

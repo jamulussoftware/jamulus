@@ -41,8 +41,8 @@ switch ($BuildOption)
 ###  PROCEDURE  ###
 ###################
 
-# Rename the file
-echo "rename"
+# Copy the file
+echo "copy"
 if ($BuildOption -ne "")
 {
     $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win_${BuildOption}.exe"
@@ -52,7 +52,7 @@ else
     $artifact_deploy_filename = "jamulus_${Env:jamulus_buildversionstring}_win.exe"
 }
 
-echo "rename deploy file to $artifact_deploy_filename"
+echo "copying deploy file to $artifact_deploy_filename"
 cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
 if ( !$? )
 {

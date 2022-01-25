@@ -66,4 +66,3 @@ if ($BuildOption -Eq "jackonwindows")
         throw "32bit jack installation failed with exit code $LastExitCode"
     }
 }
-

@@ -19,7 +19,7 @@ $ErrorActionPreference = "Stop"
 if (("$jamulus_project_path" -eq $null) -or ("$jamulus_project_path" -eq "")) {
     throw "expecting ""jamulus_project_path"" as parameter or ENV"
 } elseif (!(Test-Path -Path $jamulus_project_path)) {
-    throw "non.existing jamulus_project_path: $jamulus_project_path"
+    throw "non-existing jamulus_project_path: $jamulus_project_path"
 } else {
     echo "jamulus_project_path is valid: $jamulus_project_path"
 }

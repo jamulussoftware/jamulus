@@ -667,7 +667,7 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
     }
 }
 
-static inline QString TruncateString ( QString str, int position )
+QString TruncateString ( QString str, int position )
 {
     QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
 

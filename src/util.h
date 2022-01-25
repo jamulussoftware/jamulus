@@ -99,6 +99,9 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, c
 
 QString GetVersionAndNameStr ( const bool bDisplayInGui = true );
 QString MakeClientNameTitle ( QString win, QString client );
+#ifndef HEADLESS
+QString TruncateString ( QString str, int position );
+#endif
 
 /******************************************************************************\
 * CVector Base Class                                                           *

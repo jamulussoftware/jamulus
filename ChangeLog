@@ -18,8 +18,8 @@
 - Client: Added Conductor to list of instruments (#2140).
   (contributed by @henkdegroot)
 
-- Client: Fix wrong display of Unicode characters at line wrap (#1994).
-  (contributed by @djfun, @pljones)
+- Client: Fix wrong display of Unicode characters at line wrap and settings screen (#1994, #2274).
+  (contributed by @djfun, @pljones, @hoffie)
 
 - Client: Fixed incorrect operation of feedback detection on first connect in run (#2120).
   (contributed by @softins)

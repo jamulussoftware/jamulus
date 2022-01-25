@@ -34,6 +34,7 @@
 #include <QAccessible>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include "global.h"
 #include "util.h"
 #include "ui_chatdlgbase.h"

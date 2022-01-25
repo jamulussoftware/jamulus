@@ -45,6 +45,7 @@
 #endif
 #include <QFile>
 #include <QDirIterator>
+#include <QRegularExpression>
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QUrl>

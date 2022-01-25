@@ -2,7 +2,6 @@
 
 # autobuild_3_copy_files: copy the built files to deploy folder
 
-
 ####################
 ###  PARAMETERS  ###
 ####################
@@ -13,6 +12,10 @@ param (
     [string] $jamulus_buildversionstring = $Env:jamulus_buildversionstring,
     [string] $BuildOption = ""
 )
+
+# Fail early on all errors
+$ErrorActionPreference = "Stop"
+
 # Sanity check of parameters
 if (("$jamulus_project_path" -eq $null) -or ("$jamulus_project_path" -eq "")) {
     throw "expecting ""jamulus_project_path"" as parameter or ENV"
@@ -51,6 +54,10 @@ else
 
 echo "rename deploy file to $artifact_deploy_filename"
 cp "$jamulus_project_path\deploy\Jamulus*installer-win.exe" "$jamulus_project_path\deploy\$artifact_deploy_filename"
+if ( !$? )
+{
+		throw "cp failed with exit code $LastExitCode";
+}
 
 
 Function github_output_value

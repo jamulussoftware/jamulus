@@ -10,7 +10,9 @@ on:
 
 jobs:
   check-and-update-copyright-notices:
-    if: ${{ github.event_name == 'push' }}
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,6 +38,7 @@ jobs:
 
   delete-old-pr-branch:
     if: >-
+      github.repository_owner == 'jamulussoftware' &&
       github.event_name == 'pull_request' &&
       startsWith(github.event.pull_request.head.label, 'jamulussoftware:updateCopyrightNotices')
     runs-on: ubuntu-latest

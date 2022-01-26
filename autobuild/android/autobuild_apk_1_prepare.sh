@@ -7,6 +7,8 @@
 ###  PROCEDURE  ###
 ###################
 
+COMMANDLINETOOLS_VERSION=6858069
+ANDROID_NDK_VERSION=r21d
 
 export DEBIAN_FRONTEND="noninteractive"
 echo "::set-env name=DEBIAN_FRONTEND::${DEBIAN_FRONTEND}"
@@ -18,8 +20,9 @@ sudo apt-get -qq -y install build-essential git zip unzip bzip2 p7zip-full wget 
 
 # Add Android tools and platform tools to PATH
 export ANDROID_HOME="/opt/android/android-sdk"
-export ANDROID_SDK_ROOT="/opt/android/android-sdk"
+export ANDROID_SDK_ROOT="${ANDROID_HOME}"
 export ANDROID_NDK_ROOT="/opt/android/android-ndk"
+COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
 
 export PATH="${PATH}:${ANDROID_HOME}/tools"
 export PATH="${PATH}:${ANDROID_HOME}/platform-tools"
@@ -28,21 +31,21 @@ export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
 # other variables
 export MY_QT_VERSION="5.15.2"
 export ANDROID_NDK_HOST="linux-x86_64"
-export ANDROID_SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+export ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
 
 # paths for Android SDK
-mkdir -p "${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
+mkdir -p "${COMMANDLINETOOLS_DIR}"
 mkdir -p "${ANDROID_SDK_ROOT}"/build-tools/latest/
 
 # Install Android sdk
-wget -q -O downloadfile https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
+wget -q -O downloadfile https://dl.google.com/android/repository/commandlinetools-linux-${COMMANDLINETOOLS_VERSION}_latest.zip
 unzip -q downloadfile
-mv cmdline-tools/* /opt/android/android-sdk/cmdline-tools/latest/
+mv cmdline-tools/* "${COMMANDLINETOOLS_DIR}"
 
 # Install Android ndk
-wget -q -O downloadfile https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip
+wget -q -O downloadfile https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip
 unzip -q downloadfile
-mv android-ndk-r21d /opt/android/android-ndk
+mv android-ndk-${ANDROID_NDK_VERSION} "${ANDROID_NDK_ROOT}"
 
 # Install Android SDK
 yes | "${ANDROID_SDKMANAGER}" --licenses

@@ -52,10 +52,8 @@
 #include "connectdlg.h"
 #include "analyzerconsole.h"
 #include "ui_clientdlgbase.h"
-#if defined( __APPLE__ ) || defined( __MACOSX )
-#    if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
-#        include <QtMac>
-#    endif
+#if defined( Q_OS_MACX )
+#    include "mac/badgelabel.h"
 #endif
 
 /* Definitions ****************************************************************/

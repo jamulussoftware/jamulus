@@ -154,9 +154,8 @@ win32 {
         RC_FILE = mac/mainicon.icns
     }
 
-    QT += macextras
-    HEADERS += mac/activity.h
-    OBJECTIVE_SOURCES += mac/activity.mm
+    HEADERS += mac/activity.h mac/badgelabel.h
+    OBJECTIVE_SOURCES += mac/activity.mm mac/badgelabel.mm
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
 
@@ -185,7 +184,8 @@ win32 {
         -framework CoreMIDI \
         -framework AudioToolbox \
         -framework AudioUnit \
-        -framework Foundation
+        -framework Foundation \
+        -framework AppKit
 
     contains(CONFIG, "jackonmac") {
         message(Using JACK.)

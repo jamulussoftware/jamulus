@@ -146,7 +146,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
         const int iNumBlocks = /* floor */ ( iInSize / iBlockSize );
 
         // copy new data in internal buffer
-        for ( int iBlock = 0; iBlock < iNumBlocks; iBlock++ )
+        for ( long iBlock = 0; iBlock < iNumBlocks; iBlock++ )
         {
             // extract sequence number of current received block (per definition
             // the sequence number is appended after the coded audio data)
@@ -263,7 +263,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
         // copy new data in internal buffer
         const int iNumBlocks = iInSize / iBlockSize;
 
-        for ( int iBlock = 0; iBlock < iNumBlocks; iBlock++ )
+        for ( long iBlock = 0; iBlock < iNumBlocks; iBlock++ )
         {
             // for simultion buffer only update pointer, no data copying
             if ( !bIsSimulation )

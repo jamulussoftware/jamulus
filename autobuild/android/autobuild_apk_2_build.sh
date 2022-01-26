@@ -15,7 +15,6 @@ source $(dirname $(readlink -f "${BASH_SOURCE[0]}"))/../ensure_THIS_JAMULUS_PROJ
 
 cd "${THIS_JAMULUS_PROJECT_PATH}"
 
-#$QTDIR/bin/qmake -spec android-clang CONFIG+=$CONFIG
 "${QTDIR}"/bin/qmake -spec android-clang CONFIG+=release
 echo .
 echo .

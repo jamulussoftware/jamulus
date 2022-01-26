@@ -118,6 +118,7 @@ jobs:
 
            - config_name:           MacOS (artifacts)
              target_os:             macos
+             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?)
              building_on_os:        macos-10.15
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"

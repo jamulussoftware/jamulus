@@ -750,7 +750,12 @@ void CConnectDlg::OnTimerPing()
                                                  bEnableIPv6 ) )
         {
             // if address is valid, send ping message using a new thread
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+            QFuture<void> f = QtConcurrent::run ( &CConnectDlg::EmitCLServerListPingMes, this, haServerAddress );
+            Q_UNUSED ( f );
+#else
             QtConcurrent::run ( this, &CConnectDlg::EmitCLServerListPingMes, haServerAddress );
+#endif
         }
     }
 }

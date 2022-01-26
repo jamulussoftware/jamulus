@@ -565,6 +565,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
         {
             continue;
         }
+
+        if ( !CLocale::IsCountryCodeSupported ( iCurCntry ) )
+        {
+            // The current Qt version which is the base for the loop may support
+            // more country codes than our protocol does. Therefore, skip
+            // the unsupported options to avoid surprises.
+            continue;
+        }
+
         // get current country enum
         QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
 

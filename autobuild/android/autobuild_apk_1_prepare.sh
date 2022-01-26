@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # autobuild_1_prepare: set up environment, install Qt & dependencies
 

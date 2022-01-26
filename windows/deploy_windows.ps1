@@ -1,4 +1,4 @@
-param(
+param (
     # Replace default path with system Qt installation folder if necessary
     [string] $QtInstallPath = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
@@ -10,6 +10,9 @@ param(
     [string] $BuildOption = ""
 )
 
+# Fail early on all errors
+$ErrorActionPreference = "Stop"
+
 # change directory to the directory above (if needed)
 Set-Location -Path "$PSScriptRoot\..\"
 
@@ -19,10 +22,6 @@ $BuildPath = "$RootPath\build"
 $DeployPath = "$RootPath\deploy"
 $WindowsPath ="$RootPath\windows"
 $AppName = "Jamulus"
-
-# Stop at all errors
-$ErrorActionPreference = "Stop"
-
 
 # Execute native command with errorlevel handling
 Function Invoke-Native-Command {

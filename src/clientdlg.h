@@ -37,6 +37,7 @@
 #include <QLayout>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QActionGroup>
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 6, 0 )
 #    include <QVersionNumber>
 #endif

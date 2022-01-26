@@ -25,6 +25,8 @@
 #pragma once
 
 #include <QDataStream>
+#include <QString>
+#include <QIODevice>
 
 namespace recorder
 {

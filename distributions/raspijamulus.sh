@@ -5,12 +5,16 @@ OPUS="opus-1.3.1"
 NCORES=$(nproc)
 
 # install required packages
-pkgs='alsamixergui build-essential qt5-default libasound2-dev cmake libglib2.0-dev'
+pkgs='alsamixergui build-essential qtbase5-dev qttools5-dev-tools libasound2-dev cmake libglib2.0-dev'
 if ! dpkg -s $pkgs >/dev/null 2>&1; then
   read -p "Do you want to install missing packages? " -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     sudo apt-get install $pkgs -y
+    # Raspbian 10 needs qt5-default; Raspbian 11 doesn't need or provide it
+    if ! qtchooser -list-versions | grep -q default; then
+      sudo apt-get install qt5-default -y
+    fi
   fi
 fi
 
@@ -59,7 +63,7 @@ if [ -d "jack2" ]; then
 else
   git clone https://github.com/jackaudio/jack2.git
   cd jack2
-  git checkout v1.9.12
+  git checkout v1.9.20
   ./waf configure --alsa --prefix=/usr/local --libdir=$(pwd)/build
   ./waf -j${NCORES}
   mkdir build/jack

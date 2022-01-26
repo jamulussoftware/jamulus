@@ -10,7 +10,9 @@ on:
 
 jobs:
   check-and-update-copyright-notices:
-    if: ${{ github.event_name == 'push' }}
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,12 +32,13 @@ jobs:
             gh pr comment "${existing_pr}" --body "PR has been updated by tools/update-copyright-notices.sh."
           else
             body=$'This automated Pull Request updates the copyright notices throughout the source.\n\n'
-            body="${body}This PR is the result of a `tools/update-copyright-notices.sh` run."
+            body="${body}This PR is the result of a tools/update-copyright-notices.sh run."
             gh pr create --base master --head "${pr_branch}" --title "Update copyright notice(s) for $(date +%Y)" --body "${body}"
           fi
 
   delete-old-pr-branch:
     if: >-
+      github.repository_owner == 'jamulussoftware' &&
       github.event_name == 'pull_request' &&
       startsWith(github.event.pull_request.head.label, 'jamulussoftware:updateCopyrightNotices')
     runs-on: ubuntu-latest

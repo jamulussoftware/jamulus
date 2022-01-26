@@ -11,13 +11,10 @@
 export DEBIAN_FRONTEND="noninteractive"
 echo "::set-env name=DEBIAN_FRONTEND::${DEBIAN_FRONTEND}"
 
-sudo apt-get  update
-sudo apt-get -qq -y install  build-essential git zip unzip bzip2 p7zip-full wget curl chrpath libxkbcommon-x11-0
+sudo apt-get -qq update
 # Dependencies to create Android pkg
-sudo apt-get -qq -y install  openjdk-8-jre openjdk-8-jdk openjdk-8-jdk-headless gradle
-# Clean apt cache
-sudo apt-get clean
-rm -rf /var/lib/apt/lists/*
+sudo apt-get -qq -y install build-essential git zip unzip bzip2 p7zip-full wget curl chrpath libxkbcommon-x11-0 \
+    openjdk-8-jre openjdk-8-jdk openjdk-8-jdk-headless gradle
 
 # Add Android tools and platform tools to PATH
 export ANDROID_HOME="/opt/android/android-sdk"
@@ -38,20 +35,14 @@ mkdir -p "${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
 mkdir -p "${ANDROID_SDK_ROOT}"/build-tools/latest/
 
 # Install Android sdk
-downloadfile="downloadfile"
 wget -q -O downloadfile https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
 unzip -q downloadfile
-rm downloadfile
 mv cmdline-tools/* /opt/android/android-sdk/cmdline-tools/latest/
-rm -r cmdline-tools
 
 # Install Android ndk
-downloadfile="downloadfile"
 wget -q -O downloadfile https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip
 unzip -q downloadfile
-rm downloadfile
 mv android-ndk-r21d /opt/android/android-ndk
-
 
 # Install Android SDK
 yes | "${ANDROID_SDKMANAGER}" --licenses

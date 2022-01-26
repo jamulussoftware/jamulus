@@ -130,8 +130,8 @@
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2021 L&apos;équipe de développement de Jamulus</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation>Copyright (C) 2005-2022 L&apos;équipe de développement de Jamulus</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -3962,8 +3962,8 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished">Copyright (C) 2005-2021 L&apos;équipe de développement de Jamulus</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation type="unfinished">Copyright (C) 2005-2022 L&apos;équipe de développement de Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

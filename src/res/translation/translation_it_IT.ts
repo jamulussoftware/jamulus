@@ -169,13 +169,13 @@
         <translation>Versione</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2020 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2020 Volker Fischer e altri</translation>
+        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer e altri</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2021 Team di sviluppo Jamulus</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation>Copyright (C) 2005-2022 Team di sviluppo Jamulus</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -4523,8 +4523,8 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished">Copyright (C) 2005-2021 Team di sviluppo Jamulus</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation type="unfinished">Copyright (C) 2005-2022 Team di sviluppo Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

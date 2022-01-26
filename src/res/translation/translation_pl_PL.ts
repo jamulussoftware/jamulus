@@ -129,13 +129,13 @@
         <translation></translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2020 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2020 Volker Fischer i inni</translation>
+        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer i inni</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2021 Zespół programistów Jamulus-a</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation>Copyright (C) 2005-2022 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -4017,8 +4017,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished">Copyright (C) 2005-2021 Zespół programistów Jamulus-a</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation type="unfinished">Copyright (C) 2005-2022 Zespół programistów Jamulus-a</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

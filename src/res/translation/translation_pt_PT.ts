@@ -177,13 +177,13 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2020 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2020 Volker Fischer e outros</translation>
+        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer e outros</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2021 A Equipa de Desenvolvimento do Jamulus</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation>Copyright (C) 2005-2022 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -210,8 +210,8 @@
         <translation type="vanished">Autor: Volker Fischer</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2020</source>
-        <translation type="vanished">Copyright (C) 2005-2020</translation>
+        <source>Copyright (C) 2005-2022</source>
+        <translation type="vanished">Copyright (C) 2005-2022</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="198"/>
@@ -4542,8 +4542,8 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished">Copyright (C) 2005-2021 A Equipa de Desenvolvimento do Jamulus</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation type="unfinished">Copyright (C) 2005-2022 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

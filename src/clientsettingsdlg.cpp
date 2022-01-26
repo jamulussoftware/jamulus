@@ -823,7 +823,8 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     else
     {
         // special title text with buffer size information added
-        grbSoundCrdBufDelay->setTitle ( tr ( "Buffer Delay: " ) + GenSndCrdBufferDelayString ( iCurActualBufSize ) );
+        // append 2 whitespace characters, so that the text doesn't get cut off
+        grbSoundCrdBufDelay->setTitle ( tr ( "Buffer Delay: " ) + GenSndCrdBufferDelayString ( iCurActualBufSize ) + "  " );
     }
 }
 

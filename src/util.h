@@ -648,7 +648,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
         return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
-    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
+    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value %1" ) ).arg ( eSvrRegStatus );
 }
 
 // Directory server registration outcome ---------------------------------------

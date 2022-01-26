@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -1926,7 +1926,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += " <http://www.famfamfam.com>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2021 The Jamulus Development Team" );
+        strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2022 The Jamulus Development Team" );
         strVersionText += "\n";
     }
 

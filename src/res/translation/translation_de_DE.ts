@@ -165,13 +165,13 @@
         <translation></translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2020 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2020 Volker Fischer und andere</translation>
+        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer und andere</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2021 beim Jamulus Entwicklungs Team</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation>Copyright (C) 2005-2022 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
@@ -4526,8 +4526,8 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
-        <translation type="unfinished">Copyright (C) 2005-2021 beim Jamulus Entwicklungs Team</translation>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
+        <translation type="unfinished">Copyright (C) 2005-2022 beim Jamulus Entwicklungs Team</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

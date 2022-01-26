@@ -177,12 +177,12 @@
         <translation>TextLabelVersion</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2020 Volker Fischer and others</source>
-        <translation type="vanished">Copyright (C) 2005-2020 Volker Fischer e outros</translation>
+        <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
+        <translation type="vanished">Copyright (C) 2005-2022 Volker Fischer e outros</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
         <translatorcomment>I&apos;ll keep it untranslated for the moment</translatorcomment>
         <translation></translation>
     </message>
@@ -212,8 +212,8 @@
         <translation type="vanished">Autor: Volker Fischer</translation>
     </message>
     <message>
-        <source>Copyright (C) 2005-2020</source>
-        <translation type="vanished">Copyright (C) 2005-2020</translation>
+        <source>Copyright (C) 2005-2022</source>
+        <translation type="vanished">Copyright (C) 2005-2022</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="198"/>
@@ -4561,7 +4561,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
-        <source>Copyright (C) 2005-2021 The Jamulus Development Team</source>
+        <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

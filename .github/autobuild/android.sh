@@ -6,7 +6,7 @@ ANDROID_NDK_VERSION=r21d
 ANDROID_PLATFORM=android-30
 ANDROID_BUILD_TOOLS=30.0.2
 AQTINSTALL_VERSION=2.0.6
-QT_VERSION=5.15.2
+QT_VERSION=6.2.3
 
 # Only variables which are really needed by sub-commands are exported.
 # Definitions have to stay in a specific order due to dependencies.

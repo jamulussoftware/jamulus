@@ -1,6 +1,7 @@
 param (
     # Replace default path with system Qt installation folder if necessary
-    [string] $QtInstallPath = "C:\Qt\5.15.2",
+    [string] $QtInstallPath32 = "C:\Qt\5.15.2",
+    [string] $QtInstallPath64 = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
@@ -236,15 +237,17 @@ Function Build-App
 # Build and deploy Jamulus 64bit and 32bit variants
 function Build-App-Variants
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [string] $QtInstallPath
-    )
-
     foreach ($_ in ("x86_64", "x86"))
     {
         $OriginalEnv = Get-ChildItem Env:
-        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch $_
+        if ($_ -eq "x86")
+        {
+            Initialize-Build-Environment -QtInstallPath $QtInstallPath32 -BuildArch $_
+        }
+        else
+        {
+            Initialize-Build-Environment -QtInstallPath $QtInstallPath64 -BuildArch $_
+        }
         Build-App -BuildConfig "release" -BuildArch $_
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
@@ -286,16 +289,12 @@ Function Build-Installer
 # Build and copy NS-Process dll
 Function Build-NSProcess
 {
-    param(
-        [Parameter(Mandatory=$true)]
-        [string] $QtInstallPath
-    )
     if (!(Test-Path -path "$WindowsPath\nsProcess.dll")) {
 
         echo "Building nsProcess..."
 
         $OriginalEnv = Get-ChildItem Env:
-        Initialize-Build-Environment -QtInstallPath $QtInstallPath -BuildArch "x86"
+        Initialize-Build-Environment -QtInstallPath $QtInstallPath32 -BuildArch "x86"
 
         Invoke-Native-Command -Command "msbuild" `
             -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
@@ -309,6 +308,6 @@ Function Build-NSProcess
 
 Clean-Build-Environment
 Install-Dependencies
-Build-App-Variants -QtInstallPath $QtInstallPath
-Build-NSProcess -QtInstallPath $QtInstallPath
+Build-App-Variants
+Build-NSProcess
 Build-Installer -BuildOption $BuildOption

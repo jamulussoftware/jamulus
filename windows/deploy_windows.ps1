@@ -307,7 +307,6 @@ Function Build-NSProcess
 
         $OriginalEnv = Get-ChildItem Env:
         Initialize-Build-Environment -BuildArch "x86"
-        Initialize-Qt-Build-Environment -QtInstallPath $QtInstallPath32 -QtCompile $QtCompile32
 
         Invoke-Native-Command -Command "msbuild" `
             -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `

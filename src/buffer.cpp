@@ -146,6 +146,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
         const int iNumBlocks = /* floor */ ( iInSize / iBlockSize );
 
         // copy new data in internal buffer
+        // iBlock is a long to avoid overflowing a mulitplication later in the code
         for ( long iBlock = 0; iBlock < iNumBlocks; iBlock++ )
         {
             // extract sequence number of current received block (per definition
@@ -263,6 +264,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
         // copy new data in internal buffer
         const int iNumBlocks = iInSize / iBlockSize;
 
+        // iBlock is a long to avoid overflowing a mulitplication later in the code
         for ( long iBlock = 0; iBlock < iNumBlocks; iBlock++ )
         {
             // for simultion buffer only update pointer, no data copying

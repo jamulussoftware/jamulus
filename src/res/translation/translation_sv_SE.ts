@@ -1917,7 +1917,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Okej</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="562"/>
+        <location filename="../../util.h" line="566"/>
         <source>Custom</source>
         <translation>Eget</translation>
     </message>
@@ -1926,37 +1926,37 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Alla genrer</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="565"/>
+        <location filename="../../util.h" line="569"/>
         <source>Any Genre 2</source>
         <translation>Alla genrer 2</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="568"/>
+        <location filename="../../util.h" line="572"/>
         <source>Any Genre 3</source>
         <translation>Alla genrer 3</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="571"/>
+        <location filename="../../util.h" line="575"/>
         <source>Genre Rock</source>
         <translation>Genre Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="574"/>
+        <location filename="../../util.h" line="578"/>
         <source>Genre Jazz</source>
         <translation>Genre Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="577"/>
+        <location filename="../../util.h" line="581"/>
         <source>Genre Classical/Folk</source>
         <translation>Genre Klassisk/Folkmusik</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="580"/>
+        <location filename="../../util.h" line="584"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Genre Choral/Barbershop</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="583"/>
+        <location filename="../../util.h" line="587"/>
         <source>Any Genre 1</source>
         <translation>Alla genrer 1</translation>
     </message>
@@ -2727,7 +2727,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">&amp;Om...</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="419"/>
+        <location filename="../../util.h" line="423"/>
         <source>About Qt</source>
         <translation type="unfinished">Om Qt</translation>
     </message>
@@ -3572,52 +3572,52 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Inte aktiv</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="610"/>
         <source>Unregistered</source>
         <translation>Oregistrerad</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="613"/>
         <source>Bad address</source>
         <translation>Felaktig adress</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="616"/>
         <source>Registration requested</source>
         <translation>Registreringsförfrågan skickad</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="615"/>
+        <location filename="../../util.h" line="619"/>
         <source>Registration failed</source>
         <translation>Registreringen misslyckades</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="618"/>
+        <location filename="../../util.h" line="622"/>
         <source>Check server version</source>
         <translation>Kontrollera serverversionen</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="621"/>
+        <location filename="../../util.h" line="625"/>
         <source>Registered</source>
         <translation>Registrerad</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="624"/>
+        <location filename="../../util.h" line="628"/>
         <source>Directory Server full</source>
         <translation>Katalogservern är full</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="627"/>
+        <location filename="../../util.h" line="631"/>
         <source>Your server version is too old</source>
         <translation>Din serverversion är för gammal</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="630"/>
+        <location filename="../../util.h" line="634"/>
         <source>Requirements not fulfilled</source>
         <translation>Kraven uppfylls inte</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="633"/>
+        <location filename="../../util.h" line="637"/>
         <source>Unknown value </source>
         <translation>Okänt värde </translation>
     </message>

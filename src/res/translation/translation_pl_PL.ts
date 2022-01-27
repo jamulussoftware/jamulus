@@ -1798,7 +1798,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Wysoka</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="562"/>
+        <location filename="../../util.h" line="566"/>
         <source>Custom</source>
         <translation>Własny</translation>
     </message>
@@ -1807,37 +1807,37 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Wszystkie style</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="565"/>
+        <location filename="../../util.h" line="569"/>
         <source>Any Genre 2</source>
         <translation>Każdy styl 2</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="568"/>
+        <location filename="../../util.h" line="572"/>
         <source>Any Genre 3</source>
         <translation>Każdy styl 3</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="571"/>
+        <location filename="../../util.h" line="575"/>
         <source>Genre Rock</source>
         <translation>Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="574"/>
+        <location filename="../../util.h" line="578"/>
         <source>Genre Jazz</source>
         <translation>Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="577"/>
+        <location filename="../../util.h" line="581"/>
         <source>Genre Classical/Folk</source>
         <translation>Klasyka/folk</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="580"/>
+        <location filename="../../util.h" line="584"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Chór/zespół wokalny</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="583"/>
+        <location filename="../../util.h" line="587"/>
         <source>Any Genre 1</source>
         <translation>Każdy styl 1</translation>
     </message>
@@ -2691,7 +2691,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">&amp;O programie...</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="419"/>
+        <location filename="../../util.h" line="423"/>
         <source>About Qt</source>
         <translation>O Qt</translation>
     </message>
@@ -3444,52 +3444,52 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>&amp;Okno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="610"/>
         <source>Unregistered</source>
         <translation>Niezarejstrowany</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="613"/>
         <source>Bad address</source>
         <translation>Błędny adres</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="616"/>
         <source>Registration requested</source>
         <translation>Wymagana rejestracja</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="615"/>
+        <location filename="../../util.h" line="619"/>
         <source>Registration failed</source>
         <translation>Rejestraca nie powiodła się</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="618"/>
+        <location filename="../../util.h" line="622"/>
         <source>Check server version</source>
         <translation>Sprawdź wersję serwera</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="621"/>
+        <location filename="../../util.h" line="625"/>
         <source>Registered</source>
         <translation>Zarejestrowany</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="624"/>
+        <location filename="../../util.h" line="628"/>
         <source>Directory Server full</source>
         <translation>Serwer zbiorczy zapełniony</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="627"/>
+        <location filename="../../util.h" line="631"/>
         <source>Your server version is too old</source>
         <translation>Wersja twojego serwera jest przestarzała</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="630"/>
+        <location filename="../../util.h" line="634"/>
         <source>Requirements not fulfilled</source>
         <translation>Niespełniono wymagań</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="633"/>
+        <location filename="../../util.h" line="637"/>
         <source>Unknown value </source>
         <translation>Nieznana wartość </translation>
     </message>

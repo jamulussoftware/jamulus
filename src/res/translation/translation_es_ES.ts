@@ -2134,7 +2134,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation type="vanished">Manual</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="562"/>
+        <location filename="../../util.h" line="566"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
     </message>
@@ -2151,37 +2151,37 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation type="vanished">Género Clásica/Folk/Coro</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="565"/>
+        <location filename="../../util.h" line="569"/>
         <source>Any Genre 2</source>
         <translation>Cualquier Género 2</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="568"/>
+        <location filename="../../util.h" line="572"/>
         <source>Any Genre 3</source>
         <translation>Cualquier Género 3</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="571"/>
+        <location filename="../../util.h" line="575"/>
         <source>Genre Rock</source>
         <translation>Género Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="574"/>
+        <location filename="../../util.h" line="578"/>
         <source>Genre Jazz</source>
         <translation>Género Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="577"/>
+        <location filename="../../util.h" line="581"/>
         <source>Genre Classical/Folk</source>
         <translation>Género Clásico/Folk</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="580"/>
+        <location filename="../../util.h" line="584"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Género Coral/Barbershop</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="583"/>
+        <location filename="../../util.h" line="587"/>
         <source>Any Genre 1</source>
         <translation>Cualquier Género 1</translation>
     </message>
@@ -3076,7 +3076,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation type="vanished">&amp;Acerca de...</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="419"/>
+        <location filename="../../util.h" line="423"/>
         <source>About Qt</source>
         <translation>Acerca de Qt</translation>
     </message>
@@ -3981,52 +3981,52 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="610"/>
         <source>Unregistered</source>
         <translation>Sin registrar</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="613"/>
         <source>Bad address</source>
         <translation>Dirección no válida</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="616"/>
         <source>Registration requested</source>
         <translation>Registro solicitado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="615"/>
+        <location filename="../../util.h" line="619"/>
         <source>Registration failed</source>
         <translation>Error de registro</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="618"/>
+        <location filename="../../util.h" line="622"/>
         <source>Check server version</source>
         <translation>Comprueba la versión del servidor</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="621"/>
+        <location filename="../../util.h" line="625"/>
         <source>Registered</source>
         <translation>Registrado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="624"/>
+        <location filename="../../util.h" line="628"/>
         <source>Directory Server full</source>
         <translation>Servidor de Directorio lleno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="627"/>
+        <location filename="../../util.h" line="631"/>
         <source>Your server version is too old</source>
         <translation>La versión de tu servidor es demasiado antigua</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="630"/>
+        <location filename="../../util.h" line="634"/>
         <source>Requirements not fulfilled</source>
         <translation>No se cumplen los requisitos</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="633"/>
+        <location filename="../../util.h" line="637"/>
         <source>Unknown value </source>
         <translation>Valor desconocido </translation>
     </message>

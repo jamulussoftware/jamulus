@@ -2094,7 +2094,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Handmatig</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="562"/>
+        <location filename="../../util.h" line="566"/>
         <source>Custom</source>
         <translation>Aangepast</translation>
     </message>
@@ -2103,37 +2103,37 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Alle genres</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="565"/>
+        <location filename="../../util.h" line="569"/>
         <source>Any Genre 2</source>
         <translation>Ieder Genre 2</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="568"/>
+        <location filename="../../util.h" line="572"/>
         <source>Any Genre 3</source>
         <translation>Ieder Genre 3</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="571"/>
+        <location filename="../../util.h" line="575"/>
         <source>Genre Rock</source>
         <translation>Genre Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="574"/>
+        <location filename="../../util.h" line="578"/>
         <source>Genre Jazz</source>
         <translation>Genre Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="577"/>
+        <location filename="../../util.h" line="581"/>
         <source>Genre Classical/Folk</source>
         <translation>Genre Klassiek/Folk</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="580"/>
+        <location filename="../../util.h" line="584"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Genre Koor/Barbershop</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="583"/>
+        <location filename="../../util.h" line="587"/>
         <source>Any Genre 1</source>
         <translation>Ieder Genre 1</translation>
     </message>
@@ -3024,7 +3024,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">&amp;Over...</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="419"/>
+        <location filename="../../util.h" line="423"/>
         <source>About Qt</source>
         <translation>Over Qt</translation>
     </message>
@@ -3929,52 +3929,52 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>&amp;Window</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="610"/>
         <source>Unregistered</source>
         <translation>Niet geregistreerd</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="613"/>
         <source>Bad address</source>
         <translation>Foutief adres</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="616"/>
         <source>Registration requested</source>
         <translation>Registratie aangevraagd</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="615"/>
+        <location filename="../../util.h" line="619"/>
         <source>Registration failed</source>
         <translation>Registratie is mislukt</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="618"/>
+        <location filename="../../util.h" line="622"/>
         <source>Check server version</source>
         <translation>Controleer de versie van de server</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="621"/>
+        <location filename="../../util.h" line="625"/>
         <source>Registered</source>
         <translation>Geregistreerd</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="624"/>
+        <location filename="../../util.h" line="628"/>
         <source>Directory Server full</source>
         <translation>Adresboek server vol</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="627"/>
+        <location filename="../../util.h" line="631"/>
         <source>Your server version is too old</source>
         <translation>Uw serverversie is te oud</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="630"/>
+        <location filename="../../util.h" line="634"/>
         <source>Requirements not fulfilled</source>
         <translation>Vereisten niet gehaald</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="633"/>
+        <location filename="../../util.h" line="637"/>
         <source>Unknown value </source>
         <translation>Onbekende waarde </translation>
     </message>

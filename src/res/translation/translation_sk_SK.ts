@@ -1702,7 +1702,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation>Vysoká</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="562"/>
+        <location filename="../../util.h" line="566"/>
         <source>Custom</source>
         <translation>Vlastný</translation>
     </message>
@@ -1711,37 +1711,37 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="vanished">Všetky žánre</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="565"/>
+        <location filename="../../util.h" line="569"/>
         <source>Any Genre 2</source>
         <translation>Ľubovoľný žáner 2</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="568"/>
+        <location filename="../../util.h" line="572"/>
         <source>Any Genre 3</source>
         <translation>Ľubovoľný žáner 3</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="571"/>
+        <location filename="../../util.h" line="575"/>
         <source>Genre Rock</source>
         <translation>Žáner Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="574"/>
+        <location filename="../../util.h" line="578"/>
         <source>Genre Jazz</source>
         <translation>Žáner Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="577"/>
+        <location filename="../../util.h" line="581"/>
         <source>Genre Classical/Folk</source>
         <translation>Žáner Klasika/Folk</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="580"/>
+        <location filename="../../util.h" line="584"/>
         <source>Genre Choral/Barbershop</source>
         <translation>Žáner Zbor/Barbershop</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="583"/>
+        <location filename="../../util.h" line="587"/>
         <source>Any Genre 1</source>
         <translation>Ľubovoľný žáner 1</translation>
     </message>
@@ -2580,7 +2580,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="vanished">&amp;O programe...</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="419"/>
+        <location filename="../../util.h" line="423"/>
         <source>About Qt</source>
         <translation>O Qt</translation>
     </message>
@@ -3293,52 +3293,52 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation>&amp;Okno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="610"/>
         <source>Unregistered</source>
         <translation>Neregistrovaný</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="613"/>
         <source>Bad address</source>
         <translation>Zlá adresa</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="616"/>
         <source>Registration requested</source>
         <translation>Vyžiadaná registrácia</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="615"/>
+        <location filename="../../util.h" line="619"/>
         <source>Registration failed</source>
         <translation>Registrácia zlyhala</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="618"/>
+        <location filename="../../util.h" line="622"/>
         <source>Check server version</source>
         <translation>Skontrolovať verziu servera</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="621"/>
+        <location filename="../../util.h" line="625"/>
         <source>Registered</source>
         <translation>Registrovaný</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="624"/>
+        <location filename="../../util.h" line="628"/>
         <source>Directory Server full</source>
         <translation>Adresárový server je plný</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="627"/>
+        <location filename="../../util.h" line="631"/>
         <source>Your server version is too old</source>
         <translation>Verzia vášho servera je príliš stará</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="630"/>
+        <location filename="../../util.h" line="634"/>
         <source>Requirements not fulfilled</source>
         <translation>Požiadavky nie sú splnené</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="633"/>
+        <location filename="../../util.h" line="637"/>
         <source>Unknown value </source>
         <translation>Neznáma hodnota </translation>
     </message>

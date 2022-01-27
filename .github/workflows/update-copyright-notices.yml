@@ -32,7 +32,8 @@ jobs:
             gh pr comment "${existing_pr}" --body "PR has been updated by tools/update-copyright-notices.sh."
           else
             body=$'This automated Pull Request updates the copyright notices throughout the source.\n\n'
-            body="${body}This PR is the result of a tools/update-copyright-notices.sh run."
+            body="${body}This PR is the result of a tools/update-copyright-notices.sh run."$'\n\n'
+            body="${body}CHANGELOG: SKIP"
             gh pr create --base master --head "${pr_branch}" --title "Update copyright notice(s) for $(date +%Y)" --body "${body}"
           fi
 

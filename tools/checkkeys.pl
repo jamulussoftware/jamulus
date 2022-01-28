@@ -18,13 +18,14 @@ while ($ts = <*.ts>) {
 	foreach $context (@{$xs->{context}}) {
 		# printf "\n========================================\nContext: %s\n", $context->{name};
 		my $contextname = $context->{name};
+		$contextname =~ s/Base$//;	# merge base class with its child
 		$contextname = 'CClientDlg+CHelpMenu' if ($contextname eq 'CClientDlg' || $contextname eq 'CHelpMenu');
 
 		foreach $message (@{$context->{message}}) {
 			# printf "  Msg: %s\n", $message->{source};
 			next if $message->{translation}{type} eq 'obsolete';
 			next if $message->{translation}{type} eq 'vanished';
-			next if $message->{translation}{type} eq 'unfinished';
+			#next if $message->{translation}{type} eq 'unfinished';	# don't skip unfinished strings, as they may still get used
 
 			next unless $message->{source} =~ /\&(.)/;
 

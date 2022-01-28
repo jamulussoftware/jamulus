@@ -2094,7 +2094,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Handmatig</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="562"/>
+        <location filename="../../util.h" line="566"/>
         <source>Custom</source>
         <translation>Aangepast</translation>
     </message>
@@ -3929,7 +3929,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>&amp;Window</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="610"/>
         <source>Unregistered</source>
         <translation>Niet geregistreerd</translation>
     </message>

@@ -5,10 +5,12 @@ The Jamulus Audio Protocol
 Jamulus uses connectionless UDP packets to communicate between the client and server, and additionally for directory server registration. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.  
 Some of the messages need to be acknowledged, some do not.
 
-All of this information can be discovered from reading the code, but hopefully is quicker to digest when available in one location.
+All of this information can be discovered from reading the code, but hopefully is quicker to digest when available in one location. There is a wireshark disector available too, [here](https://github.com/softins/jamulus-wireshark), if you would like to inspect the packet flow.
+
+---
 
 Overview
----
+==
 
 The message packet structure is:
 
@@ -68,67 +70,66 @@ At the end of the session, the client calls the `CLM_DISCONNECTION(0xf203)` mess
 A typical flow would be:
 
 ```
- Client                                   Server
+ Client                                     Server
 
-  AUDIO --------------------------------->  |
-    | <------------------------------------ CLIENT_ID (0x2000)           
-  ACK(CLIENT_ID) ------------------------>  |
+  AUDIO --------------------------------->  
+      <------------------------------------ CLIENT_ID (0x2000)           
+  ACK(CLIENT_ID) ------------------------> 
 
-    | <------------------------------------ CONN_CLIENTS_LIST (0x1800) (Reset to zero) 
-  ACK(CONN_CLIENTS_LIST) ---------------->  |
+      <------------------------------------ CONN_CLIENTS_LIST (0x1800) (Reset to zero) 
+  ACK(CONN_CLIENTS_LIST) ----------------> 
 
-    | <------------------------------------ REQ_SPLIT_MESSAGE_SUPPORT (0x2200)
-  SPLIT_MESS_SUPPORTED (0x2300) --------->  | 
-  ACK(REQ_SPLIT_MESSAGE_SUPPORT) -------->  |
-    | <------------------------------------ ACK(SPLIT_MESS_SUPPORTED)
+      <------------------------------------ REQ_SPLIT_MESSAGE_SUPPORT (0x2200)
+  SPLIT_MESS_SUPPORTED (0x2300) ---------> 
+  ACK(REQ_SPLIT_MESSAGE_SUPPORT) --------> 
+      <------------------------------------ ACK(SPLIT_MESS_SUPPORTED)
 
-    | <------------------------------------ REQ_NETW_TRANSPORT_PROPS (0x1500)  
-  NETW_TRANSPORT_PROPS (0x1400) --------->  | 
-  ACK(REQ_NETW_TRANSPORT_PROPS) --------->  |
-    | <------------------------------------ ACK(NETW_TRANSPORT_PROPS)
+      <------------------------------------ REQ_NETW_TRANSPORT_PROPS (0x1500)  
+  NETW_TRANSPORT_PROPS (0x1400) ---------> 
+  ACK(REQ_NETW_TRANSPORT_PROPS) ---------> 
+      <------------------------------------ ACK(NETW_TRANSPORT_PROPS)
 
-    | <------------------------------------ REQ_JITT_BUF_SIZE (0x0B00)   
-  JITT_BUF_SIZE (0x0a00) ---------------->  | 
-  ACK(REQ_JITT_BUF_SIZE) ---------------->  |
-    | <------------------------------------ ACK(JITT_BUF_SIZE)
+      <------------------------------------ REQ_JITT_BUF_SIZE (0x0B00)   
+  JITT_BUF_SIZE (0x0a00) ----------------> 
+  ACK(REQ_JITT_BUF_SIZE) ---------------->
+      <------------------------------------ ACK(JITT_BUF_SIZE)
 
-    | <------------------------------------ REQ_CHANNELS_INFOS (0x1700)
-  CHANNEL_INFOS (0x1900) ---------------->  | 
-  ACK(REQ_CHANNELS_INFOS) --------------->  |
-    | <------------------------------------ ACK(CHANNEL_INFOS)
+      <------------------------------------ REQ_CHANNELS_INFOS (0x1700)
+  CHANNEL_INFOS (0x1900) ----------------> 
+  ACK(REQ_CHANNELS_INFOS) --------------->
+      <------------------------------------ ACK(CHANNEL_INFOS)
 
 (Optional welcome message)
-    | <------------------------------------ CHAT_TEXT (0x1200)
-  ACK(CHAT_TEXT) ------------------------>  |
+      <------------------------------------ CHAT_TEXT (0x1200)
+  ACK(CHAT_TEXT) ------------------------>
 
-    | <------------------------------------ VERSION_AND_OS (0x1d00)
-  ACK(VERSION_AND_OS) ------------------->  |
+      <------------------------------------ VERSION_AND_OS (0x1d00)
+  ACK(VERSION_AND_OS) ------------------->
 
-  CHANNEL_INFOS (0x1900) ---------------->  | 
-    | <------------------------------------ ACK(CHANNEL_INFOS)
+  CHANNEL_INFOS (0x1900) ----------------> 
+      <------------------------------------ ACK(CHANNEL_INFOS)
 
-    | <------------------------------------ RECORDER_STATE (0x2100)
-  ACK(RECORDER_STATE) ------------------->  |
+      <------------------------------------ RECORDER_STATE (0x2100)
+  ACK(RECORDER_STATE) ------------------->   
 
 
-  REQ_CONNECTED_CLIENTS_LIST (0x1000) ----> |  
-    | <------------------------------------ ACK(REQ_CONNECTED_CLIENTS_LIST)
+  REQ_CONNECTED_CLIENTS_LIST (0x1000) ---->    
+      <------------------------------------ ACK(REQ_CONNECTED_CLIENTS_LIST)
 
-  REQ_CHANNEL_LEVEL_LIST (0x1c00) --------> |  
+  REQ_CHANNEL_LEVEL_LIST (0x1c00) -------->    
 
-  JITT_BUF_SIZE (0x0a00) ---------------->  | 
-    | <------------------------------------ JITT_BUF_SIZE (0x0a00)  
-    | <------------------------------------ ACK(JITT_BUF_SIZE)
-  ACK(JITT_BUF_SIZE) -------------------->  |
+  JITT_BUF_SIZE (0x0a00) ---------------->    
+      <------------------------------------ JITT_BUF_SIZE (0x0a00)  
+      <------------------------------------ ACK(JITT_BUF_SIZE)
+  ACK(JITT_BUF_SIZE) -------------------->   
 
-    | <------------------------------------ CONN_CLIENTS_LIST (0x1800)
-  ACK(CONN_CLIENTS_LIST) ---------------->  |
+      <------------------------------------ CONN_CLIENTS_LIST (0x1800)
+  ACK(CONN_CLIENTS_LIST) ---------------->   
   
-  NETW_TRANSPORT_PROPS (0x1400) --------->  | 
-    | <------------------------------------ CONN_CLIENTS_LIST (0x1800)
-    | <------------------------------------ ACK(NETW_TRANSPORT_PROPS)
-  ACK(CONN_CLIENTS_LIST) ---------------->  | 
-
+  NETW_TRANSPORT_PROPS (0x1400) --------->    
+      <------------------------------------ CONN_CLIENTS_LIST (0x1800)
+      <------------------------------------ ACK(NETW_TRANSPORT_PROPS)
+  ACK(CONN_CLIENTS_LIST) ---------------->    
 ```
 
 ---
@@ -136,31 +137,38 @@ A typical flow would be:
 General Streaming Messages
 --
 
-During streaming, the server will periodically send some control messages to the clients.  
+During streaming, some control messages are used.  
 Some typical messages could be:
 
 ```
- Client                                   Server
+ Client                                     Server
 
-    | <------------------------------------ CLM_CHANNEL_LEVEL_LIST (0xf703) 
+      <------------------------------------ CLM_CHANNEL_LEVEL_LIST (0xf703) 
 
-  CHANNEL_GAIN (0x0d00) ----------------->  | 
+  CHANNEL_GAIN (0x0d00) ----------------->    
 
-  CLM_PING_MS (0xe903) ------------------>  | 
+  CLM_PING_MS (0xe903) ------------------>    
 
-    | <------------------------------------ ACK(CHANNEL_GAIN)   
+      <------------------------------------ ACK(CHANNEL_GAIN)   
 
-    | <------------------------------------ CLM_PING_MS (0xe903) 
+      <------------------------------------ CLM_PING_MS (0xe903) 
 
-  MUTE_STATE_CHANGED (0x1f00) ----------->  | 
-    | <------------------------------------ ACK(MUTE_STATE_CHANGED) 
+  MUTE_STATE_CHANGED (0x1f00) ----------->    
+      <------------------------------------ ACK(MUTE_STATE_CHANGED) 
 
-  NETW_TRANSPORT_PROPS (0x1400) --------->  | 
-    | <------------------------------------ ACK(NETW_TRANSPORT_PROPS) - Reset audio packet sequencing on change
+  NETW_TRANSPORT_PROPS (0x1400) --------->    
+      <------------------------------------ ACK(NETW_TRANSPORT_PROPS) - Reset audio packet sequencing on change
 
-  CHANNEL_PAN (0x1e00) ------------------>  | 
-    | <------------------------------------ ACK(CHANNEL_PAN)   
+  CHANNEL_PAN (0x1e00) ------------------>    
+      <------------------------------------ ACK(CHANNEL_PAN)   
 ```
+
+---
 
 Audio Packet Structure
 --
+The OPUS codec is used to compress the audio over the network and the packets are documented [here](https://datatracker.ietf.org/doc/html/rfc6716).
+
+Jamulus uses a custom OPUS encoder / decoder, giving some different frame sizes.
+
+Audio packets are sent over the network

@@ -146,7 +146,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 2. [Download and install qt5 with the Qt Installer](https://www.qt.io/download) (not homebrew). Explicitly select iOS when choosing the Qt version
 3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
 4. Open the generated .xcodeproject in Xcode
-5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode might tell you if you need to change anything else like the bundle id.
+5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode might tell you if you need to change anything else like the bundle id. For instance, you can use your free Apple Developer Program Account as a Personal Team, and set it up under Xcode Menu->Preferences->Accounts. Then choose a Bundle Identifier at your choice in the relevant field under General Tab in section Identity. Then go to Signing & Capabilities tab, section Identity, the Automatic manage signing option and you should get Team: (Your Name) (Personal Team), Bundle identifier: (the same you modified on General Tab), Provisioning Profile: Xcode Management Profile, Signing Certificate: Apple Development (your e-mail used for signing in to Apple)
 6. Connect your device via USB (or WiFi if you set it up for that)
 7. Select your device next to the play button
 8. Compile and run Jamulus by clicking on the play button

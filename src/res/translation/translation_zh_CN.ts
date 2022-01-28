@@ -44,12 +44,12 @@
     <message>
         <location filename="../../util.cpp" line="425"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>旗帜图标作者为 Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="494"/>
         <source>For details on the contributions check out the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>关于贡献者的详情请参见 %1</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="495"/>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../../util.cpp" line="546"/>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>关于 %1</translation>
     </message>
     <message>
         <source>About </source>
@@ -241,12 +241,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="178"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>推子标签指示了连接到的客户端。标签名称、乐器图案和您所在位置的旗帜可在主窗口中进行设置。</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="187"/>
         <source>Mixer channel country/region flag</source>
-        <translation type="unfinished"></translation>
+        <translation>混音通道的国家/地区旗帜</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="253"/>
@@ -722,7 +722,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="207"/>
         <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果此 LED 指示器变红，您可能无法很愉快的使用 %1。</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="234"/>
@@ -787,7 +787,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="727"/>
         <source>%1 Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 目录</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1164"/>
@@ -818,7 +818,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
-        <translation type="unfinished"></translation>
+        <translation>设置(&amp;I)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="391"/>
@@ -853,7 +853,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
-        <translation type="unfinished"></translation>
+        <translation>优先显示自己的推子(&amp;W)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="323"/>
@@ -1244,17 +1244,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="360"/>
         <source>Custom Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义目录</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="361"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果您需要在连接对话框的分类目录下拉框中添加额外的分类目录，即可在这里填写位置。&lt;br&gt;若要移除一个值，先将其选中，然后在输入框中删除对应的文字，在将输入焦点移出控件即可。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="368"/>
         <source>Custom Directories combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义分类目录下拉框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="371"/>
@@ -1304,22 +1304,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="76"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation type="unfinished"></translation>
+        <translation>抖动缓冲区补偿了网络和声卡时值抖动。缓冲区的大小也影响了音频流的质量（发生多少丢包）和总体延迟（缓冲区越大，延迟越高）。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="81"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>您可以在本地客户端和服务端手动设置抖动缓冲区的大小。对于本地抖动缓冲区，音频流的丢包将由抖动缓冲区大小推子下方的灯来指示。若灯变红，则表明缓冲区上溢/下溢在发生，因而音频流发生了中断。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="90"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation type="unfinished"></translation>
+        <translation>若选取了自动，则本地客户端和远程服务器的抖动缓冲区将根据网络情况和声卡时值抖动来自动推断。若选取了自动，则用于手动设置抖动缓冲区大小的推子也将被禁用（无法使用鼠标调节）。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation type="unfinished"></translation>
+        <translation>若选取了自动，则本地客户端和远程服务器的抖动缓冲区将设为保守可使得音频丢包率最低的值。若要调整音频延迟，则推荐您禁用自动设置并手动使用滑块调低抖动缓冲区大小直到达到您满意的效果。本地音频抖动丢包时 LED 标识将指示红灯。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="183"/>
@@ -1342,42 +1342,42 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
-        <translation type="unfinished"></translation>
+        <translation>控制了本地音频左右声道的相对音量。对于单声道信号，其行为为对声像的调整。例如，若麦克风连接到了右输入声道，而音量远高于麦克风的乐器被连接到了左输入声道，则将音量推子向推子上方标识 %1 的方向移动，%2 是当前的衰减指示器。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>音频设备</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>在 Windows 操作系统下，ASIO 驱动（声卡）可通过 %1 进行选择。若所选的 ASIO 驱动无效，则将展示错误信息并选取上一个有效的驱动。在 macOS 中，输入和输出硬件可供选择。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>Three buffer sizes can be selected</source>
-        <translation type="unfinished"></translation>
+        <translation>三种缓冲区大小可供选择</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="189"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 采样：提供最低的延迟但并非支持所有声卡。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 采样：仅当在 64 或 128 采样存在问题时使用。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果没有选择缓冲区大小且所有设置均被禁用，则表明驱动所使用的缓冲区大小与提供的值不匹配。在此设定下，%1 仍将可供使用，但可能存在受限的性能。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>实际的缓冲区延迟的设置将影响连接、当前上行带宽以及总体延迟情况。缓冲区大小越小，则指示灯亮红的概率越大（音频丢包），对上行带宽的要求也就越高，总体延迟也就越低。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
@@ -1407,17 +1407,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="270"/>
         <source>Meter Style</source>
-        <translation type="unfinished"></translation>
+        <translation>计量表样式</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Narrow Bar and Small LEDs options only apply to the mixerboard. When Narrow Bar is selected, the input meters are set to Bar. When Small LEDs is selected, the input meters are set to Round LEDs. The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择音量计量表所使用的计量表样式。窄条和小 LED 选项仅在混音版有效。选择窄条时，输入音量计量表将被设置为条状。选择小 LED 时，输入音量计量表将使用圆 LED。其余选项均可同时应用于混音版和输入音量计量表。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="277"/>
         <source>Meter Style combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>计量表样式下拉框</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="280"/>
@@ -1492,12 +1492,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="496"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>在此填写您的名字或别名以便合奏的其他乐手知道您是谁。您也可以添加乐器的图片以及您所在国家或地区的旗帜。您还可以添加您的城市和水平程度的相关信息。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="512"/>
         <source>Country/region flag button</source>
-        <translation type="unfinished"></translation>
+        <translation>国家/地区旗帜按钮</translation>
     </message>
     <message>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
@@ -1571,27 +1571,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>LEDs</source>
-        <translation type="unfinished"></translation>
+        <translation>LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>条状</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>Narrow Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>窄条</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>Round LEDs</source>
-        <translation type="unfinished"></translation>
+        <translation>圆形 LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>Small LEDs</source>
-        <translation type="unfinished"></translation>
+        <translation>小 LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="462"/>
@@ -1957,12 +1957,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.cpp" line="1102"/>
         <source>Vibraphone</source>
-        <translation type="unfinished"></translation>
+        <translation>铁琴</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1105"/>
         <source>Conductor</source>
-        <translation type="unfinished"></translation>
+        <translation>指挥</translation>
     </message>
 </context>
 <context>
@@ -2011,7 +2011,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="103"/>
         <source>Country/Region</source>
-        <translation type="unfinished">国家/地区</translation>
+        <translation>国家/地区</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="620"/>
@@ -2075,7 +2075,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="227"/>
         <source>Meter Style</source>
-        <translation type="unfinished"></translation>
+        <translation>计量表样式</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="241"/>
@@ -2090,7 +2090,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="335"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>音频设备</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="676"/>
@@ -2213,27 +2213,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="45"/>
         <source>Directory</source>
-        <translation type="unfinished">分类目录</translation>
+        <translation>分类目录</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="46"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>根据所选分类目录展示服务器列表。您可以在高级选项中添加自定义的分类目录。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="48"/>
         <source>Directory combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>分类目录下拉框</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="57"/>
         <source>Filters the server list by the given text. Note that the filter is case insensitive. A single # character will filter for those servers with at least one person connected.</source>
-        <translation type="unfinished"></translation>
+        <translation>根据给定文字过滤服务器列表。请注意过滤文字并非大小写敏感的。使用单 # 字符以过滤展示至少有一个人连接到的服务器。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="68"/>
         <source>Uncheck to collapse the server list to show just the server details. Check to show everyone on the servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>取消勾选以收起服务器列表来仅展示服务器信息。勾选以展示加入对应服务器的所有用户。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="74"/>
@@ -2243,17 +2243,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="75"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>连接配置窗口列出了所选的分类目录下可供使用的服务器列表。使用分类目录下拉框来选择分类目录，在服务器列表中找到您想要加入的服务器，点击选中它，然后点击“连接”按钮以进行连接。或者，您也可以双击服务器名称来进行连接。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="80"/>
         <source>Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation type="unfinished"></translation>
+        <translation>永久服务器（指在服务器列表中存在超过 48 小时的服务器）会以粗体标识。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="81"/>
         <source>You can add custom directories in Advanced Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>您可以在高级设置中添加自定义的分类目录项。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
@@ -2330,7 +2330,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果您知道某个服务器的 IP 地址或 URL，您可以使用“服务器名称/地址”栏来连接到对应的服务器。在 IP 或 URL 后端可以可选的填写端口号，使用半角冒号进行隔开。例如：%1。此栏也将显示最近使用过的服务器地址列表。</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="149"/>
@@ -2607,27 +2607,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
         <source>Recording has been switched off by the UI checkbox</source>
-        <translation type="unfinished"></translation>
+        <translation>录制已通过界面的勾选框关闭</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished"></translation>
+        <translation>录制已因界面的勾选框或因程序收到 SIGUSR2 信号而关闭</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="148"/>
         <source>Language</source>
-        <translation type="unfinished">语言(Lang)</translation>
+        <translation>语言(Lang)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="148"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished">选择用于用户界面的语言。</translation>
+        <translation>选择用于用户界面的语言。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="152"/>
         <source>Language combo box</source>
-        <translation type="unfinished">语言选择框</translation>
+        <translation>语言选择框</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -2677,7 +2677,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="66"/>
         <source>If the Register Server check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果登记服务器勾选框被勾选，这里将展示到目录服务器的登记是否成功。若登记失败，请选择其它服务器列表。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="108"/>
@@ -2767,32 +2767,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../serverdlg.cpp" line="157"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>点击按钮以打开可供选择录制目录位置的对话框。  所选值必须存在且可写入（允许运行 Jamulus 的用户创建子目录）。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="174"/>
         <source>Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义目录</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
         <source>The custom directory is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义目录指用于提供连接对话框中所展示的服务器列表信息的自定义的目录服务器的 IP 地址或 URL。</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="180"/>
         <source>Custom Directory line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义目录编辑框</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="201"/>
         <source>&amp;Hide %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>隐藏 %1 服务器(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="204"/>
         <source>&amp;Show %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>显示 %1 服务器(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="209"/>
@@ -3082,7 +3082,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../../android/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>请求流停止时遇到错误: $s</translation>
     </message>
     <message>
         <location filename="../../../android/sound.cpp" line="75"/>
@@ -3275,62 +3275,62 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../util.cpp" line="1893"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation type="unfinished"></translation>
+        <translation>使用 GNU 通用许可证第2版或更高版本发布 (GPLv2)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1902"/>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
-        <translation type="unfinished"></translation>
+        <translation>此程序是自由软件；您可以修改或重分发此程序，只要您遵守</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1904"/>
         <source>the terms of the GNU General Public License as published by the Free Software</source>
-        <translation type="unfinished"></translation>
+        <translation>由自由软件基金会发布的 GNU 通用许可证的条款</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1906"/>
         <source>Foundation; either version 2 of the License, or (at your option) any later version.</source>
-        <translation type="unfinished"></translation>
+        <translation>无论您依据的是本授权的第 2 版，或（您可选的）任一日后发行的版本。</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1908"/>
         <source>There is NO WARRANTY, to the extent permitted by law.</source>
-        <translation type="unfinished"></translation>
+        <translation>在法律允许的范围内，不提供任何担保。</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1911"/>
         <source>Using the following libraries, resources or code snippets:</source>
-        <translation type="unfinished"></translation>
+        <translation>使用了下述程序库、资源或代码片段：</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1913"/>
         <source>Qt framework </source>
-        <translation type="unfinished"></translation>
+        <translation>Qt 应用程序框架 </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1916"/>
         <source>Opus Interactive Audio Codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Opus Interactive Audio Codec</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1919"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished">音频混响代码作者为 Perry R. Cook 和 Gary P. Scavone</translation>
+        <translation>音频混响代码作者为 Perry R. Cook 和 Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1922"/>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
-        <translation type="unfinished"></translation>
+        <translation>部分位图资源来自 Open Clip Art Library (OCAL)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1925"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>旗帜图标作者为 Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation type="unfinished">版权所有 (C) 2005-2021 Jamulus 开发团队</translation>
+        <translation>版权所有 (C) 2005-2022 Jamulus 开发团队</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

@@ -2021,7 +2021,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="361"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation>Als u extra adresboeken wilt toevoegen aan de adresboek keuze in het verbingsvenster, dan kunt u hier de adressen invoeren.&lt;br&gt;Als u een waarde wilt verwijderen, selecteert u deze, verwijdert u de tekst in het invoervak en verplaatst u de focus uit de vak.</translation>
+        <translation>Als u extra adresboeken wilt toevoegen aan de adresboek keuze in het verbindingsvenster, dan kunt u hier de adressen invoeren.&lt;br&gt;Als u een waarde wilt verwijderen, selecteert u deze, verwijdert u de tekst in het invoervak en verplaatst u de focus uit de vak.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="368"/>
@@ -2908,7 +2908,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation>Als u het IP-adres of de URL van de server weet, dan kunt u daar verbinding meemaken door deze in te voeren in het Servernaam/Adres veld. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, b.v. %1. Het veld laat ook een lijst zien met de meest recent gebruikte serveradressen.</translation>
+        <translation>Als u het IP-adres of de URL van de server weet, dan kunt u daar verbinding mee maken door deze in te voeren in het Servernaam/Adres veld. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, b.v. %1. Het veld laat ook een lijst zien met de meest recent gebruikte serveradressen.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="149"/>
@@ -4476,7 +4476,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../util.cpp" line="1893"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation>Gereleased onder de GNU General Public License version 2 or later (GPLv2)</translation>
+        <translation>Gereleased onder de GNU General Public License versie 2 of recenter (GPLv2)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1902"/>

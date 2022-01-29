@@ -119,12 +119,13 @@ Further documentation can be found in [TRANSLATING.md](https://github.com/jamulu
 
 Thanks for contributing to Jamulus!'
 
-### New/Changed screenshots
+---
+
+**New/Changed screenshots**:
 
 Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and add use those URLs in
 your `.inc` files.
 
-<!-- URLs to EN image here -->
 
 
 get_languages() {

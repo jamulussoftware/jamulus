@@ -123,8 +123,12 @@ Thanks for contributing to Jamulus!
 
 **New/Changed screenshots**:
 
-Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and add use those URLs in
-your `.inc` files.'
+Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and use those URLs in
+your `.inc` files.
+
+<!-- add URLs here -->
+
+'
 
 
 

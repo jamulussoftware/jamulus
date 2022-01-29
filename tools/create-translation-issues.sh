@@ -99,6 +99,7 @@ Please
 
 - Start your work in your fork on a branch based on jamuluswebsite'"'"'s `${TRANSLATE_BRANCH}` branch.
 - Update the language-specific files using your favorite editor (or directly on Github),
+- New/changed images are listed at the end of this issue. [Generate new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your image `.inc` files.
 - Commit and push your changes to your fork,
 - Open a Pull Request with your translations to the **${TRANSLATE_BRANCH}** branch with the subject `${TITLE}`,
 - Link your PR(s) to this issue by including `Fixes #<Insert this issue'"'"'s number here>` in the PR content.
@@ -117,6 +118,13 @@ Feel free to use this Issue to discuss anything you need prior to making any PR 
 Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/README.md#translating).
 
 Thanks for contributing to Jamulus!'
+
+### New/Changed screenshots
+
+Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and add use those URLs in
+your `.inc` files.
+
+<!-- URLs to EN image here -->
 
 
 get_languages() {

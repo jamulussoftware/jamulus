@@ -78,8 +78,8 @@
 - Android: Some internal improvements to the experimental Android port buffer handling (#1528, #2237).
   (contributed by @j-santander, @softins)
 
-- Documentation: Enhanced the iOS compilation guide (#2139).
-  (contributed by @ann0see)
+- Documentation: Enhanced the iOS compilation guide and signing instructions (#2139, #2315).
+  (contributed by @ann0see, @RobyDati)
 
 - Documentation: Added a man page for Jamulus, from the Debian project (#2180).
   (contributed by @mirabilos)

@@ -1,7 +1,7 @@
 Source: jamulus
 Section: sound
 Priority: optional
-Maintainer: "corrados" <nomail@example.com>
+Maintainer: "The Jamulus Development Team" <team@jamulus.io>
 Build-Depends:
  debhelper (>= 9),
  libjack-jackd2-dev,
@@ -9,8 +9,8 @@ Build-Depends:
  qttools5-dev-tools,
 Standards-Version: é&%JAMVERSION%&è
 Homepage: https://jamulus.io
-Vcs-Git: git://github.com/corrados/jamulus.git
-Vcs-Browser: https://github.com/corrados/jamulus
+Vcs-Git: git://github.com/jamulussoftware/jamulus.git
+Vcs-Browser: https://github.com/jamulussoftware/jamulus
 
 Package: jamulus
 Architecture: any

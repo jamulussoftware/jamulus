@@ -8,7 +8,7 @@
 #   ./tools/create-translation-issues.sh RELEASE DEADLINE app|web [EXTRA_TEXT]
 #
 # Requirements:
-# - Github CLI tools + valid login
+# - Github CLI tools + valid login (run `gh auth login` before running the script)
 # - jamulus and jamulussoftware git checkouts
 #
 # Example usage for app translations:
@@ -123,8 +123,7 @@ Thanks for contributing to Jamulus!
 
 **New/Changed screenshots**:
 
-Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and use those URLs in
-your `.inc` files.
+Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and use those URLs in your `.inc` files.
 
 <!-- add URLs here-->
 

@@ -117,14 +117,14 @@ Feel free to use this Issue to discuss anything you need prior to making any PR 
 
 Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/README.md#translating).
 
-Thanks for contributing to Jamulus!'
+Thanks for contributing to Jamulus!
 
 ---
 
 **New/Changed screenshots**:
 
 Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite/tree/release#adding-screenshots) for your screenshots here, and add use those URLs in
-your `.inc` files.
+your `.inc` files.'
 
 
 

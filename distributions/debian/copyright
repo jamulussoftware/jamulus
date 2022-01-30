@@ -4,7 +4,9 @@ Upstream-Contact: The Jamulus Development Team
 Source: https://github.com/jamulussoftware/jamulus/
 
 Files: *
-Copyright: 2004-2022 The Jamulus Development Team
+Copyright:
+ 2021-2022 The Jamulus Development Team and contributors
+ 2004-2021 Volker Fischer and contributors
 License: GPL-2+
 
 Files: debian/*

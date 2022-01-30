@@ -1,10 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Jamulus
-Upstream-Contact: Volker Fischer 
-Source: https://github.com/corrados/jamulus/
+Upstream-Contact: The Jamulus Development Team
+Source: https://github.com/jamulussoftware/jamulus/
 
 Files: *
-Copyright: 2004-2020 Volker Fischer 
+Copyright: 2004-2022 The Jamulus Development Team
 License: GPL-2
 
 Files: debian/*

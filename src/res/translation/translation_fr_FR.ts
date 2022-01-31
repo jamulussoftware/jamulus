@@ -26,7 +26,7 @@
     <message>
         <location filename="../../util.cpp" line="392"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation>Un serveur collecte les données audio de chaque client, les mixes et renvoie le résultat à chaque client.</translation>
+        <translation>Un serveur collecte les données audio de chaque client, les mixe et renvoie le résultat à chaque client.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="411"/>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../../util.cpp" line="546"/>
         <source>About %1</source>
-        <translation>A propos %1</translation>
+        <translation>À propos %1</translation>
     </message>
     <message>
         <source>About </source>
@@ -761,7 +761,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="727"/>
         <source>%1 Directory</source>
-        <translation>%1 Annuaire</translation>
+        <translation>%1 Répertoire</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1164"/>

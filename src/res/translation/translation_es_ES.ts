@@ -491,7 +491,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="178"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation>LA etiqueta del fader identifica el cliente conectado. El nombre de la etiqueta, una imagen de tu instrumento y la bandera de tu ubicación se pueden establecer en la ventana principal.</translation>
+        <translation>La etiqueta del fader identifica el cliente conectado. El nombre de la etiqueta, una imagen de tu instrumento y la bandera de tu ubicación se pueden establecer en la ventana principal.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="187"/>
@@ -2852,8 +2852,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../connectdlg.cpp" line="68"/>
         <source>Uncheck to collapse the server list to show just the server details. Check to show everyone on the servers.</source>
-        <translatorcomment>Deshabilita para colapsar la lista de servidores para solo mostrar los detalles del servidor. Habilita para mostrar todos los conectados a los servidores.</translatorcomment>
-        <translation></translation>
+        <translation>Deshabilita para colapsar la lista de servidores para solo mostrar los detalles del servidor. Habilita para mostrar todos los conectados a los servidores.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="75"/>
@@ -2965,7 +2964,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation>Si conoces la dirección IP o la URL de un servidor, puedes conectarte a ál utilizando el campo de Nombre/Dirección Servidor. Se puede añadir opcionalmente un número de puerto tras la dirección IP utilizando dos puntos como separador, por ej. %1. El campo tambień mostrará una lista de las direcciones de servidores utilizadas más recientemente.</translation>
+        <translation>Si conoces la dirección IP o la URL de un servidor, puedes conectarte a él utilizando el campo de Nombre/Dirección Servidor. Se puede añadir opcionalmente un número de puerto tras la dirección IP utilizando dos puntos como separador, por ej. %1. El campo tambień mostrará una lista de las direcciones de servidores utilizadas más recientemente.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="149"/>
@@ -4550,7 +4549,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../../util.cpp" line="1908"/>
         <source>There is NO WARRANTY, to the extent permitted by law.</source>
-        <translation>No existe NINGUNA GARANTÍA, en la medida permitida por la leyaplicable.</translation>
+        <translation>No existe NINGUNA GARANTÍA, en la medida permitida por la ley aplicable.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1911"/>

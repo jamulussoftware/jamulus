@@ -28,11 +28,12 @@
 // a single character to an EMidiCtlType
 char const sMidiCtlChar[] = {
     // Has to follow order of EMidiCtlType
-    /* [EMidiCtlType::Fader] = */ 'f',
-    /* [EMidiCtlType::Pan]   = */ 'p',
-    /* [EMidiCtlType::Solo]  = */ 's',
-    /* [EMidiCtlType::Mute]  = */ 'm',
-    /* [EMidiCtlType::None]  = */ '\0' };
+    /* [EMidiCtlType::Fader]       = */ 'f',
+    /* [EMidiCtlType::Pan]         = */ 'p',
+    /* [EMidiCtlType::Solo]        = */ 's',
+    /* [EMidiCtlType::Mute]        = */ 'm',
+    /* [EMidiCtlType::MuteMyself]  = */ 'o',
+    /* [EMidiCtlType::None]        = */ '\0' };
 
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
@@ -390,6 +391,12 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
                         {
                             // We depend on toggles reflecting the desired state
                             emit ControllerInFaderIsMute ( cCtrl.iChannel, iValue >= 0x40 );
+                        }
+                        break;
+                        case MuteMyself:
+                        {
+                            // We depend on toggles reflecting the desired state to Mute Myself
+                            emit ControllerInMuteMyself ( iValue >= 0x40 );
                         }
                         break;
                         default:

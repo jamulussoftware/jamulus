@@ -10,4 +10,4 @@ for file in $(find android ios linux mac src windows -regex '.*\.\(cpp\|h\|mm\)'
 		sed -re 's/(\*.*Copyright.*[^-][0-9]{4})(\s*-\s*\b[0-9]{4})?\s*$/\1-'"${YEAR}"'/' -i "${file}"
 done
 
-sed -re 's/(Copyright:\s*[0-9]{4}-)[0-9]{4}/\1'"${YEAR}"'/' -i distributions/debian/copyright
+sed -re 's/^( [0-9]{4}-)[0-9]{4}( The Jamulus)/\1'"${YEAR}"'\2/' -i distributions/debian/copyright

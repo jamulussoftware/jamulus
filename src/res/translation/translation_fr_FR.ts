@@ -141,7 +141,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
         <source>&amp;Libraries</source>
-        <translation>Bib&amp;liothèques</translation>
+        <translation>&amp;Bibliothèques</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="134"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="161"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation>En cochant la case Muet, le canal audio peut être mis en sourdine.</translation>
+        <translation>En cochant la case Me silencer, le canal audio peut être mis en sourdine.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="162"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="139"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
-        <translation>Affiche le niveau audio pré-fader de ce canal.  Tous les clients connectés au serveur se verront attribuer un niveau audio, la même valeur pour chaque client.</translation>
+        <translation>Affiche le niveau audio pré-chariot de ce canal.  Tous les clients connectés au serveur se verront attribuer un niveau audio, la même valeur pour chaque client.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="66"/>
@@ -504,7 +504,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation>Vid&amp;er l&apos;historique du tchate</translation>
+        <translation>&amp;Vider l&apos;historique du tchate</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="64"/>
@@ -601,7 +601,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="103"/>
         <source>Reverb effect</source>
-        <translation>Effet Réverb</translation>
+        <translation>Effet Réverbe</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="104"/>
@@ -660,7 +660,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="157"/>
         <source>Delay status LED indicator</source>
-        <translation>Indicateur LED d&apos;état de délai</translation>
+        <translation>Indicateur diode lumineuse d&apos;état de délai</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="97"/>
@@ -685,7 +685,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation>Si ce voyant LED devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser l&apos;application.</translation>
+        <translation>Si cette diode lumineuse devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser l&apos;application.</translation>
     </message>
     <message>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
@@ -738,7 +738,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="376"/>
         <source>C&amp;hat...</source>
-        <translation>Tc&amp;hate...</translation>
+        <translation>&amp;Tchate...</translation>
     </message>
     <message>
         <source>&amp;Settings...</source>
@@ -986,7 +986,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientdlg.cpp" line="1217"/>
         <source>D&amp;isconnect</source>
-        <translation>Dé&amp;connecter</translation>
+        <translation>&amp;Déconnecter</translation>
     </message>
 </context>
 <context>
@@ -1044,12 +1044,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientdlgbase.ui" line="512"/>
         <source>&amp;Chat</source>
-        <translation>T&amp;chate</translation>
+        <translation>&amp;Tchate</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="531"/>
         <source>C&amp;onnect</source>
-        <translation>Se c&amp;onnecter</translation>
+        <translation>Se &amp;connecter</translation>
     </message>
     <message>
         <source>Pan</source>
@@ -1726,7 +1726,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>LEDs</source>
-        <translation>Diode lumineuse</translation>
+        <translation>Diodes lumineuses</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
@@ -1741,12 +1741,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>Round LEDs</source>
-        <translation>Diode lumineuses rondes</translation>
+        <translation>Diodes lumineuses rondes</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>Small LEDs</source>
-        <translation>Petites diodes lumineuse</translation>
+        <translation>Petites diodes lumineuses</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="462"/>
@@ -2517,7 +2517,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../connectdlg.cpp" line="59"/>
         <source>Filter edit box</source>
-        <translation>Bote d&apos;édition de filtre</translation>
+        <translation>Boite d&apos;édition de filtre</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="67"/>
@@ -3220,7 +3220,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>Server welcome message edit box</source>
-        <translation>Bote d&apos;édition du message de bienvenue du serveur</translation>
+        <translation>Boite d&apos;édition du message de bienvenue du serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
@@ -3255,7 +3255,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../serverdlg.cpp" line="174"/>
         <source>Custom Directory</source>
-        <translation>Annuaire personnalisé</translation>
+        <translation>Répertoire personnalisé</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
@@ -3477,7 +3477,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../serverdlgbase.ui" line="67"/>
         <source>Server Setup</source>
-        <translation>Paramètre du serveur</translation>
+        <translation>Paramètres du serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
@@ -3938,7 +3938,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../util.cpp" line="1913"/>
         <source>Qt framework </source>
-        <translation>Cadre de travail Qt </translation>
+        <translation>Cadriciel de travail Qt </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1916"/>

@@ -716,7 +716,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="727"/>
         <source>%1 Directory</source>
-        <translation>%1 Serwer</translation>
+        <translation>%1 Serwer zbiorczy</translation>
     </message>
     <message>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>

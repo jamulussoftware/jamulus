@@ -1407,7 +1407,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation>W systemie operacyjnym Windows. można wybrać sterownik SIO (kartę dźwiękową) używając %1-a. Jeśli wybrany sterownik ASIO nie jest prawidłowy, wyświetlany jest komunikat o błędzie i wybierany jest poprzedni prawidłowy sterownik. W systemie MacOS/Linux nie ma możliwości wyboru karty dźwiękowej przez Jamulus-a.</translation>
+        <translation>W systemie operacyjnym Windows. można wybrać sterownik ASIO (kartę dźwiękową) używając %1-a. Jeśli wybrany sterownik ASIO nie jest prawidłowy, wyświetlany jest komunikat o błędzie i wybierany jest poprzedni prawidłowy sterownik. W systemie MacOS/Linux nie ma możliwości wyboru karty dźwiękowej przez Jamulus-a.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="154"/>

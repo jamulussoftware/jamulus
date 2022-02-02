@@ -583,7 +583,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="145"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation>Vuoi aprire il link %1 nel tuo Browser?</translation>
+        <translation>Vuoi aprire il link &apos;%1&apos; nel tuo Browser?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>

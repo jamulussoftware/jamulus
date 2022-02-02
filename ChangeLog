@@ -109,6 +109,9 @@
 - Internal: Improved powershell redirect handling when building for Windows in Github (#2225).
   (contributed by @henkdegroot)
 
+- Internal: Prepared autobuild logic for upcoming Qt6 compatibility (#2328).
+  (contributed by @hoffie, @softins)
+
 
 ### 3.8.1 (2021-10-23) ###
 

@@ -33,11 +33,11 @@ echo "Build installer..."
 # Build the installer
 if ($BuildOption -ne "")
 {
-    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2" -BuildOption $BuildOption
+    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2" "C:\Qt\5.15.2" -BuildOption $BuildOption
 }
 else
 {
-    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2"
+    powershell "$jamulus_project_path\windows\deploy_windows.ps1" "C:\Qt\5.15.2" "C:\Qt\5.15.2"
 }
 if ( !$? )
 {

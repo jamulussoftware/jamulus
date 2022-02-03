@@ -169,6 +169,13 @@ Audio Packet Structure
 --
 The OPUS codec is used to compress the audio over the network and the packets are documented [here](https://datatracker.ietf.org/doc/html/rfc6716).
 
-Jamulus uses a custom OPUS encoder / decoder, giving some different frame sizes.
+Jamulus uses a custom OPUS encoder / decoder, giving some different frame sizes, but always uses a 48kHz sample rate. OPUS and OPUS64 codecs are the only supported options currently.
 
-Audio packets are sent over the network
+The packet size will vary based on:
+* Stereo vs mono
+* Packet size (64/128/256)
+* Use of frame sequence number (from v3.6.0 onwards)
+
+These values are wrapped up into the `NETW_TRANSPORT_PROPS` messages, which the client sends to the server to tell it which values to use.
+
+Both client and server use a jitter buffer for received audio data to prevent audio drop-out. This is configurable.

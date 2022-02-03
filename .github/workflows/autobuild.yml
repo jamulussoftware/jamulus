@@ -115,6 +115,7 @@ jobs:
              cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
              cmd3_postbuild:        false
              uses_codeql:           true
+             xcode_version:         11.7
 
            - config_name:           MacOS (artifacts)
              target_os:             macos

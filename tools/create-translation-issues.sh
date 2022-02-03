@@ -84,7 +84,7 @@ Fixes #<Insert this issue'"'"'s number here>
 
 ${EXTRA_TEXT}${MULTIPLE_TRANSLATORS_TEXT}
 
-Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamulus/blob/master/TRANSLATING.md).
+Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamulus/blob/master/docs/TRANSLATING.md).
 
 Thanks for contributing to Jamulus!'
 

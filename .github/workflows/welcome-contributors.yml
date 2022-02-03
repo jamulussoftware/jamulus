@@ -1,0 +1,21 @@
+name: Welcome new contributors
+on:
+  pull_request:
+    types: [opened]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: wow-actions/welcome@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIRST_PR_COMMENT: |
+            "👋 @{{ author }}.
+            Thanks for opening your first pull request and contributing to Jamulus!
+            To make documentation and maintenance simple, please fill out the pull request template (if you haven't already).
+            Just a few tips:
+              * Are you really sure that your pull request needs the type of documentation you mentioned? Can you write it yourself?
+              * Do you want help? Ask for it!
+              * Do you want to add yourself to the the [contributors list](https://github.com/jamulussoftware/jamulus/blob/d8ef148edffe276b09487ce6c175d0b96cfd86f1/src/util.cpp#L428)?
+
+            Please check out our [contributing guidelines](https://github.com/jamulussoftware/jamulus/blob/master/CONTRIBUTING.md)."

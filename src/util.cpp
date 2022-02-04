@@ -948,10 +948,19 @@ QString CHostAddress::toString ( const EStringMode eStringMode ) const
 
     // special case: for local host address, we do not replace the last byte
     if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
-         ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) )
+         ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) && ( InetAddr != QHostAddress ( QHostAddress::LocalHostIPv6 ) ) )
     {
-        // replace last byte by an "x"
-        strReturn = strReturn.section ( ".", 0, 2 ) + ".x";
+        // replace last part by an "x"
+        if ( strReturn.contains ( "." ) )
+        {
+            // IPv4 or IPv4-mapped:
+            strReturn = strReturn.section ( ".", 0, -2 ) + ".x";
+        }
+        else
+        {
+            // IPv6
+            strReturn = strReturn.section ( ":", 0, -2 ) + ":x";
+        }
     }
 
     if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )

@@ -942,6 +942,27 @@ int CHostAddress::Compare ( const CHostAddress& other ) const
     return thisAddr < otherAddr ? -1 : thisAddr > otherAddr ? 1 : 0;
 }
 
+QString CHostAddress::toString ( const EStringMode eStringMode ) const
+{
+    QString strReturn = InetAddr.toString();
+
+    // special case: for local host address, we do not replace the last byte
+    if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
+         ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) )
+    {
+        // replace last byte by an "x"
+        strReturn = strReturn.section ( ".", 0, 2 ) + ".x";
+    }
+
+    if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+    {
+        // add port number after a semicolon
+        strReturn += ":" + QString().setNum ( iPort );
+    }
+
+    return strReturn;
+}
+
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
 {

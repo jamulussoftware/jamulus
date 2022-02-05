@@ -966,7 +966,15 @@ QString CHostAddress::toString ( const EStringMode eStringMode ) const
     if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
     {
         // add port number after a semicolon
-        strReturn += ":" + QString().setNum ( iPort );
+        if ( strReturn.contains ( "." ) )
+        {
+            strReturn += ":" + QString().setNum ( iPort );
+        }
+        else
+        {
+            // enclose pure IPv6 address in [ ] before adding port, to avoid ambiguity
+            strReturn = "[" + strReturn + "]:" + QString().setNum ( iPort );
+        }
     }
 
     return strReturn;

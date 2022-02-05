@@ -65,7 +65,7 @@ The client on a new connection will:
 
 This is defined in `CClient::OnNewConnection()`
 
-At the end of the session, the client calls the `CLM_DISCONNECTION(0xf203)` message, until the server stops streaming audio to it.
+At the end of the session, the client calls the `CLM_DISCONNECTION (0xf203)` message, until the server stops streaming audio to it.
 
 A typical flow would be:
 

@@ -965,7 +965,7 @@ QString CHostAddress::toString ( const EStringMode eStringMode ) const
 
     if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
     {
-        // add port number after a semicolon
+        // add port number after a colon
         if ( strReturn.contains ( "." ) )
         {
             strReturn += ":" + QString().setNum ( iPort );

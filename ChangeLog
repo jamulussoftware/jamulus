@@ -112,6 +112,9 @@
 - Internal: Prepared autobuild logic for upcoming Qt6 compatibility (#2328).
   (contributed by @hoffie, @softins)
 
+- Internal: Release build process has been refactored and uses pinned dependencies for better reproducibility now. (#2345)
+  (contributed by @hoffie)
+
 
 ### 3.8.1 (2021-10-23) ###
 

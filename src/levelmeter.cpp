@@ -61,9 +61,9 @@ CLevelMeter::CLevelMeter ( QWidget* parent ) : QWidget ( parent ), eLevelMeterTy
     pBarMeter->setFormat ( "" );                        // suppress percent numbers
 
     // setup stacked layout for meter type switching mechanism
-    pStackedLayout = new QStackedLayout ( this );
-    pStackedLayout->addWidget ( pLEDMeter );
-    pStackedLayout->addWidget ( pBarMeter );
+    pMinStackedLayout = new CMinimumStackedLayout ( this );
+    pMinStackedLayout->addWidget ( pLEDMeter );
+    pMinStackedLayout->addWidget ( pBarMeter );
 
     // according to QScrollArea description: "When using a scroll area to display the
     // contents of a custom widget, it is important to ensure that the size hint of
@@ -103,7 +103,7 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
         {
             vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_BLACK );
         }
-        pStackedLayout->setCurrentIndex ( 0 );
+        pMinStackedLayout->setCurrentIndex ( 0 );
         break;
 
     case MT_SLIM_LED:
@@ -112,7 +112,7 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
         {
             vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_SLIM_BLACK );
         }
-        pStackedLayout->setCurrentIndex ( 0 );
+        pMinStackedLayout->setCurrentIndex ( 0 );
         break;
 
     case MT_SMALL_LED:
@@ -121,21 +121,12 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
         {
             vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_SMALL_BLACK );
         }
-        pStackedLayout->setCurrentIndex ( 0 );
+        pMinStackedLayout->setCurrentIndex ( 0 );
         break;
 
     case MT_BAR:
-        pStackedLayout->setCurrentIndex ( 1 );
-        break;
-
     case MT_SLIM_BAR:
-        // set all LEDs to disabled, otherwise we would not get our desired small width
-        for ( int iLEDIdx = 0; iLEDIdx < NUM_LEDS_INCL_CLIP_LED; iLEDIdx++ )
-        {
-            vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_DISABLED );
-        }
-
-        pStackedLayout->setCurrentIndex ( 1 );
+        pMinStackedLayout->setCurrentIndex ( 1 );
         break;
     }
 

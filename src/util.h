@@ -41,6 +41,7 @@
 #    include <QDesktopServices>
 #    include <QKeyEvent>
 #    include <QTextBoundaryFinder>
+#    include <QStackedLayout>
 #    include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
@@ -444,6 +445,15 @@ public slots:
 
 signals:
     void LanguageChanged ( QString strLanguage );
+};
+
+// StackedLayout which auto-reduces to the size of the currently visible widget
+class CMinimumStackedLayout : public QStackedLayout
+{
+    Q_OBJECT
+public:
+    CMinimumStackedLayout ( QWidget* parent = nullptr ) : QStackedLayout ( parent ) {}
+    virtual QSize sizeHint() const override;
 };
 #endif
 

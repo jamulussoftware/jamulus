@@ -942,6 +942,44 @@ int CHostAddress::Compare ( const CHostAddress& other ) const
     return thisAddr < otherAddr ? -1 : thisAddr > otherAddr ? 1 : 0;
 }
 
+QString CHostAddress::toString ( const EStringMode eStringMode ) const
+{
+    QString strReturn = InetAddr.toString();
+
+    // special case: for local host address, we do not replace the last byte
+    if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
+         ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) && ( InetAddr != QHostAddress ( QHostAddress::LocalHostIPv6 ) ) )
+    {
+        // replace last part by an "x"
+        if ( strReturn.contains ( "." ) )
+        {
+            // IPv4 or IPv4-mapped:
+            strReturn = strReturn.section ( ".", 0, -2 ) + ".x";
+        }
+        else
+        {
+            // IPv6
+            strReturn = strReturn.section ( ":", 0, -2 ) + ":x";
+        }
+    }
+
+    if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+    {
+        // add port number after a colon
+        if ( strReturn.contains ( "." ) )
+        {
+            strReturn += ":" + QString().setNum ( iPort );
+        }
+        else
+        {
+            // enclose pure IPv6 address in [ ] before adding port, to avoid ambiguity
+            strReturn = "[" + strReturn + "]:" + QString().setNum ( iPort );
+        }
+    }
+
+    return strReturn;
+}
+
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable ( const bool bReGenerateTable )
 {

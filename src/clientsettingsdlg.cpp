@@ -561,21 +561,22 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry ); iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
     {
         // exclude the "None" entry since it is added after the sorting
-        if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
+        if ( static_cast<QLocale::Country> ( iCurCntry ) == QLocale::AnyCountry )
         {
-            // get current country enum
-            QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
+            continue;
+        }
+        // get current country enum
+        QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
 
-            // try to load icon from resource file name
-            QIcon CurFlagIcon;
-            CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
+        // try to load icon from resource file name
+        QIcon CurFlagIcon;
+        CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
 
-            // only add the entry if a flag is available
-            if ( !CurFlagIcon.isNull() )
-            {
-                // create a combo box item with text and image
-                pcbxCountry->addItem ( QIcon ( CurFlagIcon ), QLocale::countryToString ( eCountry ), iCurCntry );
-            }
+        // only add the entry if a flag is available
+        if ( !CurFlagIcon.isNull() )
+        {
+            // create a combo box item with text and image
+            pcbxCountry->addItem ( QIcon ( CurFlagIcon ), QLocale::countryToString ( eCountry ), iCurCntry );
         }
     }
 

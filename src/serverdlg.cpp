@@ -308,12 +308,13 @@ lvwClients->setMinimumHeight ( 140 );
     for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry ); iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
     {
         // add all countries except of the "Default" country
-        if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
+        if ( static_cast<QLocale::Country> ( iCurCntry ) == QLocale::AnyCountry )
         {
-            // store the country enum index together with the string (this is
-            // important since we sort the combo box items later on)
-            cbxLocationCountry->addItem ( QLocale::countryToString ( static_cast<QLocale::Country> ( iCurCntry ) ), iCurCntry );
+            continue;
         }
+        // store the country enum index together with the string (this is
+        // important since we sort the combo box items later on)
+        cbxLocationCountry->addItem ( QLocale::countryToString ( static_cast<QLocale::Country> ( iCurCntry ) ), iCurCntry );
     }
 
     // sort country combo box items in alphabetical order

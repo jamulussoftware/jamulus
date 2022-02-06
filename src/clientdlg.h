@@ -147,6 +147,8 @@ public slots:
 
     void OnControllerInFaderIsMute ( const int iChannelIdx, const bool bIsMute ) { MainMixerBoard->SetFaderIsMute ( iChannelIdx, bIsMute ); }
 
+    void OnControllerInMuteMyself ( const bool bMute ) { chbLocalMute->setChecked ( bMute ); }
+
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString strVersion );
 
     void OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString strVersion );

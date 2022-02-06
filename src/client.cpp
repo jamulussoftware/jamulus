@@ -164,6 +164,8 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Sound, &CSound::ControllerInFaderIsMute, this, &CClient::OnControllerInFaderIsMute );
 
+    QObject::connect ( &Sound, &CSound::ControllerInMuteMyself, this, &CClient::OnControllerInMuteMyself );
+
     QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived, this, &CClient::OnInvalidPacketReceived );
 
     QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal, this, &CClient::OnHandledSignal );
@@ -702,6 +704,17 @@ void CClient::OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute )
 #endif
 
     emit ControllerInFaderIsMute ( iChannelIdx, bIsMute );
+}
+
+void CClient::OnControllerInMuteMyself ( bool bMute )
+{
+    // in case of a headless client the buttons are not displayed so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // FIXME: no idea what to do here.
+#endif
+
+    emit ControllerInMuteMyself ( bMute );
 }
 
 void CClient::OnClientIDReceived ( int iChanID )

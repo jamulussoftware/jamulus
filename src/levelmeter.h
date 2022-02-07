@@ -29,7 +29,6 @@
 #include <QTimer>
 #include <QLayout>
 #include <QProgressBar>
-#include <QStackedLayout>
 #include "util.h"
 #include "global.h"
 
@@ -107,10 +106,10 @@ protected:
 
     void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType, const bool bIsClip );
 
-    QStackedLayout* pStackedLayout;
-    ELevelMeterType eLevelMeterType;
-    CVector<cLED*>  vecpLEDs;
-    QProgressBar*   pBarMeter;
+    CMinimumStackedLayout* pMinStackedLayout;
+    ELevelMeterType        eLevelMeterType;
+    CVector<cLED*>         vecpLEDs;
+    QProgressBar*          pBarMeter;
 
     QTimer TimerClip;
 

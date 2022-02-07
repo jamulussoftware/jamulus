@@ -1,8 +1,8 @@
 
 ### 3.8.2beta1dev <- NOTE: the release version number will be 3.8.2 ###
 
-- Client: Added selection option for level meter style (#1688).
-  (contributed by @henkdegroot)
+- Client: Added selection option for level meter style (#1688, #2352).
+  (contributed by @henkdegroot, @hoffie, @pgScorpio)
 
 - Client: On Windows, if no driver found while installing, the "Run Jamulus"
   option will not be checked (#2103).

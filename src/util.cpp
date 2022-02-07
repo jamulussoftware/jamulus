@@ -680,6 +680,16 @@ QString TruncateString ( QString str, int position )
     }
     return str.left ( position );
 }
+
+QSize CMinimumStackedLayout::sizeHint() const
+{
+    // always use the size of the currently visible widget:
+    if ( currentWidget() )
+    {
+        return currentWidget()->sizeHint();
+    }
+    return QStackedLayout::sizeHint();
+}
 #endif
 
 /******************************************************************************\

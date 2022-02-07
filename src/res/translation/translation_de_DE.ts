@@ -1517,7 +1517,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="189"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation>64 Samples: Führt zu geringer Verzögerung, funktioniert aber nicht mit allen Soundkarten.</translation>
+        <translation>64 Samples: Führt zur geringsten Verzögerung, funktioniert aber nicht mit allen Soundkarten.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>

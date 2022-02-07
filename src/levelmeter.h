@@ -44,11 +44,11 @@ class CLevelMeter : public QWidget
 public:
     enum ELevelMeterType
     {
-        MT_LED,
-        MT_BAR,
-        MT_SLIM_BAR,
-        MT_SLIM_LED,
-        MT_SMALL_LED
+        MT_BAR_NARROW,
+        MT_BAR_WIDE,
+        MT_LED_STRIPE,
+        MT_LED_ROUND_SMALL,
+        MT_LED_ROUND_BIG
     };
 
     CLevelMeter ( QWidget* parent = nullptr );
@@ -68,14 +68,14 @@ protected:
             RL_GREEN,
             RL_YELLOW,
             RL_RED,
-            RL_SLIM_BLACK,
-            RL_SLIM_GREEN,
-            RL_SLIM_YELLOW,
-            RL_SLIM_RED,
-            RL_SMALL_BLACK,
-            RL_SMALL_GREEN,
-            RL_SMALL_YELLOW,
-            RL_SMALL_RED
+            RL_ROUND_SMALL_BLACK,
+            RL_ROUND_SMALL_GREEN,
+            RL_ROUND_SMALL_YELLOW,
+            RL_ROUND_SMALL_RED,
+            RL_ROUND_BIG_BLACK,
+            RL_ROUND_BIG_GREEN,
+            RL_ROUND_BIG_YELLOW,
+            RL_ROUND_BIG_RED
         };
 
         cLED ( QWidget* parent );
@@ -89,14 +89,14 @@ protected:
         QPixmap BitmCubeLedGreen;
         QPixmap BitmCubeLedYellow;
         QPixmap BitmCubeLedRed;
-        QPixmap BitmCubeSlimLedBlack;
-        QPixmap BitmCubeSlimLedGreen;
-        QPixmap BitmCubeSlimLedYellow;
-        QPixmap BitmCubeSlimLedRed;
-        QPixmap BitmCubeSmallLedBlack;
-        QPixmap BitmCubeSmallLedGreen;
-        QPixmap BitmCubeSmallLedYellow;
-        QPixmap BitmCubeSmallLedRed;
+        QPixmap BitmCubeRoundSmallLedBlack;
+        QPixmap BitmCubeRoundSmallLedGreen;
+        QPixmap BitmCubeRoundSmallLedYellow;
+        QPixmap BitmCubeRoundSmallLedRed;
+        QPixmap BitmCubeRoundBigLedBlack;
+        QPixmap BitmCubeRoundBigLedGreen;
+        QPixmap BitmCubeRoundBigLedYellow;
+        QPixmap BitmCubeRoundBigLedRed;
 
         ELightColor eCurLightColor;
         QLabel*     pLEDLabel;

@@ -269,9 +269,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // MeterStyle
     lblMeterStyle->setWhatsThis ( "<b>" + tr ( "Meter Style" ) + ":</b> " +
                                   tr ( "Select the meter style to be used for the level meters. The "
-                                       "Narrow Bar and Small LEDs options only apply to the mixerboard. When "
-                                       "Narrow Bar is selected, the input meters are set to Bar. When "
-                                       "Small LEDs is selected, the input meters are set to Round LEDs. "
+                                       "Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When "
+                                       "Bar (narrow) is selected, the input meters are set to Bar (wide). When "
+                                       "LEDs (round, small) is selected, the input meters are set to LEDs (round, big). "
                                        "The remaining options apply to the mixerboard and input meters." ) );
 
     cbxMeterStyle->setAccessibleName ( tr ( "Meter Style combo box" ) );
@@ -440,11 +440,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // MeterStyle combo box
     cbxMeterStyle->clear();
-    cbxMeterStyle->addItem ( tr ( "LEDs" ) );       // MT_LED
-    cbxMeterStyle->addItem ( tr ( "Bar" ) );        // MT_BAR
-    cbxMeterStyle->addItem ( tr ( "Narrow Bar" ) ); // MT_SLIM_BAR
-    cbxMeterStyle->addItem ( tr ( "Round LEDs" ) ); // MT_SLIM_LED
-    cbxMeterStyle->addItem ( tr ( "Small LEDs" ) ); // MT_SMALL_LED
+    cbxMeterStyle->addItem ( tr ( "Bar (narrow)" ) );        // MT_BAR_NARROW
+    cbxMeterStyle->addItem ( tr ( "Bar (wide)" ) );          // MT_BAR_WIDE
+    cbxMeterStyle->addItem ( tr ( "LEDs (stripe)" ) );       // MT_LED_STRIPE
+    cbxMeterStyle->addItem ( tr ( "LEDs (round, small)" ) ); // MT_LED_ROUND_SMALL
+    cbxMeterStyle->addItem ( tr ( "LEDs (round, big)" ) );   // MT_LED_ROUND_BIG
     cbxMeterStyle->setCurrentIndex ( static_cast<int> ( pClient->GetMeterStyle() ) );
 
     // language combo box (corrects the setting if language not found)

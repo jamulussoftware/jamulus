@@ -518,11 +518,11 @@ enum EGUIDesign
 enum EMeterStyle
 {
     // used for settings -> enum values should be fixed
-    MT_LED       = 0,
-    MT_BAR       = 1,
-    MT_SLIM_BAR  = 2,
-    MT_SLIM_LED  = 3,
-    MT_SMALL_LED = 4
+    MT_BAR_NARROW      = 0,
+    MT_BAR_WIDE        = 1,
+    MT_LED_STRIPE      = 2,
+    MT_LED_ROUND_SMALL = 3,
+    MT_LED_ROUND_BIG   = 4
 };
 
 // Server licence type enum ----------------------------------------------------

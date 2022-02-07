@@ -1537,17 +1537,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="270"/>
         <source>Meter Style</source>
-        <translation>Audiokanal-Stil</translation>
+        <translation>Pegel-Messer-Stil</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Narrow Bar and Small LEDs options only apply to the mixerboard. When Narrow Bar is selected, the input meters are set to Bar. When Small LEDs is selected, the input meters are set to Round LEDs. The remaining options apply to the mixerboard and input meters.</source>
-        <translation>Wähle den Audikanal-Stil aus, der für die Schieberegler genutzt wird. Die schmalen Balken und kleinen LEDs werden nur im Mixer angezeigt. Wenn die schmalen Balken ausgewählt sind, sind die Eingangspegelanzeigen Balken. Wenn kleine LEDs ausgwählt sind, sind die Eingangspegelanzeigen runde LEDs. Die anderen Optionen verändern sowohl den Mixer, als auch die Eingangspegelanzeigen.</translation>
+        <translation>Wähle den Pegel-Messer-Stil aus, der für die Schieberegler genutzt wird. Die schmalen Balken und kleinen LEDs werden nur im Mixer angezeigt. Wenn die schmalen Balken ausgewählt sind, sind die Eingangspegelanzeigen Balken. Wenn kleine LEDs ausgwählt sind, sind die Eingangspegelanzeigen runde LEDs. Die anderen Optionen verändern sowohl den Mixer, als auch die Eingangspegelanzeigen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="277"/>
         <source>Meter Style combo box</source>
-        <translation>Audiokanal-Stil Combo-Box</translation>
+        <translation>Pegel-Messer-Stil Combo-Box</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
@@ -2613,7 +2613,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="227"/>
         <source>Meter Style</source>
-        <translation>Audiokanal-Stil</translation>
+        <translation>Pegel-Messer-Stil</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="241"/>

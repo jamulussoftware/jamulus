@@ -479,7 +479,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="178"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation>Mit der Kanalbeschriftung wird der verbundene Teilnehmer identifiziert. Der Name, ein Bild des Instruments und eine Flagge des eigenen Landes kann im eigenen Profil ausgewählt werden.</translation>
+        <translation>Durch die Kanalbeschriftung wird der verbundene Teilnehmer identifiziert. Der Name, ein Bild des Instruments und eine Flagge des eigenen Landes kann im eigenen Profil ausgewählt werden.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="187"/>
@@ -1497,7 +1497,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
-        <translation>Mit diesem Einstellregler kann der relative Pegel vom linken und rechten Eingangskanal verändert werden. Für ein Mono-Signal verhält sich der Regler wie ein Pan-Regler. Wenn z.B. ein Mikrofon am rechten Kanal angeschlossen ist und das Instrument am linken Eingangskanal viel lauter als das Mikrofon ist, dann bewege den Audio-Regler in die Richtung, in der das Label über dem Kanal %1 anzeigt; %2 ist der aktuelle Dämpfungsindikator.</translation>
+        <translation>Mit diesem Regler kann der relative Pegel vom linken und rechten Eingangskanal verändert werden. Für ein Mono-Signal verhält er sich wie ein Pan-Regler. Wenn z.B. ein Mikrofon am rechten Kanal angeschlossen ist und das Instrument am linken Eingangskanal viel lauter als das Mikrofon ist, dann bewege den Audio-Regler in die Richtung, in der das Label über dem Kanal %1 anzeigt; %2 ist der aktuelle Dämpfungsindikator.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
@@ -1522,12 +1522,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
-        <translation>256 Samples: Diese Einstellung sollte nur dann verwendet werden, wenn 64 oder 128 Samples problematisch sind.</translation>
+        <translation>256 Samples: Diese Einstellung sollte nur dann verwendet werden, wenn 64 oder 128 Samples schlechte Ergebnisse liefern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
-        <translation>Wenn keine Puffergröße ausgewählt ist und alle Einstellungen deaktiviert sind bedeutet das, dass eine Puffergröße vom Treiber verwendet wird, die nicht den Standardwerten entspricht. %1 wird zwar trotzdem funktionieren, aber eventuell eine schlechtere Leistung bringen.</translation>
+        <translation>Wenn keine Puffergröße ausgewählt ist und alle Einstellungen deaktiviert sind, bedeutet das, dass eine Puffergröße vom Treiber verwendet wird, die nicht den Standardwerten entspricht. %1 wird zwar trotzdem funktionieren, aber eventuell eine schlechtere Leistung bringen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="213"/>
@@ -2805,7 +2805,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../connectdlg.cpp" line="46"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
-        <translation>Zeigt die Server, die vom ausgewählten Verzeichnis gelistet werden. Du kannst benutzerdefinierte Verzeichnisse in den erweiterten Einstellungen hinzufügen.</translation>
+        <translation>Zeigt die Server, die vom ausgewählten Verzeichnis gelistet werden an. Du kannst benutzerdefinierte Verzeichnisse in den erweiterten Einstellungen hinzufügen.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="48"/>
@@ -2924,7 +2924,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation>Wenn Du die IP-Adresse oder URL eines Servers kennst, kannst du über das Feld Severadresse eine Verbindung zu ihm herstellen. Nach der IP-Adresse oder URL kann eine optionale Portnummer mit einem Doppelpunkt als Trennzeichen eingefügt werden, z.B. %1. In diesem Feld wird auch eine Liste der zuletzt verwendeten Serveradressen angezeigt.</translation>
+        <translation>Wenn Du die IP-Adresse oder URL eines Servers kennst, kannst du über das Feld &quot;Severadresse&quot; eine Verbindung zu ihm herstellen. Nach der IP-Adresse oder URL kann eine optionale Portnummer mit einem Doppelpunkt als Trennzeichen eingefügt werden, z.B. %1. In diesem Feld wird auch eine Liste der zuletzt verwendeten Serveradressen angezeigt.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="149"/>
@@ -4517,7 +4517,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../util.cpp" line="1922"/>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
-        <translation>Manche pixmaps sind aus der Open Clip Art Library (OCAL)</translation>
+        <translation>Manche Pixmaps sind aus der Open Clip Art Library (OCAL)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1925"/>

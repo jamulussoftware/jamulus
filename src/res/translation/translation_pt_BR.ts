@@ -2834,7 +2834,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../connectdlg.cpp" line="57"/>
         <source>Filters the server list by the given text. Note that the filter is case insensitive. A single # character will filter for those servers with at least one person connected.</source>
-        <translation>Filtra a lista de servidores pelo texto fornecido. Observe que o filtro não diferencia maiúsculas de minúsculas. Um único caractere# filtrará os servidores com pelo menos uma pessoa conectada.</translation>
+        <translation>Filtra a lista de servidores pelo texto fornecido. Observe que o filtro não diferencia maiúsculas de minúsculas. Um único caractere # filtrará os servidores com pelo menos uma pessoa conectada.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="68"/>
@@ -2943,7 +2943,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation>Se você souver o endereço IP ou URL de um servidor, poderá conectar-se a ele usando o campo Nome/Endereço de Servidor. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando dois pontos como separador, por exemplo, %1. O campo também mostrará uma lista de servidores usados mais recentemente.</translation>
+        <translation>Se você souber o endereço IP ou URL de um servidor, poderá conectar-se a ele usando o campo Nome/Endereço de Servidor. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando dois pontos como separador, por exemplo, %1. O campo também mostrará uma lista de servidores usados mais recentemente.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="149"/>
@@ -4398,8 +4398,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translatorcomment>English is missing %1</translatorcomment>
-        <translation>O formato do fluxo no dispositivo de entrada atual não é compatível com %1. Selecione outro dispositivo.</translation>
+        <translation>O formato do fluxo no dispositivo de entrada atual não é compatível com este software. Selecione outro dispositivo.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="475"/>

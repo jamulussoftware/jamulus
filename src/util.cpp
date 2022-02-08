@@ -1218,32 +1218,34 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     // special flag for none
     if ( eCountry == QLocale::AnyCountry )
     {
-        strReturn = ":/png/flags/res/flags/flagnone.png";
+        return ":/png/flags/res/flags/flagnone.png";
     }
-    else
+
+    // There is no direct query of the country code in Qt, therefore we use a
+    // workaround: Get the matching locales properties and split the name of
+    // that since the second part is the country code
+    QList<QLocale> vCurLocaleList = QLocale::matchingLocales ( QLocale::AnyLanguage, QLocale::AnyScript, eCountry );
+
+    // check if the matching locales query was successful
+    if ( vCurLocaleList.size() < 1 )
     {
-        // There is no direct query of the country code in Qt, therefore we use a
-        // workaround: Get the matching locales properties and split the name of
-        // that since the second part is the country code
-        QList<QLocale> vCurLocaleList = QLocale::matchingLocales ( QLocale::AnyLanguage, QLocale::AnyScript, eCountry );
+        return "";
+    }
 
-        // check if the matching locales query was successful
-        if ( vCurLocaleList.size() > 0 )
-        {
-            QStringList vstrLocParts = vCurLocaleList.at ( 0 ).name().split ( "_" );
+    QStringList vstrLocParts = vCurLocaleList.at ( 0 ).name().split ( "_" );
 
-            // the second split contains the name we need
-            if ( vstrLocParts.size() > 1 )
-            {
-                strReturn = ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+    // the second split contains the name we need
+    if ( vstrLocParts.size() <= 1 )
+    {
+        return "";
+    }
 
-                // check if file actually exists, if not then invalidate reference
-                if ( !QFile::exists ( strReturn ) )
-                {
-                    strReturn = "";
-                }
-            }
-        }
+    strReturn = ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+
+    // check if file actually exists, if not then invalidate reference
+    if ( !QFile::exists ( strReturn ) )
+    {
+        return "";
     }
 
     return strReturn;

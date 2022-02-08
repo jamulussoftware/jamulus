@@ -76,12 +76,12 @@
     <message>
         <location filename="../../util.cpp" line="425"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>Ícones de bandeiras por Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="494"/>
         <source>For details on the contributions check out the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Para detalhes sobre as contribuições, consulte a %1</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="495"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../../util.cpp" line="546"/>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobre %1</translation>
     </message>
     <message>
         <source>About </source>
@@ -501,12 +501,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="178"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>A marcação do fader identifica o cliente conectado. O nome, a imagem de seu instrumento e a bandeira de sua localização podem ser definidos na janela principal.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="187"/>
         <source>Mixer channel country/region flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandeira do país/região do canal do mixer</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="836"/>
@@ -923,7 +923,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="727"/>
         <source>%1 Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretório %1</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1164"/>
@@ -1040,7 +1040,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
-        <translation type="unfinished"></translation>
+        <translation>Def&amp;inições</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="391"/>
@@ -1075,12 +1075,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="207"/>
         <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se este indicador LED ficar vermelho, você não irá divertir-se muito ao usar o software %1.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
-        <translation type="unfinished"></translation>
+        <translation>P&amp;róprio Fader Primeiro</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="323"/>
@@ -1489,27 +1489,27 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>LEDs</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>Narrow Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra Estreita</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>Round LEDs</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs Redondos</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>Small LEDs</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs Pequenos</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="462"/>
@@ -1522,7 +1522,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="496"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Escreva o seu nome ou um apelido aqui para que os outros músicos com quem quer tocar saibam quem você é. Além disso, pode também definir uma imagem do instrumento que toca e uma bandeira do país ou região onde vive. A cidade e o nível de habilidade com o seu instrumento também podem ser adicionados.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="501"/>
@@ -1532,7 +1532,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="512"/>
         <source>Country/region flag button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botão da bandeira do país/região</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1164"/>
@@ -1995,72 +1995,72 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Controla os níveis relativos dos canais locais esquerdo e direito. Para um sinal mono, atua como uma panorâmica entre os dois canais. Por exemplo, se um microfone estiver ligado no canal de entrada direito e um instrumento estiver ligado no canal de entrada esquerdo, mais alto que o microfone, mova o fader de áudio numa direção em que o marcador acima do fader mostre %1, onde %2 é o indicador de atenuação.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de Áudio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>No sistema operacional Windows o driver ASIO (placa de som) pode ser selecionado usando %1. Se o driver ASIO selecionado não for válido, uma mensagem de erro será exibida e o driver válido anterior será selecionado. No macOS o hardware de entrada e saída pode ser selecionado.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>Three buffer sizes can be selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Três tamanhos de buffer podem ser selecionados</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="189"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 amostras: Fornece menor latência, mas não funciona com todas as placas de som.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 amostras: Deve apenas ser usado quando 64 ou 128 amostras estiver causando problemas.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se nenhum tamanho de buffer estiver selecionado e todas as configurações estiverem desativadas, significa que um tamanho de buffer em uso pelo driver não combina os valores. %1 ainda funcionará com essa configuração, mas com desempenho limitado.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>O atraso do buffer influencia a conexão, a taxa de upload e a latência geral. Quanto menor o tamanho do buffer, maior a probabilidade de a luz vermelha no indicador de estado (interrupções), maior a taxa de upload e menor a latência geral.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="270"/>
         <source>Meter Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo do Medidor</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Narrow Bar and Small LEDs options only apply to the mixerboard. When Narrow Bar is selected, the input meters are set to Bar. When Small LEDs is selected, the input meters are set to Round LEDs. The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione o estilo a ser usado para os medidores de nível. As opções Barra Estreita e LEDs Pequenos aplicam-se apenas à mesa do mixer. Quando a Barra Estreita é selecionada, os medidores de entrada são definidos como Barra. Quando LEDs Pequenos é selecionado, os medidores de entrada são definidos como LEDs redondos. As opções restantes aplicam-se à mesa do mixere aos medidores de entrada.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="277"/>
         <source>Meter Style combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Seletor do Estilo do Medidor</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="360"/>
         <source>Custom Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretórios Personalizados</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="361"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se você precisa acrescentar diretórios adicionais no menu lista Diretório da caixa de diálogo Conectar, insira os endereços aqui.&lt;br&gt;Para remover um valor, selecione-o, exclua o texto na caixa de entrada e mova o foco para fora do controle.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="368"/>
         <source>Custom Directories combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Seletor de Diretório Personalizado</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="381"/>
@@ -2510,12 +2510,12 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../util.cpp" line="1102"/>
         <source>Vibraphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibrafone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1105"/>
         <source>Conductor</source>
-        <translation type="unfinished"></translation>
+        <translation>Maestro</translation>
     </message>
 </context>
 <context>
@@ -2568,7 +2568,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="103"/>
         <source>Country/Region</source>
-        <translation type="unfinished">País/Região</translation>
+        <translation>País/Região</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="620"/>
@@ -2632,7 +2632,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="227"/>
         <source>Meter Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo do Medidor</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="241"/>
@@ -2647,7 +2647,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="335"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo de Áudio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="676"/>
@@ -2819,42 +2819,42 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../connectdlg.cpp" line="45"/>
         <source>Directory</source>
-        <translation type="unfinished">Diretório</translation>
+        <translation>Diretório</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="46"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Exibe os servidores listados por diretório selecionado. Você pode adicionar diretórios personalizados em Configurações Avançadas.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="48"/>
         <source>Directory combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Seletor de Diretório</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="57"/>
         <source>Filters the server list by the given text. Note that the filter is case insensitive. A single # character will filter for those servers with at least one person connected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtra a lista de servidores pelo texto fornecido. Observe que o filtro não diferencia maiúsculas de minúsculas. Um único caractere # filtrará os servidores com pelo menos uma pessoa conectada.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="68"/>
         <source>Uncheck to collapse the server list to show just the server details. Check to show everyone on the servers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Desmarque para recolher a lista de servidores e mostrar apenas os detalhes.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="75"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>A janela de Configuração de Conexão lista os servidores disponíveis registrados no diretório selecionado. Use o menu lista para alterar o diretório, localize o servidor que deseja ingressar na lista de servidores, clique nele e, em seguida clique no botão Conectar para conectar-se. Como alternativa, clique duas vezes no nome do servidor para conectar-se.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="80"/>
         <source>Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidores permanentes (aqueles que estão listados por mais de 48 horas) são mostrados em negrito.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="81"/>
         <source>You can add custom directories in Advanced Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Você pode adicionar diretórios personalizados em Configurações Avançadas.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
@@ -2943,7 +2943,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se você souber o endereço IP ou URL de um servidor, poderá conectar-se a ele usando o campo Nome/Endereço de Servidor. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando dois pontos como separador, por exemplo, %1. O campo também mostrará uma lista de servidores usados mais recentemente.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="149"/>
@@ -3643,12 +3643,12 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
         <source>Recording has been switched off by the UI checkbox</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravação foi desligada pela caixa de seleção da IU</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravação foi desligada pela caixa de seleção da IU ou SIGUSR2 recebido</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -3698,7 +3698,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../serverdlg.cpp" line="66"/>
         <source>If the Register Server check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se a caixa de seleção Registrar Servidor estiver marcada, isto exibirá se o registro no servidor de diretório foi bem-sucedido. Se o registro falhar, escolha outra lista de servidores.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="108"/>
@@ -3795,47 +3795,47 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../serverdlg.cpp" line="148"/>
         <source>Language</source>
-        <translation type="unfinished">Idioma</translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="148"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished">Selecione o idiomara para ser utilizado na interface do usuário.</translation>
+        <translation>Selecione o idioma para ser utilizado na interface do usuário.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="152"/>
         <source>Language combo box</source>
-        <translation type="unfinished">Seletor de idioma</translation>
+        <translation>Seletor de idioma</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="157"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>Clique no botão para abrir a caixa de diálogo que permite selecionar o diretório principal de gravação. O valor escolhido deve existir e ser gravável (permite a criação de subdiretórios pelo usuário que está executando Jamulus).</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="174"/>
         <source>Custom Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Diretório Personalizado</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="175"/>
         <source>The custom directory is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished"></translation>
+        <translation>O diretório personalizado é o endereço IP ou URL do servidor de diretório na qual a lista de servidores do diálogo de conexão é gerida.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="180"/>
         <source>Custom Directory line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edição de linha do Diretório Personalizado</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="201"/>
         <source>&amp;Hide %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ocultar servidor %1</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="204"/>
         <source>&amp;Show %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar &amp;servidor %1</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="209"/>
@@ -4323,7 +4323,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../android/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro ao requisitar parada do stream: $s</translation>
     </message>
     <message>
         <location filename="../../../android/sound.cpp" line="75"/>
@@ -4398,7 +4398,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation>O formato do fluxo no dispositivo de entrada atual não é compatível com %1. Selecione outro dispositivo.</translation>
+        <translation>O formato do fluxo no dispositivo de entrada atual não é compatível com este software. Selecione outro dispositivo.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="475"/>
@@ -4507,62 +4507,63 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../util.cpp" line="1893"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lançado sob a Licença Pública Geral GNU versão 2 (GPLv2)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1902"/>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
-        <translation type="unfinished"></translation>
+        <translation>Este programa é um software livre; você pode redistribuí-lo e/ou modificá-lo sob</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1904"/>
         <source>the terms of the GNU General Public License as published by the Free Software</source>
-        <translation type="unfinished"></translation>
+        <translation>os termos da Licença Pública Geral GNU, conforme publicado pela Free Software</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1906"/>
         <source>Foundation; either version 2 of the License, or (at your option) any later version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Foundation, seja a versão 2 da Licença ou (a seu critério) qualquer versão posterior.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1908"/>
         <source>There is NO WARRANTY, to the extent permitted by law.</source>
-        <translation type="unfinished"></translation>
+        <translation>NÃO HÁ GARANTIA, até o limite permitido por lei.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1911"/>
         <source>Using the following libraries, resources or code snippets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizando as seguintes bibliotecas, recursos ou partes de código:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1913"/>
         <source>Qt framework </source>
-        <translation type="unfinished"></translation>
+        <translation>Framework Qt </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1916"/>
         <source>Opus Interactive Audio Codec</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>No need to translate name.</translatorcomment>
+        <translation>Opus Interactive Audio Codec</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1919"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished">Código de reverberação de áudio por Perry R. Cook e Gary P. Scavone</translation>
+        <translation>Código de reverberação de áudio por Perry R. Cook e Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1922"/>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alguns pixmaps são da Open Clip Art Library (OCAL)</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1925"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>Ícones de bandeiras por Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1929"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2022 Equipe de Desenvolvimento Jamulus</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>

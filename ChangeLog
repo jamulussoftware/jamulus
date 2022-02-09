@@ -1,8 +1,8 @@
 
 ### 3.8.2beta1dev <- NOTE: the release version number will be 3.8.2 ###
 
-- Client: Added selection option for level meter style (#1688, #2352).
-  (contributed by @henkdegroot, @hoffie, @pgScorpio)
+- Client: Added selection option for level meter style (#1688, #2352, #2356).
+  (contributed by @henkdegroot, @hoffie, @pgScorpio, @pljones)
 
 - Client: On Windows, if no driver found while installing, the "Run Jamulus"
   option will not be checked (#2103).
@@ -118,9 +118,11 @@
 - Internal: Prepared autobuild logic for upcoming Qt6 compatibility (#2328).
   (contributed by @hoffie, @softins)
 
-- Internal: Release build process has been refactored and uses pinned dependencies for better reproducibility now. (#2345)
-  (contributed by @hoffie)
+- Internal: Release build process has been refactored and uses pinned dependencies for better reproducibility now. (#2345, #2336)
+  (contributed by @hoffie, @softins)
 
+- Internal: Moved documentation files into docs/ folder to clean up root folder. (#2283)
+  (contributed by @ann0see)
 
 ### 3.8.1 (2021-10-23) ###
 

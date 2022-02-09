@@ -1,0 +1,11 @@
+Das ist ein Zuhör-Client für Jamulus. Um diese App zu nutzen ist eine <b>Mobilfunk oder LAN Verbindung</b> zwingend erforderlich. WLAN wird zu einer massiv schlechteren Audioqualität führen. Bitte beachte, dass nicht alle Geräte eine genügend geringe Latenz für Jamming anbieten, deshalb sollte diese App nur als Zuhör-Client genutzt werden.
+
+<b>Was ist Jamulus?</b>
+Jamulus ist eine Software mit der du online musizieren, üben oder jammen kannst, mit Freunden, deiner Band oder jemandem, der gerade auch online ist. Über eine normale Internetverbindung ist es einfach zusammen zu musizieren, mit hoher Klangqualität und niedriger Latenz, aus der Ferne und im Takt. Es ist verfügbar für Windows, macOS, Linux, Android und iOS.
+<b>Anforderungen</b>
+Für eine gute Qualität mit niedriger Latenz ist folgendes erforderlich:
+* Kabelgebundene Kopfhörer, kein Bluetooth (zu hohe Latenz)
+* Eine stabile Internetverbindung (4G, 5G, Ethernet, kein WLAN)
+* Ein gutes Mikrofon/Audio-Interface, wenn du mitspielen möchtest
+
+Bitte besuche die <a href="https://jamulus.io/de/">Jamulus Website</a> für mehr Informationen.

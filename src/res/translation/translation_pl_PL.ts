@@ -1455,7 +1455,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz styl miarki używanej do poziomów. Opcje „Pasek” (zwężony)  i „Diody” (małe, zaokrąglone) mają zastosowanie tylko do miksera. Gdy zaznaczony jest „Pasek” (zwężony) - wskaźniki wejścia są ustawione do paska (szeroki). Zaznaczenie „Diody” (małe) spowoduje dopasowywanie wskaźników do dużych diód. Pozostałe opcje mają zastosowanie zarówno do miksera jak i wskaźników wejścia.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="291"/>
@@ -1495,27 +1495,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pasek (zwężony)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pasek (szeroki)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diody (pasek)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diody (małe, zaokrąglone)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation>Diody (zaokrąglone, duże)</translation>
     </message>
     <message>
         <source>Current Connection Status Parameter</source>

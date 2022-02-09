@@ -590,7 +590,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translatorcomment>Didn&apos;t include &quot;de Mensagens&quot; in order to  keep the menu a bit shorter.</translatorcomment>
+        <translatorcomment>Didn&apos;t include &quot;de Mensagens&quot; in order to keep the menu a bit shorter.</translatorcomment>
         <translation>&amp;Limpar Histórico</translation>
     </message>
     <message>
@@ -3809,7 +3809,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
         <source>Server Welcome Message</source>
-        <translation>Mensagem  de Boas-vindas do Servidor</translation>
+        <translation>Mensagem de Boas-vindas do Servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="142"/>
@@ -4290,7 +4290,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation>O dispositivo de áudio selecionado não está mais presente no sistema. Verifique seu  dispositivo de áudio.</translation>
+        <translation>O dispositivo de áudio selecionado não está mais presente no sistema. Verifique seu dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
@@ -4316,7 +4316,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <location filename="../../../windows/sound.cpp" line="206"/>
         <location filename="../../../windows/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation>O dispositivo de áudio selecionado é incompatível uma vez que  o formato de áudio requerido não está disponível. Por favor, selecione outro dispositivo.</translation>
+        <translation>O dispositivo de áudio selecionado é incompatível uma vez que o formato de áudio requerido não está disponível. Por favor, selecione outro dispositivo.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
@@ -4387,17 +4387,17 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation>Nenhuma placa de som está disponível em  seu sistema. A entrada do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
+        <translation>Nenhuma placa de som está disponível em seu sistema. A entrada do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation>Nenhuma placa de som está disponível em  seu sistema. A saída do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
+        <translation>Nenhuma placa de som está disponível em seu sistema. A saída do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation>O dispositivo de áudio selecionado não está mais presente. Verifique seu  dispositivo de áudio.</translation>
+        <translation>O dispositivo de áudio selecionado não está mais presente. Verifique seu dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
@@ -4407,7 +4407,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>A taxa de amostragem no dispositivo de entrada atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI(em Aplicativos-&gt;Utilitários).</translation>
+        <translation>A taxa de amostragem no dispositivo de entrada atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI (em Aplicativos-&gt;Utilitários).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
@@ -4417,7 +4417,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>A taxa de amostragem no dispositivo de saída atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI(em Aplicativos-&gt;Utilitários).</translation>
+        <translation>A taxa de amostragem no dispositivo de saída atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI (em Aplicativos-&gt;Utilitários).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
@@ -4432,7 +4432,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="727"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation>Os tamanhos de buffer do dispositivo de áudio de entrada e saída atual não podem ser definidos para um valor comum. Selecione diferentes dispositivos de  entrada/saída nas suas configurações.</translation>
+        <translation>Os tamanhos de buffer do dispositivo de áudio de entrada e saída atual não podem ser definidos para um valor comum. Selecione diferentes dispositivos de entrada/saída nas suas configurações.</translation>
     </message>
 </context>
 <context>

@@ -1393,29 +1393,29 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
     // apply MeterStyle to current window
     switch ( eNewMeterStyle )
     {
-    case MT_LED:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED );
+    case MT_LED_STRIPE:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
         break;
 
-    case MT_SLIM_LED:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
+    case MT_LED_ROUND_BIG:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
 
-    case MT_BAR:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
+    case MT_BAR_WIDE:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         break;
 
-    case MT_SLIM_BAR:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
+    case MT_BAR_NARROW:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         break;
 
-    case MT_SMALL_LED:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
+    case MT_LED_ROUND_SMALL:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
     }
 

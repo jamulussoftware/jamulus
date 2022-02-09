@@ -50,6 +50,9 @@
 - Client: Accelerator key clash between Settings button and Settings menu corrected (#2248).
   (contributed by @henkdegroot)
 
+- Client: Added option code 'o' in --ctrlmidich for "Mute Myself" (#2334).
+  (contributed by @henkdegroot)
+
 - Client/Server: Output from --help and --version is now sent to StdOut instead of StdErr (#2244).
   (contributed by @henkdegroot)
 

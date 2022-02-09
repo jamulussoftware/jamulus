@@ -70,7 +70,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                            "<br>" +
                            tr ( "For proper usage of the "
                                 "application, you should not hear your singing/instrument through "
-                                "the loudspeaker or your headphone when the software is not connected."
+                                "the loudspeaker or your headphone when the software is not connected. "
                                 "This can be achieved by muting your input audio channel in the "
                                 "Playback mixer (not the Recording mixer!)." ) +
                            TOOLTIP_COM_END_TEXT;

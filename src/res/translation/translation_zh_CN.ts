@@ -606,7 +606,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
-        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
+        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation>为了恰当的使用此应用程序，当您未连接到服务器时您不会希望在音响或耳机中听到您的演唱或弹奏。您可以通过在音频声道（不是录制混音器！）中将自己静音来达到此目的。</translation>
     </message>
     <message>
@@ -1346,7 +1346,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
         <translation>控制了本地音频左右声道的相对音量。对于单声道信号，其行为为对声像的调整。例如，若麦克风连接到了右输入声道，而音量远高于麦克风的乐器被连接到了左输入声道，则将音量推子向推子上方标识 %1 的方向移动，%2 是当前的衰减指示器。</translation>
     </message>
     <message>
@@ -1485,7 +1485,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
-        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
+        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>此选项允许你增加输入信号的强度最多十倍（+20dB）。若你的声卡音量过低，首先尝试通过将麦克风离近的方式提高音量，调整您的声音设备或者增加您的系统输入音量设定。若这些方法仍不奏效，则在此设置增加的强度。如果您的声卡音量过高，音频有失真或削波，则请不要使用此选项，此项无助于解决这些问题，相反，您应当考虑通过离远麦克风、降低声音设备的音量或降低系统输入音量设定的方式解决此问题。</translation>
     </message>
     <message>
@@ -2294,7 +2294,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">连接配置窗口展示了所有可用服务器的列表。服务器管理员可以选择其服务器对应的流派分类。使用下拉列表选择流派，点击想要加入的服务器并点击连接按钮以连接到对应的服务器。您也可以双击服务器名称来进行连接。永久（已在列表中存在超过 48 小时的）服务器将以粗体展示。</translation>
     </message>
     <message>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
         <translation type="vanished">如果您知道某个服务器的 IP 地址或 URL，您可以使用“服务器名称/地址”栏来连接到对应的服务器。在 IP 或 URL 后端可以可选的填写端口号，使用半角冒号进行隔开。例如：example.org:</translation>
     </message>
     <message>
@@ -2353,7 +2353,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
         <translation>如果您知道某个服务器的 IP 地址或 URL，您可以使用“服务器名称/地址”栏来连接到对应的服务器。在 IP 或 URL 后端可以可选的填写端口号，使用半角冒号进行隔开。例如：%1。此栏也将显示最近使用过的服务器地址列表。</translation>
     </message>
     <message>
@@ -2665,7 +2665,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>主要录制目录</translation>
     </message>
     <message>
-        <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
+        <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
         <translation type="vanished">点击按钮以打开供选择主要录制目录路径的对话框。所选值必须存在且可写（允许运行 Jamulus 所使用的用户创建子目录）。 </translation>
     </message>
     <message>
@@ -3256,7 +3256,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="158"/>
-        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
+        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation>之前所选的音频设备已不再可用或现处于不兼容的状态。我们将尝试寻找一个有效的音频设备，但新的设备可能会产生自激。在连接刀服务器前，请考虑检查您的音频设备设置项。</translation>
     </message>
     <message>

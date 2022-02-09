@@ -156,8 +156,8 @@ QString CSoundBase::SetDev ( const QString strDevName )
         if ( !strDevName.isEmpty() )
         {
             strReturn = tr ( "The previously selected audio device "
-                             "is no longer available or the driver has changed to an incompatible state."
-                             "We'll attempt to find a valid audio device, but this new audio device may cause feedback."
+                             "is no longer available or the driver has changed to an incompatible state. "
+                             "We'll attempt to find a valid audio device, but this new audio device may cause feedback. "
                              "Before connecting to a server, please check your audio device settings." );
         }
 

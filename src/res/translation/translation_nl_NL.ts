@@ -1431,7 +1431,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer de meterstijl die voor de niveaumeters moet worden gebruikt. De opties &quot;Balk (smal)&quot; en &quot;LED&apos;s (rond, klein)&quot; zijn alleen van toepassing op het mengpaneel. Als &quot;Balk (smal)&quot; is geselecteerd dan worden de ingangmeters ingesteld op &quot;Balk (breed)&quot;. Als &quot;LED&apos;s (rond, klein)&quot; is geselecteerd dan worden de ingangsmeters ingesteld op &quot;LED&apos;s (rond, groot)&quot;. De overige opties zijn van toepassing op het mengpaneel en de ingangsmeters.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="280"/>
@@ -2091,27 +2091,27 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Balk (smal)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation>Balk (breed)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation>LED&apos;s (streep)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation>LED&apos;s (rond, klein)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation>LED&apos;s (rond, groot)</translation>
     </message>
     <message>
         <source>Manual</source>

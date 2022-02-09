@@ -76,7 +76,7 @@
     <message>
         <location filename="../../util.cpp" line="425"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished">Ícones de bandeiras por Mark James</translation>
+        <translation>Ícones de bandeiras por Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="495"/>
@@ -1471,7 +1471,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="291"/>
         <source>and</source>
-        <translation></translation>
+        <translation>e</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="371"/>
@@ -1967,7 +1967,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation type="unfinished">No sistema operacional Windows o driver ASIO (placa de som) pode ser selecionado usando %1.  Se o driver ASIO selecionado não for válido, uma mensagem de erro será exibida e o driver válido anterior será selecionado. No macOS o hardware de entrada e saída pode ser selecionado.</translation>
+        <translation type="unfinished">No sistema operacional Windows o driver ASIO (placa de som) pode ser selecionado usando %1. Se o driver ASIO selecionado não for válido, uma mensagem de erro será exibida e o driver válido anterior será selecionado. No macOS o hardware de entrada e saída pode ser selecionado.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="186"/>
@@ -1977,7 +1977,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="189"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation>64 amostras:  Fornece menor latência, mas não funciona com todas as placas de som.</translation>
+        <translation>64 amostras: Fornece menor latência, mas não funciona com todas as placas de som.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
@@ -4257,7 +4257,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation type="unfinished">O dispositivo de áudio selecionado é incompatível uma vez que não suporta  uma taxa de amostras de %1. Por favor, selecione outro dispositivo.</translation>
+        <translation type="unfinished">O dispositivo de áudio selecionado é incompatível uma vez que não suporta uma taxa de amostras de %1. Por favor, selecione outro dispositivo.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="158"/>
@@ -4344,17 +4344,17 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished">Nenhuma placa de som está disponível em  seu sistema. A entrada do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
+        <translation type="unfinished">Nenhuma placa de som está disponível em seu sistema. A entrada do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished">Nenhuma placa de som está disponível em  seu sistema. A saída do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
+        <translation type="unfinished">Nenhuma placa de som está disponível em seu sistema. A saída do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation type="unfinished">O dispositivo de áudio selecionado não está mais presente. Verifique seu  dispositivo de áudio.</translation>
+        <translation type="unfinished">O dispositivo de áudio selecionado não está mais presente. Verifique seu dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
@@ -4364,7 +4364,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished">A taxa de amostragem no dispositivo de entrada atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI(em Aplicativos-&gt;Utilitários).</translation>
+        <translation type="unfinished">A taxa de amostragem no dispositivo de entrada atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI (em Aplicativos-&gt;Utilitários).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
@@ -4374,7 +4374,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished">A taxa de amostragem no dispositivo de saída atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI(em Aplicativos-&gt;Utilitários).</translation>
+        <translation type="unfinished">A taxa de amostragem no dispositivo de saída atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI (em Aplicativos-&gt;Utilitários).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>

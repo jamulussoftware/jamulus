@@ -590,7 +590,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translatorcomment>Didn&apos;t include &quot;de Mensagens&quot; in order to  keep the menu a bit shorter.</translatorcomment>
+        <translatorcomment>Didn&apos;t include &quot;de Mensagens&quot; in order to keep the menu a bit shorter.</translatorcomment>
         <translation>&amp;Limpar Histórico</translation>
     </message>
     <message>
@@ -1459,7 +1459,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione o estilo a ser usado para os medidores de nível. As opções Barra (estreita) e LEDs (redondo, pequeno) aplicam-se apenas à mesa do mixer. Quando a Barra (estreita) é selecionada, os medidores de entrada são definidos como Barra l(larga). Quando LEDs (redondo, pequeno) é selecionado, os medidores de entrada são definidos como LEDs (redondo, grande). As opções restantes aplicam-se à mesa do mixer e aos medidores de entrada.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="280"/>
@@ -1664,7 +1664,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="318"/>
         <source>Audio channels combo box</source>
-        <translation>Seletor de canais áudio</translation>
+        <translation>Seletor de canais de áudio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="321"/>
@@ -1963,8 +1963,8 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
         <source>Input Boost</source>
-        <translatorcomment>Still thinking between &quot;Impulso&quot; or &quot;Aumento&quot;</translatorcomment>
-        <translation>Impulso de Entrada</translation>
+        <translatorcomment>Changed from Impulso to Reforço</translatorcomment>
+        <translation>Reforço de Entrada</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
@@ -1974,7 +1974,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="357"/>
         <source>Input Boost combo box</source>
-        <translation>Seletor do Impulso de Entrada</translation>
+        <translation>Seletor do Reforço de Entrada</translation>
     </message>
     <message>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
@@ -2054,7 +2054,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="361"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation>Se você precisa acrescentar diretórios adicionais no menu lista Diretório da caixa de diálogo Conectar, insira os endereços aqui.&lt;br&gt;Para remover um valor, selecione-o, exclua o texto na caixa de entrada e mova o foco para fora do controle.</translation>
+        <translation>Se você precisa acrescentar diretórios adicionais no menu suspenso Diretório da caixa de diálogo Conectar, insira os endereços aqui.&lt;br&gt;Para remover um valor, selecione-o, exclua o texto na caixa de entrada e mova o foco para fora do controle.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="368"/>
@@ -2126,27 +2126,27 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra (estreita)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra (larga)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs (faixa)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs (redondo, pequeno)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs (redondo, grande)</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -2712,7 +2712,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1033"/>
         <source>Input Boost</source>
-        <translation>Impulso de Entrada</translation>
+        <translation>Reforço de Entrada</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1056"/>
@@ -2868,7 +2868,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../connectdlg.cpp" line="75"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation>A janela de Configuração de Conexão lista os servidores disponíveis registrados no diretório selecionado. Use o menu lista para alterar o diretório, localize o servidor que deseja ingressar na lista de servidores, clique nele e, em seguida clique no botão Conectar para conectar-se. Como alternativa, clique duas vezes no nome do servidor para conectar-se.</translation>
+        <translation>A janela de Configuração de Conexão lista os servidores disponíveis registrados no diretório selecionado. Use o menu suspenso Diretório para alterar o diretório, localize o servidor que deseja ingressar na lista de servidores, clique nele e, em seguida clique no botão Conectar para conectar-se. Como alternativa, clique duas vezes no nome do servidor para conectar-se.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="80"/>
@@ -3662,7 +3662,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../serverdlg.cpp" line="104"/>
         <source>Combo box for location of this server</source>
-        <translation>Caixa de seleção para localização deste servidor</translation>
+        <translation>Seletor para localização deste servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
@@ -3809,7 +3809,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../serverdlg.cpp" line="141"/>
         <source>Server Welcome Message</source>
-        <translation>Mensagem  de Boas-vindas do Servidor</translation>
+        <translation>Mensagem de Boas-vindas do Servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="142"/>
@@ -4290,7 +4290,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation>O dispositivo de áudio selecionado não está mais presente no sistema. Verifique seu  dispositivo de áudio.</translation>
+        <translation>O dispositivo de áudio selecionado não está mais presente no sistema. Verifique seu dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
@@ -4316,7 +4316,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <location filename="../../../windows/sound.cpp" line="206"/>
         <location filename="../../../windows/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation>O dispositivo de áudio selecionado é incompatível uma vez que  o formato de áudio requerido não está disponível. Por favor, selecione outro dispositivo.</translation>
+        <translation>O dispositivo de áudio selecionado é incompatível uma vez que o formato de áudio requerido não está disponível. Por favor, selecione outro dispositivo.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
@@ -4387,17 +4387,17 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation>Nenhuma placa de som está disponível em  seu sistema. A entrada do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
+        <translation>Nenhuma placa de som está disponível em seu sistema. A entrada do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation>Nenhuma placa de som está disponível em  seu sistema. A saída do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
+        <translation>Nenhuma placa de som está disponível em seu sistema. A saída do CoreAudio falhou na chamada AudioHardwareGetProperty.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation>O dispositivo de áudio selecionado não está mais presente. Verifique seu  dispositivo de áudio.</translation>
+        <translation>O dispositivo de áudio selecionado não está mais presente. Verifique seu dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
@@ -4407,7 +4407,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>A taxa de amostragem no dispositivo de entrada atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI(em Aplicativos-&gt;Utilitários).</translation>
+        <translation>A taxa de amostragem no dispositivo de entrada atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI (em Aplicativos-&gt;Utilitários).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
@@ -4417,7 +4417,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>A taxa de amostragem no dispositivo de saída atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI(em Aplicativos-&gt;Utilitários).</translation>
+        <translation>A taxa de amostragem no dispositivo de saída atual não é %1 Hz e, portanto, é incompatível. Selecione outro dispositivo ou tente definir manualmente a taxa de amostragem para %1 Hz via Configuração de Áudio e MIDI (em Aplicativos-&gt;Utilitários).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
@@ -4432,7 +4432,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../../../mac/sound.cpp" line="727"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation>Os tamanhos de buffer do dispositivo de áudio de entrada e saída atual não podem ser definidos para um valor comum. Selecione diferentes dispositivos de  entrada/saída nas suas configurações.</translation>
+        <translation>Os tamanhos de buffer do dispositivo de áudio de entrada e saída atual não podem ser definidos para um valor comum. Selecione diferentes dispositivos de entrada/saída nas suas configurações.</translation>
     </message>
 </context>
 <context>

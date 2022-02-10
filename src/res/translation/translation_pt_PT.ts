@@ -735,7 +735,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
-        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
+        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation>Para um uso adequado da aplicação, não deve ouvir a sua voz/instrumento diretamente nas colunas ou nos headphones enquanto a aplicação não estiver ligada a um servidor. Isso pode ser feito silenciando (mute) o canal da entrada de áudio no dispositivo de reprodução (não no dispositivo de captura!).</translation>
     </message>
     <message>
@@ -743,7 +743,7 @@
         <translation type="vanished">Clicar nesse botão altera a legenda do botão de Ligar para Desligar, ou seja, implementa uma funcionalidade de alternação para conectar e desconectar a aplicação.</translation>
     </message>
     <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation type="vanished">Controla os níveis relativos dos canais esquerdo e direito. Para um sinal mono, actua como uma panorâmica entre os dois canais. Por exemplo, se um microfone estiver ligado no canal direito e um instrumento estiver ligado no canal esquerdo, mais alto que o microfone, mova o fader de áudio numa direção em que a etiqueta acima do fader mostre </translation>
     </message>
     <message>
@@ -1758,7 +1758,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <translation>Fader da Entrada Local de Áudio</translation>
     </message>
     <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation type="vanished">Controla os níveis relativos dos canais esquerdo e direito. Para um sinal mono, actua como uma panorâmica entre os dois canais. Por exemplo, se um microfone estiver ligado no canal direito e um instrumento estiver ligado no canal esquerdo, mais alto que o microfone, mova o fader de áudio numa direção em que a etiqueta acima do fader mostre </translation>
     </message>
     <message>
@@ -1833,7 +1833,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="239"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished">Abre as configurações do drive. Nota: %1 somente suporta dispositivos com uma taxa de amostragem de %2 Hz.Você não poderá selecionar um driver/dispositivo que não suporte. Para obter mais ajuda, consulte jamulus.io.</translation>
+        <translation type="unfinished">Abre as configurações do drive. Nota: %1 somente suporta dispositivos com uma taxa de amostragem de %2 Hz. Você não poderá selecionar um driver/dispositivo que não suporte. Para obter mais ajuda, consulte jamulus.io.</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
@@ -1930,7 +1930,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
-        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
+        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>Esta definição permite aumentar o nível de sinal de entrada até um factor de 10 (+20dB). Se o seu som está muito baixo, tente primeiro aumentar o nível posicionando-se mais perto do microfone, ajustando o seu equipamento de áudio ou aumentando o volume nas definições do seu sistema operativo. Apenas se tudo isto falhar deverá tentar esta opção. Se o seu som estiver demasiado alto, distorcido ou a clipar, esta opção não irá ajudar. A distorção irá permanecer. Em vez disso, diminua o volume do sinal de entrada afastando-se do microfone, ajustando o seu equipamento de som ou baixando o volume nas definições do seu sistema operativo.</translation>
     </message>
     <message>
@@ -1956,7 +1956,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
         <translation type="unfinished">Controla os níveis relativos dos canais esquerdo e direito. Para um sinal mono, actua como uma panorâmica entre os dois canais. Por exemplo, se um microfone estiver ligado no canal direito e um instrumento estiver ligado no canal esquerdo, mais alto que o microfone, mova o fader de áudio numa direção em que a etiqueta acima do fader mostre %1, onde %2 é o indicador de atenuação.</translation>
     </message>
     <message>
@@ -2852,7 +2852,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <translation type="vanished">O endereço IP ou URL do servidor executando o servidor </translation>
     </message>
     <message>
-        <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
+        <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
         <translation type="vanished"> deve ser definido aqui. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando o caractere dois pontos como separador, por exemplo, example.org:</translation>
     </message>
     <message>
@@ -2864,7 +2864,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <translation type="vanished">A janela Configuração da ligação mostra uma lista de servidores disponíveis. Os operadores dos servidores podem registar os seus servidores por género musical. Utilize o menu Lista para selecionar um género, clique no servidor ao qual se deseja ligar e pressione o botão Ligar. Como alternativa, clique duas vezes no nome do servidor. Servidores permanentes (aqueles que estão registados há mais de 48 horas) são mostrados em negrito.</translation>
     </message>
     <message>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
         <translation type="vanished">Se souver o endereço IP ou URL de um servidor, pode ligar-se a este utilizando o campo Nome/Endereço do Servidor. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando o caractere dois pontos como separador, por exemplo, example.org:</translation>
     </message>
     <message>
@@ -2923,7 +2923,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
         <translation type="unfinished">Se você souber o endereço IP ou URL de um servidor, poderá conectar-se a ele usando o campo Nome/Endereço de Servidor. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando dois pontos como separador, por exemplo, %1. O campo também mostrará uma lista de servidores usados mais recentemente.</translation>
     </message>
     <message>
@@ -3643,7 +3643,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <translation>Directório Principal das Gravações</translation>
     </message>
     <message>
-        <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
+        <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
         <translation type="vanished">Clique no botão para abrir o diálogo que permite selecionar o directório das gravações. O directório escolhido deve existir e ter permissões de escrita (deve permitir a criação de sub-pastas pelo utilizador que está a correr o Jamulus). </translation>
     </message>
     <message>
@@ -4449,7 +4449,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="158"/>
-        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
+        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation type="unfinished">O dispositivo de áudio selecionado anteriormente não está mais disponível ou o driver mudou para um estado incompatível. Tentaremos encontrar um dispositivo de áudio válido, mas esse novo dispositivo pode causar microfonia. Antes de conectar-se a um servidor, verifique suas definições de dispositivo de áudio.</translation>
     </message>
     <message>

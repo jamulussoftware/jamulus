@@ -782,7 +782,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
-        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
+        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation>Voor goed gebruik van de applicatie moet u de zang of het instrument niet via de luidspreker of koptelefoon horen als de software niet verbonden is. Dit kan worden bereikt door het dempen van het audiokanaal in de afspeelmixer (niet de opnamemixer!).</translation>
     </message>
     <message>
@@ -790,7 +790,7 @@
         <translation type="vanished">Door op deze knop te klikken verandert het onderschrift van de knop van Verbinden naar Verbreken, d.w.z. dat het een toggle-functie heeft voor verbinden/verbreken.</translation>
     </message>
     <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation type="vanished">Met de audiofader kunnen de relatieve niveaus van de linker en rechter lokale audiokanalen worden gewijzigd. Voor een monosignaal werkt het als een panning tussen de twee kanalen. Als bijvoorbeeld een microfoon is verbonden op het rechter ingangskanaal en een veel luider instrument is verbonden op het linker ingangskanaal, beweeg dan de audiofader in de richting van het label </translation>
     </message>
     <message>
@@ -1750,7 +1750,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Lokale audio-ingangsfader</translation>
     </message>
     <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation type="vanished">Met de audiofader kunnen de relatieve niveaus van de linker en rechter lokale audiokanalen worden gewijzigd. Voor een monosignaal werkt het als een panning tussen de twee kanalen. Als bijvoorbeeld een microfoon is verbonden op het rechter ingangskanaal en een veel luider instrument is verbonden op het linker ingangskanaal, beweeg dan de audiofader in de richting van het label </translation>
     </message>
     <message>
@@ -1930,7 +1930,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
-        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
+        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>Met deze instelling kunt u het niveau van uw ingangssignaal tot en met een factor 10 verhogen (+ 20dB). Als uw geluid te zacht is, probeer dan eerst het niveau te verhogen door dichter bij de microfoon te komen, uw geluidsapparatuur aan te passen of de niveaus in uw besturingssysteem te verhogen. Stel hier alleen een factor in als dit niet lukt. Als uw geluid te luid is, vervormd klinkt en afknapt, zal deze optie niet helpen. Gebruik het daar niet voor, de vervorming zal er nog steeds zijn. Verlaag in plaats daarvan uw ingangssignaal door verder weg te gaan van uw microfoon, uw geluidsapparatuur aan te passen of door de niveaus in uw besturingssysteem te verlagen.</translation>
     </message>
     <message>
@@ -1960,7 +1960,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
         <translation>Met de audiofader kunnen de relatieve niveaus van de linker en rechter lokale audiokanalen worden gewijzigd. Voor een monosignaal werkt het als een panning tussen de twee kanalen. Als bijvoorbeeld een microfoon is verbonden op het rechter ingangskanaal en een veel luider instrument is verbonden op het linker ingangskanaal, beweeg dan de audiofader in de richting van het label %1, waarbij %2 de huidige dempingsindicator is.</translation>
     </message>
     <message>
@@ -2860,7 +2860,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">Het IP-adres of de URL van de server waarop de </translation>
     </message>
     <message>
-        <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
+        <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
         <translation type="vanished"> serversoftware moet worden ingesteld. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, bijvoorbeeld example.org:</translation>
     </message>
     <message>
@@ -2872,7 +2872,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation type="vanished">De serverlijst toont een lijst van beschikbare servers. Server beheerders kunnen hun servers optioneel op muziek genre weergeven. Gebruik de lijst optie om een genre te kiezen, klik op de server die u wilt gebruiken en druk op de verbindingsknop om verbinding te maken. U kunt ook dubbelklikken op een servernaam in de lijst om verbinding te maken. Permanente servers (die langer dan 48 uur in de lijst staan) worden vetgedrukt weergegeven.</translation>
     </message>
     <message>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
         <translation type="vanished">Het IP-adres of de URL van de server kan bij Servernaam/Adres worden ingevoerd. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, b.v. example.org:</translation>
     </message>
     <message>
@@ -2931,7 +2931,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
         <translation>Als u het IP-adres of de URL van de server weet, dan kunt u daar verbinding mee maken door deze in te voeren in het Servernaam/Adres veld. Een optioneel poortnummer kan worden toegevoegd na het IP-adres of de URL met een dubbele punt als scheidingsteken, b.v. %1. Het veld laat ook een lijst zien met de meest recent gebruikte serveradressen.</translation>
     </message>
     <message>
@@ -3655,7 +3655,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <translation>Hoofddirectory voor geluidsopnames</translation>
     </message>
     <message>
-        <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
+        <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
         <translation type="vanished">Klik op deze knop om het venster te tonen waarin de directory voor geluidsopnames kan worden ingesteld. Deze directory moet reeds bestaan en door de gebruiker die Jamulus draait kunnen worden aangepast. </translation>
     </message>
     <message>
@@ -4461,7 +4461,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="158"/>
-        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
+        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation>Het eerder geselecteerde audioapparaat is niet langer beschikbaar of het stuurprogramma is gewijzigd in een niet compatibele status. We zullen proberen een geldig audioapparaat te vinden, maar dit nieuwe audioapparaat kan feedback veroorzaken. Controleer uw audioapparaat instellingen voordat u verbinding maakt met een server.</translation>
     </message>
     <message>

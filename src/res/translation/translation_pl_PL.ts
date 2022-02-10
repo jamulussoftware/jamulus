@@ -626,7 +626,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
-        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected.This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
+        <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation>W celu prawidłowego korzystania z aplikacji nie należy słyszeć śpiewu/instrumentu przez głośnik lub słuchawki, gdy oprogramowanie nie jest podłączone. Można to osiągnąć wyciszając wejściowy kanał audio w mikserze odtwarzającym (nie w mikserze nagrywającym!).</translation>
     </message>
     <message>
@@ -635,7 +635,7 @@
         <translation>otwiera okno wyboru serwera. do którego można się podłączyć, a gdy połączono, naciśnięcie tego przycisku spowoduje zakończenie sesji.</translation>
     </message>
     <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation type="vanished">Kontroluje względne poziomy lewego i prawego lokalnego kanału audio. Na przykład, jeśli mikrofon jest podłączony do prawego kanału wejściowego, a instrument jest podłączony do lewego kanału wejściowego, który jest znacznie głośniejszy od mikrofonu, należy przesunąć suwak audio w kierunku, w którym pokazuje etykieta nad suwakiem </translation>
     </message>
     <message>
@@ -1539,7 +1539,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Suwak Lokalnego Wejścia Audio</translation>
     </message>
     <message>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
         <translation type="vanished">Kontroluje względne poziomy lewego i prawego lokalnego kanału audio. Na przykład, jeśli mikrofon jest podłączony do prawego kanału wejściowego, a instrument jest podłączony do lewego kanału wejściowego, który jest znacznie głośniejszy od mikrofonu, należy przesunąć suwak audio w kierunku, w którym pokazuje etykieta nad suwakiem </translation>
     </message>
     <message>
@@ -1628,7 +1628,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="59"/>
-        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
+        <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
         <translation>Kontroluje względne poziomy lewego i prawego lokalnego kanału audio. Na przykład, jeśli mikrofon jest podłączony do prawego kanału wejściowego, a instrument jest podłączony do lewego kanału wejściowego, który jest znacznie głośniejszy od mikrofonu, należy przesunąć suwak audio w kierunku, w którym %1 pokazuje etykietę nad suwakiem, gdzie %2 jest właściwym wskaźnikiem tego cichszego.</translation>
     </message>
     <message>
@@ -1746,7 +1746,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
-        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB).If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
+        <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
         <translation>Ta opcja pozwala na stopniowe zwiększenie poziomu twojego sygnału wejściowego aż do 10 (+20dB). Kiedy twój dźwięk jest zbyt cichy, najpierw spróbuj zwiększyć głośność zbliżając się do mikrofonu, ustawiając lepiej sprzęt audio lub zwiększając poziomy w ustawieniach wejścia dźwięku w swoim systemie operacyjnym. Dopiero gdy wszystko powyższe zawiedzie, ustaw to wzmocnienie tutaj. Jednak gdy twój dźwięk jest zbyt głośny, zniekształcony lub urywany, ta opcja nie pomoże. Wtedy jej nie używaj. Zniekształcenia i tak pozostaną. Zamiast tego obniż poziom sygnału wejściowego odsuwając się od mikrofonu, zmieniając ustawienia twoich urządzeń dźwiękowych lub ściszając poziomy wejścia w swoim systemie.</translation>
     </message>
     <message>
@@ -2537,7 +2537,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation type="vanished">Okno ustawień połączenia pokazuje listę dostępnych serwerów. Operatorzy serwerów mogą opcjonalnie wyświetlać swoje serwery według gatunków muzycznych. Użyj listy wyboru, aby wybrać gatunek, wybierz serwer, do którego chcesz się połączyć i wciśnij przycisk Połącz. Ewentualnie, podwójne kliknij na nazwę serwera. Stałe serwery (te, które są na liście od ponad 48 godzin) są zaznaczone pogrubioną czcionką.</translation>
     </message>
     <message>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
         <translation type="vanished">Jeżeli znasz adres IP lub URL serwera, możesz się połączyć używając pola Nazwa/Adres Serwera. Opcjonalny numer portu może być dodany po adresie IP lub adresie URL za pomocą dwukropka jako separatora, np. example.org:</translation>
     </message>
     <message>
@@ -2602,7 +2602,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
-        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, %1. The field will also show a list of the most recently used server addresses.</source>
+        <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
         <translation>Jeżeli znasz adres IP lub URL serwera możesz podłączyć się do niego podając te dane w polu nazwa/adres serwera. Dodatkowo może być podany numer portu - po dwukropku za adresem/numerem IP, np. %1. To pole tekstowe będzie także wyświetlać listę ostatnio używanych adresów.</translation>
     </message>
     <message>
@@ -3154,7 +3154,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Główny katalog nagrywania</translation>
     </message>
     <message>
-        <source>Click the button to open the dialog that allows the main recording directory to be selected.The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
+        <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
         <translation type="vanished">Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a. </translation>
     </message>
     <message>
@@ -3948,7 +3948,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="158"/>
-        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
+        <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation>Poprzednio wybrane urządzenie dźwiękowe nie jest już dostępne lub jego ustawienia nie są już kompatybilne. Spróbuję znaleźć odpowiednie urządzenie dźwiękowe ale może ono powodować sprzężenia. Przed podłączeniem do serwera proszę sprawdzić swoje ustawienia audio.</translation>
     </message>
     <message>

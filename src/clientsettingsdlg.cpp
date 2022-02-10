@@ -57,7 +57,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
                           tr ( "Controls the relative levels of the left and right local audio "
-                               "channels. For a mono signal it acts as a pan between the two channels."
+                               "channels. For a mono signal it acts as a pan between the two channels. "
                                "For example, if a microphone is connected to "
                                "the right input channel and an instrument is connected to the left "
                                "input channel which is much louder than the microphone, move the "
@@ -342,7 +342,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // input boost
     QString strInputBoost = "<b>" + tr ( "Input Boost" ) + ":</b> " +
                             tr ( "This setting allows you to increase your input signal level "
-                                 "by factors up to 10 (+20dB)."
+                                 "by factors up to 10 (+20dB). "
                                  "If your sound is too quiet, first try to increase the level by "
                                  "getting closer to the microphone, adjusting your sound equipment "
                                  "or increasing levels in your operating system's input settings. "

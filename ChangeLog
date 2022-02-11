@@ -44,7 +44,7 @@
 - Client: On Windows, hide the ASIO button in the version that uses JACK instead (#2215).
   (contributed by @henkdegroot)
 
-- Client: Improved the "What's this?" text displayed for Buffer Delay (#2232)
+- Client: Improved the "What's this?" text displayed for Buffer Delay (#2232).
   (contributed by @henkdegroot)
 
 - Client: Accelerator key clash between Settings button and Settings menu corrected (#2248).
@@ -65,6 +65,19 @@
 - Client/Server: Some improvements to text related to localisation (#2085).
   (Contributed by @BLumia)
 
+- GUI: Translations have been updated:
+  * Dutch, by @henkdegroot and @jerogee (#2371, #2314)
+  * French, by @jujudusud (#2329, #2320)
+  * German, by @ann0see and @rolamos (#2349)
+  * Italian, by @dzpex (#2327)
+  * Polish, by @SeeLook (#2375, #2331)
+  * Portuguese Brazilian, by @melcon (#2369, #2358)
+  * Portuguese European, by @melcon (#2368)
+  * Simplified Chinese, by @BLumia (#2313)
+  * Slovak, by @jose1711 (#2348)
+  * Spanish, by @ignotus666 (#2378, #2326)
+  * Swedish, by @softins (#2364)
+
 - Server: Fixed incorrect German translation (#2137).
   (contributed by @rolamos)
 
@@ -72,7 +85,7 @@
   lowest available channel number. Improves operation of clients with MIDI faders (#2151).
   (contributed by @softins)
 
-- Server: Improved the icon that is displayed in the Windows system tray for a server (#2231)
+- Server: Improved the icon that is displayed in the Windows system tray for a server (#2231).
   (contributed by @henkdegroot)
 
 - Bugfix: IPv6 address formatting and obfuscation has been improved (#2343).
@@ -93,6 +106,9 @@
 - Build: Raspijamulus build script has been improved to work with the latest Raspberry Pi OS releases and to include a newer JACK version (#2267).
   (contributed by @corrados, @softins)
 
+- Internal: Improved accelerator key detection (#2061).
+  (contributed by @softins)
+
 - Internal: A hypothetical CodeQL-detected multiplication overflow in sound buffer handling has been fixed (#2292, #2297).
   (contributed by @softins)
 
@@ -105,8 +121,7 @@
 - Internal: Some code reordering, particularly of the settings initialisation (#2174, #2177).
   (contributed by @pljones)
 
-- Internal: Removed unneeded submodules from tools directory, and replaced with a RELATED-PROJECTS
-  document (#2196).
+- Internal: Removed unneeded submodules from tools directory, and replaced with a RELATED-PROJECTS document (#2196).
   (contributed by @softins)
 
 - Internal: Improved generation of the changelog for the Debian package, using dch (#2138).
@@ -118,11 +133,12 @@
 - Internal: Prepared autobuild logic for upcoming Qt6 compatibility (#2328).
   (contributed by @hoffie, @softins)
 
-- Internal: Release build process has been refactored and uses pinned dependencies for better reproducibility now. (#2345, #2336)
+- Internal: Release build process has been refactored and uses pinned dependencies for better reproducibility now (#2345, #2336).
   (contributed by @hoffie, @softins)
 
-- Internal: Moved documentation files into docs/ folder to clean up root folder. (#2283)
+- Internal: Moved documentation files into docs/ folder to clean up root folder (#2283).
   (contributed by @ann0see)
+
 
 ### 3.8.1 (2021-10-23) ###
 

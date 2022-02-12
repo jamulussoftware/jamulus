@@ -1285,27 +1285,27 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Úzke paličky</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paličky</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">LEDky</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Malé LEDky</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Okrúhle LEDky</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>

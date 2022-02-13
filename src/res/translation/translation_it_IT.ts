@@ -1769,7 +1769,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Selezionare lo stile del VU-Meter da utilizzare per i livelli audio. L&apos;opzione &quot;Barra LED stretta e LED piccoli si applicano solo al mixer. Quando si seleziona &quot;Barre Strette&quot;, gli indicatori di input sono impostati su Barre. Quando si seleziona LED Piccoli, gli indicatori di ingresso sono impostati su LED rotondi. Le restanti opzioni si applicano all mixer ed ai VU-Meter delgli input.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="280"/>
@@ -2051,27 +2051,27 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barre Sottili</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barre</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">LED Piccoli</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">LED Rotondi</translation>
     </message>
     <message>
         <source>LEDs</source>

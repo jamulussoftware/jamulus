@@ -1477,7 +1477,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle den Stil aus, der für die Pegel-Messer benutzt wird. Die Stile &quot;Balken (schmal)&quot; und &quot;LEDs (rund, klein)&quot; beziehen sich nur auf den Mixerbereich. Die Auswahl des Stils &quot;Balken (schmal)&quot; sorgt dafür, dass die Eingangspegelanzeigen dennoch mit breiten Balken dargestellt werden. Wenn der Stil &quot;LEDs (rund, klein)&quot; ausgwählt ist, entsprechen die Eingangspegelanzeigen dem Stil &quot;LEDs (rund, groß)&quot;. Die anderen Optionen beziehen sich sowohl auf den Mixer als auch auf die Eingangspegelanzeigen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="280"/>
@@ -1630,27 +1630,27 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Balken (schmal)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation>Balken (breit)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs (Streifen)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs (rund, klein)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation>LEDs (rund, groß)</translation>
     </message>
     <message>
         <source>LEDs</source>

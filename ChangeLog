@@ -65,10 +65,13 @@
 - Client/Server: Some improvements to text related to localisation (#2085).
   (Contributed by @BLumia)
 
+- GUI: Improved Connect Dialog help texts (#2121).
+  (contributed by @pljones)
+
 - GUI: Translations have been updated:
   * Dutch, by @henkdegroot and @jerogee (#2371, #2314)
-  * French, by @jujudusud (#2329, #2320)
-  * German, by @ann0see and @rolamos (#2349)
+  * French, by @jujudusud (#2329, #2320, #2381)
+  * German, by @ann0see, @rolamos and @hoffie (#2349, #2387)
   * Italian, by @dzpex (#2327)
   * Polish, by @SeeLook (#2375, #2331)
   * Portuguese Brazilian, by @melcon (#2369, #2358)

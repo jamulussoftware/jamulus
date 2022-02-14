@@ -1175,7 +1175,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished">选择音量计量表所使用的计量表样式。窄条和小 LED 选项仅在混音版有效。选择窄条时，输入音量计量表将被设置为条状。选择小 LED 时，输入音量计量表将使用圆 LED。其余选项均可同时应用于混音版和输入音量计量表。</translation>
+        <translation>选择音量计量表所使用的计量表样式。窄条和圆形小 LED 选项仅在混音版有效。选择窄条时，输入音量计量表将被设置为条状。选择圆形小 LED 时，输入音量计量表将使用圆形大 LED。其余选项均可同时应用于混音版和输入音量计量表。</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="285"/>
@@ -1496,27 +1496,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished">窄条</translation>
+        <translation>窄条</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished">条状</translation>
+        <translation>条状</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished">LED</translation>
+        <translation>条纹 LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished">小 LED</translation>
+        <translation>圆形小 LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished">圆形 LED</translation>
+        <translation>圆形大 LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="496"/>

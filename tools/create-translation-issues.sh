@@ -16,7 +16,7 @@
 # Example usage for web translations:
 #  ../jamulus/tools/create-translation-issues.sh 3.8.0 2021-05-15 web 'Note: The term "Central server" has been replaced with "Directory server"'
 
-set -eu
+set -eux
 
 if [[ -z ${1:-} ]] || [[ -z ${2:-} ]] || [[ -z ${3:-} ]] ; then
     echo "Syntax: $0 RELEASE DEADLINE app|web [EXTRA_TEXT]"
@@ -53,18 +53,20 @@ declare -A TRANSLATORS_BY_LANG=(
     [app_pt_PT]="Snayler"
     [app_sk_SK]="jose1711"
     [app_sv_SE]="genesisproject2020"
+    [app_zh_CN]="BLumia"
 
     # Web translators:
     [web_de]="Helondeth,ewarning"
     [web_es]="ignotus666"
     [web_fr]="jujudusud,trebmuh"
     [web_it]="dzpex"
+    [web_pt]="Snayler,melcon,ewarning"
 )
 
 BODY_TEMPLATE_APP='Hi ${SPLIT_TRANSLATORS},
 We are getting ready for the ${RELEASE} release. No further changes to translatable strings are currently planned for this release.
 
-We would be happy if you updated the Jamulus software translations for **${LANG}** until **${DEADLINE}**.
+We would be happy if you updated the Jamulus software translations for **${LANG}** by **${DEADLINE}**.
 
 Please
 - Update your fork from `jamulussoftware/jamulus` `master` and create a working branch
@@ -90,15 +92,7 @@ BODY_TEMPLATE_WEB='Hi ${SPLIT_TRANSLATORS},
 
 We are getting ready for the ${RELEASE} release and have created the [${TRANSLATE_BRANCH}](https://github.com/jamulussoftware/jamuluswebsite/tree/${TRANSLATE_BRANCH}) branch ([full diff](https://github.com/jamulussoftware/jamuluswebsite/compare/release..${TRANSLATE_BRANCH})).
 
-Because the English is still going through large changes, we are not expecting translations of anything other than the following pages:
-
-- [Home page](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/1-index.html)
-- [Setup](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Setup.md) (renamed from Getting-Started)
-- Installation pages for each supported platform ([Windows](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Installation-for-Windows.md), [Mac](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Installation-for-Macintosh.md), [Linux](https://github.com/jamulussoftware/jamuluswebsite/blob/${TRANSLATE_BRANCH}/wiki/en/en-Installation-for-Linux.md))
-
-While you are of course welcome to translate more than this, please be aware that you may have to re-translate for the next release.
-
-We would be happy if you updated the translations for **${LANG}** until **${DEADLINE}**.
+We would be happy if you updated the translations for **${LANG}** by **${DEADLINE}**.
 
 Please
 
@@ -140,8 +134,9 @@ get_languages() {
             echo "Error: Please ensure that you are at the root of a jamuluswebsite checkout" >/dev/stderr
             exit 1
         fi
-        for LANG in $(cd wiki/ && ls -d *); do
-            [[ -d wiki/$LANG ]] || continue
+	for LANG in $(cd _translator-files/po/ && ls -d *) ;do
+#     [[ -d wiki/$LANG ]] || continue
+	[[ -d _translator-files/po/$LANG ]] || continue	
             [[ $LANG == en ]] && continue # does not have to be translated
             echo "$LANG"
         done
@@ -185,7 +180,7 @@ create_translation_issue_for_lang() {
         RELEASE="$RELEASE" \
         SPLIT_TRANSLATORS=$(sed -re 's/^/@/; s/,/, @/g' <<<"$translators") \
         TITLE="$title" \
-        TRANSLATE_BRANCH=translate${RELEASE//./_} \
+        TRANSLATE_BRANCH=next-release \
         envsubst <<<"$body_template"
     )
 

@@ -21,6 +21,7 @@
 !define APP_EXE           "${APP_NAME}.exe"
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define APP_UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
+!define APP_URL           "https://jamulus.io"
 
 !define SF_USELECTED  0
 
@@ -183,6 +184,10 @@ Var bRunApp
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "DisplayName"     "${APP_NAME}"
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "DisplayIcon"     "$INSTDIR\${APP_EXE},0"
     WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "UninstallString" '"$INSTDIR\${UNINSTALL_EXE}"'
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "DisplayVersion"  "${APP_VERSION}"
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "HelpLink"        "${APP_URL}"
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "URLInfoAbout"    "${APP_URL}"
+    WriteRegStr HKLM "${APP_UNINSTALL_KEY}" "Publisher"       "${APP_NAME}"
 
     ; Add the uninstaller
     WriteUninstaller "$INSTDIR\${UNINSTALL_EXE}"
@@ -413,16 +418,17 @@ FunctionEnd
             MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(JACK_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
                 Abort
        SkipMessage:
+            StrCpy $bRunApp "0" ; set the run app after install option to unchecked as there is no audio driver
 
     FunctionEnd
 !else
     Function ASIOCheckInstalled
 
         ; insert ASIO install page if no ASIO driver was found
-        ClearErrors
         EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
 
-        IfErrors 0 ASIOExists
+        ; check on errors cannot be used, as the error flag is not set when the string exists does not contain at least 1 subkey for a driver
+        ${If} $0 == "" ; if empty string returned, ASIO key does not exist or does not have at least 1 subkey
             !insertmacro MUI_HEADER_TEXT "$(ASIO_DRIVER_HEADER)" "$(ASIO_DRIVER_SUB)"
             nsDialogs::Create 1018
             Pop $Dialog
@@ -438,7 +444,7 @@ FunctionEnd
 
             nsDialogs::Show
 
-        ASIOExists:
+        ${EndIf}
 
     FunctionEnd
 
@@ -447,12 +453,17 @@ FunctionEnd
     FunctionEnd
 
     Function ExitASIOInstalled
-        ClearErrors
+
         EnumRegKey $0 HKLM "SOFTWARE\ASIO" 0
-        IfErrors 0 SkipMessage
+
+        ; check on errors cannot be used, as the error flag is not set when the string exists does not contain at least 1 subkey for a driver
+        ${If} $0 == "" ; if empty string returned, ASIO key does not exist or does not have at least 1 subkey
             MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(ASIO_EXIT_NO_DRIVER)" /sd IDNO IDYES SkipMessage
                 Abort
-       SkipMessage:
+        ${EndIf}
+
+        SkipMessage:
+            StrCpy $bRunApp "0" ; set the run app after install option to unchecked as there is no audio driver
 
     FunctionEnd
 !endif

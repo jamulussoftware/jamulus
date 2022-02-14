@@ -35,12 +35,11 @@
 
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
-        <file>res/CLEDGreenArrow.png</file>
         <file>res/CLEDGreenSmall.png</file>
-        <file>res/CLEDGreyArrow.png</file>
         <file>res/CLEDGreySmall.png</file>
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellowSmall.png</file>
+        <file>res/CLEDBlackSmall.png</file>
         <file>res/IndicatorGreen.png</file>
         <file>res/IndicatorYellow.png</file>
         <file>res/IndicatorRed.png</file>
@@ -50,6 +49,10 @@
         <file>res/HLEDYellowSmall.png</file>
         <file>res/IndicatorRedFancy.png</file>
         <file>res/IndicatorYellowFancy.png</file>
+        <file>res/LEDGreenSmall.png</file>
+        <file>res/LEDBlackSmall.png</file>
+        <file>res/LEDRedSmall.png</file>
+        <file>res/LEDYellowSmall.png</file>
     </qresource>
     <qresource prefix="/png/fader">
         <file>res/faderbackground.png</file>
@@ -110,10 +113,14 @@
         <file>res/instruments/mandolin.png</file>
         <file>res/instruments/ukulele.png</file>
         <file>res/instruments/bassukulele.png</file>
+        <file>res/instruments/vibraphone.png</file>
+        <file>res/instruments/conductor.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>
         <file>res/fronticonserver.png</file>
+        <file>res/servertrayiconactive.png</file>
+        <file>res/servertrayiconinactive.png</file>
     </qresource>
     <qresource prefix="/png/flags">
         <file>res/flags/flagnone.png</file>

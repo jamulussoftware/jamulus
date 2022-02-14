@@ -1,15 +1,12 @@
-<!-- Thank you for working on Jamulus and opening a Pull Request! Please fill the following to make the review process straight foward -->
+<!-- Thank you for working on Jamulus and opening a Pull Request! Please fill the following to make the review process straight forward -->
 
 **Short description of changes**
-
 <!-- A short description of your changes which might go into the change log -->
 
 **Context: Fixes an issue?**
-
 <!-- If this fixes an issue, please write Fixes: <issue number here>; if not, please give your PR a context. -->
 
 **Does this change need documentation? What needs to be documented and how?**
-
 <!-- Most new features should be documented on the website: https://github.com/jamulussoftware/jamuluswebsite/ If you have a proposal what to document, feel free to open a draft PR on the website repo -->
 
 **Status of this Pull Request**

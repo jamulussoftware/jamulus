@@ -37,13 +37,13 @@ LangString ASIO_EXIT_NO_DRIVER ${LANG_POLISH} \
      "${APP_NAME} wymaga sterownika ASIO do działania, ale nie można go było znaleźć na tym komputerze. Powinieneś zainstalować np. ASIO4ALL (Więcej informacji na jamulus.io w sekcji Istalacja dla Windows). Czy nadal chcesz najpierw zainstalować ${APP_NAME}?"
 
 LangString JACK_DRIVER_HEADER ${LANG_POLISH} \
-     "JACK Audio Connection Kit"
+     "Serwer dźwięku JACK"
 
 LangString JACK_DRIVER_SUB ${LANG_POLISH} \
-     "To use this version of ${APP_NAME}, you need use the JACK Audio Connection Kit"
+     "Żeby używać tej wersji ${APP_NAME}-a, potrzebny jest serwer dźwięku JACK"
 
 LangString JACK_DRIVER_EXPLAIN ${LANG_POLISH} \
-     "This version of ${APP_NAME} is making use of the JACK Audio Connection Kit. Please make sure this has been installed or download the standard version of ${APP_NAME} on jamulus.io which is using ASIO."
+     "Ta wersja programu ${APP_NAME} do działania potrzebuje serwera dźwięku JACK. Proszę się upewnić, że JACK jest zainstalowany lub pobrać standardową wersję ${APP_NAME}-a z jamulus.io, która używa ASIO."
 
 LangString JACK_EXIT_NO_DRIVER ${LANG_POLISH} \
-     "This ${APP_NAME} version needs the JACK Audio Connection Kit to work, but it doesn't seem to be installed on your PC. You should install JACK for Windows first. Do you still want to continue with the installation of ${APP_NAME} without installing JACK first?"
+     "Ta wersja programu ${APP_NAME} wymaga do działania serwera dźwięku JACK, ale wygląda na to, że nie jest on zainstalowany. Najpierw trzeba zainstalować JACK-a dla Windows-a. Czy nadal chcesz kontynuować tą instalację ${APP_NAME}-a bez zainstalowanego JACK-a?"

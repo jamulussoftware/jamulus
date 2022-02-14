@@ -38,6 +38,7 @@
 #include <QListWidget>
 #include <QMenu>
 #include <QMutex>
+#include <QTextBoundaryFinder>
 #include "global.h"
 #include "util.h"
 #include "levelmeter.h"
@@ -62,6 +63,7 @@ public:
     bool    IsMute() { return pcbMute->isChecked(); }
     int     GetGroupID() { return iGroupID; }
     void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void    SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void    SetDisplayChannelLevel ( const bool eNDCL );
     bool    GetDisplayChannelLevel();
     void    SetDisplayPans ( const bool eNDP );
@@ -82,6 +84,7 @@ public:
     int    GetRunningNewClientCnt() { return iRunningNewClientCnt; }
     void   SetChannelLevel ( const uint16_t iLevel );
     void   SetIsMyOwnFader() { bIsMyOwnFader = true; }
+    bool   GetIsMyOwnFader() { return bIsMyOwnFader; }
     void   UpdateSoloState ( const bool bNewOtherSoloState );
 
 protected:
@@ -115,16 +118,17 @@ protected:
 
     CChannelInfo cReceivedChanInfo;
 
-    bool       bOtherChannelIsSolo;
-    bool       bIsMyOwnFader;
-    bool       bIsMutedAtServer;
-    double     dPreviousFaderLevel;
-    int        iGroupID;
-    QString    strGroupBaseText;
-    int        iRunningNewClientCnt;
-    int        iInstrPicMaxWidth;
-    EGUIDesign eDesign;
-    QPixmap    BitmapMutedIcon;
+    bool        bOtherChannelIsSolo;
+    bool        bIsMyOwnFader;
+    bool        bIsMutedAtServer;
+    double      dPreviousFaderLevel;
+    int         iGroupID;
+    QString     strGroupBaseText;
+    int         iRunningNewClientCnt;
+    int         iInstrPicMaxWidth;
+    EGUIDesign  eDesign;
+    EMeterStyle eMeterStyle;
+    QPixmap     BitmapMutedIcon;
 
 public slots:
     void OnLevelValueChanged ( int value )
@@ -188,6 +192,7 @@ public:
     void    SetServerName ( const QString& strNewServerName );
     QString GetServerName() { return strServerName; }
     void    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void    SetMeterStyle ( const EMeterStyle eNewMeterStyle );
     void    SetDisplayPans ( const bool eNDP );
     void    SetPanIsSupported();
     void    SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );

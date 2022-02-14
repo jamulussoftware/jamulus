@@ -96,7 +96,7 @@
     <message>
         <location filename="../../util.cpp" line="538"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinois simplifié</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="546"/>
@@ -495,7 +495,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="135"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>Souhaitez-vous ouvrir le lien &apos;%1&apos; dans votre navigateur ?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="280"/>
         <source>&amp;Connection Setup...</source>
-        <translation>Paramètres de &amp;connexion...</translation>
+        <translation>&amp;Paramètres de connexion...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="374"/>
@@ -870,17 +870,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="159"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Voyant d&apos;état du tampon de gigue local</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="160"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>Le voyant d&apos;état du tampon de gigue local indique l&apos;état actuel du flux audio/de la diffusion. Si le voyant est rouge, le flux audio est interrompu. Cela est dû à l&apos;un des problèmes suivants :</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="184"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur du voyant d&apos;état du tampon de gigue local</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="302"/>
@@ -890,7 +890,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="372"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished">Paramètre&amp;s</translation>
+        <translation>Paramètre&amp;s</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="713"/>
@@ -1174,6 +1174,11 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>Sound Card Buffer Delay</source>
         <translation>Délai de temporisation de l&apos;interface audio</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="182"/>
+        <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
+        <translation>Le paramètre de délai de mise en mémoire tampon est un paramètre fondamental de %1. Ce paramètre a une influence sur de nombreuses propriétés de la connexion.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
@@ -1512,62 +1517,57 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le pilote ASIO (carte son) peut être sélectionné à l&apos;aide de %1 sous le système d&apos;exploitation Windows. Sous macOS/Linux, aucune sélection de carte son n&apos;est possible. Si le pilote ASIO sélectionné n&apos;est pas valide, un message d&apos;erreur s&apos;affiche et le pilote valide précédent est sélectionné.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour chaque canal d&apos;entrée/sortie %1 (canal gauche et droit), un canal réel différent de la carte son peut être sélectionné.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="182"/>
-        <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many conncetion properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Active la prise en charge de très petits paquets audio réseau. Ces paquets réseau ne sont réellement utilisés que si le délai du tampon de la carte son est inférieur à %1 échantillons. Plus les tampons réseau sont petits, plus la latence audio est faible. Mais en même temps, la charge du réseau et la probabilité de pertes audio ou d&apos;artefacts sonores augmentent.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains pilotes de carte son ne permettent pas de modifier le délai de mise en mémoire tampon à partir de %1. Dans ce cas, le paramètre de délai de mise en mémoire tampon est désactivé et doit être modifié à l&apos;aide du pilote de la carte son. Sous Windows, utilisez le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration JACK pour modifier la taille de la mémoire tampon.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, cela signifie qu&apos;une taille de tampon non prise en charge est utilisée par le pilote. %1 fonctionnera quand même avec ce paramètre, mais ses performances risquent d&apos;être limitées.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si les paramètres de retard de la mémoire tampon sont désactivés, il est interdit par le pilote audio de modifier ce paramètre à partir de %1. Sous Windows, appuyez sur le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration JACK pour modifier la taille de la mémoire tampon.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cela ouvre les paramètres du pilote de votre carte son. Certains pilotes vous permettent de modifier les paramètres de la mémoire tampon, d&apos;autres, comme ASIO4ALL, vous permettent de choisir les entrées ou les sorties de votre ou vos périphériques. Vous trouverez de plus amples informations sur jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvre les paramètres du pilote. Remarque : %1 ne prend actuellement en charge que les périphériques dont la fréquence d&apos;échantillonnage est de %2 Hz. Vous ne pourrez pas sélectionner un pilote/appareil qui ne le fait pas. Pour plus d&apos;aide, consultez jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="276"/>
-        <source>%1 and %2:</source>
-        <translation type="unfinished"></translation>
+        <source>and</source>
+        <translation>et</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="355"/>
         <source>Audio Upstream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Débit ascendant du flux audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>Cela dépend de la taille actuelle des paquets audio et du paramètre de compression. Assurez-vous que le débit en amont n&apos;est pas supérieur à votre vitesse de téléchargement sur Internet (vérifiez-le avec un service tel que speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="365"/>
@@ -1641,7 +1641,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="477"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce que vous définissez ici apparaîtra sur votre chariot sur la table de mixage lorsque vous êtes connecté à un serveur %1. Cette balise sera également affichée sur chaque client connecté au même serveur que vous.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1118"/>
@@ -2232,7 +2232,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directories:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse personnalisée du serveur annuaire :</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1001"/>
@@ -2377,7 +2377,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur annuaire</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -3054,7 +3054,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <location filename="../../serverdlg.cpp" line="195"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="328"/>
@@ -3083,17 +3083,17 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Pays/Région</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Définissez le pays ou la région où le serveur est exécuté. Les clients afficheront cet emplacement dans la liste des serveurs de leur boîte de dialogue de connexion.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="117"/>
         <source>Combo box for location of this server</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste déroulante pour le pays où le serveur est situé</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="168"/>
@@ -3131,7 +3131,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <location filename="../../serverdlg.cpp" line="341"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="574"/>
@@ -3254,7 +3254,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement : Région</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="196"/>
@@ -3342,7 +3342,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../serverlist.cpp" line="647"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;écrire dans &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -3450,33 +3450,33 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio sélectionné n&apos;est plus présent dans le système. Veuillez vérifier votre appareil audio.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;initialiser le pilote audio. Vérifiez si votre matériel audio est branché et vérifiez les paramètres de votre pilote.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio sélectionné est incompatible car il ne prend pas en charge une fréquence d&apos;échantillonnage de %1 Hz. Veuillez sélectionner un autre périphérique.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>La configuration actuelle du périphérique audio est incompatible car la fréquence d&apos;échantillonnage n&apos;a pas pu être définie sur %2 Hz. Veuillez vérifier si un commutateur matériel ou un paramètre du pilote permet de définir manuellement la fréquence d&apos;échantillonnage et redémarrer %1.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio sélectionné est incompatible car il ne prend pas en charge les canaux d&apos;entrée/sortie %1. Veuillez sélectionner un autre périphérique ou une autre configuration.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="206"/>
         <location filename="../../../windows/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio sélectionné est incompatible car le format d&apos;échantillon audio requis n&apos;est pas disponible. Veuillez utiliser un autre appareil.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
@@ -3486,7 +3486,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../../windows/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez installer un pilote ASIO avant d&apos;exécuter %1. Si vous possédez un périphérique avec un support ASIO, installez son pilote ASIO officiel. Sinon, vous devrez télécharger et installer un pilote universel comme ASIO4ALL.</translation>
     </message>
     <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
@@ -3512,82 +3512,82 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../../linux/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK n&apos;a pas pu être lancé automatiquement. Veuillez lancer JACK manuellement et vérifier les messages d&apos;erreur.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK ne fonctionne pas à un taux d&apos;échantillonnage de &lt;b&gt;%1 Hz&lt;/b&gt;. Veuillez utiliser un outil comme  &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; pour régler le taux d&apos;échantillonnage de JACK à %1 Hz.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;enregistrement du port JACK a échoué. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez arrêter %1 et JACK. Ensuite, vérifiez si un autre programme avec un taux d&apos;échantillonnage de %2 Hz peut se connecter à JACK.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;enregistrement du port JACK a échoué. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez arrêter %1 et JACK. Ensuite, vérifiez si un autre programme MIDI peut se connecter à JACK.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;activer le client JACK. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez vérifier la sortie JACK.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation type="unfinished"></translation>
+        <translation>JACK a été arrêté. %1 a besoin de JACK pour fonctionner. Veuillez redémarrer %1 pour relancer JACK. </translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune carte son n&apos;est disponible dans votre système. L&apos;appel à l&apos;entrée AudioHardwareGetProperty de CoreAudio a échoué.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune carte son n&apos;est disponible dans le système. L&apos;appel de la sortie CoreAudio AudioHardwareGetProperty a échoué.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio actuellement sélectionné n&apos;est plus présent. Veuillez vérifier votre périphérique audio.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique d&apos;entrée audio n&apos;est plus disponible. Veuillez vérifier si votre périphérique d&apos;entrée est correctement connecté.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>La fréquence d&apos;échantillonnage du périphérique d&apos;entrée actuel n&apos;est pas de %1 Hz et est donc incompatible. Veuillez sélectionner un autre périphérique ou essayer de régler manuellement la fréquence d&apos;échantillonnage sur %1 Hz via Audio-MIDI-Setup (dans Applications-&gt;Utilitaires).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique de sortie audio n&apos;est plus disponible. Veuillez vérifier si votre périphérique de sortie est correctement connecté.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>La fréquence d&apos;échantillonnage du périphérique de sortie actuel n&apos;est pas %1 Hz et est donc incompatible. Veuillez sélectionner un autre périphérique ou essayer de régler manuellement la fréquence d&apos;échantillonnage sur %1 Hz via Audio-MIDI-Setup (dans Applications-&gt;Utilitaires).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le format de flux du périphérique d&apos;entrée actuel n&apos;est pas compatible avec ce logiciel. Veuillez sélectionner un autre périphérique.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="475"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le format du flux sur le périphérique de sortie actuel n&apos;est pas compatible avec %1. Veuillez sélectionner un autre périphérique.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="728"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>La taille de la mémoire tampon du périphérique audio d&apos;entrée et de sortie actuel ne peut pas être définie sur une valeur commune. Veuillez sélectionner des périphériques d&apos;entrée/sortie différents dans les paramètres de votre système.</translation>
     </message>
 </context>
 <context>
@@ -3627,32 +3627,32 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../soundbase.cpp" line="116"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;utiliser le périphérique audio sélectionné en raison de l&apos;erreur suivante : %1 Le pilote précédent sera sélectionné.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="157"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio précédemment sélectionné n&apos;est plus disponible ou le pilote est passé à un état incompatible.Nous allons essayer de trouver un périphérique audio valide, mais ce nouveau périphérique audio peut provoquer un effet larsen.Avant de vous connecter à un serveur, veuillez vérifier les paramètres de votre périphérique audio.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="169"/>
         <source>No usable %1 audio device found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun périphérique audio %1 utilisable n&apos;a été trouvé.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="170"/>
         <source>These are all the available drivers with error messages:</source>
-        <translation type="unfinished"></translation>
+        <translation>Voici tous les pilotes disponibles avec les messages d&apos;erreur :</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="182"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous ouvrir la configuration du pilote ASIO pour essayer de modifier votre configuration afin qu&apos;elle fonctionne ?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de démarrer %1. Veuillez redémarrer %1 et vérifier/reconfigurer vos paramètres audio.</translation>
     </message>
 </context>
 <context>
@@ -3678,7 +3678,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../../global.h" line="120"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>A %1 une mise à jour est disponible : &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;rendez-vous dans détails et téléchargements&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../global.h" line="270"/>

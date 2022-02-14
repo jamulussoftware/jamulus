@@ -134,6 +134,9 @@ public:
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
+    EMeterStyle GetMeterStyle() const { return eMeterStyle; }
+    void        SetMeterStyle ( const EMeterStyle eNMT ) { eMeterStyle = eNMT; }
+
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void          SetAudioQuality ( const EAudioQuality eNAudioQuality );
 
@@ -344,8 +347,9 @@ protected:
     int iMonoBlockSizeSam;
     int iStereoBlockSizeSam;
 
-    EGUIDesign eGUIDesign;
-    bool       bEnableOPUS64;
+    EGUIDesign  eGUIDesign;
+    EMeterStyle eMeterStyle;
+    bool        bEnableOPUS64;
 
     bool   bJitterBufferOK;
     bool   bEnableIPv6;

@@ -141,10 +141,17 @@ Schemes:
 Will build the file and make it available in `./Release/Jamulus.app`
 
 ## iOS
-* Make sure to install qt5 with the Qt Installer (not homebrew), and explicitly select iOS when choosing the Qt version
-* Run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro`
-* Open the generated .xcodeproject in XCode, check the Signing & Capabilities and configure a team
-* To run on a iOS device, build and run on the device, you'll have first trust your developer profile in device's Settings.
+
+1. Install [Xcode from the Mac AppStore](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
+2. [Download and install qt5 with the Qt Installer](https://www.qt.io/download) (not homebrew). Explicitly select iOS when choosing the Qt version
+3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
+4. Open the generated .xcodeproject in Xcode
+5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode might tell you if you need to change anything else like the bundle id.
+6. Connect your device via USB (or WiFi if you set it up for that)
+7. Select your device next to the play button
+8. Compile and run Jamulus by clicking on the play button
+9. Before being able to start Jamulus on your device, you'll have trust your developer profile in the device's Settings under General>Profiles & Device Management. For more information [see the guide by osxdaily](https://osxdaily.com/2021/05/07/how-to-trust-an-app-on-iphone-ipad-to-fix-untrusted-developer-message/)
+10. After a week you might need to restart from step 6 to continue to run Jamulus on iOS, unless you are paying for the Apple developer programme.
 
 ## Android
 * Install Qt, including the Android support from the Qt installer

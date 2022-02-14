@@ -96,7 +96,7 @@
     <message>
         <location filename="../../util.cpp" line="538"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiński uproszczony</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="546"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="135"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy chcesz otworzyć link &apos;%1&apos; w przeglądarce?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -719,27 +719,27 @@
     <message>
         <location filename="../../clientdlg.cpp" line="188"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished">Wskaźnik aktualnego stanu połączenia</translation>
+        <translation>Wskaźnik aktualnego stanu połączenia</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="191"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished">Czas Ping Time to czas potrzebny do przejścia strumienia audio z klienta do serwera i z powrotem. Opóźnienie to jest wprowadzane przez sieć i powinno wynosić około 20-30 ms. Jeśli opóźnienie to jest większe niż około 50 ms, odległość do serwera jest zbyt duża lub połączenie internetowe nie jest wystarczające.</translation>
+        <translation>Czas Ping Time to czas potrzebny do przejścia strumienia audio od klienta do serwera i z powrotem. To opóźnienie jest wywoływane przez sieć internetową i powinno wynosić około 20-30 ms. Jeśli jest większe niż około 50 ms, odległość do serwera jest zbyt duża lub szybkość połączenia internetowego nie jest wystarczająca.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="198"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="unfinished">Całkowite opóźnienie jest obliczane na podstawie bieżącego czasu ping i opóźnienia wprowadzonego przez bieżące ustawienia bufora.</translation>
+        <translation>Całkowite opóźnienie jest obliczane na podstawie bieżącego ping-a i opóźnienia wynikającego z aktualnych ustawień bufora.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="206"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished">Jeśli ta dioda zmieni kolor na czerwony, może być utrudnione używanie </translation>
+        <translation>Jeśli ta dioda zmieni kolor na czerwony może być utrudnione korzystanie z </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="208"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation>-a.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="228"/>
@@ -828,22 +828,22 @@
     <message>
         <location filename="../../clientdlg.cpp" line="159"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Dioda statusu lokalnego bufora opóźnień</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="160"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dioda lokalnego bufora opóźnień pokazuje status aktualnego strumienia audio. Jeżeli jest czerwona to strumień jest przerywany. Powodem tego może być jedna z poniższych przyczyn:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="184"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Wskaźnik stanu lokalnego bufora opóźnień</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="372"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished">&amp;Ustawienia</translation>
+        <translation>&amp;Ustawienia</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="946"/>
@@ -928,7 +928,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientdlg.cpp" line="713"/>
         <source>Directory Server</source>
-        <translation type="unfinished">Serwer katalogowy</translation>
+        <translation>Serwer adresowy</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="758"/>
@@ -986,18 +986,18 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation>Odchylenie</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="400"/>
         <location filename="../../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
@@ -1050,7 +1050,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientdlgbase.ui" line="587"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation>Ustaw dźwięk, połącz się z serwerem i zacznij jam sesion!</translation>
+        <translation>Ustaw dźwięk, połącz się z serwerem i zacznij sesję!</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="609"/>
@@ -1170,6 +1170,11 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Opóźnienie Bufora Karty Dźwiękowej</translation>
     </message>
     <message>
+        <location filename="../../clientsettingsdlg.cpp" line="182"/>
+        <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
+        <translation>Ustawienie bufora opóźnień jest kluczowe w programie %1. Ma to wpływ na wiele cech połączenia.</translation>
+    </message>
+    <message>
         <location filename="../../clientsettingsdlg.cpp" line="185"/>
         <source>Three buffer sizes are supported</source>
         <translation>Obsługiwane są trzy wielkości buforów</translation>
@@ -1221,27 +1226,27 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Language</source>
-        <translation type="unfinished">Język</translation>
+        <translation>Język</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz język interfejsu użytkownika.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="267"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista wyboru języka</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="355"/>
         <source>Audio Upstream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Szybkość wysyłania audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="356"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>Zależy od aktualnego rozmiaru bufora audio i wybranej jakości dźwięku. Upewnij się, że szybkość wysyłania nie jest wyższa niż dostępna u ciebie prędkość wychodząca (upload) połączenia internetowego (można to sprawdzić np. na speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="437"/>
@@ -1254,7 +1259,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="477"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>To co zostanie tu wpisane pojawi się na suwaku miksera podczas połączenia z serwerem %1. Ta etykieta będzie także wyświetlana u innych muzyków podłączonych do tego samego serwera.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="1118"/>
@@ -1288,47 +1293,42 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="153"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Może być wybrany inny kanał aktualnej karty dźwiękowej dla każdego wejściowego i wyjściowego strumienia programu %1 (prawy i lewy kanał).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="172"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="182"/>
-        <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many conncetion properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Włącza obsługę bardzo małych pakietów internetowych z danymi audio. Właściwie to te małe pakiety są używane tylko jeżeli opóźnienie bufora jest mniejsze niż %1 sampli. Im mniejsze bufory sieciowe tym niższe opóźnienie audio ale jednocześnie zwiększa się obciążenie sieci i prawdopodobieństwo występowania przerw i zniekształceń dźwięku.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="199"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektóre sterowniki kart dźwiękowych nie pozwalają na zmianę bufora opoóźnień z poziomu %1-a. W takim przypadku te ustawienia są zablokowane i mogą być zmieniane tylko z poziomu sterownika karty dźwiękowej. W systemie Windows użyj przycisku ustawień ASIO aby otworzyć odpowiednie okno. W systemie Linux użyj programu do konfiguracji serwera JACK.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gdy rozmiar bufora nie jest wybrany, a wszystkie ustawienia są zablokowane, oznacza to, że sterownik używa nieobsługiwanego rozmiaru bufora. %1 będzie działał z tymi ustawieniami ale jego fukcjonalność może być ograniczona.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeżeli ustawienia opóźnienia bufora są zablokowane oznacza to, że sterownik audio nie pozwala na ich zmianę z poziomu %1-a. Aby otworzyć okno ustawień sterownika w systemie Windows - naciśnij  przycisk ustawienia ASIO. W systemie Linux do zmiany bufora opóźnień użyj programu do konfiguracji serwera JACK.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="233"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwiera ustawienia sterownika karty dźwiękowej. Niktóre sterowniki pozwalają na zmianę ustawień bufora, a inne jak ASIO4ALL pozwalają wybrać wejścia i wyjścia. Więcej informacji można znaleść na stronie jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="238"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwiera ustawienia sterownika. Uwaga: aktualnie %1 obsługuje tylko urządzenia z częstotliwością próbkowania %2 Hz. Nie będzie można wybrać sterownika/urządzenia nieobsługującego tej częstotliwośći. Więcej informacji można znaleść na stronie jamulus.io.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="276"/>
-        <source>%1 and %2:</source>
-        <translation type="unfinished"></translation>
+        <source>and</source>
+        <translation>i</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="292"/>
@@ -1410,7 +1410,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sterownik ASIO (karta dźwiękowa) może być wybrany w %1-ie w systemie Windows. W systemach MacOs/Linux wybór karty dźwiękowej nie jest możliwy. Jeżeli wybrany sterownik ASIO nie jest poprawny wtedy wyświetlany jest komunikat błędu i poprzednio działający sterownik zostaje przywrócony.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="149"/>
@@ -1439,7 +1439,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="346"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Własny adres serwera</translation>
+        <translation>Własny adres serwera zbiorczego</translation>
     </message>
     <message>
         <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
@@ -1603,12 +1603,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="347"/>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="unfinished">Należy pozostawić to puste pole, chyba że konieczne jest wprowadzenie adresu serwera innego niż domyślny.</translation>
+        <translation>Należy pozostawić to pole puste, chyba że konieczne jest wprowadzenie adresu serwera innego niż domyślny.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="352"/>
         <source>Directory server address combo box</source>
-        <translation type="unfinished">Lista wyboru serwera zbiorczego</translation>
+        <translation>Lista wyboru serwera zbiorczego</translation>
     </message>
     <message>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
@@ -2191,12 +2191,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="859"/>
         <source>kbps</source>
-        <translation type="unfinished"></translation>
+        <translation>kbps</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="962"/>
         <source>Custom Directories:</source>
-        <translation type="unfinished"></translation>
+        <translation>Serwery zbiorcze:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="1023"/>
@@ -2420,7 +2420,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Serwer</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -2494,12 +2494,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../util.cpp" line="605"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished">&amp;O programie Jamulus...</translation>
+        <translation>&amp;O programie Jamulus...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="607"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished">O programie &amp;Qt</translation>
+        <translation>O &amp;Qt...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -2508,7 +2508,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../util.h" line="418"/>
         <source>About Qt</source>
-        <translation type="unfinished">O programie Qt</translation>
+        <translation>O Qt</translation>
     </message>
 </context>
 <context>
@@ -2868,22 +2868,22 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../serverdlg.cpp" line="70"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished">Jeśli pole wyboru Ustaw serwer jako publiczny jest zaznaczone, pokazuje, czy rejestracja na zbiorczcym serwerze zakończyła się sukcesem. Jeśli rejestracja nie powiodła się, wybierz inny serwer z listy.</translation>
+        <translation>Jeśli pole wyboru Ustaw serwer jako publiczny jest zaznaczone, pokazuje, czy rejestracja na zbiorczcym serwerze zakończyła się sukcesem. Jeśli rejestracja nie powiodła się, wybierz inny serwer z listy.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>Custom Directory Server Address</source>
-        <translation type="unfinished">Własny adres serwera zbiorczego</translation>
+        <translation>Własny adres serwera zbiorczego</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="76"/>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished">Niestandardowy adres serwera zbiorczego to adres IP lub adres URL serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
+        <translation>Niestandardowy adres serwera zbiorczego to adres IP lub adres URL serwera, na którym zarządzana jest lista serwerów w oknie dialogowym połączenia.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
         <source>Directory server address line edit</source>
-        <translation type="unfinished">Edycja linii adresowej serwera zbiorczego</translation>
+        <translation>Linia edycji adresu serwera zbiorczego</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="83"/>
@@ -2893,7 +2893,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../serverdlg.cpp" line="84"/>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="unfinished">Wybiera adres serwera (np. adres serwera zbiorczego), na listę którego zostanie dodany nasz serwer.</translation>
+        <translation>Wybiera adres serwera (np. adres serwera zbiorczego), na listę którego zostanie dodany nasz serwer.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="85"/>
@@ -3022,13 +3022,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <location filename="../../serverdlg.cpp" line="195"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>serwer %1-a</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="341"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation>Serwer %1-a</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="562"/>
@@ -3114,7 +3114,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../serverdlg.cpp" line="61"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished">Jeśli pole wyboru „Ustaw serwer jako publiczny” jest zaznaczone, serwer ten rejestruje się na serwerze zbiorczym, tak aby wszyscy użytkownicy aplikacji mogli zobaczyć go na liście serwerów i połączyć się z nim. Rejestracja serwera jest okresowo odnawiana, aby upewnić się, że wszystkie serwery na liście są rzeczywiście dostępne.</translation>
+        <translation>Jeśli pole wyboru „Ustaw serwer jako publiczny” jest zaznaczone, serwer ten rejestruje się na serwerze zbiorczym, tak aby wszyscy użytkownicy aplikacji mogli zobaczyć go na liście i połączyć się z nim. Rejestracja serwera jest okresowo odnawiana, aby upewnić się, że wszystkie serwery na liście są rzeczywiście dostępne.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="89"/>
@@ -3124,17 +3124,17 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../serverdlg.cpp" line="109"/>
         <source>Country/Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Kraj/Region</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustaw kraj lub region gdzie znajduje się serwer. Inni będą widzieć tą nazwę lokalizacji w oknie z listą serwerów.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="117"/>
         <source>Combo box for location of this server</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista rozwijana położenia tego serwera</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="153"/>
@@ -3243,7 +3243,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../util.h" line="612"/>
         <source>Directory Server full</source>
-        <translation type="unfinished">Serwer zbiorczy zapełniony</translation>
+        <translation>Serwer zbiorczy zapełniony</translation>
     </message>
     <message>
         <location filename="../../util.h" line="615"/>
@@ -3347,7 +3347,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../serverdlgbase.ui" line="82"/>
         <source>List</source>
-        <translation type="unfinished">Lista</translation>
+        <translation>Lista</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="92"/>
@@ -3358,12 +3358,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Położenie: Region</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="257"/>
         <source>Custom Directory Server Address:</source>
-        <translation type="unfinished">Własny Adres Serwera Zbiorczego:</translation>
+        <translation>Własny Adres Serwera Zbiorczego:</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="117"/>
@@ -3385,7 +3385,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../serverlist.cpp" line="647"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie da się zapisywać do &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -3493,33 +3493,33 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../../windows/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybrane urządzenie dźwiękowe nie jest już dostępne w systemie. Proszę sprawdzić je sprawdzić.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie da się włączyć sterownika audio. Sprawdź czy twój sprzęt audio jest podłączony i zweryfikuj ustawienia sterownika.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybrane urządzenie dźwiękowe jest niekompatybilne bo nie obsługuje próbkowania %1 Hz. Proszę wybrać inne.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualne urządzenie dźwiękowe jest niekompatybilne bo nie da się ustawić próbkowania %2 Hz. Proszę sprawdzić przełączniki na urządzeniu lub ustawienia jego sterownika żeby ustawić tą częstotliwość ręcznie i uruchomić %1 ponownie.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybrane urządzenie dźwiękowe jest niekompatybilne bo nie obsługuje %1 kanałów wej/wyj. Proszę wybrać inne urządzenie lub zmienić jego konfigurację.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="206"/>
         <location filename="../../../windows/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybrane urządzenie dźwiękowe jest niekompatybilne bo nie obsługuje wymaganego formatu próbek audio. Proszę wybrać inne.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="553"/>
@@ -3529,7 +3529,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../../windows/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proszę zainstalować sterownik ASIO przed uruchomieniem %1-a. Jeżeli twoje urządzenie posiada wsparcie dla ASIO, zainstaluj oficjalny sterownik dla niego, jeżeli nie, trzeba zainstalować uniwersalny sterownik taki jak ASIO4ALL.</translation>
     </message>
     <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
@@ -3551,82 +3551,82 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../../linux/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK nie mógł być uruchomiony automatycznie. Proszę go uruchomić ręcznie i sprawdzić komunikaty błędów.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK nie jest uruchomiony z częstotliwością próbkowania &lt;b&gt;%1 Hz&lt;/b&gt;. Proszę użyć programu takiego jak &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; aby ustawić próbkowanie JACK-a na %1.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie powiodła się rejestracja portu na serwerze JACK. Prawdopodobnie to jego błąd. Proszę zamknąć %1-a i JACK-a i sprawdzić czy jakiś inny program wykorzystujący próbkowanie %2 Hz może się podłączyć do JACK-a.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie powiodła się rejestracja portu na serwerze JACK. Prawdopodobnie to jego błąd. Proszę zamknąć %1-a i JACK-a i sprawdzić czy jakiś inny program MIDI może się podłączyć do JACK-a.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie da się uruchomić klienta JACK. Prawdopodobnie to błąd JACK-a. Proszę sprawdzić jego komunikaty.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation type="unfinished"></translation>
+        <translation>JACK został zatrzymany. %1 wymaga serwera JACK. Proszę zrestartować %1-a aby uruchomić JACK-a jeszcze raz. </translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>W twoim systemie nie ma karty dźwiękowej. Wywołanie CoreAudio input AudioHardwareGetProperty nie powiodło się.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>W twoim systemie nie ma karty dźwiękowej. Wywołanie CoreAudio output AudioHardwareGetProperty nie powiodło się.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brakuje aktualnie zaznaczonego urządzenia dźwiękowego. Proszę sprawdzić urządenia dźwiękowe.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wejściowe urządzenie dźwiękowe nie jest już dostępne. Proszę sprawdzić czy jest właściwie podłączone.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>Częstotliwość próbkowania aktualnego urządzenia wejściowego to nie %1 Hz więc jest niekompatybilna. Proszę wybrać inne urządzenie lub spróbować zmienić próbkowanie na %1 Hz ręcznie - poprzez ustawienia Dźwięk-MIDI (w Programy-&gt;Narzędzia).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyjściowe urządzenie dźwiękowe nie jest już dostępne. Proszę sprawdzić czy jest właściwie podłączone.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation type="unfinished"></translation>
+        <translation>Częstotliwość próbkowania aktualnego urządzenia wejściowego to nie %1 Hz więc jest niekompatybilna. Proszę wybrać inne urządzenie lub spróbować zmienić próbkowanie na %1 Hz ręcznie - poprzez ustawienia Dźwięk-MIDI (w Programy-&gt;Narzędzia).</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Format strumienia dźwiękowego aktualnego urządzenia wejściowego nie jest kompatybilny z tym oprogramowaniem. Proszę wybrać inne urządzenie.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="475"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Format strumienia dźwiękowego aktualnego urządzenia wyjściowego nie jest kompatybilny z %1-em. Proszę wybrać inne urządzenie.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="728"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozmiary buforów aktualnych urządzeń wejściowych i wejściowych nie mogą być ustawione na jednakową wartość. Proszę wybrać inne urządzenia w ustawieniach systemowych.</translation>
     </message>
 </context>
 <context>
@@ -3682,32 +3682,32 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../soundbase.cpp" line="116"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można używać wybranego urządzenia dźwiękowego z powodu błędu %1. Poprzedni sterownik zostanie wybrany.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="157"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state.We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback.Before connecting to a server, please check your audio device settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Poprzednio wybrane urządzenie dźwiękowe nie jest już dostępne lub jego ustawienia nie są już kompatybilne. Spróbuję znaleźć odpowiednie urządzenie dźwiękowe ale może ono powodować sprzężenia. Przed podłączeniem do serwera proszę sprawdzić swoje ustawienia audio.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="169"/>
         <source>No usable %1 audio device found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie znaleziono działającego użądzenia dźwiękowego %1.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="170"/>
         <source>These are all the available drivers with error messages:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wszystkie te dostępne sterowniki mają błędy:</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="182"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation type="unfinished"></translation>
+        <translation>Czy chcesz otworzyć ustawienia sterownika ASIO żeby spróbować ustawić konfigurację dźwięku?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się uruchomić %1-a. Proszę sprawdzić/zmienić ustawienia dźwięku i uruchomić %1-a ponownie.</translation>
     </message>
 </context>
 <context>
@@ -3733,7 +3733,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../global.h" line="120"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostępna jest aktualizacja %1-a: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;zobacz szczegóły i pobierz&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../global.h" line="270"/>

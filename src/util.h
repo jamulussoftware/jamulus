@@ -40,6 +40,7 @@
 #    include <QDateTime>
 #    include <QDesktopServices>
 #    include <QKeyEvent>
+#    include <QTextBoundaryFinder>
 #    include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
@@ -96,7 +97,7 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, c
     return ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) / iFrameSize;
 }
 
-QString GetVersionAndNameStr ( const bool bWithHtml = true );
+QString GetVersionAndNameStr ( const bool bDisplayInGui = true );
 QString MakeClientNameTitle ( QString win, QString client );
 
 /******************************************************************************\
@@ -499,6 +500,17 @@ enum EGUIDesign
     GD_SLIMFADER = 2
 };
 
+// MeterStyle enum -------------------------------------------------------------
+enum EMeterStyle
+{
+    // used for settings -> enum values should be fixed
+    MT_LED       = 0,
+    MT_BAR       = 1,
+    MT_SLIM_BAR  = 2,
+    MT_SLIM_LED  = 3,
+    MT_SMALL_LED = 4
+};
+
 // Server licence type enum ----------------------------------------------------
 enum ELicenceType
 {
@@ -528,8 +540,8 @@ enum EChSortType
     ST_BY_CITY       = 4
 };
 
-// Directory server address type -----------------------------------------------
-enum ECSAddType
+// Directory type --------------------------------------------------------------
+enum EDirectoryType
 {
     // used for settings -> enum values should be fixed
     AT_DEFAULT              = 0,
@@ -542,7 +554,7 @@ enum ECSAddType
     AT_CUSTOM               = 7 // Must be the last entry!
 };
 
-inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
+inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
 {
     switch ( eAddrType )
     {
@@ -572,7 +584,7 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
     }
 }
 
-// Slave server registration state ---------------------------------------------
+// Server registration state ---------------------------------------------
 enum ESvrRegStatus
 {
     SRS_UNREGISTERED,
@@ -581,7 +593,7 @@ enum ESvrRegStatus
     SRS_TIME_OUT,
     SRS_UNKNOWN_RESP,
     SRS_REGISTERED,
-    SRS_CENTRAL_SVR_FULL,
+    SRS_SERVER_LIST_FULL,
     SRS_VERSION_TOO_OLD,
     SRS_NOT_FULFILL_REQUIREMENTS
 };
@@ -608,7 +620,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     case SRS_REGISTERED:
         return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
-    case SRS_CENTRAL_SVR_FULL:
+    case SRS_SERVER_LIST_FULL:
         return QCoreApplication::translate ( "CServerDlg", "Directory Server full" );
 
     case SRS_VERSION_TOO_OLD:
@@ -626,7 +638,7 @@ enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
     SRR_REGISTERED              = 0,
-    SRR_CENTRAL_SVR_FULL        = 1,
+    SRR_SERVER_LIST_FULL        = 1,
     SRR_VERSION_TOO_OLD         = 2,
     SRR_NOT_FULFILL_REQIREMENTS = 3
 };
@@ -993,7 +1005,7 @@ public:
     static QString      FixAddress ( const QString& strAddress );
     static CHostAddress GetLocalAddress();
     static CHostAddress GetLocalAddress6();
-    static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType, const QString& strCentralServerAddress );
+    static QString      GetDirectoryAddress ( const EDirectoryType eDirectoryType, const QString& strDirectoryAddress );
     static bool         IsPrivateNetworkIP ( const QHostAddress& qhAddr );
 };
 

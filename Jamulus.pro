@@ -1,6 +1,6 @@
-VERSION = 3.8.0dev
+VERSION = 3.8.1dev
 
-# use target name which does not use a captital letter at the beginning
+# use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)
     TARGET = jamulus
@@ -402,7 +402,14 @@ win32 {
         icons.path = $$ICONSDIR
         icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
 
-        INSTALLS += target desktop icons
+        isEmpty(MANDIR) {
+            MANDIR = share/man/man1
+        }
+        MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
+        man.path = $$MANDIR
+        man.files = distributions/Jamulus.1
+
+        INSTALLS += target desktop icons man
     }
 }
 
@@ -740,15 +747,17 @@ DISTFILES += ChangeLog \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
     src/res/CLEDGreen.png \
-    src/res/CLEDGreenArrow.png \
     src/res/CLEDGreenSmall.png \
     src/res/CLEDGrey.png \
-    src/res/CLEDGreyArrow.png \
     src/res/CLEDGreySmall.png \
     src/res/CLEDRed.png \
     src/res/CLEDRedSmall.png \
     src/res/CLEDYellow.png \
     src/res/CLEDYellowSmall.png \
+    src/res/LEDBlackSmall.png \
+    src/res/LEDGreenSmall.png \
+    src/res/LEDRedSmall.png \
+    src/res/LEDYellowSmall.png \
     src/res/IndicatorGreen.png \
     src/res/IndicatorYellow.png \
     src/res/IndicatorRed.png \
@@ -772,11 +781,14 @@ DISTFILES += ChangeLog \
     src/res/mixerboardbackground.png \
     src/res/transparent1x1.png \
     src/res/mutediconorange.png \
+    src/res/servertrayiconactive.png \
+    src/res/servertrayiconinactive.png \
     src/res/instruments/accordeon.png \
     src/res/instruments/aguitar.png \
     src/res/instruments/bassguitar.png \
     src/res/instruments/cello.png \
     src/res/instruments/clarinet.png \
+    src/res/instruments/conductor.png \
     src/res/instruments/djembe.png \
     src/res/instruments/doublebass.png \
     src/res/instruments/drumset.png \
@@ -799,6 +811,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/trombone.png \
     src/res/instruments/trumpet.png \
     src/res/instruments/tuba.png \
+    src/res/instruments/vibraphone.png \
     src/res/instruments/violin.png \
     src/res/instruments/vocal.png \
     src/res/instruments/guitarvocal.png \

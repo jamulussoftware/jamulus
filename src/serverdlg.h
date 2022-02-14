@@ -87,7 +87,7 @@ protected:
 
     QMenuBar* pMenu;
 
-    bool            bSystemTrayIconAvaialbe;
+    bool            bSystemTrayIconAvailable;
     QSystemTrayIcon SystemTrayIcon;
     QPixmap         BitmapSystemTrayInactive;
     QPixmap         BitmapSystemTrayActive;
@@ -98,11 +98,11 @@ public slots:
     void OnStartOnOSStartStateChanged ( int value );
     void OnEnableRecorderStateChanged ( int value ) { pServer->SetEnableRecording ( Qt::CheckState::Checked == value ); }
 
-    void OnCentralServerAddressEditingFinished();
+    void OnCustomDirectoryEditingFinished();
     void OnServerNameTextChanged ( const QString& strNewName );
     void OnLocationCityTextChanged ( const QString& strNewCity );
     void OnLocationCountryActivated ( int iCntryListItem );
-    void OnCentServAddrTypeActivated ( int iTypeIdx );
+    void OnDirectoryTypeActivated ( int iTypeIdx );
     void OnTimer();
     void OnServerStarted();
     void OnServerStopped();

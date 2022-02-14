@@ -93,7 +93,7 @@ QString CServerListEntry::toCSV()
 
 // --- CServerListManager ---
 CServerListManager::CServerListManager ( const quint16  iNPortNum,
-                                         const QString& sNCentServAddr,
+                                         const QString& sNDirectoryAddress,
                                          const QString& strServerListFileName,
                                          const QString& strServerInfo,
                                          const QString& strServerListFilter,
@@ -101,15 +101,15 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const int      iNumChannels,
                                          const bool     bNEnableIPv6,
                                          CProtocol*     pNConLProt ) :
-    eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
+    eDirectoryType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
     bEnableIPv6 ( bNEnableIPv6 ),
     eSvrRegStatus ( SRS_UNREGISTERED ),
     strMinServerVersion ( "" ), // disable version check with empty version
     pConnLessProtocol ( pNConLProt ),
     iSvrRegRetries ( 0 )
 {
-    // set the directory server address (also bIsCentralServer)
-    SetCentralServerAddress ( sNCentServAddr );
+    // set the directory server address (also bIsDirectoryServer)
+    SetDirectoryAddress ( sNDirectoryAddress );
 
     // set the server internal address, including internal port number
     QHostAddress qhaServerPublicIP;
@@ -125,7 +125,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         qhaServerPublicIP = QHostAddress ( strServerPublicIP );
     }
     qDebug() << "Using" << qhaServerPublicIP.toString() << "as external IP.";
-    SlaveCurLocalHostAddress = CHostAddress ( qhaServerPublicIP, iNPortNum );
+    ServerPublicIP = CHostAddress ( qhaServerPublicIP, iNPortNum );
 
     if ( bEnableIPv6 )
     {
@@ -134,7 +134,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
         qhaServerPublicIP6 = NetworkUtil::GetLocalAddress6().InetAddr;
         qDebug() << "Using" << qhaServerPublicIP6.toString() << "as external IPv6.";
-        SlaveCurLocalHostAddress6 = CHostAddress ( qhaServerPublicIP6, iNPortNum );
+        ServerPublicIP6 = CHostAddress ( qhaServerPublicIP6, iNPortNum );
     }
 
     // prepare the server info information
@@ -154,8 +154,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // definition the client substitutes the IP address of the directory server
     // itself for his server list. If we are a directory server, we assume that
     // we are a permanent server.
-    CServerListEntry
-        ThisServerListEntry ( CHostAddress(), SlaveCurLocalHostAddress, "", QLocale::system().country(), "", iNumChannels, bIsCentralServer );
+    CServerListEntry ThisServerListEntry ( CHostAddress(), ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectoryServer );
 
     // parse the server info string according to definition:
     // [this server name];[this server city];[this server country as QLocale ID] (; ... ignored)
@@ -187,12 +186,12 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // Clear the persistent serverlist file name
     ServerListFileName.clear();
 
-    if ( bIsCentralServer )
+    if ( bIsDirectoryServer )
     {
         // Load any persistent server list (create it if it is not there)
         if ( !strServerListFileName.isEmpty() && ServerListFileName.isEmpty() )
         {
-            CentralServerLoadServerList ( strServerListFileName );
+            Load ( strServerListFileName );
         }
 
         // whitelist parsing
@@ -219,9 +218,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         }
     }
 
-    // for slave servers start the one shot timer for determining if it is a
-    // permanent server
-    if ( !bIsCentralServer )
+    // start the one shot timer for determining if this is a
+    // permanent registered server
+    if ( !bIsDirectoryServer )
     {
         // 1 minute = 60 * 1000 ms
         QTimer::singleShot ( SERVLIST_TIME_PERMSERV_MINUTES * 60000, this, SLOT ( OnTimerIsPermanent() ) );
@@ -236,64 +235,64 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
     QObject::connect ( &TimerPingServerInList, &QTimer::timeout, this, &CServerListManager::OnTimerPingServerInList );
 
-    QObject::connect ( &TimerPingCentralServer, &QTimer::timeout, this, &CServerListManager::OnTimerPingCentralServer );
+    QObject::connect ( &TimerPingServers, &QTimer::timeout, this, &CServerListManager::OnTimerPingServers );
 
-    QObject::connect ( &TimerRegistering, &QTimer::timeout, this, &CServerListManager::OnTimerRegistering );
+    QObject::connect ( &TimerRegistering, &QTimer::timeout, this, &CServerListManager::OnTimerRefreshRegistration );
 
     QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout, this, &CServerListManager::OnTimerCLRegisterServerResp );
 
     QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CServerListManager::OnAboutToQuit );
 }
 
-void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
+void CServerListManager::SetDirectoryAddress ( const QString sNDirectoryAddress )
 {
     // if the address has not actually changed, do nothing
-    if ( sNCentServAddr == strCentralServerAddress )
+    if ( sNDirectoryAddress == strDirectoryAddress )
     {
         return;
     }
 
     // if we are registered to a custom directory server, unregister before updating the name
-    if ( eCentralServerAddressType == AT_CUSTOM && GetSvrRegStatus() == SRS_REGISTERED )
+    if ( eDirectoryType == AT_CUSTOM && GetSvrRegStatus() == SRS_REGISTERED )
     {
-        SlaveServerUnregister();
+        Unregister();
     }
 
     QMutexLocker locker ( &Mutex );
 
     // now save the new name
-    strCentralServerAddress = sNCentServAddr;
+    strDirectoryAddress = sNDirectoryAddress;
 
-    SetCentralServerState();
+    SetIsDirectoryServer();
 }
 
-void CServerListManager::SetCentralServerAddressType ( const ECSAddType eNCSAT )
+void CServerListManager::SetDirectoryType ( const EDirectoryType eNCSAT )
 {
     // if the type is changing, unregister before updating
-    if ( eNCSAT != eCentralServerAddressType && GetSvrRegStatus() == SRS_REGISTERED )
+    if ( eNCSAT != eDirectoryType && GetSvrRegStatus() == SRS_REGISTERED )
     {
-        SlaveServerUnregister();
+        Unregister();
     }
 
     QMutexLocker locker ( &Mutex );
 
     // now update the server type
-    eCentralServerAddressType = eNCSAT;
+    eDirectoryType = eNCSAT;
 
-    SetCentralServerState();
+    SetIsDirectoryServer();
 }
 
-void CServerListManager::SetCentralServerState()
+void CServerListManager::SetIsDirectoryServer()
 {
     // per definition: If we are in server mode and the directory server address
     // is the localhost address, and set to Custom, we are in directory server mode.
-    bool bNCentralServer =
-        ( ( !strCentralServerAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-          ( eCentralServerAddressType == AT_CUSTOM ) );
-    if ( bIsCentralServer != bNCentralServer )
+    bool bNIsDirectoryServer =
+        ( ( !strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strDirectoryAddress.compare ( "127.0.0.1" ) ) &&
+          ( eDirectoryType == AT_CUSTOM ) );
+    if ( bIsDirectoryServer != bNIsDirectoryServer )
     {
-        bIsCentralServer = bNCentralServer;
-        qInfo() << ( bIsCentralServer ? "Now a directory server" : "No longer a directory server" );
+        bIsDirectoryServer = bNIsDirectoryServer;
+        qInfo() << ( bIsDirectoryServer ? "Now a directory server" : "No longer a directory server" );
     }
 }
 
@@ -303,7 +302,7 @@ void CServerListManager::Update()
 
     if ( bEnabled )
     {
-        if ( bIsCentralServer )
+        if ( bIsDirectoryServer )
         {
             // start timer for polling the server list if enabled
             // 1 minute = 60 * 1000 ms
@@ -315,13 +314,12 @@ void CServerListManager::Update()
         else
         {
             // initiate registration right away so that we do not have to wait
-            // for the first time out of the timer until the slave server gets
-            // registered at the directory server, note that we have to unlock
-            // the mutex before calling the function since inside this function
-            // the mutex is locked, too
+            // for the first time out of the timer to get registered.
+            // note that we have to unlock the mutex before calling the function
+            // since inside this function the mutex is locked, too
             locker.unlock();
             {
-                OnTimerRegistering();
+                OnTimerRefreshRegistration();
             }
             locker.relock();
 
@@ -339,15 +337,15 @@ void CServerListManager::Update()
             // keep the port open at the NAT router.
             // If no NAT is used, we send the messages anyway since they do
             // not hurt (very low traffic). We also reuse the same update
-            // time as used in the directory server for pinging the slave
+            // time as used in the directory server for pinging the registered
             // servers.
-            TimerPingCentralServer.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+            TimerPingServers.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
         }
     }
     else
     {
         // disable service -> stop timer
-        if ( bIsCentralServer )
+        if ( bIsDirectoryServer )
         {
             TimerPollList.stop();
             TimerPingServerInList.stop();
@@ -356,7 +354,7 @@ void CServerListManager::Update()
         {
             TimerCLRegisterServerResp.stop();
             TimerRegistering.stop();
-            TimerPingCentralServer.stop();
+            TimerPingServers.stop();
         }
     }
 }
@@ -372,7 +370,7 @@ void CServerListManager::OnTimerPingServerInList()
     // server entry)
     for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
     {
-        // send empty message to keep NAT port open at slave server
+        // send empty message to keep NAT port open at registered server
         pConnLessProtocol->CreateCLEmptyMes ( ServerList[iIdx].HostAddr );
     }
 }
@@ -403,12 +401,12 @@ void CServerListManager::OnTimerPollList()
     }
 }
 
-void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
-                                                       const CHostAddress&    LInetAddr,
-                                                       const CServerCoreInfo& ServerInfo,
-                                                       const QString          strVersion )
+void CServerListManager::Append ( const CHostAddress&    InetAddr,
+                                  const CHostAddress&    LInetAddr,
+                                  const CServerCoreInfo& ServerInfo,
+                                  const QString          strVersion )
 {
-    if ( bIsCentralServer && bEnabled )
+    if ( bIsDirectoryServer && bEnabled )
     {
         qInfo() << qUtf8Printable ( QString ( "Requested to register entry for %1 (%2): %3" )
                                         .arg ( InetAddr.toString() )
@@ -474,14 +472,14 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
         }
 
         pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr,
-                                                        iSelIdx == INVALID_INDEX ? ESvrRegResult::SRR_CENTRAL_SVR_FULL
+                                                        iSelIdx == INVALID_INDEX ? ESvrRegResult::SRR_SERVER_LIST_FULL
                                                                                  : ESvrRegResult::SRR_REGISTERED );
     }
 }
 
-void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& InetAddr )
+void CServerListManager::Remove ( const CHostAddress& InetAddr )
 {
-    if ( bIsCentralServer && bEnabled )
+    if ( bIsDirectoryServer && bEnabled )
     {
         qInfo() << qUtf8Printable ( QString ( "Requested to unregister entry for %1" ).arg ( InetAddr.toString() ) );
 
@@ -498,11 +496,11 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
     }
 }
 
-void CServerListManager::CentralServerQueryServerList ( const CHostAddress& InetAddr )
+void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
 {
     QMutexLocker locker ( &Mutex );
 
-    if ( bIsCentralServer && bEnabled )
+    if ( bIsDirectoryServer && bEnabled )
     {
         const int iCurServerListSize = ServerList.size();
 
@@ -536,11 +534,11 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                     // but it supplied an additional public address using
                     // --serverpublicip.
                     // In this case, use the latter.
-                    // This is common when running a directory server with slave
+                    // This is common when running a directory with registered
                     // servers behind a NAT and dealing with external, public
-                    // clients.
+                    // clients. In this case, sending a ping would not open
+                    // a NAT port.
                     vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
-                    // ?? Shouldn't this send the ping, as below ??
                 }
                 else
                 {
@@ -577,7 +575,7 @@ int CServerListManager::IndexOf ( CHostAddress haSearchTerm )
     return INVALID_INDEX;
 }
 
-void CServerListManager::CentralServerLoadServerList ( const QString strServerList )
+void CServerListManager::Load ( const QString strServerList )
 {
     QFile file ( strServerList );
 
@@ -632,7 +630,7 @@ void CServerListManager::CentralServerLoadServerList ( const QString strServerLi
     }
 }
 
-void CServerListManager::CentralServerSaveServerList()
+void CServerListManager::Save()
 {
     if ( ServerListFileName.isEmpty() )
     {
@@ -663,7 +661,7 @@ void CServerListManager::CentralServerSaveServerList()
     }
 }
 
-/* Slave server functionality *************************************************/
+/* Registered server functionality *************************************************/
 void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
 {
     // we need the lock since the user might change the server properties at
@@ -679,8 +677,8 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
         SetSvrRegStatus ( ESvrRegStatus::SRS_REGISTERED );
         break;
 
-    case ESvrRegResult::SRR_CENTRAL_SVR_FULL:
-        SetSvrRegStatus ( ESvrRegStatus::SRS_CENTRAL_SVR_FULL );
+    case ESvrRegResult::SRR_SERVER_LIST_FULL:
+        SetSvrRegStatus ( ESvrRegStatus::SRS_SERVER_LIST_FULL );
         break;
 
     case ESvrRegResult::SRR_VERSION_TOO_OLD:
@@ -697,16 +695,16 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
     }
 }
 
-void CServerListManager::OnTimerPingCentralServer()
+void CServerListManager::OnTimerPingServers()
 {
     QMutexLocker locker ( &Mutex );
 
     // first check if directory server address is valid
-    if ( !( SlaveCurCentServerHostAddress == CHostAddress() ) )
+    if ( !( DirectoryAddress == CHostAddress() ) )
     {
         // send empty message to directory server to keep NAT port open -> we do
         // not require any answer from the directory server
-        pConnLessProtocol->CreateCLEmptyMes ( SlaveCurCentServerHostAddress );
+        pConnLessProtocol->CreateCLEmptyMes ( DirectoryAddress );
     }
 }
 
@@ -726,7 +724,7 @@ void CServerListManager::OnTimerCLRegisterServerResp()
         {
             locker.unlock();
             {
-                OnTimerRegistering();
+                OnTimerRefreshRegistration();
             }
             locker.relock();
 
@@ -736,38 +734,38 @@ void CServerListManager::OnTimerCLRegisterServerResp()
     }
 }
 
-void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
+void CServerListManager::SetRegistered ( const bool bIsRegister )
 {
     // we need the lock since the user might change the server properties at
     // any time
     QMutexLocker locker ( &Mutex );
 
     // get the correct directory server address
-    const QString strCurCentrServAddr = NetworkUtil::GetCentralServerAddress ( eCentralServerAddressType, strCentralServerAddress );
+    const QString strCurrentDirectoryAddress = NetworkUtil::GetDirectoryAddress ( eDirectoryType, strDirectoryAddress );
 
-    // For the slave server, the slave server properties are stored in the
+    // For a registered server, the server properties are stored in the
     // very first item in the server list (which is actually no server list
-    // but just one item long for the slave server).
+    // but just one item long for the registered server).
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
 
     // Allow IPv4 only for communicating with Directory Servers
-    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr, SlaveCurCentServerHostAddress, false ) )
+    if ( NetworkUtil().ParseNetworkAddress ( strCurrentDirectoryAddress, DirectoryAddress, false ) )
     {
         if ( bIsRegister )
         {
             // register server
             SetSvrRegStatus ( SRS_REQUESTED );
 
-            pConnLessProtocol->CreateCLRegisterServerExMes ( SlaveCurCentServerHostAddress, SlaveCurLocalHostAddress, ServerList[0] );
+            pConnLessProtocol->CreateCLRegisterServerExMes ( DirectoryAddress, ServerPublicIP, ServerList[0] );
         }
         else
         {
             // unregister server
             SetSvrRegStatus ( SRS_UNREGISTERED );
 
-            pConnLessProtocol->CreateCLUnregisterServerMes ( SlaveCurCentServerHostAddress );
+            pConnLessProtocol->CreateCLUnregisterServerMes ( DirectoryAddress );
         }
     }
     else

@@ -5,8 +5,8 @@ param(
     [string] $QtCompile64 = "msvc2019_64",
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
-    [string] $NsisName = "nsis-3.06.1",
-    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.06.1/nsis-3.06.1.zip",
+    [string] $NsisName = "nsis-3.08",
+    [string] $NsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.08/nsis-3.08.zip",
     [string] $BuildOption = ""
 )
 
@@ -58,13 +58,10 @@ Function Get-RedirectedUrl {
     )
 
     $request = [System.Net.WebRequest]::Create($url)
-    $request.AllowAutoRedirect=$false
+    $request.AllowAutoRedirect=$true
     $response=$request.GetResponse()
-
-    if ($response.StatusCode -eq "Found")
-    {
-        $response.GetResponseHeader("Location")
-    }
+    $response.ResponseUri.AbsoluteUri
+    $response.Close()
 }
 
 function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402

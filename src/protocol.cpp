@@ -306,8 +306,8 @@ CONNECTION LESS MESSAGES
       NOTE: In the PROTMESSID_CLM_SERVER_LIST list, this field will be empty
       as only the initial IP address should be used by the client.  Where
       necessary, that value will contain the server internal address.
-      When running a directory server and a slave server behind the same NAT,
-      this field is used the other way round: It will contain the public
+      When running a directory server and a registered server behind the same
+      NAT, this field is used the other way round: It will contain the public
       IP in this case which will be served to clients from the Internet.
 
 
@@ -2573,7 +2573,7 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress& InetAddr, con
     // server registration result (1 byte)
     const int iSvrRegResult = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
-    if ( ( iSvrRegResult != SRR_REGISTERED ) && ( iSvrRegResult != SRR_CENTRAL_SVR_FULL ) && ( iSvrRegResult != SRR_VERSION_TOO_OLD ) &&
+    if ( ( iSvrRegResult != SRR_REGISTERED ) && ( iSvrRegResult != SRR_SERVER_LIST_FULL ) && ( iSvrRegResult != SRR_VERSION_TOO_OLD ) &&
          ( iSvrRegResult != SRR_NOT_FULFILL_REQIREMENTS ) )
     {
         return true;

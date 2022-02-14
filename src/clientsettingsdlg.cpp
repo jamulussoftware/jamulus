@@ -61,8 +61,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "For example, if a microphone is connected to "
                                "the right input channel and an instrument is connected to the left "
                                "input channel which is much louder than the microphone, move the "
-                               "audio fader in a direction where the label above the fader shows " ) +
-                          "<i>" + tr ( "L" ) + " -x</i>" + tr ( ", where" ) + " <i>x</i> " + tr ( "is the current attenuation indicator." );
+                               "audio fader in a direction where the label above the fader shows "
+                               "%1, where %2 is the current attenuation indicator." )
+                              .arg ( "<i>" + tr ( "L" ) + " -x</i>", "<i>x</i>" );
 
     lblAudioPan->setWhatsThis ( strAudFader );
     lblAudioPanValue->setWhatsThis ( strAudFader );
@@ -116,13 +117,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer switch" ) );
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
 
+#if !defined( WITH_JACK )
     // sound card device
     lblSoundcardDevice->setWhatsThis ( "<b>" +
-                                       QString ( tr ( "Sound Card Device" ) + ":</b> " +
-                                                 tr ( "The ASIO driver (sound card) can be selected using "
-                                                      "%1 under the Windows operating system. Under macOS/Linux, no sound "
-                                                      "card selection is possible. If the selected ASIO driver is not valid "
-                                                      "an error message is shown and the previous valid driver is selected." ) )
+                                       QString ( tr ( "Device" ) + ":</b> " +
+                                                 tr ( "Under the Windows operating system the ASIO driver (sound card) can be "
+                                                      "selected using %1. If the selected ASIO driver is not valid an error "
+                                                      "message is shown and the previous valid driver is selected. "
+                                                      "Under macOS the input and output hardware can be selected." ) )
                                            .arg ( APP_NAME ) +
                                        "<br>" +
                                        tr ( "If the driver is selected during an active connection, the connection "
@@ -131,7 +133,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     cbxSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
 
-#ifdef _WIN32
+#    if defined( _WIN32 )
     // set Windows specific tool tip
     cbxSoundcard->setToolTip ( tr ( "If the ASIO4ALL driver is used, "
                                     "please note that this driver usually introduces approx. 10-30 ms of "
@@ -142,7 +144,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                     "driver, make sure to connect the ASIO inputs in the kX DSP settings "
                                     "panel." ) +
                                TOOLTIP_COM_END_TEXT );
-#endif
+#    endif
 
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = "<b>" + tr ( "Sound Card Channel Mapping" ) + ":</b> " +
@@ -165,6 +167,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxLOutChan->setAccessibleName ( tr ( "Left output channel selection combo box" ) );
     cbxROutChan->setWhatsThis ( strSndCrdChanMapp );
     cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
+#endif
 
     // enable OPUS64
     chbEnableOPUS64->setWhatsThis (
@@ -180,7 +183,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     // sound card buffer delay
     QString strSndCrdBufDelay = "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
                                 QString ( tr ( "The buffer delay setting is a fundamental setting of %1. "
-                                               "This setting has an influence on many conncetion properties." ) )
+                                               "This setting has an influence on many connection properties." ) )
                                     .arg ( APP_NAME ) +
                                 "<br>" + tr ( "Three buffer sizes are supported" ) +
                                 ":<ul>"
@@ -228,6 +231,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                       .arg ( APP_NAME ) +
                                   TOOLTIP_COM_END_TEXT;
 
+#if defined( _WIN32 ) && !defined( WITH_JACK )
     // Driver setup button
     QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b> " +
                                     tr ( "This opens the driver settings of your sound card. Some drivers "
@@ -242,6 +246,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                           .arg ( APP_NAME )
                                           .arg ( SYSTEM_SAMPLE_RATE_HZ ) +
                                       TOOLTIP_COM_END_TEXT;
+#endif
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
@@ -252,14 +257,27 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
+
+#if defined( _WIN32 ) && !defined( WITH_JACK )
     butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
     butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
     butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
+#endif
 
     // fancy skin
     lblSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr ( "Select the skin to be used for the main window." ) );
 
     cbxSkin->setAccessibleName ( tr ( "Skin combo box" ) );
+
+    // MeterStyle
+    lblMeterStyle->setWhatsThis ( "<b>" + tr ( "Meter Style" ) + ":</b> " +
+                                  tr ( "Select the meter style to be used for the level meters. The "
+                                       "Narrow Bar and Small LEDs options only apply to the mixerboard. When "
+                                       "Narrow Bar is selected, the input meters are set to Bar. When "
+                                       "Small LEDs is selected, the input meters are set to Round LEDs. "
+                                       "The remaining options apply to the mixerboard and input meters." ) );
+
+    cbxMeterStyle->setAccessibleName ( tr ( "Meter Style combo box" ) );
 
     // Interface Language
     lblLanguage->setWhatsThis ( "<b>" + tr ( "Language" ) + ":</b> " + tr ( "Select the language to be used for the user interface." ) );
@@ -273,7 +291,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "<ul>"
                                "<li>"
                                "<b>" +
-                               tr ( "%1 and %2:" ).arg ( "<b>" + tr ( "Mono" ) + "</b>", "<b>" + tr ( "Stereo" ) + "</b>" ) +
+                               tr ( "Mono" ) + "</b> " + tr ( "and" ) + " <b>" + tr ( "Stereo" ) + ":</b> " +
                                tr ( "These modes use "
                                     "one and two audio channels respectively." ) +
                                "</li>"
@@ -342,14 +360,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
 
-    // custom directory server address
-    QString strCentrServAddr = "<b>" + tr ( "Custom Directory Server Address" ) + ":</b> " +
-                               tr ( "Leave this blank unless you need to enter the address of a directory "
-                                    "server other than the default." );
+    // custom directories
+    QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
+                                   tr ( "If you need to add additional directories to the Connect dialog Directory drop down, "
+                                        "you can enter the addresses here.<br>"
+                                        "To remove a value, select it, delete the text in the input box, "
+                                        "then move focus out of the control." );
 
-    lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    cbxCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    cbxCentralServerAddress->setAccessibleName ( tr ( "Directory server address combo box" ) );
+    lblCustomDirectories->setWhatsThis ( strCustomDirectories );
+    cbxCustomDirectories->setWhatsThis ( strCustomDirectories );
+    cbxCustomDirectories->setAccessibleName ( tr ( "Custom Directories combo box" ) );
 
     // current connection status parameter
     QString strConnStats = "<b>" + tr ( "Audio Upstream Rate" ) + ":</b> " +
@@ -375,10 +395,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
     // init driver button
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( WITH_JACK )
     butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
 #else
-    // no use for this button for MacOS/Linux right now -> hide it
+    // no use for this button for MacOS/Linux right now or when using JACK -> hide it
     butDriverSetup->hide();
 #endif
 
@@ -422,12 +442,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     cbxSkin->addItem ( tr ( "Compact" ) ); // GD_SLIMFADER
     cbxSkin->setCurrentIndex ( static_cast<int> ( pClient->GetGUIDesign() ) );
 
+    // MeterStyle combo box
+    cbxMeterStyle->clear();
+    cbxMeterStyle->addItem ( tr ( "LEDs" ) );       // MT_LED
+    cbxMeterStyle->addItem ( tr ( "Bar" ) );        // MT_BAR
+    cbxMeterStyle->addItem ( tr ( "Narrow Bar" ) ); // MT_SLIM_BAR
+    cbxMeterStyle->addItem ( tr ( "Round LEDs" ) ); // MT_SLIM_LED
+    cbxMeterStyle->addItem ( tr ( "Small LEDs" ) ); // MT_SMALL_LED
+    cbxMeterStyle->setCurrentIndex ( static_cast<int> ( pClient->GetMeterStyle() ) );
+
     // language combo box (corrects the setting if language not found)
     cbxLanguage->Init ( pSettings->strLanguage );
 
-    // init custom directory server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
-    cbxCentralServerAddress->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
-    cbxCentralServerAddress->setInsertPolicy ( QComboBox::NoInsert );
+    // init custom directories combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
+    cbxCustomDirectories->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
+    cbxCustomDirectories->setInsertPolicy ( QComboBox::NoInsert );
 
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pSettings->iNewClientFaderLevel ) );
@@ -471,7 +500,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
                           tr ( "Write your name or an alias here so the other musicians you want to "
                                "play with know who you are. You may also add a picture of the instrument "
-                               "you play and a flag of the country you are located in. "
+                               "you play and a flag of the country or region you are located in. "
                                "Your city and skill level playing your instrument may also be added." ) +
                           "<br>" +
                           QString ( tr ( "What you set here will appear at your fader on the mixer "
@@ -485,7 +514,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     plblInstrument->setWhatsThis ( strFaderTag );
     pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
     plblCountry->setWhatsThis ( strFaderTag );
-    pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
+    pcbxCountry->setAccessibleName ( tr ( "Country/region flag button" ) );
     plblCity->setWhatsThis ( strFaderTag );
     pedtCity->setAccessibleName ( tr ( "City edit box" ) );
     plblSkill->setWhatsThis ( strFaderTag );
@@ -643,15 +672,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        this,
                        &CClientSettingsDlg::OnGUIDesignActivated );
 
-    QObject::connect ( cbxCentralServerAddress->lineEdit(),
-                       &QLineEdit::editingFinished,
-                       this,
-                       &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
-
-    QObject::connect ( cbxCentralServerAddress,
+    QObject::connect ( cbxMeterStyle,
                        static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
                        this,
-                       &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
+                       &CClientSettingsDlg::OnMeterStyleActivated );
+
+    QObject::connect ( cbxCustomDirectories->lineEdit(), &QLineEdit::editingFinished, this, &CClientSettingsDlg::OnCustomDirectoriesEditingFinished );
+
+    QObject::connect ( cbxCustomDirectories,
+                       static_cast<void ( QComboBox::* ) ( int )> ( &QComboBox::activated ),
+                       this,
+                       &CClientSettingsDlg::OnCustomDirectoriesEditingFinished );
 
     QObject::connect ( cbxLanguage, &CLanguageComboBox::LanguageChanged, this, &CClientSettingsDlg::OnLanguageChanged );
 
@@ -661,7 +692,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        &CClientSettingsDlg::OnInputBoostChanged );
 
     // buttons
+#if defined( _WIN32 ) && !defined( WITH_JACK )
+    // Driver Setup button is only available for Windows when JACK is not used
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
+#endif
 
     // misc
     // sliders
@@ -707,7 +741,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 void CClientSettingsDlg::showEvent ( QShowEvent* )
 {
     UpdateDisplay();
-    UpdateCustomCentralServerComboBox();
+    UpdateDirectoryServerComboBox();
 
     // set the name
     pedtAlias->setText ( pClient->ChannelInfo.strName );
@@ -870,7 +904,9 @@ void CClientSettingsDlg::SetEnableFeedbackDetection ( bool enable )
     chbDetectFeedback->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
 }
 
+#if defined( _WIN32 ) && !defined( WITH_JACK )
 void CClientSettingsDlg::OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
+#endif
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {
@@ -936,6 +972,13 @@ void CClientSettingsDlg::OnGUIDesignActivated ( int iDesignIdx )
     UpdateDisplay();
 }
 
+void CClientSettingsDlg::OnMeterStyleActivated ( int iMeterStyleIdx )
+{
+    pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iMeterStyleIdx ) );
+    emit MeterStyleChanged();
+    UpdateDisplay();
+}
+
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
@@ -950,24 +993,32 @@ void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
 
 void CClientSettingsDlg::OnFeedbackDetectionChanged ( int value ) { pSettings->bEnableFeedbackDetection = value == Qt::Checked; }
 
-void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
+void CClientSettingsDlg::OnCustomDirectoriesEditingFinished()
 {
-    // if the user has selected and deleted an entry in the combo box list,
-    // we delete the corresponding entry in the directory server address vector
-    if ( cbxCentralServerAddress->currentText().isEmpty() && cbxCentralServerAddress->currentData().isValid() )
+    if ( cbxCustomDirectories->currentText().isEmpty() && cbxCustomDirectories->currentData().isValid() )
     {
-        pSettings->vstrCentralServerAddress[cbxCentralServerAddress->currentData().toInt()] = "";
+        // if the user has selected an entry in the combo box list and deleted the text in the input field,
+        // and then focus moves off the control without selecting a new entry,
+        // we delete the corresponding entry in the vector
+        pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()] = "";
+    }
+    else if ( cbxCustomDirectories->currentData().isValid() && pSettings->vstrDirectoryAddress[cbxCustomDirectories->currentData().toInt()].compare (
+                                                                   NetworkUtil::FixAddress ( cbxCustomDirectories->currentText() ) ) == 0 )
+    {
+        // if the user has selected another entry in the combo box list without changing anything,
+        // there is no need to update any list
+        return;
     }
     else
     {
         // store new address at the top of the list, if the list was already
         // full, the last element is thrown out
-        pSettings->vstrCentralServerAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCentralServerAddress->currentText() ) );
+        pSettings->vstrDirectoryAddress.StringFiFoWithCompare ( NetworkUtil::FixAddress ( cbxCustomDirectories->currentText() ) );
     }
 
     // update combo box list and inform connect dialog about the new address
-    UpdateCustomCentralServerComboBox();
-    emit CustomCentralServerAddrChanged();
+    UpdateDirectoryServerComboBox();
+    emit CustomDirectoriesChanged();
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
@@ -1011,17 +1062,17 @@ void CClientSettingsDlg::UpdateDisplay()
     }
 }
 
-void CClientSettingsDlg::UpdateCustomCentralServerComboBox()
+void CClientSettingsDlg::UpdateDirectoryServerComboBox()
 {
-    cbxCentralServerAddress->clear();
-    cbxCentralServerAddress->clearEditText();
+    cbxCustomDirectories->clear();
+    cbxCustomDirectories->clearEditText();
 
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
-        if ( !pSettings->vstrCentralServerAddress[iLEIdx].isEmpty() )
+        if ( !pSettings->vstrDirectoryAddress[iLEIdx].isEmpty() )
         {
             // store the index as user data to the combo box item, too
-            cbxCentralServerAddress->addItem ( pSettings->vstrCentralServerAddress[iLEIdx], iLEIdx );
+            cbxCustomDirectories->addItem ( pSettings->vstrDirectoryAddress[iLEIdx], iLEIdx );
         }
     }
 }

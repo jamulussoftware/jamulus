@@ -218,7 +218,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const quint16      iPortNumber,
                    const quint16      iQosNumber,
                    const QString&     strHTMLStatusFileName,
-                   const QString&     strCentralServer,
+                   const QString&     strDirectoryServer,
                    const QString&     strServerListFileName,
                    const QString&     strServerInfo,
                    const QString&     strServerListFilter,
@@ -242,7 +242,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     strServerHTMLFileListName ( strHTMLStatusFileName ),
     HighPrecisionTimer ( bNUseDoubleSystemFrameSize ),
     ServerListManager ( iPortNumber,
-                        strCentralServer,
+                        strDirectoryServer,
                         strServerListFileName,
                         strServerInfo,
                         strServerPublicIP,
@@ -561,7 +561,7 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, vecChannels[iChID].GetAddress() );
 }
 
-void CServer::OnNewConnection ( int iChID, CHostAddress RecHostAddr )
+void CServer::OnNewConnection ( int iChID, int iTotChans, CHostAddress RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -637,6 +637,7 @@ void CServer::OnNewConnection ( int iChID, CHostAddress RecHostAddr )
 
     // logging of new connected channel
     CServerLogging::getInstance().AddNewConnection ( RecHostAddr.InetAddr, GetNumberOfConnectedClients() );
+
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )
@@ -684,9 +685,9 @@ void CServer::OnAboutToQuit()
     Stop();
 
     // if server was registered at the directory server, unregister on shutdown
-    if ( GetServerListEnabled() )
+    if ( GetServerRegistered() )
     {
-        UnregisterSlaveServer();
+        Unregister();
     }
 
     if ( bWriteStatusHTMLFile )
@@ -1501,7 +1502,7 @@ int CServer::FindChannel ( const CHostAddress& CheckAddr, const bool bAllowNew )
             return vecChannelOrder[t];
         }
 
-        if ( cmp < 0 )
+        if ( cmp > 0 )
         {
             l = t + 1;
         }
@@ -1573,13 +1574,14 @@ void CServer::FreeChannel ( const int iCurChanID )
         {
             --iCurNumChannels;
 
-            // move channel IDs down by one starting at the bottom and working up
-            while ( i < iCurNumChannels )
+            // move channel IDs down by one starting at the freed channel and working up the active channels
+            // and then the free channels until its position in the free list is reached
+            while ( i < iCurNumChannels || ( i + 1 < iMaxNumChannels && vecChannelOrder[i + 1] < iCurChanID ) )
             {
                 int j              = i++;
                 vecChannelOrder[j] = vecChannelOrder[i];
             }
-            // put deleted channel at the end ready for re-use
+            // put deleted channel in the vacated position ready for re-use
             vecChannelOrder[i] = iCurChanID;
 
             // DumpChannels ( __FUNCTION__ );
@@ -1608,7 +1610,7 @@ void CServer::DumpChannels ( const QString& title )
     }
 }
 
-void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+void CServer::OnProtocolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -1616,7 +1618,7 @@ void CServer::OnProtcolCLMessageReceived ( int iRecID, CVector<uint8_t> vecbyMes
     ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData, iRecID, RecHostAddr );
 }
 
-void CServer::OnProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
+void CServer::OnProtocolMessageReceived ( int iRecCounter, int iRecID, CVector<uint8_t> vecbyMesBodyData, CHostAddress RecHostAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -1626,7 +1628,7 @@ void CServer::OnProtcolMessageReceived ( int iRecCounter, int iRecID, CVector<ui
     // if the channel exists, apply the protocol message to the channel
     if ( iCurChanID != INVALID_CHANNEL_ID )
     {
-        vecChannels[iCurChanID].PutProtcolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+        vecChannels[iCurChanID].PutProtocolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
     }
 }
 

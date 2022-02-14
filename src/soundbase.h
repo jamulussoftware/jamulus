@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -48,6 +48,7 @@ enum EMidiCtlType
     Pan,
     Solo,
     Mute,
+    MuteMyself,
     None
 };
 
@@ -171,4 +172,5 @@ signals:
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
+    void ControllerInMuteMyself ( bool bMute );
 };

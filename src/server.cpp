@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -1041,7 +1041,7 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
         // get current number of OPUS coded bytes
         const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetCeltNumCodedBytes();
 
-        for ( size_t iB = 0; iB < (size_t) vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+        for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
         {
             // get data
             const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[iChanCnt], iCeltNumCodedBytes );
@@ -1081,10 +1081,12 @@ void CServer::DecodeReceiveData ( const int iChanCnt, const int iNumClients )
             // OPUS decode received data stream
             if ( CurOpusDecoder != nullptr )
             {
+                const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+
                 iUnused = opus_custom_decode ( CurOpusDecoder,
                                                pCurCodedData,
                                                iCeltNumCodedBytes,
-                                               &vecvecsData[iChanCnt][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                               &vecvecsData[iChanCnt][iOffset],
                                                iClientFrameSizeSamples );
             }
         }
@@ -1354,10 +1356,12 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt, const int iNumClients 
 opus_custom_encoder_ctl ( pCurOpusEncoder, OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
             // clang-format on
 
-            for ( size_t iB = 0; iB < (size_t) vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
+            for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[iChanCnt]; iB++ )
             {
+                const int iOffset = iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt];
+
                 iUnused = opus_custom_encode ( pCurOpusEncoder,
-                                               &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[iChanCnt]],
+                                               &vecsSendData[iOffset],
                                                iClientFrameSizeSamples,
                                                &vecvecbyCodedData[iChanCnt][0],
                                                iCeltNumCodedBytes );

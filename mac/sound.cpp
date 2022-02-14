@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -461,8 +461,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
         return QString ( tr ( "The stream format on the current input device isn't "
-                              "compatible with this software. Please select another device." ) )
-            .arg ( APP_NAME );
+                              "compatible with this software. Please select another device." ) );
     }
 
     // check the output

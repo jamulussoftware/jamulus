@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -31,6 +31,7 @@
 #include <QTimer>
 #include <QLocale>
 #include <QtConcurrent>
+#include <QRegularExpression>
 #include "global.h"
 #include "util.h"
 #include "settings.h"

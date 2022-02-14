@@ -1,4 +1,4 @@
-VERSION = 3.8.1dev
+VERSION = 3.8.2rc1dev
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -157,7 +157,11 @@ win32 {
         MACOSX_BUNDLE_ICON.path = Contents/Resources
         QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON
     } else {
-        QMAKE_INFO_PLIST = mac/Info-make.plist
+        equals(QT_VERSION, "5.9.9") {
+            QMAKE_INFO_PLIST = mac/Info-make-legacy.plist
+        } else {
+            QMAKE_INFO_PLIST = mac/Info-make.plist
+        }
     }
 
     LIBS += -framework CoreFoundation \
@@ -210,8 +214,7 @@ win32 {
     target.path = /tmp/your_executable # path on device
     INSTALLS += target
 
-    HEADERS += android/sound.h \
-        android/ring_buffer.h
+    HEADERS += android/sound.h
 
     SOURCES += android/sound.cpp \
         android/androiddebug.cpp

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -393,6 +393,7 @@ protected slots:
     void OnControllerInPanValue ( int iChannelIdx, int iValue );
     void OnControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
+    void OnControllerInMuteMyself ( bool bMute );
     void OnClientIDReceived ( int iChanID );
 
 signals:
@@ -423,4 +424,5 @@ signals:
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );
     void ControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
+    void ControllerInMuteMyself ( bool bMute );
 };

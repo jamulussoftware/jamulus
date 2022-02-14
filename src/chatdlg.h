@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -34,6 +34,7 @@
 #include <QAccessible>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QRegularExpression>
 #include "global.h"
 #include "util.h"
 #include "ui_chatdlgbase.h"

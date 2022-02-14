@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -490,6 +490,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Dau Huy Ngoc (<a href=\"https://github.com/ngocdh\">ngocdh</a>)</p>"
         "<p>Jiri Popek (<a href=\"https://github.com/jardous\">jardous</a>)</p>"
         "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
+        "<p>RobyDati (<a href=\"https://github.com/RobyDati\">RobyDati</a>)</p>"
         "<br>" +
         tr ( "For details on the contributions check out the %1" )
             .arg ( "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." ) );
@@ -667,7 +668,7 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
     }
 }
 
-static inline QString TruncateString ( QString str, int position )
+QString TruncateString ( QString str, int position )
 {
     QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
 
@@ -678,6 +679,16 @@ static inline QString TruncateString ( QString str, int position )
         position = tbfString.position();
     }
     return str.left ( position );
+}
+
+QSize CMinimumStackedLayout::sizeHint() const
+{
+    // always use the size of the currently visible widget:
+    if ( currentWidget() )
+    {
+        return currentWidget()->sizeHint();
+    }
+    return QStackedLayout::sizeHint();
 }
 #endif
 
@@ -939,6 +950,44 @@ int CHostAddress::Compare ( const CHostAddress& other ) const
     quint32 otherAddr = other.InetAddr.toIPv4Address();
 
     return thisAddr < otherAddr ? -1 : thisAddr > otherAddr ? 1 : 0;
+}
+
+QString CHostAddress::toString ( const EStringMode eStringMode ) const
+{
+    QString strReturn = InetAddr.toString();
+
+    // special case: for local host address, we do not replace the last byte
+    if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
+         ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) && ( InetAddr != QHostAddress ( QHostAddress::LocalHostIPv6 ) ) )
+    {
+        // replace last part by an "x"
+        if ( strReturn.contains ( "." ) )
+        {
+            // IPv4 or IPv4-mapped:
+            strReturn = strReturn.section ( ".", 0, -2 ) + ".x";
+        }
+        else
+        {
+            // IPv6
+            strReturn = strReturn.section ( ":", 0, -2 ) + ":x";
+        }
+    }
+
+    if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+    {
+        // add port number after a colon
+        if ( strReturn.contains ( "." ) )
+        {
+            strReturn += ":" + QString().setNum ( iPort );
+        }
+        else
+        {
+            // enclose pure IPv6 address in [ ] before adding port, to avoid ambiguity
+            strReturn = "[" + strReturn + "]:" + QString().setNum ( iPort );
+        }
+    }
+
+    return strReturn;
 }
 
 // Instrument picture data base ------------------------------------------------
@@ -1926,7 +1975,8 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += " <http://www.famfamfam.com>";
         strVersionText += "\n *** ";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2021 The Jamulus Development Team" );
+        strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2022 The Jamulus Development Team" );
+        strVersionText += "\n";
     }
 
     return strVersionText;

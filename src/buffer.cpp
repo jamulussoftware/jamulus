@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -148,9 +148,12 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
         // copy new data in internal buffer
         for ( int iBlock = 0; iBlock < iNumBlocks; iBlock++ )
         {
+            // calculate the block offset once per loop instead of repeated multiplying
+            const int iBlockOffset = iBlock * ( iBlockSize + iNumBytesSeqNum );
+
             // extract sequence number of current received block (per definition
             // the sequence number is appended after the coded audio data)
-            const int iCurrentSequenceNumber = vecbyData[iBlock * ( iBlockSize + iNumBytesSeqNum ) + iBlockSize];
+            const int iCurrentSequenceNumber = vecbyData[iBlockOffset + iBlockSize];
 
             // calculate the sequence number difference and take care of wrap
             int iSeqNumDiff = iCurrentSequenceNumber - static_cast<int> ( iSequenceNumberAtGetPos );
@@ -242,9 +245,7 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
             if ( !bIsSimulation )
             {
                 // copy one block of data in buffer
-                std::copy ( vecbyData.begin() + iBlock * ( iBlockSize + iNumBytesSeqNum ),
-                            vecbyData.begin() + iBlock * ( iBlockSize + iNumBytesSeqNum ) + iBlockSize,
-                            vecvecMemory[iBlockPutPos].begin() );
+                std::copy ( vecbyData.begin() + iBlockOffset, vecbyData.begin() + iBlockOffset + iBlockSize, vecvecMemory[iBlockPutPos].begin() );
             }
 
             // valid packet added, set flag
@@ -268,10 +269,11 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData, int iInSize )
             // for simultion buffer only update pointer, no data copying
             if ( !bIsSimulation )
             {
+                // calculate the block offset once per loop instead of repeated multiplying
+                const int iBlockOffset = iBlock * iBlockSize;
+
                 // copy one block of data in buffer
-                std::copy ( vecbyData.begin() + iBlock * iBlockSize,
-                            vecbyData.begin() + iBlock * iBlockSize + iBlockSize,
-                            vecvecMemory[iBlockPutPos].begin() );
+                std::copy ( vecbyData.begin() + iBlockOffset, vecbyData.begin() + iBlockOffset + iBlockSize, vecvecMemory[iBlockPutPos].begin() );
             }
 
             // set the put position one block further

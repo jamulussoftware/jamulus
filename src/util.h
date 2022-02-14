@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -41,10 +41,12 @@
 #    include <QDesktopServices>
 #    include <QKeyEvent>
 #    include <QTextBoundaryFinder>
+#    include <QStackedLayout>
 #    include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
 #include <QDirIterator>
+#include <QRegularExpression>
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QUrl>
@@ -99,6 +101,9 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, c
 
 QString GetVersionAndNameStr ( const bool bDisplayInGui = true );
 QString MakeClientNameTitle ( QString win, QString client );
+#ifndef HEADLESS
+QString TruncateString ( QString str, int position );
+#endif
 
 /******************************************************************************\
 * CVector Base Class                                                           *
@@ -441,6 +446,15 @@ public slots:
 signals:
     void LanguageChanged ( QString strLanguage );
 };
+
+// StackedLayout which auto-reduces to the size of the currently visible widget
+class CMinimumStackedLayout : public QStackedLayout
+{
+    Q_OBJECT
+public:
+    CMinimumStackedLayout ( QWidget* parent = nullptr ) : QStackedLayout ( parent ) {}
+    virtual QSize sizeHint() const override;
+};
 #endif
 
 /******************************************************************************\
@@ -504,11 +518,11 @@ enum EGUIDesign
 enum EMeterStyle
 {
     // used for settings -> enum values should be fixed
-    MT_LED       = 0,
-    MT_BAR       = 1,
-    MT_SLIM_BAR  = 2,
-    MT_SLIM_LED  = 3,
-    MT_SMALL_LED = 4
+    MT_BAR_NARROW      = 0,
+    MT_BAR_WIDE        = 1,
+    MT_LED_STRIPE      = 2,
+    MT_LED_ROUND_SMALL = 3,
+    MT_LED_ROUND_BIG   = 4
 };
 
 // Server licence type enum ----------------------------------------------------
@@ -734,26 +748,7 @@ public:
 
     int Compare ( const CHostAddress& other ) const;
 
-    QString toString ( const EStringMode eStringMode = SM_IP_PORT ) const
-    {
-        QString strReturn = InetAddr.toString();
-
-        // special case: for local host address, we do not replace the last byte
-        if ( ( ( eStringMode == SM_IP_NO_LAST_BYTE ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) ) &&
-             ( InetAddr != QHostAddress ( QHostAddress::LocalHost ) ) )
-        {
-            // replace last byte by an "x"
-            strReturn = strReturn.section ( ".", 0, 2 ) + ".x";
-        }
-
-        if ( ( eStringMode == SM_IP_PORT ) || ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
-        {
-            // add port number after a semicolon
-            strReturn += ":" + QString().setNum ( iPort );
-        }
-
-        return strReturn;
-    }
+    QString toString ( const EStringMode eStringMode = SM_IP_PORT ) const;
 
     QHostAddress InetAddr;
     quint16      iPort;

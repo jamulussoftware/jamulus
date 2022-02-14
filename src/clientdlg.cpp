@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -70,7 +70,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
                            "<br>" +
                            tr ( "For proper usage of the "
                                 "application, you should not hear your singing/instrument through "
-                                "the loudspeaker or your headphone when the software is not connected."
+                                "the loudspeaker or your headphone when the software is not connected. "
                                 "This can be achieved by muting your input audio channel in the "
                                 "Playback mixer (not the Recording mixer!)." ) +
                            TOOLTIP_COM_END_TEXT;
@@ -384,7 +384,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pViewMenu->addSeparator();
 
     // Settings menu  --------------------------------------------------------------
-    QMenu* pSettingsMenu = new QMenu ( tr ( "&Settings" ), this );
+    QMenu* pSettingsMenu = new QMenu ( tr ( "Sett&ings" ), this );
 
     pSettingsMenu->addAction ( tr ( "My &Profile..." ), this, SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
 
@@ -506,6 +506,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( pClient, &CClient::ControllerInFaderIsSolo, this, &CClientDlg::OnControllerInFaderIsSolo );
 
     QObject::connect ( pClient, &CClient::ControllerInFaderIsMute, this, &CClientDlg::OnControllerInFaderIsMute );
+
+    QObject::connect ( pClient, &CClient::ControllerInMuteMyself, this, &CClientDlg::OnControllerInMuteMyself );
 
     QObject::connect ( pClient, &CClient::CLChannelLevelListReceived, this, &CClientDlg::OnCLChannelLevelListReceived );
 
@@ -1391,29 +1393,29 @@ void CClientDlg::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
     // apply MeterStyle to current window
     switch ( eNewMeterStyle )
     {
-    case MT_LED:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED );
+    case MT_LED_STRIPE:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
         break;
 
-    case MT_SLIM_LED:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
+    case MT_LED_ROUND_BIG:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
 
-    case MT_BAR:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
+    case MT_BAR_WIDE:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         break;
 
-    case MT_SLIM_BAR:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
+    case MT_BAR_NARROW:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         break;
 
-    case MT_SMALL_LED:
-        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
-        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
+    case MT_LED_ROUND_SMALL:
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         break;
     }
 

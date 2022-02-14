@@ -1,5 +1,146 @@
 
-### 3.8.1dev <- NOTE: the release version number will be 3.9.0 ###
+### 3.8.2rc1dev <- NOTE: the release version number will be 3.8.2 ###
+
+- Client: Added selection option for level meter style (#1688, #2352, #2356).
+  (contributed by @henkdegroot, @hoffie, @pgScorpio, @pljones)
+
+- Client: On Windows, if no driver found while installing, the "Run Jamulus"
+  option will not be checked (#2103).
+  (contributed by @henkdegroot)
+
+- Client: on macOS, corrected minimum OS version number for Legacy installer from 10.13 to 10.10.
+  Legacy installer will now install correctly on macOS Yosemite or newer (#2223).
+  (contributed by @softins)
+
+- Client: Added Vibraphone to list of instruments (#2043, #2080, #2158).
+  (contributed by @DavidSavinkoff, @softins, photo by @vibraphon)
+
+- Client: Added Conductor to list of instruments (#2140).
+  (contributed by @henkdegroot)
+
+- Client: Fix wrong display of Unicode characters at line wrap and settings screen (#1994, #2274).
+  (contributed by @djfun, @pljones, @hoffie)
+
+- Client: Fixed incorrect operation of feedback detection on first connect in run (#2120).
+  (contributed by @softins)
+
+- Client: Added option always to show one's own fader first (#1809).
+  (contributed by @ngocdh)
+
+- Client: Improved regex to highlight URLs in the chat window, avoiding terminating punctuation.
+  Also migrated from deprecated QRegExp to QRegularExpression, for future compatibility with
+  Qt6 (#2124, #2272, #2273).
+  (contributed by @softins, @corrados, @hoffie)
+
+- Client: Improved keyboard control of the list of Custom Directories (#2129).
+  (contributed by @pljones)
+
+- Client: Added the connected server name to the heading in the mixer panel (#2173).
+  (contributed by @pljones)
+
+- Client: Enhanced the ASIO driver detection during installation on Windows (#2149).
+  (contributed by @henkdegroot)
+
+- Client: On Windows, hide the ASIO button in the version that uses JACK instead (#2215).
+  (contributed by @henkdegroot)
+
+- Client: Improved the "What's this?" text displayed for Buffer Delay (#2232).
+  (contributed by @henkdegroot)
+
+- Client: Accelerator key clash between Settings button and Settings menu corrected (#2248).
+  (contributed by @henkdegroot)
+
+- Client: Added option code 'o' in --ctrlmidich for "Mute Myself" (#2334).
+  (contributed by @henkdegroot)
+
+- Client/Server: Output from --help and --version is now sent to StdOut instead of StdErr (#2244).
+  (contributed by @henkdegroot)
+
+- Client/Server: Improved the version output on the command line to give more detail and Qt version (#2187).
+  (contributed by @henkdegroot)
+
+- Client/Server: Added version and Jamulus URL to the Windows uninstall information registered when installing (#2201).
+  (contributed by @henkdegroot)
+
+- Client/Server: Some improvements to text related to localisation (#2085).
+  (Contributed by @BLumia)
+
+- GUI: Improved Connect Dialog help texts (#2121).
+  (contributed by @pljones)
+
+- GUI: Translations have been updated:
+  * Dutch, by @henkdegroot and @jerogee (#2371, #2314)
+  * French, by @jujudusud (#2329, #2320, #2381)
+  * German, by @ann0see, @rolamos and @hoffie (#2349, #2387)
+  * Italian, by @dzpex (#2327)
+  * Polish, by @SeeLook (#2375, #2331)
+  * Portuguese Brazilian, by @melcon (#2369, #2358)
+  * Portuguese European, by @melcon (#2368)
+  * Simplified Chinese, by @BLumia (#2313)
+  * Slovak, by @jose1711 (#2348)
+  * Spanish, by @ignotus666 (#2378, #2326)
+  * Swedish, by @softins (#2364)
+
+- Server: Fixed incorrect German translation (#2137).
+  (contributed by @rolamos)
+
+- Server: Improved management and allocation of free channels, so that a new client always gets the
+  lowest available channel number. Improves operation of clients with MIDI faders (#2151).
+  (contributed by @softins)
+
+- Server: Improved the icon that is displayed in the Windows system tray for a server (#2231).
+  (contributed by @henkdegroot)
+
+- Bugfix: IPv6 address formatting and obfuscation has been improved (#2343).
+  (contributed by @rdica, @hoffie, @softins)
+
+- Windows Installer: Updated NSIS to v3.08 (#2208).
+  (contributed by @ann0see)
+
+- Android: Some internal improvements to the experimental Android port buffer handling (#1528, #2237).
+  (contributed by @j-santander, @softins)
+
+- Documentation: Enhanced the iOS compilation guide and signing instructions (#2139, #2315).
+  (contributed by @ann0see, @RobyDati)
+
+- Documentation: Added a man page for Jamulus, from the Debian project (#2180).
+  (contributed by @mirabilos)
+
+- Build: Raspijamulus build script has been improved to work with the latest Raspberry Pi OS releases and to include a newer JACK version (#2267).
+  (contributed by @corrados, @softins)
+
+- Internal: Improved accelerator key detection (#2061).
+  (contributed by @softins)
+
+- Internal: A hypothetical CodeQL-detected multiplication overflow in sound buffer handling has been fixed (#2292, #2297).
+  (contributed by @softins)
+
+- Internal: Changed "Central" to "Directory" in names of variables and functions (#2079).
+  (contributed by @pljones)
+
+- Internal: Corrected "Protcol" to "Protocol" in names of variables and functions (#2146).
+  (contributed by @atsampson)
+
+- Internal: Some code reordering, particularly of the settings initialisation (#2174, #2177).
+  (contributed by @pljones)
+
+- Internal: Removed unneeded submodules from tools directory, and replaced with a RELATED-PROJECTS document (#2196).
+  (contributed by @softins)
+
+- Internal: Improved generation of the changelog for the Debian package, using dch (#2138).
+  (contributed by @npostavs)
+
+- Internal: Improved powershell redirect handling when building for Windows in Github (#2225).
+  (contributed by @henkdegroot)
+
+- Internal: Prepared autobuild logic for upcoming Qt6 compatibility (#2328).
+  (contributed by @hoffie, @softins)
+
+- Internal: Release build process has been refactored and uses pinned dependencies for better reproducibility now (#2345, #2336).
+  (contributed by @hoffie, @softins)
+
+- Internal: Moved documentation files into docs/ folder to clean up root folder (#2283).
+  (contributed by @ann0see)
 
 
 ### 3.8.1 (2021-10-23) ###

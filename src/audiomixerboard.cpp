@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -268,33 +268,33 @@ void CChannelFader::SetMeterStyle ( const EMeterStyle eNewMeterStyle )
 
     switch ( eNewMeterStyle )
     {
-    case MT_BAR:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
+    case MT_BAR_NARROW:
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_NARROW );
+        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
+        pFader->setMinimumHeight ( 85 );
+        break;
+
+    case MT_BAR_WIDE:
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR_WIDE );
         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
         pFader->setMinimumHeight ( 120 );
         break;
 
-    case MT_SLIM_BAR:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_BAR );
+    case MT_LED_ROUND_SMALL:
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_SMALL );
         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
         pFader->setMinimumHeight ( 85 );
         break;
 
-    case MT_SLIM_LED:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_LED );
+    case MT_LED_ROUND_BIG:
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_ROUND_BIG );
         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
         pFader->setMinimumHeight ( 162 );
         break;
 
-    case MT_SMALL_LED:
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SMALL_LED );
-        // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
-        pFader->setMinimumHeight ( 85 );
-        break;
-
     default:
         // reset style sheet and set original parameters
-        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED_STRIPE );
         // Fader height controls the distribution of the LEDs, if the value is too small the fader might not be movable
         pFader->setMinimumHeight ( 120 );
         break;

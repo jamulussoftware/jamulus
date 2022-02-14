@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -86,7 +86,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     QString strServAddrH = "<b>" + tr ( "Server Address" ) + ":</b> " +
                            tr ( "If you know the IP address or URL of a server, you can connect to it "
                                 "using the Server name/Address field. An optional port number can be added after the IP "
-                                "address or URL using a colon as a separator, e.g, %1. "
+                                "address or URL using a colon as a separator, e.g. %1. "
                                 "The field will also show a list of the most recently used server addresses." )
                                .arg ( QString ( "<tt>example.org:%1</tt>" ).arg ( DEFAULT_PORT_NUMBER ) );
 

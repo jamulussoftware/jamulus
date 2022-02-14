@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -210,6 +210,9 @@ public:
 
         return iAvData;
     }
+
+    bool isFull() const { return eBufState == BS_FULL; }
+    bool isEmpty() const { return eBufState == BS_EMPTY; }
 
 protected:
     enum EBufState

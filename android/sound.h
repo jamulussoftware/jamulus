@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Simon Tomlinson, Volker Fischer
@@ -29,7 +29,7 @@
 #include "global.h"
 #include <QDebug>
 #include <android/log.h>
-#include "ring_buffer.h"
+#include "buffer.h"
 #include <mutex>
 
 /* Classes ********************************************************************/
@@ -69,10 +69,10 @@ public:
     };
 
 protected:
-    CVector<int16_t>  vecsTmpInputAudioSndCrdStereo;
-    RingBuffer<float> mOutBuffer;
-    int               iOboeBufferSizeMono;
-    int               iOboeBufferSizeStereo;
+    CVector<int16_t> vecsTmpInputAudioSndCrdStereo;
+    CBuffer<int16_t> mOutBuffer;
+    int              iOboeBufferSizeMono;
+    int              iOboeBufferSizeStereo;
 
 private:
     void setupCommonStreamParams ( oboe::AudioStreamBuilder* builder );

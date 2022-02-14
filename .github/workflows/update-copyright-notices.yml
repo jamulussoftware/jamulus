@@ -1,0 +1,51 @@
+name: Update copyright notices
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  check-and-update-copyright-notices:
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./tools/update-copyright-notices.sh
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          pr_branch=updateCopyrightNotices
+          git checkout -b ${pr_branch}
+          git add .
+          git commit -m "AUTO: Update copyright notices for $(date +%Y)" || exit 0
+          git push origin "+${pr_branch}"
+          existing_pr=$(gh pr list --head "${pr_branch}" --json number --jq '.[].number')
+          if [[ $existing_pr ]]; then
+            gh pr comment "${existing_pr}" --body "PR has been updated by tools/update-copyright-notices.sh."
+          else
+            body=$'This automated Pull Request updates the copyright notices throughout the source.\n\n'
+            body="${body}This PR is the result of a tools/update-copyright-notices.sh run."
+            gh pr create --base master --head "${pr_branch}" --title "Update copyright notice(s) for $(date +%Y)" --body "${body}"
+          fi
+
+  delete-old-pr-branch:
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name == 'pull_request' &&
+      startsWith(github.event.pull_request.head.label, 'jamulussoftware:updateCopyrightNotices')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - env:
+          pr_branch: ${{ github.event.pull_request.head.ref }}
+        run: |
+          [[ ${pr_branch} == updateCopyrightNotices ]] || exit 1
+          git push origin :${pr_branch}

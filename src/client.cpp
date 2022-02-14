@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -61,7 +61,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bFraSiFactDefSupported ( false ),
     bFraSiFactSafeSupported ( false ),
     eGUIDesign ( GD_ORIGINAL ),
-    eMeterStyle ( MT_LED ),
+    eMeterStyle ( MT_LED_STRIPE ),
     bEnableOPUS64 ( false ),
     bJitterBufferOK ( true ),
     bEnableIPv6 ( bNEnableIPv6 ),
@@ -163,6 +163,8 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &Sound, &CSound::ControllerInFaderIsSolo, this, &CClient::OnControllerInFaderIsSolo );
 
     QObject::connect ( &Sound, &CSound::ControllerInFaderIsMute, this, &CClient::OnControllerInFaderIsMute );
+
+    QObject::connect ( &Sound, &CSound::ControllerInMuteMyself, this, &CClient::OnControllerInMuteMyself );
 
     QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived, this, &CClient::OnInvalidPacketReceived );
 
@@ -702,6 +704,17 @@ void CClient::OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute )
 #endif
 
     emit ControllerInFaderIsMute ( iChannelIdx, bIsMute );
+}
+
+void CClient::OnControllerInMuteMyself ( bool bMute )
+{
+    // in case of a headless client the buttons are not displayed so we need
+    // to send the controller information directly to the server
+#ifdef HEADLESS
+    // FIXME: no idea what to do here.
+#endif
+
+    emit ControllerInMuteMyself ( bMute );
 }
 
 void CClient::OnClientIDReceived ( int iChanID )

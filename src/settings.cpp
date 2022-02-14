@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
  *  Volker Fischer
@@ -412,7 +412,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // MeterStyle
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_SMALL_LED */, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "meterstyle", 0, 4 /* MT_LED_ROUND_BIG */, iValue ) )
     {
         pClient->SetMeterStyle ( static_cast<EMeterStyle> ( iValue ) );
     }
@@ -424,19 +424,19 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
             switch ( iValue )
             {
             case GD_STANDARD:
-                pClient->SetMeterStyle ( MT_BAR );
+                pClient->SetMeterStyle ( MT_BAR_WIDE );
                 break;
 
             case GD_ORIGINAL:
-                pClient->SetMeterStyle ( MT_LED );
+                pClient->SetMeterStyle ( MT_LED_STRIPE );
                 break;
 
             case GD_SLIMFADER:
-                pClient->SetMeterStyle ( MT_SLIM_BAR );
+                pClient->SetMeterStyle ( MT_BAR_NARROW );
                 break;
 
             default:
-                pClient->SetMeterStyle ( MT_LED );
+                pClient->SetMeterStyle ( MT_LED_STRIPE );
                 break;
             }
         }

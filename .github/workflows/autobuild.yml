@@ -99,6 +99,7 @@ jobs:
              cmd2_build:            "./autobuild/android/autobuild_apk_2_build.sh"
              cmd3_postbuild:        "./autobuild/android/autobuild_apk_3_copy_files.sh"
              uses_codeql:           true
+             checkout_fetch_depth:  '0'  # Jamulus.pro needs to count git history length for android versioning
 
            - config_name:           Linux (artifacts+codeQL)
              target_os:             linux

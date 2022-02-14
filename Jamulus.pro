@@ -203,6 +203,10 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
+    ANDROID_VERSION_NAME = $$VERSION
+    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+
     # we want to compile with C++14
     CONFIG += c++14
 

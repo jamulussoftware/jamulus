@@ -1593,8 +1593,9 @@ QMap<QString, QString> CLocale::GetAvailableTranslations()
         // get alias of translation file
         const QString strCurFileName = DirIter.next();
 
-        // extract only language code (must be at the end, separated with a "_")
-        const QString strLoc = strCurFileName.right ( strCurFileName.length() - strCurFileName.indexOf ( "_" ) - 1 );
+        // extract only language code xx_XX from translation_xx_XX.qm
+        const int     lang   = strCurFileName.indexOf ( "_" ) + 1;
+        const QString strLoc = strCurFileName.mid ( lang, strCurFileName.indexOf ( "." ) - lang );
 
         TranslMap[strLoc] = strCurFileName;
     }

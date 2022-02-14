@@ -22,7 +22,7 @@ contains(VERSION, .*dev.*) {
 
 CONFIG += qt \
     thread \
-    lrelease
+    lrelease embed_translations
 
 QT += network \
     xml \

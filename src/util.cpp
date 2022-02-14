@@ -1583,7 +1583,7 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
 QMap<QString, QString> CLocale::GetAvailableTranslations()
 {
     QMap<QString, QString> TranslMap;
-    QDirIterator           DirIter ( ":/translations" );
+    QDirIterator           DirIter ( ":/i18n" );
 
     // add english language (default which is in the actual source code)
     TranslMap["en"] = ""; // empty file name means that the translation load fails and we get the default english language

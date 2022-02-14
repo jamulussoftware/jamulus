@@ -47,3 +47,6 @@ Jamulus.xcodeproj
 jamulus_plugin_import.cpp
 .github_release_changelog.md
 /debian/
+src/res/qmake_qmake_qm_files.qrc
+src/res/qrc_qmake_qmake_qm_files.cpp
+src/res/translation/*.qm

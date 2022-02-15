@@ -1,4 +1,4 @@
-This is a listening client for Jamulus. Please note that you need to use a <b>cellular or ethernet connection</b> in order to use this app. WiFi will lead to massively degraded audio quality. Also note that not all devices provide low enough audio latency for Jamming, which is why you should use this App as listening client.
+Welcome to Jamulus. Please note, latency optimization on Android has not been addressed and experiences will vary strongly from device to device. Trying to participate in jams should only be attempted when you're sure you have a good connection. The usual recommendations apply - a stable connection (4G/5G cellular; Ethernet; WiFi discouraged) and wired, non-Bluetooth headphones are essential. Try listening only first and see if the latency is suitable before trying to join in and jam.
 
 <b>What is Jamulus?</b>
 Jamulus is for playing, rehearsing, or just jamming with your friends, your band or just anyone you find online. With high quality, low-latency sound on a normal broadband connection, it's easy to play together remotely and in time. It is available for Windows, macOS, Linux, Android and iOS.

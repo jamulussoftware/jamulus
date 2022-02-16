@@ -171,6 +171,7 @@ jobs:
         uses:                       actions/checkout@v2
         with:
           submodules:               true
+          fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}
 
       # Enable caching of downloaded dependencies
       - name:                       "Cache Mac dependencies"

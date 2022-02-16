@@ -226,7 +226,7 @@ win32 {
 
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-    OTHER_FILES += android/AndroidManifest.xml
+    DISTFILES += android/AndroidManifest.xml
 
     # if compiling for android you need to use Oboe library which is included as a git submodule
     # make sure you git pull with submodules to pull the latest Oboe library

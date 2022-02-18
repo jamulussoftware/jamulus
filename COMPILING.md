@@ -53,7 +53,7 @@ sudo make install
 
 ### “Headless” server build
 
-Although not strictly necessary, we recommend using the headless flag to avoid having to install some of the dependent packages, save some disk space and/or speed up your build time. 
+Although not strictly necessary, we recommend using the headless flag to avoid having to install some of the dependent packages, save some disk space and/or speed up your build time.
 
 Note that you don’t need to install the JACK package(s) for a headless build. If you plan to run headless on Gentoo, or are compiling under Ubuntu for use on another Ubuntu machine, the only packages you should need for a headless build are `qtcore`, `qtnetwork`, `qtconcurrent` and `qtxml` (both for building and running the server).
 
@@ -148,7 +148,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 4. Open the generated .xcodeproject in Xcode
 5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode will tell you what you need to change.
 * If have a free Apple Developer Account, you can use it as a "Personal Team":
-* Set it up under Xcode Menu->Preferences->Accounts. 
+* Set it up under Xcode Menu->Preferences->Accounts.
 * Then choose a Bundle Identifier at your choice in the relevant field in the "General" Tab (in section "Identity")
 * Now click on the "Signing & Capabilities" tab. In the section "Signing", the "Automatically manage signing" option should be selected.
 * You should now see Team: (Your Name) (Personal Team), Bundle identifier: (the same you modified on General Tab), Provisioning Profile: Xcode Management Profile, Signing Certificate: Apple Development (your e-mail used for signing in to Apple) below
@@ -160,7 +160,7 @@ Will build the file and make it available in `./Release/Jamulus.app`
 
 ## Android
 * Install Qt, including the Android support from the Qt installer
-* Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions 
+* Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions
 * Make sure Jamulus submodules are present, notably oboe:
 `git submodule update --init`
 * Open Jamulus.pro in Qt Creator

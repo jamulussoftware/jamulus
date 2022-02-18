@@ -12,21 +12,21 @@ cert_name=""
 
 while getopts 'hs:' flag; do
     case "${flag}" in
-    s) 
-    cert_name=$OPTARG 
+    s)
+    cert_name=$OPTARG
     if [[ -z "$cert_name" ]]; then
         echo "Please add the name of the certificate to use: -s \"<name>\""
     fi
     # shift 2
     ;;
-    h) 
-    echo "Usage: -s <cert name> for signing mac build" 
-    exit 0 
+    h)
+    echo "Usage: -s <cert name> for signing mac build"
+    exit 0
     ;;
     *)
     exit 1
     ;;
-   
+
     esac
 done
 

@@ -30,4 +30,3 @@ else
     echo "ERROR: THIS_JAMULUS_PROJECT_PATH must reference an existing directory: \"${THIS_JAMULUS_PROJECT_PATH}\""
     exit 1
 fi
-

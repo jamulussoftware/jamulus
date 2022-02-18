@@ -738,7 +738,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="376"/>
         <source>C&amp;hat...</source>
-        <translation>&amp;Tchate...</translation>
+        <translation>Tc&amp;hate...</translation>
     </message>
     <message>
         <source>&amp;Settings...</source>
@@ -985,7 +985,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
+        <source>&amp;Disconnect</source>
         <translation>&amp;Déconnecter</translation>
     </message>
 </context>

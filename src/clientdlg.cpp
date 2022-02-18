@@ -1216,7 +1216,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         lbrInputLevelR->setEnabled ( true );
 
         // change connect button text to "disconnect"
-        butConnect->setText ( tr ( "D&isconnect" ) );
+        butConnect->setText ( tr ( "&Disconnect" ) );
 
         // set server name in audio mixer group box title
         MainMixerBoard->SetServerName ( strMixerBoardLabel );

@@ -1158,8 +1158,8 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
-        <translation>D&amp;isconnetti</translation>
+        <source>&amp;Disconnect</source>
+        <translation>Disco&amp;nnetti</translation>
     </message>
 </context>
 <context>

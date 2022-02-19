@@ -1169,8 +1169,8 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
-        <translation>Desl&amp;igar</translation>
+        <source>&amp;Disconnect</source>
+        <translation>&amp;Desligar</translation>
     </message>
 </context>
 <context>

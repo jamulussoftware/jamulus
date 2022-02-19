@@ -981,7 +981,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
+        <source>&amp;Disconnect</source>
         <translation>O&amp;dpojiť</translation>
     </message>
 </context>

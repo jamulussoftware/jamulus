@@ -928,7 +928,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
-        <translation>&amp;Ustawienia</translation>
+        <translation>Ustaw&amp;ienia</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="391"/>
@@ -989,7 +989,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
+        <source>&amp;Disconnect</source>
         <translation>&amp;Rozłącz</translation>
     </message>
 </context>
@@ -1038,7 +1038,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation>&amp;Wycisz mnie</translation>
+        <translation>Wycisz &amp;Mnie</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="505"/>

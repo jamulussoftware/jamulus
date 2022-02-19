@@ -585,7 +585,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="58"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Editar</translation>
+        <translation>E&amp;ditar</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="60"/>
@@ -1176,9 +1176,8 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
-        <translatorcomment>Opted by Desligar instead of Desconectar to keep same keyboard shortcut</translatorcomment>
-        <translation>Desl&amp;igar</translation>
+        <source>&amp;Disconnect</source>
+        <translation>&amp;Desconectar</translation>
     </message>
 </context>
 <context>

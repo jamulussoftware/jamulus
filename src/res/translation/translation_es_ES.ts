@@ -575,7 +575,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="58"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Editar</translation>
+        <translation>E&amp;ditar</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="60"/>
@@ -1036,7 +1036,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation>&amp;Cargar Configuración Canales Mezclador...</translation>
+        <translation>C&amp;argar Configuración Canales Mezclador...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="292"/>
@@ -1177,7 +1177,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
+        <source>&amp;Disconnect</source>
         <translation>&amp;Desconectar</translation>
     </message>
 </context>

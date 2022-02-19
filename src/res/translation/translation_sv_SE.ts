@@ -901,7 +901,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlg.cpp" line="296"/>
         <source>E&amp;xit</source>
-        <translation>&amp;Avsluta</translation>
+        <translation>A&amp;vsluta</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="160"/>
@@ -936,7 +936,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
-        <translation type="unfinished">E&amp;gen fader först</translation>
+        <translation type="unfinished">&amp;Egen fader först</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="387"/>
@@ -1011,7 +1011,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
+        <source>&amp;Disconnect</source>
         <translation>Koppla &amp;ner</translation>
     </message>
 </context>
@@ -1065,7 +1065,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../../clientdlgbase.ui" line="505"/>
         <source>&amp;Settings</source>
-        <translation>&amp;Inställningar</translation>
+        <translation>In&amp;ställningar</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="512"/>

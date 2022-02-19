@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2020
  *
  * Author(s):
  *  Volker Fischer
@@ -26,11 +26,9 @@
 \******************************************************************************/
 
 #include "sound.h"
+#include "asiodrivers.h"
 
 /* Implementation *************************************************************/
-// external references
-extern AsioDrivers* asioDrivers;
-bool                loadAsioDriver ( char* name );
 
 // pointer to our sound object
 CSound* pSound;
@@ -43,11 +41,12 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     // find and load driver
     int iDriverIdx = INVALID_INDEX; // initialize with an invalid index
 
-    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    for ( int i = 0; i < lNumDevs; i++ )
     {
         if ( strDriverName.compare ( cDriverNames[i] ) == 0 )
         {
             iDriverIdx = i;
+            break;
         }
     }
 
@@ -62,7 +61,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     long lNumInChanPrev  = lNumInChan;
     long lNumOutChanPrev = lNumOutChan;
 
-    loadAsioDriver ( cDriverNames[iDriverIdx] );
+    AsioDrivers.loadDriver( cDriverNames[iDriverIdx] );
 
     // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
     // should be set, but we haven't being doing that and it seems to work
@@ -72,7 +71,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
     {
         // clean up and return error string
-        asioDrivers->removeCurrentDriver();
+        AsioDrivers.closeDriver();
         return tr ( "Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings." );
     }
 
@@ -108,7 +107,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         }
 
         // driver cannot be used, clean up
-        asioDrivers->removeCurrentDriver();
+        AsioDrivers.closeDriver();
     }
 
     return strStat;
@@ -127,7 +126,7 @@ void CSound::UnloadCurrentDriver()
         bufferInfos[0].buffers[0] = NULL;
     }
     ASIOExit();
-    asioDrivers->removeCurrentDriver();
+    AsioDrivers.closeDriver();
 }
 
 QString CSound::CheckDeviceCapabilities()
@@ -140,7 +139,12 @@ QString CSound::CheckDeviceCapabilities()
     // check the sample rate
     const ASIOError CanSaRateReturn = ASIOCanSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
 
-    if ( ( CanSaRateReturn == ASE_NoClock ) || ( CanSaRateReturn == ASE_NotPresent ) )
+    if ((CanSaRateReturn == ASE_NotPresent) || (CanSaRateReturn == ASE_InvalidMode))
+    {
+        return tr("Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.");
+    }
+
+    if ( CanSaRateReturn == ASE_NoClock )
     {
         // return error string
         return QString ( tr ( "The selected audio device is incompatible "
@@ -152,7 +156,7 @@ QString CSound::CheckDeviceCapabilities()
     // check if sample rate can be set
     const ASIOError SetSaRateReturn = ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
 
-    if ( ( SetSaRateReturn == ASE_NoClock ) || ( SetSaRateReturn == ASE_InvalidMode ) || ( SetSaRateReturn == ASE_NotPresent ) )
+    if ( !ASIOError_OK (SetSaRateReturn) )
     {
         // return error string
         return QString ( tr ( "The current audio device configuration is incompatible "
@@ -514,6 +518,7 @@ void CSound::Stop()
     }
 }
 
+
 CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ),
                  void*          arg,
                  const QString& strMIDISetup,
@@ -540,12 +545,11 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
     for ( i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
         // allocate memory for driver names
-        cDriverNames[i] = new char[32];
+        cDriverNames[i] = new char[MAX_DRIVERNAMESIZE];
     }
 
-    char cDummyName[] = "dummy";
-    loadAsioDriver ( cDummyName ); // to initialize external object
-    lNumDevs = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
+    AsioDrivers.init();
+    lNumDevs = AsioDrivers.getDriverNames ( cDriverNames, MAX_DRIVERNAMESIZE, MAX_NUMBER_SOUND_CARDS );
 
     // in case we do not have a driver available, throw error
     if ( lNumDevs == 0 )
@@ -556,7 +560,7 @@ CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg )
                                        "If not, you'll need to install a universal driver like ASIO4ALL." ) )
                             .arg ( APP_NAME ) );
     }
-    asioDrivers->removeCurrentDriver();
+    AsioDrivers.closeDriver();
 
     // copy driver names to base class but internally we still have to use
     // the char* variable because of the ASIO API :-(

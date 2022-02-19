@@ -1,0 +1,1722 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{15DF5CF0-7981-3697-9DD5-FC2FD7374F49}</ProjectGuid>
+    <RootNamespace>Jamulus</RootNamespace>
+    <Keyword>Qt4VSv1.0</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolset>v142</PlatformToolset>
+    <OutputDirectory>$(BuildDir)release\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>$(BuidDir)release\temp\</IntermediateDirectory>
+    <PrimaryOutput>Jamulus</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolset>v142</PlatformToolset>
+    <OutputDirectory>$(BuildDir)debug\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>$(BuidDir)debug\temp\</IntermediateDirectory>
+    <PrimaryOutput>Jamulus</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\temp\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Jamulus</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\temp\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Jamulus</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>src;libs\opus\include;libs\opus\celt;libs\opus\silk;libs\opus\silk\float;libs\opus\silk\fixed;libs\opus;$(QtSrcPath)\include;$(QtSrcPath)\include\QtWidgets;$(QtSrcPath)\include\QtGui;$(QtSrcPath)\include\QtANGLE;$(QtSrcPath)\include\QtNetwork;$(QtSrcPath)\include\QtXml;$(QtSrcPath)\include\QtConcurrent;$(QtSrcPath)\include\QtCore;$(OutputPath)moc;$(OutputPath)ui</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;APP_VERSION="3.8.2beta1dev-82fa74f2-dirty";CUSTOM_MODES;_REENTRANT;QT_NO_DEPRECATED_WARNINGS;NOMINMAX;OPUS_X86_MAY_HAVE_SSE;OPUS_X86_MAY_HAVE_SSE2;OPUS_X86_MAY_HAVE_SSE4_1;OPUS_X86_PRESUME_SSE=1;OPUS_X86_PRESUME_SSE2=1;CPU_INFO_BY_C;OPUS_BUILD=1;USE_ALLOCA=1;OPUS_HAVE_RTCD=1;HAVE_LRINTF=1;HAVE_LRINT=1;NDEBUG;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_XML_LIB;QT_CONCURRENT_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ole32.lib;user32.lib;advapi32.lib;winmm.lib;ws2_32.lib;$(QtSrcPath)\lib\Qt5Widgets.lib;$(QtSrcPath)\lib\Qt5Gui.lib;$(QtSrcPath)\lib\Qt5Network.lib;$(QtSrcPath)\lib\Qt5Xml.lib;$(QtSrcPath)\lib\Qt5Concurrent.lib;$(QtSrcPath)\lib\Qt5Core.lib;$(QtSrcPath)\lib\qtmain.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkIncremental>false</LinkIncremental>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)\Jamulus.exe</OutputFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <Version>3.8</Version>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;APP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\";CUSTOM_MODES;_REENTRANT;QT_NO_DEPRECATED_WARNINGS;NOMINMAX;OPUS_X86_MAY_HAVE_SSE;OPUS_X86_MAY_HAVE_SSE2;OPUS_X86_MAY_HAVE_SSE4_1;OPUS_X86_PRESUME_SSE=1;OPUS_X86_PRESUME_SSE2=1;CPU_INFO_BY_C;OPUS_BUILD=1;USE_ALLOCA=1;OPUS_HAVE_RTCD=1;HAVE_LRINTF=1;HAVE_LRINT=1;NDEBUG;QT_NO_DEBUG;QT_WIDGETS_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_XML_LIB;QT_CONCURRENT_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Command>Powershell $(ProjectDir)$(ProjectName).ps1 --prebuild release</Command>
+    </PreBuildEvent>
+    <PreLinkEvent>
+      <Command>Powershell $(ProjectDir)$(ProjectName).ps1 --prelink release</Command>
+    </PreLinkEvent>
+    <PostBuildEvent>
+      <Command>Powershell $(ProjectDir)$(ProjectName).ps1 --postbuild release</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>src;libs\opus\include;libs\opus\celt;libs\opus\silk;libs\opus\silk\float;libs\opus\silk\fixed;libs\opus;$(QtSrcPath)\include;$(QtSrcPath)\include\QtWidgets;$(QtSrcPath)\include\QtGui;$(QtSrcPath)\include\QtANGLE;$(QtSrcPath)\include\QtNetwork;$(QtSrcPath)\include\QtXml;$(QtSrcPath)\include\QtConcurrent;$(QtSrcPath)\include\QtCore;$(OutputPath)moc;$(OutputPath)ui</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4577;4467;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;APP_VERSION="3.8.2beta1dev-82fa74f2-dirty";CUSTOM_MODES;_REENTRANT;QT_NO_DEPRECATED_WARNINGS;NOMINMAX;OPUS_X86_MAY_HAVE_SSE;OPUS_X86_MAY_HAVE_SSE2;OPUS_X86_MAY_HAVE_SSE4_1;OPUS_X86_PRESUME_SSE=1;OPUS_X86_PRESUME_SSE2=1;CPU_INFO_BY_C;OPUS_BUILD=1;USE_ALLOCA=1;OPUS_HAVE_RTCD=1;HAVE_LRINTF=1;HAVE_LRINT=1;QT_WIDGETS_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_XML_LIB;QT_CONCURRENT_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ole32.lib;user32.lib;advapi32.lib;winmm.lib;ws2_32.lib;$(QtSrcPath)\lib\Qt5Widgetsd.lib;$(QtSrcPath)\lib\Qt5Guid.lib;$(QtSrcPath)\lib\Qt5Networkd.lib;$(QtSrcPath)\lib\Qt5Xmld.lib;$(QtSrcPath)\lib\Qt5Concurrentd.lib;$(QtSrcPath)\lib\Qt5Cored.lib;$(QtSrcPath)\lib\qtmaind.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <OutputFile>$(OutDir)\Jamulus.exe</OutputFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <Version>3.8</Version>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;WIN64;APP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\";CUSTOM_MODES;_REENTRANT;QT_NO_DEPRECATED_WARNINGS;NOMINMAX;OPUS_X86_MAY_HAVE_SSE;OPUS_X86_MAY_HAVE_SSE2;OPUS_X86_MAY_HAVE_SSE4_1;OPUS_X86_PRESUME_SSE=1;OPUS_X86_PRESUME_SSE2=1;CPU_INFO_BY_C;OPUS_BUILD=1;USE_ALLOCA=1;OPUS_HAVE_RTCD=1;HAVE_LRINTF=1;HAVE_LRINT=1;QT_WIDGETS_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_XML_LIB;QT_CONCURRENT_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Command>Powershell $(ProjectDir)$(ProjectName).ps1 --prebuild debug</Command>
+    </PreBuildEvent>
+    <PreLinkEvent>
+      <Command>Powershell $(ProjectDir)$(ProjectName).ps1 --prelink debug</Command>
+    </PreLinkEvent>
+    <PostBuildEvent>
+      <Command>Powershell $(ProjectDir)$(ProjectName).ps1 --postbuild debug</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="libs\opus\silk\A2NLSF.c" />
+    <ClCompile Include="libs\opus\silk\CNG.c" />
+    <ClCompile Include="libs\opus\silk\HP_variable_cutoff.c" />
+    <ClCompile Include="libs\opus\silk\LPC_analysis_filter.c" />
+    <ClCompile Include="libs\opus\silk\float\LPC_analysis_filter_FLP.c" />
+    <ClCompile Include="libs\opus\silk\LPC_fit.c" />
+    <ClCompile Include="libs\opus\silk\LPC_inv_pred_gain.c" />
+    <ClCompile Include="libs\opus\silk\LP_variable_cutoff.c" />
+    <ClCompile Include="libs\opus\silk\float\LTP_analysis_filter_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\LTP_scale_ctrl_FLP.c" />
+    <ClCompile Include="libs\opus\silk\NLSF2A.c" />
+    <ClCompile Include="libs\opus\silk\NLSF_VQ.c" />
+    <ClCompile Include="libs\opus\silk\NLSF_VQ_weights_laroia.c" />
+    <ClCompile Include="libs\opus\silk\NLSF_decode.c" />
+    <ClCompile Include="libs\opus\silk\NLSF_del_dec_quant.c" />
+    <ClCompile Include="libs\opus\silk\NLSF_encode.c" />
+    <ClCompile Include="libs\opus\silk\NLSF_stabilize.c" />
+    <ClCompile Include="libs\opus\silk\NLSF_unpack.c" />
+    <ClCompile Include="libs\opus\silk\NSQ.c" />
+    <ClCompile Include="libs\opus\silk\NSQ_del_dec.c" />
+    <ClCompile Include="libs\opus\silk\x86\NSQ_del_dec_sse4_1.c" />
+    <ClCompile Include="libs\opus\silk\x86\NSQ_sse4_1.c" />
+    <ClCompile Include="libs\opus\silk\PLC.c" />
+    <ClCompile Include="libs\opus\silk\VAD.c" />
+    <ClCompile Include="libs\opus\silk\x86\VAD_sse4_1.c" />
+    <ClCompile Include="libs\opus\silk\VQ_WMat_EC.c" />
+    <ClCompile Include="libs\opus\silk\x86\VQ_WMat_EC_sse4_1.c" />
+    <ClCompile Include="libs\opus\silk\ana_filt_bank_1.c" />
+    <ClCompile Include="libs\opus\src\analysis.c" />
+    <ClCompile Include="src\analyzerconsole.cpp" />
+    <ClCompile Include="libs\opus\silk\float\apply_sine_window_FLP.c" />
+    <ClCompile Include="windows\asio.cpp" />
+    <ClCompile Include="windows\asiodrivers.cpp" />
+    <ClCompile Include="src\audiomixerboard.cpp" />
+    <ClCompile Include="libs\opus\silk\float\autocorrelation_FLP.c" />
+    <ClCompile Include="libs\opus\celt\bands.c" />
+    <ClCompile Include="libs\opus\silk\biquad_alt.c" />
+    <ClCompile Include="src\buffer.cpp" />
+    <ClCompile Include="libs\opus\silk\float\burg_modified_FLP.c" />
+    <ClCompile Include="libs\opus\silk\bwexpander.c" />
+    <ClCompile Include="libs\opus\silk\bwexpander_32.c" />
+    <ClCompile Include="libs\opus\silk\float\bwexpander_FLP.c" />
+    <ClCompile Include="libs\opus\celt\celt.c" />
+    <ClCompile Include="libs\opus\celt\celt_decoder.c" />
+    <ClCompile Include="libs\opus\celt\celt_encoder.c" />
+    <ClCompile Include="libs\opus\celt\celt_lpc.c" />
+    <ClCompile Include="libs\opus\celt\x86\celt_lpc_sse4_1.c" />
+    <ClCompile Include="src\channel.cpp" />
+    <ClCompile Include="src\chatdlg.cpp" />
+    <ClCompile Include="libs\opus\silk\check_control_input.c" />
+    <ClCompile Include="src\client.cpp" />
+    <ClCompile Include="src\clientdlg.cpp" />
+    <ClCompile Include="src\clientsettingsdlg.cpp" />
+    <ClCompile Include="libs\opus\silk\code_signs.c" />
+    <ClCompile Include="src\connectdlg.cpp" />
+    <ClCompile Include="libs\opus\silk\control_SNR.c" />
+    <ClCompile Include="libs\opus\silk\control_audio_bandwidth.c" />
+    <ClCompile Include="libs\opus\silk\control_codec.c" />
+    <ClCompile Include="libs\opus\silk\float\corrMatrix_FLP.c" />
+    <ClCompile Include="src\recorder\creaperproject.cpp" />
+    <ClCompile Include="src\recorder\cwavestream.cpp" />
+    <ClCompile Include="libs\opus\celt\cwrs.c" />
+    <ClCompile Include="libs\opus\silk\debug.c" />
+    <ClCompile Include="libs\opus\silk\dec_API.c" />
+    <ClCompile Include="libs\opus\silk\decode_core.c" />
+    <ClCompile Include="libs\opus\silk\decode_frame.c" />
+    <ClCompile Include="libs\opus\silk\decode_indices.c" />
+    <ClCompile Include="libs\opus\silk\decode_parameters.c" />
+    <ClCompile Include="libs\opus\silk\decode_pitch.c" />
+    <ClCompile Include="libs\opus\silk\decode_pulses.c" />
+    <ClCompile Include="libs\opus\silk\decoder_set_fs.c" />
+    <ClCompile Include="libs\opus\silk\enc_API.c" />
+    <ClCompile Include="libs\opus\silk\float\encode_frame_FLP.c" />
+    <ClCompile Include="libs\opus\silk\encode_indices.c" />
+    <ClCompile Include="libs\opus\silk\encode_pulses.c" />
+    <ClCompile Include="libs\opus\silk\float\energy_FLP.c" />
+    <ClCompile Include="libs\opus\celt\entcode.c" />
+    <ClCompile Include="libs\opus\celt\entdec.c" />
+    <ClCompile Include="libs\opus\celt\entenc.c" />
+    <ClCompile Include="libs\opus\silk\float\find_LPC_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\find_LTP_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\find_pitch_lags_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\find_pred_coefs_FLP.c" />
+    <ClCompile Include="libs\opus\silk\gain_quant.c" />
+    <ClCompile Include="libs\opus\silk\init_decoder.c" />
+    <ClCompile Include="libs\opus\silk\init_encoder.c" />
+    <ClCompile Include="libs\opus\silk\inner_prod_aligned.c" />
+    <ClCompile Include="libs\opus\silk\float\inner_product_FLP.c" />
+    <ClCompile Include="libs\opus\silk\interpolate.c" />
+    <ClCompile Include="src\recorder\jamcontroller.cpp" />
+    <ClCompile Include="src\recorder\jamrecorder.cpp" />
+    <ClCompile Include="libs\opus\silk\float\k2a_FLP.c" />
+    <ClCompile Include="libs\opus\celt\kiss_fft.c" />
+    <ClCompile Include="libs\opus\celt\laplace.c" />
+    <ClCompile Include="src\levelmeter.cpp" />
+    <ClCompile Include="libs\opus\silk\lin2log.c" />
+    <ClCompile Include="libs\opus\silk\log2lin.c" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="libs\opus\celt\mathops.c" />
+    <ClCompile Include="libs\opus\celt\mdct.c" />
+    <ClCompile Include="libs\opus\src\mlp.c" />
+    <ClCompile Include="libs\opus\src\mlp_data.c" />
+    <ClCompile Include="libs\opus\celt\modes.c" />
+    <ClCompile Include="src\multicolorled.cpp" />
+    <ClCompile Include="libs\opus\silk\float\noise_shape_analysis_FLP.c" />
+    <ClCompile Include="libs\opus\src\opus.c" />
+    <ClCompile Include="libs\opus\src\opus_decoder.c" />
+    <ClCompile Include="libs\opus\src\opus_encoder.c" />
+    <ClCompile Include="libs\opus\celt\pitch.c" />
+    <ClCompile Include="libs\opus\silk\float\pitch_analysis_core_FLP.c" />
+    <ClCompile Include="libs\opus\silk\pitch_est_tables.c" />
+    <ClCompile Include="libs\opus\celt\x86\pitch_sse.c" />
+    <ClCompile Include="libs\opus\celt\x86\pitch_sse2.c" />
+    <ClCompile Include="libs\opus\celt\x86\pitch_sse4_1.c" />
+    <ClCompile Include="libs\opus\silk\process_NLSFs.c" />
+    <ClCompile Include="libs\opus\silk\float\process_gains_FLP.c" />
+    <ClCompile Include="src\protocol.cpp" />
+    <ClCompile Include="libs\opus\silk\quant_LTP_gains.c" />
+    <ClCompile Include="libs\opus\celt\quant_bands.c" />
+    <ClCompile Include="libs\opus\celt\rate.c" />
+    <ClCompile Include="libs\opus\src\repacketizer.c" />
+    <ClCompile Include="libs\opus\silk\resampler.c" />
+    <ClCompile Include="libs\opus\silk\resampler_down2.c" />
+    <ClCompile Include="libs\opus\silk\resampler_down2_3.c" />
+    <ClCompile Include="libs\opus\silk\resampler_private_AR2.c" />
+    <ClCompile Include="libs\opus\silk\resampler_private_IIR_FIR.c" />
+    <ClCompile Include="libs\opus\silk\resampler_private_down_FIR.c" />
+    <ClCompile Include="libs\opus\silk\resampler_private_up2_HQ.c" />
+    <ClCompile Include="libs\opus\silk\resampler_rom.c" />
+    <ClCompile Include="libs\opus\silk\float\residual_energy_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\scale_copy_vector_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\scale_vector_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\schur_FLP.c" />
+    <ClCompile Include="src\server.cpp" />
+    <ClCompile Include="src\serverdlg.cpp" />
+    <ClCompile Include="src\serverlist.cpp" />
+    <ClCompile Include="src\serverlogging.cpp" />
+    <ClCompile Include="src\settings.cpp" />
+    <ClCompile Include="libs\opus\silk\shell_coder.c" />
+    <ClCompile Include="libs\opus\silk\sigm_Q15.c" />
+    <ClCompile Include="src\signalhandler.cpp" />
+    <ClCompile Include="src\socket.cpp" />
+    <ClCompile Include="libs\opus\silk\sort.c" />
+    <ClCompile Include="libs\opus\silk\float\sort_FLP.c" />
+    <ClCompile Include="windows\sound.cpp" />
+    <ClCompile Include="src\soundbase.cpp" />
+    <ClCompile Include="libs\opus\silk\stereo_LR_to_MS.c" />
+    <ClCompile Include="libs\opus\silk\stereo_MS_to_LR.c" />
+    <ClCompile Include="libs\opus\silk\stereo_decode_pred.c" />
+    <ClCompile Include="libs\opus\silk\stereo_encode_pred.c" />
+    <ClCompile Include="libs\opus\silk\stereo_find_predictor.c" />
+    <ClCompile Include="libs\opus\silk\stereo_quant_pred.c" />
+    <ClCompile Include="libs\opus\silk\sum_sqr_shift.c" />
+    <ClCompile Include="libs\opus\silk\table_LSF_cos.c" />
+    <ClCompile Include="libs\opus\silk\tables_LTP.c" />
+    <ClCompile Include="libs\opus\silk\tables_NLSF_CB_NB_MB.c" />
+    <ClCompile Include="libs\opus\silk\tables_NLSF_CB_WB.c" />
+    <ClCompile Include="libs\opus\silk\tables_gain.c" />
+    <ClCompile Include="libs\opus\silk\tables_other.c" />
+    <ClCompile Include="libs\opus\silk\tables_pitch_lag.c" />
+    <ClCompile Include="libs\opus\silk\tables_pulses_per_block.c" />
+    <ClCompile Include="src\util.cpp" />
+    <ClCompile Include="libs\opus\celt\vq.c" />
+    <ClCompile Include="libs\opus\celt\x86\vq_sse2.c" />
+    <ClCompile Include="libs\opus\silk\float\warped_autocorrelation_FLP.c" />
+    <ClCompile Include="libs\opus\silk\float\wrappers_FLP.c" />
+    <ClCompile Include="libs\opus\celt\x86\x86_celt_map.c" />
+    <ClCompile Include="libs\opus\silk\x86\x86_silk_map.c" />
+    <ClCompile Include="libs\opus\celt\x86\x86cpu.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\debug\ui\ui_aboutdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\debug\ui\ui_chatdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\debug\ui\ui_clientdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\debug\ui\ui_clientsettingsdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\debug\ui\ui_connectdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\debug\ui\ui_serverdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\release\ui\ui_aboutdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\release\ui\ui_chatdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\release\ui\ui_clientdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\release\ui\ui_clientsettingsdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\release\ui\ui_connectdlgbase.h" />
+    <ClInclude Include="..\build\jamulus-master\JamulusWin\release\ui\ui_serverdlgbase.h" />
+    <ClInclude Include="libs\opus\silk\API.h" />
+    <ClInclude Include="libs\opus\silk\Inlines.h" />
+    <ClInclude Include="libs\opus\silk\MacroCount.h" />
+    <ClInclude Include="libs\opus\silk\MacroDebug.h" />
+    <ClInclude Include="libs\opus\silk\NSQ.h" />
+    <ClInclude Include="libs\opus\silk\PLC.h" />
+    <ClInclude Include="libs\opus\silk\SigProc_FIX.h" />
+    <ClInclude Include="libs\opus\silk\x86\SigProc_FIX_sse.h" />
+    <ClInclude Include="libs\opus\silk\float\SigProc_FLP.h" />
+    <ClInclude Include="libs\opus\celt\_kiss_fft_guts.h" />
+    <ClInclude Include="libs\opus\src\analysis.h" />
+    <CustomBuild Include="src\analyzerconsole.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\analyzerconsole.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\analyzerconsole.h -o $(BuildDir)release\moc\moc_analyzerconsole.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/analyzerconsole.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_analyzerconsole.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\analyzerconsole.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\analyzerconsole.h -o $(BuildDir)debug\moc\moc_analyzerconsole.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/analyzerconsole.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_analyzerconsole.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\celt\arch.h" />
+    <ClInclude Include="windows\asio.h" />
+    <ClInclude Include="windows\asiodrivers.h" />
+    <ClInclude Include="windows\asiosys.h" />
+    <CustomBuild Include="src\audiomixerboard.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\audiomixerboard.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\audiomixerboard.h -o $(BuildDir)release\moc\moc_audiomixerboard.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/audiomixerboard.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_audiomixerboard.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\audiomixerboard.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\audiomixerboard.h -o $(BuildDir)debug\moc\moc_audiomixerboard.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/audiomixerboard.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_audiomixerboard.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\celt\bands.h" />
+    <ClInclude Include="src\buffer.h" />
+    <ClInclude Include="libs\opus\celt\celt.h" />
+    <ClInclude Include="libs\opus\celt\celt_lpc.h" />
+    <ClInclude Include="libs\opus\celt\x86\celt_lpc_sse.h" />
+    <CustomBuild Include="src\channel.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\channel.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\channel.h -o $(BuildDir)release\moc\moc_channel.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/channel.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_channel.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\channel.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\channel.h -o $(BuildDir)debug\moc\moc_channel.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/channel.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_channel.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\chatdlg.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\chatdlg.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\chatdlg.h -o $(BuildDir)release\moc\moc_chatdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/chatdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_chatdlg.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\chatdlg.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\chatdlg.h -o $(BuildDir)debug\moc\moc_chatdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/chatdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_chatdlg.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\client.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\client.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\client.h -o $(BuildDir)release\moc\moc_client.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/client.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_client.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\client.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\client.h -o $(BuildDir)debug\moc\moc_client.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/client.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_client.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\clientdlg.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\clientdlg.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\clientdlg.h -o $(BuildDir)release\moc\moc_clientdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/clientdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_clientdlg.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\clientdlg.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\clientdlg.h -o $(BuildDir)debug\moc\moc_clientdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/clientdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_clientdlg.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\clientsettingsdlg.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\clientsettingsdlg.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\clientsettingsdlg.h -o $(BuildDir)release\moc\moc_clientsettingsdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/clientsettingsdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_clientsettingsdlg.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\clientsettingsdlg.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\clientsettingsdlg.h -o $(BuildDir)debug\moc\moc_clientsettingsdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/clientsettingsdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_clientsettingsdlg.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\connectdlg.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\connectdlg.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\connectdlg.h -o $(BuildDir)release\moc\moc_connectdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/connectdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_connectdlg.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\connectdlg.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\connectdlg.h -o $(BuildDir)debug\moc\moc_connectdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/connectdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_connectdlg.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\silk\control.h" />
+    <ClInclude Include="libs\opus\celt\cpu_support.h" />
+    <CustomBuild Include="src\recorder\creaperproject.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\recorder\creaperproject.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\recorder\creaperproject.h -o $(BuildDir)release\moc\moc_creaperproject.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/recorder/creaperproject.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_creaperproject.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\recorder\creaperproject.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\recorder\creaperproject.h -o $(BuildDir)debug\moc\moc_creaperproject.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/recorder/creaperproject.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_creaperproject.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\recorder\cwavestream.h" />
+    <ClInclude Include="libs\opus\celt\cwrs.h" />
+    <ClInclude Include="libs\opus\silk\debug.h" />
+    <ClInclude Include="libs\opus\silk\define.h" />
+    <ClInclude Include="libs\opus\celt\ecintrin.h" />
+    <ClInclude Include="libs\opus\celt\entcode.h" />
+    <ClInclude Include="libs\opus\celt\entdec.h" />
+    <ClInclude Include="libs\opus\celt\entenc.h" />
+    <ClInclude Include="libs\opus\silk\errors.h" />
+    <ClInclude Include="libs\opus\celt\float_cast.h" />
+    <ClInclude Include="src\global.h" />
+    <ClInclude Include="windows\iasiodrv.h" />
+    <CustomBuild Include="src\recorder\jamcontroller.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\recorder\jamcontroller.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\recorder\jamcontroller.h -o $(BuildDir)release\moc\moc_jamcontroller.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/recorder/jamcontroller.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_jamcontroller.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\recorder\jamcontroller.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\recorder\jamcontroller.h -o $(BuildDir)debug\moc\moc_jamcontroller.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/recorder/jamcontroller.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_jamcontroller.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\recorder\jamrecorder.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\recorder\jamrecorder.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\recorder\jamrecorder.h -o $(BuildDir)release\moc\moc_jamrecorder.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/recorder/jamrecorder.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_jamrecorder.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\recorder\jamrecorder.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\recorder\jamrecorder.h -o $(BuildDir)debug\moc\moc_jamrecorder.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/recorder/jamrecorder.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_jamrecorder.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\celt\kiss_fft.h" />
+    <ClInclude Include="libs\opus\celt\laplace.h" />
+    <CustomBuild Include="src\levelmeter.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\levelmeter.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\levelmeter.h -o $(BuildDir)release\moc\moc_levelmeter.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/levelmeter.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_levelmeter.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\levelmeter.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\levelmeter.h -o $(BuildDir)debug\moc\moc_levelmeter.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/levelmeter.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_levelmeter.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\silk\macros.h" />
+    <ClInclude Include="libs\opus\silk\main.h" />
+    <ClInclude Include="libs\opus\silk\float\main_FLP.h" />
+    <ClInclude Include="libs\opus\silk\x86\main_sse.h" />
+    <ClInclude Include="libs\opus\celt\mathops.h" />
+    <ClInclude Include="libs\opus\celt\mdct.h" />
+    <ClInclude Include="libs\opus\celt\mfrngcod.h" />
+    <ClInclude Include="libs\opus\src\mlp.h" />
+    <ClInclude Include="libs\opus\celt\modes.h" />
+    <CustomBuild Include="src\multicolorled.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\multicolorled.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\multicolorled.h -o $(BuildDir)release\moc\moc_multicolorled.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/multicolorled.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_multicolorled.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\multicolorled.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\multicolorled.h -o $(BuildDir)debug\moc\moc_multicolorled.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/multicolorled.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_multicolorled.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\include\opus.h" />
+    <ClInclude Include="libs\opus\include\opus_custom.h" />
+    <ClInclude Include="libs\opus\include\opus_defines.h" />
+    <ClInclude Include="libs\opus\src\opus_private.h" />
+    <ClInclude Include="libs\opus\include\opus_types.h" />
+    <ClInclude Include="libs\opus\celt\os_support.h" />
+    <ClInclude Include="libs\opus\celt\pitch.h" />
+    <ClInclude Include="libs\opus\silk\pitch_est_defines.h" />
+    <ClInclude Include="libs\opus\celt\x86\pitch_sse.h" />
+    <CustomBuild Include="src\protocol.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\protocol.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\protocol.h -o $(BuildDir)release\moc\moc_protocol.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/protocol.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_protocol.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\protocol.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\protocol.h -o $(BuildDir)debug\moc\moc_protocol.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/protocol.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_protocol.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\celt\quant_bands.h" />
+    <ClInclude Include="libs\opus\celt\rate.h" />
+    <ClInclude Include="libs\opus\silk\resampler_private.h" />
+    <ClInclude Include="libs\opus\silk\resampler_rom.h" />
+    <ClInclude Include="libs\opus\silk\resampler_structs.h" />
+    <CustomBuild Include="src\server.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\server.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\server.h -o $(BuildDir)release\moc\moc_server.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/server.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_server.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\server.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\server.h -o $(BuildDir)debug\moc\moc_server.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/server.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_server.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\serverdlg.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\serverdlg.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\serverdlg.h -o $(BuildDir)release\moc\moc_serverdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/serverdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_serverdlg.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\serverdlg.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\serverdlg.h -o $(BuildDir)debug\moc\moc_serverdlg.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/serverdlg.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_serverdlg.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\serverlist.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\serverlist.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\serverlist.h -o $(BuildDir)release\moc\moc_serverlist.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/serverlist.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_serverlist.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\serverlist.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\serverlist.h -o $(BuildDir)debug\moc\moc_serverlist.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/serverlist.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_serverlist.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\serverlogging.h" />
+    <CustomBuild Include="src\settings.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\settings.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\settings.h -o $(BuildDir)release\moc\moc_settings.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/settings.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_settings.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\settings.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\settings.h -o $(BuildDir)debug\moc\moc_settings.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/settings.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_settings.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\signalhandler.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\signalhandler.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\signalhandler.h -o $(BuildDir)release\moc\moc_signalhandler.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/signalhandler.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_signalhandler.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\signalhandler.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\signalhandler.h -o $(BuildDir)debug\moc\moc_signalhandler.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/signalhandler.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_signalhandler.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\socket.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\socket.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\socket.h -o $(BuildDir)release\moc\moc_socket.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/socket.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_socket.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\socket.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\socket.h -o $(BuildDir)debug\moc\moc_socket.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/socket.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_socket.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="windows\sound.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">windows\sound.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore windows\sound.h -o $(BuildDir)release\moc\moc_sound.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC windows/sound.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_sound.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">windows\sound.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore windows\sound.h -o $(BuildDir)debug\moc\moc_sound.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC windows/sound.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_sound.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\soundbase.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\soundbase.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\soundbase.h -o $(BuildDir)release\moc\moc_soundbase.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/soundbase.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_soundbase.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\soundbase.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\soundbase.h -o $(BuildDir)debug\moc\moc_soundbase.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/soundbase.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_soundbase.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\celt\stack_alloc.h" />
+    <ClInclude Include="libs\opus\celt\static_modes_float.h" />
+    <ClInclude Include="libs\opus\silk\structs.h" />
+    <ClInclude Include="libs\opus\silk\float\structs_FLP.h" />
+    <ClInclude Include="libs\opus\silk\tables.h" />
+    <ClInclude Include="libs\opus\src\tansig_table.h" />
+    <CustomBuild Include="src\testbench.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\testbench.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\testbench.h -o $(BuildDir)release\moc\moc_testbench.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/testbench.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_testbench.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\testbench.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\testbench.h -o $(BuildDir)debug\moc\moc_testbench.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/testbench.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_testbench.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\threadpool.h" />
+    <ClInclude Include="libs\opus\silk\tuning_parameters.h" />
+    <ClInclude Include="libs\opus\silk\typedef.h" />
+    <CustomBuild Include="src\util.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\util.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\util.h -o $(BuildDir)release\moc\moc_util.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/util.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_util.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\util.h;$(BuildDir)debug\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\util.h -o $(BuildDir)debug\moc\moc_util.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/util.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_util.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="libs\opus\celt\vq.h" />
+    <ClInclude Include="libs\opus\celt\x86\vq_sse.h" />
+    <ClInclude Include="libs\opus\celt\x86\x86cpu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_analyzerconsole.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_analyzerconsole.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_audiomixerboard.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_audiomixerboard.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_channel.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_channel.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_chatdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_chatdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_client.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_client.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_clientdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_clientdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_clientsettingsdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_clientsettingsdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_connectdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_connectdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_creaperproject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_creaperproject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_jamcontroller.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_jamcontroller.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_jamrecorder.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_jamrecorder.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_levelmeter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_levelmeter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_multicolorled.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_multicolorled.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <CustomBuild Include="$(BuildDir)debug\moc\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtSrcPath)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cl -Bx$(QtBinDir)qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -Zi -MDd -E $(QtSrcPath)\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;$(BuildDir)debug\moc\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_predefs.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="$(BuildDir)release\moc\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtSrcPath)\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cl -Bx$(QtBinDir)qmake.exe -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -O2 -MD -E $(QtSrcPath)\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;$(BuildDir)release\moc\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\moc\moc_predefs.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_protocol.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_protocol.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_server.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_server.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_serverdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_serverdlg.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_serverlist.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_serverlist.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_settings.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_settings.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_signalhandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_signalhandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_socket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_socket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_sound.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_sound.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_soundbase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_soundbase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_testbench.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_testbench.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)debug\moc\moc_util.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="$(BuildDir)release\moc\moc_util.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\res\qrc_resources.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="src\res\translation\translation_de_DE.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_de_DE.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_de_DE.ts -qm src\res\translation\release\translation_de_DE.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_de_DE.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_de_DE.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_de_DE.ts -qm src\res\translation\debug\translation_de_DE.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_de_DE.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_es_ES.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_es_ES.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_es_ES.ts -qm src\res\translation\release\translation_es_ES.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_es_ES.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_es_ES.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_es_ES.ts -qm src\res\translation\debug\translation_es_ES.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_es_ES.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_fr_FR.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_fr_FR.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_fr_FR.ts -qm src\res\translation\release\translation_fr_FR.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_fr_FR.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_fr_FR.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_fr_FR.ts -qm src\res\translation\debug\translation_fr_FR.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_fr_FR.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_it_IT.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_it_IT.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_it_IT.ts -qm src\res\translation\release\translation_it_IT.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_it_IT.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_it_IT.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_it_IT.ts -qm src\res\translation\debug\translation_it_IT.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_it_IT.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_nl_NL.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_nl_NL.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_nl_NL.ts -qm src\res\translation\release\translation_nl_NL.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_nl_NL.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_nl_NL.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_nl_NL.ts -qm src\res\translation\debug\translation_nl_NL.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_nl_NL.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_pl_PL.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_pl_PL.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_pl_PL.ts -qm src\res\translation\release\translation_pl_PL.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_pl_PL.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_pl_PL.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_pl_PL.ts -qm src\res\translation\debug\translation_pl_PL.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_pl_PL.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_pt_BR.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_pt_BR.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_pt_BR.ts -qm src\res\translation\release\translation_pt_BR.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_pt_BR.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_pt_BR.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_pt_BR.ts -qm src\res\translation\debug\translation_pt_BR.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_pt_BR.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_pt_PT.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_pt_PT.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_pt_PT.ts -qm src\res\translation\release\translation_pt_PT.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_pt_PT.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_pt_PT.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_pt_PT.ts -qm src\res\translation\debug\translation_pt_PT.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_pt_PT.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_sk_SK.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_sk_SK.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_sk_SK.ts -qm src\res\translation\release\translation_sk_SK.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_sk_SK.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_sk_SK.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_sk_SK.ts -qm src\res\translation\debug\translation_sk_SK.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_sk_SK.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_sv_SE.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_sv_SE.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_sv_SE.ts -qm src\res\translation\release\translation_sv_SE.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_sv_SE.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_sv_SE.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_sv_SE.ts -qm src\res\translation\debug\translation_sv_SE.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_sv_SE.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\res\translation\translation_zh_CN.ts">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\translation_zh_CN.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_zh_CN.ts -qm src\res\translation\release\translation_zh_CN.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\translation\release\translation_zh_CN.qm;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\translation_zh_CN.ts;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)lrelease.exe src\res\translation\translation_zh_CN.ts -qm src\res\translation\debug\translation_zh_CN.qm</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\translation\debug\translation_zh_CN.qm;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="src\aboutdlgbase.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\aboutdlgbase.ui;$(QtBinDir)uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)uic.exe src\aboutdlgbase.ui -o $(BuildDir)release\ui\ui_aboutdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC src/aboutdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\ui\ui_aboutdlgbase.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\aboutdlgbase.ui;$(QtBinDir)uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)uic.exe src\aboutdlgbase.ui -o $(BuildDir)debug\ui\ui_aboutdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC src/aboutdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\ui\ui_aboutdlgbase.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\chatdlgbase.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\chatdlgbase.ui;$(QtBinDir)uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)uic.exe src\chatdlgbase.ui -o $(BuildDir)release\ui\ui_chatdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC src/chatdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\ui\ui_chatdlgbase.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\chatdlgbase.ui;$(QtBinDir)uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)uic.exe src\chatdlgbase.ui -o $(BuildDir)debug\ui\ui_chatdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC src/chatdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\ui\ui_chatdlgbase.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\clientdlgbase.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\clientdlgbase.ui;$(QtBinDir)uic.exe;src\multicolorled.h;src\audiomixerboard.h;src\levelmeter.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)uic.exe src\clientdlgbase.ui -o $(BuildDir)release\ui\ui_clientdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC src/clientdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\ui\ui_clientdlgbase.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\clientdlgbase.ui;$(QtBinDir)uic.exe;src\multicolorled.h;src\audiomixerboard.h;src\levelmeter.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)uic.exe src\clientdlgbase.ui -o $(BuildDir)debug\ui\ui_clientdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC src/clientdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\ui\ui_clientdlgbase.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\clientsettingsdlgbase.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\clientsettingsdlgbase.ui;$(QtBinDir)uic.exe;src\util.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)uic.exe src\clientsettingsdlgbase.ui -o $(BuildDir)release\ui\ui_clientsettingsdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC src/clientsettingsdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\ui\ui_clientsettingsdlgbase.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\clientsettingsdlgbase.ui;$(QtBinDir)uic.exe;src\util.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)uic.exe src\clientsettingsdlgbase.ui -o $(BuildDir)debug\ui\ui_clientsettingsdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC src/clientsettingsdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\ui\ui_clientsettingsdlgbase.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\connectdlgbase.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\connectdlgbase.ui;$(QtBinDir)uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)uic.exe src\connectdlgbase.ui -o $(BuildDir)release\ui\ui_connectdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC src/connectdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\ui\ui_connectdlgbase.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\connectdlgbase.ui;$(QtBinDir)uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)uic.exe src\connectdlgbase.ui -o $(BuildDir)debug\ui\ui_connectdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC src/connectdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\ui\ui_connectdlgbase.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\serverdlgbase.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\serverdlgbase.ui;$(QtBinDir)uic.exe;src\util.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)uic.exe src\serverdlgbase.ui -o $(BuildDir)release\ui\ui_serverdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC src/serverdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(BuildDir)release\ui\ui_serverdlgbase.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\serverdlgbase.ui;$(QtBinDir)uic.exe;src\util.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)uic.exe src\serverdlgbase.ui -o $(BuildDir)debug\ui\ui_serverdlgbase.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC src/serverdlgbase.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\ui\ui_serverdlgbase.h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\res\CLEDBlackSmall.png" />
+    <None Include="src\res\CLEDDisabledSmall.png" />
+    <None Include="src\res\CLEDGreenSmall.png" />
+    <None Include="src\res\CLEDGreySmall.png" />
+    <None Include="src\res\CLEDRedSmall.png" />
+    <None Include="src\res\CLEDYellowSmall.png" />
+    <None Include="src\res\HLEDBlackSmall.png" />
+    <None Include="src\res\HLEDGreenSmall.png" />
+    <None Include="src\res\HLEDRedSmall.png" />
+    <None Include="src\res\HLEDYellowSmall.png" />
+    <None Include="src\res\IndicatorGreen.png" />
+    <None Include="src\res\IndicatorRed.png" />
+    <None Include="src\res\IndicatorRedFancy.png" />
+    <None Include="src\res\IndicatorYellow.png" />
+    <None Include="src\res\IndicatorYellowFancy.png" />
+    <None Include="src\res\LEDBlackSmall.png" />
+    <None Include="src\res\LEDGreenSmall.png" />
+    <None Include="src\res\LEDRedSmall.png" />
+    <None Include="src\res\LEDYellowSmall.png" />
+    <None Include="src\res\instruments\accordeon.png" />
+    <None Include="src\res\flags\ad.png" />
+    <None Include="src\res\flags\ae.png" />
+    <None Include="src\res\flags\af.png" />
+    <None Include="src\res\flags\ag.png" />
+    <None Include="src\res\instruments\aguitar.png" />
+    <None Include="src\res\flags\ai.png" />
+    <None Include="src\res\flags\al.png" />
+    <None Include="src\res\flags\am.png" />
+    <None Include="src\res\flags\an.png" />
+    <None Include="src\res\flags\ao.png" />
+    <None Include="src\res\flags\ar.png" />
+    <None Include="src\res\flags\as.png" />
+    <None Include="src\res\flags\at.png" />
+    <None Include="src\res\flags\au.png" />
+    <None Include="src\res\flags\aw.png" />
+    <None Include="src\res\flags\ax.png" />
+    <None Include="src\res\flags\az.png" />
+    <None Include="src\res\flags\ba.png" />
+    <None Include="src\res\instruments\banjo.png" />
+    <None Include="src\res\instruments\bassguitar.png" />
+    <None Include="src\res\instruments\bassoon.png" />
+    <None Include="src\res\instruments\bassukulele.png" />
+    <None Include="src\res\flags\bb.png" />
+    <None Include="src\res\flags\bd.png" />
+    <None Include="src\res\flags\be.png" />
+    <None Include="src\res\flags\bf.png" />
+    <None Include="src\res\flags\bg.png" />
+    <None Include="src\res\flags\bh.png" />
+    <None Include="src\res\flags\bi.png" />
+    <None Include="src\res\flags\bj.png" />
+    <None Include="src\res\flags\bm.png" />
+    <None Include="src\res\flags\bn.png" />
+    <None Include="src\res\flags\bo.png" />
+    <None Include="src\res\instruments\bodhran.png" />
+    <None Include="src\res\instruments\bongo.png" />
+    <None Include="src\res\flags\br.png" />
+    <None Include="src\res\flags\bs.png" />
+    <None Include="src\res\flags\bt.png" />
+    <None Include="src\res\flags\bv.png" />
+    <None Include="src\res\flags\bw.png" />
+    <None Include="src\res\flags\by.png" />
+    <None Include="src\res\flags\bz.png" />
+    <None Include="src\res\flags\ca.png" />
+    <None Include="src\res\flags\cc.png" />
+    <None Include="src\res\flags\cd.png" />
+    <None Include="src\res\instruments\cello.png" />
+    <None Include="src\res\flags\cf.png" />
+    <None Include="src\res\flags\cg.png" />
+    <None Include="src\res\flags\ch.png" />
+    <None Include="src\res\flags\ci.png" />
+    <None Include="src\res\flags\ck.png" />
+    <None Include="src\res\flags\cl.png" />
+    <None Include="src\res\instruments\clarinet.png" />
+    <None Include="src\res\flags\cm.png" />
+    <None Include="src\res\flags\cn.png" />
+    <None Include="src\res\flags\co.png" />
+    <None Include="src\res\instruments\conductor.png" />
+    <None Include="src\res\instruments\congas.png" />
+    <None Include="src\res\flags\cr.png" />
+    <None Include="src\res\flags\cs.png" />
+    <None Include="src\res\flags\cu.png" />
+    <None Include="src\res\flags\cv.png" />
+    <None Include="src\res\flags\cx.png" />
+    <None Include="src\res\flags\cy.png" />
+    <None Include="src\res\flags\cz.png" />
+    <None Include="src\res\flags\de.png" />
+    <None Include="src\res\flags\dj.png" />
+    <None Include="src\res\instruments\djembe.png" />
+    <None Include="src\res\flags\dk.png" />
+    <None Include="src\res\flags\dm.png" />
+    <None Include="src\res\flags\do.png" />
+    <None Include="src\res\instruments\doublebass.png" />
+    <None Include="src\res\instruments\drumset.png" />
+    <None Include="src\res\flags\dz.png" />
+    <None Include="src\res\flags\ec.png" />
+    <None Include="src\res\flags\ee.png" />
+    <None Include="src\res\flags\eg.png" />
+    <None Include="src\res\instruments\eguitar.png" />
+    <None Include="src\res\flags\eh.png" />
+    <None Include="src\res\flags\er.png" />
+    <None Include="src\res\flags\es.png" />
+    <None Include="src\res\flags\et.png" />
+    <None Include="src\res\faderbackground.png" />
+    <None Include="src\res\faderhandle.png" />
+    <None Include="src\res\faderhandlesmall.png" />
+    <None Include="src\res\flags\fam.png" />
+    <None Include="src\res\flags\fi.png" />
+    <None Include="src\res\flags\fj.png" />
+    <None Include="src\res\flags\fk.png" />
+    <None Include="src\res\flags\flagnone.png" />
+    <None Include="src\res\instruments\flute.png" />
+    <None Include="src\res\flags\fm.png" />
+    <None Include="src\res\flags\fo.png" />
+    <None Include="src\res\flags\fr.png" />
+    <None Include="src\res\instruments\frenchhorn.png" />
+    <None Include="src\res\fronticon.png" />
+    <None Include="src\res\fronticonserver.png" />
+    <None Include="src\res\flags\ga.png" />
+    <None Include="src\res\flags\gb.png" />
+    <None Include="src\res\flags\gd.png" />
+    <None Include="src\res\flags\ge.png" />
+    <None Include="src\res\flags\gf.png" />
+    <None Include="src\res\flags\gh.png" />
+    <None Include="src\res\flags\gi.png" />
+    <None Include="src\res\flags\gl.png" />
+    <None Include="src\res\flags\gm.png" />
+    <None Include="src\res\flags\gn.png" />
+    <None Include="src\res\flags\gp.png" />
+    <None Include="src\res\flags\gq.png" />
+    <None Include="src\res\flags\gr.png" />
+    <None Include="src\res\instruments\grandpiano.png" />
+    <None Include="src\res\flags\gs.png" />
+    <None Include="src\res\flags\gt.png" />
+    <None Include="src\res\flags\gu.png" />
+    <None Include="src\res\instruments\guitarvocal.png" />
+    <None Include="src\res\flags\gw.png" />
+    <None Include="src\res\flags\gy.png" />
+    <None Include="src\res\instruments\harmonica.png" />
+    <None Include="src\res\instruments\harp.png" />
+    <None Include="src\res\flags\hk.png" />
+    <None Include="src\res\flags\hm.png" />
+    <None Include="src\res\flags\hn.png" />
+    <None Include="src\res\flags\hr.png" />
+    <None Include="src\res\flags\ht.png" />
+    <None Include="src\res\flags\hu.png" />
+    <None Include="src\res\flags\id.png" />
+    <None Include="src\res\flags\ie.png" />
+    <None Include="src\res\flags\il.png" />
+    <None Include="src\res\flags\in.png" />
+    <None Include="src\res\flags\io.png" />
+    <None Include="src\res\flags\iq.png" />
+    <None Include="src\res\flags\ir.png" />
+    <None Include="src\res\flags\is.png" />
+    <None Include="src\res\flags\it.png" />
+    <None Include="src\res\flags\jm.png" />
+    <None Include="src\res\flags\jo.png" />
+    <None Include="src\res\flags\jp.png" />
+    <None Include="src\res\flags\ke.png" />
+    <None Include="src\res\instruments\keyboard.png" />
+    <None Include="src\res\instruments\keyboardvocal.png" />
+    <None Include="src\res\flags\kg.png" />
+    <None Include="src\res\flags\kh.png" />
+    <None Include="src\res\flags\ki.png" />
+    <None Include="src\res\flags\km.png" />
+    <None Include="src\res\flags\kn.png" />
+    <None Include="src\res\flags\kp.png" />
+    <None Include="src\res\flags\kr.png" />
+    <None Include="src\res\flags\kw.png" />
+    <None Include="src\res\flags\ky.png" />
+    <None Include="src\res\flags\kz.png" />
+    <None Include="src\res\flags\la.png" />
+    <None Include="src\res\flags\lb.png" />
+    <None Include="src\res\flags\lc.png" />
+    <None Include="src\res\ledbuttonnotpressed.png" />
+    <None Include="src\res\ledbuttonpressed.png" />
+    <None Include="src\res\flags\li.png" />
+    <None Include="src\res\instruments\listener.png" />
+    <None Include="src\res\flags\lk.png" />
+    <None Include="src\res\flags\lr.png" />
+    <None Include="src\res\flags\ls.png" />
+    <None Include="src\res\flags\lt.png" />
+    <None Include="src\res\flags\lu.png" />
+    <None Include="src\res\flags\lv.png" />
+    <None Include="src\res\flags\ly.png" />
+    <None Include="src\res\flags\ma.png" />
+    <None Include="src\res\instruments\mandolin.png" />
+    <None Include="src\res\flags\mc.png" />
+    <None Include="src\res\flags\md.png" />
+    <None Include="src\res\flags\me.png" />
+    <None Include="src\res\flags\mg.png" />
+    <None Include="src\res\flags\mh.png" />
+    <None Include="src\res\instruments\microphone.png" />
+    <None Include="src\res\mixerboardbackground.png" />
+    <None Include="src\res\flags\mk.png" />
+    <None Include="src\res\flags\ml.png" />
+    <None Include="src\res\flags\mm.png" />
+    <None Include="src\res\flags\mn.png" />
+    <None Include="src\res\flags\mo.png" />
+    <None Include="src\res\instruments\mountaindulcimer.png" />
+    <None Include="src\res\flags\mp.png" />
+    <None Include="src\res\flags\mq.png" />
+    <None Include="src\res\flags\mr.png" />
+    <None Include="src\res\flags\ms.png" />
+    <None Include="src\res\flags\mt.png" />
+    <None Include="src\res\flags\mu.png" />
+    <None Include="src\res\mutediconorange.png" />
+    <None Include="src\res\flags\mv.png" />
+    <None Include="src\res\flags\mw.png" />
+    <None Include="src\res\flags\mx.png" />
+    <None Include="src\res\flags\my.png" />
+    <None Include="src\res\flags\mz.png" />
+    <None Include="src\res\flags\na.png" />
+    <None Include="src\res\flags\nc.png" />
+    <None Include="src\res\flags\ne.png" />
+    <None Include="src\res\flags\nf.png" />
+    <None Include="src\res\flags\ng.png" />
+    <None Include="src\res\flags\ni.png" />
+    <None Include="src\res\flags\nl.png" />
+    <None Include="src\res\flags\no.png" />
+    <None Include="src\res\instruments\none.png" />
+    <None Include="src\res\flags\np.png" />
+    <None Include="src\res\flags\nr.png" />
+    <None Include="src\res\flags\nu.png" />
+    <None Include="src\res\flags\nz.png" />
+    <None Include="src\res\instruments\oboe.png" />
+    <None Include="src\res\flags\om.png" />
+    <None Include="src\res\flags\pa.png" />
+    <None Include="src\res\flags\pe.png" />
+    <None Include="src\res\flags\pf.png" />
+    <None Include="src\res\flags\pg.png" />
+    <None Include="src\res\flags\ph.png" />
+    <None Include="src\res\flags\pk.png" />
+    <None Include="src\res\flags\pl.png" />
+    <None Include="src\res\flags\pm.png" />
+    <None Include="src\res\flags\pn.png" />
+    <None Include="src\res\flags\pr.png" />
+    <None Include="src\res\flags\ps.png" />
+    <None Include="src\res\flags\pt.png" />
+    <None Include="src\res\flags\pw.png" />
+    <None Include="src\res\flags\py.png" />
+    <None Include="src\res\flags\qa.png" />
+    <None Include="src\res\instruments\rapping.png" />
+    <None Include="src\res\flags\re.png" />
+    <None Include="src\res\instruments\recorder.png" />
+    <CustomBuild Include="src\resources.qrc">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\resources.qrc;$(QtBinDir)rcc.exe;src\res\faderhandlesmall.png;src\res\transparent1x1.png;src\res\mixerboardbackground.png;src\res\ledbuttonpressed.png;src\res\faderhandle.png;src\res\faderbackground.png;src\res\ledbuttonnotpressed.png;src\res\mutediconorange.png;src\res\instruments\vocalalto.png;src\res\instruments\rapping.png;src\res\instruments\vocal.png;src\res\instruments\doublebass.png;src\res\instruments\trombone.png;src\res\instruments\microphone.png;src\res\instruments\keyboardvocal.png;src\res\instruments\synthesizer.png;src\res\instruments\bassoon.png;src\res\instruments\aguitar.png;src\res\instruments\bongo.png;src\res\instruments\none.png;src\res\instruments\vocallead.png;src\res\instruments\ukulele.png;src\res\instruments\mandolin.png;src\res\instruments\violin.png;src\res\instruments\congas.png;src\res\instruments\accordeon.png;src\res\instruments\recorder.png;src\res\instruments\cello.png;src\res\instruments\frenchhorn.png;src\res\instruments\viola.png;src\res\instruments\harmonica.png;src\res\instruments\flute.png;src\res\instruments\conductor.png;src\res\instruments\eguitar.png;src\res\instruments\djembe.png;src\res\instruments\banjo.png;src\res\instruments\guitarvocal.png;src\res\instruments\bassguitar.png;src\res\instruments\keyboard.png;src\res\instruments\grandpiano.png;src\res\instruments\oboe.png;src\res\instruments\drumset.png;src\res\instruments\bassukulele.png;src\res\instruments\vocaltenor.png;src\res\instruments\vibraphone.png;src\res\instruments\trumpet.png;src\res\instruments\listener.png;src\res\instruments\harp.png;src\res\instruments\vocalbass.png;src\res\instruments\tuba.png;src\res\instruments\mountaindulcimer.png;src\res\instruments\saxophone.png;src\res\instruments\scratching.png;src\res\instruments\vocalbaritone.png;src\res\instruments\vocalsoprano.png;src\res\instruments\streamer.png;src\res\instruments\clarinet.png;src\res\instruments\bodhran.png;src\res\IndicatorGreen.png;src\res\CLEDDisabledSmall.png;src\res\LEDGreenSmall.png;src\res\CLEDGreenSmall.png;src\res\LEDRedSmall.png;src\res\HLEDGreenSmall.png;src\res\IndicatorRed.png;src\res\HLEDYellowSmall.png;src\res\IndicatorYellow.png;src\res\CLEDGreySmall.png;src\res\LEDYellowSmall.png;src\res\CLEDYellowSmall.png;src\res\IndicatorYellowFancy.png;src\res\LEDBlackSmall.png;src\res\HLEDRedSmall.png;src\res\CLEDBlackSmall.png;src\res\CLEDRedSmall.png;src\res\HLEDBlackSmall.png;src\res\IndicatorRedFancy.png;src\res\flags\ca.png;src\res\flags\ky.png;src\res\flags\tc.png;src\res\flags\li.png;src\res\flags\tr.png;src\res\flags\do.png;src\res\flags\mh.png;src\res\flags\mw.png;src\res\flags\va.png;src\res\flags\ng.png;src\res\flags\fm.png;src\res\flags\gl.png;src\res\flags\pe.png;src\res\flags\hk.png;src\res\flags\pt.png;src\res\flags\bo.png;src\res\flags\sb.png;src\res\flags\kh.png;src\res\flags\cn.png;src\res\flags\kw.png;src\res\flags\dm.png;src\res\flags\lv.png;src\res\flags\mu.png;src\res\flags\ne.png;src\res\flags\vn.png;src\res\flags\fk.png;src\res\flags\gy.png;src\res\flags\pr.png;src\res\flags\an.png;src\res\flags\bm.png;src\res\flags\so.png;src\res\flags\cl.png;src\res\flags\tn.png;src\res\flags\dk.png;src\res\flags\lt.png;src\res\flags\dz.png;src\res\flags\md.png;src\res\flags\um.png;src\res\flags\ms.png;src\res\flags\nc.png;src\res\flags\fi.png;src\res\flags\nr.png;src\res\flags\gh.png;src\res\flags\gw.png;src\res\flags\pa.png;src\res\flags\al.png;src\res\flags\zw.png;src\res\flags\bz.png;src\res\flags\sm.png;src\res\flags\cy.png;src\res\flags\lc.png;src\res\flags\tl.png;src\res\flags\lr.png;src\res\flags\eh.png;src\res\flags\mq.png;src\res\flags\uz.png;src\res\flags\na.png;src\res\flags\np.png;src\res\flags\gf.png;src\res\flags\gu.png;src\res\flags\pn.png;src\res\flags\ht.png;src\res\flags\id.png;src\res\flags\flagnone.png;src\res\flags\is.png;src\res\flags\bi.png;src\res\flags\sk.png;src\res\flags\ch.png;src\res\flags\sz.png;src\res\flags\la.png;src\res\flags\tj.png;src\res\flags\mo.png;src\res\flags\gd.png;src\res\flags\om.png;src\res\flags\gs.png;src\res\flags\pl.png;src\res\flags\hr.png;src\res\flags\ye.png;src\res\flags\yt.png;src\res\flags\iq.png;src\res\flags\aw.png;src\res\flags\bg.png;src\res\flags\jp.png;src\res\flags\bv.png;src\res\flags\si.png;src\res\flags\cf.png;src\res\flags\cu.png;src\res\flags\th.png;src\res\flags\de.png;src\res\flags\tw.png;src\res\flags\ug.png;src\res\flags\mm.png;src\res\flags\es.png;src\res\flags\nl.png;src\res\flags\vu.png;src\res\flags\fr.png;src\res\flags\gb.png;src\res\flags\gq.png;src\res\flags\py.png;src\res\flags\af.png;src\res\flags\io.png;src\res\flags\au.png;src\res\flags\be.png;src\res\flags\rw.png;src\res\flags\bt.png;src\res\flags\sg.png;src\res\flags\cd.png;src\res\flags\km.png;src\res\flags\sv.png;src\res\flags\cs.png;src\res\flags\tf.png;src\res\flags\mk.png;src\res\flags\mz.png;src\res\flags\ph.png;src\res\flags\hn.png;src\res\flags\pw.png;src\res\flags\ad.png;src\res\flags\as.png;src\res\flags\ru.png;src\res\flags\br.png;src\res\flags\se.png;src\res\flags\st.png;src\res\flags\kz.png;src\res\flags\td.png;src\res\flags\ly.png;src\res\flags\mx.png;src\res\flags\gm.png;src\res\flags\pf.png;src\res\flags\zm.png;src\res\flags\ba.png;src\res\flags\rs.png;src\res\flags\sc.png;src\res\flags\ki.png;src\res\flags\sr.png;src\res\flags\co.png;src\res\flags\ua.png;src\res\flags\mg.png;src\res\flags\mv.png;src\res\flags\nf.png;src\res\flags\nu.png;src\res\flags\ps.png;src\res\flags\ao.png;src\res\flags\bn.png;src\res\flags\sa.png;src\res\flags\kg.png;src\res\flags\fam.png;src\res\flags\cm.png;src\res\flags\to.png;src\res\flags\lu.png;src\res\flags\me.png;src\res\flags\mt.png;src\res\flags\fj.png;src\res\flags\gi.png;src\res\flags\qa.png;src\res\flags\am.png;src\res\flags\ro.png;src\res\flags\ke.png;src\res\flags\sn.png;src\res\flags\ck.png;src\res\flags\cz.png;src\res\flags\tm.png;src\res\flags\dj.png;src\res\flags\ls.png;src\res\flags\mc.png;src\res\flags\mr.png;src\res\flags\hu.png;src\res\flags\ie.png;src\res\flags\it.png;src\res\flags\az.png;src\res\flags\bj.png;src\res\flags\by.png;src\res\flags\sl.png;src\res\flags\ci.png;src\res\flags\kr.png;src\res\flags\cx.png;src\res\flags\lb.png;src\res\flags\tk.png;src\res\flags\tz.png;src\res\flags\ma.png;src\res\flags\eg.png;src\res\flags\mp.png;src\res\flags\uy.png;src\res\flags\vi.png;src\res\flags\no.png;src\res\flags\ge.png;src\res\flags\gt.png;src\res\flags\pm.png;src\res\flags\ai.png;src\res\flags\ir.png;src\res\flags\ax.png;src\res\flags\bh.png;src\res\flags\bw.png;src\res\flags\sj.png;src\res\flags\cg.png;src\res\flags\kp.png;src\res\flags\sy.png;src\res\flags\cv.png;src\res\flags\ee.png;src\res\flags\mn.png;src\res\flags\et.png;src\res\flags\vg.png;src\res\flags\wf.png;src\res\flags\gr.png;src\res\flags\pk.png;src\res\flags\ag.png;src\res\flags\bf.png;src\res\flags\jo.png;src\res\flags\sh.png;src\res\flags\kn.png;src\res\flags\tg.png;src\res\flags\tv.png;src\res\flags\ec.png;src\res\flags\ml.png;src\res\flags\er.png;src\res\flags\ve.png;src\res\flags\nz.png;src\res\flags\ga.png;src\res\flags\ws.png;src\res\flags\gp.png;src\res\flags\ae.png;src\res\flags\in.png;src\res\flags\za.png;src\res\flags\at.png;src\res\flags\bd.png;src\res\flags\jm.png;src\res\flags\bs.png;src\res\flags\cc.png;src\res\flags\cr.png;src\res\flags\lk.png;src\res\flags\tt.png;src\res\flags\us.png;src\res\flags\my.png;src\res\flags\vc.png;src\res\flags\ni.png;src\res\flags\fo.png;src\res\flags\gn.png;src\res\flags\pg.png;src\res\flags\hm.png;src\res\flags\il.png;src\res\flags\ar.png;src\res\flags\re.png;src\res\flags\bb.png;src\res\flags\sd.png;src\res\servertrayiconinactive.png;src\res\fronticonserver.png;src\res\fronticon.png;src\res\servertrayiconactive.png;src\res\translation\translation_pl_PL.qm;src\res\translation\translation_sv_SE.qm;src\res\translation\translation_zh_CN.qm;src\res\translation\translation_fr_FR.qm;src\res\translation\translation_es_ES.qm;src\res\translation\translation_nl_NL.qm;src\res\translation\translation_pt_PT.qm;src\res\translation\translation_sk_SK.qm;src\res\translation\translation_pt_BR.qm;src\res\translation\translation_de_DE.qm;src\res\translation\translation_it_IT.qm;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)rcc.exe -name resources src\resources.qrc -o src\res\qrc_resources.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC src/resources.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\res\qrc_resources.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\resources.qrc;$(QtBinDir)rcc.exe;src\res\faderhandlesmall.png;src\res\transparent1x1.png;src\res\mixerboardbackground.png;src\res\ledbuttonpressed.png;src\res\faderhandle.png;src\res\faderbackground.png;src\res\ledbuttonnotpressed.png;src\res\mutediconorange.png;src\res\instruments\vocalalto.png;src\res\instruments\rapping.png;src\res\instruments\vocal.png;src\res\instruments\doublebass.png;src\res\instruments\trombone.png;src\res\instruments\microphone.png;src\res\instruments\keyboardvocal.png;src\res\instruments\synthesizer.png;src\res\instruments\bassoon.png;src\res\instruments\aguitar.png;src\res\instruments\bongo.png;src\res\instruments\none.png;src\res\instruments\vocallead.png;src\res\instruments\ukulele.png;src\res\instruments\mandolin.png;src\res\instruments\violin.png;src\res\instruments\congas.png;src\res\instruments\accordeon.png;src\res\instruments\recorder.png;src\res\instruments\cello.png;src\res\instruments\frenchhorn.png;src\res\instruments\viola.png;src\res\instruments\harmonica.png;src\res\instruments\flute.png;src\res\instruments\conductor.png;src\res\instruments\eguitar.png;src\res\instruments\djembe.png;src\res\instruments\banjo.png;src\res\instruments\guitarvocal.png;src\res\instruments\bassguitar.png;src\res\instruments\keyboard.png;src\res\instruments\grandpiano.png;src\res\instruments\oboe.png;src\res\instruments\drumset.png;src\res\instruments\bassukulele.png;src\res\instruments\vocaltenor.png;src\res\instruments\vibraphone.png;src\res\instruments\trumpet.png;src\res\instruments\listener.png;src\res\instruments\harp.png;src\res\instruments\vocalbass.png;src\res\instruments\tuba.png;src\res\instruments\mountaindulcimer.png;src\res\instruments\saxophone.png;src\res\instruments\scratching.png;src\res\instruments\vocalbaritone.png;src\res\instruments\vocalsoprano.png;src\res\instruments\streamer.png;src\res\instruments\clarinet.png;src\res\instruments\bodhran.png;src\res\IndicatorGreen.png;src\res\CLEDDisabledSmall.png;src\res\LEDGreenSmall.png;src\res\CLEDGreenSmall.png;src\res\LEDRedSmall.png;src\res\HLEDGreenSmall.png;src\res\IndicatorRed.png;src\res\HLEDYellowSmall.png;src\res\IndicatorYellow.png;src\res\CLEDGreySmall.png;src\res\LEDYellowSmall.png;src\res\CLEDYellowSmall.png;src\res\IndicatorYellowFancy.png;src\res\LEDBlackSmall.png;src\res\HLEDRedSmall.png;src\res\CLEDBlackSmall.png;src\res\CLEDRedSmall.png;src\res\HLEDBlackSmall.png;src\res\IndicatorRedFancy.png;src\res\flags\ca.png;src\res\flags\ky.png;src\res\flags\tc.png;src\res\flags\li.png;src\res\flags\tr.png;src\res\flags\do.png;src\res\flags\mh.png;src\res\flags\mw.png;src\res\flags\va.png;src\res\flags\ng.png;src\res\flags\fm.png;src\res\flags\gl.png;src\res\flags\pe.png;src\res\flags\hk.png;src\res\flags\pt.png;src\res\flags\bo.png;src\res\flags\sb.png;src\res\flags\kh.png;src\res\flags\cn.png;src\res\flags\kw.png;src\res\flags\dm.png;src\res\flags\lv.png;src\res\flags\mu.png;src\res\flags\ne.png;src\res\flags\vn.png;src\res\flags\fk.png;src\res\flags\gy.png;src\res\flags\pr.png;src\res\flags\an.png;src\res\flags\bm.png;src\res\flags\so.png;src\res\flags\cl.png;src\res\flags\tn.png;src\res\flags\dk.png;src\res\flags\lt.png;src\res\flags\dz.png;src\res\flags\md.png;src\res\flags\um.png;src\res\flags\ms.png;src\res\flags\nc.png;src\res\flags\fi.png;src\res\flags\nr.png;src\res\flags\gh.png;src\res\flags\gw.png;src\res\flags\pa.png;src\res\flags\al.png;src\res\flags\zw.png;src\res\flags\bz.png;src\res\flags\sm.png;src\res\flags\cy.png;src\res\flags\lc.png;src\res\flags\tl.png;src\res\flags\lr.png;src\res\flags\eh.png;src\res\flags\mq.png;src\res\flags\uz.png;src\res\flags\na.png;src\res\flags\np.png;src\res\flags\gf.png;src\res\flags\gu.png;src\res\flags\pn.png;src\res\flags\ht.png;src\res\flags\id.png;src\res\flags\flagnone.png;src\res\flags\is.png;src\res\flags\bi.png;src\res\flags\sk.png;src\res\flags\ch.png;src\res\flags\sz.png;src\res\flags\la.png;src\res\flags\tj.png;src\res\flags\mo.png;src\res\flags\gd.png;src\res\flags\om.png;src\res\flags\gs.png;src\res\flags\pl.png;src\res\flags\hr.png;src\res\flags\ye.png;src\res\flags\yt.png;src\res\flags\iq.png;src\res\flags\aw.png;src\res\flags\bg.png;src\res\flags\jp.png;src\res\flags\bv.png;src\res\flags\si.png;src\res\flags\cf.png;src\res\flags\cu.png;src\res\flags\th.png;src\res\flags\de.png;src\res\flags\tw.png;src\res\flags\ug.png;src\res\flags\mm.png;src\res\flags\es.png;src\res\flags\nl.png;src\res\flags\vu.png;src\res\flags\fr.png;src\res\flags\gb.png;src\res\flags\gq.png;src\res\flags\py.png;src\res\flags\af.png;src\res\flags\io.png;src\res\flags\au.png;src\res\flags\be.png;src\res\flags\rw.png;src\res\flags\bt.png;src\res\flags\sg.png;src\res\flags\cd.png;src\res\flags\km.png;src\res\flags\sv.png;src\res\flags\cs.png;src\res\flags\tf.png;src\res\flags\mk.png;src\res\flags\mz.png;src\res\flags\ph.png;src\res\flags\hn.png;src\res\flags\pw.png;src\res\flags\ad.png;src\res\flags\as.png;src\res\flags\ru.png;src\res\flags\br.png;src\res\flags\se.png;src\res\flags\st.png;src\res\flags\kz.png;src\res\flags\td.png;src\res\flags\ly.png;src\res\flags\mx.png;src\res\flags\gm.png;src\res\flags\pf.png;src\res\flags\zm.png;src\res\flags\ba.png;src\res\flags\rs.png;src\res\flags\sc.png;src\res\flags\ki.png;src\res\flags\sr.png;src\res\flags\co.png;src\res\flags\ua.png;src\res\flags\mg.png;src\res\flags\mv.png;src\res\flags\nf.png;src\res\flags\nu.png;src\res\flags\ps.png;src\res\flags\ao.png;src\res\flags\bn.png;src\res\flags\sa.png;src\res\flags\kg.png;src\res\flags\fam.png;src\res\flags\cm.png;src\res\flags\to.png;src\res\flags\lu.png;src\res\flags\me.png;src\res\flags\mt.png;src\res\flags\fj.png;src\res\flags\gi.png;src\res\flags\qa.png;src\res\flags\am.png;src\res\flags\ro.png;src\res\flags\ke.png;src\res\flags\sn.png;src\res\flags\ck.png;src\res\flags\cz.png;src\res\flags\tm.png;src\res\flags\dj.png;src\res\flags\ls.png;src\res\flags\mc.png;src\res\flags\mr.png;src\res\flags\hu.png;src\res\flags\ie.png;src\res\flags\it.png;src\res\flags\az.png;src\res\flags\bj.png;src\res\flags\by.png;src\res\flags\sl.png;src\res\flags\ci.png;src\res\flags\kr.png;src\res\flags\cx.png;src\res\flags\lb.png;src\res\flags\tk.png;src\res\flags\tz.png;src\res\flags\ma.png;src\res\flags\eg.png;src\res\flags\mp.png;src\res\flags\uy.png;src\res\flags\vi.png;src\res\flags\no.png;src\res\flags\ge.png;src\res\flags\gt.png;src\res\flags\pm.png;src\res\flags\ai.png;src\res\flags\ir.png;src\res\flags\ax.png;src\res\flags\bh.png;src\res\flags\bw.png;src\res\flags\sj.png;src\res\flags\cg.png;src\res\flags\kp.png;src\res\flags\sy.png;src\res\flags\cv.png;src\res\flags\ee.png;src\res\flags\mn.png;src\res\flags\et.png;src\res\flags\vg.png;src\res\flags\wf.png;src\res\flags\gr.png;src\res\flags\pk.png;src\res\flags\ag.png;src\res\flags\bf.png;src\res\flags\jo.png;src\res\flags\sh.png;src\res\flags\kn.png;src\res\flags\tg.png;src\res\flags\tv.png;src\res\flags\ec.png;src\res\flags\ml.png;src\res\flags\er.png;src\res\flags\ve.png;src\res\flags\nz.png;src\res\flags\ga.png;src\res\flags\ws.png;src\res\flags\gp.png;src\res\flags\ae.png;src\res\flags\in.png;src\res\flags\za.png;src\res\flags\at.png;src\res\flags\bd.png;src\res\flags\jm.png;src\res\flags\bs.png;src\res\flags\cc.png;src\res\flags\cr.png;src\res\flags\lk.png;src\res\flags\tt.png;src\res\flags\us.png;src\res\flags\my.png;src\res\flags\vc.png;src\res\flags\ni.png;src\res\flags\fo.png;src\res\flags\gn.png;src\res\flags\pg.png;src\res\flags\hm.png;src\res\flags\il.png;src\res\flags\ar.png;src\res\flags\re.png;src\res\flags\bb.png;src\res\flags\sd.png;src\res\servertrayiconinactive.png;src\res\fronticonserver.png;src\res\fronticon.png;src\res\servertrayiconactive.png;src\res\translation\translation_pl_PL.qm;src\res\translation\translation_sv_SE.qm;src\res\translation\translation_zh_CN.qm;src\res\translation\translation_fr_FR.qm;src\res\translation\translation_es_ES.qm;src\res\translation\translation_nl_NL.qm;src\res\translation\translation_pt_PT.qm;src\res\translation\translation_sk_SK.qm;src\res\translation\translation_pt_BR.qm;src\res\translation\translation_de_DE.qm;src\res\translation\translation_it_IT.qm;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QtBinDir)rcc.exe -name resources src\resources.qrc -o src\res\qrc_resources.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC src/resources.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\res\qrc_resources.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="src\res\flags\ro.png" />
+    <None Include="src\res\flags\rs.png" />
+    <None Include="src\res\flags\ru.png" />
+    <None Include="src\res\flags\rw.png" />
+    <None Include="src\res\flags\sa.png" />
+    <None Include="src\res\instruments\saxophone.png" />
+    <None Include="src\res\flags\sb.png" />
+    <None Include="src\res\flags\sc.png" />
+    <None Include="src\res\instruments\scratching.png" />
+    <None Include="src\res\flags\sd.png" />
+    <None Include="src\res\flags\se.png" />
+    <None Include="src\res\servertrayiconactive.png" />
+    <None Include="src\res\servertrayiconinactive.png" />
+    <None Include="src\res\flags\sg.png" />
+    <None Include="src\res\flags\sh.png" />
+    <None Include="src\res\flags\si.png" />
+    <None Include="src\res\flags\sj.png" />
+    <None Include="src\res\flags\sk.png" />
+    <None Include="src\res\flags\sl.png" />
+    <None Include="src\res\flags\sm.png" />
+    <None Include="src\res\flags\sn.png" />
+    <None Include="src\res\flags\so.png" />
+    <None Include="src\res\flags\sr.png" />
+    <None Include="src\res\flags\st.png" />
+    <None Include="src\res\instruments\streamer.png" />
+    <None Include="src\res\flags\sv.png" />
+    <None Include="src\res\flags\sy.png" />
+    <None Include="src\res\instruments\synthesizer.png" />
+    <None Include="src\res\flags\sz.png" />
+    <None Include="src\res\flags\tc.png" />
+    <None Include="src\res\flags\td.png" />
+    <None Include="src\res\flags\tf.png" />
+    <None Include="src\res\flags\tg.png" />
+    <None Include="src\res\flags\th.png" />
+    <None Include="src\res\flags\tj.png" />
+    <None Include="src\res\flags\tk.png" />
+    <None Include="src\res\flags\tl.png" />
+    <None Include="src\res\flags\tm.png" />
+    <None Include="src\res\flags\tn.png" />
+    <None Include="src\res\flags\to.png" />
+    <None Include="src\res\flags\tr.png" />
+    <None Include="src\res\translation\translation_de_DE.qm" />
+    <None Include="src\res\translation\translation_es_ES.qm" />
+    <None Include="src\res\translation\translation_fr_FR.qm" />
+    <None Include="src\res\translation\translation_it_IT.qm" />
+    <None Include="src\res\translation\translation_nl_NL.qm" />
+    <None Include="src\res\translation\translation_pl_PL.qm" />
+    <None Include="src\res\translation\translation_pt_BR.qm" />
+    <None Include="src\res\translation\translation_pt_PT.qm" />
+    <None Include="src\res\translation\translation_sk_SK.qm" />
+    <None Include="src\res\translation\translation_sv_SE.qm" />
+    <None Include="src\res\translation\translation_zh_CN.qm" />
+    <None Include="src\res\transparent1x1.png" />
+    <None Include="src\res\instruments\trombone.png" />
+    <None Include="src\res\instruments\trumpet.png" />
+    <None Include="src\res\flags\tt.png" />
+    <None Include="src\res\instruments\tuba.png" />
+    <None Include="src\res\flags\tv.png" />
+    <None Include="src\res\flags\tw.png" />
+    <None Include="src\res\flags\tz.png" />
+    <None Include="src\res\flags\ua.png" />
+    <None Include="src\res\flags\ug.png" />
+    <None Include="src\res\instruments\ukulele.png" />
+    <None Include="src\res\flags\um.png" />
+    <None Include="src\res\flags\us.png" />
+    <None Include="src\res\flags\uy.png" />
+    <None Include="src\res\flags\uz.png" />
+    <None Include="src\res\flags\va.png" />
+    <None Include="src\res\flags\vc.png" />
+    <None Include="src\res\flags\ve.png" />
+    <None Include="src\res\flags\vg.png" />
+    <None Include="src\res\flags\vi.png" />
+    <None Include="src\res\instruments\vibraphone.png" />
+    <None Include="src\res\instruments\viola.png" />
+    <None Include="src\res\instruments\violin.png" />
+    <None Include="src\res\flags\vn.png" />
+    <None Include="src\res\instruments\vocal.png" />
+    <None Include="src\res\instruments\vocalalto.png" />
+    <None Include="src\res\instruments\vocalbaritone.png" />
+    <None Include="src\res\instruments\vocalbass.png" />
+    <None Include="src\res\instruments\vocallead.png" />
+    <None Include="src\res\instruments\vocalsoprano.png" />
+    <None Include="src\res\instruments\vocaltenor.png" />
+    <None Include="src\res\flags\vu.png" />
+    <None Include="src\res\flags\wf.png" />
+    <None Include="src\res\flags\ws.png" />
+    <None Include="src\res\flags\ye.png" />
+    <None Include="src\res\flags\yt.png" />
+    <None Include="src\res\flags\za.png" />
+    <None Include="src\res\flags\zm.png" />
+    <None Include="src\res\flags\zw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libs\opus\AUTHORS" />
+    <None Include="src\res\CLEDBlack.png" />
+    <None Include="src\res\CLEDBlackSmall.png" />
+    <None Include="src\res\CLEDDisabledSmall.png" />
+    <None Include="src\res\CLEDGreen.png" />
+    <None Include="src\res\CLEDGreenSmall.png" />
+    <None Include="src\res\CLEDGrey.png" />
+    <None Include="src\res\CLEDGreySmall.png" />
+    <None Include="src\res\CLEDRed.png" />
+    <None Include="src\res\CLEDRedSmall.png" />
+    <None Include="src\res\CLEDYellow.png" />
+    <None Include="src\res\CLEDYellowSmall.png" />
+    <None Include="CONTRIBUTING.md" />
+    <None Include="COPYING" />
+    <None Include="libs\opus\COPYING" />
+    <None Include="ChangeLog" />
+    <None Include="libs\opus\ChangeLog" />
+    <None Include="src\res\HLEDBlack.png" />
+    <None Include="src\res\HLEDBlackSmall.png" />
+    <None Include="src\res\HLEDGreen.png" />
+    <None Include="src\res\HLEDGreenSmall.png" />
+    <None Include="src\res\HLEDRed.png" />
+    <None Include="src\res\HLEDRedSmall.png" />
+    <None Include="src\res\HLEDYellow.png" />
+    <None Include="src\res\HLEDYellowSmall.png" />
+    <None Include="libs\opus\INSTALL" />
+    <None Include="src\res\IndicatorGreen.png" />
+    <None Include="src\res\IndicatorRed.png" />
+    <None Include="src\res\IndicatorRedFancy.png" />
+    <None Include="src\res\IndicatorYellow.png" />
+    <None Include="src\res\IndicatorYellowFancy.png" />
+    <None Include="src\res\LEDBlackSmall.png" />
+    <None Include="src\res\LEDGreenSmall.png" />
+    <None Include="src\res\LEDRedSmall.png" />
+    <None Include="src\res\LEDYellowSmall.png" />
+    <None Include="libs\opus\NEWS" />
+    <None Include="README.md" />
+    <None Include="libs\opus\README" />
+    <None Include="src\res\instruments\accordeon.png" />
+    <None Include="src\res\flags\ad.png" />
+    <None Include="src\res\flags\ae.png" />
+    <None Include="src\res\flags\af.png" />
+    <None Include="src\res\flags\ag.png" />
+    <None Include="src\res\instruments\aguitar.png" />
+    <None Include="src\res\flags\ai.png" />
+    <None Include="src\res\flags\al.png" />
+    <None Include="src\res\flags\am.png" />
+    <None Include="src\res\flags\an.png" />
+    <None Include="src\res\flags\ao.png" />
+    <None Include="src\res\flags\ar.png" />
+    <None Include="libs\opus\celt\arm\armopts.s.in" />
+    <None Include="src\res\flags\as.png" />
+    <None Include="src\res\flags\at.png" />
+    <None Include="src\res\flags\au.png" />
+    <None Include="src\res\flags\aw.png" />
+    <None Include="src\res\flags\ax.png" />
+    <None Include="src\res\flags\az.png" />
+    <None Include="src\res\flags\ba.png" />
+    <None Include="src\res\instruments\banjo.png" />
+    <None Include="src\res\instruments\bassguitar.png" />
+    <None Include="src\res\instruments\bassoon.png" />
+    <None Include="src\res\instruments\bassoon.svg" />
+    <None Include="src\res\instruments\bassukulele.png" />
+    <None Include="src\res\instruments\bassukulele.svg" />
+    <None Include="src\res\flags\bb.png" />
+    <None Include="src\res\flags\bd.png" />
+    <None Include="src\res\flags\be.png" />
+    <None Include="src\res\flags\bf.png" />
+    <None Include="src\res\flags\bg.png" />
+    <None Include="src\res\flags\bh.png" />
+    <None Include="src\res\flags\bi.png" />
+    <None Include="src\res\flags\bj.png" />
+    <None Include="src\res\flags\bm.png" />
+    <None Include="src\res\flags\bn.png" />
+    <None Include="src\res\flags\bo.png" />
+    <None Include="src\res\instruments\bodhran.png" />
+    <None Include="src\res\instruments\bodhran.svg" />
+    <None Include="src\res\instruments\bongo.png" />
+    <None Include="src\res\instruments\bongo.svg" />
+    <None Include="src\res\flags\br.png" />
+    <None Include="src\res\flags\bs.png" />
+    <None Include="src\res\flags\bt.png" />
+    <None Include="src\res\flags\bv.png" />
+    <None Include="src\res\flags\bw.png" />
+    <None Include="src\res\flags\by.png" />
+    <None Include="src\res\flags\bz.png" />
+    <None Include="src\res\flags\ca.png" />
+    <None Include="src\res\flags\cc.png" />
+    <None Include="src\res\flags\cd.png" />
+    <None Include="src\res\instruments\cello.png" />
+    <None Include="libs\opus\celt\arm\celt_pitch_xcorr_arm.s" />
+    <None Include="src\res\flags\cf.png" />
+    <None Include="src\res\flags\cg.png" />
+    <None Include="src\res\flags\ch.png" />
+    <None Include="src\res\flags\ci.png" />
+    <None Include="src\res\flags\ck.png" />
+    <None Include="src\res\flags\cl.png" />
+    <None Include="src\res\instruments\clarinet.png" />
+    <None Include="src\res\flags\cm.png" />
+    <None Include="src\res\flags\cn.png" />
+    <None Include="src\res\flags\co.png" />
+    <None Include="src\res\instruments\conductor.png" />
+    <None Include="src\res\instruments\congas.png" />
+    <None Include="src\res\instruments\congas.svg" />
+    <None Include="src\res\flags\cr.png" />
+    <None Include="src\res\flags\cs.png" />
+    <None Include="src\res\flags\cu.png" />
+    <None Include="src\res\flags\cv.png" />
+    <None Include="src\res\flags\cx.png" />
+    <None Include="src\res\flags\cy.png" />
+    <None Include="src\res\flags\cz.png" />
+    <None Include="src\res\flags\de.png" />
+    <None Include="src\res\flags\dj.png" />
+    <None Include="src\res\instruments\djembe.png" />
+    <None Include="src\res\flags\dk.png" />
+    <None Include="src\res\flags\dm.png" />
+    <None Include="src\res\flags\do.png" />
+    <None Include="src\res\instruments\doublebass.png" />
+    <None Include="src\res\instruments\drumset.png" />
+    <None Include="src\res\flags\dz.png" />
+    <None Include="src\res\flags\ec.png" />
+    <None Include="src\res\flags\ee.png" />
+    <None Include="src\res\flags\eg.png" />
+    <None Include="src\res\instruments\eguitar.png" />
+    <None Include="src\res\flags\eh.png" />
+    <None Include="src\res\flags\er.png" />
+    <None Include="src\res\flags\es.png" />
+    <None Include="src\res\flags\et.png" />
+    <None Include="src\res\faderbackground.png" />
+    <None Include="src\res\faderhandle.png" />
+    <None Include="src\res\faderhandlesmall.png" />
+    <None Include="src\res\flags\fam.png" />
+    <None Include="src\res\flags\fi.png" />
+    <None Include="src\res\flags\fj.png" />
+    <None Include="src\res\flags\fk.png" />
+    <None Include="src\res\flags\flagnone.png" />
+    <None Include="src\res\instruments\flute.png" />
+    <None Include="src\res\flags\fm.png" />
+    <None Include="src\res\flags\fo.png" />
+    <None Include="src\res\flags\fr.png" />
+    <None Include="src\res\instruments\frenchhorn.png" />
+    <None Include="src\res\fronticon.png" />
+    <None Include="src\res\fronticonserver.png" />
+    <None Include="src\res\flags\ga.png" />
+    <None Include="src\res\flags\gb.png" />
+    <None Include="src\res\flags\gd.png" />
+    <None Include="src\res\flags\ge.png" />
+    <None Include="src\res\flags\gf.png" />
+    <None Include="src\res\flags\gh.png" />
+    <None Include="src\res\flags\gi.png" />
+    <None Include="src\res\flags\gl.png" />
+    <None Include="src\res\flags\gm.png" />
+    <None Include="src\res\flags\gn.png" />
+    <None Include="src\res\flags\gp.png" />
+    <None Include="src\res\flags\gq.png" />
+    <None Include="src\res\flags\gr.png" />
+    <None Include="src\res\instruments\grandpiano.png" />
+    <None Include="src\res\flags\gs.png" />
+    <None Include="src\res\flags\gt.png" />
+    <None Include="src\res\flags\gu.png" />
+    <None Include="src\res\instruments\guitarvocal.png" />
+    <None Include="src\res\flags\gw.png" />
+    <None Include="src\res\flags\gy.png" />
+    <None Include="src\res\instruments\harmonica.png" />
+    <None Include="src\res\instruments\harp.png" />
+    <None Include="src\res\instruments\harp.svg" />
+    <None Include="src\res\flags\hk.png" />
+    <None Include="src\res\flags\hm.png" />
+    <None Include="src\res\flags\hn.png" />
+    <None Include="src\res\flags\hr.png" />
+    <None Include="src\res\flags\ht.png" />
+    <None Include="src\res\flags\hu.png" />
+    <None Include="src\res\flags\id.png" />
+    <None Include="src\res\flags\ie.png" />
+    <None Include="src\res\flags\il.png" />
+    <None Include="src\res\flags\in.png" />
+    <None Include="src\res\flags\io.png" />
+    <None Include="src\res\flags\iq.png" />
+    <None Include="src\res\flags\ir.png" />
+    <None Include="src\res\flags\is.png" />
+    <None Include="src\res\flags\it.png" />
+    <None Include="distributions\jamulus-server.desktop.in" />
+    <None Include="distributions\jamulus-server.svg" />
+    <None Include="distributions\jamulus.desktop.in" />
+    <None Include="distributions\jamulus.png" />
+    <None Include="distributions\jamulus.svg" />
+    <None Include="src\res\flags\jm.png" />
+    <None Include="src\res\flags\jo.png" />
+    <None Include="src\res\flags\jp.png" />
+    <None Include="src\res\flags\ke.png" />
+    <None Include="src\res\instruments\keyboard.png" />
+    <None Include="src\res\instruments\keyboardvocal.png" />
+    <None Include="src\res\flags\kg.png" />
+    <None Include="src\res\flags\kh.png" />
+    <None Include="src\res\flags\ki.png" />
+    <None Include="src\res\flags\km.png" />
+    <None Include="src\res\flags\kn.png" />
+    <None Include="src\res\flags\kp.png" />
+    <None Include="src\res\flags\kr.png" />
+    <None Include="src\res\flags\kw.png" />
+    <None Include="src\res\flags\ky.png" />
+    <None Include="src\res\flags\kz.png" />
+    <None Include="src\res\flags\la.png" />
+    <None Include="src\res\flags\lb.png" />
+    <None Include="src\res\flags\lc.png" />
+    <None Include="src\res\ledbuttonnotpressed.png" />
+    <None Include="src\res\ledbuttonpressed.png" />
+    <None Include="src\res\flags\li.png" />
+    <None Include="src\res\instruments\listener.png" />
+    <None Include="src\res\flags\lk.png" />
+    <None Include="src\res\flags\lr.png" />
+    <None Include="src\res\flags\ls.png" />
+    <None Include="src\res\flags\lt.png" />
+    <None Include="src\res\flags\lu.png" />
+    <None Include="src\res\flags\lv.png" />
+    <None Include="src\res\flags\ly.png" />
+    <None Include="src\res\flags\ma.png" />
+    <None Include="src\res\instruments\mandolin.png" />
+    <None Include="src\res\flags\mc.png" />
+    <None Include="src\res\flags\md.png" />
+    <None Include="src\res\flags\me.png" />
+    <None Include="src\res\flags\mg.png" />
+    <None Include="src\res\flags\mh.png" />
+    <None Include="src\res\instruments\microphone.png" />
+    <None Include="src\res\mixerboardbackground.png" />
+    <None Include="src\res\flags\mk.png" />
+    <None Include="src\res\flags\ml.png" />
+    <None Include="src\res\flags\mm.png" />
+    <None Include="src\res\flags\mn.png" />
+    <None Include="src\res\flags\mo.png" />
+    <None Include="src\res\instruments\mountaindulcimer.png" />
+    <None Include="src\res\flags\mp.png" />
+    <None Include="src\res\flags\mq.png" />
+    <None Include="src\res\flags\mr.png" />
+    <None Include="src\res\flags\ms.png" />
+    <None Include="src\res\flags\mt.png" />
+    <None Include="src\res\flags\mu.png" />
+    <None Include="src\res\mutediconorange.png" />
+    <None Include="src\res\flags\mv.png" />
+    <None Include="src\res\flags\mw.png" />
+    <None Include="src\res\flags\mx.png" />
+    <None Include="src\res\flags\my.png" />
+    <None Include="src\res\flags\mz.png" />
+    <None Include="src\res\flags\na.png" />
+    <None Include="src\res\flags\nc.png" />
+    <None Include="src\res\flags\ne.png" />
+    <None Include="src\res\flags\nf.png" />
+    <None Include="src\res\flags\ng.png" />
+    <None Include="src\res\flags\ni.png" />
+    <None Include="src\res\flags\nl.png" />
+    <None Include="src\res\flags\no.png" />
+    <None Include="src\res\instruments\none.png" />
+    <None Include="src\res\flags\np.png" />
+    <None Include="src\res\flags\nr.png" />
+    <None Include="src\res\flags\nu.png" />
+    <None Include="src\res\flags\nz.png" />
+    <None Include="src\res\instruments\oboe.png" />
+    <None Include="src\res\instruments\oboe.svg" />
+    <None Include="src\res\flags\om.png" />
+    <None Include="src\res\flags\pa.png" />
+    <None Include="src\res\flags\pe.png" />
+    <None Include="src\res\flags\pf.png" />
+    <None Include="src\res\flags\pg.png" />
+    <None Include="src\res\flags\ph.png" />
+    <None Include="src\res\flags\pk.png" />
+    <None Include="src\res\flags\pl.png" />
+    <None Include="src\res\flags\pm.png" />
+    <None Include="src\res\flags\pn.png" />
+    <None Include="src\res\flags\pr.png" />
+    <None Include="src\res\flags\ps.png" />
+    <None Include="src\res\flags\pt.png" />
+    <None Include="src\res\flags\pw.png" />
+    <None Include="src\res\flags\py.png" />
+    <None Include="src\res\flags\qa.png" />
+    <None Include="src\res\instruments\rapping.png" />
+    <None Include="src\res\flags\re.png" />
+    <None Include="src\res\instruments\recorder.png" />
+    <None Include="src\res\flags\ro.png" />
+    <None Include="src\res\flags\rs.png" />
+    <None Include="src\res\flags\ru.png" />
+    <None Include="src\res\flags\rw.png" />
+    <None Include="src\res\flags\sa.png" />
+    <None Include="src\res\instruments\saxophone.png" />
+    <None Include="src\res\flags\sb.png" />
+    <None Include="src\res\flags\sc.png" />
+    <None Include="src\res\instruments\scratching.png" />
+    <None Include="src\res\flags\sd.png" />
+    <None Include="src\res\flags\se.png" />
+    <None Include="src\res\servertrayiconactive.png" />
+    <None Include="src\res\servertrayiconinactive.png" />
+    <None Include="src\res\flags\sg.png" />
+    <None Include="src\res\flags\sh.png" />
+    <None Include="src\res\flags\si.png" />
+    <None Include="src\res\flags\sj.png" />
+    <None Include="src\res\flags\sk.png" />
+    <None Include="src\res\flags\sl.png" />
+    <None Include="src\res\flags\sm.png" />
+    <None Include="src\res\flags\sn.png" />
+    <None Include="src\res\flags\so.png" />
+    <None Include="src\res\flags\sr.png" />
+    <None Include="src\res\flags\st.png" />
+    <None Include="src\res\instruments\streamer.png" />
+    <None Include="src\res\flags\sv.png" />
+    <None Include="src\res\flags\sy.png" />
+    <None Include="src\res\instruments\synthesizer.png" />
+    <None Include="src\res\flags\sz.png" />
+    <None Include="src\res\flags\tc.png" />
+    <None Include="src\res\flags\td.png" />
+    <None Include="src\res\flags\tf.png" />
+    <None Include="src\res\flags\tg.png" />
+    <None Include="src\res\flags\th.png" />
+    <None Include="src\res\flags\tj.png" />
+    <None Include="src\res\flags\tk.png" />
+    <None Include="src\res\flags\tl.png" />
+    <None Include="src\res\flags\tm.png" />
+    <None Include="src\res\flags\tn.png" />
+    <None Include="src\res\flags\to.png" />
+    <None Include="src\res\flags\tr.png" />
+    <None Include="src\res\translation\translation_de_DE.qm" />
+    <None Include="src\res\translation\translation_es_ES.qm" />
+    <None Include="src\res\translation\translation_fr_FR.qm" />
+    <None Include="src\res\translation\translation_it_IT.qm" />
+    <None Include="src\res\translation\translation_nl_NL.qm" />
+    <None Include="src\res\translation\translation_pl_PL.qm" />
+    <None Include="src\res\translation\translation_pt_BR.qm" />
+    <None Include="src\res\translation\translation_pt_PT.qm" />
+    <None Include="src\res\translation\translation_sk_SK.qm" />
+    <None Include="src\res\translation\translation_sv_SE.qm" />
+    <None Include="src\res\translation\translation_zh_CN.qm" />
+    <None Include="src\res\transparent1x1.png" />
+    <None Include="src\res\instruments\trombone.png" />
+    <None Include="src\res\instruments\trumpet.png" />
+    <None Include="src\res\flags\tt.png" />
+    <None Include="src\res\instruments\tuba.png" />
+    <None Include="src\res\flags\tv.png" />
+    <None Include="src\res\flags\tw.png" />
+    <None Include="src\res\flags\tz.png" />
+    <None Include="src\res\flags\ua.png" />
+    <None Include="src\res\flags\ug.png" />
+    <None Include="src\res\instruments\ukulele.png" />
+    <None Include="src\res\instruments\ukulele.svg" />
+    <None Include="src\res\flags\um.png" />
+    <None Include="src\res\flags\us.png" />
+    <None Include="src\res\flags\uy.png" />
+    <None Include="src\res\flags\uz.png" />
+    <None Include="src\res\flags\va.png" />
+    <None Include="src\res\flags\vc.png" />
+    <None Include="src\res\flags\ve.png" />
+    <None Include="src\res\flags\vg.png" />
+    <None Include="src\res\flags\vi.png" />
+    <None Include="src\res\instruments\vibraphone.png" />
+    <None Include="src\res\instruments\viola.png" />
+    <None Include="src\res\instruments\violin.png" />
+    <None Include="src\res\flags\vn.png" />
+    <None Include="src\res\instruments\vocal.png" />
+    <None Include="src\res\instruments\vocalalto.png" />
+    <None Include="src\res\instruments\vocalbaritone.png" />
+    <None Include="src\res\instruments\vocalbass.png" />
+    <None Include="src\res\instruments\vocallead.png" />
+    <None Include="src\res\instruments\vocalsoprano.png" />
+    <None Include="src\res\instruments\vocaltenor.png" />
+    <None Include="src\res\flags\vu.png" />
+    <None Include="src\res\flags\wf.png" />
+    <None Include="src\res\flags\ws.png" />
+    <None Include="src\res\flags\ye.png" />
+    <None Include="src\res\flags\yt.png" />
+    <None Include="src\res\flags\za.png" />
+    <None Include="src\res\flags\zm.png" />
+    <None Include="src\res\flags\zw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="windows\mainicon.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

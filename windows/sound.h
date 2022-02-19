@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2022
+ * Copyright (c) 2004-2020
  *
  * Author(s):
  *  Volker Fischer
@@ -30,15 +30,14 @@
 #include "../src/global.h"
 #include "../src/soundbase.h"
 
-// copy the ASIO SDK in the llcon/windows directory: "llcon/windows/ASIOSDK2" to
-// get it work
+//ASIO Interfaces
 #include "asiosys.h"
 #include "asio.h"
-#include "asiodrivers.h"
 
 /* Definitions ****************************************************************/
 // stereo for input and output
 #define NUM_IN_OUT_CHANNELS 2
+#define MAX_DRIVERNAMESIZE 32
 
 /* Classes ********************************************************************/
 class CSound : public CSoundBase

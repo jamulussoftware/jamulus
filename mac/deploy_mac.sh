@@ -44,7 +44,7 @@ build_app()
 {
     # Build Jamulus
     qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2}
-    local target_name="$(cat "${build_path}/Makefile" | sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p')"
+    local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
     local job_count="$(sysctl -n hw.ncpu)"
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
@@ -73,7 +73,7 @@ build_installer_image()
     brew extract --version="${create_dmg_version}" create-dmg homebrew/cask
     brew install /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask/Formula/create-dmg@"${create_dmg_version}".rb
     # Get Jamulus version
-    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+    local app_version="$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)"
 
     # Build installer image
 

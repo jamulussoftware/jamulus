@@ -66,7 +66,7 @@ make
 sudo make install # optional
 ```
 
-To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/debian/jamulus-headless.service). See also runtime [configuration options](https://jamulus.io/wiki/Running-a-Server.md#command-line-options), and [this manual](https://jamulus.io/wiki/Server-Linux).
+To control the server with systemd, see this [unit file example](https://github.com/jamulussoftware/jamulus/blob/master/distributions/debian/jamulus-headless.service). See also runtime [configuration options](https://jamulus.io/wiki/Running-a-Server#command-line-options), and [this manual](https://jamulus.io/wiki/Server-Linux).
 
 ---
 

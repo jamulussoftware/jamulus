@@ -34,18 +34,26 @@ export ANDROID_NDK_HOST="linux-x86_64"
 export ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
 
 # paths for Android SDK
-mkdir -p "${COMMANDLINETOOLS_DIR}"
 mkdir -p "${ANDROID_SDK_ROOT}"/build-tools/latest/
 
 # Install Android sdk
-wget -q -O downloadfile https://dl.google.com/android/repository/commandlinetools-linux-${COMMANDLINETOOLS_VERSION}_latest.zip
-unzip -q downloadfile
-mv cmdline-tools/* "${COMMANDLINETOOLS_DIR}"
+if [[ -d "${COMMANDLINETOOLS_DIR}" ]]; then
+    echo "Using commandlinetools installation from previous run (actions/cache)"
+else
+    mkdir -p "${COMMANDLINETOOLS_DIR}"
+    wget -q -O downloadfile https://dl.google.com/android/repository/commandlinetools-linux-${COMMANDLINETOOLS_VERSION}_latest.zip
+    unzip -q downloadfile
+    mv cmdline-tools/* "${COMMANDLINETOOLS_DIR}"
+fi
 
 # Install Android ndk
-wget -q -O downloadfile https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip
-unzip -q downloadfile
-mv android-ndk-${ANDROID_NDK_VERSION} "${ANDROID_NDK_ROOT}"
+if [[ -d "${ANDROID_NDK_ROOT}" ]]; then
+    echo "Using NDK installation from previous run (actions/cache)"
+else
+    wget -q -O downloadfile https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip
+    unzip -q downloadfile
+    mv android-ndk-${ANDROID_NDK_VERSION} "${ANDROID_NDK_ROOT}"
+fi
 
 # Install Android SDK
 yes | "${ANDROID_SDKMANAGER}" --licenses

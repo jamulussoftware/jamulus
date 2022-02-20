@@ -30,14 +30,14 @@
 #include "../src/global.h"
 #include "../src/soundbase.h"
 
-//ASIO Interfaces
+// ASIO Interfaces
 #include "asiosys.h"
 #include "asio.h"
 
 /* Definitions ****************************************************************/
 // stereo for input and output
 #define NUM_IN_OUT_CHANNELS 2
-#define MAX_DRIVERNAMESIZE 32
+#define MAX_DRIVERNAMESIZE  32
 
 /* Classes ********************************************************************/
 class CSound : public CSoundBase

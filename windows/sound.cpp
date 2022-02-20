@@ -61,7 +61,7 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
     long lNumInChanPrev  = lNumInChan;
     long lNumOutChanPrev = lNumOutChan;
 
-    AsioDrivers.loadDriver( cDriverNames[iDriverIdx] );
+    AsioDrivers.loadDriver ( cDriverNames[iDriverIdx] );
 
     // According to the docs, driverInfo.asioVersion and driverInfo.sysRef
     // should be set, but we haven't being doing that and it seems to work
@@ -139,9 +139,9 @@ QString CSound::CheckDeviceCapabilities()
     // check the sample rate
     const ASIOError CanSaRateReturn = ASIOCanSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
 
-    if ((CanSaRateReturn == ASE_NotPresent) || (CanSaRateReturn == ASE_InvalidMode))
+    if ( ( CanSaRateReturn == ASE_NotPresent ) || ( CanSaRateReturn == ASE_InvalidMode ) )
     {
-        return tr("Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.");
+        return tr ( "Couldn't initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings." );
     }
 
     if ( CanSaRateReturn == ASE_NoClock )
@@ -156,7 +156,7 @@ QString CSound::CheckDeviceCapabilities()
     // check if sample rate can be set
     const ASIOError SetSaRateReturn = ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
 
-    if ( !ASIOError_OK (SetSaRateReturn) )
+    if ( !ASIOError_OK ( SetSaRateReturn ) )
     {
         // return error string
         return QString ( tr ( "The current audio device configuration is incompatible "
@@ -517,7 +517,6 @@ void CSound::Stop()
         ASIOMutex.unlock();
     }
 }
-
 
 CSound::CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ),
                  void*          arg,

@@ -8,16 +8,14 @@
 //============================================================================
 #include "iasiodrv.h"
 
-extern const pIASIO NO_ASIO_DRIVER;  // All pIASIO pointers NOT referencing an opened ASIO interface should point to NO_ASIO_DRIVER!
-extern pIASIO       pAsioDriver;     // Pointer to the current selected ASIO interface. (NO_ASIO_DRIVER if no selection, should never be NULL!)
+extern const pIASIO NO_ASIO_DRIVER; // All pIASIO pointers NOT referencing an opened ASIO interface should point to NO_ASIO_DRIVER!
+extern pIASIO       pAsioDriver;    // Pointer to the current selected ASIO interface. (NO_ASIO_DRIVER if no selection, should never be NULL!)
 
 //============================================================================
 // Forward class definitions
 //============================================================================
 class CAsioDriverInfoList;
 class CAsioDrivers;
-
-
 
 //============================================================================
 // Driver Info" struct with the basic info of the driver.
@@ -27,16 +25,14 @@ class CAsioDriverInfo;
 
 typedef struct
 {
-    long    drvID;                      // Normally the same as the Index in the driverlist, negative when initialisation failed.
+    long drvID; // Normally the same as the Index in the driverlist, negative when initialisation failed.
 
-    CLSID   clsid;                      // Driver CLSID
-    char    dllpath[MAXPATHLEN+ 1];     // Path to the driver dlll
-    char    drvname[MAXDRVNAMELEN + 1]; // System name of the driver
+    CLSID clsid;                      // Driver CLSID
+    char  dllpath[MAXPATHLEN + 1];    // Path to the driver dlll
+    char  drvname[MAXDRVNAMELEN + 1]; // System name of the driver
 
-    IASIO*  asio;                       // Pointer to the ASIO interface when opened, should point to NO_ASIO_DRIVER if closed
+    IASIO* asio; // Pointer to the ASIO interface when opened, should point to NO_ASIO_DRIVER if closed
 } asiodrvstruct;
-
-
 
 //============================================================================
 //  CAsioDriverInfo: asiodrvstruct with it's access and control functions
@@ -48,7 +44,7 @@ protected:
     friend class CAsioDriverInfoList;
     friend class CAsioDrivers;
 
-    CAsioDriverInfo(CAsioDriverInfoList* driverList, HKEY hkey, char* keyname, long drvID);
+    CAsioDriverInfo ( CAsioDriverInfoList* driverList, HKEY hkey, char* keyname, long drvID );
     ~CAsioDriverInfo();
 
     LONG open();
@@ -58,19 +54,14 @@ protected:
     CAsioDriverInfo*     next;
 
 public:
-    inline long getDriverId() const
-    {
-        return drvID;
-    }
+    inline long getDriverId() const { return drvID; }
 
-    bool getDriverCLSID(CLSID* pid) const;
-    bool getDriverName(char* name, unsigned int maxlen) const;
-    bool getDllPath(   char* path, unsigned int maxlen) const;
-    
-    inline bool asioIsOpen() { return ( asio && (asio != NO_ASIO_DRIVER) ); };
+    bool getDriverCLSID ( CLSID* pid ) const;
+    bool getDriverName ( char* name, unsigned int maxlen ) const;
+    bool getDllPath ( char* path, unsigned int maxlen ) const;
+
+    inline bool asioIsOpen() { return ( asio && ( asio != NO_ASIO_DRIVER ) ); };
 };
-
-
 
 //============================================================================
 //  CAsioDriverInfoList: List of all available drivers
@@ -86,32 +77,27 @@ protected:
     void getDrvList();
     void deleteDrvList();
 
-    CAsioDriverInfo* getDriver(int id) const;
-    CAsioDriverInfo* getDriver(const char* name) const;
+    CAsioDriverInfo* getDriver ( int id ) const;
+    CAsioDriverInfo* getDriver ( const char* name ) const;
 
 public:
     CAsioDriverInfo* pDrvListRoot;
     long             lNumDrivers;
     CAsioDriverInfo* pCurrentDriver;
 
-        // nice to have
-    inline LONG asioGetNumDev() const
-    {
-        return (LONG)lNumDrivers;
-    }
+    // nice to have
+    inline LONG asioGetNumDev() const { return (LONG) lNumDrivers; }
 
-    long getDriverNames(char** names, long maxNamelen, long maxDrivers) const;
+    long getDriverNames ( char** names, long maxNamelen, long maxDrivers ) const;
 
-    inline const CAsioDriverInfo* asioGetDriver(int id)           const { return getDriver(id);   }
-    inline const CAsioDriverInfo* asioGetDriver(const char* name) const { return getDriver(name); }
+    inline const CAsioDriverInfo* asioGetDriver ( int id ) const { return getDriver ( id ); }
+    inline const CAsioDriverInfo* asioGetDriver ( const char* name ) const { return getDriver ( name ); }
 
-    bool asioGetCurrentDriverName(char* name, int maxlen) const;
-    LONG asioGetDriverName(int, char*, int) const;
-    LONG asioGetDriverPath(int, char*, int) const;
-    LONG asioGetDriverCLSID(int, CLSID*) const;
+    bool asioGetCurrentDriverName ( char* name, int maxlen ) const;
+    LONG asioGetDriverName ( int, char*, int ) const;
+    LONG asioGetDriverPath ( int, char*, int ) const;
+    LONG asioGetDriverCLSID ( int, CLSID* ) const;
 };
-
-
 
 //============================================================================
 //  CAsioDrivers: Main interface for controlling ASIO device selection
@@ -126,10 +112,7 @@ public:
     CAsioDrivers();
     virtual ~CAsioDrivers();
 
-    inline const CAsioDriverInfo* getCurrentDriverInfo() const
-    {
-        return pCurrentDriver;
-    }
+    inline const CAsioDriverInfo* getCurrentDriverInfo() const { return pCurrentDriver; }
 
     void deinit()
     {
@@ -137,7 +120,7 @@ public:
         {
             bInitialised = false;
             deleteDrvList();
-            (void)CoUninitialize();
+            (void) CoUninitialize();
         }
     }
 
@@ -145,7 +128,7 @@ public:
     {
         if ( !bInitialised )
         {
-            (void)CoInitialize(NULL);   // initialize COM, must be done before calling any other COM function (except CoGetMalloc).
+            (void) CoInitialize ( NULL ); // initialize COM, must be done before calling any other COM function (except CoGetMalloc).
             getDrvList();
             bInitialised = true;
         }
@@ -157,8 +140,8 @@ public:
         init();
     }
 
-    bool loadDriver(long index);
-    bool loadDriver(char* name);
+    bool loadDriver ( long index );
+    bool loadDriver ( char* name );
 
     inline bool reloadDriver()
     {
@@ -173,7 +156,7 @@ public:
 
     inline LONG closeDriver()
     {
-        if (pCurrentDriver)
+        if ( pCurrentDriver )
         {
             return pCurrentDriver->close();
         }
@@ -183,15 +166,13 @@ public:
 
     inline long getCurrentDriverIndex() { return pCurrentDriver ? pCurrentDriver->drvID : -1; }
 
-
-    //Export protected function from CAsioDriverInfoList
-    inline long getDriverNames(char** names, long maxNamelen, long maxDrivers) const
+    // Export protected function from CAsioDriverInfoList
+    inline long getDriverNames ( char** names, long maxNamelen, long maxDrivers ) const
     {
-        return CAsioDriverInfoList::getDriverNames( names, maxNamelen, maxDrivers );
+        return CAsioDriverInfoList::getDriverNames ( names, maxNamelen, maxDrivers );
     }
 };
 
 extern CAsioDrivers AsioDrivers; // Maintains Asio Device list and selects current driver
 
 #endif //__asiodrivers__
-

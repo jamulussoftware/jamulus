@@ -1,5 +1,5 @@
 
-### 3.8.2rc1dev <- NOTE: the release version number will be 3.8.2 ###
+### 3.8.2 (2022-02-20) ###
 
 - Client: Added selection option for level meter style (#1688, #2352, #2356).
   (contributed by @henkdegroot, @hoffie, @pgScorpio, @pljones)

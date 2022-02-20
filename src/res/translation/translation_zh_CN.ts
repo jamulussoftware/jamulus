@@ -47,67 +47,67 @@
         <translation>旗帜图标作者为 Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="495"/>
+        <location filename="../../util.cpp" line="496"/>
         <source>For details on the contributions check out the %1</source>
         <translation>关于贡献者的详情请参见 %1</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="496"/>
+        <location filename="../../util.cpp" line="497"/>
         <source>Github Contributors list</source>
         <translation>Github 贡献者列表</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="499"/>
+        <location filename="../../util.cpp" line="500"/>
         <source>Spanish</source>
         <translation>西班牙语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="503"/>
+        <location filename="../../util.cpp" line="504"/>
         <source>French</source>
         <translation>法语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="508"/>
+        <location filename="../../util.cpp" line="509"/>
         <source>Portuguese</source>
         <translation>葡萄牙语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="513"/>
+        <location filename="../../util.cpp" line="514"/>
         <source>Dutch</source>
         <translation>荷兰语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="518"/>
+        <location filename="../../util.cpp" line="519"/>
         <source>Italian</source>
         <translation>意大利语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="522"/>
+        <location filename="../../util.cpp" line="523"/>
         <source>German</source>
         <translation>德语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="527"/>
+        <location filename="../../util.cpp" line="528"/>
         <source>Polish</source>
         <translation>波兰语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="532"/>
+        <location filename="../../util.cpp" line="533"/>
         <source>Swedish</source>
         <translation>瑞典语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="536"/>
+        <location filename="../../util.cpp" line="537"/>
         <source>Slovak</source>
         <translation>斯洛伐克语</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="539"/>
+        <location filename="../../util.cpp" line="540"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="547"/>
+        <location filename="../../util.cpp" line="548"/>
         <source>About %1</source>
         <translation>关于 %1</translation>
     </message>
@@ -930,7 +930,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1219"/>
-        <source>D&amp;isconnect</source>
+        <source>&amp;Disconnect</source>
         <translation>断开连接(&amp;D)</translation>
     </message>
 </context>
@@ -1621,7 +1621,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../../clientsettingsdlg.cpp" line="462"/>
         <location filename="../../clientsettingsdlg.cpp" line="588"/>
         <location filename="../../clientsettingsdlg.cpp" line="596"/>
-        <location filename="../../util.cpp" line="1007"/>
+        <location filename="../../util.cpp" line="1008"/>
         <source>None</source>
         <translation>无</translation>
     </message>
@@ -1744,247 +1744,247 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>任何流派 1</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1010"/>
+        <location filename="../../util.cpp" line="1011"/>
         <source>Drum Set</source>
         <translation>组鼓</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1013"/>
+        <location filename="../../util.cpp" line="1014"/>
         <source>Djembe</source>
         <translation>非洲鼓</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1016"/>
+        <location filename="../../util.cpp" line="1017"/>
         <source>Electric Guitar</source>
         <translation>电吉他</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1019"/>
+        <location filename="../../util.cpp" line="1020"/>
         <source>Acoustic Guitar</source>
         <translation>原声吉他</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1022"/>
+        <location filename="../../util.cpp" line="1023"/>
         <source>Bass Guitar</source>
         <translation>贝斯</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1025"/>
+        <location filename="../../util.cpp" line="1026"/>
         <source>Keyboard</source>
         <translation>键盘手</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1028"/>
+        <location filename="../../util.cpp" line="1029"/>
         <source>Synthesizer</source>
         <translation>合成器</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1031"/>
+        <location filename="../../util.cpp" line="1032"/>
         <source>Grand Piano</source>
         <translation>大钢琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1034"/>
+        <location filename="../../util.cpp" line="1035"/>
         <source>Accordion</source>
         <translation>手风琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1037"/>
+        <location filename="../../util.cpp" line="1038"/>
         <source>Vocal</source>
         <translation>歌手</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1040"/>
+        <location filename="../../util.cpp" line="1041"/>
         <source>Microphone</source>
         <translation>麦克风</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1043"/>
+        <location filename="../../util.cpp" line="1044"/>
         <source>Harmonica</source>
         <translation>口琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1046"/>
+        <location filename="../../util.cpp" line="1047"/>
         <source>Trumpet</source>
         <translation>小号</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1049"/>
+        <location filename="../../util.cpp" line="1050"/>
         <source>Trombone</source>
         <translation>长号</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1052"/>
+        <location filename="../../util.cpp" line="1053"/>
         <source>French Horn</source>
         <translation>圆号</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1055"/>
+        <location filename="../../util.cpp" line="1056"/>
         <source>Tuba</source>
         <translation>大号</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1058"/>
+        <location filename="../../util.cpp" line="1059"/>
         <source>Saxophone</source>
         <translation>萨克斯</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1061"/>
+        <location filename="../../util.cpp" line="1062"/>
         <source>Clarinet</source>
         <translation>单簧管</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1064"/>
+        <location filename="../../util.cpp" line="1065"/>
         <source>Flute</source>
         <translation>长笛</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1067"/>
+        <location filename="../../util.cpp" line="1068"/>
         <source>Violin</source>
         <translation>小提琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1070"/>
+        <location filename="../../util.cpp" line="1071"/>
         <source>Cello</source>
         <translation>大提琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1073"/>
+        <location filename="../../util.cpp" line="1074"/>
         <source>Double Bass</source>
         <translation>低音提琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1076"/>
+        <location filename="../../util.cpp" line="1077"/>
         <source>Recorder</source>
         <translation>录音员</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1079"/>
+        <location filename="../../util.cpp" line="1080"/>
         <source>Streamer</source>
         <translation>直播推流员</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1082"/>
+        <location filename="../../util.cpp" line="1083"/>
         <source>Listener</source>
         <translation>听众</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1085"/>
+        <location filename="../../util.cpp" line="1086"/>
         <source>Guitar+Vocal</source>
         <translation>吉他弹唱</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1088"/>
+        <location filename="../../util.cpp" line="1089"/>
         <source>Keyboard+Vocal</source>
         <translation>键盘手弹唱</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1091"/>
+        <location filename="../../util.cpp" line="1092"/>
         <source>Bodhran</source>
         <translation>宝思兰鼓</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1094"/>
+        <location filename="../../util.cpp" line="1095"/>
         <source>Bassoon</source>
         <translation>大管</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1097"/>
+        <location filename="../../util.cpp" line="1098"/>
         <source>Oboe</source>
         <translation>双簧管</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1100"/>
+        <location filename="../../util.cpp" line="1101"/>
         <source>Harp</source>
         <translation>竖琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1103"/>
+        <location filename="../../util.cpp" line="1104"/>
         <source>Viola</source>
         <translation>中提琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1106"/>
+        <location filename="../../util.cpp" line="1107"/>
         <source>Congas</source>
         <translation>康茄鼓</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1109"/>
+        <location filename="../../util.cpp" line="1110"/>
         <source>Bongo</source>
         <translation>邦戈鼓</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1112"/>
+        <location filename="../../util.cpp" line="1113"/>
         <source>Vocal Bass</source>
         <translation>男低音</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1115"/>
+        <location filename="../../util.cpp" line="1116"/>
         <source>Vocal Tenor</source>
         <translation>男高音</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1118"/>
+        <location filename="../../util.cpp" line="1119"/>
         <source>Vocal Alto</source>
         <translation>女低音</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1121"/>
+        <location filename="../../util.cpp" line="1122"/>
         <source>Vocal Soprano</source>
         <translation>女高音</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1124"/>
+        <location filename="../../util.cpp" line="1125"/>
         <source>Banjo</source>
         <translation>班卓琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1127"/>
+        <location filename="../../util.cpp" line="1128"/>
         <source>Mandolin</source>
         <translation>曼陀林</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1130"/>
+        <location filename="../../util.cpp" line="1131"/>
         <source>Ukulele</source>
         <translation>尤克里里</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1133"/>
+        <location filename="../../util.cpp" line="1134"/>
         <source>Bass Ukulele</source>
         <translation>贝斯尤克里里</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1136"/>
+        <location filename="../../util.cpp" line="1137"/>
         <source>Vocal Baritone</source>
         <translation>男中音</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1139"/>
+        <location filename="../../util.cpp" line="1140"/>
         <source>Vocal Lead</source>
         <translation>领唱</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1142"/>
+        <location filename="../../util.cpp" line="1143"/>
         <source>Mountain Dulcimer</source>
         <translation>扬琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1145"/>
+        <location filename="../../util.cpp" line="1146"/>
         <source>Scratching</source>
         <translation>打碟</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1148"/>
+        <location filename="../../util.cpp" line="1149"/>
         <source>Rapping</source>
         <translation>饶舌歌手</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1151"/>
+        <location filename="../../util.cpp" line="1152"/>
         <source>Vibraphone</source>
         <translation>铁琴</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1154"/>
+        <location filename="../../util.cpp" line="1155"/>
         <source>Conductor</source>
         <translation>指挥</translation>
     </message>
@@ -2427,33 +2427,33 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../../util.cpp" line="589"/>
+        <location filename="../../util.cpp" line="590"/>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="596"/>
-        <location filename="../../util.cpp" line="601"/>
+        <location filename="../../util.cpp" line="597"/>
+        <location filename="../../util.cpp" line="602"/>
         <source>Getting &amp;Started...</source>
         <translation>入门(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="597"/>
+        <location filename="../../util.cpp" line="598"/>
         <source>Software &amp;Manual...</source>
         <translation>软件说明书(&amp;M)...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="604"/>
+        <location filename="../../util.cpp" line="605"/>
         <source>What&apos;s &amp;This</source>
         <translation>这是什么(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="606"/>
+        <location filename="../../util.cpp" line="607"/>
         <source>&amp;About Jamulus...</source>
         <translation>关于 Jamulus(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="608"/>
+        <location filename="../../util.cpp" line="609"/>
         <source>About &amp;Qt...</source>
         <translation>关于 &amp;Qt...</translation>
     </message>
@@ -2466,12 +2466,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../../util.cpp" line="665"/>
+        <location filename="../../util.cpp" line="666"/>
         <source>Restart Required</source>
         <translation>需要重启</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="665"/>
+        <location filename="../../util.cpp" line="666"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>请重启应用程序以使语言变更生效.</translation>
     </message>
@@ -2479,22 +2479,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <location filename="../../util.cpp" line="565"/>
+        <location filename="../../util.cpp" line="566"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>此服务器需要你同意一些条件才可加入。请阅读聊天窗口中的内容。</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="566"/>
+        <location filename="../../util.cpp" line="567"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>我已阅读并同意这些条件(&amp;A)。</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="567"/>
+        <location filename="../../util.cpp" line="568"/>
         <source>Accept</source>
         <translation>接受</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="568"/>
+        <location filename="../../util.cpp" line="569"/>
         <source>Decline</source>
         <translation>拒绝</translation>
     </message>
@@ -3287,72 +3287,72 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../util.cpp" line="1925"/>
+        <location filename="../../util.cpp" line="1926"/>
         <source>, Version </source>
         <translation>，版本 </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1938"/>
+        <location filename="../../util.cpp" line="1939"/>
         <source>Internet Jam Session Software</source>
         <translation>网络合奏软件</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1942"/>
+        <location filename="../../util.cpp" line="1943"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>使用 GNU 通用许可证第2版或更高版本发布 (GPLv2)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1951"/>
+        <location filename="../../util.cpp" line="1952"/>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
         <translation>此程序是自由软件；您可以修改或重分发此程序，只要您遵守</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1953"/>
+        <location filename="../../util.cpp" line="1954"/>
         <source>the terms of the GNU General Public License as published by the Free Software</source>
         <translation>由自由软件基金会发布的 GNU 通用许可证的条款</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1955"/>
+        <location filename="../../util.cpp" line="1956"/>
         <source>Foundation; either version 2 of the License, or (at your option) any later version.</source>
         <translation>无论您依据的是本授权的第 2 版，或（您可选的）任一日后发行的版本。</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1957"/>
+        <location filename="../../util.cpp" line="1958"/>
         <source>There is NO WARRANTY, to the extent permitted by law.</source>
         <translation>在法律允许的范围内，不提供任何担保。</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1960"/>
+        <location filename="../../util.cpp" line="1961"/>
         <source>Using the following libraries, resources or code snippets:</source>
         <translation>使用了下述程序库、资源或代码片段：</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1962"/>
+        <location filename="../../util.cpp" line="1963"/>
         <source>Qt framework </source>
         <translation>Qt 应用程序框架 </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1965"/>
+        <location filename="../../util.cpp" line="1966"/>
         <source>Opus Interactive Audio Codec</source>
         <translation>Opus Interactive Audio Codec</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1968"/>
+        <location filename="../../util.cpp" line="1969"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
         <translation>音频混响代码作者为 Perry R. Cook 和 Gary P. Scavone</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1971"/>
+        <location filename="../../util.cpp" line="1972"/>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
         <translation>部分位图资源来自 Open Clip Art Library (OCAL)</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1974"/>
+        <location filename="../../util.cpp" line="1975"/>
         <source>Flag icons by Mark James</source>
         <translation>旗帜图标作者为 Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1978"/>
+        <location filename="../../util.cpp" line="1979"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
         <translation>版权所有 (C) 2005-2022 Jamulus 开发团队</translation>
     </message>

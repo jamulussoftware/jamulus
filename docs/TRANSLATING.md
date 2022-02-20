@@ -218,7 +218,7 @@ Select the current repository as `jamulus`, and the branch that was created abov
 
 The changed file(s) should be listed in the left-hand column as `src/res/translation/translation_xx_YY.ts`. When the file is selected, the differences will be displayed in the main panel.
 
-Add a simple commit message in the first box below the file list, (e.g. change "Update filename" 
+Add a simple commit message in the first box below the file list, (e.g. change "Update filename"
 to something like "Update German translations for v3.7.0"), and add any extra description in the Description box (optional, probably not required).
 
 Commit the changes to the local git repo by clicking on **Commit to <branch>**.

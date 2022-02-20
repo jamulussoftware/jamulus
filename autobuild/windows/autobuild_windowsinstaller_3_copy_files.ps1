@@ -68,7 +68,7 @@ Function github_output_value
         [Parameter(Mandatory=$true)]
         [string] $value
     )
-    
+
     echo "github_output_value() $name = $value"
     echo "::set-output name=$name::$value"
 }

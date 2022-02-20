@@ -12,21 +12,21 @@ cert_name=""
 
 while getopts 'hs:' flag; do
     case "${flag}" in
-    s) 
-    cert_name=$OPTARG 
+    s)
+    cert_name=$OPTARG
     if [[ -z "$cert_name" ]]; then
         echo "Please add the name of the certificate to use: -s \"<name>\""
     fi
     # shift 2
     ;;
-    h) 
-    echo "Usage: -s <cert name> for signing mac build" 
-    exit 0 
+    h)
+    echo "Usage: -s <cert name> for signing mac build"
+    exit 0
     ;;
     *)
     exit 1
     ;;
-   
+
     esac
 done
 
@@ -44,7 +44,7 @@ build_app()
 {
     # Build Jamulus
     qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2}
-    local target_name="$(cat "${build_path}/Makefile" | sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p')"
+    local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
     local job_count="$(sysctl -n hw.ncpu)"
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
@@ -67,18 +67,30 @@ build_app()
 
 build_installer_image()
 {
-    # Install dmgbuild (for the current user), this is required to build the installer image
-    python -m ensurepip --user --default-pip
-    python -m pip install --user dmgbuild==1.4.2
-    local dmgbuild_bin="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
-
+    # Install create-dmg via brew. brew needs to be installed first.
+    # Download and later install. This is done to make caching possible
+    local create_dmg_version="1.0.9"
+    brew extract --version="${create_dmg_version}" create-dmg homebrew/cask
+    brew install /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask/Formula/create-dmg@"${create_dmg_version}".rb
     # Get Jamulus version
-    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+    local app_version="$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)"
 
     # Build installer image
-    "${dmgbuild_bin}" -s "${macdeploy_path}/deployment_settings.py" -D background="${resources_path}/installerbackground.png" \
-        -D app_path="${deploy_path}/$1.app" -D server_path="${deploy_path}/$2.app" \
-        -D license="${root_path}/COPYING" "$1 Installer" "${deploy_path}/$1-${app_version}-installer-mac.dmg"
+
+    create-dmg \
+      --volname "${1} Installer" \
+      --background "${resources_path}/installerbackground.png" \
+      --window-pos 200 400 \
+      --window-size 900 320 \
+      --app-drop-link 820 210 \
+      --text-size 12 \
+      --icon-size 72 \
+      --icon "${1}.app" 630 210 \
+      --icon "${2}.app" 530 210 \
+      --eula "${root_path}/COPYING" \
+      "${deploy_path}/$1-${app_version}-installer-mac.dmg" \
+      "${deploy_path}/"
+
 }
 
 

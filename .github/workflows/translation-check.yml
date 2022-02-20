@@ -1,0 +1,21 @@
+name: Verify translations
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/res/translation/**'
+
+jobs:
+  translation-check:
+    name: Verify translation
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: "Check Windows installer translations"
+        run: ./tools/check-wininstaller-translations.sh
+      #- name: "Check for duplicate hotkeys (will not fail)"
+      #  run: sudo apt install libxml-simple-perl && cd src/res/translation/ && perl ./tools/checkkeys.pl

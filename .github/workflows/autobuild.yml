@@ -169,6 +169,38 @@ jobs:
         with:
           submodules:               true
 
+      # Enable caching of downloaded dependencies
+      - name:                       "Cache Mac dependencies"
+        if:                         ${{ matrix.config.target_os == 'macos' }}
+        uses:                       actions/cache@v2
+        with:
+          path: |
+            /usr/local/opt/qt
+            ~/Library/Caches/pip
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/artifacts/autobuild_mac_1_prepare.sh', 'autobuild/mac/codeQL/autobuild_mac_1_prepare.sh') }}-${{ matrix.config.cmd1_prebuild }}
+
+      - name:                       "Cache Windows dependencies"
+        if:                         ${{ matrix.config.target_os == 'windows' }}
+        uses:                       actions/cache@v2
+        with:
+          path: |
+            C:\Qt
+            C:\ChocoCache
+            ~\AppData\Local\pip\Cache
+            ~\windows\NSIS
+            ~\windows\ASIOSDK2
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows/autobuild_windowsinstaller_1_prepare.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.cmd1_prebuild }}
+
+      - name:                       "Cache Android dependencies"
+        if:                         ${{ matrix.config.target_os == 'android' }}
+        uses:                       actions/cache@v2
+        with:
+          path: |
+            /opt/Qt
+            /opt/android/android-sdk
+            /opt/android/android-ndk
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/android/autobuild_apk_1_prepare.sh', 'autobuild/android/install-qt.sh') }}-${{ matrix.config.cmd1_prebuild }}
+
       # Prepare (install QT & dependencies)
       - name:                       "Prepare for ${{ matrix.config.config_name }}"
         if:                         ${{ matrix.config.cmd1_prebuild }}

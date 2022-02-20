@@ -1,4 +1,4 @@
-VERSION = 3.8.2rc1dev
+VERSION = 3.8.2dev
 
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -146,9 +146,9 @@ win32 {
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
     OSX_ENTITLEMENTS.files = Jamulus.entitlements
-    OSX_ENTITLEMENTS.path = Contents/Resources 
+    OSX_ENTITLEMENTS.path = Contents/Resources
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
-    
+
     macx-xcode {
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
         XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
@@ -1168,4 +1168,3 @@ contains(CONFIG, "disable_version_check") {
 }
 
 ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
-

@@ -20,34 +20,42 @@ $ErrorActionPreference = "Stop"
 ###################
 
 $QtDir = 'C:\Qt'
+$ChocoCacheDir = 'C:\ChocoCache'
 $Qt32Version = "5.15.2"
 $Qt64Version = "5.15.2"
 $AqtinstallVersion = "2.0.5"
 $JackVersion = "1.9.17"
 $MsvcVersion = "2019"
 
-echo "Install Qt..."
-# Install Qt
-pip install "aqtinstall==$AqtinstallVersion"
-if ( !$? )
+if ( Test-Path -Path $QtDir )
 {
-		throw "pip install aqtinstall failed with exit code $LastExitCode"
+    echo "Using Qt installation from previous run (actions/cache)"
 }
-
-echo "Get Qt 64 bit..."
-# intermediate solution if the main server is down: append e.g. " -b https://mirrors.ocf.berkeley.edu/qt/" to the "aqt"-line below
-aqt install-qt --outputdir "${QtDir}" windows desktop "${Qt64Version}" "win64_msvc${MsvcVersion}_64"
-if ( !$? )
+else
 {
-		throw "64bit Qt installation failed with exit code $LastExitCode"
-}
+    echo "Install Qt..."
+    # Install Qt
+    pip install "aqtinstall==$AqtinstallVersion"
+    if ( !$? )
+    {
+        throw "pip install aqtinstall failed with exit code $LastExitCode"
+    }
 
-echo "Get Qt 32 bit..."
-# intermediate solution if the main server is down: append e.g. " -b https://mirrors.ocf.berkeley.edu/qt/" to the "aqt"-line below
-aqt install-qt --outputdir "${QtDir}" windows desktop "${Qt32Version}" "win32_msvc${MsvcVersion}"
-if ( !$? )
-{
-		throw "32bit Qt installation failed with exit code $LastExitCode"
+    echo "Get Qt 64 bit..."
+    # intermediate solution if the main server is down: append e.g. " -b https://mirrors.ocf.berkeley.edu/qt/" to the "aqt"-line below
+    aqt install-qt --outputdir "${QtDir}" windows desktop "${Qt64Version}" "win64_msvc${MsvcVersion}_64"
+    if ( !$? )
+    {
+        throw "64bit Qt installation failed with exit code $LastExitCode"
+    }
+
+    echo "Get Qt 32 bit..."
+    # intermediate solution if the main server is down: append e.g. " -b https://mirrors.ocf.berkeley.edu/qt/" to the "aqt"-line below
+    aqt install-qt --outputdir "${QtDir}" windows desktop "${Qt32Version}" "win32_msvc${MsvcVersion}"
+    if ( !$? )
+    {
+            throw "32bit Qt installation failed with exit code $LastExitCode"
+    }
 }
 
 
@@ -57,6 +65,8 @@ if ( !$? )
 
 if ($BuildOption -Eq "jackonwindows")
 {
+    choco config set cacheLocation $ChocoCacheDir
+
     echo "Install JACK2 64-bit..."
     # Install JACK2 64-bit
     choco install --no-progress -y jack --version "${JackVersion}"

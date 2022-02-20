@@ -1,5 +1,8 @@
 
-### 3.8.2rc1dev <- NOTE: the release version number will be 3.8.2 ###
+### 3.8.2dev <- NOTE: the release version number will be 3.9.0 ###
+
+
+### 3.8.2 (2022-02-20) ###
 
 - Client: Added selection option for level meter style (#1688, #2352, #2356).
   (contributed by @henkdegroot, @hoffie, @pgScorpio, @pljones)
@@ -76,7 +79,7 @@
   * Polish, by @SeeLook (#2375, #2331)
   * Portuguese Brazilian, by @melcon (#2369, #2358)
   * Portuguese European, by @melcon (#2368)
-  * Simplified Chinese, by @BLumia (#2313)
+  * Simplified Chinese, by @BLumia (#2313, #2391)
   * Slovak, by @jose1711 (#2348)
   * Spanish, by @ignotus666 (#2378, #2326)
   * Swedish, by @softins (#2364)
@@ -162,8 +165,8 @@
 
 - Bug Fix: Fix ampersand not being shown correctly on mixer (#1886, #1893).
   (contributed by @HughePaul, @ann0see)
-  
-- Bug Fix: A crash fix related to the way iOS handles sockets in idle mode (#1875). 
+
+- Bug Fix: A crash fix related to the way iOS handles sockets in idle mode (#1875).
   (contributed by @ngocdh)
 
 - Server: A single click on the server application in the systemtray now opens the Jamulus Server main window (#1722, #1731).
@@ -175,7 +178,7 @@
 - Server: The list of servers registered on a directory can now be saved during directory restart. Use the new
   --directoryfile CLI option to use this feature (#1867).
   (contributed by @pljones)
-  
+
 - Server: Add link to website if a new version is available (#1980).
   (contributed by: @ann0see)
 
@@ -193,7 +196,7 @@
 
 - Android: Add close button on Android to enhance UX (#1763, #1876).
   (contributed by @ngocdh)
-  
+
 - iOS: Sound support, feature to allow switch between external device and the internal mic (#1875).
   (contributed by @ngocdh)
 
@@ -217,14 +220,14 @@
 
 - Documentation: Number range command line error messages reworded accurately (#1978).
   (contributed by @DavidSavinkoff)
-  
+
 - Website: switch to .po file format to make updating translations easier (various PRs)
   (contributed by: @ignotus666)
 
 - Website: Removed edit button from wiki layout file (#576).
   (contributed by: @DevRish)
 
-- Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937). 
+- Internal: Enable signing of macOS binaries (via build script and automatically via CI) (#1856, #1937).
   (contributed by @emlynmac)
 
 - Internal: Added Apple Appstore licence waiver (#1874)
@@ -235,7 +238,7 @@
 
 - Internal: Document release process on contribute page (#1594, #592).
   (contributed by: @hoffie, @ann0see)
-  
+
 ### 3.8.0 (2021-06-02) ###
 
 - The term "Central server" has been replaced with "Directory server" (#1407, #1715, #1629).

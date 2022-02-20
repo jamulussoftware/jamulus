@@ -2,8 +2,8 @@
 
 ## We’d really appreciate your support!
 
-- If the [Github issue](https://github.com/jamulussoftware/jamulus/issues) for your feature/bug fix already exists, write a message in that issue saying you want to work on it. 
-- Otherwise, please [post on the GitHub Discussions](https://github.com/jamulussoftware/jamulus/discussions) and say that you are planning to do some coding and explain why. Then we can discuss the specification. 
+- If the [Github issue](https://github.com/jamulussoftware/jamulus/issues) for your feature/bug fix already exists, write a message in that issue saying you want to work on it.
+- Otherwise, please [post on the GitHub Discussions](https://github.com/jamulussoftware/jamulus/discussions) and say that you are planning to do some coding and explain why. Then we can discuss the specification.
 - Please only start coding after we have agreed to a specification to avoid putting lots of work into something which may not get accepted later.
 
 ## Jamulus project/source code general principles
@@ -12,7 +12,7 @@
 This has been, and must continue to be, the most important requirement. It is particularly important for use cases such as the Worldjam where instability during a live performance would be unacceptable. The following two principles are designed to support this principle.
 
 ### [Keep it Simple and Stupid](https://en.wikipedia.org/wiki/KISS_principle) and [Do One Thing and Do It Well](https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well)
-If a feature or function can be achieved in another way by another system or method, then that is preferable to building that feature into Jamulus. 
+If a feature or function can be achieved in another way by another system or method, then that is preferable to building that feature into Jamulus.
 
 ### Source code consistency
 - Respect the existing code style: Tab size=4, insert spaces.
@@ -53,7 +53,7 @@ The Jamulus project has a [style and tone guide](https://jamulus.io/contribute/S
 Features should be usable in the sense that they act as expected to somebody who does not have a technical background.
 
 ### Ownership
-The submitter of an Issue or a PR is responsible for its care and feeding, answering all questions directed at them, and making agreed amends if needed. 
+The submitter of an Issue or a PR is responsible for its care and feeding, answering all questions directed at them, and making agreed amends if needed.
 
 So as to reduce effort for others in understanding a PR or an Issue, authors are strongly encouraged to update their initial posts/PR descriptions or title to reflect the current state of play, amends, enhancements, outstanding issues etc. Admins reserve the right to do this as they see fit.
 
@@ -67,6 +67,6 @@ The git master branch is protected to require at least two reviews by the main d
 
 ---
 
-## Want to get involved in other ways? 
+## Want to get involved in other ways?
 
 We always need help with documentation, translation and anything else. Have a look at our [overview for contributors](https://jamulus.io/wiki/Contribution).

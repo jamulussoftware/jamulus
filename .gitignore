@@ -5,6 +5,7 @@ Makefile
 *.pro.user*
 **.cppe
 **.he
+.vs
 .cproject
 .project
 .settings

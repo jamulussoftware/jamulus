@@ -91,9 +91,9 @@ const ASIOChannelInfo NoAsioChannelInfo =
 class CAsioDummy : public IASIO
 {
 public: //IUnknown:
-    virtual HRESULT   QueryInterface(const IID&, void**)                            { return 0xC00D0071 /*NS_E_NO_DEVICE*/; }
-    virtual ULONG     AddRef(void)                                                  { return 0; }
-    virtual ULONG     STDMETHODCALLTYPE Release(void)                               { return 0; }
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(const IID&, void**)            { return 0xC00D0071 /*NS_E_NO_DEVICE*/; }
+    virtual ULONG   STDMETHODCALLTYPE AddRef(void)                                  { return 0; }
+    virtual ULONG   STDMETHODCALLTYPE Release(void)                                 { return 0; }
 
 public:
     virtual ASIOBool  CAsioDummy::init(void*)                                       { return ASIOFalse;}

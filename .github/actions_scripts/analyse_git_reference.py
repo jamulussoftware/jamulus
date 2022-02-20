@@ -42,9 +42,9 @@ else:
     print('Number of arguments:', len(sys.argv), 'arguments.')
     print('Argument List:', str(sys.argv))
     raise Exception("wrong agruments")
-    
+
 # derive workspace-path
-repo_path_on_disk = os.environ['GITHUB_WORKSPACE'] 
+repo_path_on_disk = os.environ['GITHUB_WORKSPACE']
 
 # derive git related variables
 version_from_changelog = get_jamulus_version(repo_path_on_disk)
@@ -74,7 +74,7 @@ if fullref.startswith("refs/tags/"):
     print('this reference is a Tag')
     release_tag = pushed_name # tag already exists
     release_title="Release {}  ({})".format(release_version_name, pushed_name)
-    
+
     if pushed_name.startswith("r"):
         if re.match(r'^r\d+_\d+_\d+$', pushed_name):
             print('this reference is a Release-Tag')
@@ -110,7 +110,7 @@ def set_github_variable(varname, varval):
 set_github_variable("PUBLISH_TO_RELEASE", str(publish_to_release).lower())
 set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())
 set_github_variable("RELEASE_TITLE", release_title)
-set_github_variable("RELEASE_TAG", release_tag) 
+set_github_variable("RELEASE_TAG", release_tag)
 set_github_variable("PUSHED_NAME", pushed_name)
 set_github_variable("JAMULUS_VERSION", release_version_name)
 set_github_variable("RELEASE_VERSION_NAME", release_version_name)

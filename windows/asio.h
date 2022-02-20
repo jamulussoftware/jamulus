@@ -436,40 +436,40 @@ enum
 {
     kAsioSelectorSupported = 1, // selector in <value>, returns 1L if supported,
                                 // 0 otherwise
-    kAsioEngineVersion,        // returns engine (host) asio implementation version,
-                               // 2 or higher
-    kAsioResetRequest,         // request driver reset. if accepted, this
-                               // will close the driver (ASIO_Exit() ) and
-                               // re-open it again (ASIO_Init() etc). some
-                               // drivers need to reconfigure for instance
-                               // when the sample rate changes, or some basic
-                               // changes have been made in ASIO_ControlPanel().
-                               // returns 1L; note the request is merely passed
-                               // to the application, there is no way to determine
-                               // if it gets accepted at this time (but it usually
-                               // will be).
-    kAsioBufferSizeChange,     // not yet supported, will currently always return 0L.
-                               // for now, use kAsioResetRequest instead.
-                               // once implemented, the new buffer size is expected
-                               // in <value>, and on success returns 1L
-    kAsioResyncRequest,        // the driver went out of sync, such that
-                               // the timestamp is no longer valid. this
-                               // is a request to re-start the engine and
-                               // slave devices (sequencer). returns 1 for ok,
-                               // 0 if not supported.
-    kAsioLatenciesChanged,     // the drivers latencies have changed. The engine
-                               // will refetch the latencies.
-    kAsioSupportsTimeInfo,     // if host returns true here, it will expect the
-                               // callback bufferSwitchTimeInfo to be called instead
-                               // of bufferSwitch
-    kAsioSupportsTimeCode,     //
-    kAsioMMCCommand,           // unused - value: number of commands, message points to mmc commands
-    kAsioSupportsInputMonitor, // kAsioSupportsXXX return 1 if host supports this
-    kAsioSupportsInputGain,    // unused and undefined
-    kAsioSupportsInputMeter,   // unused and undefined
-    kAsioSupportsOutputGain,   // unused and undefined
-    kAsioSupportsOutputMeter,  // unused and undefined
-    kAsioOverload,             // driver detected an overload
+    kAsioEngineVersion,         // returns engine (host) asio implementation version,
+                                // 2 or higher
+    kAsioResetRequest,          // request driver reset. if accepted, this
+                                // will close the driver (ASIO_Exit() ) and
+                                // re-open it again (ASIO_Init() etc). some
+                                // drivers need to reconfigure for instance
+                                // when the sample rate changes, or some basic
+                                // changes have been made in ASIO_ControlPanel().
+                                // returns 1L; note the request is merely passed
+                                // to the application, there is no way to determine
+                                // if it gets accepted at this time (but it usually
+                                // will be).
+    kAsioBufferSizeChange,      // not yet supported, will currently always return 0L.
+                                // for now, use kAsioResetRequest instead.
+                                // once implemented, the new buffer size is expected
+                                // in <value>, and on success returns 1L
+    kAsioResyncRequest,         // the driver went out of sync, such that
+                                // the timestamp is no longer valid. this
+                                // is a request to re-start the engine and
+                                // slave devices (sequencer). returns 1 for ok,
+                                // 0 if not supported.
+    kAsioLatenciesChanged,      // the drivers latencies have changed. The engine
+                                // will refetch the latencies.
+    kAsioSupportsTimeInfo,      // if host returns true here, it will expect the
+                                // callback bufferSwitchTimeInfo to be called instead
+                                // of bufferSwitch
+    kAsioSupportsTimeCode,      //
+    kAsioMMCCommand,            // unused - value: number of commands, message points to mmc commands
+    kAsioSupportsInputMonitor,  // kAsioSupportsXXX return 1 if host supports this
+    kAsioSupportsInputGain,     // unused and undefined
+    kAsioSupportsInputMeter,    // unused and undefined
+    kAsioSupportsOutputGain,    // unused and undefined
+    kAsioSupportsOutputMeter,   // unused and undefined
+    kAsioOverload,              // driver detected an overload
 
     kAsioNumMessageSelectors
 };

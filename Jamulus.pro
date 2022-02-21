@@ -68,13 +68,13 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)  pgScorpio: is this still valid ??? asiolist.cpp no longer exists!
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
-    HEADERS += windows/asio.h \
-        windows/asiodrivers.h \
+    INCLUDEPATH += windows/ASIOSDK2/common
+    HEADERS += windows/ASIOSDK2/common/asio.h \
+        windows/ASIOSDK2/common/iasiodrv.h \
         windows/asiosys.h \
-        windows/iasiodrv.h \
+        windows/asiodrivers.h \
         windows/sound.h
-    SOURCES += windows/asio.cpp \
-        windows/asiodrivers.cpp \
+    SOURCES += windows/asiodrivers.cpp \
         windows/sound.cpp
     RC_FILE = windows/mainicon.rc
     mingw* {

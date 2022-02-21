@@ -30,9 +30,10 @@
 #include "../src/global.h"
 #include "../src/soundbase.h"
 
-// ASIO Interfaces
+//============================================================================
+// ASIO Definitions
+//============================================================================
 #include "asiosys.h"
-#include "asio.h"
 
 /* Definitions ****************************************************************/
 // stereo for input and output

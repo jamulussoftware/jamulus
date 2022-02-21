@@ -57,7 +57,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>src;libs\opus\include;libs\opus\celt;libs\opus\silk;libs\opus\silk\float;libs\opus\silk\fixed;libs\opus;$(QtSrcPath)\include;$(QtSrcPath)\include\QtWidgets;$(QtSrcPath)\include\QtGui;$(QtSrcPath)\include\QtANGLE;$(QtSrcPath)\include\QtNetwork;$(QtSrcPath)\include\QtXml;$(QtSrcPath)\include\QtConcurrent;$(QtSrcPath)\include\QtCore;$(OutputPath)moc;$(OutputPath)ui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;libs\opus\include;libs\opus\celt;libs\opus\silk;libs\opus\silk\float;libs\opus\silk\fixed;libs\opus;$(QtSrcPath)\include;$(QtSrcPath)\include\QtWidgets;$(QtSrcPath)\include\QtGui;$(QtSrcPath)\include\QtANGLE;$(QtSrcPath)\include\QtNetwork;$(QtSrcPath)\include\QtXml;$(QtSrcPath)\include\QtConcurrent;$(QtSrcPath)\include\QtCore;$(OutputPath)moc;$(OutputPath)ui;windows\ASIOSDK2\common</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -109,7 +109,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>src;libs\opus\include;libs\opus\celt;libs\opus\silk;libs\opus\silk\float;libs\opus\silk\fixed;libs\opus;$(QtSrcPath)\include;$(QtSrcPath)\include\QtWidgets;$(QtSrcPath)\include\QtGui;$(QtSrcPath)\include\QtANGLE;$(QtSrcPath)\include\QtNetwork;$(QtSrcPath)\include\QtXml;$(QtSrcPath)\include\QtConcurrent;$(QtSrcPath)\include\QtCore;$(OutputPath)moc;$(OutputPath)ui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;libs\opus\include;libs\opus\celt;libs\opus\silk;libs\opus\silk\float;libs\opus\silk\fixed;libs\opus;$(QtSrcPath)\include;$(QtSrcPath)\include\QtWidgets;$(QtSrcPath)\include\QtGui;$(QtSrcPath)\include\QtANGLE;$(QtSrcPath)\include\QtNetwork;$(QtSrcPath)\include\QtXml;$(QtSrcPath)\include\QtConcurrent;$(QtSrcPath)\include\QtCore;$(OutputPath)moc;$(OutputPath)ui;windows\ASIOSDK2\common</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -Zc:referenceBinding -Zc:__cplusplus -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -187,7 +187,6 @@
     <ClCompile Include="libs\opus\src\analysis.c" />
     <ClCompile Include="src\analyzerconsole.cpp" />
     <ClCompile Include="libs\opus\silk\float\apply_sine_window_FLP.c" />
-    <ClCompile Include="windows\asio.cpp" />
     <ClCompile Include="windows\asiodrivers.cpp" />
     <ClCompile Include="src\audiomixerboard.cpp" />
     <ClCompile Include="libs\opus\silk\float\autocorrelation_FLP.c" />
@@ -361,7 +360,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(BuildDir)debug\moc\moc_analyzerconsole.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="libs\opus\celt\arch.h" />
-    <ClInclude Include="windows\asio.h" />
+    <ClInclude Include="windows\ASIOSDK2\common\asio.h" />
     <ClInclude Include="windows\asiodrivers.h" />
     <ClInclude Include="windows\asiosys.h" />
     <CustomBuild Include="src\audiomixerboard.h">
@@ -462,7 +461,7 @@
     <ClInclude Include="libs\opus\silk\errors.h" />
     <ClInclude Include="libs\opus\celt\float_cast.h" />
     <ClInclude Include="src\global.h" />
-    <ClInclude Include="windows\iasiodrv.h" />
+    <ClInclude Include="windows\ASIOSDK2\common\iasiodrv.h" />
     <CustomBuild Include="src\recorder\jamcontroller.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\recorder\jamcontroller.h;$(BuildDir)release\moc\moc_predefs.h;$(QtBinDir)moc.exe;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QtBinDir)moc.exe  -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DAPP_VERSION=\"3.8.2beta1dev-82fa74f2-dirty\" -DCUSTOM_MODES -D_REENTRANT -DQT_NO_DEPRECATED_WARNINGS -DNOMINMAX -DOPUS_X86_MAY_HAVE_SSE -DOPUS_X86_MAY_HAVE_SSE2 -DOPUS_X86_MAY_HAVE_SSE4_1 -DOPUS_X86_PRESUME_SSE=1 -DOPUS_X86_PRESUME_SSE2=1 -DCPU_INFO_BY_C -DOPUS_BUILD=1 -DUSE_ALLOCA=1 -DOPUS_HAVE_RTCD=1 -DHAVE_LRINTF=1 -DHAVE_LRINT=1 -DNDEBUG -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_XML_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include $(OutputPath)moc\moc_predefs.h -I$(QtSrcPath)/mkspecs/win32-msvc -I$(VCProjectDir)src -I$(VCProjectDir)libs/opus/include -I$(VCProjectDir)libs/opus/celt -I$(VCProjectDir)libs/opus/silk -I$(VCProjectDir)libs/opus/silk/float -I$(VCProjectDir)libs/opus/silk/fixed -I$(VCProjectDir)libs/opus -I$(QtSrcPath)/include -I$(QtSrcPath)/include/QtWidgets -I$(QtSrcPath)/include/QtGui -I$(QtSrcPath)/include/QtANGLE -I$(QtSrcPath)/include/QtNetwork -I$(QtSrcPath)/include/QtXml -I$(QtSrcPath)/include/QtConcurrent -I$(QtSrcPath)/include/QtCore src\recorder\jamcontroller.h -o $(BuildDir)release\moc\moc_jamcontroller.cpp</Command>

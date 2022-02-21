@@ -1,15 +1,14 @@
 #ifndef __asiodrivers__
 #define __asiodrivers__
 
+//============================================================================
+// ASIO Definitions
+//============================================================================
 #include "asiosys.h"
 
-//============================================================================
-// ASIO driver dll interface
-//============================================================================
-#include "iasiodrv.h"
+typedef IASIO* pIASIO;
 
 extern const pIASIO NO_ASIO_DRIVER; // All pIASIO pointers NOT referencing an opened ASIO interface should point to NO_ASIO_DRIVER!
-extern pIASIO       pAsioDriver;    // Pointer to the current selected ASIO interface. (NO_ASIO_DRIVER if no selection, should never be NULL!)
 
 //============================================================================
 // Forward class definitions

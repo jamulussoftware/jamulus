@@ -1,3 +1,10 @@
+//============================================================================
+// asiosys.h
+//  Jamulus ASIO definitions for the ASIOSDK
+//  Always include asiosys.h to include the ASIOSDK !
+//  Never include iasiodrv.h or asio.h directly
+//============================================================================
+
 #ifndef __asiosys__
 #define __asiosys__
 
@@ -21,5 +28,11 @@
 #define MAXPATHLEN    511
 #define MAXDRVNAMELEN 127
 #define MAXERRMSGLEN  123
+
+#define __ASIODRIVER_FWD_DEFINED__
+
+#include "iasiodrv.h" // will also include asio.h
+
+inline bool ASIOError_OK ( ASIOError error ) { return ( ( error == ASE_OK ) || ( error == ASE_SUCCESS ) ); }
 
 #endif

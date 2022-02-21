@@ -143,9 +143,6 @@
     <ClCompile Include="libs\opus\silk\float\apply_sine_window_FLP.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="windows\asio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="windows\asiodrivers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -742,7 +739,7 @@
     <ClInclude Include="libs\opus\celt\arch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="windows\asio.h">
+    <ClInclude Include="windows\ASIOSDK2\common\asio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="windows\asiodrivers.h">
@@ -829,7 +826,7 @@
     <ClInclude Include="src\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="windows\iasiodrv.h">
+    <ClInclude Include="windows\ASIOSDK2\common\iasiodrv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="src\recorder\jamcontroller.h">
@@ -5452,6 +5449,1011 @@
     </None>
     <None Include="src\res\flags\zw.png">
       <Filter>Icons</Filter>
+    </None>
+    <None Include="src\res\CLEDBlackSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\CLEDDisabledSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\CLEDGreenSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\CLEDGreySmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\CLEDRedSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\CLEDYellowSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\HLEDBlackSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\HLEDGreenSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\HLEDRedSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\HLEDYellowSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\IndicatorGreen.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\IndicatorRed.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\IndicatorRedFancy.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\IndicatorYellow.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\IndicatorYellowFancy.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\LEDBlackSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\LEDGreenSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\LEDRedSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\LEDYellowSmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\accordeon.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ad.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ae.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\af.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ag.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\aguitar.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ai.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\al.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\am.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\an.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ao.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ar.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\as.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\at.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\au.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\aw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ax.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\az.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ba.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\banjo.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\bassguitar.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\bassoon.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\bassukulele.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bb.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bd.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\be.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bf.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bh.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bi.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bj.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bo.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\bodhran.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\bongo.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\br.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bs.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bt.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bv.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\by.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\bz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ca.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cc.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cd.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\cello.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cf.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ch.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ci.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ck.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cl.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\clarinet.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\co.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\conductor.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\congas.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cs.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cu.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cv.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cx.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cy.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\cz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\de.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\dj.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\djembe.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\dk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\dm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\do.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\doublebass.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\drumset.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\dz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ec.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ee.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\eg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\eguitar.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\eh.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\er.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\es.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\et.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\faderbackground.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\faderhandle.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\faderhandlesmall.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\fam.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\fi.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\fj.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\fk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\flagnone.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\flute.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\fm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\fo.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\fr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\frenchhorn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\fronticon.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\fronticonserver.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ga.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gb.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gd.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ge.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gf.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gh.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gi.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gl.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gp.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gq.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\grandpiano.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gs.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gt.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gu.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\guitarvocal.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\gy.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\harmonica.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\harp.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\hk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\hm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\hn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\hr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ht.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\hu.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\id.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ie.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\il.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\in.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\io.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\iq.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ir.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\is.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\it.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\jm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\jo.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\jp.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ke.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\keyboard.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\keyboardvocal.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\kg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\kh.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ki.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\km.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\kn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\kp.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\kr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\kw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ky.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\kz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\la.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\lb.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\lc.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\ledbuttonnotpressed.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\ledbuttonpressed.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\li.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\listener.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\lk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\lr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ls.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\lt.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\lu.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\lv.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ly.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ma.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\mandolin.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mc.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\md.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\me.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mh.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\microphone.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\mixerboardbackground.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ml.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mo.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\mountaindulcimer.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mp.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mq.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ms.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mt.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mu.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\mutediconorange.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mv.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mx.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\my.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\mz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\na.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\nc.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ne.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\nf.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ng.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ni.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\nl.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\no.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\none.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\np.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\nr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\nu.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\nz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\oboe.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\om.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pa.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pe.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pf.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ph.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pl.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ps.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pt.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\pw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\py.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\qa.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\rapping.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\re.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\recorder.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ro.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\rs.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ru.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\rw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sa.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\saxophone.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sb.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sc.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\scratching.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sd.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\se.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\servertrayiconactive.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\servertrayiconinactive.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sh.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\si.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sj.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sl.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\so.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\st.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\streamer.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sv.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sy.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\synthesizer.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\sz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tc.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\td.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tf.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\th.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tj.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tk.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tl.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\to.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tr.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_de_DE.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_es_ES.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_fr_FR.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_it_IT.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_nl_NL.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_pl_PL.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_pt_BR.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_pt_PT.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_sk_SK.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_sv_SE.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\translation\translation_zh_CN.qm">
+      <Filter>Translation Qm Files</Filter>
+    </None>
+    <None Include="src\res\transparent1x1.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\trombone.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\trumpet.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tt.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\tuba.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tv.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tw.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\tz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ua.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ug.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\ukulele.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\um.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\us.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\uy.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\uz.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\va.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\vc.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ve.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\vg.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\vi.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vibraphone.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\viola.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\violin.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\vn.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vocal.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vocalalto.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vocalbaritone.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vocalbass.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vocallead.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vocalsoprano.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\instruments\vocaltenor.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\vu.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\wf.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ws.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\ye.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\yt.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\za.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\zm.png">
+      <Filter>Image Files</Filter>
+    </None>
+    <None Include="src\res\flags\zw.png">
+      <Filter>Image Files</Filter>
     </None>
     <None Include="src\res\CLEDBlackSmall.png">
       <Filter>Image Files</Filter>

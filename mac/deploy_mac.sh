@@ -73,7 +73,7 @@ build_installer_image()
     brew extract --version="${create_dmg_version}" create-dmg homebrew/cask
     brew install /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask/Formula/create-dmg@"${create_dmg_version}".rb
     # Get Jamulus version
-    local app_version="$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)"
+    local app_version="$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")"
 
     # Build installer image
 

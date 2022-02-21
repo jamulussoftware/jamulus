@@ -29,6 +29,10 @@ Add-Type -AssemblyName 'PresentationFramework'
 $QtBase      = "C:\Qt\5.15.2"
 $QtMSVC      = "msvc2019"
 
+$Jamulus_Version="3.8.2"
+#For development versions uncomment next line:
+$Jamulus_Version =$Jamulus_Version + 'dev-'+$(git describe --match=xxxxxxxxxxxxxxxxxxxx --always --abbrev --dirty)
+
 #==================================================================================================
 # Fixed settings:
 #==================================================================================================
@@ -215,6 +219,7 @@ function CheckEnvironment()
     setEnv 'QtBinDir'       "$QtBinPath\"
     setEnv 'QMAKESPEC'      $QMAKESPEC  
 
+    setEnv 'Jamulus_Version' $Jamulus_Version
 
     #=========================================================================
     # Add user defined environment variables here:

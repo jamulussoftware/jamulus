@@ -19,6 +19,7 @@ do
     echo -n .
     dch "$entry"
 done
+dch -v "${VERSION}-1" ".deb-only release to fix packaging issues such as failing Ubuntu 18.04 installations"
 echo
 
 echo "Copying modified control file for proper dependencies/maintainer logic"

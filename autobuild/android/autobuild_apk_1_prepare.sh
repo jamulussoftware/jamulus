@@ -66,7 +66,7 @@ yes | "${ANDROID_SDKMANAGER}" --licenses
 THIS_SCRIPT=$(readlink -f "${0}")
 # Absolute path this script is in, thus /home/user/bin
 THIS_SCRIPT_PATH=$(dirname "${THIS_SCRIPT}")
-bash "${THIS_SCRIPT_PATH}"/install-qt.sh --version "${MY_QT_VERSION}" --target android --toolchain android qtbase qt3d qtdeclarative qtandroidextras qtconnectivity qtgamepad qtlocation qtmultimedia qtquickcontrols2 qtremoteobjects qtscxml qtsensors qtserialport qtsvg qtimageformats qttools qtspeech qtwebchannel qtwebsockets qtwebview qtxmlpatterns qttranslations
+bash "${THIS_SCRIPT_PATH}"/install-qt.sh --version "${MY_QT_VERSION}" --target android --toolchain android qtbase qtandroidextras qttools qttranslations
 
 # Set the QTDIR environment variable
 export QTDIR="/opt/Qt/${MY_QT_VERSION}/android"

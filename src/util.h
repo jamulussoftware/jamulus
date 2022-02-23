@@ -558,6 +558,7 @@ enum EChSortType
 enum EDirectoryType
 {
     // used for settings -> enum values should be fixed
+    AT_NONE                 = -1, // means not registered, "invalid value"
     AT_DEFAULT              = 0,
     AT_ANY_GENRE2           = 1,
     AT_ANY_GENRE3           = 2,
@@ -572,8 +573,8 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
 {
     switch ( eAddrType )
     {
-    case AT_CUSTOM:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
+    case AT_NONE:
+        return QCoreApplication::translate ( "CServerDlg", "None" );
 
     case AT_ANY_GENRE2:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 2" );
@@ -593,6 +594,9 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
     case AT_GENRE_CHORAL:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Choral/Barbershop" );
 
+    case AT_CUSTOM:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
+
     default: // AT_DEFAULT
         return QCoreApplication::translate ( "CClientSettingsDlg", "Any Genre 1" );
     }
@@ -601,7 +605,7 @@ inline QString DirectoryTypeToString ( EDirectoryType eAddrType )
 // Server registration state ---------------------------------------------
 enum ESvrRegStatus
 {
-    SRS_UNREGISTERED,
+    SRS_NOT_REGISTERED,
     SRS_BAD_ADDRESS,
     SRS_REQUESTED,
     SRS_TIME_OUT,
@@ -616,8 +620,8 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 {
     switch ( eSvrRegStatus )
     {
-    case SRS_UNREGISTERED:
-        return QCoreApplication::translate ( "CServerDlg", "Unregistered" );
+    case SRS_NOT_REGISTERED:
+        return QCoreApplication::translate ( "CServerDlg", "Not registered" );
 
     case SRS_BAD_ADDRESS:
         return QCoreApplication::translate ( "CServerDlg", "Bad address" );

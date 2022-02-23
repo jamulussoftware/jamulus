@@ -143,28 +143,20 @@ public:
                          const bool     bNEnableIPv6,
                          CProtocol*     pNConLProt );
 
-    void SetEnabled ( const bool bState ) { bEnabled = bState; }
-    bool GetEnabled() const { return bEnabled; }
-
-    void Unregister() { SetRegistered ( false ); }
-
-    // set server infos -> per definition the server info of this server is
-    // stored in the first entry of the list, we assume here that the first
-    // entry is correctly created in the constructor of the class
-    void    SetServerName ( const QString& strNewName ) { ServerList[0].strName = strNewName; }
+    void    SetServerName ( const QString& strNewName );
     QString GetServerName() { return ServerList[0].strName; }
 
-    void    SetServerCity ( const QString& strNewCity ) { ServerList[0].strCity = strNewCity; }
+    void    SetServerCity ( const QString& strNewCity );
     QString GetServerCity() { return ServerList[0].strCity; }
 
-    void             SetServerCountry ( const QLocale::Country eNewCountry ) { ServerList[0].eCountry = eNewCountry; }
+    void             SetServerCountry ( const QLocale::Country eNewCountry );
     QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
 
     void    SetDirectoryAddress ( const QString sNDirectoryAddress );
     QString GetDirectoryAddress() { return strDirectoryAddress; }
 
     void           SetDirectoryType ( const EDirectoryType eNCSAT );
-    EDirectoryType GetDirectoryType() { return eDirectoryType; }
+    EDirectoryType GetDirectoryType() { return DirectoryType; }
 
     bool IsDirectoryServer() const { return bIsDirectoryServer; }
 
@@ -180,33 +172,39 @@ public:
 
     void StoreRegistrationResult ( ESvrRegResult eStatus );
 
+    QString GetServerListFileName() { return ServerListFileName; }
+    bool    SetServerListFileName ( QString strFilename );
+
 protected:
     void SetIsDirectoryServer();
+    void Unregister();
+    void Register();
+    void SetRegistered ( bool bIsRegister );
+
     int  IndexOf ( CHostAddress haSearchTerm );
-    void Load ( const QString strServerList );
+    bool Load();
     void Save();
-    void SetRegistered ( const bool bIsRegister );
     void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );
 
     QMutex Mutex;
 
-    bool bEnabled;
+    CHostAddress   DirectoryAddress;
+    EDirectoryType DirectoryType;
 
-    QList<CServerListEntry> ServerList;
+    bool bEnableIPv6;
 
-    QString        strDirectoryAddress;
-    EDirectoryType eDirectoryType;
-    bool           bIsDirectoryServer;
-    bool           bEnableIPv6;
-
-    // server registration status
-    ESvrRegStatus eSvrRegStatus;
-
-    CHostAddress DirectoryAddress;
     CHostAddress ServerPublicIP;
     CHostAddress ServerPublicIP6;
 
     QString ServerListFileName;
+
+    QList<CServerListEntry> ServerList;
+
+    QString strDirectoryAddress;
+    bool    bIsDirectoryServer;
+
+    // server registration status
+    ESvrRegStatus eSvrRegStatus;
 
     QList<QHostAddress> vWhiteList;
     QString             strMinServerVersion;
@@ -219,8 +217,9 @@ protected:
     QTimer TimerPollList;
     QTimer TimerPingServerInList;
     QTimer TimerPingServers;
-    QTimer TimerRegistering;
+    QTimer TimerRefreshRegistration;
     QTimer TimerCLRegisterServerResp;
+    QTimer TimerIsPermanent;
 
 public slots:
     void OnTimerPollList();
@@ -228,9 +227,13 @@ public slots:
     void OnTimerPingServers();
     void OnTimerRefreshRegistration() { SetRegistered ( true ); }
     void OnTimerCLRegisterServerResp();
-
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
-    void OnAboutToQuit() { Save(); }
+
+    void OnAboutToQuit()
+    {
+        QMutexLocker locker ( &Mutex );
+        Save();
+    }
 
 signals:
     void SvrRegStatusChanged();

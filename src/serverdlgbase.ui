@@ -68,18 +68,11 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QCheckBox" name="chbRegisterServer">
-         <property name="text">
-          <string>Make My Server Public (Register My Server in the Server List)</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <layout class="QHBoxLayout">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="lblDirectoryType">
            <property name="text">
-            <string>List</string>
+            <string>Directory</string>
            </property>
           </widget>
          </item>
@@ -254,12 +247,33 @@
          <item>
           <widget class="QLabel" name="lblCustomDirectory">
            <property name="text">
-            <string>Custom Directory Server Address:</string>
+            <string>Custom Directory address</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLineEdit" name="edtCustomDirectory"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QPushButton" name="pbtServerListPersistence">
+           <property name="text">
+            <string>Server List Filename</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="edtServerListPersistence">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbtClearServerListPersistence"/>
          </item>
         </layout>
        </item>
@@ -313,7 +327,6 @@
  <tabstops>
   <tabstop>lvwClients</tabstop>
   <tabstop>tabWidget</tabstop>
-  <tabstop>chbRegisterServer</tabstop>
   <tabstop>cbxDirectoryType</tabstop>
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
@@ -327,7 +340,11 @@
   <tabstop>edtRecordingDir</tabstop>
   <tabstop>tbtClearRecordingDir</tabstop>
   <tabstop>edtCustomDirectory</tabstop>
+  <tabstop>pbtServerListPersistence</tabstop>
+  <tabstop>edtServerListPersistence</tabstop>
+  <tabstop>tbtClearServerListPersistence</tabstop>
   <tabstop>chbStartOnOSStart</tabstop>
+  <tabstop>chbEnableDelayPanning</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

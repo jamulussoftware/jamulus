@@ -3229,13 +3229,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation>Nagrywanie zostało wyłączone przez użytkownika</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation>Nagrywanie zostało wyłączone przez użytkownika.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation>Nagrywanie zostało wyłączone przez użytkownika lub otrzymano komunikat SIGUSR2</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation>Nagrywanie zostało wyłączone przez użytkownika lub otrzymano komunikat SIGUSR2.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="148"/>
@@ -3403,8 +3403,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>Nie wybrano katalogu nagrywania lub nie da się go używać</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>Nie wybrano katalogu nagrywania lub nie da się go używać.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3420,13 +3420,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Nikt nie jest podłączony do serwera żeby nagrywać</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Nikt nie jest podłączony do serwera żeby nagrywać.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Wykonawcy są nagrywani do wybranego katalogu</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Wykonawcy są nagrywani do wybranego katalogu.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

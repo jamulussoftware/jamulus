@@ -3691,13 +3691,13 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation>La grabación se ha apagado con la casilla de la interfaz gráfica</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation>La grabación se ha apagado con la casilla de la interfaz gráfica.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation>La grabación se ha apagado, bien a través de la casilla de la interfaz gráfica o por haber recibido SIGUSR2</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation>La grabación se ha apagado, bien a través de la casilla de la interfaz gráfica o por haber recibido SIGUSR2.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -3791,8 +3791,8 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>No se ha establecido ningún directorio de grabación o el valor no es utilizable</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>No se ha establecido ningún directorio de grabación o el valor no es utilizable.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3808,13 +3808,13 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>No hay nadie conectado al servidor para grabar</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>No hay nadie conectado al servidor para grabar.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Los intérpretes están siendo grabados al directorio de sesión especificado</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Los intérpretes están siendo grabados al directorio de sesión especificado.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

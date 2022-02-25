@@ -3631,13 +3631,13 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation>Die Aufnahme wurde über die Checkbox in der Benutzeroberfläche ausgeschaltet</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation>Die Aufnahme wurde über die Checkbox in der Benutzeroberfläche ausgeschaltet.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation>Die Aufnahme wurde entweder durch eine Auswahl in der Benutzeroberfläche oder das SIGUSR2 Signal beendet</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation>Die Aufnahme wurde entweder durch eine Auswahl in der Benutzeroberfläche oder das SIGUSR2 Signal beendet.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -3731,8 +3731,8 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>Es wurde kein Aufnahmeverzeichnis gesetzt oder es wurde ein ungültiges Aufnahmeverzeichnis angegeben</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>Es wurde kein Aufnahmeverzeichnis gesetzt oder es wurde ein ungültiges Aufnahmeverzeichnis angegeben.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3748,13 +3748,13 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Es ist kein Musiker mit dem Server verbunden</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Es ist kein Musiker mit dem Server verbunden.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Die Aufnahme ist aktiv</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Die Aufnahme ist aktiv.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

@@ -3206,8 +3206,8 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>Aucun répertoire d&apos;enregistrement n&apos;a été défini ou la valeur n&apos;est pas utilisable</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>Aucun répertoire d&apos;enregistrement n&apos;a été défini ou la valeur n&apos;est pas utilisable.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3223,13 +3223,13 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Il n&apos;y a personne connecté au serveur pour enregistrer</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Il n&apos;y a personne connecté au serveur pour enregistrer.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Les interprètes sont enregistrés dans le répertoire de session spécifié</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Les interprètes sont enregistrés dans le répertoire de session spécifié.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>
@@ -3348,12 +3348,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
+        <source>Recording has been switched off by the UI checkbox.</source>
         <translation>L&apos;enregistrement a été désactivé par la case à cocher de l&apos;interface utilisateur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
         <translation>L&apos;enregistrement a été désactivé, soit par la case à cocher de l&apos;interface utilisateur, soit par la réception de SIGUSR2</translation>
     </message>
     <message>

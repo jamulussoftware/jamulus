@@ -3106,13 +3106,13 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation>Nahrávanie bolo vypnuté pomocou začiarkavacieho políčka</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation>Nahrávanie bolo vypnuté pomocou začiarkavacieho políčka.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation>Nahrávanie bolo vypnuté, buď prostredníctvom začiarkavacieho políčka alebo bol prijatý signál SIGUSR2</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation>Nahrávanie bolo vypnuté, buď prostredníctvom začiarkavacieho políčka alebo bol prijatý signál SIGUSR2.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
@@ -3278,17 +3278,17 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
+        <source>No recording directory has been set or the value is not useable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
+        <source>There is no one connected to the server to record.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
+        <source>The performers are being recorded to the specified session directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

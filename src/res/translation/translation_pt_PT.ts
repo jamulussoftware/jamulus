@@ -3623,13 +3623,13 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation type="unfinished">As gravações foram desactivadas pela caixa de seleção da IU</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation type="unfinished">As gravações foram desactivadas pela caixa de seleção da IU.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished">As gravações foram desactivadas pela caixa de seleção da IU ou por sinal SIGUSR2 ser recebido</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation type="unfinished">As gravações foram desactivadas pela caixa de seleção da IU ou por sinal SIGUSR2 ser recebido.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -3723,8 +3723,8 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>O directório de gravaçãos não foi definido ou não é utilizável</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>O directório de gravaçãos não foi definido ou não é utilizável.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3740,13 +3740,13 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Não está ninguém ligado ao servidor para gravar</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Não está ninguém ligado ao servidor para gravar.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Os artistas estão a ser gravados para o directório de sessão especificado</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Os artistas estão a ser gravados para o directório de sessão especificado.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

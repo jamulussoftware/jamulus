@@ -2630,12 +2630,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
+        <source>Recording has been switched off by the UI checkbox.</source>
         <translation>录制已通过界面的勾选框关闭</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
         <translation>录制已因界面的勾选框或因程序收到 SIGUSR2 信号而关闭</translation>
     </message>
     <message>
@@ -2746,7 +2746,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
+        <source>No recording directory has been set or the value is not useable.</source>
         <translation>没有设置录制目录或填写的路径不可用</translation>
     </message>
     <message>
@@ -2755,12 +2755,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
+        <source>There is no one connected to the server to record.</source>
         <translation>没有人连接到服务器以供录制</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
+        <source>The performers are being recorded to the specified session directory.</source>
         <translation>演奏已被录制到会话所对应的目录中</translation>
     </message>
     <message>

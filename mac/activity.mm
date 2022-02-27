@@ -31,23 +31,23 @@ public:
     id<NSObject> activityId;
 };
 
-CActivity::CActivity() : pActivity(new CActivityId()) {}
+CActivity::CActivity() : pActivity ( new CActivityId() ) {}
 
-CActivity::~CActivity()
-{
-    delete pActivity;
-}
+CActivity::~CActivity() { delete pActivity; }
 
 void CActivity::BeginActivity()
 {
-    NSActivityOptions options = NSActivityBackground | NSActivityIdleDisplaySleepDisabled | NSActivityIdleSystemSleepDisabled | NSActivityLatencyCritical;
+    NSActivityOptions options =
+        NSActivityBackground | NSActivityIdleDisplaySleepDisabled | NSActivityIdleSystemSleepDisabled | NSActivityLatencyCritical;
 
-    pActivity->activityId = [[NSProcessInfo processInfo] beginActivityWithOptions: options reason:@"Jamulus provides low latency audio processing and should not be inturrupted by system throttling."];
+    pActivity->activityId = [[NSProcessInfo processInfo]
+        beginActivityWithOptions:options
+                          reason:@"Jamulus provides low latency audio processing and should not be inturrupted by system throttling."];
 }
 
 void CActivity::EndActivity()
 {
-    [[NSProcessInfo processInfo] endActivity: pActivity->activityId];
+    [[NSProcessInfo processInfo] endActivity:pActivity->activityId];
 
     pActivity->activityId = nil;
 }

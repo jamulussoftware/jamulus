@@ -183,7 +183,7 @@ jobs:
             /usr/local/opt/qt
             ~/Library/Caches/pip
             ~/Library/Cache/jamulus-homebrew-bottles
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/artifacts/autobuild_mac_1_prepare.sh', 'autobuild/mac/codeQL/autobuild_mac_1_prepare.sh') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/artifacts/autobuild_mac_1_prepare.sh', 'autobuild/mac/codeQL/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.cmd1_prebuild }}
 
       - name:                       "Cache Windows dependencies"
         if:                         ${{ matrix.config.target_os == 'windows' }}

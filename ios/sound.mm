@@ -42,14 +42,14 @@ CSound::CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* 
 
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&audioSessionError];
         [[AVAudioSession sharedInstance] requestRecordPermission:^( BOOL granted ) {
-          if ( granted )
-          {
-              // ok
-          }
-          else
-          {
-              // TODO - alert user
-          }
+            if ( granted )
+            {
+                // ok
+            }
+            else
+            {
+                // TODO - alert user
+            }
         }];
         [[AVAudioSession sharedInstance] setMode:AVAudioSessionModeMeasurement error:&audioSessionError];
     }
@@ -226,18 +226,18 @@ int CSound::Init ( const int iCoreAudioBufferSizeMono )
 
         if ( !isInitialized )
         {
-            [[NSNotificationCenter defaultCenter] addObserverForName:AVAudioSessionRouteChangeNotification
-                                                              object:nil
-                                                               queue:nil
-                                                          usingBlock:^( NSNotification* notification ) {
-                                                            UInt8 reason =
-                                                                [[notification.userInfo valueForKey:AVAudioSessionRouteChangeReasonKey] intValue];
-                                                            if ( reason == AVAudioSessionRouteChangeReasonNewDeviceAvailable or
-                                                                 reason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable )
-                                                            {
-                                                                emit ReinitRequest ( RS_RELOAD_RESTART_AND_INIT ); // reload the available devices frame
-                                                            }
-                                                          }];
+            [[NSNotificationCenter defaultCenter]
+                addObserverForName:AVAudioSessionRouteChangeNotification
+                            object:nil
+                             queue:nil
+                        usingBlock:^( NSNotification* notification ) {
+                            UInt8 reason = [[notification.userInfo valueForKey:AVAudioSessionRouteChangeReasonKey] intValue];
+                            if ( reason == AVAudioSessionRouteChangeReasonNewDeviceAvailable or
+                                 reason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable )
+                            {
+                                emit ReinitRequest ( RS_RELOAD_RESTART_AND_INIT ); // reload the available devices frame
+                            }
+                        }];
         }
 
         isInitialized = true;

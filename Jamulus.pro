@@ -203,6 +203,11 @@ win32 {
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {
+    ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64
+    ANDROID_VERSION_NAME = $$VERSION
+    ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
+    message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
+
     # we want to compile with C++14
     CONFIG += c++14
 
@@ -221,7 +226,7 @@ win32 {
 
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-    OTHER_FILES += android/AndroidManifest.xml
+    DISTFILES += android/AndroidManifest.xml
 
     # if compiling for android you need to use Oboe library which is included as a git submodule
     # make sure you git pull with submodules to pull the latest Oboe library
@@ -1166,5 +1171,3 @@ contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)
     DEFINES += DISABLE_VERSION_CHECK
 }
-
-ANDROID_ABIS = armeabi-v7a arm64-v8a x86 x86_64

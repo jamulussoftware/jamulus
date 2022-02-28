@@ -15,6 +15,25 @@ param(
 # Fail early on all errors
 $ErrorActionPreference = "Stop"
 
+Function Install-Qt {
+    param(
+        [string] $QtVersion,
+        [string] $QtArch,
+        [string] $InstallDir
+    )
+    $Args = ("--outputdir", "$InstallDir", "windows", "desktop", "$QtVersion", "$QtArch")
+    aqt install-qt @Args
+    if ( !$? )
+    {
+        echo "WARNING: Qt installation via first aqt run failed, re-starting with different base URL."
+        aqt install-qt @Args -b https://mirrors.ocf.berkeley.edu/qt/
+        if ( !$? )
+        {
+            throw "Qt installation with args @Arguments failed with exit code $LastExitCode"
+        }
+    }
+}
+
 ###################
 ###  PROCEDURE  ###
 ###################
@@ -25,7 +44,8 @@ $Qt32Version = "5.15.2"
 $Qt64Version = "5.15.2"
 $AqtinstallVersion = "2.0.5"
 $JackVersion = "1.9.17"
-$MsvcVersion = "2019"
+$Msvc32Version = "win32_msvc2019"
+$Msvc64Version = "win64_msvc2019_64"
 
 if ( Test-Path -Path $QtDir )
 {
@@ -42,20 +62,10 @@ else
     }
 
     echo "Get Qt 64 bit..."
-    # intermediate solution if the main server is down: append e.g. " -b https://mirrors.ocf.berkeley.edu/qt/" to the "aqt"-line below
-    aqt install-qt --outputdir "${QtDir}" windows desktop "${Qt64Version}" "win64_msvc${MsvcVersion}_64"
-    if ( !$? )
-    {
-        throw "64bit Qt installation failed with exit code $LastExitCode"
-    }
+    Install-Qt ${Qt64Version} ${Msvc64Version} ${QtDir}
 
     echo "Get Qt 32 bit..."
-    # intermediate solution if the main server is down: append e.g. " -b https://mirrors.ocf.berkeley.edu/qt/" to the "aqt"-line below
-    aqt install-qt --outputdir "${QtDir}" windows desktop "${Qt32Version}" "win32_msvc${MsvcVersion}"
-    if ( !$? )
-    {
-            throw "32bit Qt installation failed with exit code $LastExitCode"
-    }
+    Install-Qt ${Qt32Version} ${Msvc32Version} ${QtDir}
 }
 
 

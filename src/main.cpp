@@ -557,6 +557,9 @@ int main ( int argc, char** argv )
     }
 #endif
 
+    // TODO create settings in default state, if loading from file do that next, then come back here to
+    //      override from command line options, then create client or server, letting them do the validation
+
     if ( bIsClient )
     {
         if ( ServerOnlyOptions.size() != 0 )
@@ -593,12 +596,19 @@ int main ( int argc, char** argv )
 
         if ( bUseGUI )
         {
-            if ( strDirectoryServer.isEmpty() )
+            // by definition, when running with the GUI we always default to registering somewhere but
+            // until the settings are loaded we do not know where, so we cannot be prescriptive here
+
+            if ( !strServerListFileName.isEmpty() )
             {
-                // per definition: if we are in "GUI" server mode and no directory server
-                // address is given, we use the default directory server address
-                strDirectoryServer = DEFAULT_SERVER_ADDRESS;
-                qInfo() << qUtf8Printable ( QString ( "- default directory server set: %1" ).arg ( strDirectoryServer ) );
+                qInfo() << "Note:"
+                        << "Server list persistence file will only take effect when running as a directory server.";
+            }
+
+            if ( !strServerListFilter.isEmpty() )
+            {
+                qInfo() << "Note:"
+                        << "Server list filter will only take effect when running as a directory server.";
             }
         }
         else
@@ -607,51 +617,11 @@ int main ( int argc, char** argv )
             if ( !strIniFileName.isEmpty() )
             {
                 qWarning() << "No initialization file support in headless server mode.";
+                strIniFileName = "";
             }
-        }
+            // therefore we know everything based on command line options
 
-        if ( strDirectoryServer.isEmpty() )
-        {
-            // per definition, we must be a headless server and ignoring inifile, so we have all the information
-
-            if ( !strServerListFileName.isEmpty() )
-            {
-                qWarning() << "Server list persistence file will only take effect when running as a directory server.";
-                strServerListFileName = "";
-            }
-
-            if ( !strServerListFilter.isEmpty() )
-            {
-                qWarning() << "Server list filter will only take effect when running as a directory server.";
-                strServerListFilter = "";
-            }
-
-            if ( !strServerPublicIP.isEmpty() )
-            {
-                qWarning() << "Server Public IP will only take effect when registering a server with a directory server.";
-                strServerPublicIP = "";
-            }
-        }
-        else
-        {
-            // either we are not headless and there is an inifile, or a directory server was supplied on the command line
-
-            // if we are not headless, certain checks cannot be made, as the inifile state is not yet known
-            if ( !bUseGUI && strDirectoryServer.compare ( "localhost", Qt::CaseInsensitive ) != 0 && strDirectoryServer.compare ( "127.0.0.1" ) != 0 )
-            {
-                if ( !strServerListFileName.isEmpty() )
-                {
-                    qWarning() << "Server list persistence file will only take effect when running as a directory server.";
-                    strServerListFileName = "";
-                }
-
-                if ( !strServerListFilter.isEmpty() )
-                {
-                    qWarning() << "Server list filter will only take effect when running as a directory server.";
-                    strServerListFileName = "";
-                }
-            }
-            else
+            if ( strDirectoryServer.compare ( "localhost", Qt::CaseInsensitive ) == 0 || strDirectoryServer.compare ( "127.0.0.1" ) == 0 )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
@@ -709,14 +679,39 @@ int main ( int argc, char** argv )
                     }
                 }
             }
-
-            if ( !strServerPublicIP.isEmpty() )
+            else
             {
-                QHostAddress InetAddr;
-                if ( !InetAddr.setAddress ( strServerPublicIP ) )
+                if ( !strServerListFileName.isEmpty() )
                 {
-                    qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
+                    qWarning() << "Server list persistence file will only take effect when running as a directory server.";
+                    strServerListFileName = "";
+                }
+
+                if ( !strServerListFilter.isEmpty() )
+                {
+                    qWarning() << "Server list filter will only take effect when running as a directory server.";
+                    strServerListFileName = "";
+                }
+            }
+
+            if ( strDirectoryServer.isEmpty() )
+            {
+                if ( !strServerPublicIP.isEmpty() )
+                {
+                    qWarning() << "Server Public IP will only take effect when registering a server with a directory server.";
                     strServerPublicIP = "";
+                }
+            }
+            else
+            {
+                if ( !strServerPublicIP.isEmpty() )
+                {
+                    QHostAddress InetAddr;
+                    if ( !InetAddr.setAddress ( strServerPublicIP ) )
+                    {
+                        qWarning() << "Server Public IP is invalid. Only plain IP addresses are supported.";
+                        strServerPublicIP = "";
+                    }
                 }
             }
         }
@@ -881,10 +876,6 @@ int main ( int argc, char** argv )
                     CLocale::LoadTranslation ( Settings.strLanguage, pApp );
                 }
 
-                // update server list AFTER restoring the settings from the
-                // settings file
-                Server.UpdateServerList();
-
                 // GUI object for the server
                 CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
 
@@ -902,11 +893,12 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
-                // enable server list if a directory server is defined
-                Server.SetServerRegistered ( !strDirectoryServer.isEmpty() );
-
-                // update serverlist
-                Server.UpdateServerList();
+                // CServerListManager defaults to AT_NONE, so need to switch if
+                // strDirectoryServer is wanted
+                if ( !strDirectoryServer.isEmpty() )
+                {
+                    Server.SetDirectoryType ( AT_CUSTOM );
+                }
 
                 pApp->exec();
             }

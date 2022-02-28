@@ -829,9 +829,9 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
 
     // directory type
     // CServerListManager defaults to AT_NONE
-    // Server GUI defaults to AT_DEFAULT
+    // Server GUI also defaults to AT_NONE (previously AT_DEFAULT, when registration was controlled by a checkbox)
     // Because type could be AT_CUSTOM, it has to be set after the address to avoid multiple registrations
-    EDirectoryType directoryType = AT_DEFAULT;
+    EDirectoryType directoryType = AT_NONE;
 
     // if command line is set, use it
     if ( CommandLineOptions.contains ( "--centralserver" ) || CommandLineOptions.contains ( "--directoryserver" ) )
@@ -840,15 +840,6 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
     }
     else
     {
-        // clang-format off
-// TODO compatibility to old version < 3.8.2
-// if "servlistenabled" exists and is false, set directory type to AT_NONE
-if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
-{
-    directoryType = AT_NONE;
-}
-        // clang-format on
-
         // clang-format off
 // TODO compatibility to old version < ?????
 // only the case that manual was set in old ini must be considered

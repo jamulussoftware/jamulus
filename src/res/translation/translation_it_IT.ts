@@ -3640,13 +3640,13 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation>La registrazione è stata fermata mediante il box presente sull&apos;interfaccia</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation>La registrazione è stata fermata mediante il box presente sull&apos;interfaccia.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation>La registrazione è stata fermata mediante il box presente sull&apos;interfaccia oppure dalla ricezione del segnale SIGUSR2</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation>La registrazione è stata fermata mediante il box presente sull&apos;interfaccia oppure dalla ricezione del segnale SIGUSR2.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -3740,8 +3740,8 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>Cartella per la registrazione non settata o non utilizzabile</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>Cartella per la registrazione non settata o non utilizzabile.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3757,13 +3757,13 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Non c&apos;è nessuno collegato al server per registrare</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Non c&apos;è nessuno collegato al server per registrare.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Gli artisti vengono registrati nella directory della sessione specificata</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Gli artisti vengono registrati nella directory della sessione specificata.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

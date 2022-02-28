@@ -161,23 +161,40 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="edtCurrentSessionDir">
-           <property name="readOnly">
-            <bool>true</bool>
+          <widget class="QPushButton" name="pbtNewRecording">
+           <property name="text">
+            <string>New Recording</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="lblRecorderStatus">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>STATUS</string>
            </property>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout">
          <item>
-          <widget class="QPushButton" name="pbtNewRecording">
+          <widget class="QLabel" name="lblCurrentSessionDir">
            <property name="text">
-            <string>New Recording</string>
+            <string>Session</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="edtCurrentSessionDir">
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

@@ -3145,13 +3145,13 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation type="unfinished">Inspelningen har stängts av av kryssrutan UI</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation type="unfinished">Inspelningen har stängts av av kryssrutan UI.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="unfinished">Inspelningen har stängts av, antingen genom att kryssrutan UI eller SIGUSR2 har tagits emot</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation type="unfinished">Inspelningen har stängts av, antingen genom att kryssrutan UI eller SIGUSR2 har tagits emot.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="183"/>
@@ -3366,8 +3366,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>Ingen inspelningskatalog har ställts in eller värdet kan inte användas</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>Ingen inspelningskatalog har ställts in eller värdet kan inte användas.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3383,13 +3383,13 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Det är ingen ansluten till servern att spela in</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Det är ingen ansluten till servern att spela in.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Artisterna spelas in i den angivna sessionskatalogen</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Artisterna spelas in i den angivna sessionskatalogen.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

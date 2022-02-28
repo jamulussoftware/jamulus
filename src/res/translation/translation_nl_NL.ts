@@ -3635,13 +3635,13 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation>Opname is uitgeschakeld middels het vinkje in het venster</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation>Opname is uitgeschakeld middels het vinkje in het venster.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation>Opname is uitgeschakeld middels het vinkje in het venster of doordat het SIGUSR2 signaal is ontvangen</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation>Opname is uitgeschakeld middels het vinkje in het venster of doordat het SIGUSR2 signaal is ontvangen.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -3735,8 +3735,8 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>Geen geluidsopnamedirectory ingesteld of waarde is niet bruikbaar</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>Geen geluidsopnamedirectory ingesteld of waarde is niet bruikbaar.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3752,13 +3752,13 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Er is niemand verbonden met de server voor geluidsopname</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Er is niemand verbonden met de server voor geluidsopname.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Het geluid van de muzikanten wordt opgenomen in de aangegeven sessie-directory</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Het geluid van de muzikanten wordt opgenomen in de aangegeven sessie-directory.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

@@ -359,11 +359,11 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir ( const QStri
 /**
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
  * @param server Server object emitting signals
- * @return QString::null on success else the failure reason
+ * @return QString() on success else the failure reason
  */
 QString CJamRecorder::Init()
 {
-    QString   errmsg = QString::null;
+    QString   errmsg = QString();
     QFileInfo fi ( recordBaseDir.absolutePath() );
     fi.setCaching ( false );
 

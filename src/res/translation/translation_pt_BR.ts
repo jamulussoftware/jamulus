@@ -3665,13 +3665,13 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="125"/>
-        <source>Recording has been switched off by the UI checkbox</source>
-        <translation>Gravação foi desligada pela caixa de seleção da IU</translation>
+        <source>Recording has been switched off by the UI checkbox.</source>
+        <translation>Gravação foi desligada pela caixa de seleção da IU.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="127"/>
-        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation>Gravação foi desligada pela caixa de seleção da IU ou SIGUSR2 recebido</translation>
+        <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
+        <translation>Gravação foi desligada pela caixa de seleção da IU ou SIGUSR2 recebido.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="155"/>
@@ -3765,8 +3765,8 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="122"/>
-        <source>No recording directory has been set or the value is not useable</source>
-        <translation>Nenhum diretório de gravação definido ou o valor não é utilizável</translation>
+        <source>No recording directory has been set or the value is not useable.</source>
+        <translation>Nenhum diretório de gravação definido ou o valor não é utilizável.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
@@ -3782,13 +3782,13 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="129"/>
-        <source>There is no one connected to the server to record</source>
-        <translation>Não há ninguém conectado ao servidor para gravar</translation>
+        <source>There is no one connected to the server to record.</source>
+        <translation>Não há ninguém conectado ao servidor para gravar.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="130"/>
-        <source>The performers are being recorded to the specified session directory</source>
-        <translation>Os artistas estão sendo gravados no diretório de sessão especificado</translation>
+        <source>The performers are being recorded to the specified session directory.</source>
+        <translation>Os artistas estão sendo gravados no diretório de sessão especificado.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="131"/>

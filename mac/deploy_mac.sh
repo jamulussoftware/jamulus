@@ -69,9 +69,8 @@ build_installer_image()
 {
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
-    local create_dmg_version="1.0.9"
-    brew extract --version="${create_dmg_version}" create-dmg homebrew/cask
-    brew install /usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask/Formula/create-dmg@"${create_dmg_version}".rb
+    brew_install_pinned "create-dmg" "1.0.9"
+
     # Get Jamulus version
     local app_version="$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")"
 
@@ -91,6 +90,29 @@ build_installer_image()
       "${deploy_path}/$1-${app_version}-installer-mac.dmg" \
       "${deploy_path}/"
 
+}
+
+brew_install_pinned() {
+    local pkg="$1"
+    local version="$2"
+    local pkg_version="${pkg}@${version}"
+    local brew_bottle_dir="${HOME}/Library/Cache/jamulus-homebrew-bottles"
+    local formula="/usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask/Formula/${pkg_version}.rb"
+    echo "Installing ${pkg_version}"
+    mkdir -p "${brew_bottle_dir}"
+    pushd "${brew_bottle_dir}"
+    if ! find . | grep -qF "${pkg_version}--"; then
+        echo "Building fresh ${pkg_version} package"
+        brew developer on  # avoids a warning
+        brew extract --version="${version}" "${pkg}" homebrew/cask
+        brew install --build-bottle --formula "${formula}"
+        brew bottle "${formula}"
+        # In order to keep the result the same, we uninstall and re-install without --build-bottle later
+        # (--build-bottle is documented to change behavior, e.g. by not running postinst scripts).
+        brew uninstall "${pkg_version}"
+    fi
+    brew install "${pkg_version}--"*
+    popd
 }
 
 

@@ -141,8 +141,6 @@ win32 {
     }
 
     QT += macextras
-    HEADERS += mac/sound.h
-    SOURCES += mac/sound.cpp
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
@@ -176,25 +174,25 @@ win32 {
         -framework AudioUnit \
         -framework Foundation
 
-    # replace coreaudio with jack if requested
     contains(CONFIG, "jackonmac") {
-        message(Using Jack instead of CoreAudio.)
-
+        message(Using JACK.)
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
                  message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
-
-        HEADERS -= mac/sound.h
-        SOURCES -= mac/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
         LIBS += /usr/local/lib/libjack.dylib
+    } else {
+        message(Using CoreAudio.)
+        HEADERS += mac/sound.h
+        SOURCES += mac/sound.cpp
     }
+
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist
     QT += macextras

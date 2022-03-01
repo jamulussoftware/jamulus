@@ -20,7 +20,7 @@ echo "Building... qmake"
 qmake
 
 echo "Building... make"
-make
+make -j "$(sysctl -n hw.ncpu)"
 
 
 echo "Done"

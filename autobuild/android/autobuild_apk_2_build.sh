@@ -20,7 +20,7 @@ echo .
 echo .
 echo .
 echo .
-/opt/android/android-ndk/prebuilt/linux-x86_64/bin/make
+/opt/android/android-ndk/prebuilt/linux-x86_64/bin/make -j "$(nproc)"
 echo .
 echo .
 echo .

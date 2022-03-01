@@ -829,11 +829,10 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
 
     // directory type
     // CServerListManager defaults to AT_NONE
-    // Server GUI also defaults to AT_NONE (previously AT_DEFAULT, when registration was controlled by a checkbox)
     // Because type could be AT_CUSTOM, it has to be set after the address to avoid multiple registrations
     EDirectoryType directoryType = AT_NONE;
 
-    // if command line is set, use it
+    // if a command line Directory server address is set, set the Directory Type (genre) to AT_CUSTOM so it's used
     if ( CommandLineOptions.contains ( "--centralserver" ) || CommandLineOptions.contains ( "--directoryserver" ) )
     {
         directoryType = AT_CUSTOM;

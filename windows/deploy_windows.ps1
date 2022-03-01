@@ -4,6 +4,10 @@ param (
     [string] $QtInstallPath64 = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
+    # Important:
+    # - Do not update ASIO SDK without checking for license-related changes.
+    # - Do not copy (parts of) the ASIO SDK into the Jamulus source tree without
+    #   further consideration as it would make the license situation more complicated.
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
     [string] $NsisName = "nsis-3.08",

@@ -30,8 +30,16 @@
 #include "../src/global.h"
 #include "../src/soundbase.h"
 
-// copy the ASIO SDK in the llcon/windows directory: "llcon/windows/ASIOSDK2" to
-// get it work
+// The following includes require the ASIO SDK to be placed in
+// windows/ASIOSDK2 during build.
+// Important:
+// - Do not copy parts of ASIO SDK into the Jamulus source tree without
+//   further consideration as it would make the license situation more
+//   complicated.
+// - When building yourself, read and understand the
+//   Steinberg ASIO SDK Licensing Agreement and verify whether you might be
+//   obliged to sign it as well, especially when considering distribution
+//   of Jamulus Windows binaries with ASIO support.
 #include "asiosys.h"
 #include "asio.h"
 #include "asiodrivers.h"

@@ -134,10 +134,15 @@ Function Install-Dependencies
       Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     }
     Initialize-Module-Here -m "VSSetup"
-    Install-Dependency -Uri $AsioSDKUrl `
-        -Name $AsioSDKName -Destination "ASIOSDK2"
     Install-Dependency -Uri $NsisUrl `
         -Name $NsisName -Destination "NSIS"
+
+    if ($BuildOption -Notmatch "jack") {
+        # Don't download ASIO SDK on Jamulus JACK builds to save
+        # resources and to be extra-sure license-wise.
+        Install-Dependency -Uri $AsioSDKUrl `
+            -Name $AsioSDKName -Destination "ASIOSDK2"
+    }
 }
 
 # Setup environment variables and build tool paths

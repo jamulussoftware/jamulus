@@ -13,6 +13,6 @@ source $(dirname $(readlink -f "${BASH_SOURCE[0]}"))/../ensure_THIS_JAMULUS_PROJ
 ###  PROCEDURE  ###
 ###################
 
-cd "${THIS_JAMULUS_PROJECT_PATH}"/distributions
+cd "${THIS_JAMULUS_PROJECT_PATH}"
 
-sh ./build-debian-package-auto.sh
+sh ./linux/deploy_deb.sh

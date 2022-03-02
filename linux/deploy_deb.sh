@@ -2,8 +2,7 @@
 
 # Create deb files
 
-cp -r debian ..
-cd ..
+cp -r distributions/debian .
 
 # get the jamulus version from pro file
 VERSION=$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)

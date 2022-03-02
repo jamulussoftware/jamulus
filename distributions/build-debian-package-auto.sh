@@ -21,11 +21,6 @@ do
 done
 echo
 
-echo "Copying modified control file for proper dependencies/maintainer logic"
-cp distributions/autobuilddeb/control debian/control
-
 echo "${VERSION} building..."
-
-sed -i "s/é&%JAMVERSION%&è/${VERSION}/g" debian/control
 
 debuild --preserve-env -b -us -uc

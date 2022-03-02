@@ -46,6 +46,7 @@ $AqtinstallVersion = "2.0.5"
 $JackVersion = "1.9.17"
 $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
+$JomVersion = "1.1.2"
 
 if ( Test-Path -Path $QtDir )
 {
@@ -68,6 +69,9 @@ else
     Install-Qt ${Qt32Version} ${Msvc32Version} ${QtDir}
 }
 
+choco config set cacheLocation $ChocoCacheDir
+choco install --no-progress -y jom --version "${JomVersion}"
+
 
 #################################
 ###  ONLY ADD JACK IF NEEDED  ###
@@ -75,8 +79,6 @@ else
 
 if ($BuildOption -Eq "jackonwindows")
 {
-    choco config set cacheLocation $ChocoCacheDir
-
     echo "Install JACK2 64-bit..."
     # Install JACK2 64-bit
     choco install --no-progress -y jack --version "${JackVersion}"

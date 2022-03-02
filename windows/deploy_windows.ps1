@@ -234,7 +234,16 @@ Function Build-App
         "-o", "$BuildPath\Makefile")
 
     Set-Location -Path $BuildPath
-    Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    if (Get-Command "jom.exe" -ErrorAction SilentlyContinue)
+    {
+        echo "Building with jom /J ${Env:NUMBER_OF_PROCESSORS}"
+        Invoke-Native-Command -Command "jom" -Arguments ("/J", "${Env:NUMBER_OF_PROCESSORS}", "$BuildConfig")
+    }
+    else
+    {
+        echo "Building with nmake (install Qt jom if you want parallel builds)"
+        Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    }
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$DeployPath\$BuildArch",
         "$BuildPath\$BuildConfig\$AppName.exe")

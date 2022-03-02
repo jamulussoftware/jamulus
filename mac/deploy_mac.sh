@@ -3,7 +3,6 @@ set -e
 
 root_path="$(pwd)"
 project_path="${root_path}/Jamulus.pro"
-macdeploy_path="${root_path}/mac"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"

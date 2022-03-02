@@ -68,15 +68,7 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
-    HEADERS += windows/sound.h
-    SOURCES += windows/sound.cpp \
-        windows/ASIOSDK2/common/asio.cpp \
-        windows/ASIOSDK2/host/asiodrivers.cpp \
-        windows/ASIOSDK2/host/pc/asiolist.cpp
     RC_FILE = windows/mainicon.rc
-    INCLUDEPATH += windows/ASIOSDK2/common \
-        windows/ASIOSDK2/host \
-        windows/ASIOSDK2/host/pc
     mingw* {
         LIBS += -lole32 \
             -luser32 \
@@ -92,8 +84,8 @@ win32 {
             ws2_32.lib
     }
 
-    # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
+        message(Using JACK.)
         contains(QT_ARCH, "i386") {
             exists("C:/Program Files (x86)") {
                 message("Cross compilation build")
@@ -112,8 +104,6 @@ win32 {
             message("Warning: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
         }
 
-        HEADERS -= windows/sound.h
-        SOURCES -= windows/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
         DEFINES += WITH_JACK
@@ -121,6 +111,20 @@ win32 {
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
         INCLUDEPATH += "$${programfilesdir}/JACK2/include"
         LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
+    } else {
+        message(Using ASIO.)
+        message(Please review the ASIO SDK licence.)
+
+        # Important: Keep those ASIO includes local to this build target in
+        # order to avoid poisoning other builds license-wise.
+        HEADERS += windows/sound.h
+        SOURCES += windows/sound.cpp \
+            windows/ASIOSDK2/common/asio.cpp \
+            windows/ASIOSDK2/host/asiodrivers.cpp \
+            windows/ASIOSDK2/host/pc/asiolist.cpp
+        INCLUDEPATH += windows/ASIOSDK2/common \
+            windows/ASIOSDK2/host \
+            windows/ASIOSDK2/host/pc
     }
 
 } else:macx {
@@ -137,8 +141,6 @@ win32 {
     }
 
     QT += macextras
-    HEADERS += mac/sound.h
-    SOURCES += mac/sound.cpp
     HEADERS += mac/activity.h
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
@@ -172,25 +174,25 @@ win32 {
         -framework AudioUnit \
         -framework Foundation
 
-    # replace coreaudio with jack if requested
     contains(CONFIG, "jackonmac") {
-        message(Using Jack instead of CoreAudio.)
-
+        message(Using JACK.)
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
                  message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
-
-        HEADERS -= mac/sound.h
-        SOURCES -= mac/sound.cpp
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
         LIBS += /usr/local/lib/libjack.dylib
+    } else {
+        message(Using CoreAudio.)
+        HEADERS += mac/sound.h
+        SOURCES += mac/sound.cpp
     }
+
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist
     QT += macextras

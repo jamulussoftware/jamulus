@@ -44,14 +44,14 @@ echo ""
 #move/rename headless first, so wildcard pattern matches only one file each
 echo ""
 echo ""
-artifact_deploy_filename_1=jamulus_headless_${jamulus_buildversionstring}_ubuntu_amd64.deb
+artifact_deploy_filename_1=jamulus_headless_${jamulus_buildversionstring}_amd64.deb
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename_1}"
 mv "${THIS_JAMULUS_PROJECT_PATH}"/../jamulus-headless*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_1}"
 
 #move/rename normal second
 echo ""
 echo ""
-artifact_deploy_filename_2=jamulus_${jamulus_buildversionstring}_ubuntu_amd64.deb
+artifact_deploy_filename_2=jamulus_${jamulus_buildversionstring}_amd64.deb
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename_2}"
 mv "${THIS_JAMULUS_PROJECT_PATH}"/../jamulus*_amd64.deb "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename_2}"
 

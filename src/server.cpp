@@ -416,7 +416,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     int iAvailableCores = QThread::idealThreadCount();
 
-    // setup QThreadPool if multithreading is active and possible
+    // setup CThreadPool if multithreading is active and possible
     if ( bUseMultithreading )
     {
         if ( iAvailableCores == 1 )

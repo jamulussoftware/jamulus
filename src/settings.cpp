@@ -840,11 +840,10 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
     else
     {
         // clang-format off
-// TODO compatibility to old version < ?????
-// only the case that manual was set in old ini must be considered
-if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) && !bValue )
+// TODO compatibility to old version < 3.4.7
+if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
 {
-    directoryType = AT_CUSTOM;
+    directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
 }
 else
             // clang-format on
@@ -867,6 +866,15 @@ else
         {
             directoryType = static_cast<EDirectoryType> ( iValue );
         }
+
+        // clang-format off
+// TODO compatibility to old version < 3.9.0
+// override type to AT_NONE if servlistenabled exists and is false
+if (  GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
+{
+    directoryType = AT_NONE;
+}
+        // clang-format on
     }
 
     pServer->SetDirectoryType ( directoryType );

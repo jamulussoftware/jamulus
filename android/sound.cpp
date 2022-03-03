@@ -272,16 +272,17 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
 
 void CSound::addOutputData ( int channel_count )
 {
-    QMutexLocker locker ( &MutexAudioProcessCallback );
+    QMutexLocker      locker ( &MutexAudioProcessCallback );
+    const std::size_t bufsize = (std::size_t) iOboeBufferSizeMono * channel_count;
 
     // Only copy data if we have data to copy, otherwise fill with silence
     if ( vecsTmpInputAudioSndCrdStereo.empty() )
     {
         // prime output stream buffer with silence
-        vecsTmpInputAudioSndCrdStereo.resize ( iOboeBufferSizeMono * channel_count, 0 );
+        vecsTmpInputAudioSndCrdStereo.resize ( bufsize, 0 );
     }
 
-    mOutBuffer.Put ( vecsTmpInputAudioSndCrdStereo, iOboeBufferSizeMono * channel_count );
+    mOutBuffer.Put ( vecsTmpInputAudioSndCrdStereo, bufsize );
 
     if ( mOutBuffer.isFull() )
     {
@@ -296,9 +297,9 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
 
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    std::size_t      to_write = (std::size_t) numFrames * oboeStream->getChannelCount();
-    std::size_t      count    = std::min ( (std::size_t) mOutBuffer.GetAvailData(), to_write );
-    CVector<int16_t> outBuffer ( count );
+    const std::size_t to_write = (std::size_t) numFrames * oboeStream->getChannelCount();
+    const std::size_t count    = std::min ( (std::size_t) mOutBuffer.GetAvailData(), to_write );
+    CVector<int16_t>  outBuffer ( count );
 
     mOutBuffer.Get ( outBuffer, count );
 

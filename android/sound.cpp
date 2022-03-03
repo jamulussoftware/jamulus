@@ -235,7 +235,7 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
     if ( mCountCallbacksToDrain > 0 )
     {
         // discard the input buffer
-        int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
+        const int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
 
         memset ( audioData, 0 /* value */, numBytes );
 
@@ -272,16 +272,17 @@ oboe::DataCallbackResult CSound::onAudioInput ( oboe::AudioStream* oboeStream, v
 
 void CSound::addOutputData ( int channel_count )
 {
-    QMutexLocker locker ( &MutexAudioProcessCallback );
+    QMutexLocker      locker ( &MutexAudioProcessCallback );
+    const std::size_t bufsize = (std::size_t) iOboeBufferSizeMono * channel_count;
 
     // Only copy data if we have data to copy, otherwise fill with silence
     if ( vecsTmpInputAudioSndCrdStereo.empty() )
     {
         // prime output stream buffer with silence
-        vecsTmpInputAudioSndCrdStereo.resize ( iOboeBufferSizeMono * channel_count, 0 );
+        vecsTmpInputAudioSndCrdStereo.resize ( bufsize, 0 );
     }
 
-    mOutBuffer.Put ( vecsTmpInputAudioSndCrdStereo, iOboeBufferSizeMono * channel_count );
+    mOutBuffer.Put ( vecsTmpInputAudioSndCrdStereo, bufsize );
 
     if ( mOutBuffer.isFull() )
     {
@@ -296,8 +297,8 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
 
     QMutexLocker locker ( &MutexAudioProcessCallback );
 
-    std::size_t      to_write = (std::size_t) numFrames * oboeStream->getChannelCount();
-    std::size_t      count    = std::min ( (std::size_t) mOutBuffer.GetAvailData(), to_write );
+    const int32_t    to_write = numFrames * oboeStream->getChannelCount();
+    const int32_t    count    = std::min ( mOutBuffer.GetAvailData(), to_write );
     CVector<int16_t> outBuffer ( count );
 
     mOutBuffer.Get ( outBuffer, count );
@@ -306,13 +307,14 @@ oboe::DataCallbackResult CSound::onAudioOutput ( oboe::AudioStream* oboeStream, 
     // According to the format that we've set on initialization, audioData
     // is an array of int16_t
     //
+    int16_t* intData = static_cast<int16_t*> ( audioData );
 
-    memcpy ( audioData, outBuffer.data(), count * sizeof ( int16_t ) );
+    memcpy ( intData, outBuffer.data(), sizeof ( int16_t ) * count );
 
     if ( to_write > count )
     {
         mStats.frames_filled_out += ( to_write - count );
-        memset ( ( (float*) audioData ) + count, 0, ( to_write - count ) * sizeof ( float ) );
+        memset ( intData + count, 0, sizeof ( int16_t ) * ( to_write - count ) );
     }
 
     return oboe::DataCallbackResult::Continue;

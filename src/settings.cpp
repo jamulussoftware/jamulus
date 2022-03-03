@@ -829,11 +829,10 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
 
     // directory type
     // CServerListManager defaults to AT_NONE
-    // Server GUI defaults to AT_DEFAULT
     // Because type could be AT_CUSTOM, it has to be set after the address to avoid multiple registrations
-    EDirectoryType directoryType = AT_DEFAULT;
+    EDirectoryType directoryType = AT_NONE;
 
-    // if command line is set, use it
+    // if a command line Directory server address is set, set the Directory Type (genre) to AT_CUSTOM so it's used
     if ( CommandLineOptions.contains ( "--centralserver" ) || CommandLineOptions.contains ( "--directoryserver" ) )
     {
         directoryType = AT_CUSTOM;
@@ -841,20 +840,10 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
     else
     {
         // clang-format off
-// TODO compatibility to old version < 3.8.2
-// if "servlistenabled" exists and is false, set directory type to AT_NONE
-if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
+// TODO compatibility to old version < 3.4.7
+if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
 {
-    directoryType = AT_NONE;
-}
-        // clang-format on
-
-        // clang-format off
-// TODO compatibility to old version < ?????
-// only the case that manual was set in old ini must be considered
-if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) && !bValue )
-{
-    directoryType = AT_CUSTOM;
+    directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
 }
 else
             // clang-format on
@@ -877,6 +866,15 @@ else
         {
             directoryType = static_cast<EDirectoryType> ( iValue );
         }
+
+        // clang-format off
+// TODO compatibility to old version < 3.9.0
+// override type to AT_NONE if servlistenabled exists and is false
+if (  GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
+{
+    directoryType = AT_NONE;
+}
+        // clang-format on
     }
 
     pServer->SetDirectoryType ( directoryType );

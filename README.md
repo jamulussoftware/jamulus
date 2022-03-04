@@ -2,6 +2,11 @@
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
+## Contents of this feature branch
+
+This branch contains an unfinished implementation of multi-channel support for Jamulus Clients by using phantom clients. For more information see DonC's Pull Request: https://github.com/jamulussoftware/jamulus/pull/1909 Further development can be based on this branch.
+
+
 Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" width="102" height="102" src="https://jamulus.io/assets/img/jamulus-icon-2020.svg"/></a>

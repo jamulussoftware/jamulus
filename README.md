@@ -2,6 +2,10 @@
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
+## Contents of this feature branch
+
+This branch contains a semi-working implementation of PortAudio for Windows which allows Jamulus to run without ASIO. Unfortunately there are issues (probably with PortAudio) such that not every soundcard is supported natively. Although ASIO4ALL is not perfect, up until now PortAudio isn't good either (compatibility and issue wise). For more information see npostavs Pull Request: https://github.com/jamulussoftware/jamulus/pull/870 Further development can be based on this branch. 
+
 Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" width="102" height="102" src="https://jamulus.io/assets/img/jamulus-icon-2020.svg"/></a>

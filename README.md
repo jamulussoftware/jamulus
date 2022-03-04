@@ -4,7 +4,7 @@
 
 ## Contents of this feature branch
 
-This branch contains a almost finished implementation of a stereo streaming API directly from the server to ffmpeg. For more information see npostavs Pull Request: https://github.com/jamulussoftware/jamulus/pull/967 Further development can be based on this branch and the approach in dtinth's repo linked in the Pull Request mentioned above.
+This branch contains a almost finished implementation of a stereo streaming API directly from the server to ffmpeg. For more information see dingodoppelt's Pull Request: https://github.com/jamulussoftware/jamulus/pull/967 Further development can be based on this branch and the approach in dtinth's repo linked in the Pull Request mentioned above.
 
 Jamulus - Internet Jam Session Software
 =======================================

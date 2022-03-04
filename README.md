@@ -2,6 +2,10 @@
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
+## Contents of this feature branch
+
+This branch contains a almost finished implementation of a stereo streaming API directly from the server to ffmpeg. For more information see npostavs Pull Request: https://github.com/jamulussoftware/jamulus/pull/967 Further development can be based on this branch and the approach in dtinth's repo linked in the Pull Request mentioned above.
+
 Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" width="102" height="102" src="https://jamulus.io/assets/img/jamulus-icon-2020.svg"/></a>

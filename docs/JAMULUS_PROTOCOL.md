@@ -1,6 +1,5 @@
 
-The Jamulus Audio Protocol
-==
+# The Jamulus Audio Protocol
 
 Jamulus uses connectionless UDP packets to communicate between the client and server, and additionally for directory server registration. The `src/protocol.cpp` file contains much of the details of the packets themselves, whereas this document is intended to form a higher-level view of the protocol interactions.  
 Some of the messages need to be acknowledged, some do not.
@@ -9,8 +8,7 @@ All of this information can be discovered from reading the code, but hopefully i
 
 ---
 
-Overview
-==
+## Overview
 
 The message packet structure is:
 
@@ -39,11 +37,9 @@ DATA is the fragment data to be re-assembled
 
 This forms the data component of the packet above.
 
----
 
+## Client Session with a Server
 
-Client Session with a Server
---
 As the protocol is connectionless, the message flow at session start up can happen out of order.  
 When a client starts a session with a server, it sends valid audio packets to the server port, to which the server will respond with the audio mix for that client.
 
@@ -132,10 +128,7 @@ A typical flow would be:
   ACK(CONN_CLIENTS_LIST) ---------------->    
 ```
 
----
-
-General Streaming Messages
---
+## General Streaming Messages
 
 During streaming, some control messages are used.  
 Some typical messages could be:
@@ -165,8 +158,8 @@ Some typical messages could be:
 
 ---
 
-Audio Packet Structure
---
+## Audio Packet Structure
+
 The OPUS codec is used to compress the audio over the network and the packets are documented [here](https://datatracker.ietf.org/doc/html/rfc6716).
 
 Jamulus uses a custom OPUS encoder / decoder, giving some different frame sizes, but always uses a 48kHz sample rate. OPUS and OPUS64 codecs are the only supported options currently.

@@ -1,3 +1,7 @@
-# exclude third party code from clang-format checks
+# Exclude third party code from clang-format checks.
+#
+# This file is used by the clang-format-lint-action on Github.
+# When updating this list, remember to update Jamulus.pro's CLANG_SOURCES
+# as well.
 ./libs
 ./windows/nsProcess

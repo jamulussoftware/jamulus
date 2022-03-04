@@ -1173,3 +1173,12 @@ contains(CONFIG, "disable_version_check") {
     message(The version check is disabled.)
     DEFINES += DISABLE_VERSION_CHECK
 }
+
+# Enable formatting all code via `make clang_format`.
+# Note: When extending the list of file extensions or when adding new code directories,
+# be sure to update .github/workflows/coding-style-check.yml and .clang-format-ignore as well.
+CLANG_FORMAT_SOURCES = $$files(*.cpp, true) $$files(*.mm, true) $$files(*.h, true)
+CLANG_FORMAT_SOURCES = $$find(CLANG_FORMAT_SOURCES, ^\(android|ios|mac|linux|src|windows\)/)
+CLANG_FORMAT_SOURCES ~= s!^\(windows/\(nsProcess|ASIOSDK2\)/|src/res/qrc_resources\.cpp\)\S*$!!g
+clang_format.commands = 'clang-format -i $$CLANG_FORMAT_SOURCES'
+QMAKE_EXTRA_TARGETS += clang_format

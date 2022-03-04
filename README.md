@@ -2,6 +2,10 @@
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
+## Contents of this feature branch
+
+This branch contains a mostly finished implementation of a single/master mix server based on the idea by corrados on the branch feature_singlemixserver. All client mixes are syncronized. For more information see cwerling's Pull Request: https://github.com/jamulussoftware/jamulus/pull/1381 Further development can be based on this branch.
+
 Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/></a>

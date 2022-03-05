@@ -125,6 +125,11 @@ jobs:
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
              uses_codeql:           false
+             # Qt5's maximum supported Xcode version is 12.x (SDK 11).
+             # However, 12.5.1 triggers a Qt build warning about lack of support contrary to the docs.
+             # It also uses a newer macOS SDK which should not be an issue for older macOS versions, but we currently
+             # aim to err on the safe side and use 12.1.1 instead.
+             # https://xcodereleases.com/ https://doc.qt.io/qt-5/macos.html
              xcode_version:         12.1.1
 
            - config_name:           MacOS Legacy (artifacts)
@@ -134,7 +139,7 @@ jobs:
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh do_not_sign"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
              uses_codeql:           false
-             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
+             # For Qt5 on Mac (Legacy), we need to ensure SDK 10.15 is used, and not SDK 11.x.
              # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
              # https://developer.apple.com/support/xcode/
              # Xcode 12.1.1 is the most-recent 12.1.x release:

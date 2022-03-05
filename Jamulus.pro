@@ -410,7 +410,14 @@ win32 {
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/jamulus.png distributions/jamulus.svg distributions/jamulus-server.svg
+        icons.files = distributions/jamulus.png
+
+        isEmpty(ICONSDIR_SVG) {
+            ICONSDIR_SVG = share/icons/hicolor/scalable/apps/
+        }
+        ICONSDIR_SVG = $$absolute_path($$ICONSDIR_SVG, $$PREFIX)
+        icons_svg.path = $$ICONSDIR_SVG
+        icons_svg.files = distributions/jamulus.svg distributions/jamulus-server.svg
 
         isEmpty(MANDIR) {
             MANDIR = share/man/man1
@@ -419,7 +426,7 @@ win32 {
         man.path = $$MANDIR
         man.files = distributions/Jamulus.1
 
-        INSTALLS += target desktop icons man
+        INSTALLS += target desktop icons icons_svg man
     }
 }
 

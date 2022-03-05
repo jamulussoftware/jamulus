@@ -29,7 +29,7 @@
 .Op Fl P | Fl \-delaypan
 .Op Fl p | Fl \-port Ar number
 .Op Fl Q | Fl \-qos Ar value
-.Op Fl R | Fl \-recording Ar Directory
+.Op Fl R | Fl \-recording Ar directory
 .Op Fl s | Fl \-server
 .Op Fl T | Fl \-multithreading
 .Op Fl t | Fl \-notranslation
@@ -60,7 +60,7 @@ is also possible.
 .Pp
 One participant starts
 .Nm
-in Server mode, ideally on a dedicated Server (virtual) machine;
+in Server mode, ideally on a dedicated server (virtual) machine;
 all participants start the (graphical) Client which transmits audio
 to the Server, receiving back a mixed stream.
 Use of a metronome is recommended.
@@ -87,8 +87,7 @@ at startup
 disconnect all Clients on quit
 .It Fl e | Fl \-directoryserver Ar hostname
 .Pq Server mode only
-make the Server Registered and set its genre by setting the address
-of the Directory Server to use to
+Register the Server with the given Directory by setting the Directory Server Address to use to
 .Ar hostname ;
 see also
 .Fl o ;
@@ -101,8 +100,8 @@ use 64 samples frame size mode, which reduces latency if Clients connect with
 turned on; requires a faster CPU to avoid dropouts and uses more bandwidth to
 connected Clients
 .It Fl f | Fl \-listfilter Ar filter
-.Pq Directory Server mode only
-whitelist which Servers are allowed to register on the Server list;
+.Pq Directory mode only
+whitelist which Servers are allowed to register on the server list;
 .Ar filter
 must consist of semicolon-separated IP addresses
 .It Fl h | Fl \&? | Fl \-help
@@ -227,7 +226,7 @@ left to right.
 does not provide feedback as to the current state of the Solo and Mute
 buttons so the controller must track and signal their state locally.
 .It Fl \-directoryfile Ar file
-.Pq Directory Server mode only
+.Pq Directory mode only
 remember registered Servers even if the Directory is restarted
 .It Fl \-mutemyown
 .Pq headless Client only
@@ -262,11 +261,11 @@ knows four modes of operation: Client mode and three kinds of Server
 .Pq Unregistered, Registered, Directory.
 A Unregistered Server is unlisted, Clients can only connect if given
 the address (IP address and port).
-A Registered Server will contact a Directory Server (whose address must be
+A Registered Server will contact a Directory (whose address must be
 given at Server startup) and show up in that Server's list; Clients
 can retrieve a list of Registered Servers from the Directory Server.
-Several Registered Directory Servers are operated by the Jamulus project;
-there is a Directory Server for each genre, which is how Registered Jamulus
+Several Registered Directories are operated by the Jamulus project;
+there is a Directory for each genre, which is how Registered Jamulus
 Servers are categorised into genres.
 .Sh SEE ALSO
 .Xr qjackctl 1

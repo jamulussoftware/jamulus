@@ -18,4 +18,6 @@ jobs:
     - uses: DoozyX/clang-format-lint-action@2a28e3a8d9553f244243f7e1ff94f6685dff87be
       with:
         clangFormatVersion: 10
+        # When updating the extension list, remember to update
+        # Jamulus.pro's CLANG_SOURCES as well.
         extensions: 'cpp,h,mm'

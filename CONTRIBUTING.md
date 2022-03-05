@@ -19,6 +19,9 @@ If a feature or function can be achieved in another way by another system or met
 - Space before and after `(` and `)`, except no space between `)` and `;`, and no space before an empty `()`.
 - All bodies of `if`, `else`, `while`, `for`, etc., to be enclosed in braces `{` and `}`, on separate lines.
 
+You can use your editor's or IDE's clang-format support to accomplish that.
+On the command line, you can run `make clang_format` to do the same before committing.
+
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
 
 Please run a local build test. Make sure there are no errors. After opening a pull request, keep an eye on the CI checks for quality or compile issues and fix them as required.

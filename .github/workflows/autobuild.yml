@@ -128,6 +128,15 @@ jobs:
              uses_codeql:           false
              xcode_version:         12.1.1
 
+           - config_name:           iOS (artifacts)
+             target_os:             ios
+             building_on_os:        macos-10.15
+             cmd1_prebuild:         "./autobuild/ios/artifacts/autobuild_ios_1_prepare.sh 5.15.2"
+             cmd2_build:            "./autobuild/ios/artifacts/autobuild_ios_2_build.sh"
+             cmd3_postbuild:        "./autobuild/ios/artifacts/autobuild_ios_3_copy_files.sh"
+             uses_codeql:           false
+             xcode_version:         12.1.1
+
            - config_name:           MacOS Legacy (artifacts)
              target_os:             macos
              building_on_os:        macos-10.15
@@ -162,7 +171,7 @@ jobs:
     steps:
 
       - name:                       Select Xcode version for Mac
-        if:                         ${{ matrix.config.target_os == 'macos' }}
+        if:                         ${{ matrix.config.target_os == 'macos' || matrix.config.target_os == 'ios' }}
         uses:                       maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: ${{ matrix.config.xcode_version }}

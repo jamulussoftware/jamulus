@@ -4,6 +4,10 @@ param (
     [string] $QtInstallPath64 = "C:\Qt\5.15.2",
     [string] $QtCompile32 = "msvc2019",
     [string] $QtCompile64 = "msvc2019_64",
+    # Important:
+    # - Do not update ASIO SDK without checking for license-related changes.
+    # - Do not copy (parts of) the ASIO SDK into the Jamulus source tree without
+    #   further consideration as it would make the license situation more complicated.
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
     [string] $NsisName = "nsis-3.08",
@@ -130,10 +134,15 @@ Function Install-Dependencies
       Install-PackageProvider -Name "Nuget" -Scope CurrentUser -Force
     }
     Initialize-Module-Here -m "VSSetup"
-    Install-Dependency -Uri $AsioSDKUrl `
-        -Name $AsioSDKName -Destination "ASIOSDK2"
     Install-Dependency -Uri $NsisUrl `
         -Name $NsisName -Destination "NSIS"
+
+    if ($BuildOption -Notmatch "jack") {
+        # Don't download ASIO SDK on Jamulus JACK builds to save
+        # resources and to be extra-sure license-wise.
+        Install-Dependency -Uri $AsioSDKUrl `
+            -Name $AsioSDKName -Destination "ASIOSDK2"
+    }
 }
 
 # Setup environment variables and build tool paths
@@ -234,7 +243,16 @@ Function Build-App
         "-o", "$BuildPath\Makefile")
 
     Set-Location -Path $BuildPath
-    Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    if (Get-Command "jom.exe" -ErrorAction SilentlyContinue)
+    {
+        echo "Building with jom /J ${Env:NUMBER_OF_PROCESSORS}"
+        Invoke-Native-Command -Command "jom" -Arguments ("/J", "${Env:NUMBER_OF_PROCESSORS}", "$BuildConfig")
+    }
+    else
+    {
+        echo "Building with nmake (install Qt jom if you want parallel builds)"
+        Invoke-Native-Command -Command "nmake" -Arguments ("$BuildConfig")
+    }
     Invoke-Native-Command -Command "$Env:QtWinDeployPath" `
         -Arguments ("--$BuildConfig", "--compiler-runtime", "--dir=$DeployPath\$BuildArch",
         "$BuildPath\$BuildConfig\$AppName.exe")

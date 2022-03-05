@@ -3,7 +3,6 @@ set -e
 
 root_path="$(pwd)"
 project_path="${root_path}/Jamulus.pro"
-macdeploy_path="${root_path}/mac"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
@@ -119,8 +118,8 @@ brew_install_pinned() {
 # Check that we are running from the correct location
 if [ ! -f "${project_path}" ];
 then
-    echo Please run this script from the Qt project directory where "$(basename ${project_path})" is located.
-    echo Usage: mac/$(basename $0)
+    echo Please run this script from the Qt project directory where $(basename "${project_path}") is located.
+    echo Usage: mac/$(basename "${0}")
     exit 1
 fi
 

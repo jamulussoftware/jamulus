@@ -1,6 +1,5 @@
 #### Automatically build and upload releases to GitHub ####
 
-
 # see analyse_git_reference.py for implementation of the logic:
 #     for every push to a branch starting with "autobuild": (can be used during development for tighter supervision of builds)
 #          - do CodeQl while building for every platform
@@ -16,7 +15,6 @@
 #          - publish the created binaries/packs only as artifacts/appendix as a release
 #
 
-
 on:
   workflow_dispatch:
   push:
@@ -26,7 +24,6 @@ on:
       - "autobuild*"  # for developers: branches starting with autobuild will be built and evaluated on each push
       - "autobuild/*" # for developers: branches starting with autobuild will be built and evaluated on each push
       - "master"
-    #  - "*"
   pull_request: # The branches below must be a subset of the branches in "push"
     branches:
       - master
@@ -75,11 +72,6 @@ jobs:
              body_path:             ${{ github.workspace }}/autoLatestChangelog.md
              prerelease:            ${{ steps.jamulus-build-vars.outputs.IS_PRERELEASE }}
              draft:                 false
-
-
-         ### CANCEL ### can be used for development concerning release-creation
-         #- name:                    Cancelthrougherroe
-         #  run:                     myundefinedfunction
 
 
   release_assets:

@@ -39,17 +39,13 @@ jobs:
       version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
 
      steps:
-         # Checkout code
          - name:                    Checkout code
            uses:                    actions/checkout@v2
 
-         # Set variables
-         # Determine release / pre-release
          - name:                    Get Jamulus build info, determine actions & variables
            run:                     python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
            id:                      jamulus-build-vars
 
-         # remove release, if it exists (with this releasetag)
          - name:                    Remove release, if existing (for branches)
            if:                      ${{ contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true') }}
            continue-on-error:       true
@@ -59,7 +55,7 @@ jobs:
              tag_name:              ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
            env:
              GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
-         # create release (empty, filled by next jobs)
+
          - name:                    'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
            if:                      ${{ contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true') }}
            id:                      create_release_step
@@ -158,21 +154,18 @@ jobs:
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
-
       - name:                       Select Xcode version for Mac
         if:                         ${{ matrix.config.target_os == 'macos' || matrix.config.target_os == 'ios' }}
         uses:                       maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: ${{ matrix.config.xcode_version }}
 
-      # Checkout code
       - name:                       Checkout code
         uses:                       actions/checkout@v2
         with:
           submodules:               true
           fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}
 
-      # Enable caching of downloaded dependencies
       - name:                       "Cache Mac dependencies"
         if:                         ${{ matrix.config.target_os == 'macos' }}
         uses:                       actions/cache@v2
@@ -205,7 +198,6 @@ jobs:
             /opt/android/android-ndk
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/android/autobuild_apk_1_prepare.sh', 'autobuild/android/install-qt.sh') }}-${{ matrix.config.cmd1_prebuild }}
 
-      # Prepare (install QT & dependencies)
       - name:                       "Prepare for ${{ matrix.config.config_name }}"
         if:                         ${{ matrix.config.cmd1_prebuild }}
         run:                        ${{ matrix.config.cmd1_prebuild }}
@@ -214,7 +206,6 @@ jobs:
           jamulus_project_path:     ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
-      # Initialize CodeQL tools for code-scanning for security
       - name:                       Initialize CodeQL
         if:                         matrix.config.uses_codeql
         uses:                       github/codeql-action/init@v1
@@ -224,7 +215,6 @@ jobs:
           # Learn more:
           # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
-      # Build
       - name:                       "Build for ${{ matrix.config.config_name }}"
         id:                         step_macos_build
         if:                         ${{ matrix.config.cmd2_build }}
@@ -246,7 +236,6 @@ jobs:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
-      # Upload Artifact to Job
       - name:                       Upload Artifact 1 to Job
         if:                         ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
         uses:                       actions/upload-artifact@v2
@@ -256,7 +245,6 @@ jobs:
           retention-days:           31
           if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
 
-      # Upload Artifact to Job
       - name:                       Upload Artifact 2 to Job
         if:                         ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
         uses:                       actions/upload-artifact@v2
@@ -266,7 +254,6 @@ jobs:
           retention-days:           31
           if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
 
-      # Notarize macOS build, if needed
       - name: "Notarize macOS Release Build"
         if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id: notarize-macOS-app
@@ -276,7 +263,7 @@ jobs:
           primary-bundle-id: io.jamulus.Jamulus
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
-      # Apply successful notarization
+
       - name: "Staple macOS Release Build"
         if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id: staple-macOS-app
@@ -284,7 +271,6 @@ jobs:
         with:
           product-path: deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
 
-      # Upload Artifact to Release
       - name:                       Upload Artifact 1 to Release
         if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id:                         upload-release-asset1
@@ -297,7 +283,6 @@ jobs:
           asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_content_type:       application/octet-stream
 
-      # Upload Artifact to Release
       - name:                       Upload Artifact 2 to Release
         if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_2 != '') &&  contains(needs.create_release.outputs.publish_to_release, 'true') }}
         id:                         upload-release-asset2
@@ -310,7 +295,6 @@ jobs:
           asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
           asset_content_type:       application/octet-stream
 
-      # Run CodeQL tools for code-scanning for security
       - name:                       Perform CodeQL Analysis
         if:                         matrix.config.uses_codeql
         uses:                       github/codeql-action/analyze@v1

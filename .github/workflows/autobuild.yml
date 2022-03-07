@@ -13,7 +13,6 @@
 #     for every tag that starts with 'r' and does not have any suffix:
 #          - do CodeQl while building for every platform
 #          - publish the created binaries/packs only as artifacts/appendix as a release
-#
 
 on:
   workflow_dispatch:
@@ -21,11 +20,12 @@ on:
     tags:
       - "r*"
     branches:
-      # for developers: branches starting with autobuild will be built and evaluated on each push
+      # For developers: Branches starting with autobuild will be built and evaluated on each push.
       - "autobuild**"
       - "master"
-  pull_request: # The branches below must be a subset of the branches in "push"
+  pull_request:
     branches:
+      # These branches must be a subset of the branches in "push":
       - master
 
 name:                               Auto-Build
@@ -75,7 +75,9 @@ jobs:
     needs:                          create_release
     strategy:
       fail-fast:                    false
-      matrix: # Think of this like a foreach loop. Basically runs the steps with every combination of the contents of this. More info: https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+      matrix:
+        # Think of this like a foreach loop. Basically runs the steps with every combination of
+        # the contents of this.
         config:
            - config_name:           AndroidAPK (artifact+codeQL)
              target_os:             android
@@ -84,7 +86,8 @@ jobs:
              cmd2_build:            "./autobuild/android/autobuild_apk_2_build.sh"
              cmd3_postbuild:        "./autobuild/android/autobuild_apk_3_copy_files.sh"
              uses_codeql:           true
-             checkout_fetch_depth:  '0'  # Jamulus.pro needs to count git history length for android versioning
+             # Jamulus.pro needs to count git history length for android versioning:
+             checkout_fetch_depth:  '0'
 
            - config_name:           Linux (artifacts+codeQL)
              target_os:             linux
@@ -211,9 +214,6 @@ jobs:
         uses:                       github/codeql-action/init@v1
         with:
           languages: 'cpp'
-          # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
-          # Learn more:
-          # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
       - name:                       "Build for ${{ matrix.config.config_name }}"
         id:                         step_macos_build
@@ -243,7 +243,7 @@ jobs:
           name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           retention-days:           31
-          if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
+          if-no-files-found:        error
 
       - name:                       Upload Artifact 2 to Job
         if:                         ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
@@ -252,7 +252,7 @@ jobs:
           name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
           path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
           retention-days:           31
-          if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
+          if-no-files-found:        error
 
       - name:                       "Notarize macOS Release Build"
         if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
@@ -278,7 +278,7 @@ jobs:
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }} # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
           asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
           asset_content_type:       application/octet-stream
@@ -290,7 +290,7 @@ jobs:
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url:               ${{ needs.create_release.outputs.upload_url }} # See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url:               ${{ needs.create_release.outputs.upload_url }}
           asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
           asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
           asset_content_type:       application/octet-stream

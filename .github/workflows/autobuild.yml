@@ -158,7 +158,7 @@ jobs:
         if:                         ${{ matrix.config.target_os == 'macos' || matrix.config.target_os == 'ios' }}
         uses:                       maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: ${{ matrix.config.xcode_version }}
+          xcode-version:            ${{ matrix.config.xcode_version }}
 
       - name:                       Checkout code
         uses:                       actions/checkout@v2
@@ -254,22 +254,22 @@ jobs:
           retention-days:           31
           if-no-files-found:        error # 'warn' or 'ignore' are also available, defaults to `warn`
 
-      - name: "Notarize macOS Release Build"
-        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
-        id: notarize-macOS-app
-        uses: devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
+      - name:                       "Notarize macOS Release Build"
+        if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        id:                         notarize-macOS-app
+        uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
-          product-path: deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
-          primary-bundle-id: io.jamulus.Jamulus
+          product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          primary-bundle-id:        io.jamulus.Jamulus
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
 
-      - name: "Staple macOS Release Build"
-        if: ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
-        id: staple-macOS-app
-        uses: devbotsxyz/xcode-staple@v1
+      - name:                       "Staple macOS Release Build"
+        if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true') }}
+        id:                         staple-macOS-app
+        uses:                       devbotsxyz/xcode-staple@v1
         with:
-          product-path: deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
 
       - name:                       Upload Artifact 1 to Release
         if:                         ${{ (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && contains(needs.create_release.outputs.publish_to_release, 'true') }}

@@ -39,10 +39,7 @@ jobs:
      outputs:
       publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
-      version:                      ${{ steps.jamulus-build-vars.outputs.JAMULUS_VERSION }}
       version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
-      x_github_workspace:           ${{ steps.jamulus-build-vars.outputs.X_GITHUB_WORKSPACE }} #needed, because matrix can not directly access ${{ github.workspace }} aparrently
-
 
      steps:
          # Checkout code

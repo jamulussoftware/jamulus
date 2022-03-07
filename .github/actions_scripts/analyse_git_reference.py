@@ -64,43 +64,24 @@ write_changelog(jamulus_pro_version)
 release_version_name = get_release_version_name(jamulus_pro_version)
 
 fullref = os.environ['GITHUB_REF']
-reflist = fullref.split("/", 2)
-pushed_name = reflist[2]
+publish_to_release = fullref.startswith('refs/tags/r')
 
-# decisions about release, prerelease, title and tag:
-publish_to_release = False
-is_prerelease = True
-if fullref.startswith("refs/tags/"):
-    print('this reference is a Tag')
-    release_tag = pushed_name  # tag already exists
-    release_title = "Release {}  ({})".format(release_version_name, pushed_name)
-
-    if pushed_name.startswith("r"):
-        publish_to_release = True
-        if re.match(r'^r\d+_\d+_\d+$', pushed_name):
-            print('this reference is a Release-Tag')
-            is_prerelease = False
-        else:
-            print('this reference is a Non-Release-Tag')
-    else:
-        print('this reference is a Non-Release-Tag')
-
-elif fullref.startswith("refs/heads/"):
-    print('this reference is a Head/Branch')
-    release_title = 'Pre-Release of "{}"'.format(pushed_name)
-    release_tag = "releasetag/" + pushed_name  # better not use pure pushed name, creates a tag with the name of the branch, leads to ambiguous references => can not push to this branch easily
-
-else:
-    print('unknown git-reference type: ' + fullref)
-    release_title = 'Pre-Release of "{}"'.format(pushed_name)
-    release_tag = "releasetag/" + pushed_name  # avoid ambiguity in references in all cases
-
-# set github-available variables
-set_github_variable("PUBLISH_TO_RELEASE", str(publish_to_release).lower())
-set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())
-set_github_variable("RELEASE_TITLE", release_title)
-set_github_variable("RELEASE_TAG", release_tag)
-set_github_variable("PUSHED_NAME", pushed_name)
-set_github_variable("JAMULUS_VERSION", release_version_name)
+# RELEASE_VERSION_NAME is required for all builds including branch pushes
+# and PRs:
 set_github_variable("RELEASE_VERSION_NAME", release_version_name)
-set_github_variable("X_GITHUB_WORKSPACE", os.environ['GITHUB_WORKSPACE'])
+
+# PUBLISH_TO_RELEASE is always required as the workflow decides about further
+# steps based on this. It will only be true for tag pushes with a tag
+# starting with "r".
+set_github_variable("PUBLISH_TO_RELEASE", str(publish_to_release).lower())
+
+if publish_to_release:
+    reflist = fullref.split("/", 2)
+    release_tag = reflist[2]
+    release_title = f"Release {release_version_name}  ({release_tag})"
+    is_prerelease = not re.match(r'^r\d+_\d+_\d+$', release_tag)
+
+    # Those variables are only used when a release is created at all:
+    set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())
+    set_github_variable("RELEASE_TITLE", release_title)
+    set_github_variable("RELEASE_TAG", release_tag)

@@ -85,7 +85,7 @@ jobs:
              cmd1_prebuild:         "./autobuild/android/autobuild_apk_1_prepare.sh"
              cmd2_build:            "./autobuild/android/autobuild_apk_2_build.sh"
              cmd3_postbuild:        "./autobuild/android/autobuild_apk_3_copy_files.sh"
-             uses_codeql:           true
+             run_codeql:            true
              # Jamulus.pro needs to count git history length for android versioning:
              checkout_fetch_depth:  '0'
 
@@ -95,7 +95,7 @@ jobs:
              cmd1_prebuild:         "./autobuild/linux/autobuild_deb_1_prepare.sh"
              cmd2_build:            "./autobuild/linux/autobuild_deb_2_build.sh"
              cmd3_postbuild:        "./autobuild/linux/autobuild_deb_3_copy_files.sh"
-             uses_codeql:           true
+             run_codeql:            true
 
            - config_name:           MacOS (codeQL)
              target_os:             macos
@@ -103,7 +103,7 @@ jobs:
              cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 5.15.2"
              cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
              cmd3_postbuild:        false
-             uses_codeql:           true
+             run_codeql:            true
              xcode_version:         12.1.1
 
            - config_name:           MacOS (artifacts)
@@ -113,7 +113,7 @@ jobs:
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
-             uses_codeql:           false
+             run_codeql:            false
              xcode_version:         12.1.1
 
            - config_name:           iOS (artifacts)
@@ -122,7 +122,7 @@ jobs:
              cmd1_prebuild:         "./autobuild/ios/artifacts/autobuild_ios_1_prepare.sh 5.15.2"
              cmd2_build:            "./autobuild/ios/artifacts/autobuild_ios_2_build.sh"
              cmd3_postbuild:        "./autobuild/ios/artifacts/autobuild_ios_3_copy_files.sh"
-             uses_codeql:           false
+             run_codeql:            false
              xcode_version:         12.1.1
 
            - config_name:           MacOS Legacy (artifacts)
@@ -131,7 +131,7 @@ jobs:
              cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.9.9"
              cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh do_not_sign"
              cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
-             uses_codeql:           false
+             run_codeql:            false
              # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
              # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
              # https://developer.apple.com/support/xcode/
@@ -145,7 +145,7 @@ jobs:
              cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1
              cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
              cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
-             uses_codeql:           true
+             run_codeql:            true
 
            - config_name:           Windows JACK (artifact)
              target_os:             windows
@@ -153,7 +153,7 @@ jobs:
              cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1 -BuildOption jackonwindows
              cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1 -BuildOption jackonwindows
              cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1 -BuildOption jackonwindows
-             uses_codeql:           false
+             run_codeql:            false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:
@@ -210,7 +210,7 @@ jobs:
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
       - name:                       Initialize CodeQL
-        if:                         matrix.config.uses_codeql
+        if:                         matrix.config.run_codeql
         uses:                       github/codeql-action/init@v1
         with:
           languages: 'cpp'
@@ -306,5 +306,5 @@ jobs:
           asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis
-        if:                         matrix.config.uses_codeql
+        if:                         matrix.config.run_codeql
         uses:                       github/codeql-action/analyze@v1

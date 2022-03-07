@@ -255,7 +255,10 @@ jobs:
           if-no-files-found:        error
 
       - name:                       "Notarize macOS Release Build"
-        if:                         (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true')
+        if:                         >-
+                                    steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
+                                    steps.step_macos_build.outputs.macos_signed == 'true' &&
+                                    contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         notarize-macOS-app
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
@@ -265,14 +268,19 @@ jobs:
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
 
       - name:                       "Staple macOS Release Build"
-        if:                         (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && (steps.step_macos_build.outputs.macos_signed == 'true') && contains(needs.create_release.outputs.publish_to_release, 'true')
+        if:                         >-
+                                    steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
+                                    steps.step_macos_build.outputs.macos_signed == 'true' &&
+                                    contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         staple-macOS-app
         uses:                       devbotsxyz/xcode-staple@v1
         with:
           product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
 
       - name:                       Upload Artifact 1 to Release
-        if:                         (steps.step_cmd3_postbuild.outputs.artifact_1 != '') && contains(needs.create_release.outputs.publish_to_release, 'true')
+        if:                         >-
+                                    steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
+                                    contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         upload-release-asset1
         uses:                       actions/upload-release-asset@v1
         env:
@@ -284,7 +292,9 @@ jobs:
           asset_content_type:       application/octet-stream
 
       - name:                       Upload Artifact 2 to Release
-        if:                         (steps.step_cmd3_postbuild.outputs.artifact_2 != '') &&  contains(needs.create_release.outputs.publish_to_release, 'true')
+        if:                         >-
+                                    steps.step_cmd3_postbuild.outputs.artifact_2 != '' &&
+                                    contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         upload-release-asset2
         uses:                       actions/upload-release-asset@v1
         env:

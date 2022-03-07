@@ -21,8 +21,8 @@ on:
     tags:
       - "r*"
     branches:
-      - "autobuild*"  # for developers: branches starting with autobuild will be built and evaluated on each push
-      - "autobuild/*" # for developers: branches starting with autobuild will be built and evaluated on each push
+      # for developers: branches starting with autobuild will be built and evaluated on each push
+      - "autobuild**"
       - "master"
   pull_request: # The branches below must be a subset of the branches in "push"
     branches:

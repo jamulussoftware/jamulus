@@ -1,4 +1,6 @@
-#### Automatically build and upload releases to GitHub ####
+# This file builds the source and produces artifacts for every supported platform.
+# For release tags it creates a Github release and uploads the binaries to that releases.
+# The builds are instrumented with CodeQL.
 
 # see analyse_git_reference.py for implementation of the logic:
 #     for every push to a branch starting with "autobuild": (can be used during development for tighter supervision of builds)
@@ -22,16 +24,19 @@ on:
     branches:
       # For developers: Branches starting with autobuild will be built and evaluated on each push.
       - "autobuild**"
+      # CodeQL requires every branch from on.pull_request to be part of on.push as well in order to run comparisons.
+      # We also need master here to trigger builds on PR merge to master and manual pushes (e.g. as part of the release process):
       - "master"
   pull_request:
     branches:
-      # These branches must be a subset of the branches in "push":
       - master
 
 name:                               Auto-Build
 jobs:
   create_release:
-    name:                           Prepare Auto-Build/Release
+    # Check if we are doing a release or just a normal build.
+    # This must be done before actually building the app to find out where to upload the binaries and if we need to create a Github release.
+    name:                           Build vars & Github release (if required)
     runs-on:                        ubuntu-20.04
     outputs:
       publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
@@ -42,11 +47,11 @@ jobs:
       - name:                       Checkout code
         uses:                       actions/checkout@v2
 
-      - name:                       Get Jamulus build info, determine actions & variables
+      - name:                       Determine release version, type and prerelease variables and generate Changelog
         run:                        python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
         id:                         jamulus-build-vars
 
-      - name:                       Remove release, if existing (for branches)
+      - name:                       Remove release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
         continue-on-error:          true
         uses:                       dev-drprasad/delete-tag-and-release@v0.1.2
@@ -56,7 +61,7 @@ jobs:
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
 
-      - name:                       'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
+      - name:                       Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  ${{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}
         if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
         id:                         create_release_step
         uses:                       actions/create-release@v1
@@ -71,7 +76,7 @@ jobs:
 
 
   release_assets:
-    name:                           Build assets for ${{ matrix.config.config_name }}
+    name:                           Build for ${{ matrix.config.config_name }}
     needs:                          create_release
     strategy:
       fail-fast:                    false
@@ -169,7 +174,7 @@ jobs:
           submodules:               true
           fetch-depth:              ${{ matrix.config.checkout_fetch_depth || '1' }}
 
-      - name:                       "Cache Mac dependencies"
+      - name:                       Cache Mac dependencies
         if:                         matrix.config.target_os == 'macos'
         uses:                       actions/cache@v2
         with:
@@ -179,7 +184,7 @@ jobs:
             ~/Library/Cache/jamulus-homebrew-bottles
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/artifacts/autobuild_mac_1_prepare.sh', 'autobuild/mac/codeQL/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.cmd1_prebuild }}
 
-      - name:                       "Cache Windows dependencies"
+      - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
         uses:                       actions/cache@v2
         with:
@@ -191,7 +196,7 @@ jobs:
             ~\windows\ASIOSDK2
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows/autobuild_windowsinstaller_1_prepare.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.cmd1_prebuild }}
 
-      - name:                       "Cache Android dependencies"
+      - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
         uses:                       actions/cache@v2
         with:
@@ -201,7 +206,7 @@ jobs:
             /opt/android/android-ndk
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/android/autobuild_apk_1_prepare.sh', 'autobuild/android/install-qt.sh') }}-${{ matrix.config.cmd1_prebuild }}
 
-      - name:                       "Prepare for ${{ matrix.config.config_name }}"
+      - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         if:                         matrix.config.cmd1_prebuild
         run:                        ${{ matrix.config.cmd1_prebuild }}
         env:
@@ -215,7 +220,7 @@ jobs:
         with:
           languages: 'cpp'
 
-      - name:                       "Build for ${{ matrix.config.config_name }}"
+      - name:                       Build for ${{ matrix.config.config_name }}
         id:                         step_macos_build
         if:                         matrix.config.cmd2_build
         run:                        ${{ matrix.config.cmd2_build }} ${{ github.workspace }}
@@ -228,7 +233,7 @@ jobs:
           NOTARIZATION_PASSWORD:      ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:          ${{ secrets.KEYCHAIN_PASSWORD }}
 
-      - name:                       "Post-Build for ${{ matrix.config.config_name }}"
+      - name:                       Post-Build for ${{ matrix.config.config_name }}
         id:                         step_cmd3_postbuild
         if:                         matrix.config.cmd3_postbuild
         run:                        ${{ matrix.config.cmd3_postbuild }} ${{ github.workspace }}
@@ -254,7 +259,7 @@ jobs:
           retention-days:           31
           if-no-files-found:        error
 
-      - name:                       "Notarize macOS Release Build"
+      - name:                       Notarize macOS Release Build
         if:                         >-
                                     steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
                                     steps.step_macos_build.outputs.macos_signed == 'true' &&
@@ -267,7 +272,7 @@ jobs:
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
 
-      - name:                       "Staple macOS Release Build"
+      - name:                       Staple macOS Release Build
         if:                         >-
                                     steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
                                     steps.step_macos_build.outputs.macos_signed == 'true' &&

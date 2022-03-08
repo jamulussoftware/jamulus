@@ -226,7 +226,7 @@ win32 {
     SOURCES += android/sound.cpp \
         android/androiddebug.cpp
 
-    LIBS += -lOpenSLES -loboe
+    LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
     DISTFILES += android/AndroidManifest.xml
 
@@ -243,10 +243,10 @@ win32 {
         libs/oboe/LICENSE \
         libs/oboe/README
 
-        INCLUDEPATH += $$INCLUDEPATH_OBOE
-        HEADERS += $$OBOE_HEADERS
-        SOURCES += $$OBOE_SOURCES
-        DISTFILES += $$DISTFILES_OBOE
+    INCLUDEPATH += $$INCLUDEPATH_OBOE
+    HEADERS += $$OBOE_HEADERS
+    SOURCES += $$OBOE_SOURCES
+    DISTFILES += $$DISTFILES_OBOE
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11

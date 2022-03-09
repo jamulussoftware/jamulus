@@ -5,8 +5,15 @@ Generates a list of Github user names who contributed to a specific release.
 May need a Github Personal access token to avoid hitting rate limits.
 
 Usage:
-./tools/get_release_contributors.py --from release --to translate3_7_0 --github-token YOUR_TOKEN --repo /path/to/your/jamuluswebsite
-./tools/get_release_contributors.py --from r3_6_2 --to r3_7_0rc1 --github-token YOUR_TOKEN --repo /path/to/your/jamulus
+
+## Website repo (jamulussoftware/jamuluswebsite)
+- cd jamuluswebsite
+- git log --oneline release # Find commit ID of previous version. Search for "RELEASE:"
+- /path/to/jamulussoftware/code/tools/get_release_contributors.py --from COMMIT_ID_FROM_PREVIOUS_STEP --to next-release --github-token YOUR_TOKEN --repo .
+
+## Code repo (jamulussoftware/jamulus)
+- git pull -C /path/
+- ./tools/get_release_contributors.py --from r3_8_1 --to r3_8_2 --github-token YOUR_TOKEN --repo .
 
 """
 import requests
@@ -28,7 +35,7 @@ class UnexpectedGithubStatus(RuntimeError):
 
 
 # List of user names which should be ignored (such as bots):
-ignore_list = ['github-actions[bot]', 'imgbot[bot]']
+ignore_list = ['github-actions[bot]', 'imgbot[bot]', 'actions-bot', 'actions-user', 'ImgBotApp']
 
 CHARSET = 'utf-8'
 

@@ -221,7 +221,7 @@ jobs:
           languages: 'cpp'
 
       - name:                       Build for ${{ matrix.config.config_name }}
-        id:                         step_macos_build
+        id:                         step_build
         if:                         matrix.config.cmd2_build
         run:                        ${{ matrix.config.cmd2_build }} ${{ github.workspace }}
         env:
@@ -262,7 +262,7 @@ jobs:
       - name:                       Notarize macOS Release Build
         if:                         >-
                                     steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
-                                    steps.step_macos_build.outputs.macos_signed == 'true' &&
+                                    steps.step_build.outputs.macos_signed == 'true' &&
                                     contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         notarize-macOS-app
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
@@ -275,7 +275,7 @@ jobs:
       - name:                       Staple macOS Release Build
         if:                         >-
                                     steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
-                                    steps.step_macos_build.outputs.macos_signed == 'true' &&
+                                    steps.step_build.outputs.macos_signed == 'true' &&
                                     contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         staple-macOS-app
         uses:                       devbotsxyz/xcode-staple@v1

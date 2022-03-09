@@ -102,23 +102,14 @@ jobs:
             cmd3_postbuild:         "./autobuild/linux/autobuild_deb_3_copy_files.sh"
             run_codeql:             true
 
-          - config_name:            MacOS (codeQL)
-            target_os:              macos
-            building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh"
-            cmd3_postbuild:         false
-            run_codeql:             true
-            xcode_version:          12.1.1
-
-          - config_name:            MacOS (artifacts)
+          - config_name:            MacOS (artifacts+codeQL)
             target_os:              macos
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
             cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.15.2"
             cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh sign_if_possible"
             cmd3_postbuild:         "./autobuild/mac/autobuild_mac_3_copy_files.sh"
-            run_codeql:             false
+            run_codeql:             true
             xcode_version:          12.1.1
 
           - config_name:            iOS (artifacts)

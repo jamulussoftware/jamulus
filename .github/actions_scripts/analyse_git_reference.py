@@ -80,6 +80,8 @@ if publish_to_release:
     release_tag = reflist[2]
     release_title = f"Release {release_version_name}  ({release_tag})"
     is_prerelease = not re.match(r'^r\d+_\d+_\d+$', release_tag)
+    if not is_prerelease and release_version_name != release_tag[1:].replace('_', '.'):
+        raise Exception(f"non-pre-release tag {release_tag} doesn't match Jamulus.pro VERSION = {release_version_name}")
 
     # Those variables are only used when a release is created at all:
     set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())

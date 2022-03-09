@@ -124,9 +124,9 @@ jobs:
           - config_name:            iOS (artifacts)
             target_os:              ios
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/ios/artifacts/autobuild_ios_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/ios/artifacts/autobuild_ios_2_build.sh"
-            cmd3_postbuild:         "./autobuild/ios/artifacts/autobuild_ios_3_copy_files.sh"
+            cmd1_prebuild:          "./autobuild/ios/autobuild_ios_1_prepare.sh 5.15.2"
+            cmd2_build:             "./autobuild/ios/autobuild_ios_2_build.sh"
+            cmd3_postbuild:         "./autobuild/ios/autobuild_ios_3_copy_files.sh"
             run_codeql:             false
             xcode_version:          12.1.1
 

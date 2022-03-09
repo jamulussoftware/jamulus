@@ -669,19 +669,6 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
     }
 }
 
-QString TruncateString ( QString str, int position )
-{
-    QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
-
-    tbfString.setPosition ( position );
-    if ( !tbfString.isAtBoundary() )
-    {
-        tbfString.toPreviousBoundary();
-        position = tbfString.position();
-    }
-    return str.left ( position );
-}
-
 QSize CMinimumStackedLayout::sizeHint() const
 {
     // always use the size of the currently visible widget:
@@ -1416,4 +1403,17 @@ QString MakeClientNameTitle ( QString win, QString client )
         sReturnString += " - " + client;
     }
     return ( sReturnString );
+}
+
+QString TruncateString ( QString str, int position )
+{
+    QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
+
+    tbfString.setPosition ( position );
+    if ( !tbfString.isAtBoundary() )
+    {
+        tbfString.toPreviousBoundary();
+        position = tbfString.position();
+    }
+    return str.left ( position );
 }

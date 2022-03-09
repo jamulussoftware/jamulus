@@ -42,6 +42,10 @@
 #    include "mac/activity.h"
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
+#include <memory>
+#include "rpcserver.h"
+#include "serverrpc.h"
+#include "clientrpc.h"
 
 // Implementation **************************************************************
 
@@ -85,6 +89,7 @@ int main ( int argc, char** argv )
     bool         bEnableIPv6                 = false;
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
+    int          iJsonRpcPortNumber          = INVALID_PORT;
     quint16      iQosNumber                  = DEFAULT_QOS_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strMIDISetup                = "";
@@ -101,6 +106,7 @@ int main ( int argc, char** argv )
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
+    QString      strJsonRpcSecretFileName    = "";
 
 #if !defined( HEADLESS ) && defined( _WIN32 )
     if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
@@ -160,6 +166,24 @@ int main ( int argc, char** argv )
             bCustomPortNumberGiven = true;
             qInfo() << qUtf8Printable ( QString ( "- selected port number: %1" ).arg ( iPortNumber ) );
             CommandLineOptions << "--port";
+            continue;
+        }
+
+        // JSON-RPC port number ------------------------------------------------
+        if ( GetNumericArgument ( argc, argv, i, "--jsonrpcport", "--jsonrpcport", 0, 65535, rDbleArgument ) )
+        {
+            iJsonRpcPortNumber = static_cast<quint16> ( rDbleArgument );
+            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC port number: %1" ).arg ( iJsonRpcPortNumber ) );
+            CommandLineOptions << "--jsonrpcport";
+            continue;
+        }
+
+        // JSON-RPC secret file name -------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "--jsonrpcsecretfile", "--jsonrpcsecretfile", strArgument ) )
+        {
+            strJsonRpcSecretFileName = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC secret file: %1" ).arg ( strJsonRpcSecretFileName ) );
+            CommandLineOptions << "--jsonrpcsecretfile";
             continue;
         }
 
@@ -785,6 +809,43 @@ int main ( int argc, char** argv )
 //CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
     // clang-format on
 
+    CRpcServer* pRpcServer = nullptr;
+
+    if ( iJsonRpcPortNumber != INVALID_PORT )
+    {
+        if ( strJsonRpcSecretFileName.isEmpty() )
+        {
+            qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: --jsonrpcsecretfile is required. Exiting." ) );
+            exit ( 1 );
+        }
+
+        QFile qfJsonRpcSecretFile ( strJsonRpcSecretFileName );
+        if ( !qfJsonRpcSecretFile.open ( QFile::OpenModeFlag::ReadOnly ) )
+        {
+            qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Unable to open secret file %1. Exiting." ).arg ( strJsonRpcSecretFileName ) );
+            exit ( 1 );
+        }
+        QTextStream qtsJsonRpcSecretStream ( &qfJsonRpcSecretFile );
+        QString     strJsonRpcSecret = qtsJsonRpcSecretStream.readLine();
+        if ( strJsonRpcSecret.length() < JSON_RPC_MINIMUM_SECRET_LENGTH )
+        {
+            qCritical() << qUtf8Printable ( QString ( "JSON-RPC: Refusing to run with secret of length %1 (required: %2). Exiting." )
+                                                .arg ( strJsonRpcSecret.length() )
+                                                .arg ( JSON_RPC_MINIMUM_SECRET_LENGTH ) );
+            exit ( 1 );
+        }
+
+        qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
+                      "(not subject to semantic versioning) during the initial phase.";
+
+        pRpcServer = new CRpcServer ( pApp, iJsonRpcPortNumber, strJsonRpcSecret );
+        if ( !pRpcServer->Start() )
+        {
+            qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) );
+            exit ( 1 );
+        }
+    }
+
     try
     {
         if ( bIsClient )
@@ -809,6 +870,11 @@ int main ( int argc, char** argv )
             {
                 CLocale::LoadTranslation ( Settings.strLanguage, pApp );
                 CInstPictures::UpdateTableOnLanguageChange();
+            }
+
+            if ( pRpcServer )
+            {
+                new CClientRpc ( &Client, pRpcServer, pRpcServer );
             }
 
 #ifndef HEADLESS
@@ -862,6 +928,11 @@ int main ( int argc, char** argv )
                              bDelayPan,
                              bEnableIPv6,
                              eLicenceType );
+
+            if ( pRpcServer )
+            {
+                new CServerRpc ( &Server, pRpcServer, pRpcServer );
+            }
 
 #ifndef HEADLESS
             if ( bUseGUI )
@@ -946,6 +1017,12 @@ QString UsageArguments ( char** argv )
            "                        (not supported for headless server mode)\n"
            "  -n, --nogui           disable GUI (\"headless\")\n"
            "  -p, --port            set the local port number\n"
+           "      --jsonrpcport     enable JSON-RPC server, set TCP port number\n"
+           "                        (EXPERIMENTAL, APIs might still change;\n"
+           "                        only accessible from localhost)\n"
+           "      --jsonrpcsecretfile\n"
+           "                        path to a single-line file which contains a freely\n"
+           "                        chosen secret to authenticate JSON-RPC users.\n"
            "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
            "                        (see the Jamulus website to enable QoS on Windows)\n"
            "  -t, --notranslation   disable translation (use English language)\n"

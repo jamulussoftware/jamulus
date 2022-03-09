@@ -106,6 +106,9 @@ LED bar:      lbr
 #define CENTSERV_GENRE_CLASSICAL_FOLK "classical.jamulus.io:22524"
 #define CENTSERV_GENRE_CHORAL         "choral.jamulus.io:22724"
 
+// specify an invalid port to disable the server
+#define INVALID_PORT -1
+
 // servers to check for new versions
 #define UPDATECHECK1_ADDRESS "updatecheck1.jamulus.io"
 #define UPDATECHECK2_ADDRESS "updatecheck2.jamulus.io"
@@ -277,6 +280,12 @@ LED bar:      lbr
 
 // mixer settings file name suffix
 #define MIX_SETTINGS_FILE_SUFFIX "jch"
+
+// minimum length of JSON-RPC secret string (main.cpp)
+#define JSON_RPC_MINIMUM_SECRET_LENGTH 16
+
+// JSON-RPC listen address
+#define JSON_RPC_LISTEN_ADDRESS "127.0.0.1"
 
 #define _MAXSHORT     32767
 #define _MINSHORT     ( -32768 )

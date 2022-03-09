@@ -31,43 +31,43 @@ on:
 name:                               Auto-Build
 jobs:
   create_release:
-     name:                          Prepare Auto-Build/Release
-     runs-on:                       ubuntu-20.04
-     outputs:
+    name:                           Prepare Auto-Build/Release
+    runs-on:                        ubuntu-20.04
+    outputs:
       publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
       version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
 
-     steps:
-         - name:                    Checkout code
-           uses:                    actions/checkout@v2
+    steps:
+      - name:                       Checkout code
+        uses:                       actions/checkout@v2
 
-         - name:                    Get Jamulus build info, determine actions & variables
-           run:                     python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
-           id:                      jamulus-build-vars
+      - name:                       Get Jamulus build info, determine actions & variables
+        run:                        python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
+        id:                         jamulus-build-vars
 
-         - name:                    Remove release, if existing (for branches)
-           if:                      contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
-           continue-on-error:       true
-           uses:                    dev-drprasad/delete-tag-and-release@v0.1.2
-           with:
-             delete_release:        true
-             tag_name:              ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
-           env:
-             GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
+      - name:                       Remove release, if existing (for branches)
+        if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
+        continue-on-error:          true
+        uses:                       dev-drprasad/delete-tag-and-release@v0.1.2
+        with:
+          delete_release:           true
+          tag_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
 
-         - name:                    'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
-           if:                      contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
-           id:                      create_release_step
-           uses:                    actions/create-release@v1
-           env:
-             GITHUB_TOKEN:          ${{ secrets.GITHUB_TOKEN }}
-           with:
-             tag_name:              ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
-             release_name:          ${{ steps.jamulus-build-vars.outputs.RELEASE_TITLE }}
-             body_path:             ${{ github.workspace }}/autoLatestChangelog.md
-             prerelease:            ${{ steps.jamulus-build-vars.outputs.IS_PRERELEASE }}
-             draft:                 false
+      - name:                       'Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  {{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}'
+        if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
+        id:                         create_release_step
+        uses:                       actions/create-release@v1
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
+          release_name:             ${{ steps.jamulus-build-vars.outputs.RELEASE_TITLE }}
+          body_path:                ${{ github.workspace }}/autoLatestChangelog.md
+          prerelease:               ${{ steps.jamulus-build-vars.outputs.IS_PRERELEASE }}
+          draft:                    false
 
 
   release_assets:
@@ -79,81 +79,81 @@ jobs:
         # Think of this like a foreach loop. Basically runs the steps with every combination of
         # the contents of this.
         config:
-           - config_name:           AndroidAPK (artifact+codeQL)
-             target_os:             android
-             building_on_os:        ubuntu-20.04
-             cmd1_prebuild:         "./autobuild/android/autobuild_apk_1_prepare.sh"
-             cmd2_build:            "./autobuild/android/autobuild_apk_2_build.sh"
-             cmd3_postbuild:        "./autobuild/android/autobuild_apk_3_copy_files.sh"
-             run_codeql:            true
-             # Jamulus.pro needs to count git history length for android versioning:
-             checkout_fetch_depth:  '0'
+          - config_name:            AndroidAPK (artifact+codeQL)
+            target_os:              android
+            building_on_os:         ubuntu-20.04
+            cmd1_prebuild:          "./autobuild/android/autobuild_apk_1_prepare.sh"
+            cmd2_build:             "./autobuild/android/autobuild_apk_2_build.sh"
+            cmd3_postbuild:         "./autobuild/android/autobuild_apk_3_copy_files.sh"
+            run_codeql:             true
+            # Jamulus.pro needs to count git history length for android versioning:
+            checkout_fetch_depth:   '0'
 
-           - config_name:           Linux (artifacts+codeQL)
-             target_os:             linux
-             building_on_os:        ubuntu-18.04
-             cmd1_prebuild:         "./autobuild/linux/autobuild_deb_1_prepare.sh"
-             cmd2_build:            "./autobuild/linux/autobuild_deb_2_build.sh"
-             cmd3_postbuild:        "./autobuild/linux/autobuild_deb_3_copy_files.sh"
-             run_codeql:            true
+          - config_name:            Linux (artifacts+codeQL)
+            target_os:              linux
+            building_on_os:         ubuntu-18.04
+            cmd1_prebuild:          "./autobuild/linux/autobuild_deb_1_prepare.sh"
+            cmd2_build:             "./autobuild/linux/autobuild_deb_2_build.sh"
+            cmd3_postbuild:         "./autobuild/linux/autobuild_deb_3_copy_files.sh"
+            run_codeql:             true
 
-           - config_name:           MacOS (codeQL)
-             target_os:             macos
-             building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 5.15.2"
-             cmd2_build:            "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
-             cmd3_postbuild:        false
-             run_codeql:            true
-             xcode_version:         12.1.1
+          - config_name:            MacOS (codeQL)
+            target_os:              macos
+            building_on_os:         macos-10.15
+            cmd1_prebuild:          "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 5.15.2"
+            cmd2_build:             "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
+            cmd3_postbuild:         false
+            run_codeql:             true
+            xcode_version:          12.1.1
 
-           - config_name:           MacOS (artifacts)
-             target_os:             macos
-             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?)
-             building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"
-             cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
-             run_codeql:            false
-             xcode_version:         12.1.1
+          - config_name:            MacOS (artifacts)
+            target_os:              macos
+            # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?)
+            building_on_os:         macos-10.15
+            cmd1_prebuild:          "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
+            cmd2_build:             "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"
+            cmd3_postbuild:         "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
+            run_codeql:             false
+            xcode_version:          12.1.1
 
-           - config_name:           iOS (artifacts)
-             target_os:             ios
-             building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/ios/artifacts/autobuild_ios_1_prepare.sh 5.15.2"
-             cmd2_build:            "./autobuild/ios/artifacts/autobuild_ios_2_build.sh"
-             cmd3_postbuild:        "./autobuild/ios/artifacts/autobuild_ios_3_copy_files.sh"
-             run_codeql:            false
-             xcode_version:         12.1.1
+          - config_name:            iOS (artifacts)
+            target_os:              ios
+            building_on_os:         macos-10.15
+            cmd1_prebuild:          "./autobuild/ios/artifacts/autobuild_ios_1_prepare.sh 5.15.2"
+            cmd2_build:             "./autobuild/ios/artifacts/autobuild_ios_2_build.sh"
+            cmd3_postbuild:         "./autobuild/ios/artifacts/autobuild_ios_3_copy_files.sh"
+            run_codeql:             false
+            xcode_version:          12.1.1
 
-           - config_name:           MacOS Legacy (artifacts)
-             target_os:             macos
-             building_on_os:        macos-10.15
-             cmd1_prebuild:         "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.9.9"
-             cmd2_build:            "./autobuild/mac/artifacts/autobuild_mac_2_build.sh do_not_sign"
-             cmd3_postbuild:        "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
-             run_codeql:            false
-             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
-             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
-             # https://developer.apple.com/support/xcode/
-             # Xcode 12.1.1 is the most-recent 12.1.x release:
-             # https://xcodereleases.com/
-             xcode_version:         12.1.1
+          - config_name:            MacOS Legacy (artifacts)
+            target_os:              macos
+            building_on_os:         macos-10.15
+            cmd1_prebuild:          "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.9.9"
+            cmd2_build:             "./autobuild/mac/artifacts/autobuild_mac_2_build.sh do_not_sign"
+            cmd3_postbuild:         "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
+            run_codeql:             false
+            # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
+            # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
+            # https://developer.apple.com/support/xcode/
+            # Xcode 12.1.1 is the most-recent 12.1.x release:
+            # https://xcodereleases.com/
+            xcode_version:          12.1.1
 
-           - config_name:           Windows (artifact+codeQL)
-             target_os:             windows
-             building_on_os:        windows-2019
-             cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1
-             cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
-             cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
-             run_codeql:            true
+          - config_name:            Windows (artifact+codeQL)
+            target_os:              windows
+            building_on_os:         windows-2019
+            cmd1_prebuild:          powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1
+            cmd2_build:             powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
+            cmd3_postbuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
+            run_codeql:             true
 
-           - config_name:           Windows JACK (artifact)
-             target_os:             windows
-             building_on_os:        windows-2019
-             cmd1_prebuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1 -BuildOption jackonwindows
-             cmd2_build:            powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1 -BuildOption jackonwindows
-             cmd3_postbuild:        powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1 -BuildOption jackonwindows
-             run_codeql:            false
+          - config_name:            Windows JACK (artifact)
+            target_os:              windows
+            building_on_os:         windows-2019
+            cmd1_prebuild:          powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1 -BuildOption jackonwindows
+            cmd2_build:             powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1 -BuildOption jackonwindows
+            cmd3_postbuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1 -BuildOption jackonwindows
+            run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     steps:

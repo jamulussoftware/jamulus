@@ -15,8 +15,8 @@ echo "::set-env name=DEBIAN_FRONTEND::${DEBIAN_FRONTEND}"
 
 sudo apt-get -qq update
 # Dependencies to create Android pkg
-sudo apt-get -qq -y install build-essential git zip unzip bzip2 p7zip-full wget curl chrpath libxkbcommon-x11-0 \
-    openjdk-8-jre openjdk-8-jdk openjdk-8-jdk-headless gradle
+sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full wget curl chrpath libxkbcommon-x11-0 \
+    openjdk-8-jre-headless openjdk-8-jdk-headless
 
 # Add Android tools and platform tools to PATH
 export ANDROID_HOME="/opt/android/android-sdk"

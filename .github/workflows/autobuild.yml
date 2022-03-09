@@ -105,19 +105,19 @@ jobs:
           - config_name:            MacOS (codeQL)
             target_os:              macos
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/codeQL/autobuild_mac_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/mac/codeQL/autobuild_mac_2_build.sh"
+            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.15.2"
+            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh"
             cmd3_postbuild:         false
             run_codeql:             true
             xcode_version:          12.1.1
 
           - config_name:            MacOS (artifacts)
             target_os:              macos
-            # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?)
+            # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/mac/artifacts/autobuild_mac_2_build.sh sign_if_possible"
-            cmd3_postbuild:         "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh"
+            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.15.2"
+            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh sign_if_possible"
+            cmd3_postbuild:         "./autobuild/mac/autobuild_mac_3_copy_files.sh"
             run_codeql:             false
             xcode_version:          12.1.1
 
@@ -133,9 +133,9 @@ jobs:
           - config_name:            MacOS Legacy (artifacts)
             target_os:              macos
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/artifacts/autobuild_mac_1_prepare.sh 5.9.9"
-            cmd2_build:             "./autobuild/mac/artifacts/autobuild_mac_2_build.sh do_not_sign"
-            cmd3_postbuild:         "./autobuild/mac/artifacts/autobuild_mac_3_copy_files.sh legacy"
+            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.9.9"
+            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh do_not_sign"
+            cmd3_postbuild:         "./autobuild/mac/autobuild_mac_3_copy_files.sh legacy"
             run_codeql:             false
             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
@@ -182,7 +182,7 @@ jobs:
             /usr/local/opt/qt
             ~/Library/Caches/pip
             ~/Library/Cache/jamulus-homebrew-bottles
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/artifacts/autobuild_mac_1_prepare.sh', 'autobuild/mac/codeQL/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.cmd1_prebuild }}
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'

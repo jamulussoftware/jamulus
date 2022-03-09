@@ -12,7 +12,7 @@ if [ -n "${SIGN}" ]; then
     shift
 fi
 
-source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
 
 ###################
 ###  PROCEDURE  ###

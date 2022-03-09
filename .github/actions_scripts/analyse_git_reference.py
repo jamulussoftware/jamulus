@@ -64,7 +64,7 @@ write_changelog(jamulus_pro_version)
 release_version_name = get_release_version_name(jamulus_pro_version)
 
 fullref = os.environ['GITHUB_REF']
-publish_to_release = fullref.startswith('refs/tags/r')
+publish_to_release = bool(re.match(r'^refs/tags/r\d+_\d+_\d+\S*$', fullref))
 
 # RELEASE_VERSION_NAME is required for all builds including branch pushes
 # and PRs:

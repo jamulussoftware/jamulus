@@ -1,6 +1,99 @@
 
 ### 3.8.2dev <- NOTE: the release version number will be 3.9.0 ###
 
+- Internal: Check coding style on macOS/iOS code files (.mm extension) (#1871).
+  (contributed by @ngocdh)
+
+- Feature: Added new JSON-RPC interface to control client and server (see [docs/JSON-RPC.md](https://github.com/jamulussoftware/jamulus/blob/master/docs/JSON-RPC.md) for details). This interface is still EXPERIMENTAL and is subject to breaking changes even on patch versions (#1975).
+  (contributed by @dtinth)
+
+- UI: Amend server registration, added server persistence (#2199).
+  (contributed by @pljones)
+
+- Build macOS .dmg files by create-dmg for building compatibility with further versions of macOS #2420 (#2207).
+  (contributed by @ann0see)
+
+- Code: Added `make clang_format` helper command to simplify code formatting for contributors (#2258).
+  (contributed by @hoffie)
+
+- Mac: Use latest Xcode version with SDK 10.15 support (#2266).
+  (contributed by @hoffie)
+
+- Autobuild: Refactor & use actions/cache (#2284).
+  (contributed by @hoffie)
+
+- Internal: Make Qt downloads on Windows more reliable by re-trying downloads (#2333).
+  (contributed by @ann0see)
+
+- Automatically build IPA for iOS (#2355).
+  (contributed by @ann0see)
+
+- Removed unneeded dependencies for Android build (#2394).
+  (contributed by @ann0see)
+
+- Build: Improved grep usage in scripts #2421 (#2397).
+  (contributed by @ann0see)
+
+- Android package version has been fixed to show the actual release version (#2398).
+  (contributed by @hoffie)
+
+- Internal: Removed unneeded white-space in all files and streamline line endings (#2402).
+  (contributed by @ann0see)
+
+- GUI: Improved Country selection handling to work with Qt6 and cover 53 previously unsupported territories (#2409).
+  (contributed by @hoffie)
+
+- tools/get_release_contributors.py: Clarify docs and ignore ImgBotApp & actions-bot (#2411).
+  (contributed by @hoffie)
+
+- Updated Running a server webpage link in COMPILING.md file (#2419).
+  (contributed by @jujudusud)
+
+- Build: Fix Mac app version (#2421).
+  (contributed by @hoffie)
+
+- Bug: Allow Jamulus being installed on Ubuntu 18.04. This dependency issue has already been fixed for the release before but is now officially part of the upstream build process (#2423).
+  (contributed by @hoffie)
+
+- UI: Adjust Server Language combo box length to fit into layout properly (#2424).
+  (contributed by @pljones)
+
+- Recorder adjustments (#2427).
+  (contributed by @pljones)
+
+- Server: Set default directory to "None" when not set in ini file or command line (#2442).
+  (contributed by @softins)
+
+- Internal: Refactored JACK- and ASIO-related logic (#2443).
+  (contributed by @hoffie)
+
+- Internal: Speed up build process by using parallelization (#2444).
+  (contributed by @hoffie)
+
+- Internal: Speed up build process by using jom with parallelization instead of nmake in autobuilds (#2445).
+  (contributed by @hoffie)
+
+- Refactor linux autobuild (#2451).
+  (contributed by @ann0see)
+
+- Android: sound driver small improvements and CodeQL fix (#2457).
+  (contributed by @softins)
+
+- Linux: Added the Jamulus Server desktop icon to the Debian/Ubuntu build and fixed SVG icon installation location (#2460).
+  (contributed by @hoffie)
+
+- Internal: Moved outdated VST code on feature branch since there hasn't been any active development for a long time. Work can still be continued from the feature branch feature/vst (#2461).
+  (contributed by @ann0see)
+
+- Internal: Added debian/ folder to .gitignore file to ensure build files are not added to git (#2464).
+  (contributed by @ann0see)
+
+- Autobuild: Improved build preparation performance (#2473).
+  (contributed by @hoffie)
+
+- Build: Removed broken QMAKE_APPLICATION_BUNDLE_NAME. logic (#2477).
+  (contributed by @hoffie)
+
 
 ### 3.8.2 (2022-02-20) ###
 

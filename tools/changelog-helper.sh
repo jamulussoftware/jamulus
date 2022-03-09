@@ -126,9 +126,14 @@ check_or_add_pr() {
         return
     fi
     checked_ids[$id]=1
-    local json=$(gh pr view "${id/#/}" --json title,author)
+    local json=$(gh pr view "${id/#/}" --json title,author,state)
+    local state=$(jq -r .state <<<"${json}")
     local title=$(jq -r .title <<<"${json}" | sanitize_title)
     local author=$(jq -r .author.login <<<"${json}")
+    if [[ "${state}" != "MERGED" ]]; then
+        echo "-> Ignoring PR #${id} as state ${state} != MERGED"
+        return
+    fi
     if grep -qF "#$id" <<<"$changelog"; then
         return
     fi

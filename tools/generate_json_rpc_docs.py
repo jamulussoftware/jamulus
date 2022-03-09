@@ -30,9 +30,9 @@ class DocumentationItem:
         /// @param {number} params.channelLevelList[*] - The channel level, an integer between 0 and 9.
     """
 
-    def __init__(self, name, type):
+    def __init__(self, name, type_):
         self.name = name
-        self.type = type
+        self.type = type_
         self.brief = DocumentationText()
         self.params = []
         self.results = []
@@ -109,10 +109,10 @@ class DocumentationTable:
             # Parse tag in form of "{type} name - description"
             match = re.match(r"^\{(\w+)\}\s+([\S]+)\s+-\s+(.*)$", text, re.DOTALL)
             if match:
-                type = match.group(1)
+                type_ = match.group(1)
                 name = match.group(2)
                 description = re.sub(r"^\s+", " ", match.group(3)).strip()
-                output.append("| " + name + " | " + type + " | " + description + " |")
+                output.append(f"| {name} | {type_} | {description} |")
         return "\n".join(output)
 
 

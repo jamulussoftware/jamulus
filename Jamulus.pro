@@ -145,7 +145,6 @@ win32 {
     OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
-    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
 
     OSX_ENTITLEMENTS.files = Jamulus.entitlements
     OSX_ENTITLEMENTS.path = Contents/Resources
@@ -201,7 +200,6 @@ win32 {
     HEADERS += ios/sound.h
     OBJECTIVE_SOURCES += ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
-    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
     LIBS += -framework AVFoundation \
         -framework AudioToolbox
 } else:android {

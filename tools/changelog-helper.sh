@@ -126,7 +126,9 @@ check_or_add_pr() {
         return
     fi
     checked_ids[$id]=1
-    if grep -qF "#$id" <<<"$changelog"; then
+    if grep -qE "#$id\>" <<<"$changelog"; then
+        # Changelog already lists this PR ID -> nothing to do
+        # (\> ensures that we only match full, standalone IDs)
         return
     fi
     local json=$(gh pr view "${id/#/}" --json title,author,state)

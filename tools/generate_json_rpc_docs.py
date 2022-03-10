@@ -19,6 +19,7 @@ source_files = [
 
 repo_root = os.path.join(os.path.dirname(__file__), '..')
 
+
 class DocumentationItem:
     """
     Represents a documentation item. In the source code they look like this:
@@ -26,18 +27,27 @@ class DocumentationItem:
         /// @rpc_notification jamulusclient/channelLevelListReceived
         /// @brief Emitted when the channel level list is received.
         /// @param {array} params.channelLevelList - The channel level list.
-        ///  Each item corresponds to the respective client retrieved from the jamulusclient/clientListReceived notification.
-        /// @param {number} params.channelLevelList[*] - The channel level, an integer between 0 and 9.
+        ///  Each item corresponds to the respective client retrieved from the
+        ///  jamulusclient/clientListReceived notification.
+        /// @param {number} params.channelLevelList[*] - The channel level,
+        ///  an integer between 0 and 9.
     """
 
-    def __init__(self, name, type):
+    def __init__(self, name, type_):
+        """
+        @param name: str
+        @param type: str
+        """
         self.name = name
-        self.type = type
+        self.type = type_
         self.brief = DocumentationText()
         self.params = []
         self.results = []
 
     def handle_tag(self, tag_name):
+        """
+        @param tag_name: str, brief|param|result
+        """
         if tag_name == "brief":
             self.current_tag = self.brief
         elif tag_name == "param":
@@ -50,12 +60,21 @@ class DocumentationItem:
             raise Exception("Unknown tag: " + tag_name)
 
     def handle_text(self, text):
+        """
+        @param text: str
+        """
         self.current_tag.add_text(text)
 
     def sort_key(self):
+        """
+        @return str
+        """
         return self.type + ": " + self.name
 
     def to_markdown(self):
+        """
+        @return: Markdown-formatted str with name, brief, params and results
+        """
         output = []
         output.append("### " + self.name)
         output.append("")
@@ -83,12 +102,19 @@ class DocumentationText:
     """
 
     def __init__(self):
+        """Constructor"""
         self.parts = []
 
     def add_text(self, text):
+        """
+        @param text: str
+        """
         self.parts.append(text)
 
     def __str__(self):
+        """
+        @return: Space-delimited list of previously added parts
+        """
         return " ".join(self.parts)
 
 
@@ -98,21 +124,28 @@ class DocumentationTable:
     """
 
     def __init__(self, tags):
+        """
+        @param tags: iterable
+        """
         self.tags = tags
 
     def to_markdown(self):
+        """
+        @return: str containing the Markdown table
+        """
         output = []
         output.append("| Name | Type | Description |")
         output.append("| --- | --- | --- |")
+        tag_re = re.compile(r"^\{(\w+)\}\s+([\S]+)\s+-\s+(.*)$", re.DOTALL)
         for tag in self.tags:
             text = str(tag)
             # Parse tag in form of "{type} name - description"
-            match = re.match(r"^\{(\w+)\}\s+([\S]+)\s+-\s+(.*)$", text, re.DOTALL)
+            match = tag_re.match(text)
             if match:
-                type = match.group(1)
+                type_ = match.group(1)
                 name = match.group(2)
                 description = re.sub(r"^\s+", " ", match.group(3)).strip()
-                output.append("| " + name + " | " + type + " | " + description + " |")
+                output.append(f"| {name} | {type_} | {description} |")
         return "\n".join(output)
 
 

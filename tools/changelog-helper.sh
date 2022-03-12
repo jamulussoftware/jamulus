@@ -126,10 +126,17 @@ check_or_add_pr() {
         return
     fi
     checked_ids[$id]=1
-    local json=$(gh pr view "${id/#/}" --json title,author)
+    if grep -qE "#$id\>" <<<"$changelog"; then
+        # Changelog already lists this PR ID -> nothing to do
+        # (\> ensures that we only match full, standalone IDs)
+        return
+    fi
+    local json=$(gh pr view "${id/#/}" --json title,author,state)
+    local state=$(jq -r .state <<<"${json}")
     local title=$(jq -r .title <<<"${json}" | sanitize_title)
     local author=$(jq -r .author.login <<<"${json}")
-    if grep -qF "#$id" <<<"$changelog"; then
+    if [[ "${state}" != "MERGED" ]]; then
+        echo "-> Ignoring PR #${id} as state ${state} != MERGED"
         return
     fi
     local title_suggestion_in_pr=$(gh pr view "$id" --json body,comments,reviews --jq '(.body), (.comments[] .body), (.reviews[] .body)' | grep -oP '\bCHANGELOG:\s*\K([^\\]{5,})' | tail -n1 | sanitize_title)

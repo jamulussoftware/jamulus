@@ -208,8 +208,8 @@ win32 {
     ANDROID_VERSION_CODE = $$system(git log --oneline | wc -l)
     message("Setting ANDROID_VERSION_NAME=$${ANDROID_VERSION_NAME} ANDROID_VERSION_CODE=$${ANDROID_VERSION_CODE}")
 
-    # we want to compile with C++14
-    CONFIG += c++14
+    # liboboe requires C++17 for std::timed_mutex
+    CONFIG += c++17
 
     QT += androidextras
 
@@ -230,107 +230,8 @@ win32 {
 
     # if compiling for android you need to use Oboe library which is included as a git submodule
     # make sure you git pull with submodules to pull the latest Oboe library
-    OBOE_SOURCES = libs/oboe/src/aaudio/AAudioLoader.cpp \
-        libs/oboe/src/aaudio/AudioStreamAAudio.cpp \
-        libs/oboe/src/common/AudioSourceCaller.cpp \
-        libs/oboe/src/common/AudioStream.cpp \
-        libs/oboe/src/common/AudioStreamBuilder.cpp \
-        libs/oboe/src/common/DataConversionFlowGraph.cpp \
-        libs/oboe/src/common/FilterAudioStream.cpp \
-        libs/oboe/src/common/FixedBlockAdapter.cpp \
-        libs/oboe/src/common/FixedBlockReader.cpp \
-        libs/oboe/src/common/FixedBlockWriter.cpp \
-        libs/oboe/src/common/LatencyTuner.cpp \
-        libs/oboe/src/common/QuirksManager.cpp \
-        libs/oboe/src/common/SourceFloatCaller.cpp \
-        libs/oboe/src/common/SourceI16Caller.cpp \
-        libs/oboe/src/common/StabilizedCallback.cpp \
-        libs/oboe/src/common/Trace.cpp \
-        libs/oboe/src/common/Utilities.cpp \
-        libs/oboe/src/common/Version.cpp \
-        libs/oboe/src/fifo/FifoBuffer.cpp \
-        libs/oboe/src/fifo/FifoController.cpp \
-        libs/oboe/src/fifo/FifoControllerBase.cpp \
-        libs/oboe/src/fifo/FifoControllerIndirect.cpp \
-        libs/oboe/src/flowgraph/ChannelCountConverter.cpp \
-        libs/oboe/src/flowgraph/ClipToRange.cpp \
-        libs/oboe/src/flowgraph/FlowGraphNode.cpp \
-        libs/oboe/src/flowgraph/ManyToMultiConverter.cpp \
-        libs/oboe/src/flowgraph/MonoToMultiConverter.cpp \
-        libs/oboe/src/flowgraph/MultiToMonoConverter.cpp \
-        libs/oboe/src/flowgraph/RampLinear.cpp \
-        libs/oboe/src/flowgraph/SampleRateConverter.cpp \
-        libs/oboe/src/flowgraph/SinkFloat.cpp \
-        libs/oboe/src/flowgraph/SinkI16.cpp \
-        libs/oboe/src/flowgraph/SinkI24.cpp \
-        libs/oboe/src/flowgraph/SourceFloat.cpp \
-        libs/oboe/src/flowgraph/SourceI16.cpp \
-        libs/oboe/src/flowgraph/SourceI24.cpp \
-        libs/oboe/src/flowgraph/resampler/IntegerRatio.cpp \
-        libs/oboe/src/flowgraph/resampler/LinearResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/MultiChannelResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerMono.cpp \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerStereo.cpp \
-        libs/oboe/src/flowgraph/resampler/SincResampler.cpp \
-        libs/oboe/src/flowgraph/resampler/SincResamplerStereo.cpp \
-        libs/oboe/src/opensles/AudioInputStreamOpenSLES.cpp \
-        libs/oboe/src/opensles/AudioOutputStreamOpenSLES.cpp \
-        libs/oboe/src/opensles/AudioStreamBuffered.cpp \
-        libs/oboe/src/opensles/AudioStreamOpenSLES.cpp \
-        libs/oboe/src/opensles/EngineOpenSLES.cpp \
-        libs/oboe/src/opensles/OpenSLESUtilities.cpp \
-        libs/oboe/src/opensles/OutputMixerOpenSLES.cpp
-
-    OBOE_HEADERS = libs/oboe/src/aaudio/AAudioLoader.h \
-        libs/oboe/src/aaudio/AudioStreamAAudio.h \
-        libs/oboe/src/common/AudioClock.h \
-        libs/oboe/src/common/AudioSourceCaller.h \
-        libs/oboe/src/common/DataConversionFlowGraph.h \
-        libs/oboe/src/common/FilterAudioStream.h \
-        libs/oboe/src/common/FixedBlockAdapter.h \
-        libs/oboe/src/common/FixedBlockReader.h \
-        libs/oboe/src/common/FixedBlockWriter.h \
-        libs/oboe/src/common/MonotonicCounter.h \
-        libs/oboe/src/common/OboeDebug.h \
-        libs/oboe/src/common/QuirksManager.h \
-        libs/oboe/src/common/SourceFloatCaller.h \
-        libs/oboe/src/common/SourceI16Caller.h \
-        libs/oboe/src/common/Trace.h \
-        libs/oboe/src/fifo/FifoBuffer.h \
-        libs/oboe/src/fifo/FifoController.h \
-        libs/oboe/src/fifo/FifoControllerBase.h \
-        libs/oboe/src/fifo/FifoControllerIndirect.h \
-        libs/oboe/src/flowgraph/ChannelCountConverter.h \
-        libs/oboe/src/flowgraph/ClipToRange.h \
-        libs/oboe/src/flowgraph/FlowGraphNode.h \
-        libs/oboe/src/flowgraph/ManyToMultiConverter.h \
-        libs/oboe/src/flowgraph/MonoToMultiConverter.h \
-        libs/oboe/src/flowgraph/MultiToMonoConverter.h \
-        libs/oboe/src/flowgraph/RampLinear.h \
-        libs/oboe/src/flowgraph/SampleRateConverter.h \
-        libs/oboe/src/flowgraph/SinkFloat.h \
-        libs/oboe/src/flowgraph/SinkI16.h \
-        libs/oboe/src/flowgraph/SinkI24.h \
-        libs/oboe/src/flowgraph/SourceFloat.h \
-        libs/oboe/src/flowgraph/SourceI16.h \
-        libs/oboe/src/flowgraph/SourceI24.h \
-        libs/oboe/src/flowgraph/resampler/HyperbolicCosineWindow.h \
-        libs/oboe/src/flowgraph/resampler/IntegerRatio.h \
-        libs/oboe/src/flowgraph/resampler/LinearResampler.h \
-        libs/oboe/src/flowgraph/resampler/MultiChannelResampler.h \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResampler.h \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerMono.h \
-        libs/oboe/src/flowgraph/resampler/PolyphaseResamplerStereo.h \
-        libs/oboe/src/flowgraph/resampler/SincResampler.h \
-        libs/oboe/src/flowgraph/resampler/SincResamplerStereo.h \
-        libs/oboe/src/opensles/AudioInputStreamOpenSLES.h \
-        libs/oboe/src/opensles/AudioOutputStreamOpenSLES.h \
-        libs/oboe/src/opensles/AudioStreamBuffered.h \
-        libs/oboe/src/opensles/AudioStreamOpenSLES.h \
-        libs/oboe/src/opensles/EngineOpenSLES.h \
-        libs/oboe/src/opensles/OpenSLESUtilities.h \
-        libs/oboe/src/opensles/OutputMixerOpenSLES.h
+    OBOE_SOURCES = $$files(libs/oboe/src/*.cpp, true)
+    OBOE_HEADERS = $$files(libs/oboe/src/*.h, true)
 
     INCLUDEPATH_OBOE = libs/oboe/include/ \
         libs/oboe/src/
@@ -340,10 +241,10 @@ win32 {
         libs/oboe/LICENSE \
         libs/oboe/README
 
-        INCLUDEPATH += $$INCLUDEPATH_OBOE
-        HEADERS += $$OBOE_HEADERS
-        SOURCES += $$OBOE_SOURCES
-        DISTFILES += $$DISTFILES_OBOE
+    INCLUDEPATH += $$INCLUDEPATH_OBOE
+    HEADERS += $$OBOE_HEADERS
+    SOURCES += $$OBOE_SOURCES
+    DISTFILES += $$DISTFILES_OBOE
 } else:unix {
     # we want to compile with C++11
     CONFIG += c++11

@@ -21,7 +21,7 @@ Function Install-Qt {
         [string] $QtArch,
         [string] $InstallDir
     )
-    $Args = ("--outputdir", "$InstallDir", "windows", "desktop", "$QtVersion", "$QtArch")
+    $Args = ("--outputdir", "$InstallDir", "windows", "desktop", "$QtVersion", "$QtArch", "--archives", "qtbase", "qttools", "qttranslations", "qtwinextras")
     aqt install-qt @Args
     if ( !$? )
     {

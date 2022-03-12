@@ -176,7 +176,7 @@ QString CSoundBase::SetDev ( const QString strDevName )
             }
             sErrorMessage += "</ul>";
 
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( WITH_JACK )
             // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
             // offer the user under Windows that we open the driver setups of all registered
             // ASIO drivers

@@ -112,18 +112,6 @@ jobs:
             run_codeql:             true
             xcode_version:          12.1.1
 
-          - config_name:            iOS (artifacts)
-            target_os:              ios
-            building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/ios/autobuild_ios_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/ios/autobuild_ios_2_build.sh"
-            cmd3_postbuild:         "./autobuild/ios/autobuild_ios_3_copy_files.sh"
-            # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
-            # There are no hints that iOS is supposed to be supported by CodeQL.
-            # Therefore, disable it:
-            run_codeql:             false
-            xcode_version:          12.1.1
-
           - config_name:            MacOS Legacy (artifacts)
             target_os:              macos
             building_on_os:         macos-10.15
@@ -136,6 +124,18 @@ jobs:
             # https://developer.apple.com/support/xcode/
             # Xcode 12.1.1 is the most-recent 12.1.x release:
             # https://xcodereleases.com/
+            xcode_version:          12.1.1
+
+          - config_name:            iOS (artifacts)
+            target_os:              ios
+            building_on_os:         macos-10.15
+            cmd1_prebuild:          "./autobuild/ios/autobuild_ios_1_prepare.sh 5.15.2"
+            cmd2_build:             "./autobuild/ios/autobuild_ios_2_build.sh"
+            cmd3_postbuild:         "./autobuild/ios/autobuild_ios_3_copy_files.sh"
+            # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
+            # There are no hints that iOS is supposed to be supported by CodeQL.
+            # Therefore, disable it:
+            run_codeql:             false
             xcode_version:          12.1.1
 
           - config_name:            Windows (artifact+codeQL)

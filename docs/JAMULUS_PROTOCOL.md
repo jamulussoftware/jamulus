@@ -167,7 +167,7 @@ Jamulus uses a custom OPUS encoder / decoder, giving some different frame sizes,
 
 The packet size will vary based on:
 * Stereo vs mono
-* Packet size (64/128/256)
+* Buffer size (64/128/256 samples)
 * Use of frame sequence number (from v3.6.0 onwards)
 
 These values are wrapped up into the `NETW_TRANSPORT_PROPS` messages, which the client sends to the server to tell it which values to use.

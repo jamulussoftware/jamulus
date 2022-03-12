@@ -9,7 +9,7 @@ fi
 
 QT_DIR=/usr/local/opt/qt
 QT_VER=$1
-AQTINSTALL_VERSION=2.0.5
+AQTINSTALL_VERSION=2.0.6
 
 ###################
 ###  PROCEDURE  ###

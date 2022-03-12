@@ -21,15 +21,22 @@ Function Install-Qt {
         [string] $QtArch,
         [string] $InstallDir
     )
-    $Args = ("--outputdir", "$InstallDir", "windows", "desktop", "$QtVersion", "$QtArch", "--archives", "qtbase", "qttools", "qttranslations", "qtwinextras")
+    $Args = (
+        "--outputdir", "$InstallDir",
+        "windows",
+        "desktop",
+        "$QtVersion",
+        "$QtArch",
+        "--archives", "qtbase", "qttools", "qttranslations", "qtwinextras"
+    )
     aqt install-qt @Args
     if ( !$? )
     {
         echo "WARNING: Qt installation via first aqt run failed, re-starting with different base URL."
-        aqt install-qt @Args -b https://mirrors.ocf.berkeley.edu/qt/
+        aqt install-qt -b https://mirrors.ocf.berkeley.edu/qt/ @Args
         if ( !$? )
         {
-            throw "Qt installation with args @Arguments failed with exit code $LastExitCode"
+            throw "Qt installation with args @{Args} failed with exit code $LastExitCode"
         }
     }
 }

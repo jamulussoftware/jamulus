@@ -63,10 +63,10 @@ else
     }
 
     echo "Get Qt 64 bit..."
-    Install-Qt ${Qt64Version} ${Msvc64Version} ${QtDir}
+    Install-Qt "${Qt64Version}" "${Msvc64Version}" "${QtDir}"
 
     echo "Get Qt 32 bit..."
-    Install-Qt ${Qt32Version} ${Msvc32Version} ${QtDir}
+    Install-Qt "${Qt32Version}" "${Msvc32Version}" "${QtDir}"
 }
 
 choco config set cacheLocation $ChocoCacheDir

@@ -17,7 +17,7 @@ AQTINSTALL_VERSION=2.0.6
 
 echo "Install dependencies..."
 python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios ${QT_VER}
+python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VER}"
 
 # Add the qt binaries to the PATH.
 # The clang_64 entry can be dropped when Qt <6.2 compatibility is no longer needed.

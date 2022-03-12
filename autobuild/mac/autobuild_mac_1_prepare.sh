@@ -20,7 +20,7 @@ if [[ -d "${QT_DIR}" ]]; then
 else
     echo "Install dependencies..."
     python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-    python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop ${QT_VER}
+    python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VER}"
 fi
 
 # Add the qt binaries to the PATH.

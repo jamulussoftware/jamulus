@@ -129,9 +129,9 @@ jobs:
           - config_name:            iOS (artifacts)
             target_os:              ios
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/ios/autobuild_ios_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/ios/autobuild_ios_2_build.sh"
-            cmd3_postbuild:         "./autobuild/ios/autobuild_ios_3_copy_files.sh"
+            cmd1_prebuild:          "QT_VERSION=5.15.2 ./.github/autobuild/ios.sh setup"
+            cmd2_build:             "QT_VERSION=5.15.2 ./.github/autobuild/ios.sh build"
+            cmd3_postbuild:         "QT_VERSION=5.15.2 ./.github/autobuild/ios.sh get-artifacts"
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:

@@ -65,7 +65,7 @@ Parameters:
 
 | Name | Type | Description |
 | --- | --- | --- |
-| params | object | No parameters (empty object). |
+| params.secret | string | The preshared secret key. |
 
 Results:
 
@@ -276,6 +276,7 @@ Results:
 | result.city | string | The server city. |
 | result.countryId | number | The server country ID (see QLocale::Country). |
 | result.welcomeMessage | string | The server welcome message. |
+| result.directoryServer | string | The directory server to which this server requested registration, or blank if none. |
 | result.registrationStatus | string | The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus). |
 
 

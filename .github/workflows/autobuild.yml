@@ -97,9 +97,9 @@ jobs:
           - config_name:            Linux .deb (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-18.04
-            cmd1_prebuild:          "./autobuild/linux/autobuild_deb_1_prepare.sh"
-            cmd2_build:             "./autobuild/linux/autobuild_deb_2_build.sh"
-            cmd3_postbuild:         "./autobuild/linux/autobuild_deb_3_copy_files.sh"
+            cmd1_prebuild:          ./.github/autobuild/linux_deb.sh setup
+            cmd2_build:             ./.github/autobuild/linux_deb.sh build
+            cmd3_postbuild:         ./.github/autobuild/linux_deb.sh get-artifacts
             run_codeql:             true
 
           - config_name:            MacOS (artifacts+codeQL)

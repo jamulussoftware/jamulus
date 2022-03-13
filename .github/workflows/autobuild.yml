@@ -174,7 +174,6 @@ jobs:
         with:
           path: |
             /usr/local/opt/qt
-            ~/Library/Caches/pip
             ~/Library/Cache/jamulus-homebrew-bottles
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.cmd1_prebuild }}
 
@@ -185,7 +184,6 @@ jobs:
           path: |
             C:\Qt
             C:\ChocoCache
-            ~\AppData\Local\pip\Cache
             ~\windows\NSIS
             ~\windows\ASIOSDK2
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows/autobuild_windowsinstaller_1_prepare.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.cmd1_prebuild }}

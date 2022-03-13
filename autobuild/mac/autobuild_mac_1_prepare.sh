@@ -9,7 +9,7 @@ fi
 
 QT_DIR=/usr/local/opt/qt
 QT_VER=$1
-AQTINSTALL_VERSION=2.0.5
+AQTINSTALL_VERSION=2.0.6
 
 ###################
 ###  PROCEDURE  ###
@@ -20,7 +20,7 @@ if [[ -d "${QT_DIR}" ]]; then
 else
     echo "Install dependencies..."
     python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-    python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop ${QT_VER}
+    python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VER}" --archives qtbase qttools qttranslations qtmacextras
 fi
 
 # Add the qt binaries to the PATH.

@@ -21,15 +21,22 @@ Function Install-Qt {
         [string] $QtArch,
         [string] $InstallDir
     )
-    $Args = ("--outputdir", "$InstallDir", "windows", "desktop", "$QtVersion", "$QtArch")
+    $Args = (
+        "--outputdir", "$InstallDir",
+        "windows",
+        "desktop",
+        "$QtVersion",
+        "$QtArch",
+        "--archives", "qtbase", "qttools", "qttranslations", "qtwinextras"
+    )
     aqt install-qt @Args
     if ( !$? )
     {
         echo "WARNING: Qt installation via first aqt run failed, re-starting with different base URL."
-        aqt install-qt @Args -b https://mirrors.ocf.berkeley.edu/qt/
+        aqt install-qt -b https://mirrors.ocf.berkeley.edu/qt/ @Args
         if ( !$? )
         {
-            throw "Qt installation with args @Arguments failed with exit code $LastExitCode"
+            throw "Qt installation with args @{Args} failed with exit code $LastExitCode"
         }
     }
 }
@@ -42,7 +49,7 @@ $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
 $Qt32Version = "5.15.2"
 $Qt64Version = "5.15.2"
-$AqtinstallVersion = "2.0.5"
+$AqtinstallVersion = "2.0.6"
 $JackVersion = "1.9.17"
 $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
@@ -63,10 +70,10 @@ else
     }
 
     echo "Get Qt 64 bit..."
-    Install-Qt ${Qt64Version} ${Msvc64Version} ${QtDir}
+    Install-Qt "${Qt64Version}" "${Msvc64Version}" "${QtDir}"
 
     echo "Get Qt 32 bit..."
-    Install-Qt ${Qt32Version} ${Msvc32Version} ${QtDir}
+    Install-Qt "${Qt32Version}" "${Msvc32Version}" "${QtDir}"
 }
 
 choco config set cacheLocation $ChocoCacheDir

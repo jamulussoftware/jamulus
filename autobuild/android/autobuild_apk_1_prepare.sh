@@ -9,6 +9,7 @@
 
 COMMANDLINETOOLS_VERSION=6858069
 ANDROID_NDK_VERSION=r21d
+AQTINSTALL_VERSION=2.0.6
 
 export DEBIAN_FRONTEND="noninteractive"
 echo "::set-env name=DEBIAN_FRONTEND::${DEBIAN_FRONTEND}"
@@ -63,13 +64,17 @@ yes | "${ANDROID_SDKMANAGER}" --licenses
 
 
 # Download / install Qt
-THIS_SCRIPT=$(readlink -f "${0}")
-# Absolute path this script is in, thus /home/user/bin
-THIS_SCRIPT_PATH=$(dirname "${THIS_SCRIPT}")
-bash "${THIS_SCRIPT_PATH}"/install-qt.sh --version "${MY_QT_VERSION}" --target android --toolchain android qtbase qtandroidextras qttools qttranslations
+QT_BASEDIR="/opt/Qt"
+if [[ -d "${QT_BASEDIR}" ]]; then
+    echo "Using Qt installation from previous run (actions/cache)"
+else
+    echo "Install dependencies..."
+    python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+    python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${MY_QT_VERSION}" --archives qtbase qttools qttranslations qtandroidextras
+fi
 
 # Set the QTDIR environment variable
-export QTDIR="/opt/Qt/${MY_QT_VERSION}/android"
+export QTDIR="${QT_BASEDIR}/${MY_QT_VERSION}/android"
 
 #necessary
 echo "::set-env name=QTDIR::${QTDIR}"

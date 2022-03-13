@@ -106,18 +106,18 @@ jobs:
             target_os:              macos
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh sign_if_possible"
-            cmd3_postbuild:         "./autobuild/mac/autobuild_mac_3_copy_files.sh"
+            cmd1_prebuild:          "QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh setup"
+            cmd2_build:             "QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh build"
+            cmd3_postbuild:         "QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh get-artifacts"
             run_codeql:             true
             xcode_version:          12.1.1
 
           - config_name:            MacOS Legacy (artifacts)
             target_os:              macos
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.9.9"
-            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh do_not_sign"
-            cmd3_postbuild:         "./autobuild/mac/autobuild_mac_3_copy_files.sh legacy"
+            cmd1_prebuild:          "QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh setup"
+            cmd2_build:             "QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh build"
+            cmd3_postbuild:         "QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh get-artifacts"
             run_codeql:             false
             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:

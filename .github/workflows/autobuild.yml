@@ -234,7 +234,8 @@ jobs:
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
       - name:                       Upload Artifact 1 to Job
-        if:                         steps.step_cmd3_postbuild.outputs.artifact_1
+        # Every build job has at least one artifact. Therefore, no `if` here.
+        # If the artifact is missing, this should fail.
         uses:                       actions/upload-artifact@v2
         with:
           name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
@@ -253,7 +254,6 @@ jobs:
 
       - name:                       Notarize macOS Release Build
         if:                         >-
-                                    steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
                                     steps.step_build.outputs.macos_signed == 'true' &&
                                     contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         notarize-macOS-app
@@ -266,7 +266,6 @@ jobs:
 
       - name:                       Staple macOS Release Build
         if:                         >-
-                                    steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
                                     steps.step_build.outputs.macos_signed == 'true' &&
                                     contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         staple-macOS-app
@@ -275,9 +274,9 @@ jobs:
           product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
 
       - name:                       Upload Artifact 1 to Release
-        if:                         >-
-                                    steps.step_cmd3_postbuild.outputs.artifact_1 != '' &&
-                                    contains(needs.create_release.outputs.publish_to_release, 'true')
+        # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
+        # If the artifact is missing, this should fail.
+        if:                         contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         upload-release-asset1
         uses:                       actions/upload-release-asset@v1
         env:

@@ -141,17 +141,17 @@ jobs:
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
             building_on_os:         windows-2019
-            cmd1_prebuild:          powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1
-            cmd2_build:             powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1
-            cmd3_postbuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1
+            cmd1_prebuild:          powershell .\.github\autobuild\windows.ps1 -Stage setup
+            cmd2_build:             powershell .\.github\autobuild\windows.ps1 -Stage build -GithubWorkspace
+            cmd3_postbuild:         powershell .\.github\autobuild\windows.ps1 -Stage get-artifacts -GithubWorkspace
             run_codeql:             true
 
           - config_name:            Windows JACK (artifact)
             target_os:              windows
             building_on_os:         windows-2019
-            cmd1_prebuild:          powershell .\autobuild\windows\autobuild_windowsinstaller_1_prepare.ps1 -BuildOption jackonwindows
-            cmd2_build:             powershell .\autobuild\windows\autobuild_windowsinstaller_2_build.ps1 -BuildOption jackonwindows
-            cmd3_postbuild:         powershell .\autobuild\windows\autobuild_windowsinstaller_3_copy_files.ps1 -BuildOption jackonwindows
+            cmd1_prebuild:          powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage setup
+            cmd2_build:             powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage build -GithubWorkspace
+            cmd3_postbuild:         powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage get-artifacts -GithubWorkspace
             run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
@@ -186,7 +186,7 @@ jobs:
             C:\ChocoCache
             ~\windows\NSIS
             ~\windows\ASIOSDK2
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows/autobuild_windowsinstaller_1_prepare.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.cmd1_prebuild }}
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'

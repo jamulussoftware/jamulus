@@ -226,7 +226,7 @@ void CRpcServer::ProcessMessage ( QTcpSocket* pSocket, QJsonObject message, QJso
     {
         /// @rpc_method jamulus/apiAuth
         /// @brief Authenticates the connection which is a requirement for calling further methods.
-        /// @param {object} params - No parameters (empty object).
+        /// @param {string} params.secret - The preshared secret key.
         /// @result {string} result - "ok" on success
         HandleApiAuth ( pSocket, params, response );
         return;

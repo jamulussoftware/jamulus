@@ -1,16 +1,19 @@
 #!/bin/bash
 
 # This script is intended to setup a clean Raspberry Pi system for running Jamulus
-OPUS="opus-1.3.1"
+# This needs to be run from the distributions/ folder
+
+readonly OPUS="opus-1.3.1"
 NCORES=$(nproc)
+readonly NCORES
 
 # install required packages
-pkgs='alsamixergui build-essential qtbase5-dev qttools5-dev-tools libasound2-dev cmake libglib2.0-dev'
-if ! dpkg -s $pkgs >/dev/null 2>&1; then
+readonly pkgs=(alsamixergui build-essential qtbase5-dev qttools5-dev-tools libasound2-dev cmake libglib2.0-dev)
+if ! dpkg -s "${pkgs[@]}" >/dev/null 2>&1; then
   read -p "Do you want to install missing packages? " -n 1 -r
   echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    sudo apt-get install $pkgs -y
+  if [[ ${REPLY} =~ ^[Yy]$ ]]; then
+    sudo apt-get install "${pkgs[@]}" -y
     # Raspbian 10 needs qt5-default; Raspbian 11 doesn't need or provide it
     if ! qtchooser -list-versions | grep -q default; then
       sudo apt-get install qt5-default -y
@@ -22,11 +25,11 @@ fi
 if [ -d "${OPUS}" ]; then
   echo "The Opus directory is present, we assume it is compiled and ready to use. If not, delete the opus directory and call this script again."
 else
-  wget https://archive.mozilla.org/pub/opus/${OPUS}.tar.gz
-  tar -xzf ${OPUS}.tar.gz
-  rm ${OPUS}.tar.gz
-  cd ${OPUS}
-  if [ ${OPUS} == "opus-1.3.1" ]; then
+  wget https://archive.mozilla.org/pub/opus/"${OPUS}.tar.gz"
+  tar -xzf "${OPUS}.tar.gz"
+  rm "${OPUS}.tar.gz"
+  cd "${OPUS}" || exit 1
+  if [ "${OPUS}" == "opus-1.3.1" ]; then
     echo "@@ -117,13 +117,19 @@ void validate_celt_decoder(CELTDecoder *st)
  #ifndef CUSTOM_MODES
     celt_assert(st->mode == opus_custom_mode_create(48000, 960, NULL));
@@ -51,7 +54,7 @@ else
     patch celt/celt_decoder.c opus_patch_file.diff
   fi
   ./configure --enable-custom-modes --enable-fixed-point
-  make -j${NCORES}
+  make "-j${NCORES}"
   mkdir include/opus
   cp include/*.h include/opus
   cd ..
@@ -62,10 +65,10 @@ if [ -d "jack2" ]; then
   echo "The Jack2 directory is present, we assume it is compiled and ready to use. If not, delete the jack2 directory and call this script again."
 else
   git clone https://github.com/jackaudio/jack2.git
-  cd jack2
+  cd jack2 || exit 1
   git checkout v1.9.20
-  ./waf configure --alsa --prefix=/usr/local --libdir=$(pwd)/build
-  ./waf -j${NCORES}
+  ./waf configure --alsa --prefix=/usr/local "--libdir=$(pwd)/build"
+  ./waf "-j${NCORES}"
   mkdir build/jack
   cp build/*.so build/jack
   cp build/common/*.so build/jack
@@ -84,7 +87,7 @@ fi
 # compile Jamulus with external Opus library
 cd ..
 qmake "CONFIG+=opus_shared_lib raspijamulus headless" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Jamulus.pro
-make -j${NCORES}
+make "-j${NCORES}"
 
 # get first USB audio sound card device
 ADEVICE=$(aplay -l|grep "USB Audio"|tail -1|cut -d' ' -f3)
@@ -111,7 +114,7 @@ fi
 
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
-distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
+distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa "-dhw:${ADEVICE}" -p 128 -n 3 -r 48000 -s &
 ./Jamulus -n -i ${JAMULUSINIFILE} -c anygenre3.jamulus.io &
 
 echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"

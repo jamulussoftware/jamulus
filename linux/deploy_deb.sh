@@ -2,8 +2,7 @@
 
 # Create deb files
 
-cp -r debian ..
-cd ..
+cp -r distributions/debian .
 
 # get the jamulus version from pro file
 VERSION=$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)
@@ -21,11 +20,6 @@ do
 done
 echo
 
-echo "Copying modified control file for proper dependencies/maintainer logic"
-cp distributions/autobuilddeb/control debian/control
-
 echo "${VERSION} building..."
-
-sed -i "s/é&%JAMVERSION%&è/${VERSION}/g" debian/control
 
 debuild --preserve-env -b -us -uc

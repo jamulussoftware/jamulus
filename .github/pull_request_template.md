@@ -1,4 +1,4 @@
-<!-- Thank you for working on Jamulus and opening a Pull Request! Please fill the following to make the review process straight forward -->
+<!-- Thank you for working on Jamulus and opening a Pull Request! Please fill in the following to make the review process straightforward -->
 
 **Short description of changes**
 <!-- Explain what your PR does -->

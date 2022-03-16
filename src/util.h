@@ -40,7 +40,6 @@
 #    include <QDateTime>
 #    include <QDesktopServices>
 #    include <QKeyEvent>
-#    include <QTextBoundaryFinder>
 #    include <QStackedLayout>
 #    include "ui_aboutdlgbase.h"
 #endif
@@ -52,6 +51,7 @@
 #include <QUrl>
 #include <QLocale>
 #include <QElapsedTimer>
+#include <QTextBoundaryFinder>
 #include <vector>
 #include <algorithm>
 #include "global.h"
@@ -101,9 +101,7 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes, c
 
 QString GetVersionAndNameStr ( const bool bDisplayInGui = true );
 QString MakeClientNameTitle ( QString win, QString client );
-#ifndef HEADLESS
 QString TruncateString ( QString str, int position );
-#endif
 
 /******************************************************************************\
 * CVector Base Class                                                           *

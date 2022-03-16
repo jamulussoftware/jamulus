@@ -492,6 +492,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
         "<p>Gary Wang (<a href=\"https://github.com/BLumia\">BLumia</a>)</p>"
         "<p>RobyDati (<a href=\"https://github.com/RobyDati\">RobyDati</a>)</p>"
         "<p>Rob-NY (<a href=\"https://github.com/Rob-NY\">Rob-NY</a>)</p>"
+        "<p>Thai Pangsakulyanont (<a href=\"https://github.com/dtinth\">dtinth</a>)</p>"
         "<br>" +
         tr ( "For details on the contributions check out the %1" )
             .arg ( "<a href=\"https://github.com/jamulussoftware/jamulus/graphs/contributors\">" + tr ( "Github Contributors list" ) + "</a>." ) );
@@ -667,19 +668,6 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
 
         emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
     }
-}
-
-QString TruncateString ( QString str, int position )
-{
-    QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
-
-    tbfString.setPosition ( position );
-    if ( !tbfString.isAtBoundary() )
-    {
-        tbfString.toPreviousBoundary();
-        position = tbfString.position();
-    }
-    return str.left ( position );
 }
 
 QSize CMinimumStackedLayout::sizeHint() const
@@ -1416,4 +1404,17 @@ QString MakeClientNameTitle ( QString win, QString client )
         sReturnString += " - " + client;
     }
     return ( sReturnString );
+}
+
+QString TruncateString ( QString str, int position )
+{
+    QTextBoundaryFinder tbfString ( QTextBoundaryFinder::Grapheme, str );
+
+    tbfString.setPosition ( position );
+    if ( !tbfString.isAtBoundary() )
+    {
+        tbfString.toPreviousBoundary();
+        position = tbfString.position();
+    }
+    return str.left ( position );
 }

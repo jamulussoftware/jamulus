@@ -11,7 +11,7 @@ fi
 ###  PARAMETERS  ###
 ####################
 
-source "$(dirname "${BASH_SOURCE[0]}")/../../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../ensure_THIS_JAMULUS_PROJECT_PATH.sh"
 
 ###################
 ###  PROCEDURE  ###
@@ -27,9 +27,9 @@ echo ""
 
 echo ""
 echo ""
-artifact_deploy_filename=jamulus_${jamulus_buildversionstring}_mac${BUILD_SUFFIX}.dmg
+artifact_deploy_filename=jamulus_${jamulus_buildversionstring}_iOSUnsigned${BUILD_SUFFIX}.ipa
 echo "Move/Rename the built file to deploy/${artifact_deploy_filename}"
-mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Jamulus-*installer-mac.dmg "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
+mv "${THIS_JAMULUS_PROJECT_PATH}"/deploy/Jamulus.ipa "${THIS_JAMULUS_PROJECT_PATH}"/deploy/"${artifact_deploy_filename}"
 
 
 echo ""

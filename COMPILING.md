@@ -76,8 +76,7 @@ To control the server with systemd, see this [unit file example](https://github.
 You will need [Qt](https://www.qt.io/download)
 
 * Use the free GPLv2 license for Open Source development
-* To determine the Qt version you need, check [qt-installer-windows.qs](https://github.com/jamulussoftware/jamulus/blob/master/windows/qt-installer-windows.qs): under INSTALL_COMPONENTS you will see `qt.qt5.[version]`, e.g., 5123 means version 5.12.3.
-* Select Components during installation: Expand the Qt section, find the matching version, e.g., **Qt 5.12.3**, and add the compiler components for your compiler, e.g., `MSVC 2017 32-bit/64-bit` for Visual Studio 2019
+* Select Components during installation: Expand the Qt section, find the matching version, preferrably **Qt 5.15.2**, and add the compiler components for your compiler, e.g., `MSVC 2019 32-bit/64-bit` for Visual Studio 2019
 * [ASIO development files](https://www.steinberg.net/en/company/developer.html)
 
 ### Compiling and building installer

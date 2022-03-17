@@ -1,8 +1,8 @@
 /******************************************************************************\
- * Copyright (c) 2004-2020
+ * Copyright (c) 2004-2022
  *
  * Author(s):
- *  Volker Fischer
+ *  Volker Fischer, revised and maintained by Peter Goderie (pgScorpio)
  *
  ******************************************************************************
  *
@@ -24,106 +24,107 @@
 
 #pragma once
 
-#include <QMutex>
-#include <QMessageBox>
+//============================================================================
+// System includes
+//============================================================================
+
 #include "../src/util.h"
 #include "../src/global.h"
 #include "../src/soundbase.h"
 
 //============================================================================
-// ASIO Definitions
+// ASIO includes
 //============================================================================
+
 #include "asiosys.h"
+#include "asiodriver.h"
 
-/* Definitions ****************************************************************/
-// stereo for input and output
-#define NUM_IN_OUT_CHANNELS 2
-#define MAX_DRIVERNAMESIZE  32
+//============================================================================
+// CSound
+//============================================================================
 
-/* Classes ********************************************************************/
 class CSound : public CSoundBase
 {
     Q_OBJECT
 
 public:
-    CSound ( void ( *fpNewCallback ) ( CVector<int16_t>& psData, void* arg ), void* arg, const QString& strMIDISetup, const bool, const QString& );
+    CSound ( void ( *fpProcessCallback ) ( CVector<int16_t>& psData, void* pCallbackArg ), void* pProcessCallBackParg );
 
-    virtual ~CSound() { UnloadCurrentDriver(); }
-
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
-    virtual void Start();
-    virtual void Stop();
-
-    virtual void OpenDriverSetup() { ASIOControlPanel(); }
-
-    // channel selection
-    virtual int     GetNumInputChannels() { return static_cast<int> ( lNumInChanPlusAddChan ); }
-    virtual QString GetInputChannelName ( const int iDiD ) { return channelInputName[iDiD]; }
-    virtual void    SetLeftInputChannel ( const int iNewChan );
-    virtual void    SetRightInputChannel ( const int iNewChan );
-    virtual int     GetLeftInputChannel() { return vSelectedInputChannels[0]; }
-    virtual int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
-
-    virtual int     GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
-    virtual QString GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
-    virtual void    SetLeftOutputChannel ( const int iNewChan );
-    virtual void    SetRightOutputChannel ( const int iNewChan );
-    virtual int     GetLeftOutputChannel() { return vSelectedOutputChannels[0]; }
-    virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
-
-    virtual float GetInOutLatencyMs() { return fInOutLatencyMs; }
+    virtual ~CSound()
+    {
+        closeCurrentDevice();
+        closeAllAsioDrivers();
+    }
 
 protected:
-    virtual QString LoadAndInitializeDriver ( QString strDriverName, bool bOpenDriverSetup );
-    virtual void    UnloadCurrentDriver();
-    int             GetActualBufferSize ( const int iDesiredBufferSizeMono );
-    QString         CheckDeviceCapabilities();
-    bool            CheckSampleTypeSupported ( const ASIOSampleType SamType );
-    bool            CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType );
-    void            ResetChannelMapping();
+    // ASIO data
+    bool bASIOPostOutput;
 
-    int iASIOBufferSizeMono;
-    int iASIOBufferSizeStereo;
+    bool              asioDriversLoaded;
+    tVAsioDrvDataList asioDriverData;
 
-    long         lNumInChan;
-    long         lNumInChanPlusAddChan; // includes additional "added" channels
-    long         lNumOutChan;
-    float        fInOutLatencyMs;
-    CVector<int> vSelectedInputChannels;
-    CVector<int> vSelectedOutputChannels;
+    CAsioDriver asioDriver;    // The current selected asio driver
+    CAsioDriver newAsioDriver; // the new asio driver opened by checkDeviceChange(CheckOpen, ...),
+                               // to be checked by checkDeviceChange(CheckCapabilities, ...)
+                               // and set as asioDriver by checkDeviceChange(Activate, ...) or closed by checkDeviceChange(Abort, ...)
 
-    CVector<int16_t> vecsMultChanAudioSndCrd;
+    ASIOBufferInfo bufferInfos[DRV_MAX_NUM_IN_CHANNELS + DRV_MAX_NUM_OUT_CHANNELS];
+    // for input + output buffers. pgScorpio: I think we actually only need 6: 2 outputs, 2 inputs
+    // and possibly 2 extra inputs when when mixing I think there is no need to create buffers for
+    // unused in- and outputs ! (if we re-create them on change of channel selection.)
 
-    QMutex ASIOMutex;
+protected:
+    // ASIO callback implementations
+    void      onBufferSwitch ( long index, ASIOBool processNow );
+    ASIOTime* onBufferSwitchTimeInfo ( ASIOTime* timeInfo, long index, ASIOBool processNow );
+    void      onSampleRateChanged ( ASIOSampleRate sampleRate );
+    long      onAsioMessages ( long selector, long value, void* message, double* opt );
 
-    // utility functions
-    static int16_t Flip16Bits ( const int16_t iIn );
-    static int32_t Flip32Bits ( const int32_t iIn );
-    static int64_t Flip64Bits ( const int64_t iIn );
-
-    // audio hardware buffer info
-    struct sHWBufferInfo
-    {
-        long lMinSize;
-        long lMaxSize;
-        long lPreferredSize;
-        long lGranularity;
-    } HWBufferInfo;
-
-    // ASIO stuff
-    ASIODriverInfo  driverInfo;
-    ASIOBufferInfo  bufferInfos[2 * MAX_NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
-    ASIOChannelInfo channelInfosInput[MAX_NUM_IN_OUT_CHANNELS];
-    QString         channelInputName[MAX_NUM_IN_OUT_CHANNELS];
-    ASIOChannelInfo channelInfosOutput[MAX_NUM_IN_OUT_CHANNELS];
-    bool            bASIOPostOutput;
-    ASIOCallbacks   asioCallbacks;
-
+protected:
     // callbacks
-    static void      bufferSwitch ( long index, ASIOBool processNow );
-    static ASIOTime* bufferSwitchTimeInfo ( ASIOTime* timeInfo, long index, ASIOBool processNow );
-    static void      sampleRateChanged ( ASIOSampleRate ) {}
-    static long      asioMessages ( long selector, long value, void* message, double* opt );
 
-    char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
+    static ASIOCallbacks asioCallbacks;
+
+    static void _onBufferSwitch ( long index, ASIOBool processNow ) { pSound->onBufferSwitch ( index, processNow ); }
+
+    static ASIOTime* _onBufferSwitchTimeInfo ( ASIOTime* timeInfo, long index, ASIOBool processNow )
+    {
+        return pSound->onBufferSwitchTimeInfo ( timeInfo, index, processNow );
+    }
+
+    static void _onSampleRateChanged ( ASIOSampleRate sampleRate ) { pSound->onSampleRateChanged ( sampleRate ); }
+
+    static long _onAsioMessages ( long selector, long value, void* message, double* opt )
+    {
+        return pSound->onAsioMessages ( selector, value, message, opt );
+    }
+
+protected:
+    // CSound Internal
+    void closeAllAsioDrivers();
+    bool prepareAsio ( bool bStartAsio ); // Called before starting
+
+    bool checkNewDeviceCapabilities(); // used by checkDeviceChange( checkCapabilities, iDriverIndex)
+
+    //============================================================================
+    // Virtual interface to CSoundBase:
+    //============================================================================
+protected: // CSoundBase Mandatory pointer to instance (must be set to 'this' in the CSound constructor)
+    static CSound* pSound;
+
+public: // CSoundBase Mandatory functions. (but static functions can't be virtual)
+    static inline CSoundBase*             pInstance() { return pSound; }
+    static inline const CSoundProperties& GetProperties() { return pSound->getSoundProperties(); }
+
+protected:
+    // CSoundBase internal
+    virtual long         createDeviceList ( bool bRescan = false ); // Fills strDeviceList. Returns number of devices found
+    virtual bool         checkDeviceChange ( CSoundBase::tDeviceChangeCheck mode, int iDriverIndex ); // Open device sequence handling....
+    virtual unsigned int getDeviceBufferSize ( unsigned int iDesiredBufferSize );
+
+    virtual void closeCurrentDevice(); // Closes the current driver and Clears Device Info
+    virtual bool openDeviceSetup() { return asioDriver.controlPanel(); }
+
+    virtual bool start();
+    virtual bool stop();
 };

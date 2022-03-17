@@ -30,6 +30,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     pClient ( pNCliP ),
     pSettings ( pNSetP )
 {
+    // pgScorpio TODO: All CSound related dependancies must come from CSoundProperties ! No ifdef's here !
+    const CSoundProperties& soundProperties = CSound::GetProperties();
+
     setupUi ( this );
 
 #if defined( Q_OS_IOS )
@@ -65,11 +68,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "%1, where %2 is the current attenuation indicator." )
                               .arg ( "<i>" + tr ( "L" ) + " -x</i>", "<i>x</i>" );
 
-    lblAudioPan->setWhatsThis ( strAudFader );
+    groupBoxBalance->setWhatsThis ( strAudFader );
     lblAudioPanValue->setWhatsThis ( strAudFader );
-    sldAudioPan->setWhatsThis ( strAudFader );
+    sldAudioPan_5->setWhatsThis ( strAudFader );
 
-    sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
+    sldAudioPan_5->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // jitter buffer
     QString strJitterBufferSize = "<b>" + tr ( "Jitter Buffer Size" ) + ":</b> " +
@@ -117,33 +120,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer switch" ) );
     chbAutoJitBuf->setToolTip ( strJitterBufferSizeTT );
 
-#if !defined( WITH_JACK )
     // sound card device
-    lblSoundcardDevice->setWhatsThis ( "<b>" + tr ( "Audio Device" ) + ":</b> " +
-                                       tr ( "Under the Windows operating system the ASIO driver (sound card) can be "
-                                            "selected using %1. If the selected ASIO driver is not valid an error "
-                                            "message is shown and the previous valid driver is selected. "
-                                            "Under macOS the input and output hardware can be selected." )
-                                           .arg ( APP_NAME ) +
-                                       "<br>" +
-                                       tr ( "If the driver is selected during an active connection, the connection "
-                                            "is stopped, the driver is changed and the connection is started again "
-                                            "automatically." ) );
+    groupBoxAudioDevice->setWhatsThis ( soundProperties.AudioDeviceWhatsThis() );
+    cbxSoundcard->setAccessibleName ( soundProperties.AudioDeviceAccessibleName() );
+    cbxSoundcard->setToolTip ( soundProperties.AudioDeviceToolTip() + TOOLTIP_COM_END_TEXT );
+    cbxSoundcard->setHidden ( !soundProperties.HasAudioDeviceSelection() );
 
-    cbxSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
+    // driver setup button
+    butDriverSetup->setWhatsThis ( soundProperties.SetupButtonWhatsThis() );
+    butDriverSetup->setAccessibleName ( soundProperties.SetupButtonAccessibleName() );
+    butDriverSetup->setToolTip ( soundProperties.SetupButtonToolTip() + TOOLTIP_COM_END_TEXT );
 
-#    if defined( _WIN32 )
-    // set Windows specific tool tip
-    cbxSoundcard->setToolTip ( tr ( "If the ASIO4ALL driver is used, "
-                                    "please note that this driver usually introduces approx. 10-30 ms of "
-                                    "additional audio delay. Using a sound card with a native ASIO driver "
-                                    "is therefore recommended." ) +
-                               "<br>" +
-                               tr ( "If you are using the kX ASIO "
-                                    "driver, make sure to connect the ASIO inputs in the kX DSP settings "
-                                    "panel." ) +
-                               TOOLTIP_COM_END_TEXT );
-#    endif
+    butDriverSetup->setText ( soundProperties.SetupButtonText() );
+    butDriverSetup->setHidden ( !soundProperties.HasSetupDialog() );
 
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = "<b>" + tr ( "Sound Card Channel Mapping" ) + ":</b> " +
@@ -157,16 +146,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                     .arg ( APP_NAME );
 
     lblInChannelMapping->setWhatsThis ( strSndCrdChanMapp );
+    lblInChannelMapping->setVisible ( soundProperties.HasInputChannelSelection() );
     lblOutChannelMapping->setWhatsThis ( strSndCrdChanMapp );
+    lblOutChannelMapping->setVisible ( soundProperties.HasOutputChannelSelection() );
     cbxLInChan->setWhatsThis ( strSndCrdChanMapp );
     cbxLInChan->setAccessibleName ( tr ( "Left input channel selection combo box" ) );
+    cbxLInChan->setVisible ( soundProperties.HasInputChannelSelection() );
     cbxRInChan->setWhatsThis ( strSndCrdChanMapp );
     cbxRInChan->setAccessibleName ( tr ( "Right input channel selection combo box" ) );
+    cbxRInChan->setVisible ( soundProperties.HasInputChannelSelection() );
     cbxLOutChan->setWhatsThis ( strSndCrdChanMapp );
     cbxLOutChan->setAccessibleName ( tr ( "Left output channel selection combo box" ) );
+    cbxLOutChan->setVisible ( soundProperties.HasOutputChannelSelection() );
     cbxROutChan->setWhatsThis ( strSndCrdChanMapp );
     cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
-#endif
+    cbxROutChan->setVisible ( soundProperties.HasOutputChannelSelection() );
 
     // enable OPUS64
     chbEnableOPUS64->setWhatsThis ( "<b>" + tr ( "Enable Small Network Buffers" ) + ":</b> " +
@@ -228,23 +222,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                       .arg ( APP_NAME ) +
                                   TOOLTIP_COM_END_TEXT;
 
-#if defined( _WIN32 ) && !defined( WITH_JACK )
-    // Driver setup button
-    QString strSndCardDriverSetup = "<b>" + tr ( "Sound card driver settings" ) + ":</b> " +
-                                    tr ( "This opens the driver settings of your sound card. Some drivers "
-                                         "allow you to change buffer settings, others like ASIO4ALL "
-                                         "lets you choose input or outputs of your device(s). "
-                                         "More information can be found on jamulus.io." );
-
-    QString strSndCardDriverSetupTT = tr ( "Opens the driver settings. Note: %1 currently only supports devices "
-                                           "with a sample rate of %2 Hz. "
-                                           "You will not be able to select a driver/device which doesn't. "
-                                           "For more help see jamulus.io." )
-                                          .arg ( APP_NAME )
-                                          .arg ( SYSTEM_SAMPLE_RATE_HZ ) +
-                                      TOOLTIP_COM_END_TEXT;
-#endif
-
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
     rbtBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
@@ -254,12 +231,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
-
-#if defined( _WIN32 ) && !defined( WITH_JACK )
-    butDriverSetup->setWhatsThis ( strSndCardDriverSetup );
-    butDriverSetup->setAccessibleName ( tr ( "ASIO Device Settings push button" ) );
-    butDriverSetup->setToolTip ( strSndCardDriverSetupTT );
-#endif
 
     // fancy skin
     lblSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr ( "Select the skin to be used for the main window." ) );
@@ -335,7 +306,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                      "fader level if no other fader level from a previous connection "
                                      "of that client was already stored." );
 
-    lblNewClientLevel->setWhatsThis ( strNewClientLevel );
+    groupBoxNewClientLevel->setWhatsThis ( strNewClientLevel );
     edtNewClientLevel->setWhatsThis ( strNewClientLevel );
     edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
 
@@ -352,9 +323,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                  "there. Instead, decrease your input level by getting farther away "
                                  "from your microphone, adjusting your sound equipment "
                                  "or by decreasing your operating system's input settings." );
-    lblInputBoost->setWhatsThis ( strInputBoost );
+    groupBoxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setWhatsThis ( strInputBoost );
     cbxInputBoost->setAccessibleName ( tr ( "Input Boost combo box" ) );
+    groupBoxInputBoost->setVisible ( soundProperties.HasInputGainSelection() );
 
     // custom directories
     QString strCustomDirectories = "<b>" + tr ( "Custom Directories" ) + ":</b> " +
@@ -363,7 +335,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                         "To remove a value, select it, delete the text in the input box, "
                                         "then move focus out of the control." );
 
-    lblCustomDirectories->setWhatsThis ( strCustomDirectories );
+    groupBoxCustomDirectories->setWhatsThis ( strCustomDirectories );
     cbxCustomDirectories->setWhatsThis ( strCustomDirectories );
     cbxCustomDirectories->setAccessibleName ( tr ( "Custom Directories combo box" ) );
 
@@ -386,21 +358,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     QString strDetectFeedback = "<b>" + tr ( "Feedback Protection" ) + ":</b> " +
                                 tr ( "Enable feedback protection to detect acoustic feedback between "
                                      "microphone and speakers." );
-    lblDetectFeedback->setWhatsThis ( strDetectFeedback );
+    groupBoxFeedBackProtection->setWhatsThis ( strDetectFeedback );
     chbDetectFeedback->setWhatsThis ( strDetectFeedback );
     chbDetectFeedback->setAccessibleName ( tr ( "Feedback Protection check box" ) );
 
-    // init driver button
-#if defined( _WIN32 ) && !defined( WITH_JACK )
-    butDriverSetup->setText ( tr ( "ASIO Device Settings" ) );
-#else
-    // no use for this button for MacOS/Linux right now or when using JACK -> hide it
-    butDriverSetup->hide();
-#endif
-
     // init audio in fader
-    sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
-    sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
+    sldAudioPan_5->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
+    sldAudioPan_5->setTickInterval ( AUD_FADER_IN_MAX / 5 );
     UpdateAudioFaderSlider();
 
     // init delay and other information controls
@@ -492,7 +456,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
 
     // Add help text to controls -----------------------------------------------
     // Musician Profile
-    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
+    QString strFaderTag = "<b>" + tr ( "User Profile" ) + ":</b> " +
                           tr ( "Write your name or an alias here so the other musicians you want to "
                                "play with know who you are. You may also add a picture of the instrument "
                                "you play and a flag of the country or region you are located in. "
@@ -504,6 +468,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                                "you." )
                               .arg ( APP_NAME );
 
+    grbMusician->setWhatsThis ( strFaderTag );
     plblAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
     plblInstrument->setWhatsThis ( strFaderTag );
@@ -687,14 +652,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
                        &CClientSettingsDlg::OnInputBoostChanged );
 
     // buttons
-#if defined( _WIN32 ) && !defined( WITH_JACK )
-    // Driver Setup button is only available for Windows when JACK is not used
     QObject::connect ( butDriverSetup, &QPushButton::clicked, this, &CClientSettingsDlg::OnDriverSetupClicked );
-#endif
 
     // misc
     // sliders
-    QObject::connect ( sldAudioPan, &QSlider::valueChanged, this, &CClientSettingsDlg::OnAudioPanValueChanged );
+    QObject::connect ( sldAudioPan_5, &QSlider::valueChanged, this, &CClientSettingsDlg::OnAudioPanValueChanged );
 
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
                        static_cast<void ( QButtonGroup::* ) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
@@ -841,23 +803,25 @@ void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
     cbxSoundcard->setCurrentText ( pClient->GetSndCrdDev() );
 
     // update input/output channel selection
-#if defined( _WIN32 ) || defined( __APPLE__ ) || defined( __MACOSX )
+    // #if defined( _WIN32 ) || defined( __APPLE__ ) || defined( __MACOSX )
     int iSndChanIdx;
 
     // Definition: The channel selection frame shall only be visible,
     // if more than two input or output channels are available
-    const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
-    const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
+    /*
+        const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
+        const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
 
-    if ( ( iNumInChannels <= 2 ) && ( iNumOutChannels <= 2 ) )
-    {
-        // as defined, make settings invisible
-        FrameSoundcardChannelSelection->setVisible ( false );
-    }
-    else
+        if ( ( iNumInChannels < 2 ) && ( iNumOutChannels < 2 ) )
+        {
+            // as defined, make settings invisible
+            FrameSoundcardChannelSelection->setVisible ( false );
+        }
+        else
+    */
     {
         // update combo boxes
-        FrameSoundcardChannelSelection->setVisible ( true );
+        //        FrameSoundcardChannelSelection->setVisible ( true );
 
         // input
         cbxLInChan->clear();
@@ -887,10 +851,12 @@ void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
             cbxROutChan->setCurrentIndex ( pClient->GetSndCrdRightOutputChannel() );
         }
     }
-#else
-    // for other OS, no sound card channel selection is supported
-    FrameSoundcardChannelSelection->setVisible ( false );
-#endif
+    /*
+    #else
+        // for other OS, no sound card channel selection is supported
+        FrameSoundcardChannelSelection->setVisible ( false );
+    #endif
+    */
 }
 
 void CClientSettingsDlg::SetEnableFeedbackDetection ( bool enable )
@@ -899,9 +865,7 @@ void CClientSettingsDlg::SetEnableFeedbackDetection ( bool enable )
     chbDetectFeedback->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
 }
 
-#if defined( _WIN32 ) && !defined( WITH_JACK )
 void CClientSettingsDlg::OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
-#endif
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {
@@ -1049,7 +1013,7 @@ void CClientSettingsDlg::UpdateDisplay()
     UpdateJitterBufferFrame();
     UpdateSoundCardFrame();
 
-    if ( !pClient->IsRunning() )
+    if ( !pClient->SoundIsStarted() )
     {
         // clear text labels with client parameters
         lblUpstreamValue->setText ( "---" );
@@ -1155,7 +1119,7 @@ void CClientSettingsDlg::UpdateAudioFaderSlider()
 {
     // update slider and label of audio fader
     const int iCurAudInFader = pClient->GetAudioInFader();
-    sldAudioPan->setValue ( iCurAudInFader );
+    sldAudioPan_5->setValue ( iCurAudInFader );
 
     // show in label the center position and what channel is
     // attenuated

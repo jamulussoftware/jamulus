@@ -29,6 +29,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QMutex>
+#include <QMessageBox>
 #ifdef USE_OPUS_SHARED_LIB
 #    include "opus/opus_custom.h"
 #else
@@ -110,18 +111,22 @@ public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
               const QString& strConnOnStartupAddress,
-              const QString& strMIDISetup,
-              const bool     bNoAutoJackConnect,
               const QString& strNClientName,
               const bool     bNEnableIPv6,
               const bool     bNMuteMeInPersonalMix );
 
     virtual ~CClient();
 
-    void Start();
+    // pgScorpio: use clear function names !!
+    bool StartSound() { return Sound.Start(); }
+    bool StopSound() { return Sound.Stop(); }
+    bool SoundIsStarted() { return Sound.IsStarted(); } // Was IsRunning, See Client dialog code:  IsRunning is misused on some places
+    bool SoundIsActive() const { return Sound.IsActive(); }
+
+    // pgScorpio: Start/Stop what ??
+    bool Start();
     void Stop();
-    bool IsRunning() { return Sound.IsRunning(); }
-    bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
+
     bool SetServerAddr ( QString strNAddr );
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
@@ -177,11 +182,11 @@ public:
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
     // sound card device selection
-    QStringList GetSndCrdDevNames() { return Sound.GetDevNames(); }
+    QStringList GetSndCrdDevNames() { return Sound.GetDeviceNames(); }
 
-    QString SetSndCrdDev ( const QString strNewDev );
-    QString GetSndCrdDev() { return Sound.GetDev(); }
-    void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
+    void    SetSndCrdDev ( const QString strNewDev );
+    QString GetSndCrdDev() { return Sound.GetCurrentDeviceName(); }
+    void    OpenSndCrdDriverSetup() { Sound.OpenDeviceSetup(); }
 
     // sound card channel selection
     int     GetSndCrdNumInputChannels() { return Sound.GetNumInputChannels(); }
@@ -242,7 +247,11 @@ public:
 
     void SetRemoteChanPan ( const int iId, const float fPan ) { Channel.SetRemoteChanPan ( iId, fPan ); }
 
-    void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
+    void SetInputBoost ( const int iNewBoost ) //{ iInputBoost = iNewBoost; }
+    {                                          // pgScorpio: Moved input gain to CSound
+        iInputBoost = 1;
+        Sound.SetInputGain ( iNewBoost );
+    }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
@@ -273,7 +282,8 @@ public:
     QString          strClientName;
 
 #ifdef LLCON_VST_PLUGIN
-    // VST version must have direct access to sound object
+    // VST version must have direct access to sound object.
+    // pgScorpio: We can now use CSound::pInstance() to get a pointer to it's CSoundBase interface
     CSound* GetSound() { return &Sound; }
 #endif
 
@@ -364,6 +374,11 @@ protected:
 
     CSignalHandler* pSignalHandler;
 
+protected:
+    void ShowError ( QString strError );
+    void ShowWarning ( QString strWarning );
+    void ShowInfo ( QString strInfo );
+
 protected slots:
     void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
@@ -419,7 +434,8 @@ signals:
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
     void Disconnected();
-    void SoundDeviceChanged ( QString strError );
+
+    void SoundDeviceChanged ( bool bDisconnect );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );

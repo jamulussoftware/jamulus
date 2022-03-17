@@ -25,14 +25,18 @@
 #include "client.h"
 
 /* Implementation *************************************************************/
-CClient::CClient ( const quint16  iPortNumber,
-                   const quint16  iQosNumber,
-                   const QString& strConnOnStartupAddress,
-                   const QString& strMIDISetup,
-                   const bool     bNoAutoJackConnect,
-                   const QString& strNClientName,
-                   const bool     bNEnableIPv6,
-                   const bool     bNMuteMeInPersonalMix ) :
+// clang-format off
+//TODO: Don't pass bNoAutoJackConnect (and strNClientName ?) to CCLient and CSound but pass commandline options !
+//      Use the original char** argv so we can use the global command line parsing functions!
+//      Each class should parse the commandline for it's own options, so commandline options will be transparant.
+//  clang-format on
+CClient::CClient ( const quint16       iPortNumber,
+                   const quint16       iQosNumber,
+                   const QString&      strConnOnStartupAddress,
+                   const QString&      strNClientName,
+                   const bool          bNEnableIPv6,
+                   const bool          bNMuteMeInPersonalMix
+                 ) :
     ChannelInfo(),
     strClientName ( strNClientName ),
     Channel ( false ), /* we need a client channel -> "false" */
@@ -48,7 +52,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bMuteOutStream ( false ),
     fMuteOutStreamGain ( 1.0f ),
     Socket ( &Channel, iPortNumber, iQosNumber, "", bNEnableIPv6 ),
-    Sound ( AudioCallback, this, strMIDISetup, bNoAutoJackConnect, strNClientName ),
+    Sound ( AudioCallback, this),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
     iReverbLevel ( 0 ),
@@ -154,17 +158,17 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived, this, &CClient::CLChannelLevelListReceived );
 
     // other
-    QObject::connect ( &Sound, &CSound::ReinitRequest, this, &CClient::OnSndCrdReinitRequest );
+    QObject::connect ( &Sound, &CSound::reinitRequest, this, &CClient::OnSndCrdReinitRequest );
 
-    QObject::connect ( &Sound, &CSound::ControllerInFaderLevel, this, &CClient::OnControllerInFaderLevel );
+    QObject::connect ( &Sound, &CSound::controllerInFaderLevel, this, &CClient::OnControllerInFaderLevel );
 
-    QObject::connect ( &Sound, &CSound::ControllerInPanValue, this, &CClient::OnControllerInPanValue );
+    QObject::connect ( &Sound, &CSound::controllerInPanValue, this, &CClient::OnControllerInPanValue );
 
-    QObject::connect ( &Sound, &CSound::ControllerInFaderIsSolo, this, &CClient::OnControllerInFaderIsSolo );
+    QObject::connect ( &Sound, &CSound::controllerInFaderIsSolo, this, &CClient::OnControllerInFaderIsSolo );
 
-    QObject::connect ( &Sound, &CSound::ControllerInFaderIsMute, this, &CClient::OnControllerInFaderIsMute );
+    QObject::connect ( &Sound, &CSound::controllerInFaderIsMute, this, &CClient::OnControllerInFaderIsMute );
 
-    QObject::connect ( &Sound, &CSound::ControllerInMuteMyself, this, &CClient::OnControllerInMuteMyself );
+    QObject::connect ( &Sound, &CSound::controllerInMuteMyself, this, &CClient::OnControllerInMuteMyself );
 
     QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived, this, &CClient::OnInvalidPacketReceived );
 
@@ -188,9 +192,9 @@ CClient::CClient ( const quint16  iPortNumber,
 CClient::~CClient()
 {
     // if we were running, stop sound device
-    if ( Sound.IsRunning() )
+    if ( Sound.IsStarted() )
     {
-        Sound.Stop();
+        StopSound();
     }
 
     // free audio encoders and decoders
@@ -206,6 +210,30 @@ CClient::~CClient()
     // free audio modes
     opus_custom_mode_destroy ( OpusMode );
     opus_custom_mode_destroy ( Opus64Mode );
+}
+
+void CClient::ShowError ( QString strError )
+{
+    if ( !strError.isEmpty() )
+    {
+        QMessageBox::critical ( NULL, QString ( APP_NAME ) + " " + tr ( "Error" ), strError, tr ( "Ok" ), nullptr );
+    }
+}
+
+void CClient::ShowWarning ( QString strWarning )
+{
+    if ( !strWarning.isEmpty() )
+    {
+        QMessageBox::warning ( NULL, QString ( APP_NAME ) + " " + tr ( "Warning" ), strWarning, tr ( "Ok" ), nullptr );
+    }
+}
+
+void CClient::ShowInfo ( QString strInfo )
+{
+    if ( !strInfo.isEmpty() )
+    {
+        QMessageBox::information ( NULL, QString ( APP_NAME ) + " " + tr ( "Information" ), strInfo, tr ( "Ok" ), nullptr );
+    }
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -293,7 +321,7 @@ void CClient::CreateServerJitterBufferMessage()
 void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
 {
     // make sure we are running and the server address is correct
-    if ( IsRunning() && ( InetAddr == Channel.GetAddress() ) )
+    if ( SoundIsStarted() && ( InetAddr == Channel.GetAddress() ) )
     {
         // take care of wrap arounds (if wrapping, do not use result)
         const int iCurDiff = EvaluatePingMessage ( iMs );
@@ -392,195 +420,107 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
     {
         // init with new parameter, if client was running then first
         // stop it and restart again after new initialization
-        const bool bWasRunning = Sound.IsRunning();
-        if ( bWasRunning )
-        {
-            Sound.Stop();
-        }
+
+        CSoundBase::CSoundStopper sound ( Sound );
 
         // set new parameter
         iSndCrdPrefFrameSizeFactor = iNewFactor;
 
         // init with new block size index parameter
         Init();
-
-        if ( bWasRunning )
-        {
-            // restart client
-            Sound.Start();
-        }
     }
 }
 
 void CClient::SetEnableOPUS64 ( const bool eNEnableOPUS64 )
 {
+    CSoundBase::CSoundStopper sound ( Sound );
+
     // init with new parameter, if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
-
     // set new parameter
     bEnableOPUS64 = eNEnableOPUS64;
     Init();
-
-    if ( bWasRunning )
-    {
-        Sound.Start();
-    }
 }
 
 void CClient::SetAudioQuality ( const EAudioQuality eNAudioQuality )
 {
+    CSoundBase::CSoundStopper sound ( Sound );
+
     // init with new parameter, if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
 
     // set new parameter
     eAudioQuality = eNAudioQuality;
     Init();
-
-    if ( bWasRunning )
-    {
-        Sound.Start();
-    }
 }
 
 void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
 {
     // init with new parameter, if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+
+    CSoundBase::CSoundStopper sound ( Sound );
 
     // set new parameter
     eAudioChannelConf = eNAudChanConf;
     Init();
-
-    if ( bWasRunning )
-    {
-        Sound.Start();
-    }
 }
 
-QString CClient::SetSndCrdDev ( const QString strNewDev )
+void CClient::SetSndCrdDev ( const QString strNewDev )
 {
     // if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+    CSoundBase::CSoundStopper sound ( Sound );
 
-    const QString strError = Sound.SetDev ( strNewDev );
+    if ( !Sound.SetDevice ( strNewDev ) )
+    {
+        sound.Abort();                    // Do not restart!
+        emit SoundDeviceChanged ( true ); // Disconnect
+    }
 
     // init again because the sound card actual buffer size might
     // be changed on new device
     Init();
-
-    if ( bWasRunning )
-    {
-        // restart client
-        Sound.Start();
-    }
-
-    // in case of an error inform the GUI about it
-    if ( !strError.isEmpty() )
-    {
-        emit SoundDeviceChanged ( strError );
-    }
-
-    return strError;
 }
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
 {
     // if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+    CSoundBase::CSoundStopper sound ( Sound );
 
     Sound.SetLeftInputChannel ( iNewChan );
     Init();
-
-    if ( bWasRunning )
-    {
-        // restart client
-        Sound.Start();
-    }
 }
 
 void CClient::SetSndCrdRightInputChannel ( const int iNewChan )
 {
     // if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+    CSoundBase::CSoundStopper sound ( Sound );
 
     Sound.SetRightInputChannel ( iNewChan );
     Init();
-
-    if ( bWasRunning )
-    {
-        // restart client
-        Sound.Start();
-    }
 }
 
 void CClient::SetSndCrdLeftOutputChannel ( const int iNewChan )
 {
     // if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+    CSoundBase::CSoundStopper sound ( Sound );
 
     Sound.SetLeftOutputChannel ( iNewChan );
     Init();
-
-    if ( bWasRunning )
-    {
-        // restart client
-        Sound.Start();
-    }
 }
 
 void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
 {
+    CSoundBase::CSoundStopper sound ( Sound );
+
     // if client was running then first
     // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
-
     Sound.SetRightOutputChannel ( iNewChan );
     Init();
-
-    if ( bWasRunning )
-    {
-        // restart client
-        Sound.Start();
-    }
 }
 
 void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
@@ -591,43 +531,43 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
     // different thread, therefore we need a mutex here
     MutexDriverReinit.lock();
     {
+        CSoundBase::CSoundStopper sound ( Sound );
+
         // in older QT versions, enums cannot easily be used in signals without
-        // registering them -> workaroud: we use the int type and cast to the enum
-        const ESndCrdResetType eSndCrdResetType = static_cast<ESndCrdResetType> ( iSndCrdResetType );
+        // registering them -> workaround: we use the int type and cast to the enum
+        const tSndCrdResetType eSndCrdResetType = static_cast<tSndCrdResetType> ( iSndCrdResetType );
 
         // if client was running then first
         // stop it and restart again after new initialization
-        const bool bWasRunning = Sound.IsRunning();
-        if ( bWasRunning )
-        {
-            Sound.Stop();
-        }
 
         // perform reinit request as indicated by the request type parameter
-        if ( eSndCrdResetType != RS_ONLY_RESTART )
+        if ( eSndCrdResetType != tSndCrdResetType::RS_ONLY_RESTART )
         {
-            if ( eSndCrdResetType != RS_ONLY_RESTART_AND_INIT )
+            if ( eSndCrdResetType != tSndCrdResetType::RS_ONLY_RESTART_AND_INIT )
             {
                 // reinit the driver if requested
                 // (we use the currently selected driver)
-                strError = Sound.SetDev ( Sound.GetDev() );
+                Sound.ResetDevice(); // pgScorpio: was Sound.SetDev ( Sound.GetDev() ); But no! we should just reset the current device !
             }
 
             // init client object (must always be performed if the driver
-            // was changed)
-            Init();
-        }
+            // was changed)  pgScorpio: driver changed ??? Just settings changed Should be called by Sound.ResetDev() or Sound.Start if neccesary!!!
 
-        if ( bWasRunning )
-        {
-            // restart client
-            Sound.Start();
+            Init();
         }
     }
     MutexDriverReinit.unlock();
 
-    // inform GUI about the sound card device change
-    emit SoundDeviceChanged ( strError );
+    // inform GUI about the sound card device change, pgScorpio: device change???
+    if ( strError.isEmpty() )
+    {
+        emit SoundDeviceChanged ( false );
+    }
+    else
+    {
+        emit SoundDeviceChanged ( true );
+        ShowError ( strError );
+    }
 }
 
 void CClient::OnHandledSignal ( int sigNum )
@@ -642,7 +582,7 @@ void CClient::OnHandledSignal ( int sigNum )
     case SIGINT:
     case SIGTERM:
         // if connected, terminate connection (needed for headless mode)
-        if ( IsRunning() )
+        if ( SoundIsStarted() )
         {
             Stop();
         }
@@ -730,7 +670,7 @@ void CClient::OnClientIDReceived ( int iChanID )
     emit ClientIDReceived ( iChanID );
 }
 
-void CClient::Start()
+bool CClient::Start()
 {
     // init object
     Init();
@@ -739,13 +679,13 @@ void CClient::Start()
     Channel.SetEnable ( true );
 
     // start audio interface
-    Sound.Start();
+    return StartSound();
 }
 
 void CClient::Stop()
 {
     // stop audio interface
-    Sound.Stop();
+    StopSound();
 
     // disable channel
     Channel.SetEnable ( false );
@@ -783,15 +723,9 @@ void CClient::Init()
     const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT;
     const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE;
 
-#if defined( Q_OS_IOS )
-    bFraSiFactPrefSupported = true; // to reduce sound init time, because we know it's supported in iOS
-    bFraSiFactDefSupported  = true;
-    bFraSiFactSafeSupported = true;
-#else
-    bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
-    bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault ) == iFraSizeDefault );
-    bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe ) == iFraSizeSafe );
-#endif
+    bFraSiFactPrefSupported = Sound.BufferSizeSupported ( iFraSizePreffered );
+    bFraSiFactDefSupported  = Sound.BufferSizeSupported ( iFraSizeDefault );
+    bFraSiFactSafeSupported = Sound.BufferSizeSupported ( iFraSizeSafe );
 
     // translate block size index in actual block size
     const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
@@ -805,7 +739,12 @@ void CClient::Init()
     //      iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
     // Problem is legitimate setting changes (buffer size for example).
     // so the condition should be something like "if ( Sound.isInitialized and APP_IS_INIALIZING)"
-    iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
+    //
+    // pgScorpio: Solution was NOT using Init(iPrefMonoFrameSize) but to use the new
+    //            Sound.BufferSizeSupported(iFrameSize) and
+    //            Sound.SetBufferSize ( iPrefMonoFrameSize )
+    //            The actual init will be done by Sound.Start() from StartSound()
+    iMonoBlockSizeSam = Sound.SetBufferSize ( iPrefMonoFrameSize );
 
     // Calculate the current sound card frame size factor. In case
     // the current mono block size is not a multiple of the system
@@ -825,6 +764,8 @@ void CClient::Init()
         // An unsupported sound card buffer size is currently used -> we have
         // to use a conversion buffer. Per definition we use the smallest buffer
         // size as the current frame size.
+        //
+        // pgScorpio: TODO The buffer size conversion should be done by CSound !
 
         // store actual sound card buffer size (stereo)
         bSndCrdConversionBufferRequired  = true;
@@ -1046,7 +987,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     // Transmit signal ---------------------------------------------------------
 
-    if ( iInputBoost != 1 )
+    if ( iInputBoost !=
+         1 ) // pgScorpio: This can now be done by CSound during sample conversion (Much faster than itterating the whole buffer again!)
     {
         // apply a general gain boost to all audio input:
         for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )

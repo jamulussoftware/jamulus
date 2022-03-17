@@ -331,41 +331,32 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     }
 
     // sound card selection
-    const QString strError = pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
-
-    if ( !strError.isEmpty() )
-    {
-#ifndef HEADLESS
-        // special case: when settings are loaded no GUI is yet created, therefore
-        // we have to create a warning message box here directly
-        QMessageBox::warning ( nullptr, APP_NAME, strError );
-#endif
-    }
+    pClient->SetSndCrdDev ( FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", "auddev_base64", "" ) ) );
 
     // sound card channel mapping settings: make sure these settings are
     // set AFTER the sound card device is set, otherwise the settings are
     // overwritten by the defaults
     //
     // sound card left input channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch", 0, DRV_MAX_NUM_IN_CHANNELS - 1, iValue ) )
     {
         pClient->SetSndCrdLeftInputChannel ( iValue );
     }
 
     // sound card right input channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch", 0, DRV_MAX_NUM_IN_CHANNELS - 1, iValue ) )
     {
         pClient->SetSndCrdRightInputChannel ( iValue );
     }
 
     // sound card left output channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch", 0, DRV_MAX_NUM_OUT_CHANNELS - 1, iValue ) )
     {
         pClient->SetSndCrdLeftOutputChannel ( iValue );
     }
 
     // sound card right output channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch", 0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch", 0, DRV_MAX_NUM_OUT_CHANNELS - 1, iValue ) )
     {
         pClient->SetSndCrdRightOutputChannel ( iValue );
     }
@@ -501,7 +492,7 @@ else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, st
     }
     else
     {
-        // if directory is not set to custom, or if no custom directory index is found in the settings .ini file, then initialize to zero
+        // if directory is not set to custom, or if no custom directory index is found in the settings .ini file, then initialise to zero
         iCustomDirectoryIndex = 0;
     }
 

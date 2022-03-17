@@ -77,7 +77,7 @@ public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
                  const QString&   strConnOnStartupAddress,
-                 const QString&   strMIDISetup,
+                 const bool       bUseMIDICtrl,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
                  const bool       bMuteStream,
@@ -113,7 +113,6 @@ protected:
     QTimer         TimerBuffersLED;
     QTimer         TimerStatus;
     QTimer         TimerPing;
-    QTimer         TimerCheckAudioDeviceOk;
     QTimer         TimerDetectFeedback;
 
     virtual void closeEvent ( QCloseEvent* Event );
@@ -127,10 +126,10 @@ protected:
     CAnalyzerConsole   AnalyzerConsole;
 
 public slots:
+    void OnSoundActiveTimeout();
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
-    void OnTimerCheckAudioDeviceOk();
     void OnTimerDetectFeedback();
 
     void OnTimerStatus() { UpdateDisplay(); }
@@ -157,8 +156,8 @@ public slots:
     void OnSaveChannelSetup();
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
     void OnOpenUserProfileSettings();
-    void OnOpenAudioNetSettings();
-    void OnOpenAdvancedSettings();
+    void OnOpenAudioSettings();
+    void OnOpenNetworkSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
     void OnOwnFaderFirst()
@@ -191,7 +190,7 @@ public slots:
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
-    void OnSoundDeviceChanged ( QString strError );
+    void OnSoundDeviceChanged ( bool bDisconnect );
 
     void OnChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader ) { pClient->SetRemoteChanGain ( iId, fGain, bIsMyOwnFader ); }
 

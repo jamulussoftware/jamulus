@@ -51,3 +51,10 @@ Debug-iphoneos/
 Jamulus.xcodeproj
 jamulus_plugin_import.cpp
 autoLatestChangelog.md
+*.pro.user
+*.pro.user.*
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+Jamulus*.ps1

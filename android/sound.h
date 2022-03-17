@@ -37,24 +37,7 @@ class CSound : public CSoundBase, public oboe::AudioStreamCallback
 {
     Q_OBJECT
 
-public:
-    static const uint8_t RING_FACTOR;
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-             void*          arg,
-             const QString& strMIDISetup,
-             const bool,
-             const QString& );
-    virtual ~CSound() {}
-
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
-    virtual void Start();
-    virtual void Stop();
-
-    // Call backs for Oboe
-    virtual oboe::DataCallbackResult onAudioReady ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );
-    virtual void                     onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result );
-    virtual void                     onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result );
-
+private:
     struct Stats
     {
         Stats() { reset(); }
@@ -68,16 +51,27 @@ public:
         std::size_t ring_overrun;
     };
 
+    // used to reach a state where the input buffer is
+    // empty and the garbage in the first 500ms or so is discarded
+    static constexpr int32_t kNumCallbacksToDrain   = 10;
+    int32_t                  mCountCallbacksToDrain = kNumCallbacksToDrain;
+    Stats                    mStats;
+
+    oboe::ManagedStream mRecordingStream;
+    oboe::ManagedStream mPlayStream;
+
 protected:
-    CVector<int16_t> vecsTmpInputAudioSndCrdStereo;
     CBuffer<int16_t> mOutBuffer;
-    int              iOboeBufferSizeMono;
-    int              iOboeBufferSizeStereo;
+
+public:
+    CSound ( void ( *theProcessCallback ) ( CVector<short>& psData, void* arg ), void* theProcessCallbackArg );
+
+    virtual ~CSound() {}
 
 private:
     void setupCommonStreamParams ( oboe::AudioStreamBuilder* builder );
     void printStreamDetails ( oboe::ManagedStream& stream );
-    void openStreams();
+    bool openStreams();
     void closeStreams();
     void warnIfNotLowLatency ( oboe::ManagedStream& stream, QString streamName );
     void closeStream ( oboe::ManagedStream& stream );
@@ -87,12 +81,35 @@ private:
 
     void addOutputData ( int channel_count );
 
-    oboe::ManagedStream mRecordingStream;
-    oboe::ManagedStream mPlayStream;
+protected:
+    bool setBaseValues();
+    bool checkCapabilities();
 
-    // used to reach a state where the input buffer is
-    // empty and the garbage in the first 500ms or so is discarded
-    static constexpr int32_t kNumCallbacksToDrain   = 10;
-    int32_t                  mCountCallbacksToDrain = kNumCallbacksToDrain;
-    Stats                    mStats;
+protected:
+    // Call backs for Oboe
+    virtual oboe::DataCallbackResult onAudioReady ( oboe::AudioStream* oboeStream, void* audioData, int32_t numFrames );
+    virtual void                     onErrorAfterClose ( oboe::AudioStream* oboeStream, oboe::Result result );
+    virtual void                     onErrorBeforeClose ( oboe::AudioStream* oboeStream, oboe::Result result );
+
+    //============================================================================
+    // Virtual interface to CSoundBase:
+    //============================================================================
+protected: // CSoundBase Mandatory pointer to instance (must be set to 'this' in the CSound constructor)
+    static CSound* pSound;
+
+public: // CSoundBase Mandatory functions. (but static functions can't be virtual)
+    static inline CSoundBase*             pInstance() { return pSound; }
+    static inline const CSoundProperties& GetProperties() { return pSound->getSoundProperties(); }
+
+protected:
+    // CSoundBase internal
+    virtual long         createDeviceList ( bool bRescan = false ); // Fills strDeviceList. Returns number of devices found
+    virtual bool         checkDeviceChange ( CSoundBase::tDeviceChangeCheck mode, int iDriverIndex ); // Open device sequence handling....
+    virtual unsigned int getDeviceBufferSize ( unsigned int iDesiredBufferSize );
+
+    virtual void closeCurrentDevice(); // Closes the current driver and Clears Device Info
+    virtual bool openDeviceSetup() { return false; }
+
+    virtual bool start();
+    virtual bool stop();
 };

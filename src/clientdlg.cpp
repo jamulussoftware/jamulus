@@ -28,7 +28,7 @@
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
                          const QString&   strConnOnStartupAddress,
-                         const QString&   strMIDISetup,
+                         const bool       bUseMIDICtrl,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
                          const bool       bMuteStream,
@@ -38,7 +38,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
-    bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
+    bMIDICtrlUsed ( bUseMIDICtrl ),
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
@@ -265,11 +265,10 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     // prepare update check info label (invisible by default)
     lblUpdateCheck->setOpenExternalLinks ( true ); // enables opening a web browser if one clicks on a html link
-    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME ).arg ( VERSION ) + "</b></font>" );
+    lblUpdateCheck->setText ( "<font color=\"red\"><b>" + APP_UPGRADE_AVAILABLE_MSG_TEXT.arg ( APP_NAME, VERSION ) + "</b></font>" );
     lblUpdateCheck->hide();
 
     // setup timers
-    TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
     TimerDetectFeedback.setSingleShot ( true );
 
     // Connect on startup ------------------------------------------------------
@@ -386,11 +385,11 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // Settings menu  --------------------------------------------------------------
     QMenu* pSettingsMenu = new QMenu ( tr ( "Sett&ings" ), this );
 
-    pSettingsMenu->addAction ( tr ( "My &Profile..." ), this, SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
+    pSettingsMenu->addAction ( tr ( "&User Settings..." ), this, SLOT ( OnOpenUserProfileSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_P ) );
 
-    pSettingsMenu->addAction ( tr ( "Audio/Network &Settings..." ), this, SLOT ( OnOpenAudioNetSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
+    pSettingsMenu->addAction ( tr ( "&Audio Settings..." ), this, SLOT ( OnOpenAudioSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_S ) );
 
-    pSettingsMenu->addAction ( tr ( "A&dvanced Settings..." ), this, SLOT ( OnOpenAdvancedSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
+    pSettingsMenu->addAction ( tr ( "&Network Settings..." ), this, SLOT ( OnOpenNetworkSettings() ), QKeySequence ( Qt::CTRL + Qt::Key_D ) );
 
     // Main menu bar -----------------------------------------------------------
     QMenuBar* pMenu = new QMenuBar ( this );
@@ -440,6 +439,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     }
 
     // Connections -------------------------------------------------------------
+
+    QObject::connect ( CSound::pInstance(), &CSound::soundActiveTimeout, this, &CClientDlg::OnSoundActiveTimeout );
+
     // push buttons
     QObject::connect ( butConnect, &QPushButton::clicked, this, &CClientDlg::OnConnectDisconBut );
 
@@ -458,8 +460,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     QObject::connect ( &TimerStatus, &QTimer::timeout, this, &CClientDlg::OnTimerStatus );
 
     QObject::connect ( &TimerPing, &QTimer::timeout, this, &CClientDlg::OnTimerPing );
-
-    QObject::connect ( &TimerCheckAudioDeviceOk, &QTimer::timeout, this, &CClientDlg::OnTimerCheckAudioDeviceOk );
 
     QObject::connect ( &TimerDetectFeedback, &QTimer::timeout, this, &CClientDlg::OnTimerDetectFeedback );
 
@@ -609,7 +609,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     AnalyzerConsole.close();
 
     // if connected, terminate connection
-    if ( pClient->IsRunning() )
+    if ( pClient->SoundIsStarted() )
     {
         pClient->Stop();
     }
@@ -690,6 +690,13 @@ void CClientDlg::OnConnectDlgAccepted()
     // we process the accepted signal only once after the dialog was initially shown.
     if ( bConnectDlgWasShown )
     {
+        // first check if we are already connected, if this is the case we have to
+        // disconnect the old server first
+        if ( pClient->SoundIsStarted() )
+        {
+            Disconnect();
+        }
+
         // get the address from the connect dialog
         QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
@@ -730,13 +737,6 @@ void CClientDlg::OnConnectDlgAccepted()
             }
         }
 
-        // first check if we are already connected, if this is the case we have to
-        // disconnect the old server first
-        if ( pClient->IsRunning() )
-        {
-            Disconnect();
-        }
-
         // initiate connection
         Connect ( strSelectedAddress, strMixerBoardLabel );
 
@@ -745,13 +745,14 @@ void CClientDlg::OnConnectDlgAccepted()
     }
 }
 
+void CClientDlg::OnSoundActiveTimeout() { Disconnect(); }
+
 void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
-    if ( pClient->IsRunning() )
+    if ( pClient->SoundIsStarted() )
     {
         Disconnect();
-        SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
     }
     else
     {
@@ -846,7 +847,7 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         CLicenceDlg LicenceDlg;
 
         // mute the client output stream
-        pClient->SetMuteOutStream ( true );
+        pClient->SetMuteOutStream ( true ); // pgScorpio: This should be a signal !
 
         // Open the licence dialog and check if the licence was accepted. In
         // case the dialog is just closed or the decline button was pressed,
@@ -859,7 +860,7 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         // unmute the client output stream if local mute button is not pressed
         if ( chbLocalMute->checkState() == Qt::Unchecked )
         {
-            pClient->SetMuteOutStream ( false );
+            pClient->SetMuteOutStream ( false ); // pgScorpio: This should be a signal !
         }
     }
 }
@@ -885,9 +886,9 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
     SetMyWindowTitle ( iNewNumClients );
 }
 
-void CClientDlg::OnOpenAudioNetSettings() { ShowGeneralSettings ( SETTING_TAB_AUDIONET ); }
+void CClientDlg::OnOpenAudioSettings() { ShowGeneralSettings ( SETTING_TAB_AUDIO ); }
 
-void CClientDlg::OnOpenAdvancedSettings() { ShowGeneralSettings ( SETTING_TAB_ADVANCED ); }
+void CClientDlg::OnOpenNetworkSettings() { ShowGeneralSettings ( SETTING_TAB_NETWORK ); }
 
 void CClientDlg::OnOpenUserProfileSettings() { ShowGeneralSettings ( SETTING_TAB_USER ); }
 
@@ -1008,7 +1009,7 @@ void CClientDlg::OnSettingsStateChanged ( int value )
 {
     if ( value == Qt::Checked )
     {
-        ShowGeneralSettings ( SETTING_TAB_AUDIONET );
+        ShowGeneralSettings ( SETTING_TAB_AUDIO );
     }
     else
     {
@@ -1030,7 +1031,7 @@ void CClientDlg::OnChatStateChanged ( int value )
 
 void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
-    pClient->SetMuteOutStream ( value == Qt::Checked );
+    pClient->SetMuteOutStream ( value == Qt::Checked ); // pgScorpio: This should be a signal !
 
     // show/hide info label
     if ( value == Qt::Checked )
@@ -1135,49 +1136,25 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     ledDelay->SetLight ( eOverallDelayLEDColor );
 }
 
-void CClientDlg::OnTimerCheckAudioDeviceOk()
-{
-    // check if the audio device entered the audio callback after a pre-defined
-    // timeout to check if a valid device is selected and if we do not have
-    // fundamental settings errors (in which case the GUI would only show that
-    // it is trying to connect the server which does not help to solve the problem (#129))
-    if ( !pClient->IsCallbackEntered() )
-    {
-        QMessageBox::warning ( this,
-                               APP_NAME,
-                               tr ( "Your sound card is not working correctly. "
-                                    "Please open the settings dialog and check the device selection and the driver settings." ) );
-    }
-}
-
 void CClientDlg::OnTimerDetectFeedback() { bDetectFeedback = false; }
 
-void CClientDlg::OnSoundDeviceChanged ( QString strError )
+void CClientDlg::OnSoundDeviceChanged ( bool bDisconnect )
 {
-    if ( !strError.isEmpty() )
+    if ( bDisconnect )
     {
-        // the sound device setup has a problem, disconnect any active connection
-        if ( pClient->IsRunning() )
+        Disconnect();
+
+        TimerDetectFeedback.stop();
+        bDetectFeedback = false;
+    }
+    else
+    {
+        if ( pSettings->bEnableFeedbackDetection && TimerDetectFeedback.isActive() )
         {
-            Disconnect();
+            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS );
+            bDetectFeedback = true;
         }
-
-        // show the error message of the device setup
-        QMessageBox::critical ( this, APP_NAME, strError, tr ( "Ok" ), nullptr );
     }
-
-    // if the check audio device timer is running, it must be restarted on a device change
-    if ( TimerCheckAudioDeviceOk.isActive() )
-    {
-        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS );
-    }
-
-    if ( pSettings->bEnableFeedbackDetection && TimerDetectFeedback.isActive() )
-    {
-        TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS );
-        bDetectFeedback = true;
-    }
-
     // update the settings dialog
     ClientSettingsDlg.UpdateSoundDeviceChannelSelectionFrame();
 }
@@ -1188,6 +1165,11 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
 }
 
+// clang-format off
+//pgScorpio TODO:
+// Connect() does NOT belong here! Dialog code should never take any non ui actions !
+// Signal CClient, and CLient should take the needed actions and control CClientDlg by onConnected(), onDisconnected().
+//  clang-format on
 void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
 {
     // set address and check if address is valid
@@ -1197,7 +1179,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         // running state but show error message
         try
         {
-            if ( !pClient->IsRunning() )
+            if ( !pClient->SoundIsStarted() )
             {
                 pClient->Start();
             }
@@ -1210,39 +1192,46 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
             return;
         }
 
-        // hide label connect to server
-        lblConnectToServer->hide();
-        lbrInputLevelL->setEnabled ( true );
-        lbrInputLevelR->setEnabled ( true );
-
-        // change connect button text to "disconnect"
-        butConnect->setText ( tr ( "&Disconnect" ) );
-
-        // set server name in audio mixer group box title
-        MainMixerBoard->SetServerName ( strMixerBoardLabel );
-
-        // start timer for level meter bar and ping time measurement
-        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
-        TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start ( PING_UPDATE_TIME_MS );
-        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
-
-        // audio feedback detection
-        if ( pSettings->bEnableFeedbackDetection )
+        if ( pClient->SoundIsStarted() )
         {
-            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
-            bDetectFeedback = true;
+            // hide label connect to server
+            lblConnectToServer->hide();
+            lbrInputLevelL->setEnabled ( true );
+            lbrInputLevelR->setEnabled ( true );
+
+            // change connect button text to "disconnect"
+            butConnect->setText ( tr ( "&Disconnect" ) );
+
+            // set server name in audio mixer group box title
+            MainMixerBoard->SetServerName ( strMixerBoardLabel );
+
+            // start timer for level meter bar and ping time measurement
+            TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+            TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
+            TimerPing.start ( PING_UPDATE_TIME_MS );
+
+            // audio feedback detection
+            if ( pSettings->bEnableFeedbackDetection )
+            {
+                TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+                bDetectFeedback = true;
+            }
         }
     }
 }
 
+// clang-format off
+//pgScorpio TODO:
+// Disconnect() does NOT belong here! Dialog code should never take any non ui actions !
+// Signal CClient, and CLient should take the needed actions and control CClientDlg by onConnected(), onDisconnected().
+//  clang-format on
 void CClientDlg::Disconnect()
 {
     // only stop client if currently running, in case we received
     // the stopped message, the client is already stopped but the
     // connect/disconnect button and other GUI controls must be
     // updated
-    if ( pClient->IsRunning() )
+    if ( pClient->SoundIsStarted() )
     {
         pClient->Stop();
     }
@@ -1266,7 +1255,6 @@ void CClientDlg::Disconnect()
     // stop other timers
     TimerBuffersLED.stop();
     TimerPing.stop();
-    TimerCheckAudioDeviceOk.stop();
     TimerDetectFeedback.stop();
     bDetectFeedback = false;
 
@@ -1288,6 +1276,8 @@ OnTimerStatus();
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+
+    //    SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
 }
 
 void CClientDlg::UpdateDisplay()

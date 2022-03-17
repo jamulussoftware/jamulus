@@ -71,10 +71,37 @@ LED bar:      lbr
 //#define _DEBUG_
 #undef _DEBUG_
 
+// html text macro's:
+#define htmlBold( T ) "<b>" + T + "</b>"
+#define htmlNewLine() "<br>"
+
 // version and application name (use version from qt prject file)
 #undef VERSION
 #define VERSION  APP_VERSION
 #define APP_NAME "Jamulus"
+
+// Sound Definitions
+// stereo for input and output on protocol
+#define PROT_NUM_IN_CHANNELS  2
+#define PROT_NUM_OUT_CHANNELS 2
+
+// minimum driver requirements
+#define DRV_MIN_IN_CHANNELS  1
+#define DRV_MIN_OUT_CHANNELS 2
+
+// define the maximum number of audio channel for input/output we can store
+// channel infos for (and therefore this is the maximum number of entries in
+// the channel selection combo box regardless of the actual available number
+// of channels by the audio device)
+// pgScorpio: No longer a limit in CSoundBase, should also be no limit in CSound, but it still is a limit used in settings....
+#define DRV_MAX_NUM_IN_CHANNELS  64
+#define DRV_MAX_NUM_OUT_CHANNELS 64
+
+// maximum number of recognized sound cards installed in the system
+#define DRV_MAX_NUM_DEVICES 129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
+// pgScorpio: was DRV_MAX_NUM_DEVICES
+
+#define DRV_MAX_INPUT_GAIN 10
 
 // Windows registry key name of auto run entry for the server
 #define AUTORUN_SERVER_REG_NAME "Jamulus server"
@@ -178,15 +205,6 @@ LED bar:      lbr
 // maximum number of fader groups (must be consistent to audiomixerboard implementation)
 #define MAX_NUM_FADER_GROUPS 8
 
-// maximum number of recognized sound cards installed in the system
-#define MAX_NUMBER_SOUND_CARDS 129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
-
-// define the maximum number of audio channel for input/output we can store
-// channel infos for (and therefore this is the maximum number of entries in
-// the channel selection combo box regardless of the actual available number
-// of channels by the audio device)
-#define MAX_NUM_IN_OUT_CHANNELS 64
-
 // maximum number of elemts in the server address combo box
 #define MAX_NUM_SERVER_ADDR_ITEMS 12
 
@@ -260,9 +278,9 @@ LED bar:      lbr
 #define MAX_LEN_VERSION_TEXT        30
 
 // define Settings tab indexes
-#define SETTING_TAB_USER     0
-#define SETTING_TAB_AUDIONET 1
-#define SETTING_TAB_ADVANCED 2
+#define SETTING_TAB_USER    0
+#define SETTING_TAB_AUDIO   1
+#define SETTING_TAB_NETWORK 2
 
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT \
@@ -351,17 +369,174 @@ public:
 
 /* Prototypes for global functions ********************************************/
 // command line parsing, TODO do not declare functions globally but in a class
-QString UsageArguments ( char** argv );
+//                       pgScorpio: A Class is there now !
+//                                 (Still containing these functions)
 
-bool GetFlagArgument ( char** argv, int& i, QString strShortOpt, QString strLongOpt );
+extern QString UsageArguments ( QString appPath );
 
-bool GetStringArgument ( int argc, char** argv, int& i, QString strShortOpt, QString strLongOpt, QString& strArg );
+//============================================================================
+// CCommandlineOptions class:
+//  Note that passing commandline arguments to classes is no longer required,
+//  since an instance of this class can get commandline options anywhere.
+//============================================================================
 
-bool GetNumericArgument ( int     argc,
-                          char**  argv,
-                          int&    i,
-                          QString strShortOpt,
-                          QString strLongOpt,
-                          double  rRangeStart,
-                          double  rRangeStop,
-                          double& rValue );
+class CCommandlineOptions
+{
+public:
+    CCommandlineOptions() { reset(); }
+
+private:
+    friend int main ( int argc, char** argv );
+
+    // Statics assigned from main ()
+    static int    appArgc;
+    static char** appArgv;
+
+protected:
+    // GetFirstArgument/GetNextArgument:
+    int    currentIndex;
+    char** currentArgv;
+
+    void reset()
+    {
+        currentArgv  = appArgv;
+        currentIndex = 0;
+    }
+
+public:
+    // GetFirstArgument/GetNextArgument:
+
+    QString GetFirstArgument()
+    {
+        reset();
+        // Skip program path
+        return GetNextArgument();
+    }
+
+    QString GetNextArgument()
+    {
+        if ( currentIndex < appArgc )
+        {
+            currentArgv++;
+            currentIndex++;
+
+            if ( currentIndex < appArgc )
+            {
+                return QString ( *currentArgv );
+            }
+        }
+
+        return QString();
+    }
+
+public:
+    QString GetProgramPath() { return QString ( *appArgv ); }
+
+public:
+    // sequencial parse functions:
+
+    bool GetFlagArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt ) const;
+
+    bool GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg ) const;
+
+    bool GetNumericArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, double rRangeStart, double rRangeStop, double& rValue )
+        const;
+
+public:
+    // Get specific argument:
+
+    bool GetFlagArgument ( const QString& strShortOpt, const QString& strLongOpt ) const
+    {
+        int i = 1;
+        while ( i < appArgc )
+        {
+            if ( GetFlagArgument ( i, strShortOpt, strLongOpt ) )
+            {
+                return true;
+            }
+
+            i++;
+        }
+
+        return false;
+    }
+
+    bool GetStringArgument ( const QString& strShortOpt, const QString& strLongOpt, QString& strArg ) const
+    {
+        int i = 1;
+        while ( i < appArgc )
+        {
+            if ( GetStringArgument ( i, strShortOpt, strLongOpt, strArg ) )
+            {
+                return true;
+            }
+
+            i++;
+        }
+
+        return false;
+    }
+
+    bool GetNumericArgument ( const QString& strShortOpt, const QString& strLongOpt, double rRangeStart, double rRangeStop, double& rValue ) const
+    {
+        int i = 1;
+        while ( i < appArgc )
+        {
+            if ( GetNumericArgument ( i, strShortOpt, strLongOpt, rRangeStart, rRangeStop, rValue ) )
+            {
+                return true;
+            }
+
+            i++;
+        }
+
+        return false;
+    }
+};
+
+// defines for commandline options in the style "shortopt", "longopt"
+// Name is standard CMDLN_LONGOPTNAME
+// These defines can be used for strShortOpt, strLongOpt parameters
+// of the CCommandlineOptions functions.
+//
+// clang-format off
+#define CMDLN_SERVER              "-s",                    "--server"
+#define CMDLN_INIFILE             "-i",                    "--inifile"
+#define CMDLN_NOGUI               "-n",                    "--nogui"
+#define CMDLN_PORT                "-p",                    "--port"
+#define CMDLN_QOS                 "-Q",                    "--qos"
+#define CMDLN_NOTRANSLATION       "-t",                    "--notranslation"
+#define CMDLN_ENABLEIPV6          "-6",                    "--enableipv6"
+#define CMDLN_DISCONONQUIT        "-d",                    "--discononquit"
+#define CMDLN_DIRECTORYSERVER     "-e",                    "--directoryserver"
+#define CMDLN_DIRECTORYFILE       "--directoryfile",       "--directoryfile"
+#define CMDLN_LISTFILTER          "-f",                    "--listfilter"
+#define CMDLN_FASTUPDATE          "-F",                    "--fastupdate"
+#define CMDLN_LOG                 "-l",                    "--log"
+#define CMDLN_LICENCE             "-L",                    "--licence"
+#define CMDLN_HTMLSTATUS          "-m",                    "--htmlstatus"
+#define CMDLN_SERVERINFO          "-o",                    "--serverinfo"
+#define CMDLN_SERVERPUBLICIP      "--serverpublicip",      "--serverpublicip"
+#define CMDLN_DELAYPAN            "-P",                    "--delaypan"
+#define CMDLN_RECORDING           "-R",                    "--recording"
+#define CMDLN_NORECORD            "--norecord",            "--norecord"
+#define CMDLN_SERVERBINDIP        "--serverbindip",        "--serverbindip"
+#define CMDLN_MULTITHREADING      "-T",                    "--multithreading"
+#define CMDLN_NUMCHANNELS         "-u",                    "--numchannels"
+#define CMDLN_WELCOMEMESSAGE      "-w",                    "--welcomemessage"
+#define CMDLN_STARTMINIMIZED      "-z",                    "--startminimized"
+#define CMDLN_CONNECT             "-c",                    "--connect"
+#define CMDLN_NOJACKCONNECT       "-j",                    "--nojackconnect"
+#define CMDLN_MUTESTREAM          "-M",                    "--mutestream"
+#define CMDLN_MUTEMYOWN           "--mutemyown",           "--mutemyown"
+#define CMDLN_CLIENTNAME          "--clientname",          "--clientname"
+#define CMDLN_CTRLMIDICH          "--ctrlmidich",          "--ctrlmidich"
+// Backwards compatibilyty:
+#define CMDLN_CENTRALSERVER       "--centralserver",       "--centralserver"
+// pgScorpio: TODO These are NOT in help !:
+#define CMDLN_SHOWALLSERVERS      "--showallservers",      "--showallservers"
+#define CMDLN_SHOWANALYZERCONSOLE "--showanalyzerconsole", "--showanalyzerconsole"
+// CMDLN_SPECIAL: Mostly used for debugging, any option after --special is accepted, should NOT be in help !
+#define CMDLN_SPECIAL             "--special",             "--special"
+#define CMDLN_JACKINPUTS          "--jackinputs",          "--jackinputs"
+// clang-format on

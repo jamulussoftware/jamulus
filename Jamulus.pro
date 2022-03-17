@@ -69,12 +69,14 @@ win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)  pgScorpio: is this still valid ??? asiolist.cpp no longer exists!
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     INCLUDEPATH += windows/ASIOSDK2/common
-    HEADERS += windows/ASIOSDK2/common/asio.h \
+    HEADERS += \
+        windows/ASIOSDK2/common/asio.h \
         windows/ASIOSDK2/common/iasiodrv.h \
         windows/asiosys.h \
-        windows/asiodrivers.h \
+        windows/asiodriver.h \
         windows/sound.h
-    SOURCES += windows/asiodrivers.cpp \
+    SOURCES += \
+        windows/asiodriver.cpp \
         windows/sound.cpp
     RC_FILE = windows/mainicon.rc
     mingw* {
@@ -114,8 +116,10 @@ win32 {
 
         HEADERS -= windows/sound.h
         SOURCES -= windows/sound.cpp
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
+        HEADERS += linux/sound.h \
+        linux/jackclient.h
+        SOURCES += linux/sound.cpp \
+        linux/jackclient.cpp
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_ASIO
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
@@ -137,10 +141,10 @@ win32 {
     }
 
     QT += macextras
-    HEADERS += mac/sound.h
-    SOURCES += mac/sound.cpp
-    HEADERS += mac/activity.h
-    OBJECTIVE_SOURCES += mac/activity.mm
+    HEADERS += mac/activity.h \
+        mac/sound.h
+    SOURCES +=  mac/sound.cpp
+ OBJECTIVE_SOURCES += mac/activity.mm
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
     QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
@@ -184,8 +188,10 @@ win32 {
 
         HEADERS -= mac/sound.h
         SOURCES -= mac/sound.cpp
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
+        HEADERS += linux/sound.h \
+        linux/jackclient.h
+        SOURCES += linux/sound.cpp \
+        linux/jackclient.cpp
         DEFINES += WITH_JACK
         DEFINES += JACK_REPLACES_COREAUDIO
         INCLUDEPATH += /usr/local/include
@@ -349,8 +355,10 @@ win32 {
     # unnecessarily without this workaround (#741):
     QMAKE_LFLAGS += -Wl,--as-needed
 
-    HEADERS += linux/sound.h
-    SOURCES += linux/sound.cpp
+    HEADERS += linux/sound.h \
+    linux/jackclient.h
+    SOURCES += linux/sound.cpp \
+    linux/jackclient.cpp
 
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though

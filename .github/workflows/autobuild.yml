@@ -94,13 +94,21 @@ jobs:
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
-          - config_name:            Linux .deb (artifacts+codeQL)
+          - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-18.04
             cmd1_prebuild:          ./.github/autobuild/linux_deb.sh setup
             cmd2_build:             ./.github/autobuild/linux_deb.sh build
             cmd3_postbuild:         ./.github/autobuild/linux_deb.sh get-artifacts
             run_codeql:             true
+
+          - config_name:            Linux .deb armhf (artifacts)
+            target_os:              linux
+            building_on_os:         ubuntu-18.04
+            cmd1_prebuild:          TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh setup
+            cmd2_build:             TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh build
+            cmd3_postbuild:         TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh get-artifacts
+            run_codeql:             false
 
           - config_name:            MacOS (artifacts+codeQL)
             target_os:              macos

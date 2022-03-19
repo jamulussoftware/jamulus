@@ -41,7 +41,7 @@
 #include "buffer.h"
 #include "signalhandler.h"
 
-#if defined( _WIN32 ) && !defined( JACK_REPLACES_ASIO )
+#if defined( _WIN32 ) && !defined( JACK_ON_WINDOWS )
 #    include "../windows/sound.h"
 #else
 #    if ( defined( Q_OS_MACX ) ) && !defined( JACK_REPLACES_COREAUDIO )
@@ -54,7 +54,7 @@
 #                include "../android/sound.h"
 #            else
 #                include "../linux/sound.h"
-#                ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
+#                ifndef JACK_ON_WINDOWS // these headers are not available in Windows OS
 #                    include <sched.h>
 #                    include <netdb.h>
 #                endif

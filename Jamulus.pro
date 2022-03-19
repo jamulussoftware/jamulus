@@ -107,7 +107,7 @@ win32 {
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
         DEFINES += WITH_JACK
-        DEFINES += JACK_REPLACES_ASIO
+        DEFINES += JACK_ON_WINDOWS
         DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
         INCLUDEPATH += "$${programfilesdir}/JACK2/include"
         LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"

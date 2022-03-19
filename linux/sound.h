@@ -24,7 +24,7 @@
 
 #pragma once
 
-#ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
+#ifndef JACK_ON_WINDOWS // these headers are not available in Windows OS
 #    include <unistd.h>
 #    include <sys/ioctl.h>
 #endif

@@ -36,7 +36,14 @@
 #include "testbench.h"
 #include "util.h"
 #ifdef ANDROID
-#    include <QtAndroidExtras/QtAndroid>
+#    if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+/* Qt6 doesn't have qtandroidextras anymore, but there is no replacement either.
+ * Therefore, the official workaround is using the private header here:
+ */
+#        include <QtCore/private/qandroidextras_p.h>
+#    else
+#        include <QtAndroidExtras/QtAndroid>
+#    endif
 #endif
 #if defined( Q_OS_MACX )
 #    include "mac/activity.h"

@@ -211,7 +211,13 @@ win32 {
     # liboboe requires C++17 for std::timed_mutex
     CONFIG += c++17
 
-    QT += androidextras
+    lessThan(QT_MAJOR_VERSION, 6) {
+        QT += androidextras
+    } else {
+        # Qt >=6 does not have an androidextras module anymore.
+        # The current workaround as of Qt 6.2 is to use private headers from qtbase.
+        CONFIG += core-private
+    }
 
     # enabled only for debugging on android devices
     DEFINES += ANDROIDDEBUG

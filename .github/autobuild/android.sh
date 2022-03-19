@@ -71,6 +71,11 @@ setup_qt() {
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" \
             --archives qtbase qttools qttranslations qtandroidextras
+        QT_ARCHIVES=(qtbase qttools qttranslations)
+        if [[ "${QT_VERSION}" =~ 5\..* ]]; then
+            QT_ARCHIVES+=(qtandroidextras)
+        fi
+        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" --archives "${QT_ARCHIVES[@]}"
     fi
 }
 

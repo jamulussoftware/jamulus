@@ -2,7 +2,7 @@
 set -eu
 
 QT_DIR=/usr/local/opt/qt
-AQTINSTALL_VERSION=2.0.6
+AQTINSTALL_VERSION=2.1.0
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
@@ -19,7 +19,14 @@ setup() {
     else
         echo "Installing Qt"
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
+        # Install actual ios Qt:
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" --archives qtbase qttools qttranslations
+        if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+            # Starting with Qt6, ios' qtbase install does no longer include a real qmake binary.
+            # Instead, it is a script which invokes the mac desktop qmake.
+            # As of aqtinstall 2.1.0 / 04/2022, desktop qtbase has to be installed manually:
+            python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase
+        fi
     fi
 }
 

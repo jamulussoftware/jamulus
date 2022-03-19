@@ -1,4 +1,5 @@
-#!/bin/sh -e
+#!/bin/bash
+set -eu
 
 # Create deb files
 

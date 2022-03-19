@@ -42,7 +42,7 @@ Function Install-Qt
         "desktop",
         "$QtVersion",
         "$QtArch",
-        "--archives", "qtbase", "qttools", "qttranslations", "qtwinextras"
+        "--archives", "qtbase", "qttools", "qttranslations"
     )
     aqt install-qt @Args
     if ( !$? )

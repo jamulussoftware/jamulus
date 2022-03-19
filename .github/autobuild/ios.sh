@@ -19,7 +19,7 @@ setup() {
     else
         echo "Installing Qt"
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
-        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" --archives qtbase qttools qttranslations qtmacextras
+        python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" --archives qtbase qttools qttranslations
     fi
 }
 

@@ -216,7 +216,6 @@ win32 {
 
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist
-    QT += macextras
     OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
     HEADERS += ios/ios_app_delegate.h
     HEADERS += ios/sound.h

@@ -11,7 +11,7 @@ setup() {
     sudo apt-get -qq update
 
     echo "Install dependencies..."
-    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper libjack-jackd2-dev qtbase5-dev qttools5-dev-tools
+    sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev qtbase5-dev qttools5-dev-tools
 }
 
 build_app_as_deb() {

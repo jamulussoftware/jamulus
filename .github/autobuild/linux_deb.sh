@@ -14,6 +14,9 @@ case "${TARGET_ARCH}" in
     armhf)
         ABI_NAME="arm-linux-gnueabihf"
         ;;
+    arm64)
+        ABI_NAME="aarch64-linux-gnu"
+        ;;
     *)
         echo "Unsupported TARGET_ARCH ${TARGET_ARCH}"
         exit 1
@@ -50,10 +53,10 @@ setup_cross_compiler() {
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
 
-    if [[ "${TARGET_ARCH}" == armhf ]]; then
-        # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf. Therefore, build a custom one:
+    # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf or aarch64. Therefore, build a custom one:
+    if [[ $ABI_NAME ]]; then
         sudo cp -R "/usr/lib/${ABI_NAME}/qt5/mkspecs/linux-arm-gnueabi-g++/" "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/"
-        sudo sed -re 's/-gnueabi/-gnueabihf/' -i "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/qmake.conf"
+        sudo sed -re "s/arm-linux-gnueabi/${ABI_NAME}/" -i "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/qmake.conf"
     fi
 }
 

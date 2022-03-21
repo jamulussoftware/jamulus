@@ -8,17 +8,26 @@ ANDROID_BUILD_TOOLS=30.0.2
 AQTINSTALL_VERSION=2.0.6
 QT_VERSION=6.2.3
 
+# This list has to match Jamulus.pro's ANDROID_ABIS, but we can't extract it automatically as names differ slightly:
+ABIS=(x86 x86_64 armv7 arm64_v8a)
+
+if [[  "${QT_VERSION}" =~ 5\..* ]]; then
+    JAVA_VERSION=8
+else
+    JAVA_VERSION=11
+fi
+
 # Only variables which are really needed by sub-commands are exported.
 # Definitions have to stay in a specific order due to dependencies.
 QT_BASEDIR="/opt/Qt"
 ANDROID_BASEDIR="/opt/android"
 BUILD_DIR=build
 export ANDROID_SDK_ROOT="${ANDROID_BASEDIR}/android-sdk"
+export ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
 COMMANDLINETOOLS_DIR="${ANDROID_SDK_ROOT}"/cmdline-tools/latest/
-ANDROID_NDK_ROOT="${ANDROID_BASEDIR}/android-ndk"
 ANDROID_NDK_HOST="linux-x86_64"
 ANDROID_SDKMANAGER="${COMMANDLINETOOLS_DIR}/bin/sdkmanager"
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
+export JAVA_HOME="/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-amd64/"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
 
@@ -29,9 +38,14 @@ fi
 
 setup_ubuntu_dependencies() {
     export DEBIAN_FRONTEND="noninteractive"
+    EXTRA_PKGS=("")
+    if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+        # Qt6 depends on this:
+        EXTRA_PKGS=("libglib2.0-0")
+    fi
 
     sudo apt-get -qq update
-    sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full curl chrpath openjdk-8-jdk-headless
+    sudo apt-get -qq --no-install-recommends -y install build-essential zip unzip bzip2 p7zip-full curl chrpath "openjdk-${JAVA_VERSION}-jdk-headless" "${EXTRA_PKGS[@]}"
 }
 
 setup_android_sdk() {
@@ -74,19 +88,56 @@ setup_qt() {
         QT_ARCHIVES=(qtbase qttools qttranslations)
         if [[ "${QT_VERSION}" =~ 5\..* ]]; then
             QT_ARCHIVES+=(qtandroidextras)
+            python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" --archives "${QT_ARCHIVES[@]}"
+        else
+            # From Qt6 onwards, each android ABI has to be installed individually.
+            local abi
+            for abi in "${ABIS[@]}"; do
+                python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" "android_${abi}" --archives "${QT_ARCHIVES[@]}"
+            done
+
+            # In addition, android no longer provides a full qmake binary. Instead, it's just a script.
+            # We need to install the regular Linux desktop qmake instead.
+            # Qt6 is also linked to rather exotic versions of libicu, therefore, we need to install those prebuilt libs as well:
+            python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux desktop "${QT_VERSION}" --archives qtbase icu
         fi
-        python3 -m aqt install-qt --outputdir "${QT_BASEDIR}" linux android "${QT_VERSION}" --archives "${QT_ARCHIVES[@]}"
     fi
 }
 
 build_app_as_apk() {
-    QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
-    MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
+    local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
+    local DEPLOYMENT_SETTINGS="android-Jamulus-deployment-settings.json"
+    local ARCHITECTURES=""
+    local abi
+    for abi in "${ABIS[@]}"; do
+        if [[ "${QT_VERSION}" =~ 5\..* ]]; then
+            QMAKE="${QT_BASEDIR}/${QT_VERSION}/android/bin/qmake"
+            ANDROIDDEPLOYQT="${QT_BASEDIR}/${QT_VERSION}/android/bin/androiddeployqt"
+        else
+            # From Qt6 onwards, there is no single android directory anymore.
+            # Instead, there's one per ABI. As qmake handles ABIs itself, we just pick
+            # one here:
+            QMAKE="${QT_BASEDIR}/${QT_VERSION}/android_${abi}/bin/qmake"
+            # In Qt6, androiddeployqt is part of the desktop qtbase, not the android* qtbase:
+            ANDROIDDEPLOYQT="${QT_BASEDIR}/${QT_VERSION}/gcc_64/bin/androiddeployqt"
+        fi
 
-    "${QT_DIR}/bin/qmake" -spec android-clang
-    "${MAKE}" -j "$(nproc)"
-    "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
-    "${QT_DIR}"/bin/androiddeployqt --input android-Jamulus-deployment-settings.json --output "${BUILD_DIR}" \
+        "${QMAKE}" -spec android-clang
+        "${MAKE}" -j "$(nproc)"
+        "${MAKE}" INSTALL_ROOT="${BUILD_DIR}" -f Makefile install
+        if [[ "${QT_VERSION}" =~ 5\..* ]]; then
+            # Qt5 performs all ABI builds in one go
+            break
+        fi
+        [[ -z "${ARCHITECTURES}" ]] || ARCHITECTURES="${ARCHITECTURES}, "
+        ARCHITECTURES="${ARCHITECTURES}$(grep -oP '"architectures":\s*\{\K[^}]+(?=\})' "${DEPLOYMENT_SETTINGS}")"
+        "${MAKE}" clean
+    done
+    if [[ ! "${QT_VERSION}" =~ 5\..* ]]; then
+        sed -re 's/("architectures":\s*\{).*(\}.*)/\1'"${ARCHITECTURES}\2/" -i "${DEPLOYMENT_SETTINGS}"
+    fi
+
+    "${ANDROIDDEPLOYQT}" --input "${DEPLOYMENT_SETTINGS}" --output "${BUILD_DIR}" \
         --android-platform "${ANDROID_PLATFORM}" --jdk "${JAVA_HOME}" --gradle
 }
 

@@ -173,6 +173,11 @@ CClient::CClient ( const quint16  iPortNumber,
     // start timer so that elapsed time works
     PreciseTime.start();
 
+    // set gain delay timer to single-shot and connect handler function
+    TimerGain.setSingleShot ( true );
+
+    QObject::connect ( &TimerGain, &QTimer::timeout, this, &CClient::OnTimerRemoteChanGain );
+
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
@@ -335,15 +340,85 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
     CreateServerJitterBufferMessage();
 }
 
+// In order not to flood the server with gain change messages, particularly when using
+// a MIDI controller, a timer is used to limit the rate at which such messages are generated.
+// This avoids a potential long backlog of messages, since each must be ACKed before the next
+// can be sent, and this ACK is subject to the latency of the server connection.
+//
+// When the first gain change message is requested after an idle period (i.e. the timer is not
+// running), it will be sent immediately, and a 300ms timer started.
+//
+// If a gain change message is requested while the timer is still running, the new gain is not sent,
+// but just stored in newGain[iId], and the minGainId and maxGainId updated to note the range of
+// IDs that must be checked when the time expires (this will usually be a single channel
+// unless channel grouping is being used). This avoids having to check all possible channels.
+//
+// When the timer fires, the channels minGainId <= iId < maxGainId are checked by comparing
+// the last sent value in oldGain[iId] with any pending value in newGain[iId], and if they differ,
+// the new value is sent, updating oldGain[iId] with the sent value. If any new values are
+// sent, the timer is restarted so that further immediate updates will be pended.
+
 void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader )
 {
+    QMutexLocker locker ( &MutexGain );
+
     // if this gain is for my own channel, apply the value for the Mute Myself function
     if ( bIsMyOwnFader )
     {
         fMuteOutStreamGain = fGain;
     }
 
+    if ( TimerGain.isActive() )
+    {
+        // just update the new value for sending later;
+        // will compare with oldGain[iId] when the timer fires
+        newGain[iId] = fGain;
+
+        // update range of channel IDs to check in the timer
+        if ( iId < minGainId )
+            minGainId = iId; // first value to check
+        if ( iId >= maxGainId )
+            maxGainId = iId + 1; // first value NOT to check
+
+        return;
+    }
+
+    // here the timer was not active:
+    // send the actual gain and reset the range of channel IDs to empty
+    oldGain[iId] = newGain[iId] = fGain;
     Channel.SetRemoteChanGain ( iId, fGain );
+
+    maxGainId = 0;
+    minGainId = MAX_NUM_CHANNELS;
+
+    // start timer to delay sending further updates
+    TimerGain.start ( GAIN_DELAY_PERIOD_MS );
+}
+
+void CClient::OnTimerRemoteChanGain()
+{
+    QMutexLocker locker ( &MutexGain );
+    bool         bSent = false;
+
+    for ( int iId = minGainId; iId < maxGainId; iId++ )
+    {
+        if ( newGain[iId] != oldGain[iId] )
+        {
+            // send new gain and record as old gain
+            float fGain = oldGain[iId] = newGain[iId];
+            Channel.SetRemoteChanGain ( iId, fGain );
+            bSent = true;
+        }
+    }
+
+    // if a new gain has been sent, reset the range of channel IDs to empty and start timer
+    if ( bSent )
+    {
+        maxGainId = 0;
+        minGainId = MAX_NUM_CHANNELS;
+
+        TimerGain.start ( GAIN_DELAY_PERIOD_MS );
+    }
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

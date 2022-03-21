@@ -73,6 +73,9 @@
 // audio reverberation range
 #define AUD_REVERB_MAX 100
 
+// delay period between successive gain updates (ms)
+#define GAIN_DELAY_PERIOD_MS 300
+
 // OPUS number of coded bytes per audio packet
 // TODO we have to use new numbers for OPUS to avoid that old CELT packets
 // are used in the OPUS decoder (which gives a bad noise output signal).
@@ -237,6 +240,8 @@ public:
 
     void SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader );
 
+    void OnTimerRemoteChanGain();
+
     void SetRemoteChanPan ( const int iId, const float fPan ) { Channel.SetRemoteChanPan ( iId, fPan ); }
 
     void SetInputBoost ( const int iNewBoost ) { iInputBoost = iNewBoost; }
@@ -353,6 +358,14 @@ protected:
 
     // for ping measurement
     QElapsedTimer PreciseTime;
+
+    // for gain rate limiting
+    QMutex MutexGain;
+    QTimer TimerGain;
+    int    minGainId;
+    int    maxGainId;
+    float  oldGain[MAX_NUM_CHANNELS];
+    float  newGain[MAX_NUM_CHANNELS];
 
     CSignalHandler* pSignalHandler;
 

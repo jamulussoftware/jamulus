@@ -1,6 +1,9 @@
-#!/bin/sh -e
+#!/bin/bash
+set -eu
 
 # Create deb files
+
+TARGET_ARCH="${TARGET_ARCH:-amd64}"
 
 cp -r distributions/debian .
 
@@ -22,4 +25,7 @@ echo
 
 echo "${VERSION} building..."
 
-debuild --preserve-env -b -us -uc
+CC=$(dpkg-architecture -A"${TARGET_ARCH}" -qDEB_TARGET_GNU_TYPE)-gcc
+# Note: debuild only handles -a, not the long form --host-arch
+# There must be no space after -a either, otherwise debuild cannot recognize it and fails during Changelog checks.
+CC="${CC}" debuild --preserve-env -b -us -uc -j -a"${TARGET_ARCH}" --target-arch "${TARGET_ARCH}"

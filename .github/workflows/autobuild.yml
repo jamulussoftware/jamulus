@@ -102,7 +102,8 @@ jobs:
             cmd3_postbuild:         ./.github/autobuild/linux_deb.sh get-artifacts
             run_codeql:             true
 
-          - config_name:            Linux .deb armhf (artifacts)
+          - config_name:            Linux .deb armhf (artifacts, release only)
+            if:                     contains(needs.create_release.outputs.publish_to_release, 'true')
             target_os:              linux
             building_on_os:         ubuntu-18.04
             cmd1_prebuild:          TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh setup

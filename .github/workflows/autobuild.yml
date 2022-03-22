@@ -87,9 +87,9 @@ jobs:
           - config_name:            Android .apk (artifact+codeQL)
             target_os:              android
             building_on_os:         ubuntu-20.04
-            cmd1_prebuild:          "./autobuild/android/autobuild_apk_1_prepare.sh"
-            cmd2_build:             "./autobuild/android/autobuild_apk_2_build.sh"
-            cmd3_postbuild:         "./autobuild/android/autobuild_apk_3_copy_files.sh"
+            cmd1_prebuild:          "./.github/autobuild/android.sh setup"
+            cmd2_build:             "./.github/autobuild/android.sh build"
+            cmd3_postbuild:         "./.github/autobuild/android.sh get-artifacts"
             run_codeql:             true
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
@@ -204,7 +204,7 @@ jobs:
             /opt/Qt
             /opt/android/android-sdk
             /opt/android/android-ndk
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/android/autobuild_apk_1_prepare.sh', 'autobuild/android/install-qt.sh') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/android.sh') }}-${{ matrix.config.cmd1_prebuild }}
 
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         if:                         matrix.config.cmd1_prebuild

@@ -68,7 +68,9 @@
 #    include <sys/time.h>
 #endif
 
+#ifndef SERVER_ONLY
 class CClient; // forward declaration of CClient
+#endif
 
 /* Definitions ****************************************************************/
 #define METER_FLY_BACK  2

@@ -16,7 +16,7 @@ endif
 
 override_dh_auto_configure:
 	mkdir -p build-gui && cd build-gui && $(QMAKE) "CONFIG+=noupcasename" PREFIX=/usr ../Jamulus.pro
-	mkdir -p build-nox && cd build-nox && $(QMAKE) "CONFIG+=nosound headless" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro
+	mkdir -p build-nox && cd build-nox && $(QMAKE) "CONFIG+=headless serveronly" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro
 
 override_dh_auto_build:
 	cd src/res/translation && lrelease *.ts

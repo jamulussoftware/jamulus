@@ -28,6 +28,11 @@ QT += network \
     xml \
     concurrent
 
+contains(CONFIG, "nosound") {
+    CONFIG -= "nosound"
+    CONFIG += "serveronly"
+}
+
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui

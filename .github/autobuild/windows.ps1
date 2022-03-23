@@ -24,10 +24,10 @@ $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
 
-$JamulusVersion = $Env:jamulus_buildversionstring
+$JamulusVersion = $Env:JAMULUS_BUILD_VERSION
 if ( $JamulusVersion -notmatch '^\d+\.\d+\.\d+.*' )
 {
-    throw "Environment variable jamulus_buildversionstring has to be set to a valid version string"
+    throw "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
 }
 
 Function Install-Qt

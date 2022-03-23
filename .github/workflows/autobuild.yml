@@ -41,7 +41,7 @@ jobs:
     outputs:
       publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
-      version_name:                 ${{ steps.jamulus-build-vars.outputs.BUILD_VERSION }}
+      build_version:                ${{ steps.jamulus-build-vars.outputs.BUILD_VERSION }}
 
     steps:
       - name:                       Checkout code
@@ -193,7 +193,7 @@ jobs:
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         run:                        ${{ matrix.config.base_command }} setup
         env:
-          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql
@@ -205,18 +205,18 @@ jobs:
         id:                         build
         run:                        ${{ matrix.config.base_command }} build
         env:
-          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
-          MACOS_CERTIFICATE:          ${{ secrets.MACOS_CERT}}
-          MACOS_CERTIFICATE_PWD:      ${{ secrets.MACOS_CERT_PWD }}
-          MACOS_CERTIFICATE_ID:       ${{ secrets.MACOS_CERT_ID }}
-          NOTARIZATION_PASSWORD:      ${{ secrets.NOTARIZATION_PASSWORD }}
-          KEYCHAIN_PASSWORD:          ${{ secrets.KEYCHAIN_PASSWORD }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
+          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
+          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+          KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
       - name:                       Post-Build for ${{ matrix.config.config_name }}
         id:                         get-artifacts
         run:                        ${{ matrix.config.base_command }} get-artifacts
         env:
-          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Upload Artifact 1 to Job
         # Every build job has at least one artifact. Therefore, no `if` here.

@@ -24,10 +24,10 @@ $Msvc32Version = "win32_msvc2019"
 $Msvc64Version = "win64_msvc2019_64"
 $JomVersion = "1.1.2"
 
-$JamulusVersion = $Env:jamulus_buildversionstring
+$JamulusVersion = $Env:JAMULUS_BUILD_VERSION
 if ( $JamulusVersion -notmatch '^\d+\.\d+\.\d+.*' )
 {
-    throw "Environment variable jamulus_buildversionstring has to be set to a valid version string"
+    throw "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
 }
 
 Function Install-Qt
@@ -116,7 +116,7 @@ Function Build-App-With-Installer
     {
         $ExtraArgs += ("-BuildOption", $BuildOption)
     }
-    powershell ".\windows\deploy_windows.ps1" "C:\Qt\5.15.2" "C:\Qt\5.15.2" @ExtraArgs
+    powershell ".\windows\deploy_windows.ps1" "C:\Qt\${Qt32Version}" "C:\Qt\${Qt64Version}" @ExtraArgs
     if ( !$? )
     {
         throw "deploy_windows.ps1 failed with exit code $LastExitCode"
@@ -133,16 +133,16 @@ Function Pass-Artifact-to-Job
         default         { "" }
     }
 
-    $artifact_deploy_filename = "jamulus_${JamulusVersion}_win${ArtifactSuffix}.exe"
+    $artifact = "jamulus_${JamulusVersion}_win${ArtifactSuffix}.exe"
 
-    echo "Copying artifact to ${artifact_deploy_filename}"
-    cp ".\deploy\Jamulus*installer-win.exe" ".\deploy\${artifact_deploy_filename}"
+    echo "Copying artifact to ${artifact}"
+    move ".\deploy\Jamulus*installer-win.exe" ".\deploy\${artifact}"
     if ( !$? )
     {
-            throw "cp failed with exit code $LastExitCode"
+        throw "move failed with exit code $LastExitCode"
     }
-    echo "Setting Github step output name=artifact_1::${artifact_deploy_filename}"
-    echo "::set-output name=artifact_1::${artifact_deploy_filename}"
+    echo "Setting Github step output name=artifact_1::${artifact}"
+    echo "::set-output name=artifact_1::${artifact}"
 }
 
 switch ( $Stage )

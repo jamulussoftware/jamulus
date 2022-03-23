@@ -8,8 +8,8 @@ if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
     exit 1
 fi
-if [[ ! ${jamulus_buildversionstring:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Environment variable jamulus_buildversionstring has to be set to a valid version string"
+if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
     exit 1
 fi
 
@@ -17,7 +17,7 @@ setup() {
     if [[ -d "${QT_DIR}" ]]; then
         echo "Using Qt installation from previous run (actions/cache)"
     else
-        echo "Install dependencies..."
+        echo "Installing Qt"
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac ios "${QT_VERSION}" --archives qtbase qttools qttranslations qtmacextras
     fi
@@ -30,10 +30,10 @@ build_app_as_ipa() {
 }
 
 pass_artifact_to_job() {
-    artifact_deploy_filename="jamulus_${jamulus_buildversionstring}_iOSUnsigned${ARTIFACT_SUFFIX:-1}.ipa"
-    echo "Moving build artifact to deploy/${artifact_deploy_filename}"
-    mv ./deploy/Jamulus.ipa "./deploy/${artifact_deploy_filename}"
-    echo "::set-output name=artifact_1::${artifact_deploy_filename}"
+    local artifact="jamulus_${JAMULUS_BUILD_VERSION}_iOSUnsigned${ARTIFACT_SUFFIX:-1}.ipa"
+    echo "Moving build artifact to deploy/${artifact}"
+    mv ./deploy/Jamulus.ipa "./deploy/${artifact}"
+    echo "::set-output name=artifact_1::${artifact}"
 }
 
 case "${1:-}" in

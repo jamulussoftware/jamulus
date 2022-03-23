@@ -8,8 +8,8 @@ if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then
     echo "Environment variable QT_VERSION must be set to a valid Qt version"
     exit 1
 fi
-if [[ ! ${jamulus_buildversionstring:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Environment variable jamulus_buildversionstring has to be set to a valid version string"
+if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
     exit 1
 fi
 
@@ -17,15 +17,10 @@ setup() {
     if [[ -d "${QT_DIR}" ]]; then
         echo "Using Qt installation from previous run (actions/cache)"
     else
-        echo "Install dependencies..."
+        echo "Installing Qt..."
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations qtmacextras
     fi
-
-    # Add the qt binaries to the PATH.
-    # The clang_64 entry can be dropped when Qt <6.2 compatibility is no longer needed.
-    export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${QT_DIR}/${QT_VERSION}/clang_64/bin:${PATH}"
-    echo "::set-env name=PATH::${PATH}"
 }
 
 prepare_signing() {
@@ -56,6 +51,10 @@ prepare_signing() {
 }
 
 build_app_as_dmg_installer() {
+    # Add the qt binaries to the PATH.
+    # The clang_64 entry can be dropped when Qt <6.2 compatibility is no longer needed.
+    export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${QT_DIR}/${QT_VERSION}/clang_64/bin:${PATH}"
+
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then
@@ -65,10 +64,10 @@ build_app_as_dmg_installer() {
 }
 
 pass_artifact_to_job() {
-    artifact_deploy_filename="jamulus_${jamulus_buildversionstring}_mac${ARTIFACT_SUFFIX:-}.dmg"
-    echo "Moving build artifact to deploy/${artifact_deploy_filename}"
-    mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact_deploy_filename}"
-    echo "::set-output name=artifact_1::${artifact_deploy_filename}"
+    artifact="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
+    echo "Moving build artifact to deploy/${artifact}"
+    mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"
+    echo "::set-output name=artifact_1::${artifact}"
 }
 
 case "${1:-}" in

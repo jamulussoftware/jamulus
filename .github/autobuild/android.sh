@@ -22,8 +22,8 @@ export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/platform-tools"
 
-if [[ ! ${jamulus_buildversionstring:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-    echo "Environment variable jamulus_buildversionstring has to be set to a valid version string"
+if [[ ! ${JAMULUS_BUILD_VERSION:-} =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    echo "Environment variable JAMULUS_BUILD_VERSION has to be set to a valid version string"
     exit 1
 fi
 
@@ -75,8 +75,8 @@ setup_qt() {
 }
 
 build_app_as_apk() {
-    QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
-    MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
+    local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
+    local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
 
     "${QT_DIR}/bin/qmake" -spec android-clang
     "${MAKE}" -j "$(nproc)"
@@ -87,10 +87,10 @@ build_app_as_apk() {
 
 pass_artifact_to_job() {
     mkdir deploy
-    artifact_deploy_filename="jamulus_${jamulus_buildversionstring}_android.apk"
-    echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact_deploy_filename}"
-    mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact_deploy_filename}"
-    echo "::set-output name=artifact_1::${artifact_deploy_filename}"
+    local artifact="jamulus_${JAMULUS_BUILD_VERSION}_android.apk"
+    echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact}"
+    mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact}"
+    echo "::set-output name=artifact_1::${artifact}"
 }
 
 case "${1:-}" in

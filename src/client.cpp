@@ -304,6 +304,8 @@ void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
         const int iCurDiff = EvaluatePingMessage ( iMs );
         if ( iCurDiff >= 0 )
         {
+            iCurPingTime = iCurDiff; // store for use by gain message sending
+
             emit PingTimeReceived ( iCurDiff );
         }
     }
@@ -388,11 +390,7 @@ void CClient::SetRemoteChanGain ( const int iId, const float fGain, const bool b
     oldGain[iId] = newGain[iId] = fGain;
     Channel.SetRemoteChanGain ( iId, fGain );
 
-    maxGainId = 0;
-    minGainId = MAX_NUM_CHANNELS;
-
-    // start timer to delay sending further updates
-    TimerGain.start ( GAIN_DELAY_PERIOD_MS );
+    StartDelayTimer();
 }
 
 void CClient::OnTimerRemoteChanGain()
@@ -414,10 +412,26 @@ void CClient::OnTimerRemoteChanGain()
     // if a new gain has been sent, reset the range of channel IDs to empty and start timer
     if ( bSent )
     {
-        maxGainId = 0;
-        minGainId = MAX_NUM_CHANNELS;
+        StartDelayTimer();
+    }
+}
 
-        TimerGain.start ( GAIN_DELAY_PERIOD_MS );
+// reset the range of channel IDs to check and start the delay timer
+void CClient::StartDelayTimer()
+{
+    maxGainId = 0;
+    minGainId = MAX_NUM_CHANNELS;
+
+    // start timer to delay sending further updates
+    // use longer delay when connected to server with higher ping time,
+    // double the ping time in order to allow a bit of overhead for other messages
+    if ( iCurPingTime < DEFAULT_GAIN_DELAY_PERIOD_MS / 2 )
+    {
+        TimerGain.start ( DEFAULT_GAIN_DELAY_PERIOD_MS );
+    }
+    else
+    {
+        TimerGain.start ( iCurPingTime * 2 );
     }
 }
 

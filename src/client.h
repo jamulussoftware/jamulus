@@ -73,8 +73,9 @@
 // audio reverberation range
 #define AUD_REVERB_MAX 100
 
-// delay period between successive gain updates (ms)
-#define GAIN_DELAY_PERIOD_MS 300
+// default delay period between successive gain updates (ms)
+// this will be increased to double the ping time if connected to a distant server
+#define DEFAULT_GAIN_DELAY_PERIOD_MS 50
 
 // OPUS number of coded bytes per audio packet
 // TODO we have to use new numbers for OPUS to avoid that old CELT packets
@@ -239,8 +240,8 @@ public:
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
     void SetRemoteChanGain ( const int iId, const float fGain, const bool bIsMyOwnFader );
-
     void OnTimerRemoteChanGain();
+    void StartDelayTimer();
 
     void SetRemoteChanPan ( const int iId, const float fPan ) { Channel.SetRemoteChanPan ( iId, fPan ); }
 
@@ -366,6 +367,7 @@ protected:
     int    maxGainId;
     float  oldGain[MAX_NUM_CHANNELS];
     float  newGain[MAX_NUM_CHANNELS];
+    int    iCurPingTime;
 
     CSignalHandler* pSignalHandler;
 

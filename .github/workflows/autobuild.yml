@@ -41,7 +41,7 @@ jobs:
     outputs:
       publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
-      version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
+      version_name:                 ${{ steps.jamulus-build-vars.outputs.BUILD_VERSION }}
 
     steps:
       - name:                       Checkout code

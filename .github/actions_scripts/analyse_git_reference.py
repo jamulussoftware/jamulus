@@ -43,7 +43,7 @@ def write_changelog(version):
         f.write(changelog)
 
 
-def get_release_version_name(jamulus_pro_version):
+def get_build_version(jamulus_pro_version):
     if "dev" in jamulus_pro_version:
         name = "{}-{}".format(jamulus_pro_version, get_git_hash())
         print("building an intermediate version: ", name)
@@ -61,14 +61,14 @@ def set_github_variable(varname, varval):
 
 jamulus_pro_version = get_version_from_jamulus_pro()
 write_changelog(jamulus_pro_version)
-release_version_name = get_release_version_name(jamulus_pro_version)
+build_version = get_build_version(jamulus_pro_version)
 
 fullref = os.environ['GITHUB_REF']
 publish_to_release = bool(re.match(r'^refs/tags/r\d+_\d+_\d+\S*$', fullref))
 
-# RELEASE_VERSION_NAME is required for all builds including branch pushes
+# BUILD_VERSION is required for all builds including branch pushes
 # and PRs:
-set_github_variable("RELEASE_VERSION_NAME", release_version_name)
+set_github_variable("BUILD_VERSION", build_version)
 
 # PUBLISH_TO_RELEASE is always required as the workflow decides about further
 # steps based on this. It will only be true for tag pushes with a tag
@@ -78,10 +78,10 @@ set_github_variable("PUBLISH_TO_RELEASE", str(publish_to_release).lower())
 if publish_to_release:
     reflist = fullref.split("/", 2)
     release_tag = reflist[2]
-    release_title = f"Release {release_version_name}  ({release_tag})"
+    release_title = f"Release {build_version}  ({release_tag})"
     is_prerelease = not re.match(r'^r\d+_\d+_\d+$', release_tag)
-    if not is_prerelease and release_version_name != release_tag[1:].replace('_', '.'):
-        raise Exception(f"non-pre-release tag {release_tag} doesn't match Jamulus.pro VERSION = {release_version_name}")
+    if not is_prerelease and build_version != release_tag[1:].replace('_', '.'):
+        raise Exception(f"non-pre-release tag {release_tag} doesn't match Jamulus.pro VERSION = {build_version}")
 
     # Those variables are only used when a release is created at all:
     set_github_variable("IS_PRERELEASE", str(is_prerelease).lower())

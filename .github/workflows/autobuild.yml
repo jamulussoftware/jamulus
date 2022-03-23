@@ -193,7 +193,6 @@ jobs:
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
         run:                        ${{ matrix.config.base_command }} setup
         env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'  # allow setting environment variables
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
       - name:                       Initialize CodeQL

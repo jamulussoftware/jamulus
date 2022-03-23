@@ -21,11 +21,6 @@ setup() {
         python3 -m pip install "aqtinstall==${AQTINSTALL_VERSION}"
         python3 -m aqt install-qt --outputdir "${QT_DIR}" mac desktop "${QT_VERSION}" --archives qtbase qttools qttranslations qtmacextras
     fi
-
-    # Add the qt binaries to the PATH.
-    # The clang_64 entry can be dropped when Qt <6.2 compatibility is no longer needed.
-    export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${QT_DIR}/${QT_VERSION}/clang_64/bin:${PATH}"
-    echo "::set-env name=PATH::${PATH}"
 }
 
 prepare_signing() {
@@ -56,6 +51,10 @@ prepare_signing() {
 }
 
 build_app_as_dmg_installer() {
+    # Add the qt binaries to the PATH.
+    # The clang_64 entry can be dropped when Qt <6.2 compatibility is no longer needed.
+    export PATH="${QT_DIR}/${QT_VERSION}/macos/bin:${QT_DIR}/${QT_VERSION}/clang_64/bin:${PATH}"
+
     # Mac's bash version considers BUILD_ARGS unset without at least one entry:
     BUILD_ARGS=("")
     if prepare_signing; then

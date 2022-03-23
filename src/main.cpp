@@ -61,7 +61,6 @@ char** CCommandlineOptions::appArgv = NULL;
 QDialog* CMsgBoxes::pMainForm       = NULL;
 QString  CMsgBoxes::strMainFormName = APP_NAME;
 
-
 QString UsageArguments ( char** argv )
 {
     // clang-format off

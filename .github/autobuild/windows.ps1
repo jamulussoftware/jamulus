@@ -136,10 +136,10 @@ Function Pass-Artifact-to-Job
     $artifact_deploy_filename = "jamulus_${JamulusVersion}_win${ArtifactSuffix}.exe"
 
     echo "Copying artifact to ${artifact_deploy_filename}"
-    cp ".\deploy\Jamulus*installer-win.exe" ".\deploy\${artifact_deploy_filename}"
+    move ".\deploy\Jamulus*installer-win.exe" ".\deploy\${artifact_deploy_filename}"
     if ( !$? )
     {
-            throw "cp failed with exit code $LastExitCode"
+        throw "move failed with exit code $LastExitCode"
     }
     echo "Setting Github step output name=artifact_1::${artifact_deploy_filename}"
     echo "::set-output name=artifact_1::${artifact_deploy_filename}"

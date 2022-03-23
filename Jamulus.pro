@@ -1171,7 +1171,7 @@ QMAKE_EXTRA_TARGETS += clang_format
 
 equals(QT_MAJOR_VERSION, 5) {
     lessThan(QT_MINOR_VERSION, 12) {
-        message(Using extra lrelease rules for old Qt5)
+        message(Using extra lrelease rules for old Qt5 *** IGNORE the RCC errors below ***)
 
         qtPrepareTool(QMAKE_LRELEASE, lrelease)
 
@@ -1197,6 +1197,11 @@ equals(QT_MAJOR_VERSION, 5) {
             qmake_qm_files.base = $$OUT_PWD/$$LRELEASE_DIR
             qmake_qm_files.prefix = $$QM_FILES_RESOURCE_PREFIX
             RESOURCES += qmake_qm_files
+
+            # This is a hack because old rcc does not output dependencies that do not yet exist.
+            # This adds the QM files as explicit dependencies of all resource files, but that
+            # does not matter - it still ensures the qm files get built on the fly.
+            rcc.depends += $$QM_FILES
         } else {
             !isEmpty(QM_FILES_INSTALL_PATH) {
                 qm_files.files = $$QM_FILES

@@ -64,6 +64,7 @@ declare -A TRANSLATORS_BY_LANG=(
     [web_pt]="Snayler,melcon,ewarning"
 )
 
+# shellcheck disable=SC2016  # shellcheck can't know that this will be used with envsubst, so verbatim variables are correct here.
 BODY_TEMPLATE_APP='Hi ${SPLIT_TRANSLATORS},
 We are getting ready for the ${RELEASE} release. No further changes to translatable strings are currently planned for this release.
 
@@ -89,6 +90,7 @@ Further documentation can be found in [TRANSLATING.md](https://github.com/jamulu
 Thanks for contributing to Jamulus!'
 
 
+# shellcheck disable=SC2016  # shellcheck can't know that this will be used with envsubst, so verbatim variables are correct here.
 BODY_TEMPLATE_WEB='Hi ${SPLIT_TRANSLATORS},
 
 We are getting ready for the ${RELEASE} release and have created the [${TRANSLATE_BRANCH}](https://github.com/jamulussoftware/jamuluswebsite/tree/${TRANSLATE_BRANCH}) branch ([full diff](https://github.com/jamulussoftware/jamuluswebsite/compare/release..${TRANSLATE_BRANCH})).
@@ -149,7 +151,7 @@ get_languages() {
             echo "Error: Please ensure that you are at the root of a jamuluswebsite checkout" >/dev/stderr
             exit 1
         fi
-        for LANG in $(cd _translator-files/po/ && ls -d *); do
+        for LANG in $(cd _translator-files/po/ && ls -d -- *); do
             [[ -d _translator-files/po/$LANG ]] || continue
             [[ $LANG == en ]] && continue # does not have to be translated
             echo "$LANG"
@@ -184,7 +186,8 @@ create_translation_issue_for_lang() {
     multiple_translators_text=""
     [[ $translators == *,* ]] && multiple_translators_text=$'\n\n''This Issue is assigned to multiple people. Please coordinate who will translate what part.'
     [[ $TYPE == app ]] && body_template="$BODY_TEMPLATE_APP" || body_template="$BODY_TEMPLATE_WEB"
-    local body=$(
+    local body
+    body=$(
         # Note: Those line continuation backslashes are required for variables
         # to be passed through:
         DEADLINE="$DEADLINE" \
@@ -199,7 +202,8 @@ create_translation_issue_for_lang() {
     )
 
     # Check for an existing issue
-    local existing_issue=$(gh issue list --milestone "$MILESTONE" --state all --search "$title" --json number --jq '.[0].number' || true)
+    local existing_issue
+    existing_issue=$(gh issue list --milestone "$MILESTONE" --state all --search "$title" --json number --jq '.[0].number' || true)
 
     # If there's no existing issue, create one
     if [[ -z $existing_issue ]]; then
@@ -214,7 +218,8 @@ create_translation_issue_for_lang() {
     # update the issue if the bodies differ.
     # This is used on initial creation to fill in the issue number and it
     # can be used to update the body text afterwards.
-    local online_body=$(gh issue view "$existing_issue" --json body --jq .body)
+    local online_body
+    online_body=$(gh issue view "$existing_issue" --json body --jq .body)
     body=${body//<Insert this issue\'s number here>/${existing_issue}}
     if [[ "$online_body" != "$body" ]]; then
         echo "Updating Issue to translate $lang for $RELEASE"

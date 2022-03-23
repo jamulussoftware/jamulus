@@ -6,12 +6,16 @@ BASE_LANG=en
 INSTALLERLNG=installerlng.nsi
 BASE_LANGSTRINGS=$(grep LangString "${BASE_DIR}/${BASE_LANG}.nsi" | cut -d' ' -f2)
 EXIT=0
-LANGUAGE_FILES="$(ls -1 src/res/translation/wininstaller/{??.nsi,??_??.nsi} | grep -vF "${BASE_LANG}.nsi")"
-for LANGUAGE_FILE in ${LANGUAGE_FILES}; do
+for LANGUAGE_FILE in src/res/translation/wininstaller/{??.nsi,??_??.nsi}; do
+    if [[ ${LANGUAGE_FILE} =~ /${BASE_LANG}.nsi$ ]]; then
+        continue
+    fi
     echo
     echo "* ${LANGUAGE_FILE}"
     echo -n "  - Checking language file is included in ${INSTALLERLNG}... "
-    if grep -q '^!include "\${ROOT_PATH}\\'$(sed -re 's|/|\\\\|g' <<<"${LANGUAGE_FILE}")'"' "${BASE_DIR}/${INSTALLERLNG}"; then
+    # shellcheck disable=SC2016  # shellcheck is confused here as NSI files use variables which look like shell variables
+    # shellcheck disable=SC1003  # shellcheck misinterprets the verbatim backslash as an attempt to escape the single quote. it's not.
+    if grep -q '^!include "\${ROOT_PATH}\\'"$(sed -re 's|/|\\\\|g' <<<"${LANGUAGE_FILE}")"'"' "${BASE_DIR}/${INSTALLERLNG}"; then
         echo "ok"
     else
         echo "ERROR"
@@ -35,7 +39,7 @@ for LANGUAGE_FILE in ${LANGUAGE_FILES}; do
     fi
 
     echo -n "  - Checking for wrong macros... "
-    LANG_MACROS="$(grep -oP '\$\{LANG_[^}]+\}' "${LANGUAGE_FILE}")"
+    LANG_MACROS=$(grep -oP '\$\{LANG_[^}]+\}' "${LANGUAGE_FILE}")
     if grep ENGLISH <<<"$LANG_MACROS"; then
         echo "ERROR, found LANG_ENGLISH"
         EXIT=1
@@ -52,7 +56,7 @@ for LANGUAGE_FILE in ${LANGUAGE_FILES}; do
     fi
 
     echo -n "  - Checking if LANG_ macro is in ${INSTALLERLNG}..."
-    LANG_NAME="$(sort -u <<<"${LANG_MACROS}" | sed -rne 's/\$\{LANG_(.*)\}/\1/p')"
+    LANG_NAME=$(sort -u <<<"${LANG_MACROS}" | sed -rne 's/\$\{LANG_(.*)\}/\1/p')
     if grep -qi '^!insertmacro MUI_LANGUAGE "'"${LANG_NAME}"'"' "$BASE_DIR/${INSTALLERLNG}"; then
         echo "ok"
     else

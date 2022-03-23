@@ -194,7 +194,6 @@ jobs:
         run:                        ${{ matrix.config.base_command }} setup
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'  # allow setting environment variables
-          jamulus_project_path:     ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
       - name:                       Initialize CodeQL
@@ -207,7 +206,6 @@ jobs:
         id:                         build
         run:                        ${{ matrix.config.base_command }} build
         env:
-          jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
           MACOS_CERTIFICATE:          ${{ secrets.MACOS_CERT}}
           MACOS_CERTIFICATE_PWD:      ${{ secrets.MACOS_CERT_PWD }}
@@ -219,7 +217,6 @@ jobs:
         id:                         get-artifacts
         run:                        ${{ matrix.config.base_command }} get-artifacts
         env:
-          jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
 
       - name:                       Upload Artifact 1 to Job

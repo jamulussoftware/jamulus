@@ -140,8 +140,8 @@ void CChatDlg::OnAnchorClicked ( const QUrl& Url )
     // only allow http(s) URLs to be opened in an external browser
     if ( Url.scheme() == QLatin1String ( "https" ) || Url.scheme() == QLatin1String ( "http" ) )
     {
-        if ( QMessageBox::question ( this,
-                                     APP_NAME,
+        if ( QMessageBox::question ( CMsgBoxes::MainForm(),
+                                     CMsgBoxes::MainFormName(),
                                      tr ( "Do you want to open the link '%1' in your browser?" ).arg ( "<b>" + Url.toString() + "</b>" ),
                                      QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes )
         {

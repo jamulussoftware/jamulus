@@ -101,8 +101,8 @@ QString CSound::LoadAndInitializeDriver ( QString strDriverName, bool bOpenDrive
         if ( bOpenDriverSetup )
         {
             OpenDriverSetup();
-            QMessageBox::question ( nullptr,
-                                    APP_NAME,
+            QMessageBox::question ( CMsgBoxes::MainForm(),
+                                    CMsgBoxes::MainFormName(),
                                     "Are you done with your ASIO driver settings of " + GetDeviceName ( iDriverIdx ) + "?",
                                     QMessageBox::Yes );
         }
@@ -314,9 +314,8 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
     // clang-format off
 /*
 // TEST
-#include <QMessageBox>
-QMessageBox::information ( 0, "APP_NAME", QString("lMinSize: %1, lMaxSize: %2, lPreferredSize: %3, lGranularity: %4").
-                           arg(HWBufferInfo.lMinSize).arg(HWBufferInfo.lMaxSize).arg(HWBufferInfo.lPreferredSize).arg(HWBufferInfo.lGranularity) );
+CMsgBoxes::ShowInfo( QString("lMinSize: %1, lMaxSize: %2, lPreferredSize: %3, lGranularity: %4").
+                             arg(HWBufferInfo.lMinSize).arg(HWBufferInfo.lMaxSize).arg(HWBufferInfo.lPreferredSize).arg(HWBufferInfo.lGranularity) );
 _exit(1);
 */
     // clang-format on

@@ -116,7 +116,7 @@ Function Build-App-With-Installer
     {
         $ExtraArgs += ("-BuildOption", $BuildOption)
     }
-    powershell ".\windows\deploy_windows.ps1" "C:\Qt\5.15.2" "C:\Qt\5.15.2" @ExtraArgs
+    powershell ".\windows\deploy_windows.ps1" "C:\Qt\${Qt32Version}" "C:\Qt\${Qt64Version}" @ExtraArgs
     if ( !$? )
     {
         throw "deploy_windows.ps1 failed with exit code $LastExitCode"

@@ -87,10 +87,10 @@ build_app_as_apk() {
 
 pass_artifact_to_job() {
     mkdir deploy
-    local artifact_deploy_filename="jamulus_${JAMULUS_BUILD_VERSION}_android.apk"
-    echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact_deploy_filename}"
-    mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact_deploy_filename}"
-    echo "::set-output name=artifact_1::${artifact_deploy_filename}"
+    local artifact="jamulus_${JAMULUS_BUILD_VERSION}_android.apk"
+    echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact}"
+    mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact}"
+    echo "::set-output name=artifact_1::${artifact}"
 }
 
 case "${1:-}" in

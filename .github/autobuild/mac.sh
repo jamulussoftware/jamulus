@@ -64,10 +64,10 @@ build_app_as_dmg_installer() {
 }
 
 pass_artifact_to_job() {
-    artifact_deploy_filename="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
-    echo "Moving build artifact to deploy/${artifact_deploy_filename}"
-    mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact_deploy_filename}"
-    echo "::set-output name=artifact_1::${artifact_deploy_filename}"
+    artifact="jamulus_${JAMULUS_BUILD_VERSION}_mac${ARTIFACT_SUFFIX:-}.dmg"
+    echo "Moving build artifact to deploy/${artifact}"
+    mv ./deploy/Jamulus-*installer-mac.dmg "./deploy/${artifact}"
+    echo "::set-output name=artifact_1::${artifact}"
 }
 
 case "${1:-}" in

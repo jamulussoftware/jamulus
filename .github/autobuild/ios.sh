@@ -30,10 +30,10 @@ build_app_as_ipa() {
 }
 
 pass_artifact_to_job() {
-    local artifact_deploy_filename="jamulus_${JAMULUS_BUILD_VERSION}_iOSUnsigned${ARTIFACT_SUFFIX:-1}.ipa"
-    echo "Moving build artifact to deploy/${artifact_deploy_filename}"
-    mv ./deploy/Jamulus.ipa "./deploy/${artifact_deploy_filename}"
-    echo "::set-output name=artifact_1::${artifact_deploy_filename}"
+    local artifact="jamulus_${JAMULUS_BUILD_VERSION}_iOSUnsigned${ARTIFACT_SUFFIX:-1}.ipa"
+    echo "Moving build artifact to deploy/${artifact}"
+    mv ./deploy/Jamulus.ipa "./deploy/${artifact}"
+    echo "::set-output name=artifact_1::${artifact}"
 }
 
 case "${1:-}" in

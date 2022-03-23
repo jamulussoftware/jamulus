@@ -2,6 +2,10 @@
 
 [![Auto-Build](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml/badge.svg)](https://github.com/jamulussoftware/jamulus/actions/workflows/autobuild.yml)
 
+## Contents of this feature branch
+
+This branch contains a probably working implementation of a restricted Jamulus mode for educators. For more information see ann0see's Pull Request: https://github.com/jamulussoftware/jamulus/pull/974 This is probably just a PoC. Further development can be based on this branch. Please note the documentation below.
+
 Jamulus - Internet Jam Session Software
 =======================================
 <a href="https://jamulus.io/"><img align="left" width="102" height="102" src="https://jamulus.io/assets/img/jamulus-icon-2020.svg"/></a>
@@ -14,6 +18,24 @@ and runs under __Windows__ ([ASIO](https://www.steinberg.net) or [JACK](https://
 __MacOS__ ([Core Audio](https://developer.apple.com/documentation/coreaudio)) and
 __Linux__ ([JACK](https://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
+
+### Jamulus eduTools Commands
+
+Only this version (on this feature branch), when Jamulus is started with `--edumodepassword <myPassword>`.
+All commands are sent to the server via chat. Type e.g. "/c/ls" and get a feedback from the server.
+The commands only work if a user authenticates with a "secret" word which is transmitted in plain text. It is probably possible to bypass all protections with greater effort.
+Available commands:
+
+Command | Description
+-- | --
+`/c/<myPassword>` | The user who sent this chat message will be made an admin
+`/c/ls` | ls = list: Prints all logged in users with their ID, name and status. The ID is needed e.g. to block a person.
+`/c/bl 0` | Bl = block: Blocks audio from the person with ID 0 being mixed into other mixes except from his/her own one. Also doesn‘t mix his/her signal in other mixes. /c/bl 1 blocks person 1 etc.
+`/c/ubl 0` | Ubl = unblock: Opposite of /c/bl 0. Enables the user with ID 0, so they can hear the others and be heard.
+`/c/disableChat` | Disables chat for all users
+`/c/enableChat` | Enables chat for all users
+`/c/enableWaitingRoom` | Enable waiting room feature (active by default). New users will be blocked and will not hear others. Also others will not hear the newly logged in user
+`/c/disableWaitingRoom` | All users will be enabled (can be heared and can hear others)
 
 
 Installation

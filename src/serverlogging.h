@@ -45,10 +45,13 @@ public:
 
     void AddNewConnection ( const QHostAddress& ClientInetAddr, const int iNumberOfConnectedClients );
 
+    void SetLogIP ( const bool bNLogIP ) { bLogIP = bNLogIP; }
+
 protected:
     void    operator<< ( const QString& sNewStr );
     QString CurTimeDatetoLogString();
 
     bool  bDoLogging;
+    bool  bLogIP;
     QFile File;
 };

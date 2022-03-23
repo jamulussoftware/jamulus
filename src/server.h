@@ -52,6 +52,10 @@
 // no valid channel number
 #define INVALID_CHANNEL_ID ( MAX_NUM_CHANNELS + 1 )
 
+// Edu-Mode features
+#define EDU_MODE_FEATURE_CHAT      0
+#define EDU_MODE_FEATURE_WAITINGRM 1
+
 /* Classes ********************************************************************/
 #if ( defined( WIN32 ) || defined( _WIN32 ) )
 // using QTimer for Windows
@@ -125,7 +129,17 @@ public:
     void OnSendProtMessCh ( CVector<uint8_t> mess ) { SendProtMessage ( slotId - 1, mess ); }
     void OnReqConnClientsListCh() { CreateAndSendChanListForThisChan ( slotId - 1 ); }
 
-    void OnChatTextReceivedCh ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText ); }
+    void OnChatTextReceivedCh ( QString strChatText )
+    {
+        if ( strChatText.startsWith ( "/c/" ) )
+        {
+            InterpretAndExecuteChatCommand ( slotId - 1, strChatText );
+        }
+        else
+        {
+            CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+        }
+    }
 
     void OnMuteStateHasChangedCh ( int iChanID, bool bIsMuted ) { CreateOtherMuteStateChanged ( slotId - 1, iChanID, bIsMuted ); }
 
@@ -136,7 +150,13 @@ protected:
 
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID ) = 0;
 
+    // edu mode
+    virtual bool EduModeIsFeatureDisabled ( const int iFeature )                             = 0;
+    virtual void EduModeSetFeatureDisabled ( const int iFeature, const bool bFeatureStatus ) = 0;
+
     virtual void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText ) = 0;
+
+    virtual void InterpretAndExecuteChatCommand ( const int iCurChanID, const QString& strChatText ) = 0;
 
     virtual void CreateOtherMuteStateChanged ( const int iCurChanID, const int iOtherChanID, const bool bIsMuted ) = 0;
 
@@ -165,10 +185,13 @@ public:
               const QString&     strServerPublicIP,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
+              const QString&     strEduModePassword,
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const bool         bNUseMultithreading,
+              const bool         bNLogIP,
               const bool         bDisableRecording,
+              const bool         bEduModeEnabled,
               const bool         bNDelayPan,
               const bool         bNEnableIPv6,
               const ELicenceType eNLicenceType );
@@ -208,6 +231,8 @@ public:
     void             SetServerCountry ( const QLocale::Country eNewCountry ) { ServerListManager.SetServerCountry ( eNewCountry ); }
     QLocale::Country GetServerCountry() { return ServerListManager.GetServerCountry(); }
 
+    bool EduModeEnabled() { return bEduModeEnabled; }
+
     bool    GetRecorderInitialised() { return JamController.GetRecorderInitialised(); }
     void    SetEnableRecording ( bool bNewEnableRecording );
     bool    GetDisableRecording() { return bDisableRecording; }
@@ -229,6 +254,8 @@ public:
     QString GetServerListFileName() { return ServerListManager.GetServerListFileName(); }
     bool    SetServerListFileName ( QString strFilename ) { return ServerListManager.SetServerListFileName ( strFilename ); }
 
+    bool GetLogIP() { return bLogIP; }
+
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }
 
@@ -248,7 +275,14 @@ protected:
     virtual void CreateAndSendChanListForAllConChannels();
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID );
 
+    // edu mode features
+
+    virtual bool EduModeIsFeatureDisabled ( const int iFeature );
+    virtual void EduModeSetFeatureDisabled ( const int iFeature, const bool bFeatureStatus );
+
     virtual void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
+
+    virtual void InterpretAndExecuteChatCommand ( const int iCurChanID, const QString& strChatText );
 
     virtual void CreateOtherMuteStateChanged ( const int iCurChanID, const int iOtherChanID, const bool bIsMuted );
 
@@ -287,6 +321,16 @@ protected:
                                          const CVector<int>&             vecNumAudioChannels,
                                          const CVector<CVector<int16_t>> vecvecsData,
                                          CVector<uint16_t>&              vecLevelsOut );
+    // edu mode
+    bool bEduModeEnabled;
+    // true = disabled
+    bool bEduModeFeatures[2] = {
+        false, // EDU_MODE_FEATURE_CHAT
+        false  // EDU_MODE_FEATURE_WAITINGRM
+    };
+
+    // log full ip adresses if true
+    bool bLogIP;
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -301,6 +345,9 @@ protected:
     QMutex    Mutex;
     QMutex    MutexWelcomeMessage;
     bool      bChannelIsNowDisconnected;
+
+    // edu mode
+    QString strEduModePassword;
 
     // audio encoder/decoder
     OpusCustomMode*    Opus64Mode[MAX_NUM_CHANNELS];

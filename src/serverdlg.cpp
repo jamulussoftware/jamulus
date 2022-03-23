@@ -686,7 +686,17 @@ void CServerDlg::OnTimer()
             if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( static_cast<quint32> ( 0 ) ) ) )
             {
                 // IP, port number
-                vecpListViewItems[i]->setText ( 0, vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT ) );
+                QString strClientIP;
+                if ( !pServer->GetLogIP() )
+                {
+                    strClientIP = vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT ).replace ( QRegExp ( "(\\.[0-9]{1,3}){2}:" ), ".x.x:" );
+                }
+                else
+                {
+                    strClientIP = vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT );
+                }
+
+                vecpListViewItems[i]->setText ( 0, strClientIP );
 
                 // name
                 vecpListViewItems[i]->setText ( 1, vecsName[i] );

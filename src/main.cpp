@@ -87,6 +87,9 @@ int main ( int argc, char** argv )
     bool         bUseTranslation             = true;
     bool         bCustomPortNumberGiven      = false;
     bool         bEnableIPv6                 = false;
+    bool         bLogIP                      = false;
+    bool         bEduModeEnabled             = false;
+
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     int          iJsonRpcPortNumber          = INVALID_PORT;
@@ -104,6 +107,7 @@ int main ( int argc, char** argv )
     QString      strServerPublicIP           = "";
     QString      strServerBindIP             = "";
     QString      strServerListFilter         = "";
+    QString      strEduModePassword          = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
     QString      strJsonRpcSecretFileName    = "";
@@ -166,6 +170,15 @@ int main ( int argc, char** argv )
             bCustomPortNumberGiven = true;
             qInfo() << qUtf8Printable ( QString ( "- selected port number: %1" ).arg ( iPortNumber ) );
             CommandLineOptions << "--port";
+            continue;
+        }
+
+        // Log whole IP-Adresses on server ----------------------------------------------------
+        if ( GetFlagArgument ( argv, i, "--logip", "--logip" ) )
+        {
+            bLogIP = true;
+            qInfo() << qUtf8Printable ( QString ( "- Logging full IP adresses." ) );
+            CommandLineOptions << "--logip";
             continue;
         }
 
@@ -419,6 +432,21 @@ int main ( int argc, char** argv )
 
             CommandLineOptions << "--numchannels";
             ServerOnlyOptions << "--numchannels";
+            continue;
+        }
+
+        // Education mode password ---------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--edumodepassword", // no short argument
+                                 "--edumodepassword",
+                                 strArgument ) )
+        {
+            strEduModePassword = strArgument;
+            bEduModeEnabled    = true;
+            qInfo() << qUtf8Printable ( QString ( "- enabled Edu-Mode with password " ) );
+            CommandLineOptions << "--edumodepassword";
             continue;
         }
 
@@ -921,10 +949,13 @@ int main ( int argc, char** argv )
                              strServerListFilter,
                              strWelcomeMessage,
                              strRecordingDirName,
+                             strEduModePassword,
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              bUseMultithreading,
+                             bLogIP,
                              bDisableRecording,
+                             bEduModeEnabled,
                              bDelayPan,
                              bEnableIPv6,
                              eLicenceType );

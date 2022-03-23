@@ -920,6 +920,9 @@ int main ( int argc, char** argv )
                 // initialise message boxes
                 CMsgBoxes::init ( &ClientDlg, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
 
+                // initialise message boxes
+                CMsgBoxes::init ( &ClientDlg, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
                 // show dialog
                 ClientDlg.show();
 

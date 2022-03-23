@@ -1,31 +1,28 @@
 #!/bin/bash
-set -e
+set -eu
 
-root_path="$(pwd)"
+root_path=$(pwd)
 project_path="${root_path}/Jamulus.pro"
 resources_path="${root_path}/src/res"
 build_path="${root_path}/build"
 deploy_path="${root_path}/deploy"
 cert_name=""
 
-
 while getopts 'hs:' flag; do
     case "${flag}" in
-    s)
-    cert_name=$OPTARG
-    if [[ -z "$cert_name" ]]; then
-        echo "Please add the name of the certificate to use: -s \"<name>\""
-    fi
-    # shift 2
-    ;;
-    h)
-    echo "Usage: -s <cert name> for signing mac build"
-    exit 0
-    ;;
-    *)
-    exit 1
-    ;;
-
+        s)
+            cert_name=$OPTARG
+            if [[ -z "$cert_name" ]]; then
+                echo "Please add the name of the certificate to use: -s \"<name>\""
+            fi
+            ;;
+        h)
+            echo "Usage: -s <cert name> for signing mac build"
+            exit 0
+            ;;
+        *)
+            exit 1
+            ;;
     esac
 done
 
@@ -44,9 +41,11 @@ build_app()
     local client_or_server="${1}"
 
     # Build Jamulus
-    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2}
-    local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
-    local job_count="$(sysctl -n hw.ncpu)"
+    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${@:2}"
+    local target_name
+    target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
+    local job_count
+    job_count=$(sysctl -n hw.ncpu)
 
     make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
 
@@ -75,7 +74,6 @@ build_app()
     esac
 }
 
-
 build_installer_image()
 {
     local client_target_name="${1}"
@@ -86,7 +84,8 @@ build_installer_image()
     brew_install_pinned "create-dmg" "1.0.9"
 
     # Get Jamulus version
-    local app_version="$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")"
+    local app_version
+    app_version=$(sed -nE 's/^VERSION *= *(.*)$/\1/p' "${project_path}")
 
     # Build installer image
 
@@ -103,7 +102,6 @@ build_installer_image()
       --eula "${root_path}/COPYING" \
       "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
       "${deploy_path}/"
-
 }
 
 brew_install_pinned() {
@@ -129,15 +127,12 @@ brew_install_pinned() {
     popd
 }
 
-
 # Check that we are running from the correct location
-if [ ! -f "${project_path}" ];
-then
-    echo Please run this script from the Qt project directory where $(basename "${project_path}") is located.
-    echo Usage: mac/$(basename "${0}")
+if [[ ! -f "${project_path}" ]]; then
+    echo "Please run this script from the Qt project directory where $(basename "${project_path}") is located."
+    echo "Usage: mac/$(basename "${0}")"
     exit 1
 fi
-
 
 # Cleanup previous deployments
 cleanup

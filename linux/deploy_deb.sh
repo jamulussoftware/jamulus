@@ -16,7 +16,7 @@ export DEBFULLNAME=GitHubActions DEBEMAIL=noemail@example.com
 echo -n generating changelog
 rm -f debian/changelog
 dch --create --package jamulus --empty --newversion "${VERSION}" ''
-perl .github/actions_scripts/getChangelog.pl ChangeLog "${VERSION}" --line-per-entry | while read entry
+perl .github/actions_scripts/getChangelog.pl ChangeLog "${VERSION}" --line-per-entry | while read -r entry
 do
     echo -n .
     dch "$entry"

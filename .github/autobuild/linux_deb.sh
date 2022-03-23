@@ -24,10 +24,8 @@ setup() {
 
     setup_cross_compilation_apt_sources
 
-    echo "Update system..."
+    echo "Installing dependencies..."
     sudo apt-get -qq update
-
-    echo "Install dependencies..."
     sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev qtbase5-dev qttools5-dev-tools
 
     setup_cross_compiler

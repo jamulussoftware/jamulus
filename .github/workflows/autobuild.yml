@@ -87,9 +87,7 @@ jobs:
           - config_name:            Android .apk (artifact+codeQL)
             target_os:              android
             building_on_os:         ubuntu-20.04
-            cmd1_prebuild:          "./.github/autobuild/android.sh setup"
-            cmd2_build:             "./.github/autobuild/android.sh build"
-            cmd3_postbuild:         "./.github/autobuild/android.sh get-artifacts"
+            base_command:           ./.github/autobuild/android.sh
             run_codeql:             true
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
@@ -97,35 +95,27 @@ jobs:
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-18.04
-            cmd1_prebuild:          ./.github/autobuild/linux_deb.sh setup
-            cmd2_build:             ./.github/autobuild/linux_deb.sh build
-            cmd3_postbuild:         ./.github/autobuild/linux_deb.sh get-artifacts
+            base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
 
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
             building_on_os:         ubuntu-18.04
-            cmd1_prebuild:          TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh setup
-            cmd2_build:             TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh build
-            cmd3_postbuild:         TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh get-artifacts
+            base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 
           - config_name:            MacOS (artifacts+codeQL)
             target_os:              macos
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh setup"
-            cmd2_build:             "QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh build"
-            cmd3_postbuild:         "QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh get-artifacts"
+            base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
             run_codeql:             true
             xcode_version:          12.1.1
 
           - config_name:            MacOS Legacy (artifacts)
             target_os:              macos
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh setup"
-            cmd2_build:             "QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh build"
-            cmd3_postbuild:         "QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh get-artifacts"
+            base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             run_codeql:             false
             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
@@ -137,9 +127,7 @@ jobs:
           - config_name:            iOS (artifacts)
             target_os:              ios
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "QT_VERSION=5.15.2 ./.github/autobuild/ios.sh setup"
-            cmd2_build:             "QT_VERSION=5.15.2 ./.github/autobuild/ios.sh build"
-            cmd3_postbuild:         "QT_VERSION=5.15.2 ./.github/autobuild/ios.sh get-artifacts"
+            base_command:           QT_VERSION=5.15.2 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
@@ -149,17 +137,13 @@ jobs:
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
             building_on_os:         windows-2019
-            cmd1_prebuild:          powershell .\.github\autobuild\windows.ps1 -Stage setup
-            cmd2_build:             powershell .\.github\autobuild\windows.ps1 -Stage build -GithubWorkspace
-            cmd3_postbuild:         powershell .\.github\autobuild\windows.ps1 -Stage get-artifacts -GithubWorkspace
+            base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             true
 
           - config_name:            Windows JACK (artifact)
             target_os:              windows
             building_on_os:         windows-2019
-            cmd1_prebuild:          powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage setup
-            cmd2_build:             powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage build -GithubWorkspace
-            cmd3_postbuild:         powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage get-artifacts -GithubWorkspace
+            base_command:           powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage
             run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
@@ -183,7 +167,7 @@ jobs:
           path: |
             /usr/local/opt/qt
             ~/Library/Cache/jamulus-homebrew-bottles
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
@@ -194,7 +178,7 @@ jobs:
             C:\ChocoCache
             ~\windows\NSIS
             ~\windows\ASIOSDK2
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
@@ -204,11 +188,10 @@ jobs:
             /opt/Qt
             /opt/android/android-sdk
             /opt/android/android-ndk
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/android.sh') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/android.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
-        if:                         matrix.config.cmd1_prebuild
-        run:                        ${{ matrix.config.cmd1_prebuild }}
+        run:                        ${{ matrix.config.base_command }} setup
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'  # allow setting environment variables
           jamulus_project_path:     ${{ github.workspace }}
@@ -221,9 +204,8 @@ jobs:
           languages: 'cpp'
 
       - name:                       Build for ${{ matrix.config.config_name }}
-        id:                         step_build
-        if:                         matrix.config.cmd2_build
-        run:                        ${{ matrix.config.cmd2_build }} ${{ github.workspace }}
+        id:                         build
+        run:                        ${{ matrix.config.base_command }} build
         env:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
@@ -234,9 +216,8 @@ jobs:
           KEYCHAIN_PASSWORD:          ${{ secrets.KEYCHAIN_PASSWORD }}
 
       - name:                       Post-Build for ${{ matrix.config.config_name }}
-        id:                         step_cmd3_postbuild
-        if:                         matrix.config.cmd3_postbuild
-        run:                        ${{ matrix.config.cmd3_postbuild }} ${{ github.workspace }}
+        id:                         get-artifacts
+        run:                        ${{ matrix.config.base_command }} get-artifacts
         env:
           jamulus_project_path:       ${{ github.workspace }}
           jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
@@ -246,40 +227,40 @@ jobs:
         # If the artifact is missing, this should fail.
         uses:                       actions/upload-artifact@v2
         with:
-          name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
-          path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          name:                     ${{ steps.get-artifacts.outputs.artifact_1 }}
+          path:                     deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           retention-days:           31
           if-no-files-found:        error
 
       - name:                       Upload Artifact 2 to Job
-        if:                         steps.step_cmd3_postbuild.outputs.artifact_2
+        if:                         steps.get-artifacts.outputs.artifact_2
         uses:                       actions/upload-artifact@v2
         with:
-          name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
-          path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          name:                     ${{ steps.get-artifacts.outputs.artifact_2 }}
+          path:                     deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
           retention-days:           31
           if-no-files-found:        error
 
       - name:                       Notarize macOS Release Build
         if:                         >-
-                                    steps.step_build.outputs.macos_signed == 'true' &&
+                                    steps.build.outputs.macos_signed == 'true' &&
                                     contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         notarize-macOS-app
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
-          product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           primary-bundle-id:        io.jamulus.Jamulus
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
 
       - name:                       Staple macOS Release Build
         if:                         >-
-                                    steps.step_build.outputs.macos_signed == 'true' &&
+                                    steps.build.outputs.macos_signed == 'true' &&
                                     contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         staple-macOS-app
         uses:                       devbotsxyz/xcode-staple@v1
         with:
-          product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
       - name:                       Upload Artifact 1 to Release
         # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
@@ -291,13 +272,13 @@ jobs:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
-          asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          asset_path:               deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+          asset_name:               ${{ steps.get-artifacts.outputs.artifact_1 }}
           asset_content_type:       application/octet-stream
 
       - name:                       Upload Artifact 2 to Release
         if:                         >-
-                                    steps.step_cmd3_postbuild.outputs.artifact_2 != '' &&
+                                    steps.get-artifacts.outputs.artifact_2 != '' &&
                                     contains(needs.create_release.outputs.publish_to_release, 'true')
         id:                         upload-release-asset2
         uses:                       actions/upload-release-asset@v1
@@ -305,8 +286,8 @@ jobs:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
-          asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          asset_path:               deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+          asset_name:               ${{ steps.get-artifacts.outputs.artifact_2 }}
           asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis

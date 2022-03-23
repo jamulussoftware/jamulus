@@ -704,7 +704,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     while ( tbfName.toNextBoundary() != -1 )
     {
         ++iCount;
-        if ( iCount == iInsPos )
+        if ( iCount == iInsPos && tbfName.position() + iLineNumber < strModText.length() )
         {
             strModText.insert ( tbfName.position() + iLineNumber, QString ( "\n" ) );
             iLineNumber++;

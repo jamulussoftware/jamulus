@@ -61,6 +61,77 @@ char** CCommandlineOptions::appArgv = NULL;
 QDialog* CMsgBoxes::pMainForm       = NULL;
 QString  CMsgBoxes::strMainFormName = APP_NAME;
 
+
+QString UsageArguments ( char** argv )
+{
+    // clang-format off
+    return QString (
+           "\n"
+           "Usage: %1 [option] [option argument] ...\n"
+           "\n"
+           "  -h, -?, --help        display this help text and exit\n"
+           "  -v, --version         display version information and exit\n"
+           "\n"
+           "Common options:\n"
+           "  -i, --inifile         initialization file name\n"
+           "                        (not supported for headless Server mode)\n"
+           "  -n, --nogui           disable GUI (\"headless\")\n"
+           "  -p, --port            set the local port number\n"
+           "      --jsonrpcport     enable JSON-RPC server, set TCP port number\n"
+           "                        (EXPERIMENTAL, APIs might still change;\n"
+           "                        only accessible from localhost)\n"
+           "      --jsonrpcsecretfile\n"
+           "                        path to a single-line file which contains a freely\n"
+           "                        chosen secret to authenticate JSON-RPC users.\n"
+           "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
+           "                        (see the Jamulus website to enable QoS on Windows)\n"
+           "  -t, --notranslation   disable translation (use English language)\n"
+           "  -6, --enableipv6      enable IPv6 addressing (IPv4 is always enabled)\n"
+           "\n"
+           "Server only:\n"
+           "  -d, --discononquit    disconnect all Clients on quit\n"
+           "  -e, --directoryserver address of the directory Server with which to register\n"
+           "                        (or 'localhost' to host a server list on this Server)\n"
+           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
+           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
+           "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
+           "  -F, --fastupdate      use 64 samples frame size mode\n"
+           "  -l, --log             enable logging, set file name\n"
+           "  -L, --licence         show an agreement window before users can connect\n"
+           "  -m, --htmlstatus      enable HTML status file, set file name\n"
+           "  -o, --serverinfo      registration info for this Server.  Format:\n"
+           "                        [name];[city];[country as QLocale ID]\n"
+           "      --serverpublicip  public IP address for this Server.  Needed when\n"
+           "                        registering with a server list hosted\n"
+           "                        behind the same NAT\n"
+           "  -P, --delaypan        start with delay panning enabled\n"
+           "  -R, --recording       sets directory to contain recorded jams\n"
+           "      --norecord        disables recording (when enabled by default by -R)\n"
+           "  -s, --server          start Server\n"
+           "      --serverbindip    IP address the Server will bind to (rather than all)\n"
+           "  -T, --multithreading  use multithreading to make better use of\n"
+           "                        multi-core CPUs and support more Clients\n"
+           "  -u, --numchannels     maximum number of channels\n"
+           "  -w, --welcomemessage  welcome message to display on connect\n"
+           "                        (string or filename, HTML supported)\n"
+           "  -z, --startminimized  start minimizied\n"
+           "\n"
+           "Client only:\n"
+           "  -c, --connect         connect to given Server address on startup\n"
+           "  -j, --nojackconnect   disable auto JACK connections\n"
+           "  -M, --mutestream      starts the application in muted state\n"
+           "      --mutemyown       mute me in my personal mix (headless only)\n"
+           "      --clientname      Client name (window title and JACK client name)\n"
+           "      --ctrlmidich      MIDI controller channel to listen\n"
+           "\n"
+           "Example: %1 -s --inifile myinifile.ini\n"
+           "\n"
+           "For more information and localized help see:\n"
+           "https://jamulus.io/wiki/Command-Line-Options\n"
+    ).arg( argv[0] );
+    // clang-format on
+}
+
 int main ( int argc, char** argv )
 {
     CCommandlineOptions::appArgc = argc;
@@ -1008,76 +1079,6 @@ void CMsgBoxes::ShowInfo ( QString strInfo )
 /******************************************************************************\
 * Command Line Argument Parsing                                                *
 \******************************************************************************/
-QString UsageArguments ( char** argv )
-{
-    // clang-format off
-    return QString (
-           "\n"
-           "Usage: %1 [option] [option argument] ...\n"
-           "\n"
-           "  -h, -?, --help        display this help text and exit\n"
-           "  -v, --version         display version information and exit\n"
-           "\n"
-           "Common options:\n"
-           "  -i, --inifile         initialization file name\n"
-           "                        (not supported for headless Server mode)\n"
-           "  -n, --nogui           disable GUI (\"headless\")\n"
-           "  -p, --port            set the local port number\n"
-           "      --jsonrpcport     enable JSON-RPC server, set TCP port number\n"
-           "                        (EXPERIMENTAL, APIs might still change;\n"
-           "                        only accessible from localhost)\n"
-           "      --jsonrpcsecretfile\n"
-           "                        path to a single-line file which contains a freely\n"
-           "                        chosen secret to authenticate JSON-RPC users.\n"
-           "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
-           "                        (see the Jamulus website to enable QoS on Windows)\n"
-           "  -t, --notranslation   disable translation (use English language)\n"
-           "  -6, --enableipv6      enable IPv6 addressing (IPv4 is always enabled)\n"
-           "\n"
-           "Server only:\n"
-           "  -d, --discononquit    disconnect all Clients on quit\n"
-           "  -e, --directoryserver address of the directory Server with which to register\n"
-           "                        (or 'localhost' to host a server list on this Server)\n"
-           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
-           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
-           "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
-           "  -F, --fastupdate      use 64 samples frame size mode\n"
-           "  -l, --log             enable logging, set file name\n"
-           "  -L, --licence         show an agreement window before users can connect\n"
-           "  -m, --htmlstatus      enable HTML status file, set file name\n"
-           "  -o, --serverinfo      registration info for this Server.  Format:\n"
-           "                        [name];[city];[country as QLocale ID]\n"
-           "      --serverpublicip  public IP address for this Server.  Needed when\n"
-           "                        registering with a server list hosted\n"
-           "                        behind the same NAT\n"
-           "  -P, --delaypan        start with delay panning enabled\n"
-           "  -R, --recording       sets directory to contain recorded jams\n"
-           "      --norecord        disables recording (when enabled by default by -R)\n"
-           "  -s, --server          start Server\n"
-           "      --serverbindip    IP address the Server will bind to (rather than all)\n"
-           "  -T, --multithreading  use multithreading to make better use of\n"
-           "                        multi-core CPUs and support more Clients\n"
-           "  -u, --numchannels     maximum number of channels\n"
-           "  -w, --welcomemessage  welcome message to display on connect\n"
-           "                        (string or filename, HTML supported)\n"
-           "  -z, --startminimized  start minimizied\n"
-           "\n"
-           "Client only:\n"
-           "  -c, --connect         connect to given Server address on startup\n"
-           "  -j, --nojackconnect   disable auto JACK connections\n"
-           "  -M, --mutestream      starts the application in muted state\n"
-           "      --mutemyown       mute me in my personal mix (headless only)\n"
-           "      --clientname      Client name (window title and JACK client name)\n"
-           "      --ctrlmidich      MIDI controller channel to listen\n"
-           "\n"
-           "Example: %1 -s --inifile myinifile.ini\n"
-           "\n"
-           "For more information and localized help see:\n"
-           "https://jamulus.io/wiki/Command-Line-Options\n"
-    ).arg( argv[0] );
-    // clang-format on
-}
-
 bool CCommandlineOptions::GetFlagArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt )
 {
     if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )

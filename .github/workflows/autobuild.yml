@@ -52,7 +52,7 @@ jobs:
         id:                         jamulus-build-vars
 
       - name:                       Remove release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}, if existing
-        if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
+        if:                         steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         continue-on-error:          true
         uses:                       dev-drprasad/delete-tag-and-release@v0.1.2
         with:
@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
 
       - name:                       Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  ${{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}
-        if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
+        if:                         steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         id:                         create_release_step
         uses:                       actions/create-release@v1
         env:
@@ -244,7 +244,7 @@ jobs:
       - name:                       Notarize macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    contains(needs.create_release.outputs.publish_to_release, 'true')
+                                    needs.create_release.outputs.publish_to_release == 'true'
         id:                         notarize-macOS-app
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
@@ -256,7 +256,7 @@ jobs:
       - name:                       Staple macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    contains(needs.create_release.outputs.publish_to_release, 'true')
+                                    needs.create_release.outputs.publish_to_release == 'true'
         id:                         staple-macOS-app
         uses:                       devbotsxyz/xcode-staple@v1
         with:
@@ -265,7 +265,7 @@ jobs:
       - name:                       Upload Artifact 1 to Release
         # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
         # If the artifact is missing, this should fail.
-        if:                         contains(needs.create_release.outputs.publish_to_release, 'true')
+        if:                         needs.create_release.outputs.publish_to_release == 'true'
         id:                         upload-release-asset1
         uses:                       actions/upload-release-asset@v1
         env:
@@ -279,7 +279,7 @@ jobs:
       - name:                       Upload Artifact 2 to Release
         if:                         >-
                                     steps.get-artifacts.outputs.artifact_2 != '' &&
-                                    contains(needs.create_release.outputs.publish_to_release, 'true')
+                                    needs.create_release.outputs.publish_to_release == 'true'
         id:                         upload-release-asset2
         uses:                       actions/upload-release-asset@v1
         env:

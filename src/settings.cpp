@@ -338,7 +338,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     {
         // special case: when settings are loaded no GUI is yet created, therefore
         // we have to create a warning message box here directly
-        CMsgBoxes::ShowWarning( strError );
+        CMsgBoxes::ShowWarning ( strError );
     }
 
     // sound card channel mapping settings: make sure these settings are

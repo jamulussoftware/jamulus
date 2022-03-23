@@ -376,7 +376,6 @@ QString UsageArguments ( char** argv );
 #define htmlBold( T ) "<b>" + T + "</b>"
 #define htmlNewLine() "<br>"
 
-
 class CMsgBoxes
 {
 protected:
@@ -444,7 +443,12 @@ public:
 
     static bool GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg );
 
-    static bool GetNumericArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, double rRangeStart, double rRangeStop, double& rValue );
+    static bool GetNumericArgument ( int&           i,
+                                     const QString& strShortOpt,
+                                     const QString& strLongOpt,
+                                     double         rRangeStart,
+                                     double         rRangeStop,
+                                     double&        rValue );
 
 public:
     // find and get a specific argument:
@@ -497,13 +501,12 @@ public:
         return false;
     }
 
-//=================================================
-// Non statics to parse bare arguments
-// (These need an instance of CCommandlineOptions)
-//=================================================
+    //=================================================
+    // Non statics to parse bare arguments
+    // (These need an instance of CCommandlineOptions)
+    //=================================================
 
 protected:
-
     int    currentIndex;
     char** currentArgv;
 
@@ -514,7 +517,6 @@ protected:
     }
 
 public:
-
     QString GetFirstArgument()
     {
         reset();
@@ -537,7 +539,6 @@ public:
 
         return QString();
     }
-
 };
 
 // defines for commandline options in the style "shortopt", "longopt"

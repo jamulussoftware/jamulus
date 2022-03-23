@@ -182,7 +182,7 @@ QString CSoundBase::SetDev ( const QString strDevName )
             // ASIO drivers
             sErrorMessage += "<br/>" + tr ( "Do you want to open the ASIO driver setup to try changing your configuration to a working state?" );
 
-            if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes | QMessageBox::No ) )
+            if ( QMessageBox::Yes == QMessageBox::information ( CMsgBoxes::MainForm(), CMsgBoxes::MainFormName(), sErrorMessage, QMessageBox::Yes | QMessageBox::No ) )
             {
                 LoadAndInitializeFirstValidDriver ( true );
             }

@@ -664,7 +664,7 @@ void CLanguageComboBox::OnLanguageActivated ( int iLanguageIdx )
     // only update if the language selection is different from the current selected language
     if ( iIdxSelectedLanguage != iLanguageIdx )
     {
-        QMessageBox::information ( this, tr ( "Restart Required" ), tr ( "Please restart the application for the language change to take effect." ) );
+        QMessageBox::information ( CMsgBoxes::MainForm(), CMsgBoxes::MainFormName() + ": " + tr ( "Restart Required" ), tr ( "Please restart the application for the language change to take effect." ) );
 
         emit LanguageChanged ( itemData ( iLanguageIdx ).toString() );
     }

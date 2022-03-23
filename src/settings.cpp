@@ -338,7 +338,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 #ifndef HEADLESS
         // special case: when settings are loaded no GUI is yet created, therefore
         // we have to create a warning message box here directly
-        QMessageBox::warning ( nullptr, APP_NAME, strError );
+        CMsgBoxes::ShowWarning( strError );
 #endif
     }
 

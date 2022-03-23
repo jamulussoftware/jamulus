@@ -419,7 +419,7 @@ protected:
 public slots:
     void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
     void OnHelpAbout() { AboutDlg.exec(); }
-    void OnHelpAboutQt() { QMessageBox::aboutQt ( nullptr, QString ( tr ( "About Qt" ) ) ); }
+    void OnHelpAboutQt() { QMessageBox::aboutQt ( CMsgBoxes::MainForm(), QString ( tr ( "About Qt" ) ) ); }
     void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
     void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
     void OnHelpSoftwareMan() { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }

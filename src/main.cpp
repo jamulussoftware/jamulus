@@ -947,7 +947,7 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
         if ( bUseGUI )
         {
-            QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
+            CMsgBoxes::ShowError( generr.GetErrorText() );
         }
         else
 #endif

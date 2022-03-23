@@ -1059,7 +1059,8 @@ void CClientDlg::OnTimerSigMet()
         // show message box about feedback issue
         QCheckBox* chb = new QCheckBox ( tr ( "Enable feedback detection" ) );
         chb->setCheckState ( pSettings->bEnableFeedbackDetection ? Qt::Checked : Qt::Unchecked );
-        QMessageBox msgbox;
+        QMessageBox msgbox ( CMsgBoxes::MainForm());
+        msgbox.setWindowTitle(CMsgBoxes::MainFormName() + ": " + tr( "Warning" ));
         msgbox.setText ( tr ( "Audio feedback or loud signal detected.\n\n"
                               "We muted your channel and activated 'Mute Myself'. Please solve "
                               "the feedback issue first and unmute yourself afterwards." ) );
@@ -1143,10 +1144,8 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
     // it is trying to connect the server which does not help to solve the problem (#129))
     if ( !pClient->IsCallbackEntered() )
     {
-        QMessageBox::warning ( this,
-                               APP_NAME,
-                               tr ( "Your sound card is not working correctly. "
-                                    "Please open the settings dialog and check the device selection and the driver settings." ) );
+        CMsgBoxes::ShowWarning( tr ( "Your sound card is not working correctly. "
+                                     "Please open the settings dialog and check the device selection and the driver settings." ) );
     }
 }
 
@@ -1163,7 +1162,7 @@ void CClientDlg::OnSoundDeviceChanged ( QString strError )
         }
 
         // show the error message of the device setup
-        QMessageBox::critical ( this, APP_NAME, strError, tr ( "Ok" ), nullptr );
+        CMsgBoxes::ShowError ( strError );
     }
 
     // if the check audio device timer is running, it must be restarted on a device change
@@ -1206,7 +1205,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         catch ( const CGenErr& generr )
         {
             // show error message and return the function
-            QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
+            CMsgBoxes::ShowError( generr.GetErrorText() );
             return;
         }
 

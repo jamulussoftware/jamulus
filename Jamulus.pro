@@ -101,7 +101,7 @@ win32 {
             libjackname = "libjack64.lib"
         }
         !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-            message("Warning: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
+            error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
         }
 
         HEADERS += linux/sound.h
@@ -115,6 +115,9 @@ win32 {
         message(Using ASIO.)
         message(Please review the ASIO SDK licence.)
 
+        !exists(windows/ASIOSDK2) {
+            error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
+        }
         # Important: Keep those ASIO includes local to this build target in
         # order to avoid poisoning other builds license-wise.
         HEADERS += windows/sound.h
@@ -177,7 +180,7 @@ win32 {
         message(Using JACK.)
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message("Warning: jack.h was not found at the usual place, maybe jack is not installed")
+                 error("Error: jack.h was not found at the usual place, maybe jack is not installed")
             }
         }
         HEADERS += linux/sound.h

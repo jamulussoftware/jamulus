@@ -44,7 +44,7 @@ setup_cross_compiler() {
     if [[ "${TARGET_ARCH}" == amd64 ]]; then
         return
     fi
-    GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
+    local GCC_VERSION=7  # 7 is the default on 18.04, there is no reason not to update once 18.04 is out of support
     sudo apt install -qq -y --no-install-recommends "g++-${GCC_VERSION}-${ABI_NAME}" "qt5-qmake:${TARGET_ARCH}" "qtbase5-dev:${TARGET_ARCH}" "libjack-jackd2-dev:${TARGET_ARCH}"
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
@@ -64,12 +64,12 @@ pass_artifacts_to_job() {
     mkdir deploy
 
     # rename headless first, so wildcard pattern matches only one file each
-    artifact_deploy_filename_1="jamulus_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+    local artifact_deploy_filename_1="jamulus_headless_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
     echo "Moving headless build artifact to deploy/${artifact_deploy_filename_1}"
     mv ../jamulus-headless*"_${TARGET_ARCH}.deb" "./deploy/${artifact_deploy_filename_1}"
     echo "::set-output name=artifact_1::${artifact_deploy_filename_1}"
 
-    artifact_deploy_filename_2="jamulus_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
+    local artifact_deploy_filename_2="jamulus_${JAMULUS_BUILD_VERSION}_ubuntu_${TARGET_ARCH}.deb"
     echo "Moving regular build artifact to deploy/${artifact_deploy_filename_2}"
     mv ../jamulus*_"${TARGET_ARCH}.deb" "./deploy/${artifact_deploy_filename_2}"
     echo "::set-output name=artifact_2::${artifact_deploy_filename_2}"

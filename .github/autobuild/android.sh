@@ -75,8 +75,8 @@ setup_qt() {
 }
 
 build_app_as_apk() {
-    QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
-    MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
+    local QT_DIR="${QT_BASEDIR}/${QT_VERSION}/android"
+    local MAKE="${ANDROID_NDK_ROOT}/prebuilt/${ANDROID_NDK_HOST}/bin/make"
 
     "${QT_DIR}/bin/qmake" -spec android-clang
     "${MAKE}" -j "$(nproc)"
@@ -87,7 +87,7 @@ build_app_as_apk() {
 
 pass_artifact_to_job() {
     mkdir deploy
-    artifact_deploy_filename="jamulus_${JAMULUS_BUILD_VERSION}_android.apk"
+    local artifact_deploy_filename="jamulus_${JAMULUS_BUILD_VERSION}_android.apk"
     echo "Moving ${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk to deploy/${artifact_deploy_filename}"
     mv "./${BUILD_DIR}/build/outputs/apk/debug/build-debug.apk" "./deploy/${artifact_deploy_filename}"
     echo "::set-output name=artifact_1::${artifact_deploy_filename}"

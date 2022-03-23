@@ -41,6 +41,8 @@ cleanup()
 
 build_app()
 {
+    local client_or_server="${1}"
+
     # Build Jamulus
     qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2}
     local target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
@@ -60,12 +62,25 @@ build_app()
     make -f "${build_path}/Makefile" -C "${build_path}" distclean
 
     # Return app name for installer image
-    eval "$1=${target_name}"
+    case "${client_or_server}" in
+        client_app)
+            CLIENT_TARGET_NAME="${target_name}"
+            ;;
+        server_app)
+            SERVER_TARGET_NAME="${target_name}"
+            ;;
+        *)
+            echo "build_app: invalid parameter '${client_or_server}'"
+            exit 1
+    esac
 }
 
 
 build_installer_image()
 {
+    local client_target_name="${1}"
+    local server_target_name="${2}"
+
     # Install create-dmg via brew. brew needs to be installed first.
     # Download and later install. This is done to make caching possible
     brew_install_pinned "create-dmg" "1.0.9"
@@ -76,17 +91,17 @@ build_installer_image()
     # Build installer image
 
     create-dmg \
-      --volname "${1} Installer" \
+      --volname "${client_target_name} Installer" \
       --background "${resources_path}/installerbackground.png" \
       --window-pos 200 400 \
       --window-size 900 320 \
       --app-drop-link 820 210 \
       --text-size 12 \
       --icon-size 72 \
-      --icon "${1}.app" 630 210 \
-      --icon "${2}.app" 530 210 \
+      --icon "${client_target_name}.app" 630 210 \
+      --icon "${server_target_name}.app" 530 210 \
       --eula "${root_path}/COPYING" \
-      "${deploy_path}/$1-${app_version}-installer-mac.dmg" \
+      "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
       "${deploy_path}/"
 
 }
@@ -132,4 +147,4 @@ build_app client_app
 build_app server_app "CONFIG+=server_bundle"
 
 # Create versioned installer image
-build_installer_image "${client_app}" "${server_app}"
+build_installer_image "${CLIENT_TARGET_NAME}" "${SERVER_TARGET_NAME}"

@@ -49,8 +49,19 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 
 // Implementation **************************************************************
 
+int    CCommandlineOptions::appArgc = 0;
+char** CCommandlineOptions::appArgv = NULL;
+
+QDialog* CMsgBoxes::pMainForm       = NULL;
+QString  CMsgBoxes::strMainFormName = APP_NAME;
+
+
 int main ( int argc, char** argv )
 {
+    CCommandlineOptions::appArgc = argc;
+    CCommandlineOptions::appArgv = argv;
+
+    CCommandlineOptions cmdLine; // We don't really need an instance here, but using one improves the readability of the code.
 
 #if defined( Q_OS_MACX )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
@@ -72,6 +83,7 @@ int main ( int argc, char** argv )
 #else
     bool bIsClient = true;
 #endif
+    bool         bSpecialOptions             = false; // Any options after this option will be accepted ! (mostly used for debugging purpouses)
     bool         bUseGUI                     = true;
     bool         bStartMinimized             = false;
     bool         bShowComplRegConnList       = false;
@@ -121,14 +133,20 @@ int main ( int argc, char** argv )
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"
+
+    // clang-format off
+// pgScorio TODO:
+// Extra Checks on parameters:
+//      If given, CMDLN_SERVER MUST be FIRST parameter.
+//      And then only check parameters valid for common, server or client !
+    // clang-format on
+
     for ( int i = 1; i < argc; i++ )
     {
-
         // Help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) || ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
-            const QString strHelp = UsageArguments ( argv );
-            std::cout << qUtf8Printable ( strHelp );
+            std::cout << qUtf8Printable ( UsageArguments ( argv ) );
             exit ( 0 );
         }
 
@@ -142,7 +160,7 @@ int main ( int argc, char** argv )
         // Common options:
 
         // Initialization file -------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_INIFILE, strArgument ) )
         {
             strIniFileName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- initialization file name: %1" ).arg ( strIniFileName ) );
@@ -151,7 +169,7 @@ int main ( int argc, char** argv )
         }
 
         // Disable GUI flag ----------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-n", "--nogui" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_NOGUI ) )
         {
             bUseGUI = false;
             qInfo() << "- no GUI mode chosen";
@@ -160,7 +178,7 @@ int main ( int argc, char** argv )
         }
 
         // Port number ---------------------------------------------------------
-        if ( GetNumericArgument ( argc, argv, i, "-p", "--port", 0, 65535, rDbleArgument ) )
+        if ( cmdLine.GetNumericArgument ( i, CMDLN_PORT, 0, 65535, rDbleArgument ) )
         {
             iPortNumber            = static_cast<quint16> ( rDbleArgument );
             bCustomPortNumberGiven = true;
@@ -169,26 +187,8 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // JSON-RPC port number ------------------------------------------------
-        if ( GetNumericArgument ( argc, argv, i, "--jsonrpcport", "--jsonrpcport", 0, 65535, rDbleArgument ) )
-        {
-            iJsonRpcPortNumber = static_cast<quint16> ( rDbleArgument );
-            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC port number: %1" ).arg ( iJsonRpcPortNumber ) );
-            CommandLineOptions << "--jsonrpcport";
-            continue;
-        }
-
-        // JSON-RPC secret file name -------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "--jsonrpcsecretfile", "--jsonrpcsecretfile", strArgument ) )
-        {
-            strJsonRpcSecretFileName = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC secret file: %1" ).arg ( strJsonRpcSecretFileName ) );
-            CommandLineOptions << "--jsonrpcsecretfile";
-            continue;
-        }
-
         // Quality of Service --------------------------------------------------
-        if ( GetNumericArgument ( argc, argv, i, "-Q", "--qos", 0, 255, rDbleArgument ) )
+        if ( cmdLine.GetNumericArgument ( i, CMDLN_QOS, 0, 255, rDbleArgument ) )
         {
             iQosNumber = static_cast<quint16> ( rDbleArgument );
             qInfo() << qUtf8Printable ( QString ( "- selected QoS value: %1" ).arg ( iQosNumber ) );
@@ -197,7 +197,7 @@ int main ( int argc, char** argv )
         }
 
         // Disable translations ------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-t", "--notranslation" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_NOTRANSLATION ) )
         {
             bUseTranslation = false;
             qInfo() << "- translations disabled";
@@ -206,7 +206,7 @@ int main ( int argc, char** argv )
         }
 
         // Enable IPv6 ---------------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-6", "--enableipv6" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_ENABLEIPV6 ) )
         {
             bEnableIPv6 = true;
             qInfo() << "- IPv6 enabled";
@@ -217,7 +217,7 @@ int main ( int argc, char** argv )
         // Server only:
 
         // Disconnect all clients on quit --------------------------------------
-        if ( GetFlagArgument ( argv, i, "-d", "--discononquit" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_DISCONONQUIT ) )
         {
             bDisconnectAllClientsOnQuit = true;
             qInfo() << "- disconnect all clients on quit";
@@ -227,22 +227,9 @@ int main ( int argc, char** argv )
         }
 
         // Directory server ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-e", "--directoryserver", strArgument ) )
-        {
-            strDirectoryServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
-            CommandLineOptions << "--directoryserver";
-            ServerOnlyOptions << "--directoryserver";
-            continue;
-        }
-
-        // Central server ** D E P R E C A T E D ** ----------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--centralserver", // no short form
-                                 "--centralserver",
-                                 strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_DIRECTORYSERVER, strArgument ) ||
+             cmdLine.GetStringArgument ( i, CMDLN_CENTRALSERVER, strArgument ) // ** D E P R E C A T E D **
+        )
         {
             strDirectoryServer = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
@@ -252,12 +239,7 @@ int main ( int argc, char** argv )
         }
 
         // Directory file ------------------------------------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--directoryfile", // no short form
-                                 "--directoryfile",
-                                 strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_DIRECTORYFILE, strArgument ) )
         {
             strServerListFileName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- directory server persistence file: %1" ).arg ( strServerListFileName ) );
@@ -267,7 +249,7 @@ int main ( int argc, char** argv )
         }
 
         // Server list filter --------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-f", "--listfilter", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_LISTFILTER, strArgument ) )
         {
             strServerListFilter = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- server list filter: %1" ).arg ( strServerListFilter ) );
@@ -277,7 +259,7 @@ int main ( int argc, char** argv )
         }
 
         // Use 64 samples frame size mode --------------------------------------
-        if ( GetFlagArgument ( argv, i, "-F", "--fastupdate" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_FASTUPDATE ) )
         {
             bUseDoubleSystemFrameSize = false; // 64 samples frame size
             qInfo() << qUtf8Printable ( QString ( "- using %1 samples frame size mode" ).arg ( SYSTEM_FRAME_SIZE_SAMPLES ) );
@@ -287,7 +269,7 @@ int main ( int argc, char** argv )
         }
 
         // Use logging ---------------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_LOG, strArgument ) )
         {
             strLoggingFileName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- logging file name: %1" ).arg ( strLoggingFileName ) );
@@ -297,7 +279,7 @@ int main ( int argc, char** argv )
         }
 
         // Use licence flag ----------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-L", "--licence" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_LICENCE ) )
         {
             // LT_CREATIVECOMMONS is now used just to enable the pop up
             eLicenceType = LT_CREATIVECOMMONS;
@@ -308,7 +290,7 @@ int main ( int argc, char** argv )
         }
 
         // HTML status file ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_HTMLSTATUS, strArgument ) )
         {
             strHTMLStatusFileName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- HTML status file name: %1" ).arg ( strHTMLStatusFileName ) );
@@ -318,7 +300,7 @@ int main ( int argc, char** argv )
         }
 
         // Server info ---------------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-o", "--serverinfo", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_SERVERINFO, strArgument ) )
         {
             strServerInfo = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- server info: %1" ).arg ( strServerInfo ) );
@@ -328,12 +310,7 @@ int main ( int argc, char** argv )
         }
 
         // Server Public IP ----------------------------------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--serverpublicip", // no short form
-                                 "--serverpublicip",
-                                 strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_SERVERPUBLICIP, strArgument ) )
         {
             strServerPublicIP = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- server public IP: %1" ).arg ( strServerPublicIP ) );
@@ -343,7 +320,7 @@ int main ( int argc, char** argv )
         }
 
         // Enable delay panning on startup -------------------------------------
-        if ( GetFlagArgument ( argv, i, "-P", "--delaypan" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_DELAYPAN ) )
         {
             bDelayPan = true;
             qInfo() << "- starting with delay panning";
@@ -353,7 +330,7 @@ int main ( int argc, char** argv )
         }
 
         // Recording directory -------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-R", "--recording", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_RECORDING, strArgument ) )
         {
             strRecordingDirName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- recording directory name: %1" ).arg ( strRecordingDirName ) );
@@ -363,10 +340,7 @@ int main ( int argc, char** argv )
         }
 
         // Disable recording on startup ----------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--norecord", // no short form
-                               "--norecord" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_NORECORD ) )
         {
             bDisableRecording = true;
             qInfo() << "- recording will not take place until enabled";
@@ -376,7 +350,7 @@ int main ( int argc, char** argv )
         }
 
         // Server mode flag ----------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-s", "--server" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_SERVER ) )
         {
             bIsClient = false;
             qInfo() << "- server mode chosen";
@@ -386,12 +360,7 @@ int main ( int argc, char** argv )
         }
 
         // Server Bind IP --------------------------------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--serverbindip", // no short form
-                                 "--serverbindip",
-                                 strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_SERVERBINDIP, strArgument ) )
         {
             strServerBindIP = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- server bind IP: %1" ).arg ( strServerBindIP ) );
@@ -401,7 +370,7 @@ int main ( int argc, char** argv )
         }
 
         // Use multithreading --------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-T", "--multithreading" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_MULTITHREADING ) )
         {
             bUseMultithreading = true;
             qInfo() << "- using multithreading";
@@ -411,7 +380,7 @@ int main ( int argc, char** argv )
         }
 
         // Maximum number of channels ------------------------------------------
-        if ( GetNumericArgument ( argc, argv, i, "-u", "--numchannels", 1, MAX_NUM_CHANNELS, rDbleArgument ) )
+        if ( cmdLine.GetNumericArgument ( i, CMDLN_NUMCHANNELS, 1, MAX_NUM_CHANNELS, rDbleArgument ) )
         {
             iNumServerChannels = static_cast<int> ( rDbleArgument );
 
@@ -423,7 +392,7 @@ int main ( int argc, char** argv )
         }
 
         // Server welcome message ----------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-w", "--welcomemessage", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_WELCOMEMESSAGE, strArgument ) )
         {
             strWelcomeMessage = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- welcome message: %1" ).arg ( strWelcomeMessage ) );
@@ -433,7 +402,7 @@ int main ( int argc, char** argv )
         }
 
         // Start minimized -----------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-z", "--startminimized" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_STARTMINIMIZED ) )
         {
             bStartMinimized = true;
             qInfo() << "- start minimized enabled";
@@ -445,7 +414,7 @@ int main ( int argc, char** argv )
         // Client only:
 
         // Connect on startup --------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-c", "--connect", strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_CONNECT, strArgument ) )
         {
             strConnOnStartupAddress = NetworkUtil::FixAddress ( strArgument );
             qInfo() << qUtf8Printable ( QString ( "- connect on startup to address: %1" ).arg ( strConnOnStartupAddress ) );
@@ -455,7 +424,7 @@ int main ( int argc, char** argv )
         }
 
         // Disabling auto Jack connections -------------------------------------
-        if ( GetFlagArgument ( argv, i, "-j", "--nojackconnect" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_NOJACKCONNECT ) )
         {
             bNoAutoJackConnect = true;
             qInfo() << "- disable auto Jack connections";
@@ -465,7 +434,7 @@ int main ( int argc, char** argv )
         }
 
         // Mute stream on startup ----------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-M", "--mutestream" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_MUTESTREAM ) )
         {
             bMuteStream = true;
             qInfo() << "- mute stream activated";
@@ -475,10 +444,7 @@ int main ( int argc, char** argv )
         }
 
         // For headless client mute my own signal in personal mix --------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--mutemyown", // no short form
-                               "--mutemyown" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_MUTEMYOWN ) )
         {
             bMuteMeInPersonalMix = true;
             qInfo() << "- mute me in my personal mix";
@@ -488,12 +454,7 @@ int main ( int argc, char** argv )
         }
 
         // Client Name ---------------------------------------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--clientname", // no short form
-                                 "--clientname",
-                                 strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_CLIENTNAME, strArgument ) )
         {
             strClientName = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- client name: %1" ).arg ( strClientName ) );
@@ -503,12 +464,7 @@ int main ( int argc, char** argv )
         }
 
         // Controller MIDI channel ---------------------------------------------
-        if ( GetStringArgument ( argc,
-                                 argv,
-                                 i,
-                                 "--ctrlmidich", // no short form
-                                 "--ctrlmidich",
-                                 strArgument ) )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_CTRLMIDICH, strArgument ) )
         {
             strMIDISetup = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- MIDI controller settings: %1" ).arg ( strMIDISetup ) );
@@ -523,10 +479,7 @@ int main ( int argc, char** argv )
         // Undocumented debugging command line argument: Show all registered
         // servers in the server list regardless if a ping to the server is
         // possible or not.
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--showallservers", // no short form
-                               "--showallservers" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_SHOWALLSERVERS ) )
         {
             bShowComplRegConnList = true;
             qInfo() << "- show all registered servers in server list";
@@ -538,10 +491,7 @@ int main ( int argc, char** argv )
         // Show analyzer console -----------------------------------------------
         // Undocumented debugging command line argument: Show the analyzer
         // console to debug network buffer properties.
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--showanalyzerconsole", // no short form
-                               "--showanalyzerconsole" ) )
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_SHOWANALYZERCONSOLE ) )
         {
             bShowAnalyzerConsole = true;
             qInfo() << "- show analyzer console";
@@ -550,14 +500,27 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Enable Special Options ----------------------------------------------
+        if ( cmdLine.GetFlagArgument ( i, CMDLN_SPECIAL ) )
+        {
+            bSpecialOptions = true;
+            qInfo() << "- Special options enabled !";
+            continue;
+        }
+
         // Unknown option ------------------------------------------------------
         qCritical() << qUtf8Printable ( QString ( "%1: Unknown option '%2' -- use '--help' for help" ).arg ( argv[0] ).arg ( argv[i] ) );
 
+        // pgScorpio: No exit for options after the "--special" option.
+        // Used for debugging and testing new options...
+        if ( !bSpecialOptions )
+        {
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
 #if !( defined( Q_OS_MACX ) )
-        exit ( 1 );
+            exit ( 1 );
 #endif
+        }
     }
 
     // Dependencies ------------------------------------------------------------
@@ -589,8 +552,7 @@ int main ( int argc, char** argv )
         if ( ServerOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )
-                                                .arg ( argv[0] )
-                                                .arg ( ServerOnlyOptions.join ( ", " ) ) );
+                                                .arg ( CCommandlineOptions::GetProgramPath(), ServerOnlyOptions.join ( ", " ) ) );
             exit ( 1 );
         }
 
@@ -891,6 +853,9 @@ int main ( int argc, char** argv )
                                        bEnableIPv6,
                                        nullptr );
 
+                // initialise message boxes
+                CMsgBoxes::init ( &ClientDlg, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
                 // show dialog
                 ClientDlg.show();
                 pApp->exec();
@@ -1072,9 +1037,9 @@ QString UsageArguments ( char** argv )
     // clang-format on
 }
 
-bool GetFlagArgument ( char** argv, int& i, QString strShortOpt, QString strLongOpt )
+bool CCommandlineOptions::GetFlagArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
     {
         return true;
     }
@@ -1084,17 +1049,17 @@ bool GetFlagArgument ( char** argv, int& i, QString strShortOpt, QString strLong
     }
 }
 
-bool GetStringArgument ( int argc, char** argv, int& i, QString strShortOpt, QString strLongOpt, QString& strArg )
+bool CCommandlineOptions::GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
     {
-        if ( ++i >= argc )
+        if ( ++i >= appArgc )
         {
-            qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( argv[0] ).arg ( argv[i - 1] ) );
+            qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( appArgv[0] ).arg ( appArgv[i - 1] ) );
             exit ( 1 );
         }
 
-        strArg = argv[i];
+        strArg = appArgv[i];
 
         return true;
     }
@@ -1104,29 +1069,27 @@ bool GetStringArgument ( int argc, char** argv, int& i, QString strShortOpt, QSt
     }
 }
 
-bool GetNumericArgument ( int     argc,
-                          char**  argv,
-                          int&    i,
-                          QString strShortOpt,
-                          QString strLongOpt,
-                          double  rRangeStart,
-                          double  rRangeStop,
-                          double& rValue )
+bool CCommandlineOptions::GetNumericArgument ( int&           i,
+                                               const QString& strShortOpt,
+                                               const QString& strLongOpt,
+                                               double         rRangeStart,
+                                               double         rRangeStop,
+                                               double&        rValue )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
     {
         QString errmsg = "%1: '%2' needs a numeric argument from '%3' to '%4'.";
-        if ( ++i >= argc )
+        if ( ++i >= appArgc )
         {
-            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            qCritical() << qUtf8Printable ( errmsg.arg ( appArgv[0] ).arg ( appArgv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 
         char* p;
-        rValue = strtod ( argv[i], &p );
+        rValue = strtod ( appArgv[i], &p );
         if ( *p || ( rValue < rRangeStart ) || ( rValue > rRangeStop ) )
         {
-            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            qCritical() << qUtf8Printable ( errmsg.arg ( appArgv[0] ).arg ( appArgv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 

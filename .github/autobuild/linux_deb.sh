@@ -20,6 +20,8 @@ case "${TARGET_ARCH}" in
 esac
 
 setup() {
+    export DEBIAN_FRONTEND="noninteractive"
+
     setup_cross_compilation_apt_sources
 
     echo "Update system..."

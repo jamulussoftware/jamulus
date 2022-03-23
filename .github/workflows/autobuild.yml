@@ -39,9 +39,9 @@ jobs:
     name:                           Build vars & Github release (if required)
     runs-on:                        ubuntu-20.04
     outputs:
-      publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
-      upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
-      build_version:                ${{ steps.jamulus-build-vars.outputs.BUILD_VERSION }}
+      publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
+      upload_url:                   ${{ steps.create-release.outputs.upload_url }}
+      build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
 
     steps:
       - name:                       Checkout code
@@ -49,29 +49,29 @@ jobs:
 
       - name:                       Determine release version, type and prerelease variables and generate Changelog
         run:                        python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
-        id:                         jamulus-build-vars
+        id:                         get-build-vars
 
-      - name:                       Remove release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}, if existing
-        if:                         steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
+      - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
+        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         continue-on-error:          true
         uses:                       dev-drprasad/delete-tag-and-release@v0.1.2
         with:
           delete_release:           true
-          tag_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
+          tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
 
-      - name:                       Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  ${{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}
-        if:                         steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
-        id:                         create_release_step
+      - name:                       Create Release ${{steps.get-build-vars.outputs.RELEASE_TAG}}  ${{steps.get-build-vars.outputs.RELEASE_TITLE}}
+        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
+        id:                         create-release
         uses:                       actions/create-release@v1
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
-          release_name:             ${{ steps.jamulus-build-vars.outputs.RELEASE_TITLE }}
+          tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
+          release_name:             ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
           body_path:                ${{ github.workspace }}/autoLatestChangelog.md
-          prerelease:               ${{ steps.jamulus-build-vars.outputs.IS_PRERELEASE }}
+          prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
           draft:                    false
 
 

@@ -1,5 +1,9 @@
 VERSION = 3.9.1dev
 
+lessThan(QT_MAJOR_VERSION, 5) {
+    error(Jamulus requires at least Qt5)
+}
+
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)
@@ -1164,3 +1168,42 @@ CLANG_FORMAT_SOURCES = $$find(CLANG_FORMAT_SOURCES, ^\(android|ios|mac|linux|src
 CLANG_FORMAT_SOURCES ~= s!^\(libs/.*/|src/res/qrc_resources\.cpp\)\S*$!!g
 clang_format.commands = 'clang-format -i $$CLANG_FORMAT_SOURCES'
 QMAKE_EXTRA_TARGETS += clang_format
+
+equals(QT_MAJOR_VERSION, 5) {
+    lessThan(QT_MINOR_VERSION, 12) {
+        message(Using extra lrelease rules for old Qt5)
+
+        qtPrepareTool(QMAKE_LRELEASE, lrelease)
+
+        isEmpty(LRELEASE_DIR): LRELEASE_DIR = .qm
+        isEmpty(QM_FILES_RESOURCE_PREFIX): QM_FILES_RESOURCE_PREFIX = i18n
+
+        lrelease.name = lrelease
+        lrelease.input = TRANSLATIONS EXTRA_TRANSLATIONS
+        lrelease.output = $$LRELEASE_DIR/${QMAKE_FILE_IN_BASE}.qm
+        lrelease.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} $$QMAKE_LRELEASE_FLAGS -qm ${QMAKE_FILE_OUT}
+        silent: lrelease.commands = @echo lrelease ${QMAKE_FILE_IN} && $$lrelease.commands
+        lrelease.CONFIG = no_link
+        QMAKE_EXTRA_COMPILERS += lrelease
+
+        all_translations = $$TRANSLATIONS $$EXTRA_TRANSLATIONS
+        for (translation, all_translations) {
+            # mirrors $$LRELEASE_DIR/${QMAKE_FILE_IN_BASE}.qm above
+            translation = $$basename(translation)
+            QM_FILES += $$OUT_PWD/$$LRELEASE_DIR/$$replace(translation, \\..*$, .qm)
+        }
+        embed_translations {
+            qmake_qm_files.files = $$QM_FILES
+            qmake_qm_files.base = $$OUT_PWD/$$LRELEASE_DIR
+            qmake_qm_files.prefix = $$QM_FILES_RESOURCE_PREFIX
+            RESOURCES += qmake_qm_files
+        } else {
+            !isEmpty(QM_FILES_INSTALL_PATH) {
+                qm_files.files = $$QM_FILES
+                qm_files.path = $$QM_FILES_INSTALL_PATH
+                INSTALLS += qm_files
+            }
+            lrelease.CONFIG += target_predeps no_clean
+        }
+    }
+}

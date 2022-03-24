@@ -26,16 +26,18 @@ and display it in a user-friendly way. It is implemented in LUA.
 ## jamulus-historytool
 
 [jamulus-historytool](https://github.com/pljones/jamulus-historytool) comprises two scripts:
-* A PHP script to parse the Jamulus log file and emit it as a JSON response
-* A JS script to parse the JSON response and emit an SVG DOM node
+
+- A PHP script to parse the Jamulus log file and emit it as a JSON response
+- A JS script to parse the JSON response and emit an SVG DOM node
 
 This replaces the History Graph that used to be part of the Jamulus server itself.
 
 ## jamulus-jamexporter
 
 [jamulus-jamexporter](https://github.com/pljones/jamulus-jamexporter) comprises two scripts:
-* A bash script to monitor the Jamulus recording base directory for new recordings
-* A bash script to apply some judicious rules and compression before uploading the recordings offsite
+
+- A bash script to monitor the Jamulus recording base directory for new recordings
+- A bash script to apply some judicious rules and compression before uploading the recordings offsite
 
 ## jamulus-docker
 

@@ -1,13 +1,22 @@
 #!/usr/bin/make -f
 
 export QT_SELECT=qt5
+DEB_TARGET_GNU_TYPE := $(shell dpkg-architecture -qDEB_TARGET_GNU_TYPE)
+DEB_HOST_GNU_TYPE := $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE := $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+	QMAKE := qmake
+else
+	QMAKE := "/usr/lib/$(DEB_BUILD_GNU_TYPE)/qt5/bin/qmake" -qtconf "/usr/lib/$(DEB_TARGET_GNU_TYPE)/qt5/qt.conf" -spec "/usr/lib/$(DEB_TARGET_GNU_TYPE)/qt5/mkspecs/$(DEB_TARGET_GNU_TYPE)-g++" LIBS+="-lstdc++ -lm"
+endif
 
 %:
 	dh $@
 
 override_dh_auto_configure:
-	mkdir -p build-gui && cd build-gui && qmake "CONFIG+=noupcasename" PREFIX=/usr ../Jamulus.pro
-	mkdir -p build-nox && cd build-nox && qmake "CONFIG+=nosound headless" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro
+	mkdir -p build-gui && cd build-gui && $(QMAKE) "CONFIG+=noupcasename" PREFIX=/usr ../Jamulus.pro
+	mkdir -p build-nox && cd build-nox && $(QMAKE) "CONFIG+=nosound headless" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro
 
 override_dh_auto_build:
 	cd src/res/translation && lrelease *.ts

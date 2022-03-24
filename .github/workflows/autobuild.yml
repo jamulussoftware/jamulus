@@ -27,9 +27,27 @@ on:
       # CodeQL requires every branch from on.pull_request to be part of on.push as well in order to run comparisons.
       # We also need master here to trigger builds on PR merge to master and manual pushes (e.g. as part of the release process):
       - "master"
+    paths-ignore:
+      - '**README.md'
+      - 'docs/**'
+      - 'SECURITY.md'
+      - 'COMPILING.md'
+      - 'COPYING'
+      - 'APPLEAPPSTORE.LICENCE.WAIVER'
+      - '.github/ISSUE_TEMPLATE/*'
+      - '.github/pull_request_template.md'
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - '**README.md'
+      - 'docs/**'
+      - 'SECURITY.md'
+      - 'COMPILING.md'
+      - 'COPYING'
+      - 'APPLEAPPSTORE.LICENCE.WAIVER'
+      - '.github/ISSUE_TEMPLATE/*'
+      - '.github/pull_request_template.md'
 
 name:                               Auto-Build
 jobs:
@@ -39,9 +57,9 @@ jobs:
     name:                           Build vars & Github release (if required)
     runs-on:                        ubuntu-20.04
     outputs:
-      publish_to_release:           ${{ steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE }}
-      upload_url:                   ${{ steps.create_release_step.outputs.upload_url }}
-      version_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_VERSION_NAME }}
+      publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
+      upload_url:                   ${{ steps.create-release.outputs.upload_url }}
+      build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
 
     steps:
       - name:                       Checkout code
@@ -49,29 +67,29 @@ jobs:
 
       - name:                       Determine release version, type and prerelease variables and generate Changelog
         run:                        python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
-        id:                         jamulus-build-vars
+        id:                         get-build-vars
 
-      - name:                       Remove release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}, if existing
-        if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
+      - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
+        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         continue-on-error:          true
         uses:                       dev-drprasad/delete-tag-and-release@v0.1.2
         with:
           delete_release:           true
-          tag_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
+          tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
 
-      - name:                       Create Release ${{steps.jamulus-build-vars.outputs.RELEASE_TAG}}  ${{steps.jamulus-build-vars.outputs.RELEASE_TITLE}}
-        if:                         contains(steps.jamulus-build-vars.outputs.PUBLISH_TO_RELEASE, 'true')
-        id:                         create_release_step
+      - name:                       Create Release ${{steps.get-build-vars.outputs.RELEASE_TAG}}  ${{steps.get-build-vars.outputs.RELEASE_TITLE}}
+        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
+        id:                         create-release
         uses:                       actions/create-release@v1
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name:                 ${{ steps.jamulus-build-vars.outputs.RELEASE_TAG }}
-          release_name:             ${{ steps.jamulus-build-vars.outputs.RELEASE_TITLE }}
+          tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
+          release_name:             ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
           body_path:                ${{ github.workspace }}/autoLatestChangelog.md
-          prerelease:               ${{ steps.jamulus-build-vars.outputs.IS_PRERELEASE }}
+          prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
           draft:                    false
 
 
@@ -87,37 +105,35 @@ jobs:
           - config_name:            Android .apk (artifact+codeQL)
             target_os:              android
             building_on_os:         ubuntu-20.04
-            cmd1_prebuild:          "./autobuild/android/autobuild_apk_1_prepare.sh"
-            cmd2_build:             "./autobuild/android/autobuild_apk_2_build.sh"
-            cmd3_postbuild:         "./autobuild/android/autobuild_apk_3_copy_files.sh"
+            base_command:           ./.github/autobuild/android.sh
             run_codeql:             true
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
-          - config_name:            Linux .deb (artifacts+codeQL)
+          - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
             building_on_os:         ubuntu-18.04
-            cmd1_prebuild:          ./.github/autobuild/linux_deb.sh setup
-            cmd2_build:             ./.github/autobuild/linux_deb.sh build
-            cmd3_postbuild:         ./.github/autobuild/linux_deb.sh get-artifacts
+            base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
+
+          - config_name:            Linux .deb armhf (artifacts)
+            target_os:              linux
+            building_on_os:         ubuntu-18.04
+            base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
+            run_codeql:             false
 
           - config_name:            MacOS (artifacts+codeQL)
             target_os:              macos
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh sign_if_possible"
-            cmd3_postbuild:         "./autobuild/mac/autobuild_mac_3_copy_files.sh"
+            base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
             run_codeql:             true
             xcode_version:          12.1.1
 
           - config_name:            MacOS Legacy (artifacts)
             target_os:              macos
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/mac/autobuild_mac_1_prepare.sh 5.9.9"
-            cmd2_build:             "./autobuild/mac/autobuild_mac_2_build.sh do_not_sign"
-            cmd3_postbuild:         "./autobuild/mac/autobuild_mac_3_copy_files.sh legacy"
+            base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
             run_codeql:             false
             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
@@ -129,9 +145,7 @@ jobs:
           - config_name:            iOS (artifacts)
             target_os:              ios
             building_on_os:         macos-10.15
-            cmd1_prebuild:          "./autobuild/ios/autobuild_ios_1_prepare.sh 5.15.2"
-            cmd2_build:             "./autobuild/ios/autobuild_ios_2_build.sh"
-            cmd3_postbuild:         "./autobuild/ios/autobuild_ios_3_copy_files.sh"
+            base_command:           QT_VERSION=5.15.2 ./.github/autobuild/ios.sh
             # Build failed with CodeQL enabled when last tested 03/2022 (#2490).
             # There are no hints that iOS is supposed to be supported by CodeQL.
             # Therefore, disable it:
@@ -141,17 +155,13 @@ jobs:
           - config_name:            Windows (artifact+codeQL)
             target_os:              windows
             building_on_os:         windows-2019
-            cmd1_prebuild:          powershell .\.github\autobuild\windows.ps1 -Stage setup
-            cmd2_build:             powershell .\.github\autobuild\windows.ps1 -Stage build -GithubWorkspace
-            cmd3_postbuild:         powershell .\.github\autobuild\windows.ps1 -Stage get-artifacts -GithubWorkspace
+            base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             true
 
           - config_name:            Windows JACK (artifact)
             target_os:              windows
             building_on_os:         windows-2019
-            cmd1_prebuild:          powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage setup
-            cmd2_build:             powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage build -GithubWorkspace
-            cmd3_postbuild:         powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage get-artifacts -GithubWorkspace
+            base_command:           powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage
             run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
@@ -175,7 +185,7 @@ jobs:
           path: |
             /usr/local/opt/qt
             ~/Library/Cache/jamulus-homebrew-bottles
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
@@ -186,7 +196,7 @@ jobs:
             C:\ChocoCache
             ~\windows\NSIS
             ~\windows\ASIOSDK2
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'
@@ -196,15 +206,12 @@ jobs:
             /opt/Qt
             /opt/android/android-sdk
             /opt/android/android-ndk
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/android/autobuild_apk_1_prepare.sh', 'autobuild/android/install-qt.sh') }}-${{ matrix.config.cmd1_prebuild }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/android.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
-        if:                         matrix.config.cmd1_prebuild
-        run:                        ${{ matrix.config.cmd1_prebuild }}
+        run:                        ${{ matrix.config.base_command }} setup
         env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'  # allow setting environment variables
-          jamulus_project_path:     ${{ github.workspace }}
-          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql
@@ -213,92 +220,88 @@ jobs:
           languages: 'cpp'
 
       - name:                       Build for ${{ matrix.config.config_name }}
-        id:                         step_build
-        if:                         matrix.config.cmd2_build
-        run:                        ${{ matrix.config.cmd2_build }} ${{ github.workspace }}
+        id:                         build
+        run:                        ${{ matrix.config.base_command }} build
         env:
-          jamulus_project_path:       ${{ github.workspace }}
-          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
-          MACOS_CERTIFICATE:          ${{ secrets.MACOS_CERT}}
-          MACOS_CERTIFICATE_PWD:      ${{ secrets.MACOS_CERT_PWD }}
-          MACOS_CERTIFICATE_ID:       ${{ secrets.MACOS_CERT_ID }}
-          NOTARIZATION_PASSWORD:      ${{ secrets.NOTARIZATION_PASSWORD }}
-          KEYCHAIN_PASSWORD:          ${{ secrets.KEYCHAIN_PASSWORD }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
+          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
+          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+          KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
       - name:                       Post-Build for ${{ matrix.config.config_name }}
-        id:                         step_cmd3_postbuild
-        if:                         matrix.config.cmd3_postbuild
-        run:                        ${{ matrix.config.cmd3_postbuild }} ${{ github.workspace }}
+        id:                         get-artifacts
+        run:                        ${{ matrix.config.base_command }} get-artifacts
         env:
-          jamulus_project_path:       ${{ github.workspace }}
-          jamulus_buildversionstring: ${{ needs.create_release.outputs.version_name }}
+          JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Upload Artifact 1 to Job
         # Every build job has at least one artifact. Therefore, no `if` here.
         # If the artifact is missing, this should fail.
         uses:                       actions/upload-artifact@v2
         with:
-          name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
-          path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          name:                     ${{ steps.get-artifacts.outputs.artifact_1 }}
+          path:                     deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           retention-days:           31
           if-no-files-found:        error
 
       - name:                       Upload Artifact 2 to Job
-        if:                         steps.step_cmd3_postbuild.outputs.artifact_2
+        if:                         steps.get-artifacts.outputs.artifact_2
         uses:                       actions/upload-artifact@v2
         with:
-          name:                     ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
-          path:                     deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          name:                     ${{ steps.get-artifacts.outputs.artifact_2 }}
+          path:                     deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
           retention-days:           31
           if-no-files-found:        error
 
       - name:                       Notarize macOS Release Build
         if:                         >-
-                                    steps.step_build.outputs.macos_signed == 'true' &&
-                                    contains(needs.create_release.outputs.publish_to_release, 'true')
+                                    steps.build.outputs.macos_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
         id:                         notarize-macOS-app
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
-          product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
           primary-bundle-id:        io.jamulus.Jamulus
           appstore-connect-username: ${{ secrets.NOTARIZATION_USERNAME }}
           appstore-connect-password: ${{ secrets.NOTARIZATION_PASSWORD }}
 
       - name:                       Staple macOS Release Build
         if:                         >-
-                                    steps.step_build.outputs.macos_signed == 'true' &&
-                                    contains(needs.create_release.outputs.publish_to_release, 'true')
+                                    steps.build.outputs.macos_signed == 'true' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
         id:                         staple-macOS-app
         uses:                       devbotsxyz/xcode-staple@v1
         with:
-          product-path:             deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 
       - name:                       Upload Artifact 1 to Release
         # Every build job has at least one artifact. Therefore, no `if artifact_1` condition here.
         # If the artifact is missing, this should fail.
-        if:                         contains(needs.create_release.outputs.publish_to_release, 'true')
+        if:                         needs.create_release.outputs.publish_to_release == 'true'
         id:                         upload-release-asset1
         uses:                       actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
-          asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_1 }}
+          asset_path:               deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
+          asset_name:               ${{ steps.get-artifacts.outputs.artifact_1 }}
           asset_content_type:       application/octet-stream
 
       - name:                       Upload Artifact 2 to Release
         if:                         >-
-                                    steps.step_cmd3_postbuild.outputs.artifact_2 != '' &&
-                                    contains(needs.create_release.outputs.publish_to_release, 'true')
+                                    steps.get-artifacts.outputs.artifact_2 != '' &&
+                                    needs.create_release.outputs.publish_to_release == 'true'
         id:                         upload-release-asset2
         uses:                       actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url:               ${{ needs.create_release.outputs.upload_url }}
-          asset_path:               deploy/${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
-          asset_name:               ${{ steps.step_cmd3_postbuild.outputs.artifact_2 }}
+          asset_path:               deploy/${{ steps.get-artifacts.outputs.artifact_2 }}
+          asset_name:               ${{ steps.get-artifacts.outputs.artifact_2 }}
           asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis

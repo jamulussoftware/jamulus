@@ -502,11 +502,8 @@ void CProtocol::SendMessage()
             vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
             vecMessage = SendMessQueue.front().vecMessage;
 
-            // start time-out timer if not active
-            if ( !TimerSendMess.isActive() )
-            {
-                TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
-            }
+            // start or restart the ack timeout
+            TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
 
             bSendMess = true;
         }

@@ -99,6 +99,24 @@ use 64 samples frame size mode, which reduces latency if Clients connect with
 .Dq enable small network buffers
 turned on; requires a faster CPU to avoid dropouts and uses more bandwidth to
 connected Clients
+.It Fl \-jsonrpcsecretfile Ar file
+(Server mode only)
+Set the path to a text
+.Ar file
+containing an authentication string for obtaining access to the JSON-RPC API.
+This option is required when
+.Fl \-jsonrpcport
+is used.
+.It Fl \-jsonrpcport Ar port
+(Server mode only)
+Enables JSON-RPC API server to control the application, set the TCP
+.Ar port
+number.
+This API is
+.Em experimental
+and may change.
+It is only accessible from localhost.
+Please refer to the JSON-RPC API Documentation.
 .It Fl f | Fl \-listfilter Ar filter
 .Pq Directory mode only
 whitelist which Servers are allowed to register on the server list;
@@ -284,6 +302,10 @@ controlling the
 verbose
 .Fl \-ctrlmidich
 documentation and other more or less useful information
+.It Pa https://github.com/jamulussoftware/jamulus/blob/master/docs/JSON\-RPC.md
+JSON-RPC API Documentation (see
+.Fl \-jsonrpcport
+above)
 .El
 .Sh AUTHORS
 .An -nosplit

@@ -1075,6 +1075,33 @@ void CMsgBoxes::ShowInfo ( QString strInfo )
 #endif
 }
 
+void CMsgBoxes::ShowError ( QString strError )
+{
+#ifndef HEADLESS
+    QMessageBox::critical ( pMainForm, strMainFormName + ": " + QObject::tr ( "Error" ), strError, QObject::tr ( "Ok" ), nullptr );
+#else
+    qCritical() << "Error: " << strError.toLocal8Bit().data();
+#endif
+}
+
+void CMsgBoxes::ShowWarning ( QString strWarning )
+{
+#ifndef HEADLESS
+    QMessageBox::warning ( pMainForm, strMainFormName + ": " + QObject::tr ( "Warning" ), strWarning, QObject::tr ( "Ok" ), nullptr );
+#else
+    qWarning() << "Warning: " << strWarning.toLocal8Bit().data();
+#endif
+}
+
+void CMsgBoxes::ShowInfo ( QString strInfo )
+{
+#ifndef HEADLESS
+    QMessageBox::information ( pMainForm, strMainFormName + ": " + QObject::tr ( "Information" ), strInfo, QObject::tr ( "Ok" ), nullptr );
+#else
+    qInfo() << "Info: " << strInfo.toLocal8Bit().data();
+#endif
+}
+
 /******************************************************************************\
 * Command Line Argument Parsing                                                *
 \******************************************************************************/

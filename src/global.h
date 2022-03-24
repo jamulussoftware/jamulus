@@ -370,6 +370,8 @@ QString UsageArguments ( char** argv );
 //============================================================================
 #ifndef HEADLESS
 #    include <QMessageBox>
+#else
+#    define QDialog void
 #endif
 
 // html text macro's (for use in gui texts)
@@ -393,26 +395,9 @@ public:
     static const QString& MainFormName() { return strMainFormName; }
 
     // Message boxes:
-    static void ShowError ( QString strError )
-    {
-#ifndef HEADLESS
-        QMessageBox::critical ( pMainForm, strMainFormName + ": " + QObject::tr ( "Error" ), strError, QObject::tr ( "Ok" ), nullptr );
-#endif
-    }
-
-    static void ShowWarning ( QString strWarning )
-    {
-#ifndef HEADLESS
-        QMessageBox::warning ( pMainForm, strMainFormName + ": " + QObject::tr ( "Warning" ), strWarning, QObject::tr ( "Ok" ), nullptr );
-#endif
-    }
-
-    static void ShowInfo ( QString strInfo )
-    {
-#ifndef HEADLESS
-        QMessageBox::information ( pMainForm, strMainFormName + ": " + QObject::tr ( "Information" ), strInfo, QObject::tr ( "Ok" ), nullptr );
-#endif
-    }
+    static void ShowError ( QString strError );
+    static void ShowWarning ( QString strWarning );
+    static void ShowInfo ( QString strInfo );
 };
 
 //============================================================================

@@ -1049,7 +1049,7 @@ void CClientSettingsDlg::UpdateDisplay()
     UpdateJitterBufferFrame();
     UpdateSoundCardFrame();
 
-    if ( !pClient->IsRunning() )
+    if ( !pClient->SoundIsStarted() ) // pgScorpio: Was !pClient->IsRunning() Again this is NOT a connection status, Should be pClient->IsConnected()
     {
         // clear text labels with client parameters
         lblUpstreamValue->setText ( "---" );

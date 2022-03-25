@@ -858,16 +858,16 @@ if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype", static_cas
     directoryType = static_cast<EDirectoryType> ( iValue );
 }
 else
-            // clang-format on
-            if ( GetNumericIniSet ( IniXMLDocument,
-                                    "server",
-                                    "directorytype",
-                                    static_cast<int> ( AT_NONE ),
-                                    static_cast<int> ( AT_CUSTOM ),
-                                    iValue ) )
-        {
-            directoryType = static_cast<EDirectoryType> ( iValue );
-        }
+                // clang-format on
+                if ( GetNumericIniSet ( IniXMLDocument,
+                                        "server",
+                                        "directorytype",
+                                        static_cast<int> ( AT_NONE ),
+                                        static_cast<int> ( AT_CUSTOM ),
+                                        iValue ) )
+                {
+                    directoryType = static_cast<EDirectoryType> ( iValue );
+                }
 
         // clang-format off
 // TODO compatibility to old version < 3.9.0

@@ -119,10 +119,18 @@ public:
 
     virtual ~CClient();
 
-    void Start();
-    void Stop();
-    bool IsRunning() { return Sound.IsRunning(); }
-    bool IsCallbackEntered() const { return Sound.IsCallbackEntered(); }
+    void StartConnection(); // ---> pgScorpio: Was Start(), but Start what ? ( Should be Connect() ?)
+    void StopConnection();  // ---> pgScorpio: Was Stop(), but Stop what ?   ( Should be Disconnect() ?)
+    bool SoundIsStarted()   // ---> pgScorpio: Was IsRunning(), but what is running ??
+    {
+        return Sound.IsRunning(); // ---> pgScorpio: Even this name is incorrect !
+                                  // ---> pgScorpio: Sound.bRun is set when Sound is started, but this does not guarantee sound is actually running
+    }
+
+    bool SoundIsRunning() const
+    {
+        return Sound.IsCallbackEntered();
+    } // ---> pgScorpio: was IsCallbackEntered() but this is the actuall SoundIsRunning() !
     bool SetServerAddr ( QString strNAddr );
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }

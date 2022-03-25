@@ -186,7 +186,7 @@ CClient::CClient ( const quint16  iPortNumber,
     if ( !strConnOnStartupAddress.isEmpty() )
     {
         SetServerAddr ( strConnOnStartupAddress );
-        Start();
+        StartConnection(); // ---> pgScorpio: Was Start()
     }
 }
 
@@ -298,7 +298,8 @@ void CClient::CreateServerJitterBufferMessage()
 void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
 {
     // make sure we are running and the server address is correct
-    if ( IsRunning() && ( InetAddr == Channel.GetAddress() ) )
+    if ( SoundIsStarted() && // ---> pgScorpio: Does NOT mean we are Connected !
+         ( InetAddr == Channel.GetAddress() ) )
     {
         // take care of wrap arounds (if wrapping, do not use result)
         const int iCurDiff = EvaluatePingMessage ( iMs );
@@ -819,7 +820,7 @@ void CClient::OnClientIDReceived ( int iChanID )
     emit ClientIDReceived ( iChanID );
 }
 
-void CClient::Start()
+void CClient::StartConnection() // ---> pgScorpio: Was Start()
 {
     // init object
     Init();
@@ -828,10 +829,11 @@ void CClient::Start()
     Channel.SetEnable ( true );
 
     // start audio interface
-    Sound.Start();
+    Sound.Start(); // ---> pgScorpio: There is NO Check if Sound.Start() actually is successfull !!
+                   // ---> pgScorpio: If Sound.Start fails here GUI (clientdlg) and Channel are definitely out of sync !
 }
 
-void CClient::Stop()
+void CClient::StopConnection()
 {
     // stop audio interface
     Sound.Stop();

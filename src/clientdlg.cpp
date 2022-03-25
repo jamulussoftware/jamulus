@@ -609,9 +609,9 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     AnalyzerConsole.close();
 
     // if connected, terminate connection
-    if ( pClient->IsRunning() )
+    if ( pClient->SoundIsStarted() ) // ---> pgScorpio: This does NOT mean the connection is started !
     {
-        pClient->Stop();
+        pClient->StopConnection(); // ---> pgScorpio:  Was pClient->Stop()
     }
 
     // make sure all current fader settings are applied to the settings struct
@@ -732,7 +732,7 @@ void CClientDlg::OnConnectDlgAccepted()
 
         // first check if we are already connected, if this is the case we have to
         // disconnect the old server first
-        if ( pClient->IsRunning() )
+        if ( pClient->SoundIsStarted() ) // pgScorpio: Was pClient->IsRunning() Again this is NOT connection started !
         {
             Disconnect();
         }
@@ -748,7 +748,7 @@ void CClientDlg::OnConnectDlgAccepted()
 void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
-    if ( pClient->IsRunning() )
+    if ( pClient->SoundIsStarted() ) // pgScorpio: Was pClient->IsRunning() Again this is NOT connection started !
     {
         Disconnect();
         SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
@@ -1141,7 +1141,7 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
     // timeout to check if a valid device is selected and if we do not have
     // fundamental settings errors (in which case the GUI would only show that
     // it is trying to connect the server which does not help to solve the problem (#129))
-    if ( !pClient->IsCallbackEntered() )
+    if ( !pClient->SoundIsRunning() ) // ---> pgScorpio Was pClient->IsCallbackEntered()
     {
         QMessageBox::warning ( this,
                                APP_NAME,
@@ -1154,10 +1154,11 @@ void CClientDlg::OnTimerDetectFeedback() { bDetectFeedback = false; }
 
 void CClientDlg::OnSoundDeviceChanged ( QString strError )
 {
-    if ( !strError.isEmpty() )
+    if ( !strError
+              .isEmpty() ) // ---> pgScorpio: This check should already be done in CClient ! but currently the Disconnect code is at the wrong place.
     {
         // the sound device setup has a problem, disconnect any active connection
-        if ( pClient->IsRunning() )
+        if ( pClient->SoundIsStarted() ) // ---> pgScorpio: Was pClient->IsRunning(), Again this is NOT connection started !() )
         {
             Disconnect();
         }
@@ -1190,6 +1191,8 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
 
 void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
 {
+    // ---> pgScorpio: This code does not belong here but in CClient !!
+
     // set address and check if address is valid
     if ( pClient->SetServerAddr ( strSelectedAddress ) )
     {
@@ -1197,9 +1200,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
         // running state but show error message
         try
         {
-            if ( !pClient->IsRunning() )
+            if ( !pClient->SoundIsStarted() ) // ---> pgScorpio: Again this is NOT connection started !() )
             {
-                pClient->Start();
+                pClient->StartConnection();
             }
         }
 
@@ -1209,6 +1212,8 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
             QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
             return;
         }
+
+        // ---> pgScorpio: This code should be a OnConnecting() slot !
 
         // hide label connect to server
         lblConnectToServer->hide();
@@ -1238,14 +1243,18 @@ void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& str
 
 void CClientDlg::Disconnect()
 {
+    // ---> pgScorpio: This code does not belong here but in CClient !!
+
     // only stop client if currently running, in case we received
     // the stopped message, the client is already stopped but the
     // connect/disconnect button and other GUI controls must be
     // updated
-    if ( pClient->IsRunning() )
+    if ( pClient->SoundIsStarted() ) // ---> pgScorpio: Again this is NOT connection started !() )
     {
-        pClient->Stop();
+        pClient->StopConnection();
     }
+
+    // ---> pgScorpio: This code should be a OnDisconncted() slot
 
     // change connect button text to "connect"
     butConnect->setText ( tr ( "C&onnect" ) );

@@ -76,7 +76,6 @@ class CClientDlg : public CBaseDlg, private Ui_CClientDlgBase
 public:
     CClientDlg ( CClient*         pNCliP,
                  CClientSettings* pNSetP,
-                 const QString&   strConnOnStartupAddress,
                  const QString&   strMIDISetup,
                  const bool       bNewShowComplRegConnList,
                  const bool       bShowAnalyzerConsole,
@@ -94,8 +93,6 @@ protected:
     void ShowAnalyzerConsole();
     void UpdateAudioFaderSlider();
     void UpdateRevSelection();
-    void Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel );
-    void Disconnect();
     void ManageDragNDrop ( QDropEvent* Event, const bool bCheckAccept );
     void SetPingTime ( const int iPingTime, const int iOverallDelayMs, const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
@@ -119,7 +116,7 @@ protected:
     virtual void closeEvent ( QCloseEvent* Event );
     virtual void dragEnterEvent ( QDragEnterEvent* Event ) { ManageDragNDrop ( Event, true ); }
     virtual void dropEvent ( QDropEvent* Event ) { ManageDragNDrop ( Event, false ); }
-    void         UpdateDisplay();
+    void         UpdateSettingsAndChatButtons();
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -127,13 +124,16 @@ protected:
     CAnalyzerConsole   AnalyzerConsole;
 
 public slots:
+    void OnConnect ( QString strServerName );
+    void OnDisconnect();
+
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
     void OnTimerCheckAudioDeviceOk();
     void OnTimerDetectFeedback();
 
-    void OnTimerStatus() { UpdateDisplay(); }
+    void OnTimerStatus() { UpdateSettingsAndChatButtons(); }
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
@@ -191,7 +191,7 @@ public slots:
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
-    void OnSoundDeviceChanged ( QString strError );
+    void OnSoundDeviceChanged();
 
     void OnChangeChanGain ( int iId, float fGain, bool bIsMyOwnFader ) { pClient->SetRemoteChanGain ( iId, fGain, bIsMyOwnFader ); }
 
@@ -232,7 +232,6 @@ public slots:
     }
 
     void OnConnectDlgAccepted();
-    void OnDisconnected() { Disconnect(); }
     void OnGUIDesignChanged();
     void OnMeterStyleChanged();
     void OnRecorderStateReceived ( ERecorderState eRecorderState );

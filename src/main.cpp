@@ -822,14 +822,7 @@ int main ( int argc, char** argv )
         {
             // Client:
             // actual client object
-            CClient Client ( iPortNumber,
-                             iQosNumber,
-                             strConnOnStartupAddress,
-                             strMIDISetup,
-                             bNoAutoJackConnect,
-                             strClientName,
-                             bEnableIPv6,
-                             bMuteMeInPersonalMix );
+            CClient Client ( iPortNumber, iQosNumber, strMIDISetup, bNoAutoJackConnect, strClientName, bEnableIPv6, bMuteMeInPersonalMix );
 
             // load settings from init-file (command line options override)
             CClientSettings Settings ( &Client, strIniFileName );
@@ -851,21 +844,21 @@ int main ( int argc, char** argv )
             if ( bUseGUI )
             {
                 // GUI object
-                CClientDlg ClientDlg ( &Client,
-                                       &Settings,
-                                       strConnOnStartupAddress,
-                                       strMIDISetup,
-                                       bShowComplRegConnList,
-                                       bShowAnalyzerConsole,
-                                       bMuteStream,
-                                       bEnableIPv6,
-                                       nullptr );
+                CClientDlg
+                    ClientDlg ( &Client, &Settings, strMIDISetup, bShowComplRegConnList, bShowAnalyzerConsole, bMuteStream, bEnableIPv6, nullptr );
 
                 // initialise message boxes
                 CMsgBoxes::init ( &ClientDlg, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
 
                 // show dialog
                 ClientDlg.show();
+
+                // Connect on startup ------------------------------------------------------
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
+
                 pApp->exec();
             }
             else
@@ -873,6 +866,15 @@ int main ( int argc, char** argv )
             {
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // initialise message boxes
+                CMsgBoxes::init ( NULL, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
+                // Connect on startup ------------------------------------------------------
+                if ( !strConnOnStartupAddress.isEmpty() )
+                {
+                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
+                }
 
                 pApp->exec();
             }

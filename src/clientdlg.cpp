@@ -27,7 +27,6 @@
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*         pNCliP,
                          CClientSettings* pNSetP,
-                         const QString&   strConnOnStartupAddress,
                          const QString&   strMIDISetup,
                          const bool       bNewShowComplRegConnList,
                          const bool       bShowAnalyzerConsole,
@@ -272,14 +271,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     TimerCheckAudioDeviceOk.setSingleShot ( true ); // only check once after connection
     TimerDetectFeedback.setSingleShot ( true );
 
-    // Connect on startup ------------------------------------------------------
-    if ( !strConnOnStartupAddress.isEmpty() )
-    {
-        // initiate connection (always show the address in the mixer board
-        // (no alias))
-        Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
-    }
-
     // File menu  --------------------------------------------------------------
     QMenu* pFileMenu = new QMenu ( tr ( "&File" ), this );
 
@@ -473,7 +464,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // other
     QObject::connect ( pClient, &CClient::ConClientListMesReceived, this, &CClientDlg::OnConClientListMesReceived );
 
-    QObject::connect ( pClient, &CClient::Disconnected, this, &CClientDlg::OnDisconnected );
+    QObject::connect ( pClient, &CClient::Connecting, this, &CClientDlg::OnConnect );
+
+    QObject::connect ( pClient, &CClient::Disconnected, this, &CClientDlg::OnDisconnect );
 
     QObject::connect ( pClient, &CClient::ChatTextReceived, this, &CClientDlg::OnChatTextReceived );
 
@@ -609,10 +602,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     AnalyzerConsole.close();
 
     // if connected, terminate connection
-    if ( pClient->SoundIsStarted() ) // ---> pgScorpio: This does NOT mean the connection is started !
-    {
-        pClient->StopConnection(); // ---> pgScorpio:  Was pClient->Stop()
-    }
+    pClient->Disconnect();
 
     // make sure all current fader settings are applied to the settings struct
     MainMixerBoard->StoreAllFaderSettings();
@@ -730,15 +720,11 @@ void CClientDlg::OnConnectDlgAccepted()
             }
         }
 
-        // first check if we are already connected, if this is the case we have to
-        // disconnect the old server first
-        if ( pClient->SoundIsStarted() ) // pgScorpio: Was pClient->IsRunning() Again this is NOT connection started !
-        {
-            Disconnect();
-        }
-
         // initiate connection
-        Connect ( strSelectedAddress, strMixerBoardLabel );
+        if ( pClient->Connect ( strSelectedAddress, strMixerBoardLabel ) )
+        {
+            OnConnect ( strMixerBoardLabel );
+        }
 
         // reset flag
         bConnectDlgWasShown = false;
@@ -748,10 +734,9 @@ void CClientDlg::OnConnectDlgAccepted()
 void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
-    if ( pClient->SoundIsStarted() ) // pgScorpio: Was pClient->IsRunning() Again this is NOT connection started !
+    if ( pClient->Disconnect() )
     {
-        Disconnect();
-        SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
+        // Client was Connected, now disconnected
     }
     else
     {
@@ -835,7 +820,7 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
     // always when a new message arrives since this is annoying.
     ShowChatWindow ( ( strChatText.indexOf ( WELCOME_MESSAGE_PREFIX ) == 0 ) );
 
-    UpdateDisplay();
+    UpdateSettingsAndChatButtons();
 }
 
 void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
@@ -853,7 +838,7 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         // disconnect from that server.
         if ( !LicenceDlg.exec() )
         {
-            Disconnect();
+            pClient->Disconnect();
         }
 
         // unmute the client output stream if local mute button is not pressed
@@ -991,7 +976,7 @@ void CClientDlg::ShowChatWindow ( const bool bForceRaise )
         ChatDlg.activateWindow();
     }
 
-    UpdateDisplay();
+    UpdateSettingsAndChatButtons();
 }
 
 void CClientDlg::ShowAnalyzerConsole()
@@ -1151,21 +1136,8 @@ void CClientDlg::OnTimerCheckAudioDeviceOk()
 
 void CClientDlg::OnTimerDetectFeedback() { bDetectFeedback = false; }
 
-void CClientDlg::OnSoundDeviceChanged ( QString strError )
+void CClientDlg::OnSoundDeviceChanged()
 {
-    if ( !strError
-              .isEmpty() ) // ---> pgScorpio: This check should already be done in CClient ! but currently the Disconnect code is at the wrong place.
-    {
-        // the sound device setup has a problem, disconnect any active connection
-        if ( pClient->SoundIsStarted() ) // ---> pgScorpio: Was pClient->IsRunning(), Again this is NOT connection started !() )
-        {
-            Disconnect();
-        }
-
-        // show the error message of the device setup
-        CMsgBoxes::ShowError ( strError );
-    }
-
     // if the check audio device timer is running, it must be restarted on a device change
     if ( TimerCheckAudioDeviceOk.isActive() )
     {
@@ -1188,73 +1160,36 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr, int
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr, iPingTime, iNumClients );
 }
 
-void CClientDlg::Connect ( const QString& strSelectedAddress, const QString& strMixerBoardLabel )
+void CClientDlg::OnConnect ( QString strServerName )
 {
-    // ---> pgScorpio: This code does not belong here but in CClient !!
 
-    // set address and check if address is valid
-    if ( pClient->SetServerAddr ( strSelectedAddress ) )
+    // hide label connect to server
+    lblConnectToServer->hide();
+    lbrInputLevelL->setEnabled ( true );
+    lbrInputLevelR->setEnabled ( true );
+
+    // change connect button text to "disconnect"
+    butConnect->setText ( tr ( "&Disconnect" ) );
+
+    // set server name in audio mixer group box title
+    MainMixerBoard->SetServerName ( strServerName );
+
+    // start timer for level meter bar and ping time measurement
+    TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+    TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
+    TimerPing.start ( PING_UPDATE_TIME_MS );
+    TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
+
+    // audio feedback detection
+    if ( pSettings->bEnableFeedbackDetection )
     {
-        // try to start client, if error occurred, do not go in
-        // running state but show error message
-        try
-        {
-            if ( !pClient->SoundIsStarted() ) // ---> pgScorpio: Again this is NOT connection started !() )
-            {
-                pClient->StartConnection();
-            }
-        }
-
-        catch ( const CGenErr& generr )
-        {
-            // show error message and return the function
-            CMsgBoxes::ShowError ( generr.GetErrorText() );
-            return;
-        }
-
-        // ---> pgScorpio: This code should be a OnConnecting() slot !
-
-        // hide label connect to server
-        lblConnectToServer->hide();
-        lbrInputLevelL->setEnabled ( true );
-        lbrInputLevelR->setEnabled ( true );
-
-        // change connect button text to "disconnect"
-        butConnect->setText ( tr ( "&Disconnect" ) );
-
-        // set server name in audio mixer group box title
-        MainMixerBoard->SetServerName ( strMixerBoardLabel );
-
-        // start timer for level meter bar and ping time measurement
-        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
-        TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start ( PING_UPDATE_TIME_MS );
-        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
-
-        // audio feedback detection
-        if ( pSettings->bEnableFeedbackDetection )
-        {
-            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
-            bDetectFeedback = true;
-        }
+        TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+        bDetectFeedback = true;
     }
 }
 
-void CClientDlg::Disconnect()
+void CClientDlg::OnDisconnect()
 {
-    // ---> pgScorpio: This code does not belong here but in CClient !!
-
-    // only stop client if currently running, in case we received
-    // the stopped message, the client is already stopped but the
-    // connect/disconnect button and other GUI controls must be
-    // updated
-    if ( pClient->SoundIsStarted() ) // ---> pgScorpio: Again this is NOT connection started !() )
-    {
-        pClient->StopConnection();
-    }
-
-    // ---> pgScorpio: This code should be a OnDisconncted() slot
-
     // change connect button text to "connect"
     butConnect->setText ( tr ( "C&onnect" ) );
 
@@ -1278,11 +1213,7 @@ void CClientDlg::Disconnect()
     TimerDetectFeedback.stop();
     bDetectFeedback = false;
 
-    // clang-format off
-// TODO is this still required???
-// immediately update status bar
-OnTimerStatus();
-    // clang-format on
+    UpdateSettingsAndChatButtons();
 
     // reset LEDs
     ledBuffers->Reset();
@@ -1296,9 +1227,11 @@ OnTimerStatus();
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+
+    SetMixerBoardDeco ( RS_UNDEFINED, pClient->GetGUIDesign() );
 }
 
-void CClientDlg::UpdateDisplay()
+void CClientDlg::UpdateSettingsAndChatButtons()
 {
     // update settings/chat buttons (do not fire signals since it is an update)
     if ( chbSettings->isChecked() && !ClientSettingsDlg.isVisible() )

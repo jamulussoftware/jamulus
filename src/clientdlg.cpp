@@ -1183,6 +1183,7 @@ void CClientDlg::OnConnect ( QString strServerName )
     // audio feedback detection
     if ( pSettings->bEnableFeedbackDetection )
     {
+<<<<<<< HEAD
         // try to start client, if error occurred, do not go in
         // running state but show error message
         try
@@ -1223,6 +1224,10 @@ void CClientDlg::OnConnect ( QString strServerName )
             TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
             bDetectFeedback = true;
         }
+=======
+        TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+        bDetectFeedback = true;
+>>>>>>> f50b4535 (Connection status issue jamulussoftware#2519 second stage)
     }
 }
 

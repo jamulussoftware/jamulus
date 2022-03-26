@@ -732,10 +732,7 @@ void CClient::OnHandledSignal ( int sigNum )
     case SIGINT:
     case SIGTERM:
         // if connected, terminate connection (needed for headless mode)
-        if ( IsRunning() )
-        {
-            Stop();
-        }
+        StopConnection();
 
         // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
@@ -835,36 +832,39 @@ void CClient::StartConnection() // ---> pgScorpio: Was Start()
 
 void CClient::StopConnection()
 {
-    // stop audio interface
-    Sound.Stop();
-
-    // disable channel
-    Channel.SetEnable ( false );
-
-    // wait for approx. 100 ms to make sure no audio packet is still in the
-    // network queue causing the channel to be reconnected right after having
-    // received the disconnect message (seems not to gain much, disconnect is
-    // still not working reliably)
-    QTime DieTime = QTime::currentTime().addMSecs ( 100 );
-    while ( QTime::currentTime() < DieTime )
+    if ( SoundIsRunning() || Channel.IsEnabled() )
     {
-        // exclude user input events because if we use AllEvents, it happens
-        // that if the user initiates a connection and disconnection quickly
-        // (e.g. quickly pressing enter five times), the software can get into
-        // an unknown state
-        QCoreApplication::processEvents ( QEventLoop::ExcludeUserInputEvents, 100 );
+        // stop audio interface
+        Sound.Stop();
+
+        // disable channel
+        Channel.SetEnable ( false );
+
+        // wait for approx. 100 ms to make sure no audio packet is still in the
+        // network queue causing the channel to be reconnected right after having
+        // received the disconnect message (seems not to gain much, disconnect is
+        // still not working reliably)
+        QTime DieTime = QTime::currentTime().addMSecs ( 100 );
+        while ( QTime::currentTime() < DieTime )
+        {
+            // exclude user input events because if we use AllEvents, it happens
+            // that if the user initiates a connection and disconnection quickly
+            // (e.g. quickly pressing enter five times), the software can get into
+            // an unknown state
+            QCoreApplication::processEvents ( QEventLoop::ExcludeUserInputEvents, 100 );
+        }
+
+        // Send disconnect message to server (Since we disable our protocol
+        // receive mechanism with the next command, we do not evaluate any
+        // respond from the server, therefore we just hope that the message
+        // gets its way to the server, if not, the old behaviour time-out
+        // disconnects the connection anyway).
+        ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
+
+        // reset current signal level and LEDs
+        bJitterBufferOK = true;
+        SignalLevelMeter.Reset();
     }
-
-    // Send disconnect message to server (Since we disable our protocol
-    // receive mechanism with the next command, we do not evaluate any
-    // respond from the server, therefore we just hope that the message
-    // gets its way to the server, if not, the old behaviour time-out
-    // disconnects the connection anyway).
-    ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
-
-    // reset current signal level and LEDs
-    bJitterBufferOK = true;
-    SignalLevelMeter.Reset();
 }
 
 void CClient::Init()

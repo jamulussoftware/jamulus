@@ -904,6 +904,9 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
+                // initialise message boxes
+                CMsgBoxes::init ( NULL, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
                 // Connect on startup ------------------------------------------------------
                 if ( !strConnOnStartupAddress.isEmpty() )
                 {

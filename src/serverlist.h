@@ -229,11 +229,7 @@ public slots:
     void OnTimerCLRegisterServerResp();
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
 
-    void OnAboutToQuit()
-    {
-        QMutexLocker locker ( &Mutex );
-        Save();
-    }
+    void OnAboutToQuit();
 
 signals:
     void SvrRegStatusChanged();

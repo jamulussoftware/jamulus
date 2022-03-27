@@ -849,6 +849,17 @@ void CServerListManager::OnTimerCLRegisterServerResp()
     }
 }
 
+void CServerListManager::OnAboutToQuit()
+{
+    {
+        QMutexLocker locker ( &Mutex );
+        Save();
+    }
+
+    // Sets the lock - also needs to come after Save()
+    Unregister();
+}
+
 void CServerListManager::SetRegistered ( const bool bIsRegister )
 {
     // we need the lock since the user might change the server properties at

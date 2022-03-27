@@ -1,5 +1,5 @@
-Since we do not want to use the binary of nsProcess (https://nsis.sourceforge.io/NsProcess_plugin), 
-we compile the source code of the NSIS Plugin. Unfortunately it seems to be quite old. That's 
+Since we do not want to use the binary of nsProcess (https://nsis.sourceforge.io/NsProcess_plugin),
+we compile the source code of the NSIS Plugin. Unfortunately it seems to be quite old. That's
 why I (@ann0see) updated it on 2020-02-06 to support compilation
 with Visual Studio 2019. Probably a lot more could be done to this.
 

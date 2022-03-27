@@ -6,21 +6,22 @@ The code for Jamulus is open source, and is managed and made available via the G
 
 For completeness, this document describes the use both of GitHub (using `git`) and of _Qt Linguist_.
 
-----
+---
+
 ## Introduction
 
 The translator must be able to do the following steps, which will each be explained further down:
 
-* Create their own linked copy ("repository" or "repo") of Jamulus in GitHub. This is called Forking.
-* Copy ("clone") their own repository to their computer, using either:
+- Create their own linked copy ("repository" or "repo") of Jamulus in GitHub. This is called Forking.
+- Copy ("clone") their own repository to their computer, using either:
   - Command line `git`, or
   - [Github Desktop](https://docs.github.com/en/desktop)
-* Update their own local repo from the upstream master branch.
-* Create a local branch to contain the update.
-* Use the Qt Linguist tool to edit the appropriate translation (`.ts`) file.
-* Commit the updated `.ts` file to the branch their own local git repo.
-* Push the branch from their local repo to their own repo on Github.
-* Raise a Pull Request (PR) for the merging of the updated file into the upstream repo by the developers.
+- Update their own local repo from the upstream master branch.
+- Create a local branch to contain the update.
+- Use the Qt Linguist tool to edit the appropriate translation (`.ts`) file.
+- Commit the updated `.ts` file to the branch their own local git repo.
+- Push the branch from their local repo to their own repo on Github.
+- Raise a Pull Request (PR) for the merging of the updated file into the upstream repo by the developers.
 
 This guide contains two main parts:
 
@@ -28,7 +29,8 @@ This guide contains two main parts:
 
 2. The workflow for updating and contributing translations as a part of the preparation for a release of Jamulus.
 
-----
+---
+
 ## 1. Setting up
 
 ### Visit github.com
@@ -37,10 +39,10 @@ First of all, visit the [Github website](https://github.com)
 
 If you don't yet have a Github account, click on **Sign up** to go to the Create Your Account page. Enter:
 
-* Your chosen username. This is a simple word containing letters and, optionally, numbers, and will identify you in the Github world. It is not an email address. This name is represented in the examples below as `yourusername`.
-* Your email address. This will be used by Github to send you notifications by email, and to identify commits made by you.
-* Your chosen password. Do not use the same password as for any other website.
-* Solve the puzzle to prove you are human and click **Create account**.
+- Your chosen username. This is a simple word containing letters and, optionally, numbers, and will identify you in the Github world. It is not an email address. This name is represented in the examples below as `yourusername`.
+- Your email address. This will be used by Github to send you notifications by email, and to identify commits made by you.
+- Your chosen password. Do not use the same password as for any other website.
+- Solve the puzzle to prove you are human and click **Create account**.
 
 If you do have a Github account, and are not yet logged in, click on **Sign in**, and enter your username and password, then **Sign in**.
 
@@ -56,25 +58,25 @@ It will then display the message "Forking jamulussoftware/jamulus", and when fin
 
 Linux and Mac machines come with command-line Git tools ready-installed or easily available.
 
-* On Mac, the `git` command is available in `/usr/bin/git`, as part of the Xcode package, or can be installed separately (see below).
-* On Linux, it may be necessary to install the `git` package using one of these commands:
+- On Mac, the `git` command is available in `/usr/bin/git`, as part of the Xcode package, or can be installed separately (see below).
+- On Linux, it may be necessary to install the `git` package using one of these commands:
   - On RedHat or CentOS, `yum install git` or `dnf install git`
   - On Debian or Ubuntu: `apt install git`
-* On Windows, Git can be obtained from [Git for Windows](https://git-for-windows.github.io/)
+- On Windows, Git can be obtained from [Git for Windows](https://git-for-windows.github.io/)
 
 More information about installing Git on various systems can be found [here](https://www.atlassian.com/git/tutorials/install-git)
 
 Make a local copy of your Jamulus repo by using `git clone`:
 
-* At the shell command-line, navigate to the directory that will be the parent of your `jamulus` development directory.
-* Give one of the following commands:
+- At the shell command-line, navigate to the directory that will be the parent of your `jamulus` development directory.
+- Give one of the following commands:
   - For ssh access: `git clone git@github.com:yourusername/jamulus.git`
   - For https access: `git clone https://github.com/yourusername/jamulus.git`
 
 This will create a `jamulus` directory. Change to that directory.
 
-* Add the upstream repository: `git remote add upstream https://github.com/jamulussoftware/jamulus.git`
-* Check the remotes using `git remote -v`. The output should look like this:
+- Add the upstream repository: `git remote add upstream https://github.com/jamulussoftware/jamulus.git`
+- Check the remotes using `git remote -v`. The output should look like this:
   ```
   origin  git@github.com:yourusername/jamulus.git (fetch)
   origin  git@github.com:yourusername/jamulus.git (push)
@@ -99,18 +101,18 @@ When downloading for Mac, the instructions suggest opening `GitHubDesktop.zip`, 
 
 Run Github Desktop, and do the following steps:
 
-* On the Welcome Screen, click on **Sign in to GitHub.com**
-* Sign in by following the instructions. These may vary depending on whether you have logged into Github via a web browser already. If necessary, click on **Authorize Desktop**.
-* Confirm access by entering your Github password.
-* for Mac, if the browser requests to open "Github Desktop.app", click **Allow**.
-* In Configure Git, enter your name and email address. These will be used to identify commits you make to Git. Click **Continue**.
-* Agree or decline to submit periodic usage stats, and click **Finish**.
-* Either:
+- On the Welcome Screen, click on **Sign in to GitHub.com**
+- Sign in by following the instructions. These may vary depending on whether you have logged into Github via a web browser already. If necessary, click on **Authorize Desktop**.
+- Confirm access by entering your Github password.
+- for Mac, if the browser requests to open "Github Desktop.app", click **Allow**.
+- In Configure Git, enter your name and email address. These will be used to identify commits you make to Git. Click **Continue**.
+- Agree or decline to submit periodic usage stats, and click **Finish**.
+- Either:
   - Select **Clone a Repository from the Internet** and enter `yourusername/jamulus`, or
   - Select your own fork of Jamulus from the list (`yourusername/jamulus`) and click the **Clone** button.
-* Select the Local Path where the project should be stored, and click **Clone**.
-* It will display the page **Cloning jamulus** with progress indication.
-* On completion of cloning, it will ask "How are you planning to use this fork?". Answer "To contribute to the parent project".
+- Select the Local Path where the project should be stored, and click **Clone**.
+- It will display the page **Cloning jamulus** with progress indication.
+- On completion of cloning, it will ask "How are you planning to use this fork?". Answer "To contribute to the parent project".
 
 ### Qt Linguist
 
@@ -119,12 +121,14 @@ or by downloading from the [Qt Open Source download page](https://www.qt.io/down
 will need to create an account on the Qt website.
 
 Under Linux
-* On RedHat or CentOS: `yum install qt5-linguist` or `dnf install qt5-linguist`
-* On Debian or Ubuntu: `apt install qttools5-dev-tools`
+
+- On RedHat or CentOS: `yum install qt5-linguist` or `dnf install qt5-linguist`
+- On Debian or Ubuntu: `apt install qttools5-dev-tools`
 
 Instructions for use are in the [Qt Linguist Manual](https://doc.qt.io/qt-5/qtlinguist-index.html)
 
-----
+---
+
 ## 2. Doing a translation
 
 ### Get the most up-to-date files and set up a new branch
@@ -227,7 +231,7 @@ Click on **Publish branch** or **Push origin**. This will push the branch to you
 
 There will now be a section offering **Create Pull Request**. Click on that to create the PR to the upstream repository.
 
-----
+---
 
 ## That's all
 

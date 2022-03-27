@@ -7,6 +7,7 @@ We encourage responsible disclosure practices for security vulnerabilities.
 If you think you have found a security-relevant issue, please send the details to **team@jamulus.io**.
 
 We will then
+
 - open a placeholder issue without details,
 - assess the severity,
 - work on a fix,
@@ -14,14 +15,15 @@ We will then
 - publish all relevant details as part of the issue,
 - publish a Github security advisory as necessary.
 
-
 # Security model
 
 ## Guarantees
+
 The Jamulus project aims to provide robust software.
 It tries hard to avoid all kinds of implementation issues such as Code Execution, unwanted File system access, or similar issues.
 
 ## Limitations
+
 The following is a list of areas where there may be expectations which Jamulus currently does not fulfill:
 
 - There is no registration, authentication or user database.

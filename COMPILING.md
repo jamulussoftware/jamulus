@@ -7,7 +7,6 @@
 
 ---
 
-
 ## Download sources
 
 For .tar.gz [use this link](https://github.com/jamulussoftware/jamulus/archive/latest.tar.gz) to download the latest release
@@ -16,33 +15,32 @@ For .zip [use this link](https://github.com/jamulussoftware/jamulus/archive/late
 
 ## Linux
 
-#### Install dependencies
+### Install dependencies
 
 On Ubuntu-based distributions 18.04+, Debian 9+, and Raspberry Pi OS:
 
-* build-essential
-* qt5-qmake
-* qtdeclarative5-dev
-* qt5-default
-* qttools5-dev-tools
-* libjack-jackd2-dev
+- build-essential
+- qt5-qmake
+- qtdeclarative5-dev
+- qt5-default
+- qttools5-dev-tools
+- libjack-jackd2-dev
 
-#### On Fedora 33+
+### On Fedora 33+
 
-* qt5-qtdeclarative-devel
-* jack-audio-connection-kit-dbus
-* qt5-qtbase
-* jack-audio-connection-kit-devel
-* qt5-linguist
+- qt5-qtdeclarative-devel
+- jack-audio-connection-kit-dbus
+- qt5-qtbase
+- jack-audio-connection-kit-devel
+- qt5-linguist
 
-#### For all desktop distributions
+### For all desktop distributions
 
 [QjackCtl](https://qjackctl.sourceforge.io/) is optional, but recommended to configure JACK.
 
-
 ### Standard desktop build
 
-```
+```shell
 make distclean
 qmake # qmake-qt5 on Fedora 33
 make
@@ -59,7 +57,7 @@ Note that you don’t need to install the JACK package(s) for a headless build. 
 
 Compile the sources to ignore the JACK sound library:
 
-```
+```shell
 make distclean # recommended
 qmake "CONFIG+=nosound headless"
 make
@@ -72,12 +70,11 @@ To control the server with systemd, see this [unit file example](https://github.
 
 ## Windows
 
-
 You will need [Qt](https://www.qt.io/download)
 
-* Use the free GPLv2 license for Open Source development
-* Select Components during installation: Expand the Qt section, find the matching version, preferrably **Qt 5.15.2**, and add the compiler components for your compiler, e.g., `MSVC 2019 32-bit/64-bit` for Visual Studio 2019
-* [ASIO development files](https://www.steinberg.net/en/company/developer.html)
+- Use the free GPLv2 license for Open Source development
+- Select Components during installation: Expand the Qt section, find the matching version, preferrably **Qt 5.15.2**, and add the compiler components for your compiler, e.g., `MSVC 2019 32-bit/64-bit` for Visual Studio 2019
+- [ASIO development files](https://www.steinberg.net/en/company/developer.html)
 
 ### Compiling and building installer
 
@@ -99,9 +96,10 @@ Most users will probably want to use this method:
 ---
 
 ## macOS
+
 You will need XCode and Qt as follows:
 
-```
+```shell
 brew install qt5
 brew link qt5 --force
 ```
@@ -116,7 +114,7 @@ brew link qt5 --force
 
 will prompt
 
-```
+```shell
 Targets:
     Jamulus
     Qt Preprocess
@@ -128,7 +126,7 @@ Build Configurations:
 
 If no build configuration is specified and `-scheme` is not passed then "Release" is used.
 
-```
+```shell
 Schemes:
     Jamulus
 ```
@@ -146,11 +144,13 @@ Will build the file and make it available in `./Release/Jamulus.app`
 3. Go to the folder of the Jamulus source code via terminal and run `/path/to/qt/5.15.2/ios/bin/qmake -spec macx-xcode Jamulus.pro` to generate an .xcodeproject file
 4. Open the generated .xcodeproject in Xcode
 5. Go to the Signing & Capabilities tab and fix signing errors by setting a team. Xcode will tell you what you need to change.
-* If have a free Apple Developer Account, you can use it as a "Personal Team":
-* Set it up under Xcode Menu->Preferences->Accounts.
-* Then choose a Bundle Identifier at your choice in the relevant field in the "General" Tab (in section "Identity")
-* Now click on the "Signing & Capabilities" tab. In the section "Signing", the "Automatically manage signing" option should be selected.
-* You should now see Team: (Your Name) (Personal Team), Bundle identifier: (the same you modified on General Tab), Provisioning Profile: Xcode Management Profile, Signing Certificate: Apple Development (your e-mail used for signing in to Apple) below
+
+- If have a free Apple Developer Account, you can use it as a "Personal Team":
+- Set it up under Xcode Menu->Preferences->Accounts.
+- Then choose a Bundle Identifier at your choice in the relevant field in the "General" Tab (in section "Identity")
+- Now click on the "Signing & Capabilities" tab. In the section "Signing", the "Automatically manage signing" option should be selected.
+- You should now see Team: (Your Name) (Personal Team), Bundle identifier: (the same you modified on General Tab), Provisioning Profile: Xcode Management Profile, Signing Certificate: Apple Development (your e-mail used for signing in to Apple) below
+
 6. Connect your device via USB (or WiFi if you set it up for that)
 7. Select your device next to the play button
 8. Compile and run Jamulus by clicking on the play button
@@ -158,9 +158,10 @@ Will build the file and make it available in `./Release/Jamulus.app`
 10. After a week you might need to restart from step 6 to continue to run Jamulus on iOS, unless you are paying for the Apple developer programme.
 
 ## Android
-* Install Qt, including the Android support from the Qt installer
-* Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions
-* Make sure Jamulus submodules are present, notably oboe:
-`git submodule update --init`
-* Open Jamulus.pro in Qt Creator
-* Now you should be able to Build & Run for Android.
+
+- Install Qt, including the Android support from the Qt installer
+- Follow Qt's [Getting Started with Qt for Android](https://doc.qt.io/qt-5/android-getting-started.html) instructions
+- Make sure Jamulus submodules are present, notably oboe:
+  `git submodule update --init`
+- Open Jamulus.pro in Qt Creator
+- Now you should be able to Build & Run for Android.

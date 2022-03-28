@@ -95,6 +95,8 @@ jobs:
 
   release_assets:
     name:                           Build for ${{ matrix.config.config_name }}
+    env:
+      MACOS_CERTIFICATE:            ${{ secrets.MACOS_CERT}}
     needs:                          create_release
     strategy:
       fail-fast:                    false
@@ -127,7 +129,7 @@ jobs:
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
             base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-            run_codeql:             ${{ secrets.MACOS_CERT == null }}
+            run_codeql:             ${{ env.MACOS_CERTIFICATE == null }}
             xcode_version:          12.1.1
 
           - config_name:            MacOS Legacy (artifacts)

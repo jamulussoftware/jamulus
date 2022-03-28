@@ -46,7 +46,7 @@ find_or_add_missing_entries() {
     echo
     echo "Checking if all PR or references in git log since ${prev_release_tag} are included for ${target_release} based on ref ${target_ref}..."
     for id in $(git log "${prev_release_tag}..master" | grep -oP '#\K(\d+)'); do
-        gh pr view "${id}" --json title &>/dev/null || continue # Skip non-PRs
+        gh pr view "${id}" --json title &> /dev/null || continue # Skip non-PRs
         check_or_add_pr "${id}"
     done
 
@@ -76,7 +76,7 @@ group_entries() {
     changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog | tail -n +2 | head -n -1)
 
     # Remove trailing whitespace on all lines of the current changelog:
-    changelog=$(sed -re 's/\s+$//' <<<"$changelog")
+    changelog=$(sed -re 's/\s+$//' <<< "$changelog")
 
     # Prepend a number to known categories in order to make their sorting position consistent:
     category_order=(
@@ -105,21 +105,21 @@ group_entries() {
     )
     local index=0
     for category in "${category_order[@]}"; do
-        changelog=$(sed -re 's/^(- '"${category}"')/'"${index}"' \1/' <<<"${changelog}")
-        index=$((index+1))
+        changelog=$(sed -re 's/^(- '"${category}"')/'"${index}"' \1/' <<< "${changelog}")
+        index=$((index + 1))
     done
 
     # Reduce blocks ("entries") to a single line by replacing \n with \v.
     # `sort` then works on those reduced lines and sorts them by the category (e.g. Server:)
     # Afterwards, convert \v to \n again:
     changelog=$(
-        sed -r ':r;/(^|\n)$/!{$!{N;br}};s/\n/\v/g' <<<"$changelog" |
-        LC_ALL=C sort --stable --numeric-sort --field-separator=':' -k1,1 |
-        sed 's/\v/\n/g'
+        sed -r ':r;/(^|\n)$/!{$!{N;br}};s/\n/\v/g' <<< "$changelog" |
+            LC_ALL=C sort --stable --numeric-sort --field-separator=':' -k1,1 |
+            sed 's/\v/\n/g'
     )
 
     # Remove temporary sorting indices at line start again:
-    changelog=$(sed -re 's/^[0-9]+ (- )/\1/' <<<"$changelog")
+    changelog=$(sed -re 's/^[0-9]+ (- )/\1/' <<< "$changelog")
 
     # Rebuild the changelog and write back to file:
     (echo "$changelog_header" && echo "$changelog" && echo && echo && echo "$changelog_prev_releases") > ChangeLog
@@ -132,7 +132,7 @@ check_or_add_pr() {
         return
     fi
     checked_ids[$id]=1
-    if grep -qE "#$id\>" <<<"$changelog"; then
+    if grep -qE "#$id\>" <<< "$changelog"; then
         # Changelog already lists this PR ID -> nothing to do
         # (\> ensures that we only match full, standalone IDs)
         return
@@ -140,11 +140,11 @@ check_or_add_pr() {
     local json
     json=$(gh pr view "${id/#/}" --json title,author,state)
     local state
-    state=$(jq -r .state <<<"${json}")
+    state=$(jq -r .state <<< "${json}")
     local title
-    title=$(jq -r .title <<<"${json}" | sanitize_title)
+    title=$(jq -r .title <<< "${json}" | sanitize_title)
     local author
-    author=$(jq -r .author.login <<<"${json}")
+    author=$(jq -r .author.login <<< "${json}")
     if [[ "${state}" != "MERGED" ]]; then
         echo "-> Ignoring PR #${id} as state ${state} != MERGED"
         return
@@ -166,7 +166,7 @@ check_or_add_pr() {
     echo ", adding new entry"
     local new_entry=""
     local lang
-    lang=$(grep -oP 'Updated? \K(\S+)(?= app translations? for )' <<<"$title" || true)
+    lang=$(grep -oP 'Updated? \K(\S+)(?= app translations? for )' <<< "$title" || true)
     if [[ "${lang}" ]]; then
         # Note: This creates a top-level entry for each language.
         # group-entries can merge those to a single one.
@@ -208,10 +208,10 @@ add_translation_pr() {
     local changelog_orig="${changelog}"
 
     # Is there an existing entry for this language already?
-    changelog=$(sed -re "s/^(  \* ${full_lang}, by .+ \(.*)\)/\1, #${id})/" <<<"${changelog}")
+    changelog=$(sed -re "s/^(  \* ${full_lang}, by .+ \(.*)\)/\1, #${id})/" <<< "${changelog}")
     if [[ "${changelog}" == "${changelog_orig}" ]]; then
         # No existing language entry. Check for an existing translation entry.
-        changelog=$(sed -re "s/^(- ${TRANSLATION_ENTRY_TEXT}.*)/\1\n  * ${full_lang}, by @${author} (#${id})/" <<<"${changelog}")
+        changelog=$(sed -re "s/^(- ${TRANSLATION_ENTRY_TEXT}.*)/\1\n  * ${full_lang}, by @${author} (#${id})/" <<< "${changelog}")
         if [[ "${changelog}" == "${changelog_orig}" ]]; then
             # No existing translation entry at all. Add a new one.
             changelog="${changelog}$(
@@ -219,7 +219,7 @@ add_translation_pr() {
                 echo
                 echo "- ${TRANSLATION_ENTRY_TEXT}"
                 echo "  * ${full_lang}, by @${author} (#${id})"
-			)"
+            )"
         else
             # Existing translation entries, so sort them:
             local changelog_before_translations=""
@@ -289,6 +289,7 @@ case "${1:-1}" in
     *)
         echo "ERROR: Bad invocation, see --help"
         exit 1
+        ;;
 esac
 
 target_release=$(grep -oP '^### .*\K(\d+\.\d+\.\d+)\b' ChangeLog  | head -n1)
@@ -301,7 +302,7 @@ echo "Auto-detected previous release: ${prev_release}"
 echo
 
 case "$ACTION" in
-    find-missing-entries|add-missing-entries)
+    find-missing-entries | add-missing-entries)
         find_or_add_missing_entries
         ;;
     group-entries)

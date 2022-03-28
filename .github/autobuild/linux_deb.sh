@@ -17,6 +17,7 @@ case "${TARGET_ARCH}" in
     *)
         echo "Unsupported TARGET_ARCH ${TARGET_ARCH}"
         exit 1
+        ;;
 esac
 
 setup() {
@@ -33,7 +34,7 @@ setup() {
 
 setup_cross_compilation_apt_sources() {
     if [[ "${TARGET_ARCH}" == amd64 ]]; then
-       return
+        return
     fi
     sudo dpkg --add-architecture "${TARGET_ARCH}"
     sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
@@ -88,4 +89,5 @@ case "${1:-}" in
     *)
         echo "Unknown stage '${1:-}'"
         exit 1
+        ;;
 esac

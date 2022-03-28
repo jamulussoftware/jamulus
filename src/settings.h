@@ -32,7 +32,9 @@
 #    include <QMessageBox>
 #endif
 #include "global.h"
-#include "client.h"
+#ifndef SERVER_ONLY
+#    include "client.h"
+#endif
 #include "server.h"
 #include "util.h"
 
@@ -106,6 +108,7 @@ public slots:
     void OnAboutToQuit() { Save(); }
 };
 
+#ifndef SERVER_ONLY
 class CClientSettings : public CSettings
 {
 public:
@@ -180,6 +183,7 @@ protected:
 
     CClient* pClient;
 };
+#endif
 
 class CServerSettings : public CSettings
 {

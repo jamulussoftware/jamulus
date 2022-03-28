@@ -23,7 +23,9 @@
 \******************************************************************************/
 
 #include "util.h"
-#include "client.h"
+#ifndef SERVER_ONLY
+#    include "client.h"
+#endif
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------

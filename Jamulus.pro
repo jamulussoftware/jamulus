@@ -28,6 +28,12 @@ QT += network \
     xml \
     concurrent
 
+contains(CONFIG, "nosound") {
+    CONFIG -= "nosound"
+    CONFIG += "serveronly"
+    warning("\"nosound\" is deprecated: please use \"serveronly\" for a server-only build.")
+}
+
 contains(CONFIG, "headless") {
     message(Headless mode activated.)
     QT -= gui
@@ -84,50 +90,55 @@ win32 {
             ws2_32.lib
     }
 
-    contains(CONFIG, "jackonwindows") {
-        message(Using JACK.)
-        contains(QT_ARCH, "i386") {
-            exists("C:/Program Files (x86)") {
-                message("Cross compilation build")
-                programfilesdir = "C:/Program Files (x86)"
-            } else {
-                message("Native i386 build")
-                programfilesdir = "C:/Program Files"
-            }
-            libjackname = "libjack.lib"
-        } else {
-            message("Native x86_64 build")
-            programfilesdir = "C:/Program Files"
-            libjackname = "libjack64.lib"
-        }
-        !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
-            error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
-        }
-
-        HEADERS += linux/sound.h
-        SOURCES += linux/sound.cpp
-        DEFINES += WITH_JACK
-        DEFINES += JACK_ON_WINDOWS
-        DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
-        INCLUDEPATH += "$${programfilesdir}/JACK2/include"
-        LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
+    contains(CONFIG, "serveronly") {
+        message(Restricting build to server-only due to CONFIG+=serveronly.)
+        DEFINES += SERVER_ONLY
     } else {
-        message(Using ASIO.)
-        message(Please review the ASIO SDK licence.)
+        contains(CONFIG, "jackonwindows") {
+            message(Using JACK.)
+            contains(QT_ARCH, "i386") {
+                exists("C:/Program Files (x86)") {
+                    message("Cross compilation build")
+                    programfilesdir = "C:/Program Files (x86)"
+                } else {
+                    message("Native i386 build")
+                    programfilesdir = "C:/Program Files"
+                }
+                libjackname = "libjack.lib"
+            } else {
+                message("Native x86_64 build")
+                programfilesdir = "C:/Program Files"
+                libjackname = "libjack64.lib"
+            }
+            !exists("$${programfilesdir}/JACK2/include/jack/jack.h") {
+                error("Error: jack.h was not found in the expected location ($${programfilesdir}). Ensure that the right JACK2 variant is installed (32bit vs. 64bit).")
+            }
 
-        !exists(windows/ASIOSDK2) {
-            error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
+            HEADERS += linux/sound.h
+            SOURCES += linux/sound.cpp
+            DEFINES += WITH_JACK
+            DEFINES += JACK_ON_WINDOWS
+            DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
+            INCLUDEPATH += "$${programfilesdir}/JACK2/include"
+            LIBS += "$${programfilesdir}/JACK2/lib/$${libjackname}"
+        } else {
+            message(Using ASIO.)
+            message(Please review the ASIO SDK licence.)
+
+            !exists(windows/ASIOSDK2) {
+                error("Error: ASIOSDK2 must be placed in Jamulus windows folder.")
+            }
+            # Important: Keep those ASIO includes local to this build target in
+            # order to avoid poisoning other builds license-wise.
+            HEADERS += windows/sound.h
+            SOURCES += windows/sound.cpp \
+                windows/ASIOSDK2/common/asio.cpp \
+                windows/ASIOSDK2/host/asiodrivers.cpp \
+                windows/ASIOSDK2/host/pc/asiolist.cpp
+            INCLUDEPATH += windows/ASIOSDK2/common \
+                windows/ASIOSDK2/host \
+                windows/ASIOSDK2/host/pc
         }
-        # Important: Keep those ASIO includes local to this build target in
-        # order to avoid poisoning other builds license-wise.
-        HEADERS += windows/sound.h
-        SOURCES += windows/sound.cpp \
-            windows/ASIOSDK2/common/asio.cpp \
-            windows/ASIOSDK2/host/asiodrivers.cpp \
-            windows/ASIOSDK2/host/pc/asiolist.cpp
-        INCLUDEPATH += windows/ASIOSDK2/common \
-            windows/ASIOSDK2/host \
-            windows/ASIOSDK2/host/pc
     }
 
 } else:macx {
@@ -258,9 +269,6 @@ win32 {
     # unnecessarily without this workaround (#741):
     QMAKE_LFLAGS += -Wl,--as-needed
 
-    HEADERS += linux/sound.h
-    SOURCES += linux/sound.cpp
-
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though
     DEFINES += HAVE_LRINTF
@@ -268,12 +276,15 @@ win32 {
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H
 
-    # only include jack support if CONFIG nosound is not set
-    contains(CONFIG, "nosound") {
-        message(Restricting build to server-only due to CONFIG+=nosound.)
+    # only include jack support if CONFIG serveronly is not set
+    contains(CONFIG, "serveronly") {
+        message(Restricting build to server-only due to CONFIG+=serveronly.)
         DEFINES += SERVER_ONLY
     } else {
         message(Jack Audio Interface Enabled.)
+
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
 
         contains(CONFIG, "raspijamulus") {
             message(Using Jack Audio in raspijamulus.sh mode.)
@@ -335,17 +346,18 @@ win32 {
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS_GUI = src/clientdlgbase.ui \
-    src/serverdlgbase.ui \
-    src/clientsettingsdlgbase.ui \
-    src/chatdlgbase.ui \
-    src/connectdlgbase.ui \
-    src/aboutdlgbase.ui
+FORMS_GUI = src/aboutdlgbase.ui \
+    src/serverdlgbase.ui
+
+!contains(CONFIG, "serveronly") {
+    FORMS_GUI += src/clientdlgbase.ui \
+        src/clientsettingsdlgbase.ui \
+        src/chatdlgbase.ui \
+        src/connectdlgbase.ui
+}
 
 HEADERS += src/buffer.h \
     src/channel.h \
-    src/client.h \
-    src/clientrpc.h \
     src/global.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
@@ -357,23 +369,31 @@ HEADERS += src/buffer.h \
     src/rpcserver.h \
     src/settings.h \
     src/socket.h \
-    src/soundbase.h \
-    src/testbench.h \
     src/util.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
     src/signalhandler.h
 
-HEADERS_GUI = src/audiomixerboard.h \
-    src/chatdlg.h \
-    src/clientsettingsdlg.h \
-    src/connectdlg.h \
-    src/clientdlg.h \
-    src/serverdlg.h \
-    src/levelmeter.h \
-    src/analyzerconsole.h \
-    src/multicolorled.h
+!contains(CONFIG, "serveronly") {
+    HEADERS += src/client.h \
+        src/clientrpc.h \
+        src/soundbase.h \
+        src/testbench.h
+}
+
+HEADERS_GUI = src/serverdlg.h
+
+!contains(CONFIG, "serveronly") {
+    HEADERS_GUI += src/audiomixerboard.h \
+        src/chatdlg.h \
+        src/clientsettingsdlg.h \
+        src/connectdlg.h \
+        src/clientdlg.h \
+        src/levelmeter.h \
+        src/analyzerconsole.h \
+        src/multicolorled.h
+}
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
@@ -449,8 +469,6 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
 
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
-    src/client.cpp \
-    src/clientrpc.cpp \
     src/main.cpp \
     src/protocol.cpp \
     src/recorder/jamcontroller.cpp \
@@ -462,21 +480,29 @@ SOURCES += src/buffer.cpp \
     src/settings.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
-    src/soundbase.cpp \
     src/util.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
     src/recorder/cwavestream.cpp
 
-SOURCES_GUI = src/audiomixerboard.cpp \
-    src/chatdlg.cpp \
-    src/clientsettingsdlg.cpp \
-    src/connectdlg.cpp \
-    src/clientdlg.cpp \
-    src/serverdlg.cpp \
-    src/multicolorled.cpp \
-    src/levelmeter.cpp \
-    src/analyzerconsole.cpp
+!contains(CONFIG, "serveronly") {
+    SOURCES += src/client.cpp \
+        src/clientrpc.cpp \
+        src/soundbase.cpp \
+}
+
+SOURCES_GUI = src/serverdlg.cpp
+
+!contains(CONFIG, "serveronly") {
+    SOURCES_GUI += src/audiomixerboard.cpp \
+        src/chatdlg.cpp \
+        src/clientsettingsdlg.cpp \
+        src/connectdlg.cpp \
+        src/clientdlg.cpp \
+        src/multicolorled.cpp \
+        src/levelmeter.cpp \
+        src/analyzerconsole.cpp
+}
 
 SOURCES_OPUS = libs/opus/celt/bands.c \
     libs/opus/celt/celt.c \
@@ -1052,7 +1078,7 @@ contains(CONFIG, "opus_shared_lib") {
         msvc {
             # According to opus/win32/config.h, "no special compiler
             # flags necessary" when using msvc.  It always supports
-            # SSE intrinsics, but doesn't auto-vectorize.
+            # SSE intrinsics, but does not auto-vectorize.
             SOURCES += $$SOURCES_OPUS_ARCH
         } else {
             # Arch-specific files need special compiler flags, but we

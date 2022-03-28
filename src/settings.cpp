@@ -200,6 +200,7 @@ void CSettings::PutIniSetting ( QDomDocument& xmlFile, const QString& sSection, 
     xmlKey.appendChild ( currentValue );
 }
 
+#ifndef SERVER_ONLY
 // Client settings -------------------------------------------------------------
 void CClientSettings::LoadFaderSettings ( const QString& strCurFileName )
 {
@@ -335,11 +336,11 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 
     if ( !strError.isEmpty() )
     {
-#ifndef HEADLESS
+#    ifndef HEADLESS
         // special case: when settings are loaded no GUI is yet created, therefore
         // we have to create a warning message box here directly
         QMessageBox::warning ( nullptr, APP_NAME, strError );
-#endif
+#    endif
     }
 
     // sound card channel mapping settings: make sure these settings are
@@ -759,6 +760,7 @@ void CClientSettings::WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument )
         SetNumericIniSet ( IniXMLDocument, "client", QString ( "storedgroupid%1" ).arg ( iIdx ), vecStoredFaderGroupID[iIdx] );
     }
 }
+#endif
 
 // Server settings -------------------------------------------------------------
 // that this gets called means we are not headless

@@ -55,11 +55,11 @@ Although not strictly necessary, we recommend using the headless flag to avoid h
 
 Note that you don’t need to install the JACK package(s) for a headless build. If you plan to run headless on Gentoo, or are compiling under Ubuntu for use on another Ubuntu machine, the only packages you should need for a headless build are `qtcore`, `qtnetwork`, `qtconcurrent` and `qtxml` (both for building and running the server).
 
-Compile the sources to ignore the JACK sound library:
+Compile the sources and create a server-only build without a UI:
 
 ```shell
 make distclean # recommended
-qmake "CONFIG+=nosound headless"
+qmake "CONFIG+=headless serveronly"
 make
 sudo make install # optional
 ```

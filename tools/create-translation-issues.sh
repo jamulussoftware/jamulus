@@ -36,33 +36,30 @@ EXTRA_TEXT=${4:-}
 MILESTONE="Release ${RELEASE}"
 PROJECT=Tracking
 
-declare -A TRANSLATORS_BY_LANG=(
-    # Syntax:
-    # [TYPE_LANG]="github-handle1,github-handle2"
-    # with TYPE being either app or web and
-    # with LANG being the language code (different syntax for app and web!)
-
-    # App translators:
-    [app_de_DE]="rolamos"
-    [app_es_ES]="ignotus666"
-    [app_fr_FR]="jujudusud"
-    [app_it_IT]="dzpex"
-    [app_nl_NL]="henkdegroot,jerogee"
-    [app_pl_PL]="SeeLook"
-    [app_pt_BR]="melcon"
-    [app_pt_PT]="Snayler"
-    [app_sk_SK]="jose1711"
-    [app_sv_SE]="genesisproject2020"
-    [app_zh_CN]="BLumia"
-
-    # Web translators:
-    [web_de]="Helondeth,ewarning"
-    [web_es]="ignotus666"
-    [web_fr]="jujudusud,trebmuh"
-    [web_it]="dzpex"
-    [web_nl]="henkdegroot"
-    [web_pt]="Snayler,melcon,ewarning"
-)
+# Syntax:
+# TRANSLATORS_BY_LANG[TYPE_LANG]="github-handle1,github-handle2"
+# with TYPE being either app or web and
+# with LANG being the language code (different syntax for app and web!)
+declare -A TRANSLATORS_BY_LANG
+# App translators:
+TRANSLATORS_BY_LANG[app_de_DE]="rolamos"
+TRANSLATORS_BY_LANG[app_es_ES]="ignotus666"
+TRANSLATORS_BY_LANG[app_fr_FR]="jujudusud"
+TRANSLATORS_BY_LANG[app_it_IT]="dzpex"
+TRANSLATORS_BY_LANG[app_nl_NL]="henkdegroot,jerogee"
+TRANSLATORS_BY_LANG[app_pl_PL]="SeeLook"
+TRANSLATORS_BY_LANG[app_pt_BR]="melcon"
+TRANSLATORS_BY_LANG[app_pt_PT]="Snayler"
+TRANSLATORS_BY_LANG[app_sk_SK]="jose1711"
+TRANSLATORS_BY_LANG[app_sv_SE]="genesisproject2020"
+TRANSLATORS_BY_LANG[app_zh_CN]="BLumia"
+# Web translators:
+TRANSLATORS_BY_LANG[web_de]="Helondeth,ewarning"
+TRANSLATORS_BY_LANG[web_es]="ignotus666"
+TRANSLATORS_BY_LANG[web_fr]="jujudusud,trebmuh"
+TRANSLATORS_BY_LANG[web_it]="dzpex"
+TRANSLATORS_BY_LANG[web_nl]="henkdegroot"
+TRANSLATORS_BY_LANG[web_pt]="Snayler,melcon,ewarning"
 
 # shellcheck disable=SC2016  # shellcheck can't know that this will be used with envsubst, so verbatim variables are correct here.
 BODY_TEMPLATE_APP='Hi ${SPLIT_TRANSLATORS},

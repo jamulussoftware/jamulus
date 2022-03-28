@@ -14,19 +14,18 @@ export GH_REPO=jamulussoftware/jamulus
 
 PR_LIST_LIMIT=300
 TRANSLATION_ENTRY_TEXT="GUI: Translations have been updated:"
-declare -A LANGS=(
-  [de_DE]="German"
-  [fr_FR]="French"
-  [it_IT]="Italian"
-  [nl_NL]="Dutch"
-  [pl_PL]="Polish"
-  [pt_BR]="Portuguese Brazilian"
-  [pt_PT]="Portuguese European"
-  [sk_SK]="Slovak"
-  [es_ES]="Spanish"
-  [sv_SE]="Swedish"
-  [zh_CN]="Simplified Chinese"
-)
+declare -A LANGS
+LANGS[de_DE]="German"
+LANGS[fr_FR]="French"
+LANGS[it_IT]="Italian"
+LANGS[nl_NL]="Dutch"
+LANGS[pl_PL]="Polish"
+LANGS[pt_BR]="Portuguese Brazilian"
+LANGS[pt_PT]="Portuguese European"
+LANGS[sk_SK]="Slovak"
+LANGS[es_ES]="Spanish"
+LANGS[sv_SE]="Swedish"
+LANGS[zh_CN]="Simplified Chinese"
 
 find_or_add_missing_entries() {
     local changelog
@@ -123,7 +122,7 @@ group_entries() {
     changelog=$(sed -re 's/^[0-9]+ (- )/\1/' <<<"$changelog")
 
     # Rebuild the changelog and write back to file:
-    (echo "$changelog_header"; echo "$changelog"; echo; echo; echo "$changelog_prev_releases") > ChangeLog
+    (echo "$changelog_header" && echo "$changelog" && echo && echo && echo "$changelog_prev_releases") > ChangeLog
 }
 
 declare -A checked_ids=()
@@ -182,8 +181,8 @@ check_or_add_pr() {
     local changelog_before
     changelog_before=$(head -n "${changelog_begin_position}" ChangeLog)
     local changelog_after
-    changelog_after=$(tail -n "+$((changelog_begin_position+1))" ChangeLog)
-    (echo "$changelog_before"; echo; echo "$new_entry"; echo "$changelog_after") > ChangeLog
+    changelog_after=$(tail -n "+$((changelog_begin_position + 1))" ChangeLog)
+    (echo "$changelog_before" && echo && echo "$new_entry" && echo "$changelog_after") > ChangeLog
 }
 
 add_translation_pr() {
@@ -257,7 +256,7 @@ add_translation_pr() {
         fi
     fi
     # Rebuild the changelog and write back to file:
-    (echo "$changelog_header"; echo "$changelog"; echo; echo "$changelog_prev_releases") > ChangeLog
+    (echo "$changelog_header" && echo "$changelog" && echo && echo "$changelog_prev_releases") > ChangeLog
 }
 
 sanitize_title() {

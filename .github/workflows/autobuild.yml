@@ -95,8 +95,6 @@ jobs:
 
   release_assets:
     name:                           Build for ${{ matrix.config.config_name }}
-    env:
-      MACOS_CERTIFICATE:            ${{ secrets.MACOS_CERT}}
     needs:                          create_release
     strategy:
       fail-fast:                    false
@@ -129,7 +127,8 @@ jobs:
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
             base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-            run_codeql:             ${{ env.MACOS_CERTIFICATE == null }}
+            # Disable CodeQL on mac as it interferes with signing the binaries
+            run_codeql:             false
             xcode_version:          12.1.1
 
           - config_name:            MacOS Legacy (artifacts)
@@ -216,7 +215,7 @@ jobs:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Initialize CodeQL
-        if:                         matrix.config.run_codeql 
+        if:                         matrix.config.run_codeql
         uses:                       github/codeql-action/init@v1
         with:
           languages: 'cpp'

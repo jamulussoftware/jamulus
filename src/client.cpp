@@ -716,6 +716,9 @@ void CClient::OnHandledSignal ( int sigNum )
     case SIGTERM:
         // if connected, terminate connection (needed for headless mode)
         Disconnect();
+        {
+            Stop();
+        }
 
         // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
@@ -827,9 +830,6 @@ bool CClient::Connect ( QString strServerAddress, QString strServerName )
         }
     }
 
-    return false;
-}
-
 bool CClient::Disconnect()
 {
     if ( Channel.IsEnabled() )
@@ -837,9 +837,9 @@ bool CClient::Disconnect()
         /*
         // stop audio interface
         Sound.Stop();
-
-        // disable channel
-        Channel.SetEnable ( false );
+{
+    // stop audio interface
+    Sound.Stop();
 
         // wait for approx. 100 ms to make sure no audio packet is still in the
         // network queue causing the channel to be reconnected right after having
@@ -878,7 +878,7 @@ bool CClient::Disconnect()
             // an unknown state
             QCoreApplication::processEvents ( QEventLoop::ExcludeUserInputEvents, 100 );
         }
-
+        // an unknown state
         // Now stop the audio interface
         Sound.Stop();
 
@@ -895,7 +895,7 @@ bool CClient::Disconnect()
         // gets its way to the server, if not, the old behaviour time-out
         // disconnects the connection anyway).
         ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
-
+    // gets its way to the server, if not, the old behaviour time-out
         // reset current signal level and LEDs
         bJitterBufferOK = true;
         SignalLevelMeter.Reset();
@@ -913,6 +913,9 @@ bool CClient::Disconnect()
 
         return false;
     }
+}
+    bJitterBufferOK = true;
+    SignalLevelMeter.Reset();
 }
 
 void CClient::Init()

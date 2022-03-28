@@ -305,5 +305,6 @@ jobs:
           asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis
-        if:                         matrix.config.run_codeql
+        # Don't run if we're signing on macOS
+        if:                         matrix.config.run_codeql && steps.build.outputs.macos_signed == 'false'
         uses:                       github/codeql-action/analyze@v1

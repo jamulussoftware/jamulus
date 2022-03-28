@@ -214,7 +214,8 @@ jobs:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
 
       - name:                       Initialize CodeQL
-        if:                         matrix.config.run_codeql
+        # Don't run CodeQL if we have a set up for signing the macOS build
+        if:                         matrix.config.run_codeql && ${{ env.MACOS_CERTIFICATE == '' }}
         uses:                       github/codeql-action/init@v1
         with:
           languages: 'cpp'
@@ -305,6 +306,6 @@ jobs:
           asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis
-        # Don't run if we're signing on macOS
-        if:                         matrix.config.run_codeql && steps.build.outputs.macos_signed == 'false'
+        # Don't run CodeQL if we have a set up for signing the macOS build
+        if:                         matrix.config.run_codeql && ${{ env.MACOS_CERTIFICATE == '' }}
         uses:                       github/codeql-action/analyze@v1

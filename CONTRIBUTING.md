@@ -24,6 +24,9 @@ If a feature or function can be achieved in another way by another system or met
 
 You can use your editor's or IDE's clang-format support to accomplish that.
 On the command line, you can run `make clang_format` to do the same before committing.
+Please use the same clang-format version which we use.
+Other versions might produce slightly different output.
+You can find the currently used version in the [workflow definition](https://github.com/jamulussoftware/jamulus/blob/master/.github/workflows/coding-style-check.yml#L20].
 
 Do not use diff/patch to send your code changes but create a Github fork of the Jamulus code and create a Pull Request when you are done.
 

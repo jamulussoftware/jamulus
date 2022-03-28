@@ -1,12 +1,12 @@
 ---
-# Style for Clang-Format version 10
-# https://releases.llvm.org/10.0.0/tools/clang/docs/ClangFormatStyleOptions.html
+# Style for clang-format version 13
+# https://releases.llvm.org/13.0.0/tools/clang/docs/ClangFormatStyleOptions.html
 BasedOnStyle: LLVM
 AccessModifierOffset: -4
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true
-# Alignment of Consecutive Assignments/Declarations/Macros can be changed to `AcrossEmptyLinesAndComments` with Clang-Format version 12
+# Alignment of Consecutive Assignments/Declarations/Macros can be changed to `AcrossEmptyLinesAndComments` now that we require clang-format >=12
 #AlignConsecutiveAssignments: AcrossEmptyLinesAndComments
 #AlignConsecutiveDeclarations: AcrossEmptyLinesAndComments
 #AlignConsecutiveMacros: AcrossEmptyLinesAndComments

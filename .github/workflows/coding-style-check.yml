@@ -9,15 +9,15 @@ on:
 
 jobs:
   clang-format:
-    name: Verify Clang-Format compliance
+    name: Verify clang-format (v13) compliance
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: DoozyX/clang-format-lint-action@2a28e3a8d9553f244243f7e1ff94f6685dff87be
+    - uses: DoozyX/clang-format-lint-action@9ea72631b74e61ce337d0839a90e76180e997283
       with:
-        clangFormatVersion: 10
+        clangFormatVersion: 13
         # When updating the extension list, remember to update
         # Jamulus.pro's CLANG_SOURCES as well.
         extensions: 'cpp,h,mm'

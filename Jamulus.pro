@@ -160,14 +160,14 @@ win32 {
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
 
-    OSX_ENTITLEMENTS.files = Jamulus.entitlements
+    OSX_ENTITLEMENTS.files = mac/Jamulus.entitlements
     OSX_ENTITLEMENTS.path = Contents/Resources
     QMAKE_BUNDLE_DATA += OSX_ENTITLEMENTS
 
     macx-xcode {
         QMAKE_INFO_PLIST = mac/Info-xcode.plist
         XCODE_ENTITLEMENTS.name = CODE_SIGN_ENTITLEMENTS
-        XCODE_ENTITLEMENTS.value = Jamulus.entitlements
+        XCODE_ENTITLEMENTS.value = mac/Jamulus.entitlements
         QMAKE_MAC_XCODE_SETTINGS += XCODE_ENTITLEMENTS
         MACOSX_BUNDLE_ICON.path = Contents/Resources
         QMAKE_BUNDLE_DATA += MACOSX_BUNDLE_ICON

@@ -122,19 +122,21 @@ jobs:
             base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 
-          - config_name:            MacOS (artifacts+codeQL)
+          - config_name:            MacOS (artifacts)
             target_os:              macos
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
             base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-            run_codeql:             true
+            # Disable CodeQL on mac as it interferes with signing the binaries
+            run_codeql:             false
             xcode_version:          12.1.1
 
-          - config_name:            MacOS Legacy (artifacts)
+          - config_name:            MacOS Legacy (artifacts+CodeQL)
             target_os:              macos
             building_on_os:         macos-10.15
             base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
-            run_codeql:             false
+            # Enable CodeQL on mac legacy as this version does not get signed
+            run_codeql:             true
             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
             # https://developer.apple.com/support/xcode/

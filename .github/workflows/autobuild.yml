@@ -222,13 +222,13 @@ jobs:
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
-      - name:                       Run if CodeQL true and steps.build.outputs.macos_signed is true
+      - name:                       Run if CodeQL true and steps.setup.outputs.macos_signed is true
         if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed == 'true'
-        run:                        echo xxx${{ steps.build.outputs.macos_signed }}yyy
+        run:                        echo xxx${{ steps.setup.outputs.macos_signed }}yyy
 
-      - name:                       Run if CodeQL true and steps.build.outputs.macos_signed is not true
+      - name:                       Run if CodeQL true and steps.setup.outputs.macos_signed is not true
         if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
-        run:                        echo xxx${{ steps.build.outputs.macos_signed }}yyy
+        run:                        echo xxx${{ steps.setup.outputs.macos_signed }}yyy
 
       - name:                       Initialize CodeQL
         if:                         false && matrix.config.run_codeql

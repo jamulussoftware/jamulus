@@ -222,6 +222,7 @@ jobs:
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
+        # This step and the next can be removed after completion of debugging
       - name:                       Run if CodeQL true and steps.setup.outputs.macos_signed is true
         if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed == 'true'
         run:                        echo xxx${{ steps.setup.outputs.macos_signed }}yyy
@@ -229,9 +230,10 @@ jobs:
       - name:                       Run if CodeQL true and steps.setup.outputs.macos_signed is not true
         if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
         run:                        echo xxx${{ steps.setup.outputs.macos_signed }}yyy
+        # end of steps to be removed
 
       - name:                       Initialize CodeQL
-        if:                         false && matrix.config.run_codeql
+        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
         uses:                       github/codeql-action/init@v1
         with:
           languages: 'cpp'
@@ -322,5 +324,5 @@ jobs:
           asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis
-        if:                         false && matrix.config.run_codeql
+        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
         uses:                       github/codeql-action/analyze@v1

@@ -73,6 +73,7 @@ pass_artifact_to_job() {
 case "${1:-}" in
     setup)
         setup
+        prepare_signing
         ;;
     build)
         build_app_as_dmg_installer

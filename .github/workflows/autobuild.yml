@@ -215,6 +215,11 @@ jobs:
         run:                        ${{ matrix.config.base_command }} setup
         env:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
+          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
+          MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
+          MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
+          NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
+          KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
       - name:                       Run if CodeQL true and steps.build.outputs.macos_signed is true
         if:                         matrix.config.run_codeql && steps.build.outputs.macos_signed == 'true'

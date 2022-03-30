@@ -212,6 +212,7 @@ jobs:
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/android.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Set up build dependencies for ${{ matrix.config.config_name }}
+        id:                         setup
         run:                        ${{ matrix.config.base_command }} setup
         env:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
@@ -222,11 +223,11 @@ jobs:
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
       - name:                       Run if CodeQL true and steps.build.outputs.macos_signed is true
-        if:                         matrix.config.run_codeql && steps.build.outputs.macos_signed == 'true'
+        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed == 'true'
         run:                        echo xxx${{ steps.build.outputs.macos_signed }}yyy
 
       - name:                       Run if CodeQL true and steps.build.outputs.macos_signed is not true
-        if:                         matrix.config.run_codeql && steps.build.outputs.macos_signed != 'true'
+        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
         run:                        echo xxx${{ steps.build.outputs.macos_signed }}yyy
 
       - name:                       Initialize CodeQL

@@ -127,16 +127,15 @@ jobs:
             # Stay on 10.15 as long as we use dmgbuild which does not work with 11's hdiutil (?):
             building_on_os:         macos-10.15
             base_command:           QT_VERSION=5.15.2 SIGN_IF_POSSIBLE=1 ./.github/autobuild/mac.sh
-            # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
+            # run_codeql will be ignored in the steps below if building a signed image
+            # for Mac, as it causes the signing process to hang. See #2563 and #2564.
             run_codeql:             true
             xcode_version:          12.1.1
 
-          # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
           - config_name:            MacOS Legacy (artifacts)
             target_os:              macos
             building_on_os:         macos-10.15
             base_command:           QT_VERSION=5.9.9 SIGN_IF_POSSIBLE=0 ARTIFACT_SUFFIX=_legacy ./.github/autobuild/mac.sh
-            # Enable CodeQL on mac legacy as this version does not get signed
             run_codeql:             false
             # For Qt5 on Mac, we need to ensure SDK 10.15 is used, and not SDK 11.x.
             # Xcode 12.1 is the most-recent release which still ships SDK 10.15:
@@ -221,16 +220,6 @@ jobs:
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
-
-        # This step and the next can be removed after completion of debugging
-      - name:                       Run if CodeQL true and steps.setup.outputs.macos_signed is true
-        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed == 'true'
-        run:                        echo xxx${{ steps.setup.outputs.macos_signed }}yyy
-
-      - name:                       Run if CodeQL true and steps.setup.outputs.macos_signed is not true
-        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
-        run:                        echo xxx${{ steps.setup.outputs.macos_signed }}yyy
-        # end of steps to be removed
 
       - name:                       Initialize CodeQL
         if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'

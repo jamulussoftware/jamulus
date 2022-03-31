@@ -73,6 +73,8 @@ pass_artifact_to_job() {
 case "${1:-}" in
     setup)
         setup
+        # set up the macos_signed output if needed, but prevent
+        # a return status of 1 from propagating to the script exit status.
         prepare_signing || true
         ;;
     build)

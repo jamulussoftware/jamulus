@@ -842,7 +842,6 @@ void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
 
     // update input/output channel selection
 #if defined( _WIN32 ) || defined( __APPLE__ ) || defined( __MACOSX )
-    int iSndChanIdx;
 
     // Definition: The channel selection frame shall only be visible,
     // if more than two input or output channels are available
@@ -862,7 +861,8 @@ void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
         // input
         cbxLInChan->clear();
         cbxRInChan->clear();
-        for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ )
+
+        for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ )
         {
             cbxLInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
             cbxRInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
@@ -876,7 +876,7 @@ void CClientSettingsDlg::UpdateSoundDeviceChannelSelectionFrame()
         // output
         cbxLOutChan->clear();
         cbxROutChan->clear();
-        for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ )
+        for ( int iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ )
         {
             cbxLOutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
             cbxROutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );

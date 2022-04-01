@@ -41,18 +41,18 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
-LRELEASE_DIR = src/res/translation
-TRANSLATIONS = src/res/translation/translation_de_DE.ts \
-    src/res/translation/translation_fr_FR.ts \
-    src/res/translation/translation_pt_PT.ts \
-    src/res/translation/translation_pt_BR.ts \
-    src/res/translation/translation_es_ES.ts \
-    src/res/translation/translation_nl_NL.ts \
-    src/res/translation/translation_pl_PL.ts \
-    src/res/translation/translation_sk_SK.ts \
-    src/res/translation/translation_it_IT.ts \
-    src/res/translation/translation_sv_SE.ts \
-    src/res/translation/translation_zh_CN.ts
+LRELEASE_DIR = src/translation
+TRANSLATIONS = src/translation/translation_de_DE.ts \
+    src/translation/translation_fr_FR.ts \
+    src/translation/translation_pt_PT.ts \
+    src/translation/translation_pt_BR.ts \
+    src/translation/translation_es_ES.ts \
+    src/translation/translation_nl_NL.ts \
+    src/translation/translation_pl_PL.ts \
+    src/translation/translation_sk_SK.ts \
+    src/translation/translation_it_IT.ts \
+    src/translation/translation_sv_SE.ts \
+    src/translation/translation_zh_CN.ts
 
 INCLUDEPATH += src
 
@@ -683,17 +683,17 @@ DISTFILES += ChangeLog \
     distributions/jamulus.png \
     distributions/jamulus.svg \
     distributions/jamulus-server.svg \
-    src/res/translation/translation_de_DE.qm \
-    src/res/translation/translation_fr_FR.qm \
-    src/res/translation/translation_pt_PT.qm \
-    src/res/translation/translation_pt_BR.qm \
-    src/res/translation/translation_es_ES.qm \
-    src/res/translation/translation_nl_NL.qm \
-    src/res/translation/translation_pl_PL.qm \
-    src/res/translation/translation_it_IT.qm \
-    src/res/translation/translation_sv_SE.qm \
-    src/res/translation/translation_sk_SK.qm \
-    src/res/translation/translation_zh_CN.qm \
+    src/translation/translation_de_DE.qm \
+    src/translation/translation_fr_FR.qm \
+    src/translation/translation_pt_PT.qm \
+    src/translation/translation_pt_BR.qm \
+    src/translation/translation_es_ES.qm \
+    src/translation/translation_nl_NL.qm \
+    src/translation/translation_pl_PL.qm \
+    src/translation/translation_it_IT.qm \
+    src/translation/translation_sv_SE.qm \
+    src/translation/translation_sk_SK.qm \
+    src/translation/translation_zh_CN.qm \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

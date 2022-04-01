@@ -175,7 +175,7 @@ Do not click on **Publish branch** just yet.
 
 ### Work on the translation file
 
-Open Qt Linguist, and navigate to the directory `src/res/translation` within your project directory.
+Open Qt Linguist, and navigate to the directory `src/translation` within your project directory.
 
 In this directory are translation source files for each language, each with a `.ts` suffix. Don't worry about the `.qm` files, as they are compiled when building the release code.
 
@@ -220,7 +220,7 @@ Finally, go to the Github website where it will most likely offer a banner sayin
 
 Select the current repository as `jamulus`, and the branch that was created above, such as `translate-r3_7_0-german`.
 
-The changed file(s) should be listed in the left-hand column as `src/res/translation/translation_xx_YY.ts`. When the file is selected, the differences will be displayed in the main panel.
+The changed file(s) should be listed in the left-hand column as `src/translation/translation_xx_YY.ts`. When the file is selected, the differences will be displayed in the main panel.
 
 Add a simple commit message in the first box below the file list, (e.g. change "Update filename"
 to something like "Update German translations for v3.7.0"), and add any extra description in the Description box (optional, probably not required).

@@ -141,7 +141,7 @@ get_languages() {
             echo "Error: Please ensure that you are at the root of a jamulus code checkout" >/dev/stderr
             exit 1
         fi
-        for LANG_FILE in src/res/translation/*.ts; do
+        for LANG_FILE in src/translation/*.ts; do
             LANG=${LANG_FILE/*\/translation_}
             LANG=${LANG/.ts}
             echo "$LANG"

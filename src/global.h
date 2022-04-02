@@ -359,7 +359,6 @@ public:
 };
 
 /* Prototypes for global functions ********************************************/
-// command line parsing, TODO do not declare functions globally but in a class
 QString UsageArguments ( char** argv );
 
 //============================================================================
@@ -370,27 +369,29 @@ QString UsageArguments ( char** argv );
 //============================================================================
 #ifndef HEADLESS
 #    include <QMessageBox>
+#    define tMainform QDialog
+#else
+#    define tMainform void
 #endif
 
 // html text macro's (for use in gui texts)
 #define htmlBold( T ) "<b>" + T + "</b>"
 #define htmlNewLine() "<br>"
 
-
 class CMsgBoxes
 {
 protected:
-    static QDialog* pMainForm;
-    static QString  strMainFormName;
+    static tMainform* pMainForm;
+    static QString    strMainFormName;
 
 public:
-    static void init ( QDialog* theMainForm, QString theMainFormName )
+    static void init ( tMainform* theMainForm, QString theMainFormName )
     {
         pMainForm       = theMainForm;
         strMainFormName = theMainFormName;
     }
 
-    static QDialog*       MainForm() { return pMainForm; }
+    static tMainform*     MainForm() { return pMainForm; }
     static const QString& MainFormName() { return strMainFormName; }
 
     // Message boxes:
@@ -444,22 +445,24 @@ public:
 
     static bool GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg );
 
-    static bool GetNumericArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, double rRangeStart, double rRangeStop, double& rValue );
+    static bool GetNumericArgument ( int&           i,
+                                     const QString& strShortOpt,
+                                     const QString& strLongOpt,
+                                     double         rRangeStart,
+                                     double         rRangeStop,
+                                     double&        rValue );
 
 public:
     // find and get a specific argument:
 
     static bool GetFlagArgument ( const QString& strShortOpt, const QString& strLongOpt )
     {
-        int i = 1;
-        while ( i < appArgc )
+        for ( int i = 1; i < appArgc; i++ )
         {
             if ( GetFlagArgument ( i, strShortOpt, strLongOpt ) )
             {
                 return true;
             }
-
-            i++;
         }
 
         return false;
@@ -467,15 +470,12 @@ public:
 
     static bool GetStringArgument ( const QString& strShortOpt, const QString& strLongOpt, QString& strArg )
     {
-        int i = 1;
-        while ( i < appArgc )
+        for ( int i = 1; i < appArgc; i++ )
         {
             if ( GetStringArgument ( i, strShortOpt, strLongOpt, strArg ) )
             {
                 return true;
             }
-
-            i++;
         }
 
         return false;
@@ -483,27 +483,23 @@ public:
 
     static bool GetNumericArgument ( const QString& strShortOpt, const QString& strLongOpt, double rRangeStart, double rRangeStop, double& rValue )
     {
-        int i = 1;
-        while ( i < appArgc )
+        for ( int i = 1; i < appArgc; i++ )
         {
             if ( GetNumericArgument ( i, strShortOpt, strLongOpt, rRangeStart, rRangeStop, rValue ) )
             {
                 return true;
             }
-
-            i++;
         }
 
         return false;
     }
 
-//=================================================
-// Non statics to parse bare arguments
-// (These need an instance of CCommandlineOptions)
-//=================================================
+    //=================================================
+    // Non statics to parse bare arguments
+    // (These need an instance of CCommandlineOptions)
+    //=================================================
 
 protected:
-
     int    currentIndex;
     char** currentArgv;
 
@@ -514,7 +510,6 @@ protected:
     }
 
 public:
-
     QString GetFirstArgument()
     {
         reset();
@@ -537,19 +532,21 @@ public:
 
         return QString();
     }
-
 };
 
 // defines for commandline options in the style "shortopt", "longopt"
 // Name is standard CMDLN_LONGOPTNAME
 // These defines can be used for strShortOpt, strLongOpt parameters
 // of the CCommandlineOptions functions.
-//
+
 // clang-format off
+
 #define CMDLN_SERVER              "-s",                    "--server"
 #define CMDLN_INIFILE             "-i",                    "--inifile"
 #define CMDLN_NOGUI               "-n",                    "--nogui"
 #define CMDLN_PORT                "-p",                    "--port"
+#define CMDLN_JSONRPCPORT         "--jsonrpcport",         "--jsonrpcport"
+#define CMDLN_JSONRPCSECRETFILE   "--jsonrpcsecretfile",   "--jsonrpcsecretfile"
 #define CMDLN_QOS                 "-Q",                    "--qos"
 #define CMDLN_NOTRANSLATION       "-t",                    "--notranslation"
 #define CMDLN_ENABLEIPV6          "-6",                    "--enableipv6"
@@ -579,11 +576,13 @@ public:
 #define CMDLN_CTRLMIDICH          "--ctrlmidich",          "--ctrlmidich"
 // Backwards compatibilyty:
 #define CMDLN_CENTRALSERVER       "--centralserver",       "--centralserver"
-// pgScorpio: TODO These are NOT in help !:
+// Debug options: (not in help)
 #define CMDLN_SHOWALLSERVERS      "--showallservers",      "--showallservers"
 #define CMDLN_SHOWANALYZERCONSOLE "--showanalyzerconsole", "--showanalyzerconsole"
-// CMDLN_SPECIAL: Mostly used for debugging, any option after --special is accepted, should NOT be in help !
+// CMDLN_SPECIAL: Used for debugging, should NOT be in help, nor documented elsewhere!
+// any option after --special is accepted
 #define CMDLN_SPECIAL             "--special",             "--special"
 // Special options for sound-redesign testing
 #define CMDLN_JACKINPUTS          "--jackinputs",          "--jackinputs"
+
 // clang-format on

@@ -69,7 +69,7 @@ jobs:
         run:                        python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
         id:                         get-build-vars
 
-      - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
+      - name:                       Remove release ${{ steps.get-build-vars.outputs.RELEASE_TAG }}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         continue-on-error:          true
         uses:                       dev-drprasad/delete-tag-and-release@v0.1.2
@@ -79,7 +79,7 @@ jobs:
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
 
-      - name:                       Create Release ${{steps.get-build-vars.outputs.RELEASE_TAG}}  ${{steps.get-build-vars.outputs.RELEASE_TITLE}}
+      - name:                       Create Release ${{ steps.get-build-vars.outputs.RELEASE_TAG }}  ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         id:                         create-release
         uses:                       actions/create-release@v1
@@ -215,7 +215,7 @@ jobs:
         run:                        ${{ matrix.config.base_command }} setup
         env:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
+          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT }}
           MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
@@ -232,7 +232,7 @@ jobs:
         run:                        ${{ matrix.config.base_command }} build
         env:
           JAMULUS_BUILD_VERSION:    ${{ needs.create_release.outputs.build_version }}
-          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT}}
+          MACOS_CERTIFICATE:        ${{ secrets.MACOS_CERT }}
           MACOS_CERTIFICATE_PWD:    ${{ secrets.MACOS_CERT_PWD }}
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}

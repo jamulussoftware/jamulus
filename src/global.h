@@ -359,8 +359,7 @@ public:
 };
 
 /* Prototypes for global functions ********************************************/
-// command line parsing, TODO do not declare functions globally but in a class
-QString UsageArguments ( char** argv );
+extern QString UsageArguments ( char** argv );
 
 //============================================================================
 // CMsgBoxes class:
@@ -370,8 +369,9 @@ QString UsageArguments ( char** argv );
 //============================================================================
 #ifndef HEADLESS
 #    include <QMessageBox>
+#    define tMainform QDialog
 #else
-#    define QDialog void
+#    define tMainform void
 #endif
 
 // html text macro's (for use in gui texts)
@@ -381,17 +381,17 @@ QString UsageArguments ( char** argv );
 class CMsgBoxes
 {
 protected:
-    static QDialog* pMainForm;
-    static QString  strMainFormName;
+    static tMainform* pMainForm;
+    static QString    strMainFormName;
 
 public:
-    static void init ( QDialog* theMainForm, QString theMainFormName )
+    static void init ( tMainform* theMainForm, QString theMainFormName )
     {
         pMainForm       = theMainForm;
         strMainFormName = theMainFormName;
     }
 
-    static QDialog*       MainForm() { return pMainForm; }
+    static tMainform*     MainForm() { return pMainForm; }
     static const QString& MainFormName() { return strMainFormName; }
 
     // Message boxes:
@@ -536,6 +536,8 @@ public:
 #define CMDLN_INIFILE             "-i",                    "--inifile"
 #define CMDLN_NOGUI               "-n",                    "--nogui"
 #define CMDLN_PORT                "-p",                    "--port"
+#define CMDLN_JSONRPCPORT         "--jsonrpcport",         "--jsonrpcport"
+#define CMDLN_JSONRPCSECRETFILE   "--jsonrpcsecretfile",   "--jsonrpcsecretfile"
 #define CMDLN_QOS                 "-Q",                    "--qos"
 #define CMDLN_NOTRANSLATION       "-t",                    "--notranslation"
 #define CMDLN_ENABLEIPV6          "-6",                    "--enableipv6"
@@ -565,10 +567,11 @@ public:
 #define CMDLN_CTRLMIDICH          "--ctrlmidich",          "--ctrlmidich"
 // Backwards compatibilyty:
 #define CMDLN_CENTRALSERVER       "--centralserver",       "--centralserver"
-// pgScorpio: TODO These are NOT in help !:
+// Debug options: (not in help)
 #define CMDLN_SHOWALLSERVERS      "--showallservers",      "--showallservers"
 #define CMDLN_SHOWANALYZERCONSOLE "--showanalyzerconsole", "--showanalyzerconsole"
-// CMDLN_SPECIAL: Mostly used for debugging, any option after --special is accepted, should NOT be in help !
+// CMDLN_SPECIAL: Used for debugging, should NOT be in help, nor documented elsewhere!
+// any option after --special is accepted
 #define CMDLN_SPECIAL             "--special",             "--special"
 // Special options for sound-redesign testing
 #define CMDLN_JACKINPUTS          "--jackinputs",          "--jackinputs"

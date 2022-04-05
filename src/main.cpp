@@ -58,8 +58,8 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 int    CCommandlineOptions::appArgc = 0;
 char** CCommandlineOptions::appArgv = NULL;
 
-QDialog* CMsgBoxes::pMainForm       = NULL;
-QString  CMsgBoxes::strMainFormName = APP_NAME;
+tMainform* CMsgBoxes::pMainForm       = NULL;
+QString    CMsgBoxes::strMainFormName = APP_NAME;
 
 QString UsageArguments ( char** argv )
 {
@@ -209,13 +209,6 @@ int main ( int argc, char** argv )
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"
 
-    // clang-format off
-// pgScorio TODO:
-// Extra Checks on parameters:
-//      If given, CMDLN_SERVER MUST be FIRST parameter.
-//      And then only check parameters valid for common, server or client !
-    // clang-format on
-
     for ( int i = 1; i < argc; i++ )
     {
         // Help (usage) flag ---------------------------------------------------
@@ -259,6 +252,24 @@ int main ( int argc, char** argv )
             bCustomPortNumberGiven = true;
             qInfo() << qUtf8Printable ( QString ( "- selected port number: %1" ).arg ( iPortNumber ) );
             CommandLineOptions << "--port";
+            continue;
+        }
+
+        // JSON-RPC port number ------------------------------------------------
+        if ( cmdLine.GetNumericArgument ( i, CMDLN_JSONRPCPORT, 0, 65535, rDbleArgument ) )
+        {
+            iJsonRpcPortNumber = static_cast<quint16> ( rDbleArgument );
+            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC port number: %1" ).arg ( iJsonRpcPortNumber ) );
+            CommandLineOptions << "--jsonrpcport";
+            continue;
+        }
+
+        // JSON-RPC secret file name -------------------------------------------
+        if ( cmdLine.GetStringArgument ( i, CMDLN_JSONRPCSECRETFILE, strArgument ) )
+        {
+            strJsonRpcSecretFileName = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- JSON-RPC secret file: %1" ).arg ( strJsonRpcSecretFileName ) );
+            CommandLineOptions << "--jsonrpcsecretfile";
             continue;
         }
 
@@ -586,16 +597,17 @@ int main ( int argc, char** argv )
         // Unknown option ------------------------------------------------------
         qCritical() << qUtf8Printable ( QString ( "%1: Unknown option '%2' -- use '--help' for help" ).arg ( argv[0] ).arg ( argv[i] ) );
 
+#if !( defined( Q_OS_MACX ) )
+        // clicking on the Mac application bundle, the actual application
+        // is called with weird command line args -> do not exit on these
+
         // pgScorpio: No exit for options after the "--special" option.
         // Used for debugging and testing new options...
         if ( !bSpecialOptions )
         {
-// clicking on the Mac application bundle, the actual application
-// is called with weird command line args -> do not exit on these
-#if !( defined( Q_OS_MACX ) )
             exit ( 1 );
-#endif
         }
+#endif
     }
 
     // Dependencies ------------------------------------------------------------
@@ -842,7 +854,7 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE ( resources );
 
 #ifndef SERVER_ONLY
-    // clang-format off
+// clang-format off
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
 // clang-format on
@@ -923,12 +935,6 @@ int main ( int argc, char** argv )
                 // show dialog
                 ClientDlg.show();
 
-                // Connect on startup ------------------------------------------------------
-                if ( !strConnOnStartupAddress.isEmpty() )
-                {
-                    Client.Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
-                }
-
                 pApp->exec();
             }
             else
@@ -996,6 +1002,9 @@ int main ( int argc, char** argv )
                 // GUI object for the server
                 CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
 
+                // initialise message boxes
+                CMsgBoxes::init ( &ServerDlg, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
                 // show dialog (if not the minimized flag is set)
                 if ( !bStartMinimized )
                 {
@@ -1016,6 +1025,9 @@ int main ( int argc, char** argv )
                 {
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
+
+                // initialise message boxes
+                CMsgBoxes::init ( NULL, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
 
                 pApp->exec();
             }

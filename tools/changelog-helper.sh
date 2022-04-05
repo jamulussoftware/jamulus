@@ -29,8 +29,10 @@ declare -A LANGS=(
 )
 
 find_or_add_missing_entries() {
-    local changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog)
-    local changelog_begin_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n1 | cut -d: -f1)
+    local changelog
+    changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog)
+    local changelog_begin_position
+    changelog_begin_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n1 | cut -d: -f1)
 
     echo "Checking if all merged Github PRs since ${prev_release} are included for ${target_release}..."
     for id in $(gh pr list --limit "${PR_LIST_LIMIT}" --search 'milestone:"Release '"${target_release}"'"' --state merged | awk '{print $1}'); do
@@ -57,17 +59,22 @@ find_or_add_missing_entries() {
 }
 
 group_entries() {
-    local changelog_begin_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n1 | cut -d: -f1)
-    local changelog_prev_release_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n2 | tail -n1 | cut -d: -f1)
+    local changelog_begin_position
+    changelog_begin_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n1 | cut -d: -f1)
+    local changelog_prev_release_position
+    changelog_prev_release_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n2 | tail -n1 | cut -d: -f1)
 
     # Save everything before the actual release changelog content:
-    local changelog_header=$(head -n "${changelog_begin_position}" ChangeLog)
+    local changelog_header
+    changelog_header=$(head -n "${changelog_begin_position}" ChangeLog)
 
     # Save everything after the actual release changelog content:
-    local changelog_prev_releases=$(tail -n "+${changelog_prev_release_position}" ChangeLog)
+    local changelog_prev_releases
+    changelog_prev_releases=$(tail -n "+${changelog_prev_release_position}" ChangeLog)
 
     # Save the current release's changelog content:
-    local changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog | tail -n +2 | head -n -1)
+    local changelog
+    changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog | tail -n +2 | head -n -1)
 
     # Remove trailing whitespace on all lines of the current changelog:
     changelog=$(sed -re 's/\s+$//' <<<"$changelog")
@@ -100,7 +107,7 @@ group_entries() {
     local index=0
     for category in "${category_order[@]}"; do
         changelog=$(sed -re 's/^(- '"${category}"')/'"${index}"' \1/' <<<"${changelog}")
-        index=$(($index+1))
+        index=$((index+1))
     done
 
     # Reduce blocks ("entries") to a single line by replacing \n with \v.
@@ -131,15 +138,21 @@ check_or_add_pr() {
         # (\> ensures that we only match full, standalone IDs)
         return
     fi
-    local json=$(gh pr view "${id/#/}" --json title,author,state)
-    local state=$(jq -r .state <<<"${json}")
-    local title=$(jq -r .title <<<"${json}" | sanitize_title)
-    local author=$(jq -r .author.login <<<"${json}")
+    local json
+    json=$(gh pr view "${id/#/}" --json title,author,state)
+    local state
+    state=$(jq -r .state <<<"${json}")
+    local title
+    title=$(jq -r .title <<<"${json}" | sanitize_title)
+    local author
+    author=$(jq -r .author.login <<<"${json}")
     if [[ "${state}" != "MERGED" ]]; then
         echo "-> Ignoring PR #${id} as state ${state} != MERGED"
         return
     fi
-    local title_suggestion_in_pr=$(gh pr view "$id" --json body,comments,reviews --jq '(.body), (.comments[] .body), (.reviews[] .body)' | grep -oP '\bCHANGELOG:\s*\K([^\\]{5,})' | tail -n1 | sanitize_title)
+    local title_suggestion_in_pr
+    title_suggestion_in_pr=$(gh pr view "$id" --json body,comments,reviews --jq '(.body), (.comments[] .body), (.reviews[] .body)' |
+        grep -oP '\bCHANGELOG:\s*\K([^\\]{5,})' | tail -n1 | sanitize_title)
     if [[ "${title_suggestion_in_pr}" ]]; then
         title="${title_suggestion_in_pr}"
         if [[ "${title_suggestion_in_pr}" == "SKIP" ]]; then
@@ -153,7 +166,8 @@ check_or_add_pr() {
     fi
     echo ", adding new entry"
     local new_entry=""
-    local lang=$(grep -oP 'Updated? \K(\S+)(?= app translations? for )' <<<"$title" || true)
+    local lang
+    lang=$(grep -oP 'Updated? \K(\S+)(?= app translations? for )' <<<"$title" || true)
     if [[ "${lang}" ]]; then
         # Note: This creates a top-level entry for each language.
         # group-entries can merge those to a single one.
@@ -165,8 +179,10 @@ check_or_add_pr() {
         echo "- ${title} (#${id})."
         echo "  (contributed by @${author})"
     )
-    local changelog_before=$(head -n "${changelog_begin_position}" ChangeLog)
-    local changelog_after=$(tail -n "+$((${changelog_begin_position}+1))" ChangeLog)
+    local changelog_before
+    changelog_before=$(head -n "${changelog_begin_position}" ChangeLog)
+    local changelog_after
+    changelog_after=$(tail -n "+$((changelog_begin_position+1))" ChangeLog)
     (echo "$changelog_before"; echo; echo "$new_entry"; echo "$changelog_after") > ChangeLog
 }
 
@@ -174,17 +190,22 @@ add_translation_pr() {
     local lang="${1}"
     local author="${2}"
     local id="${3}"
-    local changelog_begin_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n1 | cut -d: -f1)
-    local changelog_prev_release_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n2 | tail -n1 | cut -d: -f1)
+    local changelog_begin_position
+    changelog_begin_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n1 | cut -d: -f1)
+    local changelog_prev_release_position
+    changelog_prev_release_position=$(grep -nP '^### .*\d+\.\d+\.\d+\b' ChangeLog | head -n2 | tail -n1 | cut -d: -f1)
 
     # Save everything before the actual release changelog content:
-    local changelog_header=$(head -n "${changelog_begin_position}" ChangeLog)
+    local changelog_header
+    changelog_header=$(head -n "${changelog_begin_position}" ChangeLog)
 
     # Save everything after the actual release changelog content:
-    local changelog_prev_releases=$(tail -n "+${changelog_prev_release_position}" ChangeLog)
+    local changelog_prev_releases
+    changelog_prev_releases=$(tail -n "+${changelog_prev_release_position}" ChangeLog)
 
     # Save the current release's changelog content:
-    local changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog | tail -n +2 | head -n -1)
+    local changelog
+    changelog=$(sed -rne '/^###.*'"${target_release//./\.}"'\b/,/^### '"${prev_release//./\.}"'\b/p' ChangeLog | tail -n +2 | head -n -1)
     local changelog_orig="${changelog}"
 
     # Is there an existing entry for this language already?
@@ -227,12 +248,12 @@ add_translation_pr() {
                     changelog_after_translations="${changelog_after_translations}${line}"$'\n'
                 fi
             done <<< "${changelog}"
-            changelog="$(
+            changelog=$(
                 # echo -n strips whitespace. we need that here.
                 echo -n "${changelog_before_translations}"
                 echo -n "$(grep -vP '^$' <<< "${changelog_translations}" | sort)"
                 echo -n "${changelog_after_translations}"
-            )"
+            )
         fi
     fi
     # Rebuild the changelog and write back to file:

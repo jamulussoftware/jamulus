@@ -1183,46 +1183,8 @@ void CClientDlg::OnConnect ( QString strServerName )
     // audio feedback detection
     if ( pSettings->bEnableFeedbackDetection )
     {
-        // try to start client, if error occurred, do not go in
-        // running state but show error message
-        try
-        {
-            if ( !pClient->IsRunning() )
-            {
-                pClient->Start();
-            }
-        }
-
-        catch ( const CGenErr& generr )
-        {
-            // show error message and return the function
-            CMsgBoxes::ShowError ( generr.GetErrorText() );
-            return;
-        }
-
-        // hide label connect to server
-        lblConnectToServer->hide();
-        lbrInputLevelL->setEnabled ( true );
-        lbrInputLevelR->setEnabled ( true );
-
-        // change connect button text to "disconnect"
-        butConnect->setText ( tr ( "&Disconnect" ) );
-
-        // set server name in audio mixer group box title
-        MainMixerBoard->SetServerName ( strMixerBoardLabel );
-
-        // start timer for level meter bar and ping time measurement
-        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
-        TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
-        TimerPing.start ( PING_UPDATE_TIME_MS );
-        TimerCheckAudioDeviceOk.start ( CHECK_AUDIO_DEV_OK_TIME_MS ); // is single shot timer
-
-        // audio feedback detection
-        if ( pSettings->bEnableFeedbackDetection )
-        {
-            TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
-            bDetectFeedback = true;
-        }
+        TimerDetectFeedback.start ( DETECT_FEEDBACK_TIME_MS ); // single shot timer
+        bDetectFeedback = true;
     }
 }
 

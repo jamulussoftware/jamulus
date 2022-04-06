@@ -884,32 +884,6 @@ bool CClient::Disconnect()
 
         return false;
     }
-
-    // Send disconnect message to server (Since we disable our protocol
-    // receive mechanism with the next command, we do not evaluate any
-    // respond from the server, therefore we just hope that the message
-    // gets its way to the server, if not, the old behaviour time-out
-    // disconnects the connection anyway).
-    ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
-
-        // gets its way to the server, if not, the old behaviour time-out
-        // reset current signal level and LEDs
-        bJitterBufferOK = true;
-        SignalLevelMeter.Reset();
-
-        emit Disconnected();
-
-        return true;
-    }
-    else
-    {
-        // make sure sound is stopped too
-        Sound.Stop();
-
-        emit Disconnected();
-
-        return false;
-    }
 }
 
 void CClient::Init()

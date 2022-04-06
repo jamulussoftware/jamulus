@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # This script is trigged from the Github Autobuild workflow.
 # It analyzes Jamulus.pro and git push details (tag vs. branch, etc.) to decide
 #   - whether a release should be created,

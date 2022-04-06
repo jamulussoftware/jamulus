@@ -336,7 +336,6 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
 
     if ( !strError.isEmpty() )
     {
-
         CMsgBoxes::ShowWarning ( strError );
     }
 

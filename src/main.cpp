@@ -53,20 +53,24 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #    include "clientrpc.h"
 #endif
 
+// Forward declarations ********************************************************
+
+QString UsageArguments ( char** argv );
+
 // Implementation **************************************************************
 
-int    CCommandlineOptions::appArgc = 0;
-char** CCommandlineOptions::appArgv = NULL;
+int    CCommandline::argc = 0;
+char** CCommandline::argv = NULL;
 
 tMainform* CMsgBoxes::pMainForm       = NULL;
 QString    CMsgBoxes::strMainFormName = APP_NAME;
 
 int main ( int argc, char** argv )
 {
-    CCommandlineOptions::appArgc = argc;
-    CCommandlineOptions::appArgv = argv;
+    CCommandline::argc = argc;
+    CCommandline::argv = argv;
 
-    CCommandlineOptions cmdLine; // We don't really need an instance here, but using one improves the readability of the code.
+    CCommandline cmdLine; // We don't really need an instance here, but using one improves the readability of the code.
 
 #if defined( Q_OS_MACX )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
@@ -139,13 +143,14 @@ int main ( int argc, char** argv )
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"
-
     for ( int i = 1; i < argc; i++ )
     {
+
         // Help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) || ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
-            std::cout << qUtf8Printable ( UsageArguments ( argv ) );
+            const QString strHelp = UsageArguments ( argv );
+            std::cout << qUtf8Printable ( strHelp );
             exit ( 0 );
         }
 
@@ -244,9 +249,17 @@ int main ( int argc, char** argv )
         }
 
         // Directory server ----------------------------------------------------
-        if ( cmdLine.GetStringArgument ( i, CMDLN_DIRECTORYSERVER, strArgument ) ||
-             cmdLine.GetStringArgument ( i, CMDLN_CENTRALSERVER, strArgument ) // ** D E P R E C A T E D **
-        )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_DIRECTORYSERVER, strArgument ) )
+        {
+            strDirectoryServer = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
+            CommandLineOptions << "--directoryserver";
+            ServerOnlyOptions << "--directoryserver";
+            continue;
+        }
+
+        // Central server ** D E P R E C A T E D ** ----------------------------
+        if ( cmdLine.GetStringArgument ( i, CMDLN_CENTRALSERVER, strArgument ) )
         {
             strDirectoryServer = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
@@ -569,7 +582,7 @@ int main ( int argc, char** argv )
         if ( ServerOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )
-                                                .arg ( CCommandlineOptions::GetProgramPath(), ServerOnlyOptions.join ( ", " ) ) );
+                                                .arg ( CCommandline::GetProgramPath(), ServerOnlyOptions.join ( ", " ) ) );
             exit ( 1 );
         }
 
@@ -995,6 +1008,36 @@ int main ( int argc, char** argv )
 }
 
 /******************************************************************************\
+* Message Boxes                                                                *
+\******************************************************************************/
+void CMsgBoxes::ShowError ( QString strError )
+{
+#ifndef HEADLESS
+    QMessageBox::critical ( pMainForm, strMainFormName + ": " + QObject::tr ( "Error" ), strError, QObject::tr ( "Ok" ), nullptr );
+#else
+    qCritical() << "Error: " << strError.toLocal8Bit().data();
+#endif
+}
+
+void CMsgBoxes::ShowWarning ( QString strWarning )
+{
+#ifndef HEADLESS
+    QMessageBox::warning ( pMainForm, strMainFormName + ": " + QObject::tr ( "Warning" ), strWarning, QObject::tr ( "Ok" ), nullptr );
+#else
+    qWarning() << "Warning: " << strWarning.toLocal8Bit().data();
+#endif
+}
+
+void CMsgBoxes::ShowInfo ( QString strInfo )
+{
+#ifndef HEADLESS
+    QMessageBox::information ( pMainForm, strMainFormName + ": " + QObject::tr ( "Information" ), strInfo, QObject::tr ( "Ok" ), nullptr );
+#else
+    qInfo() << "Info: " << strInfo.toLocal8Bit().data();
+#endif
+}
+
+/******************************************************************************\
 * Command Line Argument Parsing                                                *
 \******************************************************************************/
 QString UsageArguments ( char** argv )
@@ -1067,9 +1110,9 @@ QString UsageArguments ( char** argv )
     // clang-format on
 }
 
-bool CCommandlineOptions::GetFlagArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt )
+bool CCommandline::GetFlagArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt )
 {
-    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
         return true;
     }
@@ -1079,17 +1122,17 @@ bool CCommandlineOptions::GetFlagArgument ( int& i, const QString& strShortOpt, 
     }
 }
 
-bool CCommandlineOptions::GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg )
+bool CCommandline::GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg )
 {
-    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
-        if ( ++i >= appArgc )
+        if ( ++i >= argc )
         {
-            qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( appArgv[0] ).arg ( appArgv[i - 1] ) );
+            qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( argv[0] ).arg ( argv[i - 1] ) );
             exit ( 1 );
         }
 
-        strArg = appArgv[i];
+        strArg = argv[i];
 
         return true;
     }
@@ -1099,27 +1142,27 @@ bool CCommandlineOptions::GetStringArgument ( int& i, const QString& strShortOpt
     }
 }
 
-bool CCommandlineOptions::GetNumericArgument ( int&           i,
-                                               const QString& strShortOpt,
-                                               const QString& strLongOpt,
-                                               double         rRangeStart,
-                                               double         rRangeStop,
-                                               double&        rValue )
+bool CCommandline::GetNumericArgument ( int&           i,
+                                        const QString& strShortOpt,
+                                        const QString& strLongOpt,
+                                        double         rRangeStart,
+                                        double         rRangeStop,
+                                        double&        rValue )
 {
-    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
         QString errmsg = "%1: '%2' needs a numeric argument from '%3' to '%4'.";
-        if ( ++i >= appArgc )
+        if ( ++i >= argc )
         {
-            qCritical() << qUtf8Printable ( errmsg.arg ( appArgv[0] ).arg ( appArgv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 
         char* p;
-        rValue = strtod ( appArgv[i], &p );
+        rValue = strtod ( argv[i], &p );
         if ( *p || ( rValue < rRangeStart ) || ( rValue > rRangeStop ) )
         {
-            qCritical() << qUtf8Printable ( errmsg.arg ( appArgv[0] ).arg ( appArgv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 

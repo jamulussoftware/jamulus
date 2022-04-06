@@ -68,12 +68,12 @@ jobs:
         uses:                       actions/checkout@v2
 
       - name:                       Determine release version, type and prerelease variables
-        run:                        ./.github/actions_scripts/analyse_git_reference.py
+        run:                        ./.github/autobuild/get_build_vars.py
         id:                         get-build-vars
 
       - name:                       Extract Changelog for the Github release body
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
-        run:                        ./.github/actions_scripts/getChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > autoLatestChangelog.md
+        run:                        ./.github/autobuild/extractVersionChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > autoLatestChangelog.md
 
       - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'

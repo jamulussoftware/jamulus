@@ -892,9 +892,24 @@ bool CClient::Disconnect()
     // disconnects the connection anyway).
     ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
 
-    // reset current signal level and LEDs
-    bJitterBufferOK = true;
-    SignalLevelMeter.Reset();
+        // gets its way to the server, if not, the old behaviour time-out
+        // reset current signal level and LEDs
+        bJitterBufferOK = true;
+        SignalLevelMeter.Reset();
+
+        emit Disconnected();
+
+        return true;
+    }
+    else
+    {
+        // make sure sound is stopped too
+        Sound.Stop();
+
+        emit Disconnected();
+
+        return false;
+    }
 }
 
 void CClient::Init()

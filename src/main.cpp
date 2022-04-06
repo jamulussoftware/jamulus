@@ -29,11 +29,15 @@
 #ifndef HEADLESS
 #    include <QApplication>
 #    include <QMessageBox>
-#    include "clientdlg.h"
 #    include "serverdlg.h"
+#    ifndef SERVER_ONLY
+#        include "clientdlg.h"
+#    endif
 #endif
 #include "settings.h"
-#include "testbench.h"
+#ifndef SERVER_ONLY
+#    include "testbench.h"
+#endif
 #include "util.h"
 #ifdef ANDROID
 #    include <QtAndroidExtras/QtAndroid>
@@ -45,23 +49,28 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #include <memory>
 #include "rpcserver.h"
 #include "serverrpc.h"
-#include "clientrpc.h"
+#ifndef SERVER_ONLY
+#    include "clientrpc.h"
+#endif
+
+// Forward declarations ********************************************************
+
+QString UsageArguments ( char** argv );
 
 // Implementation **************************************************************
 
-int    CCommandlineOptions::appArgc = 0;
-char** CCommandlineOptions::appArgv = NULL;
+int    CCommandline::argc = 0;
+char** CCommandline::argv = NULL;
 
 tMainform* CMsgBoxes::pMainForm       = NULL;
 QString    CMsgBoxes::strMainFormName = APP_NAME;
 
-
 int main ( int argc, char** argv )
 {
-    CCommandlineOptions::appArgc = argc;
-    CCommandlineOptions::appArgv = argv;
+    CCommandline::argc = argc;
+    CCommandline::argv = argv;
 
-    CCommandlineOptions cmdLine; // We don't really need an instance here, but using one improves the readability of the code.
+    CCommandline cmdLine; // We don't really need an instance here, but using one improves the readability of the code.
 
 #if defined( Q_OS_MACX )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
@@ -133,13 +142,14 @@ int main ( int argc, char** argv )
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"
-
     for ( int i = 1; i < argc; i++ )
     {
+
         // Help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) || ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
-            std::cout << qUtf8Printable ( UsageArguments ( argv ) );
+            const QString strHelp = UsageArguments ( argv );
+            std::cout << qUtf8Printable ( strHelp );
             exit ( 0 );
         }
 
@@ -238,9 +248,17 @@ int main ( int argc, char** argv )
         }
 
         // Directory server ----------------------------------------------------
-        if ( cmdLine.GetStringArgument ( i, CMDLN_DIRECTORYSERVER, strArgument ) ||
-             cmdLine.GetStringArgument ( i, CMDLN_CENTRALSERVER, strArgument ) // ** D E P R E C A T E D **
-        )
+        if ( cmdLine.GetStringArgument ( i, CMDLN_DIRECTORYSERVER, strArgument ) )
+        {
+            strDirectoryServer = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
+            CommandLineOptions << "--directoryserver";
+            ServerOnlyOptions << "--directoryserver";
+            continue;
+        }
+
+        // Central server ** D E P R E C A T E D ** ----------------------------
+        if ( cmdLine.GetStringArgument ( i, CMDLN_CENTRALSERVER, strArgument ) )
         {
             strDirectoryServer = strArgument;
             qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
@@ -550,7 +568,7 @@ int main ( int argc, char** argv )
 #ifdef SERVER_ONLY
     if ( bIsClient )
     {
-        qCritical() << "Only --server mode is supported in this build with nosound.";
+        qCritical() << "Only --server mode is supported in this build.";
         exit ( 1 );
     }
 #endif
@@ -563,7 +581,7 @@ int main ( int argc, char** argv )
         if ( ServerOnlyOptions.size() != 0 )
         {
             qCritical() << qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )
-                                                .arg ( CCommandlineOptions::GetProgramPath(), ServerOnlyOptions.join ( ", " ) ) );
+                                                .arg ( CCommandline::GetProgramPath(), ServerOnlyOptions.join ( ", " ) ) );
             exit ( 1 );
         }
 
@@ -777,10 +795,12 @@ int main ( int argc, char** argv )
     // init resources
     Q_INIT_RESOURCE ( resources );
 
+#ifndef SERVER_ONLY
     // clang-format off
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
-    // clang-format on
+// clang-format on
+#endif
 
     CRpcServer* pRpcServer = nullptr;
 
@@ -821,6 +841,7 @@ int main ( int argc, char** argv )
 
     try
     {
+#ifndef SERVER_ONLY
         if ( bIsClient )
         {
             // Client:
@@ -850,7 +871,7 @@ int main ( int argc, char** argv )
                 new CClientRpc ( &Client, pRpcServer, pRpcServer );
             }
 
-#ifndef HEADLESS
+#    ifndef HEADLESS
             if ( bUseGUI )
             {
                 // GUI object
@@ -872,7 +893,7 @@ int main ( int argc, char** argv )
                 pApp->exec();
             }
             else
-#endif
+#    endif
             {
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
@@ -884,6 +905,7 @@ int main ( int argc, char** argv )
             }
         }
         else
+#endif
         {
             // Server:
             // actual server object
@@ -967,7 +989,7 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
         if ( bUseGUI )
         {
-            CMsgBoxes::ShowError( generr.GetErrorText() );
+            CMsgBoxes::ShowError ( generr.GetErrorText() );
         }
         else
 #endif
@@ -985,6 +1007,36 @@ int main ( int argc, char** argv )
 }
 
 /******************************************************************************\
+* Message Boxes                                                                *
+\******************************************************************************/
+void CMsgBoxes::ShowError ( QString strError )
+{
+#ifndef HEADLESS
+    QMessageBox::critical ( pMainForm, strMainFormName + ": " + QObject::tr ( "Error" ), strError, QObject::tr ( "Ok" ), nullptr );
+#else
+    qCritical() << "Error: " << strError.toLocal8Bit().data();
+#endif
+}
+
+void CMsgBoxes::ShowWarning ( QString strWarning )
+{
+#ifndef HEADLESS
+    QMessageBox::warning ( pMainForm, strMainFormName + ": " + QObject::tr ( "Warning" ), strWarning, QObject::tr ( "Ok" ), nullptr );
+#else
+    qWarning() << "Warning: " << strWarning.toLocal8Bit().data();
+#endif
+}
+
+void CMsgBoxes::ShowInfo ( QString strInfo )
+{
+#ifndef HEADLESS
+    QMessageBox::information ( pMainForm, strMainFormName + ": " + QObject::tr ( "Information" ), strInfo, QObject::tr ( "Ok" ), nullptr );
+#else
+    qInfo() << "Info: " << strInfo.toLocal8Bit().data();
+#endif
+}
+
+/******************************************************************************\
 * Command Line Argument Parsing                                                *
 \******************************************************************************/
 QString UsageArguments ( char** argv )
@@ -999,7 +1051,7 @@ QString UsageArguments ( char** argv )
            "\n"
            "Common options:\n"
            "  -i, --inifile         initialization file name\n"
-           "                        (not supported for headless server mode)\n"
+           "                        (not supported for headless Server mode)\n"
            "  -n, --nogui           disable GUI (\"headless\")\n"
            "  -p, --port            set the local port number\n"
            "      --jsonrpcport     enable JSON-RPC server, set TCP port number\n"
@@ -1014,39 +1066,39 @@ QString UsageArguments ( char** argv )
            "  -6, --enableipv6      enable IPv6 addressing (IPv4 is always enabled)\n"
            "\n"
            "Server only:\n"
-           "  -d, --discononquit    disconnect all clients on quit\n"
-           "  -e, --directoryserver address of the directory server with which to register\n"
-           "                        (or 'localhost' to host a server list on this server)\n"
-           "      --directoryfile   enable server list persistence, set file name\n"
-           "  -f, --listfilter      server list whitelist filter.  Format:\n"
+           "  -d, --discononquit    disconnect all Clients on quit\n"
+           "  -e, --directoryserver address of the directory Server with which to register\n"
+           "                        (or 'localhost' to host a server list on this Server)\n"
+           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
+           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
            "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
            "  -F, --fastupdate      use 64 samples frame size mode\n"
            "  -l, --log             enable logging, set file name\n"
            "  -L, --licence         show an agreement window before users can connect\n"
            "  -m, --htmlstatus      enable HTML status file, set file name\n"
-           "  -o, --serverinfo      registration info for this server.  Format:\n"
+           "  -o, --serverinfo      registration info for this Server.  Format:\n"
            "                        [name];[city];[country as QLocale ID]\n"
-           "      --serverpublicip  public IP address for this server.  Needed when\n"
+           "      --serverpublicip  public IP address for this Server.  Needed when\n"
            "                        registering with a server list hosted\n"
            "                        behind the same NAT\n"
            "  -P, --delaypan        start with delay panning enabled\n"
            "  -R, --recording       sets directory to contain recorded jams\n"
            "      --norecord        disables recording (when enabled by default by -R)\n"
-           "  -s, --server          start server\n"
-           "      --serverbindip    IP address the server will bind to (rather than all)\n"
+           "  -s, --server          start Server\n"
+           "      --serverbindip    IP address the Server will bind to (rather than all)\n"
            "  -T, --multithreading  use multithreading to make better use of\n"
-           "                        multi-core CPUs and support more clients\n"
+           "                        multi-core CPUs and support more Clients\n"
            "  -u, --numchannels     maximum number of channels\n"
            "  -w, --welcomemessage  welcome message to display on connect\n"
-           "                        (string or filename)\n"
+           "                        (string or filename, HTML supported)\n"
            "  -z, --startminimized  start minimizied\n"
            "\n"
            "Client only:\n"
-           "  -c, --connect         connect to given server address on startup\n"
-           "  -j, --nojackconnect   disable auto Jack connections\n"
+           "  -c, --connect         connect to given Server address on startup\n"
+           "  -j, --nojackconnect   disable auto JACK connections\n"
            "  -M, --mutestream      starts the application in muted state\n"
            "      --mutemyown       mute me in my personal mix (headless only)\n"
-           "      --clientname      client name (window title and jack client name)\n"
+           "      --clientname      Client name (window title and JACK client name)\n"
            "      --ctrlmidich      MIDI controller channel to listen\n"
            "\n"
            "Example: %1 -s --inifile myinifile.ini\n"
@@ -1057,9 +1109,9 @@ QString UsageArguments ( char** argv )
     // clang-format on
 }
 
-bool CCommandlineOptions::GetFlagArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt )
+bool CCommandline::GetFlagArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt )
 {
-    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
         return true;
     }
@@ -1069,17 +1121,17 @@ bool CCommandlineOptions::GetFlagArgument ( int& i, const QString& strShortOpt, 
     }
 }
 
-bool CCommandlineOptions::GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg )
+bool CCommandline::GetStringArgument ( int& i, const QString& strShortOpt, const QString& strLongOpt, QString& strArg )
 {
-    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
-        if ( ++i >= appArgc )
+        if ( ++i >= argc )
         {
-            qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( appArgv[0] ).arg ( appArgv[i - 1] ) );
+            qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( argv[0] ).arg ( argv[i - 1] ) );
             exit ( 1 );
         }
 
-        strArg = appArgv[i];
+        strArg = argv[i];
 
         return true;
     }
@@ -1089,27 +1141,27 @@ bool CCommandlineOptions::GetStringArgument ( int& i, const QString& strShortOpt
     }
 }
 
-bool CCommandlineOptions::GetNumericArgument ( int&           i,
-                                               const QString& strShortOpt,
-                                               const QString& strLongOpt,
-                                               double         rRangeStart,
-                                               double         rRangeStop,
-                                               double&        rValue )
+bool CCommandline::GetNumericArgument ( int&           i,
+                                        const QString& strShortOpt,
+                                        const QString& strLongOpt,
+                                        double         rRangeStart,
+                                        double         rRangeStop,
+                                        double&        rValue )
 {
-    if ( ( !strShortOpt.compare ( appArgv[i] ) ) || ( !strLongOpt.compare ( appArgv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
         QString errmsg = "%1: '%2' needs a numeric argument from '%3' to '%4'.";
-        if ( ++i >= appArgc )
+        if ( ++i >= argc )
         {
-            qCritical() << qUtf8Printable ( errmsg.arg ( appArgv[0] ).arg ( appArgv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 
         char* p;
-        rValue = strtod ( appArgv[i], &p );
+        rValue = strtod ( argv[i], &p );
         if ( *p || ( rValue < rRangeStart ) || ( rValue > rRangeStop ) )
         {
-            qCritical() << qUtf8Printable ( errmsg.arg ( appArgv[0] ).arg ( appArgv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
             exit ( 1 );
         }
 

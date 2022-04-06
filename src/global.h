@@ -358,9 +358,6 @@ public:
     int iChanNum;
 };
 
-/* Prototypes for global functions ********************************************/
-QString UsageArguments ( char** argv );
-
 //============================================================================
 // CMsgBoxes class:
 //  Use this static class to show basic Error, Warning and Info messageboxes
@@ -374,7 +371,7 @@ QString UsageArguments ( char** argv );
 #    define tMainform void
 #endif
 
-// html text macro's (for use in gui texts)
+// html text macro's (for use in message texts)
 #define htmlBold( T ) "<b>" + T + "</b>"
 #define htmlNewLine() "<br>"
 
@@ -395,48 +392,31 @@ public:
     static const QString& MainFormName() { return strMainFormName; }
 
     // Message boxes:
-    static void ShowError ( QString strError )
-    {
-#ifndef HEADLESS
-        QMessageBox::critical ( pMainForm, strMainFormName + ": " + QObject::tr ( "Error" ), strError, QObject::tr ( "Ok" ), nullptr );
-#endif
-    }
-
-    static void ShowWarning ( QString strWarning )
-    {
-#ifndef HEADLESS
-        QMessageBox::warning ( pMainForm, strMainFormName + ": " + QObject::tr ( "Warning" ), strWarning, QObject::tr ( "Ok" ), nullptr );
-#endif
-    }
-
-    static void ShowInfo ( QString strInfo )
-    {
-#ifndef HEADLESS
-        QMessageBox::information ( pMainForm, strMainFormName + ": " + QObject::tr ( "Information" ), strInfo, QObject::tr ( "Ok" ), nullptr );
-#endif
-    }
+    static void ShowError ( QString strError );
+    static void ShowWarning ( QString strWarning );
+    static void ShowInfo ( QString strInfo );
 };
 
 //============================================================================
-// CCommandlineOptions class:
+// CCommandline class:
 //  Note that passing commandline arguments to classes is no longer required,
 //  since via this class we can get commandline options anywhere.
 //============================================================================
 
-class CCommandlineOptions
+class CCommandline
 {
 public:
-    CCommandlineOptions() { reset(); }
+    CCommandline() { reset(); }
 
 private:
     friend int main ( int argc, char** argv );
 
     // Statics assigned from main ()
-    static int    appArgc;
-    static char** appArgv;
+    static int    argc;
+    static char** argv;
 
 public:
-    static QString GetProgramPath() { return QString ( *appArgv ); }
+    static QString GetProgramPath() { return QString ( *argv ); }
 
 public:
     // sequencial parse functions using the argument index:
@@ -457,7 +437,7 @@ public:
 
     static bool GetFlagArgument ( const QString& strShortOpt, const QString& strLongOpt )
     {
-        for ( int i = 1; i < appArgc; i++ )
+        for ( int i = 1; i < argc; i++ )
         {
             if ( GetFlagArgument ( i, strShortOpt, strLongOpt ) )
             {
@@ -470,7 +450,7 @@ public:
 
     static bool GetStringArgument ( const QString& strShortOpt, const QString& strLongOpt, QString& strArg )
     {
-        for ( int i = 1; i < appArgc; i++ )
+        for ( int i = 1; i < argc; i++ )
         {
             if ( GetStringArgument ( i, strShortOpt, strLongOpt, strArg ) )
             {
@@ -483,7 +463,7 @@ public:
 
     static bool GetNumericArgument ( const QString& strShortOpt, const QString& strLongOpt, double rRangeStart, double rRangeStop, double& rValue )
     {
-        for ( int i = 1; i < appArgc; i++ )
+        for ( int i = 1; i < argc; i++ )
         {
             if ( GetNumericArgument ( i, strShortOpt, strLongOpt, rRangeStart, rRangeStop, rValue ) )
             {
@@ -496,7 +476,7 @@ public:
 
     //=================================================
     // Non statics to parse bare arguments
-    // (These need an instance of CCommandlineOptions)
+    // (These need an instance of CCommandline)
     //=================================================
 
 protected:
@@ -505,7 +485,7 @@ protected:
 
     void reset()
     {
-        currentArgv  = appArgv;
+        currentArgv  = argv;
         currentIndex = 0;
     }
 
@@ -519,12 +499,12 @@ public:
 
     QString GetNextArgument()
     {
-        if ( currentIndex < appArgc )
+        if ( currentIndex < argc )
         {
             currentArgv++;
             currentIndex++;
 
-            if ( currentIndex < appArgc )
+            if ( currentIndex < argc )
             {
                 return QString ( *currentArgv );
             }
@@ -537,7 +517,7 @@ public:
 // defines for commandline options in the style "shortopt", "longopt"
 // Name is standard CMDLN_LONGOPTNAME
 // These defines can be used for strShortOpt, strLongOpt parameters
-// of the CCommandlineOptions functions.
+// of the CCommandline functions.
 
 // clang-format off
 

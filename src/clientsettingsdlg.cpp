@@ -1039,8 +1039,16 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
 void CClientSettingsDlg::UpdateUploadRate()
 {
     // update upstream rate information label
-    lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
-    lblUpstreamUnit->setText ( "kbps" );
+    if ( pClient->IsConnected() )
+    {
+        lblUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) );
+        lblUpstreamUnit->setText ( "kbps" );
+    }
+    else
+    {
+        lblUpstreamValue->setText ( "---" );
+        lblUpstreamUnit->setText ( "" );
+    }
 }
 
 void CClientSettingsDlg::UpdateDisplay()
@@ -1048,13 +1056,8 @@ void CClientSettingsDlg::UpdateDisplay()
     // update slider controls (settings might have been changed)
     UpdateJitterBufferFrame();
     UpdateSoundCardFrame();
-
-    if ( !pClient->SoundIsStarted() ) // pgScorpio: Was !pClient->IsRunning() Again this is NOT a connection status, Should be pClient->IsConnected()
-    {
-        // clear text labels with client parameters
-        lblUpstreamValue->setText ( "---" );
-        lblUpstreamUnit->setText ( "" );
-    }
+    // update upstream rate information label
+    UpdateUploadRate();
 }
 
 void CClientSettingsDlg::UpdateDirectoryServerComboBox()

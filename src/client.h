@@ -110,7 +110,6 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const quint16  iQosNumber,
-              const QString& strConnOnStartupAddress,
               const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
@@ -119,26 +118,16 @@ public:
 
     virtual ~CClient();
 
-    void StartConnection(); // ---> pgScorpio: Was Start(), but Start what ? ( Should be Connect() ?)
-    void StopConnection();  // ---> pgScorpio: Was Stop(), but Stop what ?   ( Should be Disconnect() ?)
-    bool SoundIsStarted()   // ---> pgScorpio: Was IsRunning(), but what is running ??
-    {
-        return Sound.IsRunning(); // ---> pgScorpio: Even this name is incorrect !
-                                  // ---> pgScorpio: Sound.bRun is set when Sound is started, but this does not guarantee sound is actually running
-    }
+    bool Connect ( QString strServerAddress, QString strServerName );
+    bool Disconnect();
 
-    bool SoundIsRunning() const
-    {
-        return Sound.IsCallbackEntered();
-    } // ---> pgScorpio: was IsCallbackEntered() but this is the actuall SoundIsRunning() !
-    bool SetServerAddr ( QString strNAddr );
+    bool SoundIsRunning() const { return Sound.IsCallbackEntered(); } // For OnTimerCheckAudioDeviceOk only !
+    bool IsConnected() { return Channel.IsConnected(); }
 
     double GetLevelForMeterdBLeft() { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
     bool GetAndResetbJitterBufferOKFlag();
-
-    bool IsConnected() { return Channel.IsConnected(); }
 
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
@@ -433,8 +422,9 @@ signals:
 
     void CLChannelLevelListReceived ( CHostAddress InetAddr, CVector<uint16_t> vecLevelList );
 
+    void Connecting ( QString strServerName );
     void Disconnected();
-    void SoundDeviceChanged ( QString strError );
+    void SoundDeviceChanged();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
     void ControllerInPanValue ( int iChannelIdx, int iValue );
     void ControllerInFaderIsSolo ( int iChannelIdx, bool bIsSolo );

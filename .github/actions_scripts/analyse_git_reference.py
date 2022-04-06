@@ -32,17 +32,6 @@ def get_git_hash():
     ]).decode('ascii').strip()
 
 
-def write_changelog(version):
-    changelog = subprocess.check_output([
-        'perl',
-        f'{REPO_PATH}/.github/actions_scripts/getChangelog.pl',
-        f'{REPO_PATH}/ChangeLog',
-        version,
-    ])
-    with open(f'{REPO_PATH}/autoLatestChangelog.md', 'wb') as f:
-        f.write(changelog)
-
-
 def get_build_version(jamulus_pro_version):
     if "dev" in jamulus_pro_version:
         name = "{}-{}".format(jamulus_pro_version, get_git_hash())
@@ -60,7 +49,7 @@ def set_github_variable(varname, varval):
 
 
 jamulus_pro_version = get_version_from_jamulus_pro()
-write_changelog(jamulus_pro_version)
+set_github_variable("JAMULUS_PRO_VERSION", jamulus_pro_version)
 build_version = get_build_version(jamulus_pro_version)
 
 fullref = os.environ['GITHUB_REF']

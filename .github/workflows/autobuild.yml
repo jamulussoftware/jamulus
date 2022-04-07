@@ -18,6 +18,10 @@
 
 on:
   workflow_dispatch:
+    inputs:
+      build_all_targets:
+        type: boolean
+        description: 'Build all targets (instead of just the main platforms)'
   push:
     tags:
       - "r*"
@@ -62,6 +66,7 @@ jobs:
       publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create-release.outputs.upload_url }}
       build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
+      build_all_targets:            ${{ steps.decide-build-targets.outputs.build_all_targets }}
     env:
       release_changelog_path:       ./.github_release_changelog.md
 
@@ -100,6 +105,76 @@ jobs:
           prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
           draft:                    false
 
+      - name:                       Decide which targets to build for
+        id:                         decide-build-targets
+        env:
+          GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+          INPUT_BUILD_ALL_TARGETS:  ${{ github.event.inputs.build_all_targets }}
+          PR_NUMBER:                ${{ github.event.number }}
+          PR_BASE:                  ${{ github.event.pull_request.base.sha }}
+          PR_HEAD:                  ${{ github.event.pull_request.head.sha }}
+        run:                        |
+          set -eu
+          build_all_targets() {
+            echo "::set-output name=build_all_targets::${1}"
+            echo "Building for all targets? Result: ${1}"
+            exit 0
+          }
+
+          handle_push() {
+            if [[ "${GITHUB_REF}" == "refs/tags/"* ]]; then
+              echo 'Triggered by a tag push, building all targets'
+              build_all_targets 'true'
+            fi
+            if [[ "${GITHUB_REF}" == "refs/heads/autobuild"* ]]; then
+              echo 'Triggered by a push to an autobuild* branch, building all targets'
+              build_all_targets 'true'
+            fi
+          }
+
+          handle_workflow_dispatch() {
+            if [[ "${INPUT_BUILD_ALL_TARGETS}" == 'true' ]]; then
+              echo 'Triggered by manual run with "Build all targets" checkbox set'
+              build_all_targets 'true'
+            fi
+          }
+
+          handle_pull_request() {
+            pr_body_contains_magic_string() {
+              pr_body=$(gh pr view "${PR_NUMBER}" --json body --jq .body)
+              grep -vP '<!--' <<< "$pr_body" | grep -qiF -- 'AUTOBUILD: Please build all targets'
+            }
+            if pr_body_contains_magic_string; then
+              echo 'Triggered by a PR with magic AUTOBUILD: string, building all targets'
+              build_all_targets 'true'
+            fi
+
+            pr_contains_build_changes() {
+              git fetch origin "${PR_BASE}" "${PR_HEAD}"
+              git diff --name-only "${PR_BASE}..${PR_HEAD}" |
+                grep -qP 'autobuild|windows|linux|mac|ios|android|\.pro'
+            }
+            if pr_contains_build_changes; then
+              echo 'Triggered by a PR with build- or platform-specific changes, building all targets'
+              build_all_targets 'true'
+            fi
+          }
+
+          case "${GITHUB_EVENT_NAME}" in
+            push)
+              handle_push
+              ;;
+            workflow_dispatch)
+              handle_workflow_dispatch
+              ;;
+            pull_request)
+              handle_pull_request
+              ;;
+          esac
+
+          echo 'default case, not building all targets'
+          build_all_targets 'false'
+
 
   release_assets:
     name:                           Build for ${{ matrix.config.config_name }}
@@ -115,6 +190,7 @@ jobs:
             building_on_os:         ubuntu-20.04
             base_command:           ./.github/autobuild/android.sh
             run_codeql:             true
+            is_main_build_target:   true
             # Jamulus.pro needs to count git history length for android versioning:
             checkout_fetch_depth:   '0'
 
@@ -124,6 +200,7 @@ jobs:
             building_container:     ubuntu:18.04
             base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
+            is_main_build_target:   true
 
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
@@ -140,6 +217,7 @@ jobs:
             run_codeql:             false
             # Latest Xcode which runs on macos-11:
             xcode_version:          13.4.1
+            is_main_build_target:   true
 
           - config_name:            MacOS arm64 (artifacts)
             target_os:              macos
@@ -162,6 +240,7 @@ jobs:
             # Xcode 12.1.1 is the most-recent 12.1.x release:
             # https://xcodereleases.com/
             xcode_version:          12.1.1
+            is_main_build_target:   true
 
           - config_name:            iOS (artifacts)
             target_os:              ios
@@ -178,12 +257,23 @@ jobs:
             building_on_os:         windows-2022
             base_command:           powershell .\.github\autobuild\windows.ps1 -Stage
             run_codeql:             true
+            is_main_build_target:   true
 
           - config_name:            Windows JACK (artifact)
             target_os:              windows
             building_on_os:         windows-2022
             base_command:           powershell .\.github\autobuild\windows.ps1 -BuildOption jackonwindows -Stage
             run_codeql:             false
+
+        # This injects the build_all_targets information into each matrix output:
+        build_all_targets:
+          - ${{ needs.create_release.outputs.build_all_targets }}
+
+        # Exclude all non-main build targets if we are not building for all targets:
+        exclude:
+          - build_all_targets:      'false'  # This is based on a script output and is therefore a string
+            config:
+              is_main_build_target: null
 
     runs-on:                        ${{ matrix.config.building_on_os }}
     container:                      ${{ matrix.config.building_container }}

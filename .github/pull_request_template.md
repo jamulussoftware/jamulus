@@ -32,3 +32,6 @@ CHANGELOG: <!-- Insert a short, end-user understandable sentence in past tense r
 -  [ ] My code follows the [style guide](https://github.com/jamulussoftware/jamulus/blob/master/CONTRIBUTING.md#source-code-consistency) <!-- You can also check if your code passes clang-format -->
 -  [ ] I waited some time after this Pull Request was opened and all GitHub checks completed without errors. <!-- GitHub doesn't run these checks for new contributors automatically. -->
 -  [ ] I've filled all the content above
+
+<!-- Uncomment the following line if your PR changes platform- or build-specific code: -->
+<!-- AUTOBUILD: Please build all targets -->

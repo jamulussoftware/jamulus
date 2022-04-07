@@ -458,14 +458,14 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     // custom directories
     // clang-format off
 // TODO compatibility to old version (< 3.6.1)
-QString strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
     // clang-format on
+    QString strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", "centralservaddr", "" );
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
     {
         // clang-format off
 // TODO compatibility to old version (< 3.8.2)
-strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", QString ( "centralservaddr%1" ).arg ( iIdx ), strDirectoryAddress );
         // clang-format on
+        strDirectoryAddress        = GetIniSetting ( IniXMLDocument, "client", QString ( "centralservaddr%1" ).arg ( iIdx ), strDirectoryAddress );
         vstrDirectoryAddress[iIdx] = GetIniSetting ( IniXMLDocument, "client", QString ( "directoryaddress%1" ).arg ( iIdx ), strDirectoryAddress );
         strDirectoryAddress        = "";
     }
@@ -473,17 +473,19 @@ strDirectoryAddress = GetIniSetting ( IniXMLDocument, "client", QString ( "centr
     // directory type
     // clang-format off
 // TODO compatibility to old version (<3.4.7)
-// only the case that "centralservaddr" was set in old ini must be considered
-if ( !vstrDirectoryAddress[0].isEmpty() && GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) && !bValue )
-{
-    eDirectoryType = AT_CUSTOM;
-}
-// TODO compatibility to old version (< 3.8.2)
-else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
-{
-    eDirectoryType = static_cast<EDirectoryType> ( iValue );
-}
     // clang-format on
+    // only the case that "centralservaddr" was set in old ini must be considered
+    if ( !vstrDirectoryAddress[0].isEmpty() && GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) && !bValue )
+    {
+        eDirectoryType = AT_CUSTOM;
+    }
+    // clang-format off
+// TODO compatibility to old version (< 3.8.2)
+    // clang-format on
+    else if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
+    {
+        eDirectoryType = static_cast<EDirectoryType> ( iValue );
+    }
     else if ( GetNumericIniSet ( IniXMLDocument, "client", "directorytype", 0, static_cast<int> ( AT_CUSTOM ), iValue ) )
     {
         eDirectoryType = static_cast<EDirectoryType> ( iValue );
@@ -822,8 +824,8 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         QString directoryAddress = "";
         // clang-format off
 // TODO compatibility to old version < 3.8.2
-directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", directoryAddress );
         // clang-format on
+        //      directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", directoryAddress );
         directoryAddress = GetIniSetting ( IniXMLDocument, "server", "directoryaddress", directoryAddress );
 
         pServer->SetDirectoryAddress ( directoryAddress );
@@ -843,40 +845,43 @@ directoryAddress = GetIniSetting ( IniXMLDocument, "server", "centralservaddr", 
     {
         // clang-format off
 // TODO compatibility to old version < 3.4.7
-if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
-{
-    directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
-}
-else
-            // clang-format on
-
+        // clang-format on
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
+        {
+            directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
+        }
+        else
             // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
             // clang-format off
 // TODO compatibility to old version < 3.8.2
-if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype", static_cast<int> ( AT_DEFAULT ), static_cast<int> ( AT_CUSTOM ), iValue ) )
-{
-    directoryType = static_cast<EDirectoryType> ( iValue );
-}
-else
             // clang-format on
             if ( GetNumericIniSet ( IniXMLDocument,
                                     "server",
-                                    "directorytype",
-                                    static_cast<int> ( AT_NONE ),
+                                    "centservaddrtype",
+                                    static_cast<int> ( AT_DEFAULT ),
                                     static_cast<int> ( AT_CUSTOM ),
                                     iValue ) )
-        {
-            directoryType = static_cast<EDirectoryType> ( iValue );
-        }
+            {
+                directoryType = static_cast<EDirectoryType> ( iValue );
+            }
+            else if ( GetNumericIniSet ( IniXMLDocument,
+                                         "server",
+                                         "directorytype",
+                                         static_cast<int> ( AT_NONE ),
+                                         static_cast<int> ( AT_CUSTOM ),
+                                         iValue ) )
+            {
+                directoryType = static_cast<EDirectoryType> ( iValue );
+            }
 
         // clang-format off
 // TODO compatibility to old version < 3.9.0
-// override type to AT_NONE if servlistenabled exists and is false
-if (  GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
-{
-    directoryType = AT_NONE;
-}
         // clang-format on
+        // override type to AT_NONE if servlistenabled exists and is false
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) && !bValue )
+        {
+            directoryType = AT_NONE;
+        }
     }
 
     pServer->SetDirectoryType ( directoryType );

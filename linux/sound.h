@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2022
  *
  * Author(s):
- *  Volker Fischer
+ *  Volker Fischer, revised and maintained by Peter Goderie (pgScorpio)
  *
  ******************************************************************************
  *
@@ -38,119 +38,74 @@
 #include "soundbase.h"
 #include "global.h"
 
-#if WITH_JACK
-#    include <jack/jack.h>
-#    include <jack/midiport.h>
-#endif
+#include "jackclient.h"
 
-/* Definitions ****************************************************************/
-#define NUM_IN_OUT_CHANNELS 2 // always stereo
+// Values for bool bInput/bIsInput
+#define biINPUT  true
+#define biOUTPUT false
 
-// the number of periods is critical for latency
-#define NUM_PERIOD_BLOCKS_IN  2
-#define NUM_PERIOD_BLOCKS_OUT 1
+//============================================================================
+// CSound:
+//============================================================================
 
-#define MAX_SND_BUF_IN  200
-#define MAX_SND_BUF_OUT 200
-
-/* Classes ********************************************************************/
-#if WITH_JACK
 class CSound : public CSoundBase
 {
     Q_OBJECT
 
+protected: // Jack:
+    CJackClient jackClient;
+    bool        bJackWasShutDown;
+    bool        bAutoConnect;
+    int         iJackNumInputs;
+
+    bool startJack();
+    bool stopJack();
+    bool checkCapabilities();
+    bool setBaseValues();
+
 public:
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* arg ),
-             void*          arg,
-             const QString& strMIDISetup,
-             const bool     bNoAutoJackConnect,
-             const QString& strJackClientName ) :
-        CSoundBase ( "Jack", fpNewProcessCallback, arg, strMIDISetup ),
-        iJACKBufferSizeMono ( 0 ),
-        bJackWasShutDown ( false ),
-        fInOutLatencyMs ( 0.0f )
+    CSound ( void ( *theProcessCallback ) ( CVector<short>& psData, void* arg ), void* theProcessCallbackArg );
+
+    virtual ~CSound()
     {
-        QString strJackName = QString ( APP_NAME );
-
-        if ( !strJackClientName.isEmpty() )
-        {
-            strJackName += " " + strJackClientName;
-        }
-
-        OpenJack ( bNoAutoJackConnect, strJackName.toLocal8Bit().data() );
+        Stop();
+        stopJack();
     }
-
-    virtual ~CSound() { CloseJack(); }
-
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
-    virtual void Start();
-    virtual void Stop();
-
-    virtual float GetInOutLatencyMs() { return fInOutLatencyMs; }
-
-    // these variables should be protected but cannot since we want
-    // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
-    int            iJACKBufferSizeMono;
-    int            iJACKBufferSizeStero;
-    bool           bJackWasShutDown;
-
-    jack_port_t* input_port_left;
-    jack_port_t* input_port_right;
-    jack_port_t* output_port_left;
-    jack_port_t* output_port_right;
-    jack_port_t* input_port_midi;
 
 protected:
-    void OpenJack ( const bool bNoAutoJackConnect, const char* jackClientName );
+    // CSound callbacks:
+    int onBufferSwitch ( jack_nframes_t nframes, void* arg );
 
-    void CloseJack();
+    int onBufferSizeCallback();
 
-    // callbacks
-    static int     process ( jack_nframes_t nframes, void* arg );
-    static int     bufferSizeCallback ( jack_nframes_t, void* arg );
-    static void    shutdownCallback ( void* );
-    jack_client_t* pJackClient;
+    void onShutdownCallback();
 
-    float fInOutLatencyMs;
+protected:
+    // static callbacks:
+    static int _BufferSwitch ( jack_nframes_t nframes, void* arg ) { return pSound->onBufferSwitch ( nframes, arg ); }
+
+    static int _BufferSizeCallback ( jack_nframes_t, void* ) { return pSound->onBufferSizeCallback(); }
+
+    static void _ShutdownCallback ( void* ) { pSound->onShutdownCallback(); }
+
+    //============================================================================
+    // Virtual interface to CSoundBase:
+    //============================================================================
+protected: // CSoundBase Mandatory pointer to instance (must be set to 'this' in the CSound constructor)
+    static CSound* pSound;
+
+public: // CSoundBase Mandatory functions. (but static functions can't be virtual)
+    static inline CSoundBase*             pInstance() { return pSound; }
+    static inline const CSoundProperties& GetProperties() { return pSound->getSoundProperties(); }
+
+protected:
+    virtual void onChannelSelectionChanged(){}; // Needed on macOS
+
+    virtual long         createDeviceList ( bool bRescan = false );                       // Fills strDeviceNames returns lNumDevices
+    virtual bool         checkDeviceChange ( tDeviceChangeCheck mode, int iDriverIndex ); // Performs the different actions for a device change
+    virtual unsigned int getDeviceBufferSize ( unsigned int iDesiredBufferSize ); // returns the nearest possible buffersize of selected device
+    virtual void         closeCurrentDevice();                                    // Closes the current driver and Clears Device Info
+    virtual bool         openDeviceSetup() { return false; }
+    virtual bool         start(); // Should call _onStarted() just before return
+    virtual bool         stop();  // Should call _onStopped() just before return
 };
-#else
-// no sound -> dummy class definition
-#    include "server.h"
-class CSound : public CSoundBase
-{
-    Q_OBJECT
-
-public:
-    CSound ( void ( *fpNewProcessCallback ) ( CVector<short>& psData, void* pParg ),
-             void*          pParg,
-             const QString& strMIDISetup,
-             const bool,
-             const QString& ) :
-        CSoundBase ( "nosound", fpNewProcessCallback, pParg, strMIDISetup ),
-        HighPrecisionTimer ( true )
-    {
-        HighPrecisionTimer.Start();
-        QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout, this, &CSound::OnTimer );
-    }
-    virtual ~CSound() {}
-    virtual int Init ( const int iNewPrefMonoBufferSize )
-    {
-        CSoundBase::Init ( iNewPrefMonoBufferSize );
-        vecsTemp.Init ( 2 * iNewPrefMonoBufferSize );
-        return iNewPrefMonoBufferSize;
-    }
-    CHighPrecisionTimer HighPrecisionTimer;
-    CVector<short>      vecsTemp;
-
-public slots:
-    void OnTimer()
-    {
-        vecsTemp.Reset ( 0 );
-        if ( IsRunning() )
-        {
-            ProcessCallback ( vecsTemp );
-        }
-    }
-};
-#endif // WITH_JACK

@@ -23,7 +23,7 @@ setup() {
     fi
 }
 
-prepare_signing() {
+check_if_signing() {
     [[ "${SIGN_IF_POSSIBLE:-0}" == "1" ]] || return 1
 
     # Signing was requested, now check all prerequisites:
@@ -34,6 +34,14 @@ prepare_signing() {
     [[ -n "${KEYCHAIN_PASSWORD:-}" ]] || return 1
 
     echo "Signing was requested and all dependencies are satisfied"
+
+    # Tell Github Workflow to disable CodeQL as it interferes with signing
+    echo "::set-output name=disable_codeql::true"
+    return 0
+}
+
+prepare_signing() {
+    check_if_signing || return 1
 
     # Put the cert to a file
     echo "${MACOS_CERTIFICATE}" | base64 --decode > certificate.p12
@@ -73,9 +81,9 @@ pass_artifact_to_job() {
 case "${1:-}" in
     setup)
         setup
-        # set up the macos_signed output if needed, but prevent
-        # a return status of 1 from propagating to the script exit status.
-        prepare_signing || true
+        # check whether signing will be used and prevent
+	# a return status of 1 from propagating to the script exit status.
+        check_if_signing || true
         ;;
     build)
         build_app_as_dmg_installer

@@ -222,7 +222,7 @@ jobs:
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
 
       - name:                       Initialize CodeQL
-        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
+        if:                         matrix.config.run_codeql && steps.setup.outputs.disable_codeql != 'true'
         uses:                       github/codeql-action/init@v1
         with:
           languages: 'cpp'
@@ -313,5 +313,5 @@ jobs:
           asset_content_type:       application/octet-stream
 
       - name:                       Perform CodeQL Analysis
-        if:                         matrix.config.run_codeql && steps.setup.outputs.macos_signed != 'true'
+        if:                         matrix.config.run_codeql && steps.setup.outputs.disable_codeql != 'true'
         uses:                       github/codeql-action/analyze@v1

@@ -41,8 +41,6 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
-QMAKE_UIC_FLAGS += -o src/Generated/$@
-
 LRELEASE_DIR = src/res/translation
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \

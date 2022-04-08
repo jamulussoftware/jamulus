@@ -863,17 +863,15 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         {
             directoryType = static_cast<EDirectoryType> ( iValue );
         }
-        else
-            // clang-format on
-            if ( GetNumericIniSet ( IniXMLDocument,
-                                    "server",
-                                    "directorytype",
-                                    static_cast<int> ( AT_NONE ),
-                                    static_cast<int> ( AT_CUSTOM ),
-                                    iValue ) )
-            {
-                directoryType = static_cast<EDirectoryType> ( iValue );
-            }
+        else if ( GetNumericIniSet ( IniXMLDocument,
+                                     "server",
+                                     "directorytype",
+                                     static_cast<int> ( AT_NONE ),
+                                     static_cast<int> ( AT_CUSTOM ),
+                                     iValue ) )
+        {
+            directoryType = static_cast<EDirectoryType> ( iValue );
+        }
 
         // clang-format off
 // TODO compatibility to old version < 3.9.0

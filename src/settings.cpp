@@ -848,30 +848,28 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         {
             directoryType = bValue ? AT_DEFAULT : AT_CUSTOM;
         }
-        else
-
-            // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
-            // clang-format off
+        // if "directorytype" itself is set, use it (note "AT_NONE", "AT_DEFAULT" and "AT_CUSTOM" are min/max directory type here)
+        // clang-format off
 // TODO compatibility to old version < 3.8.2
-            // clang-format on
-            if ( GetNumericIniSet ( IniXMLDocument,
-                                    "server",
-                                    "centservaddrtype",
-                                    static_cast<int> ( AT_DEFAULT ),
-                                    static_cast<int> ( AT_CUSTOM ),
-                                    iValue ) )
-            {
-                directoryType = static_cast<EDirectoryType> ( iValue );
-            }
-            else if ( GetNumericIniSet ( IniXMLDocument,
-                                         "server",
-                                         "directorytype",
-                                         static_cast<int> ( AT_NONE ),
-                                         static_cast<int> ( AT_CUSTOM ),
-                                         iValue ) )
-            {
-                directoryType = static_cast<EDirectoryType> ( iValue );
-            }
+        // clang-format on
+        else if ( GetNumericIniSet ( IniXMLDocument,
+                                     "server",
+                                     "centservaddrtype",
+                                     static_cast<int> ( AT_DEFAULT ),
+                                     static_cast<int> ( AT_CUSTOM ),
+                                     iValue ) )
+        {
+            directoryType = static_cast<EDirectoryType> ( iValue );
+        }
+        else if ( GetNumericIniSet ( IniXMLDocument,
+                                     "server",
+                                     "directorytype",
+                                     static_cast<int> ( AT_NONE ),
+                                     static_cast<int> ( AT_CUSTOM ),
+                                     iValue ) )
+        {
+            directoryType = static_cast<EDirectoryType> ( iValue );
+        }
 
         // clang-format off
 // TODO compatibility to old version < 3.9.0

@@ -23,7 +23,6 @@
 \******************************************************************************/
 
 #include "client.h"
-#include <QMessagebox.h>
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,

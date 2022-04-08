@@ -41,6 +41,8 @@ contains(CONFIG, "headless") {
     QT += widgets
 }
 
+QMAKE_UIC_FLAGS += -o src/Generated/$@
+
 LRELEASE_DIR = src/res/translation
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
@@ -54,7 +56,14 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_sv_SE.ts \
     src/res/translation/translation_zh_CN.ts
 
-INCLUDEPATH += src
+OBJECTS_DIR = obj
+
+MOC_DIR = src/Generated
+
+UI_DIR = src/Generated
+
+INCLUDEPATH += src/Generated \
+    src 
 
 INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/celt \

@@ -167,20 +167,19 @@ QString CSoundBase::SetDev ( const QString strDevName )
         if ( !vsErrorList.isEmpty() )
         {
             // create error message with all details
-            QString sErrorMessage = "<b>" + QString ( tr ( "No usable %1 audio device found." ) ).arg ( strSystemDriverTechniqueName ) +
-                                    "</b><br><br>" + tr ( "These are all the available drivers with error messages:" ) + "<ul>";
+            QString sErrorMessage =
+                tr ( "<b>%1 couldn't find a usable %2 audio device.</b><br><br>" ).arg ( APP_NAME ).arg ( strSystemDriverTechniqueName );
 
             for ( int i = 0; i < lNumDevs; i++ )
             {
-                sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "</li>";
+                sErrorMessage += "<b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "<br><br>";
             }
-            sErrorMessage += "</ul>";
 
 #if defined( _WIN32 ) && !defined( WITH_JACK )
             // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
             // offer the user under Windows that we open the driver setups of all registered
             // ASIO drivers
-            sErrorMessage += "<br/>" + tr ( "Do you want to open the ASIO driver setup to try changing your configuration to a working state?" );
+            sErrorMessage += "<br>" + tr ( "You may be able to fix errors in the driver settings. Do you want to open these settings now?" );
 
             if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes | QMessageBox::No ) )
             {

@@ -359,6 +359,7 @@ FORMS_GUI = src/aboutdlgbase.ui \
 HEADERS += src/buffer.h \
     src/channel.h \
     src/global.h \
+    src/messages.h \
     src/protocol.h \
     src/recorder/jamcontroller.h \
     src/threadpool.h \
@@ -470,6 +471,7 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
 SOURCES += src/buffer.cpp \
     src/channel.cpp \
     src/main.cpp \
+    src/messages.cpp \
     src/protocol.cpp \
     src/recorder/jamcontroller.cpp \
     src/server.cpp \

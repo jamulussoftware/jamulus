@@ -26,9 +26,9 @@
 #include <QDir>
 #include <iostream>
 #include "global.h"
+#include "messages.h"
 #ifndef HEADLESS
 #    include <QApplication>
-#    include <QMessageBox>
 #    include "serverdlg.h"
 #    ifndef SERVER_ONLY
 #        include "clientdlg.h"
@@ -900,6 +900,9 @@ int main ( int argc, char** argv )
                                        bEnableIPv6,
                                        nullptr );
 
+                // initialise message boxes
+                CMessages::init ( &ClientDlg, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
                 // show dialog
                 ClientDlg.show();
                 pApp->exec();
@@ -909,6 +912,9 @@ int main ( int argc, char** argv )
             {
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+
+                // initialise message boxes
+                CMessages::init ( NULL, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
 
                 pApp->exec();
             }
@@ -960,6 +966,9 @@ int main ( int argc, char** argv )
                 // GUI object for the server
                 CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
 
+                // initialise message boxes
+                CMessages::init ( &ServerDlg, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
                 // show dialog (if not the minimized flag is set)
                 if ( !bStartMinimized )
                 {
@@ -981,6 +990,9 @@ int main ( int argc, char** argv )
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
 
+                // initialise message boxes
+                CMessages::init ( NULL, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
+
                 pApp->exec();
             }
         }
@@ -989,17 +1001,10 @@ int main ( int argc, char** argv )
     catch ( const CGenErr& generr )
     {
         // show generic error
-#ifndef HEADLESS
-        if ( bUseGUI )
-        {
-            QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
-        }
-        else
+        CMessages::ShowError ( generr.GetErrorText() );
+#ifdef HEADLESS
+        exit ( 1 );
 #endif
-        {
-            qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( generr.GetErrorText() ) );
-            exit ( 1 );
-        }
     }
 
 #if defined( Q_OS_MACX )

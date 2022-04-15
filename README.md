@@ -47,6 +47,7 @@ to thank the maintainers of these projects for making their efforts available to
   [ccrma.stanford.edu/software/stk/](https://ccrma.stanford.edu/software/stk/)
 *   Some pixmaps are from the Open Clip Art Library (OCAL): [openclipart.com](https://openclipart.org/)
 *   Country flag icons from Mark James: [famfamfam.com](http://www.famfamfam.com)
+*   ASIO is a trademark and software of Steinberg Media Technologies GmbH
 
 
 We would also like to acknowledge the contributors listed in the

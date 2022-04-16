@@ -357,20 +357,3 @@ public:
     int iStatus;
     int iChanNum;
 };
-
-/* Prototypes for global functions ********************************************/
-// command line parsing, TODO do not declare functions globally but in a class
-QString UsageArguments ( char** argv );
-
-bool GetFlagArgument ( char** argv, int& i, QString strShortOpt, QString strLongOpt );
-
-bool GetStringArgument ( int argc, char** argv, int& i, QString strShortOpt, QString strLongOpt, QString& strArg );
-
-bool GetNumericArgument ( int     argc,
-                          char**  argv,
-                          int&    i,
-                          QString strShortOpt,
-                          QString strLongOpt,
-                          double  rRangeStart,
-                          double  rRangeStop,
-                          double& rValue );

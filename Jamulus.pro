@@ -88,6 +88,14 @@ win32 {
             advapi32.lib \
             winmm.lib \
             ws2_32.lib
+        greaterThan(QT_MAJOR_VERSION, 5) {
+            # Qt5 had a special qtmain library which took care of forwarding the MSVC default WinMain() entrypoint to
+            # the platform-agnostic main().
+            # Qt6 is still supposed to have that lib under the new name QtEntryPoint. As it does not seem
+            # to be effective when building with qmake, we are rather instructing MSVC to use the platform-agnostic
+            # main() entrypoint directly:
+            QMAKE_LFLAGS += /subsystem:windows /ENTRY:mainCRTStartup
+        }
     }
 
     contains(CONFIG, "serveronly") {

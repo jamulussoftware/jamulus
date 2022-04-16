@@ -96,7 +96,7 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 ; Supported languages configuration
 ; Additional languages can be added in the file installerlng.nsi in the wininstaller folder, see https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi
 
-!include "${ROOT_PATH}\src\res\translation\wininstaller\installerlng.nsi"
+!include "${ROOT_PATH}\src\translation\wininstaller\installerlng.nsi"
 
 ; Abort the installer/uninstaller if Jamulus is running
 

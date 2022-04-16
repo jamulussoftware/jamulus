@@ -137,11 +137,11 @@ def main(from_, to):
 
 
 def print_code_contributors(from_, to):
-    return print_contributors('Code contributors', ['.', ':!src/res/translation'], from_, to)
+    return print_contributors('Code contributors', ['.', ':!src/translation'], from_, to)
 
 
 def print_app_translators(from_, to):
-    return print_contributors('Application translators', ['src/res/translation'], from_, to)
+    return print_contributors('Application translators', ['src/translation'], from_, to)
 
 
 def print_website_contributors(from_, to):

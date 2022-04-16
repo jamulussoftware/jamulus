@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'src/res/translation/**'
+      - 'src/translation/**'
 
 jobs:
   translation-check:
@@ -18,4 +18,4 @@ jobs:
       - name: "Check Windows installer translations"
         run: ./tools/check-wininstaller-translations.sh
       #- name: "Check for duplicate hotkeys (will not fail)"
-      #  run: sudo apt install libxml-simple-perl && cd src/res/translation/ && perl ./tools/checkkeys.pl
+      #  run: sudo apt install libxml-simple-perl && cd src/translation/ && perl ./tools/checkkeys.pl

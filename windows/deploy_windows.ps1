@@ -319,7 +319,7 @@ Function Build-Installer
 # Build and copy NS-Process dll
 Function Build-NSProcess
 {
-    if (!(Test-Path -path "$WindowsPath\nsProcess.dll")) {
+    if (!(Test-Path -path "$RootPath\NSIS\nsProcess.dll")) {
 
         echo "Building nsProcess..."
 
@@ -327,11 +327,11 @@ Function Build-NSProcess
         Initialize-Build-Environment -BuildArch "x86"
 
         Invoke-Native-Command -Command "msbuild" `
-            -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
+            -Arguments ("$RootPath\libs\NSIS\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
             "/p:Platform=Win32")
 
-        Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
-        Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
+        Move-Item -Path "$RootPath\libs\NSIS\nsProcess\Release\nsProcess.dll" -Destination "$RootPath\libs\NSIS\nsProcess.dll" -Force
+        Remove-Item -Path "$RootPath\libs\NSIS\nsProcess\Release\" -Force -Recurse
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
 }

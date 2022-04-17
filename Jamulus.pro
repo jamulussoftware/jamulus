@@ -1144,6 +1144,6 @@ contains(CONFIG, "disable_version_check") {
 # be sure to update .github/workflows/coding-style-check.yml and .clang-format-ignore as well.
 CLANG_FORMAT_SOURCES = $$files(*.cpp, true) $$files(*.mm, true) $$files(*.h, true)
 CLANG_FORMAT_SOURCES = $$find(CLANG_FORMAT_SOURCES, ^\(android|ios|mac|linux|src|windows\)/)
-CLANG_FORMAT_SOURCES ~= s!^\(windows/nsProcess/|libs/ASIOSDK2/|src/res/qrc_resources\.cpp\)\S*$!!g
+CLANG_FORMAT_SOURCES ~= s!^\(libs/\(NSIS|ASIOSDK2\)/|src/res/qrc_resources\.cpp\)\S*$!!g
 clang_format.commands = 'clang-format -i $$CLANG_FORMAT_SOURCES'
 QMAKE_EXTRA_TARGETS += clang_format

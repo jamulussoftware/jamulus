@@ -4,4 +4,3 @@
 # When updating this list, remember to update Jamulus.pro's CLANG_SOURCES
 # as well.
 ./libs
-./windows/nsProcess

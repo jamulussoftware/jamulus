@@ -21,9 +21,9 @@ src/res/qrc_resources.cpp
 libs/ASIOSDK2
 windows/VC_redist.x64.exe
 windows/vc_redist.x86.exe
-windows/nsProcess.dll
+libs/NSIS/nsProcess.dll
 windows/NSIS
-windows/nsProcess/Release/
+libs/NSIS/nsProcess/Release/
 debug/
 release/
 build/

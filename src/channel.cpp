@@ -59,11 +59,11 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     // Connections -------------------------------------------------------------
 
-    // clang-format off
-// TODO if we later do not fire vectors in the emits, we can remove this again
-qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
-qRegisterMetaType<CHostAddress> ( "CHostAddress" );
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // if we later do not fire vectors in the emits, we can remove this again
+    qRegisterMetaType<CVector<uint8_t>> ( "CVector<uint8_t>" );
+    qRegisterMetaType<CHostAddress> ( "CHostAddress" );
+    //### TODO: END ###//
 
     QObject::connect ( &Protocol, &CProtocol::MessReadyForSending, this, &CChannel::OnSendProtMessage );
 

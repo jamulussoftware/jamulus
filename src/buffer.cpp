@@ -639,23 +639,23 @@ void CNetBufWithStats::UpdateAutoSetting()
     // apply non-linear IIR filter
     MathUtils().UpDownIIR1 ( dCurIIRFilterResult, static_cast<double> ( iCurDecision ), dWeightUp, dWeightDown );
 
-    // clang-format off
-/*
-// TEST store important detection parameters in file for debugging
-static FILE* pFile = fopen ( "test.dat", "w" );
-static int icnt = 0;
-if ( icnt == 50 )
-{
-    fprintf ( pFile, "%d %e\n", iCurDecision, dCurIIRFilterResult );
-    fflush ( pFile );
-    icnt = 0;
-}
-else
-{
-    icnt++;
-}
-*/
-    // clang-format on
+    //### TEST: BEGIN ###//
+    // TEST store important detection parameters in file for debugging
+    /*
+    static FILE* pFile = fopen ( "test.dat", "w" );
+    static int icnt = 0;
+    if ( icnt == 50 )
+    {
+        fprintf ( pFile, "%d %e\n", iCurDecision, dCurIIRFilterResult );
+        fflush ( pFile );
+        icnt = 0;
+    }
+    else
+    {
+        icnt++;
+    }
+    */
+    //### TEST: END ###//
 
     // apply a hysteresis
     iCurAutoBufferSizeSetting = MathUtils().DecideWithHysteresis ( dCurIIRFilterResult, iCurDecidedResult, dHysteresisValue );

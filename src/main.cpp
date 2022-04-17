@@ -812,10 +812,10 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE ( resources );
 
 #ifndef SERVER_ONLY
-    // clang-format off
-// TEST -> activate the following line to activate the test bench,
-//CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
-// clang-format on
+    //### TEST: BEGIN ###//
+    // activate the following line to activate the test bench,
+    // CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
+    //### TEST: END ###//
 #endif
 
     CRpcServer* pRpcServer = nullptr;

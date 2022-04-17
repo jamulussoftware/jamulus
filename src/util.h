@@ -689,11 +689,12 @@ enum ESkillLevel
 class CStereoSignalLevelMeter
 {
 public:
-    // clang-format off
-// TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
-//      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size with a factor of 0.99.
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
+    //      But tests with 128 and 64 samples frame size have shown that the meter fly back
+    //      is ok for both numbers of samples frame size with a factor of 0.99.
+    //### TODO: END ###//
+
     CStereoSignalLevelMeter ( const bool bNIsStereoOut = true, const double dNSmoothingFactor = 0.99 ) :
         dSmoothingFactor ( dNSmoothingFactor ),
         bIsStereoOut ( bNIsStereoOut )
@@ -784,9 +785,9 @@ public:
     static EInstCategory GetCategory ( const int iInstrument );
     static void          UpdateTableOnLanguageChange() { GetTable ( true ); }
 
-    // clang-format off
-// TODO make use of instrument category (not yet implemented)
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // make use of instrument category (not yet implemented)
+    //### TODO: END ###//
 
 protected:
     class CInstPictProps

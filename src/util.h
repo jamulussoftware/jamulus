@@ -23,11 +23,39 @@
 \******************************************************************************/
 
 #pragma once
-
+#include <vector>
+#include <algorithm>
+#ifdef _WIN32
+#    include <winsock2.h>
+#    include <ws2tcpip.h>
+#    include <windows.h>
+#    include <mmsystem.h>
+#elif defined( __APPLE__ ) || defined( __MACOSX )
+// using mach timers for Mac
+#    include <mach/mach.h>
+#    include <mach/mach_error.h>
+#    include <mach/mach_time.h>
+#else
+// using mach nanosleep for Linux
+#    include <sys/time.h>
+#endif
 #include <QCoreApplication>
 #include <QUdpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
+#include <QFile>
+#include <QDirIterator>
+#include <QRegularExpression>
+#include <QTranslator>
+#include <QLibraryInfo>
+#include <QUrl>
+#include <QLocale>
+#include <QElapsedTimer>
+#include <QTextBoundaryFinder>
+#include <QTimer>
+#ifndef _WIN32
+#    include <QThread>
+#endif
 #ifndef HEADLESS
 #    include <QMessageBox>
 #    include <QMenu>
@@ -43,30 +71,8 @@
 #    include <QStackedLayout>
 #    include "ui_aboutdlgbase.h"
 #endif
-#include <QFile>
-#include <QDirIterator>
-#include <QRegularExpression>
-#include <QTranslator>
-#include <QLibraryInfo>
-#include <QUrl>
-#include <QLocale>
-#include <QElapsedTimer>
-#include <QTextBoundaryFinder>
-#include <vector>
-#include <algorithm>
+
 #include "global.h"
-#ifdef _WIN32
-#    include <winsock2.h>
-#    include <ws2tcpip.h>
-#    include <windows.h>
-#    include <mmsystem.h>
-#elif defined( __APPLE__ ) || defined( __MACOSX )
-#    include <mach/mach.h>
-#    include <mach/mach_error.h>
-#    include <mach/mach_time.h>
-#else
-#    include <sys/time.h>
-#endif
 
 #ifndef SERVER_ONLY
 class CClient; // forward declaration of CClient
@@ -1205,7 +1211,9 @@ public:
     }
 };
 
-// Timing measurement ----------------------------------------------------------
+/******************************************************************************\
+* Timing measurement                                                           *
+\******************************************************************************/
 // intended for debugging the timing jitter of the sound card or server timer
 class CTimingMeas
 {
@@ -1260,6 +1268,64 @@ protected:
     QElapsedTimer ElapsedTimer;
     int           iCnt;
 };
+
+// High resolution timer
+#if ( defined( WIN32 ) || defined( _WIN32 ) )
+// using QTimer for Windows
+class CHighPrecisionTimer : public QObject
+{
+    Q_OBJECT
+
+public:
+    CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize );
+
+    void Start();
+    void Stop();
+    bool isActive() const { return Timer.isActive(); }
+
+protected:
+    QTimer       Timer;
+    CVector<int> veciTimeOutIntervals;
+    int          iCurPosInVector;
+    int          iIntervalCounter;
+    bool         bUseDoubleSystemFrameSize;
+
+public slots:
+    void OnTimer();
+
+signals:
+    void timeout();
+};
+#else
+
+class CHighPrecisionTimer : public QThread
+{
+    Q_OBJECT
+
+public:
+    CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize );
+
+    void Start();
+    void Stop();
+    bool isActive() { return bRun; }
+
+protected:
+    virtual void run();
+
+    bool     bRun;
+
+#    if defined( __APPLE__ ) || defined( __MACOSX )
+    uint64_t Delay;
+    uint64_t NextEnd;
+#    else
+    long     Delay;
+    timespec NextEnd;
+#    endif
+
+signals:
+    void timeout();
+};
+#endif
 
 /******************************************************************************\
 * Statistics                                                                   *

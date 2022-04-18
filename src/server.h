@@ -25,7 +25,6 @@
 #pragma once
 
 #include <QObject>
-#include <QTimer>
 #include <QDateTime>
 #include <QHostAddress>
 #include <QFileInfo>
@@ -52,71 +51,6 @@
 #define INVALID_CHANNEL_ID ( MAX_NUM_CHANNELS + 1 )
 
 /* Classes ********************************************************************/
-#if ( defined( WIN32 ) || defined( _WIN32 ) )
-// using QTimer for Windows
-class CHighPrecisionTimer : public QObject
-{
-    Q_OBJECT
-
-public:
-    CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize );
-
-    void Start();
-    void Stop();
-    bool isActive() const { return Timer.isActive(); }
-
-protected:
-    QTimer       Timer;
-    CVector<int> veciTimeOutIntervals;
-    int          iCurPosInVector;
-    int          iIntervalCounter;
-    bool         bUseDoubleSystemFrameSize;
-
-public slots:
-    void OnTimer();
-
-signals:
-    void timeout();
-};
-#else
-// using mach timers for Mac and nanosleep for Linux
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-#        include <mach/mach.h>
-#        include <mach/mach_error.h>
-#        include <mach/mach_time.h>
-#    else
-#        include <sys/time.h>
-#    endif
-
-class CHighPrecisionTimer : public QThread
-{
-    Q_OBJECT
-
-public:
-    CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize );
-
-    void Start();
-    void Stop();
-    bool isActive() { return bRun; }
-
-protected:
-    virtual void run();
-
-    bool     bRun;
-
-#    if defined( __APPLE__ ) || defined( __MACOSX )
-    uint64_t Delay;
-    uint64_t NextEnd;
-#    else
-    long     Delay;
-    timespec NextEnd;
-#    endif
-
-signals:
-    void timeout();
-};
-#endif
-
 template<unsigned int slotId>
 class CServerSlots : public CServerSlots<slotId - 1>
 {

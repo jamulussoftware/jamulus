@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2022
+ * Copyright (c) 2022-2022
  *
  * Author(s):
  *  The Jamulus Development Team

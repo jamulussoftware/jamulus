@@ -34,7 +34,7 @@ CLevelMeter::CLevelMeter ( QWidget* parent ) : QWidget ( parent ), eLevelMeterTy
     QWidget*     pLEDMeter  = new QWidget();
     QVBoxLayout* pLEDLayout = new QVBoxLayout ( pLEDMeter );
     pLEDLayout->setAlignment ( Qt::AlignHCenter );
-    pLEDLayout->setMargin ( 0 );
+    pLEDLayout->setContentsMargins ( 0, 0, 0, 0 );
     pLEDLayout->setSpacing ( 0 );
 
     // create LEDs plus the clip LED

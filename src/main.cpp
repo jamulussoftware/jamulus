@@ -1051,7 +1051,7 @@ QString UsageArguments ( char** argv )
            "  -L, --licence         show an agreement window before users can connect\n"
            "  -m, --htmlstatus      enable HTML status file, set file name\n"
            "  -o, --serverinfo      registration info for this Server.  Format:\n"
-           "                        [name];[city];[country as QLocale ID]\n"
+           "                        [name];[city];[country as Qt5 QLocale ID]\n"
            "      --serverpublicip  public IP address for this Server.  Needed when\n"
            "                        registering with a server list hosted\n"
            "                        behind the same NAT\n"

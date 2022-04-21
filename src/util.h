@@ -648,7 +648,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
         return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
-    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
+    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value %1" ) ).arg ( eSvrRegStatus );
 }
 
 // Directory server registration outcome ---------------------------------------
@@ -813,10 +813,40 @@ protected:
 class CLocale
 {
 public:
-    static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
+    static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry /* Always a Qt5 (!) code */ );
     static QMap<QString, QString>  GetAvailableTranslations();
     static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
     static void                    LoadTranslation ( const QString strLanguage, QCoreApplication* pApp );
+    static QLocale::Country        WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode );
+    static unsigned short          QtCountryToWireFormatCountryCode ( const QLocale::Country eCountry );
+    static bool                    IsCountryCodeSupported ( unsigned short iCountryCode );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    // ./tools/qt5-to-qt6-country-code-table.py generates these lists:
+    constexpr int const static wireFormatToQt6Table[] = {
+        0,   1,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
+        29,  30,  31,  32,  33,  35,  36,  37,  38,  39,  40,  41,  43,  45,  46,  48,  49,  50,  51,  53,  54,  55,  57,  56,  58,  59,  118,
+        60,  61,  63,  64,  65,  67,  68,  69,  232, 70,  71,  72,  73,  74,  75,  77,  80,  81,  82,  83,  84,  100, 85,  86,  87,  88,  89,
+        90,  91,  92,  93,  94,  95,  96,  97,  98,  99,  102, 101, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 116, 117, 119,
+        120, 122, 123, 124, 125, 174, 218, 127, 128, 129, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147,
+        148, 149, 150, 151, 152, 153, 154, 155, 156, 158, 159, 160, 161, 162, 163, 164, 165, 62,  166, 167, 168, 170, 169, 171, 172, 173, 175,
+        176, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 197, 198, 201, 202, 203, 204, 205, 206, 208,
+        209, 210, 212, 213, 214, 215, 216, 217, 220, 221, 196, 200, 222, 223, 224, 76,  225, 226, 227, 228, 229, 230, 231, 233, 234, 235, 236,
+        238, 239, 240, 241, 242, 243, 244, 245, 246, 248, 247, 250, 251, 252, 253, 254, 255, 34,  249, 256, 257, 259, 42,  260, 261, 52,  157,
+        207, 195, 199, 130, 14,  2,   66,  47,  115, 121, 237, 219, 44,  211, 126, 79,  177, 258, 78,
+    };
+    constexpr int const static qt6CountryToWireFormat[] = {
+        0,   1,   248, 2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  247, 13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,
+        25,  26,  27,  28,  29,  30,  31,  233, 32,  33,  34,  35,  36,  37,  38,  238, 39,  255, 40,  41,  250, 42,  43,  44,  45,  241, 46,
+        47,  48,  50,  49,  51,  52,  54,  55,  152, 56,  57,  58,  249, 59,  60,  61,  63,  64,  65,  66,  67,  68,  204, 69,  261, 258, 70,
+        71,  72,  73,  74,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  75,  92,  91,  93,  94,  95,  96,  97,
+        98,  99,  100, 101, 102, 103, 104, 251, 105, 106, 53,  107, 108, 252, 109, 110, 111, 112, 257, 115, 116, 117, 246, 118, 119, 120, 121,
+        122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 242, 144, 145, 146, 147,
+        148, 149, 150, 151, 153, 154, 155, 157, 156, 158, 159, 160, 113, 161, 162, 259, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173,
+        174, 175, 176, 177, 178, 179, 244, 199, 180, 181, 245, 200, 182, 183, 184, 185, 186, 187, 243, 188, 189, 190, 256, 191, 192, 193, 194,
+        195, 196, 114, 254, 197, 198, 201, 202, 203, 205, 206, 207, 208, 209, 210, 211, 62,  212, 213, 214, 215, 253, 216, 217, 218, 219, 220,
+        221, 222, 223, 224, 226, 225, 234, 227, 228, 229, 230, 231, 232, 235, 236, 260, 237, 239, 240,
+    };
+#endif
 };
 
 // Info of a channel -----------------------------------------------------------
@@ -1213,7 +1243,7 @@ public:
                         for ( int i = 0; i < iNumMeas; i++ )
                         {
                             // convert ns in ms and store the value
-                            streamFile << i << " " << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << endl;
+                            streamFile << i << " " << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << "\n";
                         }
                     }
                 }

@@ -938,19 +938,16 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 #if defined( Q_OS_MACX )
     // for MacOS only we show the number of connected clients as a
     // badge label text if more than one user is connected
-    // (only available in Qt5.2)
-#    if QT_VERSION >= QT_VERSION_CHECK( 5, 2, 0 )
     if ( iNumClients > 1 )
     {
         // show the number of connected clients
-        QtMac::setBadgeLabelText ( QString ( "%1" ).arg ( iNumClients ) );
+        SetMacBadgeLabelText ( QString ( "%1" ).arg ( iNumClients ) );
     }
     else
     {
         // clear the text (apply an empty string)
-        QtMac::setBadgeLabelText ( "" );
+        SetMacBadgeLabelText ( "" );
     }
-#    endif
 #endif
 }
 

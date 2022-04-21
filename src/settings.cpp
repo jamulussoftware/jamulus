@@ -296,7 +296,7 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     // country
     if ( GetNumericIniSet ( IniXMLDocument, "client", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
     {
-        pClient->ChannelInfo.eCountry = static_cast<QLocale::Country> ( iValue );
+        pClient->ChannelInfo.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iValue );
     }
     else
     {
@@ -636,7 +636,7 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     SetNumericIniSet ( IniXMLDocument, "client", "instrument", pClient->ChannelInfo.iInstrument );
 
     // country
-    SetNumericIniSet ( IniXMLDocument, "client", "country", static_cast<int> ( pClient->ChannelInfo.eCountry ) );
+    SetNumericIniSet ( IniXMLDocument, "client", "country", CLocale::QtCountryToWireFormatCountryCode ( pClient->ChannelInfo.eCountry ) );
 
     // city
     PutIniSetting ( IniXMLDocument, "client", "city_base64", ToBase64 ( pClient->ChannelInfo.strCity ) );
@@ -784,7 +784,7 @@ void CServerSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         // country
         if ( GetNumericIniSet ( IniXMLDocument, "server", "country", 0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
         {
-            pServer->SetServerCountry ( static_cast<QLocale::Country> ( iValue ) );
+            pServer->SetServerCountry ( CLocale::WireFormatCountryCodeToQtCountry ( iValue ) );
         }
     }
 
@@ -921,7 +921,7 @@ void CServerSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
     PutIniSetting ( IniXMLDocument, "server", "city", pServer->GetServerCity() );
 
     // country
-    SetNumericIniSet ( IniXMLDocument, "server", "country", static_cast<int> ( pServer->GetServerCountry() ) );
+    SetNumericIniSet ( IniXMLDocument, "server", "country", CLocale::QtCountryToWireFormatCountryCode ( pServer->GetServerCountry() ) );
 
     // norecord flag
     SetFlagIniSet ( IniXMLDocument, "server", "norecord", pServer->GetDisableRecording() );

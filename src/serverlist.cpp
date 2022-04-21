@@ -771,7 +771,7 @@ void CServerListManager::Save()
                                         .arg ( ServerList[iIdx].HostAddr.toString() )
                                         .arg ( ServerList[iIdx].LHostAddr.toString() )
                                         .arg ( ServerList[iIdx].strName ) );
-        out << ServerList[iIdx].toCSV() << "\n";
+        out << ServerList[iIdx].toCSV() << '\n';
     }
 }
 

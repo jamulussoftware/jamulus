@@ -1202,7 +1202,42 @@ CInstPictures::EInstCategory CInstPictures::GetCategory ( const int iInstrument 
 }
 
 // Locale management class -----------------------------------------------------
-QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry )
+QLocale::Country CLocale::WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    // The Jamulus protocol wire format gives us Qt5 country IDs.
+    // Qt6 changed those IDs, so we have to convert back:
+    return (QLocale::Country) wireFormatToQt6Table[iCountryCode];
+#else
+    return (QLocale::Country) iCountryCode;
+#endif
+}
+
+unsigned short CLocale::QtCountryToWireFormatCountryCode ( const QLocale::Country eCountry )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    // The Jamulus protocol wire format expects Qt5 country IDs.
+    // Qt6 changed those IDs, so we have to convert back:
+    return qt6CountryToWireFormat[(unsigned short) eCountry];
+#else
+    return (unsigned short) eCountry;
+#endif
+}
+
+bool CLocale::IsCountryCodeSupported ( unsigned short iCountryCode )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    // On newer Qt versions there might be codes which do not have a Qt5 equivalent.
+    // We have no way to support those sanely right now.
+    return qt6CountryToWireFormat[iCountryCode] != -1;
+#else
+    // All Qt5 codes are supported.
+    Q_UNUSED ( iCountryCode );
+    return true;
+#endif
+}
+
+QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry /* Qt-native value */ )
 {
     QString strReturn = "";
 

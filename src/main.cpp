@@ -60,7 +60,7 @@ int main ( int argc, char** argv )
 
 #if defined( Q_OS_MACX )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
-    // Qt will not show these with underline characters in the GUI on MacOS.
+    // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
 #endif
 

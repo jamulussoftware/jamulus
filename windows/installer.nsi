@@ -54,8 +54,13 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 !define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome.bmp"
+!if ${BUILD_OPTION} == "jackonwindows"
+    !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
+    !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome.bmp"
+!else
+    !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome-asio.bmp"
+    !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome-asio.bmp"
+!endif
 
 ; Store the installer language - must be placed before the installer page configuration
 !define MUI_LANGDLL_REGISTRY_ROOT      HKLM
@@ -64,6 +69,10 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
 ; Installer page configuration
 !define MUI_PAGE_CUSTOMFUNCTION_PRE AbortOnRunningApp
+; Add ASIO label to Welcome Page when not using JACK
+!if ${BUILD_OPTION} != "jackonwindows"
+    !define MUI_PAGE_CUSTOMFUNCTION_SHOW WelcomeFinishShowASIO
+!endif
 !insertmacro MUI_PAGE_WELCOME
 
 ; Display dialog based on BuildOption set
@@ -88,9 +97,17 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
 ; Uninstaller page configuration
 !define MUI_PAGE_CUSTOMFUNCTION_PRE un.AbortOnRunningApp
+; Add ASIO label to Welcome Page when not using JACK
+!if ${BUILD_OPTION} != "jackonwindows"
+    !define MUI_PAGE_CUSTOMFUNCTION_SHOW un.WelcomeFinishShowASIO
+!endif
 !insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+; Add ASIO label to Finish Page when not using JACK
+!if ${BUILD_OPTION} != "jackonwindows"
+    !define MUI_PAGE_CUSTOMFUNCTION_SHOW un.WelcomeFinishShowASIO
+!endif
 !insertmacro MUI_UNPAGE_FINISH
 
 ; Supported languages configuration
@@ -111,6 +128,21 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
     ${EndIf}
 
 !macroend
+
+; Functions to update Welcome/Finish Page - Add Label for ASIO
+!if ${BUILD_OPTION} != "jackonwindows"
+    Function WelcomeFinishShowASIO
+        ${NSD_CreateLabel} 120u 168u 55% -20u "ASIO is a registered trademark of$\nSteinberg Media Technologies GmbH"
+        Pop $0
+        SetCtlColors $0 "" "transparent"
+    FunctionEnd
+
+    Function un.WelcomeFinishShowASIO
+        ${NSD_CreateLabel} 120u 168u 55% -20u "ASIO is a registered trademark of$\nSteinberg Media Technologies GmbH"
+        Pop $0
+        SetCtlColors $0 "" "transparent"
+    FunctionEnd
+!endif
 
 ; Define Dialog variables
 
@@ -369,6 +401,11 @@ Function FinishPage.Show ; set the user choices if they were remembered
     ${EndIf}
 
     ShowWindow $mui.FinishPage.Run 1
+
+    !if ${BUILD_OPTION} != "jackonwindows"
+        ; Add ASIO label to dialog when not using JACK
+        Call WelcomeFinishShowASIO
+    !endif
 
 FunctionEnd
 

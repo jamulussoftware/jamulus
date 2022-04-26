@@ -808,7 +808,7 @@ int main ( int argc, char** argv )
     // Application/GUI setup ---------------------------------------------------
     // Application object
 #ifdef HEADLESS
-    QCoreApplication* pApp = new QCoreApplication ( argc, argv );
+    pApp = new QCoreApplication ( argc, argv );
 #else
 #    if defined( Q_OS_IOS )
     bUseGUI        = true;

@@ -343,6 +343,31 @@ protected:
     QString strErrorType;
 };
 
+class CInfoExit
+{
+public:
+    CInfoExit ( QString strMsg ) : strInfoMsg ( strMsg ) {}
+
+    QString GetInfoMessage() const { return strInfoMsg; }
+
+protected:
+    QString strInfoMsg;
+};
+
+class CErrorExit
+{
+public:
+    CErrorExit ( int exitcode, QString strNewErrorMsg ) : iExitcode ( exitcode ), strErrorMsg ( strNewErrorMsg ) {}
+
+    QString GetErrorMessage() const { return strErrorMsg; }
+
+    int GetExitCode() const { return iExitcode; }
+
+protected:
+    QString strErrorMsg;
+    int     iExitcode;
+};
+
 class CCustomEvent : public QEvent
 {
 public:

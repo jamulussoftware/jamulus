@@ -61,8 +61,10 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 
 QCoreApplication* pApp       = NULL;
 CRpcServer*       pRpcServer = NULL;
-CClientRpc*       pClientRpc = NULL;
-CServerRpc*       pServerRpc = NULL;
+#ifndef SERVER_ONLY
+CClientRpc* pClientRpc = NULL;
+#endif
+CServerRpc* pServerRpc = NULL;
 
 void cleanup()
 {
@@ -72,11 +74,13 @@ void cleanup()
         pServerRpc = NULL;
     }
 
+#ifndef SERVER_ONLY
     if ( pClientRpc )
     {
         delete pClientRpc;
         pClientRpc = NULL;
     }
+#endif
 
     if ( pRpcServer )
     {

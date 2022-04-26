@@ -55,6 +55,42 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 
 // Implementation **************************************************************
 
+// NOTE: To prevent memory leaks any pointers assigned with new
+//       should be declared here and checked and deleted in reverse order of creation in cleanup().
+//       cleanup() should be called before any exit() !
+
+QCoreApplication* pApp       = NULL;
+CRpcServer*       pRpcServer = NULL;
+CClientRpc*       pClientRpc = NULL;
+CServerRpc*       pServerRpc = NULL;
+
+void cleanup()
+{
+    if ( pServerRpc )
+    {
+        delete pServerRpc;
+        pServerRpc = NULL;
+    }
+
+    if ( pClientRpc )
+    {
+        delete pClientRpc;
+        pClientRpc = NULL;
+    }
+
+    if ( pRpcServer )
+    {
+        delete pRpcServer;
+        pRpcServer = NULL;
+    }
+
+    if ( pApp )
+    {
+        delete pApp;
+        pApp = NULL;
+    }
+}
+
 int main ( int argc, char** argv )
 {
 
@@ -63,6 +99,7 @@ int main ( int argc, char** argv )
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
 #endif
+    int exit_code = 0;
 
     QString        strArgument;
     double         rDbleArgument;
@@ -136,6 +173,7 @@ int main ( int argc, char** argv )
         {
             const QString strHelp = UsageArguments ( argv );
             std::cout << qUtf8Printable ( strHelp );
+            cleanup();
             exit ( 0 );
         }
 
@@ -143,6 +181,7 @@ int main ( int argc, char** argv )
         if ( ( !strcmp ( argv[i], "--version" ) ) || ( !strcmp ( argv[i], "-v" ) ) )
         {
             std::cout << qUtf8Printable ( GetVersionAndNameStr ( false ) );
+            cleanup();
             exit ( 0 );
         }
 
@@ -563,6 +602,7 @@ int main ( int argc, char** argv )
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
 #if !( defined( Q_OS_MACX ) )
+        cleanup();
         exit ( 1 );
 #endif
     }
@@ -584,6 +624,7 @@ int main ( int argc, char** argv )
     if ( bIsClient )
     {
         qCritical() << "Only --server mode is supported in this build.";
+        cleanup();
         exit ( 1 );
     }
 #endif
@@ -598,6 +639,7 @@ int main ( int argc, char** argv )
             qCritical() << qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )
                                                 .arg ( argv[0] )
                                                 .arg ( ServerOnlyOptions.join ( ", " ) ) );
+            cleanup();
             exit ( 1 );
         }
 
@@ -622,6 +664,7 @@ int main ( int argc, char** argv )
         {
             qCritical() << qUtf8Printable (
                 QString ( "%1: Client only option(s) '%2' used.  See '--help' for help" ).arg ( argv[0] ).arg ( ClientOnlyOptions.join ( ", " ) ) );
+            cleanup();
             exit ( 1 );
         }
 
@@ -768,9 +811,9 @@ int main ( int argc, char** argv )
     bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
 
     // bUseMultithreading = true;
-    QApplication* pApp = new QApplication ( argc, argv );
+    pApp = new QApplication ( argc, argv );
 #    else
-    QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
+    pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
 #    endif
 #endif
 
@@ -818,13 +861,12 @@ int main ( int argc, char** argv )
 // clang-format on
 #endif
 
-    CRpcServer* pRpcServer = nullptr;
-
     if ( iJsonRpcPortNumber != INVALID_PORT )
     {
         if ( strJsonRpcSecretFileName.isEmpty() )
         {
             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: --jsonrpcsecretfile is required. Exiting." ) );
+            cleanup();
             exit ( 1 );
         }
 
@@ -832,6 +874,7 @@ int main ( int argc, char** argv )
         if ( !qfJsonRpcSecretFile.open ( QFile::OpenModeFlag::ReadOnly ) )
         {
             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Unable to open secret file %1. Exiting." ).arg ( strJsonRpcSecretFileName ) );
+            cleanup();
             exit ( 1 );
         }
         QTextStream qtsJsonRpcSecretStream ( &qfJsonRpcSecretFile );
@@ -841,6 +884,7 @@ int main ( int argc, char** argv )
             qCritical() << qUtf8Printable ( QString ( "JSON-RPC: Refusing to run with secret of length %1 (required: %2). Exiting." )
                                                 .arg ( strJsonRpcSecret.length() )
                                                 .arg ( JSON_RPC_MINIMUM_SECRET_LENGTH ) );
+            cleanup();
             exit ( 1 );
         }
 
@@ -851,6 +895,7 @@ int main ( int argc, char** argv )
         if ( !pRpcServer->Start() )
         {
             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) );
+            cleanup();
             exit ( 1 );
         }
     }
@@ -884,7 +929,7 @@ int main ( int argc, char** argv )
 
             if ( pRpcServer )
             {
-                new CClientRpc ( &Client, pRpcServer, pRpcServer );
+                pClientRpc = new CClientRpc ( &Client, pRpcServer, pRpcServer );
             }
 
 #    ifndef HEADLESS
@@ -903,7 +948,7 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
-                pApp->exec();
+                exit_code = pApp->exec();
             }
             else
 #    endif
@@ -911,7 +956,7 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
-                pApp->exec();
+                exit_code = pApp->exec();
             }
         }
         else
@@ -942,7 +987,7 @@ int main ( int argc, char** argv )
 
             if ( pRpcServer )
             {
-                new CServerRpc ( &Server, pRpcServer, pRpcServer );
+                pServerRpc = new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
 
 #ifndef HEADLESS
@@ -967,7 +1012,7 @@ int main ( int argc, char** argv )
                     ServerDlg.show();
                 }
 
-                pApp->exec();
+                exit_code = pApp->exec();
             }
             else
 #endif
@@ -982,7 +1027,7 @@ int main ( int argc, char** argv )
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
 
-                pApp->exec();
+                exit_code = pApp->exec();
             }
         }
     }
@@ -999,7 +1044,11 @@ int main ( int argc, char** argv )
 #endif
         {
             qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( generr.GetErrorText() ) );
-            exit ( 1 );
+
+            if ( exit_code == 0 )
+            {
+                exit_code = 1;
+            }
         }
     }
 
@@ -1007,7 +1056,9 @@ int main ( int argc, char** argv )
     activity.EndActivity();
 #endif
 
-    return 0;
+    cleanup();
+
+    return exit_code;
 }
 
 /******************************************************************************\
@@ -1102,6 +1153,7 @@ bool GetStringArgument ( int argc, char** argv, int& i, QString strShortOpt, QSt
         if ( ++i >= argc )
         {
             qCritical() << qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( argv[0] ).arg ( argv[i - 1] ) );
+            cleanup();
             exit ( 1 );
         }
 
@@ -1130,6 +1182,7 @@ bool GetNumericArgument ( int     argc,
         if ( ++i >= argc )
         {
             qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            cleanup();
             exit ( 1 );
         }
 
@@ -1138,6 +1191,7 @@ bool GetNumericArgument ( int     argc,
         if ( *p || ( rValue < rRangeStart ) || ( rValue > rRangeStop ) )
         {
             qCritical() << qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) );
+            cleanup();
             exit ( 1 );
         }
 

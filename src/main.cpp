@@ -59,8 +59,10 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 //       should be declared here and checked and deleted in reverse order of creation in cleanup().
 //       cleanup() should be called before any exit() !
 
-QCoreApplication* pApp       = NULL;
-CRpcServer*       pRpcServer = NULL;
+QCoreApplication* pCoreApplicationInstance = NULL;
+QApplication*     pApplicationInstance     = NULL;
+
+CRpcServer* pRpcServer = NULL;
 #ifndef SERVER_ONLY
 CClientRpc* pClientRpc = NULL;
 #endif
@@ -88,10 +90,16 @@ void cleanup()
         pRpcServer = NULL;
     }
 
-    if ( pApp )
+    if ( pCoreApplicationInstance )
     {
-        delete pApp;
-        pApp = NULL;
+        delete pCoreApplicationInstance;
+        pCoreApplicationInstance = NULL;
+    }
+
+    if ( pApplicationInstance )
+    {
+        delete pApplicationInstance;
+        pApplicationInstance = NULL;
     }
 }
 
@@ -808,16 +816,24 @@ int main ( int argc, char** argv )
     // Application/GUI setup ---------------------------------------------------
     // Application object
 #ifdef HEADLESS
-    pApp = new QCoreApplication ( argc, argv );
+    QCoreApplication* pApp = pCoreApplicationInstance = new QCoreApplication ( argc, argv );
 #else
 #    if defined( Q_OS_IOS )
     bUseGUI        = true;
     bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
 
     // bUseMultithreading = true;
-    pApp = new QApplication ( argc, argv );
+    QApplication* pApp = pApplicationInstance = new QApplication ( argc, argv );
 #    else
-    pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
+    QCoreApplication* pApp;
+    if ( bUseGUI )
+    {
+        pApp = pApplicationInstance = new QApplication ( argc, argv );
+    }
+    else
+    {
+        pApp = pCoreApplicationInstance = new QCoreApplication ( argc, argv );
+    }
 #    endif
 #endif
 
@@ -1048,17 +1064,13 @@ int main ( int argc, char** argv )
 #endif
         {
             qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( generr.GetErrorText() ) );
+        }
 
-            if ( exit_code == 0 )
-            {
-                exit_code = 1;
-            }
+        if ( exit_code == 0 )
+        {
+            exit_code = 1;
         }
     }
-
-#if defined( Q_OS_MACX )
-    activity.EndActivity();
-#endif
 
     cleanup();
 

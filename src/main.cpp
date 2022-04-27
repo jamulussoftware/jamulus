@@ -55,26 +55,26 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 
 // Implementation **************************************************************
 
-// NOTE: To prevent memory leaks any pointers assigned with new
-//       should be declared here and checked and deleted in reverse order of creation in cleanup().
-//       cleanup() should be called before any exit() !
-
 int main ( int argc, char** argv )
 {
-
 #if defined( Q_OS_MACX )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
 #endif
-    int exit_code = 0;
+    // NOTE: To prevent memory leaks any pointers assigned with new in main should be
+    //       declared here and checked and deleted in reverse order of creation before main exit.
+    //       do NEVER call exit() but throw a CErrorExit, CInfoExit or a CGenErr !!
 
-    QCoreApplication* pApp       = NULL;
-    CRpcServer*       pRpcServer = NULL;
+    QCoreApplication* pCoreApplicationInstance = NULL;
+    QCoreApplication* pApplicationInstance     = NULL;
+    CRpcServer*       pRpcServer               = NULL;
 #ifndef SERVER_ONLY
     CClientRpc* pClientRpc = NULL;
 #endif
     CServerRpc* pServerRpc = NULL;
+
+    int exit_code = 0;
 
     QString        strArgument;
     double         rDbleArgument;
@@ -767,16 +767,24 @@ int main ( int argc, char** argv )
         // Application/GUI setup ---------------------------------------------------
         // Application object
 #ifdef HEADLESS
-        pApp = new QCoreApplication ( argc, argv );
+        QCoreApplication* pApp = pCoreApplicationInstance = new QCoreApplication ( argc, argv );
 #else
 #    if defined( Q_OS_IOS )
         bUseGUI   = true;
         bIsClient = true; // Client only - TODO: maybe a switch in interface to change to server?
 
         // bUseMultithreading = true;
-        pApp = new QApplication ( argc, argv );
+        QApplication* pApp = pApplicationInstance = new QApplication ( argc, argv );
 #    else
-        pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
+        QCoreApplication* pApp;
+        if ( bUseGUI )
+        {
+            pApp = pApplicationInstance = new QApplication ( argc, argv );
+        }
+        else
+        {
+            pApp = pCoreApplicationInstance = new QCoreApplication ( argc, argv );
+        }
 #    endif
 #endif
 
@@ -1000,11 +1008,11 @@ int main ( int argc, char** argv )
 #endif
         {
             qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( generr.GetErrorText() ) );
+        }
 
-            if ( exit_code == 0 )
-            {
-                exit_code = 1;
-            }
+        if ( exit_code == 0 )
+        {
+            exit_code = 1;
         }
     }
 
@@ -1031,27 +1039,28 @@ int main ( int argc, char** argv )
     if ( pServerRpc )
     {
         delete pServerRpc;
-        pServerRpc = NULL;
     }
 
 #ifndef SERVER_ONLY
     if ( pClientRpc )
     {
         delete pClientRpc;
-        pClientRpc = NULL;
     }
 #endif
 
     if ( pRpcServer )
     {
         delete pRpcServer;
-        pRpcServer = NULL;
     }
 
-    if ( pApp )
+    if ( pCoreApplicationInstance )
     {
-        delete pApp;
-        pApp = NULL;
+        delete pCoreApplicationInstance;
+    }
+
+    if ( pApplicationInstance )
+    {
+        delete pApplicationInstance;
     }
 
     return exit_code;

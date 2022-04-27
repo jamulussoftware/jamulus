@@ -67,7 +67,7 @@ int main ( int argc, char** argv )
     //       do NEVER call exit() but throw a CErrorExit, CInfoExit or a CGenErr !!
 
     QCoreApplication* pCoreApplicationInstance = NULL;
-    QCoreApplication* pApplicationInstance     = NULL;
+    QApplication*     pApplicationInstance     = NULL;
     CRpcServer*       pRpcServer               = NULL;
 #ifndef SERVER_ONLY
     CClientRpc* pClientRpc = NULL;

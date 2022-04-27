@@ -353,18 +353,18 @@ void CLevelMeter::ClipReset()
 }
 
 CLevelMeter::cLED::cLED ( QWidget* parent ) :
-    BitmCubeLedBlack ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
-    BitmCubeLedGreen ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
-    BitmCubeLedYellow ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
-    BitmCubeLedRed ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRedSmall.png" ) ),
-    BitmCubeRoundSmallLedBlack ( QString::fromUtf8 ( ":/png/LEDs/res/LEDBlackSmall.png" ) ),
-    BitmCubeRoundSmallLedGreen ( QString::fromUtf8 ( ":/png/LEDs/res/LEDGreenSmall.png" ) ),
-    BitmCubeRoundSmallLedYellow ( QString::fromUtf8 ( ":/png/LEDs/res/LEDYellowSmall.png" ) ),
-    BitmCubeRoundSmallLedRed ( QString::fromUtf8 ( ":/png/LEDs/res/LEDRedSmall.png" ) ),
-    BitmCubeRoundBigLedBlack ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDBlackSmall.png" ) ),
-    BitmCubeRoundBigLedGreen ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
-    BitmCubeRoundBigLedYellow ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
-    BitmCubeRoundBigLedRed ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
+    BitmCubeLedBlack ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlack.png" ) ),
+    BitmCubeLedGreen ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreen.png" ) ),
+    BitmCubeLedYellow ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellow.png" ) ),
+    BitmCubeLedRed ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRed.png" ) ),
+    BitmCubeRoundSmallLedBlack ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDBlackSmall.png" ) ),
+    BitmCubeRoundSmallLedGreen ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
+    BitmCubeRoundSmallLedYellow ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
+    BitmCubeRoundSmallLedRed ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) ),
+    BitmCubeRoundBigLedBlack ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDBlackBig.png" ) ),
+    BitmCubeRoundBigLedGreen ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenBig.png" ) ),
+    BitmCubeRoundBigLedYellow ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowBig.png" ) ),
+    BitmCubeRoundBigLedRed ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedBig.png" ) )
 {
     // create LED label
     pLEDLabel = new QLabel ( "", parent );

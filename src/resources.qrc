@@ -34,25 +34,25 @@
     </qresource>
 
     <qresource prefix="/png/LEDs">
-        <file>res/CLEDDisabledSmall.png</file>
-        <file>res/CLEDGreenSmall.png</file>
-        <file>res/CLEDGreySmall.png</file>
-        <file>res/CLEDRedSmall.png</file>
-        <file>res/CLEDYellowSmall.png</file>
-        <file>res/CLEDBlackSmall.png</file>
+        <file>res/CLEDDisabled.png</file>
+        <file>res/CLEDGrey.png</file>
+        <file>res/CLEDGreenBig.png</file>
+        <file>res/CLEDRedBig.png</file>
+        <file>res/CLEDYellowBig.png</file>
+        <file>res/CLEDBlackBig.png</file>
         <file>res/IndicatorGreen.png</file>
         <file>res/IndicatorYellow.png</file>
         <file>res/IndicatorRed.png</file>
-        <file>res/HLEDGreenSmall.png</file>
-        <file>res/HLEDBlackSmall.png</file>
-        <file>res/HLEDRedSmall.png</file>
-        <file>res/HLEDYellowSmall.png</file>
+        <file>res/HLEDGreen.png</file>
+        <file>res/HLEDBlack.png</file>
+        <file>res/HLEDRed.png</file>
+        <file>res/HLEDYellow.png</file>
         <file>res/IndicatorRedFancy.png</file>
         <file>res/IndicatorYellowFancy.png</file>
-        <file>res/LEDGreenSmall.png</file>
-        <file>res/LEDBlackSmall.png</file>
-        <file>res/LEDRedSmall.png</file>
-        <file>res/LEDYellowSmall.png</file>
+        <file>res/CLEDGreenSmall.png</file>
+        <file>res/CLEDBlackSmall.png</file>
+        <file>res/CLEDRedSmall.png</file>
+        <file>res/CLEDYellowSmall.png</file>
     </qresource>
     <qresource prefix="/png/fader">
         <file>res/faderbackground.png</file>

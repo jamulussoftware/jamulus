@@ -1028,14 +1028,6 @@ int main ( int argc, char** argv )
         exit_code = 0;
     }
 
-#if defined( Q_OS_MACX )
-    // a mac activity is started after Application is created
-    if ( pApp )
-    {
-        activity.EndActivity();
-    }
-#endif
-
     if ( pServerRpc )
     {
         delete pServerRpc;

@@ -22,10 +22,23 @@
  *
 \******************************************************************************/
 
+#ifdef HEADLESS
+#    if defined( Q_OS_IOS )
+#        error HEADLES mode is not valid for IOS
+#    endif
+#    if defined( ANDROID )
+#        error HEADLES mode is not valid for ANDROID
+#    endif
+#endif
+
 #include <QCoreApplication>
 #include <QDir>
 #include <iostream>
 #include "global.h"
+#include "settings.h"
+#include "util.h"
+#include <memory>
+
 #ifndef HEADLESS
 #    include <QApplication>
 #    include <QMessageBox>
@@ -34,47 +47,67 @@
 #        include "clientdlg.h"
 #    endif
 #endif
-#include "settings.h"
-#ifndef SERVER_ONLY
-#    include "testbench.h"
-#endif
-#include "util.h"
-#ifdef ANDROID
-#    include <QtAndroidExtras/QtAndroid>
-#endif
-#if defined( Q_OS_MACX )
-#    include "mac/activity.h"
-extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
-#endif
-#include <memory>
+
 #include "rpcserver.h"
 #include "serverrpc.h"
 #ifndef SERVER_ONLY
 #    include "clientrpc.h"
+#    include "testbench.h"
 #endif
+
+#ifdef ANDROID
+#    include <QtAndroidExtras/QtAndroid>
+#endif
+
+#if defined( Q_OS_MACX )
+#    include "mac/activity.h"
+extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
+#endif
+
+// Global App Name *************************************************************
+
+static QString strAppName = APP_NAME; // Will be appended by " - ClientName" or "Server - ServerName" if those names are defined
+
+const QString GetAppName() { return strAppName; }
+
+// Helpers *********************************************************************
+
+const QString getServerNameFromInfo ( const QString strServerInfo )
+{
+    if ( !strServerInfo.isEmpty() )
+    {
+        QStringList servInfoParams = strServerInfo.split ( ";" );
+        if ( servInfoParams.count() > 0 )
+        {
+            return servInfoParams[0];
+        }
+    }
+
+    return QString();
+}
 
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
+    int exit_code = 0;
+
 #if defined( Q_OS_MACX )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
     qt_set_sequence_auto_mnemonic ( true );
 #endif
-    // NOTE: To prevent memory leaks any pointers assigned with new in main should be
-    //       declared here and checked and deleted in reverse order of creation before main exit.
-    //       do NEVER call exit() but throw a CErrorExit, CInfoExit or a CGenErr !!
 
-    QCoreApplication* pCoreApplicationInstance = NULL;
-    QApplication*     pApplicationInstance     = NULL;
-    CRpcServer*       pRpcServer               = NULL;
+#ifndef HEADLESS
+    QApplication* pApplication = NULL;
+#endif
+    QCoreApplication* pCoreApplication = NULL;
+
+    CRpcServer* pRpcServer = NULL;
+    CServerRpc* pServerRpc = NULL;
 #ifndef SERVER_ONLY
     CClientRpc* pClientRpc = NULL;
 #endif
-    CServerRpc* pServerRpc = NULL;
-
-    int exit_code = 0;
 
     QString        strArgument;
     double         rDbleArgument;
@@ -84,13 +117,7 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-#if ( defined( SERVER_BUNDLE ) && defined( Q_OS_MACX ) ) || defined( SERVER_ONLY )
-    // if we are on MacOS and we are building a server bundle or requested build with serveronly, start Jamulus in server mode
-    bool bIsClient = false;
-    qInfo() << "- Starting in server mode by default (due to compile time option)";
-#else
-    bool bIsClient = true;
-#endif
+    bool         bIsClient                   = true;
     bool         bUseGUI                     = true;
     bool         bStartMinimized             = false;
     bool         bShowComplRegConnList       = false;
@@ -133,8 +160,8 @@ int main ( int argc, char** argv )
 #if !defined( HEADLESS ) && defined( _WIN32 )
         if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
         {
-            freopen ( "CONOUT$", "w", stdout );
-            freopen ( "CONOUT$", "w", stderr );
+            (void) freopen ( "CONOUT$", "w", stdout );
+            (void) freopen ( "CONOUT$", "w", stderr );
         }
 #endif
 
@@ -570,38 +597,54 @@ int main ( int argc, char** argv )
             }
 
             // Unknown option ------------------------------------------------------
-            throw CErrorExit ( 1, qUtf8Printable ( QString ( "%1: Unknown option '%2' -- use '--help' for help" ).arg ( argv[0] ).arg ( argv[i] ) ) );
+            throw CErrorExit ( qUtf8Printable ( QString ( "%1: Unknown option '%2' -- use '--help' for help" ).arg ( argv[0] ).arg ( argv[i] ) ) );
         }
 
         // Dependencies ------------------------------------------------------------
+
+#if ( defined( SERVER_BUNDLE ) && defined( Q_OS_MACX ) ) || defined( SERVER_ONLY )
+        // if we are on MacOS and we are building a server bundle or requested build with serveronly, start Jamulus in server mode
+        if ( bIsClient )
+        {
+            bIsClient = false;
+            qInfo() << "- Starting in server mode by default (due to compile time option)";
+        }
+#endif
+
 #ifdef HEADLESS
+        Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
+        Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
+        Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
+        Q_UNUSED ( bMuteStream )           // avoid compiler warnings
+
         if ( bUseGUI )
         {
             bUseGUI = false;
             qWarning() << "No GUI support compiled. Running in headless mode.";
         }
-        Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
-        Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
-        Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
-        Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
-#ifdef SERVER_ONLY
-        if ( bIsClient )
-        {
-            throw CErrorExit ( 1, "Only --server mode is supported in this build." );
-        }
+#if defined( Q_OS_IOS )
+        bIsClient = true; // Client only - TODO: maybe a switch in interface to change to server?
+        bUseGUI   = true;
+        // bUseMultithreading = true;
 #endif
 
         // TODO create settings in default state, if loading from file do that next, then come back here to
         //      override from command line options, then create client or server, letting them do the validation
+        //
+        // See https://github.com/pgScorpio/jamulus/tree/first-big-thing-for-settings for a possible solution on that
 
         if ( bIsClient )
         {
+            if ( !strClientName.isEmpty() )
+            {
+                strAppName += " - " + strClientName;
+            }
+
             if ( ServerOnlyOptions.size() != 0 )
             {
-                throw CErrorExit ( 1,
-                                   qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )
+                throw CErrorExit ( qUtf8Printable ( QString ( "%1: Server only option(s) '%2' used.  Did you omit '--server'?" )
                                                         .arg ( argv[0] )
                                                         .arg ( ServerOnlyOptions.join ( ", " ) ) ) );
             }
@@ -623,10 +666,19 @@ int main ( int argc, char** argv )
         }
         else
         {
+            strAppName += "Server";
+            if ( !strServerInfo.isEmpty() )
+            {
+                QString strServerName = getServerNameFromInfo ( strServerInfo );
+                if ( !strServerName.isEmpty() )
+                {
+                    strAppName += " - " + strServerName;
+                }
+            }
+
             if ( ClientOnlyOptions.size() != 0 )
             {
-                throw CErrorExit ( 1,
-                                   qUtf8Printable ( QString ( "%1: Client only option(s) '%2' used.  See '--help' for help" )
+                throw CErrorExit ( qUtf8Printable ( QString ( "%1: Client only option(s) '%2' used.  See '--help' for help" )
                                                         .arg ( argv[0] )
                                                         .arg ( ClientOnlyOptions.join ( ", " ) ) ) );
             }
@@ -766,26 +818,18 @@ int main ( int argc, char** argv )
 
         // Application/GUI setup ---------------------------------------------------
         // Application object
-#ifdef HEADLESS
-        QCoreApplication* pApp = pCoreApplicationInstance = new QCoreApplication ( argc, argv );
-#else
-#    if defined( Q_OS_IOS )
-        bUseGUI   = true;
-        bIsClient = true; // Client only - TODO: maybe a switch in interface to change to server?
 
-        // bUseMultithreading = true;
-        QApplication* pApp = pApplicationInstance = new QApplication ( argc, argv );
-#    else
-        QCoreApplication* pApp;
+#ifndef HEADLESS
         if ( bUseGUI )
         {
-            pApp = pApplicationInstance = new QApplication ( argc, argv );
+            pApplication = new QApplication ( argc, argv );
         }
         else
         {
-            pApp = pCoreApplicationInstance = new QCoreApplication ( argc, argv );
+            pCoreApplication = new QCoreApplication ( argc, argv );
         }
-#    endif
+#else
+        pCoreApplication = new QCoreApplication ( argc, argv );
 #endif
 
 #ifdef ANDROID
@@ -806,12 +850,29 @@ int main ( int argc, char** argv )
 #ifdef _WIN32
         // set application priority class -> high priority
         SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
-
+#    ifndef HEADLESS
         // For accessible support we need to add a plugin to qt. The plugin has to
         // be located in the install directory of the software by the installer.
         // Here, we set the path to our application path.
-        QDir ApplDir ( QApplication::applicationDirPath() );
-        pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+        if ( bUseGUI )
+        {
+            QDir ApplDir ( QApplication::applicationDirPath() );
+            pApplication->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+        }
+        else
+        {
+            QDir ApplDir ( QCoreApplication::applicationDirPath() );
+            pCoreApplication->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+        }
+#    else
+        // For accessible support we need to add a plugin to qt. The plugin has to
+        // be located in the install directory of the software by the installer.
+        // Here, we set the path to our application path.
+        {
+            QDir ApplDir ( QCoreApplication::applicationDirPath() );
+            pCoreApplication->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+        }
+#    endif
 #endif
 
 #if defined( Q_OS_MACX )
@@ -836,22 +897,20 @@ int main ( int argc, char** argv )
         {
             if ( strJsonRpcSecretFileName.isEmpty() )
             {
-                throw CErrorExit ( 1, qUtf8Printable ( QString ( "- JSON-RPC: --jsonrpcsecretfile is required. Exiting." ) ) );
+                throw CErrorExit ( qUtf8Printable ( QString ( "- JSON-RPC: --jsonrpcsecretfile is required. Exiting." ) ) );
             }
 
             QFile qfJsonRpcSecretFile ( strJsonRpcSecretFileName );
             if ( !qfJsonRpcSecretFile.open ( QFile::OpenModeFlag::ReadOnly ) )
             {
                 throw CErrorExit (
-                    1,
                     qUtf8Printable ( QString ( "- JSON-RPC: Unable to open secret file %1. Exiting." ).arg ( strJsonRpcSecretFileName ) ) );
             }
             QTextStream qtsJsonRpcSecretStream ( &qfJsonRpcSecretFile );
             QString     strJsonRpcSecret = qtsJsonRpcSecretStream.readLine();
             if ( strJsonRpcSecret.length() < JSON_RPC_MINIMUM_SECRET_LENGTH )
             {
-                throw CErrorExit ( 1,
-                                   qUtf8Printable ( QString ( "JSON-RPC: Refusing to run with secret of length %1 (required: %2). Exiting." )
+                throw CErrorExit ( qUtf8Printable ( QString ( "JSON-RPC: Refusing to run with secret of length %1 (required: %2). Exiting." )
                                                         .arg ( strJsonRpcSecret.length() )
                                                         .arg ( JSON_RPC_MINIMUM_SECRET_LENGTH ) ) );
             }
@@ -859,10 +918,14 @@ int main ( int argc, char** argv )
             qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
                           "(not subject to semantic versioning) during the initial phase.";
 
-            pRpcServer = new CRpcServer ( pApp, iJsonRpcPortNumber, strJsonRpcSecret );
+#ifndef HEADLESS
+            pRpcServer = new CRpcServer ( bUseGUI ? pApplication : pCoreApplication, iJsonRpcPortNumber, strJsonRpcSecret );
+#else
+            pRpcServer = new CRpcServer ( pCoreApplication, iJsonRpcPortNumber, strJsonRpcSecret );
+#endif
             if ( !pRpcServer->Start() )
             {
-                throw CErrorExit ( 1, qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) ) );
+                throw CErrorExit ( qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) ) );
             }
         }
 
@@ -887,7 +950,11 @@ int main ( int argc, char** argv )
             // load translation
             if ( bUseGUI && bUseTranslation )
             {
-                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+#    ifndef HEADLESS
+                CLocale::LoadTranslation ( Settings.strLanguage, pApplication );
+#    else
+                CLocale::LoadTranslation ( Settings.strLanguage, pCoreApplication );
+#    endif
                 CInstPictures::UpdateTableOnLanguageChange();
             }
 
@@ -912,7 +979,7 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
-                exit_code = pApp->exec();
+                exit_code = pApplication->exec();
             }
             else
 #    endif
@@ -920,7 +987,7 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
-                exit_code = pApp->exec();
+                exit_code = pCoreApplication->exec();
             }
         }
         else
@@ -962,9 +1029,9 @@ int main ( int argc, char** argv )
                 Settings.Load ( CommandLineOptions );
 
                 // load translation
-                if ( bUseGUI && bUseTranslation )
+                if ( bUseTranslation )
                 {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
+                    CLocale::LoadTranslation ( Settings.strLanguage, pApplication );
                 }
 
                 // GUI object for the server
@@ -976,7 +1043,7 @@ int main ( int argc, char** argv )
                     ServerDlg.show();
                 }
 
-                exit_code = pApp->exec();
+                exit_code = pApplication->exec();
             }
             else
 #endif
@@ -991,41 +1058,37 @@ int main ( int argc, char** argv )
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
 
-                exit_code = pApp->exec();
+                exit_code = pCoreApplication->exec();
             }
         }
     }
 
-    catch ( const CGenErr& generr )
+    catch ( const CInfoExit& info )
     {
-        // show generic error
-#ifndef HEADLESS
-        if ( bUseGUI )
-        {
-            QMessageBox::critical ( nullptr, APP_NAME, generr.GetErrorText(), "Quit", nullptr );
-        }
-        else
-#endif
-        {
-            qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( generr.GetErrorText() ) );
-        }
-
-        if ( exit_code == 0 )
-        {
-            exit_code = 1;
-        }
+        // show info and exit normally
+        qInfo() << qUtf8Printable ( QString ( "%1: %2" ).arg ( strAppName, info.GetInfoMessage() ) );
+        exit_code = 0;
     }
 
     catch ( const CErrorExit& fatalerr )
     {
-        qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( fatalerr.GetErrorMessage() ) );
+        // show deliberate exit message
+        qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( strAppName, fatalerr.GetErrorMessage() ) );
         exit_code = fatalerr.GetExitCode();
     }
 
-    catch ( const CInfoExit& info )
+    catch ( const CGenErr& generr )
     {
-        qInfo() << qUtf8Printable ( QString ( "%1: %2" ).arg ( APP_NAME ).arg ( info.GetInfoMessage() ) );
-        exit_code = 0;
+        // show unhandled generic error message
+        qCritical() << qUtf8Printable ( QString ( "%1: %2" ).arg ( strAppName, generr.GetErrorText() ) );
+        exit_code = generr.GetExitCode();
+    }
+
+    catch ( ... )
+    {
+        // show all other unhandled (standard) exceptions
+        qCritical() << qUtf8Printable ( QString ( "%1: Unknown Exception, Exiting" ).arg ( strAppName ) );
+        exit_code = -1;
     }
 
     if ( pServerRpc )
@@ -1045,15 +1108,17 @@ int main ( int argc, char** argv )
         delete pRpcServer;
     }
 
-    if ( pCoreApplicationInstance )
+    if ( pCoreApplication )
     {
-        delete pCoreApplicationInstance;
+        delete pCoreApplication;
     }
 
-    if ( pApplicationInstance )
+#ifndef HEADLESS
+    if ( pApplication )
     {
-        delete pApplicationInstance;
+        delete pApplication;
     }
+#endif
 
     return exit_code;
 }
@@ -1149,7 +1214,7 @@ bool GetStringArgument ( int argc, char** argv, int& i, QString strShortOpt, QSt
     {
         if ( ++i >= argc )
         {
-            throw CErrorExit ( 1, qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( argv[0] ).arg ( argv[i - 1] ) ) );
+            throw CErrorExit ( qUtf8Printable ( QString ( "%1: '%2' needs a string argument." ).arg ( argv[0] ).arg ( argv[i - 1] ) ) );
         }
 
         strArg = argv[i];
@@ -1176,14 +1241,14 @@ bool GetNumericArgument ( int     argc,
         QString errmsg = "%1: '%2' needs a numeric argument from '%3' to '%4'.";
         if ( ++i >= argc )
         {
-            throw CErrorExit ( 1, qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) ) );
+            throw CErrorExit ( qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) ) );
         }
 
         char* p;
         rValue = strtod ( argv[i], &p );
         if ( *p || ( rValue < rRangeStart ) || ( rValue > rRangeStop ) )
         {
-            throw CErrorExit ( 1, qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) ) );
+            throw CErrorExit ( qUtf8Printable ( errmsg.arg ( argv[0] ).arg ( argv[i - 1] ).arg ( rRangeStart ).arg ( rRangeStop ) ) );
         }
 
         return true;

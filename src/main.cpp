@@ -98,7 +98,13 @@ int main ( int argc, char** argv )
     qt_set_sequence_auto_mnemonic ( true );
 #endif
 
-#ifndef HEADLESS
+#ifdef HEADLESS
+    // note: pApplication will never be used in headless mode,
+    // but if we define it here we can use the same source code
+    // with far less ifdef's
+#    define QApplication QCoreApplication
+#    define pApplication pCoreApplication
+#else
     QApplication* pApplication = NULL;
 #endif
     QCoreApplication* pCoreApplication = NULL;
@@ -819,7 +825,6 @@ int main ( int argc, char** argv )
         // Application/GUI setup ---------------------------------------------------
         // Application object
 
-#ifndef HEADLESS
         if ( bUseGUI )
         {
             pApplication = new QApplication ( argc, argv );
@@ -828,9 +833,6 @@ int main ( int argc, char** argv )
         {
             pCoreApplication = new QCoreApplication ( argc, argv );
         }
-#else
-        pCoreApplication = new QCoreApplication ( argc, argv );
-#endif
 
 #ifdef ANDROID
         // special Android coded needed for record audio permission handling
@@ -850,7 +852,7 @@ int main ( int argc, char** argv )
 #ifdef _WIN32
         // set application priority class -> high priority
         SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
-#    ifndef HEADLESS
+
         // For accessible support we need to add a plugin to qt. The plugin has to
         // be located in the install directory of the software by the installer.
         // Here, we set the path to our application path.
@@ -864,15 +866,6 @@ int main ( int argc, char** argv )
             QDir ApplDir ( QCoreApplication::applicationDirPath() );
             pCoreApplication->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
         }
-#    else
-        // For accessible support we need to add a plugin to qt. The plugin has to
-        // be located in the install directory of the software by the installer.
-        // Here, we set the path to our application path.
-        {
-            QDir ApplDir ( QCoreApplication::applicationDirPath() );
-            pCoreApplication->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
-        }
-#    endif
 #endif
 
 #if defined( Q_OS_MACX )
@@ -918,11 +911,8 @@ int main ( int argc, char** argv )
             qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
                           "(not subject to semantic versioning) during the initial phase.";
 
-#ifndef HEADLESS
             pRpcServer = new CRpcServer ( bUseGUI ? pApplication : pCoreApplication, iJsonRpcPortNumber, strJsonRpcSecret );
-#else
-            pRpcServer = new CRpcServer ( pCoreApplication, iJsonRpcPortNumber, strJsonRpcSecret );
-#endif
+
             if ( !pRpcServer->Start() )
             {
                 throw CErrorExit ( qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) ) );
@@ -950,11 +940,7 @@ int main ( int argc, char** argv )
             // load translation
             if ( bUseGUI && bUseTranslation )
             {
-#    ifndef HEADLESS
                 CLocale::LoadTranslation ( Settings.strLanguage, pApplication );
-#    else
-                CLocale::LoadTranslation ( Settings.strLanguage, pCoreApplication );
-#    endif
                 CInstPictures::UpdateTableOnLanguageChange();
             }
 
@@ -1114,6 +1100,8 @@ int main ( int argc, char** argv )
     }
 
 #ifndef HEADLESS
+    // note: in headless mode pApplication is the same pointer as pCoreApplication!
+    //       so pApplication is already deleted!
     if ( pApplication )
     {
         delete pApplication;

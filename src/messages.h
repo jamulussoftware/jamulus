@@ -31,6 +31,8 @@ protected:
     static tMainform* pMainForm;
     static QString    strMainFormName;
 
+    static QString ToUtf8Printable ( const QString& text );
+
 public:
     static void init ( tMainform* theMainForm, QString theMainFormName )
     {

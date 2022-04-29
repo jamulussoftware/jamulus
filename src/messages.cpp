@@ -23,19 +23,46 @@
 \******************************************************************************/
 
 #include "messages.h"
+#include <QTextEdit>
 
 tMainform* CMessages::pMainForm = NULL;
 QString    CMessages::strMainFormName;
 
+QString CMessages::ToUtf8Printable ( const QString& text )
+{
+    QString plainText;
+
+    {
+        QTextEdit textEdit;
+
+        textEdit.setText ( text );          // Text can be html...
+        plainText = textEdit.toPlainText(); // Text will be plain Text !
+    }
+
+    // no multiple newlines
+    while ( plainText.contains ( "\n\n" ) )
+    {
+        plainText.replace ( "\n\n", "\n" );
+    }
+
+#ifdef _WIN32
+    // LF to CRLF
+    plainText.replace ( "\n", "\r\n" );
+#endif
+
+    return qUtf8Printable ( plainText );
+}
+
 /******************************************************************************\
 * Message Boxes                                                                *
 \******************************************************************************/
+
 void CMessages::ShowError ( QString strError )
 {
 #ifndef HEADLESS
     QMessageBox::critical ( pMainForm, strMainFormName + ": " + QObject::tr ( "Error" ), strError, QObject::tr ( "Ok" ), nullptr );
 #else
-    qCritical() << "Error: " << strError.toLocal8Bit().data();
+    qCritical().noquote() << "Error: " << ToUtf8Printable ( strError );
 #endif
 }
 
@@ -44,7 +71,7 @@ void CMessages::ShowWarning ( QString strWarning )
 #ifndef HEADLESS
     QMessageBox::warning ( pMainForm, strMainFormName + ": " + QObject::tr ( "Warning" ), strWarning, QObject::tr ( "Ok" ), nullptr );
 #else
-    qWarning() << "Warning: " << strWarning.toLocal8Bit().data();
+    qWarning().noquote() << "Warning: " << ToUtf8Printable ( strWarning );
 #endif
 }
 
@@ -53,6 +80,6 @@ void CMessages::ShowInfo ( QString strInfo )
 #ifndef HEADLESS
     QMessageBox::information ( pMainForm, strMainFormName + ": " + QObject::tr ( "Information" ), strInfo, QObject::tr ( "Ok" ), nullptr );
 #else
-    qInfo() << "Info: " << strInfo.toLocal8Bit().data();
+    qInfo().noquote() << "Info: " << ToUtf8Printable ( strInfo );
 #endif
 }

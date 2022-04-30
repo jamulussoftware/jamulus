@@ -26,12 +26,12 @@
 
 #include <QMutex>
 #include <QMessageBox>
-#include "../src/util.h"
-#include "../src/global.h"
-#include "../src/soundbase.h"
+#include "../../util.h"
+#include "../../global.h"
+#include "../soundbase.h"
 
 // The following includes require the ASIO SDK to be placed in
-// windows/ASIOSDK2 during build.
+// libs/ASIOSDK2 during build.
 // Important:
 // - Do not copy parts of ASIO SDK into the Jamulus source tree without
 //   further consideration as it would make the license situation more

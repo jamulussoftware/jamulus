@@ -3772,12 +3772,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
 <context>
     <name>CSound</name>
     <message>
-        <location filename="../../../android/sound.cpp" line="69"/>
+        <location filename="../../sound/oboe/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
         <translation type="unfinished">Fel vid begäran av strömningsstopp: $s</translation>
     </message>
     <message>
-        <location filename="../../../android/sound.cpp" line="75"/>
+        <location filename="../../sound/oboe/sound.cpp" line="75"/>
         <source>Error closing stream: $s</source>
         <translation>Fel vid stängning av ström: $s</translation>
     </message>
@@ -3894,43 +3894,43 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished">Nödvändigt ljudformat är inte tillgängligt.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="57"/>
+        <location filename="../../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
         <translation type="unfinished">Den valda ljudenheten finns inte längre i systemet. Kontrollera din ljudenhet.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="76"/>
+        <location filename="../../sound/asio/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
         <translation type="unfinished">Det gick inte att initiera ljuddrivrutinen. Kontrollera om din ljudmaskinvara är ansluten och kontrollera dina drivrutinsinställningar.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="146"/>
+        <location filename="../../sound/asio/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
         <translation type="unfinished">Den valda ljudenheten är inkompatibel eftersom den inte stöder en samplingsfrekvens på %1 Hz. Välj en annan enhet.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="158"/>
+        <location filename="../../sound/asio/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
         <translation type="unfinished">Den aktuella ljudenhetskonfigurationen är inkompatibel eftersom samplingshastigheten inte kunde ställas in på %2 Hz. Kontrollera om det finns en hårdvarubrytare eller drivrutinsinställning för att ställa in samplingsfrekvensen manuellt och starta om %1.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="171"/>
+        <location filename="../../sound/asio/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
         <translation type="unfinished">Den valda ljudenheten är inkompatibel eftersom den inte stöder %1 in/ut-kanaler. Välj en annan enhet eller konfiguration.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="206"/>
-        <location filename="../../../windows/sound.cpp" line="237"/>
+        <location filename="../../sound/asio/sound.cpp" line="206"/>
+        <location filename="../../sound/asio/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
         <translation type="unfinished">Den valda ljudenheten är inkompatibel eftersom det nödvändiga ljudsampelformatet inte är tillgängligt. Använd en annan enhet.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="553"/>
+        <location filename="../../sound/asio/sound.cpp" line="553"/>
         <source>No ASIO audio device driver found.</source>
         <translation>Ingen ASIO-ljudenhetsdrivrutin hittades.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="554"/>
+        <location filename="../../sound/asio/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
         <translation type="unfinished">Installera en ASIO-drivrutin innan du kör %1. Om du äger en enhet med ASIO-stöd installerar du dess officiella ASIO-drivrutin. Om inte, måste du ladda ner och installera en universell drivrutin så som ASIO4ALL.</translation>
     </message>
@@ -3951,82 +3951,82 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished"> kräver det låga latentljudgränssnittet ASIO för att fungera korrekt. Detta är inte ett vanligt Windows ljudgränssnitt och därför krävs en speciell ljuddrivrutin. Antingen har ditt ljudkort en inbyggd ASIO-drivrutin (som rekommenderas) eller så kanske du vill använda alternativa drivrutiner som ASIO4All-drivrutinen.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="47"/>
+        <location filename="../../sound/jack/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
         <translation type="unfinished">JACK kunde inte startas automatiskt. Starta JACK manuellt och leta efter felmeddelanden.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="64"/>
+        <location filename="../../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
         <translation type="unfinished">JACK körs inte med en samplingshastighet på &lt;b&gt;%1 Hz&lt;/b&gt;. Använd ett verktyg som &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; för att ställa in JACK-samplingsfrekvensen till %1 Hz.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="81"/>
+        <location filename="../../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
         <translation type="unfinished">JACK-portregistreringen misslyckades. Detta är förmodligen ett fel med JACK. Stoppa %1 och JACK. Kontrollera efteråt om ett annat program med en samplingshastighet på %2 Hz kan ansluta till JACK.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="94"/>
+        <location filename="../../sound/jack/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
         <translation type="unfinished">JACK-portregistreringen misslyckades. Detta är förmodligen ett fel med JACK. Stoppa %1 och JACK. Kontrollera efteråt om ett annat MIDI-program kan ansluta till JACK.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="107"/>
+        <location filename="../../sound/jack/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
         <translation type="unfinished">Det går inte att aktivera JACK-klienten. Detta är förmodligen ett fel med JACK. Kontrollera JACK-utgången.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="210"/>
+        <location filename="../../sound/jack/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
         <translation type="unfinished">JACK stängdes av. %1 kräver att JACK körs. Starta om %1 för att starta JACK igen. </translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="113"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
         <translation type="unfinished">Inget ljudkort är tillgängligt i ditt system. CoreAudio-ingång AudioHardwareGetProperty-anrop misslyckades.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="122"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
         <translation type="unfinished">Inget ljudkort finns tillgängligt i systemet. CoreAudio-ingång AudioHardwareGetProperty-anrop misslyckades.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="284"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
         <translation type="unfinished">Den för närvarande valda ljudenheten finns inte längre. Kontrollera din ljudenhet.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="385"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
         <translation type="unfinished">Ljudinmatningsenheten är inte längre tillgänglig. Kontrollera om din ingångsenhet är korrekt ansluten.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="394"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
         <translation type="unfinished">Samplingshastigheten på den aktuella inmatningsenheten är inte %1 Hz och är därför inkompatibel. Välj en annan enhet eller försök ställa in samplingsfrekvensen till %1 Hz manuellt via Audio-MIDI-inställning (i Program-&gt;Verktyg).</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="406"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
         <translation type="unfinished">Ljudutgångsenheten är inte längre tillgänglig. Kontrollera om din utenhet är korrekt ansluten.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="415"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
         <translation type="unfinished">Samplingshastigheten på den aktuella utenheten är inte %1 Hz och är därför inkompatibel. Välj en annan enhet eller försök ställa in samplingsfrekvensen till %1 Hz manuellt via Audio-MIDI-inställning (i Program-&gt;Verktyg).</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="463"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
         <translation type="unfinished">Strömformatet på den aktuella inmatningsenheten är inte kompatibelt med denna programvara. Välj en annan enhet.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="474"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="474"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
         <translation type="unfinished">Strömformatet på den aktuella inmatningsenheten är inte kompatibelt med %1. Välj en annan enhet.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="727"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="727"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
         <translation type="unfinished">Buffertstorlekarna för den aktuella in- och utgående ljudenheten kan inte ställas in på ett gemensamt värde. Välj olika in-/utgångsenheter i dina systeminställningar.</translation>
     </message>
@@ -4082,32 +4082,32 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation type="vanished"> kunde inte startas på grund av problem med ljudgränssnittet.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="117"/>
+        <location filename="../../sound/soundbase.cpp" line="117"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
         <translation type="unfinished">Kan inte använda den valda ljudenheten på grund av följande fel: %1 Den tidigare drivrutinen kommer att väljas.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="158"/>
+        <location filename="../../sound/soundbase.cpp" line="158"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation type="unfinished">Den tidigare valda ljudenheten är inte längre tillgänglig eller så har drivrutinen ändrats till ett inkompatibelt tillstånd. Vi kommer att försöka hitta en giltig ljudenhet, men den här nya ljudenheten kan orsaka ljudåterkoppling. Kontrollera din ljudenhet innan du ansluter till en server inställningar.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="170"/>
+        <location filename="../../sound/soundbase.cpp" line="170"/>
         <source>No usable %1 audio device found.</source>
         <translation type="unfinished">Ingen användbar %1 ljudenhet hittades.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="171"/>
+        <location filename="../../sound/soundbase.cpp" line="171"/>
         <source>These are all the available drivers with error messages:</source>
         <translation type="unfinished">Det här är alla tillgängliga drivrutiner med felmeddelanden:</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="183"/>
+        <location filename="../../sound/soundbase.cpp" line="183"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
         <translation type="unfinished">Vill du öppna ASIO-drivrutinen för att försöka ändra din konfiguration till ett fungerande tillstånd?</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="190"/>
+        <location filename="../../sound/soundbase.cpp" line="190"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
         <translation type="unfinished">Kan inte starta %1. Starta om %1 och kontrollera/konfigurera om dina ljudinställningar.</translation>
     </message>

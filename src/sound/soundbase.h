@@ -30,8 +30,8 @@
 #ifndef HEADLESS
 #    include <QMessageBox>
 #endif
-#include "global.h"
-#include "util.h"
+#include "../global.h"
+#include "../util.h"
 
 // TODO better solution with enum definition
 // problem: in signals it seems not to work to use CSoundBase::ESndCrdResetType

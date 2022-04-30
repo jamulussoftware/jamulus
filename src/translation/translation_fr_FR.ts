@@ -3705,43 +3705,43 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <translation type="vanished">Le format de l&apos;échantillon audio requis n&apos;est pas disponible.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="57"/>
+        <location filename="../../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
         <translation>Le périphérique audio sélectionné n&apos;est plus présent dans le système. Veuillez vérifier votre appareil audio.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="76"/>
+        <location filename="../../sound/asio/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
         <translation>Impossible d&apos;initialiser le pilote audio. Vérifiez si votre matériel audio est branché et vérifiez les paramètres de votre pilote.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="146"/>
+        <location filename="../../sound/asio/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
         <translation>Le périphérique audio sélectionné est incompatible car il ne prend pas en charge une fréquence d&apos;échantillonnage de %1 Hz. Veuillez sélectionner un autre périphérique.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="158"/>
+        <location filename="../../sound/asio/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
         <translation>La configuration actuelle du périphérique audio est incompatible car la fréquence d&apos;échantillonnage n&apos;a pas pu être définie sur %2 Hz. Veuillez vérifier si un commutateur matériel ou un paramètre du pilote permet de définir manuellement la fréquence d&apos;échantillonnage et redémarrer %1.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="171"/>
+        <location filename="../../sound/asio/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
         <translation>Le périphérique audio sélectionné est incompatible car il ne prend pas en charge les canaux d&apos;entrée/sortie %1. Veuillez sélectionner un autre périphérique ou une autre configuration.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="206"/>
-        <location filename="../../../windows/sound.cpp" line="237"/>
+        <location filename="../../sound/asio/sound.cpp" line="206"/>
+        <location filename="../../sound/asio/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
         <translation>Le périphérique audio sélectionné est incompatible car le format d&apos;échantillon audio requis n&apos;est pas disponible. Veuillez utiliser un autre appareil.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="553"/>
+        <location filename="../../sound/asio/sound.cpp" line="553"/>
         <source>No ASIO audio device driver found.</source>
         <translation>Aucun pilote de périphérique audio ASIO trouvé.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="554"/>
+        <location filename="../../sound/asio/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
         <translation>Veuillez installer un pilote ASIO avant d&apos;exécuter %1. Si vous possédez un périphérique avec un support ASIO, installez son pilote ASIO officiel. Sinon, vous devrez télécharger et installer un pilote universel comme ASIO4ALL.</translation>
     </message>
@@ -3762,92 +3762,92 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <translation type="vanished"> nécessite l&apos;interface audio à faible latence ASIO pour fonctionner correctement. Il ne s&apos;agit pas d&apos;une interface audio Windows standard et un pilote audio spécial est donc nécessaire. Soit votre carte son dispose d&apos;un pilote ASIO natif (ce qui est recommandé), soit vous pouvez utiliser d&apos;autres pilotes comme le pilote ASIO4All.</translation>
     </message>
     <message>
-        <location filename="../../../android/sound.cpp" line="69"/>
+        <location filename="../../sound/oboe/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
         <translation>Erreur lors de la demande d&apos;arrêt du flux : $s</translation>
     </message>
     <message>
-        <location filename="../../../android/sound.cpp" line="75"/>
+        <location filename="../../sound/oboe/sound.cpp" line="75"/>
         <source>Error closing stream: $s</source>
         <translation>Erreur de fermeture du flux : $s</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="47"/>
+        <location filename="../../sound/jack/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
         <translation>JACK n&apos;a pas pu être lancé automatiquement. Veuillez lancer JACK manuellement et vérifier les messages d&apos;erreur.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="64"/>
+        <location filename="../../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
         <translation>JACK ne fonctionne pas à un taux d&apos;échantillonnage de &lt;b&gt;%1 Hz&lt;/b&gt;. Veuillez utiliser un outil comme  &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; pour régler le taux d&apos;échantillonnage de JACK à %1 Hz.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="81"/>
+        <location filename="../../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
         <translation>L&apos;enregistrement du port JACK a échoué. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez arrêter %1 et JACK. Ensuite, vérifiez si un autre programme avec un taux d&apos;échantillonnage de %2 Hz peut se connecter à JACK.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="94"/>
+        <location filename="../../sound/jack/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
         <translation>L&apos;enregistrement du port JACK a échoué. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez arrêter %1 et JACK. Ensuite, vérifiez si un autre programme MIDI peut se connecter à JACK.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="107"/>
+        <location filename="../../sound/jack/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
         <translation>Impossible d&apos;activer le client JACK. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez vérifier la sortie JACK.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="210"/>
+        <location filename="../../sound/jack/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
         <translation>JACK a été arrêté. %1 a besoin de JACK pour fonctionner. Veuillez redémarrer %1 pour relancer JACK. </translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="113"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
         <translation>Aucune carte son n&apos;est disponible dans votre système. L&apos;appel à l&apos;entrée AudioHardwareGetProperty de CoreAudio a échoué.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="122"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
         <translation>Aucune carte son n&apos;est disponible dans le système. L&apos;appel de la sortie CoreAudio AudioHardwareGetProperty a échoué.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="284"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
         <translation>Le périphérique audio actuellement sélectionné n&apos;est plus présent. Veuillez vérifier votre périphérique audio.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="385"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
         <translation>Le périphérique d&apos;entrée audio n&apos;est plus disponible. Veuillez vérifier si votre périphérique d&apos;entrée est correctement connecté.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="394"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
         <translation>La fréquence d&apos;échantillonnage du périphérique d&apos;entrée actuel n&apos;est pas de %1 Hz et est donc incompatible. Veuillez sélectionner un autre périphérique ou essayer de régler manuellement la fréquence d&apos;échantillonnage sur %1 Hz via Audio-MIDI-Setup (dans Applications-&gt;Utilitaires).</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="406"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
         <translation>Le périphérique de sortie audio n&apos;est plus disponible. Veuillez vérifier si votre périphérique de sortie est correctement connecté.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="415"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
         <translation>La fréquence d&apos;échantillonnage du périphérique de sortie actuel n&apos;est pas %1 Hz et est donc incompatible. Veuillez sélectionner un autre périphérique ou essayer de régler manuellement la fréquence d&apos;échantillonnage sur %1 Hz via Audio-MIDI-Setup (dans Applications-&gt;Utilitaires).</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="463"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
         <translation>Le format de flux du périphérique d&apos;entrée actuel n&apos;est pas compatible avec ce logiciel. Veuillez sélectionner un autre périphérique.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="474"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="474"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
         <translation>Le format du flux sur le périphérique de sortie actuel n&apos;est pas compatible avec %1. Veuillez sélectionner un autre périphérique.</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="727"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="727"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
         <translation>La taille de la mémoire tampon du périphérique audio d&apos;entrée et de sortie actuel ne peut pas être définie sur une valeur commune. Veuillez sélectionner des périphériques d&apos;entrée/sortie différents dans les paramètres de votre système.</translation>
     </message>
@@ -3887,32 +3887,32 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <translation type="vanished"> n&apos;a pas pu être lancé en raison de problèmes d&apos;interface audio.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="117"/>
+        <location filename="../../sound/soundbase.cpp" line="117"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
         <translation>Impossible d&apos;utiliser le périphérique audio sélectionné en raison de l&apos;erreur suivante : %1 Le pilote précédent sera sélectionné.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="158"/>
+        <location filename="../../sound/soundbase.cpp" line="158"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation>Le périphérique audio précédemment sélectionné n&apos;est plus disponible ou le pilote est passé à un état incompatible. Nous allons essayer de trouver un périphérique audio valide, mais ce nouveau périphérique audio peut provoquer un effet larsen. Avant de vous connecter à un serveur, veuillez vérifier les paramètres de votre périphérique audio.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="170"/>
+        <location filename="../../sound/soundbase.cpp" line="170"/>
         <source>No usable %1 audio device found.</source>
         <translation>Aucun périphérique audio %1 utilisable n&apos;a été trouvé.</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="171"/>
+        <location filename="../../sound/soundbase.cpp" line="171"/>
         <source>These are all the available drivers with error messages:</source>
         <translation>Voici tous les pilotes disponibles avec les messages d&apos;erreur :</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="183"/>
+        <location filename="../../sound/soundbase.cpp" line="183"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
         <translation>Voulez-vous ouvrir la configuration du pilote ASIO pour essayer de modifier votre configuration afin qu&apos;elle fonctionne ?</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="190"/>
+        <location filename="../../sound/soundbase.cpp" line="190"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
         <translation>Impossible de démarrer %1. Veuillez redémarrer %1 et vérifier/reconfigurer vos paramètres audio.</translation>
     </message>

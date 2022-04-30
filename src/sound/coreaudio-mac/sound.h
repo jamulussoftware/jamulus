@@ -29,8 +29,8 @@
 #include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
 #include <QMessageBox>
-#include "soundbase.h"
-#include "global.h"
+#include "../soundbase.h"
+#include "../../global.h"
 
 /* Classes ********************************************************************/
 class CSound : public CSoundBase

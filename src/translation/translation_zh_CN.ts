@@ -3104,12 +3104,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CSound</name>
     <message>
-        <location filename="../../../android/sound.cpp" line="69"/>
+        <location filename="../../sound/oboe/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
         <translation>请求流停止时遇到错误: $s</translation>
     </message>
     <message>
-        <location filename="../../../android/sound.cpp" line="75"/>
+        <location filename="../../sound/oboe/sound.cpp" line="75"/>
         <source>Error closing stream: $s</source>
         <translation>关闭流时遇到错误: $s</translation>
     </message>
@@ -3122,43 +3122,43 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">需要的音频采样格式不可用.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="57"/>
+        <location filename="../../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
         <translation>所选的音频设备已不存在于您的系统中。请检查您的音频设备。</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="76"/>
+        <location filename="../../sound/asio/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
         <translation>无法初始化音频驱动。请检查您的音频硬件设备是否已经插入并检查您的驱动设定。</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="146"/>
+        <location filename="../../sound/asio/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
         <translation>由于所选的音频设备不支持于采样率 %1 Hz 下工作，故其处于不兼容状态。请选择其它设备。</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="158"/>
+        <location filename="../../sound/asio/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
         <translation>由于采样率无法被设置到 %2 Hz，故当前音频设备选项不兼容。请检查硬件上的开关或驱动设定，手动设置其采样率并重启 %1。</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="171"/>
+        <location filename="../../sound/asio/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
         <translation>由于所选的音频设备不支持 %1 声道输入/输出，故其处于不兼容状态。请选择其它设备或配置。</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="206"/>
-        <location filename="../../../windows/sound.cpp" line="237"/>
+        <location filename="../../sound/asio/sound.cpp" line="206"/>
+        <location filename="../../sound/asio/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
         <translation>由于所需的采样格式不可用，故当前所选的音频设备处于不兼容状态。请使用其它设备。</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="553"/>
+        <location filename="../../sound/asio/sound.cpp" line="553"/>
         <source>No ASIO audio device driver found.</source>
         <translation>未发现 ASIO 音频设备驱动.</translation>
     </message>
     <message>
-        <location filename="../../../windows/sound.cpp" line="554"/>
+        <location filename="../../sound/asio/sound.cpp" line="554"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
         <translation>请在运行 %1 前安装 ASIO 驱动。如果您由一个受 ASIO 支持的设备，请安装其官方 ASIO 驱动。若没有，您需要安装一个通用的驱动，如 ASIO4ALL。</translation>
     </message>
@@ -3167,82 +3167,82 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">请在运行 %1 前安装 ASIO 驱动。若您拥有支持 ASIO 的设备，则安装其官方 ASIO 驱动。若没有，您将需要下载安装一个通用的驱动（例如 ASIO4ALL）。</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="47"/>
+        <location filename="../../sound/jack/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
         <translation>JACK 未能自动启动。请手动启动 JACK 并检查错误信息。</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="64"/>
+        <location filename="../../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
         <translation>JACK 未在采样率 &lt;b&gt;%1 Hz&lt;/b&gt; 下运行。请使用例如 &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; 的工具将 JACK 配置到  %1 Hz。</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="81"/>
+        <location filename="../../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
         <translation>JACK 端口注册失败。这可能是由于 JACK 的错误所至。请停止运行 %1 和 JACK。然后就检查使用采样率 %2 的其它程序是否可以连接到 JACK。</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="94"/>
+        <location filename="../../sound/jack/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
         <translation>JACK 端口注册失败。这可能是由于 JACK 的错误所至。请停止运行 %1 和 JACK。然后就检查其它 MIDI 程序是否可以连接到 JACK。</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="107"/>
+        <location filename="../../sound/jack/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
         <translation>无法启用 JACK 客户端。这可能是由于 JACK 的错误所至。请检查 JACK 输出。</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="210"/>
+        <location filename="../../sound/jack/sound.cpp" line="210"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
         <translation>JACK 为停止状态。%1 需要 JACK 才能运行。请重启 %1 来再次启动 JACK。 </translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="113"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
         <translation>您的系统中没有声卡可用。CoreAudio 输入 AudioHardwareGetProperty 调用失败。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="122"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
         <translation>您的系统中没有声卡可用。CoreAudio 输入 AudioHardwareGetProperty 调用失败。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="284"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
         <translation>当前所选的音频设备已不存在。请检查您的音频设备。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="385"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
         <translation>音频输入设备已不再可用。请检查您的音频输入设备是否已正确连接。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="394"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
         <translation>当前输入设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项（位于 应用程序&gt;辅助功能）手动设定其采样率到 %1 Hz。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="406"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
         <translation>音频输出设备不再可用。请检查您的输出设备是否已正确连接。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="415"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
         <translation>当前输出设备的采样率并非 %1 Hz，故不兼容。请选择其它设备或尝试通过 音频-MIDI-选项（位于 应用程序&gt;辅助功能）手动设定其采样率到 %1 Hz。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="463"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
         <translation>当前输入设备的媒体流格式与此软件不兼容。请选择其它设备。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="474"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="474"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
         <translation>当前输出设备的媒体流格式与 %1 不兼容。请选择其它设备。</translation>
     </message>
     <message>
-        <location filename="../../../mac/sound.cpp" line="727"/>
+        <location filename="../../sound/coreaudio-mac/sound.cpp" line="727"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
         <translation>当前音频输入输出设备的缓冲区大小无法被设定到一个常见的值。请在您的系统设置中选择其它的输入/输出设备。</translation>
     </message>
@@ -3250,32 +3250,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CSoundBase</name>
     <message>
-        <location filename="../../soundbase.cpp" line="117"/>
+        <location filename="../../sound/soundbase.cpp" line="117"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
         <translation>由于以下原因，无法使用所选的音频设备：%1 将会使用之前的设备。</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="158"/>
+        <location filename="../../sound/soundbase.cpp" line="158"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
         <translation>之前所选的音频设备已不再可用或现处于不兼容的状态。我们将尝试寻找一个有效的音频设备，但新的设备可能会产生自激。在连接刀服务器前，请考虑检查您的音频设备设置项。</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="170"/>
+        <location filename="../../sound/soundbase.cpp" line="170"/>
         <source>No usable %1 audio device found.</source>
         <translation>未发现可用的 %1 音频设备。</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="171"/>
+        <location filename="../../sound/soundbase.cpp" line="171"/>
         <source>These are all the available drivers with error messages:</source>
         <translation>以下为所有可用的驱动和错误信息：</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="183"/>
+        <location filename="../../sound/soundbase.cpp" line="183"/>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
         <translation>您想要打开 ASIO 驱动向导并尝试修改您的配置以达到可用状态吗？</translation>
     </message>
     <message>
-        <location filename="../../soundbase.cpp" line="190"/>
+        <location filename="../../sound/soundbase.cpp" line="190"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
         <translation>无法启动 %1。请重启 %1 并检查/重新配置您的音频设置选项。</translation>
     </message>

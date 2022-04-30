@@ -34,9 +34,9 @@
 #include <stdio.h>
 #include <QThread>
 #include <string.h>
-#include "util.h"
-#include "soundbase.h"
-#include "global.h"
+#include "../../util.h"
+#include "../soundbase.h"
+#include "../../global.h"
 
 #if WITH_JACK
 #    include <jack/jack.h>

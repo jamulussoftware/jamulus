@@ -82,7 +82,7 @@ case "${1:-}" in
     setup)
         setup
         # check whether signing will be used and prevent
-	 # a return status of 1 from propagating to the script exit status.
+	# a return status of 1 from propagating to the script exit status.
         check_if_signing || true
         ;;
     build)

@@ -24,7 +24,7 @@
 
 #ifdef HEADLESS
 #    if defined( Q_OS_IOS )
-#        error HEADLES mode is not valid for IOS
+#        error HEADLESS mode is not supported on iOS
 #    endif
 #    if defined( ANDROID )
 #        error HEADLES mode is not valid for ANDROID

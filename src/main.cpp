@@ -27,7 +27,7 @@
 #        error HEADLESS mode is not supported on iOS
 #    endif
 #    if defined( ANDROID )
-#        error HEADLES mode is not valid for ANDROID
+#        error HEADLESS mode is not supported on Android
 #    endif
 #endif
 

@@ -921,6 +921,9 @@ int main ( int argc, char** argv )
             }
         }
         else
+#else
+        Q_UNUSED ( bUseTranslation )
+        Q_UNUSED ( bNoAutoJackConnect )
 #endif
         {
             // Server:

@@ -23,7 +23,10 @@
 \******************************************************************************/
 
 #include "messages.h"
-#include <QTextEdit>
+
+#ifndef HEADLESS
+#    include <QTextEdit>
+#endif
 
 tMainform* CMessages::pMainForm = NULL;
 QString    CMessages::strMainFormName;
@@ -32,18 +35,27 @@ QString CMessages::ToUtf8Printable ( const QString& text )
 {
     QString plainText;
 
+#ifndef HEADLESS
     {
         QTextEdit textEdit;
 
         textEdit.setText ( text );          // Text can be html...
         plainText = textEdit.toPlainText(); // Text will be plain Text !
     }
+#else
+    plainText = text;
+    // Remove htmlBold
+    plainText.replace ( "<b>", "" );
+    plainText.replace ( "</b>", "" );
+    // Translate htmlNewLine
+    plainText.replace ( "<br>", "\n" );
 
     // no multiple newlines
     while ( plainText.contains ( "\n\n" ) )
     {
         plainText.replace ( "\n\n", "\n" );
     }
+#endif
 
 #ifdef _WIN32
     // LF to CRLF
@@ -108,8 +120,8 @@ bool CMessages::ShowErrorWait ( QString strError, const QString strActionButtonT
     msgBox.setText ( strError );
     return ( msgBox.exec() == 0 );
 #else
-    Q_UNUSED ( strActionText )
-    Q_UNUSED ( strAbortText )
+    Q_UNUSED ( strActionButtonText )
+    Q_UNUSED ( strAbortButtonText )
     qCritical().noquote() << "Error: " << ToUtf8Printable ( strError );
     return bDefault;
 #endif
@@ -139,8 +151,8 @@ bool CMessages::ShowWarningWait ( QString strWarning, const QString strActionBut
     msgBox.setText ( strWarning );
     return ( msgBox.exec() == 0 );
 #else
-    Q_UNUSED ( strActionText )
-    Q_UNUSED ( strAbortText )
+    Q_UNUSED ( strActionButtonText )
+    Q_UNUSED ( strAbortButtonText )
     qWarning().noquote() << "Warning: " << ToUtf8Printable ( strWarning );
     return bDefault;
 #endif
@@ -170,8 +182,8 @@ bool CMessages::ShowInfoWait ( QString strInfo, const QString strActionButtonTex
     msgBox.setText ( strInfo );
     return ( msgBox.exec() == 0 );
 #else
-    Q_UNUSED ( strActionText )
-    Q_UNUSED ( strAbortText )
+    Q_UNUSED ( strActionButtonText )
+    Q_UNUSED ( strAbortButtonText )
     qInfo().noquote() << "Info: " << ToUtf8Printable ( strInfo );
     return bDefault;
 #endif

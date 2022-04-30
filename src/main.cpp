@@ -57,7 +57,7 @@ extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 
 int main ( int argc, char** argv )
 {
-
+    int exit_code = 0;
 #if defined( Q_OS_MACX )
     // Mnemonic keys are default disabled in Qt for MacOS. The following function enables them.
     // Qt will not show these with underline characters in the GUI on MacOS. (#1873)
@@ -906,7 +906,7 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
-                pApp->exec();
+                exit_code = pApp->exec();
             }
             else
 #    endif
@@ -917,7 +917,7 @@ int main ( int argc, char** argv )
                 // initialise message boxes
                 CMessages::init ( NULL, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
 
-                pApp->exec();
+                exit_code = pApp->exec();
             }
         }
         else
@@ -976,7 +976,7 @@ int main ( int argc, char** argv )
                     ServerDlg.show();
                 }
 
-                pApp->exec();
+                exit_code = pApp->exec();
             }
             else
 #endif
@@ -994,7 +994,7 @@ int main ( int argc, char** argv )
                 // initialise message boxes
                 CMessages::init ( NULL, strClientName.isEmpty() ? QString ( APP_NAME ) : QString ( APP_NAME ) + " " + strClientName );
 
-                pApp->exec();
+                exit_code = pApp->exec();
             }
         }
     }
@@ -1002,17 +1002,22 @@ int main ( int argc, char** argv )
     catch ( const CGenErr& generr )
     {
         // show generic error
-        CMessages::ShowError ( generr.GetErrorText() );
-#ifdef HEADLESS
-        exit ( 1 );
-#endif
+        CMessages::ShowErrorWait ( generr.GetErrorText(), QObject::tr ( "Exit" ) );
+        exit_code = 1;
+    }
+
+    catch ( ... )
+    {
+        // show generic error
+        CMessages::ShowErrorWait ( QObject::tr ( "Unhandled exception !" ), QObject::tr ( "Exit" ) );
+        exit_code = -1;
     }
 
 #if defined( Q_OS_MACX )
     activity.EndActivity();
 #endif
 
-    return 0;
+    return exit_code;
 }
 
 /******************************************************************************\

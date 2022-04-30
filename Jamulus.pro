@@ -166,8 +166,8 @@ win32 {
         RC_FILE = src/res/mainicon.icns
     }
 
-    HEADERS += mac/activity.h mac/badgelabel.h
-    OBJECTIVE_SOURCES += mac/activity.mm mac/badgelabel.mm
+    HEADERS += src/mac/activity.h src/mac/badgelabel.h
+    OBJECTIVE_SOURCES += src/mac/activity.mm src/mac/badgelabel.mm
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
 
@@ -220,8 +220,8 @@ win32 {
 
 } else:ios {
     QMAKE_INFO_PLIST = ios/Info.plist
-    OBJECTIVE_SOURCES += ios/ios_app_delegate.mm
-    HEADERS += ios/ios_app_delegate.h
+    OBJECTIVE_SOURCES += src/ios/ios_app_delegate.mm
+    HEADERS += src/ios/ios_app_delegate.h
     HEADERS += src/sound/coreaudio-ios/sound.h
     OBJECTIVE_SOURCES += src/sound/coreaudio-ios/sound.mm
     QMAKE_TARGET_BUNDLE_PREFIX = io.jamulus
@@ -246,8 +246,8 @@ win32 {
 
     HEADERS += src/sound/oboe/sound.h
 
-    SOURCES += src/sound/oboe/sound.cpp \
-        android/androiddebug.cpp
+SOURCES += src/sound/oboe/sound.cpp \
+        src/android/androiddebug.cpp
 
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

@@ -205,8 +205,7 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblDelayVal->setWhatsThis ( strConnStats );
     ledDelay->setWhatsThis ( strConnStats );
     ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                "you will not have much fun using "
-                                "the %1 software." )
+                                "you will not have much fun using %1." )
                                .arg ( APP_NAME ) +
                            TOOLTIP_COM_END_TEXT );
     lblPingVal->setText ( "---" );

@@ -84,9 +84,9 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
 
     // server address
     QString strServAddrH = "<b>" + tr ( "Server Address" ) + ":</b> " +
-                           tr ( "If you know the IP address or URL of a server, you can connect to it "
-                                "using the Server name/Address field. An optional port number can be added after the IP "
-                                "address or URL using a colon as a separator, e.g. %1. "
+                           tr ( "If you know the server address, you can connect to it "
+                                "using the Server name/Address field. An optional port number can be added after the server "
+                                "address using a colon as a separator, e.g. %1. "
                                 "The field will also show a list of the most recently used server addresses." )
                                .arg ( QString ( "<tt>example.org:%1</tt>" ).arg ( DEFAULT_PORT_NUMBER ) );
 
@@ -94,7 +94,7 @@ CConnectDlg::CConnectDlg ( CClientSettings* pNSetP, const bool bNewShowCompleteR
     cbxServerAddr->setWhatsThis ( strServAddrH );
 
     cbxServerAddr->setAccessibleName ( tr ( "Server address edit box" ) );
-    cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server IP address or URL. It also stores old URLs in the combo box list." ) );
+    cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server address. It also stores old addresses in the combo box list." ) );
 
     UpdateDirectoryServerComboBox();
 

@@ -231,6 +231,19 @@ Click on **Publish branch** or **Push origin**. This will push the branch to you
 
 There will now be a section offering **Create Pull Request**. Click on that to create the PR to the upstream repository.
 
+#### Updating a PR/fixing conflicts
+
+Other contributors may have edited your files after you began your work, which can cause conflicts. If GitHub or git tells you about conflicts, or if you are requested to (rebase)[https://teamairship.com/update-outdated-branch-without-creating-merge-commit/] your work, do so as follows:
+
+```shell
+git remote add upstream git@github.com:jamulussoftware/jamulus ;# add the main repo as upstream remote if you didn’t already as mentioned above
+git fetch upstream ; # Get the latest changes from the main upstream repo you added before (if needed)
+git checkout <theBranchYourWorkIsOn> ;# switch to (= checkout) the branch you want to rebase
+git rebase upstream/master ;# replay (=rebase) your changes onto the latest code (and fix conflicts if needed)
+git rebase --continue # to continue the rebasing progress after having fixed the conflicts
+git push --force # Push the changes to your repo. Be aware that this will overwrite your remote branch!
+```
+
 ---
 
 ## That's all

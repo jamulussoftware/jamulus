@@ -52,6 +52,18 @@ CCommandline::CCommandline ( tOnArgumentError* onArgumentErrorFunc ) : onArgumen
     reset();
 }
 
+int CCommandline::GetArgumentList ( QStringList& argumentList )
+{
+    argumentList.clear();
+
+    for ( int i = 1; i < argc; i++ )
+    {
+        argumentList.append ( argv[i] );
+    }
+
+    return argumentList.size();
+}
+
 /************************************************
  Get full command line as a single string
  ************************************************/

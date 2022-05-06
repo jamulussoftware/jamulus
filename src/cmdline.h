@@ -58,6 +58,7 @@ public:
     static QString Argument ( int i );                      // i = 1..ArgumentCount()
 
     static QString Commandline();
+    static int     GetArgumentList ( QStringList& argumentList );
 
 public:
     // sequencial parse functions using the argument index:
@@ -120,6 +121,10 @@ public:
  ********************************************************************/
 
 // clang-format off
+
+#define CMDLN_HELP                "-h",                    "--help"
+#define CMDLN_HELP2               "-?",                    "--help"
+#define CMDLN_VERSION             "-v",                    "--version"
 
 #define CMDLN_INIFILE             "-i",                    "--inifile"
 #define CMDLN_NOGUI               "-n",                    "--nogui"

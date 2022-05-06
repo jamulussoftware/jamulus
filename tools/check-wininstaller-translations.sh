@@ -1,12 +1,12 @@
 #!/bin/bash
 set -eu
 
-BASE_DIR=src/res/translation/wininstaller/
+BASE_DIR=src/translation/wininstaller/
 BASE_LANG=en
 INSTALLERLNG=installerlng.nsi
 BASE_LANGSTRINGS=$(grep LangString "${BASE_DIR}/${BASE_LANG}.nsi" | cut -d' ' -f2)
 EXIT=0
-for LANGUAGE_FILE in src/res/translation/wininstaller/{??.nsi,??_??.nsi}; do
+for LANGUAGE_FILE in src/translation/wininstaller/{??.nsi,??_??.nsi}; do
     if [[ ${LANGUAGE_FILE} =~ /${BASE_LANG}.nsi$ ]]; then
         continue
     fi

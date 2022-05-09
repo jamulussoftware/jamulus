@@ -23,7 +23,14 @@
 \******************************************************************************/
 
 #include "settings.h"
-#include <QApplication>
+
+#ifdef HEADLESS
+#    include <QCoreApplication>
+#    define pAPPLICATION QCoreApplication::instance()
+#else
+#    include <QApplication>
+#    define pAPPLICATION QApplication::instance()
+#endif
 
 /* Implementation *************************************************************/
 void CSettings::SetFileName ( const QString& strIniFilePath, const QString& sDefaultFileName )
@@ -132,7 +139,7 @@ void CSettings::Load ( const QList<QString> CommandLineOptions )
     // load translation
     if ( !CommandLineOptions.contains ( "--nogui" ) && !CommandLineOptions.contains ( "--notranslation" ) )
     {
-        CLocale::LoadTranslation ( strLanguage, QApplication::instance() );
+        CLocale::LoadTranslation ( strLanguage, pAPPLICATION );
     }
 }
 

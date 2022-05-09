@@ -940,6 +940,10 @@ int main ( int argc, char** argv )
                              bEnableIPv6,
                              eLicenceType );
 
+            // load settings (command line options override)
+            CServerSettings Settings ( &Server, strIniFileName );
+            Settings.Load ( CommandLineOptions );
+
             if ( pRpcServer )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
@@ -948,10 +952,6 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
             if ( bUseGUI )
             {
-                // load settings from init-file (command line options override)
-                CServerSettings Settings ( &Server, strIniFileName );
-                Settings.Load ( CommandLineOptions );
-
                 // load translation
                 if ( bUseGUI && bUseTranslation )
                 {

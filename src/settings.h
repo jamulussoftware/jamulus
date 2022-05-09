@@ -38,13 +38,34 @@
 #include "server.h"
 #include "util.h"
 
+/* Defines ********************************************************************/
+
+// In the new inifile format, both server and client settings can be stored in the same inifile.
+// In this case we can still read the old inifile, but they will be saved as
+// a new multi section inifile, which can't be read anymore by old Jamulus versions.
+// NOTE: To keep the old file fomat set INI_ROOT_SECTION to empty string and set INI_FILE_VERSION's to -1
+
+#define INI_ROOT_SECTION APP_NAME
+
+#define INI_DATA_SECTION_SERVER "server"
+#define INI_FILE_VERSION_SERVER 0
+
+#define INI_DATA_SECTION_CLIENT "client"
+#define INI_FILE_VERSION_CLIENT 0
+
 /* Classes ********************************************************************/
 class CSettings : public QObject
 {
+    friend int main ( int argc, char** argv );
+    friend class CClientSettings;
+    friend class CServerSettings;
+
     Q_OBJECT
 
 public:
-    CSettings() :
+    CSettings ( const QString& iniRootSection, const QString& iniDataSection ) :
+        strRootSection ( iniRootSection ),
+        strDataSection ( iniDataSection ),
         vecWindowPosMain(), // empty array
         strLanguage ( "" ),
         strFileName ( "" )
@@ -52,23 +73,56 @@ public:
         QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, &CSettings::OnAboutToQuit );
     }
 
-    void Load ( const QList<QString> CommandLineOptions );
-    void Save();
-
-    // common settings
+public: // common settings
     QByteArray vecWindowPosMain;
     QString    strLanguage;
 
 protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument )                                                  = 0;
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) = 0;
+    const QString strRootSection;
+    const QString strDataSection;
+    QString       strFileName;
+
+protected:
+    void SetFileName ( const QString& strIniFilePath, const QString& sDefaultFileName );
+
+    void Load ( const QList<QString> CommandLineOptions );
+    void Save();
 
     void ReadFromFile ( const QString& strCurFileName, QDomDocument& XMLDocument );
-
     void WriteToFile ( const QString& strCurFileName, const QDomDocument& XMLDocument );
 
-    void SetFileName ( const QString& sNFiName, const QString& sDefaultFileName );
+protected:
+    // init file access function for read/write
+    QDomNode FlushNode ( QDomNode& node );
 
+    // xml section access functions for read/write
+    // GetSectionForRead  will only return an existing section, returns a Null node if the section does not exist.
+    // GetSectionForWrite will create a new section if the section does not yet exist
+    // note: if bForceChild == false the given section itself will be returned if it has a matching name (needed for backwards compatibility)
+    //       if bForceChild == true  the returned section must be a child of the given section.
+    const QDomNode GetSectionForRead ( const QDomNode& section, QString strSectionName, bool bForceChild = true );
+    QDomNode       GetSectionForWrite ( QDomNode& section, QString strSectionName, bool bForceChild = true );
+
+    // actual working functions for init-file access
+    bool GetStringIniSet ( const QDomNode& section, const QString& sKey, QString& sValue );
+    bool SetStringIniSet ( QDomNode& section, const QString& sKey, const QString& sValue );
+
+    bool GetBase64StringIniSet ( const QDomNode& section, const QString& sKey, QString& sValue );
+    bool SetBase64StringIniSet ( QDomNode& section, const QString& sKey, const QString& sValue );
+
+    bool GetBase64ByteArrayIniSet ( const QDomNode& section, const QString& sKey, QByteArray& arrValue );
+    bool SetBase64ByteArrayIniSet ( QDomNode& section, const QString& sKey, const QByteArray& arrValue );
+
+    bool GetNumericIniSet ( const QDomNode& section, const QString& strKey, const int iRangeStart, const int iRangeStop, int& iValue );
+    bool SetNumericIniSet ( QDomNode& section, const QString& strKey, const int iValue = 0 );
+
+    bool GetFlagIniSet ( const QDomNode& section, const QString& strKey, bool& bValue );
+    bool SetFlagIniSet ( QDomNode& section, const QString& strKey, const bool bValue );
+
+public slots:
+    void OnAboutToQuit() { Save(); }
+
+public:
     // The following functions implement the conversion from the general string
     // to base64 (which should be used for binary data in XML files). This
     // enables arbitrary utf8 characters to be used as the names in the GUI.
@@ -78,34 +132,14 @@ protected:
     //            assign the stored value to a QString, this is incorrect but
     //            will not generate a compile error since there is a default
     //            conversion available for QByteArray to QString.
-    QString    ToBase64 ( const QByteArray strIn ) const { return QString::fromLatin1 ( strIn.toBase64() ); }
-    QString    ToBase64 ( const QString strIn ) const { return ToBase64 ( strIn.toUtf8() ); }
-    QByteArray FromBase64ToByteArray ( const QString strIn ) const { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
-    QString    FromBase64ToString ( const QString strIn ) const { return QString::fromUtf8 ( FromBase64ToByteArray ( strIn ) ); }
+    static QString    ToBase64 ( const QByteArray strIn ) { return QString::fromLatin1 ( strIn.toBase64() ); }
+    static QString    ToBase64 ( const QString strIn ) { return ToBase64 ( strIn.toUtf8() ); }
+    static QByteArray FromBase64ToByteArray ( const QString strIn ) { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
+    static QString    FromBase64ToString ( const QString strIn ) { return QString::fromUtf8 ( FromBase64ToByteArray ( strIn ) ); }
 
-    // init file access function for read/write
-    void SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection, const QString& strKey, const int iValue = 0 );
-
-    bool GetNumericIniSet ( const QDomDocument& xmlFile,
-                            const QString&      strSection,
-                            const QString&      strKey,
-                            const int           iRangeStart,
-                            const int           iRangeStop,
-                            int&                iValue );
-
-    void SetFlagIniSet ( QDomDocument& xmlFile, const QString& strSection, const QString& strKey, const bool bValue = false );
-
-    bool GetFlagIniSet ( const QDomDocument& xmlFile, const QString& strSection, const QString& strKey, bool& bValue );
-
-    // actual working function for init-file access
-    QString GetIniSetting ( const QDomDocument& xmlFile, const QString& sSection, const QString& sKey, const QString& sDefaultVal = "" );
-
-    void PutIniSetting ( QDomDocument& xmlFile, const QString& sSection, const QString& sKey, const QString& sValue = "" );
-
-    QString strFileName;
-
-public slots:
-    void OnAboutToQuit() { Save(); }
+protected:
+    virtual void WriteSettingsToXML ( QDomNode& root )                                                  = 0;
+    virtual void ReadSettingsFromXML ( const QDomNode& root, const QList<QString>& CommandLineOptions ) = 0;
 };
 
 #ifndef SERVER_ONLY
@@ -113,7 +147,7 @@ class CClientSettings : public CSettings
 {
 public:
     CClientSettings ( CClient* pNCliP, const QString& sNFiName ) :
-        CSettings(),
+        CSettings ( INI_ROOT_SECTION, INI_DATA_SECTION_CLIENT ),
         vecStoredFaderTags ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
         vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
         vecStoredPanValues ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
@@ -174,28 +208,30 @@ public:
     bool       bOwnFaderFirst;
 
 protected:
-    // No CommandLineOptions used when reading Client inifile
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& ) override;
-
-    void ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument );
-    void WriteFaderSettingsToXML ( QDomDocument& IniXMLDocument );
-
     CClient* pClient;
+
+    void ReadFaderSettingsFromXML ( const QDomNode& section );
+    void WriteFaderSettingsToXML ( QDomNode& section );
+
+protected:
+    // No CommandLineOptions used when reading Client inifile
+    virtual void WriteSettingsToXML ( QDomNode& root ) override;
+    virtual void ReadSettingsFromXML ( const QDomNode& root, const QList<QString>& ) override;
 };
 #endif
 
 class CServerSettings : public CSettings
 {
 public:
-    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) : CSettings(), pServer ( pNSerP )
+    CServerSettings ( CServer* pNSerP, const QString& sNFiName ) : CSettings ( INI_ROOT_SECTION, INI_DATA_SECTION_SERVER ), pServer ( pNSerP )
     {
         SetFileName ( sNFiName, DEFAULT_INI_FILE_NAME_SERVER );
     }
 
 protected:
-    virtual void WriteSettingsToXML ( QDomDocument& IniXMLDocument ) override;
-    virtual void ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions ) override;
-
     CServer* pServer;
+
+protected:
+    virtual void WriteSettingsToXML ( QDomNode& root ) override;
+    virtual void ReadSettingsFromXML ( const QDomNode& root, const QList<QString>& CommandLineOptions ) override;
 };

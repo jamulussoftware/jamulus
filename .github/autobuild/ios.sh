@@ -94,9 +94,11 @@ pass_artifact_to_job() {
     echo "::set-output name=artifact_1::${artifact}"
 
     local artifact2="jamulus_${JAMULUS_BUILD_VERSION}_iOS_signed${ARTIFACT_SUFFIX:-}.ipa"
-    echo "Moving build artifact to deploy/${artifact2}"
-    mv ./deploy/Jamulus_signed.ipa "./deploy/${artifact2}"
-    echo "::set-output name=artifact_2::${artifact2}"
+    if [ -f ./deploy/Jamulus_signed.ipa ]; then
+        echo "Moving build artifact to deploy/${artifact2}"
+        mv ./deploy/Jamulus_signed.ipa "./deploy/${artifact2}"
+        echo "::set-output name=artifact_2::${artifact2}"
+    fi
 }
 
 case "${1:-}" in

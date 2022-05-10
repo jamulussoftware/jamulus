@@ -59,8 +59,9 @@ prepare_signing() {
     security default-keychain -s build.keychain
     security unlock-keychain -p "${KEYCHAIN_PASSWORD}" build.keychain
     security import iosdist_certificate.p12 -k build.keychain -P "${IOSDIST_CERTIFICATE_PWD}" -A -T /usr/bin/codesign
-    # security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
     security set-key-partition-list -S apple-tool:,apple: -s -k "${KEYCHAIN_PASSWORD}" build.keychain
+    # add notarization/validation/upload password to keychain
+    xcrun altool --store-password-in-keychain-item --keychain build.keychain APPCONNAUTH -u $NOTARIZATION_USER -p $NOTARIZATION_PASSWORD
     # set lock timeout on keychain to 6 hours
     security set-keychain-settings -lut 21600
     
@@ -69,12 +70,8 @@ prepare_signing() {
     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
     cp $IOS_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-    # for debug
-    echo "Checking found identities..."
-    security find-identity -v 
-
     # Tell Github Workflow that we need notarization & stapling:
-    echo "::set-output name=macos_signed::true"
+    echo "::set-output name=ios_signed::true"
     return 0
 }
 

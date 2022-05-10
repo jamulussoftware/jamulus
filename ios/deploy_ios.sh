@@ -89,6 +89,11 @@ build_ipa()
             CODE_SIGNING_REQUIRED=YES \
             CODE_SIGNING_ALLOWED=YES \
             CODE_SIGN_STYLE="Manual"
+
+        # if validate/upload
+        xcrun altool --validate-app -f "${build_path}/Exports/Jamulus.ipa" -t macos -p @keychain:APPCONNAUTH
+        xcrun altool --upload-app -f "${build_path}/Exports/Jamulus.ipa" -t macos -p @keychain:APPCONNAUTH
+
     fi
 
     # Generate unsigned ipa by copying the .app structure from the xcarchive directory

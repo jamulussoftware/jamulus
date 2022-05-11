@@ -233,7 +233,7 @@ There will now be a section offering **Create Pull Request**. Click on that to c
 
 #### Updating a PR/fixing conflicts
 
-Other contributors may have edited your files after you began your work, which can cause conflicts. If GitHub or git tells you about conflicts, or if you are requested to (rebase)[https://teamairship.com/update-outdated-branch-without-creating-merge-commit/] your work, do so as follows:
+Other contributors may have edited your files after you began your work, which can cause conflicts. If GitHub or git tells you about conflicts, or if you are requested to [rebase](https://teamairship.com/update-outdated-branch-without-creating-merge-commit/) your work, do so as follows:
 
 ```shell
 git remote add upstream git@github.com:jamulussoftware/jamulus ;# add the main repo as upstream remote if you didn’t already as mentioned above

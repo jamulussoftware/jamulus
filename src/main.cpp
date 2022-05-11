@@ -797,7 +797,7 @@ int main ( int argc, char** argv )
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
     QDir ApplDir ( QApplication::applicationDirPath() );
-    pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+    pAPPLICATION->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
 #if defined( Q_OS_MACX )
@@ -847,7 +847,7 @@ int main ( int argc, char** argv )
         qWarning() << "- JSON-RPC: This interface is experimental and is subject to breaking changes even on patch versions "
                       "(not subject to semantic versioning) during the initial phase.";
 
-        pRpcServer = new CRpcServer ( pApp, iJsonRpcPortNumber, strJsonRpcSecret );
+        pRpcServer = new CRpcServer ( pAPPLICATION, iJsonRpcPortNumber, strJsonRpcSecret );
         if ( !pRpcServer->Start() )
         {
             qCritical() << qUtf8Printable ( QString ( "- JSON-RPC: Server failed to start. Exiting." ) );
@@ -875,13 +875,6 @@ int main ( int argc, char** argv )
             CClientSettings Settings ( &Client, strIniFileName );
             Settings.Load ( CommandLineOptions );
 
-            // load translation
-            if ( bUseGUI && bUseTranslation )
-            {
-                CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                CInstPictures::UpdateTableOnLanguageChange();
-            }
-
             if ( pRpcServer )
             {
                 new CClientRpc ( &Client, pRpcServer, pRpcServer );
@@ -903,7 +896,7 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
-                pApp->exec();
+                pAPPLICATION->exec();
             }
             else
 #    endif
@@ -911,7 +904,7 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
-                pApp->exec();
+                pAPPLICATION->exec();
             }
         }
         else
@@ -952,12 +945,6 @@ int main ( int argc, char** argv )
 #ifndef HEADLESS
             if ( bUseGUI )
             {
-                // load translation
-                if ( bUseGUI && bUseTranslation )
-                {
-                    CLocale::LoadTranslation ( Settings.strLanguage, pApp );
-                }
-
                 // GUI object for the server
                 CServerDlg ServerDlg ( &Server, &Settings, bStartMinimized, nullptr );
 
@@ -967,7 +954,7 @@ int main ( int argc, char** argv )
                     ServerDlg.show();
                 }
 
-                pApp->exec();
+                pAPPLICATION->exec();
             }
             else
 #endif
@@ -982,7 +969,7 @@ int main ( int argc, char** argv )
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
 
-                pApp->exec();
+                pAPPLICATION->exec();
             }
         }
     }

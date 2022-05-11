@@ -24,11 +24,15 @@
 
 #pragma once
 
-#include <QCoreApplication>
 #include <QUdpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
-#ifndef HEADLESS
+#ifdef HEADLESS
+#    include <QCoreApplication>
+#    define pAPPLICATION QCoreApplication::instance()
+#else
+#    include <QApplication>
+#    define pAPPLICATION QApplication::instance()
 #    include <QMessageBox>
 #    include <QMenu>
 #    include <QWhatsThis>
@@ -816,7 +820,7 @@ public:
     static QString                 GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry /* Always a Qt5 (!) code */ );
     static QMap<QString, QString>  GetAvailableTranslations();
     static QPair<QString, QString> FindSysLangTransFileName ( const QMap<QString, QString>& TranslMap );
-    static void                    LoadTranslation ( const QString strLanguage, QCoreApplication* pApp );
+    static void                    LoadTranslation ( const QString strLanguage );
     static QLocale::Country        WireFormatCountryCodeToQtCountry ( unsigned short iCountryCode );
     static unsigned short          QtCountryToWireFormatCountryCode ( const QLocale::Country eCountry );
     static bool                    IsCountryCodeSupported ( unsigned short iCountryCode );

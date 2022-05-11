@@ -1331,7 +1331,7 @@ QPair<QString, QString> CLocale::FindSysLangTransFileName ( const QMap<QString, 
     return PairSysLang;
 }
 
-void CLocale::LoadTranslation ( const QString strLanguage, QCoreApplication* pApp )
+void CLocale::LoadTranslation ( const QString strLanguage )
 {
     // The translator objects must be static!
     static QTranslator myappTranslator;
@@ -1342,13 +1342,13 @@ void CLocale::LoadTranslation ( const QString strLanguage, QCoreApplication* pAp
 
     if ( myappTranslator.load ( strTranslationFileName ) )
     {
-        pApp->installTranslator ( &myappTranslator );
+        pAPPLICATION->installTranslator ( &myappTranslator );
     }
 
     // allows the Qt messages to be translated in the application
     if ( myqtTranslator.load ( QLocale ( strLanguage ), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
     {
-        pApp->installTranslator ( &myqtTranslator );
+        pAPPLICATION->installTranslator ( &myqtTranslator );
     }
 }
 

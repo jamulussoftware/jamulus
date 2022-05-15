@@ -688,8 +688,9 @@ bool CServerListManager::Load()
     if ( !file.open ( QIODevice::ReadWrite | QIODevice::Text ) )
     {
         qWarning() << qUtf8Printable (
-            QString ( "Could not open '%1' for read/write.  Please check that Jamulus has permission (and that there is free space)." )
-                .arg ( ServerListFileName ) );
+            QString ( "Could not open '%1' for read/write.  Please check that %2 has permission (and that there is free space)." )
+                .arg ( ServerListFileName )
+                .arg ( APP_NAME ) );
         ServerListFileName.clear();
         return false;
     }

@@ -175,14 +175,16 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
                                     tr ( "Click the button to open the dialog that allows the main recording directory to be selected.  "
                                          "The chosen value must exist and be writeable (allow creation of sub-directories "
-                                         "by the user Jamulus is running as)." ) );
+                                         "by the user %1 is running as)." )
+                                        .arg ( APP_NAME ) );
 
     edtRecordingDir->setAccessibleName ( tr ( "Main recording directory text box (read-only)" ) );
     edtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> " +
                                     tr ( "The current value of the main recording directory. "
                                          "The chosen value must exist and be writeable (allow creation of sub-directories "
-                                         "by the user Jamulus is running as). "
-                                         "Click the button to open the dialog that allows the main recording directory to be selected." ) );
+                                         "by the user %1 is running as). "
+                                         "Click the button to open the dialog that allows the main recording directory to be selected." )
+                                        .arg ( APP_NAME ) );
 
     tbtClearRecordingDir->setAccessibleName ( tr ( "Clear the recording directory button" ) );
     tbtClearRecordingDir->setWhatsThis ( "<b>" + tr ( "Clear Recording Directory" ) + ":</b> " +
@@ -202,17 +204,19 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     pbtServerListPersistence->setAccessibleName ( tr ( "Server List Filename dialog push button" ) );
     pbtServerListPersistence->setWhatsThis ( "<b>" + tr ( "Server List Filename" ) + ":</b> " +
                                              tr ( "Click the button to open the dialog that allows the "
-                                                  "server list persistence file name to be set. The user Jamulus is running as "
+                                                  "server list persistence file name to be set. The user %1 is running as "
                                                   "needs to be able to create the file name specified "
-                                                  "although it may already exist (it will get overwritten on save)." ) );
+                                                  "although it may already exist (it will get overwritten on save)." )
+                                                 .arg ( APP_NAME ) );
 
     edtServerListPersistence->setAccessibleName ( tr ( "Server List Filename text box (read-only)" ) );
     edtServerListPersistence->setWhatsThis ( "<b>" + tr ( "Server List Filename" ) + ":</b> " +
-                                             tr ( "The current value of server list persistence file name. The user Jamulus is running as "
+                                             tr ( "The current value of server list persistence file name. The user %1 is running as "
                                                   "needs to be able to create the file name specified "
                                                   "although it may already exist (it will get overwritten on save). "
                                                   "Click the button to open the dialog that allows the "
-                                                  "server list persistence file name to be set." ) );
+                                                  "server list persistence file name to be set." )
+                                                 .arg ( APP_NAME ) );
 
     tbtClearServerListPersistence->setAccessibleName ( tr ( "Clear the server list file name button" ) );
     tbtClearServerListPersistence->setWhatsThis ( "<b>" + tr ( "Clear Server List Filename" ) + ":</b> " +

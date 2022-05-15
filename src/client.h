@@ -42,18 +42,18 @@
 #include "signalhandler.h"
 
 #if defined( _WIN32 ) && !defined( JACK_ON_WINDOWS )
-#    include "../windows/sound.h"
+#    include "sound/asio/sound.h"
 #else
 #    if ( defined( Q_OS_MACX ) ) && !defined( JACK_REPLACES_COREAUDIO )
-#        include "../mac/sound.h"
+#        include "sound/coreaudio-mac/sound.h"
 #    else
 #        if defined( Q_OS_IOS )
-#            include "../ios/sound.h"
+#            include "sound/coreaudio-ios/sound.h"
 #        else
 #            ifdef ANDROID
-#                include "../android/sound.h"
+#                include "sound/oboe/sound.h"
 #            else
-#                include "../linux/sound.h"
+#                include "sound/jack/sound.h"
 #                ifndef JACK_ON_WINDOWS // these headers are not available in Windows OS
 #                    include <sched.h>
 #                    include <netdb.h>

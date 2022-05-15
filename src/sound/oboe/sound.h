@@ -25,8 +25,8 @@
 #pragma once
 
 #include <oboe/Oboe.h>
-#include "soundbase.h"
-#include "global.h"
+#include "../soundbase.h"
+#include "../../global.h"
 #include <QDebug>
 #include <android/log.h>
 #include "buffer.h"

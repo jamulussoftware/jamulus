@@ -23,7 +23,7 @@
 \******************************************************************************/
 
 #include "sound.h"
-#include "androiddebug.cpp"
+#include "../../android/androiddebug.cpp"
 
 /* Implementation *************************************************************/
 

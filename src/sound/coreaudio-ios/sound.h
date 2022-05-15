@@ -23,8 +23,8 @@
 \******************************************************************************/
 
 #pragma once
-#include "soundbase.h"
-#include "global.h"
+#include "../soundbase.h"
+#include "../../global.h"
 
 #import <AudioToolbox/AudioToolbox.h>
 

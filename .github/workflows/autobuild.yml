@@ -200,7 +200,7 @@ jobs:
             C:\Qt
             C:\ChocoCache
             ~\windows\NSIS
-            ~\windows\ASIOSDK2
+            ~\libs\ASIOSDK2
           key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Android dependencies

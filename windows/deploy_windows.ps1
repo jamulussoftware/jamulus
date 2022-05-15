@@ -141,7 +141,7 @@ Function Install-Dependencies
         # Don't download ASIO SDK on Jamulus JACK builds to save
         # resources and to be extra-sure license-wise.
         Install-Dependency -Uri $AsioSDKUrl `
-            -Name $AsioSDKName -Destination "ASIOSDK2"
+            -Name $AsioSDKName -Destination "..\libs\ASIOSDK2"
     }
 }
 

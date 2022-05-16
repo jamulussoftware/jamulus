@@ -107,7 +107,9 @@ build_ipa()
     # unsigned IPA
     mv build/unsigned/Jamulus.ipa deploy/Jamulus_unsigned.ipa
     # signed IPA
-    mv build/Exports/Jamulus.ipa deploy/Jamulus_signed.ipa
+    if [[ ! -z "$iosdist_cert_name" ]]; then
+        mv build/Exports/Jamulus.ipa deploy/Jamulus_signed.ipa
+    fi
 }
 
 # Cleanup previous deployments

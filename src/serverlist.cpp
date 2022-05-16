@@ -69,9 +69,9 @@ CServerListEntry CServerListEntry::parse ( QString strHAddr,
 
     return CServerListEntry ( haServerHostAddr,
                               haServerLocalAddr,
-                              CServerCoreInfo ( FromBase64ToString ( sName.trimmed().left ( MAX_LEN_SERVER_NAME ) ),
+                              CServerCoreInfo ( FromBase64ToString ( sName.trimmed() ).left ( MAX_LEN_SERVER_NAME ),
                                                 lcCountry,
-                                                FromBase64ToString ( sCity.trimmed().left ( MAX_LEN_SERVER_CITY ) ),
+                                                FromBase64ToString ( sCity.trimmed() ).left ( MAX_LEN_SERVER_CITY ),
                                                 iNumClients,
                                                 isPermanent ) );
 }

@@ -319,11 +319,41 @@ typedef unsigned char      uint8_t;
 // definition for custom event
 #define MS_PACKET_RECEIVED 0
 
-/* Classes ********************************************************************/
+/* Exception Classes **********************************************************/
+
+class CInfoExit
+{
+public:
+    CInfoExit ( QString strMsg ) : strInfoMsg ( strMsg ) {}
+
+    QString GetInfoMessage() const { return strInfoMsg; }
+
+protected:
+    QString strInfoMsg;
+};
+
+class CErrorExit
+{
+public:
+    CErrorExit ( QString strNewErrorMsg, int iNewExitCode = 1 ) : strErrorMsg ( strNewErrorMsg ), iExitCode ( iNewExitCode ) {}
+
+    QString GetErrorMessage() const { return strErrorMsg; }
+
+    int GetExitCode() const { return iExitCode; }
+
+protected:
+    QString strErrorMsg;
+    int     iExitCode;
+};
+
 class CGenErr
 {
 public:
-    CGenErr ( QString strNewErrorMsg, QString strNewErrorType = "" ) : strErrorMsg ( strNewErrorMsg ), strErrorType ( strNewErrorType ) {}
+    CGenErr ( QString strNewErrorMsg, QString strNewErrorType = "", int iNewExitCode = 1 ) :
+        strErrorMsg ( strNewErrorMsg ),
+        strErrorType ( strNewErrorType ),
+        iExitCode ( iNewExitCode )
+    {}
 
     QString GetErrorText() const
     {
@@ -338,10 +368,15 @@ public:
         }
     }
 
+    int GetExitCode() const { return iExitCode; }
+
 protected:
     QString strErrorMsg;
     QString strErrorType;
+    int     iExitCode;
 };
+
+/* Event Classes **************************************************************/
 
 class CCustomEvent : public QEvent
 {
@@ -359,6 +394,9 @@ public:
 };
 
 /* Prototypes for global functions ********************************************/
+
+extern const QString GetAppName();
+
 // command line parsing, TODO do not declare functions globally but in a class
 QString UsageArguments ( char** argv );
 

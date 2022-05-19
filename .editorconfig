@@ -1,0 +1,20 @@
+# See https://editorconfig.org/
+
+# This is the top-most .editorconfig file
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{cpp,h,mm,nsi,pro,ps1,py,sh}]
+indent_style = space
+indent_size = 4
+
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
+
+[libs/**]
+ignore = true

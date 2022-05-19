@@ -1386,7 +1386,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
 
     if ( !bDisplayInGui )
     {
-        strVersionText += QCoreApplication::tr ( "Internet Jam Session Software" );
+        strVersionText += "Internet Jam Session Software";
         strVersionText += "\n *** ";
     }
 
@@ -1394,39 +1394,32 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
 
     if ( !bDisplayInGui )
     {
-        // additional text to show in console output
+        // additional non-translated text to show in console output
+        strVersionText += "\n *** <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
         strVersionText += "\n *** ";
-        strVersionText += "<https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>";
+        strVersionText += "\n *** This program is free software; you can redistribute it and/or modify it under";
+        strVersionText += "\n *** the terms of the GNU General Public License as published by the Free Software";
+        strVersionText += "\n *** Foundation; either version 2 of the License, or (at your option) any later version.";
+        strVersionText += "\n *** There is NO WARRANTY, to the extent permitted by law.";
         strVersionText += "\n *** ";
+        strVersionText += "\n *** Using the following libraries, resources or code snippets:";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "This program is free software; you can redistribute it and/or modify it under" );
+        strVersionText += QString ( "\n *** Qt framework %1" ).arg ( QT_VERSION_STR );
+        strVersionText += "\n *** <https://doc.qt.io/qt-5/lgpl.html>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "the terms of the GNU General Public License as published by the Free Software" );
+        strVersionText += "\n *** Opus Interactive Audio Codec";
+        strVersionText += "\n *** <https://www.opus-codec.org>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Foundation; either version 2 of the License, or (at your option) any later version." );
+        strVersionText += "\n *** Audio reverberation code by Perry R. Cook and Gary P. Scavone";
+        strVersionText += "\n *** <https://ccrma.stanford.edu/software/stk>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "There is NO WARRANTY, to the extent permitted by law." );
+        strVersionText += "\n *** Some pixmaps are from the Open Clip Art Library (OCAL)";
+        strVersionText += "\n *** <https://openclipart.org>";
         strVersionText += "\n *** ";
+        strVersionText += "\n *** Flag icons by Mark James";
+        strVersionText += "\n *** <http://www.famfamfam.com>";
         strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Using the following libraries, resources or code snippets:" );
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Qt framework " ) + QT_VERSION_STR;
-        strVersionText += " <https://doc.qt.io/qt-5/lgpl.html>";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Opus Interactive Audio Codec" );
-        strVersionText += " <https://www.opus-codec.org>";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" );
-        strVersionText += " <https://ccrma.stanford.edu/software/stk>";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Some pixmaps are from the Open Clip Art Library (OCAL)" );
-        strVersionText += " <https://openclipart.org>";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Flag icons by Mark James" );
-        strVersionText += " <http://www.famfamfam.com>";
-        strVersionText += "\n *** ";
-        strVersionText += "\n *** ";
-        strVersionText += QCoreApplication::tr ( "Copyright (C) 2005-2022 The Jamulus Development Team" );
+        strVersionText += "\n *** Copyright (C) 2005-2022 The Jamulus Development Team";
         strVersionText += "\n";
     }
 

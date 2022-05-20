@@ -26,8 +26,7 @@ while getopts 'hs:' flag; do
     esac
 done
 
-cleanup()
-{
+cleanup() {
     # Clean up previous deployments
     rm -rf "${build_path}"
     rm -rf "${deploy_path}"
@@ -35,9 +34,7 @@ cleanup()
     mkdir -p "${deploy_path}"
 }
 
-
-build_app()
-{
+build_app() {
     local client_or_server="${1}"
 
     # Build Jamulus
@@ -71,11 +68,11 @@ build_app()
         *)
             echo "build_app: invalid parameter '${client_or_server}'"
             exit 1
+            ;;
     esac
 }
 
-build_installer_image()
-{
+build_installer_image() {
     local client_target_name="${1}"
     local server_target_name="${2}"
 
@@ -90,18 +87,18 @@ build_installer_image()
     # Build installer image
 
     create-dmg \
-      --volname "${client_target_name} Installer" \
-      --background "${resources_path}/installerbackground.png" \
-      --window-pos 200 400 \
-      --window-size 900 320 \
-      --app-drop-link 820 210 \
-      --text-size 12 \
-      --icon-size 72 \
-      --icon "${client_target_name}.app" 630 210 \
-      --icon "${server_target_name}.app" 530 210 \
-      --eula "${root_path}/COPYING" \
-      "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
-      "${deploy_path}/"
+        --volname "${client_target_name} Installer" \
+        --background "${resources_path}/installerbackground.png" \
+        --window-pos 200 400 \
+        --window-size 900 320 \
+        --app-drop-link 820 210 \
+        --text-size 12 \
+        --icon-size 72 \
+        --icon "${client_target_name}.app" 630 210 \
+        --icon "${server_target_name}.app" 530 210 \
+        --eula "${root_path}/COPYING" \
+        "${deploy_path}/${client_target_name}-${app_version}-installer-mac.dmg" \
+        "${deploy_path}/"
 }
 
 brew_install_pinned() {

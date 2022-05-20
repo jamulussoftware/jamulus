@@ -18,14 +18,14 @@
 
 set -eu
 
-if [[ -z ${1:-} ]] || [[ -z ${2:-} ]] || [[ -z ${3:-} ]] ; then
+if [[ -z ${1:-} ]] || [[ -z ${2:-} ]] || [[ -z ${3:-} ]]; then
     echo "Syntax: $0 RELEASE DEADLINE app|web [EXTRA_TEXT]"
     exit 1
 fi
 
-if ! gh auth status &>/dev/null; then
-    echo "Error: Please ensure that Github CLI is installed and you are logged in" >/dev/stderr
-    echo "Cannot continue. Exit." >/dev/stderr
+if ! gh auth status &> /dev/null; then
+    echo "Error: Please ensure that Github CLI is installed and you are logged in" > /dev/stderr
+    echo "Cannot continue. Exit." > /dev/stderr
     exit 1
 fi
 
@@ -36,33 +36,30 @@ EXTRA_TEXT=${4:-}
 MILESTONE="Release ${RELEASE}"
 PROJECT=Tracking
 
-declare -A TRANSLATORS_BY_LANG=(
-    # Syntax:
-    # [TYPE_LANG]="github-handle1,github-handle2"
-    # with TYPE being either app or web and
-    # with LANG being the language code (different syntax for app and web!)
-
-    # App translators:
-    [app_de_DE]="rolamos"
-    [app_es_ES]="ignotus666"
-    [app_fr_FR]="jujudusud"
-    [app_it_IT]="dzpex"
-    [app_nl_NL]="henkdegroot,jerogee"
-    [app_pl_PL]="SeeLook"
-    [app_pt_BR]="melcon"
-    [app_pt_PT]="Snayler"
-    [app_sk_SK]="jose1711"
-    [app_sv_SE]="genesisproject2020"
-    [app_zh_CN]="BLumia"
-
-    # Web translators:
-    [web_de]="Helondeth,ewarning"
-    [web_es]="ignotus666"
-    [web_fr]="jujudusud,trebmuh"
-    [web_it]="dzpex"
-    [web_nl]="henkdegroot"
-    [web_pt]="Snayler,melcon,ewarning"
-)
+# Syntax:
+# TRANSLATORS_BY_LANG[TYPE_LANG]="github-handle1,github-handle2"
+# with TYPE being either app or web and
+# with LANG being the language code (different syntax for app and web!)
+declare -A TRANSLATORS_BY_LANG
+# App translators:
+TRANSLATORS_BY_LANG[app_de_DE]="rolamos"
+TRANSLATORS_BY_LANG[app_es_ES]="ignotus666"
+TRANSLATORS_BY_LANG[app_fr_FR]="jujudusud"
+TRANSLATORS_BY_LANG[app_it_IT]="dzpex"
+TRANSLATORS_BY_LANG[app_nl_NL]="henkdegroot,jerogee"
+TRANSLATORS_BY_LANG[app_pl_PL]="SeeLook"
+TRANSLATORS_BY_LANG[app_pt_BR]="melcon"
+TRANSLATORS_BY_LANG[app_pt_PT]="Snayler"
+TRANSLATORS_BY_LANG[app_sk_SK]="jose1711"
+TRANSLATORS_BY_LANG[app_sv_SE]="genesisproject2020"
+TRANSLATORS_BY_LANG[app_zh_CN]="BLumia"
+# Web translators:
+TRANSLATORS_BY_LANG[web_de]="Helondeth,ewarning"
+TRANSLATORS_BY_LANG[web_es]="ignotus666"
+TRANSLATORS_BY_LANG[web_fr]="jujudusud,trebmuh"
+TRANSLATORS_BY_LANG[web_it]="dzpex"
+TRANSLATORS_BY_LANG[web_nl]="henkdegroot"
+TRANSLATORS_BY_LANG[web_pt]="Snayler,melcon,ewarning"
 
 # shellcheck disable=SC2016  # shellcheck can't know that this will be used with envsubst, so verbatim variables are correct here.
 BODY_TEMPLATE_APP='Hi ${SPLIT_TRANSLATORS},
@@ -88,7 +85,6 @@ ${EXTRA_TEXT}${MULTIPLE_TRANSLATORS_TEXT}
 Further documentation can be found in [TRANSLATING.md](https://github.com/jamulussoftware/jamulus/blob/master/docs/TRANSLATING.md).
 
 Thanks for contributing to Jamulus!'
-
 
 # shellcheck disable=SC2016  # shellcheck can't know that this will be used with envsubst, so verbatim variables are correct here.
 BODY_TEMPLATE_WEB='Hi ${SPLIT_TRANSLATORS},
@@ -133,22 +129,20 @@ Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite
 
 '
 
-
-
 get_languages() {
     if [[ $TYPE == app ]]; then
         if [[ ! -f src/main.cpp ]]; then
-            echo "Error: Please ensure that you are at the root of a jamulus code checkout" >/dev/stderr
+            echo "Error: Please ensure that you are at the root of a jamulus code checkout" > /dev/stderr
             exit 1
         fi
         for LANG_FILE in src/translation/*.ts; do
-            LANG=${LANG_FILE/*\/translation_}
-            LANG=${LANG/.ts}
+            LANG=${LANG_FILE/*\/translation_/}
+            LANG=${LANG/.ts/}
             echo "$LANG"
         done
     elif [[ $TYPE == web ]]; then
         if [[ ! -d wiki ]]; then
-            echo "Error: Please ensure that you are at the root of a jamuluswebsite checkout" >/dev/stderr
+            echo "Error: Please ensure that you are at the root of a jamuluswebsite checkout" > /dev/stderr
             exit 1
         fi
         for LANG in $(cd _translator-files/po/ && ls -d -- *); do
@@ -157,7 +151,7 @@ get_languages() {
             echo "$LANG"
         done
     else
-        echo "Error: Invalid type. Valid types: app or website" >/dev/stderr
+        echo "Error: Invalid type. Valid types: app or website" > /dev/stderr
         exit 1
     fi
 }
@@ -178,7 +172,7 @@ create_translation_issue_for_lang() {
 
     translators=${TRANSLATORS_BY_LANG[${TYPE}_${lang}]-}
     if [[ -z $translators ]]; then
-        echo "Warning: Can't create issue for $lang - who is responsible? Skipping." >/dev/stderr
+        echo "Warning: Can't create issue for $lang - who is responsible? Skipping." > /dev/stderr
         return
     fi
 
@@ -191,14 +185,14 @@ create_translation_issue_for_lang() {
         # Note: Those line continuation backslashes are required for variables
         # to be passed through:
         DEADLINE="$DEADLINE" \
-        EXTRA_TEXT="$EXTRA_TEXT" \
-        LANG="$lang" \
-        MULTIPLE_TRANSLATORS_TEXT="$multiple_translators_text" \
-        RELEASE="$RELEASE" \
-        SPLIT_TRANSLATORS=$(sed -re 's/^/@/; s/,/, @/g' <<<"$translators") \
-        TITLE="$title" \
-        TRANSLATE_BRANCH=next-release \
-        envsubst <<<"$body_template"
+            EXTRA_TEXT="$EXTRA_TEXT" \
+            LANG="$lang" \
+            MULTIPLE_TRANSLATORS_TEXT="$multiple_translators_text" \
+            RELEASE="$RELEASE" \
+            SPLIT_TRANSLATORS=$(sed -re 's/^/@/; s/,/, @/g' <<< "$translators") \
+            TITLE="$title" \
+            TRANSLATE_BRANCH=next-release \
+            envsubst <<< "$body_template"
     )
 
     # Check for an existing issue
@@ -209,7 +203,7 @@ create_translation_issue_for_lang() {
     if [[ -z $existing_issue ]]; then
         echo "Creating Issue to translate $lang for $RELEASE"
         URL=$(gh issue create --title "$title" --label translation --project "$PROJECT" --body "$body" --assignee "$translators" --milestone "$MILESTONE")
-        existing_issue=${URL/*\/}
+        existing_issue=${URL/*\//}
     else
         echo "Issue to translate $lang for $RELEASE already exists"
     fi
@@ -223,7 +217,7 @@ create_translation_issue_for_lang() {
     body=${body//<Insert this issue\'s number here>/${existing_issue}}
     if [[ "$online_body" != "$body" ]]; then
         echo "Updating Issue to translate $lang for $RELEASE"
-        gh issue edit "$existing_issue" --body "$body" >/dev/null
+        gh issue edit "$existing_issue" --body "$body" > /dev/null
     fi
 }
 

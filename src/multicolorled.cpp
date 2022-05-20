@@ -30,9 +30,9 @@
 /* Implementation *************************************************************/
 CMultiColorLED::CMultiColorLED ( QWidget* parent ) :
     QLabel ( parent ),
-    BitmCubeDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
-    BitmCubeGrey ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
-    BitmCubeGreen ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
+    BitmCubeDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabled.png" ) ),
+    BitmCubeGrey ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGrey.png" ) ),
+    BitmCubeGreen ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenBig.png" ) ),
     BitmCubeYellow ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorYellowFancy.png" ) ),
     BitmCubeRed ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorRedFancy.png" ) ),
     BitmIndicatorGreen ( QString::fromUtf8 ( ":/png/LEDs/res/IndicatorGreen.png" ) ),

@@ -1266,11 +1266,11 @@ void CClientDlg::Disconnect()
     TimerDetectFeedback.stop();
     bDetectFeedback = false;
 
-    // clang-format off
-// TODO is this still required???
-// immediately update status bar
-OnTimerStatus();
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // is this still required???
+    // immediately update status bar
+    OnTimerStatus();
+    //### TODO: END ###//
 
     // reset LEDs
     ledBuffers->Reset();

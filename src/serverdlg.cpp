@@ -273,11 +273,11 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     lvwClients->setColumnWidth ( 3, 50 );  //         Channels
     lvwClients->clear();
 
-    // clang-format off
-// TEST workaround for resize problem of window after iconize in task bar
-lvwClients->setMinimumWidth ( 170 + 130 + 60 + 205 );
-lvwClients->setMinimumHeight ( 140 );
-    // clang-format on
+    //### TODO: BEGIN ###//
+    // workaround for resize problem of window after iconize in task bar
+    lvwClients->setMinimumWidth ( 170 + 130 + 60 + 205 );
+    lvwClients->setMinimumHeight ( 140 );
+    //### TODO: END ###//
 
     // insert items in reverse order because in Windows all of them are
     // always visible -> put first item on the top

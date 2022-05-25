@@ -190,7 +190,7 @@ jobs:
           path: |
             /usr/local/opt/qt
             ~/Library/Cache/jamulus-homebrew-bottles
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/mac/autobuild_mac_1_prepare.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/mac.sh', 'mac/deploy_mac.sh') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Windows dependencies
         if:                         matrix.config.target_os == 'windows'
@@ -201,7 +201,7 @@ jobs:
             C:\ChocoCache
             ~\windows\NSIS
             ~\libs\ASIOSDK2
-          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', 'autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
+          key:                      ${{ matrix.config.target_os }}-${{ hashFiles('.github/workflows/autobuild.yml', '.github/autobuild/windows.ps1', 'windows/deploy_windows.ps1') }}-${{ matrix.config.base_command }}
 
       - name:                       Cache Android dependencies
         if:                         matrix.config.target_os == 'android'

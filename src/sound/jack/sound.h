@@ -116,7 +116,6 @@ protected:
 };
 #else
 // no sound -> dummy class definition
-#    include "server.h"
 class CSound : public CSoundBase
 {
     Q_OBJECT

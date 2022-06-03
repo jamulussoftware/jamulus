@@ -151,7 +151,8 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                "you will not have much fun using the application." ) +
+                                "you will not have much fun using %1." )
+                               .arg ( APP_NAME ) +
                            TOOLTIP_COM_END_TEXT );
 
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
@@ -181,14 +182,14 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
 
     lblBuffers->setWhatsThis ( strLEDBuffers );
     ledBuffers->setWhatsThis ( strLEDBuffers );
+    ledBuffers->setToolTip ( tr ( "If this LED indicator turns red, "
+                                  "the audio stream is interrupted." ) +
+                             TOOLTIP_COM_END_TEXT );
 
     ledBuffers->setAccessibleName ( tr ( "Local Jitter Buffer status LED indicator" ) );
 
-    // current connection status parameter
-    QString strConnStats = "<b>" +
-                           tr ( "Current Connection Status "
-                                "Parameter" ) +
-                           ":</b> " +
+    // current connection status details
+    QString strConnStats = "<b>" + tr ( "Current Connection Status" ) + ":</b> " +
                            tr ( "The Ping Time is the time required for the audio "
                                 "stream to travel from the client to the server and back again. This "
                                 "delay is introduced by the network and should be about "
@@ -203,11 +204,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     lblPingVal->setWhatsThis ( strConnStats );
     lblDelay->setWhatsThis ( strConnStats );
     lblDelayVal->setWhatsThis ( strConnStats );
-    ledDelay->setWhatsThis ( strConnStats );
-    ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-                                "you will not have much fun using %1." )
-                               .arg ( APP_NAME ) +
-                           TOOLTIP_COM_END_TEXT );
     lblPingVal->setText ( "---" );
     lblPingUnit->setText ( "" );
     lblDelayVal->setText ( "---" );

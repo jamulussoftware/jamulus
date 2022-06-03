@@ -97,7 +97,8 @@ If you build with *ASIO* support, you'll need the [ASIO development files](https
 1. Download the [ASIOSDK](https://www.steinberg.net/asiosdk), open the top level folder in the .zip file and copy the contents into `[\path\to\jamulus\source]\libs\ASIOSDK2` if not already done, open the top level folder in the .zip file and copy the contents into `[\path\to\jamulus\source]\libs\ASIOSDK2` so that, e.g., the folder `[\path\to\jamulus\source]\libs\ASIOSDK2\common` exists
 1. Open Jamulus.pro in Qt Creator, configure the project with a default kit, then compile & run
 
-Note: If you want to work with Visual Studio, run `qmake -tp vc Jamulus.pro` to generate the `vcxproj` file which enables you to test, debug and build Jamulus via Visual Studio.
+If you want to work with Visual Studio, run `qmake -tp vc Jamulus.pro` to generate the `vcxproj` file which enables you to test, debug and build Jamulus via Visual Studio.
+
 ---
 
 ## macOS

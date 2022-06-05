@@ -4,20 +4,41 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.mm'
+      - '**.sh'
   pull_request:
     branches: [ master ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.mm'
+      - '**.sh'
+
+permissions:
+  contents: read
 
 jobs:
-  clang-format:
-    name: Verify Clang-Format compliance
-    permissions:
-      contents: read
+  check-coding-style:
+    name: Verify coding style
+    # As this action runs with minimal permissions and does not influence the build output,
+    # we perform no version pinning for the runner or the installed tools here.
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: DoozyX/clang-format-lint-action@2a28e3a8d9553f244243f7e1ff94f6685dff87be
+    - name: Check .cpp/.h/.mm with clang-format
+      uses: DoozyX/clang-format-lint-action@2a28e3a8d9553f244243f7e1ff94f6685dff87be
       with:
         clangFormatVersion: 10
         # When updating the extension list, remember to update
-        # Jamulus.pro's CLANG_SOURCES as well.
+        # Jamulus.pro's CLANG_SOURCES as well and the paths: in 'on:' list above.
         extensions: 'cpp,h,mm'
+    # shellcheck is already pre-installed on ubuntu-latest
+    - name: Check .sh with shellcheck
+      run: find -name '*.sh' -not -path './libs/*' -exec shellcheck --shell=bash {} +
+    - name: Install shfmt
+      run: sudo snap install shfmt
+    - name: Check .sh with shfmt
+      run: shfmt -d .

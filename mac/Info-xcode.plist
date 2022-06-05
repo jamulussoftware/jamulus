@@ -27,7 +27,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleIconFile</key>
-	<string>mainicon.icns</string>
+	<string>mainicon.icns</string> <!-- Hopefully, this should not need the path to the file since we include it via qmake -->
 	<key>CFBundleGetInfoString</key>
 	<string>Jamulus - Created with QT</string>
 	<key>NSPrincipalClass</key>

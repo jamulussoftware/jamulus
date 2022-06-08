@@ -1173,7 +1173,7 @@ void CAudioMixerBoard::UpdateTitle()
 
     if ( eRecorderState == RS_RECORDING )
     {
-        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" ) + "] ";
+        strTitlePrefix = QString ( "[%1] " ).arg ( tr ( "RECORDING ACTIVE" ) );
     }
 
     // replace & signs with && (See Qt documentation for QLabel)
@@ -1183,7 +1183,7 @@ void CAudioMixerBoard::UpdateTitle()
     QString strEscServerName = strServerName;
     strEscServerName.replace ( "&", "&&" );
 
-    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strEscServerName );
+    setTitle ( strTitlePrefix + tr ( "Personal Mix at: %1" ).arg ( strEscServerName ) );
     setAccessibleName ( title() );
 }
 

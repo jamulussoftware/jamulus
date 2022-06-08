@@ -1562,7 +1562,7 @@ QString GetVersionAndNameStr ( const bool bDisplayInGui )
         strVersionText += " *** ";
     }
 
-    strVersionText += APP_NAME + QCoreApplication::tr ( ", Version " ) + VERSION;
+    strVersionText += QCoreApplication::tr ( "%1, Version %2", "%1 is app name, %2 is version number" ).arg ( APP_NAME ).arg ( VERSION );
 
     if ( bDisplayInGui )
     {

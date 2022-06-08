@@ -245,8 +245,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>Eigen mix op: </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>Eigen mix op: %1</translation>
     </message>
 </context>
 <context>
@@ -4489,8 +4489,8 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>, Versie </translation>
+        <source>%1, Version %2</source>
+        <translation>%1, Versie %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

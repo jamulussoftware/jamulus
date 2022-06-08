@@ -241,8 +241,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>Eigener Mix am Server: </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>Eigener Mix am Server: %1</translation>
     </message>
 </context>
 <context>
@@ -4485,8 +4485,8 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>, Version </translation>
+        <source>%1, Version %2</source>
+        <translation>%1, Version %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

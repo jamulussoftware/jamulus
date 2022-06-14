@@ -206,8 +206,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>Personlig mix på: </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>Personlig mix på: %1</translation>
     </message>
 </context>
 <context>
@@ -4116,8 +4116,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>, Version </translation>
+        <source>%1, Version %2</source>
+        <translation>%1, Version %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

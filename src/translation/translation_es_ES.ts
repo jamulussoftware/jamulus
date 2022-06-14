@@ -253,8 +253,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>Mezcla Personal en el Servidor: </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>Mezcla Personal en el Servidor: %1</translation>
     </message>
 </context>
 <context>
@@ -4541,8 +4541,8 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>, Versión </translation>
+        <source>%1, Version %2</source>
+        <translation>%1, Versión %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

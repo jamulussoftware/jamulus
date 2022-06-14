@@ -263,8 +263,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>Mixagem Pessoal em: </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>Mixagem Pessoal em: %1</translation>
     </message>
 </context>
 <context>
@@ -4519,8 +4519,8 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>, Versão </translation>
+        <source>%1, Version %2</source>
+        <translation>%1, Versão %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

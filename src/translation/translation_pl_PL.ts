@@ -205,8 +205,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>Własny miks na: </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>Własny miks na: %1</translation>
     </message>
 </context>
 <context>
@@ -3976,8 +3976,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>, Wersja </translation>
+        <source>%1, Version %2</source>
+        <translation>%1, Wersja %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

@@ -201,8 +201,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>个人混音室: </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>个人混音室: %1</translation>
     </message>
 </context>
 <context>
@@ -3288,8 +3288,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>，版本 </translation>
+        <source>%1, Version %2</source>
+        <translation>%1，版本 %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

@@ -201,8 +201,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="1181"/>
-        <source>Personal Mix at: </source>
-        <translation>Mixage personnel à : </translation>
+        <source>Personal Mix at: %1</source>
+        <translation>Mixage personnel à : %1</translation>
     </message>
 </context>
 <context>
@@ -3921,8 +3921,8 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <name>QCoreApplication</name>
     <message>
         <location filename="../../util.cpp" line="1926"/>
-        <source>, Version </source>
-        <translation>, version </translation>
+        <source>%1, Version %2</source>
+        <translation>%1, version %2</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1939"/>

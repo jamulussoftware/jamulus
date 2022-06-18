@@ -45,5 +45,5 @@ distributions/jamulus-server.desktop
 Debug-iphoneos/
 Jamulus.xcodeproj
 jamulus_plugin_import.cpp
-autoLatestChangelog.md
+.github_release_changelog.md
 debian/

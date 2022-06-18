@@ -35,12 +35,10 @@ def get_git_hash():
 def get_build_version(jamulus_pro_version):
     if "dev" in jamulus_pro_version:
         version = "{}-{}".format(jamulus_pro_version, get_git_hash())
-        print(f"building an intermediate version: {version}")
-        return version
+        return 'intermediate', version
 
     version = jamulus_pro_version
-    print(f"building a release version: {version}")
-    return version
+    return 'release', version
 
 
 def set_github_variable(varname, varval):
@@ -50,7 +48,8 @@ def set_github_variable(varname, varval):
 
 jamulus_pro_version = get_version_from_jamulus_pro()
 set_github_variable("JAMULUS_PRO_VERSION", jamulus_pro_version)
-build_version = get_build_version(jamulus_pro_version)
+build_type, build_version = get_build_version(jamulus_pro_version)
+print(f'building a version of type "{build_type}": {build_version}')
 
 fullref = os.environ['GITHUB_REF']
 publish_to_release = bool(re.match(r'^refs/tags/r\d+_\d+_\d+\S*$', fullref))

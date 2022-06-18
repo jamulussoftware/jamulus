@@ -10,7 +10,7 @@ cp -r distributions/debian .
 # get the jamulus version from pro file
 VERSION=$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)
 
-export DEBFULLNAME=GitHubActions DEBEMAIL=noemail@example.com
+export DEBFULLNAME="Jamulus Development Team" DEBEMAIL=team@jamulus.io
 
 # Generate Changelog
 echo -n generating changelog

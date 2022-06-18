@@ -62,6 +62,8 @@ jobs:
       publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create-release.outputs.upload_url }}
       build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
+    env:
+      release_changelog_path:       ./.github_release_changelog.md
 
     steps:
       - name:                       Checkout code
@@ -83,7 +85,7 @@ jobs:
 
       - name:                       Generate release changelog
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
-        run:                        ./.github/actions_scripts/getChangelog.pl ./ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > ./autoLatestChangelog.md
+        run:                        ./.github/actions_scripts/getChangelog.pl ./ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > ${{ env.release_changelog_path }}
 
       - name:                       Create Release ${{steps.get-build-vars.outputs.RELEASE_TAG}}  ${{steps.get-build-vars.outputs.RELEASE_TITLE}}
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
@@ -94,7 +96,7 @@ jobs:
         with:
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
           release_name:             ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
-          body_path:                autoLatestChangelog.md
+          body_path:                ${{ env.release_changelog_path }}
           prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
           draft:                    false
 

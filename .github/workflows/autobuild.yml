@@ -67,7 +67,7 @@ jobs:
       - name:                       Checkout code
         uses:                       actions/checkout@v2
 
-      - name:                       Determine release version, type and prerelease variables and generate Changelog
+      - name:                       Determine release version, type and prerelease variables
         run:                        python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
         id:                         get-build-vars
 
@@ -80,6 +80,10 @@ jobs:
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
         env:
           GITHUB_TOKEN:             ${{ secrets.GITHUB_TOKEN }}
+
+      - name:                       Generate release changelog
+        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
+        run:                        ./.github/actions_scripts/getChangelog.pl ./ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > ./autoLatestChangelog.md
 
       - name:                       Create Release ${{steps.get-build-vars.outputs.RELEASE_TAG}}  ${{steps.get-build-vars.outputs.RELEASE_TITLE}}
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'

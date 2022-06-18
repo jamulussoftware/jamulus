@@ -235,7 +235,23 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             else if ( CurWhiteListAddress.setAddress ( slWhitelistAddresses.at ( iIdx ) ) )
             {
                 vWhiteList << CurWhiteListAddress;
-                qInfo() << qUtf8Printable ( QString ( "Whitelist entry added: %1" ).arg ( CurWhiteListAddress.toString() ) );
+            }
+        }
+    }
+
+    // assume directoryType will get set to AT_CUSTOM
+    if ( !strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strDirectoryAddress.compare ( "127.0.0.1" ) )
+    {
+        if ( !strMinServerVersion.isEmpty() )
+        {
+            qInfo() << "Registering servers must be version" << strMinServerVersion << "or later.";
+        }
+        if ( !vWhiteList.isEmpty() )
+        {
+            qInfo() << "Directory registration white list active.  Only the following addresses can register:";
+            foreach ( QHostAddress hostAddress, vWhiteList )
+            {
+                qInfo() << "  -" << hostAddress.toString();
             }
         }
     }

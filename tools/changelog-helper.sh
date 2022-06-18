@@ -44,9 +44,15 @@ find_or_add_missing_entries() {
         target_ref="${target_release_tag}"
     fi
     echo
-    echo "Checking if all PR or references in git log since ${prev_release_tag} are included for ${target_release} based on ref ${target_ref}..."
+    echo "Checking if all PR references in git log since ${prev_release_tag} are included for ${target_release} based on ref ${target_ref}..."
+    local milestone
     for id in $(git log "${prev_release_tag}..master" | grep -oP '#\K(\d+)'); do
         gh pr view "${id}" --json title &> /dev/null || continue # Skip non-PRs
+        milestone=$(gh pr view "${id}" --json milestone --jq .milestone.title)
+        if [[ "${milestone}" =~ "Release " ]] && [[ "${milestone}" != "Release ${target_release}" ]]; then
+            echo "-> Ignoring PR #${id}, which was mentioned in 'git log ${prev_release_tag}..HEAD', but already has milestone '${milestone}'"
+            continue
+        fi
         check_or_add_pr "${id}"
     done
 

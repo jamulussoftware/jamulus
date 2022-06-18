@@ -38,7 +38,7 @@ find_or_add_missing_entries() {
         check_or_add_pr "$id"
     done
 
-    target_ref=origin/master
+    local target_ref=origin/master
     if git tag | grep -qxF "${target_release_tag}"; then
         # already released, use this
         target_ref="${target_release_tag}"

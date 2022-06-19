@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # This script is trigged from the Github Autobuild workflow.
 # It analyzes Jamulus.pro and git push details (tag vs. branch, etc.) to decide
 #   - whether a release should be created,
@@ -32,26 +32,13 @@ def get_git_hash():
     ]).decode('ascii').strip()
 
 
-def write_changelog(version):
-    changelog = subprocess.check_output([
-        'perl',
-        f'{REPO_PATH}/.github/actions_scripts/getChangelog.pl',
-        f'{REPO_PATH}/ChangeLog',
-        version,
-    ])
-    with open(f'{REPO_PATH}/autoLatestChangelog.md', 'wb') as f:
-        f.write(changelog)
-
-
 def get_build_version(jamulus_pro_version):
     if "dev" in jamulus_pro_version:
-        name = "{}-{}".format(jamulus_pro_version, get_git_hash())
-        print("building an intermediate version: ", name)
-        return name
+        version = "{}-{}".format(jamulus_pro_version, get_git_hash())
+        return 'intermediate', version
 
-    name = jamulus_pro_version
-    print("building a release version: ", name)
-    return name
+    version = jamulus_pro_version
+    return 'release', version
 
 
 def set_github_variable(varname, varval):
@@ -60,8 +47,9 @@ def set_github_variable(varname, varval):
 
 
 jamulus_pro_version = get_version_from_jamulus_pro()
-write_changelog(jamulus_pro_version)
-build_version = get_build_version(jamulus_pro_version)
+set_github_variable("JAMULUS_PRO_VERSION", jamulus_pro_version)
+build_type, build_version = get_build_version(jamulus_pro_version)
+print(f'building a version of type "{build_type}": {build_version}')
 
 fullref = os.environ['GITHUB_REF']
 publish_to_release = bool(re.match(r'^refs/tags/r\d+_\d+_\d+\S*$', fullref))

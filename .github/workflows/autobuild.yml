@@ -62,14 +62,20 @@ jobs:
       publish_to_release:           ${{ steps.get-build-vars.outputs.PUBLISH_TO_RELEASE }}
       upload_url:                   ${{ steps.create-release.outputs.upload_url }}
       build_version:                ${{ steps.get-build-vars.outputs.BUILD_VERSION }}
+    env:
+      release_changelog_path:       ./.github_release_changelog.md
 
     steps:
       - name:                       Checkout code
         uses:                       actions/checkout@v2
 
-      - name:                       Determine release version, type and prerelease variables and generate Changelog
-        run:                        python3 ${{ github.workspace }}/.github/actions_scripts/analyse_git_reference.py
+      - name:                       Determine release version, type and prerelease variables
+        run:                        ./.github/autobuild/get_build_vars.py
         id:                         get-build-vars
+
+      - name:                       Extract Changelog for the Github release body
+        if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
+        run:                        ./.github/autobuild/extractVersionChangelog.pl ChangeLog ${{ steps.get-build-vars.outputs.JAMULUS_PRO_VERSION }} > ${{ env.release_changelog_path }}
 
       - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
@@ -90,7 +96,7 @@ jobs:
         with:
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
           release_name:             ${{ steps.get-build-vars.outputs.RELEASE_TITLE }}
-          body_path:                autoLatestChangelog.md
+          body_path:                ${{ env.release_changelog_path }}
           prerelease:               ${{ steps.get-build-vars.outputs.IS_PRERELEASE }}
           draft:                    false
 

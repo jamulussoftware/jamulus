@@ -47,10 +47,12 @@
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 #include <memory>
-#include "rpcserver.h"
-#include "serverrpc.h"
-#ifndef SERVER_ONLY
-#    include "clientrpc.h"
+#ifndef NO_JSON_RPC
+#    include "rpcserver.h"
+#    include "serverrpc.h"
+#    ifndef SERVER_ONLY
+#        include "clientrpc.h"
+#    endif
 #endif
 
 // Implementation **************************************************************
@@ -829,7 +831,13 @@ int main ( int argc, char** argv )
     //### TEST: END ###//
 #endif
 
-    CRpcServer* pRpcServer = nullptr;
+#ifdef NO_JSON_RPC
+    if ( iJsonRpcPortNumber != INVALID_PORT || !strJsonRpcSecretFileName.isEmpty() )
+    {
+        qWarning() << "No JSON-RPC support in this build.";
+    }
+#else
+    CRpcServer*   pRpcServer = nullptr;
 
     if ( iJsonRpcPortNumber != INVALID_PORT )
     {
@@ -865,6 +873,7 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
     }
+#endif
 
     try
     {
@@ -893,10 +902,12 @@ int main ( int argc, char** argv )
                 CInstPictures::UpdateTableOnLanguageChange();
             }
 
+#    ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
                 new CClientRpc ( &Client, pRpcServer, pRpcServer );
             }
+#    endif
 
 #    ifndef HEADLESS
             if ( bUseGUI )
@@ -951,10 +962,12 @@ int main ( int argc, char** argv )
                              bEnableIPv6,
                              eLicenceType );
 
+#ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
+#endif
 
 #ifndef HEADLESS
             if ( bUseGUI )

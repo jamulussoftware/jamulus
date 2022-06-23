@@ -1,5 +1,5 @@
 
-### 3.8.2dev <- NOTE: the release version number will be 3.9.0 ###
+### 3.8.2nightly3 <- NOTE: the release version number will be 3.9.0 ###
 
 - JSON-RPC: Extended jamulusserver/getServerProfile method to include directoryServer name for registration requests (#2505).
   (contributed by @Rob-NY)

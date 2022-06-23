@@ -4291,7 +4291,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="790"/>
+        <location filename="../serverlist.cpp" line="806"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Konnte nicht nach &apos;%1&apos; schreiben</translation>
     </message>

@@ -3794,7 +3794,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="790"/>
+        <location filename="../serverlist.cpp" line="806"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Nie da się zapisywać do &apos;%1&apos;</translation>
     </message>

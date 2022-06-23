@@ -4296,7 +4296,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="790"/>
+        <location filename="../serverlist.cpp" line="806"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Impossibile scrivere su &apos;%1&apos;</translation>
     </message>

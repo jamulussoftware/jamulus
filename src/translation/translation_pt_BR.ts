@@ -4333,7 +4333,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="790"/>
+        <location filename="../serverlist.cpp" line="806"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Não foi possível gravar em &apos;%1&apos;</translation>
     </message>

@@ -3623,7 +3623,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="790"/>
+        <location filename="../serverlist.cpp" line="806"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Nepodarilo sa zapísať do &apos;%1&apos;</translation>
     </message>

@@ -4291,7 +4291,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="790"/>
+        <location filename="../serverlist.cpp" line="806"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation type="unfinished">Não foi possível gravar em &apos;%1&apos;</translation>
     </message>

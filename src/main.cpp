@@ -47,10 +47,12 @@
 extern void qt_set_sequence_auto_mnemonic ( bool bEnable );
 #endif
 #include <memory>
-#include "rpcserver.h"
-#include "serverrpc.h"
-#ifndef SERVER_ONLY
-#    include "clientrpc.h"
+#ifndef NO_JSON_RPC
+#    include "rpcserver.h"
+#    include "serverrpc.h"
+#    ifndef SERVER_ONLY
+#        include "clientrpc.h"
+#    endif
 #endif
 
 // Implementation **************************************************************
@@ -114,6 +116,19 @@ int main ( int argc, char** argv )
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
     QString      strJsonRpcSecretFileName    = "";
+
+#if defined( HEADLESS ) || defined( SERVER_ONLY )
+    Q_UNUSED ( bStartMinimized )
+    Q_UNUSED ( bUseTranslation )
+    Q_UNUSED ( bShowComplRegConnList )
+    Q_UNUSED ( bShowAnalyzerConsole )
+    Q_UNUSED ( bMuteStream )
+#endif
+#if defined( SERVER_ONLY )
+    Q_UNUSED ( bMuteMeInPersonalMix )
+    Q_UNUSED ( bNoAutoJackConnect )
+    Q_UNUSED ( bCustomPortNumberGiven )
+#endif
 
 #if !defined( HEADLESS ) && defined( _WIN32 )
     if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
@@ -574,24 +589,19 @@ int main ( int argc, char** argv )
         bUseGUI = false;
         qWarning() << "No GUI support compiled. Running in headless mode.";
     }
-    Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
-    Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
-    Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
-    Q_UNUSED ( bMuteStream )           // avoid compiler warnings
 #endif
 
-#ifdef SERVER_ONLY
     if ( bIsClient )
+#ifdef SERVER_ONLY
     {
         qCritical() << "Only --server mode is supported in this build.";
         exit ( 1 );
     }
-#endif
+#else
 
     // TODO create settings in default state, if loading from file do that next, then come back here to
     //      override from command line options, then create client or server, letting them do the validation
 
-    if ( bIsClient )
     {
         if ( ServerOnlyOptions.size() != 0 )
         {
@@ -617,6 +627,7 @@ int main ( int argc, char** argv )
         }
     }
     else
+#endif
     {
         if ( ClientOnlyOptions.size() != 0 )
         {
@@ -625,6 +636,7 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
 
+#ifndef HEADLESS
         if ( bUseGUI )
         {
             // by definition, when running with the GUI we always default to registering somewhere but
@@ -643,6 +655,7 @@ int main ( int argc, char** argv )
             }
         }
         else
+#endif
         {
             // the inifile is not supported for the headless server mode
             if ( !strIniFileName.isEmpty() )
@@ -764,11 +777,11 @@ int main ( int argc, char** argv )
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
 #    if defined( Q_OS_IOS )
-    bUseGUI        = true;
-    bIsClient      = true; // Client only - TODO: maybe a switch in interface to change to server?
+    bUseGUI   = true;
+    bIsClient = true; // Client only - TODO: maybe a switch in interface to change to server?
 
     // bUseMultithreading = true;
-    QApplication* pApp = new QApplication ( argc, argv );
+    QApplication* pApp       = new QApplication ( argc, argv );
 #    else
     QCoreApplication* pApp = bUseGUI ? new QApplication ( argc, argv ) : new QCoreApplication ( argc, argv );
 #    endif
@@ -818,7 +831,13 @@ int main ( int argc, char** argv )
     //### TEST: END ###//
 #endif
 
-    CRpcServer* pRpcServer = nullptr;
+#ifdef NO_JSON_RPC
+    if ( iJsonRpcPortNumber != INVALID_PORT || !strJsonRpcSecretFileName.isEmpty() )
+    {
+        qWarning() << "No JSON-RPC support in this build.";
+    }
+#else
+    CRpcServer*   pRpcServer = nullptr;
 
     if ( iJsonRpcPortNumber != INVALID_PORT )
     {
@@ -854,6 +873,7 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
     }
+#endif
 
     try
     {
@@ -882,10 +902,12 @@ int main ( int argc, char** argv )
                 CInstPictures::UpdateTableOnLanguageChange();
             }
 
+#    ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
                 new CClientRpc ( &Client, pRpcServer, pRpcServer );
             }
+#    endif
 
 #    ifndef HEADLESS
             if ( bUseGUI )
@@ -940,10 +962,12 @@ int main ( int argc, char** argv )
                              bEnableIPv6,
                              eLicenceType );
 
+#ifndef NO_JSON_RPC
             if ( pRpcServer )
             {
                 new CServerRpc ( &Server, pRpcServer, pRpcServer );
             }
+#endif
 
 #ifndef HEADLESS
             if ( bUseGUI )

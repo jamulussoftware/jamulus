@@ -372,8 +372,6 @@ HEADERS += src/buffer.h \
     src/server.h \
     src/serverlist.h \
     src/serverlogging.h \
-    src/serverrpc.h \
-    src/rpcserver.h \
     src/settings.h \
     src/socket.h \
     src/util.h \
@@ -384,7 +382,6 @@ HEADERS += src/buffer.h \
 
 !contains(CONFIG, "serveronly") {
     HEADERS += src/client.h \
-        src/clientrpc.h \
         src/sound/soundbase.h \
         src/testbench.h
 }
@@ -482,8 +479,6 @@ SOURCES += src/buffer.cpp \
     src/server.cpp \
     src/serverlist.cpp \
     src/serverlogging.cpp \
-    src/serverrpc.cpp \
-    src/rpcserver.cpp \
     src/settings.cpp \
     src/signalhandler.cpp \
     src/socket.cpp \
@@ -494,7 +489,6 @@ SOURCES += src/buffer.cpp \
 
 !contains(CONFIG, "serveronly") {
     SOURCES += src/client.cpp \
-        src/clientrpc.cpp \
         src/sound/soundbase.cpp \
 }
 
@@ -1058,6 +1052,24 @@ contains(CONFIG, "headless") {
     HEADERS += $$HEADERS_GUI
     SOURCES += $$SOURCES_GUI
     FORMS += $$FORMS_GUI
+}
+
+contains(CONFIG, "nojsonrpc") {
+    message(JSON-RPC support excluded from build.)
+    DEFINES += NO_JSON_RPC
+} else {
+    HEADERS += \
+        src/rpcserver.h \
+        src/serverrpc.h
+    SOURCES += \
+        src/rpcserver.cpp \
+        src/serverrpc.cpp
+    contains(CONFIG, "serveronly") {
+        message("server only, skipping client rpc")
+    } else {
+        HEADERS += src/clientrpc.h
+        SOURCES += src/clientrpc.cpp
+    }
 }
 
 # use external OPUS library if requested

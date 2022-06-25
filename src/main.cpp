@@ -490,7 +490,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argv, i, "-M", "--mutestream" ) )
         {
             bMuteStream = true;
-            qInfo() << "- mute stream activated";
+            qInfo() << "- others on a server will not hear you (mutestream active)";
             CommandLineOptions << "--mutestream";
             ClientOnlyOptions << "--mutestream";
             continue;
@@ -503,7 +503,7 @@ int main ( int argc, char** argv )
                                "--mutemyown" ) )
         {
             bMuteMeInPersonalMix = true;
-            qInfo() << "- mute me in my personal mix";
+            qInfo() << "- you will not hear yourself in the server mix (mutemyown active)";
             CommandLineOptions << "--mutemyown";
             ClientOnlyOptions << "--mutemyown";
             continue;
@@ -1094,8 +1094,8 @@ QString UsageArguments ( char** argv )
            "Client only:\n"
            "  -c, --connect         connect to given Server address on startup\n"
            "  -j, --nojackconnect   disable auto JACK connections\n"
-           "  -M, --mutestream      starts the application in muted state\n"
-           "      --mutemyown       mute me in my personal mix (headless only)\n"
+           "  -M, --mutestream      prevent others on a server from hearing what I play\n"
+           "      --mutemyown       prevent me from hearing what I play in the server mix (headless only)\n"
            "      --clientname      Client name (window title and JACK client name)\n"
            "      --ctrlmidich      MIDI controller channel to listen\n"
            "\n"

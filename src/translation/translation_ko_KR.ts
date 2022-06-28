@@ -850,7 +850,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="287"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation>&amp믹서 채널 설정 로드...</translation>
+        <translation>&amp;믹서 채널 설정 로드...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="382"/>

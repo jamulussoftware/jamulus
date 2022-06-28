@@ -35,11 +35,11 @@
     </message>
     <message>
         <source>Country flag icons by Mark James</source>
-        <translation>국기 아이콘 by Mark James</translation>
+        <translation type="vanished">국기 아이콘 by Mark James</translation>
     </message>
     <message>
         <source>For details on the contributions check out the </source>
-        <translation>기여에 대한 자세한 내용은 다음을 확인하세요 </translation>
+        <translation type="vanished">기여에 대한 자세한 내용은 다음을 확인하세요 </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="615"/>
@@ -112,7 +112,7 @@
     </message>
     <message>
         <source>About </source>
-        <translation>정보 </translation>
+        <translation type="vanished">정보 </translation>
     </message>
 </context>
 <context>
@@ -338,7 +338,7 @@
     </message>
     <message>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
-        <translation>페이더 태그는 연결된 클라이언트를 식별합니다. 태그 이름, 악기 사진 및 국가의 국기를 메인 창에서 설정할 수 있습니다.</translation>
+        <translation type="vanished">페이더 태그는 연결된 클라이언트를 식별합니다. 태그 이름, 악기 사진 및 국가의 국기를 메인 창에서 설정할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="183"/>
@@ -352,7 +352,7 @@
     </message>
     <message>
         <source>Mixer channel country flag</source>
-        <translation>믹서 채널 국기</translation>
+        <translation type="vanished">믹서 채널 국기</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="223"/>
@@ -518,11 +518,11 @@
     </message>
     <message>
         <source>Do you want to open the link</source>
-        <translation>링크를 여시겠습니까</translation>
+        <translation type="vanished">링크를 여시겠습니까</translation>
     </message>
     <message>
         <source>in an external browser?</source>
-        <translation>외부 브라우저에서?</translation>
+        <translation type="vanished">외부 브라우저에서?</translation>
     </message>
 </context>
 <context>
@@ -572,11 +572,11 @@
     </message>
     <message>
         <source>Local Audio Input Fader</source>
-        <translation>로컬 오디오 입력 페이더</translation>
+        <translation type="vanished">로컬 오디오 입력 페이더</translation>
     </message>
     <message>
         <source>Local audio input fader (left/right)</source>
-        <translation>로컬 오디오 입력 페이더 (왼쪽/오른쪽)</translation>
+        <translation type="vanished">로컬 오디오 입력 페이더 (왼쪽/오른쪽)</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="56"/>
@@ -595,7 +595,7 @@
     </message>
     <message>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation>왼쪽 및 오른쪽 로컬 오디오 채널의 상대 레벨을 제어합니다. 모노 신호의 경우 두 채널 사이의 팬 역할을 합니다. 예를 들면, 마이크가 오른쪽 입력 채널에 연결되어 있고 악기가 마이크보다 소리가 훨씬 큰 왼쪽 입력 채널에 연결되어 있는 경우 페이더 위의 레이블이 표시되는 방향으로 오디오 페이더를 이동합니다</translation>
+        <translation type="vanished">왼쪽 및 오른쪽 로컬 오디오 채널의 상대 레벨을 제어합니다. 모노 신호의 경우 두 채널 사이의 팬 역할을 합니다. 예를 들면, 마이크가 오른쪽 입력 채널에 연결되어 있고 악기가 마이크보다 소리가 훨씬 큰 왼쪽 입력 채널에 연결되어 있는 경우 페이더 위의 레이블이 표시되는 방향으로 오디오 페이더를 이동합니다</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="103"/>
@@ -634,7 +634,7 @@
     </message>
     <message>
         <source>The </source>
-        <translation>The </translation>
+        <translation type="obsolete">The </translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
@@ -659,7 +659,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation>이 LED 표시등이 빨간색으로 바뀌면 %1 사용의 즐거움이 덜할 겁니다.</translation>
+        <translation type="unfinished">이 LED 표시등이 빨간색으로 바뀌면 %1 사용의 즐거움이 덜할 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="158"/>
@@ -688,11 +688,11 @@
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation>이 LED 표시등이 빨간색으로 바뀌면 애플리케이션을 사용하는 즐거움이 덜할 겁니다.</translation>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면 애플리케이션을 사용하는 즐거움이 덜할 겁니다.</translation>
     </message>
     <message>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation>버퍼 상태 LED는 현재 오디오/스트리밍 상태를 보여줍니다. 표시등이 빨간색이면 오디오 스트림이 중단됩니다. 이는 다음 문제 중 하나로 인해 발생합니다:</translation>
+        <translation type="vanished">버퍼 상태 LED는 현재 오디오/스트리밍 상태를 보여줍니다. 표시등이 빨간색이면 오디오 스트림이 중단됩니다. 이는 다음 문제 중 하나로 인해 발생합니다:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="171"/>
@@ -706,7 +706,7 @@
     </message>
     <message>
         <source>Buffers status LED indicator</source>
-        <translation>버퍼 상태 LED 표시등</translation>
+        <translation type="vanished">버퍼 상태 LED 표시등</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="229"/>
@@ -716,7 +716,7 @@
     </message>
     <message>
         <source>software upgrade available</source>
-        <translation>소프트웨어 업그레이드 가능</translation>
+        <translation type="vanished">소프트웨어 업그레이드 가능</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="279"/>
@@ -745,7 +745,7 @@
     </message>
     <message>
         <source>&amp;Settings...</source>
-        <translation>&amp;설정...</translation>
+        <translation type="vanished">&amp;설정...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="376"/>
@@ -754,7 +754,7 @@
     </message>
     <message>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation>&amp;두 줄 믹서 패널 사용</translation>
+        <translation type="vanished">&amp;두 줄 믹서 패널 사용</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="296"/>
@@ -783,23 +783,23 @@
     </message>
     <message>
         <source>Center</source>
-        <translation>가운데</translation>
+        <translation type="vanished">가운데</translation>
     </message>
     <message>
         <source>R</source>
-        <translation>R</translation>
+        <translation type="vanished">R</translation>
     </message>
     <message>
         <source>L</source>
-        <translation>L</translation>
+        <translation type="vanished">L</translation>
     </message>
     <message>
         <source>, where</source>
-        <translation>, 현재</translation>
+        <translation type="vanished">, 현재</translation>
     </message>
     <message>
         <source>is the current attenuation indicator.</source>
-        <translation>감쇠 표시기는 어디에 있습니까.</translation>
+        <translation type="vanished">감쇠 표시기는 어디에 있습니까.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="129"/>
@@ -808,7 +808,7 @@
     </message>
     <message>
         <source>Buffers Status LED</source>
-        <translation>버퍼 상태 LED</translation>
+        <translation type="vanished">버퍼 상태 LED</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="167"/>
@@ -822,7 +822,7 @@
     </message>
     <message>
         <source>Current Connection Status Parameter</source>
-        <translation>현재 연결 상태 매개변수</translation>
+        <translation type="vanished">현재 연결 상태 매개변수</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="193"/>
@@ -836,11 +836,11 @@
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation>이 LED 표시등이 빨간색으로 바뀌면, 소프트웨어를</translation>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면, 소프트웨어를</translation>
     </message>
     <message>
         <source> software.</source>
-        <translation> 사용하는 즐거움이 덜할 겁니다.</translation>
+        <translation type="vanished"> 사용하는 즐거움이 덜할 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="285"/>
@@ -874,7 +874,7 @@
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
-        <translation>이 LED 표시등이 빨간색으로 바뀌면 %1 소프트웨어를 사용하는 즐거움이 덜 할 겁니다.</translation>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면 %1 소프트웨어를 사용하는 즐거움이 덜 할 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="310"/>
@@ -919,7 +919,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation>LED 표시등이 빨간색이면 오디오 스트림이 중단됩니다.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="189"/>

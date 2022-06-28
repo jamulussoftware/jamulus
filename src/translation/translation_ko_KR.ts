@@ -919,85 +919,85 @@
     <message>
         <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이 LED 표시등이 빨간색이면 오디오 스트림이 중단됩니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="189"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation>Indicateur du voyant d&apos;état du tampon de gigue local</translation>
+        <translation>로컬 지터 버퍼 상태 LED 표시등</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">현재 연결 상태</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="303"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation>Auto-ajuster tous les &amp;chariots</translation>
+        <translation>&amp;모든 페이더 자동 조정</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation type="vanished">Paramètre&amp;s</translation>
+        <translation type="vanished">&amp;s설정</translation>
     </message>
     <message>
         <source>Directory Server</source>
-        <translation type="vanished">Serveur annuaire</translation>
+        <translation type="vanished">디렉터리 서버</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="769"/>
         <location filename="../clientdlg.cpp" line="781"/>
         <source>Select Channel Setup File</source>
-        <translation>Sélectionnez le fichier de configuration des canaux</translation>
+        <translation>채널 설정 파일 선택</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="918"/>
         <source>user</source>
-        <translation>utilisateur</translation>
+        <translation>사용자</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="922"/>
         <source>users</source>
-        <translation>utilisateurs</translation>
+        <translation>사용자</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="954"/>
         <source>Connect</source>
-        <translation>Se connecter</translation>
+        <translation>연결</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="966"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="976"/>
         <source>Chat</source>
-        <translation>Tchate</translation>
+        <translation>채팅</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1052"/>
         <source>Enable feedback detection</source>
-        <translation>Activer la détection de larsen</translation>
+        <translation>피드백 감지 켜기</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1055"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
-        <translation>Larsen audio ou signal fort détecté.
+        <translation>오디오 피드백 또는 큰 신호가 감지되었습니다.
 
-Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apos;abord résoudre le problème de larsen et rétablir le son après.</translation>
+채널을 음소거하고 &apos;자가 음소거&apos;를 활성화했습니다. 피드백 문제를 먼저 해결하고 나중에 음소거를 해제하세요.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1140"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation>Votre carte son ne fonctionne pas correctement. Veuillez ouvrir la fenêtre paramètres et vérifier la sélection du périphérique et les paramètres du pilote.</translation>
+        <translation>사운드 카드가 제대로 작동하지 않습니다. 설정 대화 상자를 열고 장치 선택과 드라이버 설정을 확인하세요.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1211"/>
         <source>&amp;Disconnect</source>
-        <translation>&amp;Déconnecter</translation>
+        <translation>&amp;연결 해제</translation>
     </message>
 </context>
 <context>

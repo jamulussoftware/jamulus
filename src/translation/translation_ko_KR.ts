@@ -835,22 +835,22 @@
         <translation>전체 지연은 현재 핑 시간과 현재 버퍼 설정에 의해 생성된 지연으로 계산됩니다.</translation>
     </message>
     <message>
-        <source>이 LED 표시등이 빨간색으로 바뀌면, 소프트웨어를 </source>
-        <translation type="vanished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le </translation>
+        <source>If this LED indicator turns red, you will not have much fun using the </source>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면, 소프트웨어를</translation>
     </message>
     <message>
-        <source> 사용하는 즐거움이 덜할 겁니다.</source>
-        <translation type="vanished"> logiciel.</translation>
+        <source> software.</source>
+        <translation type="vanished"> 사용하는 즐거움이 덜할 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="285"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation>&amp;Charger la configuration des canaux du mixeur...</translation>
+        <translation>&amp;믹서 채널 설정 불러오기...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="287"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation>&amp;믹서 채널 설정 로드...</translation>
+        <translation>&amp;믹서 채널 설정 저장하기...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="382"/>

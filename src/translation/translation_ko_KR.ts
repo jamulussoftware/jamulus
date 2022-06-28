@@ -634,137 +634,137 @@
     </message>
     <message>
         <source>The </source>
-        <translation type="obsolete">Le logiciel </translation>
+        <translation type="obsolete">The </translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
         <source>Green</source>
-        <translation>Vert</translation>
+        <translation>초록</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="134"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation>Le délai est parfait pour une séance de bœufs.</translation>
+        <translation>지연 상태가 잼 세션에 딱 적합합니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="139"/>
         <source>Yellow</source>
-        <translation>Jaune</translation>
+        <translation>노랑</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="145"/>
         <source>Red</source>
-        <translation>Rouge</translation>
+        <translation>빨강</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이 LED 표시등이 빨간색으로 바뀌면 %1 사용의 즐거움이 덜할 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="158"/>
         <source>Delay status LED indicator</source>
-        <translation>Indicateur diode lumineuse d&apos;état de délai</translation>
+        <translation>지연 상태 LED 표시등</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="97"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation>Ouvre une fenêtre dans laquelle vous pouvez sélectionner un serveur auquel vous connecter. Si vous êtes connecté, le fait d&apos;appuyer sur ce bouton mettra fin à la session.</translation>
+        <translation>연결할 서버를 선택할 수 있는 대화 상자를 엽니다. 연결되어 있는 경우 이 버튼을 누르면 세션이 종료됩니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="129"/>
         <source>Shows the current audio delay status:</source>
-        <translation>Indique l&apos;état actuel du retard audio :</translation>
+        <translation>현재 오디오 지연 상태를 표시합니다:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="140"/>
         <source>A session is still possible but it may be harder to play.</source>
-        <translation>Une session est toujours possible mais il sera probablement plus difficile de jouer.</translation>
+        <translation>세션은 여전히 가능하지만 연주하기 더 어려울 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="146"/>
         <source>The delay is too large for jamming.</source>
-        <translation>Le délai est trop important pour bœuffer.</translation>
+        <translation>재밍을 하기에는 지연이 너무 큽니다.</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation type="vanished">Si cette diode lumineuse devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser l&apos;application.</translation>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면 애플리케이션을 사용하는 즐거움이 덜할 겁니다.</translation>
     </message>
     <message>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="vanished">La LED d&apos;état des tampons indique l&apos;état actuel de l&apos;audio/streaming. Si le voyant est rouge, le flux audio est interrompu. Cela est dû à l&apos;un des problèmes suivants :</translation>
+        <translation type="vanished">버퍼 상태 LED는 현재 오디오/스트리밍 상태를 보여줍니다. 표시등이 빨간색이면 오디오 스트림이 중단됩니다. 이는 다음 문제 중 하나로 인해 발생합니다:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="171"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation>Le délai du tampon de la carte son (taille du tampon) est trop petit (voir la fenêtre des paramètres).</translation>
+        <translation>사운드 카드&apos; 버퍼 지연(버퍼 크기)이 너무 작습니다(설정 창 참조).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="175"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
-        <translation>Le taux de flux montant ou descendant est trop élevé pour votre bande passante Internet.</translation>
+        <translation>업로드 또는 다운로드 스트림 속도 전송률이 인터넷 대역폭에 비해 너무 높습니다.</translation>
     </message>
     <message>
         <source>Buffers status LED indicator</source>
-        <translation type="vanished">Indicateur LED d&apos;état de tampon</translation>
+        <translation type="vanished">버퍼 상태 LED 표시등</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="229"/>
         <location filename="../clientdlg.cpp" line="1243"/>
         <source>C&amp;onnect</source>
-        <translation>Se c&amp;onnecter</translation>
+        <translation>&amp;연결</translation>
     </message>
     <message>
         <source>software upgrade available</source>
-        <translation type="vanished">mise à jour du logiciel disponible</translation>
+        <translation type="vanished">소프트웨어 업그레이드 가능</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="279"/>
         <source>&amp;File</source>
-        <translation>&amp;Fichier</translation>
+        <translation>&amp;파일</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="306"/>
         <source>&amp;View</source>
-        <translation>&amp;Vue</translation>
+        <translation>&amp;보기</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="281"/>
         <source>&amp;Connection Setup...</source>
-        <translation>&amp;Paramètres de connexion...</translation>
+        <translation>&amp;연결 설정...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="384"/>
         <source>My &amp;Profile...</source>
-        <translation>Mon &amp;profil...</translation>
+        <translation>내 &amp;프로파일...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="371"/>
         <source>C&amp;hat...</source>
-        <translation>Tc&amp;hate...</translation>
+        <translation>&amp;채팅...</translation>
     </message>
     <message>
         <source>&amp;Settings...</source>
-        <translation type="vanished">Paramètre&amp;s...</translation>
+        <translation type="vanished">&amp;설정...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="376"/>
         <source>&amp;Analyzer Console...</source>
-        <translation>Console d&apos;a&amp;nalyse...</translation>
+        <translation>&amp;분석기 콘솔...</translation>
     </message>
     <message>
         <source>Use &amp;Two Rows Mixer Panel</source>
-        <translation type="vanished">U&amp;tiliser un panneau de mixage à deux rangées</translation>
+        <translation type="vanished">&amp;두 줄 믹서 패널 사용</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="296"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation>&amp;Effacer tous les paramètres Solo et Muet enregistrés</translation>
+        <translation>&amp;저장된 모든 솔로 및 음소거 설정 지우기</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="724"/>
         <source>%1 Directory</source>
-        <translation>%1 Répertoire</translation>
+        <translation>%1 디렉터리</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1158"/>
@@ -774,72 +774,72 @@
     <message>
         <location filename="../clientdlg.cpp" line="291"/>
         <source>E&amp;xit</source>
-        <translation>&amp;Quitter</translation>
+        <translation>&amp;나가기</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="294"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Editer</translation>
+        <translation>&amp;편집</translation>
     </message>
     <message>
         <source>Center</source>
-        <translation type="vanished">Centre</translation>
+        <translation type="vanished">가운데</translation>
     </message>
     <message>
         <source>R</source>
-        <translation type="vanished">D</translation>
+        <translation type="vanished">R</translation>
     </message>
     <message>
         <source>L</source>
-        <translation type="vanished">G</translation>
+        <translation type="vanished">L</translation>
     </message>
     <message>
         <source>, where</source>
-        <translation type="vanished">, où</translation>
+        <translation type="vanished">, 현재</translation>
     </message>
     <message>
         <source>is the current attenuation indicator.</source>
-        <translation type="vanished">est l&apos;indicateur d&apos;atténuation actuel.</translation>
+        <translation type="vanished">감쇠 표시기는 어디에 있습니까.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="129"/>
         <source>Delay Status LED</source>
-        <translation>Voyant d&apos;état de délai</translation>
+        <translation>지연 상태 LED</translation>
     </message>
     <message>
         <source>Buffers Status LED</source>
-        <translation type="vanished">Voyant d&apos;état de tampon</translation>
+        <translation type="vanished">버퍼 상태 LED</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="167"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
-        <translation>Le tampon de gigue réseau n&apos;est pas assez grand pour la gigue actuelle de l&apos;interface réseau/audio.</translation>
+        <translation>네트워크 지터 버퍼가 현재 네트워크/오디오 인터페이스 지터에 비해 충분히 크지 않습니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="179"/>
         <source>The CPU of the client or server is at 100%.</source>
-        <translation>Le processeur du client ou du serveur est à 100%.</translation>
+        <translation>클라이언트 또는 서버의 CPU가 100%입니다.</translation>
     </message>
     <message>
         <source>Current Connection Status Parameter</source>
-        <translation type="vanished">Paramètre de l&apos;état de la connexion actuelle</translation>
+        <translation type="vanished">현재 연결 상태 매개변수</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="193"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation>Le temps de ping est le temps nécessaire au flux audio pour aller du client au serveur et revenir. Ce délai est introduit par le réseau et doit être d&apos;environ 20 à 30 ms. Si ce délai est supérieur à environ 50 ms, la distance qui vous sépare du serveur est trop importante ou votre connexion internet n&apos;est pas suffisante.</translation>
+        <translation>핑 시간은 오디오 스트림이 클라이언트에서 서버로 이동하고 다시 돌아오는 데 필요한 시간입니다. 이 지연은 네트워크에 의해 발생하며 약 20-30ms 여야 합니다. 이 지연 시간이 약 50ms보다 크면 서버와의 거리가 너무 멀거나 인터넷 연결이 충분하지 않은 것입니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="200"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation>Le délai global est calculé à partir du temps de ping actuel et du délai introduit par les paramètres actuels de la mémoire tampon.</translation>
+        <translation>전체 지연은 현재 핑 시간과 현재 버퍼 설정에 의해 생성된 지연으로 계산됩니다.</translation>
     </message>
     <message>
-        <source>If this LED indicator turns red, you will not have much fun using the </source>
+        <source>이 LED 표시등이 빨간색으로 바뀌면, 소프트웨어를 </source>
         <translation type="vanished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le </translation>
     </message>
     <message>
-        <source> software.</source>
+        <source> 사용하는 즐거움이 덜할 겁니다.</source>
         <translation type="vanished"> logiciel.</translation>
     </message>
     <message>
@@ -850,61 +850,61 @@
     <message>
         <location filename="../clientdlg.cpp" line="287"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation>&amp;Sauvegarder la configuration des canaux du mixeur...</translation>
+        <translation>&amp믹서 채널 설정 로드...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="382"/>
         <source>Sett&amp;ings</source>
-        <translation>&amp;Paramètres</translation>
+        <translation>&amp;설정</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="386"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation>Audio/Réseau Paramètre&amp;s...</translation>
+        <translation>오디오/네트워크 &amp;설정...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="388"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation>Paramètres &amp;avancés...</translation>
+        <translation>&amp;고급 설정...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="315"/>
         <source>N&amp;o User Sorting</source>
-        <translation>Pas de &amp;tri des canaux</translation>
+        <translation>&amp;사용자 정렬 없음</translation>
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the %1 software.</source>
-        <translation type="vanished">Si ce témoin lumineux devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le logiciel %1.</translation>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면 %1 소프트웨어를 사용하는 즐거움이 덜 할 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="310"/>
         <source>O&amp;wn Fader First</source>
-        <translation>&amp;Chariot personnel en premier</translation>
+        <translation>&amp;자신의 페이더 우선</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="318"/>
         <source>Sort Users by &amp;Name</source>
-        <translation>Trier les utilisateurs par &amp;nom</translation>
+        <translation>사용자 정렬 by &amp;이름</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="320"/>
         <source>Sort Users by &amp;Instrument</source>
-        <translation>Trier les utilisateurs par &amp;instrument</translation>
+        <translation>사용자 정렬 by &amp;악기</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="326"/>
         <source>Sort Users by &amp;Group</source>
-        <translation>Trier les utilisateurs par &amp;groupe</translation>
+        <translation>사용자 정렬 by &amp;그룹</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="329"/>
         <source>Sort Users by &amp;City</source>
-        <translation>Trier les utilisateurs par &amp;ville</translation>
+        <translation>사용자 정렬 by &amp;도시</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="298"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation>Régler tous &amp;les chariots sur le niveau d&apos;un nouveau client</translation>
+        <translation>모든 페이더를 새 클라이언트 &amp;레벨로 설정</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="161"/>

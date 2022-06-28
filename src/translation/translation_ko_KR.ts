@@ -352,7 +352,7 @@
     </message>
     <message>
         <source>Mixer channel country flag</source>
-        <translation type="vanished">믹서 채널 국가 플래그</translation>
+        <translation type="vanished">믹서 채널 국기</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="223"/>
@@ -605,32 +605,32 @@
     <message>
         <location filename="../clientdlg.cpp" line="104"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
-        <translation>La réverbération peut être appliquée à un canal audio mono local ou aux deux canaux en mode stéréo. La sélection du canal mono et le niveau de réverbération peuvent être modifiés. Par exemple, si un signal de microphone est envoyé sur le canal audio droit de la carte son et qu&apos;un effet de réverbération doit être appliqué, réglez le sélecteur de canal à droite et déplacez le chariot vers le haut jusqu&apos;à ce que le niveau de réverbération souhaité soit atteint.</translation>
+        <translation>리버브는 하나의 로컬 모노 오디오 채널 또는 스테레오 모드의 두 채널에 모두 적용할 수 있습니다. 모노 채널 선택 및 리버브 레벨을 수정할 수 있습니다. 예를 들면, 마이크 신호가 사운드 카드의 오른쪽 오디오 채널에 입력되고 반향 효과를 적용해야 하는 경우, 채널 선택기를 오른쪽으로 설정하고 원하는 리버브 레벨에 도달할 때까지 페이더를 위쪽으로 이동합니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="115"/>
         <source>Reverb effect level setting</source>
-        <translation>Réglage du niveau de l&apos;effet de réverbération</translation>
+        <translation>리버브 효과 레벨 설정</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="118"/>
         <source>Reverb Channel Selection</source>
-        <translation>Sélection du canal de réverbération</translation>
+        <translation>리버브 채널 선택</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="119"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation>Ces boutons radio permettent de choisir le canal d&apos;entrée audio sur lequel l&apos;effet de réverbération est appliqué. Il est possible de sélectionner le canal d&apos;entrée gauche ou droit.</translation>
+        <translation>이 라디오 버튼으로 리버브 효과가 적용되는 오디오 입력 채널을 선택할 수 있습니다. 왼쪽 또는 오른쪽 입력 채널을 선택할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="124"/>
         <source>Left channel selection for reverb</source>
-        <translation>Sélection du canal gauche pour la réverbération</translation>
+        <translation>리버브 왼쪽 채널 선택</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="126"/>
         <source>Right channel selection for reverb</source>
-        <translation>Sélection du canal droit pour la réverbération</translation>
+        <translation>리버브 오른쪽 채널 선택</translation>
     </message>
     <message>
         <source>The </source>

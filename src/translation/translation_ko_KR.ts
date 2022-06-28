@@ -1005,36 +1005,36 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation>Délai</translation>
+        <translation>지연</translation>
     </message>
     <message>
         <source>Buffers</source>
-        <translation type="vanished">Tampons</translation>
+        <translation type="vanished">버퍼</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="247"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation>입력</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="295"/>
         <source>L</source>
-        <translation>G</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="305"/>
         <source>R</source>
-        <translation>D</translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation>Gigue</translation>
+        <translation>지터</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation>Ping</translation>
+        <translation>핑</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="400"/>
@@ -1045,45 +1045,45 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation>&amp;Me silencer</translation>
+        <translation>&amp;자가 음소거</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>
         <source>&amp;Settings</source>
-        <translation>Paramètre&amp;s</translation>
+        <translation>&amp;설정</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="512"/>
         <source>&amp;Chat</source>
-        <translation>&amp;Tchate</translation>
+        <translation>&amp;채팅</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="531"/>
         <source>C&amp;onnect</source>
-        <translation>Se &amp;connecter</translation>
+        <translation>&amp;연결</translation>
     </message>
     <message>
         <source>Pan</source>
-        <translation type="vanished">Pan</translation>
+        <translation type="vanished">팬</translation>
     </message>
     <message>
         <source>Center</source>
-        <translation type="vanished">Centre</translation>
+        <translation type="vanished">가운데</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
-        <translation>Réverbe</translation>
+        <translation>리버브</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="202"/>
         <source>Left</source>
-        <translation>Gauche</translation>
+        <translation>왼쪽</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="209"/>
         <source>Right</source>
-        <translation>Droite</translation>
+        <translation>오른쪽</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="557"/>

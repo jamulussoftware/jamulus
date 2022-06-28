@@ -314,45 +314,45 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="157"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</translation>
+        <translation>채널의 왼쪽에서 오른쪽으로 팬을 설정합니다. 스테레오 또는 가급적이면 모노 입력/스테레오 출력 모드에서만 작동합니다.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="165"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</translation>
+        <translation>솔로 확인란을 사용하여 오디오 채널을 솔로로 설정할 수 있습니다. 즉, 솔로 채널을 제외한 다른 모든 채널이 음소거됩니다. 하나 이상의 채널을 솔로로 설정할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="171"/>
         <source>Group</source>
-        <translation>Group</translation>
+        <translation>그룹</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="172"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</translation>
+        <translation>Grp 확인란을 사용하여 오디오 채널 그룹을 정의할 수 있습니다. 그룹 페이더 중 하나가 이동되면 그룹의 모든 채널 페이더가 비례 동기화로 이동됩니다.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="175"/>
         <source>Group button</source>
-        <translation>Group button</translation>
+        <translation>그룹 버튼</translation>
     </message>
     <message>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
-        <translation type="vanished">The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</translation>
+        <translation type="vanished">페이더 태그는 연결된 클라이언트를 식별합니다. 태그 이름, 악기 사진 및 국가의 국기를 메인 창에서 설정할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="183"/>
         <source>Mixer channel instrument picture</source>
-        <translation>Mixer channel instrument picture</translation>
+        <translation>믹서 채널 악기 사진</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="185"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>Mixer channel label (fader tag)</translation>
+        <translation>믹서 채널 이름표(페이더 태그)</translation>
     </message>
     <message>
         <source>Mixer channel country flag</source>
-        <translation type="vanished">Mixer channel country flag</translation>
+        <translation type="vanished">믹서 채널 국가 플래그</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="223"/>
@@ -392,70 +392,70 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="788"/>
         <source>Alias/Name</source>
-        <translation>Alias/Name</translation>
+        <translation>별칭/이름</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="795"/>
         <source>Instrument</source>
-        <translation>Instrument</translation>
+        <translation>악기</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="803"/>
         <source>Location</source>
-        <translation>Location</translation>
+        <translation>위치</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="831"/>
         <location filename="../audiomixerboard.cpp" line="837"/>
         <location filename="../audiomixerboard.cpp" line="843"/>
         <source>Skill Level</source>
-        <translation>Skill Level</translation>
+        <translation>스킬 레벨</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="864"/>
         <source>Alias</source>
-        <translation>Alias</translation>
+        <translation>별칭</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="830"/>
         <source>Beginner</source>
-        <translation>Beginner</translation>
+        <translation>초보</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="836"/>
         <source>Intermediate</source>
-        <translation>Intermediate</translation>
+        <translation>중급</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="842"/>
         <source>Expert</source>
-        <translation>Expert</translation>
+        <translation>전문가</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="855"/>
         <source>Musician Profile</source>
-        <translation>Musician Profile</translation>
+        <translation>음악가 프로파일</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="47"/>
         <location filename="../audiomixerboard.cpp" line="161"/>
         <location filename="../audiomixerboard.cpp" line="251"/>
         <source>Mute</source>
-        <translation>Mute</translation>
+        <translation>묵음</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="43"/>
         <location filename="../audiomixerboard.cpp" line="236"/>
         <location filename="../audiomixerboard.cpp" line="250"/>
         <source>Pan</source>
-        <translation>Pan</translation>
+        <translation>팬</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="48"/>
         <location filename="../audiomixerboard.cpp" line="164"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Solo</source>
-        <translation>Solo</translation>
+        <translation>솔로</translation>
     </message>
 </context>
 <context>
@@ -463,42 +463,42 @@
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>Chat Window</source>
-        <translation>Chat Window</translation>
+        <translation>채팅 창</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation>The chat window shows a history of all chat messages.</translation>
+        <translation>채팅 창에는 모든 채팅 메시지 기록을 보여줍니다.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="36"/>
         <source>Chat history</source>
-        <translation>Chat history</translation>
+        <translation>채팅 기록</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="39"/>
         <source>Input Message Text</source>
-        <translation>Input Message Text</translation>
+        <translation>메시지 입력</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="40"/>
         <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</translation>
+        <translation>편집 상자에 채팅 메시지를 입력하고 Enter 키를 누르면 연결된 모든 클라이언트에 메시지를 배포하는 서버로 메시지를 보냅니다. 그러면 메시지가 채팅 창에 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="44"/>
         <source>New chat text edit box</source>
-        <translation>New chat text edit box</translation>
+        <translation>새로운 채팅 텍스트 편집 상자</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
         <source>Type a message here</source>
-        <translation>Type a message here</translation>
+        <translation>메시지를 이곳에 입력하세요</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="58"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Edit</translation>
+        <translation>&amp;편집</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="60"/>

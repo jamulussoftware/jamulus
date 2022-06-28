@@ -44,7 +44,7 @@
     <message>
         <location filename="../util.cpp" line="615"/>
         <source>Flag icons by Mark James</source>
-        <translation>깃발 아이콘 by Mark James</translation>
+        <translation>플래그 아이콘 by Mark James</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="688"/>
@@ -135,7 +135,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation>A&amp;bout</translation>
+        <translation>&amp;정보</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="120"/>
@@ -239,7 +239,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="154"/>
         <source>Status indicator label</source>
-        <translation>상태 표시기 이름표</translation>
+        <translation>상태 표시기 레이블</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="156"/>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="185"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>믹서 채널 이름표(페이더 태그)</translation>
+        <translation>믹서 채널 레이블(페이더 태그)</translation>
     </message>
     <message>
         <source>Mixer channel country flag</source>
@@ -503,26 +503,26 @@
     <message>
         <location filename="../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation>Cl&amp;ear Chat History</translation>
+        <translation>&amp;채팅 기록 정리</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="64"/>
         <location filename="../chatdlg.cpp" line="69"/>
         <source>&amp;Close</source>
-        <translation>&amp;Fermer</translation>
+        <translation>&amp;닫기</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="145"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation>Souhaitez-vous ouvrir le lien &apos;%1&apos; dans votre navigateur ?</translation>
+        <translation>브라우저에서 &apos;%1&apos; 링크를 여시겠습니까?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
-        <translation type="vanished">Souhaitez-vous ouvrir le lien</translation>
+        <translation type="vanished">링크를 여시겠습니까</translation>
     </message>
     <message>
         <source>in an external browser?</source>
-        <translation type="vanished">dans un navigateur externe ?</translation>
+        <translation type="vanished">외부 브라우저에서?</translation>
     </message>
 </context>
 <context>
@@ -530,12 +530,12 @@
     <message>
         <location filename="../chatdlgbase.ui" line="20"/>
         <source>Chat</source>
-        <translation>Tchate</translation>
+        <translation>채팅</translation>
     </message>
     <message>
         <location filename="../chatdlgbase.ui" line="54"/>
         <source>&amp;Send</source>
-        <translation>En&amp;voyer</translation>
+        <translation>&amp;보내기</translation>
     </message>
 </context>
 <context>
@@ -543,64 +543,64 @@
     <message>
         <location filename="../clientdlg.cpp" line="55"/>
         <source>Input Level Meter</source>
-        <translation>Indicateur de niveau d&apos;entrée</translation>
+        <translation>레벨 미터 입력</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="60"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
-        <translation>Veillez à ne pas clipper le signal d&apos;entrée afin d&apos;éviter les distorsions du signal audio.</translation>
+        <translation>오디오 신호의 왜곡을 방지하기 위해 입력 신호를 클리핑하지 않도록 하세요.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="78"/>
         <source>Input level meter</source>
-        <translation>Indicateur de niveau d&apos;entrée</translation>
+        <translation>레벨 미터 입력</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="79"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation>Simule un indicateur de niveau analogique à diode.</translation>
+        <translation>아날로그 LED 레벨 미터를 시뮬레이션합니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="96"/>
         <source>Connect/Disconnect Button</source>
-        <translation>Bouton connecter/déconnecter</translation>
+        <translation>연결/해제 버튼</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="100"/>
         <source>Connect and disconnect toggle button</source>
-        <translation>Bouton-bascule de connection/déconnexion</translation>
+        <translation>연결 및 해제 토글 버튼</translation>
     </message>
     <message>
         <source>Local Audio Input Fader</source>
-        <translation type="vanished">Chariot d&apos;entrée audio locale</translation>
+        <translation type="vanished"로컬 오디오 입력 페이더</translation>
     </message>
     <message>
         <source>Local audio input fader (left/right)</source>
-        <translation type="vanished">Chariot d&apos;entrée audio locale (gauche/droite)</translation>
+        <translation type="vanished">로컬 오디오 입력 페이더 (왼쪽/오른쪽)</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="56"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
-        <translation>Ceci indique le niveau des deux canaux stéréo pour votre entrée audio.</translation>
+        <translation>오디오 입력에 대한 두 스테레오 채널의 레벨을 보여줍니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="63"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation>Si l&apos;application est connectée à un serveur et que vous jouez de votre instrument/chantez dans le microphone, le VU-mètre devrait clignoter. Si ce n&apos;est pas le cas, vous avez probablement sélectionné le mauvais canal d&apos;entrée (par exemple &apos;entrée ligne&apos; au lieu de l&apos;entrée microphone) ou réglé le gain d&apos;entrée trop bas dans le mélangeur audio (Windows).</translation>
+        <translation>애플리케이션이 서버에 연결되어 있고 악기를 연주하거나 마이크에 대고 노래하면 VU 미터가 깜박입니다. 그렇지 않다면, 입력 채널을 잘못 선택했거나(예: 마이크 입력 대신 &apos;라인 입력&apos;) 오디오 믹서에서(Windows) 입력 게인을 너무 낮게 설정했을 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="71"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation>Pour une bonne utilisation de l&apos;application, vous ne devez pas entendre votre chant/instrument par le haut-parleur ou votre casque lorsque le logiciel n&apos;est pas connecté. Ceci peut être réalisé en coupant votre canal audio d&apos;entrée dans le mixeur de lecture (pas dans le mixeur d&apos;enregistrement !).</translation>
+        <translation>애플리케이션을 올바르게 사용하려면 소프트웨어가 연결되어 있지 않을 때엔 스피커나 헤드폰을 통해 노래/악기 소리가 들리지 않아야 합니다. 재생 믹서(녹음 믹서가 아님!)에서 입력 오디오 채널을 음소거하면 됩니다.</translation>
     </message>
     <message>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="vanished">Contrôle les niveaux relatifs des canaux audio locaux gauche et droit. Pour un signal mono, il agit comme un pan entre les deux canaux. Par exemple, si un microphone est connecté au canal d&apos;entrée droit et qu&apos;un instrument est connecté au canal d&apos;entrée gauche qui est beaucoup plus fort que le microphone, déplacez le curseur audio dans une direction où l&apos;étiquette au-dessus du curseur indique </translation>
+        <translation type="vanished">왼쪽 및 오른쪽 로컬 오디오 채널의 상대 레벨을 제어합니다. 모노 신호의 경우 두 채널 사이의 팬 역할을 합니다. 예를 들면, 마이크가 오른쪽 입력 채널에 연결되어 있고 악기가 마이크보다 소리가 훨씬 큰 왼쪽 입력 채널에 연결되어 있는 경우 페이더 위의 레이블이 표시되는 방향으로 오디오 페이더를 이동합니다</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="103"/>
         <source>Reverb effect</source>
-        <translation>Effet Réverbe</translation>
+        <translation>리버브 효과</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="104"/>

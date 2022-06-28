@@ -348,7 +348,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="185"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation>믹서 채널 레이블(페이더 태그)</translation>
+        <translation>믹서 채널 레이블 (페이더 태그)</translation>
     </message>
     <message>
         <source>Mixer channel country flag</source>

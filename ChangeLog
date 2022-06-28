@@ -1,5 +1,11 @@
 
-### 3.8.2nightly3 <- NOTE: the release version number will be 3.9.0 ###
+### 3.8.2nightly4 <- NOTE: the release version number will be 3.9.0 ###
+
+- Translated Windows installer into Korean (#2669).
+  (contributed by @bagjunggyu)
+
+- Rephrase mute options in help text (#2673).
+  (contributed by @pljones)
 
 - JSON-RPC: Extended jamulusserver/getServerProfile method to include directoryServer name for registration requests (#2505).
   (contributed by @Rob-NY)
@@ -18,12 +24,6 @@
 
 - UI: Adjust Server Language combo box length to fit into layout properly (#2424).
   (contributed by @pljones)
-
-- GUI: Improved Country selection handling to work with Qt6 and cover 53 previously unsupported territories (#2409).
-  (contributed by @hoffie)
-
-- GUI: What's This Text and Tooltip updated for LEDs and Connection Status (#2644).
-  (contributed by @henkdegroot)
 
 - Simplify device driver error message on Windows by removing unneeded HTML (#2496).
   (contributed by @ann0see)
@@ -82,14 +82,53 @@
 - Improvements to the start up logging for the server list filter (#2647).
   (contributed by @pljones)
 
+- Client: Include ASIO references in Windows ASIO version (#2605).
+  (contributed by @henkdegroot)
+
+- Updated the link to "Running a server" web page (#2419).
+  (contributed by @jujudusud)
+
+- Added nojsonrpc qmake CONFIG option to remove JSON-RPC support (#2660).
+  (contributed by @pljones)
+
+- Make serveronly more comprehensive (#2551).
+  (contributed by @pljones)
+
+- Rename existing define to JACK_ON_WINDOWS (#2525).
+  (contributed by @pljones)
+
+- (Autobuild: Clean up redundant variables in workflow definition; to be condensed with other Autobuild refactoring entries) (#2584).
+  (contributed by @hoffie)
+
+- (List as part of Autobuild refactorings, #2503) (#2642).
+  (contributed by @hoffie)
+
+- Refactor linux autobuild (#2451).
+  (contributed by @ann0see)
+
+- Refactor raspijamulus.sh file (#2489).
+  (contributed by @ann0see)
+
+- Stop the build if the audio SDK is missing (#2536).
+  (contributed by @pljones)
+
+- Stop running Autobuild if only documentation is updated to avoid wasting computation time (#2532).
+  (contributed by @ann0see)
+
+- Client/Server: corrected operation of message ack timer (#2517).
+  (contributed by @softins)
+
+- GUI: Improved Country selection handling to work with Qt6 and cover 53 previously unsupported territories (#2409).
+  (contributed by @hoffie)
+
+- GUI: What's This Text and Tooltip updated for LEDs and Connection Status (#2644).
+  (contributed by @henkdegroot)
+
 - Server: Set default directory to "None" when not set in ini file or command line (#2442).
   (contributed by @softins)
 
 - Recorder adjustments (#2427).
   (contributed by @pljones)
-
-- Client: Include ASIO references in Windows ASIO version (#2605).
-  (contributed by @henkdegroot)
 
 - Windows: The JACK build now no longer gives an ASIO related warning message on an incompatible state (#2494).
   (contributed by @ann0see)
@@ -126,9 +165,6 @@
 - Android: Migrated to aqtinstall for Qt installation (#2497).
   (contributed by @hoffie)
 
-- Updated the link to "Running a server" web page (#2419).
-  (contributed by @jujudusud)
-
 - Documentation: Added high-level technical documentation for the Jamulus protocol (#2337).
   (contributed by @emlynmac)
 
@@ -138,30 +174,6 @@
 - Documentation: Rewrite some parts of COMPILING.md and CONTRIBUTING.md to stay up to date and enable clearer contribution guidelines (#2561).
   (contributed by @ann0see)
 
-- Added nojsonrpc qmake CONFIG option to remove JSON-RPC support (#2660).
-  (contributed by @pljones)
-
-- Make serveronly more comprehensive (#2551).
-  (contributed by @pljones)
-
-- Rename existing define to JACK_ON_WINDOWS (#2525).
-  (contributed by @pljones)
-
-- (Autobuild: Clean up redundant variables in workflow definition; to be condensed with other Autobuild refactoring entries) (#2584).
-  (contributed by @hoffie)
-
-- (List as part of Autobuild refactorings, #2503) (#2642).
-  (contributed by @hoffie)
-
-- Refactor linux autobuild (#2451).
-  (contributed by @ann0see)
-
-- Refactor raspijamulus.sh file (#2489).
-  (contributed by @ann0see)
-
-- Stop the build if the audio SDK is missing (#2536).
-  (contributed by @pljones)
-
 - Build: Improved grep usage in scripts #2421 (#2397).
   (contributed by @ann0see)
 
@@ -170,9 +182,6 @@
 
 - Build: Initial support for building with Qt6 has been implemented (@dcorson-ticino-com, @softins) (#2299).
   (contributed by @hoffie)
-
-- Stop running Autobuild if only documentation is updated to avoid wasting computation time (#2532).
-  (contributed by @ann0see)
 
 - Autobuild: Build macOS .dmg files by create-dmg for building compatibility with further versions of macOS #2420 (#2207).
   (contributed by @ann0see)
@@ -230,9 +239,6 @@
 
 - Code style: Use TODO and TEST comments instead of un-indenting with clang-format off/on (#2600).
   (contributed by @pgScorpio)
-
-- Client/Server: corrected operation of message ack timer (#2517).
-  (contributed by @softins)
 
 - Internal: Check coding style on macOS/iOS code files (.mm extension) (#1871).
   (contributed by @ngocdh)

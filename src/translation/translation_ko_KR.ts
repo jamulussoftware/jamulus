@@ -319,7 +319,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="165"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>솔로 확인란을 사용하여 오디오 채널을 솔로로 설정할 수 있습니다. 즉, 솔로 채널을 제외한 다른 모든 채널이 음소거됩니다. 하나 이상의 채널을 솔로로 설정할 수 있습니다.</translation>
+        <translation>솔로 확인란을 사용하여 오디오 채널을 솔로로 설정할 수 있습니다. 즉, 솔로 채널을 제외한 다른 모든 채널이 음소거됩니다. 한 개 이상의 채널을 솔로로 설정할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="171"/>
@@ -483,12 +483,12 @@
     <message>
         <location filename="../chatdlg.cpp" line="40"/>
         <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation>편집 상자에 채팅 메시지를 입력하고 Enter 키를 누르면 연결된 모든 클라이언트에 메시지를 배포하는 서버로 메시지를 보냅니다. 그러면 메시지가 채팅 창에 표시됩니다.</translation>
+        <translation>편집 박스에 채팅 메시지를 입력하고 Enter 키를 누르면 연결된 모든 클라이언트에 메시지를 배포하는 서버로 메시지를 보냅니다. 그러면 메시지가 채팅 창에 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="44"/>
         <source>New chat text edit box</source>
-        <translation>새로운 채팅 텍스트 편집 상자</translation>
+        <translation>새로운 채팅 텍스트 편집 박스</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
@@ -518,11 +518,11 @@
     </message>
     <message>
         <source>Do you want to open the link</source>
-        <translation type="vanished">링크를 여시겠습니까</translation>
+        <translation type="vanished">외부 브라우저에서</translation>
     </message>
     <message>
         <source>in an external browser?</source>
-        <translation type="vanished">외부 브라우저에서?</translation>
+        <translation type="vanished"> 링크를 여시겠습니까?</translation>
     </message>
 </context>
 <context>
@@ -822,7 +822,7 @@
     </message>
     <message>
         <source>Current Connection Status Parameter</source>
-        <translation type="vanished">현재 연결 상태 매개변수</translation>
+        <translation type="vanished">현재 연결 상태 파라미터</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="193"/>
@@ -1088,17 +1088,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>SILENCÉ (les autres personnes ne vous entendent pas)</translation>
+        <translation>음소거됨(&apos;다른 사람들이 내 말을 들을 수 없음)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="587"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation>Configurez votre audio, connectez-vous à un serveur et commencez à bœuffer !</translation>
+        <translation>오디오를 설정하고 서버에 연결하고 재밍을 시작해 보세요!</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="609"/>
         <source>Update check</source>
-        <translation>Vérification de mise à jour</translation>
+        <translation>업데이트 확인</translation>
     </message>
 </context>
 <context>
@@ -1106,276 +1106,276 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="75"/>
         <source>Jitter Buffer Size</source>
-        <translation>Taille du tampon de gigue</translation>
+        <translation>지터 버퍼 크기</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="87"/>
         <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>Le réglage du tampon de gigue est donc un compromis entre la qualité audio et le délai global.</translation>
+        <translation>지터 버퍼 설정은 오디오 품질과 전체 지연 사이의 균형을 맞추는 작업입니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="112"/>
         <source>Local jitter buffer slider control</source>
-        <translation>Chariot de contrôle de la mémoire tampon de la gigue locale</translation>
+        <translation>로컬 지터 버퍼 슬라이더 제어</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="115"/>
         <source>Server jitter buffer slider control</source>
-        <translation>Chariot de contrôle de la mémoire tampon de la gigue du serveur</translation>
+        <translation>서버 지터 버퍼 슬라이더 제어</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
         <source>Auto jitter buffer switch</source>
-        <translation>Commutateur de tampon de gigue automatique</translation>
+        <translation>지터 버퍼 자동 스위치</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
-        <translation type="vanished">Indicateur LED de l&apos;état du tampon de gigue</translation>
+        <translation type="vanished">지터 버퍼 상태 LED 표시등</translation>
     </message>
     <message>
         <source>Sound Card Device</source>
-        <translation type="vanished">Périphérique d&apos;interface audio</translation>
+        <translation type="vanished">사운드 카드</translation>
     </message>
     <message>
         <source>The ASIO driver (sound card) can be selected using </source>
-        <translation type="vanished">Le pilote ASIO (interface audio) peut être sélectionné en utilisant </translation>
+        <translation type="vanished">Windows 운영 체제에서는 ASIO 드라이버(사운드 카드)를 선택할 수 있지만.</translation>
     </message>
     <message>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="vanished"> sous le système d&apos;exploitation Windows. Sous MacOS/Linux, aucune sélection de carte son n&apos;est possible. Si le pilote ASIO sélectionné n&apos;est pas valide, un message d&apos;erreur s&apos;affiche et le pilote valide précédent est sélectionné.</translation>
+        <translation type="vanished">MacOS/Linux에서는 사운드 카드 선택이 불가능합니다. 선택한 ASIO 드라이버가 유효하지 않으면 오류 메시지가 표시되고 이전의 유효한 드라이버가 선택됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="129"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
-        <translation>Si le pilote est sélectionné pendant une connexion active, la connexion est interrompue, le pilote est modifié et la connexion est automatiquement relancée.</translation>
+        <translation>연결된 상태에서 드라이버를 선택하면 연결이 중지되고 드라이버를 바꾼 후에 자동으로 다시 연결됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="133"/>
         <source>Sound card device selector combo box</source>
-        <translation>Choix déroulant de sélecteur de périphérique d&apos;interface audio</translation>
+        <translation>사운드 카드 선택 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="137"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation>Si le pilote ASIO4ALL est utilisé, veuillez noter que ce pilote introduit généralement environ 10 à 30 ms de latence audio supplémentaire. Il est donc recommandé d&apos;utiliser une carte son avec un pilote ASIO natif.</translation>
+        <translation>ASIO4ALL 드라이버를 사용하는 경우 이 드라이버는 일반적으로 약 10-30ms의 추가 오디오 지연을 일으킵니다. 그러므로 기본 ASIO 드라이버와 함께 사운드 카드를 사용하는 것이 좋습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="142"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation>Si vous utilisez le pilote ASIO kX, assurez-vous de connecter les entrées ASIO dans le panneau de configuration DSP kX.</translation>
+        <translation>kX ASIO 드라이버를 사용하는 경우 kX DSP 설정 패널에서 ASIO 입력을 연결해야 합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="149"/>
         <source>Sound Card Channel Mapping</source>
-        <translation>Cartographie des canaux de la carte son</translation>
+        <translation>사운드 카드 채널 매핑</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="150"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation>Si la carte son sélectionnée offre plus d&apos;un canal d&apos;entrée ou de sortie, les paramètres de cartographie des canaux d&apos;entrées et de sorties sont visibles.</translation>
+        <translation>선택한 사운드 카드 장치가 한 개 이상의 입력 또는 출력 채널을 제공하는 경우 입력 채널 매핑 및 출력 채널 매핑 설정이 표시됩니다.</translation>
     </message>
     <message>
         <source>For each </source>
-        <translation type="vanished">Pour chaque </translation>
+        <translation type="vanished">매 </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="162"/>
         <source>Left input channel selection combo box</source>
-        <translation>Choix déroulant de sélection de canal d&apos;entrée gauche</translation>
+        <translation>왼쪽 입력 채널 선택 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="164"/>
         <source>Right input channel selection combo box</source>
-        <translation>Choix déroulant de sélection de canal d&apos;entrée droite</translation>
+        <translation>오른쪽 입력 채널 선택 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="166"/>
         <source>Left output channel selection combo box</source>
-        <translation>Choix déroulant de sélection de canal de sortie gauche</translation>
+        <translation>왼쪽 출력 채널 선택 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="168"/>
         <source>Right output channel selection combo box</source>
-        <translation>Choix déroulant de sélection de canal de sortie droite</translation>
+        <translation>오른쪽 출력 채널 선택 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
         <source>Enable Small Network Buffers</source>
-        <translation>Activer les petits tampons de réseau</translation>
+        <translation>소규모 네트워크 버퍼 활성화</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
-        <translation type="vanished">Si activée, la prise en charge des très petits paquets audio de réseau est activée. Les très petits paquets réseau ne sont réellement utilisés que si le délai de la mémoire tampon de la carte son est inférieur à </translation>
+        <translation type="vanished">활성화하면 매우 작은 네트워크 오디오 패킷에 대한 지원이 활성화됩니다. 매우 작은 네트워크 패킷은 사운드 카드 버퍼 지연이 샘플보다 작은 경우에만 실제로 사용됩니다. </translation>
     </message>
     <message>
         <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
-        <translation type="vanished"> échantillons. Plus la mémoire tampon du réseau est petite, plus la latence audio est faible. Mais en même temps, la charge du réseau augmente et la probabilité de décrochage audio augmente également.</translation>
+        <translation type="vanished"> 네트워크 버퍼가 작을수록 오디오 대기 시간이 낮아집니다. 그러나 동시에 네트워크 부하가 증가하고 오디오 드롭아웃 가능성도 증가합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
         <source>Enable small network buffers check box</source>
-        <translation>Case-à-cocher pour activer les petits tampons de réseau</translation>
+        <translation>소규모 네트워크 버퍼 활성화 체크 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="182"/>
         <source>Sound Card Buffer Delay</source>
-        <translation>Délai de temporisation de l&apos;interface audio</translation>
+        <translation>사운드 카드 버퍼 지연</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation>Le paramètre de délai de mise en mémoire tampon est un paramètre fondamental de %1. Ce paramètre a une influence sur de nombreuses propriétés de la connexion.</translation>
+        <translation>버퍼 지연 설정은 %1의 기본 설정값입니다. 이 설정은 많은 연결에 영향을 줍니다.</translation>
     </message>
     <message>
         <source>Three buffer sizes are supported</source>
-        <translation type="vanished">Trois tailles de tampon sont prises en charge</translation>
+        <translation type="vanished">세 가지 버퍼 크기를 지원합니다.</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="vanished">Certains pilotes de carte son ne permettent pas de modifier le délai de la mémoire tampon depuis l&apos;application. Dans ce cas, le réglage de délai de tampon est désactivé et doit être modifié à l&apos;aide du pilote de la carte son. Sous windows, appuyez sur le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration JACK pour modifier la taille de la mémoire tampon.</translation>
+        <translation type="vanished">일부 사운드 카드 드라이버는 애플리케이션 안에서 버퍼 지연을 변경할 수 없습니다. 이 경우 버퍼 지연 설정이 비활성화되며 사운드 카드 드라이버를 사용하여 변경해야 합니다. Windows에서는 ASIO 장치 설정 버튼을 눌러 드라이버 설정 패널을 엽니다. Linux에서는 Jack 설정 도구를 사용하여 버퍼 크기를 변경합니다.</translation>
     </message>
     <message>
         <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="vanished">Le délai actuel de la mémoire tampon a une influence sur l&apos;état de la connexion, le taux de téléchargement actuel et le délai global. Plus la taille de la mémoire tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (désynchronisations) est élevée, plus le taux de téléchargement est élevé et plus le délai global est faible.</translation>
+        <translation type="vanished">실제 버퍼 지연은 연결 상태, 현재 업로드 속도 및 전체 지연에 영향을 미칩니다. 버퍼 크기가 작을수록 상태 표시기에서 빨간색 표시등(드롭아웃)이 발생할 확률이 높아지고 업로드 속도가 빨라지고 전체 지연이 낮아집니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="219"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation>Le réglage de la mémoire tampon est donc un compromis entre la qualité audio et le délai global.</translation>
+        <translation>그러므로 버퍼 설정은 오디오 품질과 전체 지연 사이의 균형을 맞추는 작업입니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="260"/>
         <source>ASIO Device Settings push button</source>
-        <translation>Bouton-poussoir des paramètres du périphérique ASIO</translation>
+        <translation>ASIO 장치 설정 푸시 버튼</translation>
     </message>
     <message>
         <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
-        <translation type="vanished"> (canal gauche et canal droit), il est possible de sélectionner un autre canal réel de la carte son.</translation>
+        <translation type="vanished"> 입력/출력 채널(왼쪽 및 오른쪽 채널)이 다른 실제 사운드 카드 채널을 선택할 수 있습니다.</translation>
     </message>
     <message>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="vanished">Si les paramètres de taille de la mémoire tampon sont désactivés, le pilote audio ne permet pas de modifier ce paramètre depuis le logiciel. Sous Windows, appuyez sur le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration JACK pour modifier la taille de la mémoire tampon.</translation>
+        <translation type="vanished">버퍼 지연 설정이 비활성화된 경우, 오디오 드라이버가 소프트웨어 내에서 이 설정을 수정하는 것을 금지합니다. Windows에서는 ASIO 장치 설정 버튼을 눌러 드라이버 설정 패널을 엽니다. Linux에서는 Jack 설정 도구를 사용하여 버퍼 크기를 변경합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="233"/>
         <source>Sound card driver settings</source>
-        <translation>Paramètres du pilote de la carte son</translation>
+        <translation>사운드 카드 드라이버 설정</translation>
     </message>
     <message>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL let you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="vanished">Cela ouvre les paramètres du pilote de votre carte son. Certains pilotes vous permettent de modifier les paramètres de la mémoire tampon, d&apos;autres comme ASIO4ALL vous laissent choisir l&apos;entrée ou les sorties de votre (vos) périphérique(s). Plus d&apos;informations peuvent être trouvées sur jamulus.io.</translation>
+        <translation type="vanished">사운드 카드의 드라이버 설정을 열니다. 일부 드라이버를 사용하면 버퍼 설정을 변경할 수 있고 ASIO4ALL과 같은 드라이버를 사용하면 장치의 입력 또는 출력을 선택할 수 있습니다. 자세한 내용은 jamulus.io에서 확인할 수 있습니다.</translation>
     </message>
     <message>
         <source>Opens the driver settings. Note: </source>
-        <translation type="vanished">Ouvre les paramètres du pilote. Note : </translation>
+        <translation type="vanished">드라이버 설정을 엽니다. 메모: </translation>
     </message>
     <message>
         <source> currently only supports devices supporting a sample rate of </source>
-        <translation type="vanished"> prend actuellement en charge uniquement les périphériques supportant un taux d&apos;échantillonnage de </translation>
+        <translation type="vanished"> 현재 HZ의 샘플 속도를 지원하는 기기만 지원합니다 </translation>
     </message>
     <message>
         <source>Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="vanished">Hz. Vous ne pourrez pas sélectionner un pilote/périphérique ne le supportant pas. Pour plus d&apos;informations, consultez jamulus.io.</translation>
+        <translation type="vanished">그렇지 않은 드라이버/장치는 선택할 수 없습니다. 더 많은 도움이 필요하시면 jamulus.io를 참고하세요.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="249"/>
         <source>64 samples setting radio button</source>
-        <translation>Bouton radio de paramétrage à 64 échantillons</translation>
+        <translation>64HZ 샘플 설정 라디오 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="252"/>
         <source>128 samples setting radio button</source>
-        <translation>Bouton radio de paramétrage à 128 échantillons</translation>
+        <translation>128HZ 샘플 설정 라디오 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="255"/>
         <source>256 samples setting radio button</source>
-        <translation>Bouton radio de paramétrage à 256 échantillons</translation>
+        <translation>256HZ 샘플 설정 라디오 버튼</translation>
     </message>
     <message>
         <source>ASIO setup push button</source>
-        <translation type="vanished">Bouton-poussoir de paramétrage ASIO</translation>
+        <translation type="vanished">ASIO 설정 푸시 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="285"/>
         <source>Audio Channels</source>
-        <translation>Canaux audio</translation>
+        <translation>오디오 채널</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="318"/>
         <source>Audio channels combo box</source>
-        <translation>Choix déroulant de canaux audio</translation>
+        <translation>오디오 채널 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="321"/>
         <source>Audio Quality</source>
-        <translation>Qualité audio</translation>
+        <translation>오디오 품질</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="328"/>
         <source>Audio quality combo box</source>
-        <translation>Choix déroulant de qualité audio</translation>
+        <translation>오디오 품질 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="331"/>
         <source>New Client Level</source>
-        <translation>Niveau de nouveau client</translation>
+        <translation>새 클라이언트 레벨</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="340"/>
         <source>New client level edit box</source>
-        <translation>Nouvelle boîte d&apos;édition de niveau des nouveaux clients</translation>
+        <translation>새 클라이언트 레벨 편집 박스</translation>
     </message>
     <message>
         <source>Custom Directory Server Address</source>
-        <translation type="vanished">Adresse personnalisée du serveur annuaire</translation>
+        <translation type="vanished">사용자 정의 디렉터리 서버 주소</translation>
     </message>
     <message>
         <source>Current Connection Status Parameter</source>
-        <translation type="vanished">Paramètre de l&apos;état de la connexion actuelle</translation>
+        <translation type="vanished">현재 연결 상태 파라미터</translation>
     </message>
     <message>
-        <source>If this LED indicator turns red, you will not have much fun using the </source>
+        <source>이 LED 표시등이 빨간색으로 바뀌면 이 소프트웨어를 사용하는 재미가 </source>
         <translation type="vanished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le </translation>
     </message>
     <message>
-        <source> software.</source>
+        <source>덜 할 겁니다.</source>
         <translation type="vanished"> logiciel.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
         <location filename="../clientsettingsdlg.cpp" line="422"/>
         <source>Mono</source>
-        <translation>Mono</translation>
+        <translation>모노</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="307"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation> mode augmentera le débit de données de votre flux. Assurez-vous que votre débit montant ne dépasse pas la vitesse de téléchargement disponible de votre connexion internet.</translation>
+        <translation> 모드는 스트림 데이터 속도를 높입니다. 업로드 속도가 인터넷 연결의 사용 가능한 업로드 속도를 초과하지 않는지 확인하세요.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="423"/>
         <source>Mono-in/Stereo-out</source>
-        <translation>Mono-entrée/stéréo-sortie</translation>
+        <translation>모노-입력/스테레오-출력</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
         <location filename="../clientsettingsdlg.cpp" line="306"/>
         <location filename="../clientsettingsdlg.cpp" line="424"/>
         <source>Stereo</source>
-        <translation>Stéréo</translation>
+        <translation>스테레오</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="38"/>
         <location filename="../clientsettingsdlg.cpp" line="48"/>
         <location filename="../clientsettingsdlg.cpp" line="49"/>
         <source>&amp;Close</source>
-        <translation>&amp;Fermer</translation>
+        <translation>&amp;닫기</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="58"/>
         <source>Local Audio Input Fader</source>
-        <translation>Chariot d&apos;entrée audio locale</translation>
+        <translation>로컬 오디오 입력 페이더</translation>
     </message>
     <message>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>

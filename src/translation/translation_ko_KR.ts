@@ -659,7 +659,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished">이 LED 표시등이 빨간색으로 바뀌면 %1 사용의 즐거움이 덜할 겁니다.</translation>
+        <translation type="unfinished">이 LED 표시등이 빨간색으로 바뀌면 %1 사용의 즐거움이 줄어들 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="158"/>
@@ -688,7 +688,7 @@
     </message>
     <message>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면 애플리케이션을 사용하는 즐거움이 덜할 겁니다.</translation>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면 애플리케이션을 사용하는 즐거움이 줄어들 겁니다.</translation>
     </message>
     <message>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
@@ -840,7 +840,7 @@
     </message>
     <message>
         <source> software.</source>
-        <translation type="vanished"> 사용하는 즐거움이 덜할 겁니다.</translation>
+        <translation type="vanished"> 사용하는 즐거움이 줄어들 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="285"/>
@@ -1335,11 +1335,11 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">현재 연결 상태 파라미터</translation>
     </message>
     <message>
-        <source>이 LED 표시등이 빨간색으로 바뀌면 이 소프트웨어를 사용하는 재미가 </source>
+        <source>이 LED 표시등이 빨간색으로 바뀌면 이 소프트웨어를 사용하는 즐거움이 </source>
         <translation type="vanished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le </translation>
     </message>
     <message>
-        <source>덜 할 겁니다.</source>
+        <source>줄어들 겁니다.</source>
         <translation type="vanished"> logiciel.</translation>
     </message>
     <message>

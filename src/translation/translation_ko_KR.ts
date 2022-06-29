@@ -1280,17 +1280,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="249"/>
         <source>64 samples setting radio button</source>
-        <translation>64HZ 샘플 설정 라디오 버튼</translation>
+        <translation>64 샘플 설정 라디오 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="252"/>
         <source>128 samples setting radio button</source>
-        <translation>128HZ 샘플 설정 라디오 버튼</translation>
+        <translation>128 샘플 설정 라디오 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="255"/>
         <source>256 samples setting radio button</source>
-        <translation>256HZ 샘플 설정 라디오 버튼</translation>
+        <translation>256 샘플 설정 라디오 버튼</translation>
     </message>
     <message>
         <source>ASIO setup push button</source>
@@ -1379,173 +1379,173 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="vanished">Contrôle les niveaux relatifs des canaux audio locaux gauche et droit. Pour un signal mono, il agit comme un panoramique entre les deux canaux. Par exemple, si un microphone est connecté au canal d&apos;entrée droit et qu&apos;un instrument est connecté au canal d&apos;entrée gauche qui est beaucoup plus fort que le microphone, déplacez le curseur audio du côté de l&apos;étiquette </translation>
+        <translation type="vanished">왼쪽 및 오른쪽 로컬 오디오 채널의 상대 레벨을 제어합니다. 모노 신호의 경우 두 채널 사이의 팬 역할을 합니다. 예를 들면, 마이크가 오른쪽 입력 채널에 연결되어 있고 악기가 마이크보다 훨씬 소리가 큰 왼쪽 입력 채널에 연결되어 있는 경우 페이더 위의 레이블이 표시되는 방향으로 오디오 페이더를 이동합니다 </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="66"/>
         <location filename="../clientsettingsdlg.cpp" line="1181"/>
         <source>L</source>
-        <translation>G</translation>
+        <translation>L</translation>
     </message>
     <message>
         <source>, where</source>
-        <translation type="vanished">, où</translation>
+        <translation type="vanished">, 현재</translation>
     </message>
     <message>
         <source>is the current attenuation indicator.</source>
-        <translation type="vanished">est l&apos;indicateur d&apos;atténuation actuel.</translation>
+        <translation type="vanished">감쇠 표시기는 어디에 있습니까.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="72"/>
         <source>Local audio input fader (left/right)</source>
-        <translation>Chariot d&apos;entrée audio locale (gauche/droite)</translation>
+        <translation>로컬 오디오 입력 페이더 (왼쪽/오른쪽)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="76"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation>Le tampon de gigue compense les gigues de synchronisation du réseau et de la carte son. La taille de la mémoire tampon influence donc la qualité du flux audio (le nombre de désynchronisations) et le délai global (plus la mémoire tampon est longue, plus le délai est important).</translation>
+        <translation>지터 버퍼는 네트워크 및 사운드 카드 타이밍 지터를 보완합니다. 따라서 버퍼의 크기는 오디오 스트림의 품질(드롭아웃 발생 수)과 전체 지연(버퍼가 길수록 지연이 높아짐)에 영향을 줍니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="81"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
-        <translation>Vous pouvez définir manuellement la taille du tampon de gigue pour le client local et le serveur distant. Pour la mémoire tampon de gigue locale, les désynchronisations dans le flux audio sont indiquées par le voyant situé sous les chariots de taille de la mémoire tampon de gigue. Si le voyant devient rouge, cela signifie qu&apos;il y a eu un dépassement ou une sous-utilisation de la mémoire tampon et que le flux audio est interrompu.</translation>
+        <translation>로컬 클라이언트와 원격 서버에 대해 지터 버퍼 크기를 수동으로 설정할 수 있습니다. 로컬 지터 버퍼의 경우 오디오 스트림의 드롭아웃은 지터 버퍼 크기 페이더 아래의 표시등으로 표시됩니다. 표시등이 빨간색으로 바뀌면 버퍼 오버런/언더런이 발생하고 오디오 스트림이 중단됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="90"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation>Si le paramètre Auto est activé, les tampons de gigue du client local et du serveur distant sont automatiquement réglés en fonction des mesures de la gigue de synchronisation du réseau et de la carte son. Si le paramètre Auto est activé, les chariots de la taille des tampons de gigue sont désactivés (ils ne peuvent pas être déplacés avec la souris).</translation>
+        <translation>자동 설정이 활성화되면 로컬 클라이언트와 원격 서버의 지터 버퍼는 네트워크 및 사운드 카드 타이밍 지터 측정을 기반으로 자동으로 설정됩니다. 자동 활성화되면 지터 버퍼 크기 페이더가 비활성화됩니다(마우스로 이동할 수 없음).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="96"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation>Si le paramètre Auto est activé, les tampons réseau du client local et du serveur distant sont réglés sur une valeur prudente pour minimiser la probabilité d&apos;interruption de l&apos;audio. Pour régler le délai/latence audio, il est recommandé de désactiver le paramètre Auto et de réduire manuellement la taille du tampon de gigue en utilisant les chariots jusqu&apos;à ce que le nombre d&apos;interruptions soit acceptable. L&apos;indicateur LED affichera les désynchronisations audio du tampon de gigue local avec un voyant rouge.</translation>
+        <translation>Auto 설정이 활성화되면 오디오 드롭아웃 가능성을 최소화하기 위해 로컬 클라이언트와 원격 서버의 네트워크 버퍼가 보수적인 값으로 설정됩니다. 오디오 지연/대기 시간을 조정하려면 자동 설정을 비활성화하고 개인이 허용하는 드롭아웃 양에 도달할 때까지 슬라이더를 사용하여 수동으로 지터 버퍼 크기를 낮추는 것이 좋습니다. LED 표시기는 로컬 지터 버퍼의 오디오 드롭아웃을 빨간색으로 표시합니다.</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
-        <translation type="vanished">Le réglage du délai de la mémoire tampon est un paramètre fondamental de ce logiciel. Ce réglage a une influence sur de nombreuses propriétés de la connexion.</translation>
+        <translation type="vanished">버퍼 지연 설정은 본 소프트웨어의 기본 설정입니다. 이 설정은 많은 연결 속성에 영향을 줍니다.</translation>
     </message>
     <message>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="vanished">64 échantillons : le paramétrage préféré. Fournit la latence la plus faible mais ne fonctionne pas avec toutes les cartes son.</translation>
+        <translation type="vanished">64 샘플: 기본 값입니다. 가장 낮은 대기 시간을 제공하지만 모든 사운드 카드에서 작동하지는 않습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="192"/>
         <source>128 samples: Should work for most available sound cards.</source>
-        <translation>128 échantillons : devrait fonctionner pour la plupart des cartes son disponibles.</translation>
+        <translation>128 샘플: 사용 가능한 대부분의 사운드 카드에서 작동합니다.</translation>
     </message>
     <message>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
-        <translation type="vanished">256 échantillons : ne devrait être utilisé que sur des ordinateurs très lents ou avec une connexion internet lente.</translation>
+        <translation type="vanished">256 샘플: 매우 느린 컴퓨터나 느린 인터넷 연결에서만 사용해야 합니다.</translation>
     </message>
     <message>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The application will still work with this setting but with restricted performance.</source>
-        <translation type="vanished">Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, une taille de tampon non prise en charge est utilisée par le pilote. L&apos;application fonctionnera toujours avec ce paramètre, mais avec des performances limitées.</translation>
+        <translation type="vanished">버퍼 크기를 선택하지 않고 모든 설정을 비활성화하면 드라이버에서 지원되지 않는 버퍼 크기를 사용합니다. 애플리케이션은 이 설정으로 계속 작동하지만 성능이 제한됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Skin</source>
-        <translation>thème graphique</translation>
+        <translation>스킨</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation>Sélectionnez le thème graphique à utiliser pour la fenêtre principale.</translation>
+        <translation>메인 창에 사용할 스킨을 선택합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="267"/>
         <source>Skin combo box</source>
-        <translation>Choix déroulant de thème graphique</translation>
+        <translation>스킨 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation>Sélectionnez le style d&apos;indicateur à utiliser pour les indicateurs de niveaux. Les options barres (étroites) et diodes lumineuses (rondes, petites) ne s&apos;appliquent qu&apos;au tableau de mixage. Lorsque l&apos;option Barre (étroite) est sélectionnée, les indicateurs d&apos;entrées sont réglés sur barres (larges). Lorsque l&apos;option diodes lumineuses (rondes, petites) est sélectionnée, les indicateurs d&apos;entrées sont réglés sur diodes lumineuses (rondes, grandes). Les autres options s&apos;appliquent au tableau de mixage et aux indicateurs d&apos;entrées.</translation>
+        <translation>레벨 미터에 사용할 미터 스타일을 선택합니다. 막대(좁음) 및 LED(둥근, 작은) 옵션은 믹서보드에만 적용됩니다. Bar(좁음)를 선택하면 입력 미터가 Bar(넓음)로 설정됩니다. LED(둥근, 작은)를 선택하면 입력 미터가 LED(둥근, 큰)로 설정됩니다. 나머지 옵션은 믹서보드와 입력 미터에 적용됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
         <source>Language</source>
-        <translation>Langue</translation>
+        <translation>언어</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation>Sélectionnez la langue à utiliser pour l&apos;interface utilisateur.</translation>
+        <translation>사용자 인터페이스에 사용할 언어를 정합니다</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="282"/>
         <source>Language combo box</source>
-        <translation>Choix déroulant langue</translation>
+        <translation>언어 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="286"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
-        <translation>Sélectionne le nombre de canaux audio à utiliser pour la communication entre le client et le serveur. Trois modes sont disponibles :</translation>
+        <translation>클라이언트와 서버 간의 통신에 사용할 오디오 채널 수를 선택합니다. 세 가지 모드를 사용할 수 있습니다:</translation>
     </message>
     <message>
         <source>and </source>
-        <translation type="vanished">et </translation>
+        <translation type="vanished">그리고 </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
         <source>These modes use one and two audio channels respectively.</source>
-        <translation>Ces modes utilisent respectivement un et deux canaux audio.</translation>
+        <translation>이 모드는 각각 1개 및 2개의 오디오 채널을 사용합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="297"/>
         <source>Mono in/Stereo-out</source>
-        <translation>Entrée mono/sortie stéréo</translation>
+        <translation>모노 입력/스테레오-출력</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="298"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
-        <translation>Le signal audio envoyé au serveur est mono mais le signal de retour est stéréo. Ceci est utile si la carte son a l&apos;instrument sur un canal d&apos;entrée et le microphone sur l&apos;autre. Dans ce cas, les deux signaux d&apos;entrée peuvent être mélangés sur un canal mono mais le mixage du serveur est entendu en stéréo.</translation>
+        <translation>서버로 전송되는 오디오 신호는 모노이지만 리턴 신호는 스테레오입니다. 이것은 사운드 카드의 한 입력 채널에 악기가 있고 다른 입력 채널에 마이크가 있는 경우에 유용합니다. 이 경우 두 개의 입력 신호를 하나의 모노 채널로 믹스할 수 있지만 서버 믹스는 스테레오로 들립니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="306"/>
         <source>Enabling </source>
-        <translation>Activer </translation>
+        <translation>활성화 </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="312"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
-        <translation>En mode de flux stéréo, aucune sélection de canal audio pour l&apos;effet de réverbération ne sera disponible dans la fenêtre principale puisque l&apos;effet est appliqué aux deux canaux dans ce cas.</translation>
+        <translation>스테레오 스트리밍 모드에서, 리버브 효과에 대한 오디오 채널 선택은 두 채널에 효과가 적용되기 때문에 이 경우 메인 창에서는 사용할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="322"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation>Plus la qualité audio est élevée, plus le débit de données de votre flux audio est élevé. Assurez-vous que votre débit montant ne dépasse pas la bande passante disponible de votre connexion internet.</translation>
+        <translation>오디오 품질이 높을수록 오디오 스트림 데이터 속도가 높아집니다. 업로드 속도가 인터넷 연결의 사용 가능한 대역폭을 초과하지 않는지 확인하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="332"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
-        <translation>Ce paramètre définit le niveau du chariot d&apos;un client nouvellement connecté en pourcentage. Si un nouveau client se connecte au serveur actuel, il obtiendra le niveau de chariot initial spécifié si aucun autre niveau de chariot provenant d&apos;une connexion précédente de ce client n&apos;a déjà été enregistré.</translation>
+        <translation>이 설정은 새로 연결된 클라이언트의 페이더 레벨을 백분율로 정의합니다. 새 클라이언트가 현재 서버에 연결하는 경우 해당 클라이언트의 이전 연결에서 다른 페이더 레벨이 이미 저장되어 있지 않은 경우 지정된 초기 페이더 레벨을 가져옵니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="343"/>
         <source>Input Boost</source>
-        <translation>Amplification de l&apos;entrée</translation>
+        <translation>입력 부스트</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="344"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation>Ce paramètre vous permet d&apos;augmenter le niveau de votre signal d&apos;entrée par des facteurs allant jusqu&apos;à 10 (+20dB). Si votre son est trop faible, essayez d&apos;abord d&apos;augmenter le niveau en vous rapprochant du microphone, en réglant votre équipement de sonorisation ou en augmentant les niveaux dans les paramètres d&apos;entrée de votre système d&apos;exploitation. Ce n&apos;est qu&apos;en cas d&apos;échec que vous pouvez définir un facteur ici. Si votre son est trop fort, s&apos;il est déformé et s&apos;il y a de l&apos;écrêtage, cette option ne vous aidera pas. Ne l&apos;utilisez pas. La distorsion sera toujours présente. Diminuez plutôt votre niveau d&apos;entrée en vous éloignant de votre microphone, en réglant votre équipement de sonorisation ou en diminuant les paramètres d&apos;entrée de votre système d&apos;exploitation.</translation>
+        <translation>이 설정을 사용하면 입력 신호 레벨을 최대 10(+20dB)까지 높일 수 있습니다. 소리가 너무 작으면 먼저 마이크에 더 가까이 다가가거나 음향 장비를 조정하거나 운영 체제 입력 설정에서 레벨을 높이십시오. 그게 안 되는 경우에만 여기에서 설정하세요. 소리가 너무 크거나 왜곡되고 잘리면 이 옵션이 도움이 되지는 않습니다. 사용하지 않는 게 좋습니다. 왜곡은 여전히 ​​생깁니다. 대신 마이크에서 더 멀리 떨어지거나 음향 장비를 조정하거나 운영 체제 입력 설정을 줄여서 입력 레벨을 줄여보세요.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="357"/>
         <source>Input Boost combo box</source>
-        <translation>Choix déroulant d&apos;amplification de l&apos;entrée</translation>
+        <translation>입력 부스트 콤보 박스</translation>
     </message>
     <message>
         <source>Leave this blank unless you need to enter the address of a directory server other than the default.</source>
-        <translation type="vanished">Laissez ce champ vide, sauf si vous devez entrer l&apos;adresse d&apos;un serveur annuaire autre que celui par défaut.</translation>
+        <translation type="vanished">기본값 이외의 디렉터리 서버 주소를 입력해야 하는 경우가 아니면 이 필드를 비워 두세요.</translation>
     </message>
     <message>
         <source>Directory server address combo box</source>
-        <translation type="vanished">Boîte combo d&apos;adresses du serveur annuaire</translation>
+        <translation type="vanished">디렉터리 서버 주소 콤보 박스</translation>
     </message>
     <message>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="vanished">Le temps de ping est le temps nécessaire au flux audio pour aller du client au serveur et revenir. Ce délai est introduit par le réseau et doit être d&apos;environ 20 à 30 ms. Si ce délai est supérieur à environ 50 ms, la distance qui vous sépare du serveur est trop importante ou votre connexion internet n&apos;est pas suffisante.</translation>
+        <translation type="vanished">핑 시간은 오디오 스트림이 클라이언트에서 서버로 이동하고 다시 돌아오는 데 필요한 시간입니다. 이 지연은 네트워크에 의해 발생하며 약 20-30ms 여야 합니다. 이 지연 시간이 약 50ms보다 크면 서버와의 거리가 너무 멀거나 인터넷 연결이 좋지 않은 것입니다.</translation>
     </message>
     <message>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>

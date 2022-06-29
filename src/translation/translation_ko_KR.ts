@@ -1176,7 +1176,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>For each </source>
-        <translation type="vanished">매 </translation>
+        <translation type="vanished">각각의 </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="162"/>
@@ -1549,34 +1549,34 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
-        <translation type="vanished">Le délai global est calculé à partir du temps de ping actuel et du délai introduit par les paramètres actuels de la mémoire tampon.</translation>
+        <translation type="vanished">전체 지연은 현재 설정으로 생긴 핑 시간과 지연으로 계산합니다.</translation>
     </message>
     <message>
         <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation type="vanished">Le débit montant audio dépend de la taille actuelle des paquets audio et du réglage de la compression. Assurez-vous que le débit montant n&apos;est pas supérieur à votre vitesse de téléchargement Internet disponible (vérifiez cela avec un service tel que speedtest.net).</translation>
+        <translation type="vanished">오디오 업스트림 속도는 현재 오디오 패킷 크기 및 압축 설정에 따라 다릅니다. 업스트림 속도가 사용 가능한 인터넷 업로드 속도보다 높지 않은지 확인하세요(speedtest.net과 같은 서비스에서 확인하세요).</translation>
     </message>
     <message>
         <source>The ASIO driver (sound card) can be selected using %1 under the Windows operating system. Under macOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="vanished">Le pilote ASIO (carte son) peut être sélectionné à l&apos;aide de %1 sous le système d&apos;exploitation Windows. Sous macOS/Linux, aucune sélection de carte son n&apos;est possible. Si le pilote ASIO sélectionné n&apos;est pas valide, un message d&apos;erreur s&apos;affiche et le pilote valide précédent est sélectionné.</translation>
+        <translation type="vanished">Windows 운영 체제에서  ASIO 드라이버(사운드 카드)는 %1에서 선택할 수 있습니다. macOS/Linux에서는 사운드 카드를 선택할 수 없습니다. 선택한 ASIO 드라이버가 유효하지 않으면 오류 메시지가 표시되고 이전의 유효한 드라이버가 선택됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="154"/>
         <source>For each %1 input/output channel (left and right channel) a different actual sound card channel can be selected.</source>
-        <translation>Pour chaque canal d&apos;entrée/sortie %1 (canal gauche et droit), un canal réel différent de la carte son peut être sélectionné.</translation>
+        <translation>각각의 %1 입력/출력 채널(왼쪽 및 오른쪽 채널)마다 다른 실제 사운드 카드 채널을 선택할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
         <source>Enables support for very small network audio packets. These network packets are only actually used if the sound card buffer delay is smaller than %1 samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load and the probability of audio dropouts or sound artifacts increases.</source>
-        <translation>Active la prise en charge de très petits paquets audio réseau. Ces paquets réseau ne sont réellement utilisés que si le délai du tampon de la carte son est inférieur à %1 échantillons. Plus les tampons réseau sont petits, plus la latence audio est faible. Mais en même temps, la charge du réseau et la probabilité de pertes audio ou d&apos;artefacts sonores augmentent.</translation>
+        <translation>매우 작은 네트워크 오디오 패킷에 대한 지원을 활성화합니다. 이러한 네트워크 패킷은 사운드 카드 버퍼 지연이 %1 샘플보다 작은 경우에만 실제로 사용됩니다. 네트워크 버퍼가 작을수록 오디오 대기 시간이 낮아집니다. 그러나 동시에 네트워크 로드와 오디오 드롭아웃 또는 사운드 아티팩트의 가능성이 증가합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="199"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation>Certains pilotes de carte son ne permettent pas de modifier le délai de mise en mémoire tampon à partir de %1. Dans ce cas, le paramètre de délai de mise en mémoire tampon est désactivé et doit être modifié à l&apos;aide du pilote de la carte son. Sous Windows, utilisez le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration JACK pour modifier la taille de la mémoire tampon.</translation>
+        <translation>일부 사운드 카드 드라이버는 버퍼 지연이 %1 내에서 변경되는 것을 허용하지 않습니다. 이 경우 버퍼 지연 설정이 비활성화되고 사운드 카드 드라이버를 사용하여 변경해야 합니다. Windows에서는 ASIO 장치 설정 버튼을 사용하여 드라이버 설정 패널을 엽니다. Linux에서는 JACK 구성 도구를 사용하여 버퍼 크기를 변경합니다.</translation>
     </message>
     <message>
         <source>If no buffer size is selected and all settings are disabled, this means an unsupported buffer size is in use by the driver. %1 will still work with this setting but may have restricted performance.</source>
-        <translation type="vanished">Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, cela signifie qu&apos;une taille de tampon non prise en charge est utilisée par le pilote. %1 fonctionnera quand même avec ce paramètre, mais ses performances risquent d&apos;être limitées.</translation>
+        <translation type="vanished">버퍼 크기를 선택하지 않고 모든 설정을 비활성화하면 드라이버에서 지원되지 않는 버퍼 크기를 사용하고 있음을 의미합니다. %1에서도 이 설정으로 계속 작동하지만 성능이 제한될 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="59"/>

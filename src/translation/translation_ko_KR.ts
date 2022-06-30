@@ -1616,27 +1616,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="213"/>
         <source>The actual buffer delay has influence on the connection, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation>Le délai réel de la mémoire tampon a une influence sur la connexion, le débit de téléchargement actuel et le délai global. Plus la taille de la mémoire tampon est faible, plus la probabilité d&apos;un voyant rouge dans l&apos;indicateur d&apos;état (abandons) est élevée, plus le débit de téléchargement est élevé et plus le délai global est faible.</translation>
+        <translation>실제 버퍼 지연은 연결, 현재 업로드 속도 및 전체 지연에 영향을 미칩니다. 버퍼 크기가 작을수록 상태 표시기에서 빨간색 표시등(드롭아웃)이 발생할 확률이 높아지고 업로드 속도가 빨라지고 전체 지연이 낮아집니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within %1. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
-        <translation>Si les paramètres de retard de la mémoire tampon sont désactivés, il est interdit par le pilote audio de modifier ce paramètre à partir de %1. Sous Windows, appuyez sur le bouton Paramètres du périphérique ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration JACK pour modifier la taille de la mémoire tampon.</translation>
+        <translation>버퍼 지연 설정이 비활성화된 경우, 오디오 드라이버는 %1 내에서 이 설정을 수정할 수 없습니다. Windows에서는 ASIO 장치 설정 버튼을 눌러 드라이버 설정 패널을 엽니다. Linux에서는 JACK 구성 도구를 사용하여 버퍼 크기를 변경합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="234"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation>Cela ouvre les paramètres du pilote de votre carte son. Certains pilotes vous permettent de modifier les paramètres de la mémoire tampon, d&apos;autres, comme ASIO4ALL, vous permettent de choisir les entrées ou les sorties de votre ou vos périphériques. Vous trouverez de plus amples informations sur jamulus.io.</translation>
+        <translation>사운드 카드의 드라이버 설정을 엽니다. 일부 드라이버는 버퍼 설정을 변경할 수 있도록 하고 ASIO4ALL과 같은 다른 드라이버를 사용하면 장치의 입력 또는 출력을 선택할 수 있습니다. 자세한 내용은 jamulus.io에서 확인할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="239"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation>Ouvre les paramètres du pilote. Remarque : %1 ne prend actuellement en charge que les périphériques dont la fréquence d&apos;échantillonnage est de %2 Hz. Vous ne pourrez pas sélectionner un pilote/appareil qui ne le fait pas. Pour plus d&apos;aide, consultez jamulus.io.</translation>
+        <translation>드라이버 설정을 엽니다. 참고: 현재 샘플 속도가 %2 Hz인 장치만 %1의 지원을 받습니다. 그렇지 않은 드라이버/장치는 선택할 수 없습니다. 자세한 도움말은 jamulus.io를 참조하세요.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="270"/>
         <source>Meter Style</source>
-        <translation>Style d&apos;indicateur</translation>
+        <translation>미터 스타일</translation>
     </message>
     <message>
         <source>Select the meter style to be used for the level meters. The Narrow Bar and Small LEDs options only apply to the mixerboard. When Narrow Bar is selected, the input meters are set to Bar. When Small LEDs is selected, the input meters are set to Round LEDs. The remaining options apply to the mixerboard and input meters.</source>

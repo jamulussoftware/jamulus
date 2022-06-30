@@ -1640,22 +1640,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Select the meter style to be used for the level meters. The Narrow Bar and Small LEDs options only apply to the mixerboard. When Narrow Bar is selected, the input meters are set to Bar. When Small LEDs is selected, the input meters are set to Round LEDs. The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="vanished">Sélectionnez le style d&apos;indicateur à utiliser pour les indicateurs de niveau. Les options indicateur étroit et petites diodes lumineuses ne s&apos;appliquent qu&apos;au tableau de mixage. Lorsque l&apos;option indicateur étroit est sélectionnée, les indicateurs d&apos;entrée sont réglés sur indicateur. Lorsque l&apos;option petites diodes lumineuses est sélectionnée, les indicateurs d&apos;entrée sont réglés sur des diodes rondes. Les autres options s&apos;appliquent au tableau de mixage et aux indicateurs d&apos;entrée.</translation>
+        <translation type="vanished">레벨 미터에 사용할 미터 스타일을 선택합니다. 좁은 바 및 소형 LED 옵션은 믹서보드에만 적용됩니다. 좁은 바를 선택하면 입력 미터가 바로 설정됩니다. 소형 LED를 선택하면 입력 미터가 원형 LED로 설정됩니다. 나머지 옵션은 믹서보드와 입력 미터에 적용됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="277"/>
         <source>Meter Style combo box</source>
-        <translation>Choix déroulant de style d&apos;indicateur</translation>
+        <translation>미터 스타일 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
         <source>and</source>
-        <translation>et</translation>
+        <translation>그리고</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="360"/>
         <source>Custom Directories</source>
-        <translation>Adresse personnalisée du serveur annuaire</translation>
+        <translation>사용자 정의 디렉터리</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="361"/>

@@ -1581,37 +1581,37 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="59"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows %1, where %2 is the current attenuation indicator.</source>
-        <translation>Contrôle les niveaux relatifs des canaux audio locaux gauche et droit. Pour un signal mono, il agit comme un panoramique entre les deux canaux. Par exemple, si un microphone est connecté au canal d&apos;entrée droit et qu&apos;un instrument est connecté au canal d&apos;entrée gauche qui est beaucoup plus fort que le microphone, déplacez le fader audio dans une direction où l&apos;étiquette au-dessus du fader indique %1, où %2 est l&apos;indicateur d&apos;atténuation actuel.</translation>
+        <translation>왼쪽 및 오른쪽 로컬 오디오 채널 사이의 레벨을 적절하게 제어합니다. 모노 신호의 경우 두 채널 사이의 팬 역할을 합니다. 예를 들어 마이크가 오른쪽 입력 채널에 연결되어 있고 악기가 마이크보다 훨씬 큰 왼쪽 입력 채널에 연결된 경우 페이더 위의 레이블이 %1을 표시하는 방향으로 오디오 페이더를 이동합니다. 여기서 % 2는 현재 감쇠 표시기입니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="122"/>
         <source>Audio Device</source>
-        <translation>Interface audio</translation>
+        <translation>오디오 장치</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation>Sous le système d&apos;exploitation Windows, le pilote ASIO (carte son) peut être sélectionné à l&apos;aide de %1. Si le pilote ASIO sélectionné n&apos;est pas valide, un message d&apos;erreur s&apos;affiche et le pilote valide précédent est sélectionné. Sous macOS, le matériel d&apos;entrée et de sortie peut être sélectionné.</translation>
+        <translation>Windows 운영 체제에서는 ASIO 드라이버(사운드 카드)를 %1에서 선택할 수 있습니다. 선택한 ASIO 드라이버가 유효하지 않으면 오류 메시지가 표시되고 이전의 유효한 드라이버가 선택됩니다. macOS에서는 입력 및 출력 하드웨어를 선택할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="186"/>
         <source>Three buffer sizes can be selected</source>
-        <translation>Trois tailles de tampon peuvent être séléctionnées</translation>
+        <translation>세 가지 버퍼 크기를 선택할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="189"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation>64 échantillons : Fournit la latence la plus faible mais ne fonctionne pas avec toutes les cartes son.</translation>
+        <translation>64 샘플: 가장 낮은 대기 시간을 제공하지만 모든 사운드 카드에서 작동하지는 않습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="195"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
-        <translation>256 échantillons : Devrait être utilisé uniquement si le réglage 64 ou 128 échantillons provoque des disfonctionnements.</translation>
+        <translation>256 샘플: 64 또는 128 샘플이 문제를 일으키는 경우에만 사용해야 합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="207"/>
         <source>If no buffer size is selected and all settings are disabled, this means a buffer size in use by the driver which does not match the values. %1 will still work with this setting but may have restricted performance.</source>
-        <translation>Si aucune taille de tampon n&apos;est sélectionnée et que tous les paramètres sont désactivés, cela signifie que la taille de tampon utilisée par le pilote ne correspond pas aux valeurs. %1 fonctionnera toujours avec ce paramètre, mais ses performances seront peut-être limitées.</translation>
+        <translation>버퍼 크기를 선택하지 않고 모든 설정을 비활성화하면 드라이버에서 사용 중인 버퍼 크기가 값과 일치하지 않음을 의미합니다. 이 설정으로도 %1의 작동은 계속되지만 성능이 제한될 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="213"/>

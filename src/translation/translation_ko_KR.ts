@@ -1951,7 +1951,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1202"/>
         <source>Bass Guitar</source>
-        <translation>배스 기타</translation>
+        <translation>베이스 기타</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1205"/>
@@ -2116,7 +2116,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1301"/>
         <source>Vocal Soprano</source>
-        <translation>보컬 소프라노 </translation>
+        <translation>보컬 소프라노</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1304"/>
@@ -2141,7 +2141,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1316"/>
         <source>Vocal Baritone</source>
-        <translation>보컬 바리톤 </translation>
+        <translation>보컬 바리톤</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1319"/>
@@ -2474,121 +2474,121 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="68"/>
         <source>Uncheck to collapse the server list to show just the server details. Check to show everyone on the servers.</source>
-        <translation>Décochez cette case pour réduire la liste des serveurs et n&apos;afficher que les détails du serveur. Cochez la case pour afficher tous les serveurs.</translation>
+        <translation>서버 세부 정보만 표시하도록 서버 목록을 축소하려면 선택을 취소합니다. 서버의 모든 사람을 표시하려면 선택합니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="74"/>
         <source>Server List</source>
-        <translation>Liste de serveurs</translation>
+        <translation>서버 목록</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="75"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation>La fenêtre de configuration de la connexion répertorie les serveurs disponibles enregistrés dans l&apos;annuaire sélectionné. Utilisez la liste déroulante Annuaires pour changer de serveur annuaire, trouvez le serveur que vous voulez rejoindre dans la liste, cliquez dessus, puis cliquez sur le bouton Connect pour vous connecter. Vous pouvez également double-cliquer sur le nom du serveur pour vous connecter.</translation>
+        <translation>연결 설정 창에는 선택한 디렉터리에 등록된 사용 가능한 서버가 나열됩니다. 디렉터리 드롭 다운을 사용하여 디렉터리를 변경하고 서버 목록에서 가입하려는 서버를 찾아 클릭한 다음 연결 버튼을 클릭하여 연결합니다. 또는 연결할 서버 이름을 두 번 클릭합니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="80"/>
         <source>Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation>Les serveurs permanents (ceux qui sont répertoriés depuis plus de 48 heures) sont indiqués en gras.</translation>
+        <translation>영구 서버(48시간 이상 나열된 서버)는 굵게 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="81"/>
         <source>You can add custom directories in Advanced Settings.</source>
-        <translation>Vous pouvez ajouter des serveurs annuaires personnalisés dans paramètres avancés.</translation>
+        <translation>고급 설정에서 사용자 정의 디렉터리를 추가할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="83"/>
         <source>Server list view</source>
-        <translation>Vue de la liste de serveurs</translation>
+        <translation>서버 목록 보기</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="86"/>
         <source>Server Address</source>
-        <translation>Adresse du serveur</translation>
+        <translation>서버 주소</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 주소를 알고 있는 경우 서버 이름/주소 필드를 사용하여 연결할 수 있습니다. 콜론을 구분 기호로 사용하여 서버 주소 뒤에 선택적 포트 번호를 추가할 수 있습니다. 예) %1. 필드에는 가장 최근에 사용한 서버 주소 목록도 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">현재 서버 주소를 보유하고 콤보 상자 목록에 이전 주소를 저장합니다.</translation>
     </message>
     <message>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
-        <translation type="vanished">La fenêtre de configuration de la connexion affiche une liste des serveurs disponibles. Les opérateurs de serveurs peuvent, en option, lister leurs serveurs par genre musical. Utilisez le menu déroulant Liste pour sélectionner un genre, cliquez sur le serveur que vous souhaitez rejoindre et appuyez sur le bouton Connexion pour vous y connecter. Vous pouvez également double-cliquer sur le nom du serveur. Les serveurs permanents (ceux qui ont été listés pendant plus de 48 heures) sont indiqués en gras.</translation>
+        <translation type="vanished">연결 설정 창에 사용 가능한 서버 목록이 표시됩니다. 서버 운영자는 선택적으로 음악 장르별로 서버를 나열할 수 있습니다. 목록 드롭 다운을 사용하여 장르를 선택하고 참여하려는 서버를 클릭한 다음 연결 버튼을 눌러 연결합니다. 또는 서버 이름을 두 번 클릭합니다. 영구 서버(48시간 이상 나열된 서버)는 굵게 표시됩니다.</translation>
     </message>
     <message>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. example.org:</source>
-        <translation type="vanished">Si vous connaissez l&apos;adresse IP ou l&apos;URL d&apos;un serveur, vous pouvez vous y connecter en utilisant le champ Nom/Adresse du serveur. Un numéro de port optionnel peut être ajouté après l&apos;adresse IP ou l&apos;URL en utilisant deux points comme séparateur, par exemple, example.org :</translation>
+        <translation type="vanished">서버의 IP 주소 또는 URL을 알고 있는 경우 서버 이름/주소 필드를 사용하여 연결할 수 있습니다. 콜론을 구분 기호로 사용하여 IP 주소 또는 URL 뒤에 선택적 포트 번호를 추가할 수 있습니다. 예) example.org:</translation>
     </message>
     <message>
         <source>. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="vanished">. Le champ affichera également une liste des adresses de serveurs les plus récemment utilisées.</translation>
+        <translation type="vanished">. 이 필드에는 가장 최근에 사용한 서버 주소 목록도 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="96"/>
         <source>Server address edit box</source>
-        <translation>Boîte d&apos;édition d&apos;adresse de serveur</translation>
+        <translation>서버 주소 편집 박스</translation>
     </message>
     <message>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
-        <translation type="vanished">Contient l&apos;adresse IP ou l&apos;URL du serveur actuel. Il stocke également les anciennes URL dans la liste déroulante.</translation>
+        <translation type="vanished">현재 서버 IP 주소 또는 URL을 보유하고 콤보 상자 목록에 이전 URL을 저장합니다.</translation>
     </message>
     <message>
         <source>Server List Selection</source>
-        <translation type="vanished">Sélection de la liste des serveurs</translation>
+        <translation type="vanished">서버 목록 선택</translation>
     </message>
     <message>
         <source>Selects the server list to be shown.</source>
-        <translation type="vanished">Sélectionne la liste de serveurs à afficher.</translation>
+        <translation type="vanished">표시할 서버 목록을 선택합니다.</translation>
     </message>
     <message>
         <source>Server list selection combo box</source>
-        <translation type="vanished">Liste déroulante de sélection de la liste des serveurs</translation>
+        <translation type="vanished">서버 목록 선택 콤보 상자</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="56"/>
         <source>Filter</source>
-        <translation>Filtre</translation>
+        <translation>필터</translation>
     </message>
     <message>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
-        <translation type="vanished">La liste des serveurs est filtrée par le texte donné. Notez que le filtre n&apos;est pas sensible à la casse.</translation>
+        <translation type="vanished">서버 목록은 주어진 텍스트로 필터링 됩니다. 필터는 대소문자를 구분하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="59"/>
         <source>Filter edit box</source>
-        <translation>Boite d&apos;édition de filtre</translation>
+        <translation>필터 편집 박스</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="67"/>
         <source>Show All Musicians</source>
-        <translation>Afficher tous les musiciens</translation>
+        <translation>모든 뮤지션 보기</translation>
     </message>
     <message>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
-        <translation type="vanished">Si vous cochez cette case, les musiciens de tous les serveurs sont affichés. Si vous décochez la case, tous les éléments de la vue en liste sont regroupés.</translation>
+        <translation type="vanished">이 체크박스를 체크하면 모든 서버의 뮤지션이 표시됩니다. 체크 박스 선택을 취소하면 모든 목록 보기 항목이 취소됩니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="71"/>
         <source>Show all musicians check box</source>
-        <translation>Case-à-cocher pour afficher tous les musiciens</translation>
+        <translation>모든 뮤지션 보기 체크 박스</translation>
     </message>
     <message>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="vanished">Si vous connaissez l&apos;adresse IP ou l&apos;URL d&apos;un serveur, vous pouvez vous y connecter à l&apos;aide du champ Nom/adresse du serveur. Un numéro de port facultatif peut être ajouté après l&apos;adresse IP ou l&apos;URL en utilisant les deux points comme séparateur, par exemple, %1. Le champ affichera également une liste des adresses de serveur les plus récemment utilisées.</translation>
+        <translation type="vanished">서버의 IP 주소 또는 URL을 알고 있는 경우 서버 이름/주소 필드를 사용하여 연결할 수 있습니다. 콜론을 구분 기호로 사용하여 IP 주소 또는 URL 뒤에 선택적 포트 번호를 추가할 수 있습니다. 예) %1. 이 필드에는 가장 최근에 사용한 서버 주소 목록도 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="149"/>
         <source>Filter text, or # for occupied servers</source>
-        <translation>Texte du filtre, ou # pour les serveurs occupés</translation>
+        <translation>필터 텍스트 또는 점유 서버의 경우 #</translation>
     </message>
     <message>
         <source>Type # for occupied servers</source>
-        <translation type="vanished">Tapez # pour les serveurs occupés</translation>
+        <translation type="vanished">점유 서버의 경우 # 입력</translation>
     </message>
 </context>
 <context>
@@ -2596,61 +2596,61 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlgbase.ui" line="14"/>
         <source>Connection Setup</source>
-        <translation>Paramètres de connexion</translation>
+        <translation>연결 설정</translation>
     </message>
     <message>
         <source>List</source>
-        <translation type="vanished">Liste</translation>
+        <translation type="vanished">목록</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation>Serveur annuaire</translation>
+        <translation>디렉터리</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="45"/>
         <source>Filter</source>
-        <translation>Filtre</translation>
+        <translation>필터</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="55"/>
         <source>Show All Musicians</source>
-        <translation>Afficher tous les musiciens</translation>
+        <translation>모든 뮤지션 보기</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="71"/>
         <source>Server Name</source>
-        <translation>Nom du serveur</translation>
+        <translation>서버 이름</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="76"/>
         <source>Ping Time</source>
-        <translation>Temps de réponse</translation>
+        <translation>핑 시간</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="81"/>
         <source>Musicians</source>
-        <translation>Musiciens</translation>
+        <translation>뮤지션</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="86"/>
         <source>Location</source>
-        <translation>Localisation</translation>
+        <translation>위치</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="96"/>
         <source>Server Address</source>
-        <translation>Adresse du serveur</translation>
+        <translation>서버 주소</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="130"/>
         <source>C&amp;ancel</source>
-        <translation>&amp;Annuler</translation>
+        <translation>&amp;취소</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="137"/>
         <source>&amp;Connect</source>
-        <translation>Se &amp;connecter</translation>
+        <translation>&amp;연결</translation>
     </message>
 </context>
 <context>
@@ -2658,7 +2658,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="782"/>
         <source>&amp;Help</source>
-        <translation>&amp;Aide</translation>
+        <translation>&amp;도움말</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="789"/>
@@ -2669,31 +2669,31 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="790"/>
         <source>Software &amp;Manual...</source>
-        <translation>&amp;Manuel du logiciel...</translation>
+        <translation>&amp;시작하기...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="797"/>
         <source>What&apos;s &amp;This</source>
-        <translation>Qu&apos;est-ce que c&apos;es&amp;t</translation>
+        <translation>&amp;이게 뭘까요</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="799"/>
         <source>&amp;About Jamulus...</source>
-        <translation>À &amp;propos de Jamulus...</translation>
+        <translation>&amp;Jamulus 정보...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="801"/>
         <source>About &amp;Qt...</source>
-        <translation>À propos de &amp;Qt...</translation>
+        <translation>&amp;Qt 정보...</translation>
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="vanished">&amp;À propos...</translation>
+        <translation type="vanished">&amp;정보...</translation>
     </message>
     <message>
         <location filename="../util.h" line="430"/>
         <source>About Qt</source>
-        <translation>À propos de Qt</translation>
+        <translation>Qt 정보</translation>
     </message>
 </context>
 <context>
@@ -2701,12 +2701,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="858"/>
         <source>Restart Required</source>
-        <translation>Redémarrage nécessaire</translation>
+        <translation>다시 시작 필요</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="858"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation>Veuillez relancer l&apos;application pour que le changement de langue prenne effet.</translation>
+        <translation>언어의 변경 사항을 적용하려면 애플리케이션을 다시 시작하세요.</translation>
     </message>
 </context>
 <context>
@@ -2714,22 +2714,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="758"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation>Ce serveur exige que vous acceptiez des conditions avant de pouvoir le rejoindre. Veuillez les lire dans la fenêtre de tchate.</translation>
+        <translation>이 서버는 참여하기 전에 역관에 동의해야 합니다. 채팅창에서 읽어주세요.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="759"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation>J&apos;ai lu les conditions et les &amp;accepte.</translation>
+        <translation>&amp;약관을 읽었으며 동의합니다.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="760"/>
         <source>Accept</source>
-        <translation>Accepter</translation>
+        <translation>수락</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="761"/>
         <source>Decline</source>
-        <translation>Décliner</translation>
+        <translation>거절</translation>
     </message>
 </context>
 <context>
@@ -2737,285 +2737,285 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../multicolorled.cpp" line="91"/>
         <source>Red</source>
-        <translation>Rouge</translation>
+        <translation>빨강</translation>
     </message>
     <message>
         <location filename="../multicolorled.cpp" line="108"/>
         <source>Yellow</source>
-        <translation>Jaune</translation>
+        <translation>노랑</translation>
     </message>
     <message>
         <location filename="../multicolorled.cpp" line="125"/>
         <source>Green</source>
-        <translation>Vert</translation>
+        <translation>초록</translation>
     </message>
 </context>
 <context>
     <name>CMusProfDlg</name>
     <message>
         <source>Alias or name edit box</source>
-        <translation type="vanished">Dialogue d&apos;édition de pseudo ou de nom</translation>
+        <translation type="vanished">별칭 또는 이름 편집 박스</translation>
     </message>
     <message>
         <source>Instrument picture button</source>
-        <translation type="vanished">Bouton d&apos;image d&apos;instrument</translation>
+        <translation type="vanished">악기 사진 버튼</translation>
     </message>
     <message>
         <source>Country flag button</source>
-        <translation type="vanished">Bouton de drapeau de pays</translation>
+        <translation type="vanished">국기 버튼</translation>
     </message>
     <message>
         <source>City edit box</source>
-        <translation type="vanished">Dialogue d&apos;édition de ville</translation>
+        <translation type="vanished">도시 편집 박스</translation>
     </message>
     <message>
         <source>Skill level combo box</source>
-        <translation type="vanished">Choix déroulant de niveau de compétence</translation>
+        <translation type="vanished">스킬 레벨 콤보 박스</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="vanished">Aucune</translation>
+        <translation type="vanished">없음</translation>
     </message>
     <message>
         <source>Musician Profile</source>
-        <translation type="vanished">Profil de musicien</translation>
+        <translation type="vanished">뮤지션 프로필</translation>
     </message>
     <message>
         <source>Alias/Name</source>
-        <translation type="vanished">Pseudo/nom</translation>
+        <translation type="vanished">별칭/이름</translation>
     </message>
     <message>
         <source>Instrument</source>
-        <translation type="vanished">Instrument</translation>
+        <translation type="vanished">악기</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="vanished">Pays</translation>
+        <translation type="vanished">국가</translation>
     </message>
     <message>
         <source>City</source>
-        <translation type="vanished">Ville</translation>
+        <translation type="vanished">도시</translation>
     </message>
     <message>
         <source>Skill</source>
-        <translation type="vanished">Compétence</translation>
+        <translation type="vanished">스킬</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="vanished">&amp;Fermer</translation>
+        <translation type="vanished">&amp;닫기</translation>
     </message>
     <message>
         <source>Beginner</source>
-        <translation type="vanished">Débutant</translation>
+        <translation type="vanished">초보</translation>
     </message>
     <message>
         <source>Intermediate</source>
-        <translation type="vanished">Intermédiaire</translation>
+        <translation type="vanished">중급</translation>
     </message>
     <message>
         <source>Expert</source>
-        <translation type="vanished">Expert</translation>
+        <translation type="vanished">전문가</translation>
     </message>
     <message>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="vanished">Écrivez votre nom ou un pseudonyme ici pour que les autres musiciens avec lesquels vous voulez jouer sachent qui vous êtes. Vous pouvez également ajouter une photo de l&apos;instrument dont vous jouez et un drapeau du pays dans lequel vous vous trouvez. Vous pouvez également ajouter votre ville et votre niveau de compétence pour jouer de votre instrument.</translation>
+        <translation type="vanished">여기에 여러분의 이름이나 별칭을 적어서 함께 연주하고 싶은 다른 뮤지션들이 여러분이 누구인지 알 수 있도록 하세요. 연주하는 악기의 사진과 여러분이 위치한 국가 또는 지역의 국기를 추가할 수도 있습니다. 여러분의 도시 및 악기 연주 기술 수준도 추가할 수 있습니다.</translation>
     </message>
     <message>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="vanished">Ce que vous réglez ici apparaîtra au niveau de votre chariot sur la table de mixage lorsque vous serez connecté à un serveur Jamulus. Cette étiquette sera également affichée dans chaque client qui est connecté au même serveur que vous.</translation>
+        <translation type="vanished">여기에서 설정한 내용은 Jamulus 서버에 연결될 때 믹서 보드의 페이더에 나타납니다. 이 태그는 여러분과 같은 서버에 연결한 클라이언트에도 표시됩니다.</translation>
     </message>
     <message>
         <source>Drum Set</source>
-        <translation type="vanished">Batterie</translation>
+        <translation type="vanished">드럼 세트</translation>
     </message>
     <message>
         <source>Djembe</source>
-        <translation type="vanished">Djembé</translation>
+        <translation type="vanished">젬베</translation>
     </message>
     <message>
         <source>Electric Guitar</source>
-        <translation type="vanished">Guitare électrique</translation>
+        <translation type="vanished">일렉트릭 기타</translation>
     </message>
     <message>
         <source>Acoustic Guitar</source>
-        <translation type="vanished">Guitare accoustique</translation>
+        <translation type="vanished">어쿠스틱 기타</translation>
     </message>
     <message>
         <source>Bass Guitar</source>
-        <translation type="vanished">Guitare basse</translation>
+        <translation type="vanished">베이스 기타</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="vanished">Clavier</translation>
+        <translation type="vanished">키보드</translation>
     </message>
     <message>
         <source>Synthesizer</source>
-        <translation type="vanished">Synthétiseur</translation>
+        <translation type="vanished">신디사이저</translation>
     </message>
     <message>
         <source>Grand Piano</source>
-        <translation type="vanished">Piano à queue</translation>
+        <translation type="vanished">그랜드 피아노</translation>
     </message>
     <message>
         <source>Accordion</source>
-        <translation type="vanished">Accordéon</translation>
+        <translation type="vanished">아코디언</translation>
     </message>
     <message>
         <source>Vocal</source>
-        <translation type="vanished">Voix</translation>
+        <translation type="vanished">보컬</translation>
     </message>
     <message>
         <source>Microphone</source>
-        <translation type="vanished">Microphone</translation>
+        <translation type="vanished">마이크</translation>
     </message>
     <message>
         <source>Harmonica</source>
-        <translation type="vanished">Harmonica</translation>
+        <translation type="vanished">하모니카</translation>
     </message>
     <message>
         <source>Trumpet</source>
-        <translation type="vanished">Trompette</translation>
+        <translation type="vanished">트럼펫</translation>
     </message>
     <message>
         <source>Trombone</source>
-        <translation type="vanished">Trombone</translation>
+        <translation type="vanished">트롬본</translation>
     </message>
     <message>
         <source>French Horn</source>
-        <translation type="vanished">Cor d&apos;harmonie</translation>
+        <translation type="vanished">호른</translation>
     </message>
     <message>
         <source>Tuba</source>
-        <translation type="vanished">Tuba</translation>
+        <translation type="vanished">튜바</translation>
     </message>
     <message>
         <source>Saxophone</source>
-        <translation type="vanished">Saxophone</translation>
+        <translation type="vanished">색소폰</translation>
     </message>
     <message>
         <source>Clarinet</source>
-        <translation type="vanished">Clarinette</translation>
+        <translation type="vanished">클라리넷</translation>
     </message>
     <message>
         <source>Flute</source>
-        <translation type="vanished">Flute</translation>
+        <translation type="vanished">플루트</translation>
     </message>
     <message>
         <source>Violin</source>
-        <translation type="vanished">Violon</translation>
+        <translation type="vanished">바이올린</translation>
     </message>
     <message>
         <source>Cello</source>
-        <translation type="vanished">Violoncelle</translation>
+        <translation type="vanished">첼로</translation>
     </message>
     <message>
         <source>Double Bass</source>
-        <translation type="vanished">Contrebasse</translation>
+        <translation type="vanished">콘트라베이스</translation>
     </message>
     <message>
         <source>Recorder</source>
-        <translation type="vanished">Enregistreur</translation>
+        <translation type="vanished"리코더</translation>
     </message>
     <message>
         <source>Streamer</source>
-        <translation type="vanished">Diffuseur</translation>
+        <translation type="vanished">스트리머</translation>
     </message>
     <message>
         <source>Listener</source>
-        <translation type="vanished">Auditeur</translation>
+        <translation type="vanished">청취자</translation>
     </message>
     <message>
         <source>Guitar+Vocal</source>
-        <translation type="vanished">Guitare+voix</translation>
+        <translation type="vanished">기타+보컬</translation>
     </message>
     <message>
         <source>Keyboard+Vocal</source>
-        <translation type="vanished">Clavier+voix</translation>
+        <translation type="vanished">키보드+보컬</translation>
     </message>
     <message>
         <source>Bodhran</source>
-        <translation type="vanished">Bodhran</translation>
+        <translation type="vanished">보란</translation>
     </message>
     <message>
         <source>Bassoon</source>
-        <translation type="vanished">Basson</translation>
+        <translation type="vanished">바순</translation>
     </message>
     <message>
         <source>Oboe</source>
-        <translation type="vanished">Hautbois</translation>
+        <translation type="vanished">오보에</translation>
     </message>
     <message>
         <source>Harp</source>
-        <translation type="vanished">Harpe</translation>
+        <translation type="vanished">하프</translation>
     </message>
     <message>
         <source>Viola</source>
-        <translation type="vanished">Alto</translation>
+        <translation type="vanished">비올라</translation>
     </message>
     <message>
         <source>Congas</source>
-        <translation type="vanished">Congas</translation>
+        <translation type="vanished">콩가</translation>
     </message>
     <message>
         <source>Bongo</source>
-        <translation type="vanished">Bongo</translation>
+        <translation type="vanished">봉고</translation>
     </message>
     <message>
         <source>Vocal Bass</source>
-        <translation type="vanished">Voix basse</translation>
+        <translation type="vanished">보컬 베이스</translation>
     </message>
     <message>
         <source>Vocal Tenor</source>
-        <translation type="vanished">Voix ténor</translation>
+        <translation type="vanished">보컬 테너</translation>
     </message>
     <message>
         <source>Vocal Alto</source>
-        <translation type="vanished">Voix alto</translation>
+        <translation type="vanished">보컬 알토</translation>
     </message>
     <message>
         <source>Vocal Soprano</source>
-        <translation type="vanished">Voix soprano</translation>
+        <translation type="vanished">보컬 소프라노</translation>
     </message>
     <message>
         <source>Banjo</source>
-        <translation type="vanished">Banjo</translation>
+        <translation type="vanished">벤조</translation>
     </message>
     <message>
         <source>Mandolin</source>
-        <translation type="vanished">Mandoline</translation>
+        <translation type="vanished">만돌린</translation>
     </message>
     <message>
         <source>Ukulele</source>
-        <translation type="vanished">Ukulélé</translation>
+        <translation type="vanished">우쿨렐레</translation>
     </message>
     <message>
         <source>Bass Ukulele</source>
-        <translation type="vanished">Ukulélé basse</translation>
+        <translation type="vanished">베이스 우쿨렐레</translation>
     </message>
     <message>
         <source>Vocal Baritone</source>
-        <translation type="vanished">Voix baryton</translation>
+        <translation type="vanished">보컬 바리톤</translation>
     </message>
     <message>
         <source>Vocal Lead</source>
-        <translation type="vanished">Voix principale</translation>
+        <translation type="vanished">리드 보컬</translation>
     </message>
     <message>
         <source>Mountain Dulcimer</source>
-        <translation type="vanished">Dulcimer de montagne</translation>
+        <translation type="vanished">마운틴 덜시머</translation>
     </message>
     <message>
         <source>Scratching</source>
-        <translation type="vanished">Scratch</translation>
+        <translation type="vanished">스크래치</translation>
     </message>
     <message>
         <source>Rapping</source>
-        <translation type="vanished">Rap</translation>
+        <translation type="vanished">래퍼</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="288"/>
         <source>No Name</source>
-        <translation>Sans nom</translation>
+        <translation>이름 없음</translation>
     </message>
 </context>
 <context>
@@ -3023,27 +3023,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="48"/>
         <source>Client List</source>
-        <translation>Liste des clients</translation>
+        <translation>클라이언트 목록</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="49"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
-        <translation>La liste des clients affiche tous les clients qui sont actuellement connectés à ce serveur. Certaines informations sur les clients, telles que les adresses IP et le nom, sont données pour chaque client connecté.</translation>
+        <translation>클라이언트 목록에는 현재 이 서버에 연결된 모든 클라이언트가 표시됩니다. IP 주소 및 이름과 같은 클라이언트에 대한 일부 정보는 연결된 각 클라이언트에게 제공됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="53"/>
         <source>Connected clients list view</source>
-        <translation>Vue de la liste des clients connectés</translation>
+        <translation>연결된 클라이언트 목록 보기</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다. 선택한 값은 존재해야 하고 쓰기 가능해야 합니다(사용자 %1에 의해 실행 중인 사용자의 하위 디렉터리 생성 허용).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">기본 녹음 디렉터리의 현재 값입니다. 선택한 값은 존재해야 하고 쓰기 가능해야 합니다(사용자 %1에 의해 실행 중인 사용자의 하위 디렉터리 생성 허용). 버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>

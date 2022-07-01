@@ -1660,7 +1660,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="361"/>
         <source>If you need to add additional directories to the Connect dialog Directory drop down, you can enter the addresses here.&lt;br&gt;To remove a value, select it, delete the text in the input box, then move focus out of the control.</source>
-        <translation>Si vous devez ajouter des annuaires supplémentaires à la liste déroulante Annuaire de la boîte de dialogue Connecter, vous pouvez saisir les adresses ici.&lt;br&gt;Pour supprimer une valeur, sélectionnez-la, supprimez le texte dans la zone de saisie, puis déplacez la curseur en dehors.</translation>
+        <translation>연결 대화상자 하위 디렉터리에 디렉터리를 추가해야 하는 경우 여기에 주소를 입력할 수 있습니다.&lt;br&gt;값을 제거하려면 값을 선택하고 입력 상자에서 텍스트를 삭제한 다음 컨트롤 밖으로 포커스를 이동하세요.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="368"/>

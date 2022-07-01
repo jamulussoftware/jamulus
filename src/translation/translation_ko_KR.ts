@@ -1469,7 +1469,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation>사용자 인터페이스에 사용할 언어를 정합니다</translation>
+        <translation>사용자 인터페이스에 사용할 언어를 고릅니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="282"/>
@@ -3069,32 +3069,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">버튼을 클릭하여 서버 목록 지속성 파일 이름을 설정할 수 있는 대화 상자를 엽니다. %1 사용자는 이미 존재할 수 있지만 지정된 파일 이름을 생성할 수 있어야 하기 때문에 실행 중입니다(저장 시 덮어쓰게 됩니다).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 목록 파일 이름 텍스트 박스 (읽기 전용)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 목록 지속성 파일 이름의 현재 값입니다. %1 사용자는 이미 존재할 수 있지만 지정된 파일 이름을 생성할 수 있어야 하기 때문에 실행 중입니다(저장 시 덮어쓰게 됩니다). 버튼을 클릭하여 서버 목록 지속성 파일 이름을 설정할 수 있는 대화 상자를 엽니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 목록 파일 이름 정리 버튼</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 목록 파일 이름 정리</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">버튼을 클릭하여 현재 선택된 서버 목록 지속성 파일 이름을 지웁니다. 이렇게 하면 새 값을 선택할 때까지 서버 목록이 유지되지 않게 됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
@@ -3231,7 +3231,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation>서버 녹화를 켜거나 끄는 체크 박스</translation>
+        <translation>서버 녹화를 켜거나 끄는 체크박스</translation>
     </message>
     <message>
         <source>If the Register Server check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
@@ -3265,48 +3265,48 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="153"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
-        <translation>Activé pendant l&apos;enregistrement et contient le répertoire de la session d&apos;enregistrement en cours. Désactivé après l&apos;enregistrement ou lorsque l&apos;enregistreur n&apos;est pas activé.</translation>
+        <translation>기록하는 동안 활성화되고 현재 기록 세션 디렉터리를 유지합니다. 녹음 후 또는 녹음기가 활성화되지 않은 경우 비활성화됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="130"/>
         <source>Recorder status label</source>
-        <translation>Ètiquette de statut d&apos;enregistreur</translation>
+        <translation>녹음기 상태 레이블</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="132"/>
         <source>Recorder Status</source>
-        <translation>Statut de l&apos;enregistreur</translation>
+        <translation>녹음기 상태</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="132"/>
         <source>Displays the current status of the recorder.  The following values are possible:</source>
-        <translation>Affiche l&apos;état actuel de l&apos;enregistreur.  Les valeurs suivantes sont possibles :</translation>
+        <translation>녹음기의 현재 상태를 표시합니다. 다음 값이 가능합니다:</translation>
     </message>
     <message>
         <source>No recording directory has been set or the value is not useable.</source>
-        <translation type="vanished">Aucun répertoire d&apos;enregistrement n&apos;a été défini ou la valeur n&apos;est pas utilisable.</translation>
+        <translation type="vanished">녹음 디렉터리가 설정되지 않았거나 값을 사용할 수 없습니다.</translation>
     </message>
     <message>
         <source>Recording has been switched off</source>
-        <translation type="vanished">L&apos;enregistrement a été désactivé</translation>
+        <translation type="vanished">녹음이 꺼졌습니다</translation>
     </message>
     <message>
         <source> by the UI checkbox</source>
-        <translation type="vanished"> par la case à cocher de l&apos;interface graphique</translation>
+        <translation type="vanished"> UI 체크박스로</translation>
     </message>
     <message>
         <source>, either by the UI checkbox or SIGUSR2 being received</source>
-        <translation type="vanished">, soit en cochant la case de l&apos;interface graphique ou en recevant SIGUSR2</translation>
+        <translation type="vanished">, UI 체크박스 또는 수신되는 SIGUSR2에 의해</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="142"/>
         <source>There is no one connected to the server to record.</source>
-        <translation>Il n&apos;y a personne connecté au serveur pour enregistrer.</translation>
+        <translation>녹음할 서버에 연결된 사용자가 없습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="143"/>
         <source>The performers are being recorded to the specified session directory.</source>
-        <translation>Les interprètes sont enregistrés dans le répertoire de session spécifié.</translation>
+        <translation>연주는 지정된 세션 디렉터리에 녹음되고 있습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3315,300 +3315,300 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>If the recording directory is not useable, the problem will be displayed in place of the directory.</source>
-        <translation type="vanished">Si le répertoire d&apos;enregistrement n&apos;est pas utilisable, le problème sera affiché à la place du répertoire.</translation>
+        <translation type="vanished">녹음 디렉터리를 사용할 수 없는 경우 디렉터리 대신 문제가 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="159"/>
         <source>Server welcome message edit box</source>
-        <translation>Boite d&apos;édition du message de bienvenue du serveur</translation>
+        <translation>서버 환영 메시지 편집 박스</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="160"/>
         <source>Server Welcome Message</source>
-        <translation>Message de bienvenue du serveur</translation>
+        <translation>서버 환영 메시지</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="161"/>
         <source>A server welcome message text is displayed in the chat window if a musician enters the server. If no message is set, the server welcome is disabled.</source>
-        <translation>Un message de bienvenue du serveur est affiché dans la fenêtre de tchate si un musicien entre sur le serveur. Si aucun message n&apos;est défini, le message de bienvenue du serveur est désactivé.</translation>
+        <translation>뮤지션이 서버에 입장하면 채팅 창에 서버 환영 텍스트 메시지가 표시됩니다. 메시지가 설정되어 있지 않으면 서버 환영이 비활성화됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="167"/>
         <source>Language</source>
-        <translation>Langue</translation>
+        <translation>언어</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="167"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation>Sélectionnez la langue à utiliser pour l&apos;interface utilisateur.</translation>
+        <translation>사용자 인터페이스에 사용할 언어를 고릅니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="171"/>
         <source>Language combo box</source>
-        <translation>Choix déroulant langue</translation>
+        <translation>언어 콤보 박스</translation>
     </message>
     <message>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as).</source>
-        <translation type="vanished">Cliquez sur le bouton pour ouvrir la boîte de dialogue qui permet de sélectionner le répertoire d&apos;enregistrement principal.  La valeur choisie doit exister et être accessible en écriture (permettre la création de sous-répertoires par l&apos;utilisateur sous lequel Jamulus est exécuté).</translation>
+        <translation type="vanished">버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다. 선택한 값은 존재하고 쓰기 가능해야 합니다(Jamulus를 실행 중인 사용자의 하위 디렉터리 생성 허용).</translation>
     </message>
     <message>
         <source>Custom Directory</source>
-        <translation type="vanished">Répertoire personnalisé</translation>
+        <translation type="vanished">사용자 정의 디렉터리</translation>
     </message>
     <message>
         <source>The custom directory is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="vanished">L&apos;annuaire personnalisé est l&apos;adresse IP ou l&apos;URL du serveur annuaire sur lequel la liste des serveurs de la boîte de dialogue de connexion est gérée.</translation>
+        <translation type="vanished">사용자 정의 디렉터리는 연결 대화 상자의 서버 목록이 관리되는 디렉터리 서버의 IP 주소 또는 URL입니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="201"/>
         <source>Custom Directory line edit</source>
-        <translation>Modification de la ligne de l&apos;annuaire personnalisé</translation>
+        <translation>사용자 정의 디렉터리 라인 편집</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="245"/>
         <source>&amp;Hide %1 server</source>
-        <translation>Cac&amp;her le serveur %1</translation>
+        <translation>&amp;%1 서버 숨기기</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="248"/>
         <source>&amp;Show %1 server</source>
-        <translation>Afficher le &amp;serveur %1</translation>
+        <translation>&amp;%1 서버 보이기</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="253"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation>%1 serveur</translation>
+        <translation>%1 서버</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="337"/>
         <source>Type a message here. If no message is set, the server welcome is disabled.</source>
-        <translation>Tapez un message ici. Si aucun message n&apos;est défini, l&apos;accueil du serveur est désactivé.</translation>
+        <translation>여기에 메시지를 입력하세요. 메시지가 설정되어 있지 않으면 서버 환영이 비활성화됩니다.</translation>
     </message>
     <message>
         <source>software upgrade available</source>
-        <translation type="vanished">mise à jour du logiciel disponible</translation>
+        <translation type="vanished">소프트웨어 업그레이드 가능</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="590"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
-        <translation>L&apos;enregistreur n&apos;a pas réussi à démarrer. Veuillez vérifier l&apos;espace disque disponible et les permissions et réessayer. Erreur : </translation>
+        <translation>녹음을 시작하지 못했습니다. 사용 가능한 디스크 공간과 권한을 확인하고 다시 시도해 보세요. 오류: </translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">현재 디렉터리 서버</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
-        <translation>ERREUR</translation>
+        <translation>ERROR</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="125"/>
         <source>Request new recording button</source>
-        <translation>Demander un nouveau bouton d&apos;enregistrement</translation>
+        <translation>새 녹음 요청 버튼</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
         <source>Directory Type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">디렉터리 유형 콤보 박스</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished">Serveur annuaire</translation>
+        <translation type="unfinished">디렉터리</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">디렉터리에 서버를 등록하지 않으려면 &apos;%1&apos; 선택하세요.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">해당 디렉터리에 등록할 장르 중 하나를 선택합니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">또는 &apos;%1&apos; 선택 후 옵션 탭에서 사용자 정의 디렉터리 주소를 지정하여 사용자 정의 디렉터리에 등록하세요.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&apos;%1&apos; 제외한 모든 값에 대해 이 서버는 %2 사용자가 해당 디렉터리를 선택할 때 클라이언트 연결 대화 상자 서버 목록에서 이 서버를 선택할 수 있도록 디렉터리에 등록합니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 등록은 연결 대화 서버 목록의 모든 서버가 실제로 사용 가능한지 확인하기 위해 주기적으로 갱신됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">디렉터리에 대해 &quot;%1&quot; 이외의 값을 선택하면 등록 성공 여부가 표시됩니다. 등록에 실패하는 경우 다른 디렉터리를 선택하세요.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="108"/>
         <source>Country/Region</source>
-        <translation>Pays/Région</translation>
+        <translation>국가/지역</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="109"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation>Définissez le pays ou la région où le serveur est exécuté. Les clients afficheront cet emplacement dans la liste des serveurs de leur boîte de dialogue de connexion.</translation>
+        <translation>서버가 실행되는 국가 또는 지역을 설정합니다. 클라이언트는 연결 대화 상자의 서버 목록에 이 위치를 표시합니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="116"/>
         <source>Combo box for location of this server</source>
-        <translation>Liste déroulante pour le pays où le serveur est situé</translation>
+        <translation>이 서버의 위치에 대한 콤보 박스</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">녹음 디렉터리가 설정되지 않았거나 값을 사용할 수 없습니다. 옵션 탭에서 값을 확인하세요.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="138"/>
         <source>Recording has been switched off by the UI checkbox.</source>
-        <translation>L&apos;enregistrement a été désactivé par la case à cocher de l&apos;interface utilisateur</translation>
+        <translation>UI 체크박스에 의해 녹음이 꺼졌습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="140"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
-        <translation>L&apos;enregistrement a été désactivé, soit par la case à cocher de l&apos;interface utilisateur, soit par la réception de SIGUSR2</translation>
+        <translation>UI 체크박스 또는 수신 중인 SIGUSR2에 의해 녹음이 꺼졌습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="126"/>
         <source>New Recording</source>
-        <translation>Nouvel enregistrement</translation>
+        <translation>새 녹음</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="127"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
-        <translation>Pendant une session d&apos;enregistrement, le bouton peut être utilisé pour démarrer un nouvel enregistrement.</translation>
+        <translation>녹음 세션 중에 버튼을 사용하여 새 녹음을 시작할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="241"/>
         <location filename="../serverdlg.cpp" line="393"/>
         <source>E&amp;xit</source>
-        <translation>&amp;Quitter</translation>
+        <translation>&amp;나가기</translation>
     </message>
     <message>
         <source>&amp;Hide </source>
-        <translation type="vanished">Cac&amp;hé </translation>
+        <translation type="vanished">&amp;숨기기 </translation>
     </message>
     <message>
         <source> server</source>
-        <translation type="vanished"> serveur</translation>
+        <translation type="vanished"> 서버</translation>
     </message>
     <message>
         <source>&amp;Open </source>
-        <translation type="vanished">&amp;Ouvrir </translation>
+        <translation type="vanished">&amp;열기 </translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="41"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation>%1 serveur</translation>
+        <translation>%1 서버</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="602"/>
         <source>Select Main Recording Directory</source>
-        <translation>Sélectionner le répertoire principal des enregistrements</translation>
+        <translation>메인 녹음 디렉터리 선택</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="56"/>
         <source>Recording</source>
-        <translation>En cours d&apos;enregistrement</translation>
+        <translation>녹음</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="55"/>
         <source>Not recording</source>
-        <translation>Non enregistré</translation>
+        <translation>녹음하지 않음</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="53"/>
         <source>Not initialised</source>
-        <translation>Non initialisé</translation>
+        <translation>시작하지 않음</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="54"/>
         <source>Not enabled</source>
-        <translation>Non activé</translation>
+        <translation>활성화되지 않음</translation>
     </message>
     <message>
         <source> Server</source>
-        <translation type="vanished"> serveur</translation>
+        <translation type="vanished"> 서버</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="391"/>
         <source>&amp;Window</source>
-        <translation>&amp;Fenêtre</translation>
+        <translation>&amp;창</translation>
     </message>
     <message>
         <source>Unregistered</source>
-        <translation type="vanished">Non inscrit</translation>
+        <translation type="vanished"미등록</translation>
     </message>
     <message>
         <location filename="../util.h" line="583"/>
         <source>None</source>
-        <translation type="unfinished">Aucune</translation>
+        <translation type="unfinished"없음</translation>
     </message>
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">등록되지 않음</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
         <source>Bad address</source>
-        <translation>Mauvaise adresse</translation>
+        <translation>잘못된 주소</translation>
     </message>
     <message>
         <location filename="../util.h" line="636"/>
         <source>Registration requested</source>
-        <translation>Inscription demandée</translation>
+        <translation>등록 요청</translation>
     </message>
     <message>
         <location filename="../util.h" line="639"/>
         <source>Registration failed</source>
-        <translation>Échec de l&apos;inscription</translation>
+        <translation>등록 실패</translation>
     </message>
     <message>
         <location filename="../util.h" line="642"/>
         <source>Check server version</source>
-        <translation>Vérifier la version du serveur</translation>
+        <translation>서버 버전 확인</translation>
     </message>
     <message>
         <location filename="../util.h" line="645"/>
         <source>Registered</source>
-        <translation>Inscrit</translation>
+        <translation>등록함</translation>
     </message>
     <message>
         <location filename="../util.h" line="648"/>
         <source>Directory Server full</source>
-        <translation>Serveur annuaire plein</translation>
+        <translation디렉터리 서버 가득 참</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>
         <source>Your server version is too old</source>
-        <translation>La version de votre serveur est trop vieille</translation>
+        <translation>서버 버전이 너무 오래되었습니다</translation>
     </message>
     <message>
         <location filename="../util.h" line="654"/>
         <source>Requirements not fulfilled</source>
-        <translation>Exigences non satisfaites</translation>
+        <translation>요구 사항을 충족하지 않음</translation>
     </message>
     <message>
         <location filename="../util.h" line="657"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">알 수 없는 값 %1</translation>
     </message>
     <message>
         <source>Unknown value </source>
-        <translation type="vanished">Valeur inconnue </translation>
+        <translation type="vanished">알 수 없는 값 </translation>
     </message>
 </context>
 <context>
@@ -3616,135 +3616,135 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="34"/>
         <source>Client IP:Port</source>
-        <translation>IP Client:Port</translation>
+        <translation>클라이언트 IP:Port</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="39"/>
         <location filename="../serverdlgbase.ui" line="118"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation>이름</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="44"/>
         <source>Jitter Buffer Size</source>
-        <translation>Taille du tampon de gigue</translation>
+        <translation>지터 버퍼 크기</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="49"/>
         <source>Channels</source>
-        <translation>Canaux</translation>
+        <translation>채널</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="67"/>
         <source>Server Setup</source>
-        <translation>Paramètres du serveur</translation>
+        <translation>서버 설정</translation>
     </message>
     <message>
         <source>List</source>
-        <translation type="vanished">Liste</translation>
+        <translation type="vanished">목록</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="132"/>
         <source>Location: Region</source>
-        <translation>Emplacement : Région</translation>
+        <translation>위치: 지역</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">세션</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation>Bienvenue dans la fenêtre de tchate (HTML/CSS pris en charge)</translation>
+        <translation>환영 채팅 창 (HTML/CSS 지원)</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="224"/>
         <source>Options</source>
-        <translation>Options</translation>
+        <translation>옵션</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">사용자 정의 디렉터리 주소</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 목록 파일 이름</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
         <source>Start Minimized on Windows Start</source>
-        <translation>Démarrage minimisé au lancement de Windows</translation>
+        <translation>Windows 시작 시 최소화로 시작</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
         <source>Enable delay panning</source>
-        <translation>Activer le panoramique à retardement</translation>
+        <translation>지연 패닝 활성화</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
         <source>Update check</source>
-        <translation>Vérification de mise à jour</translation>
+        <translation>업데이트 확인</translation>
     </message>
     <message>
         <source>Make My Server Public (Register My Server in the Server List)</source>
-        <translation type="vanished">Rendre mon serveur public (inscrire mon serveur dans la liste des serveurs)</translation>
+        <translation type="vanished">내 서버 공개(서버 목록에 내 서버 등록)</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation type="vanished">Genre</translation>
+        <translation type="vanished">장르</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="85"/>
         <location filename="../serverdlgbase.ui" line="179"/>
         <source>STATUS</source>
-        <translation>ÉTAT</translation>
+        <translation>상태</translation>
     </message>
     <message>
         <source>Custom Directory Server Address:</source>
-        <translation type="vanished">Adresse personnalisée du serveur annuaire :</translation>
+        <translation type="vanished">사용자 정의 디렉터리 서버 주소:</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>
         <source>Recording Directory</source>
-        <translation>Répertoire des enregistrements</translation>
+        <translation>녹음 디렉터리</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Enable Jam Recorder</source>
-        <translation>Activer l&apos;enregistreur de bœuf</translation>
+        <translation>잼 녹음기 활성화</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished">Serveur annuaire</translation>
+        <translation type="unfinished">디렉터리</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
         <source>New Recording</source>
-        <translation>Nouvel enregistrement</translation>
+        <translation>새 녹음</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="232"/>
         <source>Language</source>
         <extracomment>Consider add &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct button</extracomment>
-        <translation>Langue</translation>
+        <translation>언어</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="110"/>
         <source>My Server Info</source>
-        <translation>Informations de mon serveur</translation>
+        <translation>내 서버 정보</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="125"/>
         <source>Location: City</source>
-        <translation>Emplacement : ville</translation>
+        <translation>위치: 도시</translation>
     </message>
     <message>
         <source>Location: Country</source>
-        <translation type="vanished">Emplacement : pays</translation>
+        <translation type="vanished">위치: 국가</translation>
     </message>
 </context>
 <context>
@@ -3752,42 +3752,42 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverlist.cpp" line="806"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation>Impossible d&apos;écrire dans &apos;%1&apos;</translation>
+        <translation>&apos;%1&apos;에 쓸 수 없습니다</translation>
     </message>
 </context>
 <context>
     <name>CSound</name>
     <message>
         <source>The Jack server is not running. This software requires a Jack server to run. Normally if the Jack server is not running this software will automatically start the Jack server. It seems that this auto start has not worked. Try to start the Jack server manually.</source>
-        <translation type="vanished">Le serveur JACK n&apos;est pas démarré. Ce logiciel nécessite un serveur JACK pour fonctionner. Normalement, si le serveurJACK n&apos;est pas en cours d&apos;exécution, ce logiciel démarrera automatiquement le serveur JACK. Il semble que ce démarrage automatique n&apos;ait pas fonctionné. Essayez de démarrer le serveur JACK manuellement.</translation>
+        <translation type="vanished">Jack 서버가 실행되고 있지 않습니다. 이 소프트웨어를 실행하려면 Jack 서버가 필요합니다. 일반적으로 Jack 서버가 실행되고 있지 않으면 이 소프트웨어가 Jack 서버를 자동으로 시작합니다. 이 자동 시작이 작동하지 않은 것 같습니다. Jack 서버를 수동으로 시작해 보세요.</translation>
     </message>
     <message>
         <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
-        <translation type="vanished">Le taux d&apos;échantillonnage du serveur JACK est différent de celui requis. Le taux d&apos;échantillonnage requis est le suivant :</translation>
+        <translation type="vanished">Jack 서버 샘플 속도가 필요한 샘플 속도와 다릅니다. 필요한 샘플 속도는 다음과 같습니다:</translation>
     </message>
     <message>
         <source>You can use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation type="vanished">Vous pouvez utiliser un outil comme &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; pour ajuster le taux d&apos;échantillonnage du serveur Jack.</translation>
+        <translation type="vanished">&lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; 같은 도구를 사용해서  Jack 서버 샘플 속도를 조정할 수 있습니다.</translation>
     </message>
     <message>
         <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation type="vanished">Veillez à définir les trames/périodes à une valeur faible comme </translation>
+        <translation type="vanished">낮은 지연을 이루려면 Frames/Period를 </translation>
     </message>
     <message>
         <source> to achieve a low delay.</source>
-        <translation type="vanished"> pour obtenir une latence faible.</translation>
+        <translation type="vanished"> 다음과 같이 낮은 값으로 설정해야 합니다.</translation>
     </message>
     <message>
         <source>The Jack port registering failed.</source>
-        <translation type="vanished">L&apos;enregistrement du port Jack a échoué.</translation>
+        <translation type="vanished">잭 포트 등록에 실패했습니다.</translation>
     </message>
     <message>
         <source>Cannot activate the Jack client.</source>
-        <translation type="vanished">Impossible d&apos;activer le client JACK.</translation>
+        <translation type="vanished">Jack 클라이언트를 활성화할 수 없습니다.</translation>
     </message>
     <message>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
-        <translation type="vanished">Le serveur JACK a été fermé. Ce logiciel nécessite un serveur JACK pour fonctionner. Essayez de redémarrer le logiciel pour résoudre le problème.</translation>
+        <translation type="vanished">잭 서버가 종료되었습니다. 이 소프트웨어를 실행하려면 Jack 서버가 필요합니다. 문제를 해결하려면 소프트웨어를 다시 시작해 보세요.</translation>
     </message>
     <message>
         <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
@@ -3795,154 +3795,154 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation type="vanished">L&apos;appel de sortie AudioHardwareGetProperty CoreAudio a échoué failed. Il semble qu&apos;aucune carte son ne soit disponible dans le système.</translation>
+        <translation type="vanished">CoreAudio output AudioHardwareGetProperty call failed. 시스템에서 사용할 수 있는 사운드 카드가 없는 것 같습니다.</translation>
     </message>
     <message>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="vanished">Le taux d&apos;échantillonnage de %1 Hz du périphérique d&apos;entrée audio du système actuel n&apos;est pas pris en charge. Veuillez ouvrir la configuration Audio-MIDI dans Applications-&gt;Utilitaires et essayer de définir un taux d&apos;échantillonnage de %2 Hz.</translation>
+        <translation type="vanished">현재 시스템의 오디오 입력 장치는 %1 Hz의 샘플 속도를 지원하지 않습니다. 애플리케이션-&gt;유틸리티에서 오디오-MIDI-설정을 열고 샘플 속도를 %2 Hz로 설정해 보세요.</translation>
     </message>
     <message>
         <source>The current selected audio device is no longer present in the system.</source>
-        <translation type="vanished">Le périphérique audio actuellement sélectionné n&apos;est plus présent dans le système.</translation>
+        <translation type="vanished">선택한 오디오 장치가 현재 시스템에 없습니다.</translation>
     </message>
     <message>
         <source>The audio input device is no longer available.</source>
-        <translation type="vanished">Le périphérique d&apos;entrée audio n&apos;est plus disponible.</translation>
+        <translation type="vanished">오디오 입력 장치를 더 이상 사용할 수 없습니다.</translation>
     </message>
     <message>
         <source>The audio output device is no longer available.</source>
-        <translation type="vanished">Le périphérique de sortie audio n&apos;est plus disponible.</translation>
+        <translation type="vanished">오디오 출력 장치를 더 이상 사용할 수 없습니다.</translation>
     </message>
     <message>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="vanished">Le taux d&apos;échantillonnage de %1 Hz du périphérique de sortie audio du système actuel n&apos;est pas pris en charge. Veuillez ouvrir la configuration Audio-MIDI dans Applications-&gt;Utilitaires et essayer de définir un taux d&apos;échantillonnage de %2 Hz.</translation>
+        <translation type="vanished">현재 시스템의 오디오 출력 장치는 %1 Hz의 샘플 속도를 지원하지 않습니다. 애플리케이션-&gt;유틸리티에서 오디오-MIDI-설정을 열고 샘플 속도를 %2 Hz로 설정해 보세요.</translation>
     </message>
     <message>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
-        <translation type="vanished">Le format du flux d&apos;entrée audio pour ce périphérique audio n&apos;est pas compatible avec ce logiciel.</translation>
+        <translation type="vanished">이 오디오 장치의 오디오 입력 스트림 형식은 이 소프트웨어와 호환되지 않습니다.</translation>
     </message>
     <message>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
-        <translation type="vanished">Le format du flux de sortie audio pour ce périphérique audio n&apos;est pas compatible avec ce logiciel.</translation>
+        <translation type="vanished">이 오디오 장치의 오디오 출력 스트림 형식은 이 소프트웨어와 호환되지 않습니다.</translation>
     </message>
     <message>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
-        <translation type="vanished">Les tailles de tampon du périphérique audio d&apos;entrée et de sortie actuel ne peuvent pas être réglées à une valeur commune. Veuillez choisir d&apos;autres périphériques audio d&apos;entrée/sortie dans les paramètres de votre système.</translation>
+        <translation type="vanished">현재 입출력 오디오 장치의 버퍼 크기는 공통 값으로 설정할 수 없습니다. 시스템 설정에서 다른 입력/출력 오디오 장치를 선택하세요.</translation>
     </message>
     <message>
         <source>The audio driver could not be initialized.</source>
-        <translation type="vanished">Le pilote audio n&apos;a pas pu être initialisé.</translation>
+        <translation type="vanished">오디오 드라이버를 시작할 수 없습니다.</translation>
     </message>
     <message>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
-        <translation type="vanished">Le périphérique audio ne prend pas en charge la fréquence d&apos;échantillonnage requise. La fréquence d&apos;échantillonnage requise est : </translation>
+        <translation type="vanished">오디오 장치가 필요한 샘플 속도를 지원하지 않습니다. 필요한 샘플 속도는 다음과 같습니다: </translation>
     </message>
     <message>
         <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
-        <translation type="vanished">Le périphérique audio ne permet pas de régler la fréquence d&apos;échantillonnage requise. Cette erreur peut se produire si vous avez une interface audio comme le Roland UA-25EX où vous réglez la fréquence d&apos;échantillonnage avec un commutateur matériel sur le périphérique audio. Si c&apos;est le cas, veuillez changer la fréquence d&apos;échantillonnage à </translation>
+        <translation type="vanished">오디오 장치가 필요한 샘플링 속도 설정을 지원하지 않습니다. 이 오류는 오디오 장치의 하드웨어 스위치로 샘플 속도를 설정하는 Roland UA-25EX와 같은 오디오 인터페이스가 있는 경우 발생할 수 있습니다. 이 경우 샘플 속도를 </translation>
     </message>
     <message>
         <source> Hz on the device and restart the </source>
-        <translation type="vanished"> Hz sur le périphérique et redémarrer le </translation>
+        <translation type="vanished"> Hz로 바꾸고 소프트웨어를 </translation>
     </message>
     <message>
         <source> software.</source>
-        <translation type="vanished"> logiciel.</translation>
+        <translation type="vanished"> 다시 시작하세요.</translation>
     </message>
     <message>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
-        <translation type="vanished">Le périphérique audio ne prend pas en charge le nombre de canaux requis. Le nombre de canaux requis pour l&apos;entrée et la sortie est : </translation>
+        <translation type="vanished">오디오 장치가 필요한 채널 수를 지원하지 않습니다. 입력 및 출력에 필요한 채널 수는 다음과 같습니다: </translation>
     </message>
     <message>
         <source>Required audio sample format not available.</source>
-        <translation type="vanished">Le format de l&apos;échantillon audio requis n&apos;est pas disponible.</translation>
+        <translation type="vanished">필요한 오디오 샘플 형식을 사용할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="57"/>
         <source>The selected audio device is no longer present in the system. Please check your audio device.</source>
-        <translation>Le périphérique audio sélectionné n&apos;est plus présent dans le système. Veuillez vérifier votre appareil audio.</translation>
+        <translation>선택한 오디오 장치가 더 이상 시스템에 없습니다. 오디오 장치를 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="76"/>
         <source>Couldn&apos;t initialise the audio driver. Check if your audio hardware is plugged in and verify your driver settings.</source>
-        <translation>Impossible d&apos;initialiser le pilote audio. Vérifiez si votre matériel audio est branché et vérifiez les paramètres de votre pilote.</translation>
+        <translation>오디오 드라이버를 시작할 수 없습니다. 오디오 하드웨어가 연결되어 있는지 확인하시고 드라이버 설정을 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="146"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support a sample rate of %1 Hz. Please select another device.</source>
-        <translation>Le périphérique audio sélectionné est incompatible car il ne prend pas en charge une fréquence d&apos;échantillonnage de %1 Hz. Veuillez sélectionner un autre périphérique.</translation>
+        <translation>선택한 오디오 장치는 %1 Hz의 샘플 속도를 지원하지 않으므로 호환되지 않습니다. 다른 장치를 선택해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="158"/>
         <source>The current audio device configuration is incompatible because the sample rate couldn&apos;t be set to %2 Hz. Please check for a hardware switch or driver setting to set the sample rate manually and restart %1.</source>
-        <translation>La configuration actuelle du périphérique audio est incompatible car la fréquence d&apos;échantillonnage n&apos;a pas pu être définie sur %2 Hz. Veuillez vérifier si un commutateur matériel ou un paramètre du pilote permet de définir manuellement la fréquence d&apos;échantillonnage et redémarrer %1.</translation>
+        <translation>샘플 속도를 %2 Hz로 설정할 수 없기 때문에 현재 오디오 장치 구성이 호환되지 않습니다. 샘플링 속도를 수동으로 설정하려면 하드웨어 스위치나 드라이버 설정을 확인하고 %1 다시 시작해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="171"/>
         <source>The selected audio device is incompatible since it doesn&apos;t support %1 in/out channels. Please select another device or configuration.</source>
-        <translation>Le périphérique audio sélectionné est incompatible car il ne prend pas en charge les canaux d&apos;entrée/sortie %1. Veuillez sélectionner un autre périphérique ou une autre configuration.</translation>
+        <translation>선택한 오디오 장치는 %1 입력/출력 채널을 지원하지 않으므로 호환되지 않습니다. 다른 장치 또는 구성을 선택해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="206"/>
         <location filename="../sound/asio/sound.cpp" line="237"/>
         <source>The selected audio device is incompatible since the required audio sample format isn&apos;t available. Please use another device.</source>
-        <translation>Le périphérique audio sélectionné est incompatible car le format d&apos;échantillon audio requis n&apos;est pas disponible. Veuillez utiliser un autre appareil.</translation>
+        <translation>필요한 오디오 샘플 형식을 사용할 수 없으므로 선택한 오디오 장치가 호환되지 않습니다. 다른 장치를 사용해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="554"/>
         <source>No ASIO audio device driver found.</source>
-        <translation>Aucun pilote de périphérique audio ASIO trouvé.</translation>
+        <translation>ASIO 오디오 장치 드라이버를 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="555"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation>Veuillez installer un pilote ASIO avant d&apos;exécuter %1. Si vous possédez un périphérique avec un support ASIO, installez son pilote ASIO officiel. Sinon, vous devrez télécharger et installer un pilote universel comme ASIO4ALL.</translation>
+        <translation>%1 실행 전에 ASIO 드라이버를 설치해 주세요. ASIO를 지원하는 장치를 소유하고 계시면 공식 ASIO 드라이버를 설치하세요. 그렇지 않은 경우 ASIO4ALL과 같은 범용 드라이버를 설치해야 합니다.</translation>
     </message>
     <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
-        <translation type="vanished">Veuillez installer un pilote ASIO avant d&apos;exécuter %1. Si vous possédez un périphérique avec un support ASIO, installez son pilote ASIO officiel. Sinon, vous devrez télécharger et installer un pilote universel comme ASIO4ALL.</translation>
+        <translation type="vanished">%1 실행 전에 ASIO 드라이버를 설치해 주세요. ASIO를 지원하는 장치를 소유하고 계시면 공식 ASIO 드라이버를 설치하세요. 그렇지 않은 경우 ASIO4ALL과 같은 범용 드라이버를 다운로드해서 설치해야 합니다.</translation>
     </message>
     <message>
         <source>No ASIO audio device (driver) found.</source>
-        <translation type="vanished">Aucun périphérique audio ASIO (pilote) trouvé.</translation>
+        <translation type="vanished">ASIO 오디오 장치(드라이버)를 찾을 수 없습니다.</translation>
     </message>
     <message>
         <source>The </source>
-        <translation type="vanished">Le logiciel </translation>
+        <translation type="vanished">The </translation>
     </message>
     <message>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation type="vanished"> nécessite l&apos;interface audio à faible latence ASIO pour fonctionner correctement. Il ne s&apos;agit pas d&apos;une interface audio Windows standard et un pilote audio spécial est donc nécessaire. Soit votre carte son dispose d&apos;un pilote ASIO natif (ce qui est recommandé), soit vous pouvez utiliser d&apos;autres pilotes comme le pilote ASIO4All.</translation>
+        <translation type="vanished"> 소프트웨어가 제대로 작동하려면 낮은 지연 오디오 인터페이스 ASIO가 필요합니다. 이것은 표준 Windows 오디오 인터페이스가 아니므로 특별한 오디오 드라이버가 필요합니다. 사운드 카드에 기본 ASIO 드라이버(권장)가 있거나 ASIO4All 드라이버와 같은 대체 드라이버를 사용할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../sound/oboe/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
-        <translation>Erreur lors de la demande d&apos;arrêt du flux : $s</translation>
+        <translation>오류 발생 스트림 중지 요청: $s</translation>
     </message>
     <message>
         <location filename="../sound/oboe/sound.cpp" line="75"/>
         <source>Error closing stream: $s</source>
-        <translation>Erreur de fermeture du flux : $s</translation>
+        <translation>오류 발생 스트림 닫기: $s</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
-        <translation>JACK n&apos;a pas pu être lancé automatiquement. Veuillez lancer JACK manuellement et vérifier les messages d&apos;erreur.</translation>
+        <translation>JACK을 자동으로 시작할 수 없습니다. JACK을 수동으로 시작하고 오류 메시지를 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>JACK ne fonctionne pas à un taux d&apos;échantillonnage de &lt;b&gt;%1 Hz&lt;/b&gt;. Veuillez utiliser un outil comme  &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; pour régler le taux d&apos;échantillonnage de JACK à %1 Hz.</translation>
+        <translation>JACK이 &lt;b&gt;%1 Hz&lt;/b&gt; 샘플 레이트에서 실행되고 있지 않습니다. &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; 같은 도구를 이용해서 JACK 샘플 속도를 %1 Hz로 설정해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation>L&apos;enregistrement du port JACK a échoué. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez arrêter %1 et JACK. Ensuite, vérifiez si un autre programme avec un taux d&apos;échantillonnage de %2 Hz peut se connecter à JACK.</translation>
+        <translation>JACK 포트 등록에 실패했습니다. 이것은 아마도 JACK의 오류일 것입니다. %1 및 JACK을 중지해 주세요. 샘플 레이트가 %2 Hz인 다른 프로그램이 JACK에 연결할 수 있는지 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation>L&apos;enregistrement du port JACK a échoué. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez arrêter %1 et JACK. Ensuite, vérifiez si un autre programme MIDI peut se connecter à JACK.</translation>
+        <translation>JACK 포트 등록에 실패했습니다. 이것은 아마도 JACK의 오류일 것입니다. %1 및 JACK을 중지해 주세요. 그런 다음 다른 MIDI 프로그램이 JACK에 연결할 수 있는지 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="107"/>

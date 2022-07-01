@@ -3043,28 +3043,28 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished">기본 녹음 디렉터리의 현재 값입니다. 선택한 값은 존재해야 하고 쓰기 가능해야 합니다(사용자 %1에 의해 실행 중인 사용자의 하위 디렉터리 생성 허용). 버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다.</translation>
+        <translation type="unfinished">메인 녹음 디렉터리의 현재 값입니다. 선택한 값은 존재해야 하고 쓰기 가능해야 합니다(사용자 %1에 의해 실행 중인 사용자의 하위 디렉터리 생성 허용). 버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">사용자 정의 디렉터리 주소</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">사용자 정의 디렉터리 주소는 이 서버를 추가해야 하는 서버 목록이 있는 디렉터리의 주소입니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 목록 파일 이름 대화 상자 푸시 버튼</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">서버 목록 파일 이름</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
@@ -3099,168 +3099,168 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
         <source>Start Minimized on Operating System Start</source>
-        <translation>Démarrage minimisé au lancement du système d&apos;exploitation</translation>
+        <translation>운영 체제 시작 시 최소화로 시작</translation>
     </message>
     <message>
         <source>Make My Server Public</source>
-        <translation type="vanished">Rendre mon serveur public</translation>
+        <translation type="vanished">내 서버를 공개로 설정</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="80"/>
         <source>Register Server Status</source>
-        <translation>Enregistrer l&apos;état du serveur</translation>
+        <translation>서버 상태 등록</translation>
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="vanished">Si la case Rendre mon serveur public est cochée, cela indiquera si l&apos;enregistrement auprès du serveur annuaire est réussi. Si l&apos;enregistrement a échoué, veuillez choisir une autre liste de serveurs.</translation>
+        <translation type="vanished">내 서버 공개 확인란을 선택하면 디렉터리 서버에 등록이 성공했는지가 표시됩니다. 등록에 실패한 경우 다른 서버 목록을 선택하세요.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="228"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation>Si la case &quot;Démarrage minimisé au démarrage du système d&apos;exploitation&quot; est cochée, le serveur sera exécuter au démarrage du système d&apos;exploitation et sera automatiquement réduit à une icône de la barre des tâches du système.</translation>
+        <translation>운영 체제 시작 시 최소화로 시작 확인란을 선택하면 운영 체제가 시작될 때 서버가 시작되고 자동으로 시스템 작업 표시줄 아이콘으로 최소화됩니다.</translation>
     </message>
     <message>
         <source>If the Make My Server Public check box is checked, this server registers itself at the directory server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="vanished">Si la case Rendre mon serveur public est cochée, ce serveur s&apos;enregistre sur le serveur annuaire afin que tous les utilisateurs de l&apos;application puissent le voir dans la liste des serveurs de la fenêtre de connexion et puissent s&apos;y connecter. L&apos;inscription du serveur est renouvelée périodiquement pour s&apos;assurer que tous les serveurs de la liste des serveurs de la fenêtre de connexion sont effectivement disponibles.</translation>
+        <translation type="vanished">내 서버 공개 확인란을 선택하면 이 서버가 디렉터리 서버에 등록되어 애플리케이션의 모든 사용자가 연결 대화 상자 서버 목록에서 서버를 보고 연결할 수 있습니다. 서버 등록은 연결 대화 서버 목록의 모든 서버가 실제로 사용 가능한지 확인하기 위해 주기적으로 갱신됩니다.</translation>
     </message>
     <message>
         <source>Custom Directory Server Address</source>
-        <translation type="vanished">Adresse personnalisée du serveur annuaire</translation>
+        <translation type="vanished">사용자 정의 디렉터리 서버 주소</translation>
     </message>
     <message>
         <source>The custom directory server address is the IP address or URL of the directory server at which the server list of the connection dialog is managed.</source>
-        <translation type="vanished">L&apos;adresse personnalisée du serveur annuaire est l&apos;adresse IP ou l&apos;URL du serveur annuaire sur lequel la liste des serveurs de la fenêtre de connexion est gérée.</translation>
+        <translation type="vanished">사용자 지정 디렉터리 서버 주소는 연결 대화 상자의 서버 목록이 관리되는 디렉터리 서버의 IP 주소 또는 URL입니다.</translation>
     </message>
     <message>
         <source>Directory server address line edit</source>
-        <translation type="vanished">Ligne d&apos;édition pour l&apos;adresse du serveur annuaire</translation>
+        <translation type="vanished">디렉터리 서버 주소 라인 편집</translation>
     </message>
     <message>
         <source>Server List Selection</source>
-        <translation type="vanished">Sélection de la liste des serveurs</translation>
+        <translation type="vanished">서버 목록 선택</translation>
     </message>
     <message>
         <source>Selects the server list (i.e. directory server address) in which your server will be added.</source>
-        <translation type="vanished">Sélectionne la liste de serveurs (c-à-d l&apos;adresse du serveur annuiare) dans laquelle votre serveur sera ajouté.</translation>
+        <translation type="vanished">서버를 추가할 서버 목록(예: 디렉터리 서버 주소)을 선택합니다.</translation>
     </message>
     <message>
         <source>Server list selection combo box</source>
-        <translation type="vanished">Liste déroulante de sélection de la liste des serveurs</translation>
+        <translation type="vanished">서버 목록 선택 콤보 박스</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="87"/>
         <source>Server Name</source>
-        <translation>Nom du serveur</translation>
+        <translation>서버 이름</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="88"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
-        <translation>Le nom du serveur identifie votre serveur dans la liste des serveurs de la fenêtre de connexion chez les clients.</translation>
+        <translation>서버 이름은 클라이언트의 연결 대화 상자 서버 목록에서 서버를 식별합니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="94"/>
         <source>Server name line edit</source>
-        <translation>Ligne d&apos;édition pour le nom du serveur</translation>
+        <translation>서버 이름 라인 편집</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="97"/>
         <source>Location City</source>
-        <translation>Ville de localisation</translation>
+        <translation>도시 위치</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="98"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation>La ville dans laquelle ce serveur est situé peut être définie ici. Si un nom de ville est saisi, il sera affiché dans la liste des serveurs du dialogue de connexion chez les clients.</translation>
+        <translation>이 서버가 위치한 도시를 여기에서 설정할 수 있습니다. 도시 이름을 입력하면 클라이언트의 연결 대화 상자 서버 목록에 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="105"/>
         <source>City where the server is located line edit</source>
-        <translation>Ligne d&apos;édition pour la ville où est situé le serveur</translation>
+        <translation>서버가 위치한 도시 라인 편집</translation>
     </message>
     <message>
         <source>Location country</source>
-        <translation type="vanished">Pays de localisation</translation>
+        <translation type="vanished">국가 위치</translation>
     </message>
     <message>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation type="vanished">Le pays dans lequel ce serveur est situé peut être défini ici. Si un pays est saisi, il sera affiché dans la liste des serveurs du dialogue de connexion chez les clients.</translation>
+        <translation type="vanished">이 서버가 있는 국가를 여기에서 설정할 수 있습니다. 국가를 입력하면 클라이언트의 연결 대화 상자 서버 목록에 표시됩니다.</translation>
     </message>
     <message>
         <source>Country where the server is located combo box</source>
-        <translation type="vanished">Choix déroulant du pays où le serveur est situé</translation>
+        <translation type="vanished">서버가 위치한 국가 콤보 상자</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="174"/>
         <source>Display dialog to select recording directory button</source>
-        <translation>Afficher le dialogue pour sélectionner le bouton du répertoire d&apos;enregistrement</translation>
+        <translation>녹음 디렉터리 버튼을 선택하는 대화 상자 표시</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="175"/>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>Main Recording Directory</source>
-        <translation>Répertoire principal des enregistrements</translation>
+        <translation>메인 녹음 디렉터리</translation>
     </message>
     <message>
         <source>Click the button to open the dialog that allows the main recording directory to be selected. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). </source>
-        <translation type="vanished">Cliquez sur le bouton pour ouvrir la boîte de dialogue permettant de sélectionner le répertoire d&apos;enregistrement principal. La valeur choisie doit exister et être inscriptible (permettre la création de sous-répertoires par l&apos;utilisateur sous lequel Jamulus fonctionne). </translation>
+        <translation type="vanished">버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다. 선택한 값은 존재하고 쓰기 가능해야 합니다(Jamulus를 실행 중인 사용자의 하위 디렉터리 생성 허용). </translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="181"/>
         <source>Main recording directory text box (read-only)</source>
-        <translation>Zone de texte du répertoire principal d&apos;enregistrement (lecture seule)</translation>
+        <translation>메인 녹음 디렉터리 텍스트 박스(읽기 전용)</translation>
     </message>
     <message>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="vanished">La valeur actuelle du répertoire principal d&apos;enregistrement. La valeur choisie doit exister et être inscriptible (permettre la création de sous-répertoires par l&apos;utilisateur sous lequel Jamulus fonctionne). Cliquez sur le bouton pour ouvrir la boîte de dialogue permettant de sélectionner le répertoire d&apos;enregistrement principal.</translation>
+        <translation type="vanished">메인 녹음 디렉터리의 현재 값입니다. 선택한 값은 존재하고 쓰기 가능해야 합니다(Jamulus를 실행 중인 사용자의 하위 디렉터리 생성 허용). 버튼을 클릭하여 기본 녹음 디렉터리를 선택할 수 있는 대화 상자를 엽니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="189"/>
         <source>Clear the recording directory button</source>
-        <translation>Effacer le bouton du répertoire d&apos;enregistrement</translation>
+        <translation>녹음 디렉터리 버튼 정리</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="190"/>
         <source>Clear Recording Directory</source>
-        <translation>Effacer le répertoire des enregistrements</translation>
+        <translation>녹음 디렉터리 정리</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="191"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation>Cliquez sur le bouton pour effacer le répertoire d&apos;enregistrement actuellement sélectionné. Cela empêchera l&apos;enregistrement jusqu&apos;à ce qu&apos;une nouvelle valeur soit sélectionnée.</translation>
+        <translation>버튼을 클릭하면 현재 선택한 녹음 디렉터리가 지워집니다. 이렇게 하면 새 값이 선택될 때까지 녹음이 되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation>Case à cocher pour activer ou désactiver l&apos;enregistrement du serveur</translation>
+        <translation>서버 녹화를 켜거나 끄는 체크 박스</translation>
     </message>
     <message>
         <source>If the Register Server check box is checked, this will show whether registration with the directory server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="vanished">Si la case Enregistrer le serveur est cochée, cela indique si l&apos;enregistrement avec le serveur d&apos;annuaire a réussi. Si l&apos;enregistrement a échoué, veuillez choisir une autre liste de serveurs.</translation>
+        <translation type="vanished">서버 등록 확인란을 선택하면 디렉터리 서버 등록 성공 여부를 표시합니다. 등록에 실패한 경우 다른 서버 목록을 선택하세요.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
         <source>Enable Recorder</source>
-        <translation>Activer l&apos;enregistreur</translation>
+        <translation>녹음기 활성화</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="121"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation>Coché lorsque l&apos;enregistreur est activé, sinon non coché. L&apos;enregistreur fonctionnera lorsqu&apos;une session est en cours, si (configuré correctement et) activé.</translation>
+        <translation>녹음기를 활성화하면 체크되고 그렇지 않을 땐 체크되지 않습니다. (올바르게 설정되고) 활성화된 경우 세션이 진행 중일 때 녹음기가 실행됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">녹음 디렉터리를 사용할 수 없는 경우 세션 디렉터리 대신 문제가 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="148"/>
         <source>Current session directory text box (read-only)</source>
-        <translation>Zone de texte du répertoire de la session en cours (en lecture seule)</translation>
+        <translation>현재 세션 디렉터리 텍스트 박스 (읽기 전용)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="152"/>
         <source>Current Session Directory</source>
-        <translation>Répertoire de la session en cours</translation>
+        <translation>현재 세션 디렉터리</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="153"/>

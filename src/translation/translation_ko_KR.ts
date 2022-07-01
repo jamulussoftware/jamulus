@@ -3937,214 +3937,214 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation>JACK 포트 등록에 실패했습니다. 이것은 아마도 JACK의 오류일 것입니다. %1 및 JACK을 중지해 주세요. 샘플 레이트가 %2 Hz인 다른 프로그램이 JACK에 연결할 수 있는지 확인해 주세요.</translation>
+        <translation>JACK 포트 등록에 실패했습니다. 이것은 아마도 JACK의 오류일 겁니다. %1 및 JACK을 중지해 주세요. 샘플 레이트가 %2 Hz인 다른 프로그램이 JACK에 연결할 수 있는지 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation>JACK 포트 등록에 실패했습니다. 이것은 아마도 JACK의 오류일 것입니다. %1 및 JACK을 중지해 주세요. 그런 다음 다른 MIDI 프로그램이 JACK에 연결할 수 있는지 확인해 주세요.</translation>
+        <translation>JACK 포트 등록에 실패했습니다. 이것은 아마도 JACK의 오류일 겁니다. %1 및 JACK을 중지해 주세요. 그런 다음 다른 MIDI 프로그램이 JACK에 연결할 수 있는지 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
-        <translation>Impossible d&apos;activer le client JACK. Il s&apos;agit probablement d&apos;une erreur de JACK. Veuillez vérifier la sortie JACK.</translation>
+        <translation>JACK 클라이언트를 활성화할 수 없습니다. 이것은 아마도 JACK의 오류일 겁니다. JACK의 출력을 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="209"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation>JACK a été arrêté. %1 a besoin de JACK pour fonctionner. Veuillez redémarrer %1 pour relancer JACK. </translation>
+        <translation>잭이 종료되었습니다. %1의 실행에는 JACK이 필요합니다. JACK을 다시 실행하려면 %1의  다시 시작이 필요합니다. </translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="113"/>
         <source>No sound card is available in your system. CoreAudio input AudioHardwareGetProperty call failed.</source>
-        <translation>Aucune carte son n&apos;est disponible dans votre système. L&apos;appel à l&apos;entrée AudioHardwareGetProperty de CoreAudio a échoué.</translation>
+        <translation>CoreAudio input AudioHardwareGetProperty call failed. 시스템에 사용할 수 있는 사운드 카드가 없습니다.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="122"/>
         <source>No sound card is available in the system. CoreAudio output AudioHardwareGetProperty call failed.</source>
-        <translation>Aucune carte son n&apos;est disponible dans le système. L&apos;appel de la sortie CoreAudio AudioHardwareGetProperty a échoué.</translation>
+        <translation>CoreAudio output AudioHardwareGetProperty call failed. 시스템에 사용할 수 있는 사운드 카드가 없습니다.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="284"/>
         <source>The currently selected audio device is no longer present. Please check your audio device.</source>
-        <translation>Le périphérique audio actuellement sélectionné n&apos;est plus présent. Veuillez vérifier votre périphérique audio.</translation>
+        <translation>선택한 오디오 장치가 더 이상 시스템에 없습니다. 오디오 장치를 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="385"/>
         <source>The audio input device is no longer available. Please check if your input device is connected correctly.</source>
-        <translation>Le périphérique d&apos;entrée audio n&apos;est plus disponible. Veuillez vérifier si votre périphérique d&apos;entrée est correctement connecté.</translation>
+        <translation>오디오 입력 장치를 더 이상 사용할 수 없습니다. 입력 장치가 올바르게 연결되어 있는지 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="394"/>
         <source>The sample rate on the current input device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>La fréquence d&apos;échantillonnage du périphérique d&apos;entrée actuel n&apos;est pas de %1 Hz et est donc incompatible. Veuillez sélectionner un autre périphérique ou essayer de régler manuellement la fréquence d&apos;échantillonnage sur %1 Hz via Audio-MIDI-Setup (dans Applications-&gt;Utilitaires).</translation>
+        <translation>현재 입력 장치의 샘플 속도가 %1 Hz가 아니므로 호환되지 않습니다. 다른 장치를 선택하시거나 오디오-MIDI-설정(애플리케이션-&gt;유틸리티)을 통해 수동으로 샘플 속도를 %1 Hz로 설정해 보세요.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation>Le périphérique de sortie audio n&apos;est plus disponible. Veuillez vérifier si votre périphérique de sortie est correctement connecté.</translation>
+        <translation>오디오 출력 장치를 더 이상 사용할 수 없습니다. 출력 장치가 올바르게 연결되어 있는지 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="415"/>
         <source>The sample rate on the current output device isn&apos;t %1 Hz and is therefore incompatible. Please select another device or try setting the sample rate to %1 Hz manually via Audio-MIDI-Setup (in Applications-&gt;Utilities).</source>
-        <translation>La fréquence d&apos;échantillonnage du périphérique de sortie actuel n&apos;est pas %1 Hz et est donc incompatible. Veuillez sélectionner un autre périphérique ou essayer de régler manuellement la fréquence d&apos;échantillonnage sur %1 Hz via Audio-MIDI-Setup (dans Applications-&gt;Utilitaires).</translation>
+        <translation>현재 출력 장치의 샘플 속도가 %1 Hz가 아니므로 호환되지 않습니다. 다른 장치를 선택하시거나 오디오-MIDI-설정(애플리케이션-&gt;유틸리티)을 통해 수동으로 샘플 속도를 %1 Hz로 설정해 보세요.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="463"/>
         <source>The stream format on the current input device isn&apos;t compatible with this software. Please select another device.</source>
-        <translation>Le format de flux du périphérique d&apos;entrée actuel n&apos;est pas compatible avec ce logiciel. Veuillez sélectionner un autre périphérique.</translation>
+        <translation>현재 입력 장치의 스트림 형식이 이 소프트웨어와 호환되지 않습니다. 다른 장치를 선택해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="474"/>
         <source>The stream format on the current output device isn&apos;t compatible with %1. Please select another device.</source>
-        <translation>Le format du flux sur le périphérique de sortie actuel n&apos;est pas compatible avec %1. Veuillez sélectionner un autre périphérique.</translation>
+        <translation>현재 출력 장치의 스트림 형식과 %1의 호환이 되지 않습니다. 다른 장치를 선택해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="727"/>
         <source>The buffer sizes of the current input and output audio device can&apos;t be set to a common value. Please select different input/output devices in your system settings.</source>
-        <translation>La taille de la mémoire tampon du périphérique audio d&apos;entrée et de sortie actuel ne peut pas être définie sur une valeur commune. Veuillez sélectionner des périphériques d&apos;entrée/sortie différents dans les paramètres de votre système.</translation>
+        <translation>현재 입력 및 출력 오디오 장치의 버퍼 크기는 공통 값으로 설정할 수 없습니다. 시스템 설정에서 다른 입력/출력 장치를 선택해 주세요.</translation>
     </message>
 </context>
 <context>
     <name>CSoundBase</name>
     <message>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="vanished">Le périphérique audio sélectionné n&apos;a pas pu être utilisé en raison de l&apos;erreur suivante : </translation>
+        <translation type="vanished">다음 오류로 인해 선택한 오디오 장치를 사용할 수 없습니다: </translation>
     </message>
     <message>
         <source> The previous driver will be selected.</source>
-        <translation type="vanished"> Le pilote précédent sera sélectionné.</translation>
+        <translation type="vanished"> 이전 드라이버가 선택됩니다.</translation>
     </message>
     <message>
         <source>The previously selected audio device is no longer available or the audio driver properties have changed to a state which is incompatible with this software. We now try to find a valid audio device. This new audio device might cause audio feedback. So, before connecting to a server, please check the audio device setting.</source>
-        <translation type="vanished">Le périphérique audio précédemment sélectionné n&apos;est plus disponible ou les propriétés du pilote audio sont passées à un état incompatible avec ce logiciel. Nous essayons à présent de trouver un périphérique audio valide. Ce nouveau périphérique audio peut provoquer un retour audio. Aussi, avant de vous connecter à un serveur, veuillez vérifier le réglage du périphérique audio.</translation>
+        <translation type="vanished">이전에 선택한 오디오 장치를 더 이상 사용할 수 없거나 오디오 드라이버 속성이 이 소프트웨어와 호환되지 않는 상태로 변경되었습니다. 이제 유효한 오디오 장치를 찾으려고 합니다. 이 새로운 오디오 장치는 오디오 피드백을 유발할 수 있습니다. 따라서 서버에 연결하기 전에 오디오 장치 설정을 확인해 주세요.</translation>
     </message>
     <message>
         <source>No usable </source>
-        <translation type="vanished">Pas de </translation>
+        <translation type="vanished">사용할 수 없음 </translation>
     </message>
     <message>
         <source> audio device (driver) found.</source>
-        <translation type="vanished"> périphérique audio (pilote) trouvé.</translation>
+        <translation type="vanished"> 오디오 장치(드라이버)를 찾았습니다.</translation>
     </message>
     <message>
         <source>In the following there is a list of all available drivers with the associated error message:</source>
-        <translation type="vanished">Vous trouverez ci-dessous une liste de tous les pilotes disponibles avec le message d&apos;erreur associé :</translation>
+        <translation type="vanished">관련 오류 메시지와 함께 사용 가능한 모든 드라이버 목록입니다:</translation>
     </message>
     <message>
         <source>Do you want to open the ASIO driver setups?</source>
-        <translation type="vanished">Voulez-vous ouvrir les configurations des pilotes ASIO ?</translation>
+        <translation type="vanished">ASIO 드라이버 설정을 여시겠습니까?</translation>
     </message>
     <message>
         <source> could not be started because of audio interface issues.</source>
-        <translation type="vanished"> n&apos;a pas pu être lancé en raison de problèmes d&apos;interface audio.</translation>
+        <translation type="vanished"> 오디오 인터페이스 문제로 인해 시작할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="117"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation>Impossible d&apos;utiliser le périphérique audio sélectionné en raison de l&apos;erreur suivante : %1 Le pilote précédent sera sélectionné.</translation>
+        <translation>다음 오류 때문에 선택한 오디오 장치를 사용할 수 없습니다: %1 이전 드라이버가 선택될 겁니다.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="158"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
-        <translation>Le périphérique audio précédemment sélectionné n&apos;est plus disponible ou le pilote est passé à un état incompatible. Nous allons essayer de trouver un périphérique audio valide, mais ce nouveau périphérique audio peut provoquer un effet larsen. Avant de vous connecter à un serveur, veuillez vérifier les paramètres de votre périphérique audio.</translation>
+        <translation>이전에 선택한 오디오 장치를 더 이상 사용할 수 없거나 드라이버가 호환되지 않는 상태로 변경되었습니다. 유효한 오디오 장치를 찾으려고 시도하겠습니다. 하지만, 이 새 오디오 장치로 인해 피드백이 발생할 수 있습니다. 서버에 연결하기 전에 오디오 장치 설정을 확인해 주세요.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;b&gt;%1에서 사용 가능한 %2 오디오 장치를 찾을 수 없습니다.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">드라이버 설정에서 오류를 수정할 수 있습니다. 지금 이 설정을 여시겠습니까?</translation>
     </message>
     <message>
         <source>No usable %1 audio device found.</source>
-        <translation type="vanished">Aucun périphérique audio %1 utilisable n&apos;a été trouvé.</translation>
+        <translation type="vanished">사용 가능한 %1 오디오 장치를 찾을 수 없습니다.</translation>
     </message>
     <message>
         <source>These are all the available drivers with error messages:</source>
-        <translation type="vanished">Voici tous les pilotes disponibles avec les messages d&apos;erreur :</translation>
+        <translation type="vanished">다음은 오류 메시지와 함께 사용 가능한 모든 드라이버입니다:</translation>
     </message>
     <message>
         <source>Do you want to open the ASIO driver setup to try changing your configuration to a working state?</source>
-        <translation type="vanished">Voulez-vous ouvrir la configuration du pilote ASIO pour essayer de modifier votre configuration afin qu&apos;elle fonctionne ?</translation>
+        <translation type="vanished">ASIO 드라이버 설정을 열어 구성을 작동 상태로 변경하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="189"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation>Impossible de démarrer %1. Veuillez redémarrer %1 et vérifier/reconfigurer vos paramètres audio.</translation>
+        <translation>%1 시작할 수 없습니다. %1 다시 시작하고 오디오 설정을 확인/재구성 해주세요.</translation>
     </message>
 </context>
 <context>
     <name>QCoreApplication</name>
     <message>
         <source>%1, Version %2</source>
-        <translation type="vanished">%1, version %2</translation>
+        <translation type="vanished">%1, 버전 %2</translation>
     </message>
     <message>
         <source>Internet Jam Session Software</source>
-        <translation type="vanished">Logiciel de bœuf sur internet</translation>
+        <translation type="vanished">인터넷 잼 세션 소프트웨어</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1565"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished">%1, version %2</translation>
+        <translation type="unfinished">%1, 버전 %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1582"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation>Publié sous la licence GNU General Public License version 2 ou ultérieure (GPLv2)</translation>
+        <translation>GNU 일반 공중 허가서 버전 2 또는 이후 버전에 따라 출시됨 (GPLv2)</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or modify it under</source>
-        <translation type="vanished">Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le modifier dans les conditions suivantes</translation>
+        <translation type="vanished">이 프로그램은 자유 소프트웨어입니다. </translation>
     </message>
     <message>
         <source>the terms of the GNU General Public License as published by the Free Software</source>
-        <translation type="vanished">les termes de la licence publique générale GNU (GNU General Public License), telle que publiée par l&apos;association des logiciels libres (Free Software)</translation>
+        <translation type="vanished">자유 소프트웨어 재단에서 발행한 GNU 일반 공중 사용 허가서의 조건에 따라 이를 재배포 및/또는 수정할 수 있습니다. </translation>
     </message>
     <message>
         <source>Foundation; either version 2 of the License, or (at your option) any later version.</source>
-        <translation type="vanished">Foundation ; soit la version 2 de la Licence, soit (à votre choix) toute version ultérieure.</translation>
+        <translation type="vanished">라이선스 버전 2 또는 (귀하의 선택에 따라) 이후 버전.</translation>
     </message>
     <message>
         <source>There is NO WARRANTY, to the extent permitted by law.</source>
-        <translation type="vanished">Il n&apos;y a AUCUNE GARANTIE, dans la mesure permise par la loi.</translation>
+        <translation type="vanished">법이 허용하는 한도 내에서 어떠한 보증도 하지 않습니다.</translation>
     </message>
     <message>
         <source>Using the following libraries, resources or code snippets:</source>
-        <translation type="vanished">Utilisation des bibliothèques, ressources ou extraits de code suivants :</translation>
+        <translation type="vanished">다음의 libraries, resources 또는 code snippets을 사용합니다:</translation>
     </message>
     <message>
         <source>Qt framework </source>
-        <translation type="vanished">Cadriciel de travail Qt </translation>
+        <translation type="vanished">Qt framework </translation>
     </message>
     <message>
         <source>Opus Interactive Audio Codec</source>
-        <translation type="vanished">Codec audio interactif Opus</translation>
+        <translation type="vanished">Opus Interactive Audio Codec</translation>
     </message>
     <message>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="vanished">Code de réverbération audio par Perry R. Cook et Gary P. Scavone</translation>
+        <translation type="vanished">Audio reverberation code by Perry R. Cook and Gary P. Scavone</translation>
     </message>
     <message>
         <source>Some pixmaps are from the Open Clip Art Library (OCAL)</source>
-        <translation type="vanished">Certains pixmaps proviennent de l&apos;Open Clip Art Library (OCAL)</translation>
+        <translation type="vanished">일부 픽스맵은 OCAL(Open Clip Art Library)에서 가져온 것입니다.</translation>
     </message>
     <message>
         <source>Flag icons by Mark James</source>
-        <translation type="vanished">Icônes de drapeaux par Mark James</translation>
+        <translation type="vanished">깃발 아이콘 by Mark James</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation type="vanished">Copyright (C) 2005-2022 L&apos;équipe de développement de Jamulus</translation>
+        <translation type="vanished">Copyright (C) 2005-2022 The Jamulus Development Team</translation>
     </message>
     <message>
         <source>Released under the GNU General Public License (GPL)</source>
-        <translation type="vanished">Publié sous la licence publique générale GNU (GPL)</translation>
+        <translation type="vanished">GNU 일반 공중 사용 허가서에 따라 출시됨 (GPL)</translation>
     </message>
 </context>
 <context>
@@ -4152,12 +4152,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>A %1 une mise à jour est disponible : &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;rendez-vous dans détails et téléchargements&lt;/a&gt;</translation>
+        <translation>%1 업그레이드를 사용할 수 있습니다. &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;세부 정보 및 다운로드로 이동&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
-        <translation>Pour plus d&apos;informations, utilisez l&apos;aide &quot;Qu&apos;est-ce que c&apos;est&quot; (menu d&apos;aide, bouton droit de la souris ou Maj+F1)</translation>
+        <translation>자세한 내용은 &quot;What&apos;s This&quot;를 사용하십시오. 도움말(도움말 메뉴, 마우스 오른쪽 버튼 또는 Shift+F1)</translation>
     </message>
 </context>
 </TS>

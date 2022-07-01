@@ -179,54 +179,54 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, CClientSettings* pNSet
     chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );
 
     // sound card buffer delay
-    QString strSndCrdBufDelay = "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
-                                tr ( "The buffer delay setting is a fundamental setting of %1. "
-                                     "This setting has an influence on many connection properties." )
-                                    .arg ( APP_NAME ) +
-                                "<br>" + tr ( "Three buffer sizes can be selected" ) +
-                                ":<ul>"
-                                "<li>" +
-                                tr ( "64 samples: Provides the lowest latency but does not work with all sound cards." ) +
-                                "</li>"
-                                "<li>" +
-                                tr ( "128 samples: Should work for most available sound cards." ) +
-                                "</li>"
-                                "<li>" +
-                                tr ( "256 samples: Should only be used when 64 or 128 samples "
-                                     "is causing issues." ) +
-                                "</li>"
-                                "</ul>" +
-                                tr ( "Some sound card drivers do not allow the buffer delay to be changed "
-                                     "from within %1. "
-                                     "In this case the buffer delay setting is disabled and has to be "
-                                     "changed using the sound card driver. On Windows, use the "
-                                     "ASIO Device Settings button to open the driver settings panel. On Linux, "
-                                     "use the JACK configuration tool to change the buffer size." )
-                                    .arg ( APP_NAME ) +
-                                "<br>" +
-                                tr ( "If no buffer size is selected and all settings are disabled, this means a "
-                                     "buffer size in use by the driver which does not match the values. %1 "
-                                     "will still work with this setting but may have restricted "
-                                     "performance." )
-                                    .arg ( APP_NAME ) +
-                                "<br>" +
-                                tr ( "The actual buffer delay has influence on the connection, the "
-                                     "current upload rate and the overall delay. The lower the buffer size, "
-                                     "the higher the probability of a red light in the status indicator (drop "
-                                     "outs) and the higher the upload rate and the lower the overall "
-                                     "delay." ) +
-                                "<br>" +
-                                tr ( "The buffer setting is therefore a trade-off between audio "
-                                     "quality and overall delay." );
+    QString strSndCrdBufDelay =
+        "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
+        tr ( "The buffer delay setting is a fundamental setting of %1. "
+             "This setting has an influence on many connection properties." )
+            .arg ( APP_NAME ) +
+        "<br>" + tr ( "Three buffer sizes can be selected" ) +
+        ":<ul>"
+        "<li>" +
+        tr ( "64 samples: Provides the lowest latency but does not work with all sound cards." ) +
+        "</li>"
+        "<li>" +
+        tr ( "128 samples: Should work for most available sound cards." ) +
+        "</li>"
+        "<li>" +
+        tr ( "256 samples: Should only be used when 64 or 128 samples "
+             "is causing issues." ) +
+        "</li>"
+        "</ul>" +
+        tr ( "Some sound card drivers do not allow the buffer delay to be changed from within %1. "
+             "In this case the buffer delay setting is disabled and has to be changed using the sound card driver. "
+             "Use the appropriate tool for the interface in use to adjust this buffer size. "
+             "For example, if using ASIO, use the \"ASIO Device Settings\" button to open the driver settings panel or if using JACK, use a tool "
+             "such as QjackCtl to adjust the buffer size. "
+             "Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual." )
+            .arg ( APP_NAME ) +
+        "<br>" +
+        tr ( "If no buffer size is selected and all settings are disabled, this means a "
+             "buffer size in use by the driver which does not match the values. %1 "
+             "will still work with this setting but may have restricted "
+             "performance." )
+            .arg ( APP_NAME ) +
+        "<br>" +
+        tr ( "The actual buffer delay has influence on the connection, the "
+             "current upload rate and the overall delay. The lower the buffer size, "
+             "the higher the probability of a red light in the status indicator (drop "
+             "outs) and the higher the upload rate and the lower the overall "
+             "delay." ) +
+        "<br>" + tr ( "The buffer setting is therefore a trade-off between audio quality and overall delay." );
 
-    QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
-                                       "disabled, it is prohibited by the audio driver to modify this "
-                                       "setting from within %1. "
-                                       "On Windows, press the ASIO Device Settings button to open the "
-                                       "driver settings panel. On Linux, use the JACK configuration tool to "
-                                       "change the buffer size." )
-                                      .arg ( APP_NAME ) +
-                                  TOOLTIP_COM_END_TEXT;
+    QString strSndCrdBufDelayTT =
+        tr ( "Some sound card drivers do not allow the buffer delay to be changed from within %1. "
+             "In this case the buffer delay setting is disabled and has to be changed using the sound card driver. "
+             "Use the appropriate tool for the interface in use to adjust this buffer size. "
+             "For example, if using ASIO, use the \"ASIO Device Settings\" button to open the driver settings panel or if using JACK, use a tool "
+             "such as QjackCtl to adjust the buffer size. "
+             "Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual." )
+            .arg ( APP_NAME ) +
+        TOOLTIP_COM_END_TEXT;
 
 #if defined( _WIN32 ) && !defined( WITH_JACK )
     // Driver setup button

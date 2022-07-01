@@ -1459,7 +1459,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation>레벨 미터에 사용할 미터 스타일을 선택합니다. 막대(좁음) 및 LED(둥근, 작은) 옵션은 믹서보드에만 적용됩니다. Bar(좁음)를 선택하면 입력 미터가 Bar(넓음)로 설정됩니다. LED(둥근, 작은)를 선택하면 입력 미터가 LED(둥근, 큰)로 설정됩니다. 나머지 옵션은 믹서보드와 입력 미터에 적용됩니다.</translation>
+        <translation>레벨 미터에 사용할 미터 스타일을 선택합니다. 막대(좁음) 및 LED(둥근, 작은) 옵션은 믹서보드에만 적용됩니다. 바(좁음)를 선택하면 입력 미터가 바(넓음)로 설정됩니다. LED(둥근, 작은)를 선택하면 입력 미터가 LED(둥근, 큰)로 설정됩니다. 나머지 옵션은 믹서보드와 입력 미터에 적용됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
@@ -1665,123 +1665,123 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="368"/>
         <source>Custom Directories combo box</source>
-        <translation>Choix déroulant adresse personnalisée du serveur annuaire</translation>
+        <translation>사용자 정의 디렉터리 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
         <source>Audio Upstream Rate</source>
-        <translation>Débit ascendant du flux audio</translation>
+        <translation>오디오 업스트림 속도</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="372"/>
         <source>Depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
-        <translation>Cela dépend de la taille actuelle des paquets audio et du paramètre de compression. Assurez-vous que le débit en amont n&apos;est pas supérieur à votre vitesse de téléchargement sur Internet (vérifiez-le avec un service tel que speedtest.net).</translation>
+        <translation>현재 오디오 패킷 크기 및 압축 설정에 따라 다릅니다. 업스트림 속도가 사용 가능한 인터넷 업로드 속도보다 높지 않은지 확인합니다(speedtest.net과 같은 서비스에서 확인).</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="381"/>
         <source>Number of Mixer Panel Rows</source>
-        <translation>Nombre de rangées de panneaux de mixeurs</translation>
+        <translation>믹서 패널 줄 수</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="381"/>
         <source>Adjust the number of rows used to arrange the mixer panel.</source>
-        <translation>Ajustez le nombre de rangées utilisées dans le panneau du mixeur.</translation>
+        <translation>믹서 패널을 정렬하는 데 사용되는 줄 수를 조정합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="384"/>
         <source>Number of Mixer Panel Rows spin box</source>
-        <translation>Liste de choix du nombre de rangées de panneaux de mixeurs</translation>
+        <translation>믹서 패널 줄 수 스핀 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>Protection larsen</translation>
+        <translation>피드백 보호</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
         <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>Active la protection larsen pour détecter le larsen acoustique entre le microphone et les enceintes.</translation>
+        <translation>피드백 보호를 활성화하여 마이크와 스피커 간의 음향 피드백을 감지합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
         <source>Feedback Protection check box</source>
-        <translation>Case à cocher protection larsen</translation>
+        <translation>피드백 보호 체크 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>ASIO Device Settings</source>
-        <translation>Paramètres du périphérique ASIO</translation>
+        <translation>ASIO 장치 설정</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="429"/>
         <source>Low</source>
-        <translation>Basse</translation>
+        <translation>낮음</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
         <location filename="../clientsettingsdlg.cpp" line="436"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation>보통</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="431"/>
         <source>High</source>
-        <translation>Haute</translation>
+        <translation>높음</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="437"/>
         <source>Fancy</source>
-        <translation>Fantaisie</translation>
+        <translation>훌륭함</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="438"/>
         <source>Compact</source>
-        <translation>Compact</translation>
+        <translation>콤팩트</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="443"/>
         <source>Bar (narrow)</source>
-        <translation>Barres (étroites)</translation>
+        <translation>바 (좁음)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="444"/>
         <source>Bar (wide)</source>
-        <translation>Barres (larges)</translation>
+        <translation>바 (넓음)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="445"/>
         <source>LEDs (stripe)</source>
-        <translation>Diodes lumineuses (bandes)</translation>
+        <translation>LED (줄무늬)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>LEDs (round, small)</source>
-        <translation>Diodes lumineuses (rondes, petites)</translation>
+        <translation>LED (둥근, 소형)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="447"/>
         <source>LEDs (round, big)</source>
-        <translation>Diodes lumineuses (rondes, grandes)</translation>
+        <translation>LED (둥근, 대형)</translation>
     </message>
     <message>
         <source>LEDs</source>
-        <translation type="vanished">Diodes lumineuses</translation>
+        <translation type="vanished">LED</translation>
     </message>
     <message>
         <source>Bar</source>
-        <translation type="vanished">Barre</translation>
+        <translation type="vanished">바</translation>
     </message>
     <message>
         <source>Narrow Bar</source>
-        <translation type="vanished">Barre étroite</translation>
+        <translation type="vanished">좁은 바</translation>
     </message>
     <message>
         <source>Round LEDs</source>
-        <translation type="vanished">Diodes lumineuses rondes</translation>
+        <translation type="vanished">둥근 LED</translation>
     </message>
     <message>
         <source>Small LEDs</source>
-        <translation type="vanished">Petites diodes lumineuses</translation>
+        <translation type="vanished">소형 LED</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="462"/>
@@ -1789,17 +1789,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="606"/>
         <location filename="../util.cpp" line="1187"/>
         <source>None</source>
-        <translation>Aucune</translation>
+        <translation>없음</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="496"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation>Inscrivez ici votre nom ou un pseudonyme pour que les autres musiciens avec lesquels vous voulez jouer sachent qui vous êtes. Vous pouvez également ajouter une illustration de l&apos;instrument dont vous jouez, un drapeau du pays ou de la région où vous vous trouvez ainsi que votre ville et votre niveau de compétence sur votre instrument.</translation>
+        <translation>여기에 여러분의 이름이나 별명을 적어서 함께 연주하고 싶은 다른 뮤지션들이 여러분이 누구인지 알 수 있도록 하세요. 연주하는 악기의 사진과 여러분이 위치한 국가 또는 지역의 국기를 추가할 수도 있습니다. 여러분의 도시 및 악기 연주 기술 수준도 추가할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="501"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a %1 server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation>Ce que vous définissez ici apparaîtra sur votre chariot sur la table de mixage lorsque vous êtes connecté à un serveur %1. Cette balise sera également affichée sur chaque client connecté au même serveur que vous.</translation>
+        <translation>여기에서 설정한 내용은 %1 서버에 연결할 때 믹서 보드의 페이더에 나타납니다. 이 태그는 여러분과 동일한 서버에 연결한 각 클라이언트에도 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="512"/>

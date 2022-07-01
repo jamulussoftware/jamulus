@@ -2101,22 +2101,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1292"/>
         <source>Vocal Bass</source>
-        <translation>베이스 보컬</translation>
+        <translation>보컬 베이스</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1295"/>
         <source>Vocal Tenor</source>
-        <translation>테너 보컬</translation>
+        <translation>보컬 테너</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1298"/>
         <source>Vocal Alto</source>
-        <translation>알토 보컬</translation>
+        <translation>보컬 알토</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1301"/>
         <source>Vocal Soprano</source>
-        <translation>소프라노 보컬</translation>
+        <translation>보컬 소프라노 </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1304"/>
@@ -2141,7 +2141,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1316"/>
         <source>Vocal Baritone</source>
-        <translation>바리톤 보컬</translation>
+        <translation>보컬 바리톤 </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1319"/>

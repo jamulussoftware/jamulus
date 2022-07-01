@@ -44,7 +44,7 @@
     <message>
         <location filename="../util.cpp" line="615"/>
         <source>Flag icons by Mark James</source>
-        <translation>플래그 아이콘 by Mark James</translation>
+        <translation>깃발 아이콘 by Mark James</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="688"/>
@@ -274,12 +274,12 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="178"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation>페이더 태그는 연결된 클라이언트를 식별합니다. 태그 이름, 악기 사진 및 위치 플래그를 기본 창에서 설정할 수 있습니다.</translation>
+        <translation>페이더 태그는 연결된 클라이언트를 식별합니다. 태그 이름, 악기 사진 및 위치 깃발을 기본 창에서 설정할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="187"/>
         <source>Mixer channel country/region flag</source>
-        <translation>믹서 채널 국가/지역 플래그</translation>
+        <translation>믹서 채널 국가/지역 깃발</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="253"/>
@@ -434,7 +434,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="855"/>
         <source>Musician Profile</source>
-        <translation>음악가 프로파일</translation>
+        <translation>뮤지션 프로필</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="47"/>
@@ -514,7 +514,7 @@
     <message>
         <location filename="../chatdlg.cpp" line="145"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation>브라우저에서 &apos;%1&apos; 링크를 여시겠습니까?</translation>
+        <translation>브라우저에서 &apos;%1&apos;링크를 여시겠습니까?</translation>
     </message>
     <message>
         <source>Do you want to open the link</source>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="63"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation>애플리케이션이 서버에 연결되어 있고 악기를 연주하거나 마이크에 대고 노래하면 VU 미터가 깜박입니다. 그렇지 않다면, 입력 채널을 잘못 선택했거나(예: 마이크 입력 대신 &apos;라인 입력&apos;) 오디오 믹서에서(Windows) 입력 게인을 너무 낮게 설정했을 수 있습니다.</translation>
+        <translation>애플리케이션이 서버에 연결되어 있고 악기를 연주하거나 마이크에 대고 노래하면 VU 미터가 깜박입니다. 그렇지 않다면, 입력 채널을 잘못 선택했거나(예: 마이크 입력 대신 라인 입력) 오디오 믹서에서(Windows) 입력 게인을 너무 낮게 설정했을 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="71"/>
@@ -697,7 +697,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="171"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation>사운드 카드&apos; 버퍼 지연(버퍼 크기)이 너무 작습니다(설정 창 참조).</translation>
+        <translation>사운드 카드 버퍼 지연(버퍼 크기)이 너무 작습니다(설정 창 참조).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="175"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="384"/>
         <source>My &amp;Profile...</source>
-        <translation>내 &amp;프로파일...</translation>
+        <translation>내 &amp;프로필...</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="371"/>
@@ -938,7 +938,7 @@
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation type="vanished">&amp;s설정</translation>
+        <translation type="vanished">&amp;설정</translation>
     </message>
     <message>
         <source>Directory Server</source>
@@ -1088,7 +1088,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation>음소거됨(&apos;다른 사람들이 내 말을 들을 수 없음)</translation>
+        <translation>음소거됨(다른 사람들이 내 말을 들을 수 없음)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="587"/>
@@ -1335,12 +1335,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">현재 연결 상태 파라미터</translation>
     </message>
     <message>
-        <source>이 LED 표시등이 빨간색으로 바뀌면 이 소프트웨어를 사용하는 즐거움이 </source>
-        <translation type="vanished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le </translation>
+        <source>If this LED indicator turns red, you will not have much fun using the </source>
+        <translation type="vanished">이 LED 표시등이 빨간색으로 바뀌면 이 소프트웨어를 사용하는 즐거움이 </translation>
     </message>
     <message>
-        <source>줄어들 겁니다.</source>
-        <translation type="vanished"> logiciel.</translation>
+        <source> software.</source>
+        <translation type="vanished">줄어들 겁니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
@@ -1426,7 +1426,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="vanished">64 샘플: 기본 값입니다. 가장 낮은 대기 시간을 제공하지만 모든 사운드 카드에서 작동하지는 않습니다.</translation>
+        <translation type="vanished">64 샘플: 기본값입니다. 가장 낮은 대기 시간을 제공하지만 모든 사운드 카드에서 작동하지는 않습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="192"/>
@@ -1794,7 +1794,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="496"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation>여기에 여러분의 이름이나 별명을 적어서 함께 연주하고 싶은 다른 뮤지션들이 여러분이 누구인지 알 수 있도록 하세요. 연주하는 악기의 사진과 여러분이 위치한 국가 또는 지역의 국기를 추가할 수도 있습니다. 여러분의 도시 및 악기 연주 기술 수준도 추가할 수 있습니다.</translation>
+        <translation>여기에 여러분의 이름이나 별칭을 적어서 함께 연주하고 싶은 다른 뮤지션들이 여러분이 누구인지 알 수 있도록 하세요. 연주하는 악기의 사진과 여러분이 위치한 국가 또는 지역의 국기를 추가할 수도 있습니다. 여러분의 도시 및 악기 연주 기술 수준도 추가할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="501"/>
@@ -1804,374 +1804,374 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="512"/>
         <source>Country/region flag button</source>
-        <translation>Bouton de drapeau de pays</translation>
+        <translation>국가/지역 깃발 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1174"/>
         <source>Center</source>
-        <translation>Centre</translation>
+        <translation>가운데</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1186"/>
         <source>R</source>
-        <translation>D</translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../util.h" line="604"/>
         <source>Custom</source>
-        <translation>Personnalisé</translation>
+        <translation>사용자 정의</translation>
     </message>
     <message>
         <location filename="../util.h" line="586"/>
         <source>Any Genre 2</source>
-        <translation>Tout genre 2</translation>
+        <translation>모든 장르 2</translation>
     </message>
     <message>
         <location filename="../util.h" line="589"/>
         <source>Any Genre 3</source>
-        <translation>Tout genre 3</translation>
+        <translation>모든 장르 3</translation>
     </message>
     <message>
         <location filename="../util.h" line="592"/>
         <source>Genre Rock</source>
-        <translation>Genre Rock</translation>
+        <translation>장르 Rock</translation>
     </message>
     <message>
         <location filename="../util.h" line="595"/>
         <source>Genre Jazz</source>
-        <translation>Genre Jazz</translation>
+        <translation>장르 Jazz</translation>
     </message>
     <message>
         <location filename="../util.h" line="598"/>
         <source>Genre Classical/Folk</source>
-        <translation>Genre classique/folk</translation>
+        <translation>장르 Classical/Folk</translation>
     </message>
     <message>
         <location filename="../util.h" line="601"/>
         <source>Genre Choral/Barbershop</source>
-        <translation>Genre chorale/barbershop</translation>
+        <translation>장르 Choral/Barbershop</translation>
     </message>
     <message>
         <location filename="../util.h" line="607"/>
         <source>Any Genre 1</source>
-        <translation>Tout genre 1</translation>
+        <translation>모든 장르 1</translation>
     </message>
     <message>
         <source>preferred</source>
-        <translation type="vanished">préféré</translation>
+        <translation type="vanished">선호</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="495"/>
         <source>Musician Profile</source>
-        <translation>Profil de musicien</translation>
+        <translation>뮤지션 프로필</translation>
     </message>
     <message>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="vanished">Écrivez votre nom ou un pseudonyme ici pour que les autres musiciens avec lesquels vous voulez jouer sachent qui vous êtes. Vous pouvez également ajouter une image de l&apos;instrument dont vous jouez et un drapeau du pays dans lequel vous vous trouvez. Vous pouvez également ajouter votre ville et votre niveau de compétence pour jouer de votre instrument.</translation>
+        <translation type="vanished">여기에 여러분의 이름이나 별칭을 적어서 함께 연주하고 싶은 다른 뮤지션들이 여러분이 누구인지 알 수 있도록 하세요. 연주하는 악기의 사진과 여러분이 위치한 국가 또는 지역의 국기를 추가할 수도 있습니다. 여러분의 도시 및 악기 연주 기술 수준도 추가할 수 있습니다.</translation>
     </message>
     <message>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="vanished">Ce que vous réglez ici apparaîtra au niveau de votre chariot sur la table de mixage lorsque vous serez connecté à un serveur Jamulus. Cette étiquette sera également affichée dans chaque client qui est connecté au même serveur que vous.</translation>
+        <translation type="vanished">여기에서 설정한 내용은 Jamulus 서버에 연결될 때 믹서 보드의 페이더에 나타납니다. 이 태그는 여러분과 같은 서버에 연결한 클라이언트에도 표시됩니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="508"/>
         <source>Alias or name edit box</source>
-        <translation>Boîte d&apos;édition de pseudo ou de nom</translation>
+        <translation>별칭 또는 이름 편집 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="510"/>
         <source>Instrument picture button</source>
-        <translation>Bouton d&apos;image d&apos;instrument</translation>
+        <translation>악기 사진 버튼</translation>
     </message>
     <message>
         <source>Country flag button</source>
-        <translation type="vanished">Bouton de drapeau de pays</translation>
+        <translation type="vanished">국기 버튼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="514"/>
         <source>City edit box</source>
-        <translation>Boîte d&apos;édition de ville</translation>
+        <translation>도시 편집 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="516"/>
         <source>Skill level combo box</source>
-        <translation>Choix déroulant de niveau de compétence</translation>
+        <translation>스킬 레벨 콤보 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="610"/>
         <source>Beginner</source>
-        <translation>Débutant</translation>
+        <translation>초보</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="614"/>
         <source>Intermediate</source>
-        <translation>Intermédiaire</translation>
+        <translation>중급</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="618"/>
         <source>Expert</source>
-        <translation>Expert</translation>
+        <translation>전문가</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="772"/>
         <location filename="../clientsettingsdlg.cpp" line="776"/>
         <source>Size: </source>
-        <translation>Taille : </translation>
+        <translation>크기:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="831"/>
         <source>Buffer Delay</source>
-        <translation>Délai de temporisation</translation>
+        <translation>버퍼 지연</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="836"/>
         <source>Buffer Delay: </source>
-        <translation>Délai de temporisation : </translation>
+        <translation>버퍼 지연: </translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1190"/>
         <source>Drum Set</source>
-        <translation>Batterie</translation>
+        <translation>드럼 세트</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1193"/>
         <source>Djembe</source>
-        <translation>Djembé</translation>
+        <translation>젬베</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1196"/>
         <source>Electric Guitar</source>
-        <translation>Guitare électrique</translation>
+        <translation>일렉트릭 기타</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1199"/>
         <source>Acoustic Guitar</source>
-        <translation>Guitare accoustique</translation>
+        <translation>어쿠스틱 기타</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1202"/>
         <source>Bass Guitar</source>
-        <translation>Guitare basse</translation>
+        <translation>배스 기타</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1205"/>
         <source>Keyboard</source>
-        <translation>Clavier</translation>
+        <translation>키보드</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1208"/>
         <source>Synthesizer</source>
-        <translation>Synthétiseur</translation>
+        <translation>신디사이저</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1211"/>
         <source>Grand Piano</source>
-        <translation>Piano à queue</translation>
+        <translation>그랜드 피아노</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1214"/>
         <source>Accordion</source>
-        <translation>Accordéon</translation>
+        <translation>아코디언</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1217"/>
         <source>Vocal</source>
-        <translation>Voix</translation>
+        <translation>보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1220"/>
         <source>Microphone</source>
-        <translation>Microphone</translation>
+        <translation>마이크</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1223"/>
         <source>Harmonica</source>
-        <translation>Harmonica</translation>
+        <translation>하모니카</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1226"/>
         <source>Trumpet</source>
-        <translation>Trompette</translation>
+        <translation>트럼펫</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1229"/>
         <source>Trombone</source>
-        <translation>Trombone</translation>
+        <translation>트롬본</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1232"/>
         <source>French Horn</source>
-        <translation>Cor d&apos;harmonie</translation>
+        <translation>호른</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1235"/>
         <source>Tuba</source>
-        <translation>Tuba</translation>
+        <translation>튜바</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1238"/>
         <source>Saxophone</source>
-        <translation>Saxophone</translation>
+        <translation>색소폰</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1241"/>
         <source>Clarinet</source>
-        <translation>Clarinette</translation>
+        <translation>클라리넷</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1244"/>
         <source>Flute</source>
-        <translation>Flute</translation>
+        <translation>플루트</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1247"/>
         <source>Violin</source>
-        <translation>Violon</translation>
+        <translation>바이올린</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1250"/>
         <source>Cello</source>
-        <translation>Violoncelle</translation>
+        <translation>첼로</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1253"/>
         <source>Double Bass</source>
-        <translation>Contrebasse</translation>
+        <translation>콘트라베이스</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1256"/>
         <source>Recorder</source>
-        <translation>Enregistreur</translation>
+        <translation>리코더</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1259"/>
         <source>Streamer</source>
-        <translation>Diffuseur</translation>
+        <translation>스트리머</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1262"/>
         <source>Listener</source>
-        <translation>Auditeur</translation>
+        <translation>청취자</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1265"/>
         <source>Guitar+Vocal</source>
-        <translation>Guitare+voix</translation>
+        <translation>기타+보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1268"/>
         <source>Keyboard+Vocal</source>
-        <translation>Clavier+voix</translation>
+        <translation>키보드+보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1271"/>
         <source>Bodhran</source>
-        <translation>Bodhran</translation>
+        <translation>보란</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1274"/>
         <source>Bassoon</source>
-        <translation>Basson</translation>
+        <translation>바순</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1277"/>
         <source>Oboe</source>
-        <translation>Hautbois</translation>
+        <translation>오보에</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1280"/>
         <source>Harp</source>
-        <translation>Harpe</translation>
+        <translation>하프</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1283"/>
         <source>Viola</source>
-        <translation>Alto</translation>
+        <translation>비올라</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1286"/>
         <source>Congas</source>
-        <translation>Congas</translation>
+        <translation>콩가</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1289"/>
         <source>Bongo</source>
-        <translation>Bongo</translation>
+        <translation>봉고</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1292"/>
         <source>Vocal Bass</source>
-        <translation>Voix basse</translation>
+        <translation>베이스 보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1295"/>
         <source>Vocal Tenor</source>
-        <translation>Voix ténor</translation>
+        <translation>테너 보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1298"/>
         <source>Vocal Alto</source>
-        <translation>Voix alto</translation>
+        <translation>알토 보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1301"/>
         <source>Vocal Soprano</source>
-        <translation>Voix soprano</translation>
+        <translation>소프라노 보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1304"/>
         <source>Banjo</source>
-        <translation>Banjo</translation>
+        <translation>벤조</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1307"/>
         <source>Mandolin</source>
-        <translation>Mandoline</translation>
+        <translation>만돌린</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1310"/>
         <source>Ukulele</source>
-        <translation>Ukulélé</translation>
+        <translation>우쿨렐레</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1313"/>
         <source>Bass Ukulele</source>
-        <translation>Ukulélé basse</translation>
+        <translation>베이스 우쿨렐레</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1316"/>
         <source>Vocal Baritone</source>
-        <translation>Voix baryton</translation>
+        <translation>바리톤 보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1319"/>
         <source>Vocal Lead</source>
-        <translation>Voix principale</translation>
+        <translation>리드 보컬</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1322"/>
         <source>Mountain Dulcimer</source>
-        <translation>Dulcimer de montagne</translation>
+        <translation>마운틴 덜시머</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1325"/>
         <source>Scratching</source>
-        <translation>Scratch</translation>
+        <translation>스크래치</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1328"/>
         <source>Rapping</source>
-        <translation>Rap</translation>
+        <translation>래퍼</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1331"/>
         <source>Vibraphone</source>
-        <translation>Vibraphone</translation>
+        <translation>비브라폰</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1334"/>
         <source>Conductor</source>
-        <translation>Conducteur</translation>
+        <translation>지휘자</translation>
     </message>
 </context>
 <context>
@@ -2179,157 +2179,157 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="14"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <source>Soundcard</source>
-        <translation type="vanished">Interface audio</translation>
+        <translation type="vanished">사운드 카드</translation>
     </message>
     <message>
         <source>Device</source>
-        <translation type="vanished">Périphérique</translation>
+        <translation type="vanished">장치</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="430"/>
         <source>Input Channel Mapping</source>
-        <translation>Mappage des canaux d&apos;entrée</translation>
+        <translation>입력 채널 매핑</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="450"/>
         <location filename="../clientsettingsdlgbase.ui" line="507"/>
         <source>L</source>
-        <translation>G</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="463"/>
         <location filename="../clientsettingsdlgbase.ui" line="520"/>
         <source>R</source>
-        <translation>D</translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="487"/>
         <source>Output Channel Mapping</source>
-        <translation>Mappage des canaux de sortie</translation>
+        <translation>출력 채널 매핑</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="838"/>
         <source>Enable Small Network Buffers</source>
-        <translation>Activer les petits tampons de réseau</translation>
+        <translation>소규모 네트워크 버퍼 활성화</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="608"/>
         <source>Buffer Delay</source>
-        <translation>Délai de temporisation</translation>
+        <translation>버퍼 지연</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="103"/>
         <source>Country/Region</source>
-        <translation>Pays/Région</translation>
+        <translation>국가/지역</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="620"/>
         <source>(preferred)</source>
-        <translation>(préféré)</translation>
+        <translation>(선호)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="633"/>
         <source>(default)</source>
-        <translation>(défaut)</translation>
+        <translation>(기본)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="646"/>
         <source>(safe)</source>
-        <translation>(sûr)</translation>
+        <translation>(안전)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="380"/>
         <source>Driver Setup</source>
-        <translation>Configuration du pilote</translation>
+        <translation>드라이버 설정</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="40"/>
         <source>My Profile</source>
-        <translation>Mon profil</translation>
+        <translation>내 프로필</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
         <source>Musician&apos;s Profile</source>
-        <translation>Profil musicien</translation>
+        <translation>뮤지션 프로필</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
         <source>Alias/Name</source>
-        <translation>Pseudo/nom</translation>
+        <translation>별칭/이름</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="96"/>
         <source>Instrument</source>
-        <translation>Instrument</translation>
+        <translation>악기</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="vanished">Pays</translation>
+        <translation type="vanished">국가</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="110"/>
         <source>City</source>
-        <translation>Ville</translation>
+        <translation>도시</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="117"/>
         <source>Skill</source>
-        <translation>Compétence</translation>
+        <translation>스킬</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="210"/>
         <source>User Interface</source>
-        <translation>Interface utilisateur</translation>
+        <translation>사용자 인터페이스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="227"/>
         <source>Meter Style</source>
-        <translation>Style d&apos;indicateur</translation>
+        <translation>미터 스타일</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="241"/>
         <source>Mixer Rows</source>
-        <translation>Rangées de mixeurs</translation>
+        <translation믹서 줄</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="325"/>
         <source>Audio/Network Setup</source>
-        <translation>Configuration audio/réseau</translation>
+        <translation>오디오/네트워크 설정</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="335"/>
         <source>Audio Device</source>
-        <translation>Interface audio</translation>
+        <translation>오디오 장치</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="676"/>
         <source>Jitter Buffer</source>
-        <translation>Tampon de gigue</translation>
+        <translation>지터 버퍼</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="688"/>
         <source>Auto</source>
-        <translation>Auto</translation>
+        <translation>자동</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="697"/>
         <source>Local</source>
-        <translation>Local</translation>
+        <translation>로컬</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="710"/>
         <source>Server</source>
-        <translation>Serveur</translation>
+        <translation>서버</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="727"/>
         <location filename="../clientsettingsdlgbase.ui" line="740"/>
         <source>Size</source>
-        <translation>Taille</translation>
+        <translation>크기</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="869"/>
@@ -2343,79 +2343,79 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1033"/>
         <source>Input Boost</source>
-        <translation>Amplification de l&apos;entrée</translation>
+        <translation>입력 부스트</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1056"/>
         <source>Feedback Protection</source>
-        <translation>Protection larsen</translation>
+        <translation>피드백 보호</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1069"/>
         <source>Enable</source>
-        <translation>Activer</translation>
+        <translation>활성화</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1124"/>
         <source>Input Balance</source>
-        <translation>Balance d&apos;entrée</translation>
+        <translation>입력 밸런스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1135"/>
         <source>Pan</source>
-        <translation>Panoramique</translation>
+        <translation>팬</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1215"/>
         <source>Center</source>
-        <translation>Centre</translation>
+        <translation>가운데</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="vanished">Divers</translation>
+        <translation type="vanished">기타 등등</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="567"/>
         <source>Audio Channels</source>
-        <translation>Canaux audio</translation>
+        <translation>오디오 채널</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="574"/>
         <source>Audio Quality</source>
-        <translation>Qualité audio</translation>
+        <translation>오디오 품질</translation>
     </message>
     <message>
         <source>Measurements</source>
-        <translation type="vanished">Mesures</translation>
+        <translation type="vanished">측정</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="931"/>
         <source>Advanced Setup</source>
-        <translation>Configuration avancée</translation>
+        <translation>고급 설정</translation>
     </message>
     <message>
         <source>Custom Central Server Address:</source>
-        <translation type="vanished">Adresse personnalisée du serveur annuaire :</translation>
+        <translation type="vanished">사용자 지정 중앙 서버 주소:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="999"/>
         <source>New Client Level</source>
-        <translation>Niveau des nouveaux clients</translation>
+        <translation>새 클라이언트 레벨</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="220"/>
         <source>Skin</source>
-        <translation>Thème graphique</translation>
+        <translation>스킨</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="234"/>
         <source>Language</source>
-        <translation>Langue</translation>
+        <translation>언어</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="972"/>
         <source>Custom Directories:</source>
-        <translation>Adresse personnalisée du serveur annuaire :</translation>
+        <translation>사용자 지정 디렉터리:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1011"/>
@@ -2424,12 +2424,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Custom Directory Server Address:</source>
-        <translation type="vanished">Adresse personnalisée du serveur annuaire :</translation>
+        <translation type="vanished">사용자 지정 디렉터리 서버 주소:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="845"/>
         <source>Audio Stream Rate</source>
-        <translation>Débit du flux audio</translation>
+        <translation>오디오 스트림 속도</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="879"/>
@@ -2438,15 +2438,15 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Ping Time</source>
-        <translation type="vanished">Temps de réponse</translation>
+        <translation type="vanished">핑 시간</translation>
     </message>
     <message>
         <source>Overall Delay</source>
-        <translation type="vanished">Délai global</translation>
+        <translation type="vanished">전체 지연</translation>
     </message>
     <message>
         <source>Local Jitter Buffer</source>
-        <translation type="vanished">Tampon de gigue local</translation>
+        <translation type="vanished">로컬 지터 버퍼</translation>
     </message>
 </context>
 <context>
@@ -2454,22 +2454,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="45"/>
         <source>Directory</source>
-        <translation>Serveur annuaire</translation>
+        <translation>디렉터리</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="46"/>
         <source>Shows the servers listed by the selected directory. You can add custom directories in Advanced Settings.</source>
-        <translation>Affiche les serveurs répertoriés par l&apos;annuaire sélectionné. Vous pouvez ajouter des annuaires personnalisés dans les paramètres avancés.</translation>
+        <translation>선택한 디렉터리 별로 나열된 서버를 표시합니다. 고급 설정에서 사용자 정의 디렉터리를 추가할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="48"/>
         <source>Directory combo box</source>
-        <translation>Choix déroulant annuaire</translation>
+        <translation>디렉터리 콤보 박스</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="57"/>
         <source>Filters the server list by the given text. Note that the filter is case insensitive. A single # character will filter for those servers with at least one person connected.</source>
-        <translation>Filtre la liste des serveurs en fonction du texte donné. Notez que le filtre n&apos;est pas sensible à la casse. Un simple caractère # filtrera les serveurs avec au moins une personne connectée.</translation>
+        <translation>주어진 텍스트로 서버 목록을 필터링합니다. 필터는 대소문자를 구분하지 않습니다. 단일 # 문자는 적어도 한 사람이 연결된 서버를 필터링합니다.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="68"/>

@@ -1228,7 +1228,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <source>Three buffer sizes are supported</source>
-        <translation type="vanished">세 가지 버퍼 크기를 지원합니다.</translation>
+        <translation type="vanished">세 가지 버퍼 크기를 지원합니다</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Device Settings button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
@@ -1916,7 +1916,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="772"/>
         <location filename="../clientsettingsdlg.cpp" line="776"/>
         <source>Size: </source>
-        <translation>크기:</translation>
+        <translation>크기: </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="831"/>

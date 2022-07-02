@@ -130,14 +130,6 @@ int main ( int argc, char** argv )
     Q_UNUSED ( bCustomPortNumberGiven )
 #endif
 
-#if !defined( HEADLESS ) && defined( _WIN32 )
-    if ( AttachConsole ( ATTACH_PARENT_PROCESS ) )
-    {
-        freopen ( "CONOUT$", "w", stdout );
-        freopen ( "CONOUT$", "w", stderr );
-    }
-#endif
-
     // When adding new options, follow the same order as --help output
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
@@ -771,6 +763,14 @@ int main ( int argc, char** argv )
         }
     }
 
+#if defined( _WIN32 )
+    // If we are using the GUI, minimize any attached console
+    if ( bUseGUI && ::GetConsoleWindow() )
+    {
+        ::ShowWindow ( ::GetConsoleWindow(), SW_SHOWMINNOACTIVE );
+    }
+#endif
+
     // Application/GUI setup ---------------------------------------------------
     // Application object
 #ifdef HEADLESS
@@ -1031,6 +1031,13 @@ int main ( int argc, char** argv )
     activity.EndActivity();
 #endif
 
+#if defined( _WIN32 )
+    // If we are using the GUI, restore any attached console
+    if ( bUseGUI && ::GetConsoleWindow() )
+    {
+        ::ShowWindow ( ::GetConsoleWindow(), SW_SHOWNORMAL );
+    }
+#endif
     return 0;
 }
 

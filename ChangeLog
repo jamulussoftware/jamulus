@@ -1,5 +1,11 @@
 
-### 3.8.2nightly4 <- NOTE: the release version number will be 3.9.0 ###
+### 3.9.0beta1 <- NOTE: the release version number will be 3.9.0 ###
+
+- prefix in your PR descriptions? That way our script can pick the text up directly (#2640).
+  (contributed by @chigkim)
+
+- Client: added instructions for setting buffers when using Pipewire (#2645).
+  (contributed by @gilgongo)
 
 - Translated Windows installer into Korean (#2669).
   (contributed by @bagjunggyu)
@@ -172,6 +178,9 @@
   (contributed by @gilgongo)
 
 - Documentation: Rewrite some parts of COMPILING.md and CONTRIBUTING.md to stay up to date and enable clearer contribution guidelines (#2561).
+  (contributed by @ann0see)
+
+- Build: macOS will now be built with Qt 6.3.1 for better support of modern versions of macOS. Users of macOS 10.14 or earlier must from now use the legacy build or compile from source (#2672).
   (contributed by @ann0see)
 
 - Build: Improved grep usage in scripts #2421 (#2397).

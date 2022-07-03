@@ -283,6 +283,12 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
         iNumMixerPanelRows = iValue;
     }
 
+    // audio alerts
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "enableaudioalerts", bValue ) )
+    {
+        bEnableAudioAlerts = bValue;
+    }
+
     // name
     pClient->ChannelInfo.strName = FromBase64ToString (
         GetIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
@@ -633,6 +639,9 @@ void CClientSettings::WriteSettingsToXML ( QDomDocument& IniXMLDocument )
 
     // number of mixer panel rows
     SetNumericIniSet ( IniXMLDocument, "client", "numrowsmixpan", iNumMixerPanelRows );
+
+    // audio alerts
+    SetFlagIniSet ( IniXMLDocument, "client", "enableaudioalerts", bEnableAudioAlerts );
 
     // name
     PutIniSetting ( IniXMLDocument, "client", "name_base64", ToBase64 ( pClient->ChannelInfo.strName ) );

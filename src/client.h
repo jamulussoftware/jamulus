@@ -347,6 +347,7 @@ protected:
 
     EGUIDesign  eGUIDesign;
     EMeterStyle eMeterStyle;
+    bool        bEnableAudioAlerts;
     bool        bEnableOPUS64;
 
     bool   bJitterBufferOK;

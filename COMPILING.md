@@ -23,7 +23,7 @@ Then run `git clone git@github.com:jamulussoftware/jamulus` in Terminal to get t
 
 ### Install dependencies
 
-On Debian 11+ you can install the dependencies by issuing the following command: `sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev qtbase5-dev qttools5-dev-tools`
+On Debian 11+ you can install the dependencies by issuing the following command: `sudo apt-get -qq --no-install-recommends -y install devscripts build-essential debhelper fakeroot libjack-jackd2-dev qtbase5-dev qttools5-dev-tools qtmultimedia5-dev`
 
 **Note:** The exact dependencies might be different for older distributions. See [this comment by softins](https://github.com/jamulussoftware/jamulus/pull/2267#issuecomment-1022127426)
 
@@ -34,6 +34,7 @@ On Debian 11+ you can install the dependencies by issuing the following command:
 - qt5-qtbase
 - jack-audio-connection-kit-devel
 - qt5-linguist
+- qt5-qtmultimedia
 
 ### For all desktop distributions
 

@@ -3615,8 +3615,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translatorcomment>El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista de servidores en la ventana de conexión están realmente disponibles.</translatorcomment>
-        <translation></translation>
+        <translation>El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista de servidores en la ventana de conexión están realmente disponibles.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
@@ -3677,7 +3676,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation>Valor actual del nombre del archivo de persistencia para la lista de servidores. El usuario ejecutando %1 debe poder crear el nombre de archivo especificado aunque ya exista (se sobreescribirá al guardar).Pulsa el botón para abrir la ventana que permite establecer el nombre del archivo de persistencia para la lista de servidores.</translation>
+        <translation>Valor actual del nombre del archivo de persistencia para la lista de servidores. El usuario ejecutando %1 debe poder crear el nombre de archivo especificado aunque ya exista (se sobreescribirá al guardar). Pulsa el botón para abrir la ventana que permite establecer el nombre del archivo de persistencia para la lista de servidores.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
@@ -4709,8 +4708,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translatorcomment>Quizá puedas arreglar errores en la configuración del driver. ¿Quieres abrir la configuración ahora?</translatorcomment>
-        <translation></translation>
+        <translation>Quizá puedas arreglar errores en la configuración del driver. ¿Quieres abrir la configuración ahora?</translation>
     </message>
     <message>
         <source>No usable %1 audio device found.</source>

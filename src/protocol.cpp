@@ -306,7 +306,7 @@ CONNECTION LESS MESSAGES
       NOTE: In the PROTMESSID_CLM_SERVER_LIST list, this field will be empty
       as only the initial IP address should be used by the client.  Where
       necessary, that value will contain the server internal address.
-      When running a directory server and a registered server behind the same
+      When running a directory and a registered server behind the same
       NAT, this field is used the other way round: It will contain the public
       IP in this case which will be served to clients from the Internet.
 
@@ -422,11 +422,11 @@ CONNECTION LESS MESSAGES
     - "status":
       Values of ESvrRegResult:
       0 - success
-      1 - failed due to directory server list being full
+      1 - failed due to directory's server list being full
       2 - your server version is too old
       3 - registration requirements not fulfilled
 
-    Note: the directory server may send this message in response to a
+    Note: the directory may send this message in response to a
           PROTMESSID_CLM_REGISTER_SERVER request.
           Where not received, the registering server may only retry up to
           five times for one registration request at 500ms intervals.

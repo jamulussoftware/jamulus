@@ -237,7 +237,7 @@ void CConnectDlg::RequestServerList()
     }
     cbxDirectoryServer->blockSignals ( false );
 
-    // Get the IP address of the directory server (using the ParseNetworAddress
+    // Get the IP address of the directory (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it. Note that in case of custom directories we
     // use iCustomDirectoryIndex as an index into the vector.
@@ -302,7 +302,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     // updates (to avoid the reduced list overwrites the normal list (#657)). Also,
     // we only accept a server list from the server address we have sent the
     // request for this to (note that we cannot use the port number since the
-    // receive port and send port might be different at the directory server).
+    // receive port and send port might be different at the directory).
     if ( bServerListReceived || ( InetAddr.InetAddr != haDirectoryAddress.InetAddr ) )
     {
         return;
@@ -339,8 +339,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
     for ( int iIdx = 0; iIdx < iServerInfoLen; iIdx++ )
     {
         // get the host address, note that for the very first entry which is
-        // the directory server, we have to use the receive host address
-        // instead
+        // the directory, we have to use the receive host address instead
         CHostAddress CurHostAddress;
 
         if ( iIdx > 0 )
@@ -349,7 +348,7 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         }
         else
         {
-            // substitute the receive host address for directory server
+            // substitute the receive host address for directory
             CurHostAddress = InetAddr;
         }
 

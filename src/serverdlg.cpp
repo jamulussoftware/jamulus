@@ -734,7 +734,7 @@ void CServerDlg::UpdateGUIDependencies()
 
     if ( pServer->IsDirectoryServer() )
     {
-        strStatus = tr ( "Now a directory server" );
+        strStatus = tr ( "Now a directory" );
     }
     else
     {

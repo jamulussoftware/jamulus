@@ -108,7 +108,7 @@ int main ( int argc, char** argv )
     QString      strHTMLStatusFileName       = "";
     QString      strLoggingFileName          = "";
     QString      strRecordingDirName         = "";
-    QString      strDirectoryServer          = "";
+    QString      strDirectory                = "";
     QString      strServerListFileName       = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
@@ -258,13 +258,13 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Directory server ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-e", "--directoryserver", strArgument ) )
+        // Directory to register with ------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-e", "--directory", strArgument ) )
         {
-            strDirectoryServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
-            CommandLineOptions << "--directoryserver";
-            ServerOnlyOptions << "--directoryserver";
+            strDirectory = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- register with directory: %1" ).arg ( strDirectory ) );
+            CommandLineOptions << "--directory";
+            ServerOnlyOptions << "--directory";
             continue;
         }
 
@@ -272,14 +272,14 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc,
                                  argv,
                                  i,
-                                 "--centralserver", // no short form
-                                 "--centralserver",
+                                 "--centralserver",   // no, it's not a short form...
+                                 "--directoryserver", // ugh... well, we only just added it...
                                  strArgument ) )
         {
-            strDirectoryServer = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server: %1" ).arg ( strDirectoryServer ) );
-            CommandLineOptions << "--directoryserver";
-            ServerOnlyOptions << "--directoryserver";
+            strDirectory = strArgument;
+            qInfo() << qUtf8Printable ( QString ( "- register with directory: %1" ).arg ( strDirectory ) );
+            CommandLineOptions << "--directory";
+            ServerOnlyOptions << "--directory";
             continue;
         }
 
@@ -292,7 +292,7 @@ int main ( int argc, char** argv )
                                  strArgument ) )
         {
             strServerListFileName = strArgument;
-            qInfo() << qUtf8Printable ( QString ( "- directory server persistence file: %1" ).arg ( strServerListFileName ) );
+            qInfo() << qUtf8Printable ( QString ( "- server list persistence file: %1" ).arg ( strServerListFileName ) );
             CommandLineOptions << "--directoryfile";
             ServerOnlyOptions << "--directoryfile";
             continue;
@@ -669,13 +669,13 @@ int main ( int argc, char** argv )
             if ( !strServerListFileName.isEmpty() )
             {
                 qInfo() << "Note:"
-                        << "Server list persistence file will only take effect when running as a directory server.";
+                        << "Server list persistence file will only take effect when running as a directory.";
             }
 
             if ( !strServerListFilter.isEmpty() )
             {
                 qInfo() << "Note:"
-                        << "Server list filter will only take effect when running as a directory server.";
+                        << "Server list filter will only take effect when running as a directory.";
             }
         }
         else
@@ -689,7 +689,7 @@ int main ( int argc, char** argv )
             }
             // therefore we know everything based on command line options
 
-            if ( strDirectoryServer.compare ( "localhost", Qt::CaseInsensitive ) == 0 || strDirectoryServer.compare ( "127.0.0.1" ) == 0 )
+            if ( strDirectory.compare ( "localhost", Qt::CaseInsensitive ) == 0 || strDirectory.compare ( "127.0.0.1" ) == 0 )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
@@ -751,22 +751,22 @@ int main ( int argc, char** argv )
             {
                 if ( !strServerListFileName.isEmpty() )
                 {
-                    qWarning() << "Server list persistence file will only take effect when running as a directory server.";
+                    qWarning() << "Server list persistence file will only take effect when running as a directory.";
                     strServerListFileName = "";
                 }
 
                 if ( !strServerListFilter.isEmpty() )
                 {
-                    qWarning() << "Server list filter will only take effect when running as a directory server.";
+                    qWarning() << "Server list filter will only take effect when running as a directory.";
                     strServerListFileName = "";
                 }
             }
 
-            if ( strDirectoryServer.isEmpty() )
+            if ( strDirectory.isEmpty() )
             {
                 if ( !strServerPublicIP.isEmpty() )
                 {
-                    qWarning() << "Server Public IP will only take effect when registering a server with a directory server.";
+                    qWarning() << "Server Public IP will only take effect when registering a server with a directory.";
                     strServerPublicIP = "";
                 }
             }
@@ -996,7 +996,7 @@ int main ( int argc, char** argv )
                              iPortNumber,
                              iQosNumber,
                              strHTMLStatusFileName,
-                             strDirectoryServer,
+                             strDirectory,
                              strServerListFileName,
                              strServerInfo,
                              strServerPublicIP,
@@ -1049,8 +1049,8 @@ int main ( int argc, char** argv )
                 qInfo() << qUtf8Printable ( GetVersionAndNameStr ( false ) );
 
                 // CServerListManager defaults to AT_NONE, so need to switch if
-                // strDirectoryServer is wanted
-                if ( !strDirectoryServer.isEmpty() )
+                // strDirectory is wanted
+                if ( !strDirectory.isEmpty() )
                 {
                     Server.SetDirectoryType ( AT_CUSTOM );
                 }
@@ -1115,10 +1115,10 @@ QString UsageArguments ( char** argv )
            "\n"
            "Server only:\n"
            "  -d, --discononquit    disconnect all Clients on quit\n"
-           "  -e, --directoryserver address of the directory Server with which to register\n"
-           "                        (or 'localhost' to host a server list on this Server)\n"
-           "      --directoryfile   Remember registered Servers even if the Directory is restarted. Directory Servers only.\n"
-           "  -f, --listfilter      Server list whitelist filter.  Format:\n"
+           "  -e, --directory       address of the Directory with which to register\n"
+           "                        (or 'localhost' to run as a Directory)\n"
+           "      --directoryfile   File to hold server list across Directory restarts. Directories only.\n"
+           "  -f, --listfilter      Server list whitelist filter. Directories only. Format:\n"
            "                        [IP address 1];[IP address 2];[IP address 3]; ...\n"
            "  -F, --fastupdate      use 64 samples frame size mode\n"
            "  -l, --log             enable logging, set file name\n"

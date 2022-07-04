@@ -184,8 +184,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     /*
      * Init server list entry (server info for this server) with defaults.
      *
-     * The client will use the built in or custom address when retrieving the server list from a directory.
      * The values supplied here only apply when using the server as a server, not as a directory.
+     * Note that the client will use the directory address (i.e. the address the server list was returned from)
+     * when connecting to a directory as a server.
      *
      * If we are a directory, we assume that we are a permanent server.
      */
@@ -402,7 +403,7 @@ void CServerListManager::SetIsDirectoryServer()
     // this is called with the lock set
 
     // per definition: If we are registered and the directory
-    // is the localhost address, we are in directory server mode.
+    // is the localhost address, we are in directory mode.
     bool bNIsDirectoryServer = DirectoryType == AT_CUSTOM &&
                                ( !strDirectoryAddress.compare ( "localhost", Qt::CaseInsensitive ) || !strDirectoryAddress.compare ( "127.0.0.1" ) );
 
@@ -415,13 +416,13 @@ void CServerListManager::SetIsDirectoryServer()
 
     if ( bIsDirectoryServer )
     {
-        qInfo() << "Now a directory";
+        qInfo() << qUtf8Printable ( tr ( "Now a directory" ) );
         // Load any persistent server list (create it if it is not there)
         (void) Load();
     }
     else
     {
-        qInfo() << "No longer a directory server";
+        qInfo() << qUtf8Printable ( tr ( "No longer a directory" ) );
     }
 }
 
@@ -494,15 +495,15 @@ void CServerListManager::Register()
         // in OnTimerCLRegisterServerResp on failure
         TimerCLRegisterServerResp.start();
 
-        // start timer for registering this server at the directory server
+        // start timer for registering this server at the directory
         // 1 minute = 60 * 1000 ms
         TimerRefreshRegistration.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
 
-        // Start timer for ping the directory server in short intervals to
+        // Start timer for ping the directory in short intervals to
         // keep the port open at the NAT router.
         // If no NAT is used, we send the messages anyway since they do
         // not hurt (very low traffic). We also reuse the same update
-        // time as used in the directory server for pinging the registered
+        // time as used in the directory for pinging the registered
         // servers.
         TimerPingServers.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
 
@@ -512,7 +513,7 @@ void CServerListManager::Register()
     }
 }
 
-/* Directory server list functionality ****************************************/
+/* Server list functionality **************************************************/
 void CServerListManager::OnTimerPingServerInList()
 {
     QMutexLocker locker ( &Mutex );
@@ -534,7 +535,7 @@ void CServerListManager::OnTimerPollList()
 
     QMutexLocker locker ( &Mutex );
 
-    // Check all list entries are still valid (omitting the directory server itself)
+    // Check all list entries are still valid (omitting the directory itself)
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
         // 1 minute = 60 * 1000 ms
@@ -601,7 +602,7 @@ void CServerListManager::Append ( const CHostAddress&    InetAddr,
 
         // Check if server is already registered.
         // The very first list entry must not be checked since
-        // this is per definition the directory server (i.e., this server)
+        // this is per definition the directory (i.e., this server)
         int iSelIdx = IndexOf ( InetAddr );
 
         // if server is not yet registered, we have to create a new entry
@@ -643,7 +644,7 @@ void CServerListManager::Remove ( const CHostAddress& InetAddr )
         QMutexLocker locker ( &Mutex );
 
         // Find the server to unregister in the list. The very first list entry
-        // must not be removed since this is per definition the directory server
+        // must not be removed since this is per definition the directory
         // (i.e., this server).
         int iIdx = IndexOf ( InetAddr );
         if ( iIdx > 0 )
@@ -735,7 +736,7 @@ int CServerListManager::IndexOf ( CHostAddress haSearchTerm )
     // Called with lock set.
 
     // Find the server in the list. The very first list entry
-    // per definition is the directory server
+    // per definition is the directory
     // (i.e., this server).
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
@@ -780,14 +781,14 @@ bool CServerListManager::Load()
 
     if ( !file.open ( QIODevice::ReadWrite | QIODevice::Text ) )
     {
-        qWarning() << qUtf8Printable (
-            QString ( "Could not open '%1' for read/write.  Please check that %2 has permission (and that there is free space)." )
-                .arg ( ServerListFileName )
-                .arg ( APP_NAME ) );
+        qWarning() << qUtf8Printable ( QString ( tr ( "Could not open '%1' for read/write. "
+                                                      "Please check that %2 has permission (and that there is free space)." ) )
+                                           .arg ( ServerListFileName )
+                                           .arg ( APP_NAME ) );
         ServerListFileName.clear();
         return false;
     }
-    qInfo() << "Loading persistent server list file:" << ServerListFileName;
+    qInfo() << qUtf8Printable ( QString ( tr ( "Loading persistent server list file: %1" ) ).arg ( ServerListFileName ) );
 
     // do not lose our entry
     CServerListEntry serverListEntry = ServerList[0];
@@ -850,7 +851,7 @@ void CServerListManager::Save()
     if ( !file.open ( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
     {
         // Not a useable file
-        qWarning() << QString ( tr ( "Could not write to '%1'" ) ).arg ( ServerListFileName );
+        qWarning() << qUtf8Printable ( QString ( tr ( "Could not write to '%1'" ) ).arg ( ServerListFileName ) );
         ServerListFileName.clear();
 
         return;
@@ -861,7 +862,7 @@ void CServerListManager::Save()
     // (that's this server, which is added automatically on start up, not read)
     for ( int iIdx = ServerList.size() - 1; iIdx > 0; iIdx-- )
     {
-        qInfo() << qUtf8Printable ( QString ( "Saving registration for %1 (%2): %3" )
+        qInfo() << qUtf8Printable ( QString ( tr ( "Saving registration for %1 (%2): %3" ) )
                                         .arg ( ServerList[iIdx].HostAddr.toString() )
                                         .arg ( ServerList[iIdx].LHostAddr.toString() )
                                         .arg ( ServerList[iIdx].strName ) );
@@ -910,8 +911,8 @@ void CServerListManager::OnTimerPingServers()
     // first check if directory address is valid
     if ( !( DirectoryAddress == CHostAddress() ) )
     {
-        // send empty message to directory server to keep NAT port open -> we do
-        // not require any answer from the directory server
+        // send empty message to directory to keep NAT port open -> we do
+        // not require any answer from the directory
         pConnLessProtocol->CreateCLEmptyMes ( DirectoryAddress );
     }
 }

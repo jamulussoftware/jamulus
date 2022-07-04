@@ -81,7 +81,7 @@
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunas muestras de audio son de</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
@@ -1039,12 +1039,12 @@
     <message>
         <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si este indicador LED se vuelve rojo, se interrumpe el flujo de audio.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Estado Actual de Conexión</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="288"/>
@@ -1079,7 +1079,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si este indicador LED se vuelve rojo, no te divertirás demasiado utilizando %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
@@ -1572,7 +1572,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <location filename="../clientsettingsdlg.cpp" line="200"/>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunos drivers de tarjetas de sonido no permiten cambiar el retardo de buffer desde %1. En este caso la configuración del retardo de buffer está deshabilitada y debe cambiarse utilizando el driver de la tarjeta de sonido. Utiliza la herramienta apropiada del interfaz en uso para ajustar este tamalo de buffer. Por ejemplo, si utilizas ASIO, usa el botón de &quot;Configuración Dispositivo ASIO&quot; para abrir el panel de configuración del driver o si utilizas JACK, usa una herramienta como QjackCtl para ajustar el tamaño del buffer. Otros interfaces, como Pipewire, requerirán el uso de la herramienta apropiada. Por favor consulta el manual del interfaz.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
@@ -1660,17 +1660,17 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Alertas Sonoras</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Activa la alerta sonora al recibir un mensaje de chat y cuando un nuevo cliente se une a la sesión. Para escuchar las alertas puede ser necesario un segundo dispositivo de audio.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>Audio Alerts check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Casilla Alertas Sonoras</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
@@ -2711,7 +2711,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Alertas Sonoras</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2948,12 +2948,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si conoces la dirección del servidor, puedes conectarte a él utilizando el campo de Nombre/Dirección Servidor. Opcionalmente se puede añadir un número de puerto tras la dirección del servidor utilizando dos puntos como separador, por ej. %1. El campo también mostrará una lista de las direcciones de servidores utilizadas más recientemente.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Contiene la dirección del servidor actual. También guarda direcciones antiguas en la lista desplegable.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -3585,113 +3585,114 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
         <source>Directory Type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Desplegable Tipo de Directorio</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished">Directorio</translation>
+        <translation>Directorio</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona &apos;%1&apos; para no registrar tu servidor en un directorio.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona uno de los géneros para registrarte en ese directorio.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>O selecciona &apos;%1&apos; y especifica una dirección de Directorio Personalizado en la pestaña de Opciones para registrarte en un directorio personalizado.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para cualquier valor excepto &apos;%1&apos;, este servidor se registra en un directorio para que un usuario de %2 pueda seleccionar este servidor de la lista de servidores en la ventana de conexión del cliente cuando escogen ese directorio.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista de servidores en la ventana de conexión están realmente disponibles.</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuando se escoge un valor distinto a &quot;%1&quot; para el Directorio, esto mostrará si el registro ha tenido éxito. Si el registro fracasa, por favor elige otro directorio.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha establecido un directorio de grabación o el valor no puede utilizarse. Comprueba el valor en la pestaña de Opciones.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si el directorio de grabaciones no puede utilizarse, se mostrará el problema en lugar del directorio de la sesión.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsa el botón para abrir la ventana que permite seleccionar el directorio principal de grabaciones. El valor escogido debe existir y tener permiso de escritura (permitir la creación de sub-directorios por parte del usuario ejecutando %1).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>El valor actual del directorio principal de grabaciones. El valor escogido debe existir y tener permisos de escritura (permitir la creación de sub-directorios por parte del usuario ejecutando %1). Pulsa el botón para abrir el diálogo que permite seleccionar el directorio principal de grabaciones.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección Directorio Personalizado</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>La dirección del Directorio Personalizado es la dirección del directorio que contiene la lista de servidores al cual debe añadirse este servidor.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botón ventana Nombre Archivo Lista de Servidores</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre Archivo Lista de Servidores</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsa el botón para abrir la ventana que permite establecer el nombre del archivo de persistencia para la lista de servidores. El usuario ejecutando %1 debe poder crear el nombre de archivo especificado aunque ya exista (se sobreescribirá al guardar).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Caja texto Nombre Archivo Lista de Servidores (solo lectura)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor actual del nombre del archivo de persistencia para la lista de servidores. El usuario ejecutando %1 debe poder crear el nombre de archivo especificado aunque ya exista (se sobreescribirá al guardar).Pulsa el botón para abrir la ventana que permite establecer el nombre del archivo de persistencia para la lista de servidores.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaciar el botón del nombre del archivo de lista de servidores</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaciar Nombre del Archivo de Lista de Servidores</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsa el botón para vaciar el nombre del archivo de persistencia para la lista de servidores actualmente seleccionado. Esto impedirá la persistencia de la lista de servidores hasta que se seleccione un nuevo valor.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
@@ -4064,7 +4065,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
+        <translation>Ahora un servidor de directorios</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="870"/>
@@ -4165,12 +4166,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.h" line="583"/>
         <source>None</source>
-        <translation type="unfinished">Ninguno</translation>
+        <translation>Ninguno</translation>
     </message>
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation>No registrado</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
@@ -4215,7 +4216,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.h" line="657"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor desconocido %1</translation>
     </message>
     <message>
         <source>Unknown value </source>
@@ -4262,7 +4263,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesión</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
@@ -4277,12 +4278,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección Directorio Personalizado</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre Archivo Lista de Servidores</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
@@ -4334,7 +4335,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished">Directorio</translation>
+        <translation>Directorio</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -4703,12 +4704,13 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 no pudo encontrar un dispositivo de audio %2.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Quizá puedas arreglar errores en la configuración del driver. ¿Quieres abrir la configuración ahora?</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <source>No usable %1 audio device found.</source>
@@ -4742,7 +4744,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <location filename="../util.cpp" line="1566"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished">%1, Versión %2</translation>
+        <translation>%1, Versión %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1583"/>

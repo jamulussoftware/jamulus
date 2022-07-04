@@ -237,7 +237,7 @@ void CConnectDlg::RequestServerList()
     }
     cbxDirectoryServer->blockSignals ( false );
 
-    // Get the IP address of the directory (using the ParseNetworAddress
+    // Get the IP address of the directory (using the ParseNetworkAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it. Note that in case of custom directories we
     // use iCustomDirectoryIndex as an index into the vector.

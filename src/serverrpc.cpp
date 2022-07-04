@@ -106,7 +106,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
     /// @result {string} result.city - The server city.
     /// @result {number} result.countryId - The server country ID (see QLocale::Country).
     /// @result {string} result.welcomeMessage - The server welcome message.
-    /// @result {string} result.directoryServer - The directory server to which this server requested registration, or blank if none.
+    /// @result {string} result.directoryServer - The directory to which this server requested registration, or blank if none.
     /// @result {string} result.registrationStatus - The server registration status as string (see ESvrRegStatus and SerializeRegistrationStatus).
     pRpcServer->HandleMethod ( "jamulusserver/getServerProfile", [=] ( const QJsonObject& params, QJsonObject& response ) {
         QString dsName = "";
@@ -119,7 +119,7 @@ CServerRpc::CServerRpc ( CServer* pServer, CRpcServer* pRpcServer, QObject* pare
             { "city", pServer->GetServerCity() },
             { "countryId", pServer->GetServerCountry() },
             { "welcomeMessage", pServer->GetWelcomeMessage() },
-            { "directoryServer", dsName },
+            { "directoryServer", dsName }, // TODO rename to 'directory' and update doccomment in line
             { "registrationStatus", SerializeRegistrationStatus ( pServer->GetSvrRegStatus() ) },
         };
         response["result"] = result;
@@ -233,7 +233,7 @@ QJsonValue CServerRpc::SerializeRegistrationStatus ( ESvrRegStatus eSvrRegStatus
         return "registered";
 
     case SRS_SERVER_LIST_FULL:
-        return "directory_server_full";
+        return "directory_server_full"; // TODO - remove '_server'
 
     case SRS_VERSION_TOO_OLD:
         return "server_version_too_old";

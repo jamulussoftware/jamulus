@@ -200,6 +200,6 @@ During compile time some CONFIG arguments can be given to enable or disable spec
 | `jackonmac`             | Use JACK instead of CoreAudio on macOS (untested)                       |
 | `server_bundle`         | macOS only: Create an application bundle which starts server by default |
 | `opus_shared_lib`       | Use external OPUS library                                               |
-| `disable_version_check` | Disable message shown when an update is available                       |
+| `disable_version_check` | Skip checks for version updates                                         |
 | `noupcasename`          | Compile Jamulus binary as lower case "jamulus" instead of "Jamulus"     |
 | `raspijamulus`          | Use raspijamulus.sh specific enhancements for build on Raspberry Pi     |

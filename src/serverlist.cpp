@@ -385,7 +385,7 @@ void CServerListManager::SetIsDirectoryServer()
 
     if ( bIsDirectoryServer )
     {
-        qInfo() << "Now a directory server";
+        qInfo() << "Now a directory";
         // Load any persistent server list (create it if it is not there)
         (void) Load();
     }

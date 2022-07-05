@@ -3648,6 +3648,11 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <translation>Avvia ridotto a icona all&apos;avvio del sistema operativo</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
         <translation type="vanished">Se è selezionato l&apos;avvio in modalità minimizzata il server </translation>
     </message>
@@ -4011,11 +4016,6 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <translation>Registrazione non avviata. Controlla lo spazio su disco e le autorizzazioni disponibili e riprova. Errore: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>ERRORE</translation>
@@ -4140,8 +4140,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Server Directory pieno</translation>
+        <translation type="vanished">Server Directory pieno</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

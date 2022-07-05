@@ -3635,6 +3635,11 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation>Starte minimiert beim Starten des Betriebssystems</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
         <translation type="vanished">Wenn diese Funktion angehakt ist, dann wird der </translation>
     </message>
@@ -4002,11 +4007,6 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation>Aufnahme konnte nicht gestartet werden. Bitte überprüfe den verfügbaren Speicherplatz sowie die Zugriffsrechte und versuche es erneut. Fehler: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>FEHLER</translation>
@@ -4139,8 +4139,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Verzeichnisserver voll</translation>
+        <translation type="vanished">Verzeichnisserver voll</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

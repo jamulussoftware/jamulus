@@ -3325,6 +3325,11 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Om kryssrutan Starta minimerad på operativsystemets start är markerad kommer servern att startas när operativsystemet startar och minimeras automatiskt till en ikon för systemaktivitetsfält.</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Show Creative Commons Licence Dialog</source>
         <translation type="vanished">Visa Creative Commons licensedialog</translation>
     </message>
@@ -3637,11 +3642,6 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
         <translation>Inspelningen kunde inte starta. Kontrollera tillgängligt diskutrymme och behörigheter och försök igen. Fel: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>FEL</translation>
@@ -3766,8 +3766,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Katalogservern är full</translation>
+        <translation type="vanished">Katalogservern är full</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

@@ -2883,11 +2883,6 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>录音功能启动失败。请检查可用的磁盘空间和权限然后再试一次。错误信息: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>错误</translation>
@@ -3040,6 +3035,11 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation>退出(&amp;E)</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;Hide </source>
         <translation type="vanished">隐藏(&amp;H) </translation>
     </message>
@@ -3126,8 +3126,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>目录列表已满</translation>
+        <translation type="vanished">目录列表已满</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

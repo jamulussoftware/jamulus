@@ -3631,6 +3631,11 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <translation>Iniciar Minimizado com o Sistema Operativo</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
         <translation type="vanished">Se a caixa de seleção Iniciar Minimizado com o Sistema Operativo estiver marcada, o servidor </translation>
     </message>
@@ -3994,11 +3999,6 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <translation>O Gravador falhou a inicialização. Por favor verifique se tem espaço em disco e permições e tente de novo. Erro: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>ERRO</translation>
@@ -4135,8 +4135,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Servidor de Diretório cheio</translation>
+        <translation type="vanished">Servidor de Diretório cheio</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

@@ -3701,7 +3701,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Ahora un directorio</translation>
     </message>
     <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
@@ -4200,7 +4200,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     <message>
         <location filename="../util.h" line="648"/>
         <source>Directory server list full</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de servidores llena en Directorio</translation>
     </message>
     <message>
         <source>Directory Server full</source>

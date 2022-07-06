@@ -727,6 +727,10 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : CBaseDlg ( parent )
                               "</b></p>"
                               "<p>Daniel (<a href=\"https://github.com/genesisproject2020\">genesisproject2020</a>)</p>"
                               "<p><b>" +
+                              tr ( "Korean" ) +
+                              "</b></p>"
+                              "<p>Jung-Kyu Park (<a href=\"https://github.com/bagjunggyu\">bagjunggyu</a>)</p>"
+                              "<p><b>" +
                               tr ( "Slovak" ) +
                               "</b></p>"
                               "<p>Jose Riha (<a href=\"https://github.com/jose1711\">jose1711</a>)</p>" +

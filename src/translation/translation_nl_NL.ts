@@ -77,7 +77,7 @@
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommige geluiden komen van</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
@@ -1062,17 +1062,17 @@
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Als deze LED-indicator rood wordt, zult u niet veel plezier beleven aan het gebruik van %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Als deze LED-indicator rood wordt, dan wordt de audiostream onderbroken.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Huidige verbindingsstatus</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="313"/>
@@ -2007,7 +2007,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../clientsettingsdlg.cpp" line="200"/>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sommige stuurprogramma&apos;s van geluidskaarten staan niet toe dat de buffervertraging vanuit %1 kan worden gewijzigd. In dat geval is de buffervertragingsinstelling uitgeschakeld en moet deze worden gewijzigd via het stuurprogramma van de geluidskaart. Gebruik de juiste tool voor de gebruikte interface om deze buffergrootte aan te passen. Als u bijvoorbeeld ASIO gebruikt, gebruikt u de knop &quot;ASIO Apparaatinstellingen&quot; om het paneel met driverinstellingen te openen of als u JACK gebruikt, gebruikt u een tool zoals QjackCtl om de buffergrootte aan te passen. Voor andere interfaces, zoals Pipewire, moet het juiste programma worden gebruikt. Raadpleeg hiervoor de handleiding van de interface.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
@@ -2081,17 +2081,17 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiowaarschuwingen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schakel audiowaarschuwing in bij ontvangst van een chatbericht en wanneer een nieuwe client deelneemt aan de sessie. Er kan een tweede geluidsapparaat nodig zijn om de waarschuwingen te horen.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>Audio Alerts check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiowaarschuwingen checkbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
@@ -2663,7 +2663,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiowaarschuwingen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2900,12 +2900,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Als u het serveradres weet, kunt u er verbinding mee maken via het veld Servernaam/Adres. Een optioneel poortnummer kan worden toegevoegd na het serveradres met een dubbele punt als scheidingsteken, b.v. %1. Het veld toont ook een lijst met de meest recent gebruikte serveradressen.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevat het huidige serveradres. Het slaat ook oude adressen op in de keuzelijst.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -3529,113 +3529,113 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
         <source>Directory Type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresboek type combobox</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished">Adresboek</translation>
+        <translation>Adresboek</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer &apos;%1&apos; om uw server niet in een adresboek te registreren.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer een genre om te registreren bij die adresboek.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Of selecteer &apos;%1&apos; en geef een eigen adresboek op in het tabblad Opties om u te registreren bij een aangepast adresboek.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voor elke waarde behalve &apos;%1&apos; registreert deze server zich bij een adresboek zodat een %2-gebruiker deze server kan selecteren in de serverlijst van het verbindingsvenster wanneer hij het betreffende adresboek kiest.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translation>De registratie van de server wordt periodiek vernieuwd om er zeker van te zijn dat alle servers in het verbindingsvenster ook daadwerkelijk beschikbaar zijn.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wanneer een andere waarde dan &quot;%1&quot; wordt gekozen voor adresboek zal dit laten zien of de registratie is gelukt. Als de registratie is mislukt, kiest u een ander adresboek.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen opnamedirectory ingesteld of de waarde is niet bruikbaar. Controleer de waarde in het tabblad Opties.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Als de opnamedirectory niet bruikbaar is, wordt het probleem weergegeven in plaats van de sessiedirectory.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd. De gekozen waarde moet bestaan ​​en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>De huidige waarde van de opnamedirectory. De gekozen waarde moet bestaan ​​en schrijfbaar zijn (laat het maken van submappen door de gebruiker toe die %1 uitgevoerd). Klik op de knop om het dialoogvenster te openen waarin de opnamedirectory kan worden geselecteerd.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigen adresboek adres</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het eigen adresboek adres is het adres van het adresboek met de serverlijst waaraan deze server moet worden toegevoegd.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverlijst bestandsnaam drukknop</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverlijst bestandsnaam</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik op de knop om het dialoogvenster te openen waarmee de bestandsnaam voor de serverlijst kan worden ingesteld. De gebruiker %1 is actief om de opgegeven bestandsnaam te kunnen maken, hoewel deze mogelijk al bestaat (deze wordt overschreven bij het opslaan).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverlijst bestandsnaam tekstvak (alleen lezen)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation>De huidige waarde van de serverlijst bestandsnaam. De gebruiker %1 is actief om de opgegeven bestandsnaam te kunnen maken, hoewel deze mogelijk al bestaat (deze wordt overschreven bij het opslaan). Klik op de knop om het dialoogvenster te openen waarmee de bestandsnaam voor de serverlijst kan worden ingesteld.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished"></translation>
+        <translation>Wis serverlijst bestandsnaam drukknop</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Wis serverlijst bestandsnaam</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik op de knop om de momenteel geselecteerde bestandsnaam van de serverlijst te wissen. Dit voorkomt dat de serverlijst wordt bewaard totdat een nieuwe waarde is geselecteerd.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
@@ -3645,7 +3645,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Nu een adresboek</translation>
     </message>
     <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
@@ -4113,12 +4113,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.h" line="583"/>
         <source>None</source>
-        <translation type="unfinished">Geen</translation>
+        <translation>Geen</translation>
     </message>
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Niet geregistreerd</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
@@ -4148,7 +4148,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.h" line="648"/>
         <source>Directory server list full</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresboek server lijst vol</translation>
     </message>
     <message>
         <source>Directory Server full</source>
@@ -4167,7 +4167,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.h" line="657"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende waarde %1</translation>
     </message>
     <message>
         <source>Unknown value </source>
@@ -4214,7 +4214,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessie</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
@@ -4229,12 +4229,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigen adresboek adres</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverlijst bestandsnaam</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
@@ -4286,7 +4286,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished">Adresboek</translation>
+        <translation>Adresboek</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -4655,12 +4655,12 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 kan geen geschikt %2 audioapparaat vinden.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Mogelijk kunt u fouten in de instellingen van het stuurprogramma herstellen. Wilt u deze instellingen nu openen?</translation>
     </message>
     <message>
         <source>No usable %1 audio device found.</source>
@@ -4694,7 +4694,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
         <location filename="../util.cpp" line="1566"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished">%1, Versie %2</translation>
+        <translation>%1, versie %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1583"/>

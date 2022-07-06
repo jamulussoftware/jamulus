@@ -139,6 +139,14 @@ jobs:
             # Latest Xcode which runs on macos-11:
             xcode_version:          13.4.1
 
+          - config_name:            MacOS arm64 (artifacts)
+            target_os:              macos
+            building_on_os:         macos-12
+            base_command:           QT_VERSION=6.3.1 SIGN_IF_POSSIBLE=1 TARGET_ARCH=arm64 ARTIFACT_SUFFIX=_arm64 ./.github/autobuild/mac.sh
+            # Disable CodeQL on mac as it interferes with signing the binaries (signing hangs, see #2563 and #2564)
+            run_codeql:             false
+            xcode_version:          13.4.1
+
           # Reminder: If Legacy is removed, be sure to add a dedicated job for CodeQL again.
           - config_name:            MacOS Legacy (artifacts+CodeQL)
             target_os:              macos

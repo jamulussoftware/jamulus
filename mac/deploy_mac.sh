@@ -38,7 +38,11 @@ build_app() {
     local client_or_server="${1}"
 
     # Build Jamulus
-    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${@:2}"
+    declare -a BUILD_ARGS=("_UNUSED_DUMMY=''")  # old bash fails otherwise
+    if [[ "${TARGET_ARCH:-}" ]]; then
+        BUILD_ARGS=("QMAKE_APPLE_DEVICE_ARCHS=${TARGET_ARCH}" "QT_ARCH=${TARGET_ARCH}")
+    fi
+    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" "${BUILD_ARGS[@]}" "${@:2}"
     local target_name
     target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
     local job_count

@@ -3408,6 +3408,11 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <translation>Lista wyboru języka</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user Jamulus is running as).</source>
         <translation type="vanished">Kliknij przycisk aby otworzyć okno dialogowe wyboru głownego katalogu nagrywania. Wybrana ścieżka musi istnieć i mieć ustawione prawo do zapisu i tworzenia podkatalogów przez użytkownika uruchamiającego Jamulus-a.</translation>
     </message>
@@ -3455,11 +3460,6 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <location filename="../serverdlg.cpp" line="602"/>
         <source>Select Main Recording Directory</source>
         <translation>Wybierz katalog nagrywania</translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="870"/>
@@ -3662,8 +3662,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Serwer zbiorczy zapełniony</translation>
+        <translation type="vanished">Serwer zbiorczy zapełniony</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

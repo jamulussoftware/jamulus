@@ -3284,6 +3284,11 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Custom Directory</source>
         <translation type="vanished">Vlastný adresár</translation>
     </message>
@@ -3321,11 +3326,6 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <location filename="../serverdlg.cpp" line="590"/>
         <source>Recorder failed to start. Please check available disk space and permissions and try again. Error: </source>
         <translation>Nahrávanie sa nepodarilo spustiť. Skontrolujte, prosím, či je na disku dosť miesta a práva na zápis a skúste to znovu. Chyba: </translation>
-    </message>
-    <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="870"/>
@@ -3471,8 +3471,12 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Adresárový server je plný</translation>
+        <translation type="vanished">Adresárový server je plný</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

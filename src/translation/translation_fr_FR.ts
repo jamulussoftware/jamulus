@@ -3133,6 +3133,11 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <translation>Démarrage minimisé au lancement du système d&apos;exploitation</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Make My Server Public</source>
         <translation type="vanished">Rendre mon serveur public</translation>
     </message>
@@ -3426,11 +3431,6 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
         <translation>L&apos;enregistreur n&apos;a pas réussi à démarrer. Veuillez vérifier l&apos;espace disque disponible et les permissions et réessayer. Erreur : </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>ERREUR</translation>
@@ -3619,8 +3619,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Serveur annuaire plein</translation>
+        <translation type="vanished">Serveur annuaire plein</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

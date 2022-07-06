@@ -3699,6 +3699,11 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation>Arranca Minimizado al Arrancar Sistema Operativo</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
         <translation type="vanished">Si se activa el arranque al arrancar el sistema operativo, el </translation>
     </message>
@@ -4194,8 +4199,12 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Servidor de Directorio lleno</translation>
+        <translation type="vanished">Servidor de Directorio lleno</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

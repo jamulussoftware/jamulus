@@ -3673,6 +3673,11 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation>Iniciar Minimizado com o Sistema Operacional</translation>
     </message>
     <message>
+        <location filename="../serverdlg.cpp" line="737"/>
+        <source>Now a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
         <translation type="vanished">Se a caixa de seleção Iniciar Minimizado com o Sistema Operativo estiver marcada, o servidor </translation>
     </message>
@@ -4036,11 +4041,6 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <translation>O gravador falhou ao iniciar. Verifique o espaço em disco disponível e as permissões e tente novamente. Erro: </translation>
     </message>
     <message>
-        <location filename="../serverdlg.cpp" line="737"/>
-        <source>Now a directory server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
         <translation>ERRO</translation>
@@ -4177,8 +4177,12 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../util.h" line="648"/>
+        <source>Directory server list full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directory Server full</source>
-        <translation>Servidor de Diretório cheio</translation>
+        <translation type="vanished">Servidor de Diretório cheio</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

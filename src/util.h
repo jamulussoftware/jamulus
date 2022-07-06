@@ -645,7 +645,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
         return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
     case SRS_SERVER_LIST_FULL:
-        return QCoreApplication::translate ( "CServerDlg", "Directory Server full" );
+        return QCoreApplication::translate ( "CServerDlg", "Directory server list full" );
 
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );

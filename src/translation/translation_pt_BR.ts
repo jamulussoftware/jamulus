@@ -2939,7 +2939,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation>Contém o endereço do servidor atual. Também armazena endereços  antigos na lista do seletor.</translation>
+        <translation>Contém o endereço do servidor atual. Também armazena endereços antigos na lista do seletor.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>

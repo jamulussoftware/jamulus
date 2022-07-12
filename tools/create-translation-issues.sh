@@ -53,6 +53,7 @@ TRANSLATORS_BY_LANG[app_pt_PT]="Snayler"
 TRANSLATORS_BY_LANG[app_sk_SK]="jose1711"
 TRANSLATORS_BY_LANG[app_sv_SE]="genesisproject2020"
 TRANSLATORS_BY_LANG[app_zh_CN]="BLumia"
+TRANSLATORS_BY_LANG[app_ko_KR]="bagjunggyu"
 # Web translators:
 TRANSLATORS_BY_LANG[web_de]="Helondeth,ewarning"
 TRANSLATORS_BY_LANG[web_es]="ignotus666"

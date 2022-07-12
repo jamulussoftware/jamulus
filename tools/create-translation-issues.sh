@@ -125,7 +125,11 @@ Please [replace with new URLs](https://github.com/jamulussoftware/jamuluswebsite
 
 <!-- add URLs here-->
 
-![settings-profile](https://user-images.githubusercontent.com/4561747/150635632-df083c6e-94d2-4ab8-a81c-18c7cc0c158d.png)
+![settings-profile](https://user-images.githubusercontent.com/4561747/178144679-bef8518c-f095-4848-86bf-7639cb508505.png)
+
+![server-window-setup](https://user-images.githubusercontent.com/4561747/178142684-1b85e654-78be-4909-a76c-945d7a0f7ccc.png)
+
+![server-window-options](https://user-images.githubusercontent.com/4561747/178142687-da256fa5-d7b8-47ab-9265-63c3c9760841.png)
 
 '
 

@@ -49,7 +49,7 @@
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>部分音频采样来自</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
@@ -840,7 +840,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果此 LED 指示器变红，您可能无法很愉快的使用 %1。</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
@@ -855,7 +855,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果此 LED 指示器变红，音频流则为中断状态。</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="189"/>
@@ -865,7 +865,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>当前连接状态</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="313"/>
@@ -1393,7 +1393,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="200"/>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation type="unfinished"></translation>
+        <translation>部分声卡驱动不允许缓冲区延迟被调整到 %1。在此情况下，缓冲区延迟设置项会被禁用，此时需要从相应的显卡驱动中修改缓冲区大小的设置。例如，如果使用 ASIO，则使用“ASIO 设备选项”按钮来打开驱动设置面板，或是使用 JACK 时，使用类如 QjackCtl 的工具来调整缓冲区大小。其它音频介质，如 Pipewire，则需要使用其对应的设置工具来调整。请参照对应声卡驱动或音频介质的文档。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
@@ -1517,17 +1517,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>音频提示</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>当接收到聊天消息或新客户端加入到会话时启用音频提示。可能需要第二个音频设备以便听到对应的提示音。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>Audio Alerts check box</source>
-        <translation type="unfinished"></translation>
+        <translation>音频提示勾选框</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
@@ -2145,7 +2145,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>音频提示</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2334,12 +2334,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果你知道服务器地址，你可以使用服务器名称/地址一栏来连接到对应的服务器。一个可选的端口号可以附在后面，通过半角冒号作为分割符。例如：%1。此位置也将显示一个最近使用过的服务器地址的列表。</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>存储了当前服务器地址。在下拉列表中，也存储了旧的服务器地址列表。</translation>
     </message>
     <message>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 48 hours) are shown in bold.</source>
@@ -2895,42 +2895,42 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
         <source>Directory Type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>分类目录类型下拉框</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished">分类目录</translation>
+        <translation>分类目录</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择 &apos;%1&apos; 来避免将你的服务器登记到一个目录中。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择一个流派以登记到对应的目录中。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>或者选择 &apos;%1&apos; 并在设置选项卡中设置一个自定义目录地址来登记到一个自定义的目录中。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>对于选择除 &apos;%1&apos; 外的所有情况，此服务器都将登记到一个目录之中，以便 %2 用户可以从客户端的连接对话框中的服务器列表中选择并连接到此服务器。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器的登记情况会周期性的刷新，以确保连接对话框中列出的服务器都确实可用。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>当一个非“%1”的选项被作为目录选择时，此处将呈现登记情况是否成功的状态。若登记失败，则请选择一个其它的目录。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="108"/>
@@ -2960,73 +2960,73 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>未设置录音目录或设置的值不可用。请在设置选项卡中检查对应的选项。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果录制目录不可用，问题将会被显示在此位置。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>点击按钮以打开可供选择录制目录位置的对话框。  所选值必须存在且可写入（允许运行 %1 的用户创建子目录）。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>当前录制目录路径的值。所选的值必须存在且可被写入（允许运行 %1 的用户创建子目录）。点击按钮以打开供选择主录制目录路径的对话框。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义目录服务器地址</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义目录指用于提供连接对话框中所展示的服务器列表信息的自定义的目录服务器的地址或。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器列表文件名对话框按钮</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器列表文件名</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation type="unfinished"></translation>
+        <translation>点击按钮以打开供选择存储服务器列表文件位置的对话框。运行 %1 的用户需要能够能够创建此文件（若对应的文件已存在则将在保存时覆盖文件内容）。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器列表文件名编辑框（只读）</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation>当前持久存储服务器列表的文件名。运行 %1 的用户需要能够能够创建此文件（若对应的文件已存在则将在保存时覆盖文件内容）。点击按钮以打开可供设置持久存储服务器列表的文件名的对话框。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished"></translation>
+        <translation>清除服务器列表文件名的按钮</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>清除服务器列表文件名</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>点击按钮来清除当前所选的服务器列表持久化存储的文件名。这将导致服务器列表不再持久存储到本地，直至一个新的文件名被设置。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="241"/>
@@ -3037,7 +3037,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>现在是目录了</translation>
     </message>
     <message>
         <source>&amp;Hide </source>
@@ -3092,12 +3092,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="583"/>
         <source>None</source>
-        <translation type="unfinished">无</translation>
+        <translation>无</translation>
     </message>
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation>未登记</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
@@ -3127,7 +3127,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="648"/>
         <source>Directory server list full</source>
-        <translation type="unfinished"></translation>
+        <translation>目录服务器列表已满</translation>
     </message>
     <message>
         <source>Directory Server full</source>
@@ -3146,7 +3146,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="657"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation>未知的值 %1</translation>
     </message>
     <message>
         <source>Unknown value </source>
@@ -3193,7 +3193,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>会话</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
@@ -3208,12 +3208,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义目录服务器地址</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器列表文件名</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
@@ -3257,7 +3257,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished">分类目录</translation>
+        <translation>分类目录</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -3450,12 +3450,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 未发现可用的 %2 音频设备。&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translation>您可能可通过驱动设置来修复问题。要打开对应的设置吗？</translation>
     </message>
     <message>
         <source>No usable %1 audio device found.</source>
@@ -3493,7 +3493,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../util.cpp" line="1566"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished">%1，版本 %2</translation>
+        <translation>%1，版本 %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1583"/>

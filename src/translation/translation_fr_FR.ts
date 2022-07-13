@@ -1665,7 +1665,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="360"/>
         <source>Custom Directories</source>
-        <translation>Adresse personnalisée du serveur annuaire</translation>
+        <translation>Adresse personnalisée de l&apos;annuaire</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="361"/>
@@ -1675,7 +1675,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlg.cpp" line="368"/>
         <source>Custom Directories combo box</source>
-        <translation>Choix déroulant adresse personnalisée du serveur annuaire</translation>
+        <translation>Choix déroulant adresse personnalisée de l&apos;annuaire</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="371"/>
@@ -2446,7 +2446,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="986"/>
         <source>Custom Directories:</source>
-        <translation>Adresse personnalisée du serveur annuaire :</translation>
+        <translation>Adresse personnalisée de l&apos;annuaire :</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1025"/>
@@ -2485,7 +2485,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlg.cpp" line="45"/>
         <source>Directory</source>
-        <translation>Serveur annuaire</translation>
+        <translation>Annuaire</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="46"/>
@@ -2515,7 +2515,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlg.cpp" line="75"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation>La fenêtre de configuration de la connexion répertorie les serveurs disponibles enregistrés dans l&apos;annuaire sélectionné. Utilisez la liste déroulante Annuaires pour changer de serveur annuaire, trouvez le serveur que vous voulez rejoindre dans la liste, cliquez dessus, puis cliquez sur le bouton Connect pour vous connecter. Vous pouvez également double-cliquer sur le nom du serveur pour vous connecter.</translation>
+        <translation>La fenêtre de configuration de la connexion répertorie les serveurs disponibles enregistrés dans l&apos;annuaire sélectionné. Utilisez la liste déroulante Annuaires pour changer d&apos;annuaire, trouvez le serveur que vous voulez rejoindre dans la liste, cliquez dessus, puis cliquez sur le bouton &quot;se connecter&quot; pour vous connecter. Vous pouvez également double-cliquer sur le nom du serveur pour vous connecter.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="80"/>
@@ -2636,7 +2636,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation>Serveur annuaire</translation>
+        <translation>Annuaire</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="45"/>
@@ -3079,12 +3079,12 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>Custom Directory address</source>
-        <translation>Adresse personnalisée du serveur annuaire</translation>
+        <translation>Adresse personnalisée de l&apos;annuaire</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation>L&apos;adresse personnalisée du serveur annuaire est l&apos;adresse du serveur annuaire contenant la liste des serveurs à laquelle ce serveur doit être ajouté.</translation>
+        <translation>L&apos;adresse personnalisée del&apos;annuaire est l&apos;adresse de l&apos;annuaire contenant la liste des serveurs à laquelle ce serveur doit être ajouté.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
@@ -3463,7 +3463,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation>Ou sélectionnez &quot;%1&quot; et indiquez une adresse de serveur annuaire personnalisée dans l&apos;onglet Options pour vous inscrire dans un serveur annuaire personnalisé.</translation>
+        <translation>Ou sélectionnez &quot;%1&quot; et indiquez une adresse d&apos;annuaire personnalisée dans l&apos;onglet Options pour vous inscrire dans un annuaire personnalisé.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>

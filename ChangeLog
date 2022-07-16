@@ -1,5 +1,5 @@
 
-### 3.9.0beta2 <- NOTE: the release version number will be 3.9.0 ###
+### 3.8.2.dev <- NOTE: the release version number will be 3.9.0 ###
 
 - prefix in your PR descriptions? That way our script can pick the text up directly (#2640).
   (contributed by @chigkim)

@@ -403,6 +403,7 @@ protected slots:
     void OnControllerInFaderIsMute ( int iChannelIdx, bool bIsMute );
     void OnControllerInMuteMyself ( bool bMute );
     void OnClientIDReceived ( int iChanID );
+    void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

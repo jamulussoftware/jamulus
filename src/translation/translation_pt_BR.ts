@@ -1470,7 +1470,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="260"/>
         <source>ASIO Device Settings push button</source>
-        <translation>Botão de definições do dispositivo ASIO</translation>
+        <translation>Botão de Definições do Dispositivo ASIO</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
@@ -1485,7 +1485,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation>Selecione o idiomara para ser utilizado na interface do usuário.</translation>
+        <translation>Selecione o idioma para ser utilizado na interface do usuário.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="282"/>
@@ -2040,7 +2040,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
         <location filename="../clientsettingsdlg.cpp" line="200"/>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation>Alguns drivers de placa de som não permitem que o atraso do buffer seja alterado de dentro do %1. Nesse caso, a configuração de atraso do buffer está desabilitada e deve ser alterada usando o driver da placa de som. Use a ferramenta apropriada para a interface em uso para ajustar o tamanho do buffer. Por exemplo, se estiver usando ASIO, use o botão &quot;ASIO Device Settings&quot; para abrir o painel de configurações do driver ou se estiver usando JACK, use uma ferramenta como QjackCtl para ajustar o tamanho do buffer. Outras interfaces, como o Pipewire, exigem o uso de sua ferramenta apropriada. Consulte o manual da interface.</translation>
+        <translation>Alguns drivers de placa de som não permitem que o atraso do buffer seja alterado de dentro do %1. Nesse caso, a configuração de atraso do buffer está desabilitada e deve ser alterada usando o driver da placa de som. Use a ferramenta apropriada para a interface em uso para ajustar o tamanho do buffer. Por exemplo, se estiver usando ASIO, use o botão &quot;Definições de Dispositivo ASIO&quot; para abrir o painel de configurações do driver ou se estiver usando JACK, use uma ferramenta como QjackCtl para ajustar o tamanho do buffer. Outras interfaces, como o Pipewire, exigem o uso de sua ferramenta apropriada. Consulte o manual da interface.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
@@ -3599,7 +3599,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation>Nenhum diretório de gravação foi definido ou o valor não pode ser usado.Verifique o valor na guia Opções.</translation>
+        <translation>Nenhum diretório de gravação foi definido ou o valor não pode ser usado. Verifique o valor na guia Opções.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>

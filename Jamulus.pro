@@ -42,6 +42,8 @@ contains(CONFIG, "headless") {
     QT += multimedia
 }
 
+# Hint: When adding new translations, make sure to update
+# DISTFILES (above) and src/resources.qrc as well.
 LRELEASE_DIR = src/translation
 TRANSLATIONS = src/translation/translation_de_DE.ts \
     src/translation/translation_fr_FR.ts \

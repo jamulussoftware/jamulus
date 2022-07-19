@@ -29,8 +29,11 @@
     <qresource prefix="/translations">
         <file alias="translation_sv">translation/translation_sv_SE.qm</file>
     </qresource>
-	<qresource prefix="/translations">
+    <qresource prefix="/translations">
         <file alias="translation_zh_CN">translation/translation_zh_CN.qm</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="translation_ko_KR">translation/translation_ko_KR.qm</file>
     </qresource>
 
     <qresource prefix="/png/LEDs">

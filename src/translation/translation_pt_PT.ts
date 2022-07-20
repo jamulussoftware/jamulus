@@ -2867,7 +2867,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../connectdlg.cpp" line="75"/>
         <source>The Connection Setup window lists the available servers registered with the selected directory. Use the Directory dropdown to change the directory, find the server you want to join in the server list, click on it, and then click the Connect button to connect. Alternatively, double click on the server name to connect.</source>
-        <translation>A janela de Configuração de Conexão lista os servidores disponíveis registrados no diretório selecionado. Use o menu lista para alterar o diretório, localize o servidor que deseja ingressar na lista de servidores, clique nele e, em seguida clique no botão Conectar para conectar-se. Como alternativa, clique duas vezes no nome do servidor para conectar-se.</translation>
+        <translation>A janela de Configuração de Conexão lista os servidores disponíveis registados no diretório selecionado. Use o menu lista para alterar o diretório, localize o servidor que deseja ingressar na lista de servidores, clique nele e, em seguida clique no botão Conectar para conectar-se. Como alternativa, clique duas vezes no nome do servidor para conectar-se.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="80"/>
@@ -3527,32 +3527,32 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation>Selecione &apos;%1&apos; para não registrar seu servidor com um diretório.</translation>
+        <translation>Selecione &apos;%1&apos; para não registar seu servidor com um diretório.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation>Selecione um dos gêneros para registrar-se nesse diretório.</translation>
+        <translation>Selecione um dos gêneros para registar-se nesse diretório.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation>Ou selecione &apos;%1&apos; e especifique um endereço de Diretório Personalizado na guia Opções para registrar-se com um diretório personalizado.</translation>
+        <translation>Ou selecione &apos;%1&apos; e especifique um endereço de Diretório Personalizado na guia Opções para registar-se com um diretório personalizado.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation>Para qualquer valor, exceto &apos;%1&apos;,este servidor registra-se em um diretório para que um usuário %2 possa selecioná-lo na lista de servidores da caixa de diálogo de ligação do cliente ao escolher esse diretório.</translation>
+        <translation>Para qualquer valor, exceto &apos;%1&apos;,este servidor regista-se em um diretório para que um usuário %2 possa selecioná-lo na lista de servidores da caixa de diálogo de ligação do cliente ao escolher esse diretório.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>O registro do servidor é renovado periodicamente para garantir que todos os servidores na lista do diálogo de ligação estejam realmente acessíveis.</translation>
+        <translation>O registo do servidor é renovado periodicamente para garantir que todos os servidores na lista do diálogo de ligação estejam realmente acessíveis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation>Quando um valordirefente de &quot;%1&quot; for escolhido para Diretório, isso mostrará se o registro foi bem sucedido. Se o registro falhou, escolha um diretório diferente.</translation>
+        <translation>Quando um valor direfente de &quot;%1&quot; for escolhido para Diretório, isso mostrará se o registo foi bem sucedido. Se o registo falhou, escolha um diretório diferente.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
@@ -4106,7 +4106,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation>Não registrado</translation>
+        <translation>Não registado</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
@@ -4136,7 +4136,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../util.h" line="648"/>
         <source>Directory server list full</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista de servidores no diretório cheia</translation>
     </message>
     <message>
         <source>Directory Server full</source>
@@ -4512,12 +4512,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation>O registro da porta JACK falhou. Provavelmente isso é um erro com JACK. Pare %1 e JACK. Depois, verifique se outro programa com uma taxa de amostragem de %2 Hz pode ligar-se ao JACK.</translation>
+        <translation>O registo da porta JACK falhou. Provavelmente isso é um erro com JACK. Pare %1 e JACK. Depois, verifique se outro programa com uma taxa de amostragem de %2 Hz pode ligar-se ao JACK.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation>O registro da porta JACK falhou. Provavelmente isso é um erro com JACK. Pare %1 e JACK. Depois, verifique se outro programa MIDI pode ligar-se ao JACK.</translation>
+        <translation>O registo da porta JACK falhou. Provavelmente isso é um erro com JACK. Pare %1 e JACK. Depois, verifique se outro programa MIDI pode ligar-se ao JACK.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="107"/>

@@ -3871,7 +3871,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../serverdlg.cpp" line="191"/>
         <source>Click the button to clear the currently selected recording directory. This will prevent recording until a new value is selected.</source>
-        <translation>Clique no botão para limpar o atual diretório de gravação. Isso impedirá a gravação até que um novo valor seja selecionado.</translation>
+        <translation>Clique no botão para limpar o diretório de gravação atualmente selecionado. Isso impedirá a gravação até que um novo valor seja selecionado.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
@@ -4177,8 +4177,9 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     </message>
     <message>
         <location filename="../util.h" line="648"/>
-        <source>Directory Server full</source>
-        <translation>Servidor de Diretório cheio</translation>
+        <source>Directory server list full</source>
+        <translatorcomment>where the &quot;server list&quot; is what holds registering servers and the Directory can take no more entries.</translatorcomment>
+        <translation>Lista de servidores no diretório cheia</translation>
     </message>
     <message>
         <location filename="../util.h" line="651"/>

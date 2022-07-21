@@ -2576,7 +2576,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation>Jeżeli znasz adres adres serwera możesz podłączyć się do niego podając te dane w polu nazwa/adres serwera. Dodatkowo może być podany numer portu - po dwukropku za adresem/numerem IP, np. %1. To pole tekstowe będzie także wyświetlać listę ostatnio używanych adresów.</translation>
+        <translation>Jeżeli znasz adres serwera możesz podłączyć się do niego podając te dane w polu nazwa/adres serwera. Dodatkowo może być podany numer portu - po dwukropku za adresem/numerem IP, np. %1. To pole tekstowe będzie także wyświetlać listę ostatnio używanych adresów.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>

@@ -77,7 +77,7 @@
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>Alcuni campioni audio provengono da</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
@@ -1071,17 +1071,17 @@
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se questo indicatore LED diventa rosso, avrai difficoltà di ascolto mentre usi %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se questo indicatore LED  diventa rosso , il flusso audio si interromperà.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Stato della connessione</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="313"/>
@@ -1786,7 +1786,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation type="unfinished">Selezionare lo stile del VU-Meter da utilizzare per i livelli audio. L&apos;opzione &quot;Barra LED stretta e LED piccoli si applicano solo al mixer. Quando si seleziona &quot;Barre Strette&quot;, gli indicatori di input sono impostati su Barre. Quando si seleziona LED Piccoli, gli indicatori di ingresso sono impostati su LED rotondi. Le restanti opzioni si applicano all mixer ed ai VU-Meter delgli input.</translation>
+        <translation>Selezionare lo stile del Meter da utilizzare per i livelli audio. L&apos;opzione &quot;Barra LED stretta e LED piccoli si applicano solo al mixer. Quando si seleziona &quot;Barre Strette&quot;, gli indicatori di input sono impostati su Barre. Quando si seleziona LED Piccoli, gli indicatori di ingresso sono impostati su LED rotondi. Le restanti opzioni si applicano all mixer ed ai Meter delgli input.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
@@ -1957,7 +1957,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../clientsettingsdlg.cpp" line="200"/>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alcuni driver di alcune schede audio non permettono la modifica del buffer da %1. In questo caso la funzione di modifica del buffer risulta disabilitata e andrà modificata direttamente dal driver della scheda audio. Usare il programma fornito dal produttore per modificare i parametri del buffer. Per esempio se usi i driver ASIO, puoi usare il bottone &quot;ASIO Device Settings&quot; per aprire il pannello di controllo oppure se si usa JACK si dovrà usare il tool QJackCtl per accedere ai parametri della scheda. Altre interfacce, come Pipewire, potrebbero richiedere un tool proprietario. In questo caso fare riferimento al manuale utente.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
@@ -2041,17 +2041,17 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvisi Audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita gli avvisi audio quando ricevi un messaggio in chat e quando un nuovo utente entra nella sessione. Sarà necessario un secondo device audio per ascoltare questi avvisi.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>Audio Alerts check box</source>
-        <translation type="unfinished"></translation>
+        <translation>CheckBox Avvisi Audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
@@ -2087,27 +2087,27 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished">Barre Sottili</translation>
+        <translation>Barre (Sottili)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished">Barre</translation>
+        <translation>Barre (larghe)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished">LED</translation>
+        <translation>LED (strip)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished">LED Piccoli</translation>
+        <translation>LED (Piccoli, rotondi)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished">LED Rotondi</translation>
+        <translation>LED (Rotondi, grandi)</translation>
     </message>
     <message>
         <source>LEDs</source>
@@ -2672,7 +2672,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvisi Audio</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2905,12 +2905,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se conosci l&apos;indirizzo del server, puoi connetterti utilizzando il campo Nome/Indirizzo del server. È possibile aggiungere un numero di porta (opzionale) dopo l&apos;indirizzo del server utilizzando i due punti come separatore, ad es. %1. Il campo mostrerà anche un elenco degli indirizzi utilizzati più di recente.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Contiene l&apos;indirizzo del server a cui connettersi. Memorizza anche i vecchi indirizzi, che compariranno nel menù a tendina.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>
@@ -3534,113 +3534,113 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
         <source>Directory Type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>ComboBox della categoria della Rubrica</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Rubrica</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selezionare &apos;%1&apos; per non registrare il tuo server in una rubrica.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Selezionare un genere per registrare il tuo server in quella rubrica.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Oppure seleziona &apos;%1&apos; e specifica un indirizzo personalizzato per una Rubrica nel tab Opzioni per registrare il server in una rubrica personalizzata.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per qualsiasi valore eccetto &apos;%1&apos;, questo server si registra su una rubrica in modo che un utente %2 possa trovare questo server nell&apos;elenco dei server nella finestra di dialogo di connessione dei client della rubrica selezionata.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translation>La registrazione del server viene rinnovata periodicamente per assicurarsi che tutti i server nell&apos;elenco siano effettivamente disponibili.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quando viene scelto un valore diverso da &quot;%1&quot; per la rubrica, verrà mostrato se la registrazione è andata a buon fine. Se la registrazione non è riuscita, scegli una rubrica diversa.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è stata impostata alcuna cartella per la registrazione o il percorso non è valido. Controllare il valore nella scheda Opzioni.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se la cartella di registrazione non è disponibile, il problema verrà visualizzato al posto della directory di sessione.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la cartella di registrazione principale. Il percorso scelto deve esistere e deve avere i permessi di lattura/scrittura (consenti la creazione di sottodirectory da parte dell&apos;utente %1 in esecuzione).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il valore corrente della cartella di registrazione principale. Il valore scelto deve esistere ed avere i permessi di lettura/scrittura (consenti la creazione di sottodirectory da parte dell&apos;utente %1 in esecuzione). Fare clic sul pulsante per aprire la finestra di dialogo che consente di selezionare la cartella di registrazione principale.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo della Rubrica personalizzata</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;indirizzo della rubrica personalizzato è l&apos;indirizzo della Rubrica contenente l&apos;elenco dei server a cui questo server deve essere aggiunto.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulsante Nome file elenco server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Filename lista dei server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation type="unfinished"></translation>
+        <translation>Fare clic sul pulsante per aprire la finestra di dialogo che consente di impostare il nome del file di persistenza dell&apos;elenco dei server. L&apos;utente %1 è in esecuzione poiché deve essere in grado di creare il file specificato anche se potrebbe già esistere (verrà sovrascritto al salvataggio).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>File della lista dei Server (Sola lettura)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nome del file di dell&apos;elenco dei server. L&apos;utente %1 è in esecuzione poiché deve essere in grado di creare file specificato anche se potrebbe già esistere (verrà sovrascritto al salvataggio). Fare clic sul pulsante per aprire la finestra di dialogo che consente di impostare il nome del file dell&apos;elenco dei server.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bottone per cancellare il file della lista dei server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella lista Server</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usare il bottone per canellare la lista dei server selezionata. Questo impedirà la persistenza dell&apos;elenco dei server fino a quando non viene selezionato un nuovo valore.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
@@ -3650,7 +3650,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Ora una rubrica</translation>
     </message>
     <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
@@ -4106,12 +4106,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.h" line="583"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>None</translation>
     </message>
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Non Registrato</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
@@ -4141,7 +4141,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.h" line="648"/>
         <source>Directory server list full</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista Server della Rubrica piena</translation>
     </message>
     <message>
         <source>Directory Server full</source>
@@ -4160,7 +4160,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../util.h" line="657"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Valore sconosciuto %1</translation>
     </message>
     <message>
         <source>Unknown value </source>
@@ -4207,7 +4207,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessione</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
@@ -4222,12 +4222,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo personalizzato Rubrica</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>File Lista Server</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
@@ -4279,7 +4279,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -4648,12 +4648,12 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 Impossibile trovare una valida %2 scheda audio.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Puoi risolvare il problema aprendo il software del driver. Vuoi aprire la schermata dei settaggi adesso?</translation>
     </message>
     <message>
         <source>No usable %1 audio device found.</source>
@@ -4687,7 +4687,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <location filename="../util.cpp" line="1566"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished">%1 Versione, Versione %2</translation>
+        <translation>%1, Versione %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1583"/>

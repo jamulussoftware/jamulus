@@ -77,7 +77,7 @@
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>Einige Audio samples sind von</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
@@ -793,7 +793,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="153"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese LED rot leuchtet, dann wirst du wenig Spaß mit %1 haben.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="158"/>
@@ -1048,12 +1048,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientdlg.cpp" line="185"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese LED rot leuchtet, ist der Audio-Stream unterbrochen.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktueller Verbindungsstatus</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="288"/>
@@ -1636,17 +1636,17 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiohinweise</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviert Audiohinweise beim Empfang einer Chat-Nachricht bzw. wenn ein neuer Client der beitritt. Möglicherweise ist ein zweites Audiogerät erforderlich, um die Hinweise zu hören.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>Audio Alerts check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiohinweise Checkbox</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
@@ -2683,7 +2683,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiohinweise</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -3521,12 +3521,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
         <source>Directory Type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis Combo-Box</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished">Verzeichnis</translation>
+        <translation>Verzeichnis</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
@@ -3637,7 +3637,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="737"/>
         <source>Now a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Jetzt ein Verzeichnis</translation>
     </message>
     <message>
         <source>If the start minimized on operating system start check box is checked, the </source>
@@ -4105,12 +4105,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.h" line="583"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Keins</translation>
     </message>
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht registriert</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
@@ -4140,7 +4140,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.h" line="648"/>
         <source>Directory server list full</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis Server-Liste voll</translation>
     </message>
     <message>
         <source>Directory Server full</source>
@@ -4159,7 +4159,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../util.h" line="657"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Wert %1</translation>
     </message>
     <message>
         <source>Unknown value </source>
@@ -4278,7 +4278,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished">Verzeichnis</translation>
+        <translation>Verzeichnis</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -4651,12 +4651,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 konnte kein nutzbares %2 Audiogerät finden.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kannst die Fehler eventuell in den Treibereinstellungen beheben. Möchtest du diese Einstellungen jetzt öffnen?</translation>
     </message>
     <message>
         <source>No usable %1 audio device found.</source>
@@ -4690,12 +4690,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../util.cpp" line="1566"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished">%1, Version %2</translation>
+        <translation>%1, Version %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1583"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Veröffentlicht unter der GNU General Public License version 2 oder später (GPLv2)</translation>
     </message>
     <message>
         <source>Using the following libraries, resources or code snippets:</source>

@@ -17,12 +17,6 @@
   * Slovak, by @jose1711 (#2732)
   * Spanish, by @ignotus666 (#2706)
 
-- Ubuntu: Added new runtime dependendency. You will need to added the "universe" apt repository (on Ubuntu only) (#2721).
-  (contributed by @pljones)
-
-- Ubuntu: Allow Jamulus being installed on Ubuntu 18.04 (#2423).
-  (contributed by @hoffie)
-
 - GUI: Client: Added instructions for setting buffers when using Pipewire (#2645).
   (contributed by @gilgongo)
 
@@ -115,6 +109,12 @@
 
 - Linux: Removed `linux/deploy_linux.sh` script (#2512).
   (contributed by @ann0see)
+
+- Linux: Ubuntu: Added new runtime dependency. You will need to added the "universe" apt repository (on Ubuntu only) (#2721).
+  (contributed by @pljones)
+
+- Linux: Ubuntu: Allow Jamulus being installed on Ubuntu 18.04 (#2423).
+  (contributed by @hoffie)
 
 - Linux: Updated package author information (#2652).
   (contributed by @hoffie)

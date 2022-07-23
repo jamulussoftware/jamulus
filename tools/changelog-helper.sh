@@ -86,9 +86,10 @@ group_entries() {
 
     # Prepend a number to known categories in order to make their sorting position consistent:
     category_order=(
-        "Client"
-        "GUI"
         "$TRANSLATION_ENTRY_TEXT"
+        "GUI"
+        "Accessibility"
+        "Client"
         "Server"
         "Recorder"
         "Performance"

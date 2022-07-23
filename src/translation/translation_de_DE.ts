@@ -1641,7 +1641,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>Aktiviert Audiohinweise beim Empfang einer Chat-Nachricht bzw. wenn ein neuer Client der beitritt. Möglicherweise ist ein zweites Audiogerät erforderlich, um die Hinweise zu hören.</translation>
+        <translation>Aktiviert Audiohinweise beim Empfang einer Chat-Nachricht bzw. wenn ein neuer Client beitritt. Möglicherweise ist ein zweites Audiogerät erforderlich, um die Hinweise zu hören.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>

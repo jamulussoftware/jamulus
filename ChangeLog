@@ -1,5 +1,5 @@
 
-### 3.9.0rc1 <- NOTE: the release version number will be 3.9.0 ###
+### 3.8.2dev <- NOTE: the release version number will be 3.9.0 ###
 
 - Feature: Added **_EXPERIMENTAL_** new JSON-RPC interface to control client and server (see [docs/JSON-RPC.md](https://github.com/jamulussoftware/jamulus/blob/master/docs/JSON-RPC.md) for details) (#1975, #2505).
   (contributed by @dtinth, @Rob-NY)

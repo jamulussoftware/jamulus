@@ -44,6 +44,9 @@
 - GUI: Server: Adjust Server Language combo box length to fit into layout properly (#2424).
   (contributed by @pljones)
 
+- GUI: Server: Re-order Recorder widgets for better use of space (plus Qt6 compliance) (#2427).
+  (contributed by @pljones)
+
 - GUI: Fix (hopefully) all remaining references to "directory server" in displayed messages to say "directory" (#2710).
   (contributed by @pljones)
 
@@ -83,7 +86,7 @@
 - Server: Headless Server now unregisters correctly (#2633).
   (contributed by @pljones)
 
-- Server: Handling of requests for the server list (#2643).
+- Server: Clarify code for handling of requests for the server list (#2643).
   (contributed by @pljones)
 
 - Server: Improvements to the start up logging for the server list filter (#2647).
@@ -92,13 +95,10 @@
 - Server: Set default directory to "None" when not set in ini file or command line (#2442).
   (contributed by @softins)
 
-- Server: Recorder adjustments (#2427).
-  (contributed by @pljones)
-
 - Bug Fix: Client/Server: corrected operation of message ack timer (#2517).
   (contributed by @softins)
 
-- Windows: Installer into Korean (#2669).
+- Windows: Create KR translation for installer (#2669).
   (contributed by @bagjunggyu)
 
 - Windows: The JACK build now no longer gives an ASIO related warning message on an incompatible state (#2494).
@@ -107,13 +107,13 @@
 - Linux: Added the Jamulus Server desktop icon to the Debian/Ubuntu build and fixed SVG icon installation location (#2460).
   (contributed by @hoffie)
 
-- Linux: Removed `linux/deploy_linux.sh` script (#2512).
+- Linux: Removed unused `linux/deploy_linux.sh` script (#2512).
   (contributed by @ann0see)
 
 - Linux: Ubuntu: Added new runtime dependency. You will need to added the "universe" apt repository (on Ubuntu only) (#2721).
   (contributed by @pljones)
 
-- Linux: Ubuntu: Allow Jamulus being installed on Ubuntu 18.04 (#2423).
+- Bug Fix: Backport .deb build fix to allow Jamulus being installed on Ubuntu 18.04 (#2423).
   (contributed by @hoffie)
 
 - Linux: Updated package author information (#2652).
@@ -131,10 +131,10 @@
 - Android: Removed unneeded dependencies to speed up build (#2394).
   (contributed by @ann0see)
 
-- Android package version has been fixed to show the actual release version (#2398).
+- Android: Package version has been fixed to show the actual release version (#2398).
   (contributed by @hoffie)
 
-- Android: sound driver small improvements and CodeQL fix (#2457).
+- Android: Improve sound driver to fix CodeQL warnings (#2457).
   (contributed by @softins)
 
 - Android: Improved compilation and updated liboboe to 1.6.1 (#2472).
@@ -284,7 +284,7 @@
 - Internal: Added .editorconfig for cross-language standardized indentation and line endings (#2585).
   (contributed by @hoffie)
 
-- Internal: Applied a consistent coding style (#2582).
+- Internal: Applied a consistent coding style to scripts (#2582).
   (contributed by @hoffie)
 
 - Internal: Added `make clang_format` helper command to simplify code formatting for contributors (#2258).

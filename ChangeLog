@@ -95,6 +95,9 @@
 - Server: Set default directory to "None" when not set in ini file or command line (#2442).
   (contributed by @softins)
 
+- Bug Fix: Build: .deb dependency fix to allow Jamulus being installed on Ubuntu 18.04 (#2423).
+  (contributed by @hoffie)
+
 - Bug Fix: Client/Server: corrected operation of message ack timer (#2517).
   (contributed by @softins)
 
@@ -113,9 +116,6 @@
 - Linux: Ubuntu: Added new runtime dependency. You will need to added the "universe" apt repository (on Ubuntu only) (#2721).
   (contributed by @pljones)
 
-- Bug Fix: Backport .deb build fix to allow Jamulus being installed on Ubuntu 18.04 (#2423).
-  (contributed by @hoffie)
-
 - Linux: Updated package author information (#2652).
   (contributed by @hoffie)
 
@@ -125,7 +125,7 @@
 - Mac: Fixed non-working Save/Load Mixer Channel Setup (#2565).
   (contributed by @softins)
 
-- Mac: Upgrade create-dmg to the latest version (#2664).
+- Mac: Upgraded create-dmg to the latest version (#2664).
   (contributed by @ann0see)
 
 - Android: Removed unneeded dependencies to speed up build (#2394).
@@ -191,19 +191,20 @@
 - Build: Updated aqt to v2.1.0 due to reliability reasons (#2597).
   (contributed by @ann0see)
 
-- Autobuild: Coding style and static checks for shell scripts are now enforced (#2635).
+- Autobuild: Major overhaul, incorporating improvements in performance
+  * Coding style and static checks for shell scripts are now enforced (#2635).
+  * Build workflow download and cache optimisations (#2284, #2498, #2499, #2642).
+  * Parallelisation of build processes (#2444, #2445)
+  * Build script refactoring (#2284, #2451, #2470, #2473, #2476, #2489, #2501, #2502, #2509, #2514, #2527, #2540, #2584, #2642).
   (contributed by @hoffie)
 
-- Autobuild: Clean up redundant variables in workflow definition (#2584).
+- Autobuild: Added experimental support for armhf (Raspberry-compatible) Linux .deb packages (#2526).
   (contributed by @hoffie)
 
-- Autobuild: Fix Mac/Windows cache key (#2642).
+- Autobuild: Fix iOS artifact name  (#2619).
   (contributed by @hoffie)
 
-- Autobuild: Refactor linux autobuild (#2451).
-  (contributed by @ann0see)
-
-- Autobuild: Refactor raspijamulus.sh file (#2489).
+- Autobuild: Build macOS .dmg files by create-dmg for building compatibility with further versions of macOS #2420 (#2207).
   (contributed by @ann0see)
 
 - Autobuild: Stop the build if the audio SDK is missing (#2536).
@@ -212,65 +213,8 @@
 - Autobuild: Stop running Autobuild if only documentation is updated to avoid wasting computation time (#2532).
   (contributed by @ann0see)
 
-- Autobuild: Fix iOS artifact name  (#2619).
-  (contributed by @hoffie)
-
-- Autobuild: Build macOS .dmg files by create-dmg for building compatibility with further versions of macOS #2420 (#2207).
-  (contributed by @ann0see)
-
-- Autobuild: Refactor & use actions/cache (#2284).
-  (contributed by @hoffie)
-
-- Autobuild: Refactor for better readability (#2470).
-  (contributed by @hoffie)
-
-- Autobuild: Improved analyze_git_references.py script (#2471).
-  (contributed by @hoffie)
-
-- Autobuild: Improved build preparation performance (#2473).
-  (contributed by @hoffie)
-
-- Autobuild: Reorganized macOS/iOS build logic (#2476).
-  (contributed by @hoffie)
-
-- Autobuild: Reduced Qt download size and updated aqtinstall to 2.0.6 (#2498).
-  (contributed by @hoffie)
-
-- Autobuild: Optimized build caching (#2499).
-  (contributed by @hoffie)
-
-- Autobuild: Improved failure detection (#2501).
-  (contributed by @hoffie)
-
-- Autobuild: Refactored and simplified Windows build scripts (#2502).
-  (contributed by @hoffie)
-
-- Autobuild: Refactored and simplified Linux build scripts (#2509).
-  (contributed by @hoffie)
-
-- Autobuild: Refactored and simplified Mac build scripts (#2514).
-  (contributed by @hoffie)
-
-- Autobuild: Added experimental support for armhf (Raspberry-compatible) Linux .deb packages (#2526).
-  (contributed by @hoffie)
-
-- Autobuild: Refactored and simplified Android build scripts (#2527).
-  (contributed by @hoffie)
-
-- Autobuild: Simplified build matrix and cleaned up redundant functionality (#2540).
-  (contributed by @hoffie)
-
 - Autobuild: Build Windows version on latest build environment. This upgrades the Windows build process (#2649).
   (contributed by @ann0see)
-
-- Autobuild: Improved and reorganized git/Changelog scripts (#2656).
-  (contributed by @hoffie)
-
-- Autobuild: Speed up Debian, Mac & Android build processes by using parallelization (#2444).
-  (contributed by @hoffie)
-
-- Autobuild: Speed up Windows build process by using jom with parallelization instead of nmake in autobuilds (#2445).
-  (contributed by @hoffie)
 
 - Autobuild: Make Qt downloads on Windows more reliable by re-trying downloads (#2333).
   (contributed by @ann0see)
@@ -281,20 +225,29 @@
 - Code: code restructuring to reduce cross-dependencies (CHighPrecisionTimer) (#2637).
   (contributed by @pljones)
 
+- Internal: Improved analyze_git_references.py script (#2471).
+  (contributed by @hoffie)
+
+- Internal: Improved and reorganized git/Changelog scripts (#2656).
+  (contributed by @hoffie)
+
 - Internal: Added .editorconfig for cross-language standardized indentation and line endings (#2585).
   (contributed by @hoffie)
 
-- Internal: Applied a consistent coding style to scripts (#2582).
+- Internal: Applied a consistent coding style to scripts (#2547, #2582).
   (contributed by @hoffie)
 
 - Internal: Added `make clang_format` helper command to simplify code formatting for contributors (#2258).
   (contributed by @hoffie)
 
-- Internal: Use TODO and TEST comments instead of un-indenting with clang-format off/on (#2600).
-  (contributed by @pgScorpio)
+- Internal: Added debian/ folder to .gitignore file to ensure build files are not added to git (#2464).
+  (contributed by @ann0see)
 
 - Internal: Check coding style on macOS/iOS code files (.mm extension) (#1871).
   (contributed by @ngocdh)
+
+- Internal: Use TODO and TEST comments instead of un-indenting with clang-format off/on (#2600).
+  (contributed by @pgScorpio)
 
 - Internal: Removed unneeded white-space in all files and streamline line endings (#2402).
   (contributed by @ann0see)
@@ -302,10 +255,7 @@
 - Internal: Applied standard style to .md files (#2549).
   (contributed by @ann0see)
 
-- Internal: Made all shell scripts shellcheck-clean (#2547).
-  (contributed by @hoffie)
-
-- Internal: move sound API files into src/sound folder. Contributors will now find the sound.cpp/sound.h/sound.mm in the src/sound folder for consistency (#2575).
+- Internal: Move sound API files into src/sound folder. Contributors will now find the sound.cpp/sound.h/sound.mm in the src/sound folder for consistency (#2575).
   (contributed by @ann0see)
 
 - Internal: Move translation files one level up to make finding them easier for translators (#2576).
@@ -320,14 +270,11 @@
 - Internal: Improved release contributor tooling (#2411).
   (contributed by @hoffie)
 
-- Internal: Moved outdated VST code on feature branch since there hasn't been any active development for a long time (#2461).
-  (contributed by @ann0see)
-
-- Internal: Added debian/ folder to .gitignore file to ensure build files are not added to git (#2464).
-  (contributed by @ann0see)
-
 - Internal: Improved Changelog release tooling (#2485, #2661).
   (contributed by @hoffie)
+
+- Internal: Moved outdated VST code on feature branch since there hasn't been any active development for a long time (#2461).
+  (contributed by @ann0see)
 
 - Internal: Removed outdated qt-installer-windows.qs since we no longer use Travis CI (#2516).
   (contributed by @ann0see)

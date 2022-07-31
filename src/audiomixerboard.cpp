@@ -1208,7 +1208,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
             UpdateTitle();
         }
 
-        // search for channels with are already present and preserve their gain
+        // search for channels which are already present and preserve their gain
         // setting, for all other channels reset gain
 
         // get all channels which are in use/not in use. We use the array index of vecChanInfo
@@ -1225,12 +1225,12 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
             iFaderNumber[vecChanInfo[iFader].iChanID] = iFader;
         }
 
+        // Hide all unused faders and initialize used ones
         for ( int iChanID = 0; iChanID < MAX_NUM_CHANNELS; iChanID++ )
         {
             if ( iFaderNumber[iChanID] == INVALID_INDEX )
             {
-                // fader is not used --> hide it
-                // before hiding the fader, store its level (if some conditions are fulfilled)
+                // current fader is not used
                 StoreFaderSettings ( vecpChanFader[iChanID] );
 
                 vecpChanFader[iChanID]->Hide();
@@ -1238,22 +1238,22 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
             }
 
             // current fader is used
-            // check if fader was already in use -> preserve gain value
             if ( !vecpChanFader[iChanID]->IsVisible() )
             {
-                // the fader was not in use, reset everything for new client
+                // the fader was not in use,
+                // reset everything for new client
                 vecpChanFader[iChanID]->Reset();
                 vecAvgLevels[iChanID] = 0.0f;
 
-                // check if this is my own fader and set fader property
                 if ( iChanID == iMyChannelID )
                 {
+                    // this is my own fader --> set fader property
                     vecpChanFader[iChanID]->SetIsMyOwnFader();
                 }
 
-                // set and increment the running new client counter needed for sorting (per definition:
-                // a fader for a new client shall always be inserted at the right-hand-side if no other
-                // sorting type is selected (i.e. "no sorting" is active) (#673)
+                // keep track of each new client
+                // for "no sorting" channel sort order new clients are added
+                // to the right-hand side of the mixer (#673)
                 vecpChanFader[iChanID]->SetRunningNewClientCnt ( iRunningNewClientCnt++ );
 
                 // show fader
@@ -1274,7 +1274,6 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                 }
             }
 
-            // restore gain (if new name is different from the current one)
             if ( vecpChanFader[iChanID]->GetReceivedName().compare ( vecChanInfo[iFaderNumber[iChanID]].strName ) )
             {
                 // the text has actually changed, search in the list of

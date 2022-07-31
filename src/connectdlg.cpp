@@ -460,6 +460,12 @@ void CConnectDlg::SetServerList ( const CHostAddress& InetAddr, const CVector<CS
         {
             lvwServers->expandItem ( pNewListViewItem );
         }
+
+        // accessibility
+        for ( int i = 0; i < lvwServers->columnCount(); i++ )
+        {
+            lvwServers->setItemWidget ( pNewListViewItem, i, new QPushButton ( pNewListViewItem->text ( i ) ) );
+        }
     }
 
     // immediately issue the ping measurements and start the ping timer since
@@ -883,6 +889,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
             // 4 is sufficient since the maximum width is ">500") (#201)
             pCurListViewItem->setText ( LVC_PING, QString ( "%1 ms" ).arg ( iMinPingTime, 4, 10, QLatin1Char ( ' ' ) ) );
         }
+        dynamic_cast<QPushButton*> ( lvwServers->itemWidget ( pCurListViewItem, 1 ) )->setText ( pCurListViewItem->text ( 1 ) );
 
         // update number of clients text
         if ( pCurListViewItem->text ( LVC_CLIENTS_MAX_HIDDEN ).toInt() == 0 )
@@ -898,6 +905,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
         {
             pCurListViewItem->setText ( LVC_CLIENTS, QString().setNum ( iNumClients ) + "/" + pCurListViewItem->text ( LVC_CLIENTS_MAX_HIDDEN ) );
         }
+        dynamic_cast<QPushButton*> ( lvwServers->itemWidget ( pCurListViewItem, 2 ) )->setText ( pCurListViewItem->text ( 2 ) );
 
         // check if the number of child list items matches the number of
         // connected clients, if not then request the client names

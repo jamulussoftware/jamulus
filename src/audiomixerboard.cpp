@@ -1208,94 +1208,99 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
             UpdateTitle();
         }
 
-        // search for channels with are already present and preserve their gain
+        // search for channels which are already present and preserve their gain
         // setting, for all other channels reset gain
-        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+
+        // get all channels which are in use/not in use. We use the array index of vecChanInfo
+        // if the fader is in use, else INVALID_INDEX to specify it is not in use
+        int iFaderNumber[MAX_NUM_CHANNELS];
+
+        for ( int iChanID = 0; iChanID < MAX_NUM_CHANNELS; iChanID++ )
         {
-            bool bFaderIsUsed = false;
+            iFaderNumber[iChanID] = INVALID_INDEX;
+        }
 
-            for ( int j = 0; j < iNumConnectedClients; j++ )
+        for ( int iFader = 0; iFader < iNumConnectedClients; iFader++ )
+        {
+            iFaderNumber[vecChanInfo[iFader].iChanID] = iFader;
+        }
+
+        // Hide all unused faders and initialize used ones
+        for ( int iChanID = 0; iChanID < MAX_NUM_CHANNELS; iChanID++ )
+        {
+            if ( iFaderNumber[iChanID] == INVALID_INDEX )
             {
-                // check if current fader is used
-                if ( vecChanInfo[j].iChanID == i )
+                // current fader is not used
+                StoreFaderSettings ( vecpChanFader[iChanID] );
+
+                vecpChanFader[iChanID]->Hide();
+                continue;
+            }
+
+            // current fader is used
+            if ( !vecpChanFader[iChanID]->IsVisible() )
+            {
+                // the fader was not in use,
+                // reset everything for new client
+                vecpChanFader[iChanID]->Reset();
+                vecAvgLevels[iChanID] = 0.0f;
+
+                if ( iChanID == iMyChannelID )
                 {
-                    // check if fader was already in use -> preserve gain value
-                    if ( !vecpChanFader[i]->IsVisible() )
-                    {
-                        // the fader was not in use, reset everything for new client
-                        vecpChanFader[i]->Reset();
-                        vecAvgLevels[i] = 0.0f;
+                    // this is my own fader --> set fader property
+                    vecpChanFader[iChanID]->SetIsMyOwnFader();
+                }
 
-                        // check if this is my own fader and set fader property
-                        if ( i == iMyChannelID )
-                        {
-                            vecpChanFader[i]->SetIsMyOwnFader();
-                        }
+                // keep track of each new client
+                // for "no sorting" channel sort order new clients are added
+                // to the right-hand side of the mixer (#673)
+                vecpChanFader[iChanID]->SetRunningNewClientCnt ( iRunningNewClientCnt++ );
 
-                        // set and increment the running new client counter needed for sorting (per definition:
-                        // a fader for a new client shall always be inserted at the right-hand-side if no other
-                        // sorting type is selected (i.e. "no sorting" is active) (#673)
-                        vecpChanFader[i]->SetRunningNewClientCnt ( iRunningNewClientCnt++ );
+                // show fader
+                vecpChanFader[iChanID]->Show();
 
-                        // show fader
-                        vecpChanFader[i]->Show();
-
-                        // Set the default initial fader level. Check first that
-                        // this is not the initialization (i.e. previously there
-                        // were no faders visible) to avoid that our own level is
-                        // adjusted. If we have received our own channel ID, then
-                        // we can adjust the level even if no fader was visible.
-                        // The fader level of 100 % is the default in the
-                        // server, in that case we do not have to do anything here.
-                        if ( ( !bNoFaderVisible || ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != i ) ) ) &&
-                             ( pSettings->iNewClientFaderLevel != 100 ) )
-                        {
-                            // the value is in percent -> convert range
-                            vecpChanFader[i]->SetFaderLevel ( pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
-                        }
-                    }
-
-                    // restore gain (if new name is different from the current one)
-                    if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
-                    {
-                        // the text has actually changed, search in the list of
-                        // stored settings if we have a matching entry
-                        int  iStoredFaderLevel;
-                        int  iStoredPanValue;
-                        bool bStoredFaderIsSolo;
-                        bool bStoredFaderIsMute;
-                        int  iGroupID;
-
-                        if ( GetStoredFaderSettings ( vecChanInfo[j].strName,
-                                                      iStoredFaderLevel,
-                                                      iStoredPanValue,
-                                                      bStoredFaderIsSolo,
-                                                      bStoredFaderIsMute,
-                                                      iGroupID ) )
-                        {
-                            vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel, true ); // suppress group update
-                            vecpChanFader[i]->SetPanValue ( iStoredPanValue );
-                            vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
-                            vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
-                            vecpChanFader[i]->SetGroupID ( iGroupID ); // Must be the last to be set in the fader!
-                        }
-                    }
-
-                    // set the channel infos
-                    vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
-
-                    bFaderIsUsed = true;
+                // Set the default initial fader level. Check first that
+                // this is not the initialization (i.e. previously there
+                // were no faders visible) to avoid that our own level is
+                // adjusted. If we have received our own channel ID, then
+                // we can adjust the level even if no fader was visible.
+                // The fader level of 100 % is the default in the
+                // server, in that case we do not have to do anything here.
+                if ( ( !bNoFaderVisible || ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != iChanID ) ) ) &&
+                     ( pSettings->iNewClientFaderLevel != 100 ) )
+                {
+                    // the value is in percent -> convert range
+                    vecpChanFader[iChanID]->SetFaderLevel ( pSettings->iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX );
                 }
             }
 
-            // if current fader is not used, hide it
-            if ( !bFaderIsUsed )
+            if ( vecpChanFader[iChanID]->GetReceivedName().compare ( vecChanInfo[iFaderNumber[iChanID]].strName ) )
             {
-                // before hiding the fader, store its level (if some conditions are fulfilled)
-                StoreFaderSettings ( vecpChanFader[i] );
+                // the text has actually changed, search in the list of
+                // stored settings if we have a matching entry
+                int  iStoredFaderLevel;
+                int  iStoredPanValue;
+                bool bStoredFaderIsSolo;
+                bool bStoredFaderIsMute;
+                int  iGroupID;
 
-                vecpChanFader[i]->Hide();
+                if ( GetStoredFaderSettings ( vecChanInfo[iFaderNumber[iChanID]].strName,
+                                              iStoredFaderLevel,
+                                              iStoredPanValue,
+                                              bStoredFaderIsSolo,
+                                              bStoredFaderIsMute,
+                                              iGroupID ) )
+                {
+                    vecpChanFader[iChanID]->SetFaderLevel ( iStoredFaderLevel, true ); // suppress group update
+                    vecpChanFader[iChanID]->SetPanValue ( iStoredPanValue );
+                    vecpChanFader[iChanID]->SetFaderIsSolo ( bStoredFaderIsSolo );
+                    vecpChanFader[iChanID]->SetFaderIsMute ( bStoredFaderIsMute );
+                    vecpChanFader[iChanID]->SetGroupID ( iGroupID ); // Must be the last to be set in the fader!
+                }
             }
+
+            // set the channel infos
+            vecpChanFader[iChanID]->SetChannelInfos ( vecChanInfo[iFaderNumber[iChanID]] );
         }
 
         // update the solo states since if any channel was on solo and a new client

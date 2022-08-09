@@ -334,11 +334,11 @@ float CChannel::GetPan ( const int iChanID )
 
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
-    bIsIdentified = true; // Indicate we have received channel info
-
-    // apply value (if different from previous one)
-    if ( ChannelInfo != NChanInf )
+    // apply value (if a new channel or different from previous one)
+    if ( !bIsIdentified || ChannelInfo != NChanInf )
     {
+        bIsIdentified = true; // Indicate we have received channel info
+
         ChannelInfo = NChanInf;
 
         // fire message that the channel info has changed

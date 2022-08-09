@@ -1,5 +1,5 @@
 
-### 3.9.0Nightly1 ###
+### 3.9.0dev <- NOTE: the release version number will be 3.9.1 ###
 
 - Client: Improve performance of GUI when someone join or leave a server.
 

@@ -8,6 +8,9 @@ param (
     # - Do not update ASIO SDK without checking for license-related changes.
     # - Do not copy (parts of) the ASIO SDK into the Jamulus source tree without
     #   further consideration as it would make the license situation more complicated.
+    #
+    # The following version pinnings are semi-automatically checked for
+    # updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
     [string] $AsioSDKName = "asiosdk_2.3.3_2019-06-14",
     [string] $AsioSDKUrl = "https://download.steinberg.net/sdk_downloads/asiosdk_2.3.3_2019-06-14.zip",
     [string] $NsisName = "nsis-3.08",

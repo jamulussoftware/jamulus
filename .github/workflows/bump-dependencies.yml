@@ -1,0 +1,180 @@
+name: Bump dependencies
+
+on:
+  # For PR creation:
+  workflow_dispatch:
+  schedule:
+    - cron: '13 8 * * 6'  # once a week on Saturdays at 08:13
+
+  # For branch deletion:
+  # We have to use pull_request_target because pull_request does not trigger on closed PRs with merge conflicts:
+  # https://github.com/orgs/community/discussions/26304
+  # WARNING: pull_request_target is dangerous as the run can be influenced by the PR origin.
+  pull_request_target:
+    types:
+      - closed
+
+  # For rebasing:
+  push:
+    branches: [master]
+
+permissions:
+  pull-requests: write
+  # The main repository writes are done using a deploy key as we can't grant
+  # workflows: permission here, which is required when pushing to .github/workflows.
+  # We need basic access for branch deletion anyway:
+  contents: write
+
+jobs:
+  create-prs:
+    name: Update ${{ matrix.components.name }} if necessary
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name != 'pull_request_target'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        components:
+          - name: aqt
+            # not Changelog-worthy
+            get_upstream_version: GH_REPO=miurahr/aqtinstall gh release view --json tagName --jq .tagName | sed -re 's/^v//'
+            # The following regexps capture both the *nix and the Windows variable syntax (different case, underscore):
+            local_version_regex: (.*AQTINSTALL_?VERSION\s*=\s*"?)([0-9.]*)("?.*)
+
+          - name: Qt6
+            changelog_name: bundled Qt6
+            get_upstream_version: |
+              latest_minor="$(curl -s https://download.qt.io/official_releases/qt/ | grep -oP 'href="\K[0-9.]+(?=/")' | sort --reverse --version-sort | head -n1)";
+              curl -s https://download.qt.io/official_releases/qt/"${latest_minor}"/ | grep -oP 'href="\K[0-9.]+(?=/")' | sort --reverse --version-sort | head -n1
+            # The following regex captures both the *nix and the Windows variable syntax (different case, underscore):
+            local_version_regex: (.*QT[0-9_]+VERSION\s*=\s*"?)(6\.[0-9.]+)("?.*)
+
+          - name: choco-jack
+            changelog_name: bundled JACK (Windows-only)
+            get_upstream_version: |
+              curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://community.chocolatey.org/api/v2/package/jack/ |
+                grep -oP '.*/jack\.\K.*(?=\.nupkg)'
+            local_version_regex: (.*JackVersion\s*=\s*"?)([0-9.]+)("?.*)
+
+          - name: choco-jom
+            # not Changelog-worthy
+            get_upstream_version: |
+              curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://community.chocolatey.org/api/v2/package/jom/ |
+                grep -oP 'jom\.\K.*(?=\.nupkg)'
+            local_version_regex: (.*JomVersion\s*=\s*"?)([0-9.]+)("?.*)
+
+          - name: NSIS
+            changelog_name: Windows Installer base (NSIS)
+            get_upstream_version: |
+              curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://sourceforge.net/projects/nsis/files/latest/download |
+                grep -oP '.*/nsis-\K[0-9.]+(?=-setup\.)'
+            # This pattern is a bit special as it has to match twice in a single line.
+            # Therefore, we have to be very careful to avoid consuming too much pattern space.
+            # This is why a positive lookahead is used instead of direct matching:
+            local_version_regex: (.*"nsis-|.*\/NSIS.20.\/|\/nsis-)([0-9.]+)(".*|(?=\/nsis-)|\.zip.*)
+
+          - name: ASIO-SDK
+            changelog_name: ASIO SDK (Windows-only)
+            get_upstream_version: |
+              curl -s -o /dev/null --location --range 0-5 --write-out '%{url_effective}' https://www.steinberg.net/asiosdk |
+                grep -oP '.*asiosdk_\K.*(?=\.zip)'
+            local_version_regex: (.*["\/]asiosdk_)([^"]+?)(".*|\.zip.*)
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.BUMP_DEPENDENCIES_SSH_DEPLOY_KEY || 'fail-due-to-missing-ssh-key-as-secret' }}
+          fetch-depth: '0'  # we create/compare new branches and therefore require full history
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          files=( .github/{autobuild,workflows}/* windows/*.ps1 )
+          upstream_version="$(${{ matrix.components.get_upstream_version }})"
+          local_version="$(perl -nle 'print "$2" if /${{ matrix.components.local_version_regex }}/i' "${files[@]}" | sort --reverse --version-sort | head -n1)"
+          if [[ -z "$upstream_version" ]]; then
+            echo "failed to extract upstream version"
+            exit 1
+          fi
+          if [[ -z "$local_version" ]]; then
+            echo "failed to extract local version"
+            exit 1
+          fi
+          if [[ "$upstream_version" == "$local_version" ]]; then
+            echo "upstream ${{ matrix.components.name }} (${upstream_version}) matches local ${{ matrix.components.name }} (${local_version})"
+            exit 0
+          fi
+          echo "upstream ${{ matrix.components.name }} (${upstream_version}) is different than local ${{ matrix.components.name }} (${local_version}), creating PR"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          pr_branch=ci/bump-dependencies/${{ matrix.components.name }}
+          git checkout -b "${pr_branch}"
+          # sed does not support replacements with overlapping or lookahead patterns as is the case with NSIS.
+          # Therefore, use perl instead:
+          perl -pe 's/${{ matrix.components.local_version_regex }}/${1}'"${upstream_version}"'${3}/gi' -i "${files[@]}"
+          git add .
+          title="Build: Update ${{ matrix.components.name }} to ${upstream_version}"
+          pr_title="${title} (Automated PR)"
+          existing_pr="$(gh pr list --head "${pr_branch}" --json number --jq '.[].number')"
+          git commit -m "${title}"
+          if [[ "${existing_pr}" ]]; then
+            git fetch origin "${pr_branch}"
+            diff_size="$(git diff "remotes/origin/${pr_branch}" HEAD)"
+            if [[ -z "${diff_size}" ]]; then
+              echo "found existing branch, diff is empty, nothing to do"
+              exit 0
+            fi
+          fi
+          git push origin "+${pr_branch}"
+          body="This automated Pull Request updates the used **${{ matrix.components.name }}** version to version **${upstream_version}**."$'\n\n'
+          body="${body}This PR was opened by the workflow *${GITHUB_WORKFLOW}* (*${GITHUB_JOB}*)"$'\n\n'
+          body="${body}CHANGELOG: "
+          if [[ "${{ matrix.components.changelog_name }}" ]]; then
+            body="${body}Build: Updated ${{ matrix.components.changelog_name }} to version ${upstream_version}"
+          else
+            body="${body}SKIP"
+          fi
+          if [[ $existing_pr ]]; then
+            existing_title="$(gh pr view "${existing_pr}" --json title --jq .title)"
+            gh pr edit "${existing_pr}" --title "${pr_title}" --body "${body}"
+            if [[ "${existing_title}" != "${pr_title}" ]]; then
+              # If the title changed, this implies that we are updating the PR for a different version
+              # (and not just rebasing it). Therefore, leave a comment to make that transparent:
+              gh pr comment "${existing_pr}" --body "PR has been updated for version *${upstream_version}* by the workflow *${GITHUB_WORKFLOW}* (*${GITHUB_JOB}*)."
+            fi
+          else
+            gh pr create --base master --head "${pr_branch}" --title "${pr_title}" --body "${body}"
+            echo 'When Github actions create a PR, no workflows/checks (e.g. autobuilds) run.'
+            echo 'We do want autobuilds though, therefore, we push a slightly modified commit via the deploy key, which avoids this problem.'
+            echo 'We have to wait some time in order to trigger a new event... Waiting 60sec now'
+            sleep 60
+            git commit --amend --no-edit
+            git push origin "+${pr_branch}"
+          fi
+
+  delete-old-pr-branches:
+    if: >-
+      github.repository_owner == 'jamulussoftware' &&
+      github.event_name == 'pull_request_target' &&
+      startsWith(github.event.pull_request.head.label, 'jamulussoftware:ci/bump-dependencies/')
+    runs-on: ubuntu-latest
+    steps:
+      # This job runs via pull_request_target. Please check for any security
+      # consequences when extending these steps:
+      # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
+      - uses: actions/checkout@v3
+        # this checks out the upstream `master` and not the PR branch; this is fine for us
+        # as we just need a proper config for git/gh to work with.
+      - env:
+          pr_branch: ${{ github.event.pull_request.head.ref }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          [[ "${pr_branch}" == ci/bump-dependencies/* ]] || exit 1
+          open_pr_count="$(gh pr list --head "${pr_branch}" --json number --jq '.[].number' | wc -l)"
+          if [[ "$open_pr_count" != 0 ]]; then
+            echo "Open PRs for ${pr_branch} found, keeping branch"
+            exit 0
+          fi
+          git push origin ":${pr_branch}"

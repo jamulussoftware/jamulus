@@ -109,7 +109,11 @@ Function Install-Dependency
         [string] $Destination
     )
 
-    if (Test-Path -Path "$WindowsPath\$Destination") { return }
+    if (Test-Path -Path "$WindowsPath\$Destination")
+    {
+        echo "Using ${WindowsPath}\${Destination} from previous run (actions/cache)"
+        return
+    }
 
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
     $TempDir = [System.IO.Path]::GetTempPath()

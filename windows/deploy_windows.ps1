@@ -61,11 +61,25 @@ Function Get-RedirectedUrl {
         [String]$URL
     )
 
-    $request = [System.Net.WebRequest]::Create($url)
-    $request.AllowAutoRedirect=$true
-    $response=$request.GetResponse()
-    $response.ResponseUri.AbsoluteUri
-    $response.Close()
+    foreach ($attempt in 1, 2, 3) {
+        try {
+            $request = [System.Net.WebRequest]::Create($url)
+            $request.AllowAutoRedirect=$true
+            $response=$request.GetResponse()
+            $response.ResponseUri.AbsoluteUri
+            $response.Close()
+            return
+        } catch {
+            if ($attempt -lt 3) {
+                Write-Warning "Caught error: $_"
+                Write-Warning "Get-RedirectedUrl: Fetch attempt #${attempt} for $url failed, trying again in 10s"
+                Start-Sleep -Seconds 10
+                continue
+            }
+            Write-Error "Get-RedirectedUrl: Final fetch attempt for $url failed, failing whole call"
+            throw
+        }
+    }
 }
 
 function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402

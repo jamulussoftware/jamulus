@@ -55,10 +55,9 @@ Function Clean-Build-Environment
 
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
-
     param(
         [Parameter(Mandatory=$true)]
-        [String]$URL
+        [string] $url
     )
 
     foreach ($attempt in 1, 2, 3) {

@@ -80,7 +80,7 @@ jobs:
       - name:                       Remove release ${{steps.get-build-vars.outputs.RELEASE_TAG}}, if existing
         if:                         steps.get-build-vars.outputs.PUBLISH_TO_RELEASE == 'true'
         continue-on-error:          true
-        uses:                       dev-drprasad/delete-tag-and-release@v0.1.2
+        uses:                       dev-drprasad/delete-tag-and-release@085c6969f18bad0de1b9f3fe6692a3cd01f64fe5
         with:
           delete_release:           true
           tag_name:                 ${{ steps.get-build-vars.outputs.RELEASE_TAG }}
@@ -187,7 +187,7 @@ jobs:
     steps:
       - name:                       Select Xcode version for Mac
         if:                         matrix.config.target_os == 'macos' || matrix.config.target_os == 'ios'
-        uses:                       maxim-lobanov/setup-xcode@v1
+        uses:                       maxim-lobanov/setup-xcode@4aa4176a819ae7c019451acfda0bba67bffc6704
         with:
           xcode-version:            ${{ matrix.config.xcode_version }}
 
@@ -291,7 +291,7 @@ jobs:
                                     steps.build.outputs.macos_signed == 'true' &&
                                     needs.create_release.outputs.publish_to_release == 'true'
         id:                         staple-macOS-app
-        uses:                       devbotsxyz/xcode-staple@v1
+        uses:                       devbotsxyz/xcode-staple@ae68b22ca35d15864b7f7923e1a166533b2944bf
         with:
           product-path:             deploy/${{ steps.get-artifacts.outputs.artifact_1 }}
 

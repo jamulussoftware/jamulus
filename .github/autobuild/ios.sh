@@ -2,6 +2,8 @@
 set -eu
 
 QT_DIR=/usr/local/opt/qt
+# The following version pinnings are semi-automatically checked for
+# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
 AQTINSTALL_VERSION=2.1.0
 
 if [[ ! ${QT_VERSION:-} =~ [0-9]+\.[0-9]+\..* ]]; then

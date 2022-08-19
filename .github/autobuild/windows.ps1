@@ -16,6 +16,8 @@ $ErrorActionPreference = "Stop"
 
 $QtDir = 'C:\Qt'
 $ChocoCacheDir = 'C:\ChocoCache'
+# The following version pinnings are semi-automatically checked for
+# updates. Verify .github/workflows/bump-dependencies.yaml when changing those manually:
 $Qt32Version = "5.15.2"
 $Qt64Version = "5.15.2"
 $AqtinstallVersion = "2.1.0"

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eu -o pipefail
 
 YEAR=$(date +%Y)
 echo "Updating global copyright strings..."

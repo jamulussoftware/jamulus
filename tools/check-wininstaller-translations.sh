@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eu -o pipefail
 
 BASE_DIR=src/translation/wininstaller/
 BASE_LANG=en

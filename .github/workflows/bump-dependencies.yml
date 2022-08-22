@@ -114,7 +114,7 @@ jobs:
           # Therefore, use perl instead:
           perl -pe 's/${{ matrix.components.local_version_regex }}/${1}'"${upstream_version}"'${3}/gi' -i "${files[@]}"
           git add .
-          title="Build: Update ${{ matrix.components.name }} to ${upstream_version}"
+          title="Build: Bump ${{ matrix.components.name }} from ${local_version} to ${upstream_version}"
           pr_title="${title} (Automated PR)"
           existing_pr="$(gh pr list --head "${pr_branch}" --json number --jq '.[].number')"
           git commit -m "${title}"

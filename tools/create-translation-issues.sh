@@ -16,7 +16,7 @@
 # Example usage for web translations:
 #  ../jamulus/tools/create-translation-issues.sh 3.8.0 2021-05-15 web 'Note: The term "Central server" has been replaced with "Directory server"'
 
-set -eu
+set -eu -o pipefail
 
 if [[ -z ${1:-} ]] || [[ -z ${2:-} ]] || [[ -z ${3:-} ]]; then
     echo "Syntax: $0 RELEASE DEADLINE app|web [EXTRA_TEXT]"

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eu -o pipefail
 
 root_path=$(pwd)
 project_path="${root_path}/Jamulus.pro"

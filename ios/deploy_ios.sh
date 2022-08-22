@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eu -o pipefail
 
 ## Builds an ipa file for iOS. Should be run from the repo-root
 

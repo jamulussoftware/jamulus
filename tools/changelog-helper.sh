@@ -1,6 +1,6 @@
 #!/bin/bash
 # Requirements: git, Github CLI (gh), jq
-set -eu
+set -eu -o pipefail
 
 echo "This tool checks the ChangeLog file and compares its entries for the top-most"
 echo "release against the associated Github milestone and the git log."

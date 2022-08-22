@@ -15,7 +15,7 @@ jobs:
       github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: ./tools/update-copyright-notices.sh
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
       startsWith(github.event.pull_request.head.label, 'jamulussoftware:updateCopyrightNotices')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - env:
           pr_branch: ${{ github.event.pull_request.head.ref }}
         run: |

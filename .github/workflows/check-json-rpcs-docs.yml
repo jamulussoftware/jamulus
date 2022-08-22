@@ -12,7 +12,7 @@ jobs:
   check-json-rpc-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: ./tools/generate_json_rpc_docs.py
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

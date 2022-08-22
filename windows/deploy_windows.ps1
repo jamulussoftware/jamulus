@@ -58,17 +58,30 @@ Function Clean-Build-Environment
 
 # For sourceforge links we need to get the correct mirror (especially NISIS) Thanks: https://www.powershellmagazine.com/2013/01/29/pstip-retrieve-a-redirected-url/
 Function Get-RedirectedUrl {
-
     param(
         [Parameter(Mandatory=$true)]
-        [String]$URL
+        [string] $url
     )
 
-    $request = [System.Net.WebRequest]::Create($url)
-    $request.AllowAutoRedirect=$true
-    $response=$request.GetResponse()
-    $response.ResponseUri.AbsoluteUri
-    $response.Close()
+    foreach ($attempt in 1, 2, 3) {
+        try {
+            $request = [System.Net.WebRequest]::Create($url)
+            $request.AllowAutoRedirect=$true
+            $response=$request.GetResponse()
+            $response.ResponseUri.AbsoluteUri
+            $response.Close()
+            return
+        } catch {
+            if ($attempt -lt 3) {
+                Write-Warning "Caught error: $_"
+                Write-Warning "Get-RedirectedUrl: Fetch attempt #${attempt} for $url failed, trying again in 10s"
+                Start-Sleep -Seconds 10
+                continue
+            }
+            Write-Error "Get-RedirectedUrl: Final fetch attempt for $url failed, failing whole call"
+            throw
+        }
+    }
 }
 
 function Initialize-Module-Here ($m) { # see https://stackoverflow.com/a/51692402
@@ -112,7 +125,11 @@ Function Install-Dependency
         [string] $Destination
     )
 
-    if (Test-Path -Path "$WindowsPath\$Destination") { return }
+    if (Test-Path -Path "$WindowsPath\$Destination")
+    {
+        echo "Using ${WindowsPath}\${Destination} from previous run (actions/cache)"
+        return
+    }
 
     $TempFileName = [System.IO.Path]::GetTempFileName() + ".zip"
     $TempDir = [System.IO.Path]::GetTempPath()

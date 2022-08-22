@@ -120,13 +120,15 @@ jobs:
 
           - config_name:            Linux .deb amd64 (artifacts+codeQL)
             target_os:              linux
-            building_on_os:         ubuntu-18.04
+            building_on_os:         ubuntu-22.04
+            building_container:     ubuntu:18.04
             base_command:           ./.github/autobuild/linux_deb.sh
             run_codeql:             true
 
           - config_name:            Linux .deb armhf (artifacts)
             target_os:              linux
-            building_on_os:         ubuntu-18.04
+            building_on_os:         ubuntu-22.04
+            building_container:     ubuntu:18.04
             base_command:           TARGET_ARCH=armhf ./.github/autobuild/linux_deb.sh
             run_codeql:             false
 
@@ -184,12 +186,29 @@ jobs:
             run_codeql:             false
 
     runs-on:                        ${{ matrix.config.building_on_os }}
+    container:                      ${{ matrix.config.building_container }}
     steps:
       - name:                       Select Xcode version for Mac
         if:                         matrix.config.target_os == 'macos' || matrix.config.target_os == 'ios'
         uses:                       maxim-lobanov/setup-xcode@4aa4176a819ae7c019451acfda0bba67bffc6704
         with:
           xcode-version:            ${{ matrix.config.xcode_version }}
+
+      - name:                       Set up base dependencies in container environment
+        if:                         matrix.config.building_container == 'ubuntu:18.04'
+        run:                        |
+          set -eu
+          apt-get -qq update
+          apt-get install -y software-properties-common sudo
+          add-apt-repository ppa:git-core/ppa
+          apt-get -qq update
+          apt-get -qq -y install git-core
+          # Github Runner environments usually whitelist the default checkout directory for git.
+          # However, when using containers, we have to do that manually in order for git commands to work
+          # (e.g. in Jamulus.pro's VERSION logic):
+          # https://github.com/actions/runner/issues/2033
+          # https://github.com/actions/checkout/issues/766
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
       - name:                       Checkout code
         uses:                       actions/checkout@v2

@@ -1,5 +1,5 @@
 VERSION = 3.9.0dev
-
+#ignore
 # use target name which does not use a capital letter at the beginning
 contains(CONFIG, "noupcasename") {
     message(The target name is jamulus instead of Jamulus.)

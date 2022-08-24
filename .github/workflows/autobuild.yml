@@ -365,7 +365,7 @@ jobs:
           MACOS_CERTIFICATE_ID:     ${{ secrets.MACOS_CERT_ID }}
           NOTARIZATION_PASSWORD:    ${{ secrets.NOTARIZATION_PASSWORD }}
           KEYCHAIN_PASSWORD:        ${{ secrets.KEYCHAIN_PASSWORD }}
-
+          MACOS_CA_PUBLICKEY:       ${{ secrets.MACOS_CA_PUBKEY }}
       - name:                       Post-Build for ${{ matrix.config.config_name }}
         id:                         get-artifacts
         run:                        ${{ matrix.config.base_command }} get-artifacts
@@ -394,7 +394,8 @@ jobs:
       - name:                       Notarize macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    steps.build.outputs.macos_notarize == 'true'
         id:                         notarize-macOS-app
         uses:                       devbotsxyz/xcode-notarize@d7219e1c390b47db8bab0f6b4fc1e3b7943e4b3b
         with:
@@ -406,7 +407,8 @@ jobs:
       - name:                       Staple macOS Release Build
         if:                         >-
                                     steps.build.outputs.macos_signed == 'true' &&
-                                    needs.create_release.outputs.publish_to_release == 'true'
+                                    needs.create_release.outputs.publish_to_release == 'true' &&
+                                    steps.build.outputs.macos_notarize == 'true'
         id:                         staple-macOS-app
         uses:                       devbotsxyz/xcode-staple@ae68b22ca35d15864b7f7923e1a166533b2944bf
         with:

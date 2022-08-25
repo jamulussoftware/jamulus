@@ -70,7 +70,7 @@ build_app() {
 
     # Add Qt deployment dependencies
     if [[ -z "$cert_name" ]]; then
-        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+        macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -codesign="-"
     else
         macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite -hardened-runtime -timestamp -appstore-compliant -sign-for-notarization="${cert_name}"
     fi

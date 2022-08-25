@@ -14,6 +14,14 @@ endif
 %:
 	dh $@
 
+override_dh_update_autotools_config:
+	# dh_update_autotools_config replaces libs/opus/config.{sub,guess}.
+	# This is unnecessary as we don't build opus via autotools at all
+	# (we use qmake). In addition, this would cause our -dev version generation
+	# logic to mark Debian builds as -dirty by default.
+	# Therefore, disable this behavior:
+	:
+
 override_dh_auto_configure:
 	mkdir -p build-gui && cd build-gui && $(QMAKE) "CONFIG+=noupcasename" PREFIX=/usr ../Jamulus.pro
 	mkdir -p build-nox && cd build-nox && $(QMAKE) "CONFIG+=headless serveronly" TARGET=jamulus-headless PREFIX=/usr ../Jamulus.pro

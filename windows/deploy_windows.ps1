@@ -63,7 +63,10 @@ Function Get-RedirectedUrl {
         [string] $url
     )
 
-    foreach ($attempt in 1, 2, 3) {
+    $numAttempts = 10
+    $sleepTime = 10
+    $maxSleepTime = 80
+    for ($attempt = 1; $attempt -le $numAttempts; $attempt++) {
         try {
             $request = [System.Net.WebRequest]::Create($url)
             $request.AllowAutoRedirect=$true
@@ -72,13 +75,14 @@ Function Get-RedirectedUrl {
             $response.Close()
             return
         } catch {
-            if ($attempt -lt 3) {
+            if ($attempt -lt $numAttempts) {
                 Write-Warning "Caught error: $_"
-                Write-Warning "Get-RedirectedUrl: Fetch attempt #${attempt} for $url failed, trying again in 10s"
-                Start-Sleep -Seconds 10
+                Write-Warning "Get-RedirectedUrl: Fetch attempt #${attempt}/${numAttempts} for $url failed, trying again in ${sleepTime}s"
+                Start-Sleep -Seconds $sleepTime
+                $sleepTime = [Math]::Min($sleepTime * 2, $maxSleepTime)
                 continue
             }
-            Write-Error "Get-RedirectedUrl: Final fetch attempt for $url failed, failing whole call"
+            Write-Error "Get-RedirectedUrl: All ${numAttempts} fetch attempts for $url failed, failing whole call"
             throw
         }
     }

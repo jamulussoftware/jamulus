@@ -114,7 +114,7 @@ jobs:
           # Therefore, use perl instead:
           perl -pe 's/${{ matrix.components.local_version_regex }}/${1}'"${upstream_version}"'${3}/gi' -i "${files[@]}"
           git add .
-          title="Build: Update ${{ matrix.components.name }} to ${upstream_version}"
+          title="Build: Bump ${{ matrix.components.name }} from ${local_version} to ${upstream_version}"
           pr_title="${title} (Automated PR)"
           existing_pr="$(gh pr list --head "${pr_branch}" --json number --jq '.[].number')"
           git commit -m "${title}"
@@ -137,7 +137,14 @@ jobs:
           fi
           if [[ $existing_pr ]]; then
             existing_title="$(gh pr view "${existing_pr}" --json title --jq .title)"
-            gh pr edit "${existing_pr}" --title "${pr_title}" --body "${body}"
+            # Use Github's API directly instead of using `gh edit`.
+            # The latter internally queries all fields of the PR which leads to
+            # a permission error as the workflow does not have access to
+            # organization projects:
+            gh api --silent -H "Accept: application/vnd.github+json" --method PATCH \
+              "/repos/${GITHUB_REPOSITORY}/pulls/${existing_pr}" \
+              -f title="${pr_title}" \
+              -f body="${body}"
             if [[ "${existing_title}" != "${pr_title}" ]]; then
               # If the title changed, this implies that we are updating the PR for a different version
               # (and not just rebasing it). Therefore, leave a comment to make that transparent:

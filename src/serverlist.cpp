@@ -181,10 +181,14 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         iServInfoNumSplitItems = slServInfoSeparateParams.count();
     }
 
-    // Init server list entry (server info for this server) with defaults. Per
-    // definition the client substitutes the IP address of the directory server
-    // itself for his server list. If we are a directory server, we assume that
-    // we are a permanent server.
+    /*
+     * Init server list entry (server info for this server) with defaults.
+     *
+     * The client will use the built in or custom address when retrieving the server list from a directory.
+     * The values supplied here only apply when using the server as a server, not as a directory.
+     *
+     * If we are a directory, we assume that we are a permanent server.
+     */
     CServerListEntry ThisServerListEntry ( haServerAddr, ServerPublicIP, "", QLocale::system().country(), "", iNumChannels, bIsDirectoryServer );
 
     // parse the server info string according to definition:
@@ -631,6 +635,10 @@ void CServerListManager::Remove ( const CHostAddress& InetAddr )
  - SERVER external to DIRECTORY (list entry external IP same LAN)
    - CLIENT internal to SERVER (CLM     same IP as list entry external IP): use "internal" fields (local LAN address)
    - CLIENT external to SERVER (CLM not same IP as list entry external IP): use "external" fields (public IP address from protocol)
+
+ Finally, when retrieving the entry for the directory itself life is more complicated still.  It's easiest just to return "0"
+ and allow the client connect dialogue instead to use the IP and Port from which the list was received.
+
  */
 void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
 {
@@ -646,10 +654,13 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
         // allocate memory for the entire list
         CVector<CServerInfo> vecServerInfo ( iCurServerListSize );
 
-        // copy the list (we have to copy it since the message requires
-        // a vector but the list is actually stored in a QList object and
-        // not in a vector object
-        for ( int iIdx = 0; iIdx < iCurServerListSize; iIdx++ )
+        // copy list item for the directory and just let the protocol sort out the actual details
+        vecServerInfo[0]          = ServerList[0];
+        vecServerInfo[0].HostAddr = CHostAddress();
+
+        // copy the list (we have to copy it since the message requires a vector but the list is actually stored in a QList object
+        // and not in a vector object)
+        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
             // copy list item
             CServerInfo& siCurListEntry = vecServerInfo[iIdx] = ServerList[iIdx];
@@ -657,7 +668,7 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
             bool serverIsInternal = NetworkUtil::IsPrivateNetworkIP ( siCurListEntry.HostAddr.InetAddr );
 
             bool wantHostAddr = clientIsInternal /* HostAddr is local IP if local server else external IP, so do not replace */ ||
-                                ( !serverIsInternal && iIdx != 0 &&
+                                ( !serverIsInternal &&
                                   InetAddr.InetAddr != siCurListEntry.HostAddr.InetAddr /* external server and client have different public IPs */ );
 
             if ( !wantHostAddr )
@@ -665,8 +676,9 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
                 vecServerInfo[iIdx].HostAddr = siCurListEntry.LHostAddr;
             }
 
-            // do not send a "ping" to the directory itself or a server local to the directory
-            if ( iIdx != 0 && !serverIsInternal )
+            // do not send a "ping" either to a server local to the directory (no need)
+            // or for a client local to the directory (the address will be wrong)
+            if ( !serverIsInternal && !clientIsInternal )
             {
                 // create "send empty message" for all other registered servers
                 // this causes the server (vecServerInfo[iIdx].HostAddr)

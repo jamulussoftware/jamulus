@@ -65,7 +65,16 @@ build_app() {
         echo "Building universal binary from: " "${deploy_path}/${target_name}.arch_"*
         lipo -create -output "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${deploy_path}/${target_name}.arch_"*
         rm -f "${deploy_path}/${target_name}.arch_"*
-        file "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
+
+        local file_output
+        file_output=$(file "${build_path}/${target_name}.app/Contents/MacOS/${target_name}")
+        echo "${file_output}"
+        for target_arch in "${target_archs_array[@]}"; do
+            if ! grep -q "for architecture ${target_arch}" <<< "${file_output}"; then
+                echo "Missing ${target_arch} in file output -- build went wrong?"
+                exit 1
+            fi
+        done
     fi
 
     # Add Qt deployment dependencies

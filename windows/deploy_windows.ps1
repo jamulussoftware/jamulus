@@ -131,7 +131,7 @@ Function Install-Dependency
 
     if (Test-Path -Path "$WindowsPath\$Destination")
     {
-        echo "Using ${WindowsPath}\${Destination} from previous run (actions/cache)"
+        echo "Using ${WindowsPath}\${Destination} from previous run (e.g. actions/cache)"
         return
     }
 
@@ -159,7 +159,7 @@ Function Install-Dependencies
     }
     Initialize-Module-Here -m "VSSetup"
     Install-Dependency -Uri $NsisUrl `
-        -Name $NsisName -Destination "NSIS"
+        -Name $NsisName -Destination "..\libs\NSIS\NSIS-source"
 
     if ($BuildOption -Notmatch "jack") {
         # Don't download ASIO SDK on Jamulus JACK builds to save
@@ -325,7 +325,7 @@ Function Build-Installer
 
     if ($BuildOption -ne "")
     {
-        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+        Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
             -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
             "/DBUILD_OPTION=$BuildOption", `
@@ -333,7 +333,7 @@ Function Build-Installer
     }
     else
     {
-        Invoke-Native-Command -Command "$WindowsPath\NSIS\makensis" `
+        Invoke-Native-Command -Command "$RootPath\libs\NSIS\NSIS-source\makensis" `
             -Arguments ("/v4", "/DAPP_NAME=$AppName", "/DAPP_VERSION=$AppVersion", `
             "/DROOT_PATH=$RootPath", "/DWINDOWS_PATH=$WindowsPath", "/DDEPLOY_PATH=$DeployPath", `
             "$WindowsPath\installer.nsi")
@@ -343,7 +343,7 @@ Function Build-Installer
 # Build and copy NS-Process dll
 Function Build-NSProcess
 {
-    if (!(Test-Path -path "$WindowsPath\nsProcess.dll")) {
+    if (!(Test-Path -path "$RootPath\libs\NSIS\nsProcess.dll")) {
 
         echo "Building nsProcess..."
 
@@ -351,11 +351,11 @@ Function Build-NSProcess
         Initialize-Build-Environment -BuildArch "x86"
 
         Invoke-Native-Command -Command "msbuild" `
-            -Arguments ("$WindowsPath\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
+            -Arguments ("$RootPath\libs\NSIS\nsProcess\nsProcess.sln", '/p:Configuration="Release UNICODE"', `
             "/p:Platform=Win32")
 
-        Move-Item -Path "$WindowsPath\nsProcess\Release\nsProcess.dll" -Destination "$WindowsPath\nsProcess.dll" -Force
-        Remove-Item -Path "$WindowsPath\nsProcess\Release\" -Force -Recurse
+        Move-Item -Path "$RootPath\libs\NSIS\nsProcess\Release\nsProcess.dll" -Destination "$RootPath\libs\NSIS\nsProcess.dll" -Force
+        Remove-Item -Path "$RootPath\libs\NSIS\nsProcess\Release\" -Force -Recurse
         $OriginalEnv | % { Set-Item "Env:$($_.Name)" $_.Value }
     }
 }

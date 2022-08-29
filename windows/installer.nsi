@@ -1,12 +1,12 @@
 ; Jamulus NSIS Installer with Modern User Interface
 
 ; Includes
-!include "x64.nsh"                             ; 64bit architecture support
-!include "MUI2.nsh"                            ; Modern UI
-!include "LogicLib.nsh"                        ; Logical operators
-!include "Sections.nsh"                        ; Support for section selection
-!include "nsDialogs.nsh"                       ; Support custom pages with dialogs
-!include "NSISCopyRegistryKey\registry.nsh"    ; Support moving registry keys
+!include "x64.nsh"                                                  ; 64bit architecture support
+!include "MUI2.nsh"                                                 ; Modern UI
+!include "LogicLib.nsh"                                             ; Logical operators
+!include "Sections.nsh"                                             ; Support for section selection
+!include "nsDialogs.nsh"                                            ; Support custom pages with dialogs
+!include "${ROOT_PATH}\libs\NSIS\NSISCopyRegistryKey\registry.nsh"  ; Support moving registry keys
 
 
 ; Compile-time definitions
@@ -37,7 +37,7 @@ Caption      "${APP_NAME} ${APP_VERSION} Installer"
 BrandingText "${APP_NAME}. Make music online. With friends. For free."
 
  ; Additional plugin location (for nsProcess)
-!addplugindir "${WINDOWS_PATH}"
+!addplugindir "${ROOT_PATH}\libs\NSIS"
 
 ; Add support for copying registry keys
 

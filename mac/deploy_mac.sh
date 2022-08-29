@@ -57,14 +57,14 @@ build_app() {
         make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
         target_name=$(sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p' "${build_path}/Makefile")
         if [[ ${#target_archs_array[@]} -gt 1 ]]; then
-            # When building for multiple architectures, move the binary to a safe place to avoid overwriting by the other passes.
-            mv "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${build_path}/${target_name}.app/Contents/MacOS/${target_name}.arch_${target_arch}"
+            # When building for multiple architectures, move the binary to a safe place to avoid overwriting/cleaning by the other passes.
+            mv "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${deploy_path}/${target_name}.arch_${target_arch}"
         fi
     done
     if [[ ${#target_archs_array[@]} -gt 1 ]]; then
-        echo "Building universal binary from: " "${build_path}/${target_name}.app/Contents/MacOS/${target_name}.arch_"*
-        lipo -create -output "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${build_path}/${target_name}.app/Contents/MacOS/${target_name}.arch_"*
-        rm -f "${build_path}/${target_name}.app/Contents/MacOS/${target_name}.arch_"*
+        echo "Building universal binary from: " "${deploy_path}/${target_name}.arch_"*
+        lipo -create -output "${build_path}/${target_name}.app/Contents/MacOS/${target_name}" "${deploy_path}/${target_name}.arch_"*
+        rm -f "${deploy_path}/${target_name}.arch_"*
         file "${build_path}/${target_name}.app/Contents/MacOS/${target_name}"
     fi
 

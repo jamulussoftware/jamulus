@@ -1429,7 +1429,7 @@ int celt_encode_with_ec(CELTEncoder * OPUS_RESTRICT st, const opus_val16 * pcm, 
    celt_sig *prefilter_mem;
    opus_val16 *oldBandE, *oldLogE, *oldLogE2, *energyError;
    int shortBlocks=0;
-   int isTransient=0;
+   int isTransient=1;
    const int CC = st->channels;
    const int C = st->stream_channels;
    int LM, M;

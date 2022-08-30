@@ -1436,6 +1436,31 @@ bool CLocale::IsCountryCodeSupported ( unsigned short iCountryCode )
 #endif
 }
 
+QLocale::Country CLocale::GetCountryCodeByTwoLetterCode ( QString sTwoLetterCode )
+{
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 2, 0 )
+    return QLocale::codeToTerritory ( sTwoLetterCode );
+#else
+    QList<QLocale> vLocaleList = QLocale::matchingLocales ( QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry );
+    QStringList    vstrLocParts;
+
+    // Qt < 6.2 does not support lookups from two-letter iso codes to
+    // QLocale::Country. Therefore, we have to loop over all supported
+    // locales and perform the matching ourselves.
+    // In the future, QLocale::codeToTerritory can be used.
+    foreach ( const QLocale qLocale, vLocaleList )
+    {
+        QStringList vstrLocParts = qLocale.name().split ( "_" );
+
+        if ( vstrLocParts.size() >= 2 && vstrLocParts.at ( 1 ).toLower() == sTwoLetterCode )
+        {
+            return qLocale.country();
+        }
+    }
+    return QLocale::AnyCountry;
+#endif
+}
+
 QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry /* Qt-native value */ )
 {
     QString strReturn = "";

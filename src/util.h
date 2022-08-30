@@ -853,6 +853,7 @@ public:
         195, 196, 114, 254, 197, 198, 201, 202, 203, 205, 206, 207, 208, 209, 210, 211, 62,  212, 213, 214, 215, 253, 216, 217, 218, 219, 220,
         221, 222, 223, 224, 226, 225, 234, 227, 228, 229, 230, 231, 232, 235, 236, 260, 237, 239, 240,
     };
+    constexpr int const static qt6CountryToWireFormatLen = sizeof ( qt6CountryToWireFormat ) / sizeof ( qt6CountryToWireFormat[0] );
 #endif
 };
 

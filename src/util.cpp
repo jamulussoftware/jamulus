@@ -1423,11 +1423,16 @@ bool CLocale::IsCountryCodeSupported ( unsigned short iCountryCode )
 #if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
     // On newer Qt versions there might be codes which do not have a Qt5 equivalent.
     // We have no way to support those sanely right now.
+    // Before we can check that via an array lookup, we have to ensure that
+    // we are within the boundaries of that array:
+    if ( iCountryCode >= qt6CountryToWireFormatLen )
+    {
+        return false;
+    }
     return qt6CountryToWireFormat[iCountryCode] != -1;
 #else
     // All Qt5 codes are supported.
-    Q_UNUSED ( iCountryCode );
-    return true;
+    return iCountryCode <= QLocale::LastCountry;
 #endif
 }
 

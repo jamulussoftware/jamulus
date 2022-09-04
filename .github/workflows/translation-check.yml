@@ -1,21 +1,28 @@
-name: Verify translations
+name:                Verify translations
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/translation/wininstaller/**'
+      - 'tools/check-wininstaller-translations.sh'
+      - '.github/workflows/translation-check.yml'
   push:
     paths:
-      - 'src/translation/**'
+      - 'src/translation/wininstaller/**'
+      - 'tools/check-wininstaller-translations.sh'
+      - '.github/workflows/translation-check.yml'
 
 jobs:
   translation-check:
-    name: Verify translation
+    name:            Verify translation
     permissions:
-      contents: read
-    runs-on: ubuntu-latest
+      contents:      read
+    runs-on:         ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - name: "Check Windows installer translations"
-        run: ./tools/check-wininstaller-translations.sh
-      #- name: "Check for duplicate hotkeys (will not fail)"
-      #  run: sudo apt install libxml-simple-perl && cd src/translation/ && perl ./tools/checkkeys.pl
+      - name:        Checkout Code
+        uses:        actions/checkout@v3
+      - name:        "Check Windows installer translations"
+        run:         ./tools/check-wininstaller-translations.sh
+      #- name:       "Check for duplicate hotkeys (will not fail)"
+      #  run:        sudo apt install libxml-simple-perl && cd src/translation/ && perl ./tools/checkkeys.pl

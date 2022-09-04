@@ -78,7 +78,7 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 win32 {
     DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
-    RC_FILE = windows/mainicon.rc
+    RC_FILE = src/res/win-mainicon.rc
     mingw* {
         LIBS += -lole32 \
             -luser32 \
@@ -159,11 +159,11 @@ win32 {
 
         DEFINES += SERVER_BUNDLE
         TARGET = $${TARGET}Server
-        MACOSX_BUNDLE_ICON.files = mac/jamulus-server-icon-2020.icns
-        RC_FILE = mac/jamulus-server-icon-2020.icns
+        MACOSX_BUNDLE_ICON.files = src/res/mac-jamulus-server.icns
+        RC_FILE = src/res/mac-jamulus-server.icns
     } else {
-        MACOSX_BUNDLE_ICON.files = mac/mainicon.icns
-        RC_FILE = mac/mainicon.icns
+        MACOSX_BUNDLE_ICON.files = src/res/mac-mainicon.icns
+        RC_FILE = src/res/mac-mainicon.icns
     }
 
     HEADERS += src/mac/activity.h src/mac/badgelabel.h

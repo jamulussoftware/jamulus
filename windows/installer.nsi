@@ -49,17 +49,17 @@ BrandingText "${APP_NAME}. Make music online. With friends. For free."
 !endif
 
 ; Installer graphical element configuration
-!define MUI_ICON                       "${WINDOWS_PATH}\mainicon.ico"
-!define MUI_UNICON                     "${WINDOWS_PATH}\mainicon.ico"
-!define SERVER_ICON                    "${WINDOWS_PATH}\jamulus-server-icon-2020.ico"
+!define MUI_ICON                       "${ROOT_PATH}\src\res\win-mainicon.ico"
+!define MUI_UNICON                     "${ROOT_PATH}\src\res\win-mainicon.ico"
+!define SERVER_ICON                    "${ROOT_PATH}\src\res\win-jamulus-server.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP         "${WINDOWS_PATH}\installer-banner.bmp"
+!define MUI_HEADERIMAGE_BITMAP         "${ROOT_PATH}\src\res\win-installer-banner.bmp"
 !if ${BUILD_OPTION} == "jackonwindows"
-    !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome.bmp"
-    !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome.bmp"
+    !define MUI_WELCOMEFINISHPAGE_BITMAP   "${ROOT_PATH}\src\res\win-installer-welcome.bmp"
+    !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${ROOT_PATH}\src\res\win-installer-welcome.bmp"
 !else
-    !define MUI_WELCOMEFINISHPAGE_BITMAP   "${WINDOWS_PATH}\installer-welcome-asio.bmp"
-    !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${WINDOWS_PATH}\installer-welcome-asio.bmp"
+    !define MUI_WELCOMEFINISHPAGE_BITMAP   "${ROOT_PATH}\src\res\win-installer-welcome-asio.bmp"
+    !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${ROOT_PATH}\src\res\win-installer-welcome-asio.bmp"
 !endif
 
 ; Store the installer language - must be placed before the installer page configuration

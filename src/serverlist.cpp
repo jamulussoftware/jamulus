@@ -649,6 +649,15 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
         // if the client IP address is a private one, it's on the same LAN as the directory
         bool clientIsInternal = NetworkUtil::IsPrivateNetworkIP ( InetAddr.InetAddr );
 
+        CHostAddress clientPublicAddr = InetAddr;
+        if ( clientIsInternal && CHostAddress().InetAddr != ServerList[0].LHostAddr.InetAddr &&
+             !NetworkUtil::IsPrivateNetworkIP ( ServerList[0].LHostAddr.InetAddr ) )
+        {
+            // client and directory on same LAN, directory has public IP set, that should be suitable for the
+            // client, too (i.e. same router with same public IP will be used for both), so use it for client public IP
+            clientPublicAddr.InetAddr = ServerList[0].LHostAddr.InetAddr;
+        }
+
         const ushort iCurServerListSize = static_cast<ushort> ( ServerList.size() );
 
         // allocate memory for the entire list
@@ -676,14 +685,14 @@ void CServerListManager::RetrieveAll ( const CHostAddress& InetAddr )
                 vecServerInfo[iIdx].HostAddr = siCurListEntry.LHostAddr;
             }
 
-            // do not send a "ping" either to a server local to the directory (no need)
-            // or for a client local to the directory (the address will be wrong)
-            if ( !serverIsInternal && !clientIsInternal )
+            // do not send a "ping" to a server local to the directory (no need)
+            if ( !serverIsInternal )
             {
                 // create "send empty message" for all other registered servers
                 // this causes the server (vecServerInfo[iIdx].HostAddr)
-                // to send a "reply" to the client (InetAddr) - with the intent of opening its firewall for the client
-                pConnLessProtocol->CreateCLSendEmptyMesMes ( siCurListEntry.HostAddr, InetAddr );
+                // to send a "reply" to the client (InetAddr or best guess public IP address if internal to directory)
+                // - with the intent of opening the server firewall for the client
+                pConnLessProtocol->CreateCLSendEmptyMesMes ( siCurListEntry.HostAddr, clientPublicAddr );
             }
         }
 

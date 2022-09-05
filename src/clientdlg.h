@@ -105,7 +105,6 @@ protected:
     int            iClients;
     bool           bConnected;
     bool           bConnectDlgWasShown;
-    bool           bMIDICtrlUsed;
     bool           bDetectFeedback;
     bool           bEnableIPv6;
     ERecorderState eLastRecorderState;

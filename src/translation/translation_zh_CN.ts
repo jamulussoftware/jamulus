@@ -185,32 +185,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../audiomixerboard.cpp" line="895"/>
+        <location filename="../audiomixerboard.cpp" line="903"/>
         <source>Personal Mix at the Server</source>
         <translation>位于服务器的个人混音室</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="896"/>
+        <location filename="../audiomixerboard.cpp" line="904"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>当连接到一个服务器时，此控件将允许您设置本地混音选项而不会影响到它人实际听到您的情况。标题将会显示服务器名称，以及是否在录制状态。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="969"/>
+        <location filename="../audiomixerboard.cpp" line="977"/>
         <source>Server</source>
         <translation>服务器</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="978"/>
+        <location filename="../audiomixerboard.cpp" line="986"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>尝 试 连 接 中</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1176"/>
+        <location filename="../audiomixerboard.cpp" line="1184"/>
         <source>RECORDING ACTIVE</source>
         <translation>录制已开启</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="1186"/>
+        <location filename="../audiomixerboard.cpp" line="1194"/>
         <source>Personal Mix at: %1</source>
         <translation>个人混音室: %1</translation>
     </message>
@@ -218,153 +218,153 @@
 <context>
     <name>CChannelFader</name>
     <message>
-        <location filename="../audiomixerboard.cpp" line="43"/>
-        <location filename="../audiomixerboard.cpp" line="236"/>
-        <location filename="../audiomixerboard.cpp" line="250"/>
+        <location filename="../audiomixerboard.cpp" line="44"/>
+        <location filename="../audiomixerboard.cpp" line="237"/>
+        <location filename="../audiomixerboard.cpp" line="251"/>
         <source>Pan</source>
         <translation>左右平衡</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="47"/>
-        <location filename="../audiomixerboard.cpp" line="161"/>
-        <location filename="../audiomixerboard.cpp" line="251"/>
+        <location filename="../audiomixerboard.cpp" line="48"/>
+        <location filename="../audiomixerboard.cpp" line="162"/>
+        <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Mute</source>
         <translation>静音</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="48"/>
-        <location filename="../audiomixerboard.cpp" line="164"/>
-        <location filename="../audiomixerboard.cpp" line="252"/>
+        <location filename="../audiomixerboard.cpp" line="49"/>
+        <location filename="../audiomixerboard.cpp" line="165"/>
+        <location filename="../audiomixerboard.cpp" line="253"/>
         <source>Solo</source>
         <translation>独奏</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="66"/>
+        <location filename="../audiomixerboard.cpp" line="67"/>
         <source>&amp;No grouping</source>
         <translation>不分组(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="69"/>
+        <location filename="../audiomixerboard.cpp" line="70"/>
         <source>Assign to group</source>
         <translation>分配到组</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="178"/>
+        <location filename="../audiomixerboard.cpp" line="179"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
         <translation>推子标签指示了连接到的客户端。标签名称、乐器图案和您所在位置的旗帜可在主窗口中进行设置。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="187"/>
+        <location filename="../audiomixerboard.cpp" line="188"/>
         <source>Mixer channel country/region flag</source>
         <translation>混音通道的国家/地区旗帜</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="253"/>
+        <location filename="../audiomixerboard.cpp" line="254"/>
         <source>Grp</source>
         <translation>组</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="138"/>
+        <location filename="../audiomixerboard.cpp" line="139"/>
         <source>Channel Level</source>
         <translation>声道音量</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="141"/>
+        <location filename="../audiomixerboard.cpp" line="142"/>
         <source>Input level of the current audio channel at the server</source>
         <translation>位于服务器的当前声道的输入音量</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="144"/>
+        <location filename="../audiomixerboard.cpp" line="145"/>
         <source>Mixer Fader</source>
         <translation>混音推子</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="147"/>
+        <location filename="../audiomixerboard.cpp" line="148"/>
         <source>Local mix level setting of the current audio channel at the server</source>
         <translation>位于服务器的当前音频通道的本地混音音量设置</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="150"/>
+        <location filename="../audiomixerboard.cpp" line="151"/>
         <source>Status Indicator</source>
         <translation>状态指示器</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="151"/>
+        <location filename="../audiomixerboard.cpp" line="152"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
         <translation>显示当前声道对应的客户端的状态指示。支持的指示有：</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="154"/>
+        <location filename="../audiomixerboard.cpp" line="155"/>
         <source>Status indicator label</source>
         <translation>状态指示标签</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="156"/>
+        <location filename="../audiomixerboard.cpp" line="157"/>
         <source>Panning</source>
         <translation>左右平衡</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="159"/>
+        <location filename="../audiomixerboard.cpp" line="160"/>
         <source>Local panning position of the current audio channel at the server</source>
         <translation>此服务器上当前声道的本地声像位置</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="161"/>
+        <location filename="../audiomixerboard.cpp" line="162"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation>使用静音勾选框，可将声道静音。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="162"/>
+        <location filename="../audiomixerboard.cpp" line="163"/>
         <source>Mute button</source>
         <translation>静音按钮</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="169"/>
+        <location filename="../audiomixerboard.cpp" line="170"/>
         <source>Solo button</source>
         <translation>独奏按钮</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="177"/>
+        <location filename="../audiomixerboard.cpp" line="178"/>
         <source>Fader Tag</source>
         <translation>推子标签</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="139"/>
+        <location filename="../audiomixerboard.cpp" line="140"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
         <translation>按推子显示当前声道的音量。所有连接到一服务器的客户端都会被分配有一个音频音量，所有客户端相同的值。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="145"/>
+        <location filename="../audiomixerboard.cpp" line="146"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
         <translation>调整当前声道的音量。所有连接到一服务器的客户端都会被分配有一个音频推子，在客户端旁展示，用以调整本地混音。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="153"/>
+        <location filename="../audiomixerboard.cpp" line="154"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
         <translation>被划掉的喇叭图标：表示其它客户端把你静音了。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="157"/>
+        <location filename="../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation>从左到右设定声道的声像。仅对立体声或单声道输入、立体声输出模式可用。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="165"/>
+        <location filename="../audiomixerboard.cpp" line="166"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
         <translation>使用独奏勾选框可将声道进行独奏，即除独奏声道外的其它声道将会静音。可将多个声道设置为独奏。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="171"/>
+        <location filename="../audiomixerboard.cpp" line="172"/>
         <source>Group</source>
         <translation>分组</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="172"/>
+        <location filename="../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
         <translation>通过分组勾选框，即可定义一组声道。移动一组内的任意一个推子时，所有同组的声道推子将会同时移动。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="175"/>
+        <location filename="../audiomixerboard.cpp" line="176"/>
         <source>Group button</source>
         <translation>分组按钮</translation>
     </message>
@@ -373,12 +373,12 @@
         <translation type="vanished">推子标签指示了连接到的客户端。标签名称、乐器图案和您所在地区的旗帜可在主窗口中进行设置。</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="183"/>
+        <location filename="../audiomixerboard.cpp" line="184"/>
         <source>Mixer channel instrument picture</source>
         <translation>混音通道的乐器图片</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="185"/>
+        <location filename="../audiomixerboard.cpp" line="186"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>混音通道的标签（推子标签）</translation>
     </message>
@@ -387,84 +387,84 @@
         <translation type="vanished">混音通道的地区旗帜</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="223"/>
+        <location filename="../audiomixerboard.cpp" line="224"/>
         <source>PAN</source>
         <translation>声像</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="224"/>
+        <location filename="../audiomixerboard.cpp" line="225"/>
         <source>MUTE</source>
         <translation>静音</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="225"/>
+        <location filename="../audiomixerboard.cpp" line="226"/>
         <source>SOLO</source>
         <translation>独奏</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="226"/>
+        <location filename="../audiomixerboard.cpp" line="227"/>
         <source>GRP</source>
         <translation>分组</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="237"/>
+        <location filename="../audiomixerboard.cpp" line="238"/>
         <source>M</source>
         <translation>M</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="238"/>
+        <location filename="../audiomixerboard.cpp" line="239"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="239"/>
+        <location filename="../audiomixerboard.cpp" line="240"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="788"/>
+        <location filename="../audiomixerboard.cpp" line="796"/>
         <source>Alias/Name</source>
         <translation>别名/名称</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="795"/>
+        <location filename="../audiomixerboard.cpp" line="803"/>
         <source>Instrument</source>
         <translation>乐器</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="803"/>
+        <location filename="../audiomixerboard.cpp" line="811"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="831"/>
-        <location filename="../audiomixerboard.cpp" line="837"/>
-        <location filename="../audiomixerboard.cpp" line="843"/>
+        <location filename="../audiomixerboard.cpp" line="839"/>
+        <location filename="../audiomixerboard.cpp" line="845"/>
+        <location filename="../audiomixerboard.cpp" line="851"/>
         <source>Skill Level</source>
         <translation>水平程度</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="864"/>
+        <location filename="../audiomixerboard.cpp" line="872"/>
         <source>Alias</source>
         <translation>别名</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="830"/>
+        <location filename="../audiomixerboard.cpp" line="838"/>
         <source>Beginner</source>
         <translation>新手</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="836"/>
+        <location filename="../audiomixerboard.cpp" line="844"/>
         <source>Intermediate</source>
         <translation>中级</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="842"/>
+        <location filename="../audiomixerboard.cpp" line="850"/>
         <source>Expert</source>
         <translation>专家</translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="855"/>
+        <location filename="../audiomixerboard.cpp" line="863"/>
         <source>Musician Profile</source>
         <translation>乐手信息</translation>
     </message>
@@ -552,32 +552,32 @@
 <context>
     <name>CClientDlg</name>
     <message>
-        <location filename="../clientdlg.cpp" line="55"/>
+        <location filename="../clientdlg.cpp" line="54"/>
         <source>Input Level Meter</source>
         <translation>输入音量计量表</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="60"/>
+        <location filename="../clientdlg.cpp" line="59"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
         <translation>请避免擦碰输入以避免音频失真。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="78"/>
+        <location filename="../clientdlg.cpp" line="77"/>
         <source>Input level meter</source>
         <translation>输入音量计量表</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="79"/>
+        <location filename="../clientdlg.cpp" line="78"/>
         <source>Simulates an analog LED level meter.</source>
         <translation>模拟实物 LED 音量电平计量表。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="96"/>
+        <location filename="../clientdlg.cpp" line="95"/>
         <source>Connect/Disconnect Button</source>
         <translation>连接/断开连接按钮</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="100"/>
+        <location filename="../clientdlg.cpp" line="99"/>
         <source>Connect and disconnect toggle button</source>
         <translation>连接和断开连接的开关按钮</translation>
     </message>
@@ -586,7 +586,7 @@
         <translation type="vanished"> 软件.</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="129"/>
+        <location filename="../clientdlg.cpp" line="128"/>
         <source>Delay Status LED</source>
         <translation>延迟指示 LED</translation>
     </message>
@@ -595,102 +595,102 @@
         <translation type="vanished">如果此 LED 指示器变红，您可能无法很愉快的使用 </translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="158"/>
+        <location filename="../clientdlg.cpp" line="157"/>
         <source>Delay status LED indicator</source>
         <translation>延迟状态 LED 指示器</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="167"/>
+        <location filename="../clientdlg.cpp" line="166"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
         <translation>为应对当前网络/音频接口延迟而言当前网络抖动缓冲大小不够大。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="56"/>
+        <location filename="../clientdlg.cpp" line="55"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
         <translation>这里展示了立体声的两个声道的音频输入音量。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="63"/>
+        <location filename="../clientdlg.cpp" line="62"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
         <translation>如果应用程序已连接到了服务器且您已开始对着麦克风演奏乐器或唱歌，此 VU 计量表将开始跳动。若未发生此情况，您可能选错了输入声道或您的 (Windows) 音量合成器中的音频增益设置过低。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="71"/>
+        <location filename="../clientdlg.cpp" line="70"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation>为了恰当的使用此应用程序，当您未连接到服务器时您不会希望在音响或耳机中听到您的演唱或弹奏。您可以通过在音频声道（不是录制混音器！）中将自己静音来达到此目的。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="103"/>
+        <location filename="../clientdlg.cpp" line="102"/>
         <source>Reverb effect</source>
         <translation>混响效果</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="104"/>
+        <location filename="../clientdlg.cpp" line="103"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
         <translation>可以将混响应用至本地单声道或立体声双声道上。可以调整单声道的选取和混响程度。例如，如果麦克风信号输入到了声卡的右声道并希望对其应用混响效果，从通道选取器选择右声道并向上移动推子直到达到了希望的混响程度即可。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="115"/>
+        <location filename="../clientdlg.cpp" line="114"/>
         <source>Reverb effect level setting</source>
         <translation>混响效果程度设定</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="118"/>
+        <location filename="../clientdlg.cpp" line="117"/>
         <source>Reverb Channel Selection</source>
         <translation>混响通道选则框</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="119"/>
+        <location filename="../clientdlg.cpp" line="118"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
         <translation>使用这些单选按钮可选择混响效果需要应用到的音频输入声道。左声道和右声道均可供选择。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="124"/>
+        <location filename="../clientdlg.cpp" line="123"/>
         <source>Left channel selection for reverb</source>
         <translation>左通道的混响</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="126"/>
+        <location filename="../clientdlg.cpp" line="125"/>
         <source>Right channel selection for reverb</source>
         <translation>右通道的混响</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="133"/>
+        <location filename="../clientdlg.cpp" line="132"/>
         <source>Green</source>
         <translation>绿</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="134"/>
+        <location filename="../clientdlg.cpp" line="133"/>
         <source>The delay is perfect for a jam session.</source>
         <translation>该延迟很适合来场合奏。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="139"/>
+        <location filename="../clientdlg.cpp" line="138"/>
         <source>Yellow</source>
         <translation>黄</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="145"/>
+        <location filename="../clientdlg.cpp" line="144"/>
         <source>Red</source>
         <translation>红</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="97"/>
+        <location filename="../clientdlg.cpp" line="96"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
         <translation>将打开一个供选择您要连接到的服务器的对话框。如果您已连接，按下此按钮将断开此次会话。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="129"/>
+        <location filename="../clientdlg.cpp" line="128"/>
         <source>Shows the current audio delay status:</source>
         <translation>指示当前音频的延迟情况：</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="140"/>
+        <location filename="../clientdlg.cpp" line="139"/>
         <source>A session is still possible but it may be harder to play.</source>
         <translation>仍可来场合奏但或许体验较差而难以完成。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="146"/>
+        <location filename="../clientdlg.cpp" line="145"/>
         <source>The delay is too large for jamming.</source>
         <translation>该延迟太高，不适合进行合奏。</translation>
     </message>
@@ -699,17 +699,17 @@
         <translation type="vanished">如果此 LED 指示器变红，您可能无法很愉快的使用此应用程序。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="171"/>
+        <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
         <translation>声卡的缓冲区延迟（缓冲区大小）过小（见设置窗口）。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="175"/>
+        <location filename="../clientdlg.cpp" line="174"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
         <translation>上行或下行流量频率对您的网络带宽而言过高。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="179"/>
+        <location filename="../clientdlg.cpp" line="178"/>
         <source>The CPU of the client or server is at 100%.</source>
         <translation>客户端或服务器的 CPU 负载已达 100%。</translation>
     </message>
@@ -718,12 +718,12 @@
         <translation type="vanished">当前连接情况参数</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="193"/>
+        <location filename="../clientdlg.cpp" line="192"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation>Ping 延迟时间是指您的音频数据从您的客户端传输到服务器再传输回来所需的耗时。此延迟由网络导致且应保持在 20-30 毫秒。若延迟高于 50 毫秒，您到服务器的距离可能过远或您的网络连接可能不可用。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="200"/>
+        <location filename="../clientdlg.cpp" line="199"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
         <translation>最终延迟由当前 Ping 延迟和当前的缓冲区大小设定组合计算而来。</translation>
     </message>
@@ -732,8 +732,8 @@
         <translation type="vanished">如果此 LED 指示器变红，您可能无法很愉快的使用 %1。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="229"/>
-        <location filename="../clientdlg.cpp" line="1263"/>
+        <location filename="../clientdlg.cpp" line="231"/>
+        <location filename="../clientdlg.cpp" line="1256"/>
         <source>C&amp;onnect</source>
         <translation>连接(&amp;O)</translation>
     </message>
@@ -742,153 +742,153 @@
         <translation type="vanished">软件更新可用</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="282"/>
+        <location filename="../clientdlg.cpp" line="284"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="309"/>
+        <location filename="../clientdlg.cpp" line="311"/>
         <source>&amp;View</source>
         <translation>视图(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="284"/>
+        <location filename="../clientdlg.cpp" line="286"/>
         <source>&amp;Connection Setup...</source>
         <translation>连接配置(&amp;C)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="387"/>
+        <location filename="../clientdlg.cpp" line="389"/>
         <source>My &amp;Profile...</source>
         <translation>我的信息(&amp;P)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="374"/>
+        <location filename="../clientdlg.cpp" line="376"/>
         <source>C&amp;hat...</source>
         <translation>聊天(&amp;H)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="379"/>
+        <location filename="../clientdlg.cpp" line="381"/>
         <source>&amp;Analyzer Console...</source>
         <translation>分析控制台(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="318"/>
+        <location filename="../clientdlg.cpp" line="320"/>
         <source>N&amp;o User Sorting</source>
         <translation>不对用户进行排序(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="332"/>
+        <location filename="../clientdlg.cpp" line="334"/>
         <source>Sort Users by &amp;City</source>
         <translation>根据城市排序用户(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="299"/>
+        <location filename="../clientdlg.cpp" line="301"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
         <translation>清除所有已保存的独奏和静音设定(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="306"/>
+        <location filename="../clientdlg.cpp" line="308"/>
         <source>Auto-Adjust all &amp;Faders</source>
         <translation>自动调整所有推子(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="727"/>
+        <location filename="../clientdlg.cpp" line="729"/>
         <source>%1 Directory</source>
         <translation>%1 目录</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1178"/>
+        <location filename="../clientdlg.cpp" line="1171"/>
         <source>Ok</source>
         <translatorcomment>Ok</translatorcomment>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="301"/>
+        <location filename="../clientdlg.cpp" line="303"/>
         <source>Set All Faders to New Client &amp;Level</source>
         <translation>将所有推子设置为新客户端音量值(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="294"/>
+        <location filename="../clientdlg.cpp" line="296"/>
         <source>E&amp;xit</source>
         <translation>退出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="288"/>
+        <location filename="../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
         <translation>加载混音器通道选项(&amp;L)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="290"/>
+        <location filename="../clientdlg.cpp" line="292"/>
         <source>&amp;Save Mixer Channels Setup...</source>
         <translation>保存混音器通道选项(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="385"/>
+        <location filename="../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
         <translation>设置(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="389"/>
+        <location filename="../clientdlg.cpp" line="391"/>
         <source>Audio/Network &amp;Settings...</source>
         <translation>音频/网络选项(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="391"/>
+        <location filename="../clientdlg.cpp" line="393"/>
         <source>A&amp;dvanced Settings...</source>
         <translation>高级选项(&amp;D)...</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="297"/>
+        <location filename="../clientdlg.cpp" line="299"/>
         <source>&amp;Edit</source>
         <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="153"/>
+        <location filename="../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
         <translation>如果此 LED 指示器变红，您可能无法很愉快的使用 %1。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="161"/>
+        <location filename="../clientdlg.cpp" line="160"/>
         <source>Local Jitter Buffer Status LED</source>
         <translation>本地抖动缓冲状态 LED</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="162"/>
+        <location filename="../clientdlg.cpp" line="161"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
         <translation>本地抖动缓冲区状态 LED 指示当前音频/串流状态。如果变红，表示音频流被中断了。这可能由以下问题导致：</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="185"/>
+        <location filename="../clientdlg.cpp" line="184"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
         <translation>如果此 LED 指示器变红，音频流则为中断状态。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="189"/>
+        <location filename="../clientdlg.cpp" line="188"/>
         <source>Local Jitter Buffer status LED indicator</source>
         <translation>本地抖动缓冲状态 LED 指示器</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="192"/>
+        <location filename="../clientdlg.cpp" line="191"/>
         <source>Current Connection Status</source>
         <translation>当前连接状态</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="313"/>
+        <location filename="../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
         <translation>优先显示自己的推子(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="321"/>
+        <location filename="../clientdlg.cpp" line="323"/>
         <source>Sort Users by &amp;Name</source>
         <translation>根据名称排序用户(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="323"/>
+        <location filename="../clientdlg.cpp" line="325"/>
         <source>Sort Users by &amp;Instrument</source>
         <translation>根据乐器排序用户(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="329"/>
+        <location filename="../clientdlg.cpp" line="331"/>
         <source>Sort Users by &amp;Group</source>
         <translation>根据分组排序用户(&amp;G)</translation>
     </message>
@@ -901,43 +901,43 @@
         <translation type="vanished">目录服务器</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="772"/>
-        <location filename="../clientdlg.cpp" line="784"/>
+        <location filename="../clientdlg.cpp" line="774"/>
+        <location filename="../clientdlg.cpp" line="786"/>
         <source>Select Channel Setup File</source>
         <translation>选择通道配置文件</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="938"/>
+        <location filename="../clientdlg.cpp" line="931"/>
         <source>user</source>
         <translation>用户</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="942"/>
+        <location filename="../clientdlg.cpp" line="935"/>
         <source>users</source>
         <translation>用户</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="974"/>
+        <location filename="../clientdlg.cpp" line="967"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="986"/>
+        <location filename="../clientdlg.cpp" line="979"/>
         <source>Settings</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="996"/>
+        <location filename="../clientdlg.cpp" line="989"/>
         <source>Chat</source>
         <translation>聊天</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1072"/>
+        <location filename="../clientdlg.cpp" line="1065"/>
         <source>Enable feedback detection</source>
         <translation>启用自激保护</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1075"/>
+        <location filename="../clientdlg.cpp" line="1068"/>
         <source>Audio feedback or loud signal detected.
 
 We muted your channel and activated &apos;Mute Myself&apos;. Please solve the feedback issue first and unmute yourself afterwards.</source>
@@ -946,12 +946,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 静音已启用并已为您打开了“静音自己”选项。请解决自激问题然后手动取消静音。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1160"/>
+        <location filename="../clientdlg.cpp" line="1153"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
         <translation>您的声卡未正常工作。请打开设置对话框并检查设备选项和驱动设置。</translation>
     </message>
     <message>
-        <location filename="../clientdlg.cpp" line="1231"/>
+        <location filename="../clientdlg.cpp" line="1224"/>
         <source>&amp;Disconnect</source>
         <translation>断开连接(&amp;D)</translation>
     </message>
@@ -2575,7 +2575,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CMusProfDlg</name>
     <message>
-        <location filename="../settings.cpp" line="294"/>
+        <location filename="../settings.cpp" line="296"/>
         <source>No Name</source>
         <translation>无名称</translation>
     </message>

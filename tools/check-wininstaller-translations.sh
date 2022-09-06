@@ -2,11 +2,11 @@
 set -eu -o pipefail
 
 BASE_DIR=src/translation/wininstaller/
-BASE_LANG=en
+BASE_LANG=en_UK
 INSTALLERLNG=installerlng.nsi
 BASE_LANGSTRINGS=$(grep LangString "${BASE_DIR}/${BASE_LANG}.nsi" | cut -d' ' -f2)
 EXIT=0
-for LANGUAGE_FILE in src/translation/wininstaller/{??.nsi,??_??.nsi}; do
+for LANGUAGE_FILE in src/translation/wininstaller/*_*.nsi; do
     if [[ ${LANGUAGE_FILE} =~ /${BASE_LANG}.nsi$ ]]; then
         continue
     fi

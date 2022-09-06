@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script is intended to setup a clean Raspberry Pi system for running Jamulus
-# This needs to be run from the distributions/ folder
+# This needs to be run from the linux/ folder
 
 readonly OPUS="opus-1.3.1"
 NCORES=$(nproc)
@@ -86,7 +86,7 @@ fi
 
 # compile Jamulus with external Opus library
 cd ..
-qmake "CONFIG+=opus_shared_lib raspijamulus headless" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Jamulus.pro
+qmake "CONFIG+=opus_shared_lib raspijamulus headless" "INCLUDEPATH+=linux/${OPUS}/include" "QMAKE_LIBDIR+=linux/${OPUS}/.libs" "INCLUDEPATH+=linux/jack2/common" "QMAKE_LIBDIR+=linux/jack2/build/common" Jamulus.pro
 make "-j${NCORES}"
 
 # get first USB audio sound card device
@@ -113,8 +113,8 @@ fi
 #sudo mount -o remount,size=128M /dev/shm
 
 # start Jack2 and Jamulus in headless mode
-export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
-distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa "-dhw:${ADEVICE}" -p 128 -n 3 -r 48000 -s &
+export LD_LIBRARY_PATH="linux/${OPUS}/.libs:linux/jack2/build:linux/jack2/build/common"
+linux/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa "-dhw:${ADEVICE}" -p 128 -n 3 -r 48000 -s &
 ./Jamulus -n -i ${JAMULUSINIFILE} -c anygenre3.jamulus.io &
 
 echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"

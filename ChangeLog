@@ -22,10 +22,7 @@
 - Build: Renamed headless .deb file to `jamulus-headless_[version]_ubuntu_[arch].deb` for consistency with binary. This might need changes to scripts downloading this `.deb` file (#2821).
   (contributed by @ann0see)
 
-- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support (#2808).
-  (contributed by @hoffie)
-
-- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support (#2825).
+- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support ().
   (contributed by @hoffie)
 
 - Internal: Enabled automated dependency updates via dependabot and custom automation (#2801, #2803).

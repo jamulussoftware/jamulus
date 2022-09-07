@@ -1,5 +1,5 @@
 
-### 3.9.0nightly2 ###
+### 3.9.0dev <- NOTE: the release version number will be 3.9.1 ###
 
 - Bug: Correct new channel not being shown to others if it connects with null channel info. (#2754)
   (contributed by @softins)

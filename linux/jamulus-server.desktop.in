@@ -1,5 +1,6 @@
 [Desktop Entry]
-Name=Jamulus
+Name=Jamulus (server)
+Name[fr]=Jamulus (serveur)
 Comment=Jam Session
 Comment[fr]=Séance de bœuf
 Comment[sv]=Musikaliska jamsessioner över Internet
@@ -10,8 +11,8 @@ GenericName[pt]=Software para Jam Sessions pela Internet
 GenericName[nl]=Software voor jamsessies over internet
 GenericName[sk]=Softvér na džemovanie cez internet
 GenericName[sv]=Mjukvara för Jam Sessioner över Internet
-Exec=$$TARGET
-Icon=jamulus
+Exec=$$TARGET -s
+Icon=io.jamulus.jamulusserver
 Terminal=false
 Type=Application
 Categories=AudioVideo;Audio;Mixer;Qt;

@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 TARGET_ARCH="${TARGET_ARCH:-amd64}"
 
-cp -r distributions/debian .
+cp -r linux/debian .
 
 # get the jamulus version from pro file
 VERSION=$(grep -oP 'VERSION = \K\w[^\s\\]*' Jamulus.pro)

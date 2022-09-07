@@ -326,29 +326,29 @@ win32 {
         }
         APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
         desktop.path = $$APPSDIR
-        QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in distributions/jamulus-server.desktop.in
-        desktop.files = distributions/jamulus.desktop distributions/jamulus-server.desktop
+        QMAKE_SUBSTITUTES += linux/jamulus.desktop.in linux/jamulus-server.desktop.in
+        desktop.files = linux/jamulus.desktop linux/jamulus-server.desktop
 
         isEmpty(ICONSDIR) {
             ICONSDIR = share/icons/hicolor/512x512/apps
         }
         ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
         icons.path = $$ICONSDIR
-        icons.files = distributions/jamulus.png
+        icons.files = src/res/io.jamulus.jamulus.png
 
         isEmpty(ICONSDIR_SVG) {
             ICONSDIR_SVG = share/icons/hicolor/scalable/apps/
         }
         ICONSDIR_SVG = $$absolute_path($$ICONSDIR_SVG, $$PREFIX)
         icons_svg.path = $$ICONSDIR_SVG
-        icons_svg.files = distributions/jamulus.svg distributions/jamulus-server.svg
+        icons_svg.files = src/res/io.jamulus.jamulus.svg src/res/io.jamulus.jamulusserver.svg
 
         isEmpty(MANDIR) {
             MANDIR = share/man/man1
         }
         MANDIR = $$absolute_path($$MANDIR, $$PREFIX)
         man.path = $$MANDIR
-        man.files = distributions/Jamulus.1
+        man.files = linux/Jamulus.1
 
         INSTALLS += target desktop icons icons_svg man
     }
@@ -683,11 +683,11 @@ DISTFILES += ChangeLog \
     COPYING \
     CONTRIBUTING.md \
     README.md \
-    distributions/jamulus.desktop.in \
-    distributions/jamulus-server.desktop.in \
-    distributions/jamulus.png \
-    distributions/jamulus.svg \
-    distributions/jamulus-server.svg \
+    linux/jamulus.desktop.in \
+    linux/jamulus-server.desktop.in \
+    src/res/io.jamulus.jamulus.png \
+    src/res/io.jamulus.jamulus.svg \
+    src/res/io.jamulus.jamulusserver.svg \
     src/translation/translation_de_DE.qm \
     src/translation/translation_fr_FR.qm \
     src/translation/translation_ko_KR.qm \

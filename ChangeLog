@@ -1,8 +1,35 @@
 
 ### 3.9.0dev <- NOTE: the release version number will be 3.9.1 ###
 
-- Bug: Correct new channel not being shown to others if it connects with null channel info. (#2754)
+- CLI: Rephrased recording options help text on the `--help` output for clearer description of their functionality (#2832).
+  (contributed by @ann0see)
+
+- Server: Bug: Correct new channel not being shown to others if it connects with null channel info. (#2754)
   (contributed by @softins)
+
+- Directory: Bug: Correct default "self" address for directory, enabling use as a server (#2812).
+  (contributed by @pljones)
+
+- Directory: Bug: Use configured Directory Public IP for Client when hole-punching (#2819).
+  (contributed by @pljones)
+
+- Refactoring: Moved around files to clean up the repository (#2824).
+  (contributed by @ann0see)
+
+- Build: Debian/Ubuntu: Fixed displayed version for non-release builds to removed incorrect -dirty suffixes (#2802).
+  (contributed by @hoffie)
+
+- Build: Renamed headless .deb file to `jamulus-headless_[version]_ubuntu_[arch].deb` for consistency with binary. This might need changes to scripts downloading this `.deb` file (#2821).
+  (contributed by @ann0see)
+
+- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support (#2808).
+  (contributed by @hoffie)
+
+- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support (#2825).
+  (contributed by @hoffie)
+
+- Internal: Enabled automated dependency updates via dependabot and custom automation (#2801, #2803).
+  (contributed by @hoffie)
 
 ### 3.9.0 (2022-07-29) ###
 

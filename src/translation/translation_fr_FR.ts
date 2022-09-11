@@ -59,7 +59,7 @@
     <message>
         <location filename="../util.cpp" line="690"/>
         <source>Github Contributors list</source>
-        <translation>liste de contributeurs sur github</translation>
+        <translation>liste de contributeurs sur GitHub</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="693"/>
@@ -2046,7 +2046,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../util.cpp" line="1245"/>
         <source>Flute</source>
-        <translation>Flute</translation>
+        <translation>Flûte</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1248"/>
@@ -3967,7 +3967,7 @@ Nous avons coupé votre canal et activé &quot;Me silencer&quot;. Veuillez d&apo
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>JACK ne fonctionne pas à un taux d&apos;échantillonnage de &lt;b&gt;%1 Hz&lt;/b&gt;. Veuillez utiliser un outil comme  &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; pour régler le taux d&apos;échantillonnage de JACK à %1 Hz.</translation>
+        <translation>JACK ne fonctionne pas à un taux d&apos;échantillonnage de &lt;b&gt;%1 Hz&lt;/b&gt;. Veuillez utiliser un outil comme &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; pour régler le taux d&apos;échantillonnage de JACK à %1 Hz.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>

@@ -4,7 +4,7 @@ LangString DESKTOP_SET_SHORTCUT ${LANG_GERMAN} \
     "Desktopverknüpfung erstellen"
 
 LangString INVALID_FOLDER_MSG ${LANG_GERMAN} \
-    "Das Zielverzeichnis existiert schon. Bitte wähle ein anderes Zielverzeichnis aus."
+    "Das Zielverzeichnis existiert bereits. Bitte wähle ein anderes Zielverzeichnis."
 
 LangString RUNNING_APP_MSG ${LANG_GERMAN} \
     "${APP_NAME} läuft noch. Bitte schließe das Programm und starte die Installation erneut."
@@ -28,7 +28,7 @@ LangString ASIO_DRIVER_EXPLAIN ${LANG_GERMAN} \
      "${APP_NAME} braucht einen ASIO Treiber um geringe Audio Latenz zu ermöglichen. Mehr Info:"
 
 LangString ASIO_DRIVER_MORE_INFO ${LANG_GERMAN} \
-     "Mehr info über ASIO auf jamulus.io"
+     "Mehr Info über ASIO auf jamulus.io"
 
 LangString ASIO_DRIVER_MORE_INFO_URL ${LANG_GERMAN} \
      "https://jamulus.io/de/wiki/Installation-for-Windows#asio"
@@ -40,10 +40,10 @@ LangString JACK_DRIVER_HEADER ${LANG_GERMAN} \
      "JACK Audio Connection Kit"
 
 LangString JACK_DRIVER_SUB ${LANG_GERMAN} \
-     "To use this version of ${APP_NAME}, you need use the JACK Audio Connection Kit"
+     "Um diese Version von ${APP_NAME} zu nutzen, benötigst du das JACK Audio Connection Kit"
 
 LangString JACK_DRIVER_EXPLAIN ${LANG_GERMAN} \
-     "This version of ${APP_NAME} is making use of the JACK Audio Connection Kit. Please make sure this has been installed or download the standard version of ${APP_NAME} on jamulus.io which is using ASIO."
+     "Diese Version von ${APP_NAME} nutzt das JACK Audio Connection Kit. Bitte stelle sicher, dass es installiert ist, oder lade die Standard ASIO-Version von ${APP_NAME} von jamulus.io herunter."
 
 LangString JACK_EXIT_NO_DRIVER ${LANG_GERMAN} \
-     "This ${APP_NAME} version needs the JACK Audio Connection Kit to work, but it doesn't seem to be installed on your PC. You should install JACK for Windows first. Do you still want to continue with the installation of ${APP_NAME} without installing JACK first?"
+     "Diese Version von ${APP_NAME} benötigt das JACK Audio Connection Kit, aber es scheint nicht auf deinem PC installiert zu sein. Du solltest zuerst JACK für Windows installieren. Möchtest du trotzdem mit der Installation von ${APP_NAME} fortfahren, ohne zuerst JACK zu installieren?"

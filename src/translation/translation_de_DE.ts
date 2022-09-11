@@ -209,12 +209,12 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="47"/>
         <source>Analyzer Console</source>
-        <translation></translation>
+        <translation>Analyzer Konsole</translation>
     </message>
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
         <source>Error Rate of Each Buffer Size</source>
-        <translation></translation>
+        <translation>Fehlerrate für jede Puffergröße</translation>
     </message>
 </context>
 <context>
@@ -457,7 +457,7 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="795"/>
         <source>Instrument</source>
-        <translation></translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="803"/>
@@ -511,21 +511,21 @@
         <location filename="../audiomixerboard.cpp" line="161"/>
         <location filename="../audiomixerboard.cpp" line="251"/>
         <source>Mute</source>
-        <translation></translation>
+        <translation>Mute</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="43"/>
         <location filename="../audiomixerboard.cpp" line="236"/>
         <location filename="../audiomixerboard.cpp" line="250"/>
         <source>Pan</source>
-        <translation></translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="48"/>
         <location filename="../audiomixerboard.cpp" line="164"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Solo</source>
-        <translation></translation>
+        <translation>Solo</translation>
     </message>
 </context>
 <context>
@@ -902,7 +902,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="379"/>
         <source>&amp;Analyzer Console...</source>
-        <translation></translation>
+        <translation>&amp;Analyzer Konsole...</translation>
     </message>
     <message>
         <source>Use &amp;Two Rows Mixer Panel</source>
@@ -2921,7 +2921,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
         <source>Holds the current server address. It also stores old addresses in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Enthält die aktuelle Serveradresse. Außerdem werden alte Adressen in der Combo-Box gespeichert.</translation>
     </message>
     <message>
         <source>The IP address or URL of the server running the </source>

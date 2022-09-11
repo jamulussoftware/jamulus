@@ -171,7 +171,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation>TextLabelVersion</translation>
+        <translation>Tekstlabel versie</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
@@ -1264,7 +1264,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientdlgbase.ui" line="609"/>
         <source>Update check</source>
-        <translation>Update check</translation>
+        <translation>Update controle</translation>
     </message>
     <message>
         <source>MUTED (You are not sending any audio to the server)</source>
@@ -1672,7 +1672,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../clientsettingsdlg.cpp" line="331"/>
         <source>New Client Level</source>
-        <translation>Nieuw clientniveau</translation>
+        <translation>Nieuw client-niveau</translation>
     </message>
     <message>
         <source>The new client level setting defines the fader level of a new connected client in percent. I.e. if a new client connects to the current server, it will get the specified initial fader level if no other fader level of a previous connection of that client was already stored.</source>
@@ -3076,7 +3076,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../util.cpp" line="791"/>
         <source>Software &amp;Manual...</source>
-        <translation>Software&amp;handleiding...</translation>
+        <translation>Gebruikers&amp;handleiding...</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="798"/>
@@ -4755,7 +4755,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>Er is een %1 upgrade beschikbaar: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;klik hier voor details en downloads&lt;/a&gt;</translation>
+        <translation>Er is een nieuwe versie van %1 beschikbaar: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;klik hier voor details en downloads&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>

@@ -51,6 +51,7 @@ TRANSLATIONS = src/translation/translation_de_DE.ts \
     src/translation/translation_pt_PT.ts \
     src/translation/translation_pt_BR.ts \
     src/translation/translation_es_ES.ts \
+    src/translation/translation_nb_NO.ts \
     src/translation/translation_nl_NL.ts \
     src/translation/translation_pl_PL.ts \
     src/translation/translation_sk_SK.ts \
@@ -694,6 +695,7 @@ DISTFILES += ChangeLog \
     src/translation/translation_pt_PT.qm \
     src/translation/translation_pt_BR.qm \
     src/translation/translation_es_ES.qm \
+    src/translation/translation_nb_NO.qm \
     src/translation/translation_nl_NL.qm \
     src/translation/translation_pl_PL.qm \
     src/translation/translation_it_IT.qm \

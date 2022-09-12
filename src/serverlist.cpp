@@ -205,9 +205,15 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         // [this server country as QLocale ID]
         bool      ok;
         const int iCountry = slServInfoSeparateParams[2].toInt ( &ok );
-        if ( ok && iCountry >= 0 && iCountry <= QLocale::LastCountry )
+        if ( ok && iCountry >= 0 && CLocale::IsCountryCodeSupported ( iCountry ) )
         {
-            ThisServerListEntry.eCountry = static_cast<QLocale::Country> ( iCountry );
+            // Convert from externally-supplied format ("wire format", Qt5 codes) to
+            // native format. On Qt5 builds, this is a noop, on Qt6 builds, a conversion
+            // takes place.
+            // We try to do such conversions at the outer-most interface which is capable of doing it.
+            // Although the value comes from src/main -> src/server, this very place is
+            // the first where we have access to the parsed country code:
+            ThisServerListEntry.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iCountry );
         }
     }
 

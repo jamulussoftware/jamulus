@@ -3531,12 +3531,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
         <source>Select &apos;%1&apos; not to register your server with a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle &quot;%1&quot;, um den Server nicht mit einem Verzeichnis zu registrieren.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie eines der Genres aus, um sich in diesem Verzeichnis zu registrieren.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
@@ -3551,7 +3551,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
         <source>The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Registrierung des Servers wird in regelmäßigen Abständen erneuert, um sicherzustellen, dass alle Server in der Serverliste des Verbindungsdialogs tatsächlich verfügbar sind.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
@@ -3581,7 +3581,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierte Verzeichnisadresse</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="196"/>

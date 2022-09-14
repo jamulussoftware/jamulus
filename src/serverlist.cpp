@@ -226,6 +226,15 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                 ThisServerListEntry.eCountry = qlCountry;
             }
         }
+        qInfo() << qUtf8Printable ( QString ( "Using server info: name = \"%1\", city = \"%2\", country/region = \"%3\" (%4)" )
+                                        .arg ( ThisServerListEntry.strName )
+                                        .arg ( ThisServerListEntry.strCity )
+                                        .arg ( slServInfoSeparateParams[2] )
+                                        .arg ( QLocale::countryToString ( ThisServerListEntry.eCountry ) ) );
+    }
+    else
+    {
+        qWarning() << "Ignoring invalid serverinfo, please verify the parameter syntax.";
     }
 
     // per definition, the very first entry is this server and this entry will

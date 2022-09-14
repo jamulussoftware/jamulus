@@ -131,16 +131,21 @@
     </message>
     <message>
         <location filename="../util.cpp" line="730"/>
+        <source>Korean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="734"/>
         <source>Slovak</source>
         <translation>Slowakisch</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="733"/>
+        <location filename="../util.cpp" line="737"/>
         <source>Simplified Chinese</source>
         <translation>Vereinfachtes Chinesisch</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="741"/>
+        <location filename="../util.cpp" line="745"/>
         <source>About %1</source>
         <translation>Über %1</translation>
     </message>
@@ -1712,7 +1717,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlg.cpp" line="470"/>
         <location filename="../clientsettingsdlg.cpp" line="609"/>
         <location filename="../clientsettingsdlg.cpp" line="617"/>
-        <location filename="../util.cpp" line="1188"/>
+        <location filename="../util.cpp" line="1192"/>
         <source>None</source>
         <translation>Nichts</translation>
     </message>
@@ -2314,247 +2319,247 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation type="vanished"> Der vorherige Treiber wird wieder ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1191"/>
+        <location filename="../util.cpp" line="1195"/>
         <source>Drum Set</source>
         <translation>Schlagzeug</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1194"/>
+        <location filename="../util.cpp" line="1198"/>
         <source>Djembe</source>
         <translation>Djembe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1197"/>
+        <location filename="../util.cpp" line="1201"/>
         <source>Electric Guitar</source>
         <translation>E-Gitarre</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1200"/>
+        <location filename="../util.cpp" line="1204"/>
         <source>Acoustic Guitar</source>
         <translation>Akustikgitarre</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1203"/>
+        <location filename="../util.cpp" line="1207"/>
         <source>Bass Guitar</source>
         <translation>E-Bass</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1206"/>
+        <location filename="../util.cpp" line="1210"/>
         <source>Keyboard</source>
         <translation>Keyboard</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1209"/>
+        <location filename="../util.cpp" line="1213"/>
         <source>Synthesizer</source>
         <translation>Synthesizer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1212"/>
+        <location filename="../util.cpp" line="1216"/>
         <source>Grand Piano</source>
         <translation>Flügel</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1215"/>
+        <location filename="../util.cpp" line="1219"/>
         <source>Accordion</source>
         <translation>Akkordeon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1218"/>
+        <location filename="../util.cpp" line="1222"/>
         <source>Vocal</source>
         <translation>Gesang</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1221"/>
+        <location filename="../util.cpp" line="1225"/>
         <source>Microphone</source>
         <translation>Mikrofon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1224"/>
+        <location filename="../util.cpp" line="1228"/>
         <source>Harmonica</source>
         <translation>Mundharmonika</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1227"/>
+        <location filename="../util.cpp" line="1231"/>
         <source>Trumpet</source>
         <translation>Trompete</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1230"/>
+        <location filename="../util.cpp" line="1234"/>
         <source>Trombone</source>
         <translation>Posaune</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1233"/>
+        <location filename="../util.cpp" line="1237"/>
         <source>French Horn</source>
         <translation>Waldhorn</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1236"/>
+        <location filename="../util.cpp" line="1240"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1239"/>
+        <location filename="../util.cpp" line="1243"/>
         <source>Saxophone</source>
         <translation>Saxophon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1242"/>
+        <location filename="../util.cpp" line="1246"/>
         <source>Clarinet</source>
         <translation>Klarinette</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1245"/>
+        <location filename="../util.cpp" line="1249"/>
         <source>Flute</source>
         <translation>Flöte</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1248"/>
+        <location filename="../util.cpp" line="1252"/>
         <source>Violin</source>
         <translation>Violine</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1251"/>
+        <location filename="../util.cpp" line="1255"/>
         <source>Cello</source>
         <translation>Cello</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1254"/>
+        <location filename="../util.cpp" line="1258"/>
         <source>Double Bass</source>
         <translation>Kontrabass</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1257"/>
+        <location filename="../util.cpp" line="1261"/>
         <source>Recorder</source>
         <translation>Blockflöte</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1260"/>
+        <location filename="../util.cpp" line="1264"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1263"/>
+        <location filename="../util.cpp" line="1267"/>
         <source>Listener</source>
         <translation>Zuhörer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1266"/>
+        <location filename="../util.cpp" line="1270"/>
         <source>Guitar+Vocal</source>
         <translation>Gitarre+Gesang</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1269"/>
+        <location filename="../util.cpp" line="1273"/>
         <source>Keyboard+Vocal</source>
         <translation>Keyboard+Gesang</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1272"/>
+        <location filename="../util.cpp" line="1276"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1275"/>
+        <location filename="../util.cpp" line="1279"/>
         <source>Bassoon</source>
         <translation>Fagott</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1278"/>
+        <location filename="../util.cpp" line="1282"/>
         <source>Oboe</source>
         <translation>Oboe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1281"/>
+        <location filename="../util.cpp" line="1285"/>
         <source>Harp</source>
         <translation>Harfe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1284"/>
+        <location filename="../util.cpp" line="1288"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1287"/>
+        <location filename="../util.cpp" line="1291"/>
         <source>Congas</source>
         <translation>Congas</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1290"/>
+        <location filename="../util.cpp" line="1294"/>
         <source>Bongo</source>
         <translation>Bongos</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1293"/>
+        <location filename="../util.cpp" line="1297"/>
         <source>Vocal Bass</source>
         <translation>Gesang Bass</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1296"/>
+        <location filename="../util.cpp" line="1300"/>
         <source>Vocal Tenor</source>
         <translation>Gesang Tenor</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1299"/>
+        <location filename="../util.cpp" line="1303"/>
         <source>Vocal Alto</source>
         <translation>Gesang Alt</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1302"/>
+        <location filename="../util.cpp" line="1306"/>
         <source>Vocal Soprano</source>
         <translation>Gesang Sopran</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1305"/>
+        <location filename="../util.cpp" line="1309"/>
         <source>Banjo</source>
         <translation>Banjo</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1308"/>
+        <location filename="../util.cpp" line="1312"/>
         <source>Mandolin</source>
         <translation>Mandoline</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1311"/>
+        <location filename="../util.cpp" line="1315"/>
         <source>Ukulele</source>
         <translation>Ukulele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1314"/>
+        <location filename="../util.cpp" line="1318"/>
         <source>Bass Ukulele</source>
         <translation>Bass Ukulele</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1317"/>
+        <location filename="../util.cpp" line="1321"/>
         <source>Vocal Baritone</source>
         <translation>Gesang Bariton</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1320"/>
+        <location filename="../util.cpp" line="1324"/>
         <source>Vocal Lead</source>
         <translation>Gesang Lead</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1323"/>
+        <location filename="../util.cpp" line="1327"/>
         <source>Mountain Dulcimer</source>
         <translation>Mountain Dulcimer</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1326"/>
+        <location filename="../util.cpp" line="1330"/>
         <source>Scratching</source>
         <translation>Scratching</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1329"/>
+        <location filename="../util.cpp" line="1333"/>
         <source>Rapping</source>
         <translation>Rapper</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1332"/>
+        <location filename="../util.cpp" line="1336"/>
         <source>Vibraphone</source>
         <translation>Vibraphon</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1335"/>
+        <location filename="../util.cpp" line="1339"/>
         <source>Conductor</source>
         <translation>Dirigent</translation>
     </message>
@@ -3075,33 +3080,33 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="783"/>
+        <location filename="../util.cpp" line="787"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="790"/>
-        <location filename="../util.cpp" line="795"/>
+        <location filename="../util.cpp" line="794"/>
+        <location filename="../util.cpp" line="799"/>
         <source>Getting &amp;Started...</source>
         <translation>&amp;Erste Schritte...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="791"/>
+        <location filename="../util.cpp" line="795"/>
         <source>Software &amp;Manual...</source>
         <translation>Software&amp;handbuch...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="798"/>
+        <location filename="../util.cpp" line="802"/>
         <source>What&apos;s &amp;This</source>
         <translation>Konte&amp;xthilfe</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="800"/>
+        <location filename="../util.cpp" line="804"/>
         <source>&amp;About Jamulus...</source>
         <translation>Ü&amp;ber Jamulus...</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="802"/>
+        <location filename="../util.cpp" line="806"/>
         <source>About &amp;Qt...</source>
         <translation>Über &amp;Qt...</translation>
     </message>
@@ -3118,12 +3123,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
 <context>
     <name>CLanguageComboBox</name>
     <message>
-        <location filename="../util.cpp" line="859"/>
+        <location filename="../util.cpp" line="863"/>
         <source>Restart Required</source>
         <translation>Neustart erforderlich</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="859"/>
+        <location filename="../util.cpp" line="863"/>
         <source>Please restart the application for the language change to take effect.</source>
         <translation>Bitte starte die Applikation neu um die Änderung der Spracheinstellung anzuwenden.</translation>
     </message>
@@ -3135,22 +3140,22 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation type="vanished">Ich &amp;stimme den Lizenzbedingungen zu</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="759"/>
+        <location filename="../util.cpp" line="763"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
         <translation>Dieser Server verlangt, dass man Bedingungen akzeptiert, bevor man sich verbinden kann. Bitte ließ die Bedingungen im Chat-Fenster.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="760"/>
+        <location filename="../util.cpp" line="764"/>
         <source>I have read the conditions and &amp;agree.</source>
         <translation>Ich h&amp;abe die Bedingungen gelesen und ich stimme zu.</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="761"/>
+        <location filename="../util.cpp" line="765"/>
         <source>Accept</source>
         <translation>Einwilligen</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="762"/>
+        <location filename="../util.cpp" line="766"/>
         <source>Decline</source>
         <translation>Ablehnen</translation>
     </message>
@@ -4221,7 +4226,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Benutzerdefinierte Verzeichnisadresse</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
@@ -4325,7 +4330,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="806"/>
+        <location filename="../serverlist.cpp" line="833"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Konnte nicht nach &apos;%1&apos; schreiben</translation>
     </message>
@@ -4687,13 +4692,13 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <translation type="vanished">Internet Jam Session Software</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1566"/>
+        <location filename="../util.cpp" line="1575"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Version %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1583"/>
+        <location filename="../util.cpp" line="1592"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Veröffentlicht unter der GNU General Public License version 2 oder später (GPLv2)</translation>
     </message>

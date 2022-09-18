@@ -205,16 +205,36 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         // [this server country as QLocale ID]
         bool      ok;
         const int iCountry = slServInfoSeparateParams[2].toInt ( &ok );
-        if ( ok && iCountry >= 0 && CLocale::IsCountryCodeSupported ( iCountry ) )
+        if ( ok )
         {
-            // Convert from externally-supplied format ("wire format", Qt5 codes) to
-            // native format. On Qt5 builds, this is a noop, on Qt6 builds, a conversion
-            // takes place.
-            // We try to do such conversions at the outer-most interface which is capable of doing it.
-            // Although the value comes from src/main -> src/server, this very place is
-            // the first where we have access to the parsed country code:
-            ThisServerListEntry.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iCountry );
+            if ( iCountry >= 0 && CLocale::IsCountryCodeSupported ( iCountry ) )
+            {
+                // Convert from externally-supplied format ("wire format", Qt5 codes) to
+                // native format. On Qt5 builds, this is a noop, on Qt6 builds, a conversion
+                // takes place.
+                // We try to do such conversions at the outer-most interface which is capable of doing it.
+                // Although the value comes from src/main -> src/server, this very place is
+                // the first where we have access to the parsed country code:
+                ThisServerListEntry.eCountry = CLocale::WireFormatCountryCodeToQtCountry ( iCountry );
+            }
         }
+        else
+        {
+            QLocale::Country qlCountry = CLocale::GetCountryCodeByTwoLetterCode ( slServInfoSeparateParams[2] );
+            if ( qlCountry != QLocale::AnyCountry )
+            {
+                ThisServerListEntry.eCountry = qlCountry;
+            }
+        }
+        qInfo() << qUtf8Printable ( QString ( "Using server info: name = \"%1\", city = \"%2\", country/region = \"%3\" (%4)" )
+                                        .arg ( ThisServerListEntry.strName )
+                                        .arg ( ThisServerListEntry.strCity )
+                                        .arg ( slServInfoSeparateParams[2] )
+                                        .arg ( QLocale::countryToString ( ThisServerListEntry.eCountry ) ) );
+    }
+    else
+    {
+        qWarning() << "Ignoring invalid serverinfo, please verify the parameter syntax.";
     }
 
     // per definition, the very first entry is this server and this entry will

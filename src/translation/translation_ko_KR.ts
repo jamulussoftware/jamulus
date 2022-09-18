@@ -1145,8 +1145,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
-        <translation>지터 버퍼 자동 스위치</translation>
+        <source>Auto jitter buffer check box</source>
+        <translation type="unfinished">지터 버퍼 자동 스위치</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1220,8 +1220,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>소규모 네트워크 버퍼 활성화</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">소규모 네트워크 버퍼 활성화</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1233,8 +1233,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
-        <translation>소규모 네트워크 버퍼 활성화 체크 박스</translation>
+        <source>Small network buffers check box</source>
+        <translation type="unfinished">소규모 네트워크 버퍼 활성화 체크 박스</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1719,12 +1719,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>피드백 보호</translation>
+        <translation type="unfinished">피드백 보호</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>피드백 보호를 활성화하여 마이크와 스피커 간의 음향 피드백을 감지합니다.</translation>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished">피드백 보호를 활성화하여 마이크와 스피커 간의 음향 피드백을 감지합니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1738,8 +1738,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>채팅 메시지를 수신하고 새 클라이언트가 세션에 참여할 때 오디오 경고를 활성화합니다. 경보를 듣기 위해 두 번째 사운드 장치가 필요할 수 있습니다.</translation>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -2252,8 +2252,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>소규모 네트워크 버퍼 활성화</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">소규모 네트워크 버퍼 활성화</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2392,7 +2392,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation>피드백 보호</translation>
+        <translation type="unfinished">피드백 보호</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3300,13 +3300,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
-        <source>Enable Recorder</source>
-        <translation>녹음기 활성화</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">녹음기 활성화</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation>녹음기를 활성화하면 체크되고 그렇지 않을 땐 체크되지 않습니다. (올바르게 설정되고) 활성화된 경우 세션이 진행 중일 때 녹음기가 실행됩니다.</translation>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
+        <translation type="unfinished">녹음기를 활성화하면 체크되고 그렇지 않을 땐 체크되지 않습니다. (올바르게 설정되고) 활성화된 경우 세션이 진행 중일 때 녹음기가 실행됩니다.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3737,8 +3737,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
-        <translation>지연 패닝 활성화</translation>
+        <source>Delay panning</source>
+        <translation type="unfinished">지연 패닝 활성화</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -3770,8 +3770,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>잼 녹음기 활성화</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">잼 녹음기 활성화</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>

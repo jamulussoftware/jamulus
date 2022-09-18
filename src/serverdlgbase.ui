@@ -154,9 +154,9 @@
        <item>
         <layout class="QHBoxLayout">
          <item>
-          <widget class="QCheckBox" name="chbEnableRecorder">
+          <widget class="QCheckBox" name="chbJamRecorder">
            <property name="text">
-            <string>Enable Jam Recorder</string>
+            <string>Jam Recorder</string>
            </property>
           </widget>
          </item>
@@ -309,9 +309,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="chbEnableDelayPanning">
+        <widget class="QCheckBox" name="chbDelayPanning">
          <property name="text">
-          <string>Enable delay panning</string>
+          <string>Delay panning</string>
          </property>
         </widget>
        </item>
@@ -355,7 +355,7 @@
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>
-  <tabstop>chbEnableRecorder</tabstop>
+  <tabstop>chbJamRecorder</tabstop>
   <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>pbtNewRecording</tabstop>
   <tabstop>tedWelcomeMessage</tabstop>
@@ -368,7 +368,7 @@
   <tabstop>edtServerListPersistence</tabstop>
   <tabstop>tbtClearServerListPersistence</tabstop>
   <tabstop>chbStartOnOSStart</tabstop>
-  <tabstop>chbEnableDelayPanning</tabstop>
+  <tabstop>chbDelayPanning</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

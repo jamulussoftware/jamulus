@@ -1078,8 +1078,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
-        <translation>自动抖动缓冲开关</translation>
+        <source>Auto jitter buffer check box</source>
+        <translation type="unfinished">自动抖动缓冲开关</translation>
     </message>
     <message>
         <source>Sound Card Device</source>
@@ -1137,14 +1137,14 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
+        <source>Small Network Buffers</source>
         <translatorcomment>Small Network Buffers 的作用不确定，暂定译法</translatorcomment>
         <translation>启用小网络缓冲区</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
-        <translation>启用小网络缓冲区勾选框</translation>
+        <source>Small network buffers check box</source>
+        <translation type="unfinished">启用小网络缓冲区勾选框</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1531,12 +1531,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation>音频提示</translation>
+        <translation type="unfinished">音频提示</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>当接收到聊天消息或新客户端加入到会话时启用音频提示。可能需要第二个音频设备以便听到对应的提示音。</translation>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <translation type="unfinished">当接收到聊天消息或新客户端加入到会话时启用音频提示。可能需要第二个音频设备以便听到对应的提示音。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -1604,12 +1604,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>自激保护</translation>
+        <translation type="unfinished">自激保护</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>启用自激保护以检测话筒和麦克风产生正反馈循环（自激）导致的啸叫。</translation>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished">启用自激保护以检测话筒和麦克风产生正反馈循环（自激）导致的啸叫。</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -2074,8 +2074,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>启用小网络缓冲区</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">启用小网络缓冲区</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2159,7 +2159,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation>音频提示</translation>
+        <translation type="unfinished">音频提示</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2215,7 +2215,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation>自激保护</translation>
+        <translation type="unfinished">自激保护</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -2766,13 +2766,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
-        <source>Enable Recorder</source>
-        <translation>启用录音器</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">启用录音器</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation>录音功能启用时将为勾选状态，否则为未勾选状态。若已配置并开启选项，则录音功能将在会话进行中开启录制。</translation>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
+        <translation type="unfinished">录音功能启用时将为勾选状态，否则为未勾选状态。若已配置并开启选项，则录音功能将在会话进行中开启录制。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
@@ -3248,8 +3248,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
-        <translation>启用延迟平衡</translation>
+        <source>Delay panning</source>
+        <translation type="unfinished">启用延迟平衡</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
@@ -3277,8 +3277,8 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>启用合奏录音机</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">启用合奏录音机</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>

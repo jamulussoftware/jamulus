@@ -1230,8 +1230,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
-        <translation>Auto-jitterbuffert reglage</translation>
+        <source>Auto jitter buffer check box</source>
+        <translation type="unfinished">Auto-jitterbuffert reglage</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="154"/>
@@ -1342,8 +1342,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Aktivera liten nätverksbuffert</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Aktivera liten nätverksbuffert</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1355,8 +1355,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
-        <translation>Aktivera kryssrutan för små nätverksbuffertar</translation>
+        <source>Small network buffers check box</source>
+        <translation type="unfinished">Aktivera kryssrutan för små nätverksbuffertar</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1558,12 +1558,12 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>Rundgångsskydd</translation>
+        <translation type="unfinished">Rundgångsskydd</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>Aktivera rundgångsskydd för att upptäcka rundgång mellan mikrofon och högtalare.</translation>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished">Aktivera rundgångsskydd för att upptäcka rundgång mellan mikrofon och högtalare.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -1577,7 +1577,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2303,8 +2303,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Aktivera små nätverksbuffertar</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Aktivera små nätverksbuffertar</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2444,7 +2444,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation>Rundgångsskydd</translation>
+        <translation type="unfinished">Rundgångsskydd</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3481,13 +3481,13 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
-        <source>Enable Recorder</source>
-        <translation>Starta serverinspelning</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Starta serverinspelning</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation>Markerad när inspelaren är aktiverad, annars avmarkerad. Inspelaren kommer att köras när en session pågår, om (inställt korrekt och) aktiverat.</translation>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
+        <translation type="unfinished">Markerad när inspelaren är aktiverad, annars avmarkerad. Inspelaren kommer att köras när en session pågår, om (inställt korrekt och) aktiverat.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
@@ -3839,8 +3839,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>Aktivera Jam-inspelning</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Aktivera Jam-inspelning</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -3890,8 +3890,8 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
-        <translation>Aktivera fördröjningspanorering</translation>
+        <source>Delay panning</source>
+        <translation type="unfinished">Aktivera fördröjningspanorering</translation>
     </message>
     <message>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>

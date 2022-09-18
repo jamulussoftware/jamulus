@@ -37,6 +37,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     setupUi ( this );
 
+    // always start on the main tab
+    tabWidget->setCurrentIndex ( 0 );
+
     // set window title
     setWindowTitle ( tr ( "%1 Server", "%1 is the name of the main application" ).arg ( APP_NAME ) );
 
@@ -115,10 +118,9 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     cbxLocationCountry->setAccessibleName ( tr ( "Combo box for location of this server" ) );
 
     // enable recorder
-    chbEnableRecorder->setAccessibleName ( tr ( "Checkbox to turn on or off server recording" ) );
-    chbEnableRecorder->setWhatsThis ( "<b>" + tr ( "Enable Recorder" ) + ":</b> " +
-                                      tr ( "Checked when the recorder is enabled, otherwise unchecked. "
-                                           "The recorder will run when a session is in progress, if (set up correctly and) enabled." ) );
+    chbJamRecorder->setAccessibleName ( tr ( "Checkbox to turn on or off server recording" ) );
+    chbJamRecorder->setWhatsThis ( "<b>" + tr ( "Jam Recorder" ) + ":</b> " +
+                                   tr ( "When checked, the recorder will run while a session is in progress (if set up correctly)." ) );
 
     // new recording
     pbtNewRecording->setAccessibleName ( tr ( "Request new recording button" ) );
@@ -369,11 +371,11 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
     // update delay panning check box
     if ( pServer->IsDelayPanningEnabled() )
     {
-        chbEnableDelayPanning->setCheckState ( Qt::Checked );
+        chbDelayPanning->setCheckState ( Qt::Checked );
     }
     else
     {
-        chbEnableDelayPanning->setCheckState ( Qt::Unchecked );
+        chbDelayPanning->setCheckState ( Qt::Unchecked );
     }
 
     // prepare update check info label (invisible by default)
@@ -409,11 +411,11 @@ CServerDlg::CServerDlg ( CServer* pNServP, CServerSettings* pNSetP, const bool b
 
     // Connections -------------------------------------------------------------
     // check boxes
-    QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableRecorderStateChanged );
+    QObject::connect ( chbJamRecorder, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableRecorderStateChanged );
 
     QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged, this, &CServerDlg::OnStartOnOSStartStateChanged );
 
-    QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
+    QObject::connect ( chbDelayPanning, &QCheckBox::stateChanged, this, &CServerDlg::OnEnableDelayPanningStateChanged );
 
     // line edits
     QObject::connect ( edtServerName, &QLineEdit::editingFinished, this, &CServerDlg::OnServerNameEditingFinished );
@@ -834,7 +836,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
     if ( pServer->GetRecorderInitialised() )
     {
         strRecordingDir = pServer->GetRecordingDir();
-        chbEnableRecorder->setEnabled ( true );
+        chbJamRecorder->setEnabled ( true );
 
         if ( pServer->GetRecordingEnabled() )
         {
@@ -868,13 +870,13 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
             strRecordingDir = tr ( "ERROR" ) + ": " + strRecordingDir;
         }
 
-        chbEnableRecorder->setEnabled ( false );
+        chbJamRecorder->setEnabled ( false );
         strRecorderStatus = SREC_NOT_INITIALISED;
     }
 
-    chbEnableRecorder->blockSignals ( true );
-    chbEnableRecorder->setChecked ( strRecorderStatus != SREC_NOT_ENABLED );
-    chbEnableRecorder->blockSignals ( false );
+    chbJamRecorder->blockSignals ( true );
+    chbJamRecorder->setChecked ( strRecorderStatus != SREC_NOT_ENABLED );
+    chbJamRecorder->blockSignals ( false );
 
     edtRecordingDir->setText ( strRecordingDir );
     edtRecordingDir->setEnabled ( !bIsRecording );

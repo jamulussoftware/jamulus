@@ -1149,8 +1149,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
-        <source>Auto jitter buffer switch</source>
-        <translation>Przełącznik automatycznego rozmiaru bufora odchyleń</translation>
+        <source>Auto jitter buffer check box</source>
+        <translation type="unfinished">Przełącznik automatycznego rozmiaru bufora odchyleń</translation>
     </message>
     <message>
         <source>Jitter buffer status LED indicator</source>
@@ -1218,8 +1218,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Używaj małych buforów sieciowych</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Używaj małych buforów sieciowych</translation>
     </message>
     <message>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
@@ -1227,8 +1227,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="179"/>
-        <source>Enable small network buffers check box</source>
-        <translation>Pole wyboru Włącz Małe Bufory Sieciowe</translation>
+        <source>Small network buffers check box</source>
+        <translation type="unfinished">Pole wyboru Włącz Małe Bufory Sieciowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="183"/>
@@ -1530,12 +1530,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation>Alarmy dźwiękowe</translation>
+        <translation type="unfinished">Alarmy dźwiękowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
-        <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation>Stosuj sygnały dźwiękowe dla przychodzących wiadomości czatu oraz kiedy dołącza nowy uczestnik sesji. Może być wymagane dodatkowe urządzenie dźwiękowe by je słyszeć.</translation>
+        <source>Trigger an audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
+        <translation type="unfinished">Stosuj sygnały dźwiękowe dla przychodzących wiadomości czatu oraz kiedy dołącza nowy uczestnik sesji. Może być wymagane dodatkowe urządzenie dźwiękowe by je słyszeć.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
@@ -1838,12 +1838,12 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation>Ochrona przed sprzęganiem</translation>
+        <translation type="unfinished">Ochrona przed sprzęganiem</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
-        <source>Enable feedback protection to detect acoustic feedback between microphone and speakers.</source>
-        <translation>Wykrywaj sprzężenia akustyczne między miktofonem a głośnikami.</translation>
+        <source>Prevents acoustic feedback between microphone and speakers.</source>
+        <translation type="unfinished">Wykrywaj sprzężenia akustyczne między miktofonem a głośnikami.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
@@ -2292,8 +2292,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
-        <source>Enable Small Network Buffers</source>
-        <translation>Zezwalaj na małe bufory sieciowe</translation>
+        <source>Small Network Buffers</source>
+        <translation type="unfinished">Zezwalaj na małe bufory sieciowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
@@ -2377,7 +2377,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation>Alarmy dźwiękowe</translation>
+        <translation type="unfinished">Alarmy dźwiękowe</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -2433,7 +2433,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation>Ochrona przed sprzęganiem</translation>
+        <translation type="unfinished">Ochrona przed sprzęganiem</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
@@ -3329,13 +3329,13 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
-        <source>Enable Recorder</source>
-        <translation>Nagrywanie włączone</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Nagrywanie włączone</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
-        <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
-        <translation>Zaznaczone kiedy nagrywanie jest możliwe. Nagrywanie rozpocznie się razem z sesją, jeżeli jest ustawione prawidłowo i dostępne.</translation>
+        <source>The recorder will run when a session is in progress, if (set up correctly and) checked.</source>
+        <translation type="unfinished">Zaznaczone kiedy nagrywanie jest możliwe. Nagrywanie rozpocznie się razem z sesją, jeżeli jest ustawione prawidłowo i dostępne.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="147"/>
@@ -3754,8 +3754,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
-        <source>Enable Jam Recorder</source>
-        <translation>Zezwalaj na nagrywanie sesji</translation>
+        <source>Jam Recorder</source>
+        <translation type="unfinished">Zezwalaj na nagrywanie sesji</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
@@ -3805,8 +3805,8 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
-        <source>Enable delay panning</source>
-        <translation>Opóźnienie panoramy</translation>
+        <source>Delay panning</source>
+        <translation type="unfinished">Opóźnienie panoramy</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>

@@ -38,7 +38,6 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     pClient ( pNCliP ),
     pSettings ( pNSetP ),
     bConnectDlgWasShown ( false ),
-    bMIDICtrlUsed ( !strMIDISetup.isEmpty() ),
     bDetectFeedback ( false ),
     bEnableIPv6 ( bNEnableIPv6 ),
     eLastRecorderState ( RS_UNDEFINED ), // for SetMixerBoardDeco
@@ -218,6 +217,9 @@ CClientDlg::CClientDlg ( CClient*         pNCliP,
     // set the settings pointer to the mixer board (must be done early)
     MainMixerBoard->SetSettingsPointer ( pSettings );
     MainMixerBoard->SetNumMixerPanelRows ( pSettings->iNumMixerPanelRows );
+
+    // Pass through flag for MIDICtrlUsed
+    MainMixerBoard->SetMIDICtrlUsed ( !strMIDISetup.isEmpty() );
 
     // reset mixer board
     MainMixerBoard->HideAll();
@@ -870,15 +872,6 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
 
 void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
-    // show channel numbers if --ctrlmidich is used (#241, #95)
-    if ( bMIDICtrlUsed )
-    {
-        for ( int i = 0; i < vecChanInfo.Size(); i++ )
-        {
-            vecChanInfo[i].strName.prepend ( QString().setNum ( vecChanInfo[i].iChanID ) + ":" );
-        }
-    }
-
     // update mixer board with the additional client infos
     MainMixerBoard->ApplyNewConClientList ( vecChanInfo );
 }

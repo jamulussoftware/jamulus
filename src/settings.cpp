@@ -226,11 +226,13 @@ void CClientSettings::SaveFaderSettings ( const QString& strCurFileName )
     WriteToFile ( strCurFileName, IniXMLDocument );
 }
 
-void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& )
+void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, const QList<QString>& CommandLineOptions )
 {
     int  iIdx;
     int  iValue;
     bool bValue;
+
+    bCleanUpLegacyFaderSettings = CommandLineOptions.contains ( "--cleanuplegacyfadersettings" );
 
     // IP addresses
     for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
@@ -557,6 +559,53 @@ void CClientSettings::ReadSettingsFromXML ( const QDomDocument& IniXMLDocument, 
     ReadFaderSettingsFromXML ( IniXMLDocument );
 }
 
+QString CClientSettings::CleanUpLegacyFaderSetting ( QString strFaderTag, int iIdx )
+{
+    bool ok;
+    int  iIdy;
+    bool bDup;
+
+    if ( !bCleanUpLegacyFaderSettings || strFaderTag.isEmpty() )
+    {
+        return strFaderTag;
+    }
+
+    QStringList slChanFaderTag = strFaderTag.split ( ":" );
+    if ( slChanFaderTag.size() != 2 )
+    {
+        return strFaderTag;
+    }
+
+    const int iChan = slChanFaderTag[0].toInt ( &ok );
+    if ( ok && iChan >= 0 && iChan <= MAX_NUM_CHANNELS )
+    {
+        // *assumption*: legacy tag that needs cleaning up
+        strFaderTag = slChanFaderTag[1];
+    }
+
+    // duplicate detection
+    // this assumes the first entry into the vector is the newest one and skips any later ones.
+    // the alternative is to use iIdy for the vector entry, so overwriting the duplicate.
+    // (in both cases, this currently leaves holes in the vector.)
+    bDup = false;
+    for ( iIdy = 0; iIdy < iIdx; iIdy++ )
+    {
+        if ( strFaderTag == vecStoredFaderTags[iIdy] )
+        {
+            // duplicate entry
+            bDup = true;
+            break;
+        }
+    }
+    if ( bDup )
+    {
+        // so skip all settings for this iIdx (use iIdx here even if using iIdy and not doing continue below)
+        return QString();
+    }
+
+    return strFaderTag;
+}
+
 void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocument )
 {
     int  iIdx;
@@ -566,8 +615,17 @@ void CClientSettings::ReadFaderSettingsFromXML ( const QDomDocument& IniXMLDocum
     for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
     {
         // stored fader tags
-        vecStoredFaderTags[iIdx] =
-            FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", QString ( "storedfadertag%1_base64" ).arg ( iIdx ), "" ) );
+        QString strFaderTag = CleanUpLegacyFaderSetting (
+            FromBase64ToString ( GetIniSetting ( IniXMLDocument, "client", QString ( "storedfadertag%1_base64" ).arg ( iIdx ), "" ) ),
+            iIdx );
+
+        if ( strFaderTag.isEmpty() )
+        {
+            // duplicate from clean up code
+            continue;
+        }
+
+        vecStoredFaderTags[iIdx] = strFaderTag;
 
         // stored fader levels
         if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "storedfaderlevel%1" ).arg ( iIdx ), 0, AUD_MIX_FADER_MAX, iValue ) )

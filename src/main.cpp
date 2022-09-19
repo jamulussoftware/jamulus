@@ -572,6 +572,20 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Clean up legacy fader settings --------------------------------------
+        // Undocumented temporary command line argument: Clean up fader settings
+        // corrupted by bug #2680.  Only needs to be used once (per file).
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--cleanuplegacyfadersettings", // no short form
+                               "--cleanuplegacyfadersettings" ) )
+        {
+            qInfo() << "- will clean up legacy fader settings on load";
+            CommandLineOptions << "--cleanuplegacyfadersettings";
+            ClientOnlyOptions << "--cleanuplegacyfadersettings";
+            continue;
+        }
+
         // Unknown option ------------------------------------------------------
         qCritical() << qUtf8Printable ( QString ( "%1: Unknown option '%2' -- use '--help' for help" ).arg ( argv[0] ).arg ( argv[i] ) );
 

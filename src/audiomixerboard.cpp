@@ -29,7 +29,8 @@
 \******************************************************************************/
 CChannelFader::CChannelFader ( QWidget* pNW ) :
     eDesign ( GD_STANDARD ),
-    BitmapMutedIcon ( QString::fromUtf8 ( ":/png/fader/res/mutediconorange.png" ) )
+    BitmapMutedIcon ( QString::fromUtf8 ( ":/png/fader/res/mutediconorange.png" ) ),
+    bMIDICtrlUsed ( false )
 {
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
@@ -676,7 +677,14 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
     // Label text --------------------------------------------------------------
 
-    QString             strModText = cChanInfo.strName;
+    QString strModText = cChanInfo.strName;
+
+    // show channel numbers if --ctrlmidich is used (#241, #95)
+    if ( bMIDICtrlUsed )
+    {
+        strModText.prepend ( QString().setNum ( cChanInfo.iChanID ) + ":" );
+    }
+
     QTextBoundaryFinder tbfName ( QTextBoundaryFinder::Grapheme, cChanInfo.strName );
     int                 iBreakPos;
 
@@ -1532,6 +1540,16 @@ void CAudioMixerBoard::AutoAdjustAllFaderLevels()
                 vecpChanFader[i]->SetFaderLevel ( newFaderLevel, true );
             }
         }
+    }
+}
+
+void CAudioMixerBoard::SetMIDICtrlUsed ( const bool bMIDICtrlUsed )
+{
+    QMutexLocker locker ( &Mutex );
+
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->SetMIDICtrlUsed ( bMIDICtrlUsed );
     }
 }
 

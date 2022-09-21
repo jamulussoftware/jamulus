@@ -3662,7 +3662,7 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="833"/>
+        <location filename="../serverlist.cpp" line="853"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Nepodarilo sa zapísať do &apos;%1&apos;</translation>
     </message>
@@ -3936,13 +3936,13 @@ Stíšili sme váš kanál a aktivovali nastavenia &apos;Stíšiť ma&apos;. Pro
         <translation type="vanished">Softvér na džemovanie cez internet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1575"/>
+        <location filename="../util.cpp" line="1600"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Verzia %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1592"/>
+        <location filename="../util.cpp" line="1617"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Vydané pod licenciou GNU General Public License verzie 2 alebo novšej (GPLv2)</translation>
     </message>

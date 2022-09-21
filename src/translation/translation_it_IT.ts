@@ -4335,7 +4335,7 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="833"/>
+        <location filename="../serverlist.cpp" line="853"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Impossibile scrivere su &apos;%1&apos;</translation>
     </message>
@@ -4689,13 +4689,13 @@ E&apos; stato disattivato l&apos;audio del tuo canale ed inserito il &quot;Disat
         <translation type="vanished">Programma per Jam Session su Internet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1575"/>
+        <location filename="../util.cpp" line="1600"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Versione %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1592"/>
+        <location filename="../util.cpp" line="1617"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Rilasciato sotto la GNU General Public License versione 2 o successive (GPLv2)</translation>
     </message>

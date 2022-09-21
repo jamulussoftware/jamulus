@@ -4330,7 +4330,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="833"/>
+        <location filename="../serverlist.cpp" line="853"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>Não foi possível gravar em &apos;%1&apos;</translation>
     </message>
@@ -4684,13 +4684,13 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
         <translation type="vanished">Programa de Jam Sessions pela Internet</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1575"/>
+        <location filename="../util.cpp" line="1600"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Versão %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1592"/>
+        <location filename="../util.cpp" line="1617"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Lançado sob a Licença Pública Geral GNU versão 2 (GPLv2)</translation>
     </message>

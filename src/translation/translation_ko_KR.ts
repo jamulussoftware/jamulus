@@ -3786,7 +3786,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="833"/>
+        <location filename="../serverlist.cpp" line="853"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>&apos;%1&apos;에 쓸 수 없습니다</translation>
     </message>
@@ -4124,13 +4124,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <translation type="vanished">인터넷 잼 세션 소프트웨어</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1575"/>
+        <location filename="../util.cpp" line="1600"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, 버전 %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1592"/>
+        <location filename="../util.cpp" line="1617"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>GNU 일반 공중 허가서 버전 2 또는 이후 버전에 따라 출시됨 (GPLv2)</translation>
     </message>

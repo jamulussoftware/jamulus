@@ -4394,7 +4394,7 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
 <context>
     <name>CServerListManager</name>
     <message>
-        <location filename="../serverlist.cpp" line="833"/>
+        <location filename="../serverlist.cpp" line="853"/>
         <source>Could not write to &apos;%1&apos;</source>
         <translation>No se pudo escribir a &apos;%1&apos;</translation>
     </message>
@@ -4748,13 +4748,13 @@ Hemos silenciado tu canal y activado &apos;Silenciarme Yo&apos;. Por favor resue
         <translation type="vanished">Internet Jam Session Software</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1575"/>
+        <location filename="../util.cpp" line="1600"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
         <translation>%1, Versión %2</translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="1592"/>
+        <location filename="../util.cpp" line="1617"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
         <translation>Publicado bajo la GNU General Public License versión 2 o posterior (GPLv2)</translation>
     </message>

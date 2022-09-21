@@ -1,11 +1,20 @@
 
 ### 3.9.0dev <- NOTE: the release version number will be 3.9.1 ###
 
-- CLI: Rephrased recording options help text on the `--help` output for clearer description of their functionality (#2832).
+- Bugfix: Correct new channel not being shown to others if it connects with null channel info (#2754, #2774).
+  (contributed by @softins)
+
+- Client: Improved performance of GUI when someone joins or leaves a server (#2738).
   (contributed by @ann0see)
 
-- Server: Bug: Correct new channel not being shown to others if it connects with null channel info. (#2754)
-  (contributed by @softins)
+- Client: Bugfix: Removed channel number from saved fader tag when `--ctrlmidich` is in use. In this release `--cleanuplegacyfadersettings` can be used on any saved fader settings that have been corrupted to attempt recovery (#2839).
+  (contributed by @pljones)
+
+- Server: Fixed --serverinfo country code misinterpretation introduced in Jamulus 3.9.0 on Qt6-based builds such as Mac (#2829).
+  (contributed by @hoffie)
+
+- Server: Added support for ISO country codes (de, gb, nl, ...) in --serverinfo (#2841).
+  (contributed by @hoffie)
 
 - Directory: Bug: Correct default "self" address for directory, enabling use as a server (#2812).
   (contributed by @pljones)
@@ -13,20 +22,48 @@
 - Directory: Bug: Use configured Directory Public IP for Client when hole-punching (#2819).
   (contributed by @pljones)
 
-- Refactoring: Moved around files to clean up the repository (#2824).
+- CLI: Rephrased recording options help text on the `--help` output for clearer description of their functionality (#2832).
   (contributed by @ann0see)
+
+- Windows: Upgraded JACK build to use JACK 1.9.21 (#2665).
+  (contributed by @ann0see)
+
+- Translation: Added nb_NO App translation (#2849).
+  (contributed by @ann0see)
+
+- Translations updated from Hosted Weblate (#2835, #2852).
+  (contributed by @weblate)
+
+- Refactoring: Moved around files to clean up the repository (#2822, #2824, #2834, #2838).
+  (contributed by @ann0see)
+
+- Build: Android: Export NDK root (#2764).
+  (contributed by @pljones)
+
+- Build: Debian/Ubuntu: Fixed `.deb` Changelog generation (#2793).
+  (contributed by @hoffie)
 
 - Build: Debian/Ubuntu: Fixed displayed version for non-release builds to removed incorrect -dirty suffixes (#2802).
   (contributed by @hoffie)
 
-- Build: Renamed headless .deb file to `jamulus-headless_[version]_ubuntu_[arch].deb` for consistency with binary. This might need changes to scripts downloading this `.deb` file (#2821).
+- Build: Debian/Ubuntu: Renamed headless .deb file to `jamulus-headless_[version]_ubuntu_[arch].deb` for consistency with binary. This might need changes to scripts downloading this `.deb` file (#2821).
   (contributed by @ann0see)
 
-- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support ().
+- Build: Mac: Combined Intel & M1 builds into a single Universal binary and improved M1 -dev build user-friendliness by introducing ad-hoc signing support (#2808, #2825).
   (contributed by @hoffie)
 
-- Internal: Enabled automated dependency updates via dependabot and custom automation (#2801, #2803).
+- Build: Bump versions: actions/upload-artifact from 2 to 3 (#2796), actions/cache from 2 to 3 (#2798), DoozyX/clang-format-lint-action from 0.12 to 0.14 (#2797), actions/checkout from 2 to 3 (#2799).
+  (contributed by @dependabot)
+
+- Build: Updated bundled Qt6 to version 6.3.2 (#2846).
+  (contributed by @github-actions)
+
+- Internal: Enabled automated dependency updates via dependabot and custom automation (#2777, #2778, #2801, #2803).
   (contributed by @hoffie)
+
+- Internal: Hardened build scripts and tooling against silent failures (#2794).
+  (contributed by @hoffie)
+
 
 ### 3.9.0 (2022-07-29) ###
 

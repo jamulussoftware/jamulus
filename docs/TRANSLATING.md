@@ -2,15 +2,31 @@
 
 This guide is written to provide instructions from scratch for contributing to the translation of the Jamulus application to other languages.
 
-The code for Jamulus is open source, and is managed and made available via the Github site.
+Jamulus is mostly developed on GitHub. However, translators are not required to use GitHub, as Jamulus is translated on [Hosted Weblate](https://hosted.weblate.org/projects/jamulus/).
 
-For completeness, this document describes the use both of GitHub (using `git`) and of _Qt Linguist_.
+You have two options to translate Jamulus:
+1. Using [Weblate](https://hosted.weblate.org/projects/jamulus/jamulus-app/) (online translation, easier and more feature rich. However, as of 10/2022, it will show your e-mail address on GitHub.) (recommended)
+2. Using Git directly (more advanced, but you can test your changes on your machine locally)
 
 ---
 
-## Introduction
+## Introduction (using Weblate)
 
-The translator must be able to do the following steps, which will each be explained further down:
+Translators should (if possible) have a GitHub account to communicate, as described in the **1. Setting up** paragraph in the Git section below. This account should be used to [create an account on Hosted Weblate](https://hosted.weblate.org/accounts/register/). Ensure that the Jamulus main developers are aware of your intentions to translate to your chosen language beforehand (e.g. by [creating or commenting on a respective issue during the release process for your language on GitHub](https://github.com/jamulussoftware/jamulus/issues)). This ensures you will have proper access and that support is provided. Have a look at the [adding a new language (checklist)](#adding-a-new-language-checklist) for what to expect.
+
+## Using Weblate for translation
+
+After logging into Hosted Weblate, visit the [Jamulus project page on Hosted Weblate](https://hosted.weblate.org/projects/jamulus/). There are several components dedicated to the Jamulus project. If you want to translate e.g. the main Jamulus program or the Windows installer, click on "[Jamulus app](https://hosted.weblate.org/projects/jamulus/jamulus-app/)" or "[Windows Installer](https://hosted.weblate.org/projects/jamulus/windows-installer/)" and choose your language. After that, translate the strings displayed on the Website. Weblate will open or update a Pull Request on the Jamulus repo within the next few hours, where your translation will be reviewed.
+
+More info is provided in the [Weblate documentation](https://docs.weblate.org/).
+
+---
+
+## Introduction (using Git)
+
+For completeness, this document describes the use of both GitHub (using Git), and of _Qt Linguist_.
+
+The translator must be able to carry out the following steps, each of which are explained below:
 
 - Create their own linked copy ("repository" or "repo") of Jamulus in GitHub. This is called Forking.
 - Copy ("clone") their own repository to their computer, using either:

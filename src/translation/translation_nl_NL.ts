@@ -132,7 +132,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Koreaans</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -4258,7 +4258,7 @@ We hebben uw kanaal gedempt en &apos;Demp mijzelf&apos; geactiveerd. Los eerst h
     <message>
         <location filename="../serverdlgbase.ui" line="338"/>
         <source>Update check</source>
-        <translation>Update check</translation>
+        <translation>Update controle</translation>
     </message>
     <message>
         <source>Make My Server Public (Register My Server in the Server List)</source>

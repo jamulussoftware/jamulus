@@ -6,7 +6,7 @@
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation>Qt - międzyplatformowe szablony aplikacji</translation>
+        <translation>Qt - między-platformowe szablony aplikacji</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="607"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>koreański</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -1481,7 +1481,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
     <message>
         <location filename="../clientsettingsdlg.cpp" line="271"/>
         <source>Select the meter style to be used for the level meters. The Bar (narrow) and LEDs (round, small) options only apply to the mixerboard. When Bar (narrow) is selected, the input meters are set to Bar (wide). When LEDs (round, small) is selected, the input meters are set to LEDs (round, big). The remaining options apply to the mixerboard and input meters.</source>
-        <translation>Wybierz styl miarki używanej do poziomów. Opcje „Pasek” (zwężony)  i „Diody” (małe, zaokrąglone) mają zastosowanie tylko do miksera. Gdy zaznaczony jest „Pasek” (zwężony) - wskaźniki wejścia są ustawione do paska (szeroki). Zaznaczenie „Diody” (małe) spowoduje dopasowywanie wskaźników do dużych diód. Pozostałe opcje mają zastosowanie zarówno do miksera jak i wskaźników wejścia.</translation>
+        <translation>Wybierz styl miarki używanej do poziomów. Opcje „Pasek” (zwężony) i „Diody” (małe, zaokrąglone) mają zastosowanie tylko do miksera. Gdy zaznaczony jest „Pasek” (zwężony) - wskaźniki wejścia są ustawione do paska (szeroki). Zaznaczenie „Diody” (małe) spowoduje dopasowywanie wskaźników do dużych diod. Pozostałe opcje mają zastosowanie zarówno do miksera jak i wskaźników wejścia.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
@@ -2644,7 +2644,7 @@ Twój kanał został wyciszony i włączono „Wycisz mnie”. Napraw przyczynę
         <location filename="../connectdlg.cpp" line="67"/>
         <source>Show All Musicians</source>
         <translatorcomment>Pokaż wsztystkich muzyków</translatorcomment>
-        <translation></translation>
+        <translation>Pokaż wszystkich muzyków</translation>
     </message>
     <message>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>

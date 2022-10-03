@@ -6,112 +6,112 @@
     <message>
         <location filename="../util.cpp" line="574"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Programmet lar musikere spille sammen over Internett.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="577"/>
         <source>There is a server which collects  the audio data from each client, mixes the audio data and sends the mix  back to each client.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tjeneren som samler lyddata fra hver klient mikser den og sender den til hver enkelt klient.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>This app uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished"></translation>
+        <translation>Programmet bruker følgende biblioteker, ressurser, eller kodesnutter:</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="597"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt-programrammeverk på tvers av plattformer</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="607"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lydklangkode av Perry R. Cook og Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="611"/>
         <source>Some pixmaps are from the</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Noen bilder kommer fra</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="615"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>Flaggikoner av Mark James</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>Noen lydsampler er fra</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
         <source>For details on the contributions check out the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaljer om bidragsyterne er å finne i %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="690"/>
         <source>Github Contributors list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GitHub-bidragsyterlisten</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="693"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Spansk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="697"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Fransk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="702"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugisisk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="707"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Hollandsk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="712"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italiensk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="716"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Tysk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="721"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polsk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="726"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Svensk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Koreansk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovakisk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="737"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Forenklet kinesisk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="745"/>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Om %1</translation>
     </message>
 </context>
 <context>
@@ -119,42 +119,42 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="20"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Om</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Versjon</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opphavsrett © 2005–2022 Jamulus-utviklingslaget</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation type="unfinished"></translation>
+        <translation>O&amp;m</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="120"/>
         <source>&amp;Libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bibliotek</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="134"/>
         <source>&amp;Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bidragsytere</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="148"/>
         <source>&amp;Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Oversettelse</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="198"/>
         <source>&amp;OK</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;OK</translation>
     </message>
 </context>
 <context>
@@ -162,12 +162,12 @@
     <message>
         <location filename="../analyzerconsole.cpp" line="47"/>
         <source>Analyzer Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Analysatorkonsoll</translation>
     </message>
     <message>
         <location filename="../analyzerconsole.cpp" line="65"/>
         <source>Error Rate of Each Buffer Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Feilrate for hver hurtiglagerstørrelse</translation>
     </message>
 </context>
 <context>
@@ -175,32 +175,32 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="903"/>
         <source>Personal Mix at the Server</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Personlig miks på tjeneren</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="904"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Når du kobler til en tjener vil kontrollene her la deg sette din lokale miks uten å ha innvirkning på hva andre hører fra deg. Tittelen viser tjenernavn og, (om det er kjent) hvorvidt det er et aktivt opptak.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="977"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjener</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="986"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
-        <translation type="unfinished"></translation>
+        <translation>P R Ø V E R   Å   K O B L E   T I L</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1184"/>
         <source>RECORDING ACTIVE</source>
-        <translation type="unfinished"></translation>
+        <translation>OPPTAK PÅGÅR</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="1194"/>
         <source>Personal Mix at: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Personlig miks på: %1</translation>
     </message>
 </context>
 <context>
@@ -210,243 +210,243 @@
         <location filename="../audiomixerboard.cpp" line="237"/>
         <location filename="../audiomixerboard.cpp" line="251"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>Panorering</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="48"/>
         <location filename="../audiomixerboard.cpp" line="162"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Mute</source>
-        <translation type="unfinished"></translation>
+        <translation>Forstum</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="49"/>
         <location filename="../audiomixerboard.cpp" line="165"/>
         <location filename="../audiomixerboard.cpp" line="253"/>
         <source>Solo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Solo</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="67"/>
         <source>&amp;No grouping</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ingen gruppering</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="70"/>
         <source>Assign to group</source>
-        <translation type="unfinished"></translation>
+        <translation>Tildel til gruppe</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="139"/>
         <source>Channel Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanalnivå</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="140"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viser pre-fader-lydstyrkenivå for denne kanalen. Alle klienter tilkoblet tjeneren vil bli tildelt et lydstyrkenivå, med lik verdi for hver klient.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="142"/>
         <source>Input level of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Inngangsnivå for nåværende lydkanal på tjeneren</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="145"/>
         <source>Mixer Fader</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mikser-fader</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="146"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Justerer lydstyrkenivået for denne kanalen. Alle klienter tilkoblet tjeneren vil bli tildelt en lydstyrkefader, vist ved hver klient, for å justere den lokale miksen.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="148"/>
         <source>Local mix level setting of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lokalt miksernivåinnstilling for nåværende lydkanal på tjeneren</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="151"/>
         <source>Status Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusindikator</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="152"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Viser en statusindikator om klienten som er tilknyttet denne kanalen. Støttede indikatorer er:</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="154"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Høyttaler med strek over indikerer at en annen klient har forstummet deg.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="155"/>
         <source>Status indicator label</source>
-        <translation type="unfinished"></translation>
+        <translation>Etikett for statusindikator</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="157"/>
         <source>Panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Panorering</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="158"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Setter panoreringen fra venstre til høyre for kanalen. Fungerer kun i stereo, eller helst i mono inn/stereo ut-modus</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="160"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokal panoreringsposisjon for nåværende lydkanal på tjeneren</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="162"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Med forstummelsesboksen avhuket vil lydkanalen forstummes.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="163"/>
         <source>Mute button</source>
-        <translation type="unfinished"></translation>
+        <translation>Forstummelsesknapp</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="166"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Med «Solo»-sjekkboksen kan lydkanalen settes til solo, som betyr at alle andre kanaler med unntak av påvirket/ede kanal er forstummet.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="170"/>
         <source>Solo button</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo-knapp</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="172"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gruppe</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="173"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Med «Grp»-sjekkboksen kan lydkanaler defineres som gruppe. Alle fadere i den flyttes i proporsjonal synkronisering hvis én av gruppens fadere flyttes.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="176"/>
         <source>Group button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gruppe-knapp</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="178"/>
         <source>Fader Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Fader-etikett</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="179"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your location can be set in the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fader-etiketten indentifiserer tilkoblet klient. Etikettnavnet er et bilde av instrumentet ditt, og et flagg for din posisjon kan settes i hovedvinduet.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="184"/>
         <source>Mixer channel instrument picture</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mikserkanalens instrumentbilde</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="186"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mikserkanalens etikett (fader-etikett)</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="188"/>
         <source>Mixer channel country/region flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Mikserkanalsland/regionsflagg</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="224"/>
         <source>PAN</source>
-        <translation type="unfinished"></translation>
+        <translation>PAN</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="225"/>
         <source>MUTE</source>
-        <translation type="unfinished"></translation>
+        <translation>FORSTUM</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="226"/>
         <source>SOLO</source>
-        <translation type="unfinished"></translation>
+        <translation>SOLO</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="227"/>
         <source>GRP</source>
-        <translation type="unfinished"></translation>
+        <translation>GRP</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="238"/>
         <source>M</source>
-        <translation type="unfinished"></translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="239"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="240"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="254"/>
         <source>Grp</source>
-        <translation type="unfinished"></translation>
+        <translation>Grp</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="796"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Alias/navn</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="803"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="811"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Sted</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="838"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Nybegynner</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="839"/>
         <location filename="../audiomixerboard.cpp" line="845"/>
         <location filename="../audiomixerboard.cpp" line="851"/>
         <source>Skill Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferdighetsnivå</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="844"/>
         <source>Intermediate</source>
-        <translation type="unfinished"></translation>
+        <translation>Middels</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="850"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekspert</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="863"/>
         <source>Musician Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Musikerprofil</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="872"/>
         <source>Alias</source>
-        <translation type="unfinished"></translation>
+        <translation>Alias</translation>
     </message>
 </context>
 <context>
@@ -454,58 +454,58 @@
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>Chat Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Sludrevindu</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="34"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sludrevinduet viser all sludringshistorikken.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="36"/>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Sludringshistorikk</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="39"/>
         <source>Input Message Text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skriv meldingstekst</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="40"/>
         <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skriv sludremeldingsteksten i redigeringsboksen og trykk enter for å sende meldingen til tjeneren som sender meldingen til alle tilkoblede klienter. Meldingen din vil da vises i sludringsvinduet.</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="44"/>
         <source>New chat text edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ny tekstredigeringsboks for sludring</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="54"/>
         <source>Type a message here</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv en melding her</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="58"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rediger</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="60"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;øm sludringshistorikk</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="64"/>
         <location filename="../chatdlg.cpp" line="69"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Lukk</translation>
     </message>
     <message>
         <location filename="../chatdlg.cpp" line="145"/>
         <source>Do you want to open the link &apos;%1&apos; in your browser?</source>
-        <translation type="unfinished"></translation>
+        <translation>Åpne «%1»-lenken i nettleseren din?</translation>
     </message>
 </context>
 <context>
@@ -513,12 +513,12 @@
     <message>
         <location filename="../chatdlgbase.ui" line="20"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Sludring</translation>
     </message>
     <message>
         <location filename="../chatdlgbase.ui" line="54"/>
         <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Send</translation>
     </message>
 </context>
 <context>
@@ -526,182 +526,182 @@
     <message>
         <location filename="../clientdlg.cpp" line="54"/>
         <source>Input Level Meter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inngangsnivå</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="55"/>
         <source>This shows the level of the two stereo channels for your audio input.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dette viser nivået for de to stereo-lydkanalene for din lydinngang.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="59"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forsikre deg om at du ikke klipper inngangssignalet, slik at du unngå forvrengning av lydsignalet.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="62"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis programmet er tilkoblet en tjener og du spiller ditt instrument/synger i mikrofonen, vil VU-meteret røre seg. Hvis dette ikke skjer har du antageligvis valgt feil inngangskanal (f.eks. «linje inn» istedenfor mikrofoninngangen) eller satt inngangsforsterkningen for lavt i (Windows)-lydmikseren.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="70"/>
         <source>For proper usage of the application, you should not hear your singing/instrument through the loudspeaker or your headphone when the software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Du bør høre synging/instrumenter gjennom høyttalerne eller hodetelefonene dine når programvaren ikke er tilkoblet. Du kan gjøre dette ved å forstumme lydinngangskanalen i avspillingsmikseren (ikke opptaksmikseren).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="77"/>
         <source>Input level meter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inngangsnivåvisning</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="78"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Simulerer et analogt LED-signalnivåpanel.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="95"/>
         <source>Connect/Disconnect Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Koble til/fra -knapp</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="96"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Åpner en dialog der du kan velge hvilken tjener du vil koble til. Hvis du er tilkoblet kan du avslutte økten ved å trykke på denne knappen.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="99"/>
         <source>Connect and disconnect toggle button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Knapp for tilkobling og frakobling</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="102"/>
         <source>Reverb effect</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydklangseffekt</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="103"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lydklang kan brukes på en lokal mono-lydkanal, eller begge lydkanaler i stereomodus. Monokanalvalget og nivået for lydklangseffekten kan endres. For eksempel hvis et mikrofonsignal sendes til høyre lydkanal av lydkortet og en lydklangseffekt må legges til, kan du sette kanalvelgeren til høyre og flytte nivåregulatoren oppover til ønsket lydklangsnivå oppnås.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="114"/>
         <source>Reverb effect level setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Nivåinnstilling for lydklangseffekt</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="117"/>
         <source>Reverb Channel Selection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kanalvalg for lydklang</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="118"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Disse radioknappene velger lydinngangskanalen lydklangseffekten skal brukes på. Enten venstre eller høyre inngangskanal kan velges.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="123"/>
         <source>Left channel selection for reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Venstrekanalsvalg for lydklang</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="125"/>
         <source>Right channel selection for reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Høyrekanalsvalg for lydklang</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Delay Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forsinkelsesstatus-LED</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="128"/>
         <source>Shows the current audio delay status:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Viser status for forsinkelse av nåværende lyd:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="132"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Grønn</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="133"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forsinkelsen er perfekt for samspill.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="138"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gul</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="139"/>
         <source>A session is still possible but it may be harder to play.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En økt er fremdeles mulig, men det kan være vanskeligere å spille.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="144"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rød</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="145"/>
         <source>The delay is too large for jamming.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forsinkelsen er for lang for samspill.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hvis denne LED-indikatoren blir rød vil du ikke ha mye glede av å bruke %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="157"/>
         <source>Delay status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">LED-indikator for forsinkelsesstatus</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="160"/>
         <source>Local Jitter Buffer Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Status-LED for lokalt jitter-mellomlager</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="161"/>
         <source>The local jitter buffer status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Status-LED for lokalt jitter-mellomlager viser nåværende lyd/strømmingsstatus. Hvis lyset er rødt forstyrres lydstrømmen. Dette kan ha sitt opphav i følgende:</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="166"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mellomlageret for nettverksjitter er ikke stort nok for nåværende størrelse på jitter fra lyd/nettverksgrensesnittet.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="170"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydkortets mellomlagerforsinkelse (mellomlagerstørrelse) er for liten (sjekk innstillingsvinduet).</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opp- eller nedlastingshastigheten som kreves er for høy for båndbredden din.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="178"/>
         <source>The CPU of the client or server is at 100%.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosessoren på klienten eller tjeneren jobber 100%.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Denne LED-indikatoren blir rød når lydstrømmen forstyrres.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="188"/>
         <source>Local Jitter Buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">LED-indikator for lokalt jitter-mellomlagerstatus</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="191"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Nåværende tilkoblingsstatus</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="192"/>
@@ -717,117 +717,117 @@
         <location filename="../clientdlg.cpp" line="231"/>
         <location filename="../clientdlg.cpp" line="1256"/>
         <source>C&amp;onnect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Koble til</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="284"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fil</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="286"/>
         <source>&amp;Connection Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tilkoblingsoppsett …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="290"/>
         <source>&amp;Load Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Last inn kanalmikserinnstillingene …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="292"/>
         <source>&amp;Save Mixer Channels Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Lagre kanalmikserinnstillingene …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="296"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Avslutt</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="299"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Rediger</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="301"/>
         <source>Clear &amp;All Stored Solo and Mute Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Tøm alle lagrede solo- og forstummingsinnstillinger</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="303"/>
         <source>Set All Faders to New Client &amp;Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sett alle fadere til nytt klient&amp;nivå</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="308"/>
         <source>Auto-Adjust all &amp;Faders</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Auto-juster alle &amp;fadere</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="311"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vis</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="315"/>
         <source>O&amp;wn Fader First</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Egen fader først</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="320"/>
         <source>N&amp;o User Sorting</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ingen brukersortering</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
         <source>Sort Users by &amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorter brukere etter &amp;navn</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="325"/>
         <source>Sort Users by &amp;Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sorter brukere etter &amp;instrument</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="331"/>
         <source>Sort Users by &amp;Group</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sorter brukere etter &amp;gruppe</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="334"/>
         <source>Sort Users by &amp;City</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sorter brukere etter &amp;by</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="376"/>
         <source>C&amp;hat...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Sludring …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="381"/>
         <source>&amp;Analyzer Console...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Analysatorkonsoll …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="387"/>
         <source>Sett&amp;ings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Innstillinger</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="389"/>
         <source>My &amp;Profile...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min &amp;profil …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="391"/>
         <source>Audio/Network &amp;Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lyd/&amp;nettverksinnstillinger …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="393"/>
         <source>A&amp;dvanced Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">A&amp;vanserte innstillinger …</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="729"/>
@@ -838,37 +838,37 @@
         <location filename="../clientdlg.cpp" line="774"/>
         <location filename="../clientdlg.cpp" line="786"/>
         <source>Select Channel Setup File</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg kanaloppsettsfil</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="931"/>
         <source>user</source>
-        <translation type="unfinished"></translation>
+        <translation>bruker</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="935"/>
         <source>users</source>
-        <translation type="unfinished"></translation>
+        <translation>brukere</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="967"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Koble til</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="979"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Innstillinger</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="989"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Sludring</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1065"/>
         <source>Enable feedback detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Skru på tilbakekoblingsoppdagelse</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1068"/>
@@ -880,17 +880,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlg.cpp" line="1153"/>
         <source>Your sound card is not working correctly. Please open the settings dialog and check the device selection and the driver settings.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lydkortet ditt virker ikke rett. Åpne innstillingsdialogen og sjekk enhetsvalg og driverinnstillingene.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1171"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="1224"/>
         <source>&amp;Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Koble fra</translation>
     </message>
 </context>
 <context>
@@ -898,88 +898,88 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientdlgbase.ui" line="118"/>
         <source>Reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydklang</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="202"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Venstre</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="209"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Høyre</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="247"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Inngang</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="295"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>V</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="305"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="330"/>
         <source>Jitter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Jitter</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="343"/>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Forsinkelse</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="356"/>
         <source>Ping</source>
-        <translation type="unfinished"></translation>
+        <translation>Svartidsforespørsel</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="400"/>
         <location filename="../clientdlgbase.ui" line="438"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>ms</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="498"/>
         <source>&amp;Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Forstum deg selv</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="505"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Innstillinger</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="512"/>
         <source>&amp;Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sludring</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="531"/>
         <source>C&amp;onnect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Koble til</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="557"/>
         <source>MUTED (Other people won&apos;t hear you)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forstummet (andre hører deg ikke)</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="587"/>
         <source>Set up your audio, connect to a server and start jamming!</source>
-        <translation type="unfinished"></translation>
+        <translation>Sett opp egen lyd, koble til en tjener og spill.</translation>
     </message>
     <message>
         <location filename="../clientdlgbase.ui" line="609"/>
         <source>Update check</source>
-        <translation type="unfinished"></translation>
+        <translation>Oppdateringssjekk</translation>
     </message>
 </context>
 <context>
@@ -989,12 +989,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="48"/>
         <location filename="../clientsettingsdlg.cpp" line="49"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Lukk</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="58"/>
         <source>Local Audio Input Fader</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fader for lokal lydinngang</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="59"/>
@@ -1005,17 +1005,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="66"/>
         <location filename="../clientsettingsdlg.cpp" line="1196"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>V</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="72"/>
         <source>Local audio input fader (left/right)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fader for lokal lydinngang (venstre/høyre)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="75"/>
         <source>Jitter Buffer Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Størrelse på jitter-mellomlager</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="76"/>
@@ -1045,12 +1045,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="112"/>
         <source>Local jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Glidebryterkontroll for lokalt jittermellomlager</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="115"/>
         <source>Server jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Glidebryterkontroll for tjener-jittermellomlager</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="117"/>
@@ -1060,12 +1060,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="122"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydenhet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="123"/>
         <source>Under the Windows operating system the ASIO driver (sound card) can be selected using %1. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected. Under macOS the input and output hardware can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">På Windows kan ASIO-driverrutinen (lydkort) velges ved bruk av %1. Hvis valgt ASIO-driverrutine ikke er gyldig vil en feilmelding vises og forrige gyldige driver valgt. På macOS kan inngang- og utgangsmaskinvare velges.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="129"/>
@@ -1075,7 +1075,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="133"/>
         <source>Sound card device selector combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombinasjonsboksvelger for lydkortsenhet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="137"/>
@@ -1085,12 +1085,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="142"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hvis du bruker kX ASIO-driverrutinen må du sørge for å koble til ASIO-inngangene i kX DSP-innstillingspanelet.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="149"/>
         <source>Sound Card Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lydkortets kanalvalg</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="150"/>
@@ -1105,27 +1105,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="162"/>
         <source>Left input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombinasjonsboks for valg av venstre inngangskanal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="164"/>
         <source>Right input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombinasjonsboks for valg av høyre inngangskanal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="166"/>
         <source>Left output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombinasjonsboks for valg av venstre utgangskanal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="168"/>
         <source>Right output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombinasjonsboks for valg av høyre utgangskanal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="172"/>
         <source>Enable Small Network Buffers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skru på små nettverksmellomlagre</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="173"/>
@@ -1150,22 +1150,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="187"/>
         <source>Three buffer sizes can be selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Tre hurtiglagerstørrelser kan velges</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="190"/>
         <source>64 samples: Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">64 samplinger: Gir lavest forsinkelse, men fungerer ikke med alle lydkort.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="193"/>
         <source>128 samples: Should work for most available sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>128 samplinger: Bør fungere på de fleste lydkort.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="196"/>
         <source>256 samples: Should only be used when 64 or 128 samples is causing issues.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 samplinger: Bør kun brukes hvis 64 eller 128 samplinger byr på problemer.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="200"/>
@@ -1191,17 +1191,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="233"/>
         <source>Sound card driver settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oppsett av driverrutine for lydkort</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="234"/>
         <source>This opens the driver settings of your sound card. Some drivers allow you to change buffer settings, others like ASIO4ALL lets you choose input or outputs of your device(s). More information can be found on jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dette åpner driverrutineinnstillingene for lydkortet ditt. Noen driverrutiner lar deg endre hurtiglagerinnstillinger. Andre som f.eks. ASIO4ALL lar deg velge innganger og utganger for din(e) enhet(er). Mer info er å finne på jamulus.io.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="239"/>
         <source>Opens the driver settings. Note: %1 currently only supports devices with a sample rate of %2 Hz. You will not be able to select a driver/device which doesn&apos;t. For more help see jamulus.io.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Åpner driverrutine-innstillingene. Merk: %1 støtter kun enheter med samplingsrate på %2 Hz for øyeblikket. Du vil ikke kunne velge en driverrutine/enhet som ikke har det. Mer info er å finne på jamulus.io.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="249"/>
@@ -1211,32 +1211,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="252"/>
         <source>128 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radioknapp for valg av 128 samplinger</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="255"/>
         <source>256 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radioknapp for valg av 256 samplinger</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="260"/>
         <source>ASIO Device Settings push button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trykk-knapp for ASIO-enhetsinnstillinger</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Drakt</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="265"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg drakt for hovedvinduet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="267"/>
         <source>Skin combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Draktkombinasjonsboks</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="270"/>
@@ -1256,22 +1256,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="280"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>Velg språk å bruke i brukergrensesnittet.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="282"/>
         <source>Language combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Språk-kombinasjonsboks</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="285"/>
         <source>Audio Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydkanaler</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="286"/>
@@ -1282,29 +1282,29 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="291"/>
         <location filename="../clientsettingsdlg.cpp" line="430"/>
         <source>Mono</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
         <source>and</source>
-        <translation type="unfinished"></translation>
+        <translation>og</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="291"/>
         <location filename="../clientsettingsdlg.cpp" line="306"/>
         <location filename="../clientsettingsdlg.cpp" line="432"/>
         <source>Stereo</source>
-        <translation type="unfinished"></translation>
+        <translation>Stereo</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="292"/>
         <source>These modes use one and two audio channels respectively.</source>
-        <translation type="unfinished"></translation>
+        <translation>Disse bruker respektivt én og to lydkanaler.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="297"/>
         <source>Mono in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mono inn/stereo ut</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="298"/>
@@ -1314,7 +1314,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="306"/>
         <source>Enabling </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Skrur på </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="307"/>
@@ -1324,17 +1324,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="312"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
-        <translation type="unfinished"></translation>
+        <translation>I stereostrømmingsmodus er det ikke noe kanalvalg for lydklangseffekten tilgjengelig fra hovedvinduet, siden effekten brukes for begge kanaler i dette tilfellet.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="318"/>
         <source>Audio channels combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombinasjonsboks for lydkanaler</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="321"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydkvalitet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="322"/>
@@ -1344,12 +1344,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="328"/>
         <source>Audio quality combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kombinasjonsboks for lydkvalitet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="331"/>
         <source>New Client Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nytt klientnivå</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="332"/>
@@ -1359,7 +1359,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="340"/>
         <source>New client level edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigeringsboks for nytt klientnivå</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="343"/>
@@ -1379,7 +1379,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="360"/>
         <source>Custom Directories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egendefinerte mapper</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="361"/>
@@ -1419,7 +1419,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="386"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Beskyttelse mot tilbakekobling</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="387"/>
@@ -1429,12 +1429,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="391"/>
         <source>Feedback Protection check box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avkryssningsboks for tilbakekoblingsbeskyttelse</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydvarsler</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
@@ -1449,63 +1449,63 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
         <source>ASIO Device Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ASIO-enhetsinnstillinger</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="431"/>
         <source>Mono-in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mono inn/stereo ut</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="437"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Lav</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="438"/>
         <location filename="../clientsettingsdlg.cpp" line="444"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="439"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Høy</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="445"/>
         <source>Fancy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stilig</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="446"/>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompakt</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="451"/>
         <source>Bar (narrow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjelke (tynn)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="452"/>
         <source>Bar (wide)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bjelke (bred)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="453"/>
         <source>LEDs (stripe)</source>
-        <translation type="unfinished"></translation>
+        <translation>LED-lys (stripe)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="454"/>
         <source>LEDs (round, small)</source>
-        <translation type="unfinished"></translation>
+        <translation>LED-lys (runde, små)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="455"/>
         <source>LEDs (round, big)</source>
-        <translation type="unfinished"></translation>
+        <translation>LED-lys (runde, store)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="470"/>
@@ -1513,17 +1513,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="617"/>
         <location filename="../util.cpp" line="1192"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="506"/>
         <source>Musician Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Musikerprofil</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="507"/>
         <source>Write your name or an alias here so the other musicians you want to play with know who you are. You may also add a picture of the instrument you play and a flag of the country or region you are located in. Your city and skill level playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriv navnet ditt eller et kallenavn her slik at andre musikere du vil spille med vet hvem du er. Du kan også legge til et bilde av instrumentet du spiller, eller flagget for landet eller regionen du befinner deg i. By og ferdighetsnivå for instrumentet ditt kan også legges til.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="512"/>
@@ -1533,93 +1533,93 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="519"/>
         <source>Alias or name edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigeringsfelt for alias eller navn</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="521"/>
         <source>Instrument picture button</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrumentbildeknapp</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="523"/>
         <source>Country/region flag button</source>
-        <translation type="unfinished"></translation>
+        <translation>Land/region-flaggknapp</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="525"/>
         <source>City edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigeringsfelt for by</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="527"/>
         <source>Skill level combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ferdighetsnivå-kombinasjonsboks</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="621"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Nybegynner</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="625"/>
         <source>Intermediate</source>
-        <translation type="unfinished"></translation>
+        <translation>Erfaren</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="629"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekspert</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="785"/>
         <location filename="../clientsettingsdlg.cpp" line="789"/>
         <source>Size: </source>
-        <translation type="unfinished"></translation>
+        <translation>Størrelse: </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="844"/>
         <source>Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Hurtiglagringsforsinkelse</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="849"/>
         <source>Buffer Delay: </source>
-        <translation type="unfinished"></translation>
+        <translation>Hurtiglagringsforsinkelse: </translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1189"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Midten</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="1201"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1195"/>
         <source>Drum Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Slagverk</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1198"/>
         <source>Djembe</source>
-        <translation type="unfinished"></translation>
+        <translation>Djembe</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1201"/>
         <source>Electric Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektrisk gitar</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1204"/>
         <source>Acoustic Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Akustisk gitar</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1207"/>
         <source>Bass Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Bassgitar</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1210"/>
@@ -1639,67 +1639,67 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1219"/>
         <source>Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Trekkspill</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1222"/>
         <source>Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Vokal</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1225"/>
         <source>Microphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Mikrofon</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1228"/>
         <source>Harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Munnspill</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1231"/>
         <source>Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation>Trompet</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1234"/>
         <source>Trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombone</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1237"/>
         <source>French Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Valthorn</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1240"/>
         <source>Tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1243"/>
         <source>Saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saksofon</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1246"/>
         <source>Clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinett</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1249"/>
         <source>Flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Fløyte</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1252"/>
         <source>Violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiolin</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1255"/>
         <source>Cello</source>
-        <translation type="unfinished"></translation>
+        <translation>Cello</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1258"/>
@@ -1709,22 +1709,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1261"/>
         <source>Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Blokkfløyte</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1264"/>
         <source>Streamer</source>
-        <translation type="unfinished"></translation>
+        <translation>Strømmer</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1267"/>
         <source>Listener</source>
-        <translation type="unfinished"></translation>
+        <translation>Lytter</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1270"/>
         <source>Guitar+Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Gitar+vokal</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1273"/>
@@ -1734,37 +1734,37 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1276"/>
         <source>Bodhran</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bodhrán</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1279"/>
         <source>Bassoon</source>
-        <translation type="unfinished"></translation>
+        <translation>Fagott</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1282"/>
         <source>Oboe</source>
-        <translation type="unfinished"></translation>
+        <translation>Obo</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1285"/>
         <source>Harp</source>
-        <translation type="unfinished"></translation>
+        <translation>Harpe</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1288"/>
         <source>Viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Bratsj</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1291"/>
         <source>Congas</source>
-        <translation type="unfinished"></translation>
+        <translation>Congas</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1294"/>
         <source>Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongoer</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1297"/>
@@ -1789,7 +1789,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1309"/>
         <source>Banjo</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjo</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1312"/>
@@ -1799,7 +1799,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1315"/>
         <source>Ukulele</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukulele</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1318"/>
@@ -1829,17 +1829,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="1333"/>
         <source>Rapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapping</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1336"/>
         <source>Vibraphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Vibrafon</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1339"/>
         <source>Conductor</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirigent</translation>
     </message>
     <message>
         <location filename="../util.h" line="586"/>
@@ -1874,7 +1874,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="604"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Egendefinert</translation>
     </message>
     <message>
         <location filename="../util.h" line="607"/>
@@ -1887,12 +1887,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Innstillinger</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="40"/>
         <source>My Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Min profil</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="79"/>
@@ -1902,12 +1902,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="89"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Alias/navn</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="96"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="103"/>
@@ -1917,22 +1917,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="110"/>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>By</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="117"/>
         <source>Skill</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferdighetsnivå</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="210"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Brukergrensesnitt</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="220"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Drakt</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="227"/>
@@ -1942,23 +1942,23 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="234"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="241"/>
         <source>Mixer Rows</source>
-        <translation type="unfinished"></translation>
+        <translation>Mikserrader</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydvarsler</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="294"/>
         <location filename="../clientsettingsdlgbase.ui" line="1083"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Skru på</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -1968,12 +1968,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="349"/>
         <source>Audio Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydenhet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="394"/>
         <source>Driver Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Driverrutineoppsett</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="444"/>
@@ -1984,13 +1984,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlgbase.ui" line="464"/>
         <location filename="../clientsettingsdlgbase.ui" line="521"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>V</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="477"/>
         <location filename="../clientsettingsdlgbase.ui" line="534"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="501"/>
@@ -2000,32 +2000,32 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="581"/>
         <source>Audio Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydkanaler</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="588"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Lydkvalitet</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="622"/>
         <source>Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Hurtiglagringsforsinkelse</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="634"/>
         <source>(preferred)</source>
-        <translation type="unfinished"></translation>
+        <translation>(foretrukket)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="647"/>
         <source>(default)</source>
-        <translation type="unfinished"></translation>
+        <translation>(forvalg)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="660"/>
         <source>(safe)</source>
-        <translation type="unfinished"></translation>
+        <translation>(trygt)</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="690"/>
@@ -2035,7 +2035,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="702"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisk</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="711"/>
@@ -2045,13 +2045,13 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="724"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjener</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="741"/>
         <location filename="../clientsettingsdlgbase.ui" line="754"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Størrelse</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="852"/>
@@ -2076,12 +2076,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="945"/>
         <source>Advanced Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Avansert oppsett</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="986"/>
         <source>Custom Directories:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egendefinerte mapper:</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1013"/>
@@ -2091,7 +2091,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1025"/>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation>%</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1047"/>
@@ -2101,12 +2101,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1070"/>
         <source>Feedback Protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilbakekoblingsbeskyttelse</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1138"/>
         <source>Input Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Inngangsbalanse</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="1149"/>
@@ -2124,7 +2124,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="45"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mappe</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="46"/>
@@ -2139,12 +2139,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="56"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filter</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="57"/>
         <source>Filters the server list by the given text. Note that the filter is case insensitive. A single # character will filter for those servers with at least one person connected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtrerer tjenerlisten for angitt tekst. Merk at det ikke tas hensyn til små og store bokstaver. Et enkelt «#»-tegn viser tjenere med minst én person tilknyttet.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="59"/>
@@ -2154,7 +2154,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="67"/>
         <source>Show All Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis alle musikere</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="68"/>
@@ -2164,12 +2164,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="71"/>
         <source>Show all musicians check box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avkryssningsboks for visning av alle musikere</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="74"/>
         <source>Server List</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjenerliste</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="75"/>
@@ -2184,17 +2184,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="81"/>
         <source>You can add custom directories in Advanced Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Du kan legge til egendefinerte mapper i de avanserte innstillingene.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="83"/>
         <source>Server list view</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tjenerlistevisning</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="86"/>
         <source>Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjeneradresse</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
@@ -2204,7 +2204,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="96"/>
         <source>Server address edit box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Redigeringsboks for tjeneradresse</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
@@ -2214,7 +2214,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlg.cpp" line="149"/>
         <source>Filter text, or # for occupied servers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Filtrer tekst, eller # for tjenere som ikke er tomme</translation>
     </message>
 </context>
 <context>
@@ -2222,12 +2222,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlgbase.ui" line="14"/>
         <source>Connection Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilkoblingsoppsett</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="35"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mappe</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="45"/>
@@ -2237,42 +2237,42 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../connectdlgbase.ui" line="55"/>
         <source>Show All Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis alle musikere</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="71"/>
         <source>Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjenernavn</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="76"/>
         <source>Ping Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Svartid</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="81"/>
         <source>Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Musikere</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="86"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sted</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="96"/>
         <source>Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjeneradresse</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="130"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Avbryt</translation>
     </message>
     <message>
         <location filename="../connectdlgbase.ui" line="137"/>
         <source>&amp;Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Koble til</translation>
     </message>
 </context>
 <context>
@@ -2280,38 +2280,38 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="787"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hjelp</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="794"/>
         <location filename="../util.cpp" line="799"/>
         <source>Getting &amp;Started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Begynn …</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="795"/>
         <source>Software &amp;Manual...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Programvaremanual</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="802"/>
         <source>What&apos;s &amp;This</source>
-        <translation type="unfinished"></translation>
+        <translation>Hva er &amp;dette</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="804"/>
         <source>&amp;About Jamulus...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Om Jamulus …</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="806"/>
         <source>About &amp;Qt...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Om &amp;Qt …</translation>
     </message>
     <message>
         <location filename="../util.h" line="430"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Om Qt</translation>
     </message>
 </context>
 <context>
@@ -2319,12 +2319,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="863"/>
         <source>Restart Required</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Programomstart kreves</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="863"/>
         <source>Please restart the application for the language change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Start programmet på ny for å bruke det nye språket.</translation>
     </message>
 </context>
 <context>
@@ -2332,22 +2332,22 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.cpp" line="763"/>
         <source>This server requires you accept conditions before you can join. Please read these in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjeneren krever at du godtar vilkårene før du kobler til. Les disse i sludringsvinduet.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="764"/>
         <source>I have read the conditions and &amp;agree.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeg har lest vilkårene og &amp;samtykker.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="765"/>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Godta</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="766"/>
         <source>Decline</source>
-        <translation type="unfinished"></translation>
+        <translation>Avslå</translation>
     </message>
 </context>
 <context>
@@ -2355,17 +2355,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../multicolorled.cpp" line="91"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rød</translation>
     </message>
     <message>
         <location filename="../multicolorled.cpp" line="108"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gul</translation>
     </message>
     <message>
         <location filename="../multicolorled.cpp" line="125"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Grønn</translation>
     </message>
 </context>
 <context>
@@ -2373,7 +2373,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../settings.cpp" line="296"/>
         <source>No Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Uten navn</translation>
     </message>
 </context>
 <context>
@@ -2382,12 +2382,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../serverdlg.cpp" line="41"/>
         <source>%1 Server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1-tjener</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="48"/>
         <source>Client List</source>
-        <translation type="unfinished"></translation>
+        <translation>Klientliste</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="49"/>
@@ -2397,7 +2397,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="53"/>
         <source>Connected clients list view</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Listevisning av tilkoblede klienter</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="56"/>
@@ -2407,7 +2407,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappe</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="61"/>
@@ -2417,7 +2417,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="62"/>
         <source>Select one of the genres to register with that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg en av sjangerne å registrere med denne mappen.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
@@ -2437,7 +2437,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="80"/>
         <source>Register Server Status</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Status for hvorvidt tjeneren er registrert</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
@@ -2447,7 +2447,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="87"/>
         <source>Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjenernavn</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="88"/>
@@ -2492,12 +2492,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="119"/>
         <source>Checkbox to turn on or off server recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Avkryssningsboks for å slå på eller av tjeneropptak</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="120"/>
         <source>Enable Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Skru på opptak</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="121"/>
@@ -2507,17 +2507,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="125"/>
         <source>Request new recording button</source>
-        <translation type="unfinished"></translation>
+        <translation>Forespør ny opptaksknapp</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="126"/>
         <source>New Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt opptak</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="127"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>I løpet av en økt kan knappen brukes til å starte et nytt opptak.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="130"/>
@@ -2527,7 +2527,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="132"/>
         <source>Recorder Status</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opptaksstatus</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="132"/>
@@ -2552,7 +2552,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="142"/>
         <source>There is no one connected to the server to record.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det er ingen tilknyttet tjeneren å spille inn.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="143"/>
@@ -2592,7 +2592,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="160"/>
         <source>Server Welcome Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjener-velkomstmelding</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="161"/>
@@ -2602,12 +2602,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="167"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="167"/>
         <source>Select the language to be used for the user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velg språk for brukergrensesnittet.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="171"/>
@@ -2623,7 +2623,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../serverdlg.cpp" line="175"/>
         <location filename="../serverdlg.cpp" line="182"/>
         <source>Main Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hovedopptaksmappe</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
@@ -2730,18 +2730,18 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="245"/>
         <source>&amp;Hide %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Skjul %1-tjener</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="248"/>
         <source>&amp;Show %1 server</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vis %1-tjener</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="253"/>
         <source>%1 server</source>
         <comment>%1 is the name of the main application</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1-tjeneren</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="337"/>
@@ -2751,7 +2751,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="391"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vindu</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="590"/>
@@ -2771,7 +2771,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="870"/>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Feil</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="53"/>
@@ -2781,52 +2781,52 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.h" line="54"/>
         <source>Not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ikke påskrudd</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="55"/>
         <source>Not recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tar ikke opp</translation>
     </message>
     <message>
         <location filename="../serverdlg.h" line="56"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Innspilling</translation>
     </message>
     <message>
         <location filename="../util.h" line="583"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <location filename="../util.h" line="630"/>
         <source>Not registered</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ikke registrert</translation>
     </message>
     <message>
         <location filename="../util.h" line="633"/>
         <source>Bad address</source>
-        <translation type="unfinished"></translation>
+        <translation>Feilaktig adresse</translation>
     </message>
     <message>
         <location filename="../util.h" line="636"/>
         <source>Registration requested</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrering forespurt</translation>
     </message>
     <message>
         <location filename="../util.h" line="639"/>
         <source>Registration failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrering mislyktes</translation>
     </message>
     <message>
         <location filename="../util.h" line="642"/>
         <source>Check server version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sjekk tjenerversjonen</translation>
     </message>
     <message>
         <location filename="../util.h" line="645"/>
         <source>Registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrert</translation>
     </message>
     <message>
         <location filename="../util.h" line="648"/>
@@ -2836,17 +2836,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../util.h" line="651"/>
         <source>Your server version is too old</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjenerversjonen din er for gammel</translation>
     </message>
     <message>
         <location filename="../util.h" line="654"/>
         <source>Requirements not fulfilled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krav er ikke oppfylt</translation>
     </message>
     <message>
         <location filename="../util.h" line="657"/>
         <source>Unknown value %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ukjent verdi (%1)</translation>
     </message>
 </context>
 <context>
@@ -2854,105 +2854,105 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="34"/>
         <source>Client IP:Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Klient-IP:port</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="39"/>
         <location filename="../serverdlgbase.ui" line="118"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="44"/>
         <source>Jitter Buffer Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Størrelse på jittermellomlager</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="49"/>
         <source>Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanaler</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="67"/>
         <source>Server Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Tjeneroppsett</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="75"/>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mappe</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="85"/>
         <location filename="../serverdlgbase.ui" line="179"/>
         <source>STATUS</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Status</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="110"/>
         <source>My Server Info</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Info om min tjener</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="125"/>
         <source>Location: City</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sted: by</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="132"/>
         <source>Location: Region</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sted: region</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="159"/>
         <source>Enable Jam Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Skru på samspillsopptaker</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="166"/>
         <source>New Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt opptak</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
         <source>Chat Window Welcome (HTML/CSS Supported)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velkomstmelding for sludring (HTML/CSS støttes)</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="224"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alternativer</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="232"/>
         <source>Language</source>
         <extracomment>Consider add &quot;(Lang)&quot; as a suffix to ensure that users who selected the wrong language find the correct button</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="253"/>
         <source>Recording Directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Opptaksmappe</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="274"/>
         <source>Custom Directory address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egendefinert mappeadresse</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tjenerliste-filnavn</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
         <source>Start Minimized on Windows Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Start minimert ved systemoppstart</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="314"/>
@@ -2970,7 +2970,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverlist.cpp" line="853"/>
         <source>Could not write to &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunne ikke skrive til «%1»</translation>
     </message>
 </context>
 <context>
@@ -3009,12 +3009,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/asio/sound.cpp" line="554"/>
         <source>No ASIO audio device driver found.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fant ingen ASIO-lydenhetsdriver.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="555"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Installer en ASIO-lydenhetsdriver før du kjører %1. Hvis du eier en enhet med ASIO-støtte kan du installere dens offisielle ASIO-driver. Hvis ikke må du installere en universell driver som f.eks ASIO4ALL.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="113"/>
@@ -3044,7 +3044,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="406"/>
         <source>The audio output device is no longer available. Please check if your output device is connected correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lydutgangsenheten er ikke lenger tilgjengelig. Sjekk at utgangsenheten din er tilkoblet på riktig vis.</translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="415"/>
@@ -3069,42 +3069,42 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/jack/sound.cpp" line="47"/>
         <source>JACK couldn&apos;t be started automatically. Please start JACK manually and check for error messages.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke starte JACK automatisk. Start JACK på ny automatisk og sjekk om du finner noen feilmeldinger.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK kjører ikke med samplingstakt på &lt;b&gt;%1 Hz&lt;/b&gt;. Bruk et verktøy som f.eks. &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; for å sette JACK-samplingstakten til %1 Hz.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards check if another program at a sample rate of %2 Hz can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunne ikke registrere port for JACK. Dette er antagelig en feil i JACK. Stopp %1 og JACK. Etterpå kan du sjekke om et annet program med samplingstakt på %2 Hz kan koble til JACK.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="94"/>
         <source>The JACK port registration failed. This is probably an error with JACK. Please stop %1 and JACK. Afterwards, check if another MIDI program can connect to JACK.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunne ikke registrere port for JACK. Dette er antagelig en feil i JACK. Stopp %1 og JACK. Etterpå kan du sjekke om et annet MIDI-program kan koble til JACK.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="107"/>
         <source>Can&apos;t activate the JACK client. This is probably an error with JACK. Please check the JACK output.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kan ikke aktivere JACK-klienten. Dette er antagelig en feil med JACK. Sjekk JACK-utgangen.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="209"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">JACK ble skrudd av. %1 krever at JACK kjører. Start %1 på ny for å starte JACK igjen. </translation>
     </message>
     <message>
         <location filename="../sound/oboe/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke forespørre stopping av strøm: $s</translation>
     </message>
     <message>
         <location filename="../sound/oboe/sound.cpp" line="75"/>
         <source>Error closing stream: $s</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kunne ikke lukke strømmen: $s</translation>
     </message>
 </context>
 <context>
@@ -3112,27 +3112,27 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/soundbase.cpp" line="117"/>
         <source>Can&apos;t use the selected audio device because of the following error: %1 The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kan ikke bruke valgt lydenhet fordi: %1 Forrige driver vil bli valgt.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="158"/>
         <source>The previously selected audio device is no longer available or the driver has changed to an incompatible state. We&apos;ll attempt to find a valid audio device, but this new audio device may cause feedback. Before connecting to a server, please check your audio device settings.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tidligere valgt driver er ikke lenger tilgjengelig, eller så har den endret seg til en inkompatibel tilstand. Forsøk på å finne en gyldig lydenhet vil bli utført, men denne nye lydenheten kan forårsake tilbakekobling. Før du kobler til en tjener bør du sjekke lydenhetsinnstillingene dine.</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="171"/>
         <source>&lt;b&gt;%1 couldn&apos;t find a usable %2 audio device.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 kunne ikke finne noen anvendbar %2-lydenhet.&lt;/b&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="182"/>
         <source>You may be able to fix errors in the driver settings. Do you want to open these settings now?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Åpne driverinnstillingene for å sjekke om du kan fikse feilene der?</translation>
     </message>
     <message>
         <location filename="../sound/soundbase.cpp" line="189"/>
         <source>Can&apos;t start %1. Please restart %1 and check/reconfigure your audio settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan ikke starte %1. Start %1 på ny og sjekk/sett opp lydinnstillingene dine igjen.</translation>
     </message>
 </context>
 <context>
@@ -3141,12 +3141,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../util.cpp" line="1600"/>
         <source>%1, Version %2</source>
         <comment>%1 is app name, %2 is version number</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1, versjon %2</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1617"/>
         <source>Released under the GNU General Public License version 2 or later (GPLv2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisensiert GPLv2+</translation>
     </message>
 </context>
 <context>
@@ -3154,12 +3154,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>En %1-oppgradering er tilgjengelig: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;gå til detaljer og last den ned&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>
         <source>For more information use the &quot;What&apos;s This&quot; help (help menu, right mouse button or Shift+F1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mer info får du ved å bruke «Hva er dette»-hjelpen (hjelpemeny, høyreklikksknapp, eller Shift+F1)</translation>
     </message>
 </context>
 </TS>

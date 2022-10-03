@@ -104,7 +104,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>韩语</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -2681,12 +2681,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="138"/>
         <source>Recording has been switched off by the UI checkbox.</source>
-        <translation>录制已通过界面的勾选框关闭</translation>
+        <translation>录制已通过界面的勾选框关闭。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="140"/>
         <source>Recording has been switched off, either by the UI checkbox or SIGUSR2 being received.</source>
-        <translation>录制已因界面的勾选框或因程序收到 SIGUSR2 信号而关闭</translation>
+        <translation>录制已因界面的勾选框或因程序收到 SIGUSR2 信号而关闭。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="167"/>
@@ -2803,12 +2803,12 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="142"/>
         <source>There is no one connected to the server to record.</source>
-        <translation>没有人连接到服务器以供录制</translation>
+        <translation>没有人连接到服务器以供录制。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="143"/>
         <source>The performers are being recorded to the specified session directory.</source>
-        <translation>演奏已被录制到会话所对应的目录中</translation>
+        <translation>演奏已被录制到会话所对应的目录中。</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="144"/>
@@ -3367,7 +3367,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>JACK 未在采样率 &lt;b&gt;%1 Hz&lt;/b&gt; 下运行。请使用例如 &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; 的工具将 JACK 配置到  %1 Hz。</translation>
+        <translation>JACK 未在采样率 &lt;b&gt;%1 Hz&lt;/b&gt; 下运行。请使用例如 &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; 的工具将 JACK 配置到 %1 Hz。</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>

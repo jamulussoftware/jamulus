@@ -44,17 +44,17 @@
     <message>
         <location filename="../util.cpp" line="615"/>
         <source>Flag icons by Mark James</source>
-        <translation type="unfinished">Flaggsymboler gjorda av Mark James</translation>
+        <translation>Flaggikoner av Mark James</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>Vissa ljudprover är från</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
         <source>For details on the contributions check out the %1</source>
-        <translation type="unfinished">För detaljer om bidrag, kolla in %1</translation>
+        <translation>För detaljer om bidragen kolla in %1</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="690"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Koreanska</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -914,7 +914,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="152"/>
         <source>If this LED indicator turns red, you will not have much fun using %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om den här LED-indikatorn blir röd kommer du inte att ha mycket kul med %1.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="160"/>
@@ -929,7 +929,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="184"/>
         <source>If this LED indicator turns red, the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om denna LED-indikator blir röd avbryts ljudströmmen.</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="188"/>
@@ -978,7 +978,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientdlg.cpp" line="191"/>
         <source>Current Connection Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuell anslutningsstatus</translation>
     </message>
     <message>
         <location filename="../clientdlg.cpp" line="323"/>
@@ -1564,7 +1564,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ljudvarningar</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
@@ -2147,7 +2147,7 @@ Vi stängde av din kanal och aktiverade &apos;Tysta mig själv&apos;. Vänligen 
     <message>
         <location filename="../util.cpp" line="1276"/>
         <source>Bodhran</source>
-        <translation>Klaviatur+Sång</translation>
+        <translation>Bodhrán</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1279"/>

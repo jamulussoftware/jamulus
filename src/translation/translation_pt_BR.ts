@@ -136,7 +136,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Coreano</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -538,7 +538,7 @@
         <location filename="../audiomixerboard.cpp" line="162"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Mute</source>
-        <translation>Mute</translation>
+        <translation>Mudo</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="44"/>
@@ -1866,7 +1866,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation>A configuração do atraso do buffer (buffer delay) é uma configuração fundamental do %1. Esta configuração tem influência em muitas propriedades da conexão.</translation>
+        <translation>A configuração do atraso do buffer é uma configuração fundamental do %1. Esta configuração tem influência em muitas propriedades da conexão.</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
@@ -2344,7 +2344,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../util.cpp" line="1198"/>
         <source>Djembe</source>
-        <translation>Djembe</translation>
+        <translation>Djembê</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="1201"/>
@@ -3822,7 +3822,7 @@ Silenciamos seu canal e ativamos &apos;Silenciar-me&apos;. Resolva o problema de
     <message>
         <location filename="../serverdlg.cpp" line="109"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation>Define o país ou região onde o servidor está sendo executado. Os clientes irão exibir essa localização na caixa de diálogo de conexão da da lista de servidores.</translation>
+        <translation>Define o país ou região onde o servidor está sendo executado. Os clientes irão exibir essa localização na caixa de diálogo de conexão da lista de servidores.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="116"/>

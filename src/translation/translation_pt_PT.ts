@@ -53,7 +53,7 @@
     <message>
         <location filename="../util.cpp" line="574"/>
         <source>This app enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation>Esta aplicação permite aos músicos realizar jam sessions em tempo real pela Internet.</translation>
+        <translation>Esta aplicação permite que os músicos realizem sessões &apos;&apos;jam&apos;&apos; em tempo real pela Internet.</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="577"/>
@@ -91,7 +91,7 @@
     <message>
         <location filename="../util.cpp" line="690"/>
         <source>Github Contributors list</source>
-        <translation>lista de colaboradores do Github</translation>
+        <translation>Lista de colaboradores do Github</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="693"/>
@@ -106,7 +106,7 @@
     <message>
         <location filename="../util.cpp" line="702"/>
         <source>Portuguese</source>
-        <translation>Português</translation>
+        <translation>Português (Portugal)</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="707"/>
@@ -136,7 +136,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Coreano</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -184,7 +184,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation>TextLabelVersion</translation>
+        <translation>TextoEtiquetaVersão</translation>
     </message>
     <message>
         <source>Copyright (C) 2005-2022 Volker Fischer and others</source>
@@ -193,7 +193,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2022 A Equipa de Desenvolvimento do Jamulus</translation>
+        <translation>Direitos de Autor (C) 2005-2022 A Equipa de Desenvolvimento do Jamulus</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -336,17 +336,17 @@
     <message>
         <location filename="../audiomixerboard.cpp" line="160"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation>Posição de panorâmica local do canal de áudio actual no servidor</translation>
+        <translation>Posição de panorâmica local do canal de áudio atual no servidor</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="162"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation>Com a caixa de seleção Mute, o canal de áudio pode ser silenciado.</translation>
+        <translation>Com a caixa de seleção Silenciar, o canal de áudio pode ser silenciado.</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="163"/>
         <source>Mute button</source>
-        <translation>Botão Mute</translation>
+        <translation>Botão Silenciar</translation>
     </message>
     <message>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
@@ -536,7 +536,7 @@
         <location filename="../audiomixerboard.cpp" line="162"/>
         <location filename="../audiomixerboard.cpp" line="252"/>
         <source>Mute</source>
-        <translation>Mute</translation>
+        <translation>Silenciar</translation>
     </message>
     <message>
         <location filename="../audiomixerboard.cpp" line="44"/>
@@ -857,7 +857,7 @@
     <message>
         <location filename="../clientdlg.cpp" line="174"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
-        <translation>A taxa de upload ou download é muito elevada para a sua largura de banda da Internet.</translation>
+        <translation>A taxa de envio ou de transferência é muito alta para a sua largura de banda da Internet.</translation>
     </message>
     <message>
         <source>Buffers status LED indicator</source>
@@ -1835,7 +1835,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../clientsettingsdlg.cpp" line="184"/>
         <source>The buffer delay setting is a fundamental setting of %1. This setting has an influence on many connection properties.</source>
-        <translation>A configuração do atraso do buffer (buffer delay) é uma configuração fundamental do %1. Esta configuração tem influência em muitas propriedades da ligação.</translation>
+        <translation>A definição do atraso do &apos;buffer&apos;&apos; é uma definição fundamental do %1. Esta definição tem influência em muitas propriedades da ligação.</translation>
     </message>
     <message>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, use the ASIO Device Settings button to open the driver settings panel. On Linux, use the JACK configuration tool to change the buffer size.</source>
@@ -3780,7 +3780,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../serverdlg.cpp" line="109"/>
         <source>Set the country or region where the server is running. Clients will show this location in their connect dialog&apos;s server list.</source>
-        <translation>Define o país ou região onde o servidor está sendo executado. Os clientes irão exibir essa localização no diálogo de ligação da da lista de servidores.</translation>
+        <translation>Defina o país ou a região onde o servidor está a ser executado. Os clientes irão exibir esta localização na janela da ligação da lista de servidores.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="116"/>
@@ -4471,12 +4471,12 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../sound/asio/sound.cpp" line="554"/>
         <source>No ASIO audio device driver found.</source>
-        <translation>Não foi encontrado um driver ASIO do dispositivo de áudio.</translation>
+        <translation>Não foi encontrado um controlador ASIO do dispositivo de áudio.</translation>
     </message>
     <message>
         <location filename="../sound/asio/sound.cpp" line="555"/>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to install a universal driver like ASIO4ALL.</source>
-        <translation>Por favor instale um driver ASIO driver antes de correr o %1. Se detém um dispositivo com suporte ASIO, instale o driver ASIO oficial. Se não, precisará instalar um driver ASIO universal como o ASIO4ALL.</translation>
+        <translation>Por favor, instale um controlador ASIO driver antes de executar o %1. Se tem um dispositivo com suporte ASIO, instale o controlador ASIO oficial. Se não, precisará de instalar um controlador ASIO universal, como o ASIO4ALL.</translation>
     </message>
     <message>
         <source>Please install an ASIO driver before running %1. If you own a device with ASIO support, install its official ASIO driver. If not, you&apos;ll need to download and install a universal driver like ASIO4ALL.</source>
@@ -4497,7 +4497,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../sound/oboe/sound.cpp" line="69"/>
         <source>Error requesting stream stop: $s</source>
-        <translation>Erro ao requisitar parada do stream: $s</translation>
+        <translation>Erro ao requisitar paragem do stream: $s</translation>
     </message>
     <message>
         <location filename="../sound/oboe/sound.cpp" line="75"/>
@@ -4512,7 +4512,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../sound/jack/sound.cpp" line="64"/>
         <source>JACK isn&apos;t running at a sample rate of &lt;b&gt;%1 Hz&lt;/b&gt;. Please use a tool like &lt;i&gt;&lt;a href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; to set the the JACK sample rate to %1 Hz.</source>
-        <translation>O JACK não está sendo executado com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Utilize uma ferramenta como &lt;i&gt;&lt;a=href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; para definir a taxa de amostras do JACK em %1 Hz.</translation>
+        <translation>JACK não está em execução com uma taxa de amostras de &lt;b&gt;%1 Hz&lt;/b&gt;. Por favor, use uma ferramenta, como &lt;i&gt;&lt;a=href=&quot;https://qjackctl.sourceforge.io&quot;&gt;QjackCtl&lt;/a&gt;&lt;/i&gt; para definir a taxa de amostras de JACK para %1 Hz.</translation>
     </message>
     <message>
         <location filename="../sound/jack/sound.cpp" line="81"/>
@@ -4749,7 +4749,7 @@ O seu canal foi silenciado e foi activada a função &apos;Silenciar-me&apos;. P
     <message>
         <location filename="../global.h" line="123"/>
         <source>A %1 upgrade is available: &lt;a style=&apos;color:red;&apos; href=&apos;https://jamulus.io/upgrade?progversion=%2&apos;&gt;go to details and downloads&lt;/a&gt;</source>
-        <translation>Uma atualização %1 está disponível: &lt;a style=&apos;color:red&apos; href=https://jamulus.io/upgrade?progversion=%2&apos;&gt;vá para detalhes e downloads&lt;/a&gt;</translation>
+        <translation>Está disponível uma atualização %1: &lt;a style=&apos;color:red&apos; href=https://jamulus.io/upgrade?progversion=%2&apos;&gt;vá para detalhes e transferências&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../global.h" line="273"/>

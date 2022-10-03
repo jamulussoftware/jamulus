@@ -132,7 +132,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Koreanisch</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -1553,7 +1553,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
         <location filename="../clientsettingsdlg.cpp" line="200"/>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation type="unfinished"></translation>
+        <translation>Manche Soundkartentreiber erlauben es nicht, die Puffergröße innerhalb von %1 zu ändern. In diesem Fall ist die Einstellung für die Puffergröße deaktiviert und muss über den Soundkartentreiber geändert werden. Verwende das entsprechende Tool für deine Schnittstelle um die Puffergröße anzupassen. Wenn du z. B. ASIO nutzt, verwenden die Schaltfläche &quot;ASIO-Geräteeinstellungen&quot;, um das Bedienfeld mit den Treibereinstellungen zu öffnen, oder wenn du JACK nutzt, verwende ein Tool wie QjackCtl, um die Puffergröße anzupassen. Für andere Schnittstellen, wie z. B. Pipewire, muss das entsprechende Tool verwendet werden. Bitte lese dazu das Handbuch der Schnittstelle.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
@@ -2921,7 +2921,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../connectdlg.cpp" line="87"/>
         <source>If you know the server address, you can connect to it using the Server name/Address field. An optional port number can be added after the server address using a colon as a separator, e.g. %1. The field will also show a list of the most recently used server addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn Sie die Serveradresse kennen, können Sie über das Feld Servername/Adresse eine Verbindung zu ihr herstellen. Nach der Serveradresse kann eine optionale Portnummer mit einem Doppelpunkt als Trennzeichen eingefügt werden, z. B. %1. In diesem Feld wird auch eine Liste der zuletzt verwendeten Serveradressen angezeigt.</translation>
     </message>
     <message>
         <location filename="../connectdlg.cpp" line="97"/>
@@ -3546,12 +3546,12 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="63"/>
         <source>Or select &apos;%1&apos; and specify a Custom Directory address on the Options tab to register with a custom directory.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Oder wähle &quot;%1&quot; und gebe in der Registerkarte &quot;Optionen&quot; eine benutzerdefinierte Verzeichnisadresse an, um dich bei einem benutzerdefinierten Verzeichnis zu registrieren.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="67"/>
         <source>For any value except &apos;%1&apos;, this server registers with a directory so that a %2 user can select this server in the client connect dialog server list when they choose that directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bei jedem Wert außer &apos;%1&apos; registriert sich dieser Server bei einem Verzeichnis, so dass ein %2-Benutzer diesen Server in der Serverliste des Client-Verbindungsdialogs auswählen kann, sobald er dieses Verzeichnis wählt.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="73"/>
@@ -3561,27 +3561,27 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="81"/>
         <source>When a value other than &quot;%1&quot; is chosen for Directory, this will show whether registration is successful. If the registration failed, please choose a different directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn ein anderer Wert als &quot;%1&quot; für Verzeichnis gewählt wird, zeigt dies an, ob die Registrierung erfolgreich war. Wenn die Registrierung fehlgeschlagen ist, wählen Sie bitte ein anderes Verzeichnis.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="134"/>
         <source>No recording directory has been set or the value is not useable. Check the value in the Options tab.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde kein Aufzeichnungsverzeichnis festgelegt oder der Wert ist nicht verwendbar. Überprüfen Sie den Wert unter der Registerkarte Optionen.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="145"/>
         <source>If the recording directory is not useable, the problem will be displayed in place of the session directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn das Aufzeichnungsverzeichnis nicht verfügbar ist, wird anstelle des Verzeichnisses der Fehler angezeigt.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="176"/>
         <source>Click the button to open the dialog that allows the main recording directory to be selected.  The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as).</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicken Sie auf die Schaltfläche , um das Dialogfeld zu öffnen, in dem Sie das Hauptverzeichnis für die Aufzeichnung auswählen können.  Der gewählte Wert muss existieren und beschreibbar sein (die Erstellung von Unterverzeichnissen durch den Benutzer, unter dem %1 läuft, muss möglich sein).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="183"/>
         <source>The current value of the main recording directory. The chosen value must exist and be writeable (allow creation of sub-directories by the user %1 is running as). Click the button to open the dialog that allows the main recording directory to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der aktuelle Wert des Aufnahmeverzeichnisses. Der gewählte Wert muss existieren und beschreibbar sein (die Erstellung von Unterverzeichnissen durch den Benutzer, unter dem %1 läuft, muss möglich sein). Klicke auf die Schaltfläche, um das Dialogfeld zu öffnen, in dem das Verzeichnis für die Aufzeichnung ausgewählt werden kann.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="195"/>
@@ -3591,48 +3591,48 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlg.cpp" line="196"/>
         <source>The Custom Directory address is the address of the directory holding the server list to which this server should be added.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Die Adresse des benutzerdefinierten Verzeichnisses ist die Adresse des Verzeichnisses, das die Serverliste enthält, zu der dieser Server hinzugefügt werden soll.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="204"/>
         <source>Server List Filename dialog push button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Serverliste Dateiname Dialog Button</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Serverliste Dateiname</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
         <source>Click the button to open the dialog that allows the server list persistence file name to be set. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save).</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke auf die Schaltfläche, um das Dialogfeld zu öffnen, in dem du den Namen der Persistenzdatei der Serverliste festlegen kannst. Der Benutzer, unter dem %1 läuft, muss in der Lage sein, den angegebenen Dateinamen zu erstellen, auch wenn er bereits existiert (er wird beim Speichern überschrieben).</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="212"/>
         <source>Server List Filename text box (read-only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverliste Dateiname Textbox (schreibgeschützt)</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="214"/>
         <source>The current value of server list persistence file name. The user %1 is running as needs to be able to create the file name specified although it may already exist (it will get overwritten on save). Click the button to open the dialog that allows the server list persistence file name to be set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der aktuelle Wert des Dateinamens für die Persistenz der Serverliste. Der Benutzer, unter dem %1 läuft, muss in der Lage sein, den angegebenen Dateinamen zu erstellen, auch wenn er bereits existiert (sie wird beim Speichern überschrieben). Klicken Sie auf die Schaltfläche , um das Dialogfeld zu öffnen, in dem Sie den Namen der Serverlisten-Persistenzdatei festlegen können.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="221"/>
         <source>Clear the server list file name button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schaltfläche Dateiname der Serverliste löschen</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Serverliste Dateiname Feld löschen</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
         <source>Click the button to clear the currently selected server list persistence file name. This will prevent persisting the server list until a new value is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicke auf diese Schaltfläche, um den Namen der aktuell ausgewählten Serverlisten-Persistenzdatei zu löschen. Dadurch wird verhindert, dass die Serverliste bestehen bleibt, bis ein neuer Wert ausgewählt wird.</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="227"/>
@@ -4211,7 +4211,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="190"/>
         <source>Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Session</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="206"/>
@@ -4231,7 +4231,7 @@ Wir haben Deinen Kanal stummgeschaltet und die Funktion &apos;Stummschalten&apos
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverliste Dateiname</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>

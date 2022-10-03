@@ -49,7 +49,7 @@
     <message>
         <location filename="../util.cpp" line="616"/>
         <source>Some sound samples are from</source>
-        <translation type="unfinished"></translation>
+        <translation>일부 사운드 샘플은</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="689"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../util.cpp" line="730"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>한국어</translation>
     </message>
     <message>
         <location filename="../util.cpp" line="734"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../aboutdlgbase.ui" line="72"/>
         <source>Copyright (C) 2005-2022 The Jamulus Development Team</source>
-        <translation>Copyright (C) 2005-2022 The Jamulus Development Team</translation>
+        <translation>저작권 (C) 2005-2022 Jamulus 개발 팀</translation>
     </message>
     <message>
         <location filename="../aboutdlgbase.ui" line="106"/>
@@ -1539,7 +1539,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="344"/>
         <source>This setting allows you to increase your input signal level by factors up to 10 (+20dB). If your sound is too quiet, first try to increase the level by getting closer to the microphone, adjusting your sound equipment or increasing levels in your operating system&apos;s input settings. Only if this fails, set a factor here. If your sound is too loud, sounds distorted and is clipping, this option will not help. Do not use it. The distortion will still be there. Instead, decrease your input level by getting farther away from your microphone, adjusting your sound equipment or by decreasing your operating system&apos;s input settings.</source>
-        <translation>이 설정을 사용하면 입력 신호 레벨을 최대 10(+20dB)까지 높일 수 있습니다. 소리가 너무 작으면 먼저 마이크에 더 가까이 다가가거나 음향 장비를 조정하거나 운영 체제 입력 설정에서 레벨을 높이십시오. 그게 안 되는 경우에만 여기에서 설정하세요. 소리가 너무 크거나 왜곡되고 잘리면 이 옵션이 도움이 되지는 않습니다. 사용하지 않는 게 좋습니다. 왜곡은 여전히 ​​생깁니다. 대신 마이크에서 더 멀리 떨어지거나 음향 장비를 조정하거나 운영 체제 입력 설정을 줄여서 입력 레벨을 줄여보세요.</translation>
+        <translation>이 설정을 사용하면 입력 신호 레벨을 최대 10(+20dB)까지 높일 수 있습니다. 소리가 너무 작으면, 먼저 마이크에 더 가까이 다가가거나 음향 장비를 조정하거나 운영 체제 입력 설정에서 레벨을 높이십시오. 그게 안 되는 경우에만 여기에서 설정하세요. 소리가 너무 크거나 왜곡되고 잘리면 이 옵션이 도움이 되지는 않습니다. 사용하지 않는 게 좋습니다. 왜곡은 여전히 생깁니다. 대신 마이크에서 더 멀리 떨어지거나 음향 장비를 조정하거나 운영 체제 입력 설정을 줄여서 입력 레벨을 줄여보세요.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="357"/>
@@ -1606,7 +1606,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="187"/>
         <source>Three buffer sizes can be selected</source>
-        <translation>세 가지 버퍼 크기를 선택할 수 있습니다.</translation>
+        <translation>세 가지 버퍼 크기를 선택할 수 있습니다</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="190"/>
@@ -1622,7 +1622,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../clientsettingsdlg.cpp" line="200"/>
         <location filename="../clientsettingsdlg.cpp" line="222"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within %1. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. Use the appropriate tool for the interface in use to adjust this buffer size. For example, if using ASIO, use the &quot;ASIO Device Settings&quot; button to open the driver settings panel or if using JACK, use a tool such as QjackCtl to adjust the buffer size. Other interfaces, such as Pipewire, would require their appropriate tool being used. Please refer to the interface manual.</source>
-        <translation type="unfinished"></translation>
+        <translation>일부 사운드 카드 드라이버는 버퍼 지연이 %1 내에서 변경되는 것을 허용하지 않습니다. 이 경우 버퍼 지연 설정이 비활성화되고 사운드 카드 드라이버를 사용하여 변경해야 합니다. 이 버퍼 크기를 조정하려면 사용 중인 인터페이스에 적절한 도구를 사용하십시오. 예를 들어 ASIO를 사용하는 경우 &quot;ASIO 장치 설정&quot; 버튼을 사용하여 드라이버 설정 패널을 열거나 JACK을 사용하는 경우 QjackCtl과 같은 도구를 사용하여 버퍼 크기를 조정합니다. Pipewire와 같은 다른 인터페이스는 적절한 도구를 사용해야 합니다. 인터페이스 매뉴얼을 참조하십시오.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="208"/>
@@ -1725,17 +1725,17 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlg.cpp" line="394"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>오디오 경고</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="395"/>
         <source>Enable audio alert when receiving a chat message and when a new client joins the session. A second sound device may be required to hear the alerts.</source>
-        <translation type="unfinished"></translation>
+        <translation>채팅 메시지를 수신하고 새 클라이언트가 세션에 참여할 때 오디오 경고를 활성화합니다. 경보를 듣기 위해 두 번째 사운드 장치가 필요할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="399"/>
         <source>Audio Alerts check box</source>
-        <translation type="unfinished"></translation>
+        <translation>오디오 경고 확인란</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlg.cpp" line="403"/>
@@ -2328,7 +2328,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="248"/>
         <source>Audio Alerts</source>
-        <translation type="unfinished"></translation>
+        <translation>오디오 경고</translation>
     </message>
     <message>
         <location filename="../clientsettingsdlgbase.ui" line="339"/>
@@ -3100,7 +3100,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
         <location filename="../serverdlg.cpp" line="205"/>
         <location filename="../serverdlg.cpp" line="213"/>
         <source>Server List Filename</source>
-        <translation>서버 목록 파일 이름</translation>
+        <translation>서버 목록 파일이름</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="206"/>
@@ -3125,7 +3125,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlg.cpp" line="222"/>
         <source>Clear Server List Filename</source>
-        <translation>서버 목록 파일 이름 정리</translation>
+        <translation>서버 목록 파일이름 지우기</translation>
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="223"/>
@@ -3707,7 +3707,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../serverdlgbase.ui" line="288"/>
         <source>Server List Filename</source>
-        <translation>서버 목록 파일 이름</translation>
+        <translation>서버 목록 파일이름</translation>
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="307"/>
@@ -3988,7 +3988,7 @@ We muted your channel and activated &apos;Mute Myself&apos;. Please solve the fe
     <message>
         <location filename="../sound/jack/sound.cpp" line="209"/>
         <source>JACK was shut down. %1 requires JACK to run. Please restart %1 to start JACK again. </source>
-        <translation>잭이 종료되었습니다. %1의 실행에는 JACK이 필요합니다. JACK을 다시 실행하려면 %1의  다시 시작이 필요합니다. </translation>
+        <translation>JACK이 종료되었습니다. %1의 실행에는 JACK이 필요합니다. JACK을 다시 실행하려면 %1을(를) 다시 시작하십시오. </translation>
     </message>
     <message>
         <location filename="../sound/coreaudio-mac/sound.cpp" line="113"/>

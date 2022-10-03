@@ -1,7 +1,7 @@
 ; Korean translation
 
 LangString DESKTOP_SET_SHORTCUT ${LANG_KOREAN} \
-    "바로 가기 만들기"
+    "바탕화면 바로가기 만들기"
 
 LangString INVALID_FOLDER_MSG ${LANG_KOREAN} \
     "이미 있는 폴더입니다. 다른 폴더를 지정해 주세요."
@@ -10,13 +10,13 @@ LangString RUNNING_APP_MSG ${LANG_KOREAN} \
     "${APP_NAME}가 실행 중입니다. 프로그램을 닫고 다시 설정해 주세요."
 
 LangString OLD_WRONG_VER_FOUND ${LANG_KOREAN} \
-    "32 비트 프로그램 폴더에서 ${APP_NAME}의 옛 버전을 발견했습니다. ${APP_NAME} 새 버전을 설치하시기 전에 지우 시기를 권해 드립니다. 지금 지울까요?"
+    "사용자의 32비트 Program Files 폴더에서 ${APP_NAME}의 이전 버전을 감지했습니다. ${APP_NAME}의 새 버전을 설치하기 전에 제거하는 것이 좋습니다. 지금 제거하시겠습니까?"
 
 LangString OLD_WRONG_VER_FOUND_CONFIRM ${LANG_KOREAN} \
-    "지우지 않고 계속하시면, 설치되지 않을 수도 있습니다! 그래도 옛 버전을 지우지 않고 계속할까요?"
+    "제거하지 않고 계속하면 설치가 중단될 수 있습니다! 이전 버전을 제거하지 않으시겠습니까?"
 
 LangString OLD_VER_REMOVE_FAILED ${LANG_KOREAN} \
-     "송구합니다, 옛 버전이 지워지지 않네요. 새 버전의 설치를 시도하겠습니다, 그리고 사용자도 취소를 누르고 직접 옛 버전을 지울 수 있습니다."
+     "죄송합니다. 이전 버전을 제거할 수 없습니다. 새 버전을 설치하려고 시도하지만 취소를 누르고 직접 이전 버전을 제거할 수도 있습니다."
 
 LangString ASIO_DRIVER_HEADER ${LANG_KOREAN} \
      "ASIO 드라이버"

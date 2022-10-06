@@ -262,6 +262,39 @@ git push --force # Push the changes to your repo. Be aware that this will overwr
 
 ---
 
+## Adding a new language (checklist)
+
+The following section describes how to add a new language and what to do or wait for.
+Please open an issue on GitHub and introduce yourself first, even if you intend to add the translation files yourself.
+
+After having opened an issue on GitHub:
+1. Fork the Jamulus repository as described above, then install Qt on your machine (See [COMPILING.md](../COMPILING.md)). (You will need `lrelease` and `lupdate` later on.)
+2. Create a branch based on the `master` branch: Locally navigate to the folder you cloned the repo to (with `cd /path/to/jamulus/repo`) and type `git checkout -b "translate-add-xx_YY"` (where xx_YY is the language code of the new language).
+3. Open Jamulus.pro in an editor such as `nano`: `nano Jamulus.pro` and add your language file (which will be created later) in alphabetical order to the `TRANSLATIONS` variable. The format should match the other present languages.
+4. Also add `src/translation/translation_xx_YY.qm` to the DISTFILES variable similar to the other files
+5. Save and close Jamulus.pro.
+6. Add the `.qm` file in `src/resources.qrc` similar to other languages.
+7. Now move back to the repository root and run `lupdate Jamulus.pro`. Afterwards, run `lrelease Jamulus.pro` which should create all of the necessary files.
+8. Finally, add, commit and push the changes to your repository with the following commands: `git add Jamulus.pro src/translation/translation_xx_YY.* src/resources.qrc`, `git commit -m "Translation: Add empty xx_YY translation"`, `git push`
+9. Open a Pull Request from your repo to the main repo with a brief description that you plan to translate Jamulus to your language
+10. Once the Pull Request is merged, Weblate should pick up the new language.
+
+### Adding a translation to the Windows installer
+
+To add a new translation to the Installer (while undertaking the above steps with Git) [as described above](#adding-a-new-language-checklist):
+
+1. Copy `src/translation/wininstaller/en_UK.nsi` to `src/translation/wininstaller/xx_YY.nsi`
+2. Add your language with [the correct language code](https://nsis.sourceforge.io/Examples/Modern%20UI/MultiLanguage.nsi) to `src/translation/installerlng.nsi` by following the file format
+3. Rename `${LANG_ENGLISH}` to the respective value you set in installerlng.nsi in xx_YY.nsi
+
+### After a language is added
+
+Start translating the new language using Hosted Weblate or Git (as described in the first section of this guide). If you plan to work on the translation for a longer period, please contact the administrators to be invited to the Jamulus organisation as well as translators channel on Discord or Matrix.
+
+Since every contributor can and should be added to the in-app contributor list, please remind us to add you to the `src/utils.h` file as translator or open a pull request yourself.
+
+---
+
 ## That's all
 
 Thank you for contributing!

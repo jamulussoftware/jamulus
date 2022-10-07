@@ -14,6 +14,9 @@ case "${TARGET_ARCH}" in
     armhf)
         ABI_NAME="arm-linux-gnueabihf"
         ;;
+    arm64)
+        ABI_NAME="aarch64-linux-gnu"
+        ;;
     *)
         echo "Unsupported TARGET_ARCH ${TARGET_ARCH}"
         exit 1
@@ -37,7 +40,9 @@ setup_cross_compilation_apt_sources() {
         return
     fi
     sudo dpkg --add-architecture "${TARGET_ARCH}"
+    # Duplicate the original Ubuntu sources and modify them to refer to the TARGET_ARCH:
     sed -rne "s|^deb.*/ ([^ -]+(-updates)?) main.*|deb [arch=${TARGET_ARCH}] http://ports.ubuntu.com/ubuntu-ports \1 main universe multiverse restricted|p" /etc/apt/sources.list | sudo dd of=/etc/apt/sources.list.d/"${TARGET_ARCH}".list
+    # Now take the original Ubuntu sources and limit those to the build host (i.e. non-TARGET_ARCH) architectures:
     sudo sed -re 's/^deb /deb [arch=amd64,i386] /' -i /etc/apt/sources.list
 }
 
@@ -50,10 +55,10 @@ setup_cross_compiler() {
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-g++" g++ "/usr/bin/${ABI_NAME}-g++-${GCC_VERSION}" 10
     sudo update-alternatives --install "/usr/bin/${ABI_NAME}-gcc" gcc "/usr/bin/${ABI_NAME}-gcc-${GCC_VERSION}" 10
 
-    if [[ "${TARGET_ARCH}" == armhf ]]; then
-        # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf. Therefore, build a custom one:
+    # Ubuntu's Qt version only ships a profile for gnueabi, but not for gnueabihf or aarch64. Therefore, build a custom one:
+    if [[ $ABI_NAME ]]; then
         sudo cp -R "/usr/lib/${ABI_NAME}/qt5/mkspecs/linux-arm-gnueabi-g++/" "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/"
-        sudo sed -re 's/-gnueabi/-gnueabihf/' -i "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/qmake.conf"
+        sudo sed -re "s/arm-linux-gnueabi/${ABI_NAME}/" -i "/usr/lib/${ABI_NAME}/qt5/mkspecs/${ABI_NAME}-g++/qmake.conf"
     fi
 }
 

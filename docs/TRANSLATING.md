@@ -16,7 +16,7 @@ Translators should (if possible) have a GitHub account to communicate, as descri
 
 ## Using Weblate for translation
 
-After logging into Hosted Weblate, visit the [Jamulus project page on Hosted Weblate](https://hosted.weblate.org/projects/jamulus/). There are several components dedicated to the Jamulus project. If you want to translate e.g. the main Jamulus program or the Windows installer, click on "[Jamulus app](https://hosted.weblate.org/projects/jamulus/jamulus-app/)" or "[Windows Installer](https://hosted.weblate.org/projects/jamulus/windows-installer/)" and choose your language. After that, translate the strings displayed on the Website. Weblate will open or update a Pull Request on the Jamulus repo within the next few hours, where your translation will be reviewed.
+After logging into Hosted Weblate, visit the [Jamulus project page on Hosted Weblate](https://hosted.weblate.org/projects/jamulus/). There are several components dedicated to the Jamulus project. If you want to translate e.g. the main Jamulus program or the Windows installer, click on "[Jamulus app](https://hosted.weblate.org/projects/jamulus/jamulus-app/)" or "[Windows Installer](https://hosted.weblate.org/projects/jamulus/windows-installer/)" and choose your language. After that, translate the strings displayed on the Website. Weblate will open or update a pull request on the Jamulus repo within the next few hours, where your translation will be reviewed.
 
 More info is provided in the [Weblate documentation](https://docs.weblate.org/).
 
@@ -31,13 +31,13 @@ The translator must be able to carry out the following steps, each of which are 
 - Create their own linked copy ("repository" or "repo") of Jamulus in GitHub. This is called Forking.
 - Copy ("clone") their own repository to their computer, using either:
   - Command line `git`, or
-  - [Github Desktop](https://docs.github.com/en/desktop)
+  - [GitHub Desktop](https://docs.github.com/en/desktop)
 - Update their own local repo from the upstream master branch.
 - Create a local branch to contain the update.
 - Use the Qt Linguist tool to edit the appropriate translation (`.ts`) file.
 - Commit the updated `.ts` file to the branch their own local git repo.
-- Push the branch from their local repo to their own repo on Github.
-- Raise a Pull Request (PR) for the merging of the updated file into the upstream repo by the developers.
+- Push the branch from their local repo to their own repo on GitHub.
+- Open a pull request (PR) the developers can use to merge the updated file into the upstream repo.
 
 This guide contains two main parts:
 
@@ -51,22 +51,22 @@ This guide contains two main parts:
 
 ### Visit github.com
 
-First of all, visit the [Github website](https://github.com)
+First of all, visit the [GitHub website](https://github.com)
 
-If you don't yet have a Github account, click on **Sign up** to go to the Create Your Account page. Enter:
+If you don't yet have a GitHub account, click on **Sign up** to go to the Create Your Account page. Enter:
 
-- Your chosen username. This is a simple word containing letters and, optionally, numbers, and will identify you in the Github world. It is not an email address. This name is represented in the examples below as `yourusername`.
-- Your email address. This will be used by Github to send you notifications by email, and to identify commits made by you.
+- Your chosen username. This is a simple word containing letters and, optionally, numbers, and will identify you in the GitHub world. It is not an email address. This name is represented in the examples below as `yourusername`.
+- Your email address. This will be used by GitHub to send you notifications by email, and to identify commits made by you.
 - Your chosen password. Do not use the same password as for any other website.
 - Solve the puzzle to prove you are human and click **Create account**.
 
-If you do have a Github account, and are not yet logged in, click on **Sign in**, and enter your username and password, then **Sign in**.
+If you do have a GitHub account, and are not yet logged in, click on **Sign in**, and enter your username and password, then **Sign in**.
 
 Go to the [Jamulus repository](https://github.com/jamulussoftware/jamulus).
 
 Create your own copy ("fork") of the Jamulus repository by clicking the **Fork** button at the top right of the page.
 
-If your Github account is also part of an organisation, Github will ask you where to create the fork. Choose your personal Github account.
+If your GitHub account is also part of an organisation, GitHub will ask you where to create the fork. Choose your personal GitHub account.
 
 It will then display the message "Forking jamulussoftware/jamulus", and when finished will display the home page of your own Jamulus repo (**yourusername/jamulus**).
 
@@ -107,20 +107,20 @@ This will create a `jamulus` directory. Change to that directory.
   upstream        https://github.com/jamulussoftware/jamulus.git (push)
   ```
 
-### Github Desktop
+### GitHub Desktop
 
-[Github Desktop](https://docs.github.com/en/desktop) is available for macOS 10.10 or later, and Windows 7 64-bit or later. It is not available for 32-bit Windows.
+[GitHub Desktop](https://docs.github.com/en/desktop) is available for macOS 10.10 or later, and Windows 7 64-bit or later. It is not available for 32-bit Windows.
 
-To install Github Desktop, visit the [download page](https://desktop.github.com) and follow the link for the appropriate Operating System.
+To install GitHub Desktop, visit the [download page](https://desktop.github.com) and follow the link for the appropriate Operating System.
 
 When downloading for Mac, the instructions suggest opening `GitHubDesktop.zip`, but in fact, what was downloaded was `GitHubDesktop.app`. This should just be moved from `Downloads` to `Applications`.
 
-Run Github Desktop, and do the following steps:
+Run GitHub Desktop, and do the following steps:
 
-- On the Welcome Screen, click on **Sign in to GitHub.com**
-- Sign in by following the instructions. These may vary depending on whether you have logged into Github via a web browser already. If necessary, click on **Authorize Desktop**.
-- Confirm access by entering your Github password.
-- for Mac, if the browser requests to open "Github Desktop.app", click **Allow**.
+- On the Welcome Screen, click on **Sign in to github.com**
+- Sign in by following the instructions. These may vary depending on whether you have logged into GitHub via a web browser already. If necessary, click on **Authorize Desktop**.
+- Confirm access by entering your GitHub password.
+- for Mac, if the browser requests to open "GitHub Desktop.app", click **Allow**.
 - In Configure Git, enter your name and email address. These will be used to identify commits you make to Git. Click **Continue**.
 - Agree or decline to submit periodic usage stats, and click **Finish**.
 - Either:
@@ -177,9 +177,9 @@ git checkout -b translate-r3_7_0-german
 
 (The branch name is chosen by the user; the above name translate-r3_7_0-german is an example for the German translation of V3.7.0)
 
-The branch will be used later as the source of a Pull Request.
+The branch will be used later as the source of a pull request.
 
-#### With Github Desktop
+#### With GitHub Desktop
 
 Select the current repository as `jamulus`, and the current branch as `master`.
 
@@ -209,9 +209,9 @@ Again, strings with a question mark require translation.
 
 After some or all of the required strings have been translated, the file can be saved.
 
-### Submit the updated translation as a Pull Request (PR)
+### Submit the updated translation as a pull request (PR)
 
-Once all translations have been done, the branch containing the changes must be commited to your own repo, pushed to Github (`origin`) and then a Pull Request raised to the upstream repo.
+Once all translations have been done, the branch containing the changes must be commited to your own repo, pushed to GitHub (`origin`) and then a pull request raised to the upstream repo.
 
 #### With git command line tools
 
@@ -230,9 +230,9 @@ It will probably tell you to set the upstream repository for tracking, and conve
 git push --set-upstream origin translate-r3_7_0-german
 ```
 
-Finally, go to the Github website where it will most likely offer a banner saying there is a recent commit and offering to raise a Pull Request. Do so.
+Finally, go to the GitHub website where it will most likely offer a banner saying there is a recent commit and offering to open a pull request. Do so.
 
-#### With Github Desktop
+#### With GitHub Desktop
 
 Select the current repository as `jamulus`, and the branch that was created above, such as `translate-r3_7_0-german`.
 
@@ -243,9 +243,9 @@ to something like "Update German translations for v3.7.0"), and add any extra de
 
 Commit the changes to the local git repo by clicking on **Commit to <branch>**.
 
-Click on **Publish branch** or **Push origin**. This will push the branch to your own repo on Github. (It will say **Publish branch** for a new branch, or **Push origin** if the branch has already been published).
+Click on **Publish branch** or **Push origin**. This will push the branch to your own repo on GitHub. (It will say **Publish branch** for a new branch, or **Push origin** if the branch has already been published).
 
-There will now be a section offering **Create Pull Request**. Click on that to create the PR to the upstream repository.
+There will now be a section offering **Create pull request**. Click on that to create the PR to the upstream repository.
 
 #### Updating a PR/fixing conflicts
 
@@ -276,8 +276,8 @@ After having opened an issue on GitHub:
 6. Add the `.qm` file in `src/resources.qrc` similar to other languages.
 7. Now move back to the repository root and run `lupdate Jamulus.pro`. Afterwards, run `lrelease Jamulus.pro` which should create all of the necessary files.
 8. Finally, add, commit and push the changes to your repository with the following commands: `git add Jamulus.pro src/translation/translation_xx_YY.* src/resources.qrc`, `git commit -m "Translation: Add empty xx_YY translation"`, `git push`
-9. Open a Pull Request from your repo to the main repo with a brief description that you plan to translate Jamulus to your language
-10. Once the Pull Request is merged, Weblate should pick up the new language.
+9. Open a pull request from your repo to the main repo with a brief description that you plan to translate Jamulus to your language
+10. Once the pull request is merged, Weblate should pick up the new language.
 
 ### Adding a translation to the Windows installer
 

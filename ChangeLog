@@ -1,5 +1,5 @@
 
-### 3.9.1rc1 ###
+### 3.9.0dev <- NOTE: the release version number will be 3.9.1 ###
 
 - Client: Improved performance of GUI when someone joins or leaves a server (#2738).
   (contributed by @ann0see)
